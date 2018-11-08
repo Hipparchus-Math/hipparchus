@@ -20,11 +20,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -103,9 +104,9 @@ public class RandomPercentile
     /** Source of random data */
     private final RandomGenerator randomGenerator;
     /** Number of elements consumed from the input data stream */
-    private long n = 0;
+    private long n;
     /** Buffer currently being filled */
-    private Buffer currentBuffer = null;
+    private Buffer currentBuffer;
 
     /**
      * Constructs a {@code RandomPercentile} with quantile estimation error
@@ -429,15 +430,15 @@ public class RandomPercentile
         /** PRNG used for merges and stream sampling */
         private final RandomGenerator randomGenerator;
         /** Level of the buffer */
-        private int level = 0;
+        private int level;
         /** Block size  = 2^level */
         private long blockSize;
         /** Next location in backing array for stored (taken) value */
-        private int next = 0;
+        private int next;
         /** Number of values consumed in current 2^level block of values from the stream */
-        private long consumed = 0;
+        private long consumed;
         /** Index of next value to take in current 2^level block */
-        private long nextToTake = 0;
+        private long nextToTake;
         /** ID */
         private final UUID id;
 
@@ -716,13 +717,13 @@ public class RandomPercentile
         /** PRNG used in merges */
         private final RandomGenerator randomGenerator;
         /** Total count of all buffers */
-        private int count = 0;
+        private int count;
         /** Uniform buffer size */
         private final int bufferSize;
         /** Backing store for the buffer map. Keys are levels, values are lists of registered buffers. */
-        private final HashMap<Integer,List<Buffer>> registry = new HashMap<>();
+        private final Map<Integer,List<Buffer>> registry;
         /** Maximum buffer level */
-        private int maxLevel = 0;
+        private int maxLevel;
 
         /**
          * Creates a BufferMap that can manage up to capacity buffers.
@@ -736,6 +737,7 @@ public class RandomPercentile
             this.bufferSize = bufferSize;
             this.capacity = capacity;
             this.randomGenerator = randomGenerator;
+            this.registry = new ConcurrentHashMap<>();
         }
 
         /**
@@ -749,6 +751,7 @@ public class RandomPercentile
             this.capacity = original.capacity;
             this.count = 0;
             this.randomGenerator = original.randomGenerator;
+            this.registry = new ConcurrentHashMap<>();
             Iterator<Buffer> iterator = original.iterator();
             Buffer current = null;
             Buffer newCopy = null;
@@ -953,9 +956,15 @@ public class RandomPercentile
          */
         @Override
         public Iterator<Buffer> iterator() {
-            Iterator<Buffer> it = new Iterator<Buffer>() {
+            return new Iterator<Buffer>() {
+
+                /** Outer loop iterator, from level to level. */
                 private final Iterator<Integer> levelIterator = registry.keySet().iterator();
+
+                /** List of buffers at current level. */
                 private List<Buffer> currentList = registry.get(levelIterator.next());
+
+                /** Inner loop iterator, from buffer to buffer. */
                 private Iterator<Buffer> bufferIterator =
                         currentList == null ? null : currentList.iterator();
 
@@ -992,7 +1001,6 @@ public class RandomPercentile
                     throw new UnsupportedOperationException();
                 }
             };
-            return it;
         }
 
         /**

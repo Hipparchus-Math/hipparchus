@@ -244,12 +244,12 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
              if (values.length == 1) {
                  return 0.0;
              } else {
-                 final boolean booleanDirection = direction.getDirection();
 
                  double dev = 0.0;
                  double sumsq = 0.0;
-                 for (int i = start, end = start + length; i < end; i++) {
-                     if ((values[i] > cutoff) == booleanDirection) {
+                 final int end = start + length;
+                 for (int i = start; i < end; i++) {
+                     if (direction.considerObservation(values[i], cutoff)) {
                          dev = values[i] - cutoff;
                          sumsq += dev * dev;
                      }
@@ -337,9 +337,22 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
           * Returns the value of this Direction. True corresponds to UPSIDE.
           *
           * @return true if direction is UPSIDE; false otherwise
+          * @deprecated as of 1.4 replaced by {@link #considerObservation(double, double)}
           */
-         boolean getDirection () {
+         @Deprecated
+         boolean getDirection () { // NOPMD - violation has been taken care as of 1.4 by deprecating this method and introcuding a new one
              return direction;
          }
+
+         /** Check if observation should be considered.
+          * @param value observation value
+          * @param cutoff cutoff point
+          * @return true if observation should be considered.
+          * @since 1.4
+          */
+         boolean considerObservation(final double value, final double cutoff) {
+             return value > cutoff == direction;
+         }
+
      }
 }

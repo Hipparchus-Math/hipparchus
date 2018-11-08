@@ -46,7 +46,7 @@ public abstract class AbstractMultipleLinearRegression implements
     private RealVector yVector;
 
     /** Whether or not the regression model includes an intercept.  True means no intercept. */
-    private boolean noIntercept = false;
+    private boolean noIntercept;
 
     /**
      * @return the X sample data.

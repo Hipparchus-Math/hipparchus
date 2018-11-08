@@ -142,10 +142,10 @@ public class StatisticalSummaryValues
      */
     @Override
     public boolean equals(Object object) {
-        if (object == this ) {
+        if (object == this) {
             return true;
         }
-        if (object instanceof StatisticalSummaryValues == false) {
+        if (!(object instanceof StatisticalSummaryValues)) {
             return false;
         }
         StatisticalSummary other = (StatisticalSummary) object;
@@ -181,16 +181,16 @@ public class StatisticalSummaryValues
      */
     @Override
     public String toString() {
-        StringBuilder outBuffer = new StringBuilder();
+        StringBuilder outBuffer = new StringBuilder(200); // the size is just a wild guess
         String endl = "\n";
-        outBuffer.append("StatisticalSummaryValues:").append(endl);
-        outBuffer.append("n: ").append(getN()).append(endl);
-        outBuffer.append("min: ").append(getMin()).append(endl);
-        outBuffer.append("max: ").append(getMax()).append(endl);
-        outBuffer.append("mean: ").append(getMean()).append(endl);
-        outBuffer.append("std dev: ").append(getStandardDeviation()).append(endl);
-        outBuffer.append("variance: ").append(getVariance()).append(endl);
-        outBuffer.append("sum: ").append(getSum()).append(endl);
+        outBuffer.append("StatisticalSummaryValues:").append(endl).
+                  append("n: ").append(getN()).append(endl).
+                  append("min: ").append(getMin()).append(endl).
+                  append("max: ").append(getMax()).append(endl).
+                  append("mean: ").append(getMean()).append(endl).
+                  append("std dev: ").append(getStandardDeviation()).append(endl).
+                  append("variance: ").append(getVariance()).append(endl).
+                  append("sum: ").append(getSum()).append(endl);
         return outBuffer.toString();
     }
 

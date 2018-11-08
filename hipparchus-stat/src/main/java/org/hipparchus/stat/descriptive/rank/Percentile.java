@@ -478,15 +478,14 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
         //Check if empty then create a new copy
         if (bits.isEmpty()) {
             temp = copyOf(values, begin, length); // Nothing removed, just copy
-        } else if(bits.cardinality() == length) {
+        } else if (bits.cardinality() == length) {
             temp = new double[0];                 // All removed, just empty
-        }else {                                   // Some removable, so new
+        } else {                                   // Some removable, so new
             temp = new double[length - bits.cardinality()];
             int start = begin;  //start index from source array (i.e values)
             int dest = 0;       //dest index in destination array(i.e temp)
-            int nextOne = -1;   //nextOne is the index of bit set of next one
             int bitSetPtr = 0;  //bitSetPtr is start index pointer of bitset
-            while ((nextOne = bits.nextSetBit(bitSetPtr)) != -1) {
+            for (int nextOne = bits.nextSetBit(bitSetPtr); nextOne != -1; nextOne = bits.nextSetBit(bitSetPtr)) {
                 final int lengthToCopy = nextOne - bitSetPtr;
                 System.arraycopy(values, start, temp, dest, lengthToCopy);
                 dest += lengthToCopy;

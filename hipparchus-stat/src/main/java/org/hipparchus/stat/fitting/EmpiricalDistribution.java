@@ -24,12 +24,12 @@ package org.hipparchus.stat.fitting;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,7 +123,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     private final List<StreamingStatistics> binStats;
 
     /** Sample statistics */
-    private StreamingStatistics sampleStats = null;
+    private StreamingStatistics sampleStats;
 
     /** Max loaded value */
     private double max = Double.NEGATIVE_INFINITY;
@@ -132,16 +132,16 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     private double min = Double.POSITIVE_INFINITY;
 
     /** Grid size */
-    private double delta = 0d;
+    private double delta;
 
     /** number of bins */
     private final int binCount;
 
     /** is the distribution loaded? */
-    private boolean loaded = false;
+    private boolean loaded;
 
     /** upper bounds of subintervals in (0,1) "belonging" to the bins */
-    private double[] upperBounds = null;
+    private double[] upperBounds;
 
     /**
      * Creates a new EmpiricalDistribution with the default bin count.
@@ -271,22 +271,16 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     public void load(File file) throws IOException, NullArgumentException {
         MathUtils.checkNotNull(file);
         Charset charset = Charset.forName(FILE_CHARSET);
-        InputStream is = new FileInputStream(file);
-        BufferedReader in = new BufferedReader(new InputStreamReader(is, charset));
-        try {
-            DataAdapter da = new StreamDataAdapter(in);
+        try (InputStream is1 = Files.newInputStream(file.toPath());
+             BufferedReader in1 = new BufferedReader(new InputStreamReader(is1, charset))) {
+            DataAdapter da = new StreamDataAdapter(in1);
             da.computeStats();
             // new adapter for second pass
-            is = new FileInputStream(file);
-            in = new BufferedReader(new InputStreamReader(is, charset));
-            fillBinStats(new StreamDataAdapter(in));
-            loaded = true;
-        } finally {
-            try {
-                in.close();
-            } catch (IOException ex) { //NOPMD
-                // ignore
+            try (InputStream is2 = Files.newInputStream(file.toPath());
+                 BufferedReader in2 = new BufferedReader(new InputStreamReader(is2, charset))) {
+                fillBinStats(new StreamDataAdapter(in2));
             }
+            loaded = true;
         }
     }
 
@@ -333,9 +327,8 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         /** {@inheritDoc} */
         @Override
         public void computeBinStats() throws IOException {
-            String str = null;
             double val = 0.0d;
-            while ((str = inputStream.readLine()) != null) {
+            for (String str = inputStream.readLine(); str != null; str = inputStream.readLine()) {
                 val = Double.parseDouble(str);
                 StreamingStatistics stats = binStats.get(findBin(val));
                 stats.addValue(val);
@@ -348,10 +341,9 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         /** {@inheritDoc} */
         @Override
         public void computeStats() throws IOException {
-            String str = null;
             double val = 0.0;
             sampleStats = new StreamingStatistics();
-            while ((str = inputStream.readLine()) != null) {
+            for (String str = inputStream.readLine(); str != null; str = inputStream.readLine()) {
                 val = Double.parseDouble(str);
                 sampleStats.addValue(val);
             }
@@ -371,10 +363,10 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         /**
          * Construct an ArrayDataAdapter from a double[] array
          *
-         * @param in double[] array holding the data
+         * @param in double[] array holding the data, a reference to the array will be stored
          * @throws NullArgumentException if in is null
          */
-        ArrayDataAdapter(double[] in) throws NullArgumentException {
+        ArrayDataAdapter(double[] in) throws NullArgumentException { // NOPMD - storing a reference to the array is intentional and documented here
             super();
             MathUtils.checkNotNull(in);
             inputArray = in;

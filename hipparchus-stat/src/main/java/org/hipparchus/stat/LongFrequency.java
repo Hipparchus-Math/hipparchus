@@ -49,6 +49,7 @@ public class LongFrequency extends Frequency<Long> {
      * Default constructor.
      */
     public LongFrequency() {
+     // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     /**
