@@ -486,7 +486,7 @@ public class Vector2D implements Vector<Euclidean2D> {
      */
     @Override
     public String toString() {
-        return Vector2DFormat.getInstance().format(this);
+        return Vector2DFormat.getVector2DFormat().format(this);
     }
 
     /** {@inheritDoc} */

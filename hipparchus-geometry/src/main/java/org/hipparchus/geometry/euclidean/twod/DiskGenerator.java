@@ -36,7 +36,7 @@ public class DiskGenerator implements SupportBallGenerator<Euclidean2D, Vector2D
     @Override
     public EnclosingBall<Euclidean2D, Vector2D> ballOnSupport(final List<Vector2D> support) {
 
-        if (support.size() < 1) {
+        if (support.isEmpty()) {
             return new EnclosingBall<Euclidean2D, Vector2D>(Vector2D.ZERO, Double.NEGATIVE_INFINITY);
         } else {
             final Vector2D vA = support.get(0);

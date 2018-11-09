@@ -25,7 +25,7 @@
     xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
-  <description>mul
+  <description>
     This ruleset checks the code for discouraged programming constructs.
   </description>
 
@@ -36,6 +36,7 @@
     <exclude name="AvoidFieldNameMatchingMethodName"/>
     <exclude name="NullAssignment"/>
     <exclude name="ConstructorCallsOverridableMethod"/>
+    <exclude name="CompareObjectsWithEquals"/>
 
     <!-- TODO: we should reactivate this rule -->
     <exclude name="CloneMethodMustImplementCloneable"/>
@@ -43,6 +44,12 @@
     <!-- We should really activate this rule, but it is a tremendous amount of changes! -->
     <exclude name="DataflowAnomalyAnalysis"/>
 
+  </rule>
+
+  <rule ref="category/java/errorprone.xml/AvoidDuplicateLiterals">
+    <properties>
+      <property name="skipAnnotations" value="true"/>
+    </properties>
   </rule>
 
   <rule ref="category/java/multithreading.xml"/>
@@ -56,6 +63,10 @@
 
     <!-- in mathematics, arrays are first-class citizens, they don't always serve the same purpose as varargs -->
     <exclude name="UseVarargs"/>
+
+    <!-- PMD confuses our mathematical vectors with Java Vector class -->
+    <exclude name="ReplaceVectorWithList"/>
+
   </rule>
 
   <rule ref="category/java/codestyle.xml">
@@ -148,8 +159,19 @@
 
   </rule>
 
+  <rule ref="category/java/design.xml/SwitchDensity">
+    <properties>
+      <property name="minimum" value="20"/>
+    </properties>
+  </rule>
+
+  <rule ref="category/java/design.xml/AvoidDeeplyNestedIfStmts">
+    <properties>
+      <property name="problemDepth" value="4"/>
+    </properties>
+  </rule>
+
   <rule ref="category/java/documentation.xml">
-    <exclude name="CommentSize"/>
     <exclude name="UncommentedEmptyMethodBody"/>
   </rule>
 

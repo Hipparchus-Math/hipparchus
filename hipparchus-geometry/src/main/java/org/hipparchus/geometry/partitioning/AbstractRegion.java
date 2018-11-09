@@ -103,7 +103,7 @@ public abstract class AbstractRegion<S extends Space, T extends Space> implement
 
         this.tolerance = tolerance;
 
-        if (boundary.size() == 0) {
+        if (boundary.isEmpty()) {
 
             // the tree represents the whole space
             tree = new BSPTree<S>(Boolean.TRUE);
@@ -488,7 +488,7 @@ public abstract class AbstractRegion<S extends Space, T extends Space> implement
     public AbstractRegion<S, T> applyTransform(final Transform<S, T> transform) {
 
         // transform the tree, except for boundary attribute splitters
-        final Map<BSPTree<S>, BSPTree<S>> map = new HashMap<BSPTree<S>, BSPTree<S>>();
+        final Map<BSPTree<S>, BSPTree<S>> map = new HashMap<BSPTree<S>, BSPTree<S>>(); // NOPMD - no need for ConcurrentHasMap here
         final BSPTree<S> transformedTree = recurseTransform(getTree(false), transform, map);
 
         // set up the boundary attributes splitters

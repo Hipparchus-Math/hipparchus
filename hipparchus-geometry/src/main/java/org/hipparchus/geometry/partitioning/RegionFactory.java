@@ -180,7 +180,7 @@ public class RegionFactory<S extends Space> {
     private BSPTree<S> recurseComplement(final BSPTree<S> node) {
 
         // transform the tree, except for boundary attribute splitters
-        final Map<BSPTree<S>, BSPTree<S>> map = new HashMap<BSPTree<S>, BSPTree<S>>();
+        final Map<BSPTree<S>, BSPTree<S>> map = new HashMap<BSPTree<S>, BSPTree<S>>(); // NOPMD - no need for ConcurrentHasMap here
         final BSPTree<S> transformedTree = recurseComplement(node, map);
 
         // set up the boundary attributes splitters

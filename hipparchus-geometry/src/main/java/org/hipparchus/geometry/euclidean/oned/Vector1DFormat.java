@@ -48,6 +48,7 @@ import org.hipparchus.util.CompositeFormat;
  * to use a {@link NumberFormat} instance with disabled grouping in such a case.</p>
  *
  */
+@SuppressWarnings("PMD.SingleMethodSingleton") // the violations have been taken care of as of 1.4, they correspond to deprecated methods
 public class Vector1DFormat extends VectorFormat<Euclidean1D> {
 
     /**
@@ -92,18 +93,41 @@ public class Vector1DFormat extends VectorFormat<Euclidean1D> {
     /**
      * Returns the default 1D vector format for the current locale.
      * @return the default 1D vector format.
+     * @since 1.4
      */
+    public static Vector1DFormat getVector1DFormat() {
+        return getVector1DFormat(Locale.getDefault());
+    }
+
+    /**
+     * Returns the default 1D vector format for the current locale.
+     * @return the default 1D vector format.
+     * @deprecated as of 1.4, replaced by {@link #getVector1DFormat()}
+     */
+    @Deprecated
     public static Vector1DFormat getInstance() {
-        return getInstance(Locale.getDefault());
+        return getVector1DFormat();
     }
 
     /**
      * Returns the default 1D vector format for the given locale.
      * @param locale the specific locale used by the format.
      * @return the 1D vector format specific to the given locale.
+     * @since 1.4
      */
-    public static Vector1DFormat getInstance(final Locale locale) {
+    public static Vector1DFormat getVector1DFormat(final Locale locale) {
         return new Vector1DFormat(CompositeFormat.getDefaultNumberFormat(locale));
+    }
+
+    /**
+     * Returns the default 1D vector format for the given locale.
+     * @param locale the specific locale used by the format.
+     * @return the 1D vector format specific to the given locale.
+     * @deprecated as of 1.4, replaced by {@link #getVector1DFormat(Locale)}
+     */
+    @Deprecated
+    public static Vector1DFormat getInstance(final Locale locale) {
+        return getVector1DFormat(locale);
     }
 
     /** {@inheritDoc} */
