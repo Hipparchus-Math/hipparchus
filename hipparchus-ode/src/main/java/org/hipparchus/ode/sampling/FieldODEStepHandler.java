@@ -69,8 +69,8 @@ public interface FieldODEStepHandler<T extends RealFieldElement<T>> {
      * object on each call, so if the instance wants to keep it across
      * all calls (for example to provide at the end of the integration a
      * continuous model valid throughout the integration range, as the
-     * {@link org.hipparchus.migration.ode.ContinuousOutputModel
-     * ContinuousOutputModel} class does), it should build a local copy
+     * {@link org.hipparchus.ode.DenseOutputModel
+     * DenseOutputModel} class does), it should build a local copy
      * using the clone method of the interpolator and store this copy.
      * Keeping only a reference to the interpolator and reusing it will
      * result in unpredictable behavior (potentially crashing the application).

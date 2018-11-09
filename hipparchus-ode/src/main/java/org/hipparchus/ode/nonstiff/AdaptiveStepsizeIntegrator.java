@@ -45,7 +45,7 @@ import org.hipparchus.util.FastMath;
  * <p>
  * If the Ordinary Differential Equations is an {@link org.hipparchus.ode.ExpandableODE
  * extended ODE} rather than a {@link
- * org.hipparchus.migration.ode.FirstOrderDifferentialEquations basic ODE}, then
+ * org.hipparchus.ode.OrdinaryDifferentialEquation basic ODE}, then
  * <em>only</em> the {@link org.hipparchus.ode.ExpandableODE#getPrimary() primary part}
  * of the state vector is used for stepsize control, not the complete state vector.
  * </p>
