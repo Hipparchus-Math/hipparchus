@@ -58,15 +58,14 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
     private final int maxIter;
 
     /**
-     * Contructor used by the factory methods.
+     * Constructor used by the factory methods.
      *
      * @param initialGuess Initial guess. If set to {@code null}, the initial guess
      * will be estimated using the {@link ParameterGuesser}.
      * @param maxIter Maximum number of iterations of the optimization algorithm.
      */
-    private HarmonicCurveFitter(double[] initialGuess,
-                                int maxIter) {
-        this.initialGuess = initialGuess;
+    private HarmonicCurveFitter(double[] initialGuess, int maxIter) {
+        this.initialGuess = initialGuess == null ? null : initialGuess.clone();
         this.maxIter = maxIter;
     }
 
@@ -311,9 +310,10 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
                     WeightedObservedPoint mI = observations.get(i);
                     while ((i >= 0) && (curr.getX() < mI.getX())) {
                         observations.set(i + 1, mI);
-                        if (i-- != 0) {
-                            mI = observations.get(i);
+                        if (i != 0) {
+                            mI = observations.get(i - 1);
                         }
+                        --i;
                     }
                     observations.set(i + 1, curr);
                     curr = observations.get(j);
