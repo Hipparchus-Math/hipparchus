@@ -323,7 +323,7 @@ public abstract class AbstractSimplex implements OptimizationData {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    points.length, simplex.length);
         }
-        simplex = points;
+        simplex = points.clone();
     }
 
     /**

@@ -30,7 +30,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  */
 public class MaxIter implements OptimizationData {
     /** Allowed number of evalutations. */
-    private final int maxIter;
+    private final int max;
 
     /**
      * @param max Allowed number of iterations.
@@ -42,7 +42,7 @@ public class MaxIter implements OptimizationData {
                                                    max, 0);
         }
 
-        maxIter = max;
+        this.max = max;
     }
 
     /**
@@ -51,7 +51,7 @@ public class MaxIter implements OptimizationData {
      * @return the allowed number of evaluations.
      */
     public int getMaxIter() {
-        return maxIter;
+        return max;
     }
 
     /**

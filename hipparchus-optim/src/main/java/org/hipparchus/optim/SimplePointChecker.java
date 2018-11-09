@@ -39,12 +39,12 @@ import org.hipparchus.util.Pair;
  * {@code true} if the number of iterations has been set (see
  * {@link #SimplePointChecker(double,double,int) this constructor}).
  *
- * @param <PAIR> Type of the (point, value) pair.
+ * @param <P> Type of the (point, value) pair.
  * The type of the "value" part of the pair (not used by this class).
  *
  */
-public class SimplePointChecker<PAIR extends Pair<double[], ? extends Object>>
-    extends AbstractConvergenceChecker<PAIR> {
+public class SimplePointChecker<P extends Pair<double[], ? extends Object>>
+    extends AbstractConvergenceChecker<P> {
     /**
      * If {@link #maxIterationCount} is set to this value, the number of
      * iterations will never cause {@link #converged(int, Pair, Pair)}
@@ -115,8 +115,8 @@ public class SimplePointChecker<PAIR extends Pair<double[], ? extends Object>>
      */
     @Override
     public boolean converged(final int iteration,
-                             final PAIR previous,
-                             final PAIR current) {
+                             final P previous,
+                             final P current) {
         if (maxIterationCount != ITERATION_CHECK_DISABLED && iteration >= maxIterationCount) {
             return true;
         }

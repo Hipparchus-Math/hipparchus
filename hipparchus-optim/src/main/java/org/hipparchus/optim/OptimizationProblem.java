@@ -27,11 +27,11 @@ import org.hipparchus.util.Incrementor;
  * Common settings for all optimization problems. Includes divergence and convergence
  * criteria.
  *
- * @param <PAIR> The type of value the {@link #getConvergenceChecker() convergence
+ * @param <P> The type of value the {@link #getConvergenceChecker() convergence
  *               checker} will operate on. It should include the value of the model
  *               function and point where it was evaluated.
  */
-public interface OptimizationProblem<PAIR> {
+public interface OptimizationProblem<P> {
     /**
      * Get a independent Incrementor that counts up to the maximum number of evaluations
      * and then throws an exception.
@@ -53,5 +53,5 @@ public interface OptimizationProblem<PAIR> {
      *
      * @return the object used to check for convergence.
      */
-    ConvergenceChecker<PAIR> getConvergenceChecker();
+    ConvergenceChecker<P> getConvergenceChecker();
 }

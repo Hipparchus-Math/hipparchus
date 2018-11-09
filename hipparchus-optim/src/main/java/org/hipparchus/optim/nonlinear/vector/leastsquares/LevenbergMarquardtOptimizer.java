@@ -571,6 +571,9 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
         private final double[] beta;
 
         /**
+         * <p>
+         * All arrays are stored by reference
+         * </p>
          * @param weightedJacobian Weighted Jacobian.
          * @param permutation Columns permutation array.
          * @param rank Rank of the Jacobian matrix.
@@ -578,12 +581,12 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
          * @param jacNorm Norms of the columns of the jacobian matrix.
          * @param beta Coefficients of the Householder transforms vectors.
          */
-        InternalData(double[][] weightedJacobian,
-                     int[] permutation,
+        InternalData(double[][] weightedJacobian, // NOPMD - staring array references is intentional and documented here
+                     int[] permutation,           // NOPMD - staring array references is intentional and documented here
                      int rank,
-                     double[] diagR,
-                     double[] jacNorm,
-                     double[] beta) {
+                     double[] diagR,              // NOPMD - staring array references is intentional and documented here
+                     double[] jacNorm,            // NOPMD - staring array references is intentional and documented here
+                     double[] beta) {             // NOPMD - staring array references is intentional and documented here
             this.weightedJacobian = weightedJacobian;
             this.permutation = permutation;
             this.rank = rank;

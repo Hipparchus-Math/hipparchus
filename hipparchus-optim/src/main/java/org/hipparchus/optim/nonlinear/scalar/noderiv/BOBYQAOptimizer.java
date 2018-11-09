@@ -296,7 +296,6 @@ public class BOBYQAOptimizer
      */
     private double bobyqa(double[] lowerBound,
                           double[] upperBound) {
-        printMethod(); // XXX
 
         final int n = currentBest.getDimension();
 
@@ -385,7 +384,6 @@ public class BOBYQAOptimizer
      */
     private double bobyqb(double[] lowerBound,
                           double[] upperBound) {
-        printMethod(); // XXX
 
         final int n = currentBest.getDimension();
         final int npt = numberOfInterpolationPoints;
@@ -453,9 +451,8 @@ public class BOBYQAOptimizer
 
         int state = 20;
         for(;;) {
-        switch (state) {
+        switch (state) { // NOPMD - the reference algorithm is as complex as this, we simply ported it from Fortran with minimal changes
         case 20: {
-            printState(20); // XXX
             if (trustRegionCenterInterpolationPointIndex != kbase) {
                 int ih = 0;
                 for (int j = 0; j < n; j++) {
@@ -491,7 +488,6 @@ public class BOBYQAOptimizer
 
         }
         case 60: {
-            printState(60); // XXX
             final ArrayRealVector gnew = new ArrayRealVector(n);
             final ArrayRealVector xbdi = new ArrayRealVector(n);
             final ArrayRealVector s = new ArrayRealVector(n);
@@ -565,7 +561,6 @@ public class BOBYQAOptimizer
 
         }
         case 90: {
-            printState(90); // XXX
             if (dsq <= xoptsq * ONE_OVER_A_THOUSAND) {
                 final double fracsq = xoptsq * ONE_OVER_FOUR;
                 double sumpq = ZERO;
@@ -670,7 +665,6 @@ public class BOBYQAOptimizer
 
         }
         case 210: {
-            printState(210); // XXX
             // Pick two alternative vectors of variables, relative to XBASE, that
             // are suitable as new positions of the KNEW-th interpolation point.
             // Firstly, XNEW is set to the point on a line through XOPT and another
@@ -696,7 +690,6 @@ public class BOBYQAOptimizer
 
         }
         case 230: {
-            printState(230); // XXX
             for (int k = 0; k < npt; k++) {
                 double suma = ZERO;
                 double sumb = ZERO;
@@ -819,7 +812,6 @@ public class BOBYQAOptimizer
 
         }
         case 360: {
-            printState(360); // XXX
             for (int i = 0; i < n; i++) {
                 // Computing MIN
                 // Computing MAX
@@ -1092,7 +1084,8 @@ public class BOBYQAOptimizer
                     itest = 0;
                 }
                 if (itest >= 3) {
-                    for (int i = 0, max = FastMath.max(npt, nh); i < max; i++) {
+                    final int max = FastMath.max(npt, nh);
+                    for (int i = 0; i < max; i++) {
                         if (i < n) {
                             gradientAtTrustRegionCenter.setEntry(i, lagrangeValuesAtNewPoint.getEntry(npt + i));
                         }
@@ -1129,7 +1122,6 @@ public class BOBYQAOptimizer
             distsq = FastMath.max(d1 * d1, d2 * d2);
         }
         case 650: {
-            printState(650); // XXX
             knew = -1;
             for (int k = 0; k < npt; k++) {
                 double sum = ZERO;
@@ -1181,7 +1173,6 @@ public class BOBYQAOptimizer
             //   next values of RHO and DELTA.
         }
         case 680: {
-            printState(680); // XXX
             if (rho > stoppingTrustRegionRadius) {
                 delta = HALF * rho;
                 ratio = rho / stoppingTrustRegionRadius;
@@ -1206,7 +1197,6 @@ public class BOBYQAOptimizer
             }
         }
         case 720: {
-            printState(720); // XXX
             if (fAtInterpolationPoints.getEntry(trustRegionCenterInterpolationPointIndex) <= fsave) {
                 for (int i = 0; i < n; i++) {
                     // Computing MIN
@@ -1267,11 +1257,7 @@ public class BOBYQAOptimizer
      * @param knew
      * @param adelt
      */
-    private double[] altmov(
-            int knew,
-            double adelt
-    ) {
-        printMethod(); // XXX
+    private double[] altmov(int knew, double adelt) {
 
         final int n = currentBest.getDimension();
         final int npt = numberOfInterpolationPoints;
@@ -1285,7 +1271,8 @@ public class BOBYQAOptimizer
         for (int k = 0; k < npt; k++) {
             hcol.setEntry(k, ZERO);
         }
-        for (int j = 0, max = npt - n - 1; j < max; j++) {
+        final int max = npt - n - 1;
+        for (int j = 0; j < max; j++) {
             final double tmp = zMatrix.getEntry(knew, j);
             for (int k = 0; k < npt; k++) {
                 hcol.setEntry(k, hcol.getEntry(k) + tmp * zMatrix.getEntry(k, j));
@@ -1591,9 +1578,7 @@ public class BOBYQAOptimizer
      * @param lowerBound Lower bounds.
      * @param upperBound Upper bounds.
      */
-    private void prelim(double[] lowerBound,
-                        double[] upperBound) {
-        printMethod(); // XXX
+    private void prelim(double[] lowerBound, double[] upperBound) {
 
         final int n = currentBest.getDimension();
         final int npt = numberOfInterpolationPoints;
@@ -1615,12 +1600,14 @@ public class BOBYQAOptimizer
                 bMatrix.setEntry(i, j, ZERO);
             }
         }
-        for (int i = 0, max = n * np / 2; i < max; i++) {
+        final int maxI = n * np / 2;
+        for (int i = 0; i < maxI; i++) {
             modelSecondDerivativesValues.setEntry(i, ZERO);
         }
         for (int k = 0; k < npt; k++) {
             modelSecondDerivativesParameters.setEntry(k, ZERO);
-            for (int j = 0, max = npt - np; j < max; j++) {
+            final int maxJ = npt - np;
+            for (int j = 0; j < maxJ; j++) {
                 zMatrix.setEntry(k, j, ZERO);
             }
         }
@@ -1817,9 +1804,7 @@ public class BOBYQAOptimizer
             ArrayRealVector xbdi,
             ArrayRealVector s,
             ArrayRealVector hs,
-            ArrayRealVector hred
-    ) {
-        printMethod(); // XXX
+            ArrayRealVector hred) {
 
         final int n = currentBest.getDimension();
         final int npt = numberOfInterpolationPoints;
@@ -1828,19 +1813,40 @@ public class BOBYQAOptimizer
         double crvmin = Double.NaN;
 
         // Local variables
-        double ds;
-        int iu;
-        double dhd, dhs, cth, shs, sth, ssq, beta=0, sdec, blen;
+        double dhd;
+        double dhs;
+        double cth;
+        double shs;
+        double sth;
+        double ssq;
+        double beta=0;
+        double sdec;
+        double blen;
         int iact = -1;
-        int nact = 0;
-        double angt = 0, qred;
+        double angt = 0;
+        double qred;
         int isav;
-        double temp = 0, xsav = 0, xsum = 0, angbd = 0, dredg = 0, sredg = 0;
-        int iterc;
-        double resid = 0, delsq = 0, ggsav = 0, tempa = 0, tempb = 0,
-        redmax = 0, dredsq = 0, redsav = 0, gredsq = 0, rednew = 0;
+        double temp = 0;
+        double xsav = 0;
+        double xsum = 0;
+        double angbd = 0;
+        double dredg = 0;
+        double sredg = 0;
+        double resid = 0;
+        double delsq = 0;
+        double ggsav = 0;
+        double tempa = 0;
+        double tempb = 0;
+        double redmax = 0;
+        double dredsq = 0;
+        double redsav = 0;
+        double gredsq = 0;
+        double rednew = 0;
         int itcsav = 0;
-        double rdprev = 0, rdnext = 0, stplen = 0, stepsq = 0;
+        double rdprev = 0;
+        double rdnext = 0;
+        double stplen = 0;
+        double stepsq = 0;
         int itermax = 0;
 
         // Set some constants.
@@ -1854,8 +1860,8 @@ public class BOBYQAOptimizer
         // set for the first iteration. DELSQ is the upper bound on the sum of
         // squares of the free variables. QRED is the reduction in Q so far.
 
-        iterc = 0;
-        nact = 0;
+        int iterc = 0;
+        int nact = 0;
         for (int i = 0; i < n; i++) {
             xbdi.setEntry(i, ZERO);
             if (trustRegionCenterOffset.getEntry(i) <= lowerDifference.getEntry(i)) {
@@ -1884,13 +1890,11 @@ public class BOBYQAOptimizer
 
         int state = 20;
         for(;;) {
-            switch (state) {
+            switch (state) { // NOPMD - the reference algorithm is as complex as this, we simply ported it from Fortran with minimal changes
         case 20: {
-            printState(20); // XXX
             beta = ZERO;
         }
         case 30: {
-            printState(30); // XXX
             stepsq = ZERO;
             for (int i = 0; i < n; i++) {
                 if (xbdi.getEntry(i) != ZERO) {
@@ -1923,9 +1927,8 @@ public class BOBYQAOptimizer
             state = 210; break;
         }
         case 50: {
-            printState(50); // XXX
             resid = delsq;
-            ds = ZERO;
+            double ds = ZERO;
             shs = ZERO;
             for (int i = 0; i < n; i++) {
                 if (xbdi.getEntry(i) == ZERO) {
@@ -2031,7 +2034,6 @@ public class BOBYQAOptimizer
             }
         }
         case 90: {
-            printState(90); // XXX
             crvmin = ZERO;
 
             // Prepare for the alternative iteration by calculating some scalars
@@ -2040,7 +2042,6 @@ public class BOBYQAOptimizer
 
         }
         case 100: {
-            printState(100); // XXX
             if (nact >= n - 1) {
                 state = 190; break;
             }
@@ -2067,7 +2068,6 @@ public class BOBYQAOptimizer
             // and the reduced G that is orthogonal to the reduced D.
         }
         case 120: {
-            printState(120); // XXX
             ++iterc;
             temp = gredsq * dredsq - dredg * dredg;
             if (temp <= qred * 1e-4 * qred) {
@@ -2138,7 +2138,6 @@ public class BOBYQAOptimizer
             state = 210; break;
         }
         case 150: {
-            printState(150); // XXX
             shs = ZERO;
             dhs = ZERO;
             dhd = ZERO;
@@ -2157,7 +2156,7 @@ public class BOBYQAOptimizer
             redmax = ZERO;
             isav = -1;
             redsav = ZERO;
-            iu = (int) (angbd * 17. + 3.1);
+            int iu = (int) (angbd * 17. + 3.1);
             for (int i = 0; i < iu; i++) {
                 angt = angbd * i / iu;
                 sth = (angt + angt) / (ONE + angt * angt);
@@ -2223,7 +2222,6 @@ public class BOBYQAOptimizer
             }
         }
         case 190: {
-            printState(190); // XXX
             dsq = ZERO;
             for (int i = 0; i < n; i++) {
                 // Computing MAX
@@ -2249,7 +2247,6 @@ public class BOBYQAOptimizer
             // they can be regarded as an external subroutine.
         }
         case 210: {
-            printState(210); // XXX
             int ih = 0;
             for (int j = 0; j < n; j++) {
                 hs.setEntry(j, ZERO);
@@ -2304,9 +2301,7 @@ public class BOBYQAOptimizer
     private void update(
             double beta,
             double denom,
-            int knew
-    ) {
-        printMethod(); // XXX
+            int knew) {
 
         final int n = currentBest.getDimension();
         final int npt = numberOfInterpolationPoints;
@@ -2390,7 +2385,6 @@ public class BOBYQAOptimizer
      */
     private void setup(double[] lowerBound,
                        double[] upperBound) {
-        printMethod(); // XXX
 
         double[] init = getStartPoint();
         final int dimension = init.length;
@@ -2442,15 +2436,6 @@ public class BOBYQAOptimizer
         trialStepPoint = new ArrayRealVector(dimension);
         lagrangeValuesAtNewPoint = new ArrayRealVector(dimension + numberOfInterpolationPoints);
         modelSecondDerivativesValues = new ArrayRealVector(dimension * (dimension + 1) / 2);
-    }
-
-    // XXX utility for figuring out call sequence.
-    private static void printState(int s) {
-        //        System.out.println(caller(2) + ": state " + s);
-    }
-    // XXX utility for figuring out call sequence.
-    private static void printMethod() {
-        //        System.out.println(caller(2));
     }
 
 }

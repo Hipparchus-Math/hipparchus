@@ -31,22 +31,22 @@ import org.hipparchus.util.Incrementor;
  * and storing the convergence checker.
  * <em>It is not a "user" class.</em>
  *
- * @param <PAIR> Type of the point/value pair returned by the optimization
+ * @param <P> Type of the point/value pair returned by the optimization
  * algorithm.
  *
  */
-public abstract class BaseOptimizer<PAIR> {
+public abstract class BaseOptimizer<P> {
     /** Evaluations counter. */
     protected Incrementor evaluations;
     /** Iterations counter. */
     protected Incrementor iterations;
     /** Convergence checker. */
-    private final ConvergenceChecker<PAIR> checker;
+    private final ConvergenceChecker<P> checker;
 
     /**
      * @param checker Convergence checker.
      */
-    protected BaseOptimizer(ConvergenceChecker<PAIR> checker) {
+    protected BaseOptimizer(ConvergenceChecker<P> checker) {
         this(checker, 0, Integer.MAX_VALUE);
     }
 
@@ -55,7 +55,7 @@ public abstract class BaseOptimizer<PAIR> {
      * @param maxEval Maximum number of objective function evaluations.
      * @param maxIter Maximum number of algorithm iterations.
      */
-    protected BaseOptimizer(ConvergenceChecker<PAIR> checker,
+    protected BaseOptimizer(ConvergenceChecker<P> checker,
                             int maxEval,
                             int maxIter) {
         this.checker = checker;
@@ -111,7 +111,7 @@ public abstract class BaseOptimizer<PAIR> {
      *
      * @return the object used to check for convergence.
      */
-    public ConvergenceChecker<PAIR> getConvergenceChecker() {
+    public ConvergenceChecker<P> getConvergenceChecker() {
         return checker;
     }
 
@@ -143,7 +143,7 @@ public abstract class BaseOptimizer<PAIR> {
      * @throws MathIllegalStateException if the maximal number of
      * iterations is exceeded.
      */
-    public PAIR optimize(OptimizationData... optData)
+    public P optimize(OptimizationData... optData)
         throws MathIllegalStateException {
         // Parse options.
         parseOptimizationData(optData);
@@ -164,7 +164,7 @@ public abstract class BaseOptimizer<PAIR> {
      * @throws MathIllegalStateException if the maximal number of
      * iterations is exceeded.
      */
-    public PAIR optimize()
+    public P optimize()
         throws MathIllegalStateException {
         // Reset counters.
         evaluations.reset();
@@ -179,7 +179,7 @@ public abstract class BaseOptimizer<PAIR> {
      * @return the point/value pair giving the optimal value of the
      * objective function.
      */
-    protected abstract PAIR doOptimize();
+    protected abstract P doOptimize();
 
     /**
      * Increment the evaluation count.
