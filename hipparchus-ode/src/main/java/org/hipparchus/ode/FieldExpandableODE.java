@@ -102,12 +102,11 @@ public class FieldExpandableODE<T extends RealFieldElement<T>> {
         final T t0 = s0.getTime();
 
         // initialize primary equations
-        int index = 0;
         final T[] primary0 = s0.getPrimaryState();
         primary.init(t0, primary0, finalTime);
 
         // initialize secondary equations
-        while (++index < mapper.getNumberOfEquations()) {
+        for (int index = 1; index < mapper.getNumberOfEquations(); ++index) {
             final T[] secondary0 = s0.getSecondaryState(index);
             components.get(index - 1).init(t0, primary0, secondary0, finalTime);
         }
@@ -127,12 +126,11 @@ public class FieldExpandableODE<T extends RealFieldElement<T>> {
         final T[] yDot = MathArrays.buildArray(t.getField(), mapper.getTotalDimension());
 
         // compute derivatives of the primary equations
-        int index = 0;
-        final T[] primaryState    = mapper.extractEquationData(index, y);
+        final T[] primaryState    = mapper.extractEquationData(0, y);
         final T[] primaryStateDot = primary.computeDerivatives(t, primaryState);
 
         // Add contribution for secondary equations
-        while (++index < mapper.getNumberOfEquations()) {
+        for (int index = 1; index < mapper.getNumberOfEquations(); ++index) {
             final T[] componentState    = mapper.extractEquationData(index, y);
             final T[] componentStateDot = components.get(index - 1).computeDerivatives(t, primaryState, primaryStateDot,
                                                                                        componentState);

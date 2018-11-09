@@ -792,19 +792,15 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                                                                        equations.getMapper(),
                                                                        yMidDots, mu);
 
-                if (mu >= 0) {
-
-                    if (useInterpolationError) {
-                        // use the interpolation error to limit stepsize
-                        final double interpError = interpolator.estimateError(scale);
-                        hInt = FastMath.abs(getStepSize() /
-                                                       FastMath.max(FastMath.pow(interpError, 1.0 / (mu + 4)), 0.01));
-                        if (interpError > 10.0) {
-                            hNew   = filterStep(hInt, forward, false);
-                            reject = true;
-                        }
+                if (mu >= 0 && useInterpolationError) {
+                    // use the interpolation error to limit stepsize
+                    final double interpError = interpolator.estimateError(scale);
+                    hInt = FastMath.abs(getStepSize() /
+                                        FastMath.max(FastMath.pow(interpError, 1.0 / (mu + 4)), 0.01));
+                    if (interpError > 10.0) {
+                        hNew   = filterStep(hInt, forward, false);
+                        reject = true;
                     }
-
                 }
 
             } else {

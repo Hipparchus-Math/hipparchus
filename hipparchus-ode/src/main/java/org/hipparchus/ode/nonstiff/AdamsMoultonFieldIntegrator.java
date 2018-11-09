@@ -379,11 +379,14 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
         private final T[] after;
 
         /** Simple constructor.
+         * <p>
+         * All arrays will be stored by reference to caller arrays.
+         * </p>
          * @param previous previous state
          * @param scaled current scaled first derivative
          * @param state state to correct (will be overwritten after visit)
          */
-        Corrector(final T[] previous, final T[] scaled, final T[] state) {
+        Corrector(final T[] previous, final T[] scaled, final T[] state) { // NOPMD - array reference storage is intentional and documented here
             this.previous = previous;
             this.scaled   = scaled;
             this.after    = state;
@@ -416,6 +419,7 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
          * @return the normalized correction, if greater than 1, the step
          * must be rejected
          */
+        @Override
         public T end() {
 
             T error = getField().getZero();

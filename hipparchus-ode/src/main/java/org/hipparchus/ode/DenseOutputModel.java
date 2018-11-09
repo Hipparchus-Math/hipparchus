@@ -131,11 +131,11 @@ public class DenseOutputModel implements ODEStepHandler, Serializable {
     public void append(final DenseOutputModel model)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
-        if (model.steps.size() == 0) {
+        if (model.steps.isEmpty()) {
             return;
         }
 
-        if (steps.size() == 0) {
+        if (steps.isEmpty()) {
             initialTime = model.initialTime;
             forward     = model.forward;
         } else {
@@ -204,10 +204,11 @@ public class DenseOutputModel implements ODEStepHandler, Serializable {
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * during step finalization
      */
+    @Override
     public void handleStep(final ODEStateInterpolator interpolator, final boolean isLast)
         throws MathIllegalStateException {
 
-        if (steps.size() == 0) {
+        if (steps.isEmpty()) {
             initialTime = interpolator.getPreviousState().getTime();
             forward     = interpolator.isForward();
         }

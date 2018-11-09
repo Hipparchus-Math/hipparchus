@@ -123,11 +123,11 @@ public class FieldDenseOutputModel<T extends RealFieldElement<T>>
     public void append(final FieldDenseOutputModel<T> model)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
-        if (model.steps.size() == 0) {
+        if (model.steps.isEmpty()) {
             return;
         }
 
-        if (steps.size() == 0) {
+        if (steps.isEmpty()) {
             initialTime = model.initialTime;
             forward     = model.forward;
         } else {
@@ -197,10 +197,11 @@ public class FieldDenseOutputModel<T extends RealFieldElement<T>>
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * during step finalization
      */
+    @Override
     public void handleStep(final FieldODEStateInterpolator<T> interpolator, final boolean isLast)
         throws MathIllegalStateException {
 
-        if (steps.size() == 0) {
+        if (steps.isEmpty()) {
             initialTime = interpolator.getPreviousState().getTime();
             forward     = interpolator.isForward();
         }

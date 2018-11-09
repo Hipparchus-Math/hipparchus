@@ -230,7 +230,7 @@ public class VariationalEquation {
      * @return a new instance of initial state, with the initial Jacobians
      * matrices properly initialized
      */
-    public ODEState setUpInitialState(final ODEState initialState) {
+    public ODEState setUpInitialState(final ODEState initialState) { // NOPMD - PMD false positive
 
         // insert the matrices data into secondary states
         final double[][] secondary = new double[expandable.getMapper().getNumberOfEquations() - 1][];

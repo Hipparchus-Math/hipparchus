@@ -369,11 +369,14 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
         private final double[] after;
 
         /** Simple constructor.
+         * <p>
+         * All arrays will be stored by reference to caller arrays.
+         * </p>
          * @param previous previous state
          * @param scaled current scaled first derivative
          * @param state state to correct (will be overwritten after visit)
          */
-        Corrector(final double[] previous, final double[] scaled, final double[] state) {
+        Corrector(final double[] previous, final double[] scaled, final double[] state) { // NOPMD - array reference storage is intentional and documented here
             this.previous = previous;
             this.scaled   = scaled;
             this.after    = state;
@@ -406,6 +409,7 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
          * @return the normalized correction, if greater than 1, the step
          * must be rejected
          */
+        @Override
         public double end() {
 
             double error = 0;

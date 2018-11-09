@@ -18,8 +18,8 @@
 package org.hipparchus.ode.nonstiff;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
@@ -135,7 +135,7 @@ public class AdamsNordsieckTransformer {
 
     /** Cache for already computed coefficients. */
     private static final Map<Integer, AdamsNordsieckTransformer> CACHE =
-        new HashMap<Integer, AdamsNordsieckTransformer>();
+        new ConcurrentHashMap<Integer, AdamsNordsieckTransformer>();
 
     /** Update matrix for the higher order derivatives h<sup>2</sup>/2 y'', h<sup>3</sup>/6 y''' ... */
     private final Array2DRowRealMatrix update;
@@ -187,7 +187,7 @@ public class AdamsNordsieckTransformer {
      * (excluding the one being computed)
      * @return Nordsieck transformer for the specified number of steps
      */
-    public static AdamsNordsieckTransformer getInstance(final int nSteps) {
+    public static AdamsNordsieckTransformer getInstance(final int nSteps) { // NOPMD - PMD false positive
         synchronized(CACHE) {
             AdamsNordsieckTransformer t = CACHE.get(nSteps);
             if (t == null) {

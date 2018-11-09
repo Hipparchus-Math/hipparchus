@@ -23,8 +23,8 @@
 package org.hipparchus.ode.nonstiff;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
@@ -141,8 +141,8 @@ public class AdamsNordsieckFieldTransformer<T extends RealFieldElement<T>> {
     private static final Map<Integer,
                          Map<Field<? extends RealFieldElement<?>>,
                                    AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>>> CACHE =
-        new HashMap<Integer, Map<Field<? extends RealFieldElement<?>>,
-                                 AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>>>();
+        new ConcurrentHashMap<Integer, Map<Field<? extends RealFieldElement<?>>,
+                                           AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>>>();
 
     /** Field to which the time and state vector elements belong. */
     private final Field<T> field;
@@ -193,14 +193,14 @@ public class AdamsNordsieckFieldTransformer<T extends RealFieldElement<T>> {
      * @return Nordsieck transformer for the specified field and number of steps
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> AdamsNordsieckFieldTransformer<T>
+    public static <T extends RealFieldElement<T>> AdamsNordsieckFieldTransformer<T> // NOPMD - PMD false positive
     getInstance(final Field<T> field, final int nSteps) {
         synchronized(CACHE) {
             Map<Field<? extends RealFieldElement<?>>,
                       AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>> map = CACHE.get(nSteps);
             if (map == null) {
-                map = new HashMap<Field<? extends RealFieldElement<?>>,
-                                        AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>>();
+                map = new ConcurrentHashMap<Field<? extends RealFieldElement<?>>,
+                                            AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>>();
                 CACHE.put(nSteps, map);
             }
             @SuppressWarnings("unchecked")
