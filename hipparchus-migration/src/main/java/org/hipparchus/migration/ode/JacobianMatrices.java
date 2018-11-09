@@ -211,7 +211,7 @@ public class JacobianMatrices {
      * @return a new instance of initial state, with the initial Jacobians
      * matrices properly initialized
      */
-    public ODEState setUpInitialState(final ODEState initialState) {
+    public ODEState setUpInitialState(final ODEState initialState) { // NOPMD - PMD false positive
 
         // insert the matrices data into secondary states
         final double[][] secondary = new double[efode.getMapper().getNumberOfEquations() - 1][];
@@ -448,7 +448,7 @@ public class JacobianMatrices {
 
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
                      InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException e) {
-                throw new MathIllegalStateException(LocalizedCoreFormats.SIMPLE_MESSAGE, e.getLocalizedMessage());
+                throw new MathIllegalStateException(e, LocalizedCoreFormats.SIMPLE_MESSAGE, e.getLocalizedMessage());
             }
 
             // variational equations:

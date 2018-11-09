@@ -179,6 +179,7 @@ public interface StepInterpolator extends ODEStateInterpolator {
      * @return true if the integration variable (time) increases during
      * integration
      */
+    @Override
     boolean isForward();
 
     /** Copy the instance.
