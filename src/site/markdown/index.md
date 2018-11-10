@@ -56,12 +56,13 @@ at fork time.
 
  ---
 
-## 1.3 Release is out!
+## 1.4 Release is out!
 
-Hipparchus 1.3 is now available for download from the [Hipparchus download page](downloads.html) or on Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.3 release are:
+Hipparchus 1.4 is now available for download from the [Hipparchus download page](downloads.html) or on Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.3 release are:
 
-  * complex eigen decomposition
-  * solver for continuous time algebraic Riccati equation
-  * a complete Kalman module featuring both a filter for linear processes and a filter for non-linear processes
-  * capability for secondary equations to update the derivatives of the primary equation in ODE
-  * matrix decomposer to configure decomposition threshold independently of the matrix
+  * bilinear interpolation for 2D grids.
+  * field version of sinCos.
+  * support for complex ordinary differential equations (both primary and secondary equations).
+  * accessors for state transition matrix, Jacobian matrix H, innovation covariance matrix and Kalman gain in Kalman filters.
+  * way to build three-dimensional field arrays.
+  * several fixes in the Euclidean 3D and spherical 2D partitioning
