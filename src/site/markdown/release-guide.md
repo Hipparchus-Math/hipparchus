@@ -74,8 +74,8 @@ the `maven-site-plugin` version, `reflow-velocity-tools` version and `velocity `
 not updated (and should probably remain frozen until the site skin is changed).
 
 Beware also that some plugins use configuration files that may need update too. This is
-typically the case with `maven-checkstyle-plugin`. The `src/conf/checkstyle.xml` file may
-need to be checked.
+typically the case with `maven-checkstyle-plugin` and `maven-pmd-plugin`. The
+`src/conf/checkstyle.xml` and `src/conf/pmd-ruleset` files may need to be checked.
 
 Before committing these changes, you have to check that everything works. So run
 the following command:
@@ -93,7 +93,7 @@ everything in one place.
 
 When everything runs fine and the generated site is OK, then you can commit the changes:
 
-    git add hipparchus-parent/pom.xml src/conf/checkstyle.xml
+    git add hipparchus-parent/pom.xml src/conf/checkstyle.xml src/conf/pmd-ruleset
     git commit -m "Updated maven plugins versions."
 
 ## Creating release notes
@@ -142,6 +142,7 @@ Several files must be updated to take into account the new version:
 
 |            file name             |           usage            |                                     required update                                                    | 
 |----------------------------------|----------------------------|--------------------------------------------------------------------------------------------------------|
+| `hipparchus-*/src/site/site.xml` | site structure and menus   | Add an entry in the menu for X.Y API docs (don't remove the existing entries for previous versions!)   |
 | `src/site/site.xml         `     | site structure and menus   | Add an entry in the menu for X.Y API docs (don't remove the existing entries for previous versions!)   |
 | `src/site/markdown/index.md`     | site home page             | Update the text about the latest available version, including important changes from RELEASE-NOTES.txt |
 | `src/site/markdown/downloads.md` | downloads links            | Add a table with the links for files of the new versions, don't forget the date in the table caption   |
@@ -150,7 +151,7 @@ Documentation files to update
 
 Once the files have been updated, commit the changes:
 
-    git add src/site/site.xml src/site/markdown/*.md
+    git add hipparchus-*/src/site/site.xml src/site/site.xml src/site/markdown/*.md README.md
     git commit -m "Updated documentation for the release."
 
 ## Tag and sign the git repository
