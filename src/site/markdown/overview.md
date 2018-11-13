@@ -34,6 +34,7 @@ it's just meant to give a feel for the kinds of things that Hipparchus provides.
 * Fitting a curve to a set of data points
 * Finding a smooth curve that passes through a collection of points (interpolation)
 * Fitting a parametric model to a set of measurements using least-squares methods
+* Estimating linear and non-linear processing using Kalman filtering
 * Solving equations involving real-valued functions (i.e. root-finding)
 * Solving systems of linear equations
 * Solving Ordinary Differential Equations
