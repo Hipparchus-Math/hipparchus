@@ -26,7 +26,7 @@ official release.
 
 The Git repository can be cloned using the following command, which can
 be easily adapted if you are using one of the numerous Git graphical
-user interface available or if Git is supported by you integrated
+user interface available or if Git is supported by your integrated
 development environment:
 
     git clone https://github.com/Hipparchus-Math/hipparchus.git
@@ -36,7 +36,8 @@ development environment:
 Hipparchus releases are provided in source and binary distributions via the links below.  Source packages are the most complete, since the other packages (binary jars, javadoc jars, source jars, web content) are created from these sources.
 
 Hipparchus is also available in maven central repository, with groupID org.hipparchus and artifactIds hipparchus-core,
-hipparchus-clustering, hipparchus-fft, hipparchus-fitting, hipparchus-geometry, hipparchus-ode, hipparchus-optim and hipparchus-stat. There is also a hipparchus-migration artifact to help migrating from Apache Commons Math.
+hipparchus-clustering, hipparchus-fft, hipparchus-fitting, hipparchus-filtering, hipparchus-geometry, hipparchus-ode, hipparchus-optim and hipparchus-stat.
+There is also a hipparchus-migration artifact to help migrating from Apache Commons Math.
 Maven's internal mechanism will automatically download any internal dependencies among the artifacts.  Signatures may be verified using the Hipparchus [KEYS](http://www.hipparchus.org/KEYS).
 
 ---
@@ -47,7 +48,7 @@ Maven's internal mechanism will automatically download any internal dependencies
 |  source (tar.bz2) | [hipparchus-1.4-src.tar.bz2](downloads/hipparchus-1.4-src.tar.bz2) | [md5](downloads/hipparchus-1.4-src.tar.bz2.md5) | [sig](downloads/hipparchus-1.4-src.tar.bz2.asc)|
 |  binary (zip)     | [hipparchus-1.4-bin.zip](downloads/hipparchus-1.4-bin.zip)| [md5](downloads/hipparchus-1.4-bin.zip.md5) | [sig](downloads/hipparchus-1.4-bin.zip.asc)|
 |  binary (tar.bz2) | [hipparchus-1.4-bin.tar.bz2](downloads/hipparchus-1.4-bin.tar.bz2) | [md5](downloads/hipparchus-1.4-bin.tar.bz2.md5) | [sig](downloads/hipparchus-1.4-bin.tar.bz2.asc)
-version 1.4 downloads (release date: 14-November-2018)
+version 1.4 downloads (release date: 16-November-2018)
 
 ---
 

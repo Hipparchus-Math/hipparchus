@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Filtering Release Notes</title>
   </properties>
   <body>
-    <release version="1.4" date="2018-11-14" description="This is a maintenance release. The main
+    <release version="1.4" date="2018-11-16" description="This is a maintenance release. The main
     changes since last version are the introduction of accessors for state transition matrix,
     Jacobian matrix H, innovation covariance matrix and Kalman gain in Kalman filters.">
       <action dev="luc" type="add" issue="issues/43">

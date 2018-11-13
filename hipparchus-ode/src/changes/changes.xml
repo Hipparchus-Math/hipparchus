@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
-    <release version="1.4" date="2018-11-14" description="This is a maintenance release. The main
+    <release version="1.4" date="2018-11-16" description="This is a maintenance release. The main
     changes since last version are the introduction of support for complex ordinary differential
     equations (both primary and secondary equations).">
       <action dev="luc" type="add" issue="issues/39" >

@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
-    <release version="1.4"  date="2018-11-14" description="This is a maintenance release. The main
+    <release version="1.4"  date="2018-11-16" description="This is a maintenance release. The main
     changes since last version are the introduction of bilinear interpolation for 2D grids, field
     versions of sinCos and a way to build three-dimensional field arrays.">
       <action dev="luc" type="add" issue="issues/48" >
