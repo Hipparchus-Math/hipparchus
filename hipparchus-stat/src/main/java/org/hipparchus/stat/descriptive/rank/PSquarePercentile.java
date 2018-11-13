@@ -929,6 +929,19 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
                             collection.size() + size() <= capacity;
             return isCollectionLess && super.addAll(collection);
         }
+
+        /** {@inheritDoc} */
+        @Override
+        public boolean equals(final Object other) {
+            return super.equals(other) && capacity == ((FixedCapacityList<?>) other).capacity;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public int hashCode() {
+            return super.hashCode() + capacity;
+        }
+
     }
 
     /**

@@ -195,23 +195,22 @@ public class AdamsNordsieckFieldTransformer<T extends RealFieldElement<T>> {
      */
     public static <T extends RealFieldElement<T>> AdamsNordsieckFieldTransformer<T> // NOPMD - PMD false positive
     getInstance(final Field<T> field, final int nSteps) {
-        synchronized(CACHE) {
-            Map<Field<? extends RealFieldElement<?>>,
-                      AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>> map = CACHE.get(nSteps);
-            if (map == null) {
-                map = new ConcurrentHashMap<Field<? extends RealFieldElement<?>>,
-                                            AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>>();
-                CACHE.put(nSteps, map);
-            }
-            @SuppressWarnings("unchecked")
-            AdamsNordsieckFieldTransformer<T> t = (AdamsNordsieckFieldTransformer<T>) map.get(field);
-            if (t == null) {
-                t = new AdamsNordsieckFieldTransformer<T>(field, nSteps);
-                map.put(field, t);
-            }
-            return t;
 
+        Map<Field<? extends RealFieldElement<?>>,
+                  AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>> map = CACHE.get(nSteps);
+        if (map == null) {
+            map = new ConcurrentHashMap<Field<? extends RealFieldElement<?>>,
+                                              AdamsNordsieckFieldTransformer<? extends RealFieldElement<?>>>();
+            CACHE.put(nSteps, map);
         }
+        @SuppressWarnings("unchecked")
+        AdamsNordsieckFieldTransformer<T> t = (AdamsNordsieckFieldTransformer<T>) map.get(field);
+        if (t == null) {
+            t = new AdamsNordsieckFieldTransformer<T>(field, nSteps);
+            map.put(field, t);
+        }
+        return t;
+
     }
 
     /** Build the P matrix.
