@@ -58,7 +58,8 @@ at fork time.
 
 ## 1.4 Release is out!
 
-Hipparchus 1.4 is now available for download from the [Hipparchus download page](downloads.html) or on Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.3 release are:
+Hipparchus 1.4 is now available for download from the [Hipparchus download page](downloads.html) or on
+Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.4 release are:
 
   * bilinear interpolation for 2D grids.
   * field version of sinCos.
