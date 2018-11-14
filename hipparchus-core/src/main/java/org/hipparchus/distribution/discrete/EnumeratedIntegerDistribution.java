@@ -76,7 +76,7 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
      * @param data input dataset
      */
     public EnumeratedIntegerDistribution(final int[] data) {
-        final Map<Integer, Integer> dataMap = new HashMap<>(); // NOPMD - no need for ConcurrentHashMap here
+        final Map<Integer, Integer> dataMap = new HashMap<>();
         for (int value : data) {
             Integer count = dataMap.get(value);
             if (count == null) {

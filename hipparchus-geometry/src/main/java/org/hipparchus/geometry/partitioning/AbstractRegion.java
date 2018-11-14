@@ -488,7 +488,7 @@ public abstract class AbstractRegion<S extends Space, T extends Space> implement
     public AbstractRegion<S, T> applyTransform(final Transform<S, T> transform) {
 
         // transform the tree, except for boundary attribute splitters
-        final Map<BSPTree<S>, BSPTree<S>> map = new HashMap<BSPTree<S>, BSPTree<S>>(); // NOPMD - no need for ConcurrentHasMap here
+        final Map<BSPTree<S>, BSPTree<S>> map = new HashMap<BSPTree<S>, BSPTree<S>>();
         final BSPTree<S> transformedTree = recurseTransform(getTree(false), transform, map);
 
         // set up the boundary attributes splitters

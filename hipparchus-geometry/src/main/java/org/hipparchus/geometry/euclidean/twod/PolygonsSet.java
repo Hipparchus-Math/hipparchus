@@ -206,7 +206,7 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
 
         // build the vertices
         final Vertex[] vArray = new Vertex[n];
-        final Map<Vertex, List<Line>> bindings = new IdentityHashMap<>(n); // NOPMD - no need for ConcurrentHasMap here
+        final Map<Vertex, List<Line>> bindings = new IdentityHashMap<>(n);
         for (int i = 0; i < n; ++i) {
             vArray[i] = new Vertex(vertices[i]);
             bindings.put(vArray[i], new ArrayList<>());

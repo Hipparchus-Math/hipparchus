@@ -142,7 +142,7 @@ public class DBSCANClusterer<T extends Clusterable> extends Clusterer<T> {
         MathUtils.checkNotNull(points);
 
         final List<Cluster<T>> clusters = new ArrayList<Cluster<T>>();
-        final Map<Clusterable, PointStatus> visited = new HashMap<Clusterable, PointStatus>(); // NOPMD - no need for ConcurrentHashMap here
+        final Map<Clusterable, PointStatus> visited = new HashMap<Clusterable, PointStatus>();
 
         for (final T point : points) {
             if (visited.get(point) != null) {

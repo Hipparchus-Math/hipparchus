@@ -120,7 +120,7 @@ public abstract class AbstractSubHyperplane<S extends Space, T extends Space>
         final Hyperplane<S> tHyperplane = transform.apply(hyperplane);
 
         // transform the tree, except for boundary attribute splitters
-        final Map<BSPTree<T>, BSPTree<T>> map = new HashMap<BSPTree<T>, BSPTree<T>>(); // NOPMD - no need for ConcurrentHasMap here
+        final Map<BSPTree<T>, BSPTree<T>> map = new HashMap<BSPTree<T>, BSPTree<T>>();
         final BSPTree<T> tTree =
             recurseTransform(remainingRegion.getTree(false), tHyperplane, transform, map);
 

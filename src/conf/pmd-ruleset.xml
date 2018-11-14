@@ -67,6 +67,13 @@
     <!-- PMD confuses our mathematical vectors with Java Vector class -->
     <exclude name="ReplaceVectorWithList"/>
 
+    <!-- PMD default rule for ConcurrentHashMap are too restrictive,
+         it considers *all* usages of HashMap should be replaced,
+         regardless of the map being a local variable or field, in
+         a class documented to be non-thread safe or not, with
+         surrounding synchronize block or not -->
+    <exclude name="UseConcurrentHashMap"/>
+
   </rule>
 
   <rule ref="category/java/codestyle.xml">
