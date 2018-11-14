@@ -20,12 +20,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -737,7 +737,7 @@ public class RandomPercentile
             this.bufferSize = bufferSize;
             this.capacity = capacity;
             this.randomGenerator = randomGenerator;
-            this.registry = new ConcurrentHashMap<>();
+            this.registry = new HashMap<>();
         }
 
         /**
@@ -751,7 +751,7 @@ public class RandomPercentile
             this.capacity = original.capacity;
             this.count = 0;
             this.randomGenerator = original.randomGenerator;
-            this.registry = new ConcurrentHashMap<>();
+            this.registry = new HashMap<>();
             Iterator<Buffer> iterator = original.iterator();
             Buffer current = null;
             Buffer newCopy = null;
