@@ -30,7 +30,7 @@ public interface Clusterable {
     /**
      * Gets the n-dimensional point.
      *
-     * @return the point array
+     * @return the point array (beware, it may be a reference to an internal array)
      */
     double[] getPoint();
 }
