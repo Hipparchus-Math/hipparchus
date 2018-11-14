@@ -221,13 +221,13 @@ access the signing key.
 
 A huge number of files will be uploaded to SonaType server, some of which we do not really
 release. So once the commands ends, you will have to log into SonaType OSS site
-[https://oss.sonatype.org/](https://oss.sonatype.org/) and check the staging repository
-and remove the artifacts from the `hipparchus-aggregator` module. When the artifacts
-are considered OK, the repository must be closed so it is ready for the upcoming vote
-for the release.
+[https://oss.sonatype.org/](https://oss.sonatype.org/), check the staging repository and
+remove the artifacts from the `hipparchus-aggregator` and `hipparchus-coverage` modules.
+When the artifacts are considered OK, the repository must be closed so it is ready for the
+upcoming vote for the release.
 
-This step is performed by the `release.sh` shell script, except the closing of the OSS repository
-and the uploading to Hipparchus site.
+This step is performed by the `release.sh` shell script, except the closing of the OSS repository,
+removing the spurious artifacts.
 
 ## Uploading non-maven artifacts
 
@@ -255,7 +255,7 @@ The site is generated locally using:
 Once generated, the site can be archived and uploaded to the Hipparchus site:
 
     cd target/staging
-    tar cjf ../www-X.Y.hipparchus.org.bz2 .
+    tar cjf ../www-X.Y.hipparchus.org.tar.bz2 .
 
 This archive content must be extracted in the `staging` directory that already contains the
 `downloads` directory with the 12 files uploaded just before. When the `staging` directory
