@@ -853,6 +853,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         }
 
         /** Copy this instance.
+         * @return copy of the instance
          */
         public Marker copySelf() {
             return new Marker(markerHeight, desiredMarkerPosition, desiredMarkerIncrement, intMarkerPosition);

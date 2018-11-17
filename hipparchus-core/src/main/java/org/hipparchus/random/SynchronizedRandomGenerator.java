@@ -50,7 +50,7 @@ public class SynchronizedRandomGenerator implements RandomGenerator {
     @Override
     public void setSeed(int seed) {
         synchronized (wrapped) {
-            wrapped.setSeed(seed);            
+            wrapped.setSeed(seed);
         }
     }
 
