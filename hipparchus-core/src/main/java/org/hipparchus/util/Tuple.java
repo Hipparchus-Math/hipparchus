@@ -46,7 +46,7 @@ public class Tuple implements RealFieldElement<Tuple> {
      * @param field field the instance belongs to
      * @param x components of the tuple (beware, it is <em>not</em> copied, it is shared with caller)
      */
-    private Tuple(final TupleField field, final double[] x) {
+    private Tuple(final TupleField field, final double[] x) {// NOPMD - storing user-supplied array is intentional and documented here
         this.values = x;
         this.field  = field;
     }

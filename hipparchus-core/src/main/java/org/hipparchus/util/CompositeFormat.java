@@ -114,9 +114,7 @@ public class CompositeFormat {
         Number ret = null;
 
         StringBuilder sb = new StringBuilder();
-        sb.append('(');
-        sb.append(value);
-        sb.append(')');
+        sb.append('(').append(value).append(')');
 
         final int n = sb.length();
         final int startIndex = pos.getIndex();

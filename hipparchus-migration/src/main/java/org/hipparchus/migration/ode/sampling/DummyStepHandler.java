@@ -68,6 +68,7 @@ public class DummyStepHandler implements ODEStepHandler {
      * copy.
      * @param isLast true if the step is the last one
      */
+    @Override
     public void handleStep(final ODEStateInterpolator interpolator, final boolean isLast) {
     }
 

@@ -40,7 +40,7 @@ public enum FilterType {
 
         /**  {@inheritDoc} */
         @Override
-        protected boolean getTriggeredIncreasing() {
+        protected boolean isTriggeredOnIncreasing() {
             return false;
         }
 
@@ -218,7 +218,7 @@ public enum FilterType {
 
         /**  {@inheritDoc} */
         @Override
-        protected boolean getTriggeredIncreasing() {
+        protected boolean isTriggeredOnIncreasing() {
             return true;
         }
 
@@ -386,10 +386,10 @@ public enum FilterType {
 
     };
 
-    /** Get the increasing status of triggered events.
+    /** Check if triggered events are increasing events.
      * @return true if triggered events are increasing events
      */
-    protected abstract boolean getTriggeredIncreasing();
+    protected abstract boolean isTriggeredOnIncreasing();
 
     /** Get next function transformer in the specified direction.
      * @param previous transformer active on the previous point with respect

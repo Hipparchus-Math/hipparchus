@@ -971,23 +971,23 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         final StringBuffer res = new StringBuffer();
         String fullClassName = getClass().getName();
         String shortClassName = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
-        res.append(shortClassName).append("{");
+        res.append(shortClassName).append('{');
 
         for (int i = 0; i < nRows; ++i) {
             if (i > 0) {
-                res.append(",");
+                res.append(',');
             }
-            res.append("{");
+            res.append('{');
             for (int j = 0; j < nCols; ++j) {
                 if (j > 0) {
-                    res.append(",");
+                    res.append(',');
                 }
                 res.append(getEntry(i, j));
             }
-            res.append("}");
+            res.append('}');
         }
 
-        res.append("}");
+        res.append('}');
         return res.toString();
     }
 
@@ -1001,10 +1001,10 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
      */
     @Override
     public boolean equals(final Object object) {
-        if (object == this ) {
+        if (object == this) {
             return true;
         }
-        if (object instanceof FieldMatrix<?> == false) {
+        if (!(object instanceof FieldMatrix<?>)) {
             return false;
         }
         FieldMatrix<?> m = (FieldMatrix<?>) object;

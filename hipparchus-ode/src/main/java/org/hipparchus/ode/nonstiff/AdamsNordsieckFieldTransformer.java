@@ -193,7 +193,7 @@ public class AdamsNordsieckFieldTransformer<T extends RealFieldElement<T>> {
      * @return Nordsieck transformer for the specified field and number of steps
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> AdamsNordsieckFieldTransformer<T>
+    public static <T extends RealFieldElement<T>> AdamsNordsieckFieldTransformer<T> // NOPMD - PMD false positive
     getInstance(final Field<T> field, final int nSteps) {
         synchronized(CACHE) {
             Map<Field<? extends RealFieldElement<?>>,

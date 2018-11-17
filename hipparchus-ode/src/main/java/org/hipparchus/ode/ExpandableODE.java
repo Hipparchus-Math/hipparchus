@@ -106,12 +106,11 @@ public class ExpandableODE {
         final double t0 = s0.getTime();
 
         // initialize primary equations
-        int index = 0;
         final double[] primary0 = s0.getPrimaryState();
         primary.init(t0, primary0, finalTime);
 
         // initialize secondary equations
-        while (++index < mapper.getNumberOfEquations()) {
+        for (int index = 1; index < mapper.getNumberOfEquations(); ++index) {
             final double[] secondary0 = s0.getSecondaryState(index);
             components.get(index - 1).init(t0, primary0, secondary0, finalTime);
         }
@@ -131,12 +130,11 @@ public class ExpandableODE {
         final double[] yDot = new double[mapper.getTotalDimension()];
 
         // compute derivatives of the primary equations
-        int index = 0;
-        final double[] primaryState    = mapper.extractEquationData(index, y);
+        final double[] primaryState    = mapper.extractEquationData(0, y);
         final double[] primaryStateDot = primary.computeDerivatives(t, primaryState);
 
         // Add contribution for secondary equations
-        while (++index < mapper.getNumberOfEquations()) {
+        for (int index = 1; index < mapper.getNumberOfEquations(); ++index) {
             final double[] componentState    = mapper.extractEquationData(index, y);
             final double[] componentStateDot = components.get(index - 1).computeDerivatives(t, primaryState, primaryStateDot,
                                                                                             componentState);

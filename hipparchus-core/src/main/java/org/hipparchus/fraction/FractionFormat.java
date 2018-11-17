@@ -47,6 +47,7 @@ public class FractionFormat extends AbstractFormat {
      * for the numerator and denominator.
      */
     public FractionFormat() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     /**
@@ -145,7 +146,7 @@ public class FractionFormat extends AbstractFormat {
      * offsets of the alignment field
      * @return the value passed in as toAppendTo.
      */
-    public StringBuffer format(final Fraction fraction,
+    public StringBuffer format(final Fraction fraction, // NOPMD - PMD false positive, we cannot have @Override here
                                final StringBuffer toAppendTo, final FieldPosition pos) {
 
         pos.setBeginIndex(0);

@@ -43,13 +43,6 @@ import org.hipparchus.util.MathUtils;
 public class ChiSquareTest {
 
     /**
-     * Construct a ChiSquareTest
-     */
-    public ChiSquareTest() {
-        super();
-    }
-
-    /**
      * Computes the <a href="http://www.itl.nist.gov/div898/handbook/eda/section3/eda35f.htm">
      * Chi-Square statistic</a> comparing <code>observed</code> and <code>expected</code>
      * frequency counts.

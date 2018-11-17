@@ -219,7 +219,7 @@ public class NaturalRanking implements RankingAlgorithm {
                 break;
             case FAILED:
                 nanPositions = getNanPositions(ranks);
-                if (nanPositions.size() > 0) {
+                if (!nanPositions.isEmpty()) {
                     throw new MathIllegalArgumentException(LocalizedCoreFormats.NAN_NOT_ALLOWED);
                 }
                 break;
@@ -398,7 +398,7 @@ public class NaturalRanking implements RankingAlgorithm {
      * @param nanPositions list of index values to set to <code>Double.NaN</code>
      */
     private void restoreNaNs(double[] ranks, List<Integer> nanPositions) {
-        if (nanPositions.size() == 0) {
+        if (nanPositions.isEmpty()) {
             return;
         }
         Iterator<Integer> iterator = nanPositions.iterator();

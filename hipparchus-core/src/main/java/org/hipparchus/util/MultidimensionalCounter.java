@@ -295,7 +295,7 @@ public class MultidimensionalCounter implements Iterable<Integer> {
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < dimension; i++) {
-            sb.append("[").append(getCount(i)).append("]");
+            sb.append('[').append(getCount(i)).append(']');
         }
         return sb.toString();
     }

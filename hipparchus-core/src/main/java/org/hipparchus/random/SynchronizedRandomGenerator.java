@@ -48,79 +48,106 @@ public class SynchronizedRandomGenerator implements RandomGenerator {
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setSeed(int seed) {
-        wrapped.setSeed(seed);
+    public void setSeed(int seed) {
+        synchronized (wrapped) {
+            wrapped.setSeed(seed);            
+        }
     }
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setSeed(int[] seed) {
-        wrapped.setSeed(seed);
+    public void setSeed(int[] seed) {
+        synchronized (wrapped) {
+            wrapped.setSeed(seed);
+        }
     }
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void setSeed(long seed) {
-        wrapped.setSeed(seed);
+    public void setSeed(long seed) {
+        synchronized (wrapped) {
+            wrapped.setSeed(seed);
+        }
     }
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void nextBytes(byte[] bytes) {
-        wrapped.nextBytes(bytes);
+    public void nextBytes(byte[] bytes) {
+        synchronized (wrapped) {
+            wrapped.nextBytes(bytes);
+        }
     }
 
     /** {@inheritDoc} */
     @Override
-    public synchronized void nextBytes(byte[] bytes, int offset, int len) {
-        wrapped.nextBytes(bytes, offset, len);
+    public void nextBytes(byte[] bytes, int offset, int len) {
+        synchronized (wrapped) {
+            wrapped.nextBytes(bytes, offset, len);
+        }
     }
 
     /** {@inheritDoc} */
     @Override
-    public synchronized int nextInt() {
-        return wrapped.nextInt();
+    public int nextInt() {
+        synchronized (wrapped) {
+            return wrapped.nextInt();
+        }
     }
 
     /** {@inheritDoc} */
     @Override
-    public synchronized int nextInt(int n) {
-        return wrapped.nextInt(n);
+    public int nextInt(int n) {
+        synchronized (wrapped) {
+            return wrapped.nextInt(n);
+        }
     }
 
     /** {@inheritDoc} */
     @Override
-    public synchronized long nextLong() {
-        return wrapped.nextLong();
+    public long nextLong() {
+        synchronized (wrapped) {
+            return wrapped.nextLong();
+        }
     }
 
     /** {@inheritDoc} */
     @Override
-    public synchronized long nextLong(long n) {
-        return wrapped.nextLong(n);
+    public long nextLong(long n) {
+        synchronized (wrapped) {
+            return wrapped.nextLong(n);
+        }
     }
 
     /** {@inheritDoc} */
     @Override
-    public synchronized boolean nextBoolean() {
-        return wrapped.nextBoolean();
+    public boolean nextBoolean() {
+        synchronized (wrapped) {
+            return wrapped.nextBoolean();
+        }
     }
 
     /** {@inheritDoc} */
     @Override
-    public synchronized float nextFloat() {
-        return wrapped.nextFloat();
+    public float nextFloat() {
+        synchronized (wrapped) {
+            return wrapped.nextFloat();
+        }
     }
 
     /** {@inheritDoc} */
     @Override
-    public synchronized double nextDouble() {
-        return wrapped.nextDouble();
+    public double nextDouble() {
+        synchronized (wrapped) {
+            return wrapped.nextDouble();
+        }
     }
 
     /** {@inheritDoc} */
     @Override
-    public synchronized double nextGaussian() {
-        return wrapped.nextGaussian();
+    public double nextGaussian() {
+        synchronized (wrapped) {
+            return wrapped.nextGaussian();
+        }
     }
+
 }

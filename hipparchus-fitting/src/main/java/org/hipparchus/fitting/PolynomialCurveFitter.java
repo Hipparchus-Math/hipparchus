@@ -49,15 +49,14 @@ public class PolynomialCurveFitter extends AbstractCurveFitter {
     private final int maxIter;
 
     /**
-     * Contructor used by the factory methods.
+     * Constructor used by the factory methods.
      *
      * @param initialGuess Initial guess.
      * @param maxIter Maximum number of iterations of the optimization algorithm.
      * @throws MathRuntimeException if {@code initialGuess} is {@code null}.
      */
-    private PolynomialCurveFitter(double[] initialGuess,
-                                  int maxIter) {
-        this.initialGuess = initialGuess;
+    private PolynomialCurveFitter(double[] initialGuess, int maxIter) {
+        this.initialGuess = initialGuess.clone();
         this.maxIter = maxIter;
     }
 

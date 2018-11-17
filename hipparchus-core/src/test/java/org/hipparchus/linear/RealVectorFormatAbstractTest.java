@@ -42,7 +42,7 @@ public abstract class RealVectorFormatAbstractTest {
     protected abstract char getDecimalCharacter();
 
     public RealVectorFormatAbstractTest() {
-        realVectorFormat = RealVectorFormat.getInstance(getLocale());
+        realVectorFormat = RealVectorFormat.getRealVectorFormat(getLocale());
         final NumberFormat nf = NumberFormat.getInstance(getLocale());
         nf.setMaximumFractionDigits(2);
         realVectorFormatSquare = new RealVectorFormat("[", "]", " : ", nf);

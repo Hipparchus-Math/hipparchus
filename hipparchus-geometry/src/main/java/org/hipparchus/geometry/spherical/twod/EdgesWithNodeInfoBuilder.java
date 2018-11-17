@@ -42,10 +42,9 @@ class EdgesWithNodeInfoBuilder implements BSPTreeVisitor<Sphere2D> {
     private final List<EdgeWithNodeInfo> edges;
 
     /** Simple constructor.
-     * @param root tree root
      * @param tolerance below which points are consider to be identical
      */
-    EdgesWithNodeInfoBuilder(final BSPTree<Sphere2D> root, final double tolerance) {
+    EdgesWithNodeInfoBuilder(final double tolerance) {
         this.tolerance = tolerance;
         this.edges     = new ArrayList<>();
     }

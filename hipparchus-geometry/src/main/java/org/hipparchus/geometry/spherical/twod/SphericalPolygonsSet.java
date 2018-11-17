@@ -32,7 +32,6 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
-import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.enclosing.EnclosingBall;
 import org.hipparchus.geometry.enclosing.WelzlEncloser;
 import org.hipparchus.geometry.euclidean.threed.Euclidean3D;
@@ -162,7 +161,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * {@link RegionFactory} instead.</p>
      * <p>The list of {@code vertices} is reduced by selecting a sub-set of vertices
      * before creating the boundary set. Every point in {@code vertices} will be on the
-     * {@link #checkPoint(Point) boundary} of the constructed polygon set, but not
+     * {@link #checkPoint(org.hipparchus.geometry.Point) boundary} of the constructed polygon set, but not
      * necessarily the center-line of the boundary.</p>
      * <p>
      * Polygons with thin pikes or dents are inherently difficult to handle because
@@ -558,9 +557,8 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
             } else {
 
                 // sort the arcs according to their start point
-                final BSPTree<Sphere2D> root = getTree(true);
-                final EdgesWithNodeInfoBuilder visitor = new EdgesWithNodeInfoBuilder(root, getTolerance());
-                root.visit(visitor);
+                final EdgesWithNodeInfoBuilder visitor = new EdgesWithNodeInfoBuilder(getTolerance());
+                getTree(true).visit(visitor);
                 final List<EdgeWithNodeInfo> edges = visitor.getEdges();
 
                 // connect all edges, using topological criteria first

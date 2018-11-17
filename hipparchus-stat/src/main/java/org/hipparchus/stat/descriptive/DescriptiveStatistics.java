@@ -250,7 +250,7 @@ public class DescriptiveStatistics
         try {
             eDA.discardMostRecentElements(1);
         } catch (MathIllegalArgumentException ex) {
-            throw new MathIllegalStateException(LocalizedCoreFormats.NO_DATA);
+            throw new MathIllegalStateException(ex, LocalizedCoreFormats.NO_DATA);
         }
     }
 
@@ -512,22 +512,22 @@ public class DescriptiveStatistics
      */
     @Override
     public String toString() {
-        final StringBuilder outBuffer = new StringBuilder();
+        final StringBuilder outBuffer = new StringBuilder(100);
         final String endl = "\n";
-        outBuffer.append("DescriptiveStatistics:").append(endl);
-        outBuffer.append("n: ").append(getN()).append(endl);
-        outBuffer.append("min: ").append(getMin()).append(endl);
-        outBuffer.append("max: ").append(getMax()).append(endl);
-        outBuffer.append("mean: ").append(getMean()).append(endl);
-        outBuffer.append("std dev: ").append(getStandardDeviation()).append(endl);
+        outBuffer.append("DescriptiveStatistics:").append(endl).
+                  append("n: ").append(getN()).append(endl).
+                  append("min: ").append(getMin()).append(endl).
+                  append("max: ").append(getMax()).append(endl).
+                  append("mean: ").append(getMean()).append(endl).
+                  append("std dev: ").append(getStandardDeviation()).append(endl);
         try {
             // No catch for MIAE because actual parameter is valid below
             outBuffer.append("median: ").append(getPercentile(50)).append(endl);
         } catch (MathIllegalStateException ex) {
             outBuffer.append("median: unavailable").append(endl);
         }
-        outBuffer.append("skewness: ").append(getSkewness()).append(endl);
-        outBuffer.append("kurtosis: ").append(getKurtosis()).append(endl);
+        outBuffer.append("skewness: ").append(getSkewness()).append(endl).
+                  append("kurtosis: ").append(getKurtosis()).append(endl);
         return outBuffer.toString();
     }
 

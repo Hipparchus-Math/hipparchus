@@ -39,7 +39,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** Serializable version identifier. */
     private static final long serialVersionUID = -1097961340710804027L;
     /** Default format. */
-    private static final RealVectorFormat DEFAULT_FORMAT = RealVectorFormat.getInstance();
+    private static final RealVectorFormat DEFAULT_FORMAT = RealVectorFormat.getRealVectorFormat();
 
     /** Entries of the vector. */
     private double data[];
@@ -448,7 +448,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
      * @return the array of entries.
      */
     public double[] getDataRef() {
-        return data;
+        return data; // NOPMD - returning an internal array is intentional and documented here
     }
 
     /** {@inheritDoc} */
@@ -600,8 +600,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
         try {
             return data[index];
         } catch (IndexOutOfBoundsException e) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.INDEX, index, 0,
-                getDimension() - 1);
+            throw new MathIllegalArgumentException(e, LocalizedCoreFormats.INDEX, index, 0, getDimension() - 1);
         }
     }
 
@@ -674,8 +673,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
         try {
         data[index] += increment;
         } catch(IndexOutOfBoundsException e){
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.INDEX,
-                                          index, 0, data.length - 1);
+            throw new MathIllegalArgumentException(e, LocalizedCoreFormats.INDEX, index, 0, data.length - 1);
         }
     }
 

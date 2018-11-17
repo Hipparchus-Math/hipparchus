@@ -1280,7 +1280,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      */
     @Override
     public String toString() {
-        return Vector3DFormat.getInstance().format(toVector3D());
+        return Vector3DFormat.getVector3DFormat().format(toVector3D());
     }
 
     /** Get a string representation of this vector.

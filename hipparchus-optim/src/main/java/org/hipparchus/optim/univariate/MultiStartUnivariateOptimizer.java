@@ -136,7 +136,7 @@ public class MultiStartUnivariateOptimizer
     @Override
     public UnivariatePointValuePair optimize(OptimizationData... optData) {
         // Store arguments in order to pass them to the internal optimizer.
-       optimData = optData;
+       optimData = optData.clone();
         // Set up base class and perform computations.
         return super.optimize(optData);
     }
@@ -190,7 +190,7 @@ public class MultiStartUnivariateOptimizer
                 optimData[searchIntervalIndex] = new SearchInterval(min, max, s);
                 // Optimize.
                 optima[i] = optimizer.optimize(optimData);
-            } catch (RuntimeException mue) {
+            } catch (RuntimeException mue) { // NOPMD - caching a RuntimeException is intentional here, it will be rethrown later
                 lastException = mue;
                 optima[i] = null;
             }

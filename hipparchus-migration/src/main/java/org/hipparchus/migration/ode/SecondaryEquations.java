@@ -60,6 +60,7 @@ public interface SecondaryEquations extends SecondaryODE {
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
+    @Override
     default double[] computeDerivatives(final double t, final double[] primary, final double[] primaryDot,
                                         final double[] secondary)
         throws MathIllegalArgumentException, MathIllegalStateException {

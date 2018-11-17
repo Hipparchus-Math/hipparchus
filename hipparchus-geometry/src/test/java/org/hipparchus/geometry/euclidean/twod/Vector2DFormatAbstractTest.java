@@ -42,7 +42,7 @@ public abstract class Vector2DFormatAbstractTest {
     protected abstract char getDecimalCharacter();
 
     protected Vector2DFormatAbstractTest() {
-        vector2DFormat = Vector2DFormat.getInstance(getLocale());
+        vector2DFormat = Vector2DFormat.getVector2DFormat(getLocale());
         final NumberFormat nf = NumberFormat.getInstance(getLocale());
         nf.setMaximumFractionDigits(2);
         vector2DFormatSquare = new Vector2DFormat("[", "]", " : ", nf);

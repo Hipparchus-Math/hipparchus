@@ -379,7 +379,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Fie
                     }
                 } else {
                     if (coefficients[i] < 0) {
-                        s.append("-");
+                        s.append('-');
                     }
                 }
 
@@ -389,7 +389,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Fie
                     s.append(' ');
                 }
 
-                s.append("x");
+                s.append('x');
                 if (i > 1) {
                     s.append('^');
                     s.append(Integer.toString(i));

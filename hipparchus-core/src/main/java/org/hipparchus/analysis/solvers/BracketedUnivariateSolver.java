@@ -47,12 +47,12 @@ import org.hipparchus.util.FastMath;
  * <p>For backwards compatibility, all root-finding algorithms must have
  * {@link AllowedSolution#ANY_SIDE ANY_SIDE} as default for the allowed
  * solutions.</p>
- * @param <FUNC> Type of function to solve.
+ * @param <F> Type of function to solve.
  *
  * @see AllowedSolution
  */
-public interface BracketedUnivariateSolver<FUNC extends UnivariateFunction>
-    extends BaseUnivariateSolver<FUNC> {
+public interface BracketedUnivariateSolver<F extends UnivariateFunction>
+    extends BaseUnivariateSolver<F> {
 
     /**
      * Solve for a zero in the given interval.
@@ -72,7 +72,7 @@ public interface BracketedUnivariateSolver<FUNC extends UnivariateFunction>
      * @throws org.hipparchus.exception.MathIllegalStateException if
      * the allowed number of evaluations is exceeded.
      */
-    double solve(int maxEval, FUNC f, double min, double max,
+    double solve(int maxEval, F f, double min, double max,
                  AllowedSolution allowedSolution);
 
     /**
@@ -94,7 +94,7 @@ public interface BracketedUnivariateSolver<FUNC extends UnivariateFunction>
      * @throws org.hipparchus.exception.MathIllegalStateException if
      * the allowed number of evaluations is exceeded.
      */
-    double solve(int maxEval, FUNC f, double min, double max, double startValue,
+    double solve(int maxEval, F f, double min, double max, double startValue,
                  AllowedSolution allowedSolution);
 
     /**
@@ -121,7 +121,7 @@ public interface BracketedUnivariateSolver<FUNC extends UnivariateFunction>
      * @throws MathIllegalStateException    if the allowed number of evaluations is
      *                                      exceeded.
      */
-    default Interval solveInterval(int maxEval, FUNC f, double min, double max)
+    default Interval solveInterval(int maxEval, F f, double min, double max)
             throws MathIllegalArgumentException, MathIllegalStateException {
         return this.solveInterval(maxEval, f, min, max, min + 0.5 * (max - min));
     }
@@ -151,7 +151,7 @@ public interface BracketedUnivariateSolver<FUNC extends UnivariateFunction>
      * @throws MathIllegalStateException    if the allowed number of evaluations is
      *                                      exceeded.
      */
-    Interval solveInterval(int maxEval, FUNC f, double min, double max, double startValue)
+    Interval solveInterval(int maxEval, F f, double min, double max, double startValue)
             throws MathIllegalArgumentException, MathIllegalStateException;
 
     /**

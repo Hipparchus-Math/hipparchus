@@ -134,7 +134,7 @@ public class JDKRandomGenerator extends IntRandomGenerator implements Serializab
         try {
             return delegate.nextInt(n);
         } catch (IllegalArgumentException e) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(e, LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    n, 0);
         }
     }

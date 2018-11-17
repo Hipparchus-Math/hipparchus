@@ -69,11 +69,6 @@ import org.hipparchus.complex.Complex;
 
 public class ComplexODEConverter {
 
-    /** Simple constructor.
-     */
-    public ComplexODEConverter () {
-    }
-
     /** Convert an equations set.
      * @param equations equations to convert
      * @return converted equations

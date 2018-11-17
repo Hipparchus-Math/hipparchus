@@ -16,8 +16,6 @@
  */
 package org.hipparchus.analysis.differentiation;
 
-import java.util.Arrays;
-
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.RealFieldElement;
@@ -81,10 +79,9 @@ public class FDSFactory<T extends RealFieldElement<T>> {
      * @return a {@link FieldDerivativeStructure} representing a constant value
      */
     public FieldDerivativeStructure<T> constant(final T value) {
-        final T[] data = buildArray();
-        Arrays.fill(data, valueField.getZero());
-        data[0] = value;
-        return new FieldDerivativeStructure<>(this, data);
+        final FieldDerivativeStructure<T> fds = new FieldDerivativeStructure<>(this);
+        fds.setDerivativeComponent(0, value);
+        return fds;
     }
 
     /** Build a {@link FieldDerivativeStructure} representing a variable.
@@ -107,15 +104,16 @@ public class FDSFactory<T extends RealFieldElement<T>> {
                                                    index, getCompiler().getFreeParameters());
         }
 
-        final T[] data = buildArray();
-        Arrays.fill(data, valueField.getZero());
-        data[0] = value;
+        final FieldDerivativeStructure<T> fds = new FieldDerivativeStructure<>(this);
+        fds.setDerivativeComponent(0, value);
+
         if (getCompiler().getOrder() > 0) {
             // the derivative of the variable with respect to itself is 1.
-            data[DSCompiler.getCompiler(index, getCompiler().getOrder()).getSize()] = valueField.getOne();
+            fds.setDerivativeComponent(DSCompiler.getCompiler(index, getCompiler().getOrder()).getSize(),
+                                       valueField.getOne());
         }
 
-        return new FieldDerivativeStructure<>(this, data);
+        return fds;
 
     }
 
@@ -139,15 +137,16 @@ public class FDSFactory<T extends RealFieldElement<T>> {
                                                    index, getCompiler().getFreeParameters());
         }
 
-        final T[] data = buildArray();
-        Arrays.fill(data, valueField.getZero());
-        data[0] = valueField.getZero().add(value);
+        final FieldDerivativeStructure<T> fds = new FieldDerivativeStructure<>(this);
+        fds.setDerivativeComponent(0, valueField.getZero().add(value));
+
         if (getCompiler().getOrder() > 0) {
             // the derivative of the variable with respect to itself is 1.
-            data[DSCompiler.getCompiler(index, getCompiler().getOrder()).getSize()] = valueField.getOne();
+            fds.setDerivativeComponent(DSCompiler.getCompiler(index, getCompiler().getOrder()).getSize(),
+                                       valueField.getOne());
         }
 
-        return new FieldDerivativeStructure<>(this, data);
+        return fds;
 
     }
 
@@ -205,7 +204,7 @@ public class FDSFactory<T extends RealFieldElement<T>> {
      * @return a {@link FieldDerivativeStructure} with an uninitialized array
      */
     FieldDerivativeStructure<T> build() {
-        return new FieldDerivativeStructure<>(this, buildArray());
+        return new FieldDerivativeStructure<>(this);
     }
 
     /** Build an uninitialized array for derivatives data.

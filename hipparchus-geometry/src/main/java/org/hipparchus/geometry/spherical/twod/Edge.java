@@ -159,7 +159,7 @@ public class Edge {
                 // the start of the edge is inside the circle
                 previousVertex = addSubEdge(previousVertex,
                                             new Vertex(new S2Point(circle.getPointAt(edgeStart + unwrappedEnd))),
-                                            unwrappedEnd, insideList, splitCircle);
+                                            unwrappedEnd, insideList);
                 alreadyManagedLength = unwrappedEnd;
             }
 
@@ -167,7 +167,7 @@ public class Edge {
                 // the edge ends while still outside of the circle
                 if (unwrappedEnd >= 0) {
                     previousVertex = addSubEdge(previousVertex, end,
-                                                length - alreadyManagedLength, outsideList, splitCircle);
+                                                length - alreadyManagedLength, outsideList);
                 } else {
                     // the edge is entirely outside of the circle
                     // we don't split anything
@@ -177,21 +177,21 @@ public class Edge {
                 // the edge is long enough to enter inside the circle
                 previousVertex = addSubEdge(previousVertex,
                                             new Vertex(new S2Point(circle.getPointAt(edgeStart + arcRelativeStart))),
-                                            arcRelativeStart - alreadyManagedLength, outsideList, splitCircle);
+                                            arcRelativeStart - alreadyManagedLength, outsideList);
                 alreadyManagedLength = arcRelativeStart;
 
                 if (arcRelativeEnd >= length - tolerance) {
                     // the edge ends while still inside of the circle
                     previousVertex = addSubEdge(previousVertex, end,
-                                                length - alreadyManagedLength, insideList, splitCircle);
+                                                length - alreadyManagedLength, insideList);
                 } else {
                     // the edge is long enough to exit outside of the circle
                     previousVertex = addSubEdge(previousVertex,
                                                 new Vertex(new S2Point(circle.getPointAt(edgeStart + arcRelativeEnd))),
-                                                arcRelativeEnd - alreadyManagedLength, insideList, splitCircle);
+                                                arcRelativeEnd - alreadyManagedLength, insideList);
                     alreadyManagedLength = arcRelativeEnd;
                     previousVertex = addSubEdge(previousVertex, end,
-                                                length - alreadyManagedLength, outsideList, splitCircle);
+                                                length - alreadyManagedLength, outsideList);
                 }
             }
 
@@ -207,13 +207,11 @@ public class Edge {
      * @param subStart start of the sub-edge
      * @param subEnd end of the sub-edge
      * @param subLength length of the sub-edge
-     * @param splitCircle circle splitting the edge in several parts
      * @param list list where to put the sub-edge
      * @return end vertex of the edge ({@code subEnd} if the edge was long enough and really
      * added, {@code subStart} if the edge was too small and therefore ignored)
      */
-    private Vertex addSubEdge(final Vertex subStart, final Vertex subEnd, final double subLength,
-                              final List<Edge> list, final Circle splitCircle) {
+    private Vertex addSubEdge(final Vertex subStart, final Vertex subEnd, final double subLength, final List<Edge> list) {
 
         if (subLength <= circle.getTolerance()) {
             // the edge is too short, we ignore it

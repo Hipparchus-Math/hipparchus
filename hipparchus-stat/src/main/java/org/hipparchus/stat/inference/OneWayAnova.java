@@ -54,12 +54,6 @@ import org.hipparchus.util.MathUtils;
 public class OneWayAnova {
 
     /**
-     * Default constructor.
-     */
-    public OneWayAnova() {
-    }
-
-    /**
      * Computes the ANOVA F-value for a collection of <code>double[]</code>
      * arrays.
      *
@@ -89,8 +83,7 @@ public class OneWayAnova {
     public double anovaFValue(final Collection<double[]> categoryData)
         throws MathIllegalArgumentException, NullArgumentException {
 
-        AnovaStats a = anovaStats(categoryData);
-        return a.F;
+        return anovaStats(categoryData).F;
 
     }
 

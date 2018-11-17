@@ -24,11 +24,11 @@ package org.hipparchus.optim;
 /**
  * Base class for all convergence checker implementations.
  *
- * @param <PAIR> Type of (point, value) pair.
+ * @param <P> Type of (point, value) pair.
  *
  */
-public abstract class AbstractConvergenceChecker<PAIR>
-    implements ConvergenceChecker<PAIR> {
+public abstract class AbstractConvergenceChecker<P>
+    implements ConvergenceChecker<P> {
     /**
      * Relative tolerance threshold.
      */
@@ -69,6 +69,6 @@ public abstract class AbstractConvergenceChecker<PAIR>
      */
     @Override
     public abstract boolean converged(int iteration,
-                                      PAIR previous,
-                                      PAIR current);
+                                      P previous,
+                                      P current);
 }

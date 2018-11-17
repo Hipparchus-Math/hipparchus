@@ -600,7 +600,7 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
      */
     @Override
     public String toString() {
-        return Vector3DFormat.getInstance().format(this);
+        return Vector3DFormat.getVector3DFormat().format(this);
     }
 
     /** {@inheritDoc} */

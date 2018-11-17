@@ -106,7 +106,7 @@ public class NonMonotonicSequenceException extends MathIllegalNumberException {
     /**
      * @return {@code true} is the sequence should be strictly monotonic.
      **/
-    public boolean getStrict() {
+    public boolean getStrict() { // NOPMD - this method name is for a legacy API we cannot change
         return strict;
     }
     /**

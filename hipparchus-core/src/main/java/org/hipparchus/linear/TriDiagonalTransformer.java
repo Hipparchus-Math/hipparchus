@@ -167,7 +167,7 @@ class TriDiagonalTransformer {
      * @return the main diagonal elements of the B matrix
      */
     double[][] getHouseholderVectorsRef() {
-        return householderVectors;
+        return householderVectors; // NOPMD - returning an internal array is intentional and documented here
     }
 
     /**
@@ -177,7 +177,7 @@ class TriDiagonalTransformer {
      * @return the main diagonal elements of the T matrix
      */
     double[] getMainDiagonalRef() {
-        return main;
+        return main; // NOPMD - returning an internal array is intentional and documented here
     }
 
     /**
@@ -187,7 +187,7 @@ class TriDiagonalTransformer {
      * @return the secondary diagonal elements of the T matrix
      */
     double[] getSecondaryDiagonalRef() {
-        return secondary;
+        return secondary; // NOPMD - returning an internal array is intentional and documented here
     }
 
     /**

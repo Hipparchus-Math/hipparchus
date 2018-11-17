@@ -32,4 +32,4 @@ package org.hipparchus.linear;
  *  functions mapping.
  * </p>
  */
-public abstract class SparseRealVector extends RealVector {}
+public abstract class SparseRealVector extends RealVector {} // NOPMD - this is an intentional marker class

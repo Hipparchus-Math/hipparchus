@@ -87,8 +87,7 @@ public enum LocalizedStatFormats implements Localizable {
             if (bundle.getLocale().getLanguage().equals(locale.getLanguage())) {
                 final String translated = bundle.getString(name());
                 if ((translated != null) && (translated.length() > 0) &&
-                    (!translated.toLowerCase()
-                        .contains("missing translation"))) {
+                    (!translated.toLowerCase(locale).contains("missing translation"))) {
                     // the value of the resource is the translated format
                     return translated;
                 }

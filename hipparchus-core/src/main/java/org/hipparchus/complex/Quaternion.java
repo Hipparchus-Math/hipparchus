@@ -452,12 +452,12 @@ public final class Quaternion implements Serializable {
     public String toString() {
         final String sp = " ";
         final StringBuilder s = new StringBuilder();
-        s.append("[")
+        s.append('[')
             .append(q0).append(sp)
             .append(q1).append(sp)
             .append(q2).append(sp)
             .append(q3)
-            .append("]");
+            .append(']');
 
         return s.toString();
     }

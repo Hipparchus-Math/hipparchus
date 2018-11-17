@@ -105,15 +105,14 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
     private final int maxIter;
 
     /**
-     * Contructor used by the factory methods.
+     * Constructor used by the factory methods.
      *
      * @param initialGuess Initial guess. If set to {@code null}, the initial guess
      * will be estimated using the {@link ParameterGuesser}.
      * @param maxIter Maximum number of iterations of the optimization algorithm.
      */
-    private GaussianCurveFitter(double[] initialGuess,
-                                int maxIter) {
-        this.initialGuess = initialGuess;
+    private GaussianCurveFitter(double[] initialGuess, int maxIter) {
+        this.initialGuess = initialGuess == null ? null : initialGuess.clone();
         this.maxIter = maxIter;
     }
 

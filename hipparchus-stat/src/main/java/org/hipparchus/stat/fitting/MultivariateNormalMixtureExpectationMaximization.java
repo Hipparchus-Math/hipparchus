@@ -61,7 +61,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
     /** The model fit against the data. */
     private MixtureMultivariateNormalDistribution fittedModel;
     /** The log likelihood of the data given the fitted model. */
-    private double logLikelihood = 0d;
+    private double logLikelihood;
 
     /**
      * Creates an object to fit a multivariate normal mixture model to data.
@@ -147,7 +147,6 @@ public class MultivariateNormalMixtureExpectationMaximization {
                                                    numMeanColumns, numCols);
         }
 
-        int numIterations = 0;
         double previousLogLikelihood = 0d;
 
         logLikelihood = Double.NEGATIVE_INFINITY;
@@ -155,8 +154,9 @@ public class MultivariateNormalMixtureExpectationMaximization {
         // Initialize model to fit to initial mixture.
         fittedModel = new MixtureMultivariateNormalDistribution(initialMixture.getComponents());
 
-        while (numIterations++ <= maxIterations &&
-               FastMath.abs(previousLogLikelihood - logLikelihood) > threshold) {
+        for (int numIterations = 0;
+             numIterations < maxIterations && FastMath.abs(previousLogLikelihood - logLikelihood) > threshold;
+             ++numIterations) {
             previousLogLikelihood = logLikelihood;
             double sumLogLikelihood = 0d;
 
@@ -339,7 +339,8 @@ public class MultivariateNormalMixtureExpectationMaximization {
             final double[] columnMeans = new double[numCols];
 
             // populate bin and create component
-            for (int i = minIndex, iBin = 0; i < maxIndex; i++, iBin++) {
+            for (int i = minIndex; i < maxIndex; i++) {
+                final int iBin = i - minIndex;
                 for (int j = 0; j < numCols; j++) {
                     final double val = sortedData[i].getRow()[j];
                     columnMeans[j] += val;
@@ -390,9 +391,9 @@ public class MultivariateNormalMixtureExpectationMaximization {
 
         /**
          * Create a data row.
-         * @param data Data to use for the row
+         * @param data Data to use for the row, a reference to the data is stored
          */
-        DataRow(final double[] data) {
+        DataRow(final double[] data) { // NOPMD - storing a reference to the array is intentional and documented here
             // Store reference.
             row = data;
             // Compute mean.

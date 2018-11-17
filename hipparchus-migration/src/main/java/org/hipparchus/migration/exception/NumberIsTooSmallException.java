@@ -79,7 +79,7 @@ public class NumberIsTooSmallException extends MathIllegalNumberException {
     /**
      * @return {@code true} if the minimum is included in the allowed range.
      */
-    public boolean getBoundIsAllowed() {
+    public boolean getBoundIsAllowed() { // NOPMD - this method name is for a legacy API we cannot change
         return boundIsAllowed;
     }
 

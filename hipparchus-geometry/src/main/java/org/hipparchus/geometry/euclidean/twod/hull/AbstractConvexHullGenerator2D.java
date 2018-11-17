@@ -98,11 +98,10 @@ abstract class AbstractConvexHullGenerator2D implements ConvexHullGenerator2D {
         }
 
         try {
-            return new ConvexHull2D(hullVertices.toArray(new Vector2D[hullVertices.size()]),
-                                    tolerance);
+            return new ConvexHull2D(hullVertices.toArray(new Vector2D[0]), tolerance);
         } catch (MathIllegalArgumentException e) {
             // the hull vertices may not form a convex hull if the tolerance value is to large
-            throw new MathIllegalStateException(LocalizedCoreFormats.CONVERGENCE_FAILED);
+            throw new MathIllegalStateException(e, LocalizedCoreFormats.CONVERGENCE_FAILED);
         }
     }
 

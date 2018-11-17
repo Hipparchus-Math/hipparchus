@@ -283,19 +283,19 @@ public class Frequency<T extends Comparable<T>> implements Serializable {
     @Override
     public String toString() {
         NumberFormat nf = NumberFormat.getPercentInstance();
-        StringBuilder outBuffer = new StringBuilder();
+        StringBuilder outBuffer = new StringBuilder(200); // this size is just a wild guess
         outBuffer.append("Value \tFreq. \tPct. \tCum Pct. \n");
         Iterator<T> iter = freqTable.keySet().iterator();
         while (iter.hasNext()) {
             T value = iter.next();
-            outBuffer.append(value);
-            outBuffer.append('\t');
-            outBuffer.append(getCount(value));
-            outBuffer.append('\t');
-            outBuffer.append(nf.format(getPct(value)));
-            outBuffer.append('\t');
-            outBuffer.append(nf.format(getCumPct(value)));
-            outBuffer.append('\n');
+            outBuffer.append(value).
+                      append('\t').
+                      append(getCount(value)).
+                      append('\t').
+                      append(nf.format(getPct(value))).
+                      append('\t').
+                      append(nf.format(getCumPct(value))).
+                      append('\n');
         }
         return outBuffer.toString();
     }

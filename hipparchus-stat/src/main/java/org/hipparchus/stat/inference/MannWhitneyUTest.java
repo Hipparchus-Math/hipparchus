@@ -461,10 +461,11 @@ public class MannWhitneyUTest {
      * @param x first dataset
      * @param y second dataset
      * @return map of <value, number of times it occurs> for values occurring
-     *         more than once or an empty map if there are no ties.
+     *         more than once or an empty map if there are no ties (the returned
+     *         map is <em>not</em> thread-safe, which is OK in the context of the callers)
      */
     private Map<Double, Integer> tiesMap(final double[] x, final double[] y) {
-        final Map<Double, Integer> tiesMap = new TreeMap<>();
+        final Map<Double, Integer> tiesMap = new TreeMap<>(); // NOPMD - no concurrent access in the callers context
         for (int i = 0; i < x.length; i++) {
             tiesMap.merge(x[i], 1, Integer::sum);
         }

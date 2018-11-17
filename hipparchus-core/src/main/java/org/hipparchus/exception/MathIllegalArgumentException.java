@@ -40,4 +40,15 @@ public class MathIllegalArgumentException extends MathRuntimeException {
         super(pattern, args);
     }
 
+    /** Simple constructor.
+     * @param cause root cause.
+     * @param specifier format specifier (to be translated).
+     * @param parts parts to insert in the format (no translation).
+     * @since 1.4
+     */
+    public MathIllegalArgumentException(final Throwable cause, final Localizable specifier,
+                                        final Object ... parts) {
+        super(cause, specifier, parts);
+    }
+
 }

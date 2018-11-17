@@ -135,6 +135,7 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
     /** Get the predicted state.
      * @return predicted state
      */
+    @Override
     public ProcessEstimate getPredicted() {
         return predicted;
     }
@@ -142,6 +143,7 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
     /** Get the corrected state.
      * @return corrected state
      */
+    @Override
     public ProcessEstimate getCorrected() {
         return corrected;
     }

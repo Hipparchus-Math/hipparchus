@@ -25,9 +25,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.hipparchus.distribution.EnumeratedDistribution;
 import org.hipparchus.distribution.IntegerDistribution;
@@ -78,9 +78,23 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
     private static final double[] EXPONENTIAL_SA_QI;
 
     /** Map of <classname, switch constant> for continuous distributions */
-    private static final Map<Class<? extends RealDistribution>, RealDistributionSampler> CONTINUOUS_SAMPLERS = new HashMap<>();
+    private static final Map<Class<? extends RealDistribution>, RealDistributionSampler> CONTINUOUS_SAMPLERS = new ConcurrentHashMap<>();
     /** Map of <classname, switch constant> for discrete distributions */
-    private static final Map<Class<? extends IntegerDistribution>, IntegerDistributionSampler> DISCRETE_SAMPLERS = new HashMap<>();
+    private static final Map<Class<? extends IntegerDistribution>, IntegerDistributionSampler> DISCRETE_SAMPLERS = new ConcurrentHashMap<>();
+
+    /** The default sampler for continuous distributions using the inversion technique. */
+    private static final RealDistributionSampler DEFAULT_REAL_SAMPLER =
+            (generator, dist) -> dist.inverseCumulativeProbability(generator.nextDouble());
+
+    /** The default sampler for discrete distributions using the inversion technique. */
+    private static final IntegerDistributionSampler DEFAULT_INTEGER_SAMPLER =
+            (generator, dist) -> dist.inverseCumulativeProbability(generator.nextDouble());
+
+    /** Source of random data */
+    private final RandomGenerator randomGenerator;
+
+    /** The sampler to be used for the nextZipF method */
+    private transient ZipfRejectionInversionSampler zipfSampler;
 
     /**
      * Interface for samplers of continuous distributions.
@@ -111,14 +125,6 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
          */
         int nextSample(RandomDataGenerator generator, IntegerDistribution distribution);
     }
-
-    /** The default sampler for continuous distributions using the inversion technique. */
-    private static final RealDistributionSampler DEFAULT_REAL_SAMPLER =
-            (generator, dist) -> dist.inverseCumulativeProbability(generator.nextDouble());
-
-    /** The default sampler for discrete distributions using the inversion technique. */
-    private static final IntegerDistributionSampler DEFAULT_INTEGER_SAMPLER =
-            (generator, dist) -> dist.inverseCumulativeProbability(generator.nextDouble());
 
     /**
      * Initialize tables.
@@ -216,12 +222,6 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
                                     return sampler.sample();
                                 });
     }
-
-    /** Source of random data */
-    private final RandomGenerator randomGenerator;
-
-    /** The sampler to be used for the nextZipF method */
-    private transient ZipfRejectionInversionSampler zipfSampler;
 
     /**
      * Construct a RandomDataGenerator with a default RandomGenerator as its source of random data.
@@ -750,7 +750,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
 
             // Make sure we add 2 hex digits for each byte
             if (hex.length() == 1) {
-                hex = "0" + hex;
+                outBuffer.append('0');
             }
             outBuffer.append(hex);
         }
@@ -921,6 +921,11 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
      * </blockquote>
      */
     private static class ChengBetaSampler {
+
+        /** Private constructor for utility class. */
+        private ChengBetaSampler() { // NOPMD - PMD fails to detect this is a utility class
+            // not called
+        }
 
         /**
          * Returns the next sample following a beta distribution

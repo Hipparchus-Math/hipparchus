@@ -205,21 +205,11 @@ public class CholeskyDecomposition {
      * @return a solver
      */
     public DecompositionSolver getSolver() {
-        return new Solver(lTData);
+        return new Solver();
     }
 
     /** Specialized solver. */
-    private static class Solver implements DecompositionSolver {
-        /** Row-oriented storage for L<sup>T</sup> matrix data. */
-        private final double[][] lTData;
-
-        /**
-         * Build a solver from decomposed matrix.
-         * @param lTData row-oriented storage for L<sup>T</sup> matrix data
-         */
-        private Solver(final double[][] lTData) {
-            this.lTData = lTData;
-        }
+    private class Solver implements DecompositionSolver {
 
         /** {@inheritDoc} */
         @Override

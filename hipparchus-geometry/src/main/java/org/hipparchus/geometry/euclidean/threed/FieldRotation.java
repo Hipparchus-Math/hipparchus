@@ -1586,8 +1586,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         final T[][] o = MathArrays.buildArray(m[0][0].getField(), 3, 3);
 
         // iterative correction: Xn+1 = Xn - 0.5 * (Xn.Mt.Xn - M)
-        int i = 0;
-        while (++i < 11) {
+        int i;
+        for (i = 0; i < 11; ++i) {
 
             // Mt.Xn
             final T mx00 = m[0][0].multiply(x00).add(m[1][0].multiply(x10)).add(m[2][0].multiply(x20));

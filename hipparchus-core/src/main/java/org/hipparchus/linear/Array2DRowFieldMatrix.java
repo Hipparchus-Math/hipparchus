@@ -149,7 +149,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      * @throws NullArgumentException if {@code d} is {@code null}.
      * @see #Array2DRowFieldMatrix(FieldElement[][])
      */
-    public Array2DRowFieldMatrix(final Field<T> field, final T[][] d, final boolean copyArray)
+    public Array2DRowFieldMatrix(final Field<T> field, final T[][] d, final boolean copyArray) // NOPMD - array copy is taken care of by parameter
         throws MathIllegalArgumentException, NullArgumentException {
         super(field);
         if (copyArray) {
@@ -451,7 +451,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      * @return the 2-dimensional array of entries.
      */
     public T[][] getDataRef() {
-        return data;
+        return data; // NOPMD - returning an internal array is intentional and documented here
     }
 
     /** {@inheritDoc} */

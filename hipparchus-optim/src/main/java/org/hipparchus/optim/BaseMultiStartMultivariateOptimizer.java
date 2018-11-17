@@ -34,14 +34,14 @@ import org.hipparchus.random.RandomVectorGenerator;
  * in a local extremum when looking for a global one).
  * <em>It is not a "user" class.</em>
  *
- * @param <PAIR> Type of the point/value pair returned by the optimization
+ * @param <P> Type of the point/value pair returned by the optimization
  * algorithm.
  *
  */
-public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
-    extends BaseMultivariateOptimizer<PAIR> {
+public abstract class BaseMultiStartMultivariateOptimizer<P>
+    extends BaseMultivariateOptimizer<P> {
     /** Underlying classical optimizer. */
-    private final BaseMultivariateOptimizer<PAIR> optimizer;
+    private final BaseMultivariateOptimizer<P> optimizer;
     /** Number of evaluations already performed for all starts. */
     private int totalEvaluations;
     /** Number of starts to go. */
@@ -79,7 +79,7 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
      * @param generator Random vector generator to use for restarts.
      * @throws MathIllegalArgumentException if {@code starts < 1}.
      */
-    public BaseMultiStartMultivariateOptimizer(final BaseMultivariateOptimizer<PAIR> optimizer,
+    public BaseMultiStartMultivariateOptimizer(final BaseMultivariateOptimizer<P> optimizer,
                                                final int starts,
                                                final RandomVectorGenerator generator) {
         super(optimizer.getConvergenceChecker());
@@ -123,7 +123,7 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
      *
      * @return an array containing the optima sorted from best to worst.
      */
-    public abstract PAIR[] getOptima();
+    public abstract P[] getOptima();
 
     /**
      * {@inheritDoc}
@@ -132,16 +132,16 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
      * instance of {@link MaxEval} or {@link InitialGuess}.
      */
     @Override
-    public PAIR optimize(OptimizationData... optData) {
+    public P optimize(OptimizationData... optData) {
         // Store arguments in order to pass them to the internal optimizer.
-       optimData = optData;
+       optimData = optData.clone();
         // Set up base class and perform computations.
         return super.optimize(optData);
     }
 
     /** {@inheritDoc} */
     @Override
-    protected PAIR doOptimize() {
+    protected P doOptimize() {
         // Remove all instances of "MaxEval" and "InitialGuess" from the
         // array that will be passed to the internal optimizer.
         // The former is to enforce smaller numbers of allowed evaluations
@@ -187,7 +187,7 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
                 } else {
                     int attempts = 0;
                     while (s == null) {
-                        if (attempts++ >= getMaxEvaluations()) {
+                        if (attempts >= getMaxEvaluations()) {
                             throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED,
                                                                 getMaxEvaluations());
                         }
@@ -198,13 +198,14 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
                                 s = null;
                             }
                         }
+                        ++attempts;
                     }
                 }
                 optimData[initialGuessIndex] = new InitialGuess(s);
                 // Optimize.
-                final PAIR result = optimizer.optimize(optimData);
+                final P result = optimizer.optimize(optimData);
                 store(result);
-            } catch (RuntimeException mue) {
+            } catch (RuntimeException mue) { // NOPMD - caching a RuntimeException is intentional here, it will be rethrown later
                 lastException = mue;
             }
             // CHECKSTYLE: resume IllegalCatch
@@ -212,7 +213,7 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
             totalEvaluations += optimizer.getEvaluations();
         }
 
-        final PAIR[] optima = getOptima();
+        final P[] optima = getOptima();
         if (optima.length == 0) {
             // All runs failed.
             throw lastException; // Cannot be null if starts >= 1.
@@ -227,7 +228,7 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
      *
      * @param optimum Result of an optimization run.
      */
-    protected abstract void store(PAIR optimum);
+    protected abstract void store(P optimum);
     /**
      * Method that will called in order to clear all stored optima.
      */

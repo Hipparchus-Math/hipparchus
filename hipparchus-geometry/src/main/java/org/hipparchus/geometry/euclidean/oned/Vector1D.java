@@ -233,24 +233,21 @@ public class Vector1D implements Vector<Euclidean1D> {
     @Override
     public double distance1(Vector<Euclidean1D> p) {
         Vector1D p3 = (Vector1D) p;
-        final double dx = FastMath.abs(p3.x - x);
-        return dx;
+        return FastMath.abs(p3.x - x);
     }
 
     /** {@inheritDoc} */
     @Override
     public double distance(Point<Euclidean1D> p) {
         Vector1D p3 = (Vector1D) p;
-        final double dx = p3.x - x;
-        return FastMath.abs(dx);
+        return FastMath.abs(p3.x - x);
     }
 
     /** {@inheritDoc} */
     @Override
     public double distanceInf(Vector<Euclidean1D> p) {
         Vector1D p3 = (Vector1D) p;
-        final double dx = FastMath.abs(p3.x - x);
-        return dx;
+        return FastMath.abs(p3.x - x);
     }
 
     /** {@inheritDoc} */
@@ -361,7 +358,7 @@ public class Vector1D implements Vector<Euclidean1D> {
      */
     @Override
     public String toString() {
-        return Vector1DFormat.getInstance().format(this);
+        return Vector1DFormat.getVector1DFormat().format(this);
     }
 
     /** {@inheritDoc} */

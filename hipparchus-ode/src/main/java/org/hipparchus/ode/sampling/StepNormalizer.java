@@ -193,6 +193,7 @@ public class StepNormalizer implements ODEStepHandler {
      * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      */
+    @Override
     public void handleStep(final ODEStateInterpolator interpolator, final boolean isLast)
         throws MathIllegalStateException {
         // The first time, update the last state with the start information.

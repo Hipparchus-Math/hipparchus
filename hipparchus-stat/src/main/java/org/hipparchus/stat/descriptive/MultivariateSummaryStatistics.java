@@ -85,7 +85,7 @@ public class MultivariateSummaryStatistics
     private final VectorialCovariance covarianceImpl;
 
     /** Count of values that have been added */
-    private long n = 0;
+    private long n;
 
     /**
      * Construct a MultivariateSummaryStatistics instance for the given
@@ -253,9 +253,9 @@ public class MultivariateSummaryStatistics
     public String toString() {
         final String separator = ", ";
         final String suffix = System.getProperty("line.separator");
-        StringBuilder outBuffer = new StringBuilder();
-        outBuffer.append("MultivariateSummaryStatistics:" + suffix);
-        outBuffer.append("n: " + getN() + suffix);
+        StringBuilder outBuffer = new StringBuilder(200); // the size is just a wild guess
+        outBuffer.append("MultivariateSummaryStatistics:").append(suffix).
+                  append("n: ").append(getN()).append(suffix);
         append(outBuffer, getMin(), "min: ", separator, suffix);
         append(outBuffer, getMax(), "max: ", separator, suffix);
         append(outBuffer, getMean(), "mean: ", separator, suffix);
@@ -263,7 +263,7 @@ public class MultivariateSummaryStatistics
         append(outBuffer, getSumSq(), "sum of squares: ", separator, suffix);
         append(outBuffer, getSumLog(), "sum of logarithms: ", separator, suffix);
         append(outBuffer, getStandardDeviation(), "standard deviation: ", separator, suffix);
-        outBuffer.append("covariance: " + getCovariance().toString() + suffix);
+        outBuffer.append("covariance: ").append(getCovariance().toString()).append(suffix);
         return outBuffer.toString();
     }
 
@@ -295,10 +295,10 @@ public class MultivariateSummaryStatistics
      */
     @Override
     public boolean equals(Object object) {
-        if (object == this ) {
+        if (object == this) {
             return true;
         }
-        if (object instanceof MultivariateSummaryStatistics == false) {
+        if (!(object instanceof MultivariateSummaryStatistics)) {
             return false;
         }
         MultivariateSummaryStatistics other = (MultivariateSummaryStatistics) object;

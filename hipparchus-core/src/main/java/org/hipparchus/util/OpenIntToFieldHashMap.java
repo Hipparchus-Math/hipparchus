@@ -588,7 +588,7 @@ public class OpenIntToFieldHashMap<T extends FieldElement<T>> implements Seriali
             } catch (ArrayIndexOutOfBoundsException e) {
                 next = -2;
                 if (current < 0) {
-                    throw new NoSuchElementException();
+                    throw new NoSuchElementException(); // NOPMD
                 }
             }
 

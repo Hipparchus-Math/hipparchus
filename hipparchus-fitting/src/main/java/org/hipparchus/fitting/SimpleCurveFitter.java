@@ -41,18 +41,16 @@ public class SimpleCurveFitter extends AbstractCurveFitter {
     private final int maxIter;
 
     /**
-     * Contructor used by the factory methods.
+     * Constructor used by the factory methods.
      *
      * @param function Function to fit.
      * @param initialGuess Initial guess. Cannot be {@code null}. Its length must
      * be consistent with the number of parameters of the {@code function} to fit.
      * @param maxIter Maximum number of iterations of the optimization algorithm.
      */
-    private SimpleCurveFitter(ParametricUnivariateFunction function,
-                              double[] initialGuess,
-                              int maxIter) {
+    private SimpleCurveFitter(ParametricUnivariateFunction function, double[] initialGuess, int maxIter) {
         this.function = function;
-        this.initialGuess = initialGuess;
+        this.initialGuess = initialGuess.clone();
         this.maxIter = maxIter;
     }
 

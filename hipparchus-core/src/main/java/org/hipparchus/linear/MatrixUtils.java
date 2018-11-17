@@ -49,7 +49,7 @@ public class MatrixUtils {
     /**
      * The default format for {@link RealMatrix} objects.
      */
-    public static final RealMatrixFormat DEFAULT_FORMAT = RealMatrixFormat.getInstance();
+    public static final RealMatrixFormat DEFAULT_FORMAT = RealMatrixFormat.getRealMatrixFormat();
 
     /**
      * A format for {@link RealMatrix} objects compatible with octave.
@@ -835,13 +835,9 @@ public class MatrixUtils {
             f.setAccessible(true);
             f.set(instance, vector);
 
-        } catch (NoSuchFieldException nsfe) {
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             IOException ioe = new IOException();
-            ioe.initCause(nsfe);
-            throw ioe;
-        } catch (IllegalAccessException iae) {
-            IOException ioe = new IOException();
-            ioe.initCause(iae);
+            ioe.initCause(e);
             throw ioe;
         }
 
@@ -944,13 +940,9 @@ public class MatrixUtils {
             f.setAccessible(true);
             f.set(instance, matrix);
 
-        } catch (NoSuchFieldException nsfe) {
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             IOException ioe = new IOException();
-            ioe.initCause(nsfe);
-            throw ioe;
-        } catch (IllegalAccessException iae) {
-            IOException ioe = new IOException();
-            ioe.initCause(iae);
+            ioe.initCause(e);
             throw ioe;
         }
     }

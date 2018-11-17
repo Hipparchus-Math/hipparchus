@@ -141,7 +141,7 @@ public class CMAESOptimizer
     /** Number of parents/points for recombination. */
     private int mu; //
     /** log(mu + 0.5), stored for efficiency. */
-    private double logMu2;
+    private double logMu2;   // NOPMD - using a field here is for performance reasons
     /** Array for weighted recombination. */
     private RealMatrix weights;
     /** Variance-effectiveness of sum w_i x_i. */
@@ -193,8 +193,6 @@ public class CMAESOptimizer
 
     /** History queue of best values. */
     private double[] fitnessHistory;
-    /** Size of history queue of best values. */
-    private int historySize;
 
     /** Random generator. */
     private final RandomGenerator random;
@@ -281,7 +279,7 @@ public class CMAESOptimizer
      */
     public static class Sigma implements OptimizationData {
         /** Sigma values. */
-        private final double[] sigma;
+        private final double[] s;
 
         /**
          * @param s Sigma values.
@@ -296,14 +294,14 @@ public class CMAESOptimizer
                 }
             }
 
-            sigma = s.clone();
+            this.s = s.clone();
         }
 
         /**
          * @return the sigma values.
          */
         public double[] getSigma() {
-            return sigma.clone();
+            return s.clone();
         }
     }
 
@@ -641,7 +639,7 @@ public class CMAESOptimizer
         D = ones(dimension, 1); // diagonal D defines the scaling
         BD = times(B, repmat(diagD.transpose(), dimension, 1));
         C = B.multiply(diag(square(D)).multiply(B.transpose())); // covariance
-        historySize = 10 + (int) (3 * 10 * dimension / (double) lambda);
+        final int historySize = 10 + (int) (3 * 10 * dimension / (double) lambda);
         fitnessHistory = new double[historySize]; // history of fitness values
         for (int i = 0; i < historySize; i++) {
             fitnessHistory[i] = Double.MAX_VALUE;

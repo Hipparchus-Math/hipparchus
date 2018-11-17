@@ -140,8 +140,7 @@ public class MultivariateFunctionPenaltyAdapter
                                                    lower.length, scale.length);
         }
         for (int i = 0; i < lower.length; ++i) {
-            // note the following test is written in such a way it also fails for NaN
-            if (!(upper[i] >= lower[i])) {
+            if (!(upper[i] >= lower[i])) { // NOPMD - the test is written in such a way it also fails for NaN
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                        upper[i], lower[i]);
             }

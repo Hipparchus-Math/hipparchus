@@ -95,7 +95,7 @@ public class RegressionResults implements Serializable {
      * are copied and the RegressionResults become mutable
      */
     public RegressionResults(
-            final double[] parameters, final double[][] varcov,
+            final double[] parameters, final double[][] varcov, // NOPMD - storing a reference to the array is controlled by a user-supplied parameter
             final boolean isSymmetricCompressed,
             final long nobs, final int rank,
             final double sumy, final double sumysq, final double sse,

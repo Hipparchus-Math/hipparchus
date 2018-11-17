@@ -48,6 +48,7 @@ import org.hipparchus.util.CompositeFormat;
  * to use a {@link NumberFormat} instance with disabled grouping in such a case.</p>
  *
  */
+@SuppressWarnings("PMD.SingleMethodSingleton") // the violations have been taken care of as of 1.4, they correspond to deprecated methods
 public class Vector3DFormat extends VectorFormat<Euclidean3D> {
 
     /**
@@ -95,18 +96,41 @@ public class Vector3DFormat extends VectorFormat<Euclidean3D> {
     /**
      * Returns the default 3D vector format for the current locale.
      * @return the default 3D vector format.
+     * @since 1.4
      */
+    public static Vector3DFormat getVector3DFormat() {
+        return getVector3DFormat(Locale.getDefault());
+    }
+
+    /**
+     * Returns the default 3D vector format for the current locale.
+     * @return the default 3D vector format.
+     * @deprecated as of 1.4, replaced by {@link #getVector3DFormat()}
+     */
+    @Deprecated
     public static Vector3DFormat getInstance() {
-        return getInstance(Locale.getDefault());
+        return getVector3DFormat();
     }
 
     /**
      * Returns the default 3D vector format for the given locale.
      * @param locale the specific locale used by the format.
      * @return the 3D vector format specific to the given locale.
+     * @since 1.4
      */
-    public static Vector3DFormat getInstance(final Locale locale) {
+    public static Vector3DFormat getVector3DFormat(final Locale locale) {
         return new Vector3DFormat(CompositeFormat.getDefaultNumberFormat(locale));
+    }
+
+    /**
+     * Returns the default 3D vector format for the given locale.
+     * @param locale the specific locale used by the format.
+     * @return the 3D vector format specific to the given locale.
+     * @deprecated as of 1.4, replaced by {@link #getVector3DFormat(Locale)}
+     */
+    @Deprecated
+    public static Vector3DFormat getInstance(final Locale locale) {
+        return getVector3DFormat(locale);
     }
 
     /**

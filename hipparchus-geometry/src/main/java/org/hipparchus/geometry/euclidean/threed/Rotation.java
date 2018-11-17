@@ -1328,8 +1328,8 @@ public class Rotation implements Serializable {
     double[] o2 = o[2];
 
     // iterative correction: Xn+1 = Xn - 0.5 * (Xn.Mt.Xn - M)
-    int i = 0;
-    while (++i < 11) {
+    int i;
+    for (i = 0; i < 11; ++i) {
 
       // Mt.Xn
       double mx00 = m0[0] * x00 + m1[0] * x10 + m2[0] * x20;

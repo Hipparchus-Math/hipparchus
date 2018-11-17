@@ -56,6 +56,7 @@ import org.hipparchus.util.CompositeFormat;
  * but conflicts with the default column separator).</p>
  *
  */
+@SuppressWarnings("PMD.SingleMethodSingleton") // the violations have been taken care of as of 1.4, they correspond to deprecated methods
 public class RealMatrixFormat {
 
     /** The default prefix: "{". */
@@ -214,18 +215,41 @@ public class RealMatrixFormat {
     /**
      * Returns the default real vector format for the current locale.
      * @return the default real vector format.
+     * @since 1.4
      */
+    public static RealMatrixFormat getRealMatrixFormat() {
+        return getRealMatrixFormat(Locale.getDefault());
+    }
+
+    /**
+     * Returns the default real vector format for the current locale.
+     * @return the default real vector format.
+     * @deprecated as of 1.4, replaced by {@link #getRealMatrixFormat()}
+     */
+    @Deprecated
     public static RealMatrixFormat getInstance() {
-        return getInstance(Locale.getDefault());
+        return getRealMatrixFormat();
     }
 
     /**
      * Returns the default real vector format for the given locale.
      * @param locale the specific locale used by the format.
      * @return the real vector format specific to the given locale.
+     * @since 1.4
      */
-    public static RealMatrixFormat getInstance(final Locale locale) {
+    public static RealMatrixFormat getRealMatrixFormat(final Locale locale) {
         return new RealMatrixFormat(CompositeFormat.getDefaultNumberFormat(locale));
+    }
+
+    /**
+     * Returns the default real vector format for the given locale.
+     * @param locale the specific locale used by the format.
+     * @return the real vector format specific to the given locale.
+     * @deprecated as of 1.4, replaced by {@link #getRealMatrixFormat(Locale)}
+     */
+    @Deprecated
+    public static RealMatrixFormat getInstance(final Locale locale) {
+        return getRealMatrixFormat(locale);
     }
 
     /**

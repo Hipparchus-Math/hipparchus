@@ -59,7 +59,7 @@ public class Gamma {
     /**
      * <a href="http://en.wikipedia.org/wiki/Euler-Mascheroni_constant">Euler-Mascheroni constant</a>
      */
-    public static final double GAMMA = 0.577215664901532860606512090082;
+    public static final double GAMMA = 0.577215664901532860606512090082; // NOPMD - the fact the function and the constant have the same name is intentional and comes from mathematics conventions
 
     /**
      * The value of the {@code g} constant in the Lanczos approximation, see

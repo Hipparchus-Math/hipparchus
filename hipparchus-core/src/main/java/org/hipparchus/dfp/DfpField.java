@@ -610,28 +610,30 @@ public class DfpField implements Field<Dfp> {
      * @param highPrecisionDecimalDigits precision at which the string constants mus be computed
      */
     private static void computeStringConstants(final int highPrecisionDecimalDigits) {
-        if (sqr2String == null || sqr2String.length() < highPrecisionDecimalDigits - 3) {
+        synchronized (DfpField.class) {
+            if (sqr2String == null || sqr2String.length() < highPrecisionDecimalDigits - 3) {
 
-            // recompute the string representation of the transcendental constants
-            final DfpField highPrecisionField = new DfpField(highPrecisionDecimalDigits, false);
-            final Dfp highPrecisionOne        = new Dfp(highPrecisionField, 1);
-            final Dfp highPrecisionTwo        = new Dfp(highPrecisionField, 2);
-            final Dfp highPrecisionThree      = new Dfp(highPrecisionField, 3);
+                // recompute the string representation of the transcendental constants
+                final DfpField highPrecisionField = new DfpField(highPrecisionDecimalDigits, false);
+                final Dfp highPrecisionOne        = new Dfp(highPrecisionField, 1);
+                final Dfp highPrecisionTwo        = new Dfp(highPrecisionField, 2);
+                final Dfp highPrecisionThree      = new Dfp(highPrecisionField, 3);
 
-            final Dfp highPrecisionSqr2 = highPrecisionTwo.sqrt();
-            sqr2String           = highPrecisionSqr2.toString();
-            sqr2ReciprocalString = highPrecisionOne.divide(highPrecisionSqr2).toString();
+                final Dfp highPrecisionSqr2 = highPrecisionTwo.sqrt();
+                sqr2String           = highPrecisionSqr2.toString();
+                sqr2ReciprocalString = highPrecisionOne.divide(highPrecisionSqr2).toString();
 
-            final Dfp highPrecisionSqr3 = highPrecisionThree.sqrt();
-            sqr3String           = highPrecisionSqr3.toString();
-            sqr3ReciprocalString = highPrecisionOne.divide(highPrecisionSqr3).toString();
+                final Dfp highPrecisionSqr3 = highPrecisionThree.sqrt();
+                sqr3String           = highPrecisionSqr3.toString();
+                sqr3ReciprocalString = highPrecisionOne.divide(highPrecisionSqr3).toString();
 
-            piString   = computePi(highPrecisionOne, highPrecisionTwo, highPrecisionThree).toString();
-            eString    = computeExp(highPrecisionOne, highPrecisionOne).toString();
-            ln2String  = computeLn(highPrecisionTwo, highPrecisionOne, highPrecisionTwo).toString();
-            ln5String  = computeLn(new Dfp(highPrecisionField, 5),  highPrecisionOne, highPrecisionTwo).toString();
-            ln10String = computeLn(new Dfp(highPrecisionField, 10), highPrecisionOne, highPrecisionTwo).toString();
+                piString   = computePi(highPrecisionOne, highPrecisionTwo, highPrecisionThree).toString();
+                eString    = computeExp(highPrecisionOne, highPrecisionOne).toString();
+                ln2String  = computeLn(highPrecisionTwo, highPrecisionOne, highPrecisionTwo).toString();
+                ln5String  = computeLn(new Dfp(highPrecisionField, 5),  highPrecisionOne, highPrecisionTwo).toString();
+                ln10String = computeLn(new Dfp(highPrecisionField, 10), highPrecisionOne, highPrecisionTwo).toString();
 
+            }
         }
     }
 

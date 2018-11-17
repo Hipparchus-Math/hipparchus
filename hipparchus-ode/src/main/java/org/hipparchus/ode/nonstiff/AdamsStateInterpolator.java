@@ -113,6 +113,7 @@ class AdamsStateInterpolator extends AbstractODEStateInterpolator {
      * @param newMapper equations mapper for the all equations
      * @return a new instance
      */
+    @Override
     protected AdamsStateInterpolator create(boolean newForward,
                                             ODEStateAndDerivative newGlobalPreviousState,
                                             ODEStateAndDerivative newGlobalCurrentState,

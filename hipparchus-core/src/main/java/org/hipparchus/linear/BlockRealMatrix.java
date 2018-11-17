@@ -143,7 +143,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
      * @see #BlockRealMatrix(double[][])
      */
     public BlockRealMatrix(final int rows, final int columns,
-                           final double[][] blockData, final boolean copyArray)
+                           final double[][] blockData, final boolean copyArray) // NOPMD - array copy is taken care of by parameter
         throws MathIllegalArgumentException {
         super(rows, columns);
         this.rows = rows;

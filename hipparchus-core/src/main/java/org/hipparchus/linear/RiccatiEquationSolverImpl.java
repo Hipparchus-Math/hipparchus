@@ -99,7 +99,7 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
     private RealMatrix computeP(final RealMatrix A, final RealMatrix B,
                                 final RealMatrix Q, final RealMatrix R, final RealMatrix R_inv,
                                 final int maxIterations, final double epsilon) {
-        final RealMatrix P_ = computeInitialP(A, B, Q, R, R_inv);
+        final RealMatrix P_ = computeInitialP(A, B, Q, R_inv);
         return approximateP(A, B, Q, R, R_inv, P_, maxIterations, epsilon);
     }
 
@@ -110,12 +110,11 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
      * @param A state transition matrix
      * @param B control multipliers matrix
      * @param Q state cost matrix
-     * @param R control cost matrix
      * @param R_inv inverse of matrix R
      * @return initial solution
      */
     private RealMatrix computeInitialP(final RealMatrix A, final RealMatrix B,
-                                       final RealMatrix Q, final RealMatrix R, final RealMatrix R_inv) {
+                                       final RealMatrix Q, final RealMatrix R_inv) {
         final RealMatrix B_tran = B.transpose();
 
         // computing the Hamiltonian Matrix
@@ -178,8 +177,8 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
 
         // converting to realmatrix - ignoring precision errors in imaginary
         // components
-        final RealMatrix p_real = convertToRealMatrix(p, Double.MAX_VALUE);
-        return p_real;
+        return convertToRealMatrix(p, Double.MAX_VALUE);
+
     }
 
     /**

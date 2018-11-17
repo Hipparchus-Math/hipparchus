@@ -48,7 +48,7 @@ public class FieldTuple<T extends RealFieldElement<T>> implements RealFieldEleme
      * @param field field the instance belongs to
      * @param x components of the tuple (beware, it is <em>not</em> copied, it is shared with caller)
      */
-    private FieldTuple(final FieldTupleField<T> field, final T[] x) {
+    private FieldTuple(final FieldTupleField<T> field, final T[] x) { // NOPMD - storing user-supplied array is intentional and documented here
         this.values = x;
         this.field  = field;
     }

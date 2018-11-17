@@ -22,12 +22,6 @@ package org.hipparchus.linear;
  */
 public class SingularValueDecomposer implements MatrixDecomposer {
 
-    /**
-     * Creates a singular value decomposer.
-     */
-    public SingularValueDecomposer() {
-    }
-
     /** {@inheritDoc} */
     @Override
     public DecompositionSolver decompose(final RealMatrix a) {

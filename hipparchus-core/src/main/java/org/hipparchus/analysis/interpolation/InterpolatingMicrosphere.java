@@ -338,7 +338,7 @@ public class InterpolatingMicrosphere {
          * @param n Normal vector characterizing a surface element
          * of the microsphere. No copy is made.
          */
-        Facet(double[] n) {
+        Facet(double[] n) { // NOPMD - array cloning is taken care of at call site
             normal = n;
         }
 

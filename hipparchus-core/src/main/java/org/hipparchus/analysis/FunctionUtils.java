@@ -530,7 +530,8 @@ public class FunctionUtils {
 
         return new MultivariateFunction() {
 
-            private DSFactory factory = null;
+            /** Factory used for building derivatives. */
+            private DSFactory factory;
 
             /** {@inheritDoc} */
             @Override

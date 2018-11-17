@@ -63,7 +63,7 @@ public class StreamingStatistics
     private static final long serialVersionUID = 20160422L;
 
     /** count of values that have been added */
-    private long n = 0;
+    private long n;
 
     /** SecondMoment is used to compute the mean and variance */
     private final SecondMoment secondMoment;
@@ -449,21 +449,21 @@ public class StreamingStatistics
      */
     @Override
     public String toString() {
-        StringBuilder outBuffer = new StringBuilder();
+        StringBuilder outBuffer = new StringBuilder(200); // the size is just a wild guess
         String endl = "\n";
-        outBuffer.append("StreamingStatistics:").append(endl);
-        outBuffer.append("n: ").append(getN()).append(endl);
-        outBuffer.append("min: ").append(getMin()).append(endl);
-        outBuffer.append("max: ").append(getMax()).append(endl);
-        outBuffer.append("sum: ").append(getSum()).append(endl);
-        outBuffer.append("mean: ").append(getMean()).append(endl);
-        outBuffer.append("variance: ").append(getVariance()).append(endl);
-        outBuffer.append("population variance: ").append(getPopulationVariance()).append(endl);
-        outBuffer.append("standard deviation: ").append(getStandardDeviation()).append(endl);
-        outBuffer.append("geometric mean: ").append(getGeometricMean()).append(endl);
-        outBuffer.append("second moment: ").append(getSecondMoment()).append(endl);
-        outBuffer.append("sum of squares: ").append(getSumOfSquares()).append(endl);
-        outBuffer.append("sum of logs: ").append(getSumOfLogs()).append(endl);
+        outBuffer.append("StreamingStatistics:").append(endl).
+                  append("n: ").append(getN()).append(endl).
+                  append("min: ").append(getMin()).append(endl).
+                  append("max: ").append(getMax()).append(endl).
+                  append("sum: ").append(getSum()).append(endl).
+                  append("mean: ").append(getMean()).append(endl).
+                  append("variance: ").append(getVariance()).append(endl).
+                  append("population variance: ").append(getPopulationVariance()).append(endl).
+                  append("standard deviation: ").append(getStandardDeviation()).append(endl).
+                  append("geometric mean: ").append(getGeometricMean()).append(endl).
+                  append("second moment: ").append(getSecondMoment()).append(endl).
+                  append("sum of squares: ").append(getSumOfSquares()).append(endl).
+                  append("sum of logs: ").append(getSumOfLogs()).append(endl);
         return outBuffer.toString();
     }
 
@@ -479,7 +479,7 @@ public class StreamingStatistics
         if (object == this) {
             return true;
         }
-        if (object instanceof StreamingStatistics == false) {
+        if (!(object instanceof StreamingStatistics)) {
             return false;
         }
         StreamingStatistics other = (StreamingStatistics)object;

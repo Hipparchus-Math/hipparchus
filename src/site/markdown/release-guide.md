@@ -57,8 +57,8 @@ in a set of properties:
 
     <!-- Project specific plugin versions -->
 
-    <hipparchus.findbugs-maven-plugin.version>3.0.5</hipparchus.findbugs-maven-plugin.version>
-    <hipparchus.jacoco-maven-plugin.version>0.8.1</hipparchus.jacoco-maven-plugin.version>
+    <hipparchus.spotbugs-maven-plugin.version>3.1.7</hipparchus.spotbugs-maven-plugin.version>
+    <hipparchus.jacoco-maven-plugin.version>0.8.2</hipparchus.jacoco-maven-plugin.version>
     <hipparchus.maven-assembly-plugin.version>3.1.0</hipparchus.maven-assembly-plugin.version>
     ...
 
@@ -68,14 +68,14 @@ The properties name all follow the pattern `hipparchus.some-plugin-name.version`
 name should be used in the web form to check for available versions.
 
 Beware that in some cases, the latest version cannot be used due to incompatibilities. For
-example, as of releases 1.0, 1.1, 1.2 and 1.3 the site generation was based on `reflow-maven-skin`
+example, as of releases 10 to 1.4, the site generation was based on `reflow-maven-skin`
 and this skin was not updated for recent versions of either site plugin and velocity. Hence
 the `maven-site-plugin` version, `reflow-velocity-tools` version and `velocity `version were
 not updated (and should probably remain frozen until the site skin is changed).
 
 Beware also that some plugins use configuration files that may need update too. This is
-typically the case with `maven-checkstyle-plugin`. The `src/conf/checkstyle.xml` file may
-need to be checked.
+typically the case with `maven-checkstyle-plugin` and `maven-pmd-plugin`. The
+`src/conf/checkstyle.xml` and `src/conf/pmd-ruleset` files may need to be checked.
 
 Before committing these changes, you have to check that everything works. So run
 the following command:
@@ -93,7 +93,7 @@ everything in one place.
 
 When everything runs fine and the generated site is OK, then you can commit the changes:
 
-    git add hipparchus-parent/pom.xml src/conf/checkstyle.xml
+    git add hipparchus-parent/pom.xml src/conf/checkstyle.xml src/conf/pmd-ruleset
     git commit -m "Updated maven plugins versions."
 
 ## Creating release notes
@@ -142,6 +142,7 @@ Several files must be updated to take into account the new version:
 
 |            file name             |           usage            |                                     required update                                                    | 
 |----------------------------------|----------------------------|--------------------------------------------------------------------------------------------------------|
+| `hipparchus-*/src/site/site.xml` | site structure and menus   | Add an entry in the menu for X.Y API docs (don't remove the existing entries for previous versions!)   |
 | `src/site/site.xml         `     | site structure and menus   | Add an entry in the menu for X.Y API docs (don't remove the existing entries for previous versions!)   |
 | `src/site/markdown/index.md`     | site home page             | Update the text about the latest available version, including important changes from RELEASE-NOTES.txt |
 | `src/site/markdown/downloads.md` | downloads links            | Add a table with the links for files of the new versions, don't forget the date in the table caption   |
@@ -150,7 +151,7 @@ Documentation files to update
 
 Once the files have been updated, commit the changes:
 
-    git add src/site/site.xml src/site/markdown/*.md
+    git add hipparchus-*/src/site/site.xml src/site/site.xml src/site/markdown/*.md README.md
     git commit -m "Updated documentation for the release."
 
 ## Tag and sign the git repository
@@ -220,13 +221,13 @@ access the signing key.
 
 A huge number of files will be uploaded to SonaType server, some of which we do not really
 release. So once the commands ends, you will have to log into SonaType OSS site
-[https://oss.sonatype.org/](https://oss.sonatype.org/) and check the staging repository
-and remove the artifacts from the `hipparchus-aggregator` module. When the artifacts
-are considered OK, the repository must be closed so it is ready for the upcoming vote
-for the release.
+[https://oss.sonatype.org/](https://oss.sonatype.org/), check the staging repository and
+remove the artifacts from the `hipparchus-aggregator` and `hipparchus-coverage` modules.
+When the artifacts are considered OK, the repository must be closed so it is ready for the
+upcoming vote for the release.
 
-This step is performed by the `release.sh` shell script, except the closing of the OSS repository
-and the uploading to Hipparchus site.
+This step is performed by the `release.sh` shell script, except the closing of the OSS repository,
+removing the spurious artifacts.
 
 ## Uploading non-maven artifacts
 
@@ -254,7 +255,7 @@ The site is generated locally using:
 Once generated, the site can be archived and uploaded to the Hipparchus site:
 
     cd target/staging
-    tar cjf ../www-X.Y.hipparchus.org.bz2 .
+    tar cjf ../www-X.Y.hipparchus.org.tar.bz2 .
 
 This archive content must be extracted in the `staging` directory that already contains the
 `downloads` directory with the 12 files uploaded just before. When the `staging` directory

@@ -43,7 +43,7 @@ public class DoublePoint implements Clusterable, Serializable {
      *
      * @param point the n-dimensional point in double space
      */
-    public DoublePoint(final double[] point) {
+    public DoublePoint(final double[] point) { // NOPMD - storage of array reference is intentional and documented here
         this.point = point;
     }
 
@@ -61,10 +61,15 @@ public class DoublePoint implements Clusterable, Serializable {
         }
     }
 
-    /** {@inheritDoc} */
+    /** {@inheritDoc}
+     * <p>
+     * In this implementation of the {@link Clusterable} interface,
+     * the method <em>always</em> returns a reference to an internal array.
+     * </p>
+     */
     @Override
     public double[] getPoint() {
-        return point;
+        return point; // NOPMD - returning a reference to an internal array is documented here
     }
 
     /** {@inheritDoc} */

@@ -36,7 +36,9 @@ public abstract class AbstractUnivariateStatistic
     private double[] storedData;
 
     /** Default constructor. */
-    protected AbstractUnivariateStatistic() {}
+    protected AbstractUnivariateStatistic() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     /**
      * Copy constructor, creates an identical copy
@@ -84,7 +86,7 @@ public abstract class AbstractUnivariateStatistic
      * @return reference to the stored data array (may be null)
      */
     protected double[] getDataRef() {
-        return storedData;
+        return storedData; // NOPMD - returning an internal array is intentional and documented here
     }
 
     /**

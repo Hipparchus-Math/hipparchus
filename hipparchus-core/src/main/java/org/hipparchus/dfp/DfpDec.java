@@ -361,7 +361,7 @@ public class DfpDec extends Dfp {
             result = dotrap(DfpField.FLAG_INEXACT, trapName, x, result);
         }
 
-        if (result.equals(getZero()) && this.equals(getZero()) == false) {
+        if (result.equals(getZero()) && !this.equals(getZero())) {
             getField().setIEEEFlagsBits(DfpField.FLAG_INEXACT);
             result = dotrap(DfpField.FLAG_INEXACT, trapName, x, result);
         }

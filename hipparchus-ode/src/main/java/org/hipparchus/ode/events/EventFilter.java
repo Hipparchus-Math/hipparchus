@@ -202,7 +202,7 @@ public class EventFilter implements ODEEventHandler {
     @Override
     public Action eventOccurred(final ODEStateAndDerivative state, final boolean increasing) {
         // delegate to raw handler, fixing increasing status on the fly
-        return rawHandler.eventOccurred(state, filter.getTriggeredIncreasing());
+        return rawHandler.eventOccurred(state, filter.isTriggeredOnIncreasing());
     }
 
     /**  {@inheritDoc} */

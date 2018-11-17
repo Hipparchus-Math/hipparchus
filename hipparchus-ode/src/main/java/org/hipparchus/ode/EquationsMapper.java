@@ -95,15 +95,14 @@ public class EquationsMapper implements Serializable {
         }
 
         final int n = getNumberOfEquations();
-        int index = 0;
-        final double[] state      = extractEquationData(index, y);
-        final double[] derivative = extractEquationData(index, yDot);
+        final double[] state      = extractEquationData(0, y);
+        final double[] derivative = extractEquationData(0, yDot);
         if (n < 2) {
             return new ODEStateAndDerivative(t, state, derivative);
         } else {
             final double[][] secondaryState      = new double[n - 1][];
             final double[][] secondaryDerivative = new double[n - 1][];
-            while (++index < getNumberOfEquations()) {
+            for (int index = 1; index < getNumberOfEquations(); ++index) {
                 secondaryState[index - 1]      = extractEquationData(index, y);
                 secondaryDerivative[index - 1] = extractEquationData(index, yDot);
             }

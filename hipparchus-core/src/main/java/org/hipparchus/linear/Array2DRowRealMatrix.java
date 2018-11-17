@@ -46,7 +46,9 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
     /**
      * Creates a matrix with no data
      */
-    public Array2DRowRealMatrix() {}
+    public Array2DRowRealMatrix() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     /**
      * Create a new RealMatrix with the supplied row and column dimensions.
@@ -97,7 +99,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
      * @throws NullArgumentException if {@code d} is {@code null}.
      * @see #Array2DRowRealMatrix(double[][])
      */
-    public Array2DRowRealMatrix(final double[][] d, final boolean copyArray)
+    public Array2DRowRealMatrix(final double[][] d, final boolean copyArray) // NOPMD - array copy is taken care of by parameter
         throws MathIllegalArgumentException,
         NullArgumentException {
         if (copyArray) {
@@ -394,7 +396,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
      * @return 2-dimensional array of entries.
      */
     public double[][] getDataRef() {
-        return data;
+        return data; // NOPMD - returning an internal array is intentional and documented here
     }
 
     /** {@inheritDoc} */

@@ -187,7 +187,7 @@ public class AdamsNordsieckTransformer {
      * (excluding the one being computed)
      * @return Nordsieck transformer for the specified number of steps
      */
-    public static AdamsNordsieckTransformer getInstance(final int nSteps) {
+    public static AdamsNordsieckTransformer getInstance(final int nSteps) { // NOPMD - PMD false positive
         synchronized(CACHE) {
             AdamsNordsieckTransformer t = CACHE.get(nSteps);
             if (t == null) {
