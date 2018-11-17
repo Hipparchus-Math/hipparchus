@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.hipparchus</groupId>
     <artifactId>hipparchus</artifactId>
-    <version>1.4</version>
+    <version>1.5-SNAPSHOT</version>
     <relativePath>hipparchus-parent</relativePath>
   </parent>
 
@@ -33,7 +33,7 @@
   <description>The Hipparchus mathematics library</description>
 
   <scm>
-    <!-- override the value from the parent pom wich the *same* value,
+    <!-- override the value from the parent pom with the *same*
          to avoid maven adding the module name at the end of the URL -->
     <connection>${hipparchusScmConnection}</connection>
     <developerConnection>${hipparchusScmDeveloperConnection}</developerConnection>
