@@ -539,9 +539,10 @@ public class CloseEventsTest {
 
     /**
      * test when one event detector changes the definition of another's g function before
-     * the end of the step as a result of a continue action. Not sure if this should be
-     * officially supported, but it is used in Orekit's DateDetector, it's useful, and not
-     * too hard to implement.
+     * the end of the step as a result of a continue action. In this case the change
+     * creates a new event for a detector that previously had no events occurring. Not
+     * sure if this should be officially supported, but it is used in Orekit's
+     * DateDetector, it's useful, and not too hard to implement.
      */
     @Test
     public void testEventChangesGFunctionDefinition() {
@@ -569,6 +570,170 @@ public class CloseEventsTest {
                     return detectorB.g(state);
                 } else {
                     return -1;
+                }
+            }
+
+        };
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+        integrator.addEventHandler(detectorC, maxCheck, tolerance, 100);
+
+        // action
+        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+
+        // verify
+        Assert.assertEquals(2, events.size());
+        Assert.assertEquals(t1, events.get(0).getT(), tolerance);
+        Assert.assertEquals(true, events.get(0).isIncreasing());
+        Assert.assertSame(detectorA, events.get(0).getHandler());
+        Assert.assertEquals(t2, events.get(1).getT(), tolerance);
+        Assert.assertEquals(true, events.get(1).isIncreasing());
+        Assert.assertSame(detectorC, events.get(1).getHandler());
+    }
+
+    /**
+     * test when one event detector changes the definition of another's g function before
+     * the end of the step as a result of an event occurring. In this case the change
+     * cancels the occurrence of the event.
+     */
+    @Test
+    public void testEventChangesGFunctionDefinitionCancel() {
+        // setup
+        double maxCheck = 5;
+        double tolerance = 1e-6;
+        double t1 = 11, t2 = 11.1;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        // mutable boolean
+        boolean[] swap = new boolean[1];
+        final TimeDetector detectorA =
+                new ContinuousDetector(Action.RESET_EVENTS, events, t1) {
+                    @Override
+                    public Action eventOccurred(ODEStateAndDerivative state,
+                                                boolean increasing) {
+                        swap[0] = true;
+                        return super.eventOccurred(state, increasing);
+                    }
+                };
+        final TimeDetector detectorB = new ContinuousDetector(events, t2);
+        BaseDetector detectorC = new BaseDetector(Action.CONTINUE, events) {
+
+            @Override
+            public double g(ODEStateAndDerivative state) {
+                if (!swap[0]) {
+                    return detectorB.g(state);
+                } else {
+                    return -1;
+                }
+            }
+
+        };
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+        integrator.addEventHandler(detectorC, maxCheck, tolerance, 100);
+
+        // action
+        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+
+        // verify
+        Assert.assertEquals(1, events.size());
+        Assert.assertEquals(t1, events.get(0).getT(), tolerance);
+        Assert.assertEquals(true, events.get(0).isIncreasing());
+        Assert.assertSame(detectorA, events.get(0).getHandler());
+    }
+
+    /**
+     * test when one event detector changes the definition of another's g function before
+     * the end of the step as a result of an event occurring. In this case the change
+     * delays the occurrence of the event.
+     */
+    @Test
+    public void testEventChangesGFunctionDefinitionDelay() {
+        // setup
+        double maxCheck = 5;
+        double tolerance = 1e-6;
+        double t1 = 11, t2 = 11.1, t3 = 11.2;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        // mutable boolean
+        boolean[] swap = new boolean[1];
+        final TimeDetector detectorA =
+                new ContinuousDetector(Action.RESET_EVENTS, events, t1) {
+                    @Override
+                    public Action eventOccurred(ODEStateAndDerivative state,
+                                                boolean increasing) {
+                        swap[0] = true;
+                        return super.eventOccurred(state, increasing);
+                    }
+                };
+        final TimeDetector detectorB = new ContinuousDetector(events, t2);
+        final TimeDetector detectorD = new ContinuousDetector(events, t3);
+        BaseDetector detectorC = new BaseDetector(Action.CONTINUE, events) {
+
+            @Override
+            public double g(ODEStateAndDerivative state) {
+                if (!swap[0]) {
+                    return detectorB.g(state);
+                } else {
+                    return detectorD.g(state);
+                }
+            }
+
+        };
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+        integrator.addEventHandler(detectorC, maxCheck, tolerance, 100);
+
+        // action
+        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+
+        // verify
+        Assert.assertEquals(2, events.size());
+        Assert.assertEquals(t1, events.get(0).getT(), tolerance);
+        Assert.assertEquals(true, events.get(0).isIncreasing());
+        Assert.assertSame(detectorA, events.get(0).getHandler());
+        Assert.assertEquals(t3, events.get(1).getT(), tolerance);
+        Assert.assertEquals(true, events.get(1).isIncreasing());
+        Assert.assertSame(detectorC, events.get(1).getHandler());
+    }
+
+    /**
+     * test when one event detector changes the definition of another's g function before
+     * the end of the step as a result of an event occurring. In this case the change
+     * causes the event to happen sooner than originally expected.
+     */
+    @Test
+    public void testEventChangesGFunctionDefinitionAccelerate() {
+        // setup
+        double maxCheck = 5;
+        double tolerance = 1e-6;
+        double t1 = 11, t2 = 11.1, t3 = 11.2;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        // mutable boolean
+        boolean[] swap = new boolean[1];
+        final TimeDetector detectorA =
+                new ContinuousDetector(Action.RESET_EVENTS, events, t1) {
+                    @Override
+                    public Action eventOccurred(ODEStateAndDerivative state,
+                                                boolean increasing) {
+                        swap[0] = true;
+                        return super.eventOccurred(state, increasing);
+                    }
+                };
+        final TimeDetector detectorB = new ContinuousDetector(events, t2);
+        final TimeDetector detectorD = new ContinuousDetector(events, t3);
+        BaseDetector detectorC = new BaseDetector(Action.CONTINUE, events) {
+
+            @Override
+            public double g(ODEStateAndDerivative state) {
+                if (swap[0]) {
+                    return detectorB.g(state);
+                } else {
+                    return detectorD.g(state);
                 }
             }
 
@@ -1243,6 +1408,171 @@ public class CloseEventsTest {
                     return detectorB.g(state);
                 } else {
                     return 1;
+                }
+            }
+
+        };
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+        integrator.addEventHandler(detectorC, maxCheck, tolerance, 100);
+
+        // action
+        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+
+        // verify
+        Assert.assertEquals(2, events.size());
+        Assert.assertEquals(t1, events.get(0).getT(), tolerance);
+        Assert.assertEquals(true, events.get(0).isIncreasing());
+        Assert.assertSame(detectorA, events.get(0).getHandler());
+        Assert.assertEquals(t2, events.get(1).getT(), tolerance);
+        Assert.assertEquals(true, events.get(1).isIncreasing());
+        Assert.assertSame(detectorC, events.get(1).getHandler());
+    }
+
+    /**
+     * test when one event detector changes the definition of another's g function before
+     * the end of the step as a result of an event occurring. In this case the change
+     * cancels the occurrence of the event.
+     */
+    @Test
+    public void testEventChangesGFunctionDefinitionCancelReverse() {
+        // setup
+        double maxCheck = 5;
+        double tolerance = 1e-6;
+        double t1 = -11, t2 = -11.1;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        // mutable boolean
+        boolean[] swap = new boolean[1];
+        final TimeDetector detectorA =
+                new ContinuousDetector(Action.RESET_EVENTS, events, t1) {
+                    @Override
+                    public Action eventOccurred(ODEStateAndDerivative state,
+                                                boolean increasing) {
+                        swap[0] = true;
+                        return super.eventOccurred(state, increasing);
+                    }
+                };
+        final TimeDetector detectorB = new ContinuousDetector(events, t2);
+        BaseDetector detectorC = new BaseDetector(Action.CONTINUE, events) {
+
+            @Override
+            public double g(ODEStateAndDerivative state) {
+                if (!swap[0]) {
+                    return detectorB.g(state);
+                } else {
+                    return 1;
+                }
+            }
+
+        };
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+        integrator.addEventHandler(detectorC, maxCheck, tolerance, 100);
+
+        // action
+        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+
+        // verify
+        Assert.assertEquals(1, events.size());
+        Assert.assertEquals(t1, events.get(0).getT(), tolerance);
+        Assert.assertEquals(true, events.get(0).isIncreasing());
+        Assert.assertSame(detectorA, events.get(0).getHandler());
+    }
+
+
+    /**
+     * test when one event detector changes the definition of another's g function before
+     * the end of the step as a result of an event occurring. In this case the change
+     * delays the occurrence of the event.
+     */
+    @Test
+    public void testEventChangesGFunctionDefinitionDelayReverse() {
+        // setup
+        double maxCheck = 5;
+        double tolerance = 1e-6;
+        double t1 = -11, t2 = -11.1, t3 = -11.2;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        // mutable boolean
+        boolean[] swap = new boolean[1];
+        final TimeDetector detectorA =
+                new ContinuousDetector(Action.RESET_EVENTS, events, t1) {
+                    @Override
+                    public Action eventOccurred(ODEStateAndDerivative state,
+                                                boolean increasing) {
+                        swap[0] = true;
+                        return super.eventOccurred(state, increasing);
+                    }
+                };
+        final TimeDetector detectorB = new ContinuousDetector(events, t2);
+        final TimeDetector detectorD = new ContinuousDetector(events, t3);
+        BaseDetector detectorC = new BaseDetector(Action.CONTINUE, events) {
+
+            @Override
+            public double g(ODEStateAndDerivative state) {
+                if (!swap[0]) {
+                    return detectorB.g(state);
+                } else {
+                    return detectorD.g(state);
+                }
+            }
+
+        };
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+        integrator.addEventHandler(detectorC, maxCheck, tolerance, 100);
+
+        // action
+        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+
+        // verify
+        Assert.assertEquals(2, events.size());
+        Assert.assertEquals(t1, events.get(0).getT(), tolerance);
+        Assert.assertEquals(true, events.get(0).isIncreasing());
+        Assert.assertSame(detectorA, events.get(0).getHandler());
+        Assert.assertEquals(t3, events.get(1).getT(), tolerance);
+        Assert.assertEquals(true, events.get(1).isIncreasing());
+        Assert.assertSame(detectorC, events.get(1).getHandler());
+    }
+
+    /**
+     * test when one event detector changes the definition of another's g function before
+     * the end of the step as a result of an event occurring. In this case the change
+     * causes the event to happen sooner than originally expected.
+     */
+    @Test
+    public void testEventChangesGFunctionDefinitionAccelerateReverse() {
+        // setup
+        double maxCheck = 5;
+        double tolerance = 1e-6;
+        double t1 = -11, t2 = -11.1, t3 = -11.2;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        // mutable boolean
+        boolean[] swap = new boolean[1];
+        final TimeDetector detectorA =
+                new ContinuousDetector(Action.RESET_EVENTS, events, t1) {
+                    @Override
+                    public Action eventOccurred(ODEStateAndDerivative state,
+                                                boolean increasing) {
+                        swap[0] = true;
+                        return super.eventOccurred(state, increasing);
+                    }
+                };
+        final TimeDetector detectorB = new ContinuousDetector(events, t2);
+        final TimeDetector detectorD = new ContinuousDetector(events, t3);
+        BaseDetector detectorC = new BaseDetector(Action.CONTINUE, events) {
+
+            @Override
+            public double g(ODEStateAndDerivative state) {
+                if (swap[0]) {
+                    return detectorB.g(state);
+                } else {
+                    return detectorD.g(state);
                 }
             }
 

@@ -96,10 +96,14 @@ public interface ODEEventHandler  {
      * at bounce points, and {@code sign} is used to <em>unfold</em> it back, so the
      * solvers sees a {@code g(state)} function which behaves smoothly even across events.</p>
      *
-     * <p> Calling this multiple times with the same state will result in the same value.
-     * The definition of the g function may change when an
-     * {@link #eventOccurred(ODEStateAndDerivative, boolean) event occurs}, as in the
-     * above example.
+     * <p>This method is idempotent, that is calling this multiple times with the same
+     * state will result in the same value, with two exceptions. First, the definition of
+     * the g function may change when an {@link #eventOccurred(ODEStateAndDerivative,
+     * boolean) event occurs} on this handler, as in the above example. Second, the
+     * definition of the g function may change when the {@link
+     * #eventOccurred(ODEStateAndDerivative, boolean) eventOccurred} method of any other
+     * event handler in the same integrator returns {@link Action#RESET_EVENTS}, {@link
+     * Action#RESET_DERIVATIVES}, or {@link Action#RESET_STATE}.
      *
      * @param state current value of the independent <i>time</i> variable, state vector
      * and derivative
@@ -131,6 +135,8 @@ public interface ODEEventHandler  {
      *   derivatives,</li>
      *   <li>if {@link Action#RESET_DERIVATIVES} is returned, the integrator
      *   will recompute the derivatives,
+     *   <li>if {@link Action#RESET_EVENTS} is returned, the integrator
+     *   will recheck all event handlers,
      *   <li>if {@link Action#CONTINUE} is returned, no specific action will
      *   be taken (apart from having called this method) and integration
      *   will continue.</li>
@@ -166,7 +172,8 @@ public interface ODEEventHandler  {
      * to physical time, not with respect to integration which may go backward in time)
      * @return indication of what the integrator should do next, this
      * value must be one of {@link Action#STOP}, {@link Action#RESET_STATE},
-     * {@link Action#RESET_DERIVATIVES} or {@link Action#CONTINUE}
+     * {@link Action#RESET_DERIVATIVES}, {@link Action#RESET_EVENTS}, or
+     * {@link Action#CONTINUE}
      */
     Action eventOccurred(ODEStateAndDerivative state, boolean increasing);
 
