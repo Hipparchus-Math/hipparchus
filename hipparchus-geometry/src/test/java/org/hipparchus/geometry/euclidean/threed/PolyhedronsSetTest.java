@@ -504,6 +504,49 @@ public class PolyhedronsSetTest {
         }
     }
 
+    // issue GEOMETRY-38
+    @Test
+    public void testFirstIntersectionLinesPassThroughBoundaries() {
+        // arrange
+        Vector3D lowerCorner = Vector3D.ZERO;
+        Vector3D upperCorner = new Vector3D(1, 1, 1);
+        Vector3D center = new Vector3D(0.5, lowerCorner, 0.5, upperCorner);
+
+        PolyhedronsSet polySet = new PolyhedronsSet(0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 1.0e-15);
+
+        Line upDiagonal = new Line(lowerCorner, upperCorner, 1.0e-15);
+        Line downDiagonal = upDiagonal.revert();
+
+        // act/assert
+        SubPlane upFromOutsideResult = (SubPlane) polySet.firstIntersection(new Vector3D(-1, -1, -1), upDiagonal);
+        Assert.assertNotNull(upFromOutsideResult);
+        Assert.assertEquals(0.0,
+                            Vector3D.distance(lowerCorner,
+                                              ((Plane) upFromOutsideResult.getHyperplane()).intersection(upDiagonal)),
+                            1.0e-15);
+
+        SubPlane upFromCenterResult = (SubPlane) polySet.firstIntersection(center, upDiagonal);
+        Assert.assertNotNull(upFromCenterResult);
+        Assert.assertEquals(0.0,
+                            Vector3D.distance(upperCorner,
+                                              ((Plane) upFromCenterResult.getHyperplane()).intersection(upDiagonal)),
+                            1.0e-15);
+
+        SubPlane downFromOutsideResult = (SubPlane) polySet.firstIntersection(new Vector3D(2, 2, 2), downDiagonal);
+        Assert.assertNotNull(downFromOutsideResult);
+        Assert.assertEquals(0.0,
+                            Vector3D.distance(upperCorner,
+                            ((Plane) downFromOutsideResult.getHyperplane()).intersection(downDiagonal)),
+                            1.0e-15);
+
+        SubPlane downFromCenterResult = (SubPlane) polySet.firstIntersection(center, downDiagonal);
+        Assert.assertNotNull(downFromCenterResult);
+        Assert.assertEquals(0.0,
+                            Vector3D.distance(lowerCorner,
+                                              ((Plane) downFromCenterResult.getHyperplane()).intersection(downDiagonal)),
+                            1.0e-15);
+    }
+
     @Test
     public void testIssue1211() throws IOException, ParseException {
 

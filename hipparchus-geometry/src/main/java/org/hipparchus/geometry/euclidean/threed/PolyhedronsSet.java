@@ -664,11 +664,11 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
         final BoundaryAttribute<Euclidean3D> attribute =
             (BoundaryAttribute<Euclidean3D>) node.getAttribute();
         if ((attribute.getPlusOutside() != null) &&
-            (((SubPlane) attribute.getPlusOutside()).getRemainingRegion().checkPoint(point2D) == Location.INSIDE)) {
+            (((SubPlane) attribute.getPlusOutside()).getRemainingRegion().checkPoint(point2D) != Location.OUTSIDE)) {
             return attribute.getPlusOutside();
         }
         if ((attribute.getPlusInside() != null) &&
-            (((SubPlane) attribute.getPlusInside()).getRemainingRegion().checkPoint(point2D) == Location.INSIDE)) {
+            (((SubPlane) attribute.getPlusInside()).getRemainingRegion().checkPoint(point2D) != Location.OUTSIDE)) {
             return attribute.getPlusInside();
         }
         return null;

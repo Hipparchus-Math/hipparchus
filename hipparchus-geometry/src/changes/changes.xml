@@ -49,6 +49,12 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Geometry Release Notes</title>
   </properties>
   <body>
+    <release version="1.5" date="TBC" description="TBC">
+      <action dev="luc" type="fix" due-to="Matt Juntunen">
+        Fixed lines/polyhedrons intersection occurring on facets boundaries.
+        This was ported from Apache Commons Geometry issue 38.
+      </action>
+    </release>
     <release version="1.4" date="2018-11-17" description="This is a maintenance release. The main
     changes since last version are various fixes in partitioning.">
       <action dev="evan" type="fix" issue="issues/46">
