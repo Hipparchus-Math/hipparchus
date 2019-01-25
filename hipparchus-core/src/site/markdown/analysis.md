@@ -284,9 +284,9 @@ href="http://www.math.tau.ac.il/~yekutiel/MA%20seminar/Cleveland%201979.pdf">Rob
 Locally Weighted Regression and Smoothing Scatterplots</a>. This kind of
 interpolation is computationally intensive but robust.
 
-Microsphere interpolation is a robust multidimensional interpolation algorithm.
-It has been described in William Dudziak's <a
-href="http://www.dudziak.com/microsphere.pdf">MS thesis</a>.
+]Microsphere interpolation]((../apidocs/org/hipparchus/analysis/interpolation/MicrosphereProjectionI,terpolator.html))
+is a robust multidimensional interpolation algorithm. It has been described in William Dudziak's
+<a href="http://www.dudziak.com/microsphere.pdf">MS thesis</a>.
 
 [Hermite interpolation](http://en.wikipedia.org/wiki/Hermite_interpolation)
 is an interpolation method that can use derivatives in addition to function values at sample points. The <a
@@ -322,16 +322,16 @@ sorted in increasing order in order to define a two-dimensional grid.
 
 In [bicubic interpolation](http://en.wikipedia.org/wiki/Bicubic_interpolation),
 the interpolation function is a 3rd-degree polynomial of two variables. The coefficients
-are computed from the function values sampled on a grid, as well as the values of the
+are computed from the function values sampled on a grid, and if available from the values of the
 partial derivatives of the function at those grid points.
-From two-dimensional data sampled on a grid, the
-[BicubicSplineInterpolator](../apidocs/org/hipparchus/analysis/interpolation/BicubicSplineInterpolator.html)
+For two-dimensional data sampled on a grid with derivatives available, the
+[BicubicInterpolator](../apidocs/org/hipparchus/analysis/interpolation/BicubicInterpolator.html)
 computes a
-[bicubic interpolating function](../apidocs/org/hipparchus/analysis/interpolation/BicubicSplineInterpolatingFunction.html).
-Prior to computing an interpolating function, the
-[SmoothingPolynomialBicubicSplineInterpolator](../apidocs/org/hipparchus/analysis/interpolation/SmoothingPolynomialBicubicSplineInterpolator.html)
-class performs smoothing of the data by computing the polynomial that best fits each of the one-dimensional
-curves along each of the coordinate axes.
+[bicubic interpolating function](../apidocs/org/hipparchus/analysis/interpolation/BicubicInterpolatingFunction.html).
+For two-dimensional data sampled on a grid without derivatives available, the
+[PiecewiseBicubicSplineInterpolator](../apidocs/org/hipparchus/analysis/interpolation/PiecewiseBicubicSplineInterpolator.html)
+computes a
+[piecewise bicubic interpolating function](../apidocs/org/hipparchus/analysis/interpolation/PiecewiseBicubicSplineInterpolatingFunction.html).
 
 A [TrivariateGridInterpolator](../apidocs/org/hipparchus/analysis/interpolation/TrivariateGridInterpolator.html)
 is used to find a trivariate real-valued function `f` which for a given set of tuples
