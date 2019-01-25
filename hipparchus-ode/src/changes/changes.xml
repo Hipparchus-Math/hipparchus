@@ -49,6 +49,13 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
+    <release version="1.5" date="TBD" description="TBD">
+      <action dev="evan" type="add">
+        Add Action.RESET_EVENTS to ask the integrator to recheck all event detectors
+        without recomputing the step. Use when the g function of one event detector
+        depends on events occurring in another event detector.
+      </action>
+    </release>
     <release version="1.4" date="2018-11-17" description="This is a maintenance release. The main
     changes since last version are the introduction of support for complex ordinary differential
     equations (both primary and secondary equations).">
