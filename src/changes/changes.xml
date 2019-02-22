@@ -49,6 +49,17 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
+    <release version="1.5" date="TBD" description="TBD">
+     <action dev="luc" type="fix" issue="issues/54" >
+       Avoid too many multi-step integrator restarts after event resetting derivatives.
+       Github: fixes #54.
+     </action>
+     <action dev="evan" type="add">
+        Add Action.RESET_EVENTS to ask the integrator to recheck all event detectors
+        without recomputing the step. Use when the g function of one event detector
+        depends on events occurring in another event detector.
+      </action>
+    </release>
     <release version="1.4" date="2018-11-17" description="This is a maintenance release. The main
     changes since last version are the introduction of bilinear interpolation for 2D grids, field
     versions of sinCos and a way to build three-dimensional field arrays, accessors for state

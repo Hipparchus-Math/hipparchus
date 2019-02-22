@@ -320,6 +320,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
             }
         });
 
+        resetOccurred = false;
         boolean doneWithStep = false;
         resetEvents:
         do {
@@ -386,7 +387,6 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
                         return eventState;
                     }
 
-                    resetOccurred = false;
                     if (action == Action.RESET_DERIVATIVES || action == Action.RESET_STATE) {
                         // some event handler has triggered changes that
                         // invalidate the derivatives, we need to recompute them
