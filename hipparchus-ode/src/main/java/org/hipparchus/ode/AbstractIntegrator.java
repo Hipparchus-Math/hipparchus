@@ -311,6 +311,7 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
             }
         });
 
+        resetOccurred = false;
         boolean doneWithStep = false;
         resetEvents:
         do {
@@ -375,7 +376,6 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
                         return eventState;
                     }
 
-                    resetOccurred = false;
                     if (action == Action.RESET_DERIVATIVES || action == Action.RESET_STATE) {
                         // some event handler has triggered changes that
                         // invalidate the derivatives, we need to recompute them
