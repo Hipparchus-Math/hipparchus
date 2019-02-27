@@ -25,7 +25,6 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,81 +33,14 @@ import org.junit.Test;
  * Test the SplineInterpolator.
  *
  */
-public class SplineInterpolatorTest {
+public class SplineInterpolatorTest extends UnivariateInterpolatorAbstractTest {
 
-    /** error tolerance for spline interpolator value at knot points */
-    protected double knotTolerance = 1E-14;
-
-    /** error tolerance for interpolating polynomial coefficients */
-    protected double coefficientTolerance = 1E-14;
-
-    /** error tolerance for interpolated values -- high value is from sin test */
-    protected double interpolationTolerance = 1E-14;
-
-    @Test
-    public void testInterpolateLinearDegenerateTwoSegment()
-        {
-        double tolerance = 1e-15;
-        double x[] = { 0.0, 0.5, 1.0 };
-        double y[] = { 0.0, 0.5, 1.0 };
-        UnivariateInterpolator i = new SplineInterpolator();
-        UnivariateFunction f = i.interpolate(x, y);
-        verifyInterpolation(f, x, y);
-        verifyConsistency((PolynomialSplineFunction) f, x);
-
-        // Verify coefficients using analytical values
-        PolynomialFunction polynomials[] = ((PolynomialSplineFunction) f).getPolynomials();
-        double target[] = {y[0], 1d};
-        UnitTestUtils.assertEquals(polynomials[0].getCoefficients(), target, coefficientTolerance);
-        target = new double[]{y[1], 1d};
-        UnitTestUtils.assertEquals(polynomials[1].getCoefficients(), target, coefficientTolerance);
-
-        // Check interpolation
-        Assert.assertEquals(0.0,f.value(0.0), tolerance);
-        Assert.assertEquals(0.4,f.value(0.4), tolerance);
-        Assert.assertEquals(1.0,f.value(1.0), tolerance);
+    protected UnivariateInterpolator buildDoubleInterpolator() {
+        return new SplineInterpolator();
     }
 
-    @Test
-    public void testInterpolateLinearDegenerateThreeSegment()
-        {
-        double tolerance = 1e-15;
-        double x[] = { 0.0, 0.5, 1.0, 1.5 };
-        double y[] = { 0.0, 0.5, 1.0, 1.5 };
-        UnivariateInterpolator i = new SplineInterpolator();
-        UnivariateFunction f = i.interpolate(x, y);
-        verifyInterpolation(f, x, y);
-
-        // Verify coefficients using analytical values
-        PolynomialFunction polynomials[] = ((PolynomialSplineFunction) f).getPolynomials();
-        double target[] = {y[0], 1d};
-        UnitTestUtils.assertEquals(polynomials[0].getCoefficients(), target, coefficientTolerance);
-        target = new double[]{y[1], 1d};
-        UnitTestUtils.assertEquals(polynomials[1].getCoefficients(), target, coefficientTolerance);
-        target = new double[]{y[2], 1d};
-        UnitTestUtils.assertEquals(polynomials[2].getCoefficients(), target, coefficientTolerance);
-
-        // Check interpolation
-        Assert.assertEquals(0,f.value(0), tolerance);
-        Assert.assertEquals(1.4,f.value(1.4), tolerance);
-        Assert.assertEquals(1.5,f.value(1.5), tolerance);
-    }
-
-    @Test
-    public void testInterpolateLinear() {
-        double x[] = { 0.0, 0.5, 1.0 };
-        double y[] = { 0.0, 0.5, 0.0 };
-        UnivariateInterpolator i = new SplineInterpolator();
-        UnivariateFunction f = i.interpolate(x, y);
-        verifyInterpolation(f, x, y);
-        verifyConsistency((PolynomialSplineFunction) f, x);
-
-        // Verify coefficients using analytical values
-        PolynomialFunction polynomials[] = ((PolynomialSplineFunction) f).getPolynomials();
-        double target[] = {y[0], 1.5d, 0d, -2d};
-        UnitTestUtils.assertEquals(polynomials[0].getCoefficients(), target, coefficientTolerance);
-        target = new double[]{y[1], 0d, -3d, 2d};
-        UnitTestUtils.assertEquals(polynomials[1].getCoefficients(), target, coefficientTolerance);
+    protected FieldUnivariateInterpolator buildFieldInterpolator() {
+        return new SplineInterpolator();
     }
 
     @Test
@@ -127,7 +59,7 @@ public class SplineInterpolatorTest {
                 11d * FastMath.PI / 6d,
                 2.d * FastMath.PI };
         double y[] = { 0d, 0.5d, 1d, 0.5d, 0d, -0.5d, -1d, -0.5d, 0d };
-        UnivariateInterpolator i = new SplineInterpolator();
+        UnivariateInterpolator i = buildDoubleInterpolator();
         UnivariateFunction f = i.interpolate(x, y);
         verifyInterpolation(f, x, y);
         verifyConsistency((PolynomialSplineFunction) f, x);
@@ -162,48 +94,6 @@ public class SplineInterpolatorTest {
         //Check interpolation
         Assert.assertEquals(FastMath.sqrt(2d) / 2d,f.value(FastMath.PI/4d),sineInterpolationTolerance);
         Assert.assertEquals(FastMath.sqrt(2d) / 2d,f.value(3d*FastMath.PI/4d),sineInterpolationTolerance);
-    }
-
-    @Test
-    public void testIllegalArguments() {
-        // Data set arrays of different size.
-        UnivariateInterpolator i = new SplineInterpolator();
-        try {
-            double xval[] = { 0.0, 1.0 };
-            double yval[] = { 0.0, 1.0, 2.0 };
-            i.interpolate(xval, yval);
-            Assert.fail("Failed to detect data set array with different sizes.");
-        } catch (MathIllegalArgumentException iae) {
-            // Expected.
-        }
-        // X values not sorted.
-        try {
-            double xval[] = { 0.0, 1.0, 0.5 };
-            double yval[] = { 0.0, 1.0, 2.0 };
-            i.interpolate(xval, yval);
-            Assert.fail("Failed to detect unsorted arguments.");
-        } catch (MathIllegalArgumentException iae) {
-            // Expected.
-        }
-        // Not enough data to interpolate.
-        try {
-            double xval[] = { 0.0, 1.0 };
-            double yval[] = { 0.0, 1.0 };
-            i.interpolate(xval, yval);
-            Assert.fail("Failed to detect unsorted arguments.");
-        } catch (MathIllegalArgumentException iae) {
-            // Expected.
-        }
-    }
-
-    /**
-     * verifies that f(x[i]) = y[i] for i = 0..n-1 where n is common length.
-     */
-    protected void verifyInterpolation(UnivariateFunction f, double x[], double y[])
-       {
-        for (int i = 0; i < x.length; i++) {
-            Assert.assertEquals(f.value(x[i]), y[i], knotTolerance);
-        }
     }
 
     /**

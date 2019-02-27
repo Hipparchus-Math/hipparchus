@@ -22,78 +22,33 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.UnitTestUtils;
+import org.hipparchus.analysis.RealFieldUnivariateFunction;
 import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.polynomials.FieldPolynomialFunction;
+import org.hipparchus.analysis.polynomials.FieldPolynomialSplineFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
+import org.hipparchus.util.Decimal64;
 import org.junit.Test;
 
 /**
  * Test the LinearInterpolator.
  */
-public class LinearInterpolatorTest {
+public class LinearInterpolatorTest extends UnivariateInterpolatorAbstractTest {
 
-    /** error tolerance for spline interpolator value at knot points */
-    protected double knotTolerance = 1E-12;
-
-    /** error tolerance for interpolating polynomial coefficients */
-    protected double coefficientTolerance = 1E-6;
-
-    /** error tolerance for interpolated values */
-    protected double interpolationTolerance = 1E-12;
-
-    @Test
-    public void testInterpolateLinearDegenerateTwoSegment()
-        {
-        double x[] = { 0.0, 0.5, 1.0 };
-        double y[] = { 0.0, 0.5, 1.0 };
-        UnivariateInterpolator i = new LinearInterpolator();
-        UnivariateFunction f = i.interpolate(x, y);
-        verifyInterpolation(f, x, y);
-
-        // Verify coefficients using analytical values
-        PolynomialFunction polynomials[] = ((PolynomialSplineFunction) f).getPolynomials();
-        double target[] = {y[0], 1d};
-        UnitTestUtils.assertEquals(polynomials[0].getCoefficients(), target, coefficientTolerance);
-        target = new double[]{y[1], 1d};
-        UnitTestUtils.assertEquals(polynomials[1].getCoefficients(), target, coefficientTolerance);
-
-        // Check interpolation
-        Assert.assertEquals(0.0,f.value(0.0), interpolationTolerance);
-        Assert.assertEquals(0.4,f.value(0.4), interpolationTolerance);
-        Assert.assertEquals(1.0,f.value(1.0), interpolationTolerance);
+    protected UnivariateInterpolator buildDoubleInterpolator() {
+        return new LinearInterpolator();
     }
 
-    @Test
-    public void testInterpolateLinearDegenerateThreeSegment()
-        {
-        double x[] = { 0.0, 0.5, 1.0, 1.5 };
-        double y[] = { 0.0, 0.5, 1.0, 1.5 };
-        UnivariateInterpolator i = new LinearInterpolator();
-        UnivariateFunction f = i.interpolate(x, y);
-        verifyInterpolation(f, x, y);
-
-        // Verify coefficients using analytical values
-        PolynomialFunction polynomials[] = ((PolynomialSplineFunction) f).getPolynomials();
-        double target[] = {y[0], 1d};
-        UnitTestUtils.assertEquals(polynomials[0].getCoefficients(), target, coefficientTolerance);
-        target = new double[]{y[1], 1d};
-        UnitTestUtils.assertEquals(polynomials[1].getCoefficients(), target, coefficientTolerance);
-        target = new double[]{y[2], 1d};
-        UnitTestUtils.assertEquals(polynomials[2].getCoefficients(), target, coefficientTolerance);
-
-        // Check interpolation
-        Assert.assertEquals(0,f.value(0), interpolationTolerance);
-        Assert.assertEquals(1.4,f.value(1.4), interpolationTolerance);
-        Assert.assertEquals(1.5,f.value(1.5), interpolationTolerance);
+    protected FieldUnivariateInterpolator buildFieldInterpolator() {
+        return new LinearInterpolator();
     }
 
     @Test
     public void testInterpolateLinear() {
         double x[] = { 0.0, 0.5, 1.0 };
         double y[] = { 0.0, 0.5, 0.0 };
-        UnivariateInterpolator i = new LinearInterpolator();
+        UnivariateInterpolator i = buildDoubleInterpolator();
         UnivariateFunction f = i.interpolate(x, y);
         verifyInterpolation(f, x, y);
 
@@ -106,45 +61,17 @@ public class LinearInterpolatorTest {
     }
 
     @Test
-    public void testIllegalArguments() {
-        // Data set arrays of different size.
-        UnivariateInterpolator i = new LinearInterpolator();
-        try {
-            double xval[] = { 0.0, 1.0 };
-            double yval[] = { 0.0, 1.0, 2.0 };
-            i.interpolate(xval, yval);
-            Assert.fail("Failed to detect data set array with different sizes.");
-        } catch (MathIllegalArgumentException iae) {
-            // Expected.
-        }
-        // X values not sorted.
-        try {
-            double xval[] = { 0.0, 1.0, 0.5 };
-            double yval[] = { 0.0, 1.0, 2.0 };
-            i.interpolate(xval, yval);
-            Assert.fail("Failed to detect unsorted arguments.");
-        } catch (MathIllegalArgumentException iae) {
-            // Expected.
-        }
-        // Not enough data to interpolate.
-        try {
-            double xval[] = { 0.0 };
-            double yval[] = { 0.0 };
-            i.interpolate(xval, yval);
-            Assert.fail("Failed to detect unsorted arguments.");
-        } catch (MathIllegalArgumentException iae) {
-            // Expected.
-        }
-    }
+    public void testInterpolateLinearD64() {
+        Decimal64 x[] = buildD64(0.0, 0.5, 1.0);
+        Decimal64 y[] = buildD64(0.0, 0.5, 0.0);
+        FieldUnivariateInterpolator i = buildFieldInterpolator();
+        RealFieldUnivariateFunction<Decimal64> f = i.interpolate(x, y);
+        verifyInterpolation(f, x, y);
 
-    /**
-     * verifies that f(x[i]) = y[i] for i = 0..n-1 where n is common length.
-     */
-    protected void verifyInterpolation(UnivariateFunction f, double x[], double y[])
-       {
-        for (int i = 0; i < x.length; i++) {
-            Assert.assertEquals(f.value(x[i]), y[i], knotTolerance);
-        }
+        // Verify coefficients using analytical values
+        FieldPolynomialFunction<Decimal64> polynomials[] = ((FieldPolynomialSplineFunction<Decimal64>) f).getPolynomials();
+        checkCoeffs(coefficientTolerance, polynomials[0], y[0].getReal(), +1.0);
+        checkCoeffs(coefficientTolerance, polynomials[1], y[1].getReal(), -1.0);
     }
 
 }

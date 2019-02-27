@@ -417,6 +417,45 @@ public class MathArrays {
      * @return {@code true} if the arrays have the same length.
      * @throws MathIllegalArgumentException if the lengths differ and
      * {@code abort} is {@code true}.
+     * @param <T> the type of the field elements
+     * @since 1.5
+     */
+    public static <T extends RealFieldElement<T>> boolean checkEqualLength(final T[] a,
+                                                                           final T[] b,
+                                           boolean abort) {
+        if (a.length == b.length) {
+            return true;
+        } else {
+            if (abort) {
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                       a.length, b.length);
+            }
+            return false;
+        }
+    }
+
+    /**
+     * Check that both arrays have the same length.
+     *
+     * @param a Array.
+     * @param b Array.
+     * @throws MathIllegalArgumentException if the lengths differ.
+     * @param <T> the type of the field elements
+     * @since 1.5
+     */
+    public static <T extends RealFieldElement<T>> void checkEqualLength(final T[] a, final T[] b) {
+        checkEqualLength(a, b, true);
+    }
+
+    /**
+     * Check that both arrays have the same length.
+     *
+     * @param a Array.
+     * @param b Array.
+     * @param abort Whether to throw an exception if the check fails.
+     * @return {@code true} if the arrays have the same length.
+     * @throws MathIllegalArgumentException if the lengths differ and
+     * {@code abort} is {@code true}.
      */
     public static boolean checkEqualLength(int[] a,
                                            int[] b,

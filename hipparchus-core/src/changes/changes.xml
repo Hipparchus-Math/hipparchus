@@ -50,7 +50,11 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.5"  date="TBD" description="TBD">
-      <action dev="luc" type="add" issue="issues/55" >
+      <action dev="luc" type="add">
+        Added FieldUnivariateInterpolator and make both LinearInterpolator,
+        AkimaSplineInterpolator and SplineInterpolator implement it.
+      </action>
+      <action dev="luc" type="add">
         Added FieldPolynomialFunction and FieldPolynomialSplineFunction.
       </action>
       <action dev="luc" type="add" issue="issues/53" >
