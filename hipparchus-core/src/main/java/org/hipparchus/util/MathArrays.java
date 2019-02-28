@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.hipparchus.Field;
+import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -416,6 +417,45 @@ public class MathArrays {
      * @return {@code true} if the arrays have the same length.
      * @throws MathIllegalArgumentException if the lengths differ and
      * {@code abort} is {@code true}.
+     * @param <T> the type of the field elements
+     * @since 1.5
+     */
+    public static <T extends RealFieldElement<T>> boolean checkEqualLength(final T[] a,
+                                                                           final T[] b,
+                                           boolean abort) {
+        if (a.length == b.length) {
+            return true;
+        } else {
+            if (abort) {
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                       a.length, b.length);
+            }
+            return false;
+        }
+    }
+
+    /**
+     * Check that both arrays have the same length.
+     *
+     * @param a Array.
+     * @param b Array.
+     * @throws MathIllegalArgumentException if the lengths differ.
+     * @param <T> the type of the field elements
+     * @since 1.5
+     */
+    public static <T extends RealFieldElement<T>> void checkEqualLength(final T[] a, final T[] b) {
+        checkEqualLength(a, b, true);
+    }
+
+    /**
+     * Check that both arrays have the same length.
+     *
+     * @param a Array.
+     * @param b Array.
+     * @param abort Whether to throw an exception if the check fails.
+     * @return {@code true} if the arrays have the same length.
+     * @throws MathIllegalArgumentException if the lengths differ and
+     * {@code abort} is {@code true}.
      */
     public static boolean checkEqualLength(int[] a,
                                            int[] b,
@@ -534,6 +574,106 @@ public class MathArrays {
      * @throws MathIllegalArgumentException if the array is not sorted.
      */
     public static void checkOrder(double[] val) throws MathIllegalArgumentException {
+        checkOrder(val, OrderDirection.INCREASING, true);
+    }
+
+    /**
+     * Check that the given array is sorted.
+     *
+     * @param val Values.
+     * @param dir Ordering direction.
+     * @param strict Whether the order should be strict.
+     * @param abort Whether to throw an exception if the check fails.
+     * @return {@code true} if the array is sorted.
+     * @throws MathIllegalArgumentException if the array is not sorted
+     * and {@code abort} is {@code true}.
+     * @param <T> the type of the field elements
+     * @since 1.5
+     */
+    public static <T extends RealFieldElement<T>>boolean checkOrder(T[] val, OrderDirection dir,
+                                                                    boolean strict, boolean abort)
+        throws MathIllegalArgumentException {
+        double previous = val[0].getReal();
+        final int max = val.length;
+
+        int index;
+        ITEM:
+        for (index = 1; index < max; index++) {
+            switch (dir) {
+            case INCREASING:
+                if (strict) {
+                    if (val[index].getReal() <= previous) {
+                        break ITEM;
+                    }
+                } else {
+                    if (val[index].getReal() < previous) {
+                        break ITEM;
+                    }
+                }
+                break;
+            case DECREASING:
+                if (strict) {
+                    if (val[index].getReal() >= previous) {
+                        break ITEM;
+                    }
+                } else {
+                    if (val[index].getReal() > previous) {
+                        break ITEM;
+                    }
+                }
+                break;
+            default:
+                // Should never happen.
+                throw MathRuntimeException.createInternalError();
+            }
+
+            previous = val[index].getReal();
+        }
+
+        if (index == max) {
+            // Loop completed.
+            return true;
+        }
+
+        // Loop early exit means wrong ordering.
+        if (abort) {
+            throw new MathIllegalArgumentException(dir == MathArrays.OrderDirection.INCREASING ?
+                                                    (strict ?
+                                                     LocalizedCoreFormats.NOT_STRICTLY_INCREASING_SEQUENCE :
+                                                     LocalizedCoreFormats.NOT_INCREASING_SEQUENCE) :
+                                                    (strict ?
+                                                     LocalizedCoreFormats.NOT_STRICTLY_DECREASING_SEQUENCE :
+                                                     LocalizedCoreFormats.NOT_DECREASING_SEQUENCE),
+                                                    val[index], previous, index, index - 1);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Check that the given array is sorted.
+     *
+     * @param val Values.
+     * @param dir Ordering direction.
+     * @param strict Whether the order should be strict.
+     * @throws MathIllegalArgumentException if the array is not sorted.
+     * @param <T> the type of the field elements
+     * @since 1.5
+     */
+    public static <T extends RealFieldElement<T>> void checkOrder(T[] val, OrderDirection dir,
+                                                                  boolean strict) throws MathIllegalArgumentException {
+        checkOrder(val, dir, strict, true);
+    }
+
+    /**
+     * Check that the given array is sorted in strictly increasing order.
+     *
+     * @param val Values.
+     * @throws MathIllegalArgumentException if the array is not sorted.
+     * @param <T> the type of the field elements
+     * @since 1.5
+     */
+    public static <T extends RealFieldElement<T>> void checkOrder(T[] val) throws MathIllegalArgumentException {
         checkOrder(val, OrderDirection.INCREASING, true);
     }
 
