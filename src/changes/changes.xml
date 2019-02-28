@@ -50,6 +50,11 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.5" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issues/55" >
+        Added FieldBivariateFunction and make both BilinearInterpolatingFunction
+        and PiecewiseBicubicSplineInterpolatingFunction implement it.
+        Github: fixes #55.
+      </action>
       <action dev="luc" type="add">
         Added FieldUnivariateInterpolator and make both LinearInterpolator,
         AkimaSplineInterpolator and SplineInterpolator implement it.

@@ -23,7 +23,10 @@ package org.hipparchus.analysis.interpolation;
 
 import java.util.Arrays;
 
+import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.BivariateFunction;
+import org.hipparchus.analysis.FieldBivariateFunction;
+import org.hipparchus.analysis.polynomials.FieldPolynomialSplineFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -41,7 +44,8 @@ import org.hipparchus.util.MathArrays;
  *
  */
 public class PiecewiseBicubicSplineInterpolatingFunction
-    implements BivariateFunction {
+    implements BivariateFunction, FieldBivariateFunction {
+
     /** The minimum number of points that are needed to compute the function. */
     private static final int MIN_NUM_POINTS = 5;
     /** Samples x-coordinates */
@@ -141,6 +145,44 @@ public class PiecewiseBicubicSplineInterpolatingFunction
         }
 
         final PolynomialSplineFunction spline = interpolator.interpolate(yArray, interpArray);
+
+        return spline.value(y);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     * @since 1.5
+     */
+    @Override
+    public <T extends RealFieldElement<T>> T value(final T x, final T y)
+        throws MathIllegalArgumentException {
+        final AkimaSplineInterpolator interpolator = new AkimaSplineInterpolator();
+        final int offset = 2;
+        final int count = offset + 3;
+        final int i = searchIndex(x.getReal(), xval, offset, count);
+        final int j = searchIndex(y.getReal(), yval, offset, count);
+
+        final double xArray[] = new double[count];
+        final T yArray[]      = MathArrays.buildArray(x.getField(), count);
+        final double zArray[] = new double[count];
+        final T interpArray[] = MathArrays.buildArray(x.getField(), count);
+
+        final T zero = x.getField().getZero();
+        for (int index = 0; index < count; index++) {
+            xArray[index] = xval[i + index];
+            yArray[index] = zero.add(yval[j + index]);
+        }
+
+        for (int zIndex = 0; zIndex < count; zIndex++) {
+            for (int index = 0; index < count; index++) {
+                zArray[index] = fval[i + index][j + zIndex];
+            }
+            final PolynomialSplineFunction spline = interpolator.interpolate(xArray, zArray);
+            interpArray[zIndex] = spline.value(x);
+        }
+
+        final FieldPolynomialSplineFunction<T> spline = interpolator.interpolate(yArray, interpArray);
 
         return spline.value(y);
 

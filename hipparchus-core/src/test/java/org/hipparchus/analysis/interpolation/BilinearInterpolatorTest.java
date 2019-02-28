@@ -17,8 +17,10 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.BivariateFunction;
+import org.hipparchus.analysis.RealFieldBivariateFunction;
 import org.hipparchus.random.RandomVectorGenerator;
 import org.hipparchus.random.SobolSequenceGenerator;
+import org.hipparchus.util.Decimal64;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -39,6 +41,7 @@ public class BilinearInterpolatorTest {
         double[] yVal = createLinearGrid(yMin, yMax, ny);
 
         BivariateFunction f = (x, y) -> 3.5;
+        RealFieldBivariateFunction<Decimal64> fT = (x, y) -> new Decimal64(3.5);
         BilinearInterpolatingFunction bif = createInterpolatingFunction(xVal, yVal, f);
 
         Assert.assertEquals(xMin, bif.getXInf(), 1.0e-15);
@@ -46,8 +49,8 @@ public class BilinearInterpolatorTest {
         Assert.assertEquals(yMin, bif.getYInf(), 1.0e-15);
         Assert.assertEquals(yMax, bif.getYSup(), 1.0e-15);
 
-        checkInterpolationAtNodes(xVal, yVal, bif, f, 1.0e-15);
-        checkInterpolationRandom(new SobolSequenceGenerator(2), xMin, xMax, yMin, yMax, bif, f, 1.0e-15);
+        checkInterpolationAtNodes(xVal, yVal, bif, f, fT, 1.0e-15);
+        checkInterpolationRandom(new SobolSequenceGenerator(2), xMin, xMax, yMin, yMax, bif, f, fT, 1.0e-15);
 
     }
 
@@ -65,6 +68,7 @@ public class BilinearInterpolatorTest {
         double[] yVal = createLinearGrid(yMin, yMax, ny);
 
         BivariateFunction f = (x, y) -> 2 * x - y;
+        RealFieldBivariateFunction<Decimal64> fT = (x, y) -> x.multiply(2).subtract(y);
         BilinearInterpolatingFunction bif = createInterpolatingFunction(xVal, yVal, f);
 
         Assert.assertEquals(xMin, bif.getXInf(), 1.0e-15);
@@ -72,8 +76,8 @@ public class BilinearInterpolatorTest {
         Assert.assertEquals(yMin, bif.getYInf(), 1.0e-15);
         Assert.assertEquals(yMax, bif.getYSup(), 1.0e-15);
 
-        checkInterpolationAtNodes(xVal, yVal, bif, f, 1.0e-15);
-        checkInterpolationRandom(new SobolSequenceGenerator(2), xMin, xMax, yMin, yMax, bif, f, 1.0e-15);
+        checkInterpolationAtNodes(xVal, yVal, bif, f, fT, 1.0e-15);
+        checkInterpolationRandom(new SobolSequenceGenerator(2), xMin, xMax, yMin, yMax, bif, f, fT, 1.0e-15);
 
     }
 
@@ -91,6 +95,7 @@ public class BilinearInterpolatorTest {
         double[] yVal = createLinearGrid(yMin, yMax, ny);
 
         BivariateFunction f = (x, y) -> (3 * x - 2) * (6 - 0.5 * y);
+        RealFieldBivariateFunction<Decimal64> fT = (x, y) -> x.multiply(3).subtract(2).multiply(y.multiply(-0.5).add(6));
         BilinearInterpolatingFunction bif = createInterpolatingFunction(xVal, yVal, f);
 
         Assert.assertEquals(xMin, bif.getXInf(), 1.0e-15);
@@ -98,8 +103,8 @@ public class BilinearInterpolatorTest {
         Assert.assertEquals(yMin, bif.getYInf(), 1.0e-15);
         Assert.assertEquals(yMax, bif.getYSup(), 1.0e-15);
 
-        checkInterpolationAtNodes(xVal, yVal, bif, f, 1.0e-15);
-        checkInterpolationRandom(new SobolSequenceGenerator(2), xMin, xMax, yMin, yMax, bif, f, 1.0e-15);
+        checkInterpolationAtNodes(xVal, yVal, bif, f, fT, 1.0e-15);
+        checkInterpolationRandom(new SobolSequenceGenerator(2), xMin, xMax, yMin, yMax, bif, f, fT, 1.0e-15);
 
     }
 
@@ -120,6 +125,7 @@ public class BilinearInterpolatorTest {
         double[] yVal = createLinearGrid(yMin, yMax, ny);
 
         BivariateFunction f = (x, y) -> FastMath.sin(x) * FastMath.cos(y);
+        RealFieldBivariateFunction<Decimal64> fT = (x, y) -> FastMath.sin(x).multiply(FastMath.cos(y));
         BilinearInterpolatingFunction bif = createInterpolatingFunction(xVal, yVal, f);
 
         Assert.assertEquals(xMin, bif.getXInf(), 1.0e-15);
@@ -127,8 +133,8 @@ public class BilinearInterpolatorTest {
         Assert.assertEquals(yMin, bif.getYInf(), 1.0e-15);
         Assert.assertEquals(yMax, bif.getYSup(), 1.0e-15);
 
-        checkInterpolationAtNodes(xVal, yVal, bif, f, 1.0e-15);
-        checkInterpolationRandom(new SobolSequenceGenerator(2), xMin, xMax, yMin, yMax, bif, f, tol);
+        checkInterpolationAtNodes(xVal, yVal, bif, f, fT, 1.0e-15);
+        checkInterpolationRandom(new SobolSequenceGenerator(2), xMin, xMax, yMin, yMax, bif, f, fT, tol);
 
     }
 
@@ -151,14 +157,24 @@ public class BilinearInterpolatorTest {
         return new BilinearInterpolator().interpolate(xVal, yVal, fVal);
     }
 
-    private void checkInterpolationAtNodes(final double[] xVal, final double[] yVal,
+    private void checkInterpolationAtNodes(final double[] xVal,
+                                           final double[] yVal,
                                            final BilinearInterpolatingFunction bif,
-                                           final BivariateFunction f, final double tol) {
+                                           final BivariateFunction f,
+                                           final RealFieldBivariateFunction<Decimal64> fT,
+                                           final double tol) {
+
         for (int i = 0; i < xVal.length; ++i) {
             for (int j = 0; j < yVal.length; ++j) {
+
                 final double x = xVal[i];
                 final double y = yVal[j];
                 Assert.assertEquals(f.value(x, y), bif.value(x, y), tol);
+
+                final Decimal64 x64 = new Decimal64(x);
+                final Decimal64 y64 = new Decimal64(y);
+                Assert.assertEquals(fT.value(x64, y64).getReal(), bif.value(x64, y64).getReal(), tol);
+
             }
         }
     }
@@ -168,15 +184,24 @@ public class BilinearInterpolatorTest {
                                           final double yMin, final double yMax,
                                           final BilinearInterpolatingFunction bif,
                                           final BivariateFunction f,
+                                          final RealFieldBivariateFunction<Decimal64> fT,
                                           final double tol) {
         double maxError = 0.0;
         for (int i = 0; i < 10000; ++i) {
+
             final double[] v = random.nextVector();
+
             final double x = xMin + v[0] * (xMax - xMin);
             final double y = yMin + v[1] * (yMax - yMin);
             maxError = FastMath.max(maxError, FastMath.abs(f.value(x, y) - bif.value(x, y)));
+
+            final Decimal64 x64 = new Decimal64(x);
+            final Decimal64 y64 = new Decimal64(y);
+            maxError = FastMath.max(maxError, FastMath.abs(fT.value(x64, y64).getReal()- bif.value(x64, y64).getReal()));
         }
+
         Assert.assertEquals(0.0, maxError, tol);
+
     }
 
 }
