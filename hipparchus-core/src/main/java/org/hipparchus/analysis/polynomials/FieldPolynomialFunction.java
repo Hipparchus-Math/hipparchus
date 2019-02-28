@@ -140,6 +140,7 @@ public class FieldPolynomialFunction<T extends RealFieldElement<T>> implements R
      *
      * @param coefficients Coefficients of the polynomial to evaluate.
      * @param argument Input value.
+     * @param <T> the type of the field elements
      * @return the value of the polynomial.
      * @throws MathIllegalArgumentException if {@code coefficients} is empty.
      * @throws NullArgumentException if {@code coefficients} is {@code null}.
@@ -250,6 +251,7 @@ public class FieldPolynomialFunction<T extends RealFieldElement<T>> implements R
      * Returns the coefficients of the derivative of the polynomial with the given coefficients.
      *
      * @param coefficients Coefficients of the polynomial to differentiate.
+     * @param <T> the type of the field elements
      * @return the coefficients of the derivative or {@code null} if coefficients has length 1.
      * @throws MathIllegalArgumentException if {@code coefficients} is empty.
      * @throws NullArgumentException if {@code coefficients} is {@code null}.
