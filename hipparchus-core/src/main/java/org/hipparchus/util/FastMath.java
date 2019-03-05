@@ -2753,7 +2753,6 @@ public class FastMath {
         if (y == 0) {
             final double result = x * y;
             final double invx = 1d / x;
-            final double invy = 1d / y;
 
             if (invx == 0) { // X is infinite
                 if (x > 0) {
@@ -2764,11 +2763,7 @@ public class FastMath {
             }
 
             if (x < 0 || invx < 0) {
-                if (y < 0 || invy < 0) {
-                    return -Math.PI;
-                } else {
-                    return Math.PI;
-                }
+                return copySign(Math.PI, y);
             } else {
                 return result;
             }
@@ -2801,36 +2796,18 @@ public class FastMath {
         }
 
         if (x == Double.POSITIVE_INFINITY) {
-            if (y > 0 || 1 / y > 0) {
-                return 0d;
-            }
-
-            if (y < 0 || 1 / y < 0) {
-                return -0d;
-            }
+            return copySign(0d, y);
         }
 
         if (x == Double.NEGATIVE_INFINITY)
         {
-            if (y > 0.0 || 1 / y > 0.0) {
-                return Math.PI;
-            }
-
-            if (y < 0 || 1 / y < 0) {
-                return -Math.PI;
-            }
+            return copySign(Math.PI, y);
         }
 
         // Neither y nor x can be infinite or NAN here
 
         if (x == 0) {
-            if (y > 0 || 1 / y > 0) {
-                return Math.PI * F_1_2;
-            }
-
-            if (y < 0 || 1 / y < 0) {
-                return -Math.PI * F_1_2;
-            }
+            return copySign(Math.PI * F_1_2, y);
         }
 
         // Compute ratio r = y/x
