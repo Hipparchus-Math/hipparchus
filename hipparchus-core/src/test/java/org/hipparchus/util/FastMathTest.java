@@ -173,8 +173,20 @@ public class FastMathTest {
         double x1 = -5.674940885228782e-10;
         assertEquals(Math.atan2(y1, x1), FastMath.atan2(y1, x1), 2 * Precision.EPSILON);
         double y2 = 0.0;
-        double x2 = Double.POSITIVE_INFINITY;
-        assertEquals(Math.atan2(y2, x2), FastMath.atan2(y2, x2), Precision.SAFE_MIN);
+        double x2P = Double.POSITIVE_INFINITY;
+        assertEquals(Math.atan2(y2, x2P), FastMath.atan2(y2, x2P), Precision.SAFE_MIN);
+        double x2M = Double.NEGATIVE_INFINITY;
+        assertEquals(Math.atan2(y2, x2M), FastMath.atan2(y2, x2M), Precision.SAFE_MIN);
+        assertEquals(+0.5 * FastMath.PI, FastMath.atan2(+1e20, +Precision.SAFE_MIN), Precision.SAFE_MIN);
+        assertEquals(+0.5 * FastMath.PI, FastMath.atan2(+1e20, -Precision.SAFE_MIN), Precision.SAFE_MIN);
+        assertEquals(-0.5 * FastMath.PI, FastMath.atan2(-1e20, +Precision.SAFE_MIN), Precision.SAFE_MIN);
+        assertEquals(-0.5 * FastMath.PI, FastMath.atan2(-1e20, -Precision.SAFE_MIN), Precision.SAFE_MIN);
+        assertEquals( 0.0,               FastMath.atan2(+Precision.SAFE_MIN, +1e20), Precision.SAFE_MIN);
+        assertEquals(+1.0,               FastMath.copySign(1.0, FastMath.atan2(+Precision.SAFE_MIN, +1e20)), Precision.SAFE_MIN);
+        assertEquals( 0.0,               FastMath.atan2(-Precision.SAFE_MIN, +1e20), Precision.SAFE_MIN);
+        assertEquals(-1.0,               FastMath.copySign(1.0, FastMath.atan2(-Precision.SAFE_MIN, +1e20)), Precision.SAFE_MIN);
+        assertEquals(+FastMath.PI,       FastMath.atan2(+Precision.SAFE_MIN, -1e20), Precision.SAFE_MIN);
+        assertEquals(-FastMath.PI,       FastMath.atan2(-Precision.SAFE_MIN, -1e20), Precision.SAFE_MIN);
     }
 
     @Test
