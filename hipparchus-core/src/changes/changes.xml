@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.5"  date="TBD" description="TBD">
+      <action dev="luc" type="update" >
+        MatrixUtils.createDiagonalMatrix now creates instances of DiagonalMatrix,
+        not general RealMatrix.
+      </action>
       <action dev="luc" type="add" issue="issues/55" >
         Added FieldBivariateFunction and make both BilinearInterpolatingFunction
         and PiecewiseBicubicSplineInterpolatingFunction implement it.

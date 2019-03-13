@@ -204,12 +204,8 @@ public class MatrixUtils {
      * will be copied)
      * @return diagonal matrix
      */
-    public static RealMatrix createRealDiagonalMatrix(final double[] diagonal) {
-        final RealMatrix m = createRealMatrix(diagonal.length, diagonal.length);
-        for (int i = 0; i < diagonal.length; ++i) {
-            m.setEntry(i, i, diagonal[i]);
-        }
-        return m;
+    public static DiagonalMatrix createRealDiagonalMatrix(final double[] diagonal) {
+        return new DiagonalMatrix(diagonal, true);
     }
 
     /**
