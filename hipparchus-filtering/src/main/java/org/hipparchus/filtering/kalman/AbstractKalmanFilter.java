@@ -57,6 +57,7 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
         final RealMatrix predictedCovariance =
                         stm.multiply(corrected.getCovariance().multiplyTransposed(stm)).add(noise);
         predicted = new ProcessEstimate(time, predictedState, predictedCovariance);
+        corrected = null;
     }
 
     /** Compute innovation covariance matrix.

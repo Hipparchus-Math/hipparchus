@@ -49,6 +49,15 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Filtering Release Notes</title>
   </properties>
   <body>
+    <release version="1.5"  date="TBD" description="TBD">
+      <action dev="luc" type="fix" due-to="Hao Peng">
+        Nullify corrected state after predict in abstract Kalman filter. Note that this affects
+        only custom extensions of AbstractKalmanFilter because the implementations provided
+        by Hipparchus (LinearKalmanFilter and ExtendedKalmanFilter) always call correction
+        step after having called prediction step, so the nullified corrected state is reset
+        properly at the end. This was initially reported as https://gitlab.orekit.org/orekit/orekit/issues/540.
+      </action>
+    </release>
     <release version="1.4" date="2018-11-17" description="This is a maintenance release. The main
     changes since last version are the introduction of accessors for state transition matrix,
     Jacobian matrix H, innovation covariance matrix and Kalman gain in Kalman filters.">
