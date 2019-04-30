@@ -68,6 +68,7 @@
     <exclude name="AccessorClassGeneration"/>
     <exclude name="AccessorMethodGeneration"/>
     <exclude name="AvoidReassigningParameters"/>
+    <exclude name="AvoidReassigningLoopVariables"/>
     <exclude name="ForLoopCanBeForeach"/>
 
     <!-- in mathematics, arrays are first-class citizens, they don't always serve the same purpose as varargs -->
@@ -117,6 +118,7 @@
     <exclude name="CommentDefaultAccessModifier"/>
     <exclude name="PrematureDeclaration"/>
     <exclude name="CallSuperInConstructor"/>
+    <exclude name="UseUnderscoresInNumericLiterals"/>
 
   </rule>
 
@@ -161,6 +163,7 @@
     <exclude name="ExcessiveParameterList"/>
 
     <exclude name="ClassWithOnlyPrivateConstructorsShouldBeFinal"/>
+    <exclude name="AvoidUncheckedExceptionsInSignatures"/>
 
     <!-- TODO: we should reactivate these rules -->
     <exclude name="ImmutableField"/>
