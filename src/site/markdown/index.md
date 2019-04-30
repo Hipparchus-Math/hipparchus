@@ -56,14 +56,14 @@ at fork time.
 
  ---
 
-## 1.4 Release is out!
+## 1.5 Release is out!
 
-Hipparchus 1.4 is now available for download from the [Hipparchus download page](downloads.html) or on
-Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.4 release are:
+Hipparchus 1.5 is now available for download from the [Hipparchus download page](downloads.html) or on
+Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.5 release are:
 
-  * bilinear interpolation for 2D grids.
-  * field version of sinCos.
-  * support for complex ordinary differential equations (both primary and secondary equations).
-  * accessors for state transition matrix, Jacobian matrix H, innovation covariance matrix and Kalman gain in Kalman filters.
-  * way to build three-dimensional field arrays.
-  * several fixes in the Euclidean 3D and spherical 2D partitioning
+  * field version of bilinear interpolation
+  * field version of univariate interpolators
+  * field version of polynomials
+  * field version of polynomial spline functions
+  * reset events in ODE
+  * bug fixes in interpolation, linear algebra, multi-step integrators and Kalman filtering
