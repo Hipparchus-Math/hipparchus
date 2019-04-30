@@ -134,8 +134,7 @@ import org.hipparchus.linear.RealMatrix;
 public class AdamsNordsieckTransformer {
 
     /** Cache for already computed coefficients. */
-    private static final Map<Integer, AdamsNordsieckTransformer> CACHE =
-        new HashMap<Integer, AdamsNordsieckTransformer>();
+    private static final Map<Integer, AdamsNordsieckTransformer> CACHE = new HashMap<>();
 
     /** Update matrix for the higher order derivatives h<sup>2</sup>/2 y'', h<sup>3</sup>/6 y''' ... */
     private final Array2DRowRealMatrix update;

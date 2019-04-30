@@ -61,7 +61,7 @@ public class ExpandableODE {
      */
     public ExpandableODE(final OrdinaryDifferentialEquation primary) {
         this.primary    = primary;
-        this.components = new ArrayList<SecondaryODE>();
+        this.components = new ArrayList<>();
         this.mapper     = new EquationsMapper(null, primary.getDimension());
     }
 

@@ -107,7 +107,7 @@ class AdamsFieldStateInterpolator<T extends RealFieldElement<T>> extends Abstrac
         this.scalingH  = stepSize;
         this.reference = reference;
         this.scaled    = scaled.clone();
-        this.nordsieck = new Array2DRowFieldMatrix<T>(nordsieck.getData(), false);
+        this.nordsieck = new Array2DRowFieldMatrix<>(nordsieck.getData(), false);
     }
 
     /** Create a new instance.

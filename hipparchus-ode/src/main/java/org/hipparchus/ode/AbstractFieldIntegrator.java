@@ -97,10 +97,10 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
     protected AbstractFieldIntegrator(final Field<T> field, final String name) {
         this.field        = field;
         this.name         = name;
-        stepHandlers      = new ArrayList<FieldODEStepHandler<T>>();
+        stepHandlers      = new ArrayList<>();
         stepStart         = null;
         stepSize          = null;
-        eventsStates      = new ArrayList<FieldEventState<T>>();
+        eventsStates      = new ArrayList<>();
         statesInitialized = false;
         evaluations       = new Incrementor();
     }
@@ -164,7 +164,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
     /** {@inheritDoc} */
     @Override
     public Collection<FieldODEEventHandler<T>> getEventHandlers() {
-        final List<FieldODEEventHandler<T>> list = new ArrayList<FieldODEEventHandler<T>>(eventsStates.size());
+        final List<FieldODEEventHandler<T>> list = new ArrayList<>(eventsStates.size());
         for (FieldEventState<T> state : eventsStates) {
             list.add(state.getEventHandler());
         }

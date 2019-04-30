@@ -81,7 +81,7 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
             index++;
         }
         innerDistribution =
-                new EnumeratedDistribution<Double>(createDistribution(values, probabilities));
+                new EnumeratedDistribution<>(createDistribution(values, probabilities));
     }
 
     /**
@@ -100,7 +100,7 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
         throws MathIllegalArgumentException {
         super();
         innerDistribution =
-                new EnumeratedDistribution<Double>(createDistribution(singletons, probabilities));
+                new EnumeratedDistribution<>(createDistribution(singletons, probabilities));
     }
 
 

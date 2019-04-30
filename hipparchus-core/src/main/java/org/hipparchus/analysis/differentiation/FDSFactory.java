@@ -48,8 +48,8 @@ public class FDSFactory<T extends RealFieldElement<T>> {
     public FDSFactory(final Field<T> valueField, final int parameters, final int order) {
         this.compiler        = DSCompiler.getCompiler(parameters, order);
         this.valueField      = valueField;
-        this.derivativeField = new DerivativeField<T>(constant(valueField.getZero()),
-                                                      constant(valueField.getOne()));
+        this.derivativeField = new DerivativeField<>(constant(valueField.getZero()),
+                                                     constant(valueField.getOne()));
     }
 
     /** Get the {@link Field} the value and parameters of the function belongs to.

@@ -65,7 +65,7 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
     public EnumeratedIntegerDistribution(final int[] singletons, final double[] probabilities)
         throws MathIllegalArgumentException {
         innerDistribution =
-                new EnumeratedDistribution<Integer>(createDistribution(singletons, probabilities));
+                new EnumeratedDistribution<>(createDistribution(singletons, probabilities));
     }
 
     /**
@@ -95,7 +95,7 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
             index++;
         }
         innerDistribution =
-                new EnumeratedDistribution<Integer>(createDistribution(values, probabilities));
+                new EnumeratedDistribution<>(createDistribution(values, probabilities));
     }
 
     /**

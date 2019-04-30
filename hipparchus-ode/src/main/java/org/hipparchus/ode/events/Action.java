@@ -22,8 +22,6 @@
 
 package org.hipparchus.ode.events;
 
-import org.hipparchus.ode.ODEStateAndDerivative;
-
 /** Enumerate for actions to be performed when an event occurs during ODE integration.
  */
 public enum Action {
@@ -64,9 +62,10 @@ public enum Action {
      *
      * <p> This value should be used as the return value of the {@code eventOccurred}
      * method when the integration should go on, but first recheck all event detectors for
-     * occurring events. Use when the {@link ODEEventHandler#eventOccurred(ODEStateAndDerivative,
+     * occurring events. Use when the {@link ODEEventHandler#eventOccurred(org.hipparchus.ode.ODEStateAndDerivative,
      * boolean)} method of this handler has a side effect that changes the {@link
-     * ODEEventHandler#g(ODEStateAndDerivative)} function of another event handler.
+     * ODEEventHandler#g(org.hipparchus.ode.ODEStateAndDerivative)}
+     * function of another event handler.
      */
     RESET_EVENTS;
 

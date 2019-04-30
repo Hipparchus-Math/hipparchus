@@ -103,7 +103,7 @@ public class FieldDenseOutputModel<T extends RealFieldElement<T>>
      * Build an empty continuous output model.
      */
     public FieldDenseOutputModel() {
-        steps       = new ArrayList<FieldODEStateInterpolator<T>>();
+        steps       = new ArrayList<>();
         initialTime = null;
         finalTime   = null;
         forward     = true;

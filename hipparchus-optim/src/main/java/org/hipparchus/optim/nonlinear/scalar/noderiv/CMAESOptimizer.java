@@ -198,13 +198,13 @@ public class CMAESOptimizer
     private final RandomGenerator random;
 
     /** History of sigma values. */
-    private final List<Double> statisticsSigmaHistory = new ArrayList<Double>();
+    private final List<Double> statisticsSigmaHistory;
     /** History of mean matrix. */
-    private final List<RealMatrix> statisticsMeanHistory = new ArrayList<RealMatrix>();
+    private final List<RealMatrix> statisticsMeanHistory;
     /** History of fitness values. */
-    private final List<Double> statisticsFitnessHistory = new ArrayList<Double>();
+    private final List<Double> statisticsFitnessHistory;
     /** History of D matrix. */
-    private final List<RealMatrix> statisticsDHistory = new ArrayList<RealMatrix>();
+    private final List<RealMatrix> statisticsDHistory;
 
     /**
      * @param maxIterations Maximal number of iterations.
@@ -236,6 +236,10 @@ public class CMAESOptimizer
         this.checkFeasableCount = checkFeasableCount;
         this.random = random;
         this.generateStatistics = generateStatistics;
+        this.statisticsSigmaHistory = new ArrayList<>();
+        this.statisticsMeanHistory = new ArrayList<>();
+        this.statisticsFitnessHistory = new ArrayList<>();
+        this.statisticsDHistory = new ArrayList<>();
     }
 
     /**

@@ -113,7 +113,7 @@ public class DenseOutputModel implements ODEStepHandler, Serializable {
      * Build an empty continuous output model.
      */
     public DenseOutputModel() {
-        steps       = new ArrayList<ODEStateInterpolator>();
+        steps       = new ArrayList<>();
         initialTime = Double.NaN;
         finalTime   = Double.NaN;
         forward     = true;

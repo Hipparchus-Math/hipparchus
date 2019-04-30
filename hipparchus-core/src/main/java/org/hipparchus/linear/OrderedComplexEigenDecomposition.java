@@ -41,8 +41,7 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
         final FieldMatrix<Complex> V = this.getV();
 
         // getting eigen values
-        TreeSet<Complex> eigenValues = new TreeSet<Complex>(
-                        new ComplexComparator());
+        TreeSet<Complex> eigenValues = new TreeSet<>(new ComplexComparator());
         for (int ij = 0; ij < matrix.getRowDimension(); ij++) {
             eigenValues.add(D.getEntry(ij, ij));
         }

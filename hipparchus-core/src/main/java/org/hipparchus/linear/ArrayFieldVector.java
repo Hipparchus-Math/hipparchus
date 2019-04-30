@@ -708,7 +708,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         } else {
             final int m = data.length;
             final int n = v.getDimension();
-            final FieldMatrix<T> out = new Array2DRowFieldMatrix<T>(field, m, n);
+            final FieldMatrix<T> out = new Array2DRowFieldMatrix<>(field, m, n);
             for (int i = 0; i < m; i++) {
                 for (int j = 0; j < n; j++) {
                     out.setEntry(i, j, data[i].multiply(v.getEntry(j)));
@@ -726,7 +726,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     public FieldMatrix<T> outerProduct(ArrayFieldVector<T> v) {
         final int m = data.length;
         final int n = v.data.length;
-        final FieldMatrix<T> out = new Array2DRowFieldMatrix<T>(field, m, n);
+        final FieldMatrix<T> out = new Array2DRowFieldMatrix<>(field, m, n);
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 out.setEntry(i, j, data[i].multiply(v.data[j]));
@@ -782,7 +782,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         if (n < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
         }
-        ArrayFieldVector<T> out = new ArrayFieldVector<T>(field, n);
+        ArrayFieldVector<T> out = new ArrayFieldVector<>(field, n);
         try {
             System.arraycopy(data, index, out.data, 0, n);
         } catch (IndexOutOfBoundsException e) {

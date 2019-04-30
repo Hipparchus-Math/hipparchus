@@ -220,7 +220,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
         final int max = (maxIterations < 0) ? Integer.MAX_VALUE : maxIterations;
         for (int count = 0; count < max; count++) {
             boolean emptyCluster = false;
-            List<CentroidCluster<T>> newClusters = new ArrayList<CentroidCluster<T>>();
+            List<CentroidCluster<T>> newClusters = new ArrayList<>();
             for (final CentroidCluster<T> cluster : clusters) {
                 final Clusterable newCenter;
                 if (cluster.getPoints().isEmpty()) {
@@ -302,7 +302,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
         final boolean[] taken = new boolean[numPoints];
 
         // The resulting list of initial centers.
-        final List<CentroidCluster<T>> resultSet = new ArrayList<CentroidCluster<T>>();
+        final List<CentroidCluster<T>> resultSet = new ArrayList<>();
 
         // Choose one center uniformly at random from among the data points.
         final int firstPointIndex = random.nextInt(numPoints);

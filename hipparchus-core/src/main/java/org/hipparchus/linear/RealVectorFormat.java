@@ -277,7 +277,7 @@ public class RealVectorFormat {
         }
 
         // parse components
-        List<Number> components = new ArrayList<Number>();
+        List<Number> components = new ArrayList<>();
         for (boolean loop = true; loop;){
 
             if (!components.isEmpty()) {

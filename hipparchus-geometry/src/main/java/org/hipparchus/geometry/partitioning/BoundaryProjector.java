@@ -144,7 +144,7 @@ class BoundaryProjector<S extends Space, T extends Space> implements BSPTreeVisi
      */
     private List<Region<T>> boundaryRegions(final BSPTree<S> node) {
 
-        final List<Region<T>> regions = new ArrayList<Region<T>>(2);
+        final List<Region<T>> regions = new ArrayList<>(2);
 
         @SuppressWarnings("unchecked")
         final BoundaryAttribute<S> ba = (BoundaryAttribute<S>) node.getAttribute();

@@ -45,7 +45,7 @@ import org.hipparchus.ode.sampling.ODEStateInterpolator;
  * {@link ODEStateInterpolator} and {@link MigrationStepInterpolator}
  */
 @Deprecated
-class MigrationStepInterpolator implements org.hipparchus.migration.ode.sampling.StepInterpolator {
+class MigrationStepInterpolator implements StepInterpolator {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20160328L;

@@ -45,7 +45,7 @@ public class MultiStartMultivariateOptimizer
     /** Underlying optimizer. */
     private final MultivariateOptimizer optimizer;
     /** Found optima. */
-    private final List<PointValuePair> optima = new ArrayList<PointValuePair>();
+    private final List<PointValuePair> optima;
 
     /**
      * Create a multi-start optimizer from a single-start optimizer.
@@ -65,6 +65,7 @@ public class MultiStartMultivariateOptimizer
         throws MathIllegalArgumentException, NullArgumentException {
         super(optimizer, starts, generator);
         this.optimizer = optimizer;
+        this.optima   = new ArrayList<>();
     }
 
     /**
