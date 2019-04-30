@@ -130,7 +130,7 @@ After these commands have been run, the `RELEASE-NOTES.txt` file has been update
 automatically. It should be reviewed and edited manually to improve readability
 (mainly whitespaces, indentation and lines wrapping) and then committed:
 
-    git add RELEASE-NOTES.txt src/changes.xml hipparchus-*/src/changes.xml
+    git add RELEASE-NOTES.txt src/changes/changes.xml hipparchus-*/src/changes/changes.xml
     git commit -m "Updated release notes."
 
 This third step is performed by the `release.sh` shell script (but the first two

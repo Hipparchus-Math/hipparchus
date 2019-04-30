@@ -49,7 +49,8 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
-    <release version="1.5" date="TBD" description="TBD">
+    <release version="1.5" date="2019-05-03" description="This is a maintenance release. The main
+    changes since last version are the introduction reset events in ODE.">
      <action dev="luc" type="fix" issue="issues/54" >
        Avoid too many multi-step integrator restarts after event resetting derivatives.
        Github: fixes #54.

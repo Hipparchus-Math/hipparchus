@@ -1,48 +1,43 @@
 
-              Hipparchus 1.4 RELEASE NOTES
+              Hipparchus 1.5 RELEASE NOTES
 
-The Hipparchus team is pleased to announce the release of hipparchus-1.4
+The Hipparchus team is pleased to announce the release of hipparchus-1.5
 
 The Hipparchus library is a library of mathematical components. It started as a fork of Apache Commons Math.
 
-This is a maintenance release. The main changes since last version are the introduction of bilinear
-interpolation for 2D grids, field versions of sinCos and a way to build three-dimensional field arrays,
-accessors for state transition matrix, Jacobian matrix H, innovation covariance matrix and Kalman gain
-in Kalman filters, support for complex ordinary differential equations (both primary and secondary
-equations), and various fixes in partitioning.
+This is a maintenance release. The main changes since last version are the introduction of field versions
+of bilinear interpolation, univariate interpolators, polynomials and polynomial spline functions,
+and the introduction of reset events in ODE.
 
 Changes in this version include:
 
 New features:
-o issues/48:  Added bilinear interpolation for 2D grids.
-              Github: fixes #48.
-o issues/47:  Added field version of sinCos.
-              Github: fixes #47.
-o issues/39:  Added support for complex ordinary differential equations (both primary and secondary equations).
-              Github: fixes #39.
-o issues/43:  Added accessors for state transition matrix, Jacobian matrix H, innovation covariance matrix
-              and Kalman gain in Kalman filters.
-              GitHub: fixes #43.
-o             Added a way to build three-dimensional field arrays.
+o issues/55:  Added FieldBivariateFunction and make both BilinearInterpolatingFunction
+              and PiecewiseBicubicSplineInterpolatingFunction implement it.
+              Github: fixes #55. 
+o             Added FieldUnivariateInterpolator and make both LinearInterpolator,
+              AkimaSplineInterpolator and SplineInterpolator implement it. 
+o             Added FieldPolynomialFunction and FieldPolynomialSplineFunction. 
+o             Add Action.RESET_EVENTS to ask the integrator to recheck all event detectors
+              without recomputing the step. Use when the g function of one event detector
+              depends on events occurring in another event detector. 
+o issues/53:  Fixed documentation for interpolation algorithms.
+              Github: fixes #53. 
 
 Fixed Bugs:
-o issues/45:  Fixed 2D outline extraction from 3D polyhedrons sets with holes.
-              GitHub: fixes #45.
-o issues/44:  Fixed wrong construction of an Illinois solver that really built a Pegasus solver.
-              Github: fixes #44.
-o issues/4:   Renamed scale parameter to location parameter in the log-normal distribution,
-              to avoid confusion.
-              Github: fixes #4.
-o issues/42:  Use topological information from BSP tree to connect more reliably edges and
-              vertices when building the boundary loops of SphericalPolygonsSet.
-              GitHub: fixes #42.
-o issues/42:  Forbid use of unrealistic tolerances (below ulp(2π)) in spherical geometry.
-              GitHub: fixes #42.
-o issues/41:  Fixed a corner case in BSPTree split.
-              GitHub: fixes #41.
-o issues/40:  Bisection solvers failed to raise an exception when the search
-              interval did not bracket a root.
-              GitHub: fixes #40.
+o             Nullify corrected state after predict in abstract Kalman filter. Note that this affects
+              only custom extensions of AbstractKalmanFilter because the implementations provided
+              by Hipparchus (LinearKalmanFilter and ExtendedKalmanFilter) always call correction
+              step after having called prediction step, so the nullified corrected state is reset
+              properly at the end. This was initially reported as
+              https://gitlab.orekit.org/orekit/orekit/issues/540. Thanks to Hao Peng. 
+o issues/54:  Avoid too many multi-step integrator restarts after event resetting derivatives.
+              Github: fixes #54. 
+
+Changes:
+o           MatrixUtils.createDiagonalMatrix now creates instances of DiagonalMatrix,
+            not general RealMatrix. 
+
 
 For complete information on Hipparchus, including instructions on how to submit bug reports,
 patches, or suggestions for improvement, see the Hipparchus website:
