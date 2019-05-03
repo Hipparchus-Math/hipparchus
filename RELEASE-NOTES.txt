@@ -32,7 +32,8 @@ o             Nullify corrected state after predict in abstract Kalman filter. N
               properly at the end. This was initially reported as
               https://gitlab.orekit.org/orekit/orekit/issues/540. Thanks to Hao Peng. 
 o issues/54:  Avoid too many multi-step integrator restarts after event resetting derivatives.
-              Github: fixes #54. 
+              Github: fixes #54.
+o             Fixed lines/polyhedrons intersection occurring on facets boundaries.
 
 For complete information on Hipparchus, including instructions on how to submit bug reports,
 patches, or suggestions for improvement, see the Hipparchus website:
