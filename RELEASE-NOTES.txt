@@ -34,11 +34,6 @@ o             Nullify corrected state after predict in abstract Kalman filter. N
 o issues/54:  Avoid too many multi-step integrator restarts after event resetting derivatives.
               Github: fixes #54. 
 
-Changes:
-o           MatrixUtils.createDiagonalMatrix now creates instances of DiagonalMatrix,
-            not general RealMatrix. 
-
-
 For complete information on Hipparchus, including instructions on how to submit bug reports,
 patches, or suggestions for improvement, see the Hipparchus website:
 
