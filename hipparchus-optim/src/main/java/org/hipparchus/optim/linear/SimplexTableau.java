@@ -83,7 +83,7 @@ class SimplexTableau implements Serializable {
     private final boolean restrictToNonNegative;
 
     /** The variables each column represents */
-    private final List<String> columnLabels = new ArrayList<String>();
+    private final List<String> columnLabels;
 
     /** Simple tableau. */
     private transient Array2DRowRealMatrix tableau;
@@ -150,6 +150,7 @@ class SimplexTableau implements Serializable {
         this.f                      = f;
         this.constraints            = normalizeConstraints(constraints);
         this.restrictToNonNegative  = restrictToNonNegative;
+        this.columnLabels           = new ArrayList<>();
         this.epsilon                = epsilon;
         this.maxUlps                = maxUlps;
         this.numDecisionVariables   = f.getCoefficients().getDimension() + (restrictToNonNegative ? 0 : 1);
@@ -278,7 +279,7 @@ class SimplexTableau implements Serializable {
      * @return new versions of the constraints
      */
     public List<LinearConstraint> normalizeConstraints(Collection<LinearConstraint> originalConstraints) {
-        List<LinearConstraint> normalized = new ArrayList<LinearConstraint>(originalConstraints.size());
+        List<LinearConstraint> normalized = new ArrayList<>(originalConstraints.size());
         for (LinearConstraint constraint : originalConstraints) {
             normalized.add(normalize(constraint));
         }
@@ -401,7 +402,7 @@ class SimplexTableau implements Serializable {
             return;
         }
 
-        final Set<Integer> columnsToDrop = new TreeSet<Integer>();
+        final Set<Integer> columnsToDrop = new TreeSet<>();
         columnsToDrop.add(0);
 
         // positive cost non-artificial variables
@@ -475,7 +476,7 @@ class SimplexTableau implements Serializable {
         Integer negativeVarBasicRow = negativeVarColumn > 0 ? getBasicRow(negativeVarColumn) : null;
         double mostNegative = negativeVarBasicRow == null ? 0 : getEntry(negativeVarBasicRow, getRhsOffset());
 
-        final Set<Integer> usedBasicRows = new HashSet<Integer>();
+        final Set<Integer> usedBasicRows = new HashSet<>();
         final double[] coefficients = new double[getOriginalNumDecisionVariables()];
         for (int i = 0; i < coefficients.length; i++) {
             int colIndex = columnLabels.indexOf("x" + i);

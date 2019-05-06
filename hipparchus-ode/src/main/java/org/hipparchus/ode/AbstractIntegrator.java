@@ -150,7 +150,7 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
     /** {@inheritDoc} */
     @Override
     public Collection<ODEEventHandler> getEventHandlers() {
-        final List<ODEEventHandler> list = new ArrayList<ODEEventHandler>(eventsStates.size());
+        final List<ODEEventHandler> list = new ArrayList<>(eventsStates.size());
         for (EventState state : eventsStates) {
             list.add(state.getEventHandler());
         }

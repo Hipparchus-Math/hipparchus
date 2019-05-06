@@ -388,9 +388,9 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
     public FieldRotation(final RotationOrder order, final RotationConvention convention,
                          final T alpha1, final T alpha2, final T alpha3) {
         final Field<T> field = alpha1.getField();
-        final FieldRotation<T> r1 = new FieldRotation<T>(new FieldVector3D<>(field, order.getA1()), alpha1, convention);
-        final FieldRotation<T> r2 = new FieldRotation<T>(new FieldVector3D<>(field, order.getA2()), alpha2, convention);
-        final FieldRotation<T> r3 = new FieldRotation<T>(new FieldVector3D<>(field, order.getA3()), alpha3, convention);
+        final FieldRotation<T> r1 = new FieldRotation<>(new FieldVector3D<>(field, order.getA1()), alpha1, convention);
+        final FieldRotation<T> r2 = new FieldRotation<>(new FieldVector3D<>(field, order.getA2()), alpha2, convention);
+        final FieldRotation<T> r3 = new FieldRotation<>(new FieldVector3D<>(field, order.getA3()), alpha3, convention);
         final FieldRotation<T> composed = r1.compose(r2.compose(r3, convention), convention);
         q0 = composed.q0;
         q1 = composed.q1;

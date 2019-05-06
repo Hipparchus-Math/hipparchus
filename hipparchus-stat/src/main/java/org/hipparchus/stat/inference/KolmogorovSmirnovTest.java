@@ -1109,7 +1109,7 @@ public class KolmogorovSmirnovTest {
      * @return true if x and y together contain ties
      */
     private static boolean hasTies(double[] x, double[] y) {
-        final HashSet<Double> values = new HashSet<Double>();
+        final HashSet<Double> values = new HashSet<>();
             for (int i = 0; i < x.length; i++) {
                 if (!values.add(x[i])) {
                     return true;

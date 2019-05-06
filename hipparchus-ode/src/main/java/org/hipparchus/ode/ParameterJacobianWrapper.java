@@ -62,7 +62,7 @@ class ParameterJacobianWrapper implements ODEJacobiansProvider {
         this.ode        = ode;
         this.hY         = hY.clone();
         this.controller = controller;
-        this.hParam     = new HashMap<String, Double>();
+        this.hParam     = new HashMap<>();
 
         // set up parameters for jacobian computation
         for (final ParameterConfiguration param : paramsAndSteps) {

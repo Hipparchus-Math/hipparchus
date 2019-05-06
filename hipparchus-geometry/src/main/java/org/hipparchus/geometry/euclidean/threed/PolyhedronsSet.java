@@ -239,7 +239,7 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
             }
         }
 
-        final List<SubHyperplane<Euclidean3D>> boundary = new ArrayList<SubHyperplane<Euclidean3D>>();
+        final List<SubHyperplane<Euclidean3D>> boundary = new ArrayList<>();
 
         for (final int[] facet : facets) {
 

@@ -40,11 +40,9 @@ import org.hipparchus.util.Pair;
  */
 public abstract class BaseRuleFactory<T extends Number> {
     /** List of points and weights, indexed by the order of the rule. */
-    private final SortedMap<Integer, Pair<T[], T[]>> pointsAndWeights
-        = new TreeMap<Integer, Pair<T[], T[]>>();
+    private final SortedMap<Integer, Pair<T[], T[]>> pointsAndWeights = new TreeMap<>();
     /** Cache for double-precision rules. */
-    private final SortedMap<Integer, Pair<double[], double[]>> pointsAndWeightsDouble
-        = new TreeMap<Integer, Pair<double[], double[]>>();
+    private final SortedMap<Integer, Pair<double[], double[]>> pointsAndWeightsDouble = new TreeMap<>();
 
     /**
      * Gets a copy of the quadrature rule with the given number of integration

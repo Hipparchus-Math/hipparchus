@@ -180,7 +180,7 @@ public class RegionFactory<S extends Space> {
     private BSPTree<S> recurseComplement(final BSPTree<S> node) {
 
         // transform the tree, except for boundary attribute splitters
-        final Map<BSPTree<S>, BSPTree<S>> map = new HashMap<BSPTree<S>, BSPTree<S>>();
+        final Map<BSPTree<S>, BSPTree<S>> map = new HashMap<>();
         final BSPTree<S> transformedTree = recurseComplement(node, map);
 
         // set up the boundary attributes splitters
@@ -212,7 +212,7 @@ public class RegionFactory<S extends Space> {
 
         final BSPTree<S> transformedNode;
         if (node.getCut() == null) {
-            transformedNode = new BSPTree<S>(((Boolean) node.getAttribute()) ? Boolean.FALSE : Boolean.TRUE);
+            transformedNode = new BSPTree<>(((Boolean) node.getAttribute()) ? Boolean.FALSE : Boolean.TRUE);
         } else {
 
             @SuppressWarnings("unchecked")
@@ -223,13 +223,13 @@ public class RegionFactory<S extends Space> {
                 final SubHyperplane<S> plusInside  =
                         (attribute.getPlusOutside() == null) ? null : attribute.getPlusOutside().copySelf();
                 // we start with an empty list of splitters, it will be filled in out of recursion
-                attribute = new BoundaryAttribute<S>(plusOutside, plusInside, new NodesSet<S>());
+                attribute = new BoundaryAttribute<>(plusOutside, plusInside, new NodesSet<S>());
             }
 
-            transformedNode = new BSPTree<S>(node.getCut().copySelf(),
-                                             recurseComplement(node.getPlus(),  map),
-                                             recurseComplement(node.getMinus(), map),
-                                             attribute);
+            transformedNode = new BSPTree<>(node.getCut().copySelf(),
+                                            recurseComplement(node.getPlus(),  map),
+                                            recurseComplement(node.getMinus(), map),
+                                            attribute);
         }
 
         map.put(node, transformedNode);

@@ -95,17 +95,17 @@ public class SubPlane extends AbstractSubHyperplane<Euclidean3D, Euclidean2D> {
 
         final BSPTree<Euclidean2D> splitTree = getRemainingRegion().getTree(false).split(l2DMinus);
         final BSPTree<Euclidean2D> plusTree  = getRemainingRegion().isEmpty(splitTree.getPlus()) ?
-                                               new BSPTree<Euclidean2D>(Boolean.FALSE) :
-                                               new BSPTree<Euclidean2D>(l2DPlus, new BSPTree<Euclidean2D>(Boolean.FALSE),
-                                                                        splitTree.getPlus(), null);
+                                               new BSPTree<>(Boolean.FALSE) :
+                                               new BSPTree<>(l2DPlus, new BSPTree<>(Boolean.FALSE),
+                                                             splitTree.getPlus(), null);
 
         final BSPTree<Euclidean2D> minusTree = getRemainingRegion().isEmpty(splitTree.getMinus()) ?
-                                               new BSPTree<Euclidean2D>(Boolean.FALSE) :
-                                                   new BSPTree<Euclidean2D>(l2DMinus, new BSPTree<Euclidean2D>(Boolean.FALSE),
+                                               new BSPTree<>(Boolean.FALSE) :
+                                               new BSPTree<>(l2DMinus, new BSPTree<>(Boolean.FALSE),
                                                                             splitTree.getMinus(), null);
 
-        return new SplitSubHyperplane<Euclidean3D>(new SubPlane(thisPlane.copySelf(), new PolygonsSet(plusTree, tolerance)),
-                                                   new SubPlane(thisPlane.copySelf(), new PolygonsSet(minusTree, tolerance)));
+        return new SplitSubHyperplane<>(new SubPlane(thisPlane.copySelf(), new PolygonsSet(plusTree, tolerance)),
+                                        new SubPlane(thisPlane.copySelf(), new PolygonsSet(minusTree, tolerance)));
 
     }
 

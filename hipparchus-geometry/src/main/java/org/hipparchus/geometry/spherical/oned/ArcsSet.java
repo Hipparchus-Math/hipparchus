@@ -579,7 +579,7 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
      * @return a new ordered list containing {@link Arc Arc} elements
      */
     public List<Arc> asList() {
-        final List<Arc> list = new ArrayList<Arc>();
+        final List<Arc> list = new ArrayList<>();
         for (final double[] a : this) {
             list.add(new Arc(a[0], a[1], getTolerance()));
         }
@@ -738,8 +738,8 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
      */
     public Split split(final Arc arc) {
 
-        final List<Double> minus = new ArrayList<Double>();
-        final List<Double>  plus = new ArrayList<Double>();
+        final List<Double> minus = new ArrayList<>();
+        final List<Double>  plus = new ArrayList<>();
 
         final double reference = FastMath.PI + arc.getInf();
         final double arcLength = arc.getSup() - arc.getInf();
@@ -875,7 +875,7 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
             }
 
             // build the tree by adding all angular sectors
-            BSPTree<Sphere1D> tree = new BSPTree<Sphere1D>(Boolean.FALSE);
+            BSPTree<Sphere1D> tree = new BSPTree<>(Boolean.FALSE);
             for (int i = 0; i < limits.size() - 1; i += 2) {
                 addArcLimit(tree, limits.get(i),     true);
                 addArcLimit(tree, limits.get(i + 1), false);

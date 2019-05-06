@@ -266,9 +266,8 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
          * In general, the same approach is used for A^p.
          */
 
-        final char[] binaryRepresentation = Integer.toBinaryString(power)
-                .toCharArray();
-        final ArrayList<Integer> nonZeroPositions = new ArrayList<Integer>();
+        final char[] binaryRepresentation = Integer.toBinaryString(power).toCharArray();
+        final ArrayList<Integer> nonZeroPositions = new ArrayList<>();
 
         for (int i = 0; i < binaryRepresentation.length; ++i) {
             if (binaryRepresentation[i] == '1') {
@@ -277,8 +276,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
             }
         }
 
-        ArrayList<FieldMatrix<T>> results = new ArrayList<FieldMatrix<T>>(
-                binaryRepresentation.length);
+        ArrayList<FieldMatrix<T>> results = new ArrayList<>(binaryRepresentation.length);
 
         results.add(0, this.copy());
 

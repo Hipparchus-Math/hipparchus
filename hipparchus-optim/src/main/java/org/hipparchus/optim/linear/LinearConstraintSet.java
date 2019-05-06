@@ -34,7 +34,7 @@ import org.hipparchus.optim.OptimizationData;
  */
 public class LinearConstraintSet implements OptimizationData {
     /** Set of constraints. */
-    private final Set<LinearConstraint> linearConstraints = new LinkedHashSet<LinearConstraint>();
+    private final Set<LinearConstraint> linearConstraints;
 
     /**
      * Creates a set containing the given constraints.
@@ -42,6 +42,7 @@ public class LinearConstraintSet implements OptimizationData {
      * @param constraints Constraints.
      */
     public LinearConstraintSet(LinearConstraint... constraints) {
+        linearConstraints = new LinkedHashSet<>();
         for (LinearConstraint c : constraints) {
             linearConstraints.add(c);
         }
@@ -53,6 +54,7 @@ public class LinearConstraintSet implements OptimizationData {
      * @param constraints Constraints.
      */
     public LinearConstraintSet(Collection<LinearConstraint> constraints) {
+        linearConstraints = new LinkedHashSet<>();
         linearConstraints.addAll(constraints);
     }
 

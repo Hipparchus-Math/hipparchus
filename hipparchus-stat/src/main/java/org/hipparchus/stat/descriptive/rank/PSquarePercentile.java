@@ -78,7 +78,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
      * Initial list of 5 numbers corresponding to 5 markers. <b>NOTE:</b>watch
      * out for the add methods that are overloaded
      */
-    private final List<Double> initialFive = new FixedCapacityList<Double>(PSQUARE_CONSTANT);
+    private final List<Double> initialFive = new FixedCapacityList<>(PSQUARE_CONSTANT);
 
     /**
      * The quantile needed should be in range of 0-1. The constructor
@@ -226,7 +226,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
      * @return string representation of state data
      */
     @Override
-    public String toString() {
+    public synchronized String toString() {
 
         if (markers == null) {
             return String.format("obs=%s pValue=%s",

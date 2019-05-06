@@ -266,7 +266,7 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Euclidean1D> imple
      * elements
      */
     public List<Interval> asList() {
-        final List<Interval> list = new ArrayList<Interval>();
+        final List<Interval> list = new ArrayList<>();
         for (final double[] a : this) {
             list.add(new Interval(a[0], a[1]));
         }

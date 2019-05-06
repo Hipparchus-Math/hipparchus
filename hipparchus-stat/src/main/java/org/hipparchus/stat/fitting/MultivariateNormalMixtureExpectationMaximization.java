@@ -318,8 +318,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
         final double weight = 1d / numComponents;
 
         // components of mixture model to be created
-        final List<Pair<Double, MultivariateNormalDistribution>> components =
-                new ArrayList<Pair<Double, MultivariateNormalDistribution>>(numComponents);
+        final List<Pair<Double, MultivariateNormalDistribution>> components = new ArrayList<>(numComponents);
 
         // create a component based on data in each bin
         for (int binIndex = 0; binIndex < numComponents; binIndex++) {

@@ -84,8 +84,8 @@ public class FieldLine<T extends RealFieldElement<T>> {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NORM);
         }
         this.direction = new FieldVector3D<>(norm2.sqrt().reciprocal(), delta);
-        zero = new FieldVector3D<T>(norm2.getField().getOne(), p1,
-                                    p1.dotProduct(delta).negate().divide(norm2), delta);
+        zero = new FieldVector3D<>(norm2.getField().getOne(), p1,
+                                   p1.dotProduct(delta).negate().divide(norm2), delta);
     }
 
     /** Get the tolerance below which points are considered identical.
@@ -191,8 +191,8 @@ public class FieldLine<T extends RealFieldElement<T>> {
      */
     public T distance(final FieldVector3D<T> p) {
         final FieldVector3D<T> d = p.subtract(zero);
-        final FieldVector3D<T> n = new FieldVector3D<T>(zero.getX().getField().getOne(), d,
-                                                        d.dotProduct(direction).negate(), direction);
+        final FieldVector3D<T> n = new FieldVector3D<>(zero.getX().getField().getOne(), d,
+                                                       d.dotProduct(direction).negate(), direction);
         return n.getNorm();
     }
 
@@ -202,8 +202,8 @@ public class FieldLine<T extends RealFieldElement<T>> {
      */
     public T distance(final Vector3D p) {
         final FieldVector3D<T> d = zero.subtract(p).negate();
-        final FieldVector3D<T> n = new FieldVector3D<T>(zero.getX().getField().getOne(), d,
-                                                        d.dotProduct(direction).negate(), direction);
+        final FieldVector3D<T> n = new FieldVector3D<>(zero.getX().getField().getOne(), d,
+                                                       d.dotProduct(direction).negate(), direction);
         return n.getNorm();
     }
 

@@ -218,7 +218,7 @@ public class ComplexEigenDecomposition {
 
             // finding inverse of (A - muI)
             // (A - muI) (A - muI)^{-1} = I
-            FieldLUDecomposition<Complex> luDecomp = new FieldLUDecomposition<Complex>(Aeigv);
+            FieldLUDecomposition<Complex> luDecomp = new FieldLUDecomposition<>(Aeigv);
             FieldMatrix<Complex> inv_Aeigv = luDecomp.getSolver().getInverse();
 
             // starting with a unitary vector
@@ -237,7 +237,7 @@ public class ComplexEigenDecomposition {
 
             eigenVector = eigenVector.mapAdd(Complex.ZERO);
 
-            eigenvectors[i] = new ArrayFieldVector<Complex>(eigenVector.toArray());
+            eigenvectors[i] = new ArrayFieldVector<>(eigenVector.toArray());
         }
     }
 

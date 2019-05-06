@@ -305,7 +305,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     public FieldMatrix<T> copy() {
 
         // create an empty matrix
-        BlockFieldMatrix<T> copied = new BlockFieldMatrix<T>(getField(), rows, columns);
+        BlockFieldMatrix<T> copied = new BlockFieldMatrix<>(getField(), rows, columns);
 
         // copy the blocks
         for (int i = 0; i < blocks.length; ++i) {
@@ -326,7 +326,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
             // safety check
             checkAdditionCompatible(m);
 
-            final BlockFieldMatrix<T> out = new BlockFieldMatrix<T>(getField(), rows, columns);
+            final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), rows, columns);
 
             // perform addition block-wise, to ensure good cache behavior
             int blockIndex = 0;
@@ -372,7 +372,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
         // safety check
         checkAdditionCompatible(m);
 
-        final BlockFieldMatrix<T> out = new BlockFieldMatrix<T>(getField(), rows, columns);
+        final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), rows, columns);
 
         // perform addition block-wise, to ensure good cache behavior
         for (int blockIndex = 0; blockIndex < out.blocks.length; ++blockIndex) {
@@ -398,7 +398,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
             // safety check
             checkSubtractionCompatible(m);
 
-            final BlockFieldMatrix<T> out = new BlockFieldMatrix<T>(getField(), rows, columns);
+            final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), rows, columns);
 
             // perform subtraction block-wise, to ensure good cache behavior
             int blockIndex = 0;
@@ -442,7 +442,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
         // safety check
         checkSubtractionCompatible(m);
 
-        final BlockFieldMatrix<T> out = new BlockFieldMatrix<T>(getField(), rows, columns);
+        final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), rows, columns);
 
         // perform subtraction block-wise, to ensure good cache behavior
         for (int blockIndex = 0; blockIndex < out.blocks.length; ++blockIndex) {
@@ -460,7 +460,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /** {@inheritDoc} */
     @Override
     public FieldMatrix<T> scalarAdd(final T d) {
-        final BlockFieldMatrix<T> out = new BlockFieldMatrix<T>(getField(), rows, columns);
+        final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), rows, columns);
 
         // perform subtraction block-wise, to ensure good cache behavior
         for (int blockIndex = 0; blockIndex < out.blocks.length; ++blockIndex) {
@@ -478,7 +478,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     @Override
     public FieldMatrix<T> scalarMultiply(final T d) {
 
-        final BlockFieldMatrix<T> out = new BlockFieldMatrix<T>(getField(), rows, columns);
+        final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), rows, columns);
 
         // perform subtraction block-wise, to ensure good cache behavior
         for (int blockIndex = 0; blockIndex < out.blocks.length; ++blockIndex) {
@@ -503,7 +503,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
             // safety check
             checkMultiplicationCompatible(m);
 
-            final BlockFieldMatrix<T> out = new BlockFieldMatrix<T>(getField(), rows, m.getColumnDimension());
+            final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), rows, m.getColumnDimension());
             final T zero = getField().getZero();
 
             // perform multiplication block-wise, to ensure good cache behavior
@@ -566,7 +566,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
         // safety check
         checkMultiplicationCompatible(m);
 
-        final BlockFieldMatrix<T> out = new BlockFieldMatrix<T>(getField(), rows, m.columns);
+        final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), rows, m.columns);
         final T zero = getField().getZero();
 
         // perform multiplication block-wise, to ensure good cache behavior
@@ -917,7 +917,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
 
         // create the output matrix
         final BlockFieldMatrix<T> out =
-            new BlockFieldMatrix<T>(getField(), endRow - startRow + 1, endColumn - startColumn + 1);
+            new BlockFieldMatrix<>(getField(), endRow - startRow + 1, endColumn - startColumn + 1);
 
         // compute blocks shifts
         final int blockStartRow    = startRow    / BLOCK_SIZE;
@@ -1090,7 +1090,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     public FieldMatrix<T> getRowMatrix(final int row)
         throws MathIllegalArgumentException {
         checkRowIndex(row);
-        final BlockFieldMatrix<T> out = new BlockFieldMatrix<T>(getField(), 1, columns);
+        final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), 1, columns);
 
         // perform copy block-wise, to ensure good cache behavior
         final int iBlock  = row / BLOCK_SIZE;
@@ -1176,7 +1176,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     public FieldMatrix<T> getColumnMatrix(final int column)
         throws MathIllegalArgumentException {
         checkColumnIndex(column);
-        final BlockFieldMatrix<T> out = new BlockFieldMatrix<T>(getField(), rows, 1);
+        final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), rows, 1);
 
         // perform copy block-wise, to ensure good cache behavior
         final int jBlock  = column / BLOCK_SIZE;
@@ -1478,7 +1478,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     public FieldMatrix<T> transpose() {
         final int nRows = getRowDimension();
         final int nCols = getColumnDimension();
-        final BlockFieldMatrix<T> out = new BlockFieldMatrix<T>(getField(), nCols, nRows);
+        final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), nCols, nRows);
 
         // perform transpose block-wise, to ensure good cache behavior
         int blockIndex = 0;

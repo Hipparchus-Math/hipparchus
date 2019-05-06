@@ -49,7 +49,8 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Filtering Release Notes</title>
   </properties>
   <body>
-    <release version="1.5"  date="TBD" description="TBD">
+    <release version="1.5" date="2019-05-06" description="This is a maintenance release, it
+    includes only bug fixes.">
       <action dev="luc" type="fix" due-to="Hao Peng">
         Nullify corrected state after predict in abstract Kalman filter. Note that this affects
         only custom extensions of AbstractKalmanFilter because the implementations provided

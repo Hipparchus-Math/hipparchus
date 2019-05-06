@@ -597,7 +597,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
             System.arraycopy(data[startRow + i], startColumn, outData[i], 0, columnCount);
         }
 
-        Array2DRowFieldMatrix<T> subMatrix = new Array2DRowFieldMatrix<T>(getField());
+        Array2DRowFieldMatrix<T> subMatrix = new Array2DRowFieldMatrix<>(getField());
         subMatrix.data = outData;
         return subMatrix;
     }

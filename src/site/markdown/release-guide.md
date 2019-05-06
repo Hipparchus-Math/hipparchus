@@ -57,9 +57,9 @@ in a set of properties:
 
     <!-- Project specific plugin versions -->
 
-    <hipparchus.spotbugs-maven-plugin.version>3.1.7</hipparchus.spotbugs-maven-plugin.version>
-    <hipparchus.jacoco-maven-plugin.version>0.8.2</hipparchus.jacoco-maven-plugin.version>
-    <hipparchus.maven-assembly-plugin.version>3.1.0</hipparchus.maven-assembly-plugin.version>
+    <hipparchus.spotbugs-maven-plugin.version>3.1.11</hipparchus.spotbugs-maven-plugin.version>
+    <hipparchus.jacoco-maven-plugin.version>0.8.3</hipparchus.jacoco-maven-plugin.version>
+    <hipparchus.maven-assembly-plugin.version>3.1.1</hipparchus.maven-assembly-plugin.version>
     ...
 
 You can find the latest version of the plugins using the search feature at
@@ -93,7 +93,7 @@ everything in one place.
 
 When everything runs fine and the generated site is OK, then you can commit the changes:
 
-    git add hipparchus-parent/pom.xml src/conf/checkstyle.xml src/conf/pmd-ruleset
+    git add hipparchus-parent/pom.xml src/conf/checkstyle.xml src/conf/pmd-ruleset.xml
     git commit -m "Updated maven plugins versions."
 
 ## Creating release notes
@@ -130,7 +130,7 @@ After these commands have been run, the `RELEASE-NOTES.txt` file has been update
 automatically. It should be reviewed and edited manually to improve readability
 (mainly whitespaces, indentation and lines wrapping) and then committed:
 
-    git add RELEASE-NOTES.txt src/changes.xml hipparchus-*/src/changes.xml
+    git add RELEASE-NOTES.txt src/changes/changes.xml hipparchus-*/src/changes/changes.xml
     git commit -m "Updated release notes."
 
 This third step is performed by the `release.sh` shell script (but the first two

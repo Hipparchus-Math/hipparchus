@@ -56,7 +56,7 @@ public class SparseFieldMatrix<T extends FieldElement<T>> extends AbstractFieldM
         super(field);
         rows = 0;
         columns= 0;
-        entries = new OpenIntToFieldHashMap<T>(field);
+        entries = new OpenIntToFieldHashMap<>(field);
     }
 
     /**
@@ -74,7 +74,7 @@ public class SparseFieldMatrix<T extends FieldElement<T>> extends AbstractFieldM
         super(field, rowDimension, columnDimension);
         this.rows = rowDimension;
         this.columns = columnDimension;
-        entries = new OpenIntToFieldHashMap<T>(field);
+        entries = new OpenIntToFieldHashMap<>(field);
     }
 
     /**
@@ -86,7 +86,7 @@ public class SparseFieldMatrix<T extends FieldElement<T>> extends AbstractFieldM
         super(other.getField(), other.getRowDimension(), other.getColumnDimension());
         rows = other.getRowDimension();
         columns = other.getColumnDimension();
-        entries = new OpenIntToFieldHashMap<T>(other.entries);
+        entries = new OpenIntToFieldHashMap<>(other.entries);
     }
 
     /**
@@ -98,7 +98,7 @@ public class SparseFieldMatrix<T extends FieldElement<T>> extends AbstractFieldM
         super(other.getField(), other.getRowDimension(), other.getColumnDimension());
         rows = other.getRowDimension();
         columns = other.getColumnDimension();
-        entries = new OpenIntToFieldHashMap<T>(getField());
+        entries = new OpenIntToFieldHashMap<>(getField());
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 setEntry(i, j, other.getEntry(i, j));

@@ -248,7 +248,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
         }
 
         // build the edges
-        final List<Edge> edges = new ArrayList<Edge>(n);
+        final List<Edge> edges = new ArrayList<>(n);
         Vertex end = vArray[n - 1];
         for (int i = 0; i < n; ++i) {
 
@@ -268,7 +268,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
         }
 
         // build the tree top-down
-        final BSPTree<Sphere2D> tree = new BSPTree<Sphere2D>();
+        final BSPTree<Sphere2D> tree = new BSPTree<>();
         insertEdges(hyperplaneThickness, tree, edges);
 
         return tree;
@@ -464,8 +464,8 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
 
         // we have split the node by inserting an edge as a cut sub-hyperplane
         // distribute the remaining edges in the two sub-trees
-        final List<Edge> outsideList = new ArrayList<Edge>();
-        final List<Edge> insideList  = new ArrayList<Edge>();
+        final List<Edge> outsideList = new ArrayList<>();
+        final List<Edge> insideList  = new ArrayList<>();
         for (final Edge edge : edges) {
             if (edge != inserted) {
                 edge.split(inserted.getCircle(), outsideList, insideList);
@@ -799,7 +799,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
         // find the smallest enclosing 3D sphere
         final SphereGenerator generator = new SphereGenerator();
         final WelzlEncloser<Euclidean3D, Vector3D> encloser =
-                new WelzlEncloser<Euclidean3D, Vector3D>(getTolerance(), generator);
+                new WelzlEncloser<>(getTolerance(), generator);
         EnclosingBall<Euclidean3D, Vector3D> enclosing3D = encloser.enclose(points);
         final Vector3D[] support3D = enclosing3D.getSupport();
 
@@ -810,14 +810,14 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
             // the 3D sphere is centered on the unit sphere and covers it
             // fall back to a crude approximation, based only on outside convex cells
             EnclosingBall<Sphere2D, S2Point> enclosingS2 =
-                    new EnclosingBall<Sphere2D, S2Point>(S2Point.PLUS_K, Double.POSITIVE_INFINITY);
+                    new EnclosingBall<>(S2Point.PLUS_K, Double.POSITIVE_INFINITY);
             for (Vector3D outsidePoint : getOutsidePoints()) {
                 final S2Point outsideS2 = new S2Point(outsidePoint);
                 final BoundaryProjection<Sphere2D> projection = projectToBoundary(outsideS2);
                 if (FastMath.PI - projection.getOffset() < enclosingS2.getRadius()) {
-                    enclosingS2 = new EnclosingBall<Sphere2D, S2Point>(outsideS2.negate(),
-                                                                       FastMath.PI - projection.getOffset(),
-                                                                       (S2Point) projection.getProjected());
+                    enclosingS2 = new EnclosingBall<>(outsideS2.negate(),
+                                                      FastMath.PI - projection.getOffset(),
+                                                      (S2Point) projection.getProjected());
                 }
             }
             return enclosingS2;
@@ -828,9 +828,9 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
         }
 
         final EnclosingBall<Sphere2D, S2Point> enclosingS2 =
-                new EnclosingBall<Sphere2D, S2Point>(new S2Point(enclosing3D.getCenter()),
-                                                     FastMath.acos((1 + h * h - r * r) / (2 * h)),
-                                                     support);
+                new EnclosingBall<>(new S2Point(enclosing3D.getCenter()),
+                                    FastMath.acos((1 + h * h - r * r) / (2 * h)),
+                                    support);
 
         return enclosingS2;
 

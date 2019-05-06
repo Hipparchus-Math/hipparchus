@@ -786,7 +786,7 @@ public class RandomPercentile
             Buffer buffer = new Buffer(bufferSize, level, randomGenerator);
             List<Buffer> bufferList = registry.get(level);
             if (bufferList == null) {
-                bufferList = new ArrayList<Buffer>();
+                bufferList = new ArrayList<>();
                 registry.put(level, bufferList);
             }
             bufferList.add(buffer);
@@ -918,7 +918,7 @@ public class RandomPercentile
             final int level = buffer.getLevel();
             List<Buffer> list = registry.get(level);
             if (list == null) {
-                list = new ArrayList<Buffer>();
+                list = new ArrayList<>();
                 registry.put(level, list);
                 if (level > maxLevel) {
                     maxLevel = level;

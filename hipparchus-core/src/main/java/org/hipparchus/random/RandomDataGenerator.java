@@ -1278,7 +1278,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
         EnumeratedDistributionSampler(List<Pair<T, Double>> pmf) {
             final int numMasses = pmf.size();
             weights = new double[numMasses];
-            values = new ArrayList<T>();
+            values = new ArrayList<>();
             for (int i = 0; i < numMasses; i++) {
                 weights[i] = pmf.get(i).getSecond();
                 values.add(pmf.get(i).getFirst());

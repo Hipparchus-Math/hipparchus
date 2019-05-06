@@ -60,9 +60,9 @@ class Characterization<S extends Space> {
     Characterization(final BSPTree<S> node, final SubHyperplane<S> sub) {
         outsideTouching  = null;
         insideTouching   = null;
-        outsideSplitters = new NodesSet<S>();
-        insideSplitters  = new NodesSet<S>();
-        characterize(node, sub, new ArrayList<BSPTree<S>>());
+        outsideSplitters = new NodesSet<>();
+        insideSplitters  = new NodesSet<>();
+        characterize(node, sub, new ArrayList<>());
     }
 
     /** Filter the parts of an hyperplane belonging to the boundary.
