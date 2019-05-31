@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.6"  date="TBD" description="TBD">
+      <action dev="ward" type="fix" issue="issues/56">
+        Show full precision in exception message when root bracketing fails.
+      </action>
       <action dev="ward" type="add" issue="issues/56">
         When exception message formatting fails still show a helpful message and stack
         trace.

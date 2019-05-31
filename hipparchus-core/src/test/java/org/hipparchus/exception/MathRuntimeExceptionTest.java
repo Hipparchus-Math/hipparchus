@@ -2,6 +2,7 @@ package org.hipparchus.exception;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.hipparchus.util.FastMath;
 import org.junit.Test;
 
 import java.io.PrintWriter;
@@ -49,6 +50,22 @@ public class MathRuntimeExceptionTest {
             MatcherAssert.assertThat(message,
                     CoreMatchers.containsString("toString failed"));
         }
+    }
+
+    @Test
+    public void testGetMessageDecimalFormat() {
+        // setup
+        double a = FastMath.nextUp(1.0), b = FastMath.nextDown(1.0);
+        double fa = -Double.MIN_NORMAL, fb = -12.345678901234567e-10;
+
+        // action
+        String message = new MathRuntimeException(LocalizedCoreFormats.NOT_BRACKETING_INTERVAL, a, b, fa, fb).getMessage();
+
+        // verify
+        String expected = "interval does not bracket a root: " +
+                "f(1.0000000000000002E0) = -22.250738585072014E-309, " +
+                "f(999.9999999999999E-3) = -1.2345678901234566E-9";
+        MatcherAssert.assertThat( message, CoreMatchers.is( expected) );
     }
 
 }

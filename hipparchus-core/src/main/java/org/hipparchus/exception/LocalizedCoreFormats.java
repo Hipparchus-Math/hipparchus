@@ -223,7 +223,9 @@ public enum LocalizedCoreFormats implements Localizable {
     POLYNOMIAL("polynomial"), /* keep */
     ROOTS_OF_UNITY_NOT_COMPUTED_YET("roots of unity have not been computed yet"),
     ROW_INDEX("row index ({0})"), /* keep */
-    NOT_BRACKETING_INTERVAL("interval does not bracket a root: f({0}) = {2}, f({1}) = {3}"),
+    NOT_BRACKETING_INTERVAL("interval does not bracket a root: f({0" + Formats.DOUBLE +
+            "}) = {2" + Formats.DOUBLE + "}, f({1" + Formats.DOUBLE + "}) = {3" +
+            Formats.DOUBLE + "}"),
     START_POINT_NOT_IN_INTERVAL("The start point {0} is not in the interval [{1}, {2}]"),
     SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE("sample size ({0}) exceeds collection size ({1})"), /* keep */
     SAMPLE_SIZE_LARGER_THAN_POPULATION_SIZE("sample size ({0}) must be less than or equal to population size ({1})"),
@@ -261,7 +263,6 @@ public enum LocalizedCoreFormats implements Localizable {
 
     // CHECKSTYLE: resume JavadocVariable
     // CHECKSTYLE: resume MultipleVariableDeclarations
-
 
     /** Source English format. */
     private final String sourceFormat;
