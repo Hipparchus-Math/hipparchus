@@ -49,6 +49,12 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
+    <release version="1.6"  date="TBD" description="TBD">
+      <action dev="ward" type="add" issue="issues/56">
+        When exception message formatting fails still show a helpful message and stack
+        trace.
+      </action>
+    </release>
     <release version="1.5"  date="2019-05-06" description="This is a maintenance release. The main
     changes since last version are the introduction of field versions of bilinear interpolation,
     univariate interpolators, polynomials and polynomial spline functions.">
@@ -63,7 +69,6 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
       <action dev="luc" type="add">
         Added FieldPolynomialFunction and FieldPolynomialSplineFunction.
-      </action>
       <action dev="luc" type="add" issue="issues/53" >
         Fixed documentation for interpolation algorithms.
         Github: fixes #53.

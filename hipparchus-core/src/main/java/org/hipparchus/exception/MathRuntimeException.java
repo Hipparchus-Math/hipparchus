@@ -115,8 +115,16 @@ public class MathRuntimeException extends RuntimeException implements LocalizedE
      * @param parts parts to insert in the format (no translation)
      * @return a message string
      */
-    private static String buildMessage(final Locale locale, final Localizable specifier, final Object ... parts) {
-        return (specifier == null) ? "" : new MessageFormat(specifier.getLocalizedString(locale), locale).format(parts);
+    private String buildMessage(final Locale locale, final Localizable specifier, final Object ... parts) {
+        if (specifier == null) {
+            return "";
+        }
+        try {
+            return new MessageFormat(specifier.getLocalizedString(locale), locale).format(parts);
+        } catch (Exception e) {
+            this.addSuppressed(e);
+            return specifier.getSourceString();
+        }
     }
 
 }
