@@ -34,16 +34,15 @@ public class MathRuntimeExceptionTest {
         // action
         try {
             throw new MathRuntimeException(
-                    LocalizedCoreFormats.NOT_BRACKETING_INTERVAL,
+                    LocalizedCoreFormats.URL_CONTAINS_NO_DATA,
                     bad);
         } catch (MathRuntimeException e) {
             // verify
             e.printStackTrace(writer);
             String message = buffer.toString();
-            System.out.println(message);
             // check original reason is preserved
             MatcherAssert.assertThat(message,
-                    CoreMatchers.containsString("interval does not bracket a root"));
+                    CoreMatchers.containsString("contains no data"));
             MatcherAssert.assertThat(message,
                     CoreMatchers.containsString("MathRuntimeException"));
             // check exception during formatting is preserved
@@ -52,6 +51,7 @@ public class MathRuntimeExceptionTest {
         }
     }
 
+    /** Check the bracketing exception message uses full precision. */
     @Test
     public void testGetMessageDecimalFormat() {
         // setup
@@ -59,7 +59,9 @@ public class MathRuntimeExceptionTest {
         double fa = -Double.MIN_NORMAL, fb = -12.345678901234567e-10;
 
         // action
-        String message = new MathRuntimeException(LocalizedCoreFormats.NOT_BRACKETING_INTERVAL, a, b, fa, fb).getMessage();
+        String message = new MathRuntimeException(
+                LocalizedCoreFormats.NOT_BRACKETING_INTERVAL, a, b, fa, fb)
+                .getMessage();
 
         // verify
         String expected = "interval does not bracket a root: " +
