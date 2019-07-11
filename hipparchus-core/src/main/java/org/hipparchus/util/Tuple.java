@@ -592,6 +592,26 @@ public class Tuple implements RealFieldElement<Tuple> {
 
     /** {@inheritDoc} */
     @Override
+    public Tuple toDegrees() {
+        final Tuple result = new Tuple(field, new double[values.length]);
+        for (int i = 0; i < values.length; ++i) {
+            result.values[i] = FastMath.toDegrees(values[i]);
+        }
+        return result;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Tuple toRadians() {
+        final Tuple result = new Tuple(field, new double[values.length]);
+        for (int i = 0; i < values.length; ++i) {
+            result.values[i] = FastMath.toRadians(values[i]);
+        }
+        return result;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public Tuple linearCombination(final Tuple[] a, final Tuple[] b)
         throws MathIllegalArgumentException {
         final Tuple result = new Tuple(field, new double[values.length]);

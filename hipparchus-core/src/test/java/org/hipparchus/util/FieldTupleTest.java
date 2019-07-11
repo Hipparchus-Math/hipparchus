@@ -235,4 +235,39 @@ public class FieldTupleTest extends ExtendedFieldElementAbstractTest<FieldTuple<
         Assert.assertEquals(expected, actual);
     }
 
+    @Test
+    public void testToDegreesDefinition() {
+        double epsilon = 3.0e-16;
+        for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
+            for (double x = 0.1; x < 1.2; x += 0.001) {
+                final Decimal64 dec64 = new Decimal64(x);
+                FieldTuple<Decimal64> value = new FieldTuple<Decimal64>(dec64, dec64);
+                Assert.assertEquals(FastMath.toDegrees(x), value.toDegrees().getReal(), epsilon);
+            }
+        }
+    }
+
+    @Test
+    public void testToRadiansDefinition() {
+        double epsilon = 3.0e-16;
+        for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
+            for (double x = 0.1; x < 1.2; x += 0.001) {
+                final Decimal64 dec64 = new Decimal64(x);
+                FieldTuple<Decimal64> value = new FieldTuple<Decimal64>(dec64, dec64);
+                Assert.assertEquals(FastMath.toRadians(x), value.toRadians().getReal(), epsilon);
+            }
+        }
+    }
+
+    @Test
+    public void testDegRad() {
+        for (double x = 0.1; x < 1.2; x += 0.001) {
+            final Decimal64 dec64 = new Decimal64(x);
+            FieldTuple<Decimal64> value = new FieldTuple<Decimal64>(dec64, dec64);
+            FieldTuple<Decimal64> rebuilt = value.toDegrees().toRadians();
+            FieldTuple<Decimal64> zero = rebuilt.subtract(value);
+            Assert.assertEquals(zero.getReal(), 0, 3.0e-16);
+        }
+    }
+
 }

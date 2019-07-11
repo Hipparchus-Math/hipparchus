@@ -222,4 +222,36 @@ public class TupleTest extends ExtendedFieldElementAbstractTest<Tuple> {
         Assert.assertEquals(expected, actual);
     }
 
+    @Test
+    public void testToDegreesDefinition() {
+        double epsilon = 3.0e-16;
+        for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
+            for (double x = 0.1; x < 1.2; x += 0.001) {
+                Tuple value = new Tuple(x, x);
+                Assert.assertEquals(FastMath.toDegrees(x), value.toDegrees().getReal(), epsilon);
+            }
+        }
+    }
+
+    @Test
+    public void testToRadiansDefinition() {
+        double epsilon = 3.0e-16;
+        for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
+            for (double x = 0.1; x < 1.2; x += 0.001) {
+                Tuple value = new Tuple(x, x);
+                Assert.assertEquals(FastMath.toRadians(x), value.toRadians().getReal(), epsilon);
+            }
+        }
+    }
+
+    @Test
+    public void testDegRad() {
+        for (double x = 0.1; x < 1.2; x += 0.001) {
+            Tuple value = new Tuple(x, x);
+            Tuple rebuilt = value.toDegrees().toRadians();
+            Tuple zero = rebuilt.subtract(value);
+            Assert.assertEquals(zero.getReal(), 0, 3.0e-16);
+        }
+    }
+
 }

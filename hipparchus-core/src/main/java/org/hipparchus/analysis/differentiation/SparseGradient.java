@@ -755,16 +755,14 @@ public class SparseGradient implements RealFieldElement<SparseGradient>, Seriali
         return new SparseGradient(FastMath.atanh(value), 1.0 / (1.0 - value * value), derivatives);
     }
 
-    /** Convert radians to degrees, with error of less than 0.5 ULP
-     *  @return instance converted into degrees
-     */
+    /** {@inheritDoc} */
+    @Override
     public SparseGradient toDegrees() {
         return new SparseGradient(FastMath.toDegrees(value), FastMath.toDegrees(1.0), derivatives);
     }
 
-    /** Convert degrees to radians, with error of less than 0.5 ULP
-     *  @return instance converted into radians
-     */
+    /** {@inheritDoc} */
+    @Override
     public SparseGradient toRadians() {
         return new SparseGradient(FastMath.toRadians(value), FastMath.toRadians(1.0), derivatives);
     }

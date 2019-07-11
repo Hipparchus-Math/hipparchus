@@ -591,6 +591,26 @@ public class FieldTuple<T extends RealFieldElement<T>> implements RealFieldEleme
 
     /** {@inheritDoc} */
     @Override
+    public FieldTuple<T> toDegrees() {
+        final FieldTuple<T> result = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
+        for (int i = 0; i < values.length; ++i) {
+            result.values[i] = values[i].toDegrees();
+        }
+        return result;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FieldTuple<T> toRadians() {
+        final FieldTuple<T> result = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
+        for (int i = 0; i < values.length; ++i) {
+            result.values[i] = values[i].toRadians();
+        }
+        return result;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public FieldTuple<T> linearCombination(final FieldTuple<T>[] a, final FieldTuple<T>[] b)
         throws MathIllegalArgumentException {
         final FieldTuple<T> result = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
