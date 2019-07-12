@@ -302,14 +302,14 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      *  @return instance converted into degrees
      */
     default T toDegrees() {
-        return multiply(DEG_TO_RAD);
+        return multiply(RAD_TO_DEG);
     }
 
     /** Convert degrees to radians, with error of less than 0.5 ULP
      *  @return instance converted into radians
      */
     default T toRadians() {
-        return multiply(RAD_TO_DEG);
+        return multiply(DEG_TO_RAD);
     }
 
     /**
