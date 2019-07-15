@@ -810,9 +810,8 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
     @Override
     public FieldDerivativeStructure<T> toDegrees() {
         final FieldDerivativeStructure<T> ds = factory.build();
-        final double factor = 180 / FastMath.PI;
         for (int i = 0; i < ds.data.length; ++i) {
-            ds.data[i] = data[i].multiply(factor);
+            ds.data[i] = data[i].multiply(RealFieldElement.RAD_TO_DEG);
         }
         return ds;
     }
@@ -821,9 +820,8 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
     @Override
     public FieldDerivativeStructure<T> toRadians() {
         final FieldDerivativeStructure<T> ds = factory.build();
-        final double factor = FastMath.PI / 180;
         for (int i = 0; i < ds.data.length; ++i) {
-            ds.data[i] = data[i].multiply(factor);
+            ds.data[i] = data[i].multiply(RealFieldElement.DEG_TO_RAD);
         }
         return ds;
     }
