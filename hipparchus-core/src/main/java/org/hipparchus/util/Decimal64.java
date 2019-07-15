@@ -568,6 +568,18 @@ public class Decimal64 extends Number
 
     /** {@inheritDoc} */
     @Override
+    public Decimal64 toDegrees() {
+        return new Decimal64(FastMath.toDegrees(value));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Decimal64 toRadians() {
+        return new Decimal64(FastMath.toRadians(value));
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public Decimal64 linearCombination(final Decimal64[] a, final Decimal64[] b)
         throws MathIllegalArgumentException {
         MathUtils.checkDimension(a.length, b.length);

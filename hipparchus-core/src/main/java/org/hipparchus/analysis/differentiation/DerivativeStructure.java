@@ -880,9 +880,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         return result;
     }
 
-    /** Convert radians to degrees, with error of less than 0.5 ULP
-     *  @return instance converted into degrees
-     */
+    /** {@inheritDoc} */
+    @Override
     public DerivativeStructure toDegrees() {
         final DerivativeStructure ds = factory.build();
         for (int i = 0; i < ds.data.length; ++i) {
@@ -891,9 +890,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         return ds;
     }
 
-    /** Convert degrees to radians, with error of less than 0.5 ULP
-     *  @return instance converted into radians
-     */
+    /** {@inheritDoc} */
+    @Override
     public DerivativeStructure toRadians() {
         final DerivativeStructure ds = factory.build();
         for (int i = 0; i < ds.data.length; ++i) {

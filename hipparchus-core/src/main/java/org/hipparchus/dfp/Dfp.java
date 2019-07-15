@@ -2788,6 +2788,18 @@ public class Dfp implements RealFieldElement<Dfp> {
         return getOne().add(this).divide(getOne().subtract(this)).log().divide(2);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Dfp toDegrees() {
+        return multiply(field.getRadToDeg());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Dfp toRadians() {
+        return multiply(field.getDegToRad());
+    }
+
     /** {@inheritDoc}
      */
     @Override

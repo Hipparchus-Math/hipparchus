@@ -429,4 +429,37 @@ public class Decimal64Test extends ExtendedFieldElementAbstractTest<Decimal64> {
 
         Assert.assertTrue(Decimal64.NAN.isNaN());
     }
+
+    @Test
+    public void testToDegreesDefinition() {
+        double epsilon = 3.0e-16;
+        for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
+            for (double x = 0.1; x < 1.2; x += 0.001) {
+                Decimal64 value = new Decimal64(x);
+                Assert.assertEquals(FastMath.toDegrees(x), value.toDegrees().getReal(), epsilon);
+            }
+        }
+    }
+
+    @Test
+    public void testToRadiansDefinition() {
+        double epsilon = 3.0e-16;
+        for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
+            for (double x = 0.1; x < 1.2; x += 0.001) {
+                Decimal64 value = new Decimal64(x);
+                Assert.assertEquals(FastMath.toRadians(x), value.toRadians().getReal(), epsilon);
+            }
+        }
+    }
+
+    @Test
+    public void testDegRad() {
+        for (double x = 0.1; x < 1.2; x += 0.001) {
+            Decimal64 value = new Decimal64(x);
+            Decimal64 rebuilt = value.toDegrees().toRadians();
+            Decimal64 zero = rebuilt.subtract(value);
+            Assert.assertEquals(zero.getReal(), 0, 3.0e-16);
+        }
+    }
+
 }
