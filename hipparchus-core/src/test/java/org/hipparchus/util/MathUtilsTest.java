@@ -13,6 +13,8 @@
  */
 package org.hipparchus.util;
 
+import org.hipparchus.Field;
+import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -151,6 +153,25 @@ public final class MathUtilsTest {
                 Assert.assertTrue(c <= (b + FastMath.PI));
                 double twoK = FastMath.rint((a - c) / FastMath.PI);
                 Assert.assertEquals(c, a - twoK * FastMath.PI, 1.0e-14);
+            }
+        }
+    }
+
+    @Test
+    public void testFieldNormalizeAngle() {
+        doTestFieldNormalizeAngle(Decimal64Field.getInstance());
+    }
+
+    private <T extends RealFieldElement<T>> void doTestFieldNormalizeAngle(final Field<T> field) {
+        final T zero = field.getZero();
+        for (double a = -15.0; a <= 15.0; a += 0.1) {
+            for (double b = -15.0; b <= 15.0; b += 0.2) {
+                T c = MathUtils.normalizeAngle(zero.add(a), zero.add(b));
+                double cR = c.getReal();
+                Assert.assertTrue((b - FastMath.PI) <= cR);
+                Assert.assertTrue(cR <= (b + FastMath.PI));
+                double twoK = FastMath.rint((a - cR) / FastMath.PI);
+                Assert.assertEquals(cR, a - twoK * FastMath.PI, 1.0e-14);
             }
         }
     }
