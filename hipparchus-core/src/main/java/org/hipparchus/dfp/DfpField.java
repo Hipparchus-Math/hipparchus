@@ -137,6 +137,12 @@ public class DfpField implements Field<Dfp> {
     /** A {@link Dfp} with value &pi;. */
     private final Dfp pi;
 
+    /** A {@link Dfp} for converting degrees to radians. */
+    private final Dfp degToRad;
+
+    /** A {@link Dfp} for converting radians to degrees. */
+    private final Dfp radToDeg;
+
     /** A two elements {@link Dfp} array with value &pi; split in two pieces. */
     private final Dfp[] piSplit;
 
@@ -217,6 +223,8 @@ public class DfpField implements Field<Dfp> {
                 sqr3           = new Dfp(this, sqr3String);
                 sqr3Reciprocal = new Dfp(this, sqr3ReciprocalString);
                 pi             = new Dfp(this, piString);
+                degToRad       = pi.divide(180.0);
+                radToDeg       = pi.divide(180.0).reciprocal();
                 piSplit        = split(piString);
                 e              = new Dfp(this, eString);
                 eSplit         = split(eString);
@@ -235,6 +243,8 @@ public class DfpField implements Field<Dfp> {
             sqr3           = null;
             sqr3Reciprocal = null;
             pi             = null;
+            degToRad       = null;
+            radToDeg       = null;
             piSplit        = null;
             e              = null;
             eSplit         = null;
@@ -468,6 +478,20 @@ public class DfpField implements Field<Dfp> {
      */
     public Dfp getPi() {
         return pi;
+    }
+
+    /** Get the degrees to radians conversion factor.
+     * @return a {@link Dfp} for degrees to radians conversion factor
+     */
+    public Dfp getDegToRad() {
+        return degToRad;
+    }
+
+    /** Get the radians to degrees conversion factor.
+     * @return a {@link Dfp} for radians to degrees conversion factor
+     */
+    public Dfp getRadToDeg() {
+        return radToDeg;
     }
 
     /** Get the constant &pi; split in two pieces.

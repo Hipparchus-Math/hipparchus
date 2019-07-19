@@ -806,26 +806,22 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
         return result;
     }
 
-    /** Convert radians to degrees, with error of less than 0.5 ULP
-     *  @return instance converted into degrees
-     */
+    /** {@inheritDoc} */
+    @Override
     public FieldDerivativeStructure<T> toDegrees() {
         final FieldDerivativeStructure<T> ds = factory.build();
-        final double factor = 180 / FastMath.PI;
         for (int i = 0; i < ds.data.length; ++i) {
-            ds.data[i] = data[i].multiply(factor);
+            ds.data[i] = data[i].multiply(RealFieldElement.RAD_TO_DEG);
         }
         return ds;
     }
 
-    /** Convert degrees to radians, with error of less than 0.5 ULP
-     *  @return instance converted into radians
-     */
+    /** {@inheritDoc} */
+    @Override
     public FieldDerivativeStructure<T> toRadians() {
         final FieldDerivativeStructure<T> ds = factory.build();
-        final double factor = FastMath.PI / 180;
         for (int i = 0; i < ds.data.length; ++i) {
-            ds.data[i] = data[i].multiply(factor);
+            ds.data[i] = data[i].multiply(RealFieldElement.DEG_TO_RAD);
         }
         return ds;
     }

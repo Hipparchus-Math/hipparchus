@@ -22,6 +22,7 @@
 package org.hipparchus;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 
 /**
@@ -31,6 +32,12 @@ import org.hipparchus.util.FieldSinCos;
  * @see FieldElement
  */
 public interface RealFieldElement<T> extends FieldElement<T> {
+
+    /** Degrees to radians conversion factor. */
+    double DEG_TO_RAD = FastMath.PI / 180.0;
+
+    /** Radians to degrees conversion factor. */
+    double RAD_TO_DEG = 180.0 / FastMath.PI;
 
     /** Get the real value of the number.
      * @return real value
@@ -290,6 +297,20 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      * @return atanh(this)
      */
     T atanh();
+
+    /** Convert radians to degrees, with error of less than 0.5 ULP
+     *  @return instance converted into degrees
+     */
+    default T toDegrees() {
+        return multiply(RAD_TO_DEG);
+    }
+
+    /** Convert degrees to radians, with error of less than 0.5 ULP
+     *  @return instance converted into radians
+     */
+    default T toRadians() {
+        return multiply(DEG_TO_RAD);
+    }
 
     /**
      * Compute a linear combination.

@@ -4611,6 +4611,26 @@ public class FastMath {
     }
 
     /**
+     *  Convert degrees to radians, with error of less than 0.5 ULP
+     *  @param x angle in degrees
+     *  @param <T> the type of the field element
+     *  @return x converted into radians
+     */
+    public static <T extends RealFieldElement<T>> T toRadians(T x) {
+        return x.toRadians();
+    }
+
+    /**
+     *  Convert radians to degrees, with error of less than 0.5 ULP
+     *  @param x angle in radians
+     *  @param <T> the type of the field element
+     *  @return x converted into degrees
+     */
+    public static <T extends RealFieldElement<T>> T toDegrees(T x) {
+        return x.toDegrees();
+    }
+
+    /**
      * Multiply a double number by a power of 2.
      * @param d number to multiply
      * @param n power of 2
