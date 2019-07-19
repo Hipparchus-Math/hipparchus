@@ -40,7 +40,6 @@ public class MathRuntimeExceptionTest {
             // verify
             e.printStackTrace(writer);
             String message = buffer.toString();
-            System.out.println(message);
             // check original reason is preserved
             MatcherAssert.assertThat(message,
                     CoreMatchers.containsString("interval does not bracket a root"));
@@ -49,6 +48,7 @@ public class MathRuntimeExceptionTest {
             // check exception during formatting is preserved
             MatcherAssert.assertThat(message,
                     CoreMatchers.containsString("toString failed"));
+            System.out.println(message);
         }
     }
 
