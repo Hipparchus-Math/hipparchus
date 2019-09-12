@@ -401,7 +401,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
             }
             if (maxCosine <= orthoTolerance) {
                 // Convergence has been reached.
-                return new OptimumImpl(
+                return Optimum.of(
                         current,
                         evaluationCounter.getCount(),
                         iterationCounter.getCount());
@@ -509,7 +509,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
 
                     // tests for convergence.
                     if (checker != null && checker.converged(iterationCounter.getCount(), previous, current)) {
-                        return new OptimumImpl(current, evaluationCounter.getCount(), iterationCounter.getCount());
+                        return Optimum.of(current, evaluationCounter.getCount(), iterationCounter.getCount());
                     }
                 } else {
                     // failed iteration, reset the previous values
@@ -530,7 +530,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                      preRed <= costRelativeTolerance &&
                      ratio <= 2.0) ||
                     delta <= parRelativeTolerance * xNorm) {
-                    return new OptimumImpl(current, evaluationCounter.getCount(), iterationCounter.getCount());
+                    return Optimum.of(current, evaluationCounter.getCount(), iterationCounter.getCount());
                 }
 
                 // tests for termination and stringent tolerances

@@ -404,9 +404,9 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
             // Check convergence.
             if (previous != null &&
                 checker.converged(iterationCounter.getCount(), previous, current)) {
-                return new OptimumImpl(current,
-                                       evaluationCounter.getCount(),
-                                       iterationCounter.getCount());
+                return Optimum.of(current,
+                                  evaluationCounter.getCount(),
+                                  iterationCounter.getCount());
             }
 
             // solve the linearized least squares problem

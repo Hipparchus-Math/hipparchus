@@ -23,7 +23,6 @@ package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
 /**
  * An algorithm that can be applied to a non-linear least squares problem.
- *
  */
 public interface LeastSquaresOptimizer {
 
@@ -41,7 +40,6 @@ public interface LeastSquaresOptimizer {
      * The optimum found by the optimizer. This object contains the point, its value, and
      * some metadata.
      */
-    //TODO Solution?
     interface Optimum extends LeastSquaresProblem.Evaluation {
 
         /**
@@ -60,6 +58,20 @@ public interface LeastSquaresOptimizer {
          * @return the number of iterations
          */
         int getIterations();
+
+        /**
+         * Create a new optimum from an evaluation and the values of the counters.
+         *
+         * @param value       the function value
+         * @param evaluations number of times the function was evaluated
+         * @param iterations  number of iterations of the algorithm
+         * @return a new optimum based on the given data.
+         */
+        static Optimum of(final LeastSquaresProblem.Evaluation value,
+                          final int evaluations,
+                          final int iterations) {
+            return new OptimumImpl(value, evaluations, iterations);
+        }
 
     }
 
