@@ -28,6 +28,8 @@ import org.hipparchus.analysis.function.Log;
 import org.hipparchus.analysis.integration.gauss.GaussIntegrator;
 import org.hipparchus.analysis.integration.gauss.GaussIntegratorFactory;
 import org.hipparchus.analysis.integration.gauss.LegendreRuleFactory;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Test;
 import org.junit.Assert;
 
@@ -37,6 +39,18 @@ import org.junit.Assert;
  */
 public class LegendreTest {
     private static final GaussIntegratorFactory factory = new GaussIntegratorFactory();
+
+    @Test
+    public void testTooLArgeNumberOfPoints() {
+        try {
+            factory.legendre(10000, 0, Math.PI / 2);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, miae.getSpecifier());
+            Assert.assertEquals(10000, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(1000,  ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
 
     @Test
     public void testCos() {

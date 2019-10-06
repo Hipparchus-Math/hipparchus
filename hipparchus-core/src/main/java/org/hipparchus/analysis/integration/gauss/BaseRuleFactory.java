@@ -47,10 +47,13 @@ public abstract class BaseRuleFactory<T extends Number> {
     /**
      * Gets a copy of the quadrature rule with the given number of integration
      * points.
+     * The number of points is arbitrarily limited to 1000. It prevents resources
+     * exhaustion. In practice the number of points is often much lower.
      *
      * @param numberOfPoints Number of integration points.
      * @return a copy of the integration rule.
      * @throws MathIllegalArgumentException if {@code numberOfPoints < 1}.
+     * @throws MathIllegalArgumentException if {@code numberOfPoints > 1000}.
      * @throws MathIllegalArgumentException if the elements of the rule pair do not
      * have the same length.
      */
@@ -60,6 +63,10 @@ public abstract class BaseRuleFactory<T extends Number> {
         if (numberOfPoints <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_POINTS,
                                                    numberOfPoints);
+        }
+        if (numberOfPoints > 1000) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
+                                                   numberOfPoints, 1000);
         }
 
         // Try to obtain the rule from the cache.
