@@ -81,7 +81,7 @@ public class MathRuntimeException extends RuntimeException implements LocalizedE
     /** {@inheritDoc} */
     @Override
     public String getMessage(final Locale locale) {
-        return buildMessage(locale, specifier, parts);
+        return buildMessage(locale);
     }
 
     /** {@inheritDoc} */
@@ -111,20 +111,20 @@ public class MathRuntimeException extends RuntimeException implements LocalizedE
     /**
      * Builds a message string by from a pattern and its arguments.
      * @param locale Locale in which the message should be translated
-     * @param specifier format specifier (to be translated)
-     * @param parts parts to insert in the format (no translation)
      * @return a message string
      */
-    private String buildMessage(final Locale locale, final Localizable specifier, final Object ... parts) {
+    private String buildMessage(final Locale locale) {
         if (specifier == null) {
             return "";
         }
+        // CHECKSTYLE: stop IllegalCatch
         try {
             return new MessageFormat(specifier.getLocalizedString(locale), locale).format(parts);
         } catch (Exception e) {
             this.addSuppressed(e);
             return specifier.getSourceString();
         }
+        // CHECKSTYLE: resume IllegalCatch
     }
 
 }

@@ -120,6 +120,7 @@ public final class MathUtils {
       * <p>Note that due to numerical accuracy and since &pi; cannot be represented
       * exactly, the result interval is <em>closed</em>, it cannot be half-closed
       * as would be more satisfactory in a purely mathematical view.</p>
+      * @param <T> the type of the field elements
       * @param a angle to normalize
       * @param center center of the desired 2&pi; interval for the result
       * @return a-2k&pi; with integer k and center-&pi; &lt;= a-2k&pi; &lt;= center+&pi;
