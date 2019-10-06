@@ -32,9 +32,6 @@ import org.hipparchus.util.FastMath;
 /**
  * An implementation of {@link Evaluation} that is designed for extension. All of the
  * methods implemented here use the methods that are left unimplemented.
- * <p/>
- * TODO cache results?
- *
  */
 public abstract class AbstractEvaluation implements Evaluation {
 
@@ -45,9 +42,9 @@ public abstract class AbstractEvaluation implements Evaluation {
      * Constructor.
      *
      * @param observationSize the number of observations.
-     * Needed for {@link #getRMS()} and {@link #getReducedChiSquare()}.
+     * Needed for {@link #getRMS()} and {@link #getReducedChiSquare(int)}.
      */
-    AbstractEvaluation(final int observationSize) {
+    public AbstractEvaluation(final int observationSize) {
         this.observationSize = observationSize;
     }
 
