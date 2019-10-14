@@ -287,7 +287,7 @@ public class Vector2D implements Vector<Euclidean2D> {
 
         double dot = v1.dotProduct(v2);
         double threshold = normProduct * 0.9999;
-        if ((dot < -threshold) || (dot > threshold)) {
+        if (FastMath.abs(dot) > threshold) {
             // the vectors are almost aligned, compute using the sine
             final double n = FastMath.abs(MathArrays.linearCombination(v1.x, v2.y, -v1.y, v2.x));
             if (dot >= 0) {
@@ -406,7 +406,7 @@ public class Vector2D implements Vector<Euclidean2D> {
      * @since 1.6
      */
     public static double distance1(Vector2D p1, Vector2D p2) {
-        return p1.distance(p2);
+        return p1.distance1(p2);
     }
 
     /** Compute the distance between two vectors according to the L<sub>2</sub> norm.

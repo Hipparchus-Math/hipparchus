@@ -548,7 +548,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
 
         final T dot = v1.dotProduct(v2);
         final double threshold = normProduct.getReal() * 0.9999;
-        if ((dot.getReal() < -threshold) || (dot.getReal() > threshold)) {
+        if (FastMath.abs(dot.getReal()) > threshold) {
             // the vectors are almost aligned, compute using the sine
             final T n = FastMath.abs(dot.linearCombination(v1.x, v2.y, v1.y.negate(), v2.x));
             if (dot.getReal() >= 0) {
@@ -583,7 +583,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
 
         final T dot = v1.dotProduct(v2);
         final double threshold = normProduct.getReal() * 0.9999;
-        if ((dot.getReal() < -threshold) || (dot.getReal() > threshold)) {
+        if (FastMath.abs(dot.getReal()) > threshold) {
             // the vectors are almost aligned, compute using the sine
             final T n = FastMath.abs(dot.linearCombination(v2.getY(), v1.x, v2.getX(), v1.y.negate()));
             if (dot.getReal() >= 0) {
@@ -917,8 +917,56 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @param p2 second vector
      * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
      */
+    public static <T extends RealFieldElement<T>> T  distance1(final FieldVector2D<T> p1, final Vector2D p2) {
+        return p1.distance1(p2);
+    }
+
+    /** Compute the distance between two vectors according to the L<sub>2</sub> norm.
+     * <p>Calling this method is equivalent to calling:
+     * <code>p1.subtract(p2).getNorm()</code> except that no intermediate
+     * vector is built</p>
+     * @param p1 first vector
+     * @param p2 second vector
+     * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
+     */
+    public static <T extends RealFieldElement<T>> T  distance1(final Vector2D p1, final FieldVector2D<T> p2) {
+        return p2.distance1(p1);
+    }
+
+    /** Compute the distance between two vectors according to the L<sub>2</sub> norm.
+     * <p>Calling this method is equivalent to calling:
+     * <code>p1.subtract(p2).getNorm()</code> except that no intermediate
+     * vector is built</p>
+     * @param p1 first vector
+     * @param p2 second vector
+     * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
+     */
     public static <T extends RealFieldElement<T>> T distance(final FieldVector2D<T> p1, final FieldVector2D<T> p2) {
         return p1.distance(p2);
+    }
+
+    /** Compute the distance between two vectors according to the L<sub>2</sub> norm.
+     * <p>Calling this method is equivalent to calling:
+     * <code>p1.subtract(p2).getNorm()</code> except that no intermediate
+     * vector is built</p>
+     * @param p1 first vector
+     * @param p2 second vector
+     * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
+     */
+    public static <T extends RealFieldElement<T>> T distance(final FieldVector2D<T> p1, final Vector2D p2) {
+        return p1.distance(p2);
+    }
+
+    /** Compute the distance between two vectors according to the L<sub>2</sub> norm.
+     * <p>Calling this method is equivalent to calling:
+     * <code>p1.subtract(p2).getNorm()</code> except that no intermediate
+     * vector is built</p>
+     * @param p1 first vector
+     * @param p2 second vector
+     * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
+     */
+    public static <T extends RealFieldElement<T>> T distance( final Vector2D p1, final FieldVector2D<T> p2) {
+        return p2.distance(p1);
     }
 
     /** Compute the distance between two vectors according to the L<sub>&infin;</sub> norm.
@@ -933,6 +981,30 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
         return p1.distanceInf(p2);
     }
 
+    /** Compute the distance between two vectors according to the L<sub>&infin;</sub> norm.
+     * <p>Calling this method is equivalent to calling:
+     * <code>p1.subtract(p2).getNormInf()</code> except that no intermediate
+     * vector is built</p>
+     * @param p1 first vector
+     * @param p2 second vector
+     * @return the distance between p1 and p2 according to the L<sub>&infin;</sub> norm
+     */
+    public static <T extends RealFieldElement<T>> T distanceInf(final FieldVector2D<T> p1, final Vector2D p2) {
+        return p1.distanceInf(p2);
+    }
+
+    /** Compute the distance between two vectors according to the L<sub>&infin;</sub> norm.
+     * <p>Calling this method is equivalent to calling:
+     * <code>p1.subtract(p2).getNormInf()</code> except that no intermediate
+     * vector is built</p>
+     * @param p1 first vector
+     * @param p2 second vector
+     * @return the distance between p1 and p2 according to the L<sub>&infin;</sub> norm
+     */
+    public static <T extends RealFieldElement<T>> T distanceInf(final Vector2D p1, final FieldVector2D<T> p2) {
+        return p2.distanceInf(p1);
+    }
+
     /** Compute the square of the distance between two vectors.
      * <p>Calling this method is equivalent to calling:
      * <code>p1.subtract(p2).getNormSq()</code> except that no intermediate
@@ -943,6 +1015,30 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      */
     public static <T extends RealFieldElement<T>> T distanceSq(final FieldVector2D<T> p1, final FieldVector2D<T> p2) {
         return p1.distanceSq(p2);
+    }
+
+    /** Compute the square of the distance between two vectors.
+     * <p>Calling this method is equivalent to calling:
+     * <code>p1.subtract(p2).getNormSq()</code> except that no intermediate
+     * vector is built</p>
+     * @param p1 first vector
+     * @param p2 second vector
+     * @return the square of the distance between p1 and p2
+     */
+    public static <T extends RealFieldElement<T>> T distanceSq(final FieldVector2D<T> p1, final Vector2D p2) {
+        return p1.distanceSq(p2);
+    }
+
+    /** Compute the square of the distance between two vectors.
+     * <p>Calling this method is equivalent to calling:
+     * <code>p1.subtract(p2).getNormSq()</code> except that no intermediate
+     * vector is built</p>
+     * @param p1 first vector
+     * @param p2 second vector
+     * @return the square of the distance between p1 and p2
+     */
+    public static <T extends RealFieldElement<T>> T distanceSq(final Vector2D p1, final FieldVector2D<T> p2) {
+        return p2.distanceSq(p1);
     }
 
     /** Compute the orientation of a triplet of points.
