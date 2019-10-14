@@ -42,6 +42,26 @@ public class Vector2D implements Vector<Euclidean2D> {
     /** Origin (coordinates: 0, 0). */
     public static final Vector2D ZERO   = new Vector2D(0, 0);
 
+    /** First canonical vector (coordinates: 1, 0).
+     * @since 1.6
+     */
+    public static final Vector2D PLUS_I = new Vector2D(1, 0);
+
+    /** Opposite of the first canonical vector (coordinates: -1, 0).
+     * @since 1.6
+     */
+    public static final Vector2D MINUS_I = new Vector2D(-1, 0);
+
+    /** Second canonical vector (coordinates: 0, 1).
+     * @since 1.6
+     */
+    public static final Vector2D PLUS_J = new Vector2D(0, 1);
+
+    /** Opposite of the second canonical vector (coordinates: 0, -1).
+     * @since 1.6
+     */
+    public static final Vector2D MINUS_J = new Vector2D(0, -1);
+
     // CHECKSTYLE: stop ConstantName
     /** A vector with all coordinates set to NaN. */
     public static final Vector2D NaN = new Vector2D(Double.NaN, Double.NaN);
@@ -376,6 +396,19 @@ public class Vector2D implements Vector<Euclidean2D> {
         return MathArrays.linearCombination(x1, y1, -x2, y2);
     }
 
+    /** Compute the distance between two vectors according to the L<sub>1</sub> norm.
+     * <p>Calling this method is equivalent to calling:
+     * <code>p1.subtract(p2).getNorm1()</code> except that no intermediate
+     * vector is built</p>
+     * @param p1 first vector
+     * @param p2 second vector
+     * @return the distance between p1 and p2 according to the L<sub>1</sub> norm
+     * @since 1.6
+     */
+    public static double distance1(Vector2D p1, Vector2D p2) {
+        return p1.distance(p2);
+    }
+
     /** Compute the distance between two vectors according to the L<sub>2</sub> norm.
      * <p>Calling this method is equivalent to calling:
      * <code>p1.subtract(p2).getNorm()</code> except that no intermediate
@@ -416,8 +449,8 @@ public class Vector2D implements Vector<Euclidean2D> {
      * @param p first vector of the triplet
      * @param q second vector of the triplet
      * @param r third vector of the triplet
-     * @return a positive value if (p, q, r) define a counterclockwise oriented
-     * triangle, a negative value if (p, q, r) define a clockwise oriented
+     * @return a positive value if (p, q, r) defines a counterclockwise oriented
+     * triangle, a negative value if (p, q, r) defines a clockwise oriented
      * triangle, and 0 if (p, q, r) are collinear or some points are equal
      * @since 1.2
      */
