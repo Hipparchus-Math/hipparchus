@@ -535,6 +535,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * other.</p>
      * @param v1 first vector
      * @param v2 second vector
+     * @param <T> the type of the field elements
      * @return angular separation between v1 and v2
      * @exception MathRuntimeException if either vector has a null norm
      */
@@ -570,6 +571,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * other.</p>
      * @param v1 first vector
      * @param v2 second vector
+     * @param <T> the type of the field elements
      * @return angular separation between v1 and v2
      * @exception MathRuntimeException if either vector has a null norm
      */
@@ -605,6 +607,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * other.</p>
      * @param v1 first vector
      * @param v2 second vector
+     * @param <T> the type of the field elements
      * @return angular separation between v1 and v2
      * @exception MathRuntimeException if either vector has a null norm
      */
@@ -903,6 +906,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector
+     * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
      */
     public static <T extends RealFieldElement<T>> T  distance1(final FieldVector2D<T> p1, final FieldVector2D<T> p2) {
@@ -915,6 +919,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector
+     * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
      */
     public static <T extends RealFieldElement<T>> T  distance1(final FieldVector2D<T> p1, final Vector2D p2) {
@@ -927,6 +932,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector
+     * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
      */
     public static <T extends RealFieldElement<T>> T  distance1(final Vector2D p1, final FieldVector2D<T> p2) {
@@ -939,6 +945,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector
+     * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distance(final FieldVector2D<T> p1, final FieldVector2D<T> p2) {
@@ -951,6 +958,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector
+     * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distance(final FieldVector2D<T> p1, final Vector2D p2) {
@@ -963,6 +971,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector
+     * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distance( final Vector2D p1, final FieldVector2D<T> p2) {
@@ -975,6 +984,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector
+     * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>&infin;</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distanceInf(final FieldVector2D<T> p1, final FieldVector2D<T> p2) {
@@ -987,6 +997,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector
+     * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>&infin;</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distanceInf(final FieldVector2D<T> p1, final Vector2D p2) {
@@ -999,6 +1010,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector
+     * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>&infin;</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distanceInf(final Vector2D p1, final FieldVector2D<T> p2) {
@@ -1011,6 +1023,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector
+     * @param <T> the type of the field elements
      * @return the square of the distance between p1 and p2
      */
     public static <T extends RealFieldElement<T>> T distanceSq(final FieldVector2D<T> p1, final FieldVector2D<T> p2) {
@@ -1023,6 +1036,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector
+     * @param <T> the type of the field elements
      * @return the square of the distance between p1 and p2
      */
     public static <T extends RealFieldElement<T>> T distanceSq(final FieldVector2D<T> p1, final Vector2D p2) {
@@ -1035,6 +1049,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * vector is built</p>
      * @param p1 first vector
      * @param p2 second vector
+     * @param <T> the type of the field elements
      * @return the square of the distance between p1 and p2
      */
     public static <T extends RealFieldElement<T>> T distanceSq(final Vector2D p1, final FieldVector2D<T> p2) {
@@ -1045,6 +1060,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @param p first vector of the triplet
      * @param q second vector of the triplet
      * @param r third vector of the triplet
+     * @param <T> the type of the field elements
      * @return a positive value if (p, q, r) defines a counterclockwise oriented
      * triangle, a negative value if (p, q, r) defines a clockwise oriented
      * triangle, and 0 if (p, q, r) are collinear or some points are equal
