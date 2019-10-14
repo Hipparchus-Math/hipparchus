@@ -444,7 +444,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         return array;
     }
 
-    /** Convert to a constant vector without derivatives.
+    /** Convert to a constant vector without extra field parts.
      * @return a constant vector
      */
     public Vector3D toVector3D() {
@@ -478,22 +478,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return L<sub>&infin;</sub> norm for the vector
      */
     public T getNormInf() {
-        final T xAbs = x.abs();
-        final T yAbs = y.abs();
-        final T zAbs = z.abs();
-        if (xAbs.getReal() <= yAbs.getReal()) {
-            if (yAbs.getReal() <= zAbs.getReal()) {
-                return zAbs;
-            } else {
-                return yAbs;
-            }
-        } else {
-            if (xAbs.getReal() <= zAbs.getReal()) {
-                return zAbs;
-            } else {
-                return xAbs;
-            }
-        }
+        return FastMath.max(FastMath.abs(x), FastMath.max(FastMath.abs(y), FastMath.abs(z)));
     }
 
     /** Get the azimuth of the vector.
@@ -816,8 +801,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      *
      * @param other Object to test for equality to this
      * @return true if two 3D vector objects are equal, false if
-     *         object is null, not an instance of Vector3D, or
-     *         not equal to this Vector3D instance
+     *         object is null, not an instance of FieldVector3D, or
+     *         not equal to this FieldVector3D instance
      *
      */
     @Override
@@ -1046,7 +1031,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the dot product v1.v2
      */
     public static <T extends RealFieldElement<T>> T dotProduct(final FieldVector3D<T> v1,
-                                                                   final FieldVector3D<T> v2) {
+                                                               final FieldVector3D<T> v2) {
         return v1.dotProduct(v2);
     }
 
@@ -1057,7 +1042,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the dot product v1.v2
      */
     public static <T extends RealFieldElement<T>> T dotProduct(final FieldVector3D<T> v1,
-                                                                   final Vector3D v2) {
+                                                               final Vector3D v2) {
         return v1.dotProduct(v2);
     }
 
@@ -1068,7 +1053,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the dot product v1.v2
      */
     public static <T extends RealFieldElement<T>> T dotProduct(final Vector3D v1,
-                                                                   final FieldVector3D<T> v2) {
+                                                               final FieldVector3D<T> v2) {
         return v2.dotProduct(v1);
     }
 
@@ -1079,7 +1064,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the cross product v1 ^ v2 as a new Vector
      */
     public static <T extends RealFieldElement<T>> FieldVector3D<T> crossProduct(final FieldVector3D<T> v1,
-                                                                                    final FieldVector3D<T> v2) {
+                                                                                final FieldVector3D<T> v2) {
         return v1.crossProduct(v2);
     }
 
@@ -1090,7 +1075,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the cross product v1 ^ v2 as a new Vector
      */
     public static <T extends RealFieldElement<T>> FieldVector3D<T> crossProduct(final FieldVector3D<T> v1,
-                                                                                    final Vector3D v2) {
+                                                                                final Vector3D v2) {
         return v1.crossProduct(v2);
     }
 
@@ -1101,7 +1086,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the cross product v1 ^ v2 as a new Vector
      */
     public static <T extends RealFieldElement<T>> FieldVector3D<T> crossProduct(final Vector3D v1,
-                                                                                    final FieldVector3D<T> v2) {
+                                                                                final FieldVector3D<T> v2) {
         return new FieldVector3D<T>(v2.x.linearCombination(v1.getY(), v2.z, -v1.getZ(), v2.y),
                                     v2.y.linearCombination(v1.getZ(), v2.x, -v1.getX(), v2.z),
                                     v2.z.linearCombination(v1.getX(), v2.y, -v1.getY(), v2.x));
@@ -1117,7 +1102,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the distance between v1 and v2 according to the L<sub>1</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distance1(final FieldVector3D<T> v1,
-                                                                  final FieldVector3D<T> v2) {
+                                                              final FieldVector3D<T> v2) {
         return v1.distance1(v2);
     }
 
@@ -1131,7 +1116,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the distance between v1 and v2 according to the L<sub>1</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distance1(final FieldVector3D<T> v1,
-                                                                  final Vector3D v2) {
+                                                              final Vector3D v2) {
         return v1.distance1(v2);
     }
 
@@ -1145,7 +1130,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the distance between v1 and v2 according to the L<sub>1</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distance1(final Vector3D v1,
-                                                                  final FieldVector3D<T> v2) {
+                                                              final FieldVector3D<T> v2) {
         return v2.distance1(v1);
     }
 
@@ -1159,7 +1144,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the distance between v1 and v2 according to the L<sub>2</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distance(final FieldVector3D<T> v1,
-                                                                 final FieldVector3D<T> v2) {
+                                                             final FieldVector3D<T> v2) {
         return v1.distance(v2);
     }
 
@@ -1173,7 +1158,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the distance between v1 and v2 according to the L<sub>2</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distance(final FieldVector3D<T> v1,
-                                                                 final Vector3D v2) {
+                                                             final Vector3D v2) {
         return v1.distance(v2);
     }
 
@@ -1187,7 +1172,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the distance between v1 and v2 according to the L<sub>2</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distance(final Vector3D v1,
-                                                                 final FieldVector3D<T> v2) {
+                                                             final FieldVector3D<T> v2) {
         return v2.distance(v1);
     }
 
@@ -1201,7 +1186,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the distance between v1 and v2 according to the L<sub>&infin;</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distanceInf(final FieldVector3D<T> v1,
-                                                                    final FieldVector3D<T> v2) {
+                                                                final FieldVector3D<T> v2) {
         return v1.distanceInf(v2);
     }
 
@@ -1215,7 +1200,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the distance between v1 and v2 according to the L<sub>&infin;</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distanceInf(final FieldVector3D<T> v1,
-                                                                    final Vector3D v2) {
+                                                                final Vector3D v2) {
         return v1.distanceInf(v2);
     }
 
@@ -1229,7 +1214,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the distance between v1 and v2 according to the L<sub>&infin;</sub> norm
      */
     public static <T extends RealFieldElement<T>> T distanceInf(final Vector3D v1,
-                                                                    final FieldVector3D<T> v2) {
+                                                                final FieldVector3D<T> v2) {
         return v2.distanceInf(v1);
     }
 
@@ -1243,7 +1228,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the square of the distance between v1 and v2
      */
     public static <T extends RealFieldElement<T>> T distanceSq(final FieldVector3D<T> v1,
-                                                                   final FieldVector3D<T> v2) {
+                                                               final FieldVector3D<T> v2) {
         return v1.distanceSq(v2);
     }
 
@@ -1257,7 +1242,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the square of the distance between v1 and v2
      */
     public static <T extends RealFieldElement<T>> T distanceSq(final FieldVector3D<T> v1,
-                                                                   final Vector3D v2) {
+                                                               final Vector3D v2) {
         return v1.distanceSq(v2);
     }
 
@@ -1271,7 +1256,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the square of the distance between v1 and v2
      */
     public static <T extends RealFieldElement<T>> T distanceSq(final Vector3D v1,
-                                                                   final FieldVector3D<T> v2) {
+                                                               final FieldVector3D<T> v2) {
         return v2.distanceSq(v1);
     }
 

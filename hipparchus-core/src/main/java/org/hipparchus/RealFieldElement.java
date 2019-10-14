@@ -386,7 +386,7 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      * @see #linearCombination(double, Object, double, Object)
      * @see #linearCombination(double, Object, double, Object, double, Object, double, Object)
      */
-    T linearCombination(double a1, T b1,  double a2, T b2, double a3, T b3);
+    T linearCombination(double a1, T b1, double a2, T b2, double a3, T b3);
 
     /**
      * Compute a linear combination.

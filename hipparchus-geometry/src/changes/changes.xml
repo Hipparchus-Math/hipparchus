@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Geometry Release Notes</title>
   </properties>
   <body>
+    <release version="1.6"  date="TBD" description="TBD">
+      <action dev="luc" type="add">
+        Added field version of Vector2D.
+      </action>
+    </release>
     <release version="1.5" date="2019-05-06" description="This is a maintenance release, it
     includes only bug fixes.">
       <action dev="luc" type="fix" due-to="Matt Juntunen">
