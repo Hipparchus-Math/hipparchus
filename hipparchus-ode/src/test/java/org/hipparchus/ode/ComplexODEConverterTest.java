@@ -40,6 +40,17 @@ public class ComplexODEConverterTest {
         ComplexODEConverter converter = new ComplexODEConverter();
         ComplexOrdinaryDifferentialEquation circle = new Circle(1, omega);
         ComplexODEState initial = new ComplexODEState(0.0, new Complex[] { Complex.ONE });
+        ComplexODEStateAndDerivative der = new ComplexODEStateAndDerivative(initial.getTime(),
+                                                                            initial.getPrimaryState(),
+                                                                            circle.computeDerivatives(initial.getTime(),
+                                                                                                      initial.getPrimaryState()));
+        Assert.assertEquals(initial.getTime(), der.getTime(), 1.0e-15);
+        Assert.assertEquals(initial.getPrimaryState()[0], der.getPrimaryState()[0]);
+        Assert.assertEquals(initial.getPrimaryState()[0], der.getCompleteState()[0]);
+        Assert.assertEquals(initial.getPrimaryState()[0].multiply(((Circle) circle).iOmega),
+                            der.getSecondaryDerivative(0)[0]);
+        Assert.assertEquals(initial.getPrimaryState()[0].multiply(((Circle) circle).iOmega),
+                            der.getCompleteDerivative()[0]);
         LutherIntegrator integrator = new LutherIntegrator(1.0e-3);
         final ComplexODEStateAndDerivative finalstate =
                         converter.convertState(integrator.integrate(converter.convertEquations(circle),
@@ -71,6 +82,39 @@ public class ComplexODEConverterTest {
                                                           { Complex.ONE },
                                                           { Complex.ONE }
                                                       });
+        ComplexODEStateAndDerivative der = new ComplexODEStateAndDerivative(initial.getTime(),
+                                                                            initial.getPrimaryState(),
+                                                                            primary.computeDerivatives(initial.getTime(),
+                                                                                                      initial.getPrimaryState()),
+                                                                            new Complex[][] {
+                                                                                initial.getSecondaryState(0),
+                                                                                initial.getSecondaryState(1)
+                                                                            },
+                                                                            new Complex[][] {
+                                                                                secondary0.computeDerivatives(initial.getTime(),
+                                                                                                              initial.getPrimaryState(),
+                                                                                                              primary.computeDerivatives(initial.getTime(),
+                                                                                                                                         initial.getPrimaryState()),
+                                                                                                              initial.getSecondaryState(0)),
+                                                                                secondary1.computeDerivatives(initial.getTime(),
+                                                                                                              initial.getPrimaryState(),
+                                                                                                              primary.computeDerivatives(initial.getTime(),
+                                                                                                                                         initial.getPrimaryState()),
+                                                                                                              initial.getSecondaryState(1))
+                                                                            });
+        Assert.assertEquals(initial.getTime(), der.getTime(), 1.0e-15);
+        Assert.assertEquals(initial.getPrimaryState()[0], der.getPrimaryState()[0]);
+        Assert.assertEquals(initial.getPrimaryState()[0], der.getCompleteState()[0]);
+        Assert.assertEquals(initial.getSecondaryState(0)[0], der.getCompleteState()[1]);
+        Assert.assertEquals(initial.getSecondaryState(1)[0], der.getCompleteState()[2]);
+        Assert.assertEquals(initial.getPrimaryState()[0].multiply(((Circle) primary).iOmega),
+                            der.getSecondaryDerivative(0)[0]);
+        Assert.assertEquals(initial.getPrimaryState()[0].multiply(((Circle) primary).iOmega),
+                            der.getCompleteDerivative()[0]);
+        Assert.assertEquals(initial.getSecondaryState(0)[0].multiply(((Circle) secondary0).iOmega),
+                            der.getCompleteDerivative()[1]);
+        Assert.assertEquals(initial.getSecondaryState(1)[0].multiply(((Circle) secondary1).iOmega),
+                            der.getCompleteDerivative()[2]);
         LutherIntegrator integrator = new LutherIntegrator(1.0e-3);
         final ComplexODEStateAndDerivative finalstate =
                         converter.convertState(integrator.integrate(expandable,

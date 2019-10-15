@@ -161,6 +161,12 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
                                   final double[] vecAbsoluteTolerance,
                                   final double[] vecRelativeTolerance) {
         super(name, minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
+
+        if (nSteps < 2) {
+            throw new MathIllegalArgumentException(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
+                                                   nSteps, 2, true);
+        }
+
         starter = new DormandPrince853Integrator(minStep, maxStep,
                                                  vecAbsoluteTolerance,
                                                  vecRelativeTolerance);

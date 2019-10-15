@@ -53,6 +53,25 @@ public abstract class AdamsIntegratorAbstractTest {
     @Test(expected=MathIllegalArgumentException.class)
     public abstract void testMinStep();
 
+    protected void doNbPointsTest() {
+        try {
+            createIntegrator(1, 1.0e-3, 1.0e+3, 1.0e-15, 1.0e-15);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
+                                miae.getSpecifier());
+        }
+        try {
+            double[] vecAbsoluteTolerance = { 1.0e-15, 1.0e-16 };
+            double[] vecRelativeTolerance = { 1.0e-15, 1.0e-16 };
+            createIntegrator(1, 1.0e-3, 1.0e+3, vecAbsoluteTolerance, vecRelativeTolerance);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
+                                miae.getSpecifier());
+        }
+    }
+
     protected void doDimensionCheck() {
         TestProblem1 pb = new TestProblem1();
 
@@ -81,7 +100,13 @@ public abstract class AdamsIntegratorAbstractTest {
             double scalAbsoluteTolerance = FastMath.pow(10.0, i);
             double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
 
-            ODEIntegrator integ = createIntegrator(4, minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
+            MultistepIntegrator integ = createIntegrator(4, minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
+            int orderCorrection = integ instanceof AdamsBashforthIntegrator ? 0 : 1;
+            Assert.assertEquals(FastMath.pow(2.0, 1.0 / (4 + orderCorrection)), integ.getMaxGrowth(), 1.0e-10);
+            Assert.assertEquals(0.2, integ.getMinReduction(), 1.0e-10);
+            Assert.assertEquals(4, integ.getNSteps());
+            Assert.assertEquals(0.9, integ.getSafety(), 1.0e-10);
+             Assert.assertTrue(integ.getStarterIntegrator() instanceof DormandPrince853Integrator);
             TestProblemHandler handler = new TestProblemHandler(pb, integ);
             integ.addStepHandler(handler);
             integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());

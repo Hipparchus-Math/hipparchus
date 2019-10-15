@@ -41,6 +41,11 @@ public class AdamsMoultonFieldIntegratorTest extends AdamsFieldIntegratorAbstrac
                         vecAbsoluteTolerance, vecRelativeTolerance);
     }
 
+    @Test
+    public void testNbPoints() {
+        doNbPointsTest();
+    }
+
     @Test(expected=MathIllegalArgumentException.class)
     public void testMinStep() {
         doDimensionCheck(Decimal64Field.getInstance());

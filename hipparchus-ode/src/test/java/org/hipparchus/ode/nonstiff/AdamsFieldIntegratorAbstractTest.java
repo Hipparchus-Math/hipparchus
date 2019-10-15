@@ -20,23 +20,25 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
 import org.hipparchus.ode.FieldExpandableODE;
+import org.hipparchus.ode.FieldODEIntegrator;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.ode.FieldSecondaryODE;
-import org.hipparchus.ode.FieldODEIntegrator;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.MultistepFieldIntegrator;
 import org.hipparchus.ode.TestFieldProblem1;
 import org.hipparchus.ode.TestFieldProblem5;
 import org.hipparchus.ode.TestFieldProblem6;
 import org.hipparchus.ode.TestFieldProblemAbstract;
 import org.hipparchus.ode.TestFieldProblemHandler;
-import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
+import org.hipparchus.ode.sampling.FieldODEStepHandler;
+import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -72,6 +74,26 @@ public abstract class AdamsFieldIntegratorAbstractTest {
 
     }
 
+    protected void doNbPointsTest() {
+        try {
+            createIntegrator(Decimal64Field.getInstance(), 1, 1.0e-3, 1.0e+3, 1.0e-15, 1.0e-15);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
+                                miae.getSpecifier());
+        }
+        try {
+            double[] vecAbsoluteTolerance = { 1.0e-15, 1.0e-16 };
+            double[] vecRelativeTolerance = { 1.0e-15, 1.0e-16 };
+            createIntegrator(Decimal64Field.getInstance(),
+                             1, 1.0e-3, 1.0e+3, vecAbsoluteTolerance, vecRelativeTolerance);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
+                                miae.getSpecifier());
+        }
+    }
+
     @Test
     public abstract void testIncreasingTolerance();
 
@@ -86,9 +108,15 @@ public abstract class AdamsFieldIntegratorAbstractTest {
             double scalAbsoluteTolerance = FastMath.pow(10.0, i);
             double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
 
-            FieldODEIntegrator<T> integ = createIntegrator(field, 4, minStep, maxStep,
-                                                                  scalAbsoluteTolerance,
-                                                                  scalRelativeTolerance);
+            MultistepFieldIntegrator<T> integ = createIntegrator(field, 4, minStep, maxStep,
+                                                                 scalAbsoluteTolerance,
+                                                                 scalRelativeTolerance);
+            int orderCorrection = integ instanceof AdamsBashforthFieldIntegrator ? 0 : 1;
+            Assert.assertEquals(FastMath.pow(2.0, 1.0 / (4 + orderCorrection)), integ.getMaxGrowth(), 1.0e-10);
+            Assert.assertEquals(0.2, integ.getMinReduction(), 1.0e-10);
+            Assert.assertEquals(4, integ.getNSteps());
+            Assert.assertEquals(0.9, integ.getSafety(), 1.0e-10);
+             Assert.assertTrue(integ.getStarterIntegrator() instanceof DormandPrince853FieldIntegrator);
             TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
             integ.addStepHandler(handler);
             integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
