@@ -43,7 +43,6 @@ import org.hipparchus.random.Well1024a;
 import org.hipparchus.random.Well19937a;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class FastMathTest {
@@ -1349,12 +1348,6 @@ public class FastMathTest {
     public void checkMissingFastMathClasses() {
         boolean ok = compareClassMethods(StrictMath.class, FastMath.class);
         assertTrue("FastMath should implement all StrictMath methods", ok);
-    }
-
-    @Ignore
-    @Test
-    public void checkExtraFastMathClasses() {
-        compareClassMethods( FastMath.class, StrictMath.class);
     }
 
     @Test
