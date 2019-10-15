@@ -24,16 +24,16 @@ package org.hipparchus.linear;
 
 import java.util.Iterator;
 
-import org.hipparchus.linear.RealVector;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.linear.RealVector.Entry;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
  * Tests for {@link RealVector}.
  */
-public class RealVectorTest extends RealVectorAbstractTest{
+public class RealVectorTest extends RealVectorAbstractTest {
 
     @Override
     public RealVector create(final double[] data) {
@@ -41,157 +41,123 @@ public class RealVectorTest extends RealVectorAbstractTest{
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement append(RealVector).")
     @Override
     public void testAppendVector() {
-        // Do nothing
+        checkUnsupported(() -> super.testAppendVector());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement append(double)")
     @Override
     public void testAppendScalar() {
-        // Do nothing
+        checkUnsupported(() -> super.testAppendScalar());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement getSubvector(int, int)")
     @Override
     public void testGetSubVector() {
-        // Do nothing
+        checkUnsupported(() -> super.testGetSubVector());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement getSubvector(int, int)")
     @Override
     public void testGetSubVectorInvalidIndex1() {
-        // Do nothing
+        checkUnsupported(() -> super.testGetSubVectorInvalidIndex1());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement getSubvector(int, int)")
     @Override
     public void testGetSubVectorInvalidIndex2() {
-        // Do nothing
+        checkUnsupported(() -> super.testGetSubVectorInvalidIndex2());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement getSubvector(int, int)")
     @Override
     public void testGetSubVectorInvalidIndex3() {
-        // Do nothing
+        checkUnsupported(() -> super.testGetSubVectorInvalidIndex3());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement getSubvector(int, int)")
     @Override
     public void testGetSubVectorInvalidIndex4() {
-        // Do nothing
+        checkUnsupported(() -> super.testGetSubVectorInvalidIndex4());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement setSubvector(int, RealVector)")
     @Override
     public void testSetSubVectorSameType() {
-        // Do nothing
+        checkUnsupported(() -> super.testSetSubVectorSameType());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement setSubvector(int, RealVector)")
     @Override
     public void testSetSubVectorMixedType() {
-        // Do nothing
+        checkUnsupported(() -> super.testSetSubVectorMixedType());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement setSubvector(int, RealVector)")
     @Override
     public void testSetSubVectorInvalidIndex1() {
-        // Do nothing
+        checkUnsupported(() -> super.testSetSubVectorInvalidIndex1());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement setSubvector(int, RealVector)")
     @Override
     public void testSetSubVectorInvalidIndex2() {
-        // Do nothing
+        checkUnsupported(() -> super.testSetSubVectorInvalidIndex2());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement setSubvector(int, RealVector)")
     @Override
     public void testSetSubVectorInvalidIndex3() {
-        // Do nothing
+        checkUnsupported(() -> super.testSetSubVectorInvalidIndex3());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement isNaN()")
     @Override
     public void testIsNaN() {
-        // Do nothing
+        checkUnsupported(() -> super.testIsNaN());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement isNaN()")
     @Override
     public void testIsInfinite() {
-        // Do nothing
+        checkUnsupported(() -> super.testIsInfinite());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement ebeMultiply(RealVector)")
     @Override
     public void testEbeMultiplySameType() {
-        // Do nothing
+        checkUnsupported(() -> super.testEbeMultiplySameType());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement ebeMultiply(RealVector)")
     @Override
     public void testEbeMultiplyMixedTypes() {
-        // Do nothing
+        checkUnsupported(() -> super.testEbeMultiplyMixedTypes());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement ebeMultiply(RealVector)")
     @Override
     public void testEbeMultiplyDimensionMismatch() {
-        // Do nothing
+        checkUnsupported(() -> super.testEbeMultiplyDimensionMismatch());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement ebeDivide(RealVector)")
     @Override
     public void testEbeDivideSameType() {
-        // Do nothing
+        checkUnsupported(() -> super.testEbeDivideSameType());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement ebeDivide(RealVector)")
     @Override
     public void testEbeDivideMixedTypes() {
-        // Do nothing
+        checkUnsupported(() -> super.testEbeDivideMixedTypes());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not implement ebeDivide(RealVector)")
     @Override
     public void testEbeDivideDimensionMismatch() {
-        // Do nothing
-    }
-
-    @Test
-    @Ignore("Abstract class RealVector does not implement getL1Norm()")
-    @Override
-    public void testGetL1Norm() {
-        // Do nothing
-    }
-
-    @Test
-    @Ignore("Abstract class RealVector does not implement getLInfNorm()")
-    @Override
-    public void testGetLInfNorm() {
-        // Do nothing
+        checkUnsupported(() -> super.testEbeDivideDimensionMismatch());
     }
 
     @Test
@@ -224,16 +190,30 @@ public class RealVectorTest extends RealVectorAbstractTest{
     }
 
     @Test
-    @Ignore("Abstract class RealVector is not serializable.")
     @Override
     public void testSerial() {
-        // Do nothing
+        checkUnsupported(() -> super.testSerial());
     }
 
     @Test
-    @Ignore("Abstract class RealVector does not override equals(Object).")
     @Override
     public void testEquals() {
-        // Do nothing
+        checkUnsupported(() -> super.testEquals());
     }
+
+    interface Thunk {
+        void call();
+    }
+
+    private void checkUnsupported(final Thunk t) {
+        try {
+            t.call();
+            Assert.fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            Assert.assertEquals(LocalizedCoreFormats.UNSUPPORTED_OPERATION, mre.getSpecifier());
+        } catch (UnsupportedOperationException uoe) {
+            // expected
+        }
+    }
+
 }
