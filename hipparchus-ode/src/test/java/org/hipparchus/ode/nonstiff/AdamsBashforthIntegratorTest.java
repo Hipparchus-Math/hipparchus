@@ -38,6 +38,11 @@ public class AdamsBashforthIntegratorTest extends AdamsIntegratorAbstractTest {
                         vecAbsoluteTolerance, vecRelativeTolerance);
     }
 
+    @Test
+    public void testNbPoints() {
+        doNbPointsTest();
+    }
+
     @Test(expected=MathIllegalArgumentException.class)
     public void testMinStep() {
         doDimensionCheck();

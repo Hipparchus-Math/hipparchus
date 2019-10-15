@@ -158,13 +158,8 @@ public class FieldStepNormalizerTest {
 
     private static class Checker<T extends RealFieldElement<T>> implements FieldODEFixedStepHandler<T> {
 
-        private T firstTime;
-        private T lastTime;
-
-        public void init(final FieldODEStateAndDerivative<T> initialState, final T finalTime) {
-            firstTime = null;
-            lastTime  = null;
-        }
+        private T firstTime = null;
+        private T lastTime = null;
 
         public void handleStep(FieldODEStateAndDerivative<T> s, boolean isLast) {
             if (firstTime == null) {

@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.6"  date="TBD" description="TBD">
+     <action dev="luc" type="fix" issue="issues/62" >
+       Fixed missing safety check in multi-step integrators.
+       Github: fixes #62.
+     </action>
       <action dev="luc" type="add">
         Added field version of Vector2D.
       </action>
