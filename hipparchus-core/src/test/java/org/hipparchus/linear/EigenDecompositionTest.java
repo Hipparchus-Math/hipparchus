@@ -27,13 +27,14 @@ import java.util.Random;
 
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.random.RandomDataGenerator;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Precision;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class EigenDecompositionTest {
@@ -432,10 +433,9 @@ public class EigenDecompositionTest {
     }
 
     @Test
-    @Ignore
     public void testRandomUnsymmetricMatrix() {
         for (int run = 0; run < 100; run++) {
-            Random r = new Random(System.currentTimeMillis());
+            RandomGenerator r = new Well1024a(0x171956baefeac83el);
 
             // matrix size
             int size = r.nextInt(20) + 4;
@@ -473,10 +473,9 @@ public class EigenDecompositionTest {
     }
 
     @Test
-    @Ignore
     public void testNormalDistributionUnsymmetricMatrix() {
         for (int run = 0; run < 100; run++) {
-            final Random r = new Random(System.currentTimeMillis());
+            final RandomGenerator r = new Well1024a(0x511d8551a5641ea2l);
             final RandomDataGenerator gen = new RandomDataGenerator(100);
 
             // matrix size
