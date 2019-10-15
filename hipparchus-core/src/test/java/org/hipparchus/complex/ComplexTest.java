@@ -25,12 +25,9 @@ package org.hipparchus.complex;
 import java.util.List;
 
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.complex.Complex;
-import org.hipparchus.complex.ComplexUtils;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -820,34 +817,6 @@ public class ComplexTest {
     @Test
     public void testExpInf3() {
         UnitTestUtils.assertSame(infInf, infOne.exp());
-    }
-
-    @Test
-    @Ignore
-    public void testJava() {// TODO more debug
-        System.out.println(">>testJava()");
-        // FastMathTest#testExpSpecialCases() checks the following:
-        // Assert.assertEquals("exp of -infinity should be 0.0", 0.0, FastMath.exp(Double.NEGATIVE_INFINITY), Precision.EPSILON);
-        // Let's check how well Math works:
-        System.out.println("Math.exp="+Math.exp(Double.NEGATIVE_INFINITY));
-        String props[] = {
-        "java.version", //    Java Runtime Environment version
-        "java.vendor", // Java Runtime Environment vendor
-        "java.vm.specification.version", //   Java Virtual Machine specification version
-        "java.vm.specification.vendor", //    Java Virtual Machine specification vendor
-        "java.vm.specification.name", //  Java Virtual Machine specification name
-        "java.vm.version", // Java Virtual Machine implementation version
-        "java.vm.vendor", //  Java Virtual Machine implementation vendor
-        "java.vm.name", //    Java Virtual Machine implementation name
-        "java.specification.version", //  Java Runtime Environment specification version
-        "java.specification.vendor", //   Java Runtime Environment specification vendor
-        "java.specification.name", // Java Runtime Environment specification name
-        "java.class.version", //  Java class format version number
-        };
-        for(String t : props) {
-            System.out.println(t + "=" + System.getProperty(t));
-        }
-        System.out.println("<<testJava()");
     }
 
     @Test
