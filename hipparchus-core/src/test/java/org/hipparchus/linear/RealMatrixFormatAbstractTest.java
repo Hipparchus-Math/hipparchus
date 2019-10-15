@@ -26,7 +26,6 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.Assert;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -197,12 +196,9 @@ public abstract class RealMatrixFormatAbstractTest {
     }
 
     @Test
-    @Ignore
     public void testParseSimpleWithClosingRowSeparator() {
         String source = "{{1, 1, 1},{1, 1, 1}, }}";
-        RealMatrix expected = MatrixUtils.createRealMatrix(new double[][] {{1, 1, 1}, {1, 1, 1}});
-        RealMatrix actual = realMatrixFormat.parse(source);
-        Assert.assertEquals(expected, actual);
+        Assert.assertNull(realMatrixFormat.parse(source));
     }
 
     @Test
