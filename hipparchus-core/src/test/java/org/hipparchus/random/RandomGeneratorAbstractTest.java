@@ -31,7 +31,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -317,19 +316,6 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
     public void testNextBytesChunks() {
         final int[] chunkSizes = { 4, 8, 12, 16 };
         final int[] chunks = { 1, 2, 3, 4, 5 };
-        for (int chunkSize : chunkSizes) {
-            for (int numChunks : chunks) {
-                checkNextBytesChunks(chunkSize, numChunks);
-            }
-        }
-    }
-
-    // MATH-1300: Test is ignored because it will fail due to the array
-    // size not being a multiple of 4.
-    @Ignore@Test
-    public void testNextBytesChunksFail() {
-        final int[] chunkSizes = { 5 };
-        final int[] chunks = { 4 };
         for (int chunkSize : chunkSizes) {
             for (int numChunks : chunks) {
                 checkNextBytesChunks(chunkSize, numChunks);
