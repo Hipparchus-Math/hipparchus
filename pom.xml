@@ -109,7 +109,7 @@
             <!-- override the value hacked in the parent pom, only for the aggregator module -->
             <stagingDirectory>${project.build.directory}/staging</stagingDirectory>
           </configuration>
-        </plugin>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
