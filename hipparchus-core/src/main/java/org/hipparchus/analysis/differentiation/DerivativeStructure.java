@@ -1001,17 +1001,15 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
                                                  final double a2, final DerivativeStructure b2)
         throws MathIllegalArgumentException {
 
-        // compute an accurate value, taking care of cancellations
-        final double accurateValue = MathArrays.linearCombination(a1, b1.getValue(),
-                                                                  a2, b2.getValue());
+        factory.checkCompatibility(b1.factory);
+        factory.checkCompatibility(b2.factory);
 
-        // compute a simple value, with all partial derivatives
-        final DerivativeStructure simpleValue = b1.multiply(a1).add(b2.multiply(a2));
+        final DerivativeStructure ds = factory.build();
+        factory.getCompiler().linearCombination(a1, b1.data, 0,
+                                                a2, b2.data, 0,
+                                                ds.data, 0);
 
-        // create a result with accurate value and all derivatives (not necessarily as accurate as the value)
-        final double[] all = simpleValue.getAllDerivatives();
-        all[0] = accurateValue;
-        return factory.build(all);
+        return ds;
 
     }
 
@@ -1050,18 +1048,17 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
                                                  final double a3, final DerivativeStructure b3)
         throws MathIllegalArgumentException {
 
-        // compute an accurate value, taking care of cancellations
-        final double accurateValue = MathArrays.linearCombination(a1, b1.getValue(),
-                                                                  a2, b2.getValue(),
-                                                                  a3, b3.getValue());
+        factory.checkCompatibility(b1.factory);
+        factory.checkCompatibility(b2.factory);
+        factory.checkCompatibility(b3.factory);
 
-        // compute a simple value, with all partial derivatives
-        final DerivativeStructure simpleValue = b1.multiply(a1).add(b2.multiply(a2)).add(b3.multiply(a3));
+        final DerivativeStructure ds = factory.build();
+        factory.getCompiler().linearCombination(a1, b1.data, 0,
+                                                a2, b2.data, 0,
+                                                a3, b3.data, 0,
+                                                ds.data, 0);
 
-        // create a result with accurate value and all derivatives (not necessarily as accurate as the value)
-        final double[] all = simpleValue.getAllDerivatives();
-        all[0] = accurateValue;
-        return factory.build(all);
+        return ds;
 
     }
 
@@ -1103,19 +1100,19 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
                                                  final double a4, final DerivativeStructure b4)
         throws MathIllegalArgumentException {
 
-        // compute an accurate value, taking care of cancellations
-        final double accurateValue = MathArrays.linearCombination(a1, b1.getValue(),
-                                                                  a2, b2.getValue(),
-                                                                  a3, b3.getValue(),
-                                                                  a4, b4.getValue());
+        factory.checkCompatibility(b1.factory);
+        factory.checkCompatibility(b2.factory);
+        factory.checkCompatibility(b3.factory);
+        factory.checkCompatibility(b4.factory);
 
-        // compute a simple value, with all partial derivatives
-        final DerivativeStructure simpleValue = b1.multiply(a1).add(b2.multiply(a2)).add(b3.multiply(a3)).add(b4.multiply(a4));
+        final DerivativeStructure ds = factory.build();
+        factory.getCompiler().linearCombination(a1, b1.data, 0,
+                                                a2, b2.data, 0,
+                                                a3, b3.data, 0,
+                                                a4, b4.data, 0,
+                                                ds.data, 0);
 
-        // create a result with accurate value and all derivatives (not necessarily as accurate as the value)
-        final double[] all = simpleValue.getAllDerivatives();
-        all[0] = accurateValue;
-        return factory.build(all);
+        return ds;
 
     }
 
