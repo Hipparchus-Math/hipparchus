@@ -117,9 +117,10 @@ public class SparseFieldVectorTest {
 
     @Test
     public void testBasicFunctions() {
-        SparseFieldVector<Fraction> v1 = new SparseFieldVector<Fraction>(field,vec1);
-        SparseFieldVector<Fraction> v2 = new SparseFieldVector<Fraction>(field,vec2);
+        SparseFieldVector<Fraction> v1 = (SparseFieldVector<Fraction>) new SparseFieldVector<>(field).append(new SparseFieldVector<>(field,vec1));
+        SparseFieldVector<Fraction> v2 = (SparseFieldVector<Fraction>) new SparseFieldVector<>(field).append(new ArrayFieldVector<>(vec2));
 
+        Assert.assertSame(field, v1.getField());
         FieldVector<Fraction> v2_t = new ArrayFieldVectorTest.FieldVectorTestImpl<Fraction>(vec2);
 
         //octave =  v1 + v2
@@ -178,10 +179,10 @@ public class SparseFieldVectorTest {
     @Test
     public void testOuterProduct() {
         final SparseFieldVector<Fraction> u
-            = new SparseFieldVector<Fraction>(FractionField.getInstance(),
-                                              new Fraction[] {new Fraction(1),
-                                                              new Fraction(2),
-                                                              new Fraction(-3)});
+            = (SparseFieldVector<Fraction>) new SparseFieldVector<>(FractionField.getInstance(),
+                                                                    new Fraction[] { new Fraction(1),
+                                                                                     new Fraction(2) }).
+                                            append(new Fraction(-3));
         final SparseFieldVector<Fraction> v
             = new SparseFieldVector<Fraction>(FractionField.getInstance(),
                                               new Fraction[] {new Fraction(4),

@@ -33,6 +33,7 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.FieldSinCos;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -614,10 +615,13 @@ public class SparseGradientTest extends ExtendedFieldElementAbstractTest<SparseG
             SparseGradient sgX = SparseGradient.createVariable(0, x);
             SparseGradient sin = sgX.sin();
             SparseGradient cos = sgX.cos();
+            FieldSinCos<SparseGradient> sinCos = sgX.sinCos();
             double s = FastMath.sin(x);
             double c = FastMath.cos(x);
             checkF0F1(sin, s, c);
             checkF0F1(cos, c, -s);
+            checkF0F1(sinCos.sin(), s, c);
+            checkF0F1(sinCos.cos(), c, -s);
         }
     }
 

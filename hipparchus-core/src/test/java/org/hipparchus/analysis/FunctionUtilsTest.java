@@ -80,6 +80,7 @@ public class FunctionUtilsTest {
         DSFactory factory = new DSFactory(1, 1);
         UnivariateDifferentiableFunction id = new Identity();
         Assert.assertEquals(1, FunctionUtils.compose(id, id, id).value(factory.variable(0, 3)).getPartialDerivative(1), EPS);
+        Assert.assertEquals(1.5, FunctionUtils.compose(id, id, id).value(1.5), EPS);
 
         UnivariateDifferentiableFunction c = new Constant(4);
         Assert.assertEquals(0, FunctionUtils.compose(id, c).value(factory.variable(0, 3)).getPartialDerivative(1), EPS);
@@ -125,6 +126,7 @@ public class FunctionUtilsTest {
         Assert.assertEquals(- 1 / (a * a) -1 + FastMath.cos(a),
                             FunctionUtils.add(inv, m, c, sin).value(factory.variable(0, a)).getPartialDerivative(1),
                             EPS);
+        Assert.assertEquals(4 + FastMath.sin(1.2), FunctionUtils.add(sin, c).value(1.2), EPS);
     }
 
     @Test
@@ -154,6 +156,7 @@ public class FunctionUtilsTest {
         UnivariateDifferentiableFunction cosh = new Cosh();
         Assert.assertEquals(1.5 * FastMath.sqrt(a) * FastMath.cosh(a) + FastMath.pow(a, 1.5) * FastMath.sinh(a),
                             FunctionUtils.multiply(inv, pow, cosh).value(factory.variable(0, a)).getPartialDerivative(1), 8 * EPS);
+        Assert.assertEquals(16, FunctionUtils.multiply(c, c).value(FastMath.PI), EPS);
     }
 
     @Test

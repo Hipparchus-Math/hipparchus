@@ -16,11 +16,14 @@
  */
 package org.hipparchus.analysis.interpolation;
 
+import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.BivariateFunction;
+import org.hipparchus.analysis.FieldBivariateFunction;
 import org.hipparchus.analysis.RealFieldBivariateFunction;
 import org.hipparchus.random.RandomVectorGenerator;
 import org.hipparchus.random.SobolSequenceGenerator;
 import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -68,7 +71,12 @@ public class BilinearInterpolatorTest {
         double[] yVal = createLinearGrid(yMin, yMax, ny);
 
         BivariateFunction f = (x, y) -> 2 * x - y;
-        RealFieldBivariateFunction<Decimal64> fT = (x, y) -> x.multiply(2).subtract(y);
+        RealFieldBivariateFunction<Decimal64> fT = new FieldBivariateFunction() {
+            @Override
+            public <T extends RealFieldElement<T>> T value(T x, T y) {
+                return x.multiply(2).subtract(y);
+            }
+        }.toRealFieldBivariateFunction(Decimal64Field.getInstance());
         BilinearInterpolatingFunction bif = createInterpolatingFunction(xVal, yVal, f);
 
         Assert.assertEquals(xMin, bif.getXInf(), 1.0e-15);
