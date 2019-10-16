@@ -71,6 +71,18 @@ public class FieldLineTest {
         Assert.assertEquals(0,
                             l.distance(createVector(0, -4, -4)).getReal(),
                             1.0e-10);
+        Assert.assertEquals(1.0e-10, l.getTolerance(), 1.0e-20);
+        Assert.assertEquals(0.0, l.getAbscissa(Vector3D.ZERO).getReal(), 1.0e-20);
+        Assert.assertEquals(0.0, l.getAbscissa(FieldVector3D.getZero(Decimal64Field.getInstance())).getReal(), 1.0e-20);
+        Assert.assertEquals(0.0, l.getOrigin().getX().getReal(), 1.0e-20);
+        Assert.assertEquals(0.0, l.getOrigin().getY().getReal(), 1.0e-20);
+        Assert.assertEquals(0.0, l.getOrigin().getZ().getReal(), 1.0e-20);
+        Assert.assertEquals(0.0, l.pointAt(new Decimal64(1.0)).toVector3D().getX(), 1.0e-20);
+        Assert.assertEquals(0.5 * FastMath.sqrt(2), l.pointAt(new Decimal64(1.0)).toVector3D().getY(), 1.0e-15);
+        Assert.assertEquals(0.5 * FastMath.sqrt(2), l.pointAt(new Decimal64(1.0)).toVector3D().getZ(), 1.0e-15);
+        Assert.assertEquals(0.0, l.pointAt(1.0).toVector3D().getX(), 1.0e-20);
+        Assert.assertEquals(0.5 * FastMath.sqrt(2), l.pointAt(1.0).toVector3D().getY(), 1.0e-15);
+        Assert.assertEquals(0.5 * FastMath.sqrt(2), l.pointAt(1.0).toVector3D().getZ(), 1.0e-15);
     }
 
     @Test

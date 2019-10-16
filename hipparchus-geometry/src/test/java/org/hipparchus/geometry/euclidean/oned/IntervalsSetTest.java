@@ -21,12 +21,10 @@
  */
 package org.hipparchus.geometry.euclidean.oned;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
-import org.hipparchus.geometry.euclidean.oned.Interval;
-import org.hipparchus.geometry.euclidean.oned.IntervalsSet;
-import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.util.FastMath;
@@ -38,7 +36,9 @@ public class IntervalsSetTest {
 
     @Test
     public void testInterval() {
-        IntervalsSet set = new IntervalsSet(2.3, 5.7, 1.0e-10);
+        IntervalsSet set = new IntervalsSet(Arrays.asList(new OrientedPoint(new Vector1D(2.3), false, 1.0e-10).wholeHyperplane(),
+                                                          new OrientedPoint(new Vector1D(5.7), true, 1.0e-10).wholeHyperplane()),
+                                            1.0e-10);
         Assert.assertEquals(3.4, set.getSize(), 1.0e-10);
         Assert.assertEquals(4.0, ((Vector1D) set.getBarycenter()).getX(), 1.0e-10);
         Assert.assertEquals(Region.Location.BOUNDARY, set.checkPoint(new Vector1D(2.3)));
@@ -48,6 +48,23 @@ public class IntervalsSetTest {
         Assert.assertEquals(Region.Location.INSIDE,   set.checkPoint(new Vector1D(3.0)));
         Assert.assertEquals(2.3, set.getInf(), 1.0e-10);
         Assert.assertEquals(5.7, set.getSup(), 1.0e-10);
+        OrientedPoint op = (OrientedPoint) set.getTree(false).getCut().getHyperplane();
+        Assert.assertEquals(0.0, op.emptyHyperplane().getSize(), 1.0e-10);
+        Assert.assertEquals(1.0e-10, op.getTolerance(), 1.0e-20);
+        Assert.assertTrue(Double.isInfinite(op.wholeSpace().getSize()));
+        Assert.assertEquals(2.3, op.getLocation().getX(), 1.0e-10);
+        Assert.assertEquals(-0.7, op.getOffset(new Vector1D(3.0)), 1.0e-10);
+        Assert.assertSame(op.getLocation(), op.project(new Vector1D(3.0)));
+        op.revertSelf();
+        Assert.assertEquals(+0.7, op.getOffset(new Vector1D(3.0)), 1.0e-10);
+    }
+
+    @Test
+    public void testNoBoundaries() {
+        IntervalsSet set = new IntervalsSet(new ArrayList<>(), 1.0e-10);
+        Assert.assertEquals(Region.Location.INSIDE, set.checkPoint(new Vector1D(-Double.MAX_VALUE)));
+        Assert.assertEquals(Region.Location.INSIDE, set.checkPoint(new Vector1D(+Double.MAX_VALUE)));
+        Assert.assertTrue(Double.isInfinite(set.getSize()));
     }
 
     @Test
@@ -107,6 +124,12 @@ public class IntervalsSetTest {
         IntervalsSet set = new IntervalsSet(1.0, 1.0, 1.0e-10);
         Assert.assertEquals(0.0, set.getSize(), Precision.SAFE_MIN);
         Assert.assertEquals(1.0, ((Vector1D) set.getBarycenter()).getX(), Precision.EPSILON);
+        try {
+            set.iterator().remove();
+            Assert.fail("an exception should have been thrown");
+        } catch (UnsupportedOperationException uoe) {
+            // expected
+        }
     }
 
 }

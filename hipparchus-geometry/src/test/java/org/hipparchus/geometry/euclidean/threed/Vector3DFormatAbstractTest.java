@@ -22,15 +22,16 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
+import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.geometry.euclidean.threed.Vector3D;
-import org.hipparchus.geometry.euclidean.threed.Vector3DFormat;
-import org.junit.Test;
+import org.hipparchus.geometry.Vector;
+import org.hipparchus.geometry.VectorFormat;
 import org.junit.Assert;
+import org.junit.Test;
 
 public abstract class Vector3DFormatAbstractTest {
 
@@ -46,6 +47,66 @@ public abstract class Vector3DFormatAbstractTest {
         final NumberFormat nf = NumberFormat.getInstance(getLocale());
         nf.setMaximumFractionDigits(2);
         vector3DFormatSquare = new Vector3DFormat("[", "]", " : ", nf);
+    }
+
+    @Test
+    public void testDefaults() {
+        VectorFormat<Euclidean3D> vFormat = new VectorFormat<Euclidean3D>() {
+            public StringBuffer format(Vector<Euclidean3D> vector,
+                                       StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+            public Vector<Euclidean3D> parse(String source, ParsePosition parsePosition) {
+                return null;
+            }
+            public Vector<Euclidean3D> parse(String source) {
+                return null;
+            }
+        };
+        Assert.assertArrayEquals(NumberFormat.getAvailableLocales(), VectorFormat.getAvailableLocales());
+        Assert.assertEquals("{", vFormat.getPrefix());
+        Assert.assertEquals("}", vFormat.getSuffix());
+        Assert.assertEquals("; ", vFormat.getSeparator());
+    }
+
+    @Test
+    public void testNumberFormat() {
+        NumberFormat nf = NumberFormat.getInstance(Locale.FRENCH);
+        VectorFormat<Euclidean3D> vFormat = new VectorFormat<Euclidean3D>(nf) {
+            public StringBuffer format(Vector<Euclidean3D> vector,
+                                       StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+            public Vector<Euclidean3D> parse(String source, ParsePosition parsePosition) {
+                return null;
+            }
+            public Vector<Euclidean3D> parse(String source) {
+                return null;
+            }
+        };
+        Assert.assertEquals("{", vFormat.getPrefix());
+        Assert.assertEquals("}", vFormat.getSuffix());
+        Assert.assertEquals("; ", vFormat.getSeparator());
+        Assert.assertSame(nf, vFormat.getFormat());
+    }
+
+    @Test
+    public void testPrefixSuffixSeparator() {
+        VectorFormat<Euclidean3D> vFormat = new VectorFormat<Euclidean3D>("<", ">", "|") {
+            public StringBuffer format(Vector<Euclidean3D> vector,
+                                       StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+            public Vector<Euclidean3D> parse(String source, ParsePosition parsePosition) {
+                return null;
+            }
+            public Vector<Euclidean3D> parse(String source) {
+                return null;
+            }
+        };
+        Assert.assertEquals("<", vFormat.getPrefix());
+        Assert.assertEquals(">", vFormat.getSuffix());
+        Assert.assertEquals("|", vFormat.getSeparator());
     }
 
     @Test

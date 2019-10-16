@@ -22,11 +22,14 @@
 
 package org.hipparchus.geometry.euclidean.twod;
 
+import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.geometry.Vector;
+import org.hipparchus.geometry.VectorFormat;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.geometry.euclidean.twod.Vector2DFormat;
 import org.junit.Assert;
@@ -46,6 +49,66 @@ public abstract class Vector2DFormatAbstractTest {
         final NumberFormat nf = NumberFormat.getInstance(getLocale());
         nf.setMaximumFractionDigits(2);
         vector2DFormatSquare = new Vector2DFormat("[", "]", " : ", nf);
+    }
+
+    @Test
+    public void testDefaults() {
+        VectorFormat<Euclidean2D> vFormat = new VectorFormat<Euclidean2D>() {
+            public StringBuffer format(Vector<Euclidean2D> vector,
+                                       StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+            public Vector<Euclidean2D> parse(String source, ParsePosition parsePosition) {
+                return null;
+            }
+            public Vector<Euclidean2D> parse(String source) {
+                return null;
+            }
+        };
+        Assert.assertArrayEquals(NumberFormat.getAvailableLocales(), VectorFormat.getAvailableLocales());
+        Assert.assertEquals("{", vFormat.getPrefix());
+        Assert.assertEquals("}", vFormat.getSuffix());
+        Assert.assertEquals("; ", vFormat.getSeparator());
+    }
+
+    @Test
+    public void testNumberFormat() {
+        NumberFormat nf = NumberFormat.getInstance(Locale.FRENCH);
+        VectorFormat<Euclidean2D> vFormat = new VectorFormat<Euclidean2D>(nf) {
+            public StringBuffer format(Vector<Euclidean2D> vector,
+                                       StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+            public Vector<Euclidean2D> parse(String source, ParsePosition parsePosition) {
+                return null;
+            }
+            public Vector<Euclidean2D> parse(String source) {
+                return null;
+            }
+        };
+        Assert.assertEquals("{", vFormat.getPrefix());
+        Assert.assertEquals("}", vFormat.getSuffix());
+        Assert.assertEquals("; ", vFormat.getSeparator());
+        Assert.assertSame(nf, vFormat.getFormat());
+    }
+
+    @Test
+    public void testPrefixSuffixSeparator() {
+        VectorFormat<Euclidean2D> vFormat = new VectorFormat<Euclidean2D>("<", ">", "|") {
+            public StringBuffer format(Vector<Euclidean2D> vector,
+                                       StringBuffer toAppendTo, FieldPosition pos) {
+                return null;
+            }
+            public Vector<Euclidean2D> parse(String source, ParsePosition parsePosition) {
+                return null;
+            }
+            public Vector<Euclidean2D> parse(String source) {
+                return null;
+            }
+        };
+        Assert.assertEquals("<", vFormat.getPrefix());
+        Assert.assertEquals(">", vFormat.getSuffix());
+        Assert.assertEquals("|", vFormat.getSeparator());
     }
 
     @Test

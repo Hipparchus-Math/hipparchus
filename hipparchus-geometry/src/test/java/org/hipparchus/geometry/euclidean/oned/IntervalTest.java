@@ -72,6 +72,14 @@ public class IntervalTest {
     }
 
     @Test
+    public void testWholeLine() {
+        Interval interval = new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+        Assert.assertTrue(Double.isInfinite(interval.getSize()));
+        Assert.assertEquals(Region.Location.INSIDE, interval.checkPoint(-Double.MAX_VALUE, 1.0e-10));
+        Assert.assertEquals(Region.Location.INSIDE, interval.checkPoint(+Double.MAX_VALUE, 1.0e-10));
+    }
+
+    @Test
     public void testSinglePoint() {
         Interval interval = new Interval(1.0, 1.0);
         Assert.assertEquals(0.0, interval.getSize(), Precision.SAFE_MIN);
