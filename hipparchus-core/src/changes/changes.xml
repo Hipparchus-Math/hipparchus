@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
-    <release version="1.6"  date="TBD" description="TBD">
+    <release version="1.6"  date="2019-11-01" description="This is a maintenance release. It includes only bug fixes.">
       <action dev="luc" type="fix" issue="issues/61">
         Prevent stack overflow error when attempting integration with too large number of points.
       </action>
