@@ -71,7 +71,7 @@
       <item name="Overview"                      href="../index.html"/>
       <item name="Building"                      href="../building.html"/>
       <item name="Downloads"                     href="../downloads.html"/>
-      <item name="Mailing lists"                 href="../mail-lists.html"/>
+      <item name="Forum"                         href="../forum.html"/>
       <item name="Latest API docs (development)" href="../apidocs/index.html"/>
       <item name="1.0 API docs"                  href="https://hipparchus.org/apidocs-1.0/index.html"/>
       <item name="1.1 API docs"                  href="https://hipparchus.org/apidocs-1.1/index.html"/>
@@ -79,6 +79,7 @@
       <item name="1.3 API docs"                  href="https://hipparchus.org/apidocs-1.3/index.html"/>
       <item name="1.4 API docs"                  href="https://hipparchus.org/apidocs-1.4/index.html"/>
       <item name="1.5 API docs"                  href="https://hipparchus.org/apidocs-1.5/index.html"/>
+      <item name="1.6 API docs"                  href="https://hipparchus.org/apidocs-1.6/index.html"/>
       <item name="Source Repository (current)"   href="https://github.com/Hipparchus-Math/hipparchus"/>
       <item name="Global Coverage"               href="../hipparchus-coverage/jacoco-aggregate/index.html"/>
       <item name="Developers Guide"              href="../developers.html"/>

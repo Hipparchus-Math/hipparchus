@@ -264,8 +264,8 @@ be served (it is not served when no vote is going on).
 
 ## Calling for the vote
 
-Everything is now ready so the developers and PMC can vote for the release. Send a
-mail to the developers list with a subject line of the form:
+Everything is now ready so the developers and PMC can vote for the release. Create a
+new topic in the developers category of the forum with a subject line of the form:
 
     [VOTE] Releasing hipparchus X.Y from release candidate n
 
@@ -322,4 +322,4 @@ verified and pushed:
     git tag -v X.Y
     git push --tags
 
-The last step is to announce the release by sending a mail to the announce list.
+The last step is to announce the release by creating a new topic in the announcements category of the forum.
