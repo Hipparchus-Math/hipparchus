@@ -113,6 +113,7 @@ public class MathRuntimeException extends RuntimeException implements LocalizedE
      * @param locale Locale in which the message should be translated
      * @return a message string
      */
+    @SuppressWarnings("PMD.AvoidCatchingGenericException") // catching Exception is intentional here
     private String buildMessage(final Locale locale) {
         if (specifier == null) {
             return "";

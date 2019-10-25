@@ -226,17 +226,18 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
      * @return string representation of state data
      */
     @Override
-    public synchronized String toString() {
-
-        if (markers == null) {
-            return String.format("obs=%s pValue=%s",
-                    DECIMAL_FORMAT.format(lastObservation),
-                    DECIMAL_FORMAT.format(pValue));
-        } else {
-            return String.format("obs=%s markers=%s",
-                    DECIMAL_FORMAT.format(lastObservation), markers.toString());
+    public String toString() {
+        synchronized (this) { 
+            if (markers == null) {
+                return String.format("obs=%s pValue=%s",
+                                     DECIMAL_FORMAT.format(lastObservation),
+                                     DECIMAL_FORMAT.format(pValue));
+            } else {
+                return String.format("obs=%s markers=%s",
+                                     DECIMAL_FORMAT.format(lastObservation), markers.toString());
+            }
         }
-    }
+   }
 
     /** {@inheritDoc} */
     @Override
