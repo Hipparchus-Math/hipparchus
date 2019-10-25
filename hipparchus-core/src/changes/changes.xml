@@ -75,6 +75,7 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
       <action dev="luc" type="add">
         Added FieldPolynomialFunction and FieldPolynomialSplineFunction.
+      </action>
       <action dev="luc" type="add" issue="issues/53" >
         Fixed documentation for interpolation algorithms.
         Github: fixes #53.
