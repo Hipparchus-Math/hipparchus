@@ -48,7 +48,6 @@ public class MathRuntimeExceptionTest {
             // check exception during formatting is preserved
             MatcherAssert.assertThat(message,
                     CoreMatchers.containsString("toString failed"));
-            System.out.println(message);
         }
     }
 
