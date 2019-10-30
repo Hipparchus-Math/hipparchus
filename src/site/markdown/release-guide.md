@@ -313,7 +313,8 @@ older versions to be kept available if needed. A dedicated `apidocs-X.Y` folder 
 set up with a copy of the `www-X.Y.hipparchus.org/apidocs` directory. Here again, it allows
 older versions to still be available online.
 
-The Apache server configuration must be updated to forbid serving the now unused `staging` directory.
+The Apache server configuration must be updated to forbid serving the now unused `staging` directory,
+and to add an alias for the new `apidocs-X.Y` folder.
 
 As the vote passed, a final signed tag must be added to the succeeding release candidate,
 verified and pushed:
@@ -323,3 +324,16 @@ verified and pushed:
     git push --tags
 
 The last step is to announce the release by creating a new topic in the announcements category of the forum.
+
+## Preparing next version
+
+After the release branch has been completed, it should be merged back to the master branch and the `pom.xml`
+must be updated with the `-SNAPSHOT`flag for the next release number. On a system with Unix utilities, you can do
+it with the single following line:
+
+    for pom in pom.xml hipparchus-*/pom.xml ; do mv $pom $pom.old ; sed 's,<version>X.Y</version>,<version>X.Z-SNAPSHOT</version>' < $pom.old > $pom ; rm $pom.old ; done
+
+Commit the change:
+
+    git add pom.xml hipparchus-*/pom.xml
+    git commit -m "Preparing development of next version."
