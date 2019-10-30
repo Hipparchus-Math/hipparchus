@@ -22,6 +22,9 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.MultivariateFunction;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.random.UnitSphereRandomVectorGenerator;
+import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -54,13 +57,15 @@ public final class MicrosphereProjectionInterpolatorTest {
         final double exponent = 1.1;
         final boolean shareSphere = true;
         final double noInterpolationTolerance = Math.ulp(1d);
+        final RandomGenerator random = new Well1024a(0x1c7a150c83a6d9dal);
 
         // N-dimensional interpolator.
         final MultivariateInterpolator interpolator
-            = new MicrosphereProjectionInterpolator(2, 500,
+            = new MicrosphereProjectionInterpolator(new InterpolatingMicrosphere(2, 500,
                                                     darkFraction,
                                                     darkThreshold,
                                                     background,
+                                                    new UnitSphereRandomVectorGenerator(2, random)),
                                                     exponent,
                                                     shareSphere,
                                                     noInterpolationTolerance);

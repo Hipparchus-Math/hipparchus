@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
+    <release version="1.7"  date="TBD" description="TBD.">
+      <action dev="luc" type="fix" >
+        Prevent random failure of micro-sphere test case.
+      </action>
+    </release>
     <release version="1.6"  date="2019-11-01" description="This is a maintenance release. The main
     changes are the addition of a field version of Vector2D, addition of an Optimum.of() factory
     method and a visibility change of the AbstractEvaluation constructor.">
