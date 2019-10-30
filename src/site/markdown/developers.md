@@ -43,9 +43,10 @@ _should_ guidelines prior to a release.
   * Hipparchus uses Apache Maven as our build tool. The sources can also be built
     using any IDE. To build Hipparchus, you can follow the instructions
     from the [building](building.html) page
-  * Be sure to join the users and developers [email lists](mail-lists.html)
-    and use them appropriately. Make any proposals here where the group can
-    comment on them.
+  * Be sure to subscribe to the [forum](https://forum.orekit.org/categories)
+    and add the Hipparchus categories you are interested in to the `Watched`
+    list of categories in your preferences. Use the categoris  appropriately.
+    Make any proposals here where the group can comment on them.
   * Setup an account on GitHub and use it to submit pull requests and
     identify bugs. Read the [GitHub help](https://help.github.com/).
   * Generating patches: The requested format for generating patches is
@@ -59,10 +60,10 @@ enhancements to Hipparchus. This will make it easier for the community
 to comment on your ideas and for the committers to keep track of them. 
 Thanks in advance!
 
-  * Start with a post to the developers mailing list, with a good, short title
-    describing the new feature or enhancement.  For example,
-    "Principal Components Analysis." The body of the post should include each
-    of the following items (but be _as brief as possible_):
+  * Start with a post to the forum in the Hipparchus development category,
+    with a good, short title describing the new feature or enhancement.
+    For example, "Principal Components Analysis." The body of the post
+    should include each of the following items (but be _as brief as possible_):
 
       * A concise description of the new feature / enhancement
 
@@ -72,7 +73,7 @@ Thanks in advance!
 
       * Some indication of why the addition / enhancement is practically useful
 
-  * Assuming a generally favorable response to the idea on developers list,
+  * Assuming a generally favorable response to the idea on developers forum,
     the next step is to create a ticket for a new issue in the
     Hipparchus [issues tracker](https://github.com/Hipparchus-Math/hipparchus/issues)
   * Submit code as [pull requests](https://github.com/Hipparchus-Math/hipparchus/pulls)
@@ -80,7 +81,7 @@ Thanks in advance!
     to the ticket as necessary.  Use the git diff command to generate your patches as
     diffs. Please do not submit modified copies of existing java files. Be
     patient (but not _too_ patient) with  committers reviewing patches. Post a
-    _nudge_ message to developers list with a reference to the
+    _nudge_ message to developers forum with a reference to the
     issue if a patch goes more than a few days with no comment or commit.
 
 ## Coding Style
@@ -184,7 +185,7 @@ in the git book for explanation about how to configure these settings and more.
     licenses should be avoided.  In particular, contributions should not
     implement or include references to algorithms in
     [Numerical Recipes (NR)](http://www.nr.com/). Any questions about copyright or
-    patent issues should be raised on the developers mailing list before contributing or
+    patent issues should be raised on the developers forum before contributing or
     committing code.
 
 ## Recommended Readings

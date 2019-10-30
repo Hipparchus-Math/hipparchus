@@ -25,7 +25,9 @@ Getting Started
 ---------------
 
 + Make sure you have a [GitHub account](https://github.com/signup/free).
-+ If you're planning to implement a new feature it makes sense to discuss your changes on the [dev list](https://hipparchus.org/mail-lists.html) first. This way you can make sure you're not wasting your time on something that isn't considered to be in Hipparchus's scope.
++ If you're planning to implement a new feature it makes sense to discuss your changes on the
+  [forum](https://forum.orekit.org/c/hipparchus-development) first. This way you can make sure
+  you're not wasting your time on something that isn't considered to be in Hipparchus's scope.
 + Submit a ticket for your issue, assuming one does not already exist.
   + Clearly describe the issue including steps to reproduce when it is a bug.
   + Make sure you fill in the earliest version that you know has the issue.
@@ -55,7 +57,7 @@ Submitting Changes
 
 + Sign the [Contributor License Agreement](https://hipparchus.org/licenses/#clas) if you haven't already.
 + Push your changes to a topic branch in your fork of the repository.
-+ Submit a pull request to the repository in the apache organization.
++ Submit a pull request to the [repository](https://github.com/Hipparchus-Math/hipparchus).
 + Update your GitHub ticket and include a link to the pull request in the ticket.
 
 Additional Resources
@@ -65,4 +67,6 @@ Additional Resources
 + [General GitHub documentation](https://help.github.com/)
 + [GitHub pull request documentation](https://help.github.com/send-pull-requests/)
 + [Contributor License Agreement ](https://hipparchus.org/licenses/#clas)
-+ [Mailing Lists](https://hipparchus.org/mail-lists.html)
++ [Developers forum](https://forum.orekit.org/c/hipparchus-development)
++ [Users forum](https://forum.orekit.org/c/hipparchus-usage)
++ [Announcements forum](https://forum.orekit.org/c/hipparchus-announcements)

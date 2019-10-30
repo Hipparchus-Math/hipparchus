@@ -35,10 +35,15 @@ sub-folders:
   * `LICENSE.txt`
   * `NOTICE.txt`
   * `README.md`
+  * `CONTRIBUTING.md`
+  * `JenkinsFile`
+  * `release.sh`
   * `pom.xml`
   * `hipparchus-clustering`
   * `hipparchus-core`
+  * `hipparchus-coverage`
   * `hipparchus-fft`
+  * `hipparchus-filtering`
   * `hipparchus-fitting`
   * `hipparchus-genetics`
   * `hipparchus-geometry`
@@ -46,8 +51,8 @@ sub-folders:
   * `hipparchus-ode`
   * `hipparchus-optim`
   * `hipparchus-parent`
-  * `hipparchus-perf`
   * `hipparchus-samples`
+  * `hipparchus-stat`
   * `src`
 
 This top level folder contains the maven aggregator project that
@@ -58,7 +63,10 @@ does not contain code).
 The `hipparchus-parent` folder contains the parent project for other
 modules. This parent project defines elements that will be inherited
 by all modules like maven plugins version numbers and configuration.
-This project does not either contain code by itself.
+This project does not contain code by itself.
+
+The `hipparchus-coverage` folder contains a dummy module for aggregating
+coverage reports. This project does not contain code by itself.
 
 The remaining `hipparchus-xyz` folders are the projects for the various
 modules that compose Hipparchus and that inherit from the parent.

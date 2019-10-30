@@ -56,14 +56,12 @@ at fork time.
 
  ---
 
-## 1.5 Release is out!
+## 1.6 Release is out!
 
-Hipparchus 1.5 is now available for download from the [Hipparchus download page](downloads.html) or on
-Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.5 release are:
+Hipparchus 1.6 is now available for download from the [Hipparchus download page](downloads.html) or on
+Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.6 release are:
 
-  * field version of bilinear interpolation
-  * field version of univariate interpolators
-  * field version of polynomials
-  * field version of polynomial spline functions
-  * reset events in ODE
-  * bug fixes in interpolation, linear algebra, multi-step integrators and Kalman filtering
+  * field version of Vector2D
+  * Optimum.of(...) factory method
+  * AbstractEvaluation constructor is now public
+  * bug fixes in multi-step integrators, integration and exception messages
