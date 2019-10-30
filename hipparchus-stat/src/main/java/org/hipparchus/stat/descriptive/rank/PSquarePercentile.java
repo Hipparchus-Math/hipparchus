@@ -227,7 +227,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
      */
     @Override
     public String toString() {
-        synchronized (this) { 
+        synchronized (this) {
             if (markers == null) {
                 return String.format("obs=%s pValue=%s",
                                      DECIMAL_FORMAT.format(lastObservation),
