@@ -463,6 +463,7 @@ public class BigFraction
      * The return value is -1 if the specified value is negative;
      * 0 if the specified value is zero; and 1 if the specified value is positive.
      * </p>
+     * @return the signum function of this {@link BigFraction}
      * @since 1.7
      */
     public int signum() {
