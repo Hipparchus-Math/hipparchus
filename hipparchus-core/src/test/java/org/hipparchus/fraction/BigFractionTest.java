@@ -305,6 +305,15 @@ public class BigFractionTest {
     }
 
     @Test
+    public void testSignum() {
+        Assert.assertEquals(-1, new BigFraction(4, -5).signum());
+        Assert.assertEquals(-1, new BigFraction(-4, 5).signum());
+        Assert.assertEquals( 0, new BigFraction(0).signum());
+        Assert.assertEquals(+1, new BigFraction(-4, -5).signum());
+        Assert.assertEquals(+1, new BigFraction(4, 5).signum());
+    }
+
+    @Test
     public void testReciprocal() {
         BigFraction f = null;
 

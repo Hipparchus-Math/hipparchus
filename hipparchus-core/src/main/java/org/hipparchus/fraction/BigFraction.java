@@ -458,6 +458,17 @@ public class BigFraction
         return (numerator.signum() == 1) ? this : negate();
     }
 
+    /** Returns the signum function of this {@link BigFraction}.
+     * <p>
+     * The return value is -1 if the specified value is negative;
+     * 0 if the specified value is zero; and 1 if the specified value is positive.
+     * </p>
+     * @since 1.7
+     */
+    public int signum() {
+        return numerator.signum();
+    }
+
     /**
      * <p>
      * Adds the value of this fraction to the passed {@link BigInteger},

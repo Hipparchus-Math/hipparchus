@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.7"  date="TBD" description="TBD.">
+      <action dev="luc" type="fix" issue="issues/63">
+        Added signum to Fraction and BigFraction.
+      </action>
       <action dev="luc" type="fix" >
         Prevent random failure of micro-sphere test case.
       </action>

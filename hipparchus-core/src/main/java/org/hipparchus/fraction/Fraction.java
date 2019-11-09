@@ -289,6 +289,17 @@ public class Fraction
         this.denominator = den;
     }
 
+    /** Returns the signum function of this fraction.
+     * <p>
+     * The return value is -1 if the specified value is negative;
+     * 0 if the specified value is zero; and 1 if the specified value is positive.
+     * </p>
+     * @since 1.7
+     */
+    public int signum() {
+        return Integer.signum(numerator);
+    }
+
     /**
      * Returns the absolute value of this fraction.
      * @return the absolute value.

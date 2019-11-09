@@ -146,6 +146,15 @@ public class FractionTest {
         checkIntegerOverflow(-43979.60679604749);
     }
 
+    @Test
+    public void testSignum() {
+        Assert.assertEquals(-1, new Fraction(4, -5).signum());
+        Assert.assertEquals(-1, new Fraction(-4, 5).signum());
+        Assert.assertEquals( 0, new Fraction(0).signum());
+        Assert.assertEquals(+1, new Fraction(-4, -5).signum());
+        Assert.assertEquals(+1, new Fraction(4, 5).signum());
+    }
+
     private void checkIntegerOverflow(double a) {
         try {
             @SuppressWarnings("unused")
