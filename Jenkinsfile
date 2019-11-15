@@ -1,6 +1,11 @@
 pipeline {
 
     agent any
+
+    environment {
+        MAVEN_CLI_OPTS = "-s .CI/maven-settings.xml"
+    }
+
     tools {
         maven 'mvn-default'
         jdk   'openjdk-8'
@@ -22,6 +27,15 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn package test install checkstyle:checkstyle'
+             }
+        }
+
+        stage('Deploy') {
+            // Deploy on staging repository
+            // Official deployments are made manually
+            when { branch 'master' }
+            steps {
+                sh 'mvn $MAVEN_CLI_OPTS deploy -DskipTests=true -Pci-deploy'
              }
         }
 
