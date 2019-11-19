@@ -54,14 +54,6 @@
   </issueManagement>
 
   <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
     <site>
       <id>publishedSite</id>
       <url>https://hipparchus.org/</url>
@@ -960,7 +952,30 @@
 
   <profiles>
     <profile>
+      <id>ci-deploy</id>
+      <distributionManagement>
+        <repository>
+          <id>ci-releases</id>
+          <url>https://packages.orekit.org/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>ci-snapshots</id>
+            <url>https://packages.orekit.org/repository/maven-snapshots/</url>
+        </snapshotRepository>
+      </distributionManagement>
+    </profile>
+    <profile>
       <id>release</id>
+      <distributionManagement>
+        <snapshotRepository>
+          <id>ossrh</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+          <id>ossrh</id>
+          <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+      </distributionManagement>
       <build>
         <plugins>
           <plugin>
