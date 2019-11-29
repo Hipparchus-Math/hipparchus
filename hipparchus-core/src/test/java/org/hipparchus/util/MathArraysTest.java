@@ -868,6 +868,74 @@ public class MathArraysTest {
     }
 
     @Test
+    public void testLongArrayEquals() {
+        Assert.assertFalse(MathArrays.equals(new long[] { 1L }, null));
+        Assert.assertFalse(MathArrays.equals(null, new long[] { 1L }));
+        Assert.assertTrue(MathArrays.equals((long[]) null, (long[]) null));
+
+        Assert.assertFalse(MathArrays.equals(new long[] { 1L }, new long[0]));
+        Assert.assertTrue(MathArrays.equals(new long[] { 1L }, new long[] { 1L }));
+        Assert.assertTrue(MathArrays.equals(new long[] { 0x7ff0000000000000L,
+                                                           0xfff0000000000000L, 1L, 0L },
+                                            new long[] { 0x7ff0000000000000L,
+                                                           0xfff0000000000000L, 1L, 0L }));
+        Assert.assertFalse(MathArrays.equals(new long[] { 0x7ff0000000000000L },
+                                             new long[] { 0xfff0000000000000L }));
+
+    }
+
+    @Test
+    public void testIntArrayEquals() {
+        Assert.assertFalse(MathArrays.equals(new int[] { 1 }, null));
+        Assert.assertFalse(MathArrays.equals(null, new int[] { 1 }));
+        Assert.assertTrue(MathArrays.equals((int[]) null, (int[]) null));
+
+        Assert.assertFalse(MathArrays.equals(new int[] { 1 }, new int[0]));
+        Assert.assertTrue(MathArrays.equals(new int[] { 1 }, new int[] { 1 }));
+        Assert.assertTrue(MathArrays.equals(new int[] { Integer.MAX_VALUE,
+                                                        Integer.MIN_VALUE, 1, 0 },
+                                            new int[] { Integer.MAX_VALUE,
+                                                        Integer.MIN_VALUE, 1, 0 }));
+        Assert.assertFalse(MathArrays.equals(new int[] { Integer.MAX_VALUE },
+                                             new int[] { Integer.MIN_VALUE }));
+
+    }
+
+    @Test
+    public void testByteArrayEquals() {
+        Assert.assertFalse(MathArrays.equals(new byte[] { 1 }, null));
+        Assert.assertFalse(MathArrays.equals(null, new byte[] { 1 }));
+        Assert.assertTrue(MathArrays.equals((byte[]) null, (byte[]) null));
+
+        Assert.assertFalse(MathArrays.equals(new byte[] { 1 }, new byte[0]));
+        Assert.assertTrue(MathArrays.equals(new byte[] { 1 }, new byte[] { 1 }));
+        Assert.assertTrue(MathArrays.equals(new byte[] { Byte.MAX_VALUE,
+                                                         Byte.MIN_VALUE, 1, 0 },
+                                            new byte[] { Byte.MAX_VALUE,
+                                                         Byte.MIN_VALUE, 1, 0 }));
+        Assert.assertFalse(MathArrays.equals(new byte[] { Byte.MAX_VALUE },
+                                             new byte[] { Byte.MIN_VALUE }));
+
+    }
+
+    @Test
+    public void testShortArrayEquals() {
+        Assert.assertFalse(MathArrays.equals(new short[] { 1 }, null));
+        Assert.assertFalse(MathArrays.equals(null, new short[] { 1 }));
+        Assert.assertTrue(MathArrays.equals((short[]) null, (short[]) null));
+
+        Assert.assertFalse(MathArrays.equals(new short[] { 1 }, new short[0]));
+        Assert.assertTrue(MathArrays.equals(new short[] { 1 }, new short[] { 1 }));
+        Assert.assertTrue(MathArrays.equals(new short[] { Short.MAX_VALUE,
+                                                          Short.MIN_VALUE, 1, 0 },
+                                            new short[] { Short.MAX_VALUE,
+                                                          Short.MIN_VALUE, 1, 0 }));
+        Assert.assertFalse(MathArrays.equals(new short[] { Short.MAX_VALUE },
+                                             new short[] { Short.MIN_VALUE }));
+
+    }
+
+    @Test
     public void testNormalizeArray() {
         double[] testValues1 = new double[] {1, 1, 2};
         UnitTestUtils.assertEquals( new double[] {.25, .25, .5},
