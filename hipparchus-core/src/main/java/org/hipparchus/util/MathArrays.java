@@ -1464,9 +1464,8 @@ public class MathArrays {
     }
 
     /**
-     * Returns {@code true} iff both arguments are {@code null} or have same
-     * dimensions and all their elements are equal as defined by
-     * {@link Precision#equals(long,long)}.
+     * Returns {@code true} if both arguments are {@code null} or have same
+     * dimensions and all their elements are equals.
      *
      * @param x First array.
      * @param y Second array.
@@ -1481,7 +1480,7 @@ public class MathArrays {
             return false;
         }
         for (int i = 0; i < x.length; ++i) {
-            if (!Precision.equals(x[i], y[i])) {
+            if (!(x[i] == y[i])) {
                 return false;
             }
         }
@@ -1489,9 +1488,8 @@ public class MathArrays {
     }
 
     /**
-     * Returns {@code true} iff both arguments are {@code null} or have same
-     * dimensions and all their elements are equal as defined by
-     * {@link Precision#equals(int,int)}.
+     * Returns {@code true} if both arguments are {@code null} or have same
+     * dimensions and all their elements are equals.
      *
      * @param x First array.
      * @param y Second array.
@@ -1506,7 +1504,7 @@ public class MathArrays {
             return false;
         }
         for (int i = 0; i < x.length; ++i) {
-            if (!Precision.equals(x[i], y[i])) {
+            if (!(x[i] == y[i])) {
                 return false;
             }
         }
@@ -1514,9 +1512,8 @@ public class MathArrays {
     }
 
     /**
-     * Returns {@code true} iff both arguments are {@code null} or have same
-     * dimensions and all their elements are equal as defined by
-     * {@link Precision#equals(byte,byte)}.
+     * Returns {@code true} if both arguments are {@code null} or have same
+     * dimensions and all their elements are equals.
      *
      * @param x First array.
      * @param y Second array.
@@ -1531,7 +1528,7 @@ public class MathArrays {
             return false;
         }
         for (int i = 0; i < x.length; ++i) {
-            if (!Precision.equals(x[i], y[i])) {
+            if (!(x[i] == y[i])) {
                 return false;
             }
         }
@@ -1539,9 +1536,8 @@ public class MathArrays {
     }
 
     /**
-     * Returns {@code true} iff both arguments are {@code null} or have same
-     * dimensions and all their elements are equal as defined by
-     * {@link Precision#equals(short,short)}.
+     * Returns {@code true} if both arguments are {@code null} or have same
+     * dimensions and all their elements are equals.
      *
      * @param x First array.
      * @param y Second array.
@@ -1556,7 +1552,7 @@ public class MathArrays {
             return false;
         }
         for (int i = 0; i < x.length; ++i) {
-            if (!Precision.equals(x[i], y[i])) {
+            if (!(x[i] == y[i])) {
                 return false;
             }
         }
