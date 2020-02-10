@@ -23,7 +23,15 @@
 package org.hipparchus.stat.inference;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.continuous.NormalDistribution;
@@ -174,56 +182,90 @@ public class KolmogorovSmirnovTestTest {
         Assert.assertEquals(0.3401058049019608, test.kolmogorovSmirnovStatistic(unif, gaussian), TOLERANCE);
     }
 
-    /** Small samples - exact p-value, checked against R */
+    /**
+     * Checks D and exact p against expected values.
+     *
+     * @param first test sample
+     * @param second test sample
+     * @param expectedD expected D value
+     * @param expectedP expected P value
+     */
+    private void checkValues(double[] sample1, double[] sample2, double expectedD, double expectedP) {
+        final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
+        Assert
+            .assertEquals(expectedP, test.kolmogorovSmirnovTest(sample1, sample2, false), TOLERANCE);
+        Assert.assertEquals(expectedD, test.kolmogorovSmirnovStatistic(sample1, sample2), TOLERANCE);
+    }
+
+
+    // Small sample tests. D values and p-values are checked against R version 3.2.0.
+    // R uses non-strict inequality in null hypothesis.
     @Test
     public void testTwoSampleSmallSampleExact() {
-        final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
-        final double[] smallSample1 = {
-            6, 7, 9, 13, 19, 21, 22, 23, 24
-        };
-        final double[] smallSample2 = {
-            10, 11, 12, 16, 20, 27, 28, 32, 44, 54
-        };
-        // Reference values from R, version 3.2.0 - R uses non-strict inequality in null hypothesis
-        Assert
-            .assertEquals(0.105577085453247, test.kolmogorovSmirnovTest(smallSample1, smallSample2, false), TOLERANCE);
-        Assert.assertEquals(0.5, test.kolmogorovSmirnovStatistic(smallSample1, smallSample2), TOLERANCE);
+        checkValues(
+                new double[] {6, 7, 9, 13, 19, 21, 22, 23, 24},
+                new double[] {10, 11, 12, 16, 20, 27, 28, 32, 44, 54},
+                0.5,
+                0.105577085453247
+                );
     }
 
-    /** Small samples - exact p-value, checked against R */
     @Test
     public void testTwoSampleSmallSampleExact2() {
-        final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
-        final double[] smallSample1 = {
-            6, 7, 9, 13, 19, 21, 22, 23, 24, 29, 30, 34, 36, 41, 45, 47, 51, 63, 33, 91
-        };
-        final double[] smallSample2 = {
-            10, 11, 12, 16, 20, 27, 28, 32, 44, 54, 56, 57, 64, 69, 71, 80, 81, 88, 90
-        };
-        // Reference values from R, version 3.2.0 - R uses non-strict inequality in null hypothesis
-        Assert
-            .assertEquals(0.0462986609, test.kolmogorovSmirnovTest(smallSample1, smallSample2, false), TOLERANCE);
-        Assert.assertEquals(0.4263157895, test.kolmogorovSmirnovStatistic(smallSample1, smallSample2), TOLERANCE);
+        checkValues(
+                new double[] {6, 7, 9, 13, 19, 21, 22, 23, 24, 29, 30, 34, 36, 41, 45, 47, 51, 63, 33, 91},
+                new double[] {10, 11, 12, 16, 20, 27, 28, 32, 44, 54, 56, 57, 64, 69, 71, 80, 81, 88, 90},
+                0.4263157895,
+                0.0462986609
+                );
     }
 
-    /** Small samples - exact p-value, checked against R */
     @Test
     public void testTwoSampleSmallSampleExact3() {
-        final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
-        final double[] smallSample1 = {
-            -10, -5, 17, 21, 22, 23, 24, 30, 44, 50, 56, 57, 59, 67, 73, 75, 77, 78, 79, 80, 81, 83, 84, 85, 88, 90,
-            92, 93, 94, 95, 98, 100, 101, 103, 105, 110
-        };
-        final double[] smallSample2 = {
-            -2, -1, 0, 10, 14, 15, 16, 20, 25, 26, 27, 31, 32, 33, 34, 45, 47, 48, 51, 52, 53, 54, 60, 61, 62, 63,
-            74, 82, 106, 107, 109, 11, 112, 113, 114
-        };
-        // Reference values from R, version 3.2.0 - R uses non-strict inequality in null hypothesis
-        Assert
-            .assertEquals(0.00300743602, test.kolmogorovSmirnovTest(smallSample1, smallSample2, false), TOLERANCE);
-        Assert.assertEquals(0.4103174603, test.kolmogorovSmirnovStatistic(smallSample1, smallSample2), TOLERANCE);
-        Assert
-        .assertEquals(0.00300743602, test.kolmogorovSmirnovTest(smallSample2, smallSample1, false), TOLERANCE);
+        checkValues(
+                new double[] { -10, -5, 17, 21, 22, 23, 24, 30, 44, 50, 56, 57, 59, 67, 73, 75, 77, 78, 79,
+                        80, 81, 83, 84, 85, 88, 90, 92, 93, 94, 95, 98, 100, 101, 103, 105, 110},
+                new double[] { -2, -1, 0, 10, 14, 15, 16, 20, 25, 26, 27, 31, 32, 33, 34, 45, 47, 48, 51, 52,
+                        53, 54, 60, 61, 62, 63, 74, 82, 106, 107, 109, 11, 112, 113, 114},
+                0.41031746031746,
+                0.00300743602233366
+                );
+    }
+
+    @Test
+    public void testTwoSampleSmallSampleExact4() {
+        checkValues(
+                new double[] { 2.0, 5.0, 7.0, 9.0, 10.0, 11.0, 13.0, 14.0, 16.0 },
+                new double[] { 0.0, 1.0, 3.0, 4.0, 6.0, 8.0, 12.0, 15.0 },
+                0.41666666666666,
+                0.351707116412999);
+    }
+
+    @Test
+    public void testTwoSampleSmallSampleExact5() {
+        checkValues(
+                new double[] {2.0, 4.0, 5.0, 6.0, 8.0, 10.0, 11.0, 13.0},
+                new double[] {0.0, 1.0, 3.0, 7.0, 9.0, 12.0, 14.0, 15.0},
+                0.25,
+                0.98010878010878);
+    }
+
+    @Test
+    public void testTwoSampleSmallSampleExact6() {
+        checkValues(
+                new double[] {0,2},
+                new double[] {1,3},
+                0.5,
+                1.0);
+    }
+
+    @Test
+    public void testTwoSampleSmallSampleExact7() {
+        checkValues(
+                new double[] {0.0, 2.0, 4.0, 5.0, 7.0, 8.0, 10.0, 12.0},
+                new double[] {1.0, 3.0, 6.0, 9.0, 11.0},
+                0.15,
+                1.0);
     }
 
     /**
@@ -603,6 +645,148 @@ public class KolmogorovSmirnovTestTest {
     private void checkApproximateTable(int n, int m, double criticalValue, double alpha, double epsilon) {
         final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
         Assert.assertEquals(alpha, test.approximateP(criticalValue, n, m), epsilon);
+    }
+
+    /**
+     * This is copied directly from version 3.4.1 of commons math. The results of this
+     * method are exact, but the algorithm is slow and scales very badly.  It is not
+     * practical for values of m, n larger than 10.  Versions 3.5 and beyond use a
+     * more efficient method.
+     * <p>
+     * Computes \(P(D_{n,m} > d)\) if {@code strict} is {@code true}; otherwise
+     * \(P(D_{n,m} \ge d)\), where \(D_{n,m}\) is the 2-sample Kolmogorov-Smirnov
+     * statistic. See {@link #kolmogorovSmirnovStatistic(double[], double[])} for
+     * the definition of \(D_{n,m}\).
+     * <p>
+     * The returned probability is exact, obtained by enumerating all partitions of
+     * {@code m + n} into {@code m} and {@code n} sets, computing \(D_{n,m}\) for
+     * each partition and counting the number of partitions that yield \(D_{n,m}\)
+     * values exceeding (resp. greater than or equal to) {@code d}.
+     * <p>
+     * <strong>USAGE NOTE</strong>: Since this method enumerates all combinations in
+     * \({m+n} \choose {n}\), it is very slow if called for large {@code m, n}. For
+     * this reason, {@link #kolmogorovSmirnovTest(double[], double[])} uses this
+     * only for {@code m * n < } {@value #SMALL_SAMPLE_PRODUCT}.
+     *
+     * @param d      D-statistic value
+     * @param n      first sample size
+     * @param m      second sample size
+     * @param strict whether or not the probability to compute is expressed as a
+     *               strict inequality
+     * @return probability that a randomly selected m-n partition of m + n generates
+     *         \(D_{n,m}\) greater than (resp. greater than or equal to) {@code d}
+     */
+     public double exactP341(double d, int n, int m, boolean strict) {
+        Iterator<int[]> combinationsIterator = CombinatoricsUtils.combinationsIterator(n + m, n);
+        long tail = 0;
+        final double[] nSet = new double[n];
+        final double[] mSet = new double[m];
+        while (combinationsIterator.hasNext()) {
+            // Generate an n-set
+            final int[] nSetI = combinationsIterator.next();
+            // Copy the n-set to nSet and its complement to mSet
+            int j = 0;
+            int k = 0;
+            for (int i = 0; i < n + m; i++) {
+                if (j < n && nSetI[j] == i) {
+                    nSet[j++] = i;
+                } else {
+                    mSet[k++] = i;
+                }
+            }
+            final KolmogorovSmirnovTest kStatTest = new KolmogorovSmirnovTest();
+            final double curD = kStatTest.kolmogorovSmirnovStatistic(nSet, mSet);
+            if (curD > d) {
+                tail++;
+            } else if (curD == d && !strict) {
+                tail++;
+            }
+        }
+        return (double) tail / (double) CombinatoricsUtils.binomialCoefficient(n + m, n);
+    }
+
+    /**
+     * Checks exactP for d values ranging from .01 to 1 against brute force
+     * implementation in Commons Math 3.4.1.
+     *
+     * See {@link #exactP341(double, int, int, boolean)}
+     * which duplicates that code.
+     *
+     * The brute force implementation enumerates all n-m partitions and counts
+     * the number with p-values less than d, so it really is exact (but slow).
+     * This test compares current code with the 3.4.1 implementation.
+     *
+     * Set maxSize higher to extend the test to more values. Since the 3.4.1
+     * code is very slow, setting maxSize higher than 8 will make this test
+     * case run a long time.
+     */
+    @Test
+    public void testExactP341() throws Exception {
+        final double tol = 1e-12;
+        final int maxSize = 6;
+        final KolmogorovSmirnovTest ksTest = new KolmogorovSmirnovTest();
+        for (int m = 2; m < maxSize; m++) {
+            for (int n = 2; n < maxSize; n++) {
+                double d = 0;
+                for (int i = 0; i < 100; i++) {
+                    Assert.assertEquals(
+                            exactP341(d, m, n, true),
+                            ksTest.exactP(d, m, n, true),
+                            tol);
+                    d +=.01;
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks exactP for all actually attained D values against the implementation
+     * in Commons Math 3.4.1. See {@link #exactP341(double, int, int, boolean)}
+     * which duplicates that code.
+     *
+     * The brute force implementation enumerates all n-m partitions and counts the
+     * number with p-values less than d, so it really is exact (but slow). This test
+     * compares current code with the 3.4.1 implementation. Set maxSize higher to
+     * extend the test to more values. Since the 3.4.1 code is very slow, setting
+     * maxSize higher than 8 will make this test case run a long time.
+     */
+    @Test
+    public void testExactP341RealD() {
+        final double tol = 1e-12;
+        final int maxSize = 6;
+        for (int m = 2; m < maxSize; m++) {
+            for (int n = 2; n < maxSize; n++ ) {
+                // Not actually used for the test, but dValues basically stores
+                // the ks distribution - keys are d values and values are p-values
+                final Map<Double, Double> dValues = new TreeMap<>();
+                final Iterator<int[]> combinationsIterator = CombinatoricsUtils.combinationsIterator(n + m, n);
+                final double[] nSet = new double[n];
+                final double[] mSet = new double[m];
+                while (combinationsIterator.hasNext()) {
+                    // Generate an n-set
+                    final int[] nSetI = combinationsIterator.next();
+                    // Copy the n-set to nSet and its complement to mSet
+                    int j = 0;
+                    int k = 0;
+                    for (int i = 0; i < n + m; i++) {
+                        if (j < n && nSetI[j] == i) {
+                            nSet[j++] = i;
+                        } else {
+                            mSet[k++] = i;
+                        }
+                    }
+                    final KolmogorovSmirnovTest kStatTest = new KolmogorovSmirnovTest();
+                    final double curD = kStatTest.kolmogorovSmirnovStatistic(nSet, mSet);
+                    final double curP = kStatTest.exactP(curD, m, n, true);
+                    dValues.putIfAbsent(curD, curP);
+                    Assert.assertEquals(
+                            exactP341(curD, m, n, true),
+                            kStatTest.exactP(curD, m, n, true),
+                            tol);
+                }
+            }
+        }
+        // Add code to display / persist dValues here if desired
     }
 
     /**

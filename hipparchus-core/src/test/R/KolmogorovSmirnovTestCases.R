@@ -34,7 +34,6 @@ tol <- 1E-14                     # error tolerance for tests
 # Function definitions
 
 source("testFunctions")           # utility test functions
-require("Matching")               # for ks.boot
 
 verifyOneSampleGaussian <- function(data, expectedP, expectedD, mean, sigma, exact, tol, desc) {
     results <- ks.test(data, "pnorm", mean, sigma, exact = exact)
@@ -162,6 +161,14 @@ smallSample5 <- c(-10, -5, 17, 21, 22, 23, 24, 30, 44, 50, 56, 57, 59, 67, 73, 7
                    92, 93, 94, 95, 98, 100, 101, 103, 105, 110)
 smallSample6 <- c(-2, -1, 0, 10, 14, 15, 16, 20, 25, 26, 27, 31, 32, 33, 34, 45, 47, 48, 51, 52, 53, 54, 60, 61, 62, 63,
                   74, 82, 106, 107, 109, 11, 112, 113, 114)
+smallSample7 <- c(2.0, 5.0, 7.0, 9.0, 10.0, 11.0, 13.0, 14.0, 16.0)
+smallSample8 <- c(0.0, 1.0, 3.0, 4.0, 6.0, 8.0, 12.0, 15.0)
+smallSample9 <- c(2.0, 4.0, 5.0, 6.0, 8.0, 10.0, 11.0, 13.0)
+smallSample10 <- c(0.0, 1.0, 3.0, 7.0, 9.0, 12.0, 14.0, 15.0)
+smallSample11 <- c(0,2)
+smallSample12 <- c(1,3)
+smallSample13 <- c(1.0, 3.0, 6.0, 9.0, 11.0)
+smallSample14 <- c(0.0, 2.0, 4.0, 5.0, 7.0, 8.0, 10.0, 12.0)
 bootSample1 <- c(0, 2, 4, 6, 8, 8, 10, 15, 22, 30, 33, 36, 38)
 bootSample2 <- c(9, 17, 20, 33, 40, 51, 60, 60, 72, 90, 101)
 roundingSample1 <- c(2,4,6,8,9,10,11,12,13)
@@ -199,9 +206,17 @@ verifyTwoSampleSmallSamplesExact(smallSample3, smallSample4, 0.046298660942952, 
 verifyTwoSampleSmallSamplesExact(smallSample5, smallSample6, 0.00300743602233366, 0.41031746031746, tol,
 "Two sample small samples exact 3")
 
-verifyTwoSampleBootstrap(bootSample1, bootSample2, 0.0059, 1E-3, "Two sample bootstrap - isolated failures possible")
-verifyTwoSampleBootstrap(gaussian, gaussian2, 0.0237, 1E-2, "Two sample bootstrap - isolated failures possible")
-verifyTwoSampleBootstrap(roundingSample1, roundingSample2, 0.06303, 1E-2, "Two sample bootstrap - isolated failures possible")
+verifyTwoSampleSmallSamplesExact(smallSample7, smallSample8, 0.351707116412999, 0.416666666666667, tol,
+"Two sample small samples exact 5")
+
+verifyTwoSampleSmallSamplesExact(smallSample9, smallSample10, 0.98010878010878, 0.25, tol,
+"Two sample small samples exact 6")
+
+verifyTwoSampleSmallSamplesExact(smallSample11, smallSample12, 1, 0.5, tol,
+"Two sample small samples exact 7")
+
+verifyTwoSampleSmallSamplesExact(smallSample13, smallSample14, 1, 0.15, tol,
+"Two sample small samples exact 8")
 
 displayDashes(WIDTH)
 
