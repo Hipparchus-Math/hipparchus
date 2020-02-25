@@ -24,6 +24,8 @@ package org.hipparchus.geometry.euclidean.threed;
 
 import java.lang.reflect.Field;
 
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.euclidean.threed.RotationOrder;
 import org.junit.Assert;
 import org.junit.Test;
@@ -46,6 +48,28 @@ public class RotationOrderTest {
     }
 
   }
+
+  @Test
+  public void testIssue72() {
+      for (RotationOrder order : RotationOrder.values()) {
+          RotationOrder buildOrder = RotationOrder.getRotationOrder(order.toString());
+          Assert.assertEquals(0.0, Vector3D.distance1(order.getA1(), buildOrder.getA1()), Double.MIN_VALUE);
+          Assert.assertEquals(0.0, Vector3D.distance1(order.getA2(), buildOrder.getA2()), Double.MIN_VALUE);
+          Assert.assertEquals(0.0, Vector3D.distance1(order.getA3(), buildOrder.getA3()), Double.MIN_VALUE);
+      }
+  }
+
+  @Test
+  public void testIssue72InvalidName() {
+      String wrongName = "BCE";
+      try {
+          RotationOrder.getRotationOrder(wrongName);
+      } catch (MathIllegalStateException mise) {
+          Assert.assertEquals(LocalizedGeometryFormats.INVALID_ROTATION_ORDER_NAME, mise.getSpecifier());
+          Assert.assertEquals(wrongName, mise.getParts()[0]);
+      }
+  }
+
 
   private String getFieldName(RotationOrder order) {
     try {
