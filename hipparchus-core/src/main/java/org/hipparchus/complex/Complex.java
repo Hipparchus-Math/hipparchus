@@ -26,13 +26,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.FieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
+import org.hipparchus.util.SinCos;
 
 /**
  * Representation of a Complex number, i.e. a number which has both a
@@ -57,7 +59,7 @@ import org.hipparchus.util.Precision;
  * conforms with IEEE-754 while this class conforms with the standard behavior
  * for Java object types.
  */
-public class Complex implements FieldElement<Complex>, Serializable  {
+public class Complex implements CalculusFieldElement<Complex>, Serializable  {
     /** The square root of -1. A number representing "0.0 + 1.0i" */
     public static final Complex I = new Complex(0.0, 1.0);
     // CHECKSTYLE: stop ConstantName
@@ -811,9 +813,23 @@ public class Complex implements FieldElement<Complex>, Serializable  {
             return NaN;
         }
 
-        double expReal = FastMath.exp(real);
-        return createComplex(expReal *  FastMath.cos(imaginary),
-                             expReal * FastMath.sin(imaginary));
+        final double expReal = FastMath.exp(real);
+        final SinCos sc      = FastMath.sinCos(imaginary);
+        return createComplex(expReal * sc.cos(), expReal * sc.sin());
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex expm1() {
+        if (isNaN) {
+            return NaN;
+        }
+
+        final double expm1Real = FastMath.expm1(real);
+        final SinCos sc        = FastMath.sinCos(imaginary);
+        return createComplex(expm1Real * sc.cos(), expm1Real * sc.sin());
     }
 
     /**
@@ -859,6 +875,24 @@ public class Complex implements FieldElement<Complex>, Serializable  {
                              FastMath.atan2(imaginary, real));
     }
 
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex log1p() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex log10() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     /**
      * Returns of value of this complex number raised to the power of {@code x}.
      * Implements the formula:
@@ -894,6 +928,36 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      public Complex pow(double x) {
         return this.log().multiply(x).exp();
     }
+
+     /** {@inheritDoc}
+      * @since 1.7
+      */
+     @Override
+     public Complex pow(int n) {
+
+         Complex result = ONE;
+
+         final boolean invert;
+         if (n < 0) {
+             invert = true;
+             n = -n;
+         } else {
+             invert = false;
+         }
+
+         // Exponentiate by successive squaring
+         Complex square = this;
+         while (n > 0) {
+             if ((n & 0x1) > 0) {
+                 result = result.multiply(square);
+             }
+             square = square.multiply(square);
+             n = n >> 1;
+         }
+
+         return invert ? result.reciprocal() : result;
+
+     }
 
     /**
      * Compute the
@@ -933,6 +997,43 @@ public class Complex implements FieldElement<Complex>, Serializable  {
 
         return createComplex(FastMath.sin(real) * FastMath.cosh(imaginary),
                              FastMath.cos(real) * FastMath.sinh(imaginary));
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex atan2(Complex x)
+        throws MathIllegalArgumentException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex acosh() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex asinh() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex atanh() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /**
@@ -1043,6 +1144,24 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      */
     public Complex sqrt1z() {
         return createComplex(1.0, 0.0).subtract(this.multiply(this)).sqrt();
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex cbrt() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex rootN(int n) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     /**
@@ -1288,6 +1407,139 @@ public class Complex implements FieldElement<Complex>, Serializable  {
     @Override
     public String toString() {
         return "(" + real + ", " + imaginary + ")";
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex scalb(int n) {
+        return new Complex(FastMath.scalb(real, n), FastMath.scalb(imaginary, n));
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex hypot(Complex y) {
+        return multiply(this).add(y.multiply(y)).sqrt();
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex linearCombination(final Complex[] a, final Complex[] b)
+        throws MathIllegalArgumentException {
+        final int n = 2 * a.length;
+        final double[] realA      = new double[n];
+        final double[] realB      = new double[n];
+        final double[] imaginaryA = new double[n];
+        final double[] imaginaryB = new double[n];
+        for (int i = 0; i < a.length; ++i)  {
+            final Complex ai = a[i];
+            final Complex bi = b[i];
+            realA[2 * i    ]      = +ai.real;
+            realA[2 * i + 1]      = -ai.imaginary;
+            realB[2 * i    ]      = +bi.real;
+            realB[2 * i + 1]      = +bi.imaginary;
+            imaginaryA[2 * i    ] = +ai.real;
+            imaginaryA[2 * i + 1] = +ai.imaginary;
+            imaginaryB[2 * i    ] = +bi.imaginary;
+            imaginaryB[2 * i + 1] = +bi.real;
+        }
+        return createComplex(MathArrays.linearCombination(realA,  realB),
+                             MathArrays.linearCombination(imaginaryA, imaginaryB));
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex linearCombination(final double[] a, final Complex[] b)
+        throws MathIllegalArgumentException {
+        final int n = a.length;
+        final double[] realB      = new double[n];
+        final double[] imaginaryB = new double[n];
+        for (int i = 0; i < a.length; ++i)  {
+            final Complex bi = b[i];
+            realB[i]      = +bi.real;
+            imaginaryB[i] = +bi.imaginary;
+        }
+        return createComplex(MathArrays.linearCombination(a,  realB),
+                             MathArrays.linearCombination(a, imaginaryB));
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex linearCombination(final Complex a1, final Complex b1, final Complex a2, final Complex b2) {
+        return createComplex(MathArrays.linearCombination(+a1.real, b1.real,
+                                                          -a1.imaginary, b1.imaginary,
+                                                          +a2.real, b2.real,
+                                                          -a2.imaginary, b2.imaginary),
+                             MathArrays.linearCombination(+a1.real, b1.imaginary,
+                                                          +a1.imaginary, b1.real,
+                                                          +a2.real, b2.imaginary,
+                                                          +a2.imaginary, b2.real));
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex linearCombination(final double a1, final Complex b1, final double a2, final Complex b2) {
+        return createComplex(MathArrays.linearCombination(a1, b1.real,
+                                                          a2, b2.real),
+                             MathArrays.linearCombination(a1, b1.imaginary,
+                                                          a2, b2.imaginary));
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex linearCombination(final Complex a1, final Complex b1,
+                                     final Complex a2, final Complex b2,
+                                     final Complex a3, final Complex b3) {
+        return linearCombination(new Complex[] { a1, a2, a3 },
+                                 new Complex[] { b1, b2, b3 });
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex linearCombination(final double a1, final Complex b1,
+                                     final double a2, final Complex b2,
+                                     final double a3, final Complex b3) {
+        return linearCombination(new double[]  { a1, a2, a3 },
+                                 new Complex[] { b1, b2, b3 });
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex linearCombination(final Complex a1, final Complex b1,
+                                     final Complex a2, final Complex b2,
+                                     final Complex a3, final Complex b3,
+                                     final Complex a4, final Complex b4) {
+        return linearCombination(new Complex[] { a1, a2, a3, a4 },
+                                 new Complex[] { b1, b2, b3, b4 });
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex linearCombination(final double a1, final Complex b1,
+                                     final double a2, final Complex b2,
+                                     final double a3, final Complex b3,
+                                     final double a4, final Complex b4) {
+        return linearCombination(new double[]  { a1, a2, a3, a4 },
+                                 new Complex[] { b1, b2, b3, b4 });
     }
 
 }
