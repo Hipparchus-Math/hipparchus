@@ -60,18 +60,29 @@ import org.hipparchus.util.SinCos;
  * for Java object types.
  */
 public class Complex implements CalculusFieldElement<Complex>, Serializable  {
-    /** The square root of -1. A number representing "0.0 + 1.0i" */
+    /** The square root of -1. A number representing "0.0 + 1.0i". */
     public static final Complex I = new Complex(0.0, 1.0);
+    /** The square root of -1. A number representing "0.0 - 1.0i".
+     * @since 1.7
+     */
+    public static final Complex MINUS_I = new Complex(0.0, -1.0);
     // CHECKSTYLE: stop ConstantName
-    /** A complex number representing "NaN + NaNi" */
+    /** A complex number representing "NaN + NaNi". */
     public static final Complex NaN = new Complex(Double.NaN, Double.NaN);
     // CHECKSTYLE: resume ConstantName
     /** A complex number representing "+INF + INFi" */
     public static final Complex INF = new Complex(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
-    /** A complex number representing "1.0 + 0.0i" */
+    /** A complex number representing "1.0 + 0.0i". */
     public static final Complex ONE = new Complex(1.0, 0.0);
-    /** A complex number representing "0.0 + 0.0i" */
+    /** A complex number representing "-1.0 + 0.0i".
+     * @since 1.7
+     */
+    public static final Complex MINUS_ONE = new Complex(-1.0, 0.0);
+    /** A complex number representing "0.0 + 0.0i". */
     public static final Complex ZERO = new Complex(0.0, 0.0);
+
+    /** A rel number representing log(10). */
+    private static final double LOG10 = 2.302585092994045684;
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20160305L;
@@ -118,25 +129,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * @return the absolute value.
      */
     public double abs() {
-        if (isNaN) {
-            return Double.NaN;
-        }
-        if (isInfinite()) {
-            return Double.POSITIVE_INFINITY;
-        }
-        if (FastMath.abs(real) < FastMath.abs(imaginary)) {
-            if (imaginary == 0.0) {
-                return FastMath.abs(real);
-            }
-            double q = real / imaginary;
-            return FastMath.abs(imaginary) * FastMath.sqrt(1 + q * q);
-        } else {
-            if (real == 0.0) {
-                return FastMath.abs(imaginary);
-            }
-            double q = imaginary / real;
-            return FastMath.abs(real) * FastMath.sqrt(1 + q * q);
-        }
+        return FastMath.hypot(real, imaginary);
     }
 
     /**
@@ -533,8 +526,8 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             // we don't use isInfinite() to avoid testing for NaN again
             return INF;
         }
-        return createComplex(real * factor.real - imaginary * factor.imaginary,
-                             real * factor.imaginary + imaginary * factor.real);
+        return createComplex(MathArrays.linearCombination(real, factor.real, -imaginary, factor.imaginary),
+                             MathArrays.linearCombination(real, factor.imaginary, imaginary, factor.real));
     }
 
     /**
@@ -773,8 +766,9 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return NaN;
         }
 
-        return createComplex(FastMath.cosh(real) * FastMath.cos(imaginary),
-                             FastMath.sinh(real) * FastMath.sin(imaginary));
+        final SinCos sci = FastMath.sinCos(imaginary);
+        return createComplex(FastMath.cosh(real) * sci.cos(),
+                             FastMath.sinh(real) * sci.sin());
     }
 
     /**
@@ -880,8 +874,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      */
     @Override
     public Complex log1p() {
-        // TODO Auto-generated method stub
-        return null;
+        return add(1.0).log();
     }
 
     /** {@inheritDoc}
@@ -889,8 +882,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      */
     @Override
     public Complex log10() {
-        // TODO Auto-generated method stub
-        return null;
+        return log().divide(LOG10);
     }
 
     /**
@@ -995,18 +987,27 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return NaN;
         }
 
-        return createComplex(FastMath.sin(real) * FastMath.cosh(imaginary),
-                             FastMath.cos(real) * FastMath.sinh(imaginary));
+        final SinCos scr = FastMath.sinCos(real);
+        return createComplex(scr.sin() * FastMath.cosh(imaginary),
+                             scr.cos() * FastMath.sinh(imaginary));
     }
 
     /** {@inheritDoc}
      * @since 1.7
      */
     @Override
-    public Complex atan2(Complex x)
-        throws MathIllegalArgumentException {
-        // TODO Auto-generated method stub
-        return null;
+    public Complex atan2(Complex x) {
+
+        // compute r = sqrt(x^2+y^2)
+        final Complex r = x.multiply(x).add(multiply(this)).sqrt();
+
+        if (x.real >= 0) {
+            // compute atan2(y, x) = 2 atan(y / (r + x))
+            return divide(r.add(x)).atan().multiply(2);
+        } else {
+            // compute atan2(y, x) = +/- pi - 2 atan(y / (r - x))
+            return divide(r.subtract(x)).atan().multiply(-2).add(FastMath.PI);
+        }
     }
 
     /** {@inheritDoc}
@@ -1014,8 +1015,9 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      */
     @Override
     public Complex acosh() {
-        // TODO Auto-generated method stub
-        return null;
+        final Complex sqrtPlus  = add(1).sqrt();
+        final Complex sqrtMinus = subtract(1).sqrt();
+        return add(sqrtPlus.multiply(sqrtMinus)).log();
     }
 
     /** {@inheritDoc}
@@ -1023,8 +1025,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      */
     @Override
     public Complex asinh() {
-        // TODO Auto-generated method stub
-        return null;
+        return add(multiply(this).add(1.0).sqrt()).log();
     }
 
     /** {@inheritDoc}
@@ -1032,8 +1033,9 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      */
     @Override
     public Complex atanh() {
-        // TODO Auto-generated method stub
-        return null;
+        final Complex logPlus  = add(1).log();
+        final Complex logMinus = createComplex(1 - real, -imaginary).log();
+        return logPlus.subtract(logMinus).multiply(0.5);
     }
 
     /**
@@ -1071,8 +1073,9 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return NaN;
         }
 
-        return createComplex(FastMath.sinh(real) * FastMath.cos(imaginary),
-                             FastMath.cosh(real) * FastMath.sin(imaginary));
+        final SinCos sci = FastMath.sinCos(imaginary);
+        return createComplex(FastMath.sinh(real) * sci.cos(),
+                             FastMath.cosh(real) * sci.sin());
     }
 
     /**
@@ -1114,7 +1117,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
         }
 
         if (real == 0.0 && imaginary == 0.0) {
-            return createComplex(0.0, 0.0);
+            return ZERO;
         }
 
         double t = FastMath.sqrt((FastMath.abs(real) + abs()) / 2.0);
@@ -1122,7 +1125,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return createComplex(t, imaginary / (2.0 * t));
         } else {
             return createComplex(FastMath.abs(imaginary) / (2.0 * t),
-                                 FastMath.copySign(1d, imaginary) * t);
+                                 FastMath.copySign(t, imaginary));
         }
     }
 
@@ -1143,25 +1146,33 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * @return the square root of <code>1 - this<sup>2</sup></code>.
      */
     public Complex sqrt1z() {
-        return createComplex(1.0, 0.0).subtract(this.multiply(this)).sqrt();
+        return ONE.subtract(this.multiply(this)).sqrt();
     }
 
     /** {@inheritDoc}
+     * <p>
+     * This implementation compute the principal cube root by using a branch cut along real negative axis.
+     * </p>
      * @since 1.7
      */
     @Override
     public Complex cbrt() {
-        // TODO Auto-generated method stub
-        return null;
+        final double magnitude = FastMath.cbrt(abs());
+        final SinCos sc        = FastMath.sinCos(getArgument() / 3);
+        return createComplex(magnitude * sc.cos(), magnitude * sc.sin());
     }
 
     /** {@inheritDoc}
+     * <p>
+     * This implementation compute the principal cube root by using a branch cut along real negative axis.
+     * </p>
      * @since 1.7
      */
     @Override
     public Complex rootN(int n) {
-        // TODO Auto-generated method stub
-        return null;
+        final double magnitude = FastMath.pow(abs(), 1.0 / n);
+        final SinCos sc        = FastMath.sinCos(getArgument() / n);
+        return createComplex(magnitude * sc.cos(), magnitude * sc.sin());
     }
 
     /**
@@ -1200,18 +1211,18 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return NaN;
         }
         if (imaginary > 20.0) {
-            return createComplex(0.0, 1.0);
+            return I;
         }
         if (imaginary < -20.0) {
-            return createComplex(0.0, -1.0);
+            return MINUS_I;
         }
 
-        double real2 = 2.0 * real;
+        final SinCos sc2r = FastMath.sinCos(2.0 * real);
         double imaginary2 = 2.0 * imaginary;
-        double d = FastMath.cos(real2) + FastMath.cosh(imaginary2);
+        double d = sc2r.cos() + FastMath.cosh(imaginary2);
 
-        return createComplex(FastMath.sin(real2) / d,
-                             FastMath.sinh(imaginary2) / d);
+        return createComplex(sc2r.sin() / d, FastMath.sinh(imaginary2) / d);
+
     }
 
     /**
@@ -1250,17 +1261,16 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return NaN;
         }
         if (real > 20.0) {
-            return createComplex(1.0, 0.0);
+            return ONE;
         }
         if (real < -20.0) {
-            return createComplex(-1.0, 0.0);
+            return MINUS_ONE;
         }
         double real2 = 2.0 * real;
-        double imaginary2 = 2.0 * imaginary;
-        double d = FastMath.cosh(real2) + FastMath.cos(imaginary2);
+        final SinCos sc2i = FastMath.sinCos(2.0 * imaginary);
+        double d = FastMath.cosh(real2) + sc2i.cos();
 
-        return createComplex(FastMath.sinh(real2) / d,
-                             FastMath.sin(imaginary2) / d);
+        return createComplex(FastMath.sinh(real2) / d, sc2i.sin() / d);
     }
 
 
@@ -1334,8 +1344,9 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
         double innerPart = nthPhi;
         for (int k = 0; k < n ; k++) {
             // inner part
-            final double realPart = nthRootOfAbs *  FastMath.cos(innerPart);
-            final double imaginaryPart = nthRootOfAbs *  FastMath.sin(innerPart);
+            final SinCos scInner = FastMath.sinCos(innerPart);
+            final double realPart = nthRootOfAbs *  scInner.cos();
+            final double imaginaryPart = nthRootOfAbs *  scInner.sin();
             result.add(createComplex(realPart, imaginaryPart));
             innerPart += slice;
         }
