@@ -16,9 +16,6 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Maven
-      run: mvn -B package test install checkstyle:checkstyle --file pom.xml
+      run: mvn -B package test install checkstyle:checkstyle -f pom.xml
     - name: SonarQube scan
-      uses: kitabisa/sonarqube-action@master
-      with:
-        host: ${{ secrets.SONARQUBE_HOST }}
-        login: ${{ secrets.SONARQUBE_TOKEN }}
+      run: mvn -B sonar:sonar -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }} -Dsonar.host.url=${{ secrets.SONARQUBE_HOST }} -f pom.xml
