@@ -17,3 +17,8 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: mvn -B package test install checkstyle:checkstyle --file pom.xml
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@v1.1
+      with:
+        host: ${{ secrets.SONARQUBE_HOST }}
+        login: ${{ secrets.SONARQUBE_TOKEN }}
