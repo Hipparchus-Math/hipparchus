@@ -887,6 +887,11 @@ public class ComplexTest {
         Complex y = new Complex(5, 6);
         Complex expected = new Complex(-1.860893, 11.83677);
         UnitTestUtils.assertEquals(expected, x.pow(y), 1.0e-5);
+        UnitTestUtils.assertEquals(new Complex(-46, 9).divide(2197), new Complex(2, -3).pow(new Complex(-3, 0)), 1.0e-15);
+        UnitTestUtils.assertEquals(new Complex(-1, 0).divide(8), new Complex(-2, 0).pow(new Complex(-3, 0)), 1.0e-15);
+        UnitTestUtils.assertEquals(new Complex(0, 2),
+                                   new Complex(-4, 0).pow(new Complex(0.5, 0)),
+                                   1.0e-15);
     }
 
     @Test
@@ -901,47 +906,52 @@ public class ComplexTest {
         Assert.assertTrue(x.pow(Complex.NaN).isNaN());
     }
 
-   @Test
-   public void testPowInf() {
-       UnitTestUtils.assertSame(Complex.NaN,Complex.ONE.pow(oneInf));
-       UnitTestUtils.assertSame(Complex.NaN,Complex.ONE.pow(oneNegInf));
-       UnitTestUtils.assertSame(Complex.NaN,Complex.ONE.pow(infOne));
-       UnitTestUtils.assertSame(Complex.NaN,Complex.ONE.pow(infInf));
-       UnitTestUtils.assertSame(Complex.NaN,Complex.ONE.pow(infNegInf));
-       UnitTestUtils.assertSame(Complex.NaN,Complex.ONE.pow(negInfInf));
-       UnitTestUtils.assertSame(Complex.NaN,Complex.ONE.pow(negInfNegInf));
-       UnitTestUtils.assertSame(Complex.NaN,infOne.pow(Complex.ONE));
-       UnitTestUtils.assertSame(Complex.NaN,negInfOne.pow(Complex.ONE));
-       UnitTestUtils.assertSame(Complex.NaN,infInf.pow(Complex.ONE));
-       UnitTestUtils.assertSame(Complex.NaN,infNegInf.pow(Complex.ONE));
-       UnitTestUtils.assertSame(Complex.NaN,negInfInf.pow(Complex.ONE));
-       UnitTestUtils.assertSame(Complex.NaN,negInfNegInf.pow(Complex.ONE));
-       UnitTestUtils.assertSame(Complex.NaN,negInfNegInf.pow(infNegInf));
-       UnitTestUtils.assertSame(Complex.NaN,negInfNegInf.pow(negInfNegInf));
-       UnitTestUtils.assertSame(Complex.NaN,negInfNegInf.pow(infInf));
-       UnitTestUtils.assertSame(Complex.NaN,infInf.pow(infNegInf));
-       UnitTestUtils.assertSame(Complex.NaN,infInf.pow(negInfNegInf));
-       UnitTestUtils.assertSame(Complex.NaN,infInf.pow(infInf));
-       UnitTestUtils.assertSame(Complex.NaN,infNegInf.pow(infNegInf));
-       UnitTestUtils.assertSame(Complex.NaN,infNegInf.pow(negInfNegInf));
-       UnitTestUtils.assertSame(Complex.NaN,infNegInf.pow(infInf));
-   }
+    @Test
+    public void testPowInf() {
+        UnitTestUtils.assertSame(Complex.NaN, Complex.ONE.pow(oneInf));
+        UnitTestUtils.assertSame(Complex.NaN, Complex.ONE.pow(oneNegInf));
+        UnitTestUtils.assertSame(Complex.NaN, Complex.ONE.pow(infOne));
+        UnitTestUtils.assertSame(Complex.NaN, Complex.ONE.pow(infInf));
+        UnitTestUtils.assertSame(Complex.NaN, Complex.ONE.pow(infNegInf));
+        UnitTestUtils.assertSame(Complex.NaN, Complex.ONE.pow(negInfInf));
+        UnitTestUtils.assertSame(Complex.NaN, Complex.ONE.pow(negInfNegInf));
+        UnitTestUtils.assertSame(Complex.INF, infOne.pow(Complex.ONE));
+        UnitTestUtils.assertSame(Complex.INF, negInfOne.pow(Complex.ONE));
+        UnitTestUtils.assertSame(Complex.INF, infInf.pow(Complex.ONE));
+        UnitTestUtils.assertSame(Complex.INF, infNegInf.pow(Complex.ONE));
+        UnitTestUtils.assertSame(Complex.INF, negInfInf.pow(Complex.ONE));
+        UnitTestUtils.assertSame(Complex.INF, negInfNegInf.pow(Complex.ONE));
+        UnitTestUtils.assertSame(Complex.NaN, negInfNegInf.pow(infNegInf));
+        UnitTestUtils.assertSame(Complex.NaN, negInfNegInf.pow(negInfNegInf));
+        UnitTestUtils.assertSame(Complex.NaN, negInfNegInf.pow(infInf));
+        UnitTestUtils.assertSame(Complex.NaN, infInf.pow(infNegInf));
+        UnitTestUtils.assertSame(Complex.NaN, infInf.pow(negInfNegInf));
+        UnitTestUtils.assertSame(Complex.NaN, infInf.pow(infInf));
+        UnitTestUtils.assertSame(Complex.NaN, infNegInf.pow(infNegInf));
+        UnitTestUtils.assertSame(Complex.NaN, infNegInf.pow(negInfNegInf));
+        UnitTestUtils.assertSame(Complex.NaN, infNegInf.pow(infInf));
+    }
 
-   @Test
-   public void testPowZero() {
-       UnitTestUtils.assertSame(Complex.NaN,
-               Complex.ZERO.pow(Complex.ONE));
-       UnitTestUtils.assertSame(Complex.NaN,
-               Complex.ZERO.pow(Complex.ZERO));
-       UnitTestUtils.assertSame(Complex.NaN,
-               Complex.ZERO.pow(Complex.I));
-       UnitTestUtils.assertEquals(Complex.ONE,
-               Complex.ONE.pow(Complex.ZERO), 10e-12);
-       UnitTestUtils.assertEquals(Complex.ONE,
-               Complex.I.pow(Complex.ZERO), 10e-12);
-       UnitTestUtils.assertEquals(Complex.ONE,
-               new Complex(-1, 3).pow(Complex.ZERO), 10e-12);
-   }
+    @Test
+    public void testPowZero() {
+        UnitTestUtils.assertEquals(Complex.ZERO,
+                                 Complex.ZERO.pow(Complex.ONE), 1.0e-12);
+        UnitTestUtils.assertSame(Complex.ONE,
+                                 Complex.ZERO.pow(Complex.ZERO));
+        UnitTestUtils.assertSame(Complex.NaN,
+                                 Complex.ZERO.pow(Complex.I));
+        UnitTestUtils.assertEquals(Complex.ONE,
+                                   Complex.ONE.pow(Complex.ZERO), 10e-12);
+        UnitTestUtils.assertEquals(Complex.ONE,
+                                   Complex.I.pow(Complex.ZERO), 10e-12);
+        UnitTestUtils.assertEquals(Complex.ONE,
+                                   new Complex(-1, 3).pow(Complex.ZERO), 10e-12);
+    }
+
+    @Test
+    public void testZeroPow() {
+        UnitTestUtils.assertEquals(Complex.ZERO, Complex.ZERO.pow(2.0), 1.0e-5);
+    }
 
     @Test
     public void testScalarPow() {
@@ -949,6 +959,9 @@ public class ComplexTest {
         double yDouble = 5.0;
         Complex yComplex = new Complex(yDouble);
         Assert.assertEquals(x.pow(yComplex), x.pow(yDouble));
+        UnitTestUtils.assertEquals(Complex.ONE.negate(), Complex.ONE.negate().pow(0.5).pow(2), 1.0e-15);
+        UnitTestUtils.assertEquals(new Complex(2, 0), new Complex(4, 0).pow(0.5), 1.0e-15);
+        UnitTestUtils.assertEquals(new Complex(2, 0), new Complex(4, 0).pow(new Complex(0.5, 0)), 1.0e-15);
     }
 
     @Test
@@ -969,26 +982,26 @@ public class ComplexTest {
 
    @Test
    public void testScalarPowInf() {
-       UnitTestUtils.assertSame(Complex.NaN,Complex.ONE.pow(Double.POSITIVE_INFINITY));
-       UnitTestUtils.assertSame(Complex.NaN,Complex.ONE.pow(Double.NEGATIVE_INFINITY));
-       UnitTestUtils.assertSame(Complex.NaN,infOne.pow(1.0));
-       UnitTestUtils.assertSame(Complex.NaN,negInfOne.pow(1.0));
-       UnitTestUtils.assertSame(Complex.NaN,infInf.pow(1.0));
-       UnitTestUtils.assertSame(Complex.NaN,infNegInf.pow(1.0));
-       UnitTestUtils.assertSame(Complex.NaN,negInfInf.pow(10));
-       UnitTestUtils.assertSame(Complex.NaN,negInfNegInf.pow(1.0));
-       UnitTestUtils.assertSame(Complex.NaN,negInfNegInf.pow(Double.POSITIVE_INFINITY));
-       UnitTestUtils.assertSame(Complex.NaN,negInfNegInf.pow(Double.POSITIVE_INFINITY));
-       UnitTestUtils.assertSame(Complex.NaN,infInf.pow(Double.POSITIVE_INFINITY));
-       UnitTestUtils.assertSame(Complex.NaN,infInf.pow(Double.NEGATIVE_INFINITY));
-       UnitTestUtils.assertSame(Complex.NaN,infNegInf.pow(Double.NEGATIVE_INFINITY));
-       UnitTestUtils.assertSame(Complex.NaN,infNegInf.pow(Double.POSITIVE_INFINITY));
+       UnitTestUtils.assertSame(Complex.NaN, Complex.ONE.pow(Double.POSITIVE_INFINITY));
+       UnitTestUtils.assertSame(Complex.NaN, Complex.ONE.pow(Double.NEGATIVE_INFINITY));
+       UnitTestUtils.assertSame(Complex.INF, infOne.pow(1.0));
+       UnitTestUtils.assertSame(Complex.INF, negInfOne.pow(1.0));
+       UnitTestUtils.assertSame(Complex.INF, infInf.pow(1.0));
+       UnitTestUtils.assertSame(Complex.INF, infNegInf.pow(1.0));
+       UnitTestUtils.assertSame(Complex.INF, negInfInf.pow(10));
+       UnitTestUtils.assertSame(Complex.INF, negInfNegInf.pow(1.0));
+       UnitTestUtils.assertSame(Complex.NaN, negInfNegInf.pow(Double.POSITIVE_INFINITY));
+       UnitTestUtils.assertSame(Complex.NaN, negInfNegInf.pow(Double.POSITIVE_INFINITY));
+       UnitTestUtils.assertSame(Complex.NaN, infInf.pow(Double.POSITIVE_INFINITY));
+       UnitTestUtils.assertSame(Complex.NaN, infInf.pow(Double.NEGATIVE_INFINITY));
+       UnitTestUtils.assertSame(Complex.NaN, infNegInf.pow(Double.NEGATIVE_INFINITY));
+       UnitTestUtils.assertSame(Complex.NaN, infNegInf.pow(Double.POSITIVE_INFINITY));
    }
 
    @Test
    public void testScalarPowZero() {
-       UnitTestUtils.assertSame(Complex.NaN, Complex.ZERO.pow(1.0));
-       UnitTestUtils.assertSame(Complex.NaN, Complex.ZERO.pow(0.0));
+       UnitTestUtils.assertEquals(Complex.ZERO, Complex.ZERO.pow(1.0), 1.0e-12);
+       UnitTestUtils.assertSame(Complex.ONE, Complex.ZERO.pow(0.0));
        UnitTestUtils.assertEquals(Complex.ONE, Complex.ONE.pow(0.0), 10e-12);
        UnitTestUtils.assertEquals(Complex.ONE, Complex.I.pow(0.0), 10e-12);
        UnitTestUtils.assertEquals(Complex.ONE, new Complex(-1, 3).pow(0.0), 10e-12);
