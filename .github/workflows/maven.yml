@@ -3,7 +3,7 @@
 
 name: Java CI with Maven
 
-on: [ push ]
+on: [ push, pull_request ]
 
 jobs:
   build:
@@ -18,4 +18,12 @@ jobs:
     - name: Build with Maven
       run: mvn -B package test install checkstyle:checkstyle -f pom.xml
     - name: SonarQube scan
-      run: mvn -B sonar:sonar -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }} -Dsonar.host.url=${{ secrets.SONARQUBE_HOST }} -f pom.xml
+      run: mvn -B -f pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.host.url=$SONARQUBE_HOST
+      env:
+        SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
+        SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+    - name: Deployment
+      run: mvn -B -f pom.xml -s .CI/maven-settings.xml deploy -Pci-deploy -DskipTests=true
+      env:
+        NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+        NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
