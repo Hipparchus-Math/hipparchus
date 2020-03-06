@@ -23,7 +23,7 @@ jobs:
         SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
         SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
     - name: Deployment
-      if: success() && ( github.ref == 'master' || github.ref == 'develop' )
+      if: github.ref == 'master' || github.ref == 'develop'
       run: mvn -B -f pom.xml -s .CI/maven-settings.xml deploy -Pci-deploy -DskipTests=true
       env:
         NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
