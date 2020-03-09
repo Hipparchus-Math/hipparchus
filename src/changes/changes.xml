@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.7"  date="TBD" description="TBD.">
+      <action dev="bryan" type="update" issue="issues/72">
+        Changed RotationOrder from final class to enum.
+      </action>
       <action dev="luc" type="fix" issue="issues/74">
         Fixed Complex.pow(Complex p) and Complex.pow(double p) for special cases (real arguments,
         integer power, 0).

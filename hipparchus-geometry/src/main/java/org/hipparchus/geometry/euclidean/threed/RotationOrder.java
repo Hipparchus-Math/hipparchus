@@ -22,6 +22,13 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
+
+
 /**
  * This class is a utility representing a rotation order specification
  * for Cardan or Euler angles specification.
@@ -31,92 +38,90 @@ package org.hipparchus.geometry.euclidean.threed;
  * the {@link Rotation#Rotation(RotationOrder,double,double,double)}
  * constructor or the {@link Rotation#getAngles} method.
  *
+ * Since Hipparchus 1.7 this class is an enumerate class.
+ *
  */
-public final class RotationOrder {
+public enum RotationOrder {
 
     /** Set of Cardan angles.
      * this ordered set of rotations is around X, then around Y, then
      * around Z
      */
-    public static final RotationOrder XYZ =
-      new RotationOrder("XYZ", Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K);
+     XYZ("XYZ", Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K),
 
     /** Set of Cardan angles.
      * this ordered set of rotations is around X, then around Z, then
      * around Y
      */
-    public static final RotationOrder XZY =
-      new RotationOrder("XZY", Vector3D.PLUS_I, Vector3D.PLUS_K, Vector3D.PLUS_J);
+     XZY("XZY", Vector3D.PLUS_I, Vector3D.PLUS_K, Vector3D.PLUS_J),
 
     /** Set of Cardan angles.
      * this ordered set of rotations is around Y, then around X, then
      * around Z
      */
-    public static final RotationOrder YXZ =
-      new RotationOrder("YXZ", Vector3D.PLUS_J, Vector3D.PLUS_I, Vector3D.PLUS_K);
+     YXZ("YXZ", Vector3D.PLUS_J, Vector3D.PLUS_I, Vector3D.PLUS_K),
 
     /** Set of Cardan angles.
      * this ordered set of rotations is around Y, then around Z, then
      * around X
      */
-    public static final RotationOrder YZX =
-      new RotationOrder("YZX", Vector3D.PLUS_J, Vector3D.PLUS_K, Vector3D.PLUS_I);
+     YZX("YZX", Vector3D.PLUS_J, Vector3D.PLUS_K, Vector3D.PLUS_I),
 
     /** Set of Cardan angles.
      * this ordered set of rotations is around Z, then around X, then
      * around Y
      */
-    public static final RotationOrder ZXY =
-      new RotationOrder("ZXY", Vector3D.PLUS_K, Vector3D.PLUS_I, Vector3D.PLUS_J);
+     ZXY("ZXY", Vector3D.PLUS_K, Vector3D.PLUS_I, Vector3D.PLUS_J),
 
     /** Set of Cardan angles.
      * this ordered set of rotations is around Z, then around Y, then
      * around X
      */
-    public static final RotationOrder ZYX =
-      new RotationOrder("ZYX", Vector3D.PLUS_K, Vector3D.PLUS_J, Vector3D.PLUS_I);
+     ZYX("ZYX", Vector3D.PLUS_K, Vector3D.PLUS_J, Vector3D.PLUS_I),
 
     /** Set of Euler angles.
      * this ordered set of rotations is around X, then around Y, then
      * around X
      */
-    public static final RotationOrder XYX =
-      new RotationOrder("XYX", Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_I);
+     XYX("XYX", Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_I),
 
     /** Set of Euler angles.
      * this ordered set of rotations is around X, then around Z, then
      * around X
      */
-    public static final RotationOrder XZX =
-      new RotationOrder("XZX", Vector3D.PLUS_I, Vector3D.PLUS_K, Vector3D.PLUS_I);
+     XZX("XZX", Vector3D.PLUS_I, Vector3D.PLUS_K, Vector3D.PLUS_I),
 
     /** Set of Euler angles.
      * this ordered set of rotations is around Y, then around X, then
      * around Y
      */
-    public static final RotationOrder YXY =
-      new RotationOrder("YXY", Vector3D.PLUS_J, Vector3D.PLUS_I, Vector3D.PLUS_J);
+     YXY("YXY", Vector3D.PLUS_J, Vector3D.PLUS_I, Vector3D.PLUS_J),
 
     /** Set of Euler angles.
      * this ordered set of rotations is around Y, then around Z, then
      * around Y
      */
-    public static final RotationOrder YZY =
-      new RotationOrder("YZY", Vector3D.PLUS_J, Vector3D.PLUS_K, Vector3D.PLUS_J);
+     YZY("YZY", Vector3D.PLUS_J, Vector3D.PLUS_K, Vector3D.PLUS_J),
 
     /** Set of Euler angles.
      * this ordered set of rotations is around Z, then around X, then
      * around Z
      */
-    public static final RotationOrder ZXZ =
-      new RotationOrder("ZXZ", Vector3D.PLUS_K, Vector3D.PLUS_I, Vector3D.PLUS_K);
+     ZXZ("ZXZ", Vector3D.PLUS_K, Vector3D.PLUS_I, Vector3D.PLUS_K),
 
     /** Set of Euler angles.
      * this ordered set of rotations is around Z, then around Y, then
      * around Z
      */
-    public static final RotationOrder ZYZ =
-      new RotationOrder("ZYZ", Vector3D.PLUS_K, Vector3D.PLUS_J, Vector3D.PLUS_K);
+     ZYZ("ZYZ", Vector3D.PLUS_K, Vector3D.PLUS_J, Vector3D.PLUS_K);
+
+    /** Codes map. */
+    private static final Map<String, RotationOrder> CODES_MAP = new HashMap<String, RotationOrder>();
+    static {
+        for (final RotationOrder type : values()) {
+            CODES_MAP.put(type.toString(), type);
+        }
+    }
 
     /** Name of the rotations order. */
     private final String name;
@@ -173,6 +178,21 @@ public final class RotationOrder {
      */
     public Vector3D getA3() {
         return a3;
+    }
+
+    /**
+     * Get the rotation order corresponding to a string representation.
+     * @param value name
+     * @return a rotation order object
+     * @since 1.7
+     */
+    public static RotationOrder getRotationOrder(final String value) {
+        final RotationOrder type = CODES_MAP.get(value);
+        if (type == null) {
+            // Invalid value. An exception is thrown
+            throw new MathIllegalStateException(LocalizedGeometryFormats.INVALID_ROTATION_ORDER_NAME, value);
+        }
+        return type;
     }
 
 }
