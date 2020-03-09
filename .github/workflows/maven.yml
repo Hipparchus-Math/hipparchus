@@ -1,9 +1,6 @@
-# This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
 name: Java CI with Maven
 
-on: [ push, pull_request ]
+on: [ push ]
 
 jobs:
   build:
@@ -16,15 +13,9 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Maven
-      run: mvn -B package test install checkstyle:checkstyle -f pom.xml
+      run: mvn -B -f pom.xml package test install checkstyle:checkstyle
     - name: SonarQube scan
       run: mvn -B -f pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.host.url=$SONARQUBE_HOST
       env:
         SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
         SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
-    - name: Deployment
-      if: github.ref == 'master' || github.ref == 'develop'
-      run: mvn -B -f pom.xml -s .CI/maven-settings.xml deploy -Pci-deploy -DskipTests=true
-      env:
-        NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
-        NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
