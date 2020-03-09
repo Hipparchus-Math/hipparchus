@@ -17,7 +17,7 @@ jobs:
       with:
         java-version: 1.8
     - name: Display github.ref
-      run: echo "github.ref: '"${{github.ref}}"'"
+      run: echo ${{github.ref}}
     - name: Deployment
       if:  github.ref == 'ref/heads/master' || github.ref == 'ref/heads/develop'
       run: mvn -B -f pom.xml -s .CI/maven-settings.xml deploy -Pci-deploy -DskipTests=true
