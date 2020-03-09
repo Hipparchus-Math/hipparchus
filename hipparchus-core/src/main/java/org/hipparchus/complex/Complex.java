@@ -861,18 +861,14 @@ public class Complex implements FieldElement<Complex>, Serializable  {
 
     /**
      * Returns of value of this complex number raised to the power of {@code x}.
-     * Implements the formula:
-     * <pre>
-     *  <code>
-     *   y<sup>x</sup> = exp(x&middot;log(y))
-     *  </code>
-     * </pre>
-     * where {@code exp} and {@code log} are {@link #exp} and
-     * {@link #log}, respectively.
      * <p>
-     * Returns {@link Complex#NaN} if either real or imaginary part of the
-     * input argument is {@code NaN} or infinite, or if {@code y}
-     * equals {@link Complex#ZERO}.</p>
+     * If {@code x} is a real number whose real part has an integer value, returns {@link #pow(int)},
+     * if both {@code this} and {@code x} are real and {@link FastMath#pow(double, double)}
+     * with the corresponding real arguments would return a finite number (neither NaN
+     * nor infinite), then returns the same value converted to {@code Complex},
+     * with the same special cases.
+     * In all other cases real cases, implements y<sup>x</sup> = exp(x&middot;log(y)).
+     * </p>
      *
      * @param  x exponent to which this {@code Complex} is to be raised.
      * @return <code> this<sup>x</sup></code>.
@@ -880,23 +876,94 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      */
     public Complex pow(Complex x)
         throws NullArgumentException {
+
         MathUtils.checkNotNull(x);
+
+        if (x.imaginary == 0.0) {
+            final int nx = (int) FastMath.rint(x.real);
+            if (x.real == nx) {
+                // integer power
+                return pow(nx);
+            } else if (this.imaginary == 0.0) {
+                // check real implementation that handles a bunch of special cases
+                final double realPow = FastMath.pow(this.real, x.real);
+                if (Double.isFinite(realPow)) {
+                    return createComplex(realPow, 0);
+                }
+            }
+        }
+
+        // generic implementation
         return this.log().multiply(x).exp();
+
     }
+
 
     /**
      * Returns of value of this complex number raised to the power of {@code x}.
+     * <p>
+     * If {@code x} has an integer value, returns {@link #pow(int)},
+     * if {@code this} is real and {@link FastMath#pow(double, double)}
+     * with the corresponding real arguments would return a finite number (neither NaN
+     * nor infinite), then returns the same value converted to {@code Complex},
+     * with the same special cases.
+     * In all other cases real cases, implements y<sup>x</sup> = exp(x&middot;log(y)).
+     * </p>
      *
      * @param  x exponent to which this {@code Complex} is to be raised.
-     * @return <code>this<sup>x</sup></code>.
-     * @see #pow(Complex)
+     * @return <code> this<sup>x</sup></code>.
      */
      public Complex pow(double x) {
-        return this.log().multiply(x).exp();
-    }
 
-    /**
-     * Compute the
+         final int nx = (int) FastMath.rint(x);
+         if (x == nx) {
+             // integer power
+             return pow(nx);
+         } else if (this.imaginary == 0.0) {
+             // check real implementation that handles a bunch of special cases
+             final double realPow = FastMath.pow(this.real, x);
+             if (Double.isFinite(realPow)) {
+                 return createComplex(realPow, 0);
+             }
+         }
+
+         // generic implementation
+         return this.log().multiply(x).exp();
+
+     }
+
+     /** Integer power operation.
+      * @param n power to apply
+      * @return this<sup>n</sup>
+      * @since 1.7
+      */
+     public Complex pow(int n) {
+
+         Complex result = ONE;
+         final boolean invert;
+         if (n < 0) {
+             invert = true;
+             n = -n;
+         } else {
+             invert = false;
+         }
+
+         // Exponentiate by successive squaring
+         Complex square = this;
+         while (n > 0) {
+             if ((n & 0x1) > 0) {
+                 result = result.multiply(square);
+             }
+             square = square.multiply(square);
+             n = n >> 1;
+         }
+
+         return invert ? result.reciprocal() : result;
+
+     }
+
+     /**
+      * Compute the
      * <a href="http://mathworld.wolfram.com/Sine.html" TARGET="_top">
      * sine</a>
      * of this complex number.
