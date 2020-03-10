@@ -129,7 +129,8 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * @return the absolute value.
      */
     public double abs() {
-        return FastMath.hypot(real, imaginary);
+        // we check NaN here because FastMath.hypot checks it after infinity
+        return isNaN ? Double.NaN : FastMath.hypot(real, imaginary);
     }
 
     /**
