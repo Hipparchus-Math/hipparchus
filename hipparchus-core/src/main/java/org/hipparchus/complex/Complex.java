@@ -913,54 +913,54 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * @param  x exponent to which this {@code Complex} is to be raised.
      * @return <code> this<sup>x</sup></code>.
      */
-     public Complex pow(double x) {
+    public Complex pow(double x) {
 
-         final int nx = (int) FastMath.rint(x);
-         if (x == nx) {
-             // integer power
-             return pow(nx);
-         } else if (this.imaginary == 0.0) {
-             // check real implementation that handles a bunch of special cases
-             final double realPow = FastMath.pow(this.real, x);
-             if (Double.isFinite(realPow)) {
-                 return createComplex(realPow, 0);
-             }
-         }
+        final int nx = (int) FastMath.rint(x);
+        if (x == nx) {
+            // integer power
+            return pow(nx);
+        } else if (this.imaginary == 0.0) {
+            // check real implementation that handles a bunch of special cases
+            final double realPow = FastMath.pow(this.real, x);
+            if (Double.isFinite(realPow)) {
+                return createComplex(realPow, 0);
+            }
+        }
 
-         // generic implementation
-         return this.log().multiply(x).exp();
+        // generic implementation
+        return this.log().multiply(x).exp();
 
-     }
+    }
 
-     /** Integer power operation.
-      * @param n power to apply
-      * @return this<sup>n</sup>
-      * @since 1.7
-      */
-     public Complex pow(int n) {
+    /** Integer power operation.
+     * @param n power to apply
+     * @return this<sup>n</sup>
+     * @since 1.7
+     */
+    public Complex pow(int n) {
 
-         Complex result = ONE;
-         final boolean invert;
-         if (n < 0) {
-             invert = true;
-             n = -n;
-         } else {
-             invert = false;
-         }
+        Complex result = ONE;
+        final boolean invert;
+        if (n < 0) {
+            invert = true;
+            n = -n;
+        } else {
+            invert = false;
+        }
 
-         // Exponentiate by successive squaring
-         Complex square = this;
-         while (n > 0) {
-             if ((n & 0x1) > 0) {
-                 result = result.multiply(square);
-             }
-             square = square.multiply(square);
-             n = n >> 1;
-         }
+        // Exponentiate by successive squaring
+        Complex square = this;
+        while (n > 0) {
+            if ((n & 0x1) > 0) {
+                result = result.multiply(square);
+            }
+            square = square.multiply(square);
+            n = n >> 1;
+        }
 
-         return invert ? result.reciprocal() : result;
+        return invert ? result.reciprocal() : result;
 
-     }
+    }
 
      /**
       * Compute the
