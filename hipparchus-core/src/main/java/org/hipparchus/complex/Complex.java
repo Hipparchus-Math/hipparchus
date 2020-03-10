@@ -937,25 +937,26 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * @return this<sup>n</sup>
      * @since 1.7
      */
-    public Complex pow(int n) {
+    public Complex pow(final int n) {
 
         Complex result = ONE;
         final boolean invert;
-        if (n < 0) {
+        int p = n;
+        if (p < 0) {
             invert = true;
-            n = -n;
+            p = -p;
         } else {
             invert = false;
         }
 
         // Exponentiate by successive squaring
         Complex square = this;
-        while (n > 0) {
-            if ((n & 0x1) > 0) {
+        while (p > 0) {
+            if ((p & 0x1) > 0) {
                 result = result.multiply(square);
             }
             square = square.multiply(square);
-            n = n >> 1;
+            p = p >> 1;
         }
 
         return invert ? result.reciprocal() : result;
