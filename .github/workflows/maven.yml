@@ -15,7 +15,7 @@ jobs:
     - name: Build with Maven
       run: mvn -B -f pom.xml install checkstyle:checkstyle
     - name: SonarQube scan
-      run: mvn -B -f pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.host.url=$SONARQUBE_HOST
+      run: mvn -B -f pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN
       env:
         SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
         SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
