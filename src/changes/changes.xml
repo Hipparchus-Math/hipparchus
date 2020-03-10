@@ -50,6 +50,17 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.7"  date="TBD" description="TBD.">
+      <action dev="bryan" type="update" issue="issues/72">
+        Changed RotationOrder from final class to enum.
+      </action>
+      <action dev="luc" type="fix" issue="issues/74">
+        Fixed Complex.pow(Complex p) and Complex.pow(double p) for special cases (real arguments,
+        integer power, 0).
+      </action>
+      <action dev="luc" type="add" >
+        Added Complex.pow(int n) with integer power computed more accurately by successive squarings
+        rather than complex logarithm and exponential.
+      </action>
       <action dev="luc" type="fix" issue="issues/63">
         Added signum to Fraction and BigFraction.
       </action>

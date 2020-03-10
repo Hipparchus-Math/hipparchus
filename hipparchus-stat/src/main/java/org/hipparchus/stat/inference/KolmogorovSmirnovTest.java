@@ -40,7 +40,6 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.stat.LocalizedStatFormats;
-import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -102,8 +101,9 @@ import org.hipparchus.util.MathUtils;
  * <li>[3] Jasjeet S. Sekhon. 2011. <a href="http://www.jstatsoft.org/article/view/v042i07">
  * Multivariate and Propensity Score Matching Software with Automated Balance Optimization:
  * The Matching package for R</a> Journal of Statistical Software, 42(7): 1-52.</li>
- * <li>[4] Wilcox, Rand. 2012. Introduction to Robust Estimation and Hypothesis Testing,
- * Chapter 5, 3rd Ed. Academic Press.</li>
+ * <li>[4] Kim, P. J. and Jennrich, R. I. (1970). Tables of the Exact Sampling Distribution of the
+ * Two-Sample Kolmogorov-Smirnov Criterion D_mn ,m≦n in Selected Tables in Mathematical Statistics,
+ * Vol. 1, H. L. Harter and D. B. Owen, editors.</li>
  * </ul>
  * <p>
  * Note that [1] contains an error in computing h, refer to <a
@@ -957,38 +957,12 @@ public class KolmogorovSmirnovTest {
     }
 
     /**
-     * Given a d-statistic in the range [0, 1] and the two sample sizes n and m,
-     * an integral d-statistic in the range [0, n*m] is calculated, that can be used for
-     * comparison with other integral d-statistics. Depending whether {@code strict} is
-     * {@code true} or not, the returned value divided by (n*m) is greater than
-     * (resp greater than or equal to) the given d value (allowing some tolerance).
-     *
-     * @param d a d-statistic in the range [0, 1]
-     * @param n first sample size
-     * @param m second sample size
-     * @param strict whether the returned value divided by (n*m) is allowed to be equal to d
-     * @return the integral d-statistic in the range [0, n*m]
-     */
-    private static long calculateIntegralD(double d, int n, int m, boolean strict) {
-        final double tol = 1e-12;  // d-values within tol of one another are considered equal
-        long nm = n * (long)m;
-        long upperBound = (long)FastMath.ceil((d - tol) * nm);
-        long lowerBound = (long)FastMath.floor((d + tol) * nm);
-        if (strict && lowerBound == upperBound) {
-            return upperBound + 1l;
-        }
-        else {
-            return upperBound;
-        }
-    }
-
-    /**
      * Computes \(P(D_{n,m} &gt; d)\) if {@code strict} is {@code true}; otherwise \(P(D_{n,m} \ge
      * d)\), where \(D_{n,m}\) is the 2-sample Kolmogorov-Smirnov statistic. See
      * {@link #kolmogorovSmirnovStatistic(double[], double[])} for the definition of \(D_{n,m}\).
      * <p>
      * The returned probability is exact, implemented by unwinding the recursive function
-     * definitions presented in [4] (class javadoc).
+     * definitions presented in [4] from the class javadoc.
      * </p>
      *
      * @param d D-statistic value
@@ -999,8 +973,93 @@ public class KolmogorovSmirnovTest {
      *         greater than (resp. greater than or equal to) {@code d}
      */
     public double exactP(double d, int n, int m, boolean strict) {
-       return 1 - n(m, n, m, n, calculateIntegralD(d, m, n, strict), strict) /
-               CombinatoricsUtils.binomialCoefficientDouble(n + m, m);
+        if (d < 1 / (double)( m * n)) {
+            return 1.0;
+        } else if (d >= 1) {
+            return 0;
+        }
+        double normalizeD = normalizeD(d, n, m);
+        if (!strict) {
+            normalizeD -= 1 / ((double)n * m);
+        }
+        return exactPAtMeshpoint(normalizeD, n, m);
+    }
+
+    /**
+     * Normalizes a value to an integral multiple of 1/mn between 0 and 1.
+     * If d < 1/mn, 0 is returned; if d > 1, 1 is returned; if d is very close
+     * to an integral multiple of 1/mn, that value is returned; otherwise the
+     * returned value is the smallest multiple of 1/mn less than or equal to d.
+     *
+     * @param d d value
+     * @param n first sample size
+     * @param m second sample size
+     * @return d value suitable for input to exactPAtMeshpoint(d, m, n)
+     */
+    private double normalizeD(double d, int n, int m) {
+        final double resolution = 1 / ((double)n * m);
+        final double tol = 1e-12;
+        double normalizedD = 0;
+
+        // If d is smaller that the first mesh point, return 0
+        // If greater than 1, return 1
+        if (d < resolution) {
+            return 0;
+        } else if (d > 1) {
+            return 1;
+        }
+
+        // Normalize d to the smallest mesh point less than or equal to d;
+        // except if d is less than tol less than the next mesh point, bump it up
+        final double resolutions = d / resolution;
+        final double ceil = FastMath.ceil(resolutions);
+        if (ceil - resolutions < tol) {
+           normalizedD = ceil * resolution;
+        } else {
+           normalizedD = FastMath.floor(resolutions) * resolution;
+        }
+        return normalizedD;
+    }
+
+    /**
+     * Computes \(P(D_{n,m} &gt; d)\) where \(D_{n,m}\) is the 2-sample Kolmogorov-Smirnov statistic. See
+     * {@link #kolmogorovSmirnovStatistic(double[], double[])} for the definition of \(D_{n,m}\).
+     * <p>
+     * The returned probability is exact, implemented by unwinding the recursive function
+     * definitions presented in [4].
+     *
+     * @param d D-statistic value (must be a "meshpoint" - i.e., a possible actual value of D(m,n)).
+     * @param n first sample size
+     * @param m second sample size
+     * @return probability that a randomly selected m-n partition of m + n generates \(D_{n,m}\)
+     *         greater than (resp. greater than or equal to) {@code d}
+     */
+    private double exactPAtMeshpoint(double d, int n, int m) {
+        final int nn = FastMath.max(n, m);
+        final int mm = FastMath.min(n, m);
+        final double u[] = new double[nn + 2];
+        final double k = mm * nn * d + 0.5;
+        u[1] = 1d;
+        for (int j = 1; j < nn + 1; j++) {
+            u[j + 1] = 1;
+            if (mm * j > k) {
+                u[j + 1] = 0;
+            }
+        }
+        for (int i = 1; i < mm + 1; i++) {
+            final double w = (double) i / (double) (i + nn);
+            u[1] = w * u[1];
+            if (nn * i > k) {
+                u[1] = 0;
+            }
+            for (int j = 1; j < nn + 1; j++) {
+                u[j + 1] = u[j] + u[j + 1] * w;
+                if (FastMath.abs(nn * i - mm * j) > k) {
+                    u[j + 1] = 0;
+                }
+            }
+        }
+        return 1 - u[nn + 1];
     }
 
     /**
@@ -1139,60 +1198,4 @@ public class KolmogorovSmirnovTest {
         }
     }
 
-    /**
-     * The function C(i, j) defined in [4] (class javadoc), formula (5.5).
-     * defined to return 1 if |i/n - j/m| <= c; 0 otherwise. Here c is scaled up
-     * and recoded as a long to avoid rounding errors in comparison tests, so what
-     * is actually tested is |im - jn| <= cmn.
-     *
-     * @param i first path parameter
-     * @param j second path paramter
-     * @param m first sample size
-     * @param n second sample size
-     * @param cmn integral D-statistic (see {@link #calculateIntegralD(double, int, int, boolean)})
-     * @param strict whether or not the null hypothesis uses strict inequality
-     * @return C(i,j) for given m, n, c
-     */
-    private static int c(int i, int j, int m, int n, long cmn, boolean strict) {
-        if (strict) {
-            return FastMath.abs(i*(long)n - j*(long)m) <= cmn ? 1 : 0;
-        }
-        return FastMath.abs(i*(long)n - j*(long)m) < cmn ? 1 : 0;
-    }
-
-    /**
-     * The function N(i, j) defined in [4] (class javadoc).
-     * Returns the number of paths over the lattice {(i,j) : 0 <= i <= n, 0 <= j <= m}
-     * from (0,0) to (i,j) satisfying C(h,k, m, n, c) = 1 for each (h,k) on the path.
-     * The return value is integral, but subject to overflow, so it is maintained and
-     * returned as a double.
-     *
-     * @param i first path parameter
-     * @param j second path parameter
-     * @param m first sample size
-     * @param n second sample size
-     * @param cnm integral D-statistic (see {@link #calculateIntegralD(double, int, int, boolean)})
-     * @param strict whether or not the null hypothesis uses strict inequality
-     * @return number or paths to (i, j) from (0,0) representing D-values as large as c for given m, n
-     */
-    private static double n(int i, int j, int m, int n, long cnm, boolean strict) {
-        /*
-         * Unwind the recursive definition given in [4].
-         * Compute n(1,1), n(1,2)...n(2,1), n(2,2)... up to n(i,j), one row at a time.
-         * When n(i,*) are being computed, lag[] holds the values of n(i - 1, *).
-         */
-        final double[] lag = new double[n];
-        double last = 0;
-        for (int k = 0; k < n; k++) {
-            lag[k] = c(0, k + 1, m, n, cnm, strict);
-        }
-        for (int k = 1; k <= i; k++) {
-            last = c(k, 0, m, n, cnm, strict);
-            for (int l = 1; l <= j; l++) {
-                lag[l - 1] = c(k, l, m, n, cnm, strict) * (last + lag[l - 1]);
-                last = lag[l - 1];
-            }
-        }
-        return last;
-    }
 }
