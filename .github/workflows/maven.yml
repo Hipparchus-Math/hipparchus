@@ -17,7 +17,6 @@ jobs:
     - name: SonarQube scan
       run: mvn -B -f pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN
       env:
-        SONARQUBE_HOST: ${{ secrets.SONARQUBE_HOST }}
         SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
     - name: Deployment
       if:  ( github.ref == 'refs/heads/master' ) || ( github.ref == 'refs/heads/develop' )
