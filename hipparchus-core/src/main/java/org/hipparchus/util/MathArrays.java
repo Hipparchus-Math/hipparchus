@@ -1079,11 +1079,12 @@ public class MathArrays {
 
         double result = sHighPrev + (prodLowSum + sLowSum);
 
-        if (Double.isNaN(result)) {
-            // either we have split infinite numbers or some coefficients were NaNs,
+        if (Double.isNaN(result) || result == 0.0) {
+            // either we have split infinite numbers or some coefficients were NaNs or signed zeros,
             // just rely on the naive implementation and let IEEE754 handle this
-            result = 0;
-            for (int i = 0; i < len; ++i) {
+            // we do this for zeros too as we want to preserve the sign of zero (see issue #76)
+            result = a[0] * b[0];
+            for (int i = 1; i < len; ++i) {
                 result += a[i] * b[i];
             }
         }
@@ -1154,9 +1155,10 @@ public class MathArrays {
         // to recover some bits from the extra words we have saved up to now
         double result = s12High + (prod1Low + prod2Low + s12Low);
 
-        if (Double.isNaN(result)) {
-            // either we have split infinite numbers or some coefficients were NaNs,
+        if (Double.isNaN(result) || result == 0.0) {
+            // either we have split infinite numbers or some coefficients were NaNs or signed zeros,
             // just rely on the naive implementation and let IEEE754 handle this
+            // we do this for zeros too as we want to preserve the sign of zero (see issue #76)
             result = a1 * b1 + a2 * b2;
         }
 
@@ -1244,9 +1246,10 @@ public class MathArrays {
         // to recover some bits from the extra words we have saved up to now
         double result = s123High + (prod1Low + prod2Low + prod3Low + s12Low + s123Low);
 
-        if (Double.isNaN(result)) {
-            // either we have split infinite numbers or some coefficients were NaNs,
+        if (Double.isNaN(result) || result == 0.0) {
+            // either we have split infinite numbers or some coefficients were NaNs or signed zeros,
             // just rely on the naive implementation and let IEEE754 handle this
+            // we do this for zeros too as we want to preserve the sign of zero (see issue #76)
             result = a1 * b1 + a2 * b2 + a3 * b3;
         }
 
@@ -1354,9 +1357,10 @@ public class MathArrays {
         // to recover some bits from the extra words we have saved up to now
         double result = s1234High + (prod1Low + prod2Low + prod3Low + prod4Low + s12Low + s123Low + s1234Low);
 
-        if (Double.isNaN(result)) {
-            // either we have split infinite numbers or some coefficients were NaNs,
+        if (Double.isNaN(result) || result == 0.0) {
+            // either we have split infinite numbers or some coefficients were NaNs or signed zeros,
             // just rely on the naive implementation and let IEEE754 handle this
+            // we do this for zeros too as we want to preserve the sign of zero (see issue #76)
             result = a1 * b1 + a2 * b2 + a3 * b3 + a4 * b4;
         }
 
