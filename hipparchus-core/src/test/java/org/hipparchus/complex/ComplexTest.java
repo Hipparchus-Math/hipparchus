@@ -1118,11 +1118,10 @@ public class ComplexTest {
     @Test
     public void testAsinhBranchCuts() {
         UnitTestUtils.assertEquals(new Complex(FastMath.log(2 + FastMath.sqrt(3)), 0.5 * FastMath.PI),
-                                   new Complex(-0.0, 2.0).asinh(),
-                                   1.0e-14);
-        System.out.println(new Complex(+0.0, 2.0).asinh());
-        UnitTestUtils.assertEquals(new Complex(-FastMath.log(2 + FastMath.sqrt(3)), 0.5 * FastMath.PI),
                                    new Complex(+0.0, 2.0).asinh(),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(new Complex(-FastMath.log(2 + FastMath.sqrt(3)), 0.5 * FastMath.PI),
+                                   new Complex(-0.0, 2.0).asinh(),
                                    1.0e-14);
     }
 
