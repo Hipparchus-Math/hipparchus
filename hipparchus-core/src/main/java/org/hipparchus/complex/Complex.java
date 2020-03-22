@@ -1048,6 +1048,9 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
     }
 
     /** {@inheritDoc}
+     * <p>
+     * Branch cuts are on the real axis, below +1.
+     * </p>
      * @since 1.7
      */
     @Override
@@ -1069,6 +1072,9 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
     }
 
     /** {@inheritDoc}
+     * <p>
+     * Branch cuts are on the real axis, above +1 and below -1.
+     * </p>
      * @since 1.7
      */
     @Override

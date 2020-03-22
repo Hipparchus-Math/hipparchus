@@ -1126,6 +1126,50 @@ public class ComplexTest {
     }
 
     @Test
+    public void testAcosh() {
+        for (double x = -2; x <= 2; x += 0.125) {
+            for (double y = -2; y <= 2; y += 0.125) {
+                final Complex z = new Complex(x, y);
+                UnitTestUtils.assertEquals(z, z.acosh().cosh(), 1.0e-14);
+            }
+        }
+    }
+
+    @Test
+    public void testAcoshBranchCuts() {
+        UnitTestUtils.assertEquals(new Complex(FastMath.log(2 + FastMath.sqrt(3)), +FastMath.PI),
+                                   new Complex(-2.0, +0.0).acosh(),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(new Complex(FastMath.log(2 + FastMath.sqrt(3)), -FastMath.PI),
+                                   new Complex(-2.0, -0.0).acosh(),
+                                   1.0e-14);
+    }
+
+    @Test
+    public void testAtanh() {
+        for (double x = -2; x <= 2; x += 0.125) {
+            for (double y = -2; y <= 2; y += 0.125) {
+                final Complex z = new Complex(x, y);
+                if (FastMath.abs(x) == 1.0 && y == 0.0) {
+                    Assert.assertTrue(z.atanh().isInfinite());
+                } else {
+                    UnitTestUtils.assertEquals(z, z.atanh().tanh(), 1.0e-14);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testAtanhBranchCuts() {
+        UnitTestUtils.assertEquals(new Complex(-0.5 * FastMath.log(3), +0.5 * FastMath.PI),
+                                   new Complex(-2.0, +0.0).atanh(),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(new Complex(-0.5 * FastMath.log(3), -0.5 * FastMath.PI),
+                                   new Complex(-2.0, -0.0).atanh(),
+                                   1.0e-14);
+    }
+
+    @Test
     public void testSqrtRealPositive() {
         Complex z = new Complex(3, 4);
         Complex expected = new Complex(2, 1);
