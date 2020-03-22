@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.7"  date="TBD" description="TBD.">
+      <action dev="luc" type="fix" issue="issues/76">
+        Fixed MathArrays.linearCombination when signed zeros are involved.
+      </action>
       <action dev="luc" type="fix" issue="issues/74">
         Fixed Complex.pow(Complex p) and Complex.pow(double p) for special cases (real arguments,
         integer power, 0).

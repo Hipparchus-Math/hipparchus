@@ -15,6 +15,7 @@ package org.hipparchus.util;
 
 import java.util.Arrays;
 
+import org.apache.commons.math3.util.FastMath;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -619,6 +620,20 @@ public class MathArraysTest {
         final double naive = a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
         Assert.assertTrue(FastMath.abs(naive - abSumInline) > 1.5);
 
+    }
+
+    @Test
+    public void testLinearCombinationSignedZero() {
+        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(+0.0, 1.0, +0.0, 1.0)) > 0);
+        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(-0.0, 1.0, -0.0, 1.0)) < 0);
+        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(+0.0, 1.0, +0.0, 1.0, +0.0, 1.0)) > 0);
+        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(-0.0, 1.0, -0.0, 1.0, -0.0, 1.0)) < 0);
+        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(+0.0, 1.0, +0.0, 1.0, +0.0, 1.0)) > 0);
+        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(-0.0, 1.0, -0.0, 1.0, -0.0, 1.0)) < 0);
+        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(+0.0, 1.0, +0.0, 1.0, +0.0, 1.0, +0.0, 1.0)) > 0);
+        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(-0.0, 1.0, -0.0, 1.0, -0.0, 1.0, -0.0, 1.0)) < 0);
+        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(new double[] {+0.0, +0.0}, new double[] {1.0, 1.0})) > 0);
+        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(new double[] {-0.0, -0.0}, new double[] {1.0, 1.0})) < 0);
     }
 
     @Test
