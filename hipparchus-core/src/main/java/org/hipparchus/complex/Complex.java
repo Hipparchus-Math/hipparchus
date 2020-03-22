@@ -1058,6 +1058,9 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
     }
 
     /** {@inheritDoc}
+     * <p>
+     * Branch cuts are on the imaginary axis, above +i and below -i.
+     * </p>
      * @since 1.7
      */
     @Override
@@ -1201,7 +1204,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
 
     /** {@inheritDoc}
      * <p>
-     * This implementation compute the principal cube root by using a branch cut along real negative axis.
+     * This implementation compute the principal n<sup>th</sup> root by using a branch cut along real negative axis.
      * </p>
      * @since 1.7
      */

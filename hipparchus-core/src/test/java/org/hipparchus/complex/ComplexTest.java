@@ -25,6 +25,8 @@ package org.hipparchus.complex;
 import java.util.List;
 
 import org.hipparchus.UnitTestUtils;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -118,6 +120,7 @@ public class ComplexTest {
         z = new Complex(1, nan);
         Complex w = x.add(z);
         Assert.assertSame(Complex.NaN, w);
+        Assert.assertSame(Complex.NaN, Complex.NaN.add(Double.NaN));
     }
 
     @Test
@@ -248,6 +251,7 @@ public class ComplexTest {
         Complex x = new Complex(3.0, 4.0);
         Complex z = x.divide(Complex.NaN);
         Assert.assertTrue(z.isNaN());
+        Assert.assertTrue(Complex.NaN.divide(Complex.NaN).isNaN());
     }
 
     @Test
@@ -279,6 +283,7 @@ public class ComplexTest {
         double yDouble = Double.NaN;
         Complex yComplex = new Complex(yDouble);
         Assert.assertEquals(x.divide(yComplex), x.divide(yDouble));
+        Assert.assertTrue(Complex.NaN.divide(Double.NaN).isNaN());
     }
 
     @Test
@@ -408,6 +413,13 @@ public class ComplexTest {
         double yDouble = Double.NaN;
         Complex yComplex = new Complex(yDouble);
         Assert.assertEquals(x.multiply(yComplex), x.multiply(yDouble));
+        Assert.assertTrue(new Complex(Double.NaN, 0).multiply(5).isNaN());
+        Assert.assertTrue(new Complex(0, Double.NaN).multiply(5).isNaN());
+        Assert.assertTrue(Complex.NaN.multiply(5).isNaN());
+        Assert.assertTrue(new Complex(Double.NaN, 0).multiply(5.0).isNaN());
+        Assert.assertTrue(new Complex(0, Double.NaN).multiply(5.0).isNaN());
+        Assert.assertTrue(Complex.NaN.multiply(5.0).isNaN());
+        Assert.assertTrue(Complex.ONE.multiply(Double.NaN).isNaN());
     }
 
     @Test
@@ -420,7 +432,15 @@ public class ComplexTest {
         yDouble = Double.NEGATIVE_INFINITY;
         yComplex = new Complex(yDouble);
         Assert.assertEquals(x.multiply(yComplex), x.multiply(yDouble));
-    }
+
+        Assert.assertTrue(new Complex(Double.POSITIVE_INFINITY, 0).multiply(5).isInfinite());
+        Assert.assertTrue(new Complex(0, Double.POSITIVE_INFINITY).multiply(5).isInfinite());
+        Assert.assertTrue(Complex.INF.multiply(5).isInfinite());
+        Assert.assertTrue(new Complex(Double.POSITIVE_INFINITY, 0).multiply(5.0).isInfinite());
+        Assert.assertTrue(new Complex(0, Double.POSITIVE_INFINITY).multiply(5.0).isInfinite());
+        Assert.assertTrue(Complex.INF.multiply(5.0).isInfinite());
+        Assert.assertTrue(Complex.ONE.multiply(Double.POSITIVE_INFINITY).isInfinite());
+   }
 
     @Test
     public void testNegate() {
@@ -453,6 +473,8 @@ public class ComplexTest {
         z = new Complex(1, nan);
         Complex w = x.subtract(z);
         Assert.assertSame(Complex.NaN, w);
+        Assert.assertSame(Complex.NaN, Complex.NaN.subtract(Complex.NaN));
+        Assert.assertSame(Complex.NaN, Complex.NaN.subtract(Double.NaN));
     }
 
     @Test
@@ -846,6 +868,16 @@ public class ComplexTest {
     }
 
     @Test
+    public void testExpM1() {
+        UnitTestUtils.assertSame(Complex.NaN, Complex.NaN.expm1());
+        final double testValue = FastMath.scalb(1.0, -30);
+        Assert.assertEquals(FastMath.expm1(testValue), new Complex(testValue, 0).expm1().getReal(), 1.0e-30);
+        Assert.assertTrue(FastMath.expm1(testValue) - new Complex(testValue).exp().subtract(1.0).getReal() > 4.0e-19);
+        Assert.assertEquals(0.0, new Complex(0, testValue).expm1().getReal(), 1.0e-30);
+        Assert.assertEquals(0.0, new Complex(0, testValue).expm1().getImaginary(), 1.0e-30);
+    }
+
+    @Test
     public void testLog() {
         Complex z = new Complex(3, 4);
         Complex expected = new Complex(1.60944, 0.927295);
@@ -879,6 +911,19 @@ public class ComplexTest {
     @Test
     public void testLogZero() {
         UnitTestUtils.assertSame(negInfZero, Complex.ZERO.log());
+    }
+
+    @Test
+    public void testLog1P() {
+        Complex z = new Complex(2, 4);
+        Complex expected = new Complex(1.60944, 0.927295);
+        UnitTestUtils.assertEquals(expected, z.log1p(), 1.0e-5);
+    }
+
+    @Test
+    public void testLog10() {
+        UnitTestUtils.assertEquals(new Complex(2.0, 0.0), new Complex(100, 0).log10(), 1.0e-15);
+        UnitTestUtils.assertEquals(new Complex(2.0, 0.5 * FastMath.PI / FastMath.log(10)), new Complex(0, 100).log10(), 1.0e-15);
     }
 
     @Test
@@ -1061,6 +1106,27 @@ public class ComplexTest {
     }
 
     @Test
+    public void testAsinh() {
+        for (double x = -2; x <= 2; x += 0.125) {
+            for (double y = -2; y <= 2; y += 0.125) {
+                final Complex z = new Complex(x, y);
+                UnitTestUtils.assertEquals(z, z.asinh().sinh(), 1.0e-14);
+            }
+        }
+    }
+
+    @Test
+    public void testAsinhBranchCuts() {
+        UnitTestUtils.assertEquals(new Complex(FastMath.log(2 + FastMath.sqrt(3)), 0.5 * FastMath.PI),
+                                   new Complex(-0.0, 2.0).asinh(),
+                                   1.0e-14);
+        System.out.println(new Complex(+0.0, 2.0).asinh());
+        UnitTestUtils.assertEquals(new Complex(-FastMath.log(2 + FastMath.sqrt(3)), 0.5 * FastMath.PI),
+                                   new Complex(+0.0, 2.0).asinh(),
+                                   1.0e-14);
+    }
+
+    @Test
     public void testSqrtRealPositive() {
         Complex z = new Complex(3, 4);
         Complex expected = new Complex(2, 1);
@@ -1072,6 +1138,11 @@ public class ComplexTest {
         Complex z = new Complex(0.0, 4);
         Complex expected = new Complex(1.41421, 1.41421);
         UnitTestUtils.assertEquals(expected, z.sqrt(), 1.0e-5);
+    }
+
+    @Test
+    public void testSqrtZero() {
+        UnitTestUtils.assertEquals(Complex.ZERO, Complex.ZERO.sqrt(), 1.0e-15);
     }
 
     @Test
@@ -1137,6 +1208,38 @@ public class ComplexTest {
     @Test
     public void testSqrt1zNaN() {
         Assert.assertTrue(Complex.NaN.sqrt1z().isNaN());
+    }
+
+    @Test
+    public void testCbrt() {
+        Complex z = new Complex(15, 2);
+        UnitTestUtils.assertEquals(z, z.multiply(z).multiply(z).cbrt(), 1.0e-14);
+        Complex branchCutPlus = new Complex(-8.0, +0.0);
+        Complex cbrtPlus = branchCutPlus.cbrt();
+        UnitTestUtils.assertEquals(branchCutPlus, cbrtPlus.multiply(cbrtPlus).multiply(cbrtPlus), 1.0e-14);
+        Assert.assertEquals(1.0, cbrtPlus.getReal(), 1.0e-15);
+        Assert.assertEquals(FastMath.sqrt(3.0), cbrtPlus.getImaginary(), 1.0e-15);
+        Complex branchCutMinus = new Complex(-8.0, -0.0);
+        Complex cbrtMinus = branchCutMinus.cbrt();
+        UnitTestUtils.assertEquals(branchCutMinus, cbrtMinus.multiply(cbrtMinus).multiply(cbrtMinus), 1.0e-14);
+        Assert.assertEquals(1.0, cbrtMinus.getReal(), 1.0e-15);
+        Assert.assertEquals(-FastMath.sqrt(3.0), cbrtMinus.getImaginary(), 1.0e-15);
+    }
+
+    @Test
+    public void testRootN() {
+        Complex z = new Complex(15, 2);
+        UnitTestUtils.assertEquals(z, z.multiply(z).multiply(z).rootN(3), 1.0e-14);
+        Complex branchCutPlus = new Complex(-8.0, +0.0);
+        Complex cbrtPlus = branchCutPlus.rootN(3);
+        UnitTestUtils.assertEquals(branchCutPlus, cbrtPlus.multiply(cbrtPlus).multiply(cbrtPlus), 1.0e-14);
+        Assert.assertEquals(1.0, cbrtPlus.getReal(), 1.0e-15);
+        Assert.assertEquals(FastMath.sqrt(3.0), cbrtPlus.getImaginary(), 1.0e-15);
+        Complex branchCutMinus = new Complex(-8.0, -0.0);
+        Complex cbrtMinus = branchCutMinus.rootN(3);
+        UnitTestUtils.assertEquals(branchCutMinus, cbrtMinus.multiply(cbrtMinus).multiply(cbrtMinus), 1.0e-14);
+        Assert.assertEquals(1.0, cbrtMinus.getReal(), 1.0e-15);
+        Assert.assertEquals(-FastMath.sqrt(3.0), cbrtMinus.getImaginary(), 1.0e-15);
     }
 
     @Test
@@ -1376,6 +1479,17 @@ public class ComplexTest {
         Assert.assertEquals(Complex.INF, roots.get(0));
     }
 
+    @Test
+    public void testNthRootError() {
+        try {
+            Complex.ONE.nthRoot(-1);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.CANNOT_COMPUTE_NTH_ROOT_FOR_NEGATIVE_N,
+                                miae.getSpecifier());
+        }
+    }
+
     /**
      * Test standard values
      */
@@ -1430,6 +1544,46 @@ public class ComplexTest {
         Assert.assertTrue(Double.isNaN(nanZero.getArgument()));
         Assert.assertTrue(Double.isNaN(zeroNaN.getArgument()));
         Assert.assertTrue(Double.isNaN(Complex.NaN.getArgument()));
+    }
+
+    @Test
+    public void testValueOf() {
+        Assert.assertEquals(2.0, Complex.valueOf(2.0).getReal(), 1.0e-15);
+        Assert.assertEquals(0.0, Complex.valueOf(2.0).getImaginary(), 1.0e-15);
+        Assert.assertTrue(Complex.valueOf(Double.NaN).isNaN());
+        Assert.assertTrue(Complex.valueOf(Double.POSITIVE_INFINITY).isInfinite());
+        Assert.assertEquals( 2.0, Complex.valueOf(2.0, -1.0).getReal(), 1.0e-15);
+        Assert.assertEquals(-1.0, Complex.valueOf(2.0, -1.0).getImaginary(), 1.0e-15);
+        Assert.assertTrue(Complex.valueOf(Double.NaN, 0.0).isNaN());
+        Assert.assertTrue(Complex.valueOf(Double.POSITIVE_INFINITY, 0.0).isInfinite());
+        Assert.assertTrue(Complex.valueOf(Double.NaN, -1.0).isNaN());
+        Assert.assertTrue(Complex.valueOf(Double.POSITIVE_INFINITY, -1.0).isInfinite());
+        Assert.assertTrue(Complex.valueOf(0.0, Double.NaN).isNaN());
+        Assert.assertTrue(Complex.valueOf(0.0, Double.POSITIVE_INFINITY).isInfinite());
+        Assert.assertTrue(Complex.valueOf(-1.0, Double.NaN).isNaN());
+        Assert.assertTrue(Complex.valueOf(-1.0, Double.POSITIVE_INFINITY).isInfinite());
+    }
+
+    @Test
+    public void testField() {
+        Assert.assertEquals(ComplexField.getInstance(), Complex.ZERO.getField());
+    }
+
+    @Test
+    public void testToString() {
+        Assert.assertEquals("(1.0, -2.0)", new Complex(1, -2).toString());
+    }
+
+    @Test
+    public void testScalb() {
+        Assert.assertEquals(0.125,  new Complex(2.0, 1.0).scalb(-4).getReal(), 1.0e-15);
+        Assert.assertEquals(0.0625, new Complex(2.0, 1.0).scalb(-4).getImaginary(), 1.0e-15);
+    }
+
+    @Test
+    public void testHypot() {
+        Assert.assertEquals(5.8269600298808519855, new Complex(3, 4).hypot(new Complex(5, 6)).getReal(), 1.0e-15);
+        Assert.assertEquals(7.2078750814528590485, new Complex(3, 4).hypot(new Complex(5, 6)).getImaginary(), 1.0e-15);
     }
 
     @Test
