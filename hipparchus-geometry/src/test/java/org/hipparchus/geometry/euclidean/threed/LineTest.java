@@ -151,4 +151,23 @@ public class LineTest {
 
     }
 
+    /** Test for issue #78. */
+    @Test
+    public void testCancellation() {
+         // setup
+        // point
+        Vector3D p = new Vector3D(1e16, 1e16, 1e16);
+        // unit vector
+        Vector3D u = new Vector3D(-1, -1, -1);
+
+        // action
+        Line line = Line.fromDirection(p, u, 0);
+
+        // verify
+        double ulp = FastMath.ulp(p.getNorm());
+        Assert.assertArrayEquals(line.getOrigin().toArray(), Vector3D.ZERO.toArray(), ulp);
+        Assert.assertArrayEquals(line.getDirection().toArray(), u.normalize().toArray(), 0);
+        Assert.assertEquals(line.getTolerance(), 0, 0);
+    }
+
 }
