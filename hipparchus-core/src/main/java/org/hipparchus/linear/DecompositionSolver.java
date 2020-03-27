@@ -27,7 +27,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Interface handling decomposition algorithms that can solve A &times; X = B.
  * <p>
- * Decomposition algorithms decompose an A matrix has a product of several specific
+ * Decomposition algorithms decompose an A matrix as a product of several specific
  * matrices from which they can solve A &times; X = B in least squares sense: they find X
  * such that ||A &times; X - B|| is minimal.
  * <p>
