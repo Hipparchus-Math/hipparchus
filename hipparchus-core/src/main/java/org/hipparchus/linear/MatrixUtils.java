@@ -1155,41 +1155,6 @@ public class MatrixUtils {
     }
 
 
-    /**
-     * Visitor for element-by-element multiplication by a given power of 2.
-     */
-    private static class MatrixExponentialScaling implements RealMatrixChangingVisitor {
-
-        // Store the power
-        final int squaringCount;
-
-        /**
-         * Simple constructor.
-         *
-         * @param s the base-2 power of the scaling
-         */
-        MatrixExponentialScaling(int s) {
-            this.squaringCount = s;
-        }
-
-        @Override
-        public void start(int i, int i1, int i2, int i3, int i4, int i5) {
-            // Nothing to do at start
-        }
-
-        @Override
-        public double visit(int i, int i1, double v) {
-            // Multiply by power of 2
-            return Math.scalb(v, -squaringCount);
-        }
-
-        @Override
-        public double end() {
-            // Nothing to do at end
-            return 0.0;
-        }
-    }
-
 
     // Pade coefficients required for the matrix exponential calculation
     private static final double[] padeCoefficients3 = {
@@ -1289,10 +1254,18 @@ public class MatrixUtils {
         } else {
             padeCoefficients = padeCoefficients13;
 
-            // Scale matrix by power of 2
+            // Calculate scaling factor
             final double normScale = 5.371920351148152;
             squaringCount = Math.max(0, Math.getExponent(l1Norm / normScale));
-            scaledMatrix.walkInOptimizedOrder(new MatrixExponentialScaling(squaringCount));
+
+            // Scale matrix by power of 2
+            final int finalSquaringCount = squaringCount;
+            scaledMatrix.walkInOptimizedOrder(new DefaultRealMatrixChangingVisitor() {
+                @Override
+                public double visit(int row, int column, double value) {
+                    return Math.scalb(value, -finalSquaringCount);
+                }
+            });
         }
 
         // Calculate U and V using Horner
