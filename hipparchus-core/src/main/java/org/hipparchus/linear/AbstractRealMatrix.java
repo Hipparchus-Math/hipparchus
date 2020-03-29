@@ -247,48 +247,6 @@ public abstract class AbstractRealMatrix
 
     /** {@inheritDoc} */
     @Override
-    public double getNorm() {
-        return walkInColumnOrder(new RealMatrixPreservingVisitor() {
-
-            /** Last row index. */
-            private double endRow;
-
-            /** Sum of absolute values on one column. */
-            private double columnSum;
-
-            /** Maximal sum across all columns. */
-            private double maxColSum;
-
-            /** {@inheritDoc} */
-            @Override
-            public void start(final int rows, final int columns,
-                              final int startRow, final int endRow,
-                              final int startColumn, final int endColumn) {
-                this.endRow = endRow;
-                columnSum   = 0;
-                maxColSum   = 0;
-            }
-
-            /** {@inheritDoc} */
-            @Override
-            public void visit(final int row, final int column, final double value) {
-                columnSum += FastMath.abs(value);
-                if (row == endRow) {
-                    maxColSum = FastMath.max(maxColSum, columnSum);
-                    columnSum = 0;
-                }
-            }
-
-            /** {@inheritDoc} */
-            @Override
-            public double end() {
-                return maxColSum;
-            }
-        });
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public double getFrobeniusNorm() {
         return walkInOptimizedOrder(new RealMatrixPreservingVisitor() {
 

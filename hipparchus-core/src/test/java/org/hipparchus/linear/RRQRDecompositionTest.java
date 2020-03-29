@@ -104,7 +104,7 @@ public class RRQRDecompositionTest {
 
     private void checkAPEqualQR(RealMatrix m) {
         RRQRDecomposition rrqr = new RRQRDecomposition(m);
-        double norm = rrqr.getQ().multiply(rrqr.getR()).subtract(m.multiply(rrqr.getP())).getNorm();
+        double norm = rrqr.getQ().multiply(rrqr.getR()).subtract(m.multiply(rrqr.getP())).getNorm1();
         Assert.assertEquals(0, norm, normTolerance);
     }
 
@@ -131,7 +131,7 @@ public class RRQRDecompositionTest {
     private void checkQOrthogonal(RealMatrix m) {
         RRQRDecomposition qr = new RRQRDecomposition(m);
         RealMatrix eye = MatrixUtils.createRealIdentityMatrix(m.getRowDimension());
-        double norm = qr.getQT().multiply(qr.getQ()).subtract(eye).getNorm();
+        double norm = qr.getQT().multiply(qr.getQ()).subtract(eye).getNorm1();
         Assert.assertEquals(0, norm, normTolerance);
     }
 

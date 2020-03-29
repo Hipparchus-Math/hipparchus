@@ -295,7 +295,7 @@ public final class MatrixUtilsTest {
         FieldMatrix<BigFraction> m = new Array2DRowFieldMatrix<BigFraction>(bfData, false);
         RealMatrix converted = MatrixUtils.bigFractionMatrixToRealMatrix(m);
         RealMatrix reference = new Array2DRowRealMatrix(testData, false);
-        Assert.assertEquals(0.0, converted.subtract(reference).getNorm(), 0.0);
+        Assert.assertEquals(0.0, converted.subtract(reference).getNorm1(), 0.0);
     }
 
     @Test
@@ -308,7 +308,7 @@ public final class MatrixUtilsTest {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(fData, false);
         RealMatrix converted = MatrixUtils.fractionMatrixToRealMatrix(m);
         RealMatrix reference = new Array2DRowRealMatrix(testData, false);
-        Assert.assertEquals(0.0, converted.subtract(reference).getNorm(), 0.0);
+        Assert.assertEquals(0.0, converted.subtract(reference).getNorm1(), 0.0);
     }
 
     public static final Fraction[][] asFraction(double[][] data) {

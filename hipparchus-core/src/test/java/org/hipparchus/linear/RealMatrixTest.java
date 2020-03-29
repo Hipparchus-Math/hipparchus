@@ -29,7 +29,7 @@ public class RealMatrixTest {
         DefaultMatrix dma = new DefaultMatrix(a);
         DefaultMatrix dmb = new DefaultMatrix(b);
         RealMatrix abT = dma.multiplyTransposed(dmb);
-        Assert.assertEquals(0.0, abT.subtract(abTRef).getNorm(), 1.0e-10);
+        Assert.assertEquals(0.0, abT.subtract(abTRef).getNorm1(), 1.0e-10);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class RealMatrixTest {
         DefaultMatrix dma = new DefaultMatrix(a);
         DefaultMatrix dmb = new DefaultMatrix(b);
         RealMatrix aTb = dma.transposeMultiply(dmb);
-        Assert.assertEquals(0.0, aTb.subtract(aTbRef).getNorm(), 1.0e-10);
+        Assert.assertEquals(0.0, aTb.subtract(aTbRef).getNorm1(), 1.0e-10);
     }
 
     // local class that does NOT override multiplyTransposed nor transposeMultiply

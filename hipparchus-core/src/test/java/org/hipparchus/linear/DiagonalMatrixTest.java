@@ -251,7 +251,7 @@ public class DiagonalMatrixTest {
                 b.setEntry(i, i, randomGenerator.nextDouble());
             }
             Assert.assertEquals(0.0,
-                                a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm(),
+                                a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm1(),
                                 1.0e-15);
         }
     }
@@ -273,7 +273,7 @@ public class DiagonalMatrixTest {
                 final Array2DRowRealMatrix b = new Array2DRowRealMatrix(interm, rows);
                 b.walkInOptimizedOrder(randomSetter);
                 Assert.assertEquals(0.0,
-                                    a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm(),
+                                    a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm1(),
                                     1.0e-15);
             }
         }
@@ -304,7 +304,7 @@ public class DiagonalMatrixTest {
                 b.setEntry(i, i, randomGenerator.nextDouble());
             }
             Assert.assertEquals(0.0,
-                                a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm(),
+                                a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm1(),
                                 1.0e-15);
         }
     }
@@ -326,7 +326,7 @@ public class DiagonalMatrixTest {
                 final Array2DRowRealMatrix b = new Array2DRowRealMatrix(rows, interm);
                 b.walkInOptimizedOrder(randomSetter);
                 Assert.assertEquals(0.0,
-                                    a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm(),
+                                    a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm1(),
                                     1.0e-15);
             }
         }

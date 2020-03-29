@@ -69,7 +69,7 @@ public class EigenSolverTest {
         RealMatrix inverse = es.getInverse();
         RealMatrix error =
             m.multiply(inverse).subtract(MatrixUtils.createRealIdentityMatrix(m.getRowDimension()));
-        Assert.assertEquals(0, error.getNorm(), 4.0e-15);
+        Assert.assertEquals(0, error.getNorm1(), 4.0e-15);
     }
 
     /**
@@ -187,7 +187,7 @@ public class EigenSolverTest {
 
         // using RealMatrix
         RealMatrix solution=es.solve(b);
-        Assert.assertEquals(0, solution.subtract(xRef).getNorm(), 2.5e-12);
+        Assert.assertEquals(0, solution.subtract(xRef).getNorm1(), 2.5e-12);
 
         // using RealVector
         for (int i = 0; i < b.getColumnDimension(); ++i) {

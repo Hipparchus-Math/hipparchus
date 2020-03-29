@@ -24,6 +24,7 @@ package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.util.FastMath;
 
 /**
  * Interface defining a real-valued matrix with basic algebraic operations.
@@ -171,12 +172,109 @@ public interface RealMatrix extends AnyMatrix {
     double[][] getData();
 
     /**
-     * Returns the <a href="http://mathworld.wolfram.com/MaximumAbsoluteRowSumNorm.html">
-     * maximum absolute row sum norm</a> of the matrix.
+     * Returns the <a href="http://mathworld.wolfram.com/MaximumAbsoluteColumnSumNorm.html">
+     * maximum absolute column sum norm</a> (L<sub>1</sub>) of the matrix.
+     *
+     * @return norm
+     * @deprecated as of 1.7, replaced with either {@link #getNorm1()} or {@link #getNormInfty()}
+     */
+    @Deprecated
+    default double getNorm() {
+        return getNorm1();
+    }
+
+    /**
+     * Returns the <a href="http://mathworld.wolfram.com/MaximumAbsoluteColumnSumNorm.html">
+     * maximum absolute column sum norm</a> (L<sub>1</sub>) of the matrix.
      *
      * @return norm
      */
-    double getNorm();
+    default double getNorm1() {
+        return walkInColumnOrder(new RealMatrixPreservingVisitor() {
+
+            /** Last row index. */
+            private double endRow;
+
+            /** Sum of absolute values on one column. */
+            private double columnSum;
+
+            /** Maximal sum across all columns. */
+            private double maxColSum;
+
+            /** {@inheritDoc} */
+            @Override
+            public void start(final int rows, final int columns,
+                              final int startRow, final int endRow,
+                              final int startColumn, final int endColumn) {
+                this.endRow = endRow;
+                columnSum   = 0;
+                maxColSum   = 0;
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public void visit(final int row, final int column, final double value) {
+                columnSum += FastMath.abs(value);
+                if (row == endRow) {
+                    maxColSum = FastMath.max(maxColSum, columnSum);
+                    columnSum = 0;
+                }
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public double end() {
+                return maxColSum;
+            }
+        });
+    }
+
+    /**
+     * Returns the <a href="http://mathworld.wolfram.com/MaximumAbsoluteRowSumNorm.html">
+     * maximum absolute row sum norm</a> (L<sub>&infin;</sub>) of the matrix.
+     *
+     * @return norm
+     */
+    default double getNormInfty() {
+        return walkInRowOrder(new RealMatrixPreservingVisitor() {
+
+            /** Last column index. */
+            private double endColumn;
+
+            /** Sum of absolute values on one row. */
+            private double rowSum;
+
+            /** Maximal sum across all rows. */
+            private double maxRowSum;
+
+            /** {@inheritDoc} */
+            @Override
+            public void start(final int rows, final int columns,
+                              final int startRow, final int endRow,
+                              final int startColumn, final int endColumn) {
+                this.endColumn = endColumn;
+                rowSum   = 0;
+                maxRowSum   = 0;
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public void visit(final int row, final int column, final double value) {
+                rowSum += FastMath.abs(value);
+                if (column == endColumn) {
+                    maxRowSum = FastMath.max(maxRowSum, rowSum);
+                    rowSum = 0;
+                }
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public double end() {
+                return maxRowSum;
+            }
+        });
+
+    }
 
     /**
      * Returns the <a href="http://mathworld.wolfram.com/FrobeniusNorm.html">

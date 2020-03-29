@@ -95,7 +95,7 @@ public class AdamsNordsieckTransformerTest {
                                                      n1);
         final Array2DRowRealMatrix n2 = start(transformer, nbSteps, t0 + h, h, polynomial, derivative);
 
-        Assert.assertEquals(expectedError, n2.subtract(n1).getNorm(), expectedError * 0.001);
+        Assert.assertEquals(expectedError, n2.subtract(n1).getNorm1(), expectedError * 0.001);
 
     }
 

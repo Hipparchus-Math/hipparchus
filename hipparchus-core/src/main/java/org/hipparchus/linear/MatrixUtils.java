@@ -1239,7 +1239,7 @@ public class MatrixUtils {
         scaledMatrix = scaledMatrix.subtract(identity.scalarMultiply(preprocessScale));
 
         // Select pade degree required
-        final double l1Norm = rm.getNorm();
+        final double l1Norm = rm.getNorm1();
         double[] padeCoefficients;
         int squaringCount = 0;
 

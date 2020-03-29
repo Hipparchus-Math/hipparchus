@@ -67,7 +67,7 @@ public class TriDiagonalTransformerTest {
         RealMatrix q  = transformer.getQ();
         RealMatrix qT = transformer.getQT();
         RealMatrix t  = transformer.getT();
-        double norm = q.multiply(t).multiply(qT).subtract(matrix).getNorm();
+        double norm = q.multiply(t).multiply(qT).subtract(matrix).getNorm1();
         Assert.assertEquals(0, norm, 4.0e-15);
     }
 
@@ -88,7 +88,7 @@ public class TriDiagonalTransformerTest {
         RealMatrix q  = transformer.getQ();
         RealMatrix qT = transformer.getQT();
         RealMatrix t  = transformer.getT();
-        double norm = q.multiply(t).multiply(qT).subtract(MatrixUtils.createRealMatrix(data)).getNorm();
+        double norm = q.multiply(t).multiply(qT).subtract(MatrixUtils.createRealMatrix(data)).getNorm1();
         Assert.assertEquals(0, norm, 4.0e-15);
     }
 
@@ -107,7 +107,7 @@ public class TriDiagonalTransformerTest {
     private void checkOrthogonal(RealMatrix m) {
         RealMatrix mTm = m.transposeMultiply(m);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(mTm.getRowDimension());
-        Assert.assertEquals(0, mTm.subtract(id).getNorm(), 1.0e-15);
+        Assert.assertEquals(0, mTm.subtract(id).getNorm1(), 1.0e-15);
     }
 
     @Test
@@ -162,7 +162,7 @@ public class TriDiagonalTransformerTest {
 
         // check values against known references
         RealMatrix q = transformer.getQ();
-        Assert.assertEquals(0, q.subtract(MatrixUtils.createRealMatrix(qRef)).getNorm(), 1.0e-14);
+        Assert.assertEquals(0, q.subtract(MatrixUtils.createRealMatrix(qRef)).getNorm1(), 1.0e-14);
 
         RealMatrix t = transformer.getT();
         double[][] tData = new double[mainDiagnonal.length][mainDiagnonal.length];
@@ -175,7 +175,7 @@ public class TriDiagonalTransformerTest {
                 tData[i][i + 1] = secondaryDiagonal[i];
             }
         }
-        Assert.assertEquals(0, t.subtract(MatrixUtils.createRealMatrix(tData)).getNorm(), 1.0e-14);
+        Assert.assertEquals(0, t.subtract(MatrixUtils.createRealMatrix(tData)).getNorm1(), 1.0e-14);
 
         // check the same cached instance is returned the second time
         Assert.assertTrue(q == transformer.getQ());

@@ -127,7 +127,7 @@ public class SingularValueDecompositionTest {
                 {  45.0 / 1024, -75.0 / 1024, -51.0 / 1024,  85.0 / 1024 }
         }, false);
         Assert.assertEquals(0.0,
-                     fullCovariance.subtract(svd.getCovariance(0.0)).getNorm(),
+                     fullCovariance.subtract(svd.getCovariance(0.0)).getNorm1(),
                      1.0e-14);
 
         RealMatrix halfCovariance = new Array2DRowRealMatrix(new double[][] {
@@ -137,7 +137,7 @@ public class SingularValueDecompositionTest {
                 {  -3.0 / 1024,   5.0 / 1024,  -3.0 / 1024,   5.0 / 1024 }
         }, false);
         Assert.assertEquals(0.0,
-                     halfCovariance.subtract(svd.getCovariance(6.0)).getNorm(),
+                     halfCovariance.subtract(svd.getCovariance(6.0)).getNorm1(),
                      1.0e-14);
 
     }
@@ -155,7 +155,7 @@ public class SingularValueDecompositionTest {
         RealMatrix u = svd.getU();
         RealMatrix s = svd.getS();
         RealMatrix v = svd.getV();
-        double norm = u.multiply(s).multiplyTransposed(v).subtract(matrix).getNorm();
+        double norm = u.multiply(s).multiplyTransposed(v).subtract(matrix).getNorm1();
         Assert.assertEquals(0, norm, normTolerance);
 
     }
@@ -179,7 +179,7 @@ public class SingularValueDecompositionTest {
     public void checkOrthogonal(final RealMatrix m) {
         RealMatrix mTm = m.transposeMultiply(m);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(mTm.getRowDimension());
-        Assert.assertEquals(0, mTm.subtract(id).getNorm(), normTolerance);
+        Assert.assertEquals(0, mTm.subtract(id).getNorm1(), normTolerance);
     }
 
     /** test matrices values */
@@ -203,11 +203,11 @@ public class SingularValueDecompositionTest {
 
         // check values against known references
         RealMatrix u = svd.getU();
-        Assert.assertEquals(0, u.subtract(uRef).getNorm(), normTolerance);
+        Assert.assertEquals(0, u.subtract(uRef).getNorm1(), normTolerance);
         RealMatrix s = svd.getS();
-        Assert.assertEquals(0, s.subtract(sRef).getNorm(), normTolerance);
+        Assert.assertEquals(0, s.subtract(sRef).getNorm1(), normTolerance);
         RealMatrix v = svd.getV();
-        Assert.assertEquals(0, v.subtract(vRef).getNorm(), normTolerance);
+        Assert.assertEquals(0, v.subtract(vRef).getNorm1(), normTolerance);
 
         // check the same cached instance is returned the second time
         Assert.assertTrue(u == svd.getU());
@@ -242,11 +242,11 @@ public class SingularValueDecompositionTest {
         SingularValueDecomposition svd =
             new SingularValueDecomposition(MatrixUtils.createRealMatrix(testNonSquare));
         RealMatrix u = svd.getU();
-        Assert.assertEquals(0, u.subtract(uRef).getNorm(), normTolerance);
+        Assert.assertEquals(0, u.subtract(uRef).getNorm1(), normTolerance);
         RealMatrix s = svd.getS();
-        Assert.assertEquals(0, s.subtract(sRef).getNorm(), normTolerance);
+        Assert.assertEquals(0, s.subtract(sRef).getNorm1(), normTolerance);
         RealMatrix v = svd.getV();
-        Assert.assertEquals(0, v.subtract(vRef).getNorm(), normTolerance);
+        Assert.assertEquals(0, v.subtract(vRef).getNorm1(), normTolerance);
 
         // check the same cached instance is returned the second time
         Assert.assertTrue(u == svd.getU());
