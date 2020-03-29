@@ -517,4 +517,128 @@ public final class MatrixUtilsTest {
                 MatrixUtils.createRealIdentityMatrix(testData.length), result, 1e-12);
     }
 
+    @Test
+    public void testMatrixExponentialNonSquare() {
+        double[][] exponentArr = {
+                {0.0001, 0.001},
+                {0.001, -0.0001},
+                {0.001, -0.0001}
+        };
+        RealMatrix exponent = MatrixUtils.createRealMatrix(exponentArr);
+
+        try {
+            MatrixUtils.matrixExponential(exponent);  // ragged
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testMatrixExponential3() {
+        double[][] exponentArr = {
+                {0.0001, 0.001},
+                {0.001, -0.0001}
+        };
+        RealMatrix exponent = MatrixUtils.createRealMatrix(exponentArr);
+
+        double[][] expectedResultArr = {
+                {1.00010050501688, 0.00100000016833332},
+                {0.00100000016833332, 0.999900504983209}
+        };
+        RealMatrix expectedResult = MatrixUtils.createRealMatrix(expectedResultArr);
+
+        UnitTestUtils.assertEquals("matrixExponential pade3 incorrect result",
+                expectedResult, MatrixUtils.matrixExponential(exponent), 32.0 * Math.ulp(1.0));
+    }
+
+
+    @Test
+    public void testMatrixExponential5() {
+        double[][] exponentArr = {
+                {0.1, 0.1},
+                {0.001, -0.1}
+        };
+        RealMatrix exponent = MatrixUtils.createRealMatrix(exponentArr);
+
+        double[][] expectedResultArr = {
+                {1.10522267021001, 0.100168418362112},
+                {0.00100168418362112, 0.904885833485786}
+        };
+        RealMatrix expectedResult = MatrixUtils.createRealMatrix(expectedResultArr);
+
+        UnitTestUtils.assertEquals("matrixExponential pade5 incorrect result",
+                expectedResult, MatrixUtils.matrixExponential(exponent), 2.0 * Math.ulp(1.0));
+    }
+
+    @Test
+    public void testMatrixExponential7() {
+        double[][] exponentArr = {
+                {0.5, 0.1},
+                {0.001, -0.5}
+        };
+        RealMatrix exponent = MatrixUtils.createRealMatrix(exponentArr);
+
+        double[][] expectedResultArr = {
+                {1.64878192423569, 0.104220769814317},
+                {0.00104220769814317, 0.606574226092523}
+        };
+        RealMatrix expectedResult = MatrixUtils.createRealMatrix(expectedResultArr);
+
+        UnitTestUtils.assertEquals("matrixExponential pade7 incorrect result",
+                expectedResult, MatrixUtils.matrixExponential(exponent), 32.0 * Math.ulp(1.0));
+    }
+
+    @Test
+    public void testMatrixExponential9() {
+        double[][] exponentArr = {
+                {1.8, 0.3},
+                {0.001, -0.9}
+        };
+        RealMatrix exponent = MatrixUtils.createRealMatrix(exponentArr);
+
+        double[][] expectedResultArr = {
+                {6.05008743087114, 0.627036746099251},
+                {0.00209012248699751, 0.406756715977872}
+        };
+        RealMatrix expectedResult = MatrixUtils.createRealMatrix(expectedResultArr);
+
+        UnitTestUtils.assertEquals("matrixExponential pade9 incorrect result",
+                expectedResult, MatrixUtils.matrixExponential(exponent), 16.0 * Math.ulp(1.0));
+    }
+
+    @Test
+    public void testMatrixExponential13() {
+        double[][] exponentArr1 = {
+                {3.4, 1.2},
+                {0.001, -0.9}
+        };
+        RealMatrix exponent1 = MatrixUtils.createRealMatrix(exponentArr1);
+
+        double[][] expectedResultArr1 = {
+                {29.9705442872504, 8.2499077972773},
+                {0.00687492316439775, 0.408374680340048}
+        };
+        RealMatrix expectedResult1 = MatrixUtils.createRealMatrix(expectedResultArr1);
+
+        UnitTestUtils.assertEquals("matrixExponential pade13-1 incorrect result",
+                expectedResult1, MatrixUtils.matrixExponential(exponent1), 16.0 * Math.ulp(30.0));
+
+
+        double[][] exponentArr2 = {
+                {1.0, 1e5},
+                {0.001, -1.0}
+        };
+        RealMatrix exponent2 = MatrixUtils.createRealMatrix(exponentArr2);
+
+        double[][] expectedResultArr2 = {
+                {12728.3536593144, 115190017.08756},
+                {1.1519001708756, 10424.5533175632}
+        };
+        RealMatrix expectedResult2 = MatrixUtils.createRealMatrix(expectedResultArr2);
+
+        UnitTestUtils.assertEquals("matrixExponential pade13-2 incorrect result",
+                expectedResult2, MatrixUtils.matrixExponential(exponent2), 65536.0 * Math.ulp(1e8));
+    }
+
 }

@@ -1153,4 +1153,159 @@ public class MatrixUtils {
             return decomposition.getSolver().getInverse();
         }
     }
+
+
+
+    // Pade coefficients required for the matrix exponential calculation
+    private static final double[] padeCoefficients3 = {
+            120.0,
+            60.0,
+            12.0,
+            1.0
+    };
+    private static final double[] padeCoefficients5 = {
+            30240.0,
+            15120.0,
+            3360.0,
+            420.0,
+            30.0,
+            1
+    };
+    private static final double[] padeCoefficients7 = {
+            17297280.0,
+            8648640.0,
+            1995840.0,
+            277200.0,
+            25200.0,
+            1512.0,
+            56.0,
+            1.0
+    };
+    private static final double[] padeCoefficients9 = {
+            17643225600.0,
+            8821612800.0,
+            2075673600.0,
+            302702400.0,
+            30270240.0,
+            2162160.0,
+            110880.0,
+            3960.0,
+            90.0,
+            1.0
+    };
+    private static final double[] padeCoefficients13 = {
+            6.476475253248e+16,
+            3.238237626624e+16,
+            7.7717703038976e+15,
+            1.1873537964288e+15,
+            129060195264000.0,
+            10559470521600.0,
+            670442572800.0,
+            33522128640.0,
+            1323241920.0,
+            40840800.0,
+            960960.0,
+            16380.0,
+            182.0,
+            1.0
+    };
+
+
+    /**
+     * Computes the <a href="https://mathworld.wolfram.com/MatrixExponential.html">
+     * matrix exponential</a> of the given matrix.
+     *
+     * The algorithm implementation follows the Pade approximant method of
+     * <p>Higham, Nicholas J. “The Scaling and Squaring Method for the Matrix Exponential
+     * Revisited.” SIAM Journal on Matrix Analysis and Applications 26, no. 4 (January 2005): 1179–93.</p>
+     *
+     * @param rm RealMatrix whose inverse shall be computed
+     * @return The inverse of {@code rm}
+     * @throws MathIllegalArgumentException if matrix is not square
+     */
+    public static RealMatrix matrixExponential(final RealMatrix rm) {
+
+        // Check that the input matrix is square
+        if (!rm.isSquare()) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
+                    rm.getRowDimension(), rm.getColumnDimension());
+        }
+
+        // Preprocessing to reduce the norm
+        int dim = rm.getRowDimension();
+        final RealMatrix identity = MatrixUtils.createRealIdentityMatrix(dim);
+        final double preprocessScale = rm.getTrace() / dim;
+        RealMatrix scaledMatrix = rm.copy();
+        scaledMatrix = scaledMatrix.subtract(identity.scalarMultiply(preprocessScale));
+
+        // Select pade degree required
+        final double l1Norm = rm.getNorm();
+        double[] padeCoefficients;
+        int squaringCount = 0;
+
+        if (l1Norm < 1.495585217958292e-2) {
+            padeCoefficients = padeCoefficients3;
+        } else if (l1Norm < 2.539398330063230e-1) {
+            padeCoefficients = padeCoefficients5;
+        } else if (l1Norm < 9.504178996162932e-1) {
+            padeCoefficients = padeCoefficients7;
+        } else if (l1Norm < 2.097847961257068) {
+            padeCoefficients = padeCoefficients9;
+        } else {
+            padeCoefficients = padeCoefficients13;
+
+            // Calculate scaling factor
+            final double normScale = 5.371920351148152;
+            squaringCount = Math.max(0, Math.getExponent(l1Norm / normScale));
+
+            // Scale matrix by power of 2
+            final int finalSquaringCount = squaringCount;
+            scaledMatrix.walkInOptimizedOrder(new DefaultRealMatrixChangingVisitor() {
+                @Override
+                public double visit(int row, int column, double value) {
+                    return Math.scalb(value, -finalSquaringCount);
+                }
+            });
+        }
+
+        // Calculate U and V using Horner
+        // See Golub, Gene H., and Charles F. van Loan. Matrix Computations. 4th ed.
+        // John Hopkins University Press, 2013.  pages 530/531
+        final RealMatrix scaledMatrix2 = scaledMatrix.multiply(scaledMatrix);
+        final int coeffLength = padeCoefficients.length;
+
+        // Calculate V
+        RealMatrix padeV = MatrixUtils.createRealMatrix(dim, dim);
+        for (int i = coeffLength - 1; i > 1; i -= 2) {
+            padeV = scaledMatrix2.multiply(padeV.add(identity.scalarMultiply(padeCoefficients[i])));
+        }
+        padeV = scaledMatrix.multiply(padeV.add(identity.scalarMultiply(padeCoefficients[1])));
+
+        // Calculate U
+        RealMatrix padeU = MatrixUtils.createRealMatrix(dim, dim);
+        for (int i = coeffLength - 2; i > 1; i -= 2) {
+            padeU = scaledMatrix2.multiply(padeU.add(identity.scalarMultiply(padeCoefficients[i])));
+        }
+        padeU = padeU.add(identity.scalarMultiply(padeCoefficients[0]));
+
+        // Calculate pade approximate by solving (U-V) F = (U+V) for F
+        RealMatrix padeNumer = padeU.add(padeV);
+        RealMatrix padeDenom = padeU.subtract(padeV);
+
+        // Calculate the matrix ratio
+        QRDecomposition decomposition = new QRDecomposition(padeDenom);
+        RealMatrix result = decomposition.getSolver().solve(padeNumer);
+
+        // Repeated squaring if matrix was scaled
+        for (int i = 0; i < squaringCount; i++) {
+            result = result.multiply(result);
+        }
+
+        // Undo preprocessing
+        result = result.scalarMultiply(Math.exp(preprocessScale));
+
+        return result;
+    }
+
+
 }
