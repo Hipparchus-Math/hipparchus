@@ -165,7 +165,7 @@ public class SchurTransformerTest {
 
         RealMatrix result = p.multiply(t).multiply(pT);
 
-        double norm = result.subtract(matrix).getNorm();
+        double norm = result.subtract(matrix).getNorm1();
         Assert.assertEquals(0, norm, 1.0e-9);
 
         return t;
@@ -174,7 +174,7 @@ public class SchurTransformerTest {
     private void checkOrthogonal(RealMatrix m) {
         RealMatrix mTm = m.transposeMultiply(m);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(mTm.getRowDimension());
-        Assert.assertEquals(0, mTm.subtract(id).getNorm(), 1.0e-14);
+        Assert.assertEquals(0, mTm.subtract(id).getNorm1(), 1.0e-14);
     }
 
     private void checkSchurForm(final RealMatrix m) {
@@ -197,10 +197,10 @@ public class SchurTransformerTest {
 
         // check values against known references
         RealMatrix p = transformer.getP();
-        Assert.assertEquals(0, p.subtract(MatrixUtils.createRealMatrix(pRef)).getNorm(), 1.0e-14);
+        Assert.assertEquals(0, p.subtract(MatrixUtils.createRealMatrix(pRef)).getNorm1(), 1.0e-14);
 
         RealMatrix t = transformer.getT();
-        Assert.assertEquals(0, t.subtract(MatrixUtils.createRealMatrix(hRef)).getNorm(), 1.0e-14);
+        Assert.assertEquals(0, t.subtract(MatrixUtils.createRealMatrix(hRef)).getNorm1(), 1.0e-14);
 
         // check the same cached instance is returned the second time
         Assert.assertTrue(p == transformer.getP());

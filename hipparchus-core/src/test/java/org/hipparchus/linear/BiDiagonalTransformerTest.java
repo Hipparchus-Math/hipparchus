@@ -75,7 +75,7 @@ public class BiDiagonalTransformerTest {
         RealMatrix u = transformer.getU();
         RealMatrix b = transformer.getB();
         RealMatrix v = transformer.getV();
-        double norm = u.multiply(b).multiplyTransposed(v).subtract(matrix).getNorm();
+        double norm = u.multiply(b).multiplyTransposed(v).subtract(matrix).getNorm1();
         Assert.assertEquals(0, norm, 1.0e-14);
     }
 
@@ -96,7 +96,7 @@ public class BiDiagonalTransformerTest {
     private void checkOrthogonal(RealMatrix m) {
         RealMatrix mTm = m.transposeMultiply(m);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(mTm.getRowDimension());
-        Assert.assertEquals(0, mTm.subtract(id).getNorm(), 1.0e-14);
+        Assert.assertEquals(0, mTm.subtract(id).getNorm1(), 1.0e-14);
     }
 
     @Test
@@ -153,11 +153,11 @@ public class BiDiagonalTransformerTest {
 
        // check values against known references
        RealMatrix u = transformer.getU();
-       Assert.assertEquals(0, u.subtract(uRef).getNorm(), 1.0e-14);
+       Assert.assertEquals(0, u.subtract(uRef).getNorm1(), 1.0e-14);
        RealMatrix b = transformer.getB();
-       Assert.assertEquals(0, b.subtract(bRef).getNorm(), 1.0e-14);
+       Assert.assertEquals(0, b.subtract(bRef).getNorm1(), 1.0e-14);
        RealMatrix v = transformer.getV();
-       Assert.assertEquals(0, v.subtract(vRef).getNorm(), 1.0e-14);
+       Assert.assertEquals(0, v.subtract(vRef).getNorm1(), 1.0e-14);
 
        // check the same cached instance is returned the second time
        Assert.assertTrue(u == transformer.getU());
@@ -186,11 +186,11 @@ public class BiDiagonalTransformerTest {
 
         // check values against known references
         RealMatrix u = transformer.getU();
-        Assert.assertEquals(0, u.subtract(uRef).getNorm(), 1.0e-14);
+        Assert.assertEquals(0, u.subtract(uRef).getNorm1(), 1.0e-14);
         RealMatrix b = transformer.getB();
-        Assert.assertEquals(0, b.subtract(bRef).getNorm(), 1.0e-14);
+        Assert.assertEquals(0, b.subtract(bRef).getNorm1(), 1.0e-14);
         RealMatrix v = transformer.getV();
-        Assert.assertEquals(0, v.subtract(vRef).getNorm(), 1.0e-14);
+        Assert.assertEquals(0, v.subtract(vRef).getNorm1(), 1.0e-14);
 
         // check the same cached instance is returned the second time
         Assert.assertTrue(u == transformer.getU());

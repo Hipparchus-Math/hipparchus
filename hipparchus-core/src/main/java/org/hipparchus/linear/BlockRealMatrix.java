@@ -872,7 +872,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
 
     /** {@inheritDoc} */
     @Override
-    public double getNorm() {
+    public double getNorm1() {
         final double[] colSums = new double[BLOCK_SIZE];
         double maxColSum = 0;
         for (int jBlock = 0; jBlock < blockColumns; jBlock++) {
@@ -894,6 +894,32 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
             }
         }
         return maxColSum;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public double getNormInfty() {
+        final double[] rowSums = new double[BLOCK_SIZE];
+        double maxRowSum = 0;
+        for (int iBlock = 0; iBlock < blockRows; ++iBlock) {
+            final int iHeight = blockHeight(iBlock);
+            Arrays.fill(rowSums, 0, iHeight, 0.0);
+            for (int jBlock = 0; jBlock < blockColumns; jBlock++) {
+                final int jWidth = blockWidth(jBlock);
+                final double[] block = blocks[iBlock * blockColumns + jBlock];
+                for (int i = 0; i < iHeight; ++i) {
+                    double sum = 0;
+                    for (int j = 0; j < jWidth; ++j) {
+                        sum += FastMath.abs(block[i * jWidth + j]);
+                    }
+                    rowSums[i] += sum;
+                }
+            }
+            for (int i = 0; i < iHeight; ++i) {
+                maxRowSum = FastMath.max(maxRowSum, rowSums[i]);
+            }
+        }
+        return maxRowSum;
     }
 
     /** {@inheritDoc} */

@@ -40,9 +40,30 @@ import org.hipparchus.util.Precision;
  * way to express this is to say that it is the point of the line
  * which is closest to the origin. Abscissa increases in the line
  * direction.</p>
-
+ *
+ * @see #fromDirection(Vector3D, Vector3D, double)
+ * @see #Line(Vector3D, Vector3D, double)
  */
 public class Line implements Embedding<Euclidean3D, Euclidean1D> {
+
+    /**
+     * Create a line from a point and a direction. Line = {@code point} + t * {@code
+     * direction}, where t is any real number.
+     *
+     * @param point     on the line. Can be any point.
+     * @param direction of the line. Must not be the zero vector.
+     * @param tolerance below which points are considered identical.
+     * @return a new Line with the given point and direction.
+     * @throws MathIllegalArgumentException if {@code direction} is the zero vector.
+     * @see #Line(Vector3D, Vector3D, double)
+     */
+    public static Line fromDirection(final Vector3D point,
+                                     final Vector3D direction,
+                                     final double tolerance) {
+        final Line line = new Line(tolerance);
+        line.resetWithDirection(point, direction);
+        return line;
+    }
 
     /** Line direction. */
     private Vector3D direction;
@@ -58,11 +79,12 @@ public class Line implements Embedding<Euclidean3D, Euclidean1D> {
      * @param p2 second point belonging to the line (this can be any point, different from p1)
      * @param tolerance tolerance below which points are considered identical
      * @exception MathIllegalArgumentException if the points are equal
+     * @see #fromDirection(Vector3D, Vector3D, double)
      */
     public Line(final Vector3D p1, final Vector3D p2, final double tolerance)
         throws MathIllegalArgumentException {
+        this(tolerance);
         reset(p1, p2);
-        this.tolerance = tolerance;
     }
 
     /** Copy constructor.
@@ -71,9 +93,18 @@ public class Line implements Embedding<Euclidean3D, Euclidean1D> {
      * @param line line to copy
      */
     public Line(final Line line) {
+        this(line.tolerance);
         this.direction = line.direction;
         this.zero      = line.zero;
-        this.tolerance = line.tolerance;
+    }
+
+    /**
+     * Private constructor. Just sets the tolerance.
+     *
+     * @param tolerance below which points are considered identical.
+     */
+    private Line(final double tolerance) {
+        this.tolerance = tolerance;
     }
 
     /** Reset the instance as if built from two points.
@@ -82,7 +113,17 @@ public class Line implements Embedding<Euclidean3D, Euclidean1D> {
      * @exception MathIllegalArgumentException if the points are equal
      */
     public void reset(final Vector3D p1, final Vector3D p2) throws MathIllegalArgumentException {
-        final Vector3D delta = p2.subtract(p1);
+        resetWithDirection(p1, p2.subtract(p1));
+    }
+
+    /**
+     * Reset the instance as if built from a point and direction.
+     *
+     * @param p1    point belonging to the line (this can be any point).
+     * @param delta direction of the line.
+     * @throws MathIllegalArgumentException if {@code delta} is the zero vector.
+     */
+    private void resetWithDirection(final Vector3D p1, final Vector3D delta) {
         final double norm2 = delta.getNormSq();
         if (norm2 == 0.0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NORM);

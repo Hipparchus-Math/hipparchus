@@ -129,7 +129,7 @@ public class RRQRSolverTest {
         DecompositionSolver solver = decomposition.getSolver();
 
         // using RealMatrix
-        Assert.assertEquals(0, solver.solve(b).subtract(xRef).getNorm(), 3.0e-16 * xRef.getNorm());
+        Assert.assertEquals(0, solver.solve(b).subtract(xRef).getNorm1(), 4.0e-16 * xRef.getNorm1());
 
         // using ArrayRealVector
         for (int i = 0; i < b.getColumnDimension(); ++i) {
@@ -169,7 +169,7 @@ public class RRQRSolverTest {
 
         // despite perturbation, the least square solution should be pretty good
         RealMatrix x = new RRQRDecomposition(a).getSolver().solve(b);
-        Assert.assertEquals(0, x.subtract(xRef).getNorm(), 0.01 * noise * p * q);
+        Assert.assertEquals(0, x.subtract(xRef).getNorm1(), 0.01 * noise * p * q);
 
     }
 
@@ -185,11 +185,11 @@ public class RRQRSolverTest {
         RealMatrix   x = rrqrd.getSolver().solve(b);
 
         // too many equations, the system cannot be solved at all
-        Assert.assertTrue(x.subtract(xRef).getNorm() / (p * q) > 0.01);
+        Assert.assertTrue(x.subtract(xRef).getNorm1() / (p * q) > 0.01);
 
         // the last permuted unknown should have been set to 0
         RealMatrix permuted = rrqrd.getP().transposeMultiply(x);
-        Assert.assertEquals(0.0, permuted.getSubMatrix(p, q - 1, 0, permuted.getColumnDimension() - 1).getNorm(), 0);
+        Assert.assertEquals(0.0, permuted.getSubMatrix(p, q - 1, 0, permuted.getColumnDimension() - 1).getNorm1(), 0);
 
     }
 
