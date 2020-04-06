@@ -1388,7 +1388,12 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
             for (int n = 1; n < 5; ++n) {
                 if (x < 0) {
                     // special case for Complex
-                    Assert.assertTrue(Double.isNaN(new Decimal64(x).rootN(n).getReal()));
+                    final double doubleRoot = new Decimal64(x).rootN(n).getReal();
+                    if (n % 2 == 0) {
+                        Assert.assertTrue(Double.isNaN(doubleRoot));
+                    } else {
+                        Assert.assertTrue(doubleRoot < 0);
+                    }
                     Assert.assertEquals(FastMath.PI / n, build(x).rootN(n).getArgument(), 1.0e-15);
                 } else {
                     checkRelative(FastMath.pow(x, 1.0 / n), build(x).rootN(n));
