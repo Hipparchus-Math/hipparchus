@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hipparchus.ExtendedFieldElementAbstractTest;
+import org.hipparchus.RealFieldElementAbstractTest;
 import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
@@ -37,7 +37,7 @@ import org.hipparchus.util.FieldSinCos;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class SparseGradientTest extends ExtendedFieldElementAbstractTest<SparseGradient> {
+public class SparseGradientTest extends RealFieldElementAbstractTest<SparseGradient> {
 
     @Override
     protected SparseGradient build(final double x) {

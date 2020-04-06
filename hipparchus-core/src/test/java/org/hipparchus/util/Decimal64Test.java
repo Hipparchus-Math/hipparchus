@@ -21,12 +21,12 @@
  */
 package org.hipparchus.util;
 
-import org.hipparchus.ExtendedFieldElementAbstractTest;
+import org.hipparchus.RealFieldElementAbstractTest;
 import org.hipparchus.util.Decimal64;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class Decimal64Test extends ExtendedFieldElementAbstractTest<Decimal64> {
+public class Decimal64Test extends RealFieldElementAbstractTest<Decimal64> {
     public static final double X = 1.2345;
 
     public static final Decimal64 PLUS_X = new Decimal64(X);

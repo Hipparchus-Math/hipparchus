@@ -25,7 +25,7 @@ package org.hipparchus.dfp;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hipparchus.ExtendedFieldElementAbstractTest;
+import org.hipparchus.RealFieldElementAbstractTest;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
@@ -34,7 +34,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class DfpTest extends ExtendedFieldElementAbstractTest<Dfp> {
+public class DfpTest extends RealFieldElementAbstractTest<Dfp> {
 
     @Override
     protected Dfp build(final double x) {
