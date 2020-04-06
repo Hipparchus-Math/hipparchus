@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hipparchus.ExtendedFieldElementAbstractTest;
+import org.hipparchus.RealFieldElementAbstractTest;
 import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
@@ -46,7 +46,7 @@ import org.junit.Test;
 /**
  * Test for class {@link DerivativeStructure}.
  */
-public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<DerivativeStructure> {
+public class DerivativeStructureTest extends RealFieldElementAbstractTest<DerivativeStructure> {
 
     @Override
     protected DerivativeStructure build(final double x) {
