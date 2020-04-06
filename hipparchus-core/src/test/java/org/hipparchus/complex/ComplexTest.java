@@ -22,6 +22,7 @@
 
 package org.hipparchus.complex;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.UnitTestUtils;
@@ -29,6 +30,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -759,6 +761,39 @@ public class ComplexTest {
     @Test
     public void testAtanNaN() {
         Assert.assertTrue(Complex.NaN.atan().isNaN());
+    }
+
+    @Test
+    public void testAtan2() {
+        for (double r1 : Arrays.asList(-3, 3)) {
+            for (double i1 : Arrays.asList(-2, 0, 2)) {
+                final Complex c1 = new Complex(r1, i1);
+                for (double r2 : Arrays.asList(-1, 1)) {
+                    for (double i2 : Arrays.asList(-5, 0, 5)) {
+                        final Complex c2 = new Complex(r2, i2);
+                        UnitTestUtils.assertEquals(c1.divide(c2), c1.atan2(c2).tan(), 1.0e-14);
+                        final Complex atan   = c1.divide(c2).atan();
+                        final Complex atan2  = c1.atan2(c2);
+                        final double  deltaR = FastMath.abs(atan.getReal() - atan2.getReal()) / FastMath.PI;
+                        Assert.assertTrue(FastMath.abs(deltaR - FastMath.rint(deltaR)) < 1.0e-14);
+                        Assert.assertEquals(atan.getImaginary(), atan2.getImaginary(), 1.0e-14);
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testAtan2Real() {
+        for (double r1 : Arrays.asList(-3, 3)) {
+            final Complex c1 = new Complex(r1, 0);
+            for (double r2 : Arrays.asList(-1, 1)) {
+                final Complex c2 = new Complex(r2, 0);
+                Assert.assertEquals(FastMath.atan2(r1, r2),
+                                    MathUtils.normalizeAngle(c1.atan2(c2).getReal(), 0.0),
+                                    1.0e-14);
+            }
+        }
     }
 
     @Test
