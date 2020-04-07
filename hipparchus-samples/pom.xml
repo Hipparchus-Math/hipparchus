@@ -41,6 +41,7 @@
 
   <properties>
     <hipparchusParentDir>${basedir}/..</hipparchusParentDir>
+    <sonar.skip>true</sonar.skip>
   </properties>
 
   <dependencies>

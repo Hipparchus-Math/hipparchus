@@ -300,7 +300,7 @@ public class AkimaSplineInterpolatorTest {
                                                         subtract(x.multiply(x).multiply(0.5)).
                                                         add(x).
                                                         subtract(1);
-        
+
         testInterpolation( minimumX, maximumX, numberOfElements, numberOfSamples, f, interpolationTolerance,
                            maxTolerance );
     }
