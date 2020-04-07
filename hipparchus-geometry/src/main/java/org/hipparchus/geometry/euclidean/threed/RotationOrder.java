@@ -143,8 +143,7 @@ public enum RotationOrder {
      * @param a2 axis of the second rotation
      * @param a3 axis of the third rotation
      */
-    private RotationOrder(final String name,
-                          final Vector3D a1, final Vector3D a2, final Vector3D a3) {
+    RotationOrder(final String name, final Vector3D a1, final Vector3D a2, final Vector3D a3) {
         this.name = name;
         this.a1   = a1;
         this.a2   = a2;

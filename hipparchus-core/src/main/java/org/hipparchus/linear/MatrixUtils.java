@@ -56,6 +56,68 @@ public class MatrixUtils {
      */
     public static final RealMatrixFormat OCTAVE_FORMAT = new RealMatrixFormat("[", "]", "", "", "; ", ", ");
 
+    /** Pade coefficients required for the matrix exponential calculation. */
+    private static final double[] PADE_COEFFICIENTS_3 = {
+            120.0,
+            60.0,
+            12.0,
+            1.0
+    };
+
+    /** Pade coefficients required for the matrix exponential calculation. */
+    private static final double[] PADE_COEFFICIENTS_5 = {
+            30240.0,
+            15120.0,
+            3360.0,
+            420.0,
+            30.0,
+            1
+    };
+
+    /** Pade coefficients required for the matrix exponential calculation. */
+    private static final double[] PADE_COEFFICIENTS_7 = {
+            17297280.0,
+            8648640.0,
+            1995840.0,
+            277200.0,
+            25200.0,
+            1512.0,
+            56.0,
+            1.0
+    };
+
+    /** Pade coefficients required for the matrix exponential calculation. */
+    private static final double[] PADE_COEFFICIENTS_9 = {
+            17643225600.0,
+            8821612800.0,
+            2075673600.0,
+            302702400.0,
+            30270240.0,
+            2162160.0,
+            110880.0,
+            3960.0,
+            90.0,
+            1.0
+    };
+
+    /** Pade coefficients required for the matrix exponential calculation. */
+    private static final double[] PADE_COEFFICIENTS_13 = {
+            6.476475253248e+16,
+            3.238237626624e+16,
+            7.7717703038976e+15,
+            1.1873537964288e+15,
+            129060195264000.0,
+            10559470521600.0,
+            670442572800.0,
+            33522128640.0,
+            1323241920.0,
+            40840800.0,
+            960960.0,
+            16380.0,
+            182.0,
+            1.0
+    };
+
     /**
      * Private constructor.
      */
@@ -1154,63 +1216,6 @@ public class MatrixUtils {
         }
     }
 
-
-
-    // Pade coefficients required for the matrix exponential calculation
-    private static final double[] padeCoefficients3 = {
-            120.0,
-            60.0,
-            12.0,
-            1.0
-    };
-    private static final double[] padeCoefficients5 = {
-            30240.0,
-            15120.0,
-            3360.0,
-            420.0,
-            30.0,
-            1
-    };
-    private static final double[] padeCoefficients7 = {
-            17297280.0,
-            8648640.0,
-            1995840.0,
-            277200.0,
-            25200.0,
-            1512.0,
-            56.0,
-            1.0
-    };
-    private static final double[] padeCoefficients9 = {
-            17643225600.0,
-            8821612800.0,
-            2075673600.0,
-            302702400.0,
-            30270240.0,
-            2162160.0,
-            110880.0,
-            3960.0,
-            90.0,
-            1.0
-    };
-    private static final double[] padeCoefficients13 = {
-            6.476475253248e+16,
-            3.238237626624e+16,
-            7.7717703038976e+15,
-            1.1873537964288e+15,
-            129060195264000.0,
-            10559470521600.0,
-            670442572800.0,
-            33522128640.0,
-            1323241920.0,
-            40840800.0,
-            960960.0,
-            16380.0,
-            182.0,
-            1.0
-    };
-
-
     /**
      * Computes the <a href="https://mathworld.wolfram.com/MatrixExponential.html">
      * matrix exponential</a> of the given matrix.
@@ -1244,15 +1249,15 @@ public class MatrixUtils {
         int squaringCount = 0;
 
         if (l1Norm < 1.495585217958292e-2) {
-            padeCoefficients = padeCoefficients3;
+            padeCoefficients = PADE_COEFFICIENTS_3;
         } else if (l1Norm < 2.539398330063230e-1) {
-            padeCoefficients = padeCoefficients5;
+            padeCoefficients = PADE_COEFFICIENTS_5;
         } else if (l1Norm < 9.504178996162932e-1) {
-            padeCoefficients = padeCoefficients7;
+            padeCoefficients = PADE_COEFFICIENTS_7;
         } else if (l1Norm < 2.097847961257068) {
-            padeCoefficients = padeCoefficients9;
+            padeCoefficients = PADE_COEFFICIENTS_9;
         } else {
-            padeCoefficients = padeCoefficients13;
+            padeCoefficients = PADE_COEFFICIENTS_13;
 
             // Calculate scaling factor
             final double normScale = 5.371920351148152;

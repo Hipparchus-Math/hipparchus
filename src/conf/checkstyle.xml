@@ -47,8 +47,6 @@
         
      <!-- Require method javadocs, allow undeclared RTE -->
     <module name="JavadocMethod">
-      <property name="allowUndeclaredRTE" value="true"/>
-      <property name="allowThrowsTagsForSubclasses" value="true"/>
       <property name="validateThrows" value="false"/>
     </module>
 

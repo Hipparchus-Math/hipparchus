@@ -46,25 +46,6 @@ import org.hipparchus.util.Precision;
  */
 public class Line implements Embedding<Euclidean3D, Euclidean1D> {
 
-    /**
-     * Create a line from a point and a direction. Line = {@code point} + t * {@code
-     * direction}, where t is any real number.
-     *
-     * @param point     on the line. Can be any point.
-     * @param direction of the line. Must not be the zero vector.
-     * @param tolerance below which points are considered identical.
-     * @return a new Line with the given point and direction.
-     * @throws MathIllegalArgumentException if {@code direction} is the zero vector.
-     * @see #Line(Vector3D, Vector3D, double)
-     */
-    public static Line fromDirection(final Vector3D point,
-                                     final Vector3D direction,
-                                     final double tolerance) {
-        final Line line = new Line(tolerance);
-        line.resetWithDirection(point, direction);
-        return line;
-    }
-
     /** Line direction. */
     private Vector3D direction;
 
@@ -105,6 +86,25 @@ public class Line implements Embedding<Euclidean3D, Euclidean1D> {
      */
     private Line(final double tolerance) {
         this.tolerance = tolerance;
+    }
+
+    /**
+     * Create a line from a point and a direction. Line = {@code point} + t * {@code
+     * direction}, where t is any real number.
+     *
+     * @param point     on the line. Can be any point.
+     * @param direction of the line. Must not be the zero vector.
+     * @param tolerance below which points are considered identical.
+     * @return a new Line with the given point and direction.
+     * @throws MathIllegalArgumentException if {@code direction} is the zero vector.
+     * @see #Line(Vector3D, Vector3D, double)
+     */
+    public static Line fromDirection(final Vector3D point,
+                                     final Vector3D direction,
+                                     final double tolerance) {
+        final Line line = new Line(tolerance);
+        line.resetWithDirection(point, direction);
+        return line;
     }
 
     /** Reset the instance as if built from two points.
