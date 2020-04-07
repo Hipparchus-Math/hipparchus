@@ -689,6 +689,20 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
     }
 
     @Test
+    public void testToDegreesComplex() {
+        Complex z = new Complex(3, 4);
+        Complex expected = new Complex(FastMath.toDegrees(z.getReal()), FastMath.toDegrees(z.getImaginary()));
+        UnitTestUtils.assertEquals(expected, z.toDegrees(), 1.0e-15);
+    }
+
+    @Test
+    public void testToRadiansComplex() {
+        Complex z = new Complex(3, 4);
+        Complex expected = new Complex(FastMath.toRadians(z.getReal()), FastMath.toRadians(z.getImaginary()));
+        UnitTestUtils.assertEquals(expected, z.toRadians(), 1.0e-15);
+    }
+
+    @Test
     public void testAcosComplex() {
         Complex z = new Complex(3, 4);
         Complex expected = new Complex(0.936812, -2.30551);

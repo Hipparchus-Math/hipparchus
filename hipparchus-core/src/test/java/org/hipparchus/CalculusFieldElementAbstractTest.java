@@ -115,6 +115,20 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     }
 
     @Test
+    public void testToDegrees() {
+        for (double x = -0.9; x < 0.9; x += 0.05) {
+            checkRelative(FastMath.toDegrees(x), build(x).toDegrees());
+        }
+    }
+
+    @Test
+    public void testToRadians() {
+        for (double x = -0.9; x < 0.9; x += 0.05) {
+            checkRelative(FastMath.toRadians(x), build(x).toRadians());
+        }
+    }
+
+    @Test
     public void testCos() {
         for (double x = -0.9; x < 0.9; x += 0.05) {
             checkRelative(FastMath.cos(x), build(x).cos());
