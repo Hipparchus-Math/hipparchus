@@ -311,7 +311,7 @@ public class UnitTestUtils {
         }
 
         RealMatrix delta = expected.subtract(observed);
-        if (delta.getNorm() >= tolerance) {
+        if (delta.getNorm1() >= tolerance) {
             StringBuilder messageBuffer = new StringBuilder(msg);
             messageBuffer.append("\nExpected: " + expected);
             messageBuffer.append("\nObserved: " + observed);

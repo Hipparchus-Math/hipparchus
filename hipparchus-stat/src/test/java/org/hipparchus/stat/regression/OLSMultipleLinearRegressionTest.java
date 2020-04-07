@@ -103,8 +103,8 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
             }
         });
        Assert.assertEquals(0.0,
-                     errors.subtract(referenceVariance).getNorm(),
-                     5.0e-16 * referenceVariance.getNorm());
+                     errors.subtract(referenceVariance).getNorm1(),
+                     5.0e-16 * referenceVariance.getNorm1());
        Assert.assertEquals(1, ((OLSMultipleLinearRegression) regression).calculateRSquared(), 1E-12);
     }
 

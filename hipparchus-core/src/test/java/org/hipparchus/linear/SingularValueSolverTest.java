@@ -112,7 +112,7 @@ public class SingularValueSolverTest {
         });
 
         // using RealMatrix
-        Assert.assertEquals(0, solver.solve(b).subtract(xRef).getNorm(), normTolerance);
+        Assert.assertEquals(0, solver.solve(b).subtract(xRef).getNorm1(), normTolerance);
 
         // using ArrayRealVector
         for (int i = 0; i < b.getColumnDimension(); ++i) {
@@ -149,7 +149,7 @@ public class SingularValueSolverTest {
         SingularValueDecomposition svd =
             new SingularValueDecomposition(rm);
         RealMatrix recomposed = svd.getU().multiply(svd.getS()).multiply(svd.getVT());
-        Assert.assertEquals(0.0, recomposed.subtract(rm).getNorm(), 2.0e-15);
+        Assert.assertEquals(0.0, recomposed.subtract(rm).getNorm1(), 2.0e-15);
     }
 
     @Test
@@ -163,7 +163,7 @@ public class SingularValueSolverTest {
           {0.5437098346,-0.4107754586,-0.0008256918,0.132934376},
           {-0.0714905202,0.053808742,0.0006279816,-0.0176817782}
       });
-      Assert.assertEquals(0, expected.subtract(pseudoInverse).getNorm(), 1.0e-9);
+      Assert.assertEquals(0, expected.subtract(pseudoInverse).getNorm1(), 1.0e-9);
     }
 
 }

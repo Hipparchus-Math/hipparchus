@@ -251,7 +251,7 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         GaussianRandomGenerator rawGenerator = new GaussianRandomGenerator(rg);
         double[] errorMeans = new double[nObs];  // Counting on init to 0 here
         CorrelatedRandomVectorGenerator gen = new CorrelatedRandomVectorGenerator(errorMeans, cov,
-         1.0e-12 * cov.getNorm(), rawGenerator);
+         1.0e-12 * cov.getNorm1(), rawGenerator);
 
         // Now start generating models.  Use Longley X matrix on LHS
         // and Longley OLS beta vector as "true" beta.  Generate

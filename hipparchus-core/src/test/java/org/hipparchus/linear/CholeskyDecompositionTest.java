@@ -110,7 +110,7 @@ public class CholeskyDecompositionTest {
         CholeskyDecomposition llt = new CholeskyDecomposition(matrix);
         RealMatrix l  = llt.getL();
         RealMatrix lt = llt.getLT();
-        double norm = l.multiply(lt).subtract(matrix).getNorm();
+        double norm = l.multiply(lt).subtract(matrix).getNorm1();
         Assert.assertEquals(0, norm, 1.0e-15);
     }
 
@@ -133,7 +133,7 @@ public class CholeskyDecompositionTest {
         CholeskyDecomposition llt = new CholeskyDecomposition(matrix);
         RealMatrix l  = llt.getL();
         RealMatrix lt = llt.getLT();
-        double norm = l.subtract(lt.transpose()).getNorm();
+        double norm = l.subtract(lt.transpose()).getNorm1();
         Assert.assertEquals(0, norm, 1.0e-15);
     }
 
@@ -152,9 +152,9 @@ public class CholeskyDecompositionTest {
 
         // check values against known references
         RealMatrix l = llt.getL();
-        Assert.assertEquals(0, l.subtract(lRef).getNorm(), 1.0e-13);
+        Assert.assertEquals(0, l.subtract(lRef).getNorm1(), 1.0e-13);
         RealMatrix lt = llt.getLT();
-        Assert.assertEquals(0, lt.subtract(lRef.transpose()).getNorm(), 1.0e-13);
+        Assert.assertEquals(0, lt.subtract(lRef.transpose()).getNorm1(), 1.0e-13);
 
         // check the same cached instance is returned the second time
         Assert.assertTrue(l  == llt.getL());

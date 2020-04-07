@@ -287,7 +287,7 @@ public class EigenDecompositionTest {
         });
         EigenDecomposition ed = new EigenDecomposition(m);
         Assert.assertEquals(0.0,
-                            ed.getV().multiply(ed.getD()).multiply(ed.getVT()).subtract(m).getNorm(),
+                            ed.getV().multiply(ed.getD()).multiply(ed.getVT()).subtract(m).getNorm1(),
                             1.0e-10);
     }
 
@@ -350,7 +350,7 @@ public class EigenDecompositionTest {
         RealMatrix v = ed.getV();
         RealMatrix vT = ed.getVT();
 
-        double norm = v.multiply(d).multiply(vT).subtract(symmetric).getNorm();
+        double norm = v.multiply(d).multiply(vT).subtract(symmetric).getNorm1();
         Assert.assertEquals(0, norm, 6.0e-13);
     }
 
@@ -523,12 +523,12 @@ public class EigenDecompositionTest {
             RealMatrix x = m.multiply(v);
             RealMatrix y = v.multiply(d);
 
-            double diffNorm = x.subtract(y).getNorm();
+            double diffNorm = x.subtract(y).getNorm1();
             Assert.assertTrue("The norm of (X-Y) is too large: " + diffNorm + ", matrix=" + m.toString(),
-                    x.subtract(y).getNorm() < 1000 * Precision.EPSILON * FastMath.max(x.getNorm(), y.getNorm()));
+                    x.subtract(y).getNorm1() < 1000 * Precision.EPSILON * FastMath.max(x.getNorm1(), y.getNorm1()));
 
             RealMatrix invV = new LUDecomposition(v).getSolver().getInverse();
-            double norm = v.multiply(d).multiply(invV).subtract(m).getNorm();
+            double norm = v.multiply(d).multiply(invV).subtract(m).getNorm1();
             Assert.assertEquals(0.0, norm, 1.0e-10);
         } catch (Exception e) {
             Assert.fail("Failed to create EigenDecomposition for matrix " + m.toString() + ", ex=" + e.toString());
@@ -556,7 +556,7 @@ public class EigenDecompositionTest {
         RealMatrix v  = ed.getV();
         RealMatrix d  = ed.getD();
         RealMatrix vT = ed.getVT();
-        double norm = v.multiply(d).multiply(vT).subtract(matrix).getNorm();
+        double norm = v.multiply(d).multiply(vT).subtract(matrix).getNorm1();
         Assert.assertEquals(0, norm, 6.0e-13);
     }
 
@@ -566,7 +566,7 @@ public class EigenDecompositionTest {
         RealMatrix v = new EigenDecomposition(matrix).getV();
         RealMatrix vTv = v.transposeMultiply(v);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(vTv.getRowDimension());
-        Assert.assertEquals(0, vTv.subtract(id).getNorm(), 2.0e-13);
+        Assert.assertEquals(0, vTv.subtract(id).getNorm1(), 2.0e-13);
     }
 
     /** test diagonal matrix */

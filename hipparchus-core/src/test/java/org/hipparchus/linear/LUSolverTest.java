@@ -143,7 +143,7 @@ public class LUSolverTest {
         });
 
         // using RealMatrix
-        Assert.assertEquals(0, solver.solve(b).subtract(xRef).getNorm(), 1.0e-13);
+        Assert.assertEquals(0, solver.solve(b).subtract(xRef).getNorm1(), 1.0e-13);
 
         // using ArrayRealVector
         for (int i = 0; i < b.getColumnDimension(); ++i) {

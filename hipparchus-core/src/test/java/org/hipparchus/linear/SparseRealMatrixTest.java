@@ -170,8 +170,10 @@ public final class SparseRealMatrixTest {
     public void testNorm() {
         OpenMapRealMatrix m = createSparseMatrix(testData);
         OpenMapRealMatrix m2 = createSparseMatrix(testData2);
-        Assert.assertEquals("testData norm", 14d, m.getNorm(), entryTolerance);
-        Assert.assertEquals("testData2 norm", 7d, m2.getNorm(), entryTolerance);
+        Assert.assertEquals("testData norm", 14d, m.getNorm1(), entryTolerance);
+        Assert.assertEquals("testData2 norm", 7d, m2.getNorm1(), entryTolerance);
+        Assert.assertEquals("testData norm", 10d, m.getNormInfty(), entryTolerance);
+        Assert.assertEquals("testData2 norm", 10d, m2.getNormInfty(), entryTolerance);
     }
 
     /** test m-n = m + -n */
@@ -246,7 +248,7 @@ public final class SparseRealMatrixTest {
                     final OpenMapRealMatrix b = new OpenMapRealMatrix(interm, cols);
                     b.walkInOptimizedOrder(randomSetter);
                     Assert.assertEquals(0.0,
-                                        a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm(),
+                                        a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm1(),
                                         1.0e-15);
                 }
             }
@@ -281,8 +283,8 @@ public final class SparseRealMatrixTest {
                     final OpenMapRealMatrix b = new OpenMapRealMatrix(rows, interm);
                     b.walkInOptimizedOrder(randomSetter);
                     Assert.assertEquals(0.0,
-                                        a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm(),
-                                        3.0e-13);
+                                        a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm1(),
+                                        4.0e-13);
                 }
             }
         }
@@ -745,7 +747,7 @@ public final class SparseRealMatrixTest {
     /** verifies that two matrices are close (1-norm) */
     protected void assertClose(String msg, RealMatrix m, RealMatrix n,
             double tolerance) {
-        Assert.assertTrue(msg, m.subtract(n).getNorm() < tolerance);
+        Assert.assertTrue(msg, m.subtract(n).getNorm1() < tolerance);
     }
 
     /** verifies that two vectors are close (sup norm) */

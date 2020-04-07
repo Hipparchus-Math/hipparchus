@@ -21,7 +21,6 @@
  */
 package org.hipparchus;
 
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
@@ -30,7 +29,7 @@ import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
 import org.junit.Test;
 
-public abstract class ExtendedFieldElementAbstractTest<T extends RealFieldElement<T>> {
+public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldElement<T>> {
 
     protected abstract T build(double x);
 
@@ -111,24 +110,6 @@ public abstract class ExtendedFieldElementAbstractTest<T extends RealFieldElemen
         for (double x = -3; x < 3; x += 0.2) {
             for (double y = -3; y < 3; y += 0.2) {
                     checkRelative(x / y, build(x).divide(y));
-            }
-        }
-    }
-
-    @Test
-    public void testRemainderField() {
-        for (double x = -3; x < 3; x += 0.2) {
-            for (double y = -3; y < 3; y += 0.2) {
-                checkRelative(FastMath.IEEEremainder(x, y), build(x).remainder(build(y)));
-            }
-        }
-    }
-
-    @Test
-    public void testRemainderDouble() {
-        for (double x = -3; x < 3; x += 0.2) {
-            for (double y = -3.2; y < 3.2; y += 0.25) {
-                checkRelative(FastMath.IEEEremainder(x, y), build(x).remainder(y));
             }
         }
     }
@@ -336,66 +317,6 @@ public abstract class ExtendedFieldElementAbstractTest<T extends RealFieldElemen
     }
 
     @Test
-    public void testAbs() {
-        for (double x = -0.9; x < 0.9; x += 0.05) {
-            checkRelative(FastMath.abs(x), build(x).abs());
-        }
-    }
-
-    @Test
-    public void testCeil() {
-        for (double x = -0.9; x < 0.9; x += 0.05) {
-            checkRelative(FastMath.ceil(x), build(x).ceil());
-        }
-    }
-
-    @Test
-    public void testFloor() {
-        for (double x = -0.9; x < 0.9; x += 0.05) {
-            checkRelative(FastMath.floor(x), build(x).floor());
-        }
-    }
-
-    @Test
-    public void testRint() {
-        for (double x = -0.9; x < 0.9; x += 0.05) {
-            checkRelative(FastMath.rint(x), build(x).rint());
-        }
-    }
-
-    @Test
-    public void testRound() {
-        for (double x = -0.9; x < 0.9; x += 0.05) {
-            Assert.assertEquals(FastMath.round(x), build(x).round());
-        }
-    }
-
-    @Test
-    public void testSignum() {
-        for (double x = -0.9; x < 0.9; x += 0.05) {
-            checkRelative(FastMath.signum(x), build(x).signum());
-        }
-    }
-
-    @Test
-    public void testCopySignField() {
-        for (double x = -3; x < 3; x += 0.2) {
-            for (double y = -3; y < 3; y += 0.2) {
-                checkRelative(FastMath.copySign(x, y), build(x).copySign(build(y)));
-            }
-        }
-    }
-
-    @Test
-    public void testCopySignDouble() {
-        for (double x = -3; x < 3; x += 0.2) {
-            for (double y = -3; y < 3; y += 0.2) {
-                checkRelative(FastMath.copySign(x, y), build(x).copySign(y));
-            }
-        }
-    }
-
-    @Test
     public void testScalb() {
         for (double x = -0.9; x < 0.9; x += 0.05) {
             for (int n = -100; n < 100; ++n) {
@@ -510,7 +431,7 @@ public abstract class ExtendedFieldElementAbstractTest<T extends RealFieldElemen
         checkRelative(0.0, build(-10).getField().getZero());
     }
 
-    private void checkRelative(double expected, T obtained) {
+    protected void checkRelative(double expected, T obtained) {
         Assert.assertEquals(expected, obtained.getReal(), 1.0e-15 * (1 + FastMath.abs(expected)));
     }
 

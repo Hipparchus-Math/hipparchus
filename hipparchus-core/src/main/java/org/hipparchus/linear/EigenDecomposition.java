@@ -704,7 +704,7 @@ public class EigenDecomposition {
     private SchurTransformer transformToSchur(final RealMatrix matrix) {
         final SchurTransformer schurTransform = new SchurTransformer(matrix);
         final double[][] matT = schurTransform.getT().getData();
-        final double norm = matrix.getNorm();
+        final double norm = matrix.getNorm1();
 
         realEigenvalues = new double[matT.length];
         imagEigenvalues = new double[matT.length];

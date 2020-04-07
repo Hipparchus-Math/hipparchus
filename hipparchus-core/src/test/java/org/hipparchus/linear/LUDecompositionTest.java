@@ -93,7 +93,7 @@ public class LUDecompositionTest {
         RealMatrix l = lu.getL();
         RealMatrix u = lu.getU();
         RealMatrix p = lu.getP();
-        double norm = l.multiply(u).subtract(p.multiply(matrix)).getNorm();
+        double norm = l.multiply(u).subtract(p.multiply(matrix)).getNorm1();
         Assert.assertEquals(0, norm, normTolerance);
 
         matrix = MatrixUtils.createRealMatrix(testDataMinus);
@@ -101,7 +101,7 @@ public class LUDecompositionTest {
         l = lu.getL();
         u = lu.getU();
         p = lu.getP();
-        norm = l.multiply(u).subtract(p.multiply(matrix)).getNorm();
+        norm = l.multiply(u).subtract(p.multiply(matrix)).getNorm1();
         Assert.assertEquals(0, norm, normTolerance);
 
         matrix = MatrixUtils.createRealIdentityMatrix(17);
@@ -109,7 +109,7 @@ public class LUDecompositionTest {
         l = lu.getL();
         u = lu.getU();
         p = lu.getP();
-        norm = l.multiply(u).subtract(p.multiply(matrix)).getNorm();
+        norm = l.multiply(u).subtract(p.multiply(matrix)).getNorm1();
         Assert.assertEquals(0, norm, normTolerance);
 
         matrix = MatrixUtils.createRealMatrix(singular);
@@ -161,7 +161,7 @@ public class LUDecompositionTest {
 
         RealMatrix ppT = p.multiplyTransposed(p);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(p.getRowDimension());
-        Assert.assertEquals(0, ppT.subtract(id).getNorm(), normTolerance);
+        Assert.assertEquals(0, ppT.subtract(id).getNorm1(), normTolerance);
 
         for (int i = 0; i < p.getRowDimension(); i++) {
             int zeroCount  = 0;
@@ -239,11 +239,11 @@ public class LUDecompositionTest {
 
         // check values against known references
         RealMatrix l = lu.getL();
-        Assert.assertEquals(0, l.subtract(lRef).getNorm(), 1.0e-13);
+        Assert.assertEquals(0, l.subtract(lRef).getNorm1(), 1.0e-13);
         RealMatrix u = lu.getU();
-        Assert.assertEquals(0, u.subtract(uRef).getNorm(), 1.0e-13);
+        Assert.assertEquals(0, u.subtract(uRef).getNorm1(), 1.0e-13);
         RealMatrix p = lu.getP();
-        Assert.assertEquals(0, p.subtract(pRef).getNorm(), 1.0e-13);
+        Assert.assertEquals(0, p.subtract(pRef).getNorm1(), 1.0e-13);
         int[] pivot = lu.getPivot();
         for (int i = 0; i < pivotRef.length; ++i) {
             Assert.assertEquals(pivotRef[i], pivot[i]);
@@ -280,11 +280,11 @@ public class LUDecompositionTest {
 
         // check values against known references
         RealMatrix l = lu.getL();
-        Assert.assertEquals(0, l.subtract(lRef).getNorm(), 1.0e-13);
+        Assert.assertEquals(0, l.subtract(lRef).getNorm1(), 1.0e-13);
         RealMatrix u = lu.getU();
-        Assert.assertEquals(0, u.subtract(uRef).getNorm(), 1.0e-13);
+        Assert.assertEquals(0, u.subtract(uRef).getNorm1(), 1.0e-13);
         RealMatrix p = lu.getP();
-        Assert.assertEquals(0, p.subtract(pRef).getNorm(), 1.0e-13);
+        Assert.assertEquals(0, p.subtract(pRef).getNorm1(), 1.0e-13);
         int[] pivot = lu.getPivot();
         for (int i = 0; i < pivotRef.length; ++i) {
             Assert.assertEquals(pivotRef[i], pivot[i]);

@@ -21,12 +21,12 @@
  */
 package org.hipparchus.util;
 
-import org.hipparchus.ExtendedFieldElementAbstractTest;
+import org.hipparchus.RealFieldElementAbstractTest;
 import org.hipparchus.util.Decimal64;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class Decimal64Test extends ExtendedFieldElementAbstractTest<Decimal64> {
+public class Decimal64Test extends RealFieldElementAbstractTest<Decimal64> {
     public static final double X = 1.2345;
 
     public static final Decimal64 PLUS_X = new Decimal64(X);
@@ -460,6 +460,15 @@ public class Decimal64Test extends ExtendedFieldElementAbstractTest<Decimal64> {
             Decimal64 zero = rebuilt.subtract(value);
             Assert.assertEquals(zero.getReal(), 0, 3.0e-16);
         }
+    }
+
+    @Test
+    public void testRootNegative() {
+        final Decimal64 neg64      = new Decimal64(-64);
+        final Decimal64 root3Neg64 = neg64.rootN(3);
+        final Decimal64 root2Neg64 = neg64.rootN(2);
+        Assert.assertEquals(-4.0, root3Neg64.getReal(), 1.0e-15);
+        Assert.assertTrue(root2Neg64.isNaN());
     }
 
 }

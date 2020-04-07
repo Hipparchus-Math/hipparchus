@@ -163,8 +163,20 @@ public final class Array2DRowRealMatrixTest {
     public void testNorm() {
         Array2DRowRealMatrix m = new Array2DRowRealMatrix(testData);
         Array2DRowRealMatrix m2 = new Array2DRowRealMatrix(testData2);
-        Assert.assertEquals("testData norm",14d,m.getNorm(),entryTolerance);
-        Assert.assertEquals("testData2 norm",7d,m2.getNorm(),entryTolerance);
+        Assert.assertEquals("testData norm",10d,m.getNormInfty(),entryTolerance);
+        Assert.assertEquals("testData2 norm",10d,m2.getNormInfty(),entryTolerance);
+        Assert.assertEquals("testData norm",14d,m.getNorm1(),entryTolerance);
+        Assert.assertEquals("testData2 norm",7d,m2.getNorm1(),entryTolerance);
+    }
+
+    /** test deprecated norm */
+    @Deprecated
+    @Test
+    public void testDeprecatedNorm() {
+        Array2DRowRealMatrix m = new Array2DRowRealMatrix(testData);
+        Array2DRowRealMatrix m2 = new Array2DRowRealMatrix(testData2);
+        Assert.assertEquals("testData norm",m.getNorm1(),m.getNorm(),entryTolerance);
+        Assert.assertEquals("testData2 norm",m2.getNorm1(),m2.getNorm(),entryTolerance);
     }
 
     /** test Frobenius norm */
@@ -246,7 +258,7 @@ public final class Array2DRowRealMatrixTest {
                     final Array2DRowRealMatrix b = new Array2DRowRealMatrix(interm, cols);
                     b.walkInOptimizedOrder(randomSetter);
                     Assert.assertEquals(0.0,
-                                        a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm(),
+                                        a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm1(),
                                         1.0e-15);
                 }
             }
@@ -269,7 +281,7 @@ public final class Array2DRowRealMatrixTest {
                     final BlockRealMatrix b = new BlockRealMatrix(interm, cols);
                     b.walkInOptimizedOrder(randomSetter);
                     Assert.assertEquals(0.0,
-                                        a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm(),
+                                        a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm1(),
                                         1.0e-15);
                 }
             }
@@ -304,7 +316,7 @@ public final class Array2DRowRealMatrixTest {
                     final Array2DRowRealMatrix b = new Array2DRowRealMatrix(rows, interm);
                     b.walkInOptimizedOrder(randomSetter);
                     Assert.assertEquals(0.0,
-                                        a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm(),
+                                        a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm1(),
                                         1.0e-15);
                 }
             }
@@ -327,7 +339,7 @@ public final class Array2DRowRealMatrixTest {
                     final BlockRealMatrix b = new BlockRealMatrix(rows, interm);
                     b.walkInOptimizedOrder(randomSetter);
                     Assert.assertEquals(0.0,
-                                        a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm(),
+                                        a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm1(),
                                         1.0e-15);
                 }
             }

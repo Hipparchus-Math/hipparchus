@@ -126,7 +126,7 @@ public class QRSolverTest {
         });
 
         // using RealMatrix
-        Assert.assertEquals(0, solver.solve(b).subtract(xRef).getNorm(), 2.0e-16 * xRef.getNorm());
+        Assert.assertEquals(0, solver.solve(b).subtract(xRef).getNorm1(), 2.1e-16 * xRef.getNorm1());
 
         // using ArrayRealVector
         for (int i = 0; i < b.getColumnDimension(); ++i) {
@@ -166,7 +166,7 @@ public class QRSolverTest {
 
         // despite perturbation, the least square solution should be pretty good
         RealMatrix x = new QRDecomposition(a).getSolver().solve(b);
-        Assert.assertEquals(0, x.subtract(xRef).getNorm(), 0.01 * noise * p * q);
+        Assert.assertEquals(0, x.subtract(xRef).getNorm1(), 0.01 * noise * p * q);
 
     }
 
@@ -181,10 +181,10 @@ public class QRSolverTest {
         RealMatrix   x = new QRDecomposition(a).getSolver().solve(b);
 
         // too many equations, the system cannot be solved at all
-        Assert.assertTrue(x.subtract(xRef).getNorm() / (p * q) > 0.01);
+        Assert.assertTrue(x.subtract(xRef).getNorm1() / (p * q) > 0.01);
 
         // the last unknown should have been set to 0
-        Assert.assertEquals(0.0, x.getSubMatrix(p, q - 1, 0, x.getColumnDimension() - 1).getNorm(), 0);
+        Assert.assertEquals(0.0, x.getSubMatrix(p, q - 1, 0, x.getColumnDimension() - 1).getNorm1(), 0);
     }
 
     private RealMatrix createTestMatrix(final Random r, final int rows, final int columns) {

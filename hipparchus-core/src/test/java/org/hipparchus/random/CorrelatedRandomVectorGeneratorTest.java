@@ -58,7 +58,7 @@ public class CorrelatedRandomVectorGeneratorTest {
         GaussianRandomGenerator rawGenerator = new GaussianRandomGenerator(rg);
         generator = new CorrelatedRandomVectorGenerator(mean,
                                                         covariance,
-                                                        1.0e-12 * covariance.getNorm(),
+                                                        1.0e-12 * covariance.getNorm1(),
                                                         rawGenerator);
     }
 
@@ -170,7 +170,7 @@ public class CorrelatedRandomVectorGeneratorTest {
 
     private CorrelatedRandomVectorGenerator createSampler(double[][] cov) {
         RealMatrix matrix = new Array2DRowRealMatrix(cov);
-        double small = 10e-12 * matrix.getNorm();
+        double small = 10e-12 * matrix.getNorm1();
         return new CorrelatedRandomVectorGenerator(
                 new double[cov.length],
                 matrix,

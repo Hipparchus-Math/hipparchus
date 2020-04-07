@@ -104,7 +104,7 @@ public class QRDecompositionTest {
 
     private void checkAEqualQR(RealMatrix m) {
         QRDecomposition qr = new QRDecomposition(m);
-        double norm = qr.getQ().multiply(qr.getR()).subtract(m).getNorm();
+        double norm = qr.getQ().multiply(qr.getR()).subtract(m).getNorm1();
         Assert.assertEquals(0, norm, normTolerance);
     }
 
@@ -131,7 +131,7 @@ public class QRDecompositionTest {
     private void checkQOrthogonal(RealMatrix m) {
         QRDecomposition qr = new QRDecomposition(m);
         RealMatrix eye = MatrixUtils.createRealIdentityMatrix(m.getRowDimension());
-        double norm = qr.getQT().multiply(qr.getQ()).subtract(eye).getNorm();
+        double norm = qr.getQT().multiply(qr.getQ()).subtract(eye).getNorm1();
         Assert.assertEquals(0, norm, normTolerance);
     }
 
@@ -231,13 +231,13 @@ public class QRDecompositionTest {
 
         // check values against known references
         RealMatrix q = qr.getQ();
-        Assert.assertEquals(0, q.subtract(qRef).getNorm(), 1.0e-13);
+        Assert.assertEquals(0, q.subtract(qRef).getNorm1(), 1.0e-13);
         RealMatrix qT = qr.getQT();
-        Assert.assertEquals(0, qT.subtract(qRef.transpose()).getNorm(), 1.0e-13);
+        Assert.assertEquals(0, qT.subtract(qRef.transpose()).getNorm1(), 1.0e-13);
         RealMatrix r = qr.getR();
-        Assert.assertEquals(0, r.subtract(rRef).getNorm(), 1.0e-13);
+        Assert.assertEquals(0, r.subtract(rRef).getNorm1(), 1.0e-13);
         RealMatrix h = qr.getH();
-        Assert.assertEquals(0, h.subtract(hRef).getNorm(), 1.0e-13);
+        Assert.assertEquals(0, h.subtract(hRef).getNorm1(), 1.0e-13);
 
         // check the same cached instance is returned the second time
         Assert.assertTrue(q == qr.getQ());
@@ -257,15 +257,15 @@ public class QRDecompositionTest {
     public void testInvertTallSkinny() {
         RealMatrix a     = MatrixUtils.createRealMatrix(testData4x3);
         RealMatrix pinv  = new QRDecomposition(a).getSolver().getInverse();
-        Assert.assertEquals(0, pinv.multiply(a).subtract(MatrixUtils.createRealIdentityMatrix(3)).getNorm(), 1.0e-6);
+        Assert.assertEquals(0, pinv.multiply(a).subtract(MatrixUtils.createRealIdentityMatrix(3)).getNorm1(), 1.0e-6);
     }
 
     @Test
     public void testInvertShortWide() {
         RealMatrix a = MatrixUtils.createRealMatrix(testData3x4);
         RealMatrix pinv  = new QRDecomposition(a).getSolver().getInverse();
-        Assert.assertEquals(0, a.multiply(pinv).subtract(MatrixUtils.createRealIdentityMatrix(3)).getNorm(), 1.0e-6);
-        Assert.assertEquals(0, pinv.multiply(a).getSubMatrix(0, 2, 0, 2).subtract(MatrixUtils.createRealIdentityMatrix(3)).getNorm(), 1.0e-6);
+        Assert.assertEquals(0, a.multiply(pinv).subtract(MatrixUtils.createRealIdentityMatrix(3)).getNorm1(), 1.0e-6);
+        Assert.assertEquals(0, pinv.multiply(a).getSubMatrix(0, 2, 0, 2).subtract(MatrixUtils.createRealIdentityMatrix(3)).getNorm1(), 1.0e-6);
     }
 
     private RealMatrix createTestMatrix(final Random r, final int rows, final int columns) {
