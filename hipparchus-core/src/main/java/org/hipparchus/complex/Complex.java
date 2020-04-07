@@ -962,6 +962,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      /** {@inheritDoc}
       * @since 1.7
       */
+    @Override
     public Complex pow(final int n) {
 
         Complex result = ONE;
