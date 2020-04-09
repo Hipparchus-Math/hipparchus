@@ -15,11 +15,17 @@ jobs:
     - name: Build with Maven
       run: mvn -B -f pom.xml install checkstyle:checkstyle
     - name: SonarQube scan
-      run: mvn -B -f pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.branch.name=${GITHUB_REF##*/}
+      run: |
+        if [ $PROJECT_KEY != 'Hipparchus-Math/hipparchus' ] ; then export KEY_OPTION="-Dsonar.projectKey=${PROJECT_KEY/\//:}" ; fi
+        if [ $PROJECT_KEY != 'Hipparchus-Math/hipparchus' ] ; then export PROJECT_NAME="$PROJECT_NAME ($PROJECT_KEY)" ; fi
+        mvn -B -f pom.xml sonar:sonar -Dsonar.login=$SONARQUBE_TOKEN -Dsonar.branch.name=${GITHUB_REF##*/} $KEY_OPTION -Dsonar.projectName="$PROJECT_NAME"
       env:
         SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
+        PROJECT_KEY: ${{ github.repository }}
+        PROJECT_NAME: 'Hipparchus'
+        KEY_OPTION: ''
     - name: Deployment
-      if:  ( github.ref == 'refs/heads/master' ) || ( github.ref == 'refs/heads/develop' )
+      if: ( github.repository == 'Hipparchus-Math/hipparchus' ) && ( ( github.ref == 'refs/heads/master' ) || ( github.ref == 'refs/heads/develop' ) )
       run: mvn -B -f pom.xml -s .CI/maven-settings.xml deploy -Pci-deploy -DskipTests=true
       env:
         NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
