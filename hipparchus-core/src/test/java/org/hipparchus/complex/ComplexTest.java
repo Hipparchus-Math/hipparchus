@@ -1777,6 +1777,79 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
     }
 
     @Test
+    public void testCeilComplex() {
+        for (double x = -3.9; x < 3.9; x += 0.05) {
+            for (double y = -3.9; y < 3.9; y += 0.05) {
+                final Complex z = new Complex(x, y);
+                Assert.assertEquals(FastMath.ceil(x), z.ceil().getReal(), 1.0e-15);
+                Assert.assertEquals(FastMath.ceil(y), z.ceil().getImaginary(), 1.0e-15);
+            }
+        }
+    }
+
+    @Test
+    public void testFloorComplex() {
+        for (double x = -3.9; x < 3.9; x += 0.05) {
+            for (double y = -3.9; y < 3.9; y += 0.05) {
+                final Complex z = new Complex(x, y);
+                Assert.assertEquals(FastMath.floor(x), z.floor().getReal(), 1.0e-15);
+                Assert.assertEquals(FastMath.floor(y), z.floor().getImaginary(), 1.0e-15);
+            }
+        }
+    }
+
+    @Test
+    public void testRintComplex() {
+        for (double x = -3.9; x < 3.9; x += 0.05) {
+            for (double y = -3.9; y < 3.9; y += 0.05) {
+                final Complex z = new Complex(x, y);
+                Assert.assertEquals(FastMath.rint(x), z.rint().getReal(), 1.0e-15);
+                Assert.assertEquals(FastMath.rint(y), z.rint().getImaginary(), 1.0e-15);
+            }
+        }
+    }
+
+    @Test
+    public void testCopySignFieldComplex() {
+        for (double x1 = -3.9; x1 < 3.9; x1 += 0.05) {
+            for (double y1 = -3.9; y1 < 3.9; y1 += 0.05) {
+                final Complex z1 = new Complex(x1, y1);
+                for (double x2 = -3.9; x2 < 3.9; x2 += 0.05) {
+                    for (double y2 = -3.9; y2 < 3.9; y2 += 0.05) {
+                        final Complex z2 = new Complex(x2, y2);
+                        Assert.assertEquals(FastMath.copySign(x1, x2), z1.copySign(z2).getReal(), 1.0e-15);
+                        Assert.assertEquals(FastMath.copySign(y1, y2), z1.copySign(z2).getImaginary(), 1.0e-15);
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testCopySignDoubleComplex() {
+        for (double x1 = -3.9; x1 < 3.9; x1 += 0.05) {
+            for (double y1 = -3.9; y1 < 3.9; y1 += 0.05) {
+                final Complex z1 = new Complex(x1, y1);
+                for (double r = -3.9; r < 3.9; r += 0.05) {
+                    Assert.assertEquals(FastMath.copySign(x1, r), z1.copySign(r).getReal(), 1.0e-15);
+                    Assert.assertEquals(FastMath.copySign(y1, r), z1.copySign(r).getImaginary(), 1.0e-15);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testSignumComplex() {
+        for (double x = -3.9; x < 3.9; x += 0.05) {
+            for (double y = -3.9; y < 3.9; y += 0.05) {
+                final Complex z = new Complex(x, y);
+                Assert.assertEquals(FastMath.signum(x), z.signum().getReal(), 1.0e-15);
+                Assert.assertEquals(FastMath.signum(y), z.signum().getImaginary(), 1.0e-15);
+            }
+        }
+    }
+
+    @Test
     public void testLinearCombination1() {
         final Complex[] a = new Complex[] {
             new Complex(-1321008684645961.0 / 268435456.0,
