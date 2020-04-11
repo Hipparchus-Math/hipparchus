@@ -47,53 +47,14 @@ public interface RealFieldElement<T> extends CalculusFieldElement<T> {
     T remainder(T a)
         throws MathIllegalArgumentException;
 
-    /** Get the smallest whole number larger than instance.
-     * @return ceil(this)
-     */
-    T ceil();
-
-    /** Get the largest whole number smaller than instance.
-     * @return floor(this)
-     */
-    T floor();
-
-    /** Get the whole number that is the nearest to the instance, or the even one if x is exactly half way between two integers.
-     * @return a double number r such that r is an integer r - 0.5 &le; this &le; r + 0.5
-     */
-    T rint();
-
-    /** Get the closest long to instance value.
-     * @return closest long to {@link #getReal()}
-     */
-    long round();
-
     /** absolute value.
      * @return abs(this)
      */
     T abs();
 
-    /** Compute the signum of the instance.
-     * The signum is -1 for negative numbers, +1 for positive numbers and 0 otherwise
-     * @return -1.0, -0.0, +0.0, +1.0 or NaN depending on sign of a
+    /** Get the closest long to instance value.
+     * @return closest long to {@link #getReal()}
      */
-    T signum();
-
-    /**
-     * Returns the instance with the sign of the argument.
-     * A NaN {@code sign} argument is treated as positive.
-     *
-     * @param sign the sign for the returned value
-     * @return the instance with the same sign as the {@code sign} argument
-     */
-    T copySign(T sign);
-
-    /**
-     * Returns the instance with the sign of the argument.
-     * A NaN {@code sign} argument is treated as positive.
-     *
-     * @param sign the sign for the returned value
-     * @return the instance with the same sign as the {@code sign} argument
-     */
-    T copySign(double sign);
+    long round();
 
 }

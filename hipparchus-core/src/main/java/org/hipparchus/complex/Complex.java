@@ -1600,4 +1600,56 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
                                  new Complex[] { b1, b2, b3, b4 });
     }
 
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex ceil() {
+        return createComplex(FastMath.ceil(getReal()), FastMath.ceil(getImaginary()));
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex floor() {
+        return createComplex(FastMath.floor(getReal()), FastMath.floor(getImaginary()));
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex rint() {
+        return createComplex(FastMath.rint(getReal()), FastMath.rint(getImaginary()));
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex signum() {
+        return createComplex(FastMath.signum(getReal()), FastMath.signum(getImaginary()));
+    }
+
+    /** {@inheritDoc}
+     * <p>
+     * The signs of real and imaginary parts are copied independently.
+     * </p>
+     * @since 1.7
+     */
+    @Override
+    public Complex copySign(final Complex z) {
+        return createComplex(FastMath.copySign(getReal(), z.getReal()),
+                             FastMath.copySign(getImaginary(), z.getImaginary()));
+    }
+
+    /** {@inheritDoc}
+     * @since 1.7
+     */
+    @Override
+    public Complex copySign(double r) {
+        return createComplex(FastMath.copySign(getReal(), r), FastMath.copySign(getImaginary(), r));
+    }
+
 }

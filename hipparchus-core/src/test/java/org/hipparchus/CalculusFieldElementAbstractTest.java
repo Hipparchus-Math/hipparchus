@@ -340,6 +340,52 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     }
 
     @Test
+    public void testCeil() {
+        for (double x = -0.9; x < 0.9; x += 0.05) {
+            checkRelative(FastMath.ceil(x), build(x).ceil());
+        }
+    }
+
+    @Test
+    public void testFloor() {
+        for (double x = -0.9; x < 0.9; x += 0.05) {
+            checkRelative(FastMath.floor(x), build(x).floor());
+        }
+    }
+
+    @Test
+    public void testRint() {
+        for (double x = -0.9; x < 0.9; x += 0.05) {
+            checkRelative(FastMath.rint(x), build(x).rint());
+        }
+    }
+
+    @Test
+    public void testCopySignField() {
+        for (double x = -3; x < 3; x += 0.2) {
+            for (double y = -3; y < 3; y += 0.2) {
+                checkRelative(FastMath.copySign(x, y), build(x).copySign(build(y)));
+            }
+        }
+    }
+
+    @Test
+    public void testCopySignDouble() {
+        for (double x = -3; x < 3; x += 0.2) {
+            for (double y = -3; y < 3; y += 0.2) {
+                checkRelative(FastMath.copySign(x, y), build(x).copySign(y));
+            }
+        }
+    }
+
+    @Test
+    public void testSignum() {
+        for (double x = -0.9; x < 0.9; x += 0.05) {
+            checkRelative(FastMath.signum(x), build(x).signum());
+        }
+    }
+
+    @Test
     public void testLinearCombinationFaFa() {
         RandomGenerator r = new Well1024a(0xfafal);
         for (int i = 0; i < 50; ++i) {
