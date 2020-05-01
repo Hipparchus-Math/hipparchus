@@ -26,7 +26,6 @@ import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
-import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -342,7 +341,6 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
 
     @Test
     public void testCeil() {
-        System.out.println(Precision.EPSILON + " " + FastMath.ceil(Precision.EPSILON) + " " + build(Precision.EPSILON).ceil().getReal());
         for (double x = -0.9; x < 0.9; x += 0.05) {
             checkRelative(FastMath.ceil(x), build(x).ceil());
         }
