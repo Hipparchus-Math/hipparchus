@@ -1692,6 +1692,19 @@ public class DfpTest extends RealFieldElementAbstractTest<Dfp> {
     }
 
     @Test
+    public void testHypotNoOverflow() {
+        Dfp x = field.newDfp(+3);
+        Dfp y = field.newDfp(-4);
+        Dfp h = field.newDfp(+5);
+        for (int i = 0; i < 70000; ++i) {
+            x = x.multiply(10);
+            y = y.multiply(10);
+            h = h.multiply(10);
+        }
+        Assert.assertEquals(h, x.hypot(y));
+    }
+
+    @Test
     public void testEqualsHashcodeContract() {
         DfpField var1 = new DfpField(1);
         Dfp var6 = var1.newDfp(-0.0d);
