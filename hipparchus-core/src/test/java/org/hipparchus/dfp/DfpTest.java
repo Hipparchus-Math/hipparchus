@@ -1369,6 +1369,22 @@ public class DfpTest extends RealFieldElementAbstractTest<Dfp> {
              DfpField.FLAG_INEXACT, "Ceil #1");
     }
 
+    @Test
+    public void testCeilSmallNegative()
+    {
+        test(field.newDfp("-0.00009999").ceil(),
+             field.newDfp("0"),
+             DfpField.FLAG_INEXACT, "Ceil small positive");
+    }
+
+    @Test
+    public void testCeilSmallPositive()
+    {
+        test(field.newDfp("+0.00009999").ceil(),
+             field.newDfp("+1"),
+             DfpField.FLAG_INEXACT, "Ceil small positive");
+    }
+
     @Override
     @Test
     public void testFloor()
@@ -1376,6 +1392,22 @@ public class DfpTest extends RealFieldElementAbstractTest<Dfp> {
         test(field.newDfp("1234.9999999999999999").floor(),
              field.newDfp("1234"),
              DfpField.FLAG_INEXACT, "Floor #1");
+    }
+
+    @Test
+    public void testFloorSmallNegative()
+    {
+        test(field.newDfp("-0.00009999").floor(),
+             field.newDfp("-1"),
+             DfpField.FLAG_INEXACT, "Floor small negative");
+    }
+
+    @Test
+    public void testFloorSmallPositive()
+    {
+        test(field.newDfp("+0.00009999").floor(),
+             field.newDfp("0"),
+             DfpField.FLAG_INEXACT, "Floor small positive");
     }
 
     @Override

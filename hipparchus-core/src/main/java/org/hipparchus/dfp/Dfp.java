@@ -1070,12 +1070,19 @@ public class Dfp implements RealFieldElement<Dfp> {
         }
 
         /* If the exponent is less than zero then we can certainly
-         * return zero */
+         * return -1, 0 or +1 depending on sign and rounding mode */
         if (exp < 0) {
             field.setIEEEFlagsBits(DfpField.FLAG_INEXACT);
-            Dfp result = newInstance(getZero());
-            result = dotrap(DfpField.FLAG_INEXACT, TRUNC_TRAP, this, result);
-            return result;
+            final Dfp result;
+            if (sign == -1 && rmode == DfpField.RoundingMode.ROUND_FLOOR) {
+                result = newInstance(-1);
+            } else if (sign == +1 && rmode == DfpField.RoundingMode.ROUND_CEIL) {
+                result = newInstance(+1);
+            } else {
+                // for all other combinations of sign and mode, zero is the correct rounding
+                result = newInstance(0);
+            }
+            return dotrap(DfpField.FLAG_INEXACT, TRUNC_TRAP, this, result);
         }
 
         /* If the exponent is greater than or equal to digits, then it
