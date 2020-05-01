@@ -70,6 +70,18 @@ public interface CalculusFieldElement<T> extends FieldElement<T> {
     T divide(double a);
 
     /**
+     * Return the exponent of the instance, removing the bias.
+     * <p>
+     * For double numbers of the form 2<sup>x</sup>, the unbiased
+     * exponent is exactly x.
+     * </p>
+     * @return exponent for the instance, without bias
+     */
+    default int getExponent() {
+        return FastMath.getExponent(getReal());
+    }
+
+    /**
      * Multiply the instance by a power of 2.
      * @param n power of 2
      * @return this &times; 2<sup>n</sup>
@@ -398,5 +410,21 @@ public interface CalculusFieldElement<T> extends FieldElement<T> {
      * @return the instance with the same sign as the {@code sign} argument
      */
     T copySign(double sign);
+
+    /**
+     * Check if the instance is infinite.
+     * @return true if the instance is infinite
+     */
+    default boolean isInfinite() {
+        return Double.isFinite(getReal());
+    }
+
+    /**
+     * Check if the instance is Not a Number.
+     * @return true if the instance is Not a Number
+     */
+    default boolean isNaN() {
+        return Double.isNaN(getReal());
+    }
 
 }

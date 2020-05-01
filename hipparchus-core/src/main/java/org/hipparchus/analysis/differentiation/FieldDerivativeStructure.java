@@ -20,7 +20,6 @@ import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -420,7 +419,7 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
      * @return exponent for instance in IEEE754 representation, without bias
      */
     public int getExponent() {
-        return FastMath.getExponent(data[0].getReal());
+        return data[0].getExponent();
     }
 
     /** {@inheritDoc}
@@ -444,9 +443,9 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
 
         factory.checkCompatibility(y.factory);
 
-        if (Double.isInfinite(data[0].getReal()) || Double.isInfinite(y.data[0].getReal())) {
+        if (data[0].isInfinite() || y.data[0].isInfinite()) {
             return factory.constant(Double.POSITIVE_INFINITY);
-        } else if (Double.isNaN(data[0].getReal()) || Double.isNaN(y.data[0].getReal())) {
+        } else if (data[0].isNaN() || y.data[0].isNaN()) {
             return factory.constant(Double.NaN);
         } else {
 

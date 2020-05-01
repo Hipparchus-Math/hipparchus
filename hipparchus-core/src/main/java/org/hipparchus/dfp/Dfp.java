@@ -873,16 +873,14 @@ public class Dfp implements RealFieldElement<Dfp> {
         return result;
     }
 
-    /** Check if instance is infinite.
-     * @return true if instance is infinite
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean isInfinite() {
         return nans == INFINITE;
     }
 
-    /** Check if instance is not a number.
-     * @return true if instance is not a number
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean isNaN() {
         return (nans == QNAN) || (nans == SNAN);
     }
@@ -2596,6 +2594,34 @@ public class Dfp implements RealFieldElement<Dfp> {
             return this;
         }
         return negate(); // flip sign
+    }
+
+    /** {@inheritDoc}
+     */
+    @Override
+    public int getExponent() {
+
+        if (nans != FINITE) {
+            // 2⁴³⁵⁴¹¹ < 10000³²⁷⁶⁸ < 2⁴³⁵⁴¹²
+            return 435411;
+        }
+        if (isZero()) {
+            return -435412;
+        }
+
+        final Dfp abs = abs();
+
+        // estimate a lower bound for binary exponent
+        // 13301/1001 is a continued fraction approximation of ln(10000)/ln(2)
+        int p = FastMath.max(13301 * exp / 1001 - 15, -435411);
+        Dfp twoP = DfpMath.pow(getTwo(), p);
+        while (compare(abs, twoP) >= 0) {
+            twoP = twoP.add(twoP);
+            ++p;
+        }
+
+        return p - 1;
+
     }
 
     /** {@inheritDoc}

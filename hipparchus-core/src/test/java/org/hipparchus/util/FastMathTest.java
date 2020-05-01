@@ -2030,6 +2030,38 @@ public class FastMathTest {
     }
 
     @Test
+    public void testHypot() {
+        for (double x = -20; x < 20; x += 0.01) {
+            for (double y = -20; y < 20; y += 0.01) {
+                Assert.assertEquals(FastMath.sqrt(x * x + y * y), FastMath.hypot(x, y), 1.0e-15);
+            }
+        }
+    }
+
+    @Test
+    public void testHypotNoOverflow() {
+        final double x = +3.0e250;
+        final double y = -4.0e250;
+        final double h = +5.0e250;
+        Assert.assertEquals(h, FastMath.hypot(x, y), 1.0e-15 * h);
+        Assert.assertTrue(Double.isInfinite(FastMath.sqrt(x * x + y * y)));
+    }
+
+    @Test
+    public void testHypotSpecialCases() {
+        Assert.assertTrue(Double.isNaN(FastMath.hypot(Double.NaN, 0)));
+        Assert.assertTrue(Double.isNaN(FastMath.hypot(0, Double.NaN)));
+        Assert.assertEquals(Double.POSITIVE_INFINITY, FastMath.hypot(Double.POSITIVE_INFINITY, 0), 1.0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, FastMath.hypot(Double.NEGATIVE_INFINITY, 0), 1.0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, FastMath.hypot(Double.POSITIVE_INFINITY, Double.NaN), 1.0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, FastMath.hypot(Double.NEGATIVE_INFINITY, Double.NaN), 1.0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, FastMath.hypot(0, Double.POSITIVE_INFINITY), 1.0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, FastMath.hypot(0, Double.NEGATIVE_INFINITY), 1.0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, FastMath.hypot(Double.NaN, Double.POSITIVE_INFINITY), 1.0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, FastMath.hypot(Double.NaN, Double.NEGATIVE_INFINITY), 1.0);
+    }
+
+    @Test
     public void testFMADouble() {
         // examples from official javadoc
         Assert.assertEquals(Double.doubleToRawLongBits(+0.0),

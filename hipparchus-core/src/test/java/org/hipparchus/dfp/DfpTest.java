@@ -1705,6 +1705,37 @@ public class DfpTest extends RealFieldElementAbstractTest<Dfp> {
     }
 
     @Test
+    public void testGetExponentVsDouble() {
+        for (int i = -1000; i < 1000; ++i) {
+            final double x      = FastMath.scalb(1.0, i);
+            final double xMinus = 0.99 * x;
+            final double xPlus  = 1.01 * x;
+            final Dfp dfpMinus  = field.newDfp(xMinus);
+            final Dfp dfpPlus   = field.newDfp(xPlus);
+            Assert.assertEquals(FastMath.getExponent(xMinus), dfpMinus.getExponent());
+            Assert.assertEquals(FastMath.getExponent(xPlus),  dfpPlus.getExponent());
+        }
+    }
+
+    @Test
+    public void testGetExponentSpecialCases() {
+        Assert.assertEquals(-435412, field.newDfp(0).getExponent());
+        Assert.assertEquals(0, field.newDfp(1).getExponent());
+        Assert.assertEquals(1, field.newDfp(2).getExponent());
+        Assert.assertEquals(435411, field.newDfp(Double.NaN).getExponent());
+        Assert.assertEquals(435411, field.newDfp(Double.POSITIVE_INFINITY).getExponent());
+        Assert.assertEquals(435411, field.newDfp(Double.NEGATIVE_INFINITY).getExponent());
+    }
+
+    @Test
+    public void testGetExponentAutonomous() {
+        for (int i = -435411; i < 435411; i += 217) {
+            final Dfp x = field.newDfp(2).pow(i).multiply(1.1);
+            Assert.assertEquals(i, x.getExponent());
+        }
+    }
+
+    @Test
     public void testEqualsHashcodeContract() {
         DfpField var1 = new DfpField(1);
         Dfp var6 = var1.newDfp(-0.0d);

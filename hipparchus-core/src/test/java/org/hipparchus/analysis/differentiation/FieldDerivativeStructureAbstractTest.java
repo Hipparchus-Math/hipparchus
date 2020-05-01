@@ -773,21 +773,21 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
         final FDSFactory<T> factory = buildFactory(2, 5);
         FieldDerivativeStructure<T> dsX = factory.variable(0, +3.0);
         FieldDerivativeStructure<T> dsY = factory.variable(1, -4.0);
+        T scaling = factory.getValueField().getOne();
         for (int i = 0; i < tenPower; ++i) {
-            dsX = dsX.multiply(10);
-            dsY = dsY.multiply(10);
+            scaling = scaling.multiply(10);
         }
+        dsX = dsX.multiply(scaling);
+        dsY = dsY.multiply(scaling);
         FieldDerivativeStructure<T> hypot = FieldDerivativeStructure.hypot(dsX, dsY);
         FieldDerivativeStructure<T> scaledDownHypot = hypot;
-        for (int i = 0; i < tenPower; ++i) {
-            scaledDownHypot = scaledDownHypot.divide(10);
-        }
+        scaledDownHypot = scaledDownHypot.divide(scaling);
         Assert.assertEquals(5.0, scaledDownHypot.getReal(), 5.0e-15);
-        Assert.assertEquals(dsX.getReal() / hypot.getReal(), scaledDownHypot.getPartialDerivative(1, 0).getReal(), 1.0e-10);
-        Assert.assertEquals(dsY.getReal() / hypot.getReal(), scaledDownHypot.getPartialDerivative(0, 1).getReal(), 1.0e-10);
+        Assert.assertEquals(dsX.divide(hypot).getReal(), scaledDownHypot.getPartialDerivative(1, 0).getReal(), 1.0e-10);
+        Assert.assertEquals(dsY.divide(hypot).getReal(), scaledDownHypot.getPartialDerivative(0, 1).getReal(), 1.0e-10);
 
         FieldDerivativeStructure<T> sqrt  = dsX.multiply(dsX).add(dsY.multiply(dsY)).sqrt();
-        Assert.assertTrue(Double.isInfinite(sqrt.getReal()));
+        Assert.assertTrue(sqrt.getValue().isInfinite());
 
     }
 

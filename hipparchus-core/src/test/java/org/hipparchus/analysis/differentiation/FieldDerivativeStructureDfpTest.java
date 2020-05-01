@@ -42,7 +42,7 @@ public class FieldDerivativeStructureDfpTest extends FieldDerivativeStructureAbs
     @Override
     @Test
     public void testHypotNoOverflow() {
-        doTestHypotNoOverflow(400);
+        doTestHypotNoOverflow(65600);
     }
 
 }
