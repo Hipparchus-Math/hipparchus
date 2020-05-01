@@ -2609,7 +2609,24 @@ public class Dfp implements RealFieldElement<Dfp> {
      */
     @Override
     public Dfp hypot(final Dfp y) {
-        return multiply(this).add(y.multiply(y)).sqrt();
+
+        // find scaling to avoid both overflow and underflow
+        final int scalingExp = (exp + y.exp) / 2;
+
+        // scale both operands
+        final Dfp scaledX = new Dfp(this);
+        scaledX.exp -= scalingExp;
+        final Dfp scaledY = new Dfp(y);
+        scaledY.exp -= scalingExp;
+
+        // compute scaled hypothenuse
+        final Dfp h = scaledX.multiply(scaledX).add(scaledY.multiply(scaledY)).sqrt();
+
+        // scale result
+        h.exp += scalingExp;
+
+        return h;
+
     }
 
     /** {@inheritDoc}
