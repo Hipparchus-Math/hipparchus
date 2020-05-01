@@ -21,7 +21,6 @@
  */
 package org.hipparchus.complex;
 
-import org.hipparchus.complex.RootsOfUnity;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;

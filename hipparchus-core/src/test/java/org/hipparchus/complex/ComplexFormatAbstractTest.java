@@ -28,8 +28,6 @@ import java.util.Locale;
 
 import org.junit.Test;
 import org.junit.Assert;
-import org.hipparchus.complex.Complex;
-import org.hipparchus.complex.ComplexFormat;
 import org.hipparchus.util.FastMath;
 
 public abstract class ComplexFormatAbstractTest {
