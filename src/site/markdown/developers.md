@@ -45,7 +45,7 @@ _should_ guidelines prior to a release.
     from the [building](building.html) page
   * Be sure to subscribe to the [forum](https://forum.orekit.org/categories)
     and add the Hipparchus categories you are interested in to the `Watched`
-    list of categories in your preferences. Use the categoris  appropriately.
+    list of categories in your preferences. Use the categories  appropriately.
     Make any proposals here where the group can comment on them.
   * Setup an account on GitHub and use it to submit pull requests and
     identify bugs. Read the [GitHub help](https://help.github.com/).
