@@ -15,7 +15,6 @@ package org.hipparchus.util;
 
 import java.util.Arrays;
 
-import org.apache.commons.math3.util.FastMath;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
