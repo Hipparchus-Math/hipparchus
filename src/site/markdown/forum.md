@@ -16,14 +16,14 @@
 -->
 # Hipparchus Forum
 
-Hipparchus has two communication channels, a forum an mailing lists.
+Hipparchus has two communication channels, a forum and mailing lists.
 
 The recommended channel is the forum, as the mailing lists have recurring
 technical problems. There are three categories
 [Hipparchus annoucements](https://forum.orekit.org/c/hipparchus-announcements),
 [Hipparchus usage](https://forum.orekit.org/c/hipparchus-usage) and
 [Hipparchus development](https://forum.orekit.org/c/hipparchus-development)
-in the forum. Regular users should subscribe to the forum and if configure
+in the forum. Regular users should subscribe to the forum and configure
 their preferences to add these categories to the "Watched" list so they are
 notified when a new message appears there.
 
