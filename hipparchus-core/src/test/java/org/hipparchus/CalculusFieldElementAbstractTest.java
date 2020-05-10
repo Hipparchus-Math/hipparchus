@@ -183,9 +183,17 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     public void testAtan2() {
         for (double x = -3; x < 3; x += 0.2) {
             for (double y = -3; y < 3; y += 0.2) {
-                checkRelative(FastMath.atan2(x, y), build(x).atan2(build(y)));
+                checkRelative(FastMath.atan2(y, x), build(y).atan2(build(x)));
             }
         }
+    }
+
+    @Test
+    public void testAtan2SpecialCases() {
+        checkRelative(FastMath.atan2(+0.0, +0.0), build(+0.0).atan2(build(+0.0)));
+        checkRelative(FastMath.atan2(-0.0, +0.0), build(-0.0).atan2(build(+0.0)));
+        checkRelative(FastMath.atan2(+0.0, -0.0), build(+0.0).atan2(build(-0.0)));
+        checkRelative(FastMath.atan2(-0.0, -0.0), build(-0.0).atan2(build(-0.0)));
     }
 
     @Test

@@ -1198,7 +1198,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
     }
 
     @Test
-    public void testAtan2SpecialCases() {
+    public void testAtan2SpecialCasesDerivatives() {
 
         final FDSFactory<T> factory = buildFactory(2, 2);
         FieldDerivativeStructure<T> pp =

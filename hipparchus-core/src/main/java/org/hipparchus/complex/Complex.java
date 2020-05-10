@@ -1444,6 +1444,12 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
         return new Complex(realPart);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Complex newInstance(double realPart) {
+        return valueOf(realPart);
+    }
+
     /**
      * Resolve the transient fields in a deserialized Complex Object.
      * Subclasses will need to override {@link #createComplex} to

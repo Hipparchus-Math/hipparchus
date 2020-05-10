@@ -1135,7 +1135,7 @@ public class DerivativeStructureTest extends RealFieldElementAbstractTest<Deriva
     }
 
     @Test
-    public void testAtan2SpecialCases() {
+    public void testAtan2SpecialCasesDerivative() {
 
         DSFactory factory = new DSFactory(2, 2);
         DerivativeStructure pp =

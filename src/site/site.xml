@@ -41,7 +41,7 @@
       <topNav>Hipparchus|User Guide|Parent|Modules|Reports</topNav>
       <bottomNav>
         <column>License</column>
-        <column>GitHub</column>
+        <column>Resources</column>
         <column>Migrating from Apache Commons Math</column>
       </bottomNav>
       <bottomDescription>
@@ -123,8 +123,10 @@
       <item name="License" href="license.html"/>
     </menu>
 
-    <menu name ="GitHub">
+    <menu name ="Resources">
       <item name="GitHub repository" href="https://github.com/Hipparchus-Math/hipparchus"/>
+      <item name="Users forum" href="https://forum.orekit.org/c/hipparchus-usage"/>
+      <item name="Developers forum" href="https://forum.orekit.org/c/hipparchus-development"/>
     </menu>
 
     <menu name ="Migrating from Apache Commons Math">

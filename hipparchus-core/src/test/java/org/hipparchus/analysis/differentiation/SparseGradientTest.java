@@ -685,7 +685,7 @@ public class SparseGradientTest extends RealFieldElementAbstractTest<SparseGradi
     }
 
     @Test
-    public void testAtan2SpecialCases() {
+    public void testAtan2SpecialCasesSparseGradient() {
 
         SparseGradient pp =
                 SparseGradient.atan2(SparseGradient.createVariable(1, +0.0),

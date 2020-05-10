@@ -220,6 +220,10 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         this.data    = ds.data.clone();
     }
 
+    public DerivativeStructure newInstance(final double value) {
+        return factory.constant(value);
+    }
+
     /** Get the factory that built the instance.
      * @return factory that built the instance
      */

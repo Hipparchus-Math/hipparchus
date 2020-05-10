@@ -827,6 +827,15 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
         }
     }
 
+    @Override
+    @Test
+    public void testAtan2SpecialCases() {
+        Assert.assertTrue(build(+0.0).atan2(build(+0.0)).isNaN());
+        Assert.assertTrue(build(-0.0).atan2(build(+0.0)).isNaN());
+        Assert.assertTrue(build(+0.0).atan2(build(-0.0)).isNaN());
+        Assert.assertTrue(build(-0.0).atan2(build(-0.0)).isNaN());
+    }
+
     @Test
     public void testCosComplex() {
         Complex z = new Complex(3, 4);

@@ -91,6 +91,12 @@ public class SparseGradient implements RealFieldElement<SparseGradient>, Seriali
         }
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public SparseGradient newInstance(final double value) {
+        return createConstant(value);
+    }
+
     /** Factory method creating a constant.
      * @param value value of the constant
      * @return a new instance

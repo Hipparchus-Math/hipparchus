@@ -43,6 +43,16 @@ often than would be possible in a large monolithic library.
      core Java platform (at least Java 1.8 starting with version
      1.0 of the library).
 
+## Community
+
+The recommended channel for community discussions is a forum. There are
+three categories [Hipparchus annoucements](https://forum.orekit.org/c/hipparchus-announcements),
+[Hipparchus usage](https://forum.orekit.org/c/hipparchus-usage) and
+[Hipparchus development](https://forum.orekit.org/c/hipparchus-development)
+in the forum. Regular users should subscribe to the forum and configure
+their preferences to add these categories to the "Watched" list so they are
+notified when a new message appears there.
+
 ## Fork
  
 Hipparchus started as a fork of [Apache Commons Math](https://commons.apache.org/math/).
