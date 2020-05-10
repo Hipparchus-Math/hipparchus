@@ -584,10 +584,8 @@ public class Dfp implements RealFieldElement<Dfp> {
         return new Dfp(getField(), x);
     }
 
-    /** Create an instance from a double value.
-     * @param x value to convert to an instance
-     * @return a new instance with value x
-     */
+    /** {@inheritDoc} */
+    @Override
     public Dfp newInstance(final double x) {
         return new Dfp(getField(), x);
     }
@@ -2751,6 +2749,14 @@ public class Dfp implements RealFieldElement<Dfp> {
 
         // compute r = sqrt(x^2+y^2)
         final Dfp r = x.multiply(x).add(multiply(this)).sqrt();
+        if (r.isZero()) {
+            // special cases handling
+            if (x.sign >= 0) {
+                return this; // ±0.0
+            } else {
+                return newInstance((sign <= 0) ? -FastMath.PI : FastMath.PI); // ±π
+            }
+        }
 
         if (x.sign >= 0) {
 

@@ -138,7 +138,7 @@ public class FDSFactory<T extends RealFieldElement<T>> {
         }
 
         final FieldDerivativeStructure<T> fds = new FieldDerivativeStructure<>(this);
-        fds.setDerivativeComponent(0, valueField.getZero().add(value));
+        fds.setDerivativeComponent(0, valueField.getZero().newInstance(value));
 
         if (getCompiler().getOrder() > 0) {
             // the derivative of the variable with respect to itself is 1.

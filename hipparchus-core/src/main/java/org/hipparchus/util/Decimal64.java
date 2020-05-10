@@ -83,6 +83,12 @@ public class Decimal64 extends Number
 
     /** {@inheritDoc} */
     @Override
+    public Decimal64 newInstance(final double value) {
+        return new Decimal64(value);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public Field<Decimal64> getField() {
         return Decimal64Field.getInstance();
     }

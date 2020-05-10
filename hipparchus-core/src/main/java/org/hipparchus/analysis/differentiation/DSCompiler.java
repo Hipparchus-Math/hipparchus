@@ -3301,7 +3301,7 @@ public class DSCompiler {
             for (int k = 0; k < orders.length; ++k) {
                 if (orders[k] > 0) {
                     try {
-                        term = term.multiply(field.getZero().add(delta[k]).pow(orders[k]).
+                        term = term.multiply(field.getZero().newInstance(delta[k]).pow(orders[k]).
                                              divide(CombinatoricsUtils.factorial(orders[k])));
                     } catch (MathIllegalArgumentException e) {
                         // this cannot happen
