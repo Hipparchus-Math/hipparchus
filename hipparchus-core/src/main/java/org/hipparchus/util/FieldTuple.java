@@ -53,6 +53,15 @@ public class FieldTuple<T extends RealFieldElement<T>> implements RealFieldEleme
         this.field  = field;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldTuple<T> newInstance(final double value) {
+        @SuppressWarnings("unchecked")
+        final FieldTuple<T> t = new FieldTuple<>(field, (T[]) MathArrays.buildArray(field, values.length));
+        Arrays.fill(t.values, value);
+        return t;
+    }
+
     /** Get the dimension of the tuple.
      * @return dimension of the tuple
      */

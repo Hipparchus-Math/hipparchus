@@ -61,6 +61,12 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
         this.data    = MathArrays.buildArray(factory.getValueField(), factory.getCompiler().getSize());
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldDerivativeStructure<T> newInstance(final double value) {
+        return factory.constant(value);
+    }
+
     /** Get the factory that built the instance.
      * @return factory that built the instance
      */

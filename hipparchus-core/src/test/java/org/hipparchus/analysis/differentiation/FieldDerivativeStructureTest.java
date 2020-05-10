@@ -1180,7 +1180,7 @@ public class FieldDerivativeStructureTest extends RealFieldElementAbstractTest<F
     }
 
     @Test
-    public void testAtan2SpecialCases() {
+    public void testAtan2SpecialCasesFieldDerivative() {
 
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 2, 2);
         FieldDerivativeStructure<Decimal64> pp =

@@ -21,6 +21,7 @@ import java.util.Arrays;
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.RealFieldElement;
+import org.hipparchus.analysis.differentiation.FieldDerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -49,6 +50,14 @@ public class Tuple implements RealFieldElement<Tuple> {
     private Tuple(final TupleField field, final double[] x) {// NOPMD - storing user-supplied array is intentional and documented here
         this.values = x;
         this.field  = field;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Tuple newInstance(final double value) {
+        final Tuple t = new Tuple(field, new double[values.length]);
+        Arrays.fill(t.values, value);
+        return t;
     }
 
     /** Get the dimension of the tuple.
