@@ -25,8 +25,6 @@ package org.hipparchus.fraction;
 import java.util.Locale;
 
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.fraction.Fraction;
-import org.hipparchus.fraction.FractionFormat;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Before;

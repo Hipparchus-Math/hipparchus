@@ -22,11 +22,10 @@
 
 package org.hipparchus.distribution.discrete;
 
+import org.hipparchus.distribution.IntegerDistribution;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
-import org.hipparchus.distribution.IntegerDistribution;
-import org.hipparchus.distribution.discrete.UniformIntegerDistribution;
-import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Test cases for UniformIntegerDistribution.

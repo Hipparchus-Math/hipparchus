@@ -26,8 +26,6 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.geometry.euclidean.threed.SphericalCoordinates;
-import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;

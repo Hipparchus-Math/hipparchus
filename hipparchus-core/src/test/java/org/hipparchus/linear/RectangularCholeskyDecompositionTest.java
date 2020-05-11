@@ -22,11 +22,8 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RectangularCholeskyDecomposition;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class RectangularCholeskyDecompositionTest {
 

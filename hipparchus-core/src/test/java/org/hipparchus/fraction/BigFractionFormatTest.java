@@ -27,8 +27,6 @@ import java.math.BigInteger;
 import java.util.Locale;
 
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.fraction.BigFraction;
-import org.hipparchus.fraction.BigFractionFormat;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Before;

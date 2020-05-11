@@ -36,8 +36,6 @@ import org.hipparchus.optim.SimpleValueChecker;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunctionGradient;
-import org.hipparchus.optim.nonlinear.scalar.gradient.NonLinearConjugateGradientOptimizer;
-import org.hipparchus.optim.nonlinear.scalar.gradient.Preconditioner;
 import org.junit.Assert;
 import org.junit.Test;
 

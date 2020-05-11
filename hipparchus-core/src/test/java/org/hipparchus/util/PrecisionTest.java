@@ -16,10 +16,8 @@ package org.hipparchus.util;
 import java.math.BigDecimal;
 
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.util.FastMath;
-import org.hipparchus.util.Precision;
+import org.hipparchus.exception.MathRuntimeException;
 import org.junit.Assert;
 import org.junit.Test;
 

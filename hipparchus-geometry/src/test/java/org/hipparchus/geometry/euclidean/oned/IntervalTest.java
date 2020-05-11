@@ -21,11 +21,10 @@
  */
 package org.hipparchus.geometry.euclidean.oned;
 
-import org.hipparchus.geometry.euclidean.oned.Interval;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -22,8 +22,6 @@
 package org.hipparchus.transform;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.transform.FastHadamardTransformer;
-import org.hipparchus.transform.TransformType;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;

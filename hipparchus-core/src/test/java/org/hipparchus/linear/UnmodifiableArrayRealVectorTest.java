@@ -21,9 +21,6 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.RealVector;
-
 /**
  * This is an implementation of {@link UnmodifiableRealVectorAbstractTest} for
  * unmodifiable views of {@link ArrayRealVectorTest}.

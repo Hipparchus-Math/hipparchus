@@ -23,12 +23,6 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.hipparchus.linear.DecompositionSolver;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
-import org.hipparchus.linear.SingularValueDecomposition;
 import org.junit.Assert;
 import org.junit.Test;
 

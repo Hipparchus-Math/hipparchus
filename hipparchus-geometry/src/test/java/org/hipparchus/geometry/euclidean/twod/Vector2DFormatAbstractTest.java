@@ -30,8 +30,6 @@ import java.util.Locale;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.Vector;
 import org.hipparchus.geometry.VectorFormat;
-import org.hipparchus.geometry.euclidean.twod.Vector2D;
-import org.hipparchus.geometry.euclidean.twod.Vector2DFormat;
 import org.junit.Assert;
 import org.junit.Test;
 

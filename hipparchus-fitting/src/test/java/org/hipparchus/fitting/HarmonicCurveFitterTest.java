@@ -26,11 +26,8 @@ import java.util.List;
 import java.util.Random;
 
 import org.hipparchus.analysis.function.HarmonicOscillator;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.fitting.HarmonicCurveFitter;
-import org.hipparchus.fitting.WeightedObservedPoint;
-import org.hipparchus.fitting.WeightedObservedPoints;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.junit.Assert;

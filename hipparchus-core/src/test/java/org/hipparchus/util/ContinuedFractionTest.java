@@ -21,7 +21,6 @@
  */
 package org.hipparchus.util;
 
-import org.hipparchus.util.ContinuedFraction;
 import org.junit.Assert;
 import org.junit.Test;
 

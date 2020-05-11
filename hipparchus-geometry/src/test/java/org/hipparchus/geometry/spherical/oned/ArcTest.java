@@ -23,7 +23,6 @@ package org.hipparchus.geometry.spherical.oned;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.partitioning.Region;
-import org.hipparchus.geometry.spherical.oned.Arc;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;

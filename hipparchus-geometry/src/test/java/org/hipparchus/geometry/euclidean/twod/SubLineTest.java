@@ -25,10 +25,6 @@ import java.util.List;
 
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.oned.IntervalsSet;
-import org.hipparchus.geometry.euclidean.twod.Line;
-import org.hipparchus.geometry.euclidean.twod.Segment;
-import org.hipparchus.geometry.euclidean.twod.SubLine;
-import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.junit.Assert;
 import org.junit.Test;

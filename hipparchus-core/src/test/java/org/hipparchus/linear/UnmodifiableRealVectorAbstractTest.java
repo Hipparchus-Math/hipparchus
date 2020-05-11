@@ -18,17 +18,14 @@ package org.hipparchus.linear;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Set;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.Set;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
 import org.hipparchus.linear.RealVector.Entry;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;

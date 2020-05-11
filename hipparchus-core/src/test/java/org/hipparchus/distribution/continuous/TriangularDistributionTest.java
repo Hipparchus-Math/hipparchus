@@ -22,7 +22,6 @@
 
 package org.hipparchus.distribution.continuous;
 
-import org.hipparchus.distribution.continuous.TriangularDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;

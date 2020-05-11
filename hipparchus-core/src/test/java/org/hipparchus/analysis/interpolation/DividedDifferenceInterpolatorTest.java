@@ -24,8 +24,6 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Expm1;
 import org.hipparchus.analysis.function.Sin;
-import org.hipparchus.analysis.interpolation.DividedDifferenceInterpolator;
-import org.hipparchus.analysis.interpolation.UnivariateInterpolator;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;

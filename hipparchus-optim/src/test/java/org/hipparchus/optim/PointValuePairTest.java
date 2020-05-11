@@ -22,7 +22,6 @@
 package org.hipparchus.optim;
 
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.optim.PointValuePair;
 import org.junit.Assert;
 import org.junit.Test;
 

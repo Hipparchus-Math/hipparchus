@@ -28,7 +28,6 @@ import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
-import org.hipparchus.stat.correlation.KendallsCorrelation;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

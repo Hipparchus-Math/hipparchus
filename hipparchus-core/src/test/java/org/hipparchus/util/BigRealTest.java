@@ -27,8 +27,6 @@ import java.math.MathContext;
 
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.util.BigReal;
-import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
 

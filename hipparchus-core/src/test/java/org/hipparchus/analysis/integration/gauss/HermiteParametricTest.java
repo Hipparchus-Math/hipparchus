@@ -24,12 +24,10 @@ package org.hipparchus.analysis.integration.gauss;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.hipparchus.util.FastMath;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.hipparchus.analysis.integration.gauss.GaussIntegratorFactory;
-import org.hipparchus.analysis.integration.gauss.HermiteRuleFactory;
-import org.hipparchus.util.FastMath;
 
 /**
  * Test of the {@link HermiteRuleFactory}.

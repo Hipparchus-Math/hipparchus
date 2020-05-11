@@ -21,7 +21,6 @@
  */
 package org.hipparchus.analysis.polynomials;
 
-import org.hipparchus.analysis.polynomials.PolynomialFunctionLagrangeForm;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;

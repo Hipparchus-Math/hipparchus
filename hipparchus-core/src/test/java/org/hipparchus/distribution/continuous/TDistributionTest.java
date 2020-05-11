@@ -21,11 +21,10 @@
  */
 package org.hipparchus.distribution.continuous;
 
+import org.hipparchus.UnitTestUtils;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
-import org.hipparchus.UnitTestUtils;
-import org.hipparchus.distribution.continuous.TDistribution;
-import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Test cases for TDistribution.
  */

@@ -22,7 +22,6 @@
 
 package org.hipparchus.distribution.continuous;
 
-import org.hipparchus.distribution.continuous.WeibullDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;

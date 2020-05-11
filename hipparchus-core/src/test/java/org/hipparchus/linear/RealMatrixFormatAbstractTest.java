@@ -26,12 +26,9 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import org.junit.Test;
-import org.junit.Assert;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealMatrixFormat;
+import org.junit.Assert;
+import org.junit.Test;
 
 public abstract class RealMatrixFormatAbstractTest {
 

@@ -27,8 +27,6 @@ import java.util.Map;
 
 import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.fraction.BigFraction;
-import org.hipparchus.fraction.BigFractionField;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -42,8 +42,6 @@ import org.hipparchus.analysis.function.Sinh;
 import org.hipparchus.analysis.function.Sqrt;
 import org.hipparchus.analysis.function.Tan;
 import org.hipparchus.analysis.function.Tanh;
-import org.hipparchus.linear.OpenMapRealVector;
-import org.hipparchus.linear.RealVector;
 import org.junit.Assert;
 import org.junit.Test;
 

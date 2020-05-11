@@ -22,16 +22,13 @@
 
 package org.hipparchus.linear;
 
-import org.junit.Test;
-import org.junit.Assert;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
-import org.hipparchus.linear.Array2DRowFieldMatrix;
-import org.hipparchus.linear.FieldLUDecomposition;
-import org.hipparchus.linear.FieldMatrix;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class FieldLUDecompositionTest {
     private Fraction[][] testData = {

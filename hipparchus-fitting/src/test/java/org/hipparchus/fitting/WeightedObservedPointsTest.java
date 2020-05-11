@@ -23,11 +23,9 @@ package org.hipparchus.fitting;
 
 import java.util.List;
 
+import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
-import org.hipparchus.fitting.WeightedObservedPoint;
-import org.hipparchus.fitting.WeightedObservedPoints;
-import org.hipparchus.util.Precision;
 
 /**
  * Tests {@link WeightedObservedPoints}.

@@ -24,9 +24,6 @@ package org.hipparchus.geometry.euclidean.twod.hull;
 import java.util.Collection;
 
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
-import org.hipparchus.geometry.euclidean.twod.hull.AklToussaintHeuristic;
-import org.hipparchus.geometry.euclidean.twod.hull.ConvexHullGenerator2D;
-import org.hipparchus.geometry.euclidean.twod.hull.MonotoneChain;
 
 /**
  * Test class for AklToussaintHeuristic.

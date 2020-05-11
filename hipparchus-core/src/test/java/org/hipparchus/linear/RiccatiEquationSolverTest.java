@@ -20,10 +20,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.text.DecimalFormat;
 
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealMatrixFormat;
-import org.hipparchus.linear.RiccatiEquationSolverImpl;
 import org.junit.Test;
 
 public class RiccatiEquationSolverTest {

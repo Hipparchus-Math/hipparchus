@@ -26,8 +26,6 @@ import org.hipparchus.distribution.continuous.TDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.stat.correlation.Covariance;
-import org.hipparchus.stat.correlation.PearsonsCorrelation;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;

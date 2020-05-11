@@ -24,17 +24,8 @@ package org.hipparchus.linear;
 import java.util.Arrays;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.ConjugateGradient;
-import org.hipparchus.linear.IterativeLinearSolver;
-import org.hipparchus.linear.IterativeLinearSolverEvent;
-import org.hipparchus.linear.JacobiPreconditioner;
-import org.hipparchus.linear.PreconditionedIterativeLinearSolver;
-import org.hipparchus.linear.RealLinearOperator;
-import org.hipparchus.linear.RealVector;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.IterationEvent;
 import org.hipparchus.util.IterationListener;

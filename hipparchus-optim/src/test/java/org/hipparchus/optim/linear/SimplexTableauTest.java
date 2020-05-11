@@ -25,10 +25,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.optim.linear.LinearConstraint;
-import org.hipparchus.optim.linear.LinearObjectiveFunction;
-import org.hipparchus.optim.linear.Relationship;
-import org.hipparchus.optim.linear.SimplexTableau;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.junit.Assert;
 import org.junit.Test;

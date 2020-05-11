@@ -25,17 +25,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.clustering.CentroidCluster;
-import org.hipparchus.clustering.Cluster;
-import org.hipparchus.clustering.DoublePoint;
-import org.hipparchus.clustering.FuzzyKMeansClusterer;
+import org.hamcrest.CoreMatchers;
 import org.hipparchus.clustering.distance.CanberraDistance;
 import org.hipparchus.clustering.distance.DistanceMeasure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
-import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 

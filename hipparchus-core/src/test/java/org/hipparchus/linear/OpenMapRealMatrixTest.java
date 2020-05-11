@@ -22,7 +22,6 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.OpenMapRealMatrix;
 import org.junit.Assert;
 import org.junit.Test;
 

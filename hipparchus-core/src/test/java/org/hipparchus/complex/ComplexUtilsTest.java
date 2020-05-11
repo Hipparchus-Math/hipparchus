@@ -23,12 +23,10 @@
 package org.hipparchus.complex;
 
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.complex.Complex;
-import org.hipparchus.complex.ComplexUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  */

@@ -21,7 +21,6 @@
  */
 package org.hipparchus.clustering;
 
-import org.hipparchus.clustering.LocalizedClusteringFormats;
 import org.hipparchus.exception.LocalizedFormatsAbstractTest;
 
 public class LocalizedClusteringFormatsTest extends LocalizedFormatsAbstractTest {

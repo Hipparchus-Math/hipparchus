@@ -22,7 +22,6 @@
 package org.hipparchus.transform;
 
 import org.hipparchus.exception.LocalizedFormatsAbstractTest;
-import org.hipparchus.transform.LocalizedFFTFormats;
 
 public class LocalizedFFTFormatsTest extends LocalizedFormatsAbstractTest {
 

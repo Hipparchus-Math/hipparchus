@@ -23,7 +23,6 @@ package org.hipparchus.optim.univariate;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
-import org.hipparchus.optim.univariate.BracketFinder;
 import org.junit.Assert;
 import org.junit.Test;
 

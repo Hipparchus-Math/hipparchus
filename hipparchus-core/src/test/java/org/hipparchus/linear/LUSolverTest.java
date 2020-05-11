@@ -23,12 +23,8 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.DecompositionSolver;
-import org.hipparchus.linear.LUDecomposition;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class LUSolverTest {
     private double[][] testData = {

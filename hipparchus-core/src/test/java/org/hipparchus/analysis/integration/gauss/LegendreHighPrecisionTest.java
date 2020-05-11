@@ -25,11 +25,8 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Cos;
 import org.hipparchus.analysis.function.Inverse;
 import org.hipparchus.analysis.function.Log;
-import org.hipparchus.analysis.integration.gauss.GaussIntegrator;
-import org.hipparchus.analysis.integration.gauss.GaussIntegratorFactory;
-import org.hipparchus.analysis.integration.gauss.LegendreHighPrecisionRuleFactory;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test of the {@link LegendreHighPrecisionRuleFactory}.

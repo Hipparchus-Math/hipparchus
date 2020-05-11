@@ -29,18 +29,10 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.MaxIter;
 import org.hipparchus.optim.PointValuePair;
-import org.hipparchus.optim.linear.LinearConstraint;
-import org.hipparchus.optim.linear.LinearConstraintSet;
-import org.hipparchus.optim.linear.LinearObjectiveFunction;
-import org.hipparchus.optim.linear.NonNegativeConstraint;
-import org.hipparchus.optim.linear.PivotSelectionRule;
-import org.hipparchus.optim.linear.Relationship;
-import org.hipparchus.optim.linear.SimplexSolver;
-import org.hipparchus.optim.linear.SolutionCallback;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.util.Precision;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class SimplexSolverTest {
     private static final MaxIter DEFAULT_MAX_ITER = new MaxIter(100);

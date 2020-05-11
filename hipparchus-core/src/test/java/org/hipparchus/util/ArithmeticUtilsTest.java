@@ -21,14 +21,13 @@
  */
 package org.hipparchus.util;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.math.BigInteger;
 
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.random.RandomDataGenerator;
-import org.hipparchus.util.ArithmeticUtils;
 import org.junit.Assert;
 import org.junit.Test;
 

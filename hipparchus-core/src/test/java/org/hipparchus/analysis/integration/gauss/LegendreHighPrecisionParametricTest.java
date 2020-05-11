@@ -24,8 +24,6 @@ package org.hipparchus.analysis.integration.gauss;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.hipparchus.analysis.integration.gauss.GaussIntegratorFactory;
-import org.hipparchus.analysis.integration.gauss.LegendreHighPrecisionRuleFactory;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;

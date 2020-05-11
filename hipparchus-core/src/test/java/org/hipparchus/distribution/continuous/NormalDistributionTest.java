@@ -23,7 +23,6 @@
 package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;

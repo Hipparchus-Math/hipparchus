@@ -21,8 +21,6 @@
  */
 package org.hipparchus.clustering.distance;
 
-import org.hipparchus.clustering.distance.DistanceMeasure;
-import org.hipparchus.clustering.distance.ManhattanDistance;
 import org.junit.Assert;
 import org.junit.Test;
 

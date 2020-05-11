@@ -22,10 +22,9 @@
 package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.analysis.function.Power;
-import org.hipparchus.analysis.integration.gauss.GaussIntegrator;
 import org.hipparchus.util.FastMath;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Base class for standard testing of Gaussian quadrature rules,

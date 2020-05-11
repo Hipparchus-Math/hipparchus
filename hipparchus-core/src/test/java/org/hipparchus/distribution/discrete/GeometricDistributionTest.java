@@ -14,7 +14,6 @@
 package org.hipparchus.distribution.discrete;
 
 import org.hipparchus.distribution.IntegerDistribution;
-import org.hipparchus.distribution.discrete.GeometricDistribution;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -32,8 +32,6 @@ import java.util.List;
 import org.hipparchus.clustering.Cluster;
 import org.hipparchus.clustering.DoublePoint;
 import org.hipparchus.clustering.distance.EuclideanDistance;
-import org.hipparchus.clustering.evaluation.ClusterEvaluator;
-import org.hipparchus.clustering.evaluation.SumOfClusterVariances;
 import org.junit.Before;
 import org.junit.Test;
 

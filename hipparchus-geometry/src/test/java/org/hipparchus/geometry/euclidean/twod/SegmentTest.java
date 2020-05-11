@@ -21,9 +21,6 @@
  */
 package org.hipparchus.geometry.euclidean.twod;
 
-import org.hipparchus.geometry.euclidean.twod.Line;
-import org.hipparchus.geometry.euclidean.twod.Segment;
-import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;

@@ -23,8 +23,6 @@ package org.hipparchus.geometry.spherical.twod;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
-import org.hipparchus.geometry.spherical.twod.S2Point;
-import org.hipparchus.geometry.spherical.twod.Sphere2D;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.junit.Assert;

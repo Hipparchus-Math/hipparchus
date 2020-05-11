@@ -22,7 +22,6 @@
 package org.hipparchus.ode;
 
 import org.hipparchus.exception.LocalizedFormatsAbstractTest;
-import org.hipparchus.ode.LocalizedODEFormats;
 
 public class LocalizedODEFormatsTest extends LocalizedFormatsAbstractTest {
 

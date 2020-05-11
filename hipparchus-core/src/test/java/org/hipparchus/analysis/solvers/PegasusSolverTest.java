@@ -22,9 +22,6 @@
 
 package org.hipparchus.analysis.solvers;
 
-import org.hipparchus.analysis.solvers.PegasusSolver;
-import org.hipparchus.analysis.solvers.UnivariateSolver;
-
 /**
  * Test case for {@link PegasusSolver Pegasus} solver.
  *

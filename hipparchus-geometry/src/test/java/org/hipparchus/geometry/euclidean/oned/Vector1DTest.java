@@ -30,7 +30,6 @@ import java.util.Locale;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Space;
-import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;

@@ -21,12 +21,8 @@
  */
 package org.hipparchus.geometry.euclidean.threed;
 
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.geometry.euclidean.threed.Line;
-import org.hipparchus.geometry.euclidean.threed.Plane;
-import org.hipparchus.geometry.euclidean.threed.Rotation;
-import org.hipparchus.geometry.euclidean.threed.Vector3D;
+import org.hipparchus.exception.MathRuntimeException;
 import org.junit.Assert;
 import org.junit.Test;
 

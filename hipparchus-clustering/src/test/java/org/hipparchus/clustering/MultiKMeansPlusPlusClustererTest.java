@@ -26,11 +26,6 @@ package org.hipparchus.clustering;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.clustering.CentroidCluster;
-import org.hipparchus.clustering.Clusterable;
-import org.hipparchus.clustering.DoublePoint;
-import org.hipparchus.clustering.KMeansPlusPlusClusterer;
-import org.hipparchus.clustering.MultiKMeansPlusPlusClusterer;
 import org.junit.Assert;
 import org.junit.Test;
 

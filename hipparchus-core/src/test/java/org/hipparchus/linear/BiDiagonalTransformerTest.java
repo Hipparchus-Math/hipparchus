@@ -22,9 +22,6 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.linear.BiDiagonalTransformer;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;

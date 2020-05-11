@@ -13,7 +13,6 @@
  */
 package org.hipparchus.util;
 
-import org.hipparchus.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -26,9 +26,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.geometry.enclosing.EnclosingBall;
-import org.hipparchus.geometry.euclidean.twod.DiskGenerator;
-import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
-import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.random.Well1024a;
