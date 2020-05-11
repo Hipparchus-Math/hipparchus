@@ -21,7 +21,6 @@ import java.util.Arrays;
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.analysis.differentiation.FieldDerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
