@@ -20,6 +20,7 @@ package org.hipparchus.analysis.differentiation;
 import org.hipparchus.Field;
 import org.hipparchus.util.Decimal64;
 import org.hipparchus.util.Decimal64Field;
+import org.junit.Test;
 
 /**
  * Test for class {@link FieldDerivativeStructure} on {@link Decimal64}.
@@ -32,8 +33,21 @@ public class FieldDerivativeStructureDecimal64Test extends FieldDerivativeStruct
     }
 
     @Override
-    protected Decimal64 buildScalar(double value) {
-        return new Decimal64(value);
+    @Test
+    public void testComposeField() {
+        doTestComposeField(new double[] { 1.0e-100, 5.0e-14, 2.0e-13, 3.0e-13, 2.0e-13, 1.0e-100 });
+    }
+
+    @Override
+    @Test
+    public void testComposePrimitive() {
+        doTestComposePrimitive(new double[] { 1.0e-100, 5.0e-14, 2.0e-13, 3.0e-13, 2.0e-13, 1.0e-100 });
+    }
+
+    @Override
+    @Test
+    public void testHypotNoOverflow() {
+        doTestHypotNoOverflow(250);
     }
 
 }

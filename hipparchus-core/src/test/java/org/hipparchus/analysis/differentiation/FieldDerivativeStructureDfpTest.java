@@ -35,8 +35,15 @@ public class FieldDerivativeStructureDfpTest extends FieldDerivativeStructureAbs
     }
 
     @Override
-    protected Dfp buildScalar(double value) {
-        return FIELD.newDfp(value);
+    @Test
+    public void testComposeField() {
+        doTestComposeField(new double[] { 5.0e-24, 5.0e-24, 7.0e-24, 2.0e-23, 3.0e-23, 1.0e-100 });
+    }
+
+    @Override
+    @Test
+    public void testComposePrimitive() {
+        doTestComposePrimitive(new double[] { 2.0e-14, 3.0e-14, 8.0e-14, 2.0e-13, 9.0e-14, 1.0e-100 });
     }
 
     @Override

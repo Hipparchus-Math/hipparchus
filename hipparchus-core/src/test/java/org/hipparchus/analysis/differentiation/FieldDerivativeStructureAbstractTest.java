@@ -17,6 +17,7 @@
 
 package org.hipparchus.analysis.differentiation;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import java.util.Map;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.RealFieldElementAbstractTest;
 import org.hipparchus.Field;
+import org.hipparchus.analysis.polynomials.FieldPolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
@@ -48,7 +50,9 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
 
     protected abstract Field<T> getField();
 
-    protected abstract T buildScalar(double value);
+    protected T buildScalar(double value) {
+        return getField().getZero().newInstance(value);
+    }
 
     protected FDSFactory<T> buildFactory(int parameters, int order) {
         return new FDSFactory<>(getField(), parameters, order);
@@ -764,9 +768,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
     }
 
     @Test
-    public void testHypotNoOverflow() {
-        doTestHypotNoOverflow(250);
-    }
+    public abstract void testHypotNoOverflow();
 
     protected void doTestHypotNoOverflow(int tenPower) {
 
@@ -1596,42 +1598,53 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
     }
 
     @Test
-    public void testComposeField() {
-        double[] epsilon = new double[] { 1.0e-20, 5.0e-14, 2.0e-13, 3.0e-13, 2.0e-13, 1.0e-20 };
-        PolynomialFunction poly =
-                new PolynomialFunction(new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 });
-        for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
+    public abstract void testComposeField();
+
+    protected void doTestComposeField(final double[] epsilon) {
+        double[] maxError = new double[epsilon.length];
+        for (int maxOrder = 0; maxOrder < epsilon.length; ++maxOrder) {
+            @SuppressWarnings("unchecked")
+            FieldPolynomialFunction<T>[] p = (FieldPolynomialFunction<T>[]) Array.newInstance(FieldPolynomialFunction.class,
+                                                                                              maxOrder + 1);
             final FDSFactory<T> factory = buildFactory(1, maxOrder);
-            PolynomialFunction[] p = new PolynomialFunction[maxOrder + 1];
-            p[0] = poly;
+            T[] coefficients = MathArrays.buildArray(factory.getValueField(), epsilon.length);
+            for (int i = 0; i < coefficients.length; ++i) {
+                coefficients[i] = factory.getValueField().getZero().newInstance(i + 1);
+            }
+            p[0] = new FieldPolynomialFunction<>(coefficients);
             for (int i = 1; i <= maxOrder; ++i) {
                 p[i] = p[i - 1].polynomialDerivative();
             }
             for (double x = 0.1; x < 1.2; x += 0.001) {
                 FieldDerivativeStructure<T> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<T> dsY1 = dsX.getField().getZero();
-                for (int i = poly.degree(); i >= 0; --i) {
-                    dsY1 = dsY1.multiply(dsX).add(poly.getCoefficients()[i]);
+                for (int i = p[0].degree(); i >= 0; --i) {
+                    dsY1 = dsY1.multiply(dsX).add(p[0].getCoefficients()[i]);
                 }
                 T[] f = MathArrays.buildArray(getField(), maxOrder + 1);
                 for (int i = 0; i < f.length; ++i) {
-                    f[i] = buildScalar(p[i].value(x));
+                    f[i] = p[i].value(x);
                 }
                 FieldDerivativeStructure<T> dsY2 = dsX.compose(f);
                 FieldDerivativeStructure<T> zero = dsY1.subtract(dsY2);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assert.assertEquals(0.0, zero.getPartialDerivative(n).getReal(), epsilon[n]);
+                    maxError[n] = FastMath.max(maxError[n], FastMath.abs(zero.getPartialDerivative(n).getReal()));
                 }
             }
+        }
+        for (int n = 0; n < maxError.length; ++n) {
+            Assert.assertEquals(0.0, maxError[n], epsilon[n]);
         }
     }
 
     @Test
-    public void testComposePrimitive() {
-        double[] epsilon = new double[] { 1.0e-20, 5.0e-14, 2.0e-13, 3.0e-13, 2.0e-13, 1.0e-20 };
+    public abstract void testComposePrimitive();
+
+    protected void doTestComposePrimitive(final double[] epsilon) {
         PolynomialFunction poly =
                 new PolynomialFunction(new double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 });
-        for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
+        double[] maxError = new double[epsilon.length];
+        for (int maxOrder = 0; maxOrder < epsilon.length; ++maxOrder) {
             final FDSFactory<T> factory = buildFactory(1, maxOrder);
             PolynomialFunction[] p = new PolynomialFunction[maxOrder + 1];
             p[0] = poly;
@@ -1651,9 +1664,12 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
                 FieldDerivativeStructure<T> dsY2 = dsX.compose(f);
                 FieldDerivativeStructure<T> zero = dsY1.subtract(dsY2);
                 for (int n = 0; n <= maxOrder; ++n) {
-                    Assert.assertEquals(0.0, zero.getPartialDerivative(n).getReal(), epsilon[n]);
+                    maxError[n] = FastMath.max(maxError[n], FastMath.abs(zero.getPartialDerivative(n).getReal()));
                 }
             }
+        }
+        for (int n = 0; n < maxError.length; ++n) {
+            Assert.assertEquals(0.0, maxError[n], epsilon[n]);
         }
     }
 
