@@ -26,7 +26,6 @@ import java.lang.reflect.Field;
 
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
-import org.hipparchus.geometry.euclidean.threed.RotationOrder;
 import org.junit.Assert;
 import org.junit.Test;
 

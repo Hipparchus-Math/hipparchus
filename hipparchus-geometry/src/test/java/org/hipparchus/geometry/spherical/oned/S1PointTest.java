@@ -22,8 +22,6 @@
 package org.hipparchus.geometry.spherical.oned;
 
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.geometry.spherical.oned.S1Point;
-import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.junit.Assert;

@@ -22,9 +22,8 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.ode.ODEIntegrator;
-import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
+import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.FastMath;
 
 /**

@@ -26,9 +26,9 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import org.junit.Test;
-import org.junit.Assert;
 import org.hipparchus.util.FastMath;
+import org.junit.Assert;
+import org.junit.Test;
 
 public abstract class ComplexFormatAbstractTest {
 

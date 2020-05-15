@@ -21,7 +21,11 @@
  */
 package org.hipparchus.stat;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -30,7 +34,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.stat.Frequency;
 import org.junit.Test;
 
 /**

@@ -22,6 +22,8 @@
 
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
+import static org.hamcrest.CoreMatchers.is;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,11 +36,6 @@ import org.hipparchus.linear.DiagonalMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.ConvergenceChecker;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresBuilder;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LevenbergMarquardtOptimizer;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.ParameterValidator;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Evaluation;
 import org.hipparchus.util.FastMath;
@@ -46,7 +43,6 @@ import org.hipparchus.util.Incrementor;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.is;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a

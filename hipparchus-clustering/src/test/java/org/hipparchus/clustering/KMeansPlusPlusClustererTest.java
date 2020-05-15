@@ -27,10 +27,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.hipparchus.clustering.CentroidCluster;
-import org.hipparchus.clustering.Cluster;
-import org.hipparchus.clustering.DoublePoint;
-import org.hipparchus.clustering.KMeansPlusPlusClusterer;
 import org.hipparchus.clustering.distance.EuclideanDistance;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;

@@ -22,8 +22,6 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.RealVector;
 import org.junit.Assert;
 import org.junit.Test;
 

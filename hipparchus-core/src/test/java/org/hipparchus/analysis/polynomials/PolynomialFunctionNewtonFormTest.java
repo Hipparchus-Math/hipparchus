@@ -23,7 +23,6 @@ package org.hipparchus.analysis.polynomials;
 
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.polynomials.PolynomialFunctionNewtonForm;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Decimal64;
 import org.junit.Assert;

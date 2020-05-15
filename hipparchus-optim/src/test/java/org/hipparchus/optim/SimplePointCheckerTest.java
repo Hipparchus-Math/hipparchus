@@ -22,10 +22,8 @@
 package org.hipparchus.optim;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.optim.PointValuePair;
-import org.hipparchus.optim.SimplePointChecker;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class SimplePointCheckerTest {
     @Test(expected=MathIllegalArgumentException.class)

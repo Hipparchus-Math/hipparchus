@@ -25,8 +25,6 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.ISAACRandom;
-import org.hipparchus.stat.correlation.StorelessBivariateCovariance;
-import org.hipparchus.stat.correlation.StorelessCovariance;
 import org.junit.Assert;
 import org.junit.Test;
 

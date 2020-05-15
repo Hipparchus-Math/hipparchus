@@ -22,7 +22,6 @@
 package org.hipparchus.special;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.special.BesselJ;
 import org.junit.Assert;
 import org.junit.Test;
 

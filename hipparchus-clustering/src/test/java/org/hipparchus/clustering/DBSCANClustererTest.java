@@ -24,9 +24,6 @@ package org.hipparchus.clustering;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.clustering.Cluster;
-import org.hipparchus.clustering.DBSCANClusterer;
-import org.hipparchus.clustering.DoublePoint;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.junit.Assert;

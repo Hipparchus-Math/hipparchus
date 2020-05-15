@@ -21,12 +21,10 @@
  */
 package org.hipparchus.random;
 
-import org.junit.Assert;
-
 import java.io.InputStream;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.SobolSequenceGenerator;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -28,8 +28,6 @@ import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.migration.ode.ContinuousOutputModel;
-import org.hipparchus.migration.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEIntegrator;
 import org.hipparchus.ode.ODEStateAndDerivative;

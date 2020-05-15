@@ -25,12 +25,6 @@ package org.hipparchus.linear;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
-import org.hipparchus.linear.Array2DRowFieldMatrix;
-import org.hipparchus.linear.FieldDecompositionSolver;
-import org.hipparchus.linear.FieldLUDecomposition;
-import org.hipparchus.linear.FieldMatrix;
-import org.hipparchus.linear.FieldVector;
-import org.hipparchus.linear.SparseFieldVector;
 import org.junit.Assert;
 import org.junit.Test;
 

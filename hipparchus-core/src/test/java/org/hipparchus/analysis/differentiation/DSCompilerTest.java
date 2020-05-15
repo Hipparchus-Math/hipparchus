@@ -26,7 +26,6 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hipparchus.analysis.differentiation.DSCompiler;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.junit.Assert;

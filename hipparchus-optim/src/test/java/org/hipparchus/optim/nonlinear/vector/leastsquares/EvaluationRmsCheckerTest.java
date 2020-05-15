@@ -19,7 +19,6 @@ package org.hipparchus.optim.nonlinear.vector.leastsquares;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.ConvergenceChecker;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.EvaluationRmsChecker;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Evaluation;
 import org.junit.Assert;
 import org.junit.Test;

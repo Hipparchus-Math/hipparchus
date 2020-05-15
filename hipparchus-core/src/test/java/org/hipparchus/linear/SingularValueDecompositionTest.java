@@ -28,10 +28,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Random;
 
-import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.SingularValueDecomposition;
 import org.junit.Assert;
 import org.junit.Test;
 

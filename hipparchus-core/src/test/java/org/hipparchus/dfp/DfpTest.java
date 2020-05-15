@@ -1830,4 +1830,163 @@ public class DfpTest extends RealFieldElementAbstractTest<Dfp> {
         Assert.assertEquals(Dfp.class, field.getRuntimeClass());
     }
 
+    @Override
+    @Test
+    public void testLinearCombinationReference() {
+        final DfpField field16 = new DfpField(25);
+        doTestLinearCombinationReference(x -> field16.newDfp(x), 4.15e-9, 4.21e-9);
+    }
+
+    @Test
+    public void testConvertToSameAccuracy() {
+        DfpField field13 = new DfpField(13);
+        DfpField field16 = new DfpField(16); // in fact 13, 14, 15 and 16 decimal digits are all similar to 4 digits in radix 10000
+        Dfp dfp = field13.newDfp(1.25);
+        Assert.assertSame(dfp, dfp.newInstance(field16, DfpField.RoundingMode.ROUND_HALF_EVEN));
+    }
+
+    @Test
+    public void testConvertToHigherAccuracy() {
+
+        DfpField field16 = new DfpField(16);
+        DfpField field24 = new DfpField(24);
+
+        checkConvert(field16, "1.25", field24, "1.25", null);
+
+        Assert.assertTrue(field16.newDfp(-1).sqrt().newInstance(field24, null).isNaN());
+        Assert.assertTrue(field16.newDfp().reciprocal().newInstance(field24, null).isInfinite());
+    }
+
+    @Test
+    public void testConvertToLowerAccuracy() {
+        DfpField field16 = new DfpField(16);
+        DfpField field24 = new DfpField(24);
+
+        checkConvert(field24, "1234.56789012345678901234", field16, "1234.567890123456", DfpField.RoundingMode.ROUND_DOWN);
+        checkConvert(field24, "1234.56789012345678901234", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_UP);
+        checkConvert(field24, "1234.56789012345678901234", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_HALF_UP);
+        checkConvert(field24, "1234.56789012345678901234", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_HALF_DOWN);
+        checkConvert(field24, "1234.56789012345678901234", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_HALF_EVEN);
+        checkConvert(field24, "1234.56789012345678901234", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_HALF_ODD);
+        checkConvert(field24, "1234.56789012345678901234", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_CEIL);
+        checkConvert(field24, "1234.56789012345678901234", field16, "1234.567890123456", DfpField.RoundingMode.ROUND_FLOOR);
+
+        checkConvert(field24, "1234.56789012345600000001", field16, "1234.567890123456", DfpField.RoundingMode.ROUND_DOWN);
+        checkConvert(field24, "1234.56789012345600000001", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_UP);
+        checkConvert(field24, "1234.56789012345600000001", field16, "1234.567890123456", DfpField.RoundingMode.ROUND_HALF_UP);
+        checkConvert(field24, "1234.56789012345600000001", field16, "1234.567890123456", DfpField.RoundingMode.ROUND_HALF_DOWN);
+        checkConvert(field24, "1234.56789012345600000001", field16, "1234.567890123456", DfpField.RoundingMode.ROUND_HALF_EVEN);
+        checkConvert(field24, "1234.56789012345600000001", field16, "1234.567890123456", DfpField.RoundingMode.ROUND_HALF_ODD);
+        checkConvert(field24, "1234.56789012345600000001", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_CEIL);
+        checkConvert(field24, "1234.56789012345600000001", field16, "1234.567890123456", DfpField.RoundingMode.ROUND_FLOOR);
+
+        checkConvert(field24, "1234.56789012345650000000", field16, "1234.567890123456", DfpField.RoundingMode.ROUND_DOWN);
+        checkConvert(field24, "1234.56789012345650000000", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_UP);
+        checkConvert(field24, "1234.56789012345650000000", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_HALF_UP);
+        checkConvert(field24, "1234.56789012345650000000", field16, "1234.567890123456", DfpField.RoundingMode.ROUND_HALF_DOWN);
+        checkConvert(field24, "1234.56789012345650000000", field16, "1234.567890123456", DfpField.RoundingMode.ROUND_HALF_EVEN);
+        checkConvert(field24, "1234.56789012345650000000", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_HALF_ODD);
+        checkConvert(field24, "1234.56789012345650000000", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_CEIL);
+        checkConvert(field24, "1234.56789012345650000000", field16, "1234.567890123456", DfpField.RoundingMode.ROUND_FLOOR);
+
+        checkConvert(field24, "1234.56789012345650000001", field16, "1234.567890123456", DfpField.RoundingMode.ROUND_DOWN);
+        checkConvert(field24, "1234.56789012345650000001", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_UP);
+        checkConvert(field24, "1234.56789012345650000001", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_HALF_UP);
+        checkConvert(field24, "1234.56789012345650000001", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_HALF_DOWN);
+        checkConvert(field24, "1234.56789012345650000001", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_HALF_EVEN);
+        checkConvert(field24, "1234.56789012345650000001", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_HALF_ODD);
+        checkConvert(field24, "1234.56789012345650000001", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_CEIL);
+        checkConvert(field24, "1234.56789012345650000001", field16, "1234.567890123456", DfpField.RoundingMode.ROUND_FLOOR);
+
+        checkConvert(field24, "1234.56789012345750000000", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_DOWN);
+        checkConvert(field24, "1234.56789012345750000000", field16, "1234.567890123458", DfpField.RoundingMode.ROUND_UP);
+        checkConvert(field24, "1234.56789012345750000000", field16, "1234.567890123458", DfpField.RoundingMode.ROUND_HALF_UP);
+        checkConvert(field24, "1234.56789012345750000000", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_HALF_DOWN);
+        checkConvert(field24, "1234.56789012345750000000", field16, "1234.567890123458", DfpField.RoundingMode.ROUND_HALF_EVEN);
+        checkConvert(field24, "1234.56789012345750000000", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_HALF_ODD);
+        checkConvert(field24, "1234.56789012345750000000", field16, "1234.567890123458", DfpField.RoundingMode.ROUND_CEIL);
+        checkConvert(field24, "1234.56789012345750000000", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_FLOOR);
+
+        checkConvert(field24, "1234.56789012345750000001", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_DOWN);
+        checkConvert(field24, "1234.56789012345750000001", field16, "1234.567890123458", DfpField.RoundingMode.ROUND_UP);
+        checkConvert(field24, "1234.56789012345750000001", field16, "1234.567890123458", DfpField.RoundingMode.ROUND_HALF_UP);
+        checkConvert(field24, "1234.56789012345750000001", field16, "1234.567890123458", DfpField.RoundingMode.ROUND_HALF_DOWN);
+        checkConvert(field24, "1234.56789012345750000001", field16, "1234.567890123458", DfpField.RoundingMode.ROUND_HALF_EVEN);
+        checkConvert(field24, "1234.56789012345750000001", field16, "1234.567890123458", DfpField.RoundingMode.ROUND_HALF_ODD);
+        checkConvert(field24, "1234.56789012345750000001", field16, "1234.567890123458", DfpField.RoundingMode.ROUND_CEIL);
+        checkConvert(field24, "1234.56789012345750000001", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_FLOOR);
+
+        checkConvert(field24, "-1234.56789012345678901234", field16, "-1234.567890123456", DfpField.RoundingMode.ROUND_DOWN);
+        checkConvert(field24, "-1234.56789012345678901234", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_UP);
+        checkConvert(field24, "-1234.56789012345678901234", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_HALF_UP);
+        checkConvert(field24, "-1234.56789012345678901234", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_HALF_DOWN);
+        checkConvert(field24, "-1234.56789012345678901234", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_HALF_EVEN);
+        checkConvert(field24, "-1234.56789012345678901234", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_HALF_ODD);
+        checkConvert(field24, "-1234.56789012345678901234", field16, "-1234.567890123456", DfpField.RoundingMode.ROUND_CEIL);
+        checkConvert(field24, "-1234.56789012345678901234", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_FLOOR);
+
+        checkConvert(field24, "-1234.56789012345600000001", field16, "-1234.567890123456", DfpField.RoundingMode.ROUND_DOWN);
+        checkConvert(field24, "-1234.56789012345600000001", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_UP);
+        checkConvert(field24, "-1234.56789012345600000001", field16, "-1234.567890123456", DfpField.RoundingMode.ROUND_HALF_UP);
+        checkConvert(field24, "-1234.56789012345600000001", field16, "-1234.567890123456", DfpField.RoundingMode.ROUND_HALF_DOWN);
+        checkConvert(field24, "-1234.56789012345600000001", field16, "-1234.567890123456", DfpField.RoundingMode.ROUND_HALF_EVEN);
+        checkConvert(field24, "-1234.56789012345600000001", field16, "-1234.567890123456", DfpField.RoundingMode.ROUND_HALF_ODD);
+        checkConvert(field24, "-1234.56789012345600000001", field16, "-1234.567890123456", DfpField.RoundingMode.ROUND_CEIL);
+        checkConvert(field24, "-1234.56789012345600000001", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_FLOOR);
+
+        checkConvert(field24, "-1234.56789012345650000000", field16, "-1234.567890123456", DfpField.RoundingMode.ROUND_DOWN);
+        checkConvert(field24, "-1234.56789012345650000000", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_UP);
+        checkConvert(field24, "-1234.56789012345650000000", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_HALF_UP);
+        checkConvert(field24, "-1234.56789012345650000000", field16, "-1234.567890123456", DfpField.RoundingMode.ROUND_HALF_DOWN);
+        checkConvert(field24, "-1234.56789012345650000000", field16, "-1234.567890123456", DfpField.RoundingMode.ROUND_HALF_EVEN);
+        checkConvert(field24, "-1234.56789012345650000000", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_HALF_ODD);
+        checkConvert(field24, "-1234.56789012345650000000", field16, "-1234.567890123456", DfpField.RoundingMode.ROUND_CEIL);
+        checkConvert(field24, "-1234.56789012345650000000", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_FLOOR);
+
+        checkConvert(field24, "-1234.56789012345650000001", field16, "-1234.567890123456", DfpField.RoundingMode.ROUND_DOWN);
+        checkConvert(field24, "-1234.56789012345650000001", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_UP);
+        checkConvert(field24, "-1234.56789012345650000001", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_HALF_UP);
+        checkConvert(field24, "-1234.56789012345650000001", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_HALF_DOWN);
+        checkConvert(field24, "-1234.56789012345650000001", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_HALF_EVEN);
+        checkConvert(field24, "-1234.56789012345650000001", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_HALF_ODD);
+        checkConvert(field24, "-1234.56789012345650000001", field16, "-1234.567890123456", DfpField.RoundingMode.ROUND_CEIL);
+        checkConvert(field24, "-1234.56789012345650000001", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_FLOOR);
+
+        checkConvert(field24, "-1234.56789012345750000000", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_DOWN);
+        checkConvert(field24, "-1234.56789012345750000000", field16, "-1234.567890123458", DfpField.RoundingMode.ROUND_UP);
+        checkConvert(field24, "-1234.56789012345750000000", field16, "-1234.567890123458", DfpField.RoundingMode.ROUND_HALF_UP);
+        checkConvert(field24, "-1234.56789012345750000000", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_HALF_DOWN);
+        checkConvert(field24, "-1234.56789012345750000000", field16, "-1234.567890123458", DfpField.RoundingMode.ROUND_HALF_EVEN);
+        checkConvert(field24, "-1234.56789012345750000000", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_HALF_ODD);
+        checkConvert(field24, "-1234.56789012345750000000", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_CEIL);
+        checkConvert(field24, "-1234.56789012345750000000", field16, "-1234.567890123458", DfpField.RoundingMode.ROUND_FLOOR);
+
+        checkConvert(field24, "-1234.56789012345750000001", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_DOWN);
+        checkConvert(field24, "-1234.56789012345750000001", field16, "-1234.567890123458", DfpField.RoundingMode.ROUND_UP);
+        checkConvert(field24, "-1234.56789012345750000001", field16, "-1234.567890123458", DfpField.RoundingMode.ROUND_HALF_UP);
+        checkConvert(field24, "-1234.56789012345750000001", field16, "-1234.567890123458", DfpField.RoundingMode.ROUND_HALF_DOWN);
+        checkConvert(field24, "-1234.56789012345750000001", field16, "-1234.567890123458", DfpField.RoundingMode.ROUND_HALF_EVEN);
+        checkConvert(field24, "-1234.56789012345750000001", field16, "-1234.567890123458", DfpField.RoundingMode.ROUND_HALF_ODD);
+        checkConvert(field24, "-1234.56789012345750000001", field16, "-1234.567890123457", DfpField.RoundingMode.ROUND_CEIL);
+        checkConvert(field24, "-1234.56789012345750000001", field16, "-1234.567890123458", DfpField.RoundingMode.ROUND_FLOOR);
+
+        checkConvert(field24, "1234.56789012345650000001", field16, "1234.567890123457", DfpField.RoundingMode.ROUND_HALF_EVEN);
+        checkConvert(field24, "1234.56789012345600000000", field16, "1234.567890123456", DfpField.RoundingMode.ROUND_HALF_EVEN);
+        checkConvert(field24, "9999.99999999999950000000", field16, "10000.", DfpField.RoundingMode.ROUND_HALF_EVEN);
+        checkConvert(field24, "9999.99999999999950000000", field16, "9999.999999999999", DfpField.RoundingMode.ROUND_HALF_ODD);
+        checkConvert(field24, "9999.99999999999950000001", field16, "10000.", DfpField.RoundingMode.ROUND_HALF_ODD);
+
+        Assert.assertTrue(field24.newDfp(-1).sqrt().newInstance(field16, DfpField.RoundingMode.ROUND_HALF_EVEN).isNaN());
+        Assert.assertTrue(field24.newDfp().reciprocal().newInstance(field16, DfpField.RoundingMode.ROUND_HALF_EVEN).isInfinite());
+
+    }
+
+    private void checkConvert(DfpField originalField, String originalValue,
+                            DfpField targetField, String targetValue,
+                            DfpField.RoundingMode rmode) {
+        Dfp original  = originalField.newDfp(originalValue);
+        Dfp converted = original.newInstance(targetField, rmode);
+        Assert.assertEquals(targetValue, converted.toString());
+    }
+
 }

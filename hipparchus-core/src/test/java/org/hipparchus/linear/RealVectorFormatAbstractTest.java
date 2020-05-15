@@ -26,11 +26,9 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import org.junit.Test;
-import org.junit.Assert;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.RealVectorFormat;
+import org.junit.Assert;
+import org.junit.Test;
 
 public abstract class RealVectorFormatAbstractTest {
 

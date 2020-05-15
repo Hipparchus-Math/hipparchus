@@ -25,7 +25,6 @@ package org.hipparchus.analysis.function;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.function.HarmonicOscillator;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;

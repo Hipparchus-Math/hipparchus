@@ -30,8 +30,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.util.FastMath;
-import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

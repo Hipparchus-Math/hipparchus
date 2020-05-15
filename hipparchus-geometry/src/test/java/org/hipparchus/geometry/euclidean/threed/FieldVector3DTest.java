@@ -32,8 +32,6 @@ import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.geometry.euclidean.threed.FieldVector3D;
-import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.Decimal64;
 import org.hipparchus.util.Decimal64Field;

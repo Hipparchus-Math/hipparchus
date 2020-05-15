@@ -26,7 +26,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.stat.correlation.SpearmansCorrelation;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.stat.ranking.NaturalRanking;
 import org.junit.Assert;

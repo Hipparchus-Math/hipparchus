@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.geometry.enclosing.EnclosingBall;
-import org.hipparchus.geometry.enclosing.WelzlEncloser;
 import org.hipparchus.geometry.euclidean.twod.DiskGenerator;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;

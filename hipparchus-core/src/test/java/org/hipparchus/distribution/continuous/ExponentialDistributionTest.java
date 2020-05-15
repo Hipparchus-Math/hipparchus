@@ -21,7 +21,6 @@
  */
 package org.hipparchus.distribution.continuous;
 
-import org.hipparchus.distribution.continuous.ExponentialDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;

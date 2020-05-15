@@ -23,10 +23,9 @@ package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Constant;
-import org.hipparchus.analysis.integration.gauss.GaussIntegrator;
 import org.hipparchus.util.Pair;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test for {@link GaussIntegrator} class.

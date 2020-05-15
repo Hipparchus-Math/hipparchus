@@ -83,8 +83,8 @@ public class Decimal64 extends Number
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 newInstance(final double value) {
-        return new Decimal64(value);
+    public Decimal64 newInstance(final double v) {
+        return new Decimal64(v);
     }
 
     /** {@inheritDoc} */

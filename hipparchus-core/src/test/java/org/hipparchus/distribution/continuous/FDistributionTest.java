@@ -21,7 +21,6 @@
  */
 package org.hipparchus.distribution.continuous;
 
-import org.hipparchus.distribution.continuous.FDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;

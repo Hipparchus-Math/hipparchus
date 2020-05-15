@@ -22,7 +22,6 @@
 package org.hipparchus.distribution.discrete;
 
 import org.hipparchus.distribution.IntegerDistribution;
-import org.hipparchus.distribution.discrete.PascalDistribution;
 import org.junit.Assert;
 import org.junit.Test;
 

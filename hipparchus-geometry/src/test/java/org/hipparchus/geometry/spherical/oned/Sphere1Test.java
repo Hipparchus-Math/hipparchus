@@ -23,7 +23,6 @@ package org.hipparchus.geometry.spherical.oned;
 
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.geometry.Space;
-import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.junit.Assert;
 import org.junit.Test;
 

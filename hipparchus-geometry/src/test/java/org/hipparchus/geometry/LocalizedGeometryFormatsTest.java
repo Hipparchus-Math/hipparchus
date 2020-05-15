@@ -22,7 +22,6 @@
 package org.hipparchus.geometry;
 
 import org.hipparchus.exception.LocalizedFormatsAbstractTest;
-import org.hipparchus.geometry.LocalizedGeometryFormats;
 
 public class LocalizedGeometryFormatsTest extends LocalizedFormatsAbstractTest {
 

@@ -816,4 +816,16 @@ public class DfpField implements Field<Dfp> {
 
     }
 
+    /** Get extended field for accuracy conversion.
+     * @param digitsFactor multiplication factor for number of digits
+     * @param computeConstants if true, the transcendental constants for the given precision
+     * must be computed (setting this flag to false is RESERVED for the internal recursive call)
+     * @return field with extended precision
+     * @since 1.7
+     */
+    public DfpField getExtendedField(final int digitsFactor, final boolean computeConstants) {
+        final int oldDecimalDigits = getRadixDigits() * 4;
+        return new DfpField(oldDecimalDigits * digitsFactor, computeConstants);
+    }
+
 }

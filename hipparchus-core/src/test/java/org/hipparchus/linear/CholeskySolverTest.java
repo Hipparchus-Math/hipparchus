@@ -23,10 +23,6 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.CholeskyDecomposition;
-import org.hipparchus.linear.DecompositionSolver;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
 import org.junit.Assert;
 import org.junit.Test;
 

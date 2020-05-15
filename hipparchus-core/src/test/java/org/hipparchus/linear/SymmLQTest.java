@@ -25,17 +25,6 @@ import java.util.Arrays;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.DecompositionSolver;
-import org.hipparchus.linear.IterativeLinearSolver;
-import org.hipparchus.linear.IterativeLinearSolverEvent;
-import org.hipparchus.linear.JacobiPreconditioner;
-import org.hipparchus.linear.LUDecomposition;
-import org.hipparchus.linear.PreconditionedIterativeLinearSolver;
-import org.hipparchus.linear.RealLinearOperator;
-import org.hipparchus.linear.RealVector;
-import org.hipparchus.linear.SymmLQ;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.IterationEvent;
 import org.hipparchus.util.IterationListener;

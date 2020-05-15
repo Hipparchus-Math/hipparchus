@@ -21,11 +21,9 @@
  */
 package org.hipparchus.clustering.distance;
 
+import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
-import org.hipparchus.clustering.distance.DistanceMeasure;
-import org.hipparchus.clustering.distance.EuclideanDistance;
-import org.hipparchus.util.FastMath;
 
 /**
  * Tests for {@link EuclideanDistance} class.

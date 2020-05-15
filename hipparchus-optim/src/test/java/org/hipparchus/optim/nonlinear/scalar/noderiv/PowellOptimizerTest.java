@@ -30,7 +30,6 @@ import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import org.hipparchus.optim.nonlinear.scalar.noderiv.PowellOptimizer;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;

@@ -29,8 +29,6 @@ import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Set;
 
-import org.hipparchus.util.OpenIntToDoubleHashMap;
-import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

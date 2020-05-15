@@ -23,8 +23,6 @@ package org.hipparchus.fitting;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.fitting.GaussianCurveFitter;
-import org.hipparchus.fitting.WeightedObservedPoints;
 import org.junit.Assert;
 import org.junit.Test;
 

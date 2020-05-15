@@ -25,13 +25,9 @@ package org.hipparchus.linear;
 import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.DecompositionSolver;
-import org.hipparchus.linear.EigenDecomposition;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.util.Precision;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class EigenSolverTest {
 

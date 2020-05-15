@@ -24,7 +24,6 @@ package org.hipparchus.geometry.euclidean.twod;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
-import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 import org.junit.Assert;
 import org.junit.Test;
 

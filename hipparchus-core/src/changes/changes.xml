@@ -50,6 +50,12 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.7"  date="TBD" description="TBD.">
+      <action dev="luc" type="fix" issue="issues/91">
+        Fixed accuracy of linear combination for Dfp.
+      </action>
+      <action dev="luc" type="add" >
+        Added Dfp conversion to either larger or smaller number of digits.
+      </action>
       <action dev="luc" type="fix" issue="issues/88">
         Fixed handling of special cases in Dfp.atan2(y, x).
       </action>

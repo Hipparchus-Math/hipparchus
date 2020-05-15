@@ -22,7 +22,6 @@
 package org.hipparchus.distribution.discrete;
 
 import org.hipparchus.distribution.IntegerDistribution;
-import org.hipparchus.distribution.discrete.PoissonDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;

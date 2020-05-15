@@ -21,8 +21,6 @@
  */
 package org.hipparchus.random;
 
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937a;
 import org.junit.Assert;
 import org.junit.Test;
 

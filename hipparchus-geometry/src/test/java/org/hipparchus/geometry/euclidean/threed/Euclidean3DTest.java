@@ -23,7 +23,6 @@ package org.hipparchus.geometry.euclidean.threed;
 
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.geometry.Space;
-import org.hipparchus.geometry.euclidean.threed.Euclidean3D;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 import org.junit.Assert;
 import org.junit.Test;

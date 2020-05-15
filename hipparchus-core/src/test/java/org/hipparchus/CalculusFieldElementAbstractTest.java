@@ -21,6 +21,8 @@
  */
 package org.hipparchus;
 
+import java.util.function.DoubleFunction;
+
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
@@ -391,6 +393,38 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
         for (double x = -0.9; x < 0.9; x += 0.05) {
             checkRelative(FastMath.signum(x), build(x).signum());
         }
+    }
+
+    @Test
+    public void testLinearCombinationReference() {
+        doTestLinearCombinationReference(x -> build(x), 5.0e-16, 1.0);
+    }
+
+    protected void doTestLinearCombinationReference(final DoubleFunction<T> builder,
+                                                    final double toleranceLinearCombination,
+                                                    final double relativeErrorNaiveImplementation) {
+
+        final T[] a = MathArrays.buildArray(build(0).getField(), 3);
+        a[0] = builder.apply(-1321008684645961.0);
+        a[1] = builder.apply(-5774608829631843.0);
+        a[2] = builder.apply(-7645843051051357.0 / 32.0);
+        final T[] b = MathArrays.buildArray(build(0).getField(), 3);
+        b[0] = builder.apply(-5712344449280879.0 / 16.0);
+        b[1] = builder.apply(-4550117129121957.0 / 16.0);
+        b[2] = builder.apply(8846951984510141.0);
+
+        final T abSumInline = a[0].linearCombination(a[0], b[0], a[1], b[1], a[2], b[2]);
+        final T abSumArray  = a[0].linearCombination(a, b);
+        final T abNaive     = a[0].multiply(b[0]).add(a[1].multiply(b[1])).add(a[2].multiply(b[2]));
+
+        Assert.assertEquals(abSumInline.getReal(), abSumArray.getReal(), 0);
+        final double reference = -65271563724949.90625;
+        Assert.assertEquals(reference, abSumInline.getReal(),
+                            toleranceLinearCombination * FastMath.abs(reference));
+        Assert.assertEquals(relativeErrorNaiveImplementation * FastMath.abs(reference),
+                            FastMath.abs(abNaive.subtract(reference).getReal()),
+                            1.0e-3 * relativeErrorNaiveImplementation * FastMath.abs(reference));
+
     }
 
     @Test

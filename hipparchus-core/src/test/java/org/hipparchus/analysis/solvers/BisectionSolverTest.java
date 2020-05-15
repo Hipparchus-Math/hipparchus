@@ -24,7 +24,6 @@ package org.hipparchus.analysis.solvers;
 import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
-import org.hipparchus.analysis.solvers.BisectionSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;

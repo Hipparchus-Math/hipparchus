@@ -22,12 +22,9 @@
 package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.analysis.integration.gauss.GaussIntegrator;
-import org.hipparchus.analysis.integration.gauss.GaussIntegratorFactory;
-import org.hipparchus.analysis.integration.gauss.HermiteRuleFactory;
 import org.hipparchus.util.FastMath;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test of the {@link HermiteRuleFactory}.

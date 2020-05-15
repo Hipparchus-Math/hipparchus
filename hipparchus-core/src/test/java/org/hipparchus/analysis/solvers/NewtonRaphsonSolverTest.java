@@ -24,7 +24,6 @@ package org.hipparchus.analysis.solvers;
 import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.analysis.function.Sin;
-import org.hipparchus.analysis.solvers.NewtonRaphsonSolver;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;

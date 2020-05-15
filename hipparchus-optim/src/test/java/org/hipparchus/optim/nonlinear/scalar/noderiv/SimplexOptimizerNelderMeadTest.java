@@ -25,8 +25,8 @@ package org.hipparchus.optim.nonlinear.scalar.noderiv;
 
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.optim.InitialGuess;
@@ -36,8 +36,6 @@ import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.LeastSquaresConverter;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import org.hipparchus.optim.nonlinear.scalar.noderiv.NelderMeadSimplex;
-import org.hipparchus.optim.nonlinear.scalar.noderiv.SimplexOptimizer;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;

@@ -21,7 +21,6 @@
  */
 package org.hipparchus.distribution.continuous;
 
-import org.hipparchus.distribution.continuous.LogisticDistribution;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
