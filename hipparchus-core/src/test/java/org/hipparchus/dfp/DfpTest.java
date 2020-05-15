@@ -1799,6 +1799,13 @@ public class DfpTest extends RealFieldElementAbstractTest<Dfp> {
         Assert.assertEquals(Dfp.class, field.getRuntimeClass());
     }
 
+    @Override
+    @Test
+    public void testLinearCombinationReference() {
+        final DfpField field16 = new DfpField(25);
+        doTestLinearCombinationReference(x -> field16.newDfp(x), 4.15e-9, 4.21e-9);
+    }
+
     @Test
     public void testConvertToSameAccuracy() {
         DfpField field13 = new DfpField(13);

@@ -167,6 +167,9 @@ public class Dfp implements RealFieldElement<Dfp> {
     /** Name for traps triggered by newInstance. */
     private static final String NEW_INSTANCE_TRAP = "newInstance";
 
+    /** Multiplication factor for number of digits used to compute linear combinations. */
+    private static final int LINEAR_COMBINATION_DIGITS_FACTOR = 2;
+
     /** Mantissa. */
     protected int[] mant;
 
@@ -2995,12 +2998,21 @@ public class Dfp implements RealFieldElement<Dfp> {
     @Override
     public Dfp linearCombination(final Dfp[] a, final Dfp[] b)
         throws MathIllegalArgumentException {
+
         MathUtils.checkDimension(a.length, b.length);
-        Dfp r = getZero();
+
+        // compute in extended accuracy
+        final DfpField extendedField = a[0].field.getExtendedField(LINEAR_COMBINATION_DIGITS_FACTOR, false);
+        Dfp r = extendedField.getZero();
         for (int i = 0; i < a.length; ++i) {
-            r = r.add(a[i].multiply(b[i]));
+            final Dfp aiExt = a[i].newInstance(extendedField, null);
+            final Dfp biExt = b[i].newInstance(extendedField, null);
+            r = r.add(aiExt.multiply(biExt));
         }
-        return r;
+
+        // back to normal accuracy
+        return r.newInstance(a[0].field, DfpField.RoundingMode.ROUND_HALF_EVEN);
+
     }
 
     /** {@inheritDoc}
@@ -3008,26 +3020,60 @@ public class Dfp implements RealFieldElement<Dfp> {
     @Override
     public Dfp linearCombination(final double[] a, final Dfp[] b)
         throws MathIllegalArgumentException {
+
         MathUtils.checkDimension(a.length, b.length);
-        Dfp r = getZero();
+
+        // compute in extended accuracy
+        final DfpField extendedField = b[0].field.getExtendedField(LINEAR_COMBINATION_DIGITS_FACTOR, false);
+        Dfp r = extendedField.getZero();
         for (int i = 0; i < a.length; ++i) {
-            r = r.add(b[i].multiply(a[i]));
+            final Dfp biExt = b[i].newInstance(extendedField, null);
+            r = r.add(biExt.multiply(a[i]));
         }
-        return r;
+
+        // back to normal accuracy
+        return r.newInstance(b[0].field, DfpField.RoundingMode.ROUND_HALF_EVEN);
+
     }
 
     /** {@inheritDoc}
      */
     @Override
     public Dfp linearCombination(final Dfp a1, final Dfp b1, final Dfp a2, final Dfp b2) {
-        return a1.multiply(b1).add(a2.multiply(b2));
+
+        // switch to extended accuracy
+        final DfpField extendedField = a1.field.getExtendedField(LINEAR_COMBINATION_DIGITS_FACTOR, false);
+        final Dfp a1Ext = a1.newInstance(extendedField, null);
+        final Dfp b1Ext = b1.newInstance(extendedField, null);
+        final Dfp a2Ext = a2.newInstance(extendedField, null);
+        final Dfp b2Ext = b2.newInstance(extendedField, null);
+
+        // compute linear combination in extended accuracy
+        final Dfp resultExt = a1Ext.multiply(b1Ext).
+                          add(a2Ext.multiply(b2Ext));
+
+        // back to normal accuracy
+        return resultExt.newInstance(a1.field, DfpField.RoundingMode.ROUND_HALF_EVEN);
+
     }
 
     /** {@inheritDoc}
      */
     @Override
     public Dfp linearCombination(final double a1, final Dfp b1, final double a2, final Dfp b2) {
-        return b1.multiply(a1).add(b2.multiply(a2));
+
+        // switch to extended accuracy
+        final DfpField extendedField = b1.field.getExtendedField(LINEAR_COMBINATION_DIGITS_FACTOR, false);
+        final Dfp b1Ext = b1.newInstance(extendedField, null);
+        final Dfp b2Ext = b2.newInstance(extendedField, null);
+
+        // compute linear combination in extended accuracy
+        final Dfp resultExt = b1Ext.multiply(a1).
+                          add(b2Ext.multiply(a2));
+
+        // back to normal accuracy
+        return resultExt.newInstance(b1.field, DfpField.RoundingMode.ROUND_HALF_EVEN);
+
     }
 
     /** {@inheritDoc}
@@ -3036,7 +3082,24 @@ public class Dfp implements RealFieldElement<Dfp> {
     public Dfp linearCombination(final Dfp a1, final Dfp b1,
                                  final Dfp a2, final Dfp b2,
                                  final Dfp a3, final Dfp b3) {
-        return a1.multiply(b1).add(a2.multiply(b2)).add(a3.multiply(b3));
+
+        // switch to extended accuracy
+        final DfpField extendedField = a1.field.getExtendedField(LINEAR_COMBINATION_DIGITS_FACTOR, false);
+        final Dfp a1Ext = a1.newInstance(extendedField, null);
+        final Dfp b1Ext = b1.newInstance(extendedField, null);
+        final Dfp a2Ext = a2.newInstance(extendedField, null);
+        final Dfp b2Ext = b2.newInstance(extendedField, null);
+        final Dfp a3Ext = a3.newInstance(extendedField, null);
+        final Dfp b3Ext = b3.newInstance(extendedField, null);
+
+        // compute linear combination in extended accuracy
+        final Dfp resultExt = a1Ext.multiply(b1Ext).
+                          add(a2Ext.multiply(b2Ext)).
+                          add(a3Ext.multiply(b3Ext));
+
+        // back to normal accuracy
+        return resultExt.newInstance(a1.field, DfpField.RoundingMode.ROUND_HALF_EVEN);
+
     }
 
     /** {@inheritDoc}
@@ -3045,7 +3108,21 @@ public class Dfp implements RealFieldElement<Dfp> {
     public Dfp linearCombination(final double a1, final Dfp b1,
                                  final double a2, final Dfp b2,
                                  final double a3, final Dfp b3) {
-        return b1.multiply(a1).add(b2.multiply(a2)).add(b3.multiply(a3));
+
+        // switch to extended accuracy
+        final DfpField extendedField = b1.field.getExtendedField(LINEAR_COMBINATION_DIGITS_FACTOR, false);
+        final Dfp b1Ext = b1.newInstance(extendedField, null);
+        final Dfp b2Ext = b2.newInstance(extendedField, null);
+        final Dfp b3Ext = b3.newInstance(extendedField, null);
+
+        // compute linear combination in extended accuracy
+        final Dfp resultExt = b1Ext.multiply(a1).
+                          add(b2Ext.multiply(a2)).
+                          add(b3Ext.multiply(a3));
+
+        // back to normal accuracy
+        return resultExt.newInstance(b1.field, DfpField.RoundingMode.ROUND_HALF_EVEN);
+
     }
 
     /** {@inheritDoc}
@@ -3053,7 +3130,27 @@ public class Dfp implements RealFieldElement<Dfp> {
     @Override
     public Dfp linearCombination(final Dfp a1, final Dfp b1, final Dfp a2, final Dfp b2,
                                  final Dfp a3, final Dfp b3, final Dfp a4, final Dfp b4) {
-        return a1.multiply(b1).add(a2.multiply(b2)).add(a3.multiply(b3)).add(a4.multiply(b4));
+
+        // switch to extended accuracy
+        final DfpField extendedField = a1.field.getExtendedField(LINEAR_COMBINATION_DIGITS_FACTOR, false);
+        final Dfp a1Ext = a1.newInstance(extendedField, null);
+        final Dfp b1Ext = b1.newInstance(extendedField, null);
+        final Dfp a2Ext = a2.newInstance(extendedField, null);
+        final Dfp b2Ext = b2.newInstance(extendedField, null);
+        final Dfp a3Ext = a3.newInstance(extendedField, null);
+        final Dfp b3Ext = b3.newInstance(extendedField, null);
+        final Dfp a4Ext = a4.newInstance(extendedField, null);
+        final Dfp b4Ext = b4.newInstance(extendedField, null);
+
+        // compute linear combination in extended accuracy
+        final Dfp resultExt = a1Ext.multiply(b1Ext).
+                          add(a2Ext.multiply(b2Ext)).
+                          add(a3Ext.multiply(b3Ext)).
+                          add(a4Ext.multiply(b4Ext));
+
+        // back to normal accuracy
+        return resultExt.newInstance(a1.field, DfpField.RoundingMode.ROUND_HALF_EVEN);
+
     }
 
     /** {@inheritDoc}
@@ -3061,7 +3158,23 @@ public class Dfp implements RealFieldElement<Dfp> {
     @Override
     public Dfp linearCombination(final double a1, final Dfp b1, final double a2, final Dfp b2,
                                  final double a3, final Dfp b3, final double a4, final Dfp b4) {
-        return b1.multiply(a1).add(b2.multiply(a2)).add(b3.multiply(a3)).add(b4.multiply(a4));
+
+        // switch to extended accuracy
+        final DfpField extendedField = b1.field.getExtendedField(LINEAR_COMBINATION_DIGITS_FACTOR, false);
+        final Dfp b1Ext = b1.newInstance(extendedField, null);
+        final Dfp b2Ext = b2.newInstance(extendedField, null);
+        final Dfp b3Ext = b3.newInstance(extendedField, null);
+        final Dfp b4Ext = b4.newInstance(extendedField, null);
+
+        // compute linear combination in extended accuracy
+        final Dfp resultExt = b1Ext.multiply(a1).
+                          add(b2Ext.multiply(a2)).
+                          add(b3Ext.multiply(a3)).
+                          add(b4Ext.multiply(a4));
+
+        // back to normal accuracy
+        return resultExt.newInstance(b1.field, DfpField.RoundingMode.ROUND_HALF_EVEN);
+
     }
 
 }
