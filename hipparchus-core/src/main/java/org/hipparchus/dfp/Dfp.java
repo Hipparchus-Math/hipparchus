@@ -26,6 +26,7 @@ import java.util.Arrays;
 
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -626,6 +627,165 @@ public class Dfp implements RealFieldElement<Dfp> {
      */
     public Dfp newInstance(final byte sig, final byte code) {
         return field.newDfp(sig, code);
+    }
+
+    /** Creates an instance by converting the instance to a different field (i.e. different accuracy).
+     * <p>
+     * If the target field as a greater number of digits, the extra least significant digits
+     * will be set to zero.
+     * </p>
+     * @param targetField field to convert the instance to
+     * @param rmode rounding mode to use if target field as less digits than the instance, can be null otherwise
+     * @return converted instance (or the instance itself if it already has the required number of digits)
+     * @see DfpField#getExtendedField(int, boolean)
+     * @since 1.7
+     */
+    public Dfp newInstance(final DfpField targetField, final DfpField.RoundingMode rmode) {
+        final int deltaLength = targetField.getRadixDigits() - field.getRadixDigits();
+        if (deltaLength == 0) {
+
+            // no conversion, we return the instance itself
+            return this;
+
+        } else {
+
+            // create an instance (initially set to 0) with the expected number of digits
+            Dfp result = new Dfp(targetField);
+            result.sign = sign;
+            result.exp  = exp;
+            result.nans = nans;
+            if (nans == 0) {
+
+                if (deltaLength < 0) {
+
+                    // copy only the most significant digits, dropping the least significant ones
+                    // the result corresponds to pure truncation, proper rounding will follow
+                    System.arraycopy(mant, -deltaLength, result.mant, 0, result.mant.length);
+
+                    // check if we have dropped any non-zero digits in the low part
+                    // (not counting the last dropped digit which will be handled specially)
+                    final int last = -(deltaLength + 1);
+                    boolean zeroLSB = true;
+                    for (int i = 0; i < last; ++i) {
+                        zeroLSB &= mant[i] == 0;
+                    }
+
+                    if (!(zeroLSB && mant[last] == 0)) {
+                        // there are some non-zero digits that have been discarded, perform rounding
+
+                        if (shouldIncrement(rmode, zeroLSB, mant[last], result.mant[0], sign)) {
+                            // rounding requires incrementing the mantissa
+                            result.incrementMantissa();
+                        }
+
+                        targetField.setIEEEFlagsBits(DfpField.FLAG_INEXACT);  // signal inexact
+                        result = dotrap(DfpField.FLAG_INEXACT, TRUNC_TRAP, this, result);
+
+                    }
+
+                } else {
+                    // copy all digits as the new most significant ones, leaving the least significant digits to zero
+                    System.arraycopy(mant, 0, result.mant, deltaLength, mant.length);
+                }
+
+            }
+
+            return result;
+
+        }
+    }
+
+    /** Check if mantissa of a truncated number must be incremented.
+     * <p>
+     * This method must be called <em>only</em> when some non-zero digits have been
+     * discarded (i.e. when either {@code zeroLSB} is false or {@code lastDiscarded} is non-zero),
+     * otherwise it would generate false positive
+     * </p>
+     * @param rmode rounding mode to use if target field as less digits than the instance, can be null otherwise
+     * @param zeroLSB true is least significant discarded digits (except last) are all zero
+     * @param lastDiscarded last discarded digit
+     * @param firstNonDiscarded first non-discarded digit
+     * @param sign of the number
+     * @return true if the already truncated mantissa should be incremented to achieve correct rounding
+     * @since 1.7
+     */
+    private static boolean shouldIncrement(final DfpField.RoundingMode rmode,
+                                           final boolean zeroLSB, final int lastDiscarded,
+                                           final int firstNonDiscarded, final int sign) {
+        switch (rmode) {
+            case ROUND_DOWN :
+                return false;
+
+            case ROUND_UP :
+                return true;
+
+            case ROUND_HALF_UP :
+                return lastDiscarded >= 5000;
+
+            case ROUND_HALF_DOWN :
+                return isAboveHalfWay(zeroLSB, lastDiscarded);
+
+            case ROUND_HALF_EVEN :
+                return (isHalfWay(zeroLSB, lastDiscarded) && (firstNonDiscarded & 0x1) == 0x1) ||
+                       isAboveHalfWay(zeroLSB, lastDiscarded);
+
+            case ROUND_HALF_ODD :
+                return (isHalfWay(zeroLSB, lastDiscarded) && (firstNonDiscarded & 0x1) == 0x0) ||
+                       isAboveHalfWay(zeroLSB, lastDiscarded);
+
+            case ROUND_CEIL :
+                return sign > 0;
+
+            case ROUND_FLOOR :
+                return sign < 0;
+
+            default :
+                // this should never happen
+                throw MathRuntimeException.createInternalError();
+        }
+    }
+
+    /** Increment the mantissa of the instance
+     * @since 1.7
+     */
+    private void incrementMantissa() {
+        boolean carry = true;
+        for (int i = 0; carry && i < mant.length; ++i) {
+            ++mant[i];
+            if (mant[i] >= RADIX) {
+                mant[i] -= RADIX;
+            } else {
+                carry = false;
+            }
+        }
+        if (carry) {
+            // we have exceeded capacity, we need to drop one digit
+            for (int i = 0; i < mant.length - 1; i++) {
+                mant[i] = mant[i+1];
+            }
+            mant[mant.length - 1] = 1;
+            exp++;
+        }
+    }
+
+    /** Check if discarded digits are exactly halfway between two rounder numbers.
+     * @param zeroLSB true is least significant discarded digits (except last) are all zero
+     * @param lastDiscarded last discarded digit
+     * @return true if discarded digits correspond to a number exactly halfway between two rounded numbers
+     * @since 1.7
+     */
+    private static boolean isHalfWay(final boolean zeroLSB, final int lastDiscarded) {
+        return lastDiscarded == 5000 && zeroLSB;
+    }
+
+    /** Check if discarded digits are strictly above halfway between two rounder numbers.
+     * @param zeroLSB true is least significant discarded digits (except last) are all zero
+     * @param lastDiscarded last discarded digit
+     * @return true if discarded digits correspond to a number strictly above halfway between two rounded numbers
+     * @since 1.7
+     */
+    private static boolean isAboveHalfWay(final boolean zeroLSB, final int lastDiscarded) {
+        return (lastDiscarded > 5000) || (lastDiscarded == 5000 && !zeroLSB);
     }
 
     /** Get the {@link org.hipparchus.Field Field} (really a {@link DfpField}) to which the instance belongs.
