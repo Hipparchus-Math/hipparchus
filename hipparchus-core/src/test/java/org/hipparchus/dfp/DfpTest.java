@@ -1833,8 +1833,8 @@ public class DfpTest extends RealFieldElementAbstractTest<Dfp> {
     @Override
     @Test
     public void testLinearCombinationReference() {
-        final DfpField field16 = new DfpField(25);
-        doTestLinearCombinationReference(x -> field16.newDfp(x), 4.15e-9, 4.21e-9);
+        final DfpField field25 = new DfpField(25);
+        doTestLinearCombinationReference(x -> field25.newDfp(x), 4.15e-9, 4.21e-9);
     }
 
     @Test

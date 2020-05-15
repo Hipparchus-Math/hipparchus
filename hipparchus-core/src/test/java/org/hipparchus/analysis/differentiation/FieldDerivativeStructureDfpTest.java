@@ -52,4 +52,28 @@ public class FieldDerivativeStructureDfpTest extends FieldDerivativeStructureAbs
         doTestHypotNoOverflow(65600);
     }
 
+    @Override
+    @Test
+    public void testLinearCombinationReference() {
+        doTestLinearCombinationReference(x -> build(x), 4.15e-9, 4.21e-9);
+    }
+
+    @Override
+    @Test
+    public void testLinearCombination1DSDS() {
+        doTestLinearCombination1DSDS(9.0e-9);
+    }
+
+    @Override
+    @Test
+    public void testLinearCombination1FieldDS() {
+        doTestLinearCombination1FieldDS(9.0e-9);
+    }
+
+    @Override
+    @Test
+    public void testLinearCombination1DoubleDS() {
+        doTestLinearCombination1DoubleDS(4.0e-8);
+    }
+
 }

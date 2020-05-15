@@ -1740,6 +1740,10 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
 
     @Test
     public void testLinearCombination1DSDS() {
+        doTestLinearCombination1DSDS(1.0e-15);
+    }
+
+    protected void doTestLinearCombination1DSDS(final double tol) {
         final FDSFactory<T> factory = buildFactory(6, 1);
         final FieldDerivativeStructure<T>[] a = MathArrays.buildArray(factory.getDerivativeField(), 3);
         a[0] = factory.variable(0, -1321008684645961.0 / 268435456.0);
@@ -1754,7 +1758,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
         final FieldDerivativeStructure<T> abSumArray = a[0].linearCombination(a, b);
 
         Assert.assertEquals(abSumInline.getReal(), abSumArray.getReal(), 0);
-        Assert.assertEquals(-1.8551294182586248737720779899, abSumInline.getReal(), 1.0e-15);
+        Assert.assertEquals(-1.8551294182586248737720779899, abSumInline.getReal(), tol);
         Assert.assertEquals(b[0].getReal(), abSumInline.getPartialDerivative(1, 0, 0, 0, 0, 0).getReal(), 1.0e-15);
         Assert.assertEquals(b[1].getReal(), abSumInline.getPartialDerivative(0, 1, 0, 0, 0, 0).getReal(), 1.0e-15);
         Assert.assertEquals(b[2].getReal(), abSumInline.getPartialDerivative(0, 0, 1, 0, 0, 0).getReal(), 1.0e-15);
@@ -1766,6 +1770,10 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
 
     @Test
     public void testLinearCombination1FieldDS() {
+        doTestLinearCombination1FieldDS(1.0e-15);
+    }
+
+    protected void doTestLinearCombination1FieldDS(final double tol) {
         final FDSFactory<T> factory = buildFactory(3, 1);
         final T[] a = MathArrays.buildArray(getField(), 3);
         a[0] = buildScalar(-1321008684645961.0 / 268435456.0);
@@ -1782,7 +1790,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
         final FieldDerivativeStructure<T> abSumArray = b[0].linearCombination(a, b);
 
         Assert.assertEquals(abSumInline.getReal(), abSumArray.getReal(), 0);
-        Assert.assertEquals(-1.8551294182586248737720779899, abSumInline.getReal(), 1.0e-15);
+        Assert.assertEquals(-1.8551294182586248737720779899, abSumInline.getReal(), tol);
         Assert.assertEquals(a[0].getReal(), abSumInline.getPartialDerivative(1, 0, 0).getReal(), 1.0e-15);
         Assert.assertEquals(a[1].getReal(), abSumInline.getPartialDerivative(0, 1, 0).getReal(), 1.0e-15);
         Assert.assertEquals(a[2].getReal(), abSumInline.getPartialDerivative(0, 0, 1).getReal(), 1.0e-15);
@@ -1791,6 +1799,10 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
 
     @Test
     public void testLinearCombination1DoubleDS() {
+        doTestLinearCombination1DoubleDS(1.0e-15);
+    }
+
+    protected void doTestLinearCombination1DoubleDS(final double tol) {
         final FDSFactory<T> factory = buildFactory(3, 1);
         final double[] a = new double[] {
             -1321008684645961.0 / 268435456.0,
@@ -1808,7 +1820,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
         final FieldDerivativeStructure<T> abSumArray = b[0].linearCombination(a, b);
 
         Assert.assertEquals(abSumInline.getReal(), abSumArray.getReal(), 0);
-        Assert.assertEquals(-1.8551294182586248737720779899, abSumInline.getReal(), 1.0e-15);
+        Assert.assertEquals(-1.8551294182586248737720779899, abSumInline.getReal(), tol);
         Assert.assertEquals(a[0], abSumInline.getPartialDerivative(1, 0, 0).getReal(), 1.0e-15);
         Assert.assertEquals(a[1], abSumInline.getPartialDerivative(0, 1, 0).getReal(), 1.0e-15);
         Assert.assertEquals(a[2], abSumInline.getPartialDerivative(0, 0, 1).getReal(), 1.0e-15);
