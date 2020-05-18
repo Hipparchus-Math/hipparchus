@@ -96,28 +96,21 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
         MathUtils.checkRangeInclusive(dimension, 1, MAX_DIMENSION);
 
         // initialize the other dimensions with direction numbers from a resource
-        final InputStream is = getClass().getResourceAsStream(RESOURCE_NAME);
-        if (is == null) {
-            throw MathRuntimeException.createInternalError();
-        }
+        try (InputStream is = getClass().getResourceAsStream(RESOURCE_NAME)) {
+            if (is == null) {
+                throw MathRuntimeException.createInternalError();
+            }
 
-        this.dimension = dimension;
+            this.dimension = dimension;
 
-        // init data structures
-        direction = new long[dimension][BITS + 1];
-        x = new long[dimension];
+            // init data structures
+            direction = new long[dimension][BITS + 1];
+            x = new long[dimension];
 
-        try {
             initFromStream(is);
         } catch (IOException | MathIllegalStateException e) {
             // the internal resource file could not be parsed -> should not happen
             throw MathRuntimeException.createInternalError(e);
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) { // NOPMD
-                // ignore
-            }
         }
     }
 

@@ -25,6 +25,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -121,6 +122,30 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
                 5.069831575018909,10E-7);
         Assert.assertEquals(empiricalDistribution.getSampleStats().getStandardDeviation(),
                 1.0173699343977738,10E-7);
+    }
+
+    @Test
+    public void testLoadURLError() throws IOException {
+        try {
+            URL existing = getClass().getResource("testData.txt");
+            URL nonexistent = new URL(existing.toString() + "-nonexistent");
+            empiricalDistribution.load(nonexistent);
+            Assert.fail("an exception should have been thrown");
+        } catch (IOException ioe) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testLoadFileError() throws IOException, URISyntaxException {
+        try {
+            File existing = new File(getClass().getResource("testData.txt").toURI());
+            File nonexistent = new File(existing.getAbsolutePath() + "-nonexistent");
+            empiricalDistribution.load(nonexistent);
+            Assert.fail("an exception should have been thrown");
+        } catch (IOException ioe) {
+            // expected
+        }
     }
 
     /**
