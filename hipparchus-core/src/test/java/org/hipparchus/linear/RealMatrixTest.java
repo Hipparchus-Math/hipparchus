@@ -43,7 +43,13 @@ public class RealMatrixTest {
         Assert.assertEquals(0.0, aTb.subtract(aTbRef).getNorm1(), 1.0e-10);
     }
 
-    // local class that does NOT override multiplyTransposed nor transposeMultiply
+    @Test
+    public void testDefaultMap() {
+        RealMatrix a = MatrixUtils.createRealMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
+        Assert.assertEquals(0.0, a.add(a.map(x -> -x)).getNorm1(), 1.0e-10);
+    }
+
+    // local class that does NOT override multiplyTransposed nor transposeMultiply nor map nor mapToSelf
     // so the default methods are called
     private class DefaultMatrix extends AbstractRealMatrix {
 

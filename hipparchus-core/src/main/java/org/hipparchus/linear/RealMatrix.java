@@ -22,6 +22,7 @@
 
 package org.hipparchus.linear;
 
+import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
@@ -949,4 +950,55 @@ public interface RealMatrix extends AnyMatrix {
     double walkInOptimizedOrder(RealMatrixPreservingVisitor visitor,
         int startRow, int endRow, int startColumn, int endColumn)
         throws MathIllegalArgumentException;
+
+    /**
+     * Acts as if implemented as:
+     * <pre>
+     *  return copy().mapToSelf(function);
+     * </pre>
+     * Returns a new matrix. Does not change instance data.
+     *
+     * @param function Function to apply to each entry.
+     * @return a new matrix.
+     * @since 1.7
+     */
+    default public RealMatrix map(UnivariateFunction function) {
+        return copy().mapToSelf(function);
+    }
+
+    /**
+     * Replace each entry by the result of applying the function to it.
+     *
+     * @param function Function to apply to each entry.
+     * @return a reference to this matrix.
+     * @since 1.7
+     */
+    default public RealMatrix mapToSelf(final UnivariateFunction function) {
+        walkInOptimizedOrder(new RealMatrixChangingVisitor() {
+
+            /** {@inheritDoc} */
+            @Override
+            public double visit(int row, int column, double value) {
+                // apply the function to the current entry
+                return function.value(value);
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public void start(int rows, int columns, int startRow, int endRow,
+                              int startColumn, int endColumn) {
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public double end() {
+                return 0;
+            }
+
+        });
+
+        return this;
+
+    }
+
 }
