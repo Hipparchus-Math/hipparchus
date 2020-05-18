@@ -23,6 +23,7 @@
 package org.hipparchus.stat.fitting;
 
 import java.io.BufferedReader;
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -209,8 +210,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * @exception NullArgumentException if in is null
      */
     public void load(double[] in) throws NullArgumentException {
-        DataAdapter da = new ArrayDataAdapter(in);
-        try {
+        try (DataAdapter da = new ArrayDataAdapter(in)) {
             da.computeStats();
             // new adapter for the second pass
             fillBinStats(new ArrayDataAdapter(in));
@@ -237,24 +237,22 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     public void load(URL url) throws IOException, MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(url);
         Charset charset = Charset.forName(FILE_CHARSET);
-        BufferedReader in =
-            new BufferedReader(new InputStreamReader(url.openStream(), charset));
-        try {
-            DataAdapter da = new StreamDataAdapter(in);
-            da.computeStats();
+        try (InputStream       is1  = url.openStream();
+             InputStreamReader isr1 = new InputStreamReader(is1, charset);
+             BufferedReader    br1  = new BufferedReader(isr1);
+             DataAdapter       da1  = new StreamDataAdapter(br1)) {
+            da1.computeStats();
             if (sampleStats.getN() == 0) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.URL_CONTAINS_NO_DATA, url);
             }
             // new adapter for the second pass
-            in = new BufferedReader(new InputStreamReader(url.openStream(), charset));
-            fillBinStats(new StreamDataAdapter(in));
-            loaded = true;
-        } finally {
-           try {
-               in.close();
-           } catch (IOException ex) { //NOPMD
-               // ignore
-           }
+            try (InputStream       is2  = url.openStream();
+                 InputStreamReader isr2 = new InputStreamReader(is2, charset);
+                 BufferedReader    br2  = new BufferedReader(isr2);
+                 DataAdapter       da2  = new StreamDataAdapter(br2)) {
+                fillBinStats(da2);
+                loaded = true;
+            }
         }
     }
 
@@ -271,14 +269,15 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     public void load(File file) throws IOException, NullArgumentException {
         MathUtils.checkNotNull(file);
         Charset charset = Charset.forName(FILE_CHARSET);
-        try (InputStream is1 = Files.newInputStream(file.toPath());
-             BufferedReader in1 = new BufferedReader(new InputStreamReader(is1, charset))) {
-            DataAdapter da = new StreamDataAdapter(in1);
-            da.computeStats();
+        try (InputStream    is1 = Files.newInputStream(file.toPath());
+             BufferedReader br1 = new BufferedReader(new InputStreamReader(is1, charset));
+             DataAdapter    da1 = new StreamDataAdapter(br1)) {
+            da1.computeStats();
             // new adapter for second pass
-            try (InputStream is2 = Files.newInputStream(file.toPath());
-                 BufferedReader in2 = new BufferedReader(new InputStreamReader(is2, charset))) {
-                fillBinStats(new StreamDataAdapter(in2));
+            try (InputStream    is2 = Files.newInputStream(file.toPath());
+                 BufferedReader in2 = new BufferedReader(new InputStreamReader(is2, charset));
+                 DataAdapter    da2 = new StreamDataAdapter(in2)) {
+                fillBinStats(da2);
             }
             loaded = true;
         }
@@ -288,7 +287,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * Provides methods for computing <code>sampleStats</code> and
      * <code>beanStats</code> abstracting the source of data.
      */
-    private abstract class DataAdapter{
+    private abstract class DataAdapter implements Closeable {
 
         /**
          * Compute bin stats.
@@ -309,7 +308,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     /**
      * <code>DataAdapter</code> for data provided through some input stream
      */
-    private class StreamDataAdapter extends DataAdapter{
+    private class StreamDataAdapter extends DataAdapter {
 
         /** Input stream providing access to the data */
         private BufferedReader inputStream;
@@ -319,8 +318,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
          *
          * @param in BufferedReader input stream
          */
-        StreamDataAdapter(BufferedReader in){
-            super();
+        StreamDataAdapter(BufferedReader in) {
             inputStream = in;
         }
 
@@ -333,9 +331,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
                 StreamingStatistics stats = binStats.get(findBin(val));
                 stats.addValue(val);
             }
-
-            inputStream.close();
-            inputStream = null;
         }
 
         /** {@inheritDoc} */
@@ -347,9 +342,17 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
                 val = Double.parseDouble(str);
                 sampleStats.addValue(val);
             }
-            inputStream.close();
-            inputStream = null;
         }
+
+        /** {@inheritDoc} */
+        @Override
+        public void close() throws IOException {
+            if (inputStream != null) {
+                inputStream.close();
+                inputStream = null;
+            }
+        }
+
     }
 
     /**
@@ -374,7 +377,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
         /** {@inheritDoc} */
         @Override
-        public void computeStats() throws IOException {
+        public void computeStats() {
             sampleStats = new StreamingStatistics();
             for (int i = 0; i < inputArray.length; i++) {
                 sampleStats.addValue(inputArray[i]);
@@ -383,13 +386,20 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
         /** {@inheritDoc} */
         @Override
-        public void computeBinStats() throws IOException {
+        public void computeBinStats() {
             for (int i = 0; i < inputArray.length; i++) {
                 StreamingStatistics stats =
                     binStats.get(findBin(inputArray[i]));
                 stats.addValue(inputArray[i]);
             }
         }
+
+        /** {@inheritDoc} */
+        @Override
+        public void close() {
+            // nothing to do
+        }
+
     }
 
     /**
