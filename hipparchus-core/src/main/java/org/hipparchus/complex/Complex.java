@@ -81,7 +81,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
     /** A complex number representing "0.0 + 0.0i". */
     public static final Complex ZERO = new Complex(0.0, 0.0);
 
-    /** A rel number representing log(10). */
+    /** A real number representing log(10). */
     private static final double LOG10 = 2.302585092994045684;
 
     /** Serializable version identifier */
@@ -1478,7 +1478,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      */
     @Override
     public Complex scalb(int n) {
-        return new Complex(FastMath.scalb(real, n), FastMath.scalb(imaginary, n));
+        return createComplex(FastMath.scalb(real, n), FastMath.scalb(imaginary, n));
     }
 
     /** {@inheritDoc}
