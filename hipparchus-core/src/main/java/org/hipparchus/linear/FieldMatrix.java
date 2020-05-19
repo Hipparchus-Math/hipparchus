@@ -23,6 +23,8 @@
 package org.hipparchus.linear;
 
 
+import java.util.function.Function;
+
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -835,4 +837,55 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     T walkInOptimizedOrder(FieldMatrixPreservingVisitor<T> visitor,
                            int startRow, int endRow, int startColumn, int endColumn)
     throws MathIllegalArgumentException;
+
+    /**
+     * Acts as if implemented as:
+     * <pre>
+     *  return copy().mapToSelf(function);
+     * </pre>
+     * Returns a new matrix. Does not change instance data.
+     *
+     * @param function Function to apply to each entry.
+     * @return a new matrix.
+     * @since 1.7
+     */
+    public default FieldMatrix<T> map(Function<T, T> function) {
+        return copy().mapToSelf(function);
+    }
+
+    /**
+     * Replace each entry by the result of applying the function to it.
+     *
+     * @param function Function to apply to each entry.
+     * @return a reference to this matrix.
+     * @since 1.7
+     */
+    public default FieldMatrix<T> mapToSelf(final Function<T,T> function) {
+        walkInOptimizedOrder(new FieldMatrixChangingVisitor<T>() {
+
+            /** {@inheritDoc} */
+            @Override
+            public T visit(int row, int column, T value) {
+                // apply the function to the current entry
+                return function.apply(value);
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public void start(int rows, int columns, int startRow, int endRow,
+                              int startColumn, int endColumn) {
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public T end() {
+                return getField().getZero();
+            }
+
+        });
+
+        return this;
+
+    }
+
 }

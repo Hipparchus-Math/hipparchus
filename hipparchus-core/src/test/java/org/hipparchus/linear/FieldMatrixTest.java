@@ -55,7 +55,30 @@ public class FieldMatrixTest {
         }
     }
 
-    // local class that does NOT override multiplyTransposed nor transposeMultiply
+    @Test
+    public void testDefaultMap() {
+        FieldMatrix<Decimal64> a = createMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
+        FieldMatrix<Decimal64> result = a.add(a.map(x -> x.negate()));
+        result.walkInOptimizedOrder(new FieldMatrixPreservingVisitor<Decimal64>() {
+            
+            @Override
+            public void visit(int row, int column, Decimal64 value) {
+                Assert.assertEquals(0.0, value.getReal(), 1.0e-10);
+            }
+            
+            @Override
+            public void start(int rows, int columns, int startRow, int endRow,
+                              int startColumn, int endColumn) {
+            }
+            
+            @Override
+            public Decimal64 end() {
+                return Decimal64Field.getInstance().getZero();
+            }
+        });
+    }
+
+    // local class that does NOT override multiplyTransposed nor transposeMultiply nor map nor mapToSelf
     // so the default methods are called
     private class DefaultMatrix extends AbstractFieldMatrix<Decimal64> {
 
