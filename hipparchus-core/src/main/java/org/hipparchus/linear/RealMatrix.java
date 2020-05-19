@@ -194,7 +194,7 @@ public interface RealMatrix extends AnyMatrix {
         return walkInColumnOrder(new RealMatrixPreservingVisitor() {
 
             /** Last row index. */
-            private double endRow;
+            private int endRow;
 
             /** Sum of absolute values on one column. */
             private double columnSum;
@@ -240,7 +240,7 @@ public interface RealMatrix extends AnyMatrix {
         return walkInRowOrder(new RealMatrixPreservingVisitor() {
 
             /** Last column index. */
-            private double endColumn;
+            private int endColumn;
 
             /** Sum of absolute values on one row. */
             private double rowSum;
