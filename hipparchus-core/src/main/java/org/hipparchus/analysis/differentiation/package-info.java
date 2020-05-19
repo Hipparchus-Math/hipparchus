@@ -33,6 +33,14 @@
  *   interface.
  * </p>
  * <p>
+ *   The {@link org.hipparchus.analysis.differentiation.UnivariateDerivative1 UnivariateDerivative1}
+ *   class is a more restricted implementation of a class holding the value and the differentials of
+ *   a function. This class handles only one free parameter (i.e. univariate functions) and only
+ *   differentiation order 1. As it is far less general than {@link
+ *   org.hipparchus.analysis.differentiation.DerivativeStructure DerivativeStructure}, it has less
+ *   overhead and is more efficient in its domain.
+ * </p>
+ * <p>
  *   The {@link org.hipparchus.analysis.differentiation.UnivariateFunctionDifferentiator
  *   UnivariateFunctionDifferentiator} interface defines a way to differentiate a simple {@link
  *   org.hipparchus.analysis.UnivariateFunction UnivariateFunction} and get a {@link

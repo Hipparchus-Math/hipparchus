@@ -513,6 +513,26 @@ parameter 1):
     System.out.println("d2g/dxdy = " + g.getPartialDerivative(1, 1);
     System.out.println("d2g/dy2  = " + g.getPartialDerivative(0, 2);
 
+### Automated differentiation for simple needs
+
+The <a
+href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
+DerivativeStructure</a> class is very powerful and very general. This induces an
+overhead that can be significant for simple needs. In order to reduce this overhead,
+special stripped-down implementations of Rall's numbers are also available. They
+are more efficient than the general purpose <a
+href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
+DerivativeStructure</a> class in their more limited domain.
+
+The <a
+href="../apidocs/org/hipparchus/analysis/differentiation/UnivariateDerivative1.html">
+UnivariateDerivative1</a> is an implementation devoted to univariate functions and
+when only first order derivative is needed. This means instances of this class only
+holds `f` and `\(\partial f / \partial x\)`. It is therefore equivalent to <a
+href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
+DerivativeStructure</a> configured with `parameters=1` and `order=1`. It is faster
+and has a simpler API, and does not need a factory.
+
 ### Differentiable functions
 
 There are several ways a user can create an implementation of the <a

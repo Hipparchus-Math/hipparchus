@@ -50,7 +50,11 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.7"  date="TBD" description="TBD.">
-      <action dev="luc" type="add" issue="issues/81">
+      <action dev="luc" type="add" issue="issues/93">
+        Added UnivariateDerivative1 for computing derivatives in simple
+        cases with less overhead than DerivativeStructure.
+      </action>
+       <action dev="luc" type="add" issue="issues/81">
         Added map and mapToSelf to RealMatrix.
       </action>
       <action dev="luc" type="fix" issue="issues/71">
