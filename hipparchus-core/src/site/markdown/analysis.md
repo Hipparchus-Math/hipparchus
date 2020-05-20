@@ -530,8 +530,18 @@ UnivariateDerivative1</a> is an implementation devoted to univariate functions a
 when only first order derivative is needed. This means instances of this class only
 holds `f` and `\(\partial f / \partial x\)`. It is therefore equivalent to <a
 href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
-DerivativeStructure</a> configured with `parameters=1` and `order=1`. It is faster
-and has a simpler API, and does not need a factory.
+DerivativeStructure</a> configured with `parameters=1` and `order=1`. It is faster,
+has a simpler API, and does not need a factory.
+
+The <a
+href="../apidocs/org/hipparchus/analysis/differentiation/UnivariateDerivative2.html">
+UnivariateDerivative2</a> is an implementation devoted to univariate functions and
+when only first and second order derivatives are needed. This means instances of this
+class only holds `f`, `\(\partial f / \partial x\)` and `\(\partial^2 f / \partial x^2\)`.
+It is therefore equivalent to <a
+href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
+DerivativeStructure</a> configured with `parameters=1` and `order=2`. It is faster,
+has a simpler API, and does not need a factory.
 
 ### Differentiable functions
 
