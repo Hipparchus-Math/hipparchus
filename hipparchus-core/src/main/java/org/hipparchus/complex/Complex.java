@@ -1486,7 +1486,13 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      */
     @Override
     public Complex hypot(Complex y) {
-        return multiply(this).add(y.multiply(y)).sqrt();
+        if (isInfinite() || y.isInfinite()) {
+            return INF;
+        } else if (isNaN() || y.isNaN()) {
+            return NaN;
+        } else {
+            return multiply(this).add(y.multiply(y)).sqrt();
+        }
     }
 
     /** {@inheritDoc}
