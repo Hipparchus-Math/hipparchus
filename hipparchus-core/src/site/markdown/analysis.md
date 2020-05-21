@@ -513,6 +513,9 @@ parameter 1):
     System.out.println("d2g/dxdy = " + g.getPartialDerivative(1, 1);
     System.out.println("d2g/dy2  = " + g.getPartialDerivative(0, 2);
 
+There is a field version of `DerivativeStructure`:
+[FieldDerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/FieldDerivativeStructure.html).
+
 ### Automated differentiation for simple needs
 
 The <a
@@ -552,6 +555,11 @@ instances of this class only holds `f`, `\(\partial f / \partial p_1\)`, `\(\par
 href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
 DerivativeStructure</a> configured with `parameters=n` and `order=1`. It is faster,
 has a simpler API, and does not need a factory.
+
+There are field versions of all these classes:
+[FieldUnivariateDerivative1](../apidocs/org/hipparchus/analysis/differentiation/FieldUnivariateDerivative1.html),
+[FieldUnivariateDerivative2](../apidocs/org/hipparchus/analysis/differentiation/FieldUnivariateDerivative2.html),
+[FieldGradient](../apidocs/org/hipparchus/analysis/differentiation/FieldGradient.html).
 
 ### Differentiable functions
 

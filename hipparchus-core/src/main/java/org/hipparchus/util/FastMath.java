@@ -4498,6 +4498,19 @@ public class FastMath {
     }
 
     /**
+     * Power function.  Compute x<sup>y</sup>.
+     *
+     * @param x   a double
+     * @param y   a double
+     * @param <T> the type of the field element
+     * @return x<sup>y</sup>
+     * @since 1.7
+     */
+    public static <T extends RealFieldElement<T>> T pow(final T x, final double y) {
+        return x.pow(y);
+    }
+
+    /**
      * Raise a double to an int power.
      *
      * @param d Number to raise.

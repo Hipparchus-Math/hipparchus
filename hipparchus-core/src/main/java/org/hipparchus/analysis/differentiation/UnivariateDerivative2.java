@@ -206,7 +206,7 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
                                          MathArrays.linearCombination(f2, a.f0 * a.f0,
                                                                       -2 * f1, a.f0 * a.f1,
                                                                        2 * f0, a.f1 * a.f1,
-                                                                       -f0, a.f0 * a.f2 ) * inv3);
+                                                                       -f0, a.f0 * a.f2) * inv3);
     }
 
     /** {@inheritDoc} */
@@ -378,7 +378,7 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
     public UnivariateDerivative2 cbrt() {
         final double c  = FastMath.cbrt(f0);
         final double c2 = c * c;
-        return compose(c, 1 / (3 * c2), -2 / (9 * c2 * f0));
+        return compose(c, 1 / (3 * c2), -1 / (4.5 * c2 * f0));
     }
 
     /** {@inheritDoc} */
@@ -543,14 +543,15 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
     @Override
     public UnivariateDerivative2 atan2(final UnivariateDerivative2 x) {
         final double x2    = x.f0 * x.f0;
+        final double f02   = f0 + f0;
         final double inv   = 1.0 / (f0 * f0 + x2);
         final double atan0 = FastMath.atan2(f0, x.f0);
         final double atan1 = MathArrays.linearCombination(x.f0, f1, -x.f1, f0) * inv;
         final double c     = MathArrays.linearCombination(f2, x2,
                                                           -2 * f1, x.f0 * x.f1,
-                                                          +2 * f0, x.f1 * x.f1,
+                                                          f02, x.f1 * x.f1,
                                                           -f0, x.f0 * x.f2) * inv;
-        return new UnivariateDerivative2(atan0, atan1, (c - 2 * f0 * atan1 * atan1) / x.f0);
+        return new UnivariateDerivative2(atan0, atan1, (c - f02 * atan1 * atan1) / x.f0);
     }
 
     /** {@inheritDoc} */
