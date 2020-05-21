@@ -116,7 +116,7 @@ public enum RotationOrder {
      ZYZ("ZYZ", Vector3D.PLUS_K, Vector3D.PLUS_J, Vector3D.PLUS_K);
 
     /** Codes map. */
-    private static final Map<String, RotationOrder> CODES_MAP = new HashMap<String, RotationOrder>();
+    private static final Map<String, RotationOrder> CODES_MAP = new HashMap<>();
     static {
         for (final RotationOrder type : values()) {
             CODES_MAP.put(type.toString(), type);
