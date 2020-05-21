@@ -543,6 +543,16 @@ href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.htm
 DerivativeStructure</a> configured with `parameters=1` and `order=2`. It is faster,
 has a simpler API, and does not need a factory.
 
+The <a
+href="../apidocs/org/hipparchus/analysis/differentiation/Gradient.html">
+Gradient</a> is an implementation devoted to multivariate functions and
+when only first order derivatives with respect to all parameters are needed. This means
+instances of this class only holds `f`, `\(\partial f / \partial p_1\)`, `\(\partial f / \partial p_2\)`...
+`\(\partial f / \partial p_n\)`. It is therefore equivalent to <a
+href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
+DerivativeStructure</a> configured with `parameters=n` and `order=1`. It is faster,
+has a simpler API, and does not need a factory.
+
 ### Differentiable functions
 
 There are several ways a user can create an implementation of the <a
