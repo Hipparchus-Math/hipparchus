@@ -529,7 +529,7 @@ DerivativeStructure</a> class in their more limited domain.
 
 The <a
 href="../apidocs/org/hipparchus/analysis/differentiation/UnivariateDerivative1.html">
-UnivariateDerivative1</a> is an implementation devoted to univariate functions and
+UnivariateDerivative1</a> class is an implementation devoted to univariate functions and
 when only first order derivative is needed. This means instances of this class only
 holds `f` and `\(\partial f / \partial x\)`. It is therefore equivalent to <a
 href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
@@ -538,7 +538,7 @@ has a simpler API, and does not need a factory.
 
 The <a
 href="../apidocs/org/hipparchus/analysis/differentiation/UnivariateDerivative2.html">
-UnivariateDerivative2</a> is an implementation devoted to univariate functions and
+UnivariateDerivative2</a> class is an implementation devoted to univariate functions and
 when only first and second order derivatives are needed. This means instances of this
 class only holds `f`, `\(\partial f / \partial x\)` and `\(\partial^2 f / \partial x^2\)`.
 It is therefore equivalent to <a
@@ -548,7 +548,7 @@ has a simpler API, and does not need a factory.
 
 The <a
 href="../apidocs/org/hipparchus/analysis/differentiation/Gradient.html">
-Gradient</a> is an implementation devoted to multivariate functions and
+Gradient</a> class is an implementation devoted to multivariate functions and
 when only first order derivatives with respect to all parameters are needed. This means
 instances of this class only holds `f`, `\(\partial f / \partial p_1\)`, `\(\partial f / \partial p_2\)`...
 `\(\partial f / \partial p_n\)`. It is therefore equivalent to <a
