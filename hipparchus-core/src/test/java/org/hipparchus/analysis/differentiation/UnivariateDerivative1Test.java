@@ -17,6 +17,8 @@
 package org.hipparchus.analysis.differentiation;
 
 import org.hipparchus.Field;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -41,6 +43,32 @@ public class UnivariateDerivative1Test extends UnivariateDerivativeAbstractTest<
         Assert.assertEquals(-0.5, ud1.getReal(), 1.0e-15);
         Assert.assertEquals(-0.5, ud1.getValue(), 1.0e-15);
         Assert.assertEquals(+2.5, ud1.getFirstDerivative(), 1.0e-15);
+    }
+
+    @Test
+    public void testConversion() {
+        UnivariateDerivative1 udA = new UnivariateDerivative1(-0.5, 2.5);
+        DerivativeStructure ds = udA.toDerivativeStructure();
+        Assert.assertEquals(1, ds.getFreeParameters());
+        Assert.assertEquals(1, ds.getOrder());
+        Assert.assertEquals(-0.5, ds.getValue(), 1.0e-15);
+        Assert.assertEquals(-0.5, ds.getPartialDerivative(0), 1.0e-15);
+        Assert.assertEquals( 2.5, ds.getPartialDerivative(1), 1.0e-15);
+        UnivariateDerivative1 udB = new UnivariateDerivative1(ds);
+        Assert.assertNotSame(udA, udB);
+        Assert.assertEquals(udA, udB);
+        try {
+            new UnivariateDerivative1(new DSFactory(2, 2).variable(0, 1.0));
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+        }
+        try {
+            new UnivariateDerivative1(new DSFactory(1, 2).variable(0, 1.0));
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+        }
     }
 
     @Test

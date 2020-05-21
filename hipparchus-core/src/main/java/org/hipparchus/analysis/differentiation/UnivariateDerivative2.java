@@ -16,9 +16,11 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.SinCos;
 
 /** Class representing both the value and the differentials of a function.
@@ -71,6 +73,19 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
         this.f2 = f2;
     }
 
+    /** Build an instance from a {@link DerivativeStructure}.
+     * @param ds derivative structure
+     * @exception MathIllegalArgumentException if either {@code ds} parameters
+     * is not 1 or {@code ds} order is not 2
+     */
+    public UnivariateDerivative2(final DerivativeStructure ds) throws MathIllegalArgumentException {
+        MathUtils.checkDimension(ds.getFreeParameters(), 1);
+        MathUtils.checkDimension(ds.getOrder(), 2);
+        this.f0 = ds.getValue();
+        this.f1 = ds.getPartialDerivative(1);
+        this.f2 = ds.getPartialDerivative(2);
+    }
+
     /** {@inheritDoc} */
     @Override
     public UnivariateDerivative2 newInstance(final double value) {
@@ -111,6 +126,12 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
      */
     public double getSecondDerivative() {
         return f2;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public DerivativeStructure toDerivativeStructure() {
+        return getField().getConversionFactory().build(f0, f1, f2);
     }
 
     /** {@inheritDoc} */

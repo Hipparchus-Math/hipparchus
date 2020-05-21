@@ -38,11 +38,15 @@ public class UnivariateDerivative2Field implements Field<UnivariateDerivative2>,
     /** One constant. */
     private final UnivariateDerivative2 one;
 
+    /** Associated factory for conversions to {@link DerivativeStructure}. */
+    private final DSFactory factory;
+
     /** Private constructor for the singleton.
      */
     private UnivariateDerivative2Field() {
-        zero = new UnivariateDerivative2(0.0, 0.0, 0.0);
-        one  = new UnivariateDerivative2(1.0, 0.0, 0.0);
+        zero    = new UnivariateDerivative2(0.0, 0.0, 0.0);
+        one     = new UnivariateDerivative2(1.0, 0.0, 0.0);
+        factory = new DSFactory(1, 2);
     }
 
     /** Get the unique instance.
@@ -62,6 +66,20 @@ public class UnivariateDerivative2Field implements Field<UnivariateDerivative2>,
     @Override
     public UnivariateDerivative2 getZero() {
         return zero;
+    }
+
+    /** Get the factory for converting to {@link DerivativeStructure}.
+     * <p>
+     * This factory is used only for conversions. {@code UnivariateDerivative2} by
+     * itself does not rely at all on {@link DSFactory}, {@link DSCompiler}
+     * or {@link DerivativeStructure} for its computation. For this reason,
+     * the factory here is hidden and this method is package private, so
+     * only {@link UnivariateDerivative2#toDerivativeStructure()} can call it on an
+     * existing {@link UnivariateDerivative2} instance
+     * </p>
+     */
+    DSFactory getConversionFactory() {
+        return factory;
     }
 
     /** {@inheritDoc} */

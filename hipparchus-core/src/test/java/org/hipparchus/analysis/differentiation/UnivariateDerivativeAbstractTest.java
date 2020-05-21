@@ -67,9 +67,9 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
     }
 
     protected void checkAgainstDS(final double x, final FieldUnivariateFunction f) {
-        final T yUD = f.value(build(x));
-        final DerivativeStructure     yDS = f.value(new DSFactory(1, yUD.getOrder()).variable(0, x));
-        Assert.assertEquals(yDS.getOrder(), yUD.getOrder());
+        final T xUD = build(x);
+        final T yUD = f.value(xUD);
+        final DerivativeStructure yDS = f.value(xUD.toDerivativeStructure());
         for (int i = 0; i <= yUD.getOrder(); ++i) {
             Assert.assertEquals(yDS.getPartialDerivative(i),
                                 yUD.getDerivative(i),

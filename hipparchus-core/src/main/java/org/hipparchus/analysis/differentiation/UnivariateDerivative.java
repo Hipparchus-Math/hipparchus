@@ -52,4 +52,9 @@ public abstract class UnivariateDerivative<T extends UnivariateDerivative<T>>
      */
     public abstract int getOrder();
 
+    /** Convert the instance to a {@link DerivativeStructure}.
+     * @return derivative structure with same value and derivative as the instance
+     */
+    public abstract DerivativeStructure toDerivativeStructure();
+
 }
