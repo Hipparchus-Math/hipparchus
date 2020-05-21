@@ -682,13 +682,10 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
                                                    final UnivariateDerivative2 a2, final UnivariateDerivative2 b2) {
         return new UnivariateDerivative2(MathArrays.linearCombination(a1.f0, b1.f0,
                                                                       a2.f0, b2.f0),
-                                         MathArrays.linearCombination(new double[] {
-                                                                          a1.f0, a1.f1,
-                                                                          a2.f0, a2.f1
-                                                                      }, new double[] {
-                                                                          b1.f1, b1.f0,
-                                                                          b2.f1, b2.f0
-                                                                      }),
+                                         MathArrays.linearCombination(a1.f0, b1.f1,
+                                                                      a1.f1, b1.f0,
+                                                                      a2.f0, b2.f1,
+                                                                      a2.f1, b2.f0),
                                          MathArrays.linearCombination(new double[] {
                                                                           a1.f0, 2 * a1.f1, a1.f2,
                                                                           a2.f0, 2 * a2.f1, a2.f2
