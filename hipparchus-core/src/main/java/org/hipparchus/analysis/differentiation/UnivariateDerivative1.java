@@ -16,7 +16,6 @@
  */
 package org.hipparchus.analysis.differentiation;
 
-import org.hipparchus.Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
@@ -342,7 +341,7 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
-    public Field<UnivariateDerivative1> getField() {
+    public UnivariateDerivative1Field getField() {
         return UnivariateDerivative1Field.getInstance();
     }
 
