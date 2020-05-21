@@ -962,7 +962,7 @@ public interface RealMatrix extends AnyMatrix {
      * @return a new matrix.
      * @since 1.7
      */
-    public default RealMatrix map(UnivariateFunction function) {
+    default RealMatrix map(UnivariateFunction function) {
         return copy().mapToSelf(function);
     }
 
@@ -973,7 +973,7 @@ public interface RealMatrix extends AnyMatrix {
      * @return a reference to this matrix.
      * @since 1.7
      */
-    public default RealMatrix mapToSelf(final UnivariateFunction function) {
+    default RealMatrix mapToSelf(final UnivariateFunction function) {
         walkInOptimizedOrder(new RealMatrixChangingVisitor() {
 
             /** {@inheritDoc} */

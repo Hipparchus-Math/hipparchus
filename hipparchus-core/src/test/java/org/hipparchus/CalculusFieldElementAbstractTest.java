@@ -264,6 +264,20 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     }
 
     @Test
+    public void testHypotSpecialCases() {
+        Assert.assertTrue(Double.isNaN(build(Double.NaN).hypot(build(0)).getReal()));
+        Assert.assertTrue(Double.isNaN(build(0).hypot(build(Double.NaN)).getReal()));
+        Assert.assertEquals(Double.POSITIVE_INFINITY, build(Double.POSITIVE_INFINITY).hypot(build(0)).getReal(), 1.0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, build(Double.NEGATIVE_INFINITY).hypot(build(0)).getReal(), 1.0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, build(Double.POSITIVE_INFINITY).hypot(build(Double.NaN)).getReal(), 1.0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, build(Double.NEGATIVE_INFINITY).hypot(build(Double.NaN)).getReal(), 1.0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, build(0).hypot(build(Double.POSITIVE_INFINITY)).getReal(), 1.0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, build(0).hypot(build(Double.NEGATIVE_INFINITY)).getReal(), 1.0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, build(Double.NaN).hypot(build(Double.POSITIVE_INFINITY)).getReal(), 1.0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, build(Double.NaN).hypot(build(Double.NEGATIVE_INFINITY)).getReal(), 1.0);
+    }
+
+    @Test
     public void testRootN() {
         for (double x = -0.9; x < 0.9; x += 0.05) {
             for (int n = 1; n < 5; ++n) {
@@ -293,6 +307,7 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
             for (double y = 0.1; y < 4; y += 0.2) {
                 checkRelative(FastMath.pow(x, y), build(x).pow(y));
             }
+            checkRelative(FastMath.pow(x, 0.0), build(x).pow(0.0));
         }
     }
 

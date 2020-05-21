@@ -168,6 +168,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * @return {@code this + addend}.
      * @see #add(Complex)
      */
+    @Override
     public Complex add(double addend) {
         if (isNaN || Double.isNaN(addend)) {
             return NaN;
@@ -279,6 +280,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * @return {@code this / divisor}.
      * @see #divide(Complex)
      */
+    @Override
     public Complex divide(double divisor) {
         if (isNaN || Double.isNaN(divisor)) {
             return NaN;
@@ -463,6 +465,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      *
      * @return the real part.
      */
+    @Override
     public double getReal() {
         return real;
     }
@@ -474,6 +477,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * @return true if either or both parts of this complex number is
      * {@code NaN}; false otherwise.
      */
+    @Override
     public boolean isNaN() {
         return isNaN;
     }
@@ -487,6 +491,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * @return true if one or both parts of this complex number are infinite
      * and neither part is {@code NaN}.
      */
+    @Override
     public boolean isInfinite() {
         return isInfinite;
     }
@@ -559,6 +564,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * @return {@code this * factor}.
      * @see #multiply(Complex)
      */
+    @Override
     public Complex multiply(double factor) {
         if (isNaN || Double.isNaN(factor)) {
             return NaN;
@@ -624,6 +630,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * @return {@code this - subtrahend}.
      * @see #subtract(Complex)
      */
+    @Override
     public Complex subtract(double subtrahend) {
         if (isNaN || Double.isNaN(subtrahend)) {
             return NaN;
@@ -644,6 +651,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      *
      * @return the inverse cosine of this complex number.
      */
+    @Override
     public Complex acos() {
         if (isNaN) {
             return NaN;
@@ -665,6 +673,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      *
      * @return the inverse sine of this complex number.
      */
+    @Override
     public Complex asin() {
         if (isNaN) {
             return NaN;
@@ -686,6 +695,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      *
      * @return the inverse tangent of this complex number
      */
+    @Override
     public Complex atan() {
         if (isNaN) {
             return NaN;
@@ -723,6 +733,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      *
      * @return the cosine of this complex number.
      */
+    @Override
     public Complex cos() {
         if (isNaN) {
             return NaN;
@@ -762,6 +773,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      *
      * @return the hyperbolic cosine of this complex number.
      */
+    @Override
     public Complex cosh() {
         if (isNaN) {
             return NaN;
@@ -803,6 +815,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      *
      * @return <code><i>e</i><sup>this</sup></code>.
      */
+    @Override
     public Complex exp() {
         if (isNaN) {
             return NaN;
@@ -861,6 +874,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * @return the value <code>ln &nbsp; this</code>, the natural logarithm
      * of {@code this}.
      */
+    @Override
     public Complex log() {
         if (isNaN) {
             return NaN;
@@ -901,6 +915,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * @return <code> this<sup>x</sup></code>.
      * @throws NullArgumentException if x is {@code null}.
      */
+    @Override
     public Complex pow(Complex x)
         throws NullArgumentException {
 
@@ -940,6 +955,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * @param  x exponent to which this {@code Complex} is to be raised.
      * @return <code> this<sup>x</sup></code>.
      */
+    @Override
     public Complex pow(double x) {
 
         final int nx = (int) FastMath.rint(x);
@@ -1020,6 +1036,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      *
      * @return the sine of this complex number.
      */
+    @Override
     public Complex sin() {
         if (isNaN) {
             return NaN;
@@ -1115,6 +1132,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      *
      * @return the hyperbolic sine of {@code this}.
      */
+    @Override
     public Complex sinh() {
         if (isNaN) {
             return NaN;
@@ -1158,6 +1176,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      *
      * @return the square root of {@code this}.
      */
+    @Override
     public Complex sqrt() {
         if (isNaN) {
             return NaN;
@@ -1253,6 +1272,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      *
      * @return the tangent of {@code this}.
      */
+    @Override
     public Complex tan() {
         if (isNaN || Double.isInfinite(real)) {
             return NaN;
@@ -1303,6 +1323,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      *
      * @return the hyperbolic tangent of {@code this}.
      */
+    @Override
     public Complex tanh() {
         if (isNaN || Double.isInfinite(imaginary)) {
             return NaN;
@@ -1486,7 +1507,13 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      */
     @Override
     public Complex hypot(Complex y) {
-        return multiply(this).add(y.multiply(y)).sqrt();
+        if (isInfinite() || y.isInfinite()) {
+            return INF;
+        } else if (isNaN() || y.isNaN()) {
+            return NaN;
+        } else {
+            return multiply(this).add(y.multiply(y)).sqrt();
+        }
     }
 
     /** {@inheritDoc}

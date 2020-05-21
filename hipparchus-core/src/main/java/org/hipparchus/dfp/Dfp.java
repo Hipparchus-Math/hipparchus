@@ -2797,22 +2797,28 @@ public class Dfp implements RealFieldElement<Dfp> {
     @Override
     public Dfp hypot(final Dfp y) {
 
-        // find scaling to avoid both overflow and underflow
-        final int scalingExp = (exp + y.exp) / 2;
+        if (isInfinite() || y.isInfinite()) {
+            return field.newDfp(Double.POSITIVE_INFINITY);
+        } else if (isNaN() || y.isNaN()) {
+            return field.newDfp(Double.NaN);
+        } else {
+            // find scaling to avoid both overflow and underflow
+            final int scalingExp = (exp + y.exp) / 2;
 
-        // scale both operands
-        final Dfp scaledX = new Dfp(this);
-        scaledX.exp -= scalingExp;
-        final Dfp scaledY = new Dfp(y);
-        scaledY.exp -= scalingExp;
+            // scale both operands
+            final Dfp scaledX = new Dfp(this);
+            scaledX.exp -= scalingExp;
+            final Dfp scaledY = new Dfp(y);
+            scaledY.exp -= scalingExp;
 
-        // compute scaled hypothenuse
-        final Dfp h = scaledX.multiply(scaledX).add(scaledY.multiply(scaledY)).sqrt();
+            // compute scaled hypothenuse
+            final Dfp h = scaledX.multiply(scaledX).add(scaledY.multiply(scaledY)).sqrt();
 
-        // scale result
-        h.exp += scalingExp;
+            // scale result
+            h.exp += scalingExp;
 
-        return h;
+            return h;
+        }
 
     }
 

@@ -522,6 +522,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * </p>
      * @return exponent for instance in IEEE754 representation, without bias
      */
+    @Override
     public int getExponent() {
         return FastMath.getExponent(data[0]);
     }

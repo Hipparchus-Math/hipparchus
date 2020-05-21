@@ -849,7 +849,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @return a new matrix.
      * @since 1.7
      */
-    public default FieldMatrix<T> map(Function<T, T> function) {
+    default FieldMatrix<T> map(Function<T, T> function) {
         return copy().mapToSelf(function);
     }
 
@@ -860,7 +860,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @return a reference to this matrix.
      * @since 1.7
      */
-    public default FieldMatrix<T> mapToSelf(final Function<T,T> function) {
+    default FieldMatrix<T> mapToSelf(final Function<T,T> function) {
         walkInOptimizedOrder(new FieldMatrixChangingVisitor<T>() {
 
             /** {@inheritDoc} */
