@@ -424,6 +424,7 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
      * </p>
      * @return exponent for instance in IEEE754 representation, without bias
      */
+    @Override
     public int getExponent() {
         return data[0].getExponent();
     }

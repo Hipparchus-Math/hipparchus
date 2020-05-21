@@ -52,6 +52,7 @@ public class FieldUnivariateDerivative2Field<T extends RealFieldElement<T>> impl
 
     /** Get the univariate derivative field corresponding to a value field.
      * @param valueField field for the function parameters and value
+     * @param <T> the type of the function parameters and value
      * @return univariate derivative field
      */
     public static <T extends RealFieldElement<T>> FieldUnivariateDerivative2Field<T> getUnivariateDerivative2Field(final Field<T> valueField) {
@@ -88,6 +89,7 @@ public class FieldUnivariateDerivative2Field<T extends RealFieldElement<T>> impl
      * only {@link UnivariateDerivative2#toDerivativeStructure()} can call it on an
      * existing {@link UnivariateDerivative2} instance
      * </p>
+     * @return factory for conversions
      */
     FDSFactory<T> getConversionFactory() {
         return factory;

@@ -306,6 +306,7 @@ public class Decimal64 extends Number
      *
      * @return {@code true} if {@code this} number is infinite
      */
+    @Override
     public boolean isInfinite() {
         return Double.isInfinite(value);
     }
@@ -316,6 +317,7 @@ public class Decimal64 extends Number
      *
      * @return {@code true} if {@code this} is {@code NaN}
      */
+    @Override
     public boolean isNaN() {
         return Double.isNaN(value);
     }

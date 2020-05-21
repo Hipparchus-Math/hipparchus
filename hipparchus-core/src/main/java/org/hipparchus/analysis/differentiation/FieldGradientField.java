@@ -56,6 +56,7 @@ public class FieldGradientField<T extends RealFieldElement<T>> implements Field<
     /** Get the field for number of free parameters.
      * @param valueField field for the function parameters and value
      * @param parameters number of free parameters
+     * @param <T> the type of the function parameters and value
      * @return cached field
      */
     public static <T extends RealFieldElement<T>> FieldGradientField<T> getField(final Field<T> valueField, final int parameters) {
@@ -114,6 +115,7 @@ public class FieldGradientField<T extends RealFieldElement<T>> implements Field<
      * only {@link Gradient#toDerivativeStructure()} can call it on an
      * existing {@link Gradient} instance
      * </p>
+     * @return factory for conversions
      */
     FDSFactory<T> getConversionFactory() {
         return factory;

@@ -92,8 +92,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
 
     /** {@inheritDoc} */
     @Override
-    public FieldGradient<T> newInstance(final double value) {
-        return newInstance(getValueField().getZero().newInstance(value));
+    public FieldGradient<T> newInstance(final double c) {
+        return newInstance(getValueField().getZero().newInstance(c));
     }
 
     /** Create an instance corresponding to a constant real value.
@@ -105,11 +105,11 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
      * should therefore be overridden in concrete classes. The default
      * implementation will be removed at the next major version.
      * </p>
-     * @param value constant real value
+     * @param c constant real value
      * @return instance corresponding to a constant real value
      */
-    public FieldGradient<T> newInstance(final T value) {
-        return new FieldGradient<>(value, MathArrays.buildArray(value.getField(), gradient.length));
+    public FieldGradient<T> newInstance(final T c) {
+        return new FieldGradient<>(c, MathArrays.buildArray(value.getField(), gradient.length));
     }
 
     /** {@inheritDoc} */
@@ -457,6 +457,7 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
     /** Compute a<sup>x</sup> where a is a double and x a {@link FieldGradient}
      * @param a number to exponentiate
      * @param x power to apply
+     * @param <T> the type of the function parameters and value
      * @return a<sup>x</sup>
      */
     public static <T extends RealFieldElement<T>> FieldGradient<T> pow(final double a, final FieldGradient<T> x) {

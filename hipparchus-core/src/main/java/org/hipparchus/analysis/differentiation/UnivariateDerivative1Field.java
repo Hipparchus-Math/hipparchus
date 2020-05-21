@@ -77,6 +77,7 @@ public class UnivariateDerivative1Field implements Field<UnivariateDerivative1>,
      * only {@link UnivariateDerivative1#toDerivativeStructure()} can call it on an
      * existing {@link UnivariateDerivative1} instance
      * </p>
+     * @return factory for conversions
      */
     DSFactory getConversionFactory() {
         return factory;

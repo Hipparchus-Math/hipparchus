@@ -398,6 +398,7 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
     /** Compute a<sup>x</sup> where a is a double and x a {@link FieldUnivariateDerivative1}
      * @param a number to exponentiate
      * @param x power to apply
+     * @param <T> the type of the function parameters and value
      * @return a<sup>x</sup>
      */
     public static <T extends RealFieldElement<T>> FieldUnivariateDerivative1<T> pow(final double a, final FieldUnivariateDerivative1<T> x) {

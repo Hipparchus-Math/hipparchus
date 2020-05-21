@@ -107,6 +107,7 @@ public class GradientField implements Field<Gradient> {
      * only {@link Gradient#toDerivativeStructure()} can call it on an
      * existing {@link Gradient} instance
      * </p>
+     * @return factory for conversions
      */
     DSFactory getConversionFactory() {
         return factory;

@@ -61,15 +61,15 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
     private final double value;
 
     /** Gradient of the function. */
-    private final double[] gradient;
+    private final double[] grad;
 
     /** Build an instance with values and derivative.
      * @param value value of the function
      * @param gradient gradient of the function
      */
     public Gradient(final double value, final double... gradient) {
-        this.value    = value;
-        this.gradient = gradient.clone();
+        this.value = value;
+        this.grad  = gradient.clone();
     }
 
     /** Build an instance from a {@link DerivativeStructure}.
@@ -81,14 +81,14 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
         MathUtils.checkDimension(ds.getOrder(), 1);
         final double[] derivatives = ds.getAllDerivatives();
         this.value    = derivatives[0];
-        this.gradient = new double[derivatives.length - 1];
-        System.arraycopy(derivatives, 1, gradient, 0, gradient.length);
+        this.grad = new double[derivatives.length - 1];
+        System.arraycopy(derivatives, 1, grad, 0, grad.length);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Gradient newInstance(final double value) {
-        return new Gradient(value, new double[gradient.length]);
+    public Gradient newInstance(final double c) {
+        return new Gradient(c, new double[grad.length]);
     }
 
     /** {@inheritDoc} */
@@ -108,14 +108,14 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
      * @return gradient part of the value of the function
      */
     public double[] getGradient() {
-        return gradient.clone();
+        return grad.clone();
     }
 
     /** Get the number of free parameters.
      * @return number of free parameters
      */
     public int getFreeParameters() {
-        return gradient.length;
+        return grad.length;
     }
 
     /** Get the partial derivative with respect to one parameter.
@@ -125,34 +125,34 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
      * or equal to {@link #getFreeParameters()}
      */
     public double getPartialDerivative(final int n) throws MathIllegalArgumentException {
-        if (n < 0 || n >= gradient.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, n, 0, gradient.length - 1);
+        if (n < 0 || n >= grad.length) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, n, 0, grad.length - 1);
         }
-        return gradient[n];
+        return grad[n];
     }
 
     /** Convert the instance to a {@link DerivativeStructure}.
      * @return derivative structure with same value and derivative as the instance
      */
     public DerivativeStructure toDerivativeStructure() {
-        final double[] derivatives = new double[1 + gradient.length];
+        final double[] derivatives = new double[1 + grad.length];
         derivatives[0] = value;
-        System.arraycopy(gradient, 0, derivatives, 1, gradient.length);
+        System.arraycopy(grad, 0, derivatives, 1, grad.length);
         return getField().getConversionFactory().build(derivatives);
     }
 
     /** {@inheritDoc} */
     @Override
     public Gradient add(final double a) {
-        return new Gradient(value + a, gradient);
+        return new Gradient(value + a, grad);
     }
 
     /** {@inheritDoc} */
     @Override
     public Gradient add(final Gradient a) {
         final Gradient result = newInstance(value + a.value);
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = gradient[i] + a.gradient[i];
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i] + a.grad[i];
         }
         return result;
     }
@@ -160,15 +160,15 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
     /** {@inheritDoc} */
     @Override
     public Gradient subtract(final double a) {
-        return new Gradient(value - a, gradient);
+        return new Gradient(value - a, grad);
     }
 
     /** {@inheritDoc} */
     @Override
     public Gradient subtract(final Gradient a) {
         final Gradient result = newInstance(value - a.value);
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = gradient[i] - a.gradient[i];
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i] - a.grad[i];
         }
         return result;
     }
@@ -177,8 +177,8 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
     @Override
     public Gradient multiply(final int n) {
         final Gradient result = newInstance(value * n);
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = gradient[i] * n;
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i] * n;
         }
         return result;
     }
@@ -187,8 +187,8 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
     @Override
     public Gradient multiply(final double a) {
         final Gradient result = newInstance(value * a);
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = gradient[i] * a;
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i] * a;
         }
         return result;
     }
@@ -197,8 +197,8 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
     @Override
     public Gradient multiply(final Gradient a) {
         final Gradient result = newInstance(value * a.value);
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = MathArrays.linearCombination(gradient[i], a.value, value, a.gradient[i]);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = MathArrays.linearCombination(grad[i], a.value, value, a.grad[i]);
         }
         return result;
     }
@@ -207,8 +207,8 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
     @Override
     public Gradient divide(final double a) {
         final Gradient result = newInstance(value / a);
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = gradient[i] / a;
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i] / a;
         }
         return result;
     }
@@ -219,8 +219,8 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
         final double inv1 = 1.0 / a.value;
         final double inv2 = inv1 * inv1;
         final Gradient result = newInstance(value * inv1);
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = MathArrays.linearCombination(gradient[i], a.value, -value, a.gradient[i]) * inv2;
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = MathArrays.linearCombination(grad[i], a.value, -value, a.grad[i]) * inv2;
         }
         return result;
     }
@@ -228,7 +228,7 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
     /** {@inheritDoc} */
     @Override
     public Gradient remainder(final double a) {
-        return new Gradient(FastMath.IEEEremainder(value, a), gradient);
+        return new Gradient(FastMath.IEEEremainder(value, a), grad);
     }
 
     /** {@inheritDoc} */
@@ -240,8 +240,8 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
         final double k   = FastMath.rint((value - rem) / a.value);
 
         final Gradient result = newInstance(rem);
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = gradient[i] - k * a.gradient[i];
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i] - k * a.grad[i];
         }
         return result;
 
@@ -251,8 +251,8 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
     @Override
     public Gradient negate() {
         final Gradient result = newInstance(-value);
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = -gradient[i];
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = -grad[i];
         }
         return result;
     }
@@ -330,8 +330,8 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
     @Override
     public Gradient scalb(final int n) {
         final Gradient result = newInstance(FastMath.scalb(value, n));
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = FastMath.scalb(gradient[i], n);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = FastMath.scalb(grad[i], n);
         }
         return result;
     }
@@ -381,8 +381,8 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
         final double inv1 = 1.0 / value;
         final double inv2 = inv1 * inv1;
         final Gradient result = newInstance(inv1);
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = -gradient[i] * inv2;
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = -grad[i] * inv2;
         }
         return result;
     }
@@ -394,8 +394,8 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
      */
     public Gradient compose(final double g0, final double g1) {
         final Gradient result = newInstance(g0);
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = g1 * gradient[i];
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = g1 * grad[i];
         }
         return result;
     }
@@ -445,8 +445,8 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
             final double aX = FastMath.pow(a, x.value);
             final double aXlnA = aX * FastMath.log(a);
             final Gradient result = x.newInstance(aX);
-            for (int i = 0; i < x.gradient.length; ++i) {
-                result.gradient[i] =  aXlnA * x.gradient[i];
+            for (int i = 0; i < x.grad.length; ++i) {
+                result.grad[i] =  aXlnA * x.grad[i];
             }
             return result;
         }
@@ -533,9 +533,9 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
         final SinCos sinCos = FastMath.sinCos(value);
         final Gradient sin = newInstance(sinCos.sin());
         final Gradient cos = newInstance(sinCos.cos());
-        for (int i = 0; i < gradient.length; ++i) {
-            sin.gradient[i] =  +gradient[i] * sinCos.cos();
-            cos.gradient[i] =  -gradient[i] * sinCos.sin();
+        for (int i = 0; i < grad.length; ++i) {
+            sin.grad[i] =  +grad[i] * sinCos.cos();
+            cos.grad[i] =  -grad[i] * sinCos.sin();
         }
         return new FieldSinCos<>(sin, cos);
     }
@@ -570,8 +570,8 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
     public Gradient atan2(final Gradient x) {
         final double inv = 1.0 / (value * value + x.value * x.value);
         final Gradient result = newInstance(FastMath.atan2(value, x.value));
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = MathArrays.linearCombination(x.value, gradient[i], -x.gradient[i], value) * inv;
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = MathArrays.linearCombination(x.value, grad[i], -x.grad[i], value) * inv;
         }
         return result;
     }
@@ -617,8 +617,8 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
     @Override
     public Gradient toDegrees() {
         final Gradient result = newInstance(FastMath.toDegrees(value));
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = FastMath.toDegrees(gradient[i]);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = FastMath.toDegrees(grad[i]);
         }
         return result;
     }
@@ -627,8 +627,8 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
     @Override
     public Gradient toRadians() {
         final Gradient result = newInstance(FastMath.toRadians(value));
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = FastMath.toRadians(gradient[i]);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = FastMath.toRadians(grad[i]);
         }
         return result;
     }
@@ -639,8 +639,8 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
      */
     public double taylor(final double... delta) {
         double result = value;
-        for (int i = 0; i < gradient.length; ++i) {
-            result += delta[i] * gradient[i];
+        for (int i = 0; i < grad.length; ++i) {
+            result += delta[i] * grad[i];
         }
         return result;
     }
@@ -665,12 +665,12 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
         }
 
         final Gradient result = newInstance(MathArrays.linearCombination(a0, b0));
-        for (int k = 0; k < gradient.length; ++k) {
+        for (int k = 0; k < grad.length; ++k) {
             for (int i = 0; i < n; ++i) {
-                a1[2 * i + 1] = a[i].gradient[k];
-                b1[2 * i]     = b[i].gradient[k];
+                a1[2 * i + 1] = a[i].grad[k];
+                b1[2 * i]     = b[i].grad[k];
             }
-            result.gradient[k] = MathArrays.linearCombination(a1, b1);
+            result.grad[k] = MathArrays.linearCombination(a1, b1);
         }
         return result;
 
@@ -689,11 +689,11 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
         }
 
         final Gradient result = newInstance(MathArrays.linearCombination(a, b0));
-        for (int k = 0; k < gradient.length; ++k) {
+        for (int k = 0; k < grad.length; ++k) {
             for (int i = 0; i < n; ++i) {
-                b1[i] = b[i].gradient[k];
+                b1[i] = b[i].grad[k];
             }
-            result.gradient[k] = MathArrays.linearCombination(a, b1);
+            result.grad[k] = MathArrays.linearCombination(a, b1);
         }
         return result;
 
@@ -705,11 +705,11 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
                                       final Gradient a2, final Gradient b2) {
         final Gradient result = newInstance(MathArrays.linearCombination(a1.value, b1.value,
                                                                          a2.value, b2.value));
-        for (int i = 0; i < b1.gradient.length; ++i) {
-            result.gradient[i] = MathArrays.linearCombination(a1.value,       b1.gradient[i],
-                                                              a1.gradient[i], b1.value,
-                                                              a2.value,       b2.gradient[i],
-                                                              a2.gradient[i], b2.value);
+        for (int i = 0; i < b1.grad.length; ++i) {
+            result.grad[i] = MathArrays.linearCombination(a1.value,       b1.grad[i],
+                                                              a1.grad[i], b1.value,
+                                                              a2.value,       b2.grad[i],
+                                                              a2.grad[i], b2.value);
         }
         return result;
     }
@@ -720,9 +720,9 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
                                                    final double a2, final Gradient b2) {
         final Gradient result = newInstance(MathArrays.linearCombination(a1, b1.value,
                                                                          a2, b2.value));
-        for (int i = 0; i < b1.gradient.length; ++i) {
-            result.gradient[i] = MathArrays.linearCombination(a1, b1.gradient[i],
-                                                              a2, b2.gradient[i]);
+        for (int i = 0; i < b1.grad.length; ++i) {
+            result.grad[i] = MathArrays.linearCombination(a1, b1.grad[i],
+                                                              a2, b2.grad[i]);
         }
         return result;
     }
@@ -741,14 +741,14 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
         final Gradient result = newInstance(MathArrays.linearCombination(a1.value, b1.value,
                                                                          a2.value, b2.value,
                                                                          a3.value, b3.value));
-        for (int i = 0; i < b1.gradient.length; ++i) {
-            a[1] = a1.gradient[i];
-            a[3] = a2.gradient[i];
-            a[5] = a3.gradient[i];
-            b[0] = b1.gradient[i];
-            b[2] = b2.gradient[i];
-            b[4] = b3.gradient[i];
-            result.gradient[i] = MathArrays.linearCombination(a, b);
+        for (int i = 0; i < b1.grad.length; ++i) {
+            a[1] = a1.grad[i];
+            a[3] = a2.grad[i];
+            a[5] = a3.grad[i];
+            b[0] = b1.grad[i];
+            b[2] = b2.grad[i];
+            b[4] = b3.grad[i];
+            result.grad[i] = MathArrays.linearCombination(a, b);
         }
         return result;
     }
@@ -761,10 +761,10 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
         final Gradient result = newInstance(MathArrays.linearCombination(a1, b1.value,
                                                                          a2, b2.value,
                                                                          a3, b3.value));
-        for (int i = 0; i < b1.gradient.length; ++i) {
-            result.gradient[i] = MathArrays.linearCombination(a1, b1.gradient[i],
-                                                              a2, b2.gradient[i],
-                                                              a3, b3.gradient[i]);
+        for (int i = 0; i < b1.grad.length; ++i) {
+            result.grad[i] = MathArrays.linearCombination(a1, b1.grad[i],
+                                                              a2, b2.grad[i],
+                                                              a3, b3.grad[i]);
         }
         return result;
     }
@@ -785,16 +785,16 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
                                                                          a2.value, b2.value,
                                                                          a3.value, b3.value,
                                                                          a4.value, b4.value));
-        for (int i = 0; i < b1.gradient.length; ++i) {
-            a[1] = a1.gradient[i];
-            a[3] = a2.gradient[i];
-            a[5] = a3.gradient[i];
-            a[7] = a4.gradient[i];
-            b[0] = b1.gradient[i];
-            b[2] = b2.gradient[i];
-            b[4] = b3.gradient[i];
-            b[6] = b4.gradient[i];
-            result.gradient[i] = MathArrays.linearCombination(a, b);
+        for (int i = 0; i < b1.grad.length; ++i) {
+            a[1] = a1.grad[i];
+            a[3] = a2.grad[i];
+            a[5] = a3.grad[i];
+            a[7] = a4.grad[i];
+            b[0] = b1.grad[i];
+            b[2] = b2.grad[i];
+            b[4] = b3.grad[i];
+            b[6] = b4.grad[i];
+            result.grad[i] = MathArrays.linearCombination(a, b);
         }
         return result;
     }
@@ -809,11 +809,11 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
                                                                          a2, b2.value,
                                                                          a3, b3.value,
                                                                          a4, b4.value));
-        for (int i = 0; i < b1.gradient.length; ++i) {
-            result.gradient[i] = MathArrays.linearCombination(a1, b1.gradient[i],
-                                                              a2, b2.gradient[i],
-                                                              a3, b3.gradient[i],
-                                                              a4, b4.gradient[i]);
+        for (int i = 0; i < b1.grad.length; ++i) {
+            result.grad[i] = MathArrays.linearCombination(a1, b1.grad[i],
+                                                              a2, b2.grad[i],
+                                                              a3, b3.grad[i],
+                                                              a4, b4.grad[i]);
         }
         return result;
     }
@@ -834,7 +834,7 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
 
         if (other instanceof Gradient) {
             final Gradient rhs = (Gradient) other;
-            return value == rhs.value && MathArrays.equals(gradient, rhs.gradient);
+            return value == rhs.value && MathArrays.equals(grad, rhs.grad);
         }
 
         return false;
@@ -846,7 +846,7 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
      */
     @Override
     public int hashCode() {
-        return 129 + 7 * Double.hashCode(value) - 15 * Arrays.hashCode(gradient);
+        return 129 + 7 * Double.hashCode(value) - 15 * Arrays.hashCode(grad);
     }
 
 }

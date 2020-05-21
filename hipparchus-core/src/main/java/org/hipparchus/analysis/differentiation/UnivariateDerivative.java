@@ -22,6 +22,7 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** Abstract class representing both the value and the differentials of a function.
+ * @param <T> the type of the function derivative
  * @since 1.7
  */
 public abstract class UnivariateDerivative<T extends UnivariateDerivative<T>>
