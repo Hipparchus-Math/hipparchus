@@ -19,6 +19,7 @@ package org.hipparchus.analysis.differentiation;
 import java.io.Serializable;
 
 import org.hipparchus.RealFieldElement;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** Abstract class representing both the value and the differentials of a function.
  * @since 1.7
@@ -42,10 +43,11 @@ public abstract class UnivariateDerivative<T extends UnivariateDerivative<T>>
 
     /** Get a derivative from the univariate derivative.
      * @param n derivation order (must be between 0 and {@link #getOrder()}, both inclusive)
-     * @return n<sup>th</sup> derivative, or {@code Double.NaN} if n is
+     * @return n<sup>th</sup> derivative
+     * @exception MathIllegalArgumentException if n is
      * either negative or strictly larger than {@link #getOrder()}
      */
-    public abstract double getDerivative(int n);
+    public abstract double getDerivative(int n) throws MathIllegalArgumentException;
 
     /** Get the derivation order.
      * @return derivation order

@@ -52,8 +52,18 @@ public class GradientTest extends RealFieldElementAbstractTest<Gradient> {
         Assert.assertEquals(10.0, g.getPartialDerivative(1), 1.0e-15);
         Assert.assertEquals(-1.0, g.getPartialDerivative(2), 1.0e-15);
         Assert.assertEquals(3, g.getFreeParameters());
-        Assert.assertTrue(Double.isNaN(g.getPartialDerivative(-1)));
-        Assert.assertTrue(Double.isNaN(g.getPartialDerivative(+3)));
+        try {
+            g.getPartialDerivative(-1);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
+        }
+        try {
+            g.getPartialDerivative(+3);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
+        }
     }
 
     @Test

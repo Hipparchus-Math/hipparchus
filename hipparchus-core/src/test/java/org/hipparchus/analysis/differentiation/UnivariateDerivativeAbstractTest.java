@@ -20,6 +20,8 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.RealFieldElementAbstractTest;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.FieldUnivariateFunction;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
@@ -56,14 +58,24 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
     public void testGetDerivative() {
         T x  = build(3.0);
         T ud = x.multiply(x);
-        Assert.assertTrue(Double.isNaN(ud.getDerivative(-1)));
+        try {
+            ud.getDerivative(-1);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
+        }
         Assert.assertEquals(9.0, ud.getValue(), 1.0e-15);
         Assert.assertEquals(9.0, ud.getDerivative(0), 1.0e-15);
         Assert.assertEquals(6.0, ud.getDerivative(1), 1.0e-15);
         for (int n = 2; n <= getMaxOrder(); ++n) {
             Assert.assertEquals(n == 2 ? 2.0 : 0.0, ud.getDerivative(n), 1.0e-15);
         }
-        Assert.assertTrue(Double.isNaN(ud.getDerivative(getMaxOrder() + 1)));
+        try {
+            ud.getDerivative(getMaxOrder() + 1);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
+        }
     }
 
     protected void checkAgainstDS(final double x, final FieldUnivariateFunction f) {

@@ -16,6 +16,7 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
@@ -101,7 +102,16 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
     /** {@inheritDoc} */
     @Override
     public double getDerivative(final int n) {
-        return (n == 0) ? f0 : ((n == 1) ? f1 : ((n == 2) ? f2 : Double.NaN));
+        switch (n) {
+            case 0 :
+                return f0;
+            case 1 :
+                return f1;
+            case 2 :
+                return f2;
+            default :
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, n, 0, 2);
+        }
     }
 
     /** {@inheritDoc} */

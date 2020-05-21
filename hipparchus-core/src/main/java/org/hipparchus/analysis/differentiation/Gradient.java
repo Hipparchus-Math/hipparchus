@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 import org.hipparchus.RealFieldElement;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
@@ -120,10 +121,14 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
     /** Get the partial derivative with respect to one parameter.
      * @param n index of the parameter (counting from 0)
      * @return partial derivative with respect to the n<sup>th</sup> parameter
-     * or {@code Double.NaN} if n is either negative or larger or equal to {@link #getFreeParameters()}
+     * @exception MathIllegalArgumentException if n is either negative or larger
+     * or equal to {@link #getFreeParameters()}
      */
-    public double getPartialDerivative(final int n) {
-        return (n >= 0) && (n < gradient.length) ? gradient[n] : Double.NaN;
+    public double getPartialDerivative(final int n) throws MathIllegalArgumentException {
+        if (n < 0 || n >= gradient.length) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, n, 0, gradient.length - 1);
+        }
+        return gradient[n];
     }
 
     /** Convert the instance to a {@link DerivativeStructure}.
