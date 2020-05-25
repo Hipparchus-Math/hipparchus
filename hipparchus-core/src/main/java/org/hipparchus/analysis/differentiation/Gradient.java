@@ -63,13 +63,22 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
     /** Gradient of the function. */
     private final double[] grad;
 
+    /** Build an instance with values and unitialized derivatives array.
+     * @param value value of the function
+     * @param freeParameters number of free parameters
+     */
+    private Gradient(final double value, int freeParameters) {
+        this.value = value;
+        this.grad  = new double[freeParameters];
+    }
+
     /** Build an instance with values and derivative.
      * @param value value of the function
      * @param gradient gradient of the function
      */
     public Gradient(final double value, final double... gradient) {
-        this.value = value;
-        this.grad  = gradient.clone();
+        this(value, gradient.length);
+        System.arraycopy(gradient, 0, grad, 0, grad.length);
     }
 
     /** Build an instance from a {@link DerivativeStructure}.
@@ -78,11 +87,35 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
      * is not 1
      */
     public Gradient(final DerivativeStructure ds) throws MathIllegalArgumentException {
+        this(ds.getValue(), ds.getFreeParameters());
         MathUtils.checkDimension(ds.getOrder(), 1);
-        final double[] derivatives = ds.getAllDerivatives();
-        this.value    = derivatives[0];
-        this.grad = new double[derivatives.length - 1];
-        System.arraycopy(derivatives, 1, grad, 0, grad.length);
+        System.arraycopy(ds.getAllDerivatives(), 1, grad, 0, grad.length);
+    }
+
+    /** Build an instance corresponding to a constant value.
+     * @param freeParameters number of free parameters (i.e. dimension of the gradient)
+     * @param value constant value of the function
+     * @return a {@code Gradient} with a constant value and all derivatives set to 0.0
+     */
+    public static Gradient constant(final int freeParameters, final double value) {
+        return new Gradient(value, freeParameters);
+    }
+
+    /** Build a {@code Gradient} representing a variable.
+     * <p>Instances built using this method are considered
+     * to be the free variables with respect to which differentials
+     * are computed. As such, their differential with respect to
+     * themselves is +1.</p>
+     * @param freeParameters number of free parameters (i.e. dimension of the gradient)
+     * @param index index of the variable (from 0 to {@link #getFreeParameters() getFreeParameters()} - 1)
+     * @param value value of the variable
+     * @return a {@code Gradient} with a constant value and all derivatives set to 0.0 except the
+     * one at {@code index} which will be set to 1.0
+     */
+    public static Gradient variable(final int freeParameters, final int index, final double value) {
+        final Gradient g = new Gradient(value, freeParameters);
+        g.grad[index] = 1.0;
+        return g;
     }
 
     /** {@inheritDoc} */
@@ -106,6 +139,7 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
 
     /** Get the gradient part of the function.
      * @return gradient part of the value of the function
+     * @see #getPartialDerivative(int)
      */
     public double[] getGradient() {
         return grad.clone();

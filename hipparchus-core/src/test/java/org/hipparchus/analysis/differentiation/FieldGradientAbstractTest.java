@@ -77,6 +77,28 @@ public abstract class FieldGradientAbstractTest<T extends RealFieldElement<T>>
     }
 
     @Test
+    public void testConstant() {
+        FieldGradient<T> g = FieldGradient.constant(5, getValueField().getZero().newInstance(-4.5));
+        Assert.assertEquals(5, g.getFreeParameters());
+        Assert.assertEquals(getValueField(), g.getValue().getField());
+        Assert.assertEquals(-4.5, g.getValue().getReal(), 1.0e-15);
+        for (int i = 0 ; i < g.getFreeParameters(); ++i) {
+            Assert.assertEquals(0.0, g.getPartialDerivative(i).getReal(), 1.0e-15);
+        }
+    }
+
+    @Test
+    public void testVariable() {
+        FieldGradient<T> g = FieldGradient.variable(5, 1, getValueField().getZero().newInstance(-4.5));
+        Assert.assertEquals(5, g.getFreeParameters());
+        Assert.assertEquals(getValueField(), g.getValue().getField());
+        Assert.assertEquals(-4.5, g.getValue().getReal(), 1.0e-15);
+        for (int i = 0 ; i < g.getFreeParameters(); ++i) {
+            Assert.assertEquals(i == 1 ? 1.0 : 0.0, g.getPartialDerivative(i).getReal(), 1.0e-15);
+        }
+    }
+
+    @Test
     public void testDoublePow() {
         Assert.assertSame(build(3).getField().getZero(), FieldGradient.pow(0.0, build(1.5)));
         FieldGradient<T> g = FieldGradient.pow(2.0, build(1.5));

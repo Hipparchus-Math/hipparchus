@@ -67,6 +67,26 @@ public class GradientTest extends RealFieldElementAbstractTest<Gradient> {
     }
 
     @Test
+    public void testConstant() {
+        Gradient g = Gradient.constant(5, -4.5);
+        Assert.assertEquals(5, g.getFreeParameters());
+        Assert.assertEquals(-4.5, g.getValue(), 1.0e-15);
+        for (int i = 0 ; i < g.getFreeParameters(); ++i) {
+            Assert.assertEquals(0.0, g.getPartialDerivative(i), 1.0e-15);
+        }
+    }
+
+    @Test
+    public void testVariable() {
+        Gradient g = Gradient.variable(5, 1, -4.5);
+        Assert.assertEquals(5, g.getFreeParameters());
+        Assert.assertEquals(-4.5, g.getValue(), 1.0e-15);
+        for (int i = 0 ; i < g.getFreeParameters(); ++i) {
+            Assert.assertEquals(i == 1 ? 1.0 : 0.0, g.getPartialDerivative(i), 1.0e-15);
+        }
+    }
+
+    @Test
     public void testDoublePow() {
         Assert.assertSame(build(3).getField().getZero(), Gradient.pow(0.0, build(1.5)));
         Gradient g = Gradient.pow(2.0, build(1.5));

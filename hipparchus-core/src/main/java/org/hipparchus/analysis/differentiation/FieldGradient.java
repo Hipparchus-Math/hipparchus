@@ -58,7 +58,16 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
     private final T value;
 
     /** Gradient of the function. */
-    private final T[] gradient;
+    private final T[] grad;
+
+    /** Build an instance with values and unitialized derivatives array.
+     * @param value value of the function
+     * @param freeParameters number of free parameters
+     */
+    private FieldGradient(final T value, int freeParameters) {
+        this.value = value;
+        this.grad  = MathArrays.buildArray(value.getField(), freeParameters);
+    }
 
     /** Build an instance with values and derivative.
      * @param value value of the function
@@ -66,8 +75,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
      */
     @SafeVarargs
     public FieldGradient(final T value, final T... gradient) {
-        this.value    = value;
-        this.gradient = gradient.clone();
+        this(value, gradient.length);
+        System.arraycopy(gradient, 0, grad, 0, grad.length);
     }
 
     /** Build an instance from a {@link DerivativeStructure}.
@@ -76,11 +85,42 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
      * is not 1
      */
     public FieldGradient(final FieldDerivativeStructure<T> ds) throws MathIllegalArgumentException {
+        this(ds.getValue(), ds.getFreeParameters());
         MathUtils.checkDimension(ds.getOrder(), 1);
-        final T[] derivatives = ds.getAllDerivatives();
-        this.value    = derivatives[0];
-        this.gradient = MathArrays.buildArray(derivatives[0].getField(), derivatives.length - 1);
-        System.arraycopy(derivatives, 1, gradient, 0, gradient.length);
+        System.arraycopy(ds.getAllDerivatives(), 1, grad, 0, grad.length);
+    }
+
+    /** Build an instance corresponding to a constant value.
+     * @param freeParameters number of free parameters (i.e. dimension of the gradient)
+     * @param value constant value of the function
+     * @param <T> the type of the function parameters and value
+     * @return a {@code FieldGradient} with a constant value and all derivatives set to 0.0
+     */
+    public static <T extends RealFieldElement<T>> FieldGradient<T> constant(final int freeParameters, final T value) {
+        final FieldGradient<T> g = new FieldGradient<>(value, freeParameters);
+        Arrays.fill(g.grad, value.getField().getZero());
+        return g;
+    }
+
+    /** Build a {@code Gradient} representing a variable.
+     * <p>Instances built using this method are considered
+     * to be the free variables with respect to which differentials
+     * are computed. As such, their differential with respect to
+     * themselves is +1.</p>
+     * @param freeParameters number of free parameters (i.e. dimension of the gradient)
+     * @param index index of the variable (from 0 to {@link #getFreeParameters() getFreeParameters()} - 1)
+     * @param value value of the variable
+     * @param <T> the type of the function parameters and value
+     * @return a {@code FieldGradient} with a constant value and all derivatives set to 0.0 except the
+     * one at {@code index} which will be set to 1.0
+     */
+    public static <T extends RealFieldElement<T>> FieldGradient<T> variable(final int freeParameters,
+                                                                            final int index, final T value) {
+        final FieldGradient<T> g = new FieldGradient<>(value, freeParameters);
+        final Field<T> field = value.getField();
+        Arrays.fill(g.grad, field.getZero());
+        g.grad[index] = field.getOne();
+        return g;
     }
 
     /** Get the {@link Field} the value and parameters of the function belongs to.
@@ -109,7 +149,7 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
      * @return instance corresponding to a constant real value
      */
     public FieldGradient<T> newInstance(final T c) {
-        return new FieldGradient<>(c, MathArrays.buildArray(value.getField(), gradient.length));
+        return new FieldGradient<>(c, MathArrays.buildArray(value.getField(), grad.length));
     }
 
     /** {@inheritDoc} */
@@ -129,14 +169,14 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
      * @return gradient part of the value of the function
      */
     public T[] getGradient() {
-        return gradient.clone();
+        return grad.clone();
     }
 
     /** Get the number of free parameters.
      * @return number of free parameters
      */
     public int getFreeParameters() {
-        return gradient.length;
+        return grad.length;
     }
 
     /** Get the partial derivative with respect to one parameter.
@@ -146,34 +186,34 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
      * or equal to {@link #getFreeParameters()}
      */
     public T getPartialDerivative(final int n) throws MathIllegalArgumentException {
-        if (n < 0 || n >= gradient.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, n, 0, gradient.length - 1);
+        if (n < 0 || n >= grad.length) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, n, 0, grad.length - 1);
         }
-        return gradient[n];
+        return grad[n];
     }
 
     /** Convert the instance to a {@link FieldDerivativeStructure}.
      * @return derivative structure with same value and derivative as the instance
      */
     public FieldDerivativeStructure<T> toDerivativeStructure() {
-        final T[] derivatives = MathArrays.buildArray(getValueField(), 1 + gradient.length);
+        final T[] derivatives = MathArrays.buildArray(getValueField(), 1 + grad.length);
         derivatives[0] = value;
-        System.arraycopy(gradient, 0, derivatives, 1, gradient.length);
+        System.arraycopy(grad, 0, derivatives, 1, grad.length);
         return getField().getConversionFactory().build(derivatives);
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> add(final double a) {
-        return new FieldGradient<>(value.add(a), gradient);
+        return new FieldGradient<>(value.add(a), grad);
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> add(final FieldGradient<T> a) {
         final FieldGradient<T> result = newInstance(value.add(a.value));
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = gradient[i].add(a.gradient[i]);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i].add(a.grad[i]);
         }
         return result;
     }
@@ -181,15 +221,15 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> subtract(final double a) {
-        return new FieldGradient<>(value.subtract(a), gradient);
+        return new FieldGradient<>(value.subtract(a), grad);
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> subtract(final FieldGradient<T> a) {
         final FieldGradient<T> result = newInstance(value.subtract(a.value));
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = gradient[i].subtract(a.gradient[i]);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i].subtract(a.grad[i]);
         }
         return result;
     }
@@ -198,8 +238,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
     @Override
     public FieldGradient<T> multiply(final int n) {
         final FieldGradient<T> result = newInstance(value.multiply(n));
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = gradient[i].multiply(n);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i].multiply(n);
         }
         return result;
     }
@@ -208,8 +248,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
     @Override
     public FieldGradient<T> multiply(final double a) {
         final FieldGradient<T> result = newInstance(value.multiply(a));
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = gradient[i].multiply(a);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i].multiply(a);
         }
         return result;
     }
@@ -218,8 +258,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
     @Override
     public FieldGradient<T> multiply(final FieldGradient<T> a) {
         final FieldGradient<T> result = newInstance(value.multiply(a.value));
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = value.linearCombination(gradient[i], a.value, value, a.gradient[i]);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = value.linearCombination(grad[i], a.value, value, a.grad[i]);
         }
         return result;
     }
@@ -228,8 +268,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
     @Override
     public FieldGradient<T> divide(final double a) {
         final FieldGradient<T> result = newInstance(value.divide(a));
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = gradient[i].divide(a);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i].divide(a);
         }
         return result;
     }
@@ -240,8 +280,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         final T inv1 = a.value.reciprocal();
         final T inv2 = inv1.multiply(inv1);
         final FieldGradient<T> result = newInstance(value.multiply(inv1));
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = value.linearCombination(gradient[i], a.value, value.negate(), a.gradient[i]).multiply(inv2);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = value.linearCombination(grad[i], a.value, value.negate(), a.grad[i]).multiply(inv2);
         }
         return result;
     }
@@ -249,7 +289,7 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> remainder(final double a) {
-        return new FieldGradient<>(FastMath.IEEEremainder(value, a), gradient);
+        return new FieldGradient<>(FastMath.IEEEremainder(value, a), grad);
     }
 
     /** {@inheritDoc} */
@@ -261,8 +301,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         final T k   = FastMath.rint(value.subtract(rem).divide(a.value));
 
         final FieldGradient<T> result = newInstance(rem);
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = gradient[i].subtract(k.multiply(a.gradient[i]));
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i].subtract(k.multiply(a.grad[i]));
         }
         return result;
 
@@ -272,8 +312,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
     @Override
     public FieldGradient<T> negate() {
         final FieldGradient<T> result = newInstance(value.negate());
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = gradient[i].negate();
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i].negate();
         }
         return result;
     }
@@ -351,8 +391,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
     @Override
     public FieldGradient<T> scalb(final int n) {
         final FieldGradient<T> result = newInstance(FastMath.scalb(value, n));
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = FastMath.scalb(gradient[i], n);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = FastMath.scalb(grad[i], n);
         }
         return result;
     }
@@ -402,8 +442,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         final T inv1  = value.reciprocal();
         final T mInv2 = inv1.multiply(inv1).negate();
         final FieldGradient<T> result = newInstance(inv1);
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = gradient[i].multiply(mInv2);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i].multiply(mInv2);
         }
         return result;
     }
@@ -415,8 +455,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
      */
     public FieldGradient<T> compose(final T g0, final T g1) {
         final FieldGradient<T> result = newInstance(g0);
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = g1.multiply(gradient[i]);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = g1.multiply(grad[i]);
         }
         return result;
     }
@@ -467,8 +507,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
             final T aX    = FastMath.pow(x.value.newInstance(a), x.value);
             final T aXlnA = aX.multiply(FastMath.log(a));
             final FieldGradient<T> result = x.newInstance(aX);
-            for (int i = 0; i < x.gradient.length; ++i) {
-                result.gradient[i] =  aXlnA.multiply(x.gradient[i]);
+            for (int i = 0; i < x.grad.length; ++i) {
+                result.grad[i] =  aXlnA.multiply(x.grad[i]);
             }
             return result;
         }
@@ -556,9 +596,9 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         final FieldGradient<T> sin = newInstance(sinCos.sin());
         final FieldGradient<T> cos = newInstance(sinCos.cos());
         final T mSin = sinCos.sin().negate();
-        for (int i = 0; i < gradient.length; ++i) {
-            sin.gradient[i] =  gradient[i].multiply(sinCos.cos());
-            cos.gradient[i] =  gradient[i].multiply(mSin);
+        for (int i = 0; i < grad.length; ++i) {
+            sin.grad[i] =  grad[i].multiply(sinCos.cos());
+            cos.grad[i] =  grad[i].multiply(mSin);
         }
         return new FieldSinCos<>(sin, cos);
     }
@@ -595,8 +635,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         final FieldGradient<T> result = newInstance(FastMath.atan2(value, x.value));
         final T xValueInv = x.value.multiply(inv);
         final T mValueInv = value.negate().multiply(inv);
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = value.linearCombination(xValueInv, gradient[i], x.gradient[i], mValueInv);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = value.linearCombination(xValueInv, grad[i], x.grad[i], mValueInv);
         }
         return result;
     }
@@ -642,8 +682,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
     @Override
     public FieldGradient<T> toDegrees() {
         final FieldGradient<T> result = newInstance(FastMath.toDegrees(value));
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = FastMath.toDegrees(gradient[i]);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = FastMath.toDegrees(grad[i]);
         }
         return result;
     }
@@ -652,8 +692,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
     @Override
     public FieldGradient<T> toRadians() {
         final FieldGradient<T> result = newInstance(FastMath.toRadians(value));
-        for (int i = 0; i < gradient.length; ++i) {
-            result.gradient[i] = FastMath.toRadians(gradient[i]);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = FastMath.toRadians(grad[i]);
         }
         return result;
     }
@@ -664,8 +704,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
      */
     public T taylor(final double... delta) {
         T result = value;
-        for (int i = 0; i < gradient.length; ++i) {
-            result = result.add(gradient[i].multiply(delta[i]));
+        for (int i = 0; i < grad.length; ++i) {
+            result = result.add(grad[i].multiply(delta[i]));
         }
         return result;
     }
@@ -676,8 +716,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
      */
     public T taylor(@SuppressWarnings("unchecked") final T... delta) {
         T result = value;
-        for (int i = 0; i < gradient.length; ++i) {
-            result = result.add(gradient[i].multiply(delta[i]));
+        for (int i = 0; i < grad.length; ++i) {
+            result = result.add(grad[i].multiply(delta[i]));
         }
         return result;
     }
@@ -703,12 +743,12 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         }
 
         final FieldGradient<T> result = newInstance(a[0].value.linearCombination(a0, b0));
-        for (int k = 0; k < gradient.length; ++k) {
+        for (int k = 0; k < grad.length; ++k) {
             for (int i = 0; i < n; ++i) {
-                a1[2 * i + 1] = a[i].gradient[k];
-                b1[2 * i]     = b[i].gradient[k];
+                a1[2 * i + 1] = a[i].grad[k];
+                b1[2 * i]     = b[i].grad[k];
             }
-            result.gradient[k] = a[0].value.linearCombination(a1, b1);
+            result.grad[k] = a[0].value.linearCombination(a1, b1);
         }
         return result;
 
@@ -728,11 +768,11 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         }
 
         final FieldGradient<T> result = newInstance(b[0].value.linearCombination(a, b0));
-        for (int k = 0; k < gradient.length; ++k) {
+        for (int k = 0; k < grad.length; ++k) {
             for (int i = 0; i < n; ++i) {
-                b1[i] = b[i].gradient[k];
+                b1[i] = b[i].grad[k];
             }
-            result.gradient[k] = b[0].value.linearCombination(a, b1);
+            result.grad[k] = b[0].value.linearCombination(a, b1);
         }
         return result;
 
@@ -744,11 +784,11 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
                                               final FieldGradient<T> a2, final FieldGradient<T> b2) {
         final FieldGradient<T> result = newInstance(a1.value.linearCombination(a1.value, b1.value,
                                                                                a2.value, b2.value));
-        for (int i = 0; i < b1.gradient.length; ++i) {
-            result.gradient[i] = a1.value.linearCombination(a1.value,       b1.gradient[i],
-                                                            a1.gradient[i], b1.value,
-                                                            a2.value,       b2.gradient[i],
-                                                            a2.gradient[i], b2.value);
+        for (int i = 0; i < b1.grad.length; ++i) {
+            result.grad[i] = a1.value.linearCombination(a1.value,       b1.grad[i],
+                                                            a1.grad[i], b1.value,
+                                                            a2.value,       b2.grad[i],
+                                                            a2.grad[i], b2.value);
         }
         return result;
     }
@@ -759,9 +799,9 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
                                               final double a2, final FieldGradient<T> b2) {
         final FieldGradient<T> result = newInstance(b1.value.linearCombination(a1, b1.value,
                                                                                a2, b2.value));
-        for (int i = 0; i < b1.gradient.length; ++i) {
-            result.gradient[i] = b1.value.linearCombination(a1, b1.gradient[i],
-                                                            a2, b2.gradient[i]);
+        for (int i = 0; i < b1.grad.length; ++i) {
+            result.grad[i] = b1.value.linearCombination(a1, b1.grad[i],
+                                                            a2, b2.grad[i]);
         }
         return result;
     }
@@ -783,14 +823,14 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         final FieldGradient<T> result = newInstance(a1.value.linearCombination(a1.value, b1.value,
                                                                                a2.value, b2.value,
                                                                                a3.value, b3.value));
-        for (int i = 0; i < b1.gradient.length; ++i) {
-            a[1] = a1.gradient[i];
-            a[3] = a2.gradient[i];
-            a[5] = a3.gradient[i];
-            b[0] = b1.gradient[i];
-            b[2] = b2.gradient[i];
-            b[4] = b3.gradient[i];
-            result.gradient[i] = a1.value.linearCombination(a, b);
+        for (int i = 0; i < b1.grad.length; ++i) {
+            a[1] = a1.grad[i];
+            a[3] = a2.grad[i];
+            a[5] = a3.grad[i];
+            b[0] = b1.grad[i];
+            b[2] = b2.grad[i];
+            b[4] = b3.grad[i];
+            result.grad[i] = a1.value.linearCombination(a, b);
         }
         return result;
     }
@@ -803,10 +843,10 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         final FieldGradient<T> result = newInstance(b1.value.linearCombination(a1, b1.value,
                                                                                a2, b2.value,
                                                                                a3, b3.value));
-        for (int i = 0; i < b1.gradient.length; ++i) {
-            result.gradient[i] = b1.value.linearCombination(a1, b1.gradient[i],
-                                                            a2, b2.gradient[i],
-                                                            a3, b3.gradient[i]);
+        for (int i = 0; i < b1.grad.length; ++i) {
+            result.grad[i] = b1.value.linearCombination(a1, b1.grad[i],
+                                                            a2, b2.grad[i],
+                                                            a3, b3.grad[i]);
         }
         return result;
     }
@@ -832,16 +872,16 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
                                                                                a2.value, b2.value,
                                                                                a3.value, b3.value,
                                                                                a4.value, b4.value));
-        for (int i = 0; i < b1.gradient.length; ++i) {
-            a[1] = a1.gradient[i];
-            a[3] = a2.gradient[i];
-            a[5] = a3.gradient[i];
-            a[7] = a4.gradient[i];
-            b[0] = b1.gradient[i];
-            b[2] = b2.gradient[i];
-            b[4] = b3.gradient[i];
-            b[6] = b4.gradient[i];
-            result.gradient[i] = a1.value.linearCombination(a, b);
+        for (int i = 0; i < b1.grad.length; ++i) {
+            a[1] = a1.grad[i];
+            a[3] = a2.grad[i];
+            a[5] = a3.grad[i];
+            a[7] = a4.grad[i];
+            b[0] = b1.grad[i];
+            b[2] = b2.grad[i];
+            b[4] = b3.grad[i];
+            b[6] = b4.grad[i];
+            result.grad[i] = a1.value.linearCombination(a, b);
         }
         return result;
     }
@@ -856,11 +896,11 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
                                                                                a2, b2.value,
                                                                                a3, b3.value,
                                                                                a4, b4.value));
-        for (int i = 0; i < b1.gradient.length; ++i) {
-            result.gradient[i] = b1.value.linearCombination(a1, b1.gradient[i],
-                                                            a2, b2.gradient[i],
-                                                            a3, b3.gradient[i],
-                                                            a4, b4.gradient[i]);
+        for (int i = 0; i < b1.grad.length; ++i) {
+            result.grad[i] = b1.value.linearCombination(a1, b1.grad[i],
+                                                            a2, b2.grad[i],
+                                                            a3, b3.grad[i],
+                                                            a4, b4.grad[i]);
         }
         return result;
     }
@@ -882,11 +922,11 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         if (other instanceof FieldGradient) {
             @SuppressWarnings("unchecked")
             final FieldGradient<T> rhs = (FieldGradient<T>) other;
-            if (!value.equals(rhs.value) || gradient.length != rhs.gradient.length) {
+            if (!value.equals(rhs.value) || grad.length != rhs.grad.length) {
                 return false;
             }
-            for (int i = 0; i < gradient.length; ++i) {
-                if (!gradient[i].equals(rhs.gradient[i])) {
+            for (int i = 0; i < grad.length; ++i) {
+                if (!grad[i].equals(rhs.grad[i])) {
                     return false;
                 }
             }
@@ -902,7 +942,7 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
      */
     @Override
     public int hashCode() {
-        return 129 + 7 *value.hashCode() - 15 * Arrays.hashCode(gradient);
+        return 129 + 7 *value.hashCode() - 15 * Arrays.hashCode(grad);
     }
 
 }
