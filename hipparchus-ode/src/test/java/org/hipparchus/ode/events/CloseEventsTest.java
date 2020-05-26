@@ -16,6 +16,10 @@
  */
 package org.hipparchus.ode.events;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.ode.ODEIntegrator;
 import org.hipparchus.ode.ODEState;
@@ -25,10 +29,6 @@ import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Check events are detected correctly when the event times are close.
@@ -113,6 +113,96 @@ public class CloseEventsTest {
         List<Event> events2 = detector2.getEvents();
         Assert.assertEquals(1, events2.size());
         Assert.assertEquals(5, events2.get(0).getT(), 0.0);
+    }
+
+    /**
+     * Previously there were some branches when tryAdvance() returned false but did not
+     * set {@code t0 = t}. This allowed the order of events to not be chronological and to
+     * detect events that should not have occurred, both of which are problems.
+     */
+    @Test
+    public void testSimultaneousEventsReset() {
+        // setup
+        double tol = 1e-10;
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 100.0, 1e-7, 1e-7);
+        boolean[] firstEventOccurred = {false};
+        List<Event> events = new ArrayList<>();
+
+        TimeDetector detector1 = new TimeDetector(events, 5) {
+            @Override
+            public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
+                firstEventOccurred[0] = true;
+                super.eventOccurred(state, increasing);
+                return Action.RESET_STATE;
+            }
+        };
+        integrator.addEventHandler(detector1, 10, tol, 100);
+        // this detector changes it's g function definition when detector1 fires
+        TimeDetector detector2 = new TimeDetector(events, 1, 3, 5) {
+            @Override
+            public double g(final ODEStateAndDerivative state) {
+                if (firstEventOccurred[0]) {
+                    return super.g(state);
+                }
+                return new TimeDetector(5).g(state);
+            }
+        };
+        integrator.addEventHandler(detector2, 1, tol, 100);
+
+        // action
+        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 20);
+
+        // verify
+        // order is important to make sure the test checks what it is supposed to
+        Assert.assertEquals(5, events.get(0).getT(), 0.0);
+        Assert.assertTrue(events.get(0).isIncreasing());
+        Assert.assertEquals(detector1, events.get(0).getHandler());
+        Assert.assertEquals(5, events.get(1).getT(), 0.0);
+        Assert.assertTrue(events.get(1).isIncreasing());
+        Assert.assertEquals(detector2, events.get(1).getHandler());
+        Assert.assertEquals(2, events.size());
+    }
+
+    /**
+     * When two event detectors have a discontinuous event caused by a {@link
+     * Action#RESET_STATE} or {@link Action#RESET_DERIVATIVES}. The two event detectors
+     * would each say they had an event that had to be handled before the other one, but
+     * neither would actually back up at all. For Hipparchus GitHub #91.
+     */
+    @Test
+    public void testSimultaneousDiscontinuousEventsAfterReset() {
+        // setup
+        double t = FastMath.PI;
+        double tol = 1e-10;
+        ODEIntegrator integrator = new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        List<Event> events = new ArrayList<>();
+
+        TimeDetector resetDetector =
+                new ResetDetector(events, new ODEState(t, new double[]{1e100, 0}), t);
+        integrator.addEventHandler(resetDetector, 10, tol, 100);
+        List<BaseDetector> detectors = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            BaseDetector detector1 = new StateDetector(events, 0.0);
+            integrator.addEventHandler(detector1, 10, tol, 100);
+            detectors.add(detector1);
+        }
+
+        // action
+        integrator.integrate(new Equation(), new ODEState(0, new double[]{-1e100, 0}), 10);
+
+        // verify
+        Assert.assertEquals(t, events.get(0).getT(),  tol);
+        Assert.assertTrue(events.get(0).isIncreasing());
+        Assert.assertEquals(resetDetector, events.get(0).getHandler());
+        // next two events can occur in either order
+        Assert.assertEquals(t, events.get(1).getT(),  tol);
+        Assert.assertTrue(events.get(1).isIncreasing());
+        Assert.assertEquals(detectors.get(0), events.get(1).getHandler());
+        Assert.assertEquals(t, events.get(2).getT(),  tol);
+        Assert.assertTrue(events.get(2).isIncreasing());
+        Assert.assertEquals(detectors.get(1), events.get(2).getHandler());
+        Assert.assertEquals(events.size(), 3);
     }
 
     /**
@@ -953,6 +1043,96 @@ public class CloseEventsTest {
         List<Event> events2 = detector2.getEvents();
         Assert.assertEquals(1, events2.size());
         Assert.assertEquals(-5, events2.get(0).getT(), 0.0);
+    }
+
+    /**
+     * Previously there were some branches when tryAdvance() returned false but did not
+     * set {@code t0 = t}. This allowed the order of events to not be chronological and to
+     * detect events that should not have occurred, both of which are problems.
+     */
+    @Test
+    public void testSimultaneousEventsResetReverse() {
+        // setup
+        double tol = 1e-10;
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 100.0, 1e-7, 1e-7);
+        boolean[] firstEventOccurred = {false};
+        List<Event> events = new ArrayList<>();
+
+        TimeDetector detector1 = new TimeDetector(events, -5) {
+            @Override
+            public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
+                firstEventOccurred[0] = true;
+                super.eventOccurred(state, increasing);
+                return Action.RESET_STATE;
+            }
+        };
+        integrator.addEventHandler(detector1, 10, tol, 100);
+        // this detector changes it's g function definition when detector1 fires
+        TimeDetector detector2 = new TimeDetector(events, -1, -3, -5) {
+            @Override
+            public double g(final ODEStateAndDerivative state) {
+                if (firstEventOccurred[0]) {
+                    return super.g(state);
+                }
+                return new TimeDetector(-5).g(state);
+            }
+        };
+        integrator.addEventHandler(detector2, 1, tol, 100);
+
+        // action
+        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -20);
+
+        // verify
+        // order is important to make sure the test checks what it is supposed to
+        Assert.assertEquals(-5, events.get(0).getT(), 0.0);
+        Assert.assertTrue(events.get(0).isIncreasing());
+        Assert.assertEquals(detector1, events.get(0).getHandler());
+        Assert.assertEquals(-5, events.get(1).getT(), 0.0);
+        Assert.assertTrue(events.get(1).isIncreasing());
+        Assert.assertEquals(detector2, events.get(1).getHandler());
+        Assert.assertEquals(2, events.size());
+    }
+
+    /**
+     * When two event detectors have a discontinuous event caused by a {@link
+     * Action#RESET_STATE} or {@link Action#RESET_DERIVATIVES}. The two event detectors
+     * would each say they had an event that had to be handled before the other one, but
+     * neither would actually back up at all. For Hipparchus GitHub #91.
+     */
+    @Test
+    public void testSimultaneousDiscontinuousEventsAfterResetReverse() {
+        // setup
+        double t = -FastMath.PI;
+        double tol = 1e-10;
+        ODEIntegrator integrator = new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        List<Event> events = new ArrayList<>();
+
+        TimeDetector resetDetector =
+                new ResetDetector(events, new ODEState(t, new double[]{1e100, 0}), t);
+        integrator.addEventHandler(resetDetector, 10, tol, 100);
+        List<BaseDetector> detectors = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            BaseDetector detector1 = new StateDetector(events, 0.0);
+            integrator.addEventHandler(detector1, 10, tol, 100);
+            detectors.add(detector1);
+        }
+
+        // action
+        integrator.integrate(new Equation(), new ODEState(0, new double[]{-1e100, 0}), -10);
+
+        // verify
+        Assert.assertEquals(t, events.get(0).getT(),  tol);
+        Assert.assertTrue(events.get(0).isIncreasing());
+        Assert.assertEquals(resetDetector, events.get(0).getHandler());
+        // next two events can occur in either order
+        Assert.assertEquals(t, events.get(1).getT(),  tol);
+        Assert.assertFalse(events.get(1).isIncreasing());
+        Assert.assertEquals(detectors.get(0), events.get(1).getHandler());
+        Assert.assertEquals(t, events.get(2).getT(),  tol);
+        Assert.assertFalse(events.get(2).isIncreasing());
+        Assert.assertEquals(detectors.get(1), events.get(2).getHandler());
+        Assert.assertEquals(events.size(), 3);
     }
 
     /**
@@ -1842,6 +2022,10 @@ public class CloseEventsTest {
      */
     private static class FlatDetector extends TimeDetector {
 
+        public FlatDetector(final double... eventTs) {
+            super(eventTs);
+        }
+
         public FlatDetector(List<Event> events, double... eventTs) {
             super(events, eventTs);
         }
@@ -1856,6 +2040,20 @@ public class CloseEventsTest {
             return FastMath.signum(g);
         }
 
+    }
+
+    /** Same as {@link FlatDetector} except it is never 0. */
+    private static class JumpDetector extends TimeDetector {
+
+        public JumpDetector(final double... eventTs) {
+            super(eventTs);
+        }
+
+        @Override
+        public double g(ODEStateAndDerivative state) {
+            final double g = super.g(state);
+            return g > 0 ? 1 : -1;
+        }
     }
 
     /** Linear on both ends, parabolic in the middle. */
@@ -1901,6 +2099,7 @@ public class CloseEventsTest {
 
         @Override
         public ODEState resetState(ODEStateAndDerivative state) {
+            Assert.assertEquals(this.eventTs[0], state.getTime(), 0);
             return resetState;
         }
 
@@ -1910,6 +2109,10 @@ public class CloseEventsTest {
     private static class StateDetector extends BaseDetector {
 
         private final double triggerState;
+
+        public StateDetector(double triggerState) {
+            this(new ArrayList<>(), triggerState);
+        }
 
         public StateDetector(List<Event> events, double triggerState) {
             super(Action.CONTINUE, events);

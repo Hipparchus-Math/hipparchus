@@ -127,6 +127,97 @@ public class FieldCloseEventsTest {
     }
 
     /**
+     * Previously there were some branches when tryAdvance() returned false but did not
+     * set {@code t0 = t}. This allowed the order of events to not be chronological and to
+     * detect events that should not have occurred, both of which are problems.
+     */
+    @Test
+    public void testSimultaneousEventsResetReverse() {
+        // setup
+        double tol = 1e-10;
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 100.0, 1e-7, 1e-7);
+        boolean[] firstEventOccurred = {false};
+        List<Event> events = new ArrayList<>();
+
+        TimeDetector detector1 = new TimeDetector(events, -5) {
+            @Override
+            public Action eventOccurred(FieldODEStateAndDerivative<Decimal64> state, boolean increasing) {
+                firstEventOccurred[0] = true;
+                super.eventOccurred(state, increasing);
+                return Action.RESET_STATE;
+            }
+        };
+        integrator.addEventHandler(detector1, 10, tol, 100);
+        // this detector changes it's g function definition when detector1 fires
+        TimeDetector detector2 = new TimeDetector(events, -1, -3, -5) {
+            @Override
+            public Decimal64 g(final FieldODEStateAndDerivative<Decimal64> state) {
+                if (firstEventOccurred[0]) {
+                    return super.g(state);
+                }
+                return new TimeDetector(-5).g(state);
+            }
+        };
+        integrator.addEventHandler(detector2, 1, tol, 100);
+
+        // action
+        integrator.integrate(new Equation(), initialState, zero.add(-20));
+
+        // verify
+        // order is important to make sure the test checks what it is supposed to
+        Assert.assertEquals(-5, events.get(0).getT(), 0.0);
+        Assert.assertTrue(events.get(0).isIncreasing());
+        Assert.assertEquals(detector1, events.get(0).getHandler());
+        Assert.assertEquals(-5, events.get(1).getT(), 0.0);
+        Assert.assertTrue(events.get(1).isIncreasing());
+        Assert.assertEquals(detector2, events.get(1).getHandler());
+        Assert.assertEquals(2, events.size());
+    }
+
+    /**
+     * When two event detectors have a discontinuous event caused by a {@link
+     * Action#RESET_STATE} or {@link Action#RESET_DERIVATIVES}. The two event detectors
+     * would each say they had an event that had to be handled before the other one, but
+     * neither would actually back up at all. For Hipparchus GitHub #91.
+     */
+    @Test
+    public void testSimultaneousDiscontinuousEventsAfterReset() {
+        // setup
+        double t = FastMath.PI;
+        double tol = 1e-10;
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
+        List<Event> events = new ArrayList<>();
+
+        TimeDetector resetDetector =
+                new ResetDetector(events, new FieldODEState<>(zero.add(t), new Decimal64[]{zero.add(1e100), zero}), t);
+        integrator.addEventHandler(resetDetector, 10, tol, 100);
+        List<BaseDetector> detectors = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            BaseDetector detector1 = new StateDetector(events, 0.0);
+            integrator.addEventHandler(detector1, 10, tol, 100);
+            detectors.add(detector1);
+        }
+
+        // action
+        integrator.integrate(new Equation(), new FieldODEState<>(zero, new Decimal64[]{zero.add(-1e100), zero}), zero.add(10));
+
+        // verify
+        Assert.assertEquals(t, events.get(0).getT(), tol);
+        Assert.assertTrue(events.get(0).isIncreasing());
+        Assert.assertEquals(resetDetector, events.get(0).getHandler());
+        // next two events can occur in either order
+        Assert.assertEquals(t, events.get(1).getT(), tol);
+        Assert.assertTrue(events.get(1).isIncreasing());
+        Assert.assertEquals(detectors.get(0), events.get(1).getHandler());
+        Assert.assertEquals(t, events.get(2).getT(), tol);
+        Assert.assertTrue(events.get(2).isIncreasing());
+        Assert.assertEquals(detectors.get(1), events.get(2).getHandler());
+        Assert.assertEquals(events.size(), 3);
+    }
+
+    /**
      * test the g function switching with a period shorter than the tolerance. We don't
      * need to find any of the events, but we do need to not crash. And we need to
      * preserve the alternating increasing / decreasing sequence.
@@ -967,6 +1058,97 @@ public class FieldCloseEventsTest {
         List<Event> events2 = detector2.getEvents();
         Assert.assertEquals(1, events2.size());
         Assert.assertEquals(-5, events2.get(0).getT(), 0.0);
+    }
+
+    /**
+     * Previously there were some branches when tryAdvance() returned false but did not
+     * set {@code t0 = t}. This allowed the order of events to not be chronological and to
+     * detect events that should not have occurred, both of which are problems.
+     */
+    @Test
+    public void testSimultaneousEventsReset() {
+        // setup
+        double tol = 1e-10;
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 100.0, 1e-7, 1e-7);
+        boolean[] firstEventOccurred = {false};
+        List<Event> events = new ArrayList<>();
+
+        TimeDetector detector1 = new TimeDetector(events, 5) {
+            @Override
+            public Action eventOccurred(FieldODEStateAndDerivative<Decimal64> state, boolean increasing) {
+                firstEventOccurred[0] = true;
+                super.eventOccurred(state, increasing);
+                return Action.RESET_STATE;
+            }
+        };
+        integrator.addEventHandler(detector1, 10, tol, 100);
+        // this detector changes it's g function definition when detector1 fires
+        TimeDetector detector2 = new TimeDetector(events, 1, 3, 5) {
+            @Override
+            public Decimal64 g(final FieldODEStateAndDerivative<Decimal64> state) {
+                if (firstEventOccurred[0]) {
+                    return super.g(state);
+                }
+                return new TimeDetector(5).g(state);
+            }
+        };
+        integrator.addEventHandler(detector2, 1, tol, 100);
+
+        // action
+        integrator.integrate(new Equation(), initialState, zero.add(20));
+
+        // verify
+        // order is important to make sure the test checks what it is supposed to
+        Assert.assertEquals(5, events.get(0).getT(), 0.0);
+        Assert.assertTrue(events.get(0).isIncreasing());
+        Assert.assertEquals(detector1, events.get(0).getHandler());
+        Assert.assertEquals(5, events.get(1).getT(), 0.0);
+        Assert.assertTrue(events.get(1).isIncreasing());
+        Assert.assertEquals(detector2, events.get(1).getHandler());
+        Assert.assertEquals(2, events.size());
+    }
+
+    /**
+     * When two event detectors have a discontinuous event caused by a {@link
+     * Action#RESET_STATE} or {@link Action#RESET_DERIVATIVES}. The two event detectors
+     * would each say they had an event that had to be handled before the other one, but
+     * neither would actually back up at all. For Hipparchus GitHub #91.
+     */
+    @Test
+    public void testSimultaneousDiscontinuousEventsAfterResetReverse() {
+        // setup
+        double t = -FastMath.PI;
+        double tol = 1e-10;
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
+        List<Event> events = new ArrayList<>();
+
+        TimeDetector resetDetector =
+                new ResetDetector(events, new FieldODEState<>(zero.add(t), new Decimal64[]{zero.add(1e100), zero}), t);
+        integrator.addEventHandler(resetDetector, 10, tol, 100);
+        List<BaseDetector> detectors = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            BaseDetector detector1 = new StateDetector(events, 0.0);
+            integrator.addEventHandler(detector1, 10, tol, 100);
+            detectors.add(detector1);
+        }
+
+        // action
+        integrator.integrate(new Equation(), new FieldODEState<>(zero, new Decimal64[]{zero.add(-1e100), zero}), zero.add(-10));
+
+        // verify
+        Assert.assertEquals(t, events.get(0).getT(), tol);
+        Assert.assertTrue(events.get(0).isIncreasing());
+        Assert.assertEquals(resetDetector, events.get(0).getHandler());
+        // next two events can occur in either order
+        Assert.assertEquals(t, events.get(1).getT(), tol);
+        Assert.assertFalse(events.get(1).isIncreasing());
+        Assert.assertEquals(detectors.get(0), events.get(1).getHandler());
+        Assert.assertEquals(t, events.get(2).getT(), tol);
+        Assert.assertFalse(events.get(2).isIncreasing());
+        Assert.assertEquals(detectors.get(1), events.get(2).getHandler());
+        Assert.assertEquals(events.size(), 3);
     }
 
     /**
@@ -1919,6 +2101,7 @@ public class FieldCloseEventsTest {
 
         @Override
         public FieldODEState<Decimal64> resetState(FieldODEStateAndDerivative<Decimal64> state) {
+            Assert.assertEquals(this.eventTs[0], state.getTime().getReal(), 0.0);
             return resetState;
         }
 

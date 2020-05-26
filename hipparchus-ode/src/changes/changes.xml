@@ -49,6 +49,13 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
+    <release version="1.7" date="TBD" description="TBD">
+      <action dev="evan" type="fix" issue="issues/94" due-to="Mikael">
+        Fix infinite loop in event handling when a RESET_STATE or RESET_DERIVATIVES event
+        causes two other event detectors to trigger simultaneously and discontinuously at
+        the same time.
+      </action>
+    </release>
     <release version="1.6" date="2019-11-01" description="This is a maintenance release.">
       <action dev="luc" type="update">
         No changes directly in this module. However, lower level Hipparchus modules did change,

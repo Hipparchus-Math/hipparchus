@@ -421,28 +421,39 @@ public class FieldEventState<T extends RealFieldElement<T>> {
      */
     public boolean tryAdvance(final FieldODEStateAndDerivative<T> state,
                               final FieldODEStateInterpolator<T> interpolator) {
-        // check this is only called before a pending event.
-        check(!(pendingEvent && strictlyAfter(pendingEventTime, state.getTime())));
-
         final T t = state.getTime();
+        // check this is only called before a pending event.
+        check(!pendingEvent || !strictlyAfter(pendingEventTime, t));
+
+        final boolean meFirst;
 
         // just found an event and we know the next time we want to search again
         if (earliestTimeConsidered != null && strictlyAfter(t, earliestTimeConsidered)) {
-            return false;
-        }
-
-        final T g = handler.g(state);
-        final boolean positive = g.getReal() > 0;
-
-        if ((g.getReal() == 0.0 && pendingEventTime == t) || positive == g0Positive) {
-            // at a root we already found, or g function has expected sign
-            t0 = t;
-            g0 = g; // g0Positive is the same
-            return false;
+            meFirst = false;
         } else {
-            // found a root we didn't expect -> find precise location
-            return findRoot(interpolator, t0, g0, t, g);
+            // check g function to see if there is a new event
+            final T g = handler.g(state);
+            final boolean positive = g.getReal() > 0;
+
+            if (positive == g0Positive) {
+                // g function has expected sign
+                g0 = g; // g0Positive is the same
+                meFirst = false;
+            } else {
+                // found a root we didn't expect -> find precise location
+                final T oldPendingEventTime = pendingEventTime;
+                final boolean foundRoot = findRoot(interpolator, t0, g0, t, g);
+                // make sure the new root is not the same as the old root, if one exists
+                meFirst = foundRoot && !pendingEventTime.equals(oldPendingEventTime);
+            }
         }
+
+        if (!meFirst) {
+            // advance t0 to the current time so we can't find events that occur before t
+            t0 = t;
+        }
+
+        return meFirst;
     }
 
     /**
