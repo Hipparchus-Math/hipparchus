@@ -232,7 +232,7 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
     public Gradient multiply(final Gradient a) {
         final Gradient result = newInstance(value * a.value);
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = MathArrays.linearCombination(grad[i], a.value, value, a.grad[i]);
+            result.grad[i] = grad[i] * a.value + value * a.grad[i];
         }
         return result;
     }
@@ -254,7 +254,7 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
         final double inv2 = inv1 * inv1;
         final Gradient result = newInstance(value * inv1);
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = MathArrays.linearCombination(grad[i], a.value, -value, a.grad[i]) * inv2;
+            result.grad[i] = (grad[i] * a.value - value * a.grad[i]) * inv2;
         }
         return result;
     }
@@ -605,7 +605,7 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
         final double inv = 1.0 / (value * value + x.value * x.value);
         final Gradient result = newInstance(FastMath.atan2(value, x.value));
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = MathArrays.linearCombination(x.value, grad[i], -x.grad[i], value) * inv;
+            result.grad[i] = (x.value * grad[i] - x.grad[i] * value) * inv;
         }
         return result;
     }

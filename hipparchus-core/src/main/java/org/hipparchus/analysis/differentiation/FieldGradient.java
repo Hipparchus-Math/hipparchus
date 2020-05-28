@@ -259,7 +259,7 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
     public FieldGradient<T> multiply(final FieldGradient<T> a) {
         final FieldGradient<T> result = newInstance(value.multiply(a.value));
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = value.linearCombination(grad[i], a.value, value, a.grad[i]);
+            result.grad[i] = grad[i].multiply(a.value).add(value.multiply(a.grad[i]));
         }
         return result;
     }
@@ -281,7 +281,7 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         final T inv2 = inv1.multiply(inv1);
         final FieldGradient<T> result = newInstance(value.multiply(inv1));
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = value.linearCombination(grad[i], a.value, value.negate(), a.grad[i]).multiply(inv2);
+            result.grad[i] = grad[i].multiply(a.value).subtract(value.multiply(a.grad[i])).multiply(inv2);
         }
         return result;
     }
@@ -636,7 +636,7 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         final T xValueInv = x.value.multiply(inv);
         final T mValueInv = value.negate().multiply(inv);
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = value.linearCombination(xValueInv, grad[i], x.grad[i], mValueInv);
+            result.grad[i] = xValueInv.multiply(grad[i]).add(x.grad[i].multiply(mValueInv));
         }
         return result;
     }
