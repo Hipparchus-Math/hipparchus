@@ -104,7 +104,7 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
 
     @Test
     public void testAbsInfinite() {
-        Complex z = new Complex(inf, 0);
+        Complex z = Complex.NaN.newInstance(inf);
         Assert.assertEquals(inf, z.abs(), 0);
         z = new Complex(0, neginf);
         Assert.assertEquals(inf, z.abs(), 0);
