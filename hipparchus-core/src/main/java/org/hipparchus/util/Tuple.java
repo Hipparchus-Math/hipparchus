@@ -287,12 +287,6 @@ public class Tuple implements RealFieldElement<Tuple> {
 
     /** {@inheritDoc} */
     @Override
-    public long round() {
-        return FastMath.round(values[0]);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public Tuple signum() {
         final Tuple result = new Tuple(field, new double[values.length]);
         for (int i = 0; i < values.length; ++i) {

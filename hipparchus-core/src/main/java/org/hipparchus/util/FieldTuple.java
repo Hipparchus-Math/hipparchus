@@ -291,12 +291,6 @@ public class FieldTuple<T extends RealFieldElement<T>> implements RealFieldEleme
 
     /** {@inheritDoc} */
     @Override
-    public long round() {
-        return values[0].round();
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public FieldTuple<T> signum() {
         final FieldTuple<T> result = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
         for (int i = 0; i < values.length; ++i) {

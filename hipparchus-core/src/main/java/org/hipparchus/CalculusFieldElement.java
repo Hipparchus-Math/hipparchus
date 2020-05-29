@@ -63,6 +63,13 @@ public interface CalculusFieldElement<T> extends FieldElement<T> {
      */
     double getReal();
 
+    /** Get the closest long to instance real value.
+     * @return closest long to {@link #getReal()}
+     */
+    default long round() {
+        return FastMath.round(getReal());
+    }
+
     /** '+' operator.
      * @param a right hand side parameter of the operator
      * @return this+a

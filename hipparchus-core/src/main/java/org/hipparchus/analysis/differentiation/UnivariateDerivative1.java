@@ -240,12 +240,6 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
-    public long round() {
-        return FastMath.round(f0);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public UnivariateDerivative1 signum() {
         return new UnivariateDerivative1(FastMath.signum(f0), 0.0);
     }

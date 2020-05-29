@@ -2721,13 +2721,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     /** {@inheritDoc}
      */
     @Override
-    public long round() {
-        return FastMath.round(toDouble());
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
     public Dfp signum() {
         if (isNaN() || isZero()) {
             return this;

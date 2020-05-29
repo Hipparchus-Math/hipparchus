@@ -433,12 +433,6 @@ public class SparseGradient implements RealFieldElement<SparseGradient>, Seriali
 
     /** {@inheritDoc} */
     @Override
-    public long round() {
-        return FastMath.round(value);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public SparseGradient signum() {
         return createConstant(FastMath.signum(value));
     }
