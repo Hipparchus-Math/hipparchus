@@ -477,12 +477,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         return factory.constant(FastMath.rint(data[0]));
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public long round() {
-        return FastMath.round(data[0]);
-    }
-
     /** {@inheritDoc}
      */
     @Override

@@ -288,12 +288,6 @@ public class FieldUnivariateDerivative2<T extends RealFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public long round() {
-        return FastMath.round(f0);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public FieldUnivariateDerivative2<T> signum() {
         final T zero = f0.getField().getZero();
         return new FieldUnivariateDerivative2<>(FastMath.signum(f0), zero, zero);

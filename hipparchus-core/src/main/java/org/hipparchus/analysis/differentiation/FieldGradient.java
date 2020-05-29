@@ -349,12 +349,6 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
 
     /** {@inheritDoc} */
     @Override
-    public long round() {
-        return FastMath.round(value);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public FieldGradient<T> signum() {
         return newInstance(FastMath.signum(value));
     }

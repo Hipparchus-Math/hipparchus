@@ -322,12 +322,6 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public long round() {
-        return FastMath.round(value);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public Gradient signum() {
         return newInstance(FastMath.signum(value));
     }

@@ -547,4 +547,56 @@ public class PrecisionTest {
         Assert.assertTrue(Precision.equals(0.0f, -0.0f, 0));
     }
 
+    @Test
+    public void testIsMathematicalIntegerDouble() {
+
+        Assert.assertFalse(Precision.isMathematicalInteger(Double.NaN));
+        Assert.assertFalse(Precision.isMathematicalInteger(Double.POSITIVE_INFINITY));
+        Assert.assertFalse(Precision.isMathematicalInteger(Double.NEGATIVE_INFINITY));
+        Assert.assertFalse(Precision.isMathematicalInteger(Double.MIN_NORMAL));
+        Assert.assertFalse(Precision.isMathematicalInteger(Double.MIN_VALUE));
+
+        Assert.assertTrue(Precision.isMathematicalInteger(-0.0));
+        Assert.assertTrue(Precision.isMathematicalInteger(+0.0));
+
+        for (int i = -1000; i < 1000; ++i) {
+            final double d = i;
+            Assert.assertTrue(Precision.isMathematicalInteger(d));
+            Assert.assertFalse(Precision.isMathematicalInteger(FastMath.nextAfter(d, Double.POSITIVE_INFINITY)));
+            Assert.assertFalse(Precision.isMathematicalInteger(FastMath.nextAfter(d, Double.NEGATIVE_INFINITY)));
+        }
+
+        double minNoFractional = 0x1l << 52;
+        Assert.assertTrue(Precision.isMathematicalInteger(minNoFractional));
+        Assert.assertFalse(Precision.isMathematicalInteger(minNoFractional - 0.5));
+        Assert.assertTrue(Precision.isMathematicalInteger(minNoFractional + 0.5));
+
+    }
+
+    @Test
+    public void testIsMathematicalIntegerFloat() {
+
+        Assert.assertFalse(Precision.isMathematicalInteger(Float.NaN));
+        Assert.assertFalse(Precision.isMathematicalInteger(Float.POSITIVE_INFINITY));
+        Assert.assertFalse(Precision.isMathematicalInteger(Float.NEGATIVE_INFINITY));
+        Assert.assertFalse(Precision.isMathematicalInteger(Float.MIN_NORMAL));
+        Assert.assertFalse(Precision.isMathematicalInteger(Float.MIN_VALUE));
+
+        Assert.assertTrue(Precision.isMathematicalInteger(-0.0f));
+        Assert.assertTrue(Precision.isMathematicalInteger(+0.0f));
+
+        for (int i = -1000; i < 1000; ++i) {
+            final float f = i;
+            Assert.assertTrue(Precision.isMathematicalInteger(f));
+            Assert.assertFalse(Precision.isMathematicalInteger(FastMath.nextAfter(f, Float.POSITIVE_INFINITY)));
+            Assert.assertFalse(Precision.isMathematicalInteger(FastMath.nextAfter(f, Float.NEGATIVE_INFINITY)));
+        }
+
+        float minNoFractional = 0x1l << 23;
+        Assert.assertTrue(Precision.isMathematicalInteger(minNoFractional));
+        Assert.assertFalse(Precision.isMathematicalInteger(minNoFractional - 0.5f));
+        Assert.assertTrue(Precision.isMathematicalInteger(minNoFractional + 0.5f));
+
+    }
+
 }

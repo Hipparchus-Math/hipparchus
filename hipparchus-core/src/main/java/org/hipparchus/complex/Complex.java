@@ -482,6 +482,22 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
         return isNaN;
     }
 
+    /** Check whether the instance is real (i.e. imaginary part is zero).
+     * @return true if imaginary part is zero
+     * @since 1.7
+     */
+    public boolean isReal() {
+        return imaginary == 0.0;
+    }
+
+    /** Check whether the instance is an integer (i.e. imaginary part is zero and real part has no fractional part).
+     * @return true if imaginary part is zero and real part has no fractional part
+     * @since 1.7
+     */
+    public boolean isMathematicalInteger() {
+        return isReal() && Precision.isMathematicalInteger(real);
+    }
+
     /**
      * Checks whether either the real or imaginary part of this complex number
      * takes an infinite value (either {@code Double.POSITIVE_INFINITY} or

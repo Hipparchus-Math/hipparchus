@@ -390,12 +390,6 @@ public class Decimal64 extends Number
 
     /** {@inheritDoc} */
     @Override
-    public long round() {
-        return FastMath.round(value);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public Decimal64 signum() {
         return new Decimal64(FastMath.signum(value));
     }

@@ -52,9 +52,4 @@ public interface RealFieldElement<T> extends CalculusFieldElement<T> {
      */
     T abs();
 
-    /** Get the closest long to instance value.
-     * @return closest long to {@link #getReal()}
-     */
-    long round();
-
 }

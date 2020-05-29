@@ -363,12 +363,6 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
         return factory.constant(data[0].rint());
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public long round() {
-        return data[0].round();
-    }
-
     /** {@inheritDoc}
      */
     @Override
