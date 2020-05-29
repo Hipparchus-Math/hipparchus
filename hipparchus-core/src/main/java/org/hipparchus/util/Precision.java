@@ -69,6 +69,18 @@ public class Precision {
     private static final int POSITIVE_ZERO_FLOAT_BITS   = Float.floatToRawIntBits(+0.0f);
     /** Negative zero bits. */
     private static final int NEGATIVE_ZERO_FLOAT_BITS   = Float.floatToRawIntBits(-0.0f);
+    /** Mask used to extract exponent from double bits. */
+    private static final long MASK_DOUBLE_EXPONENT = 0x7ff0000000000000L;
+    /** Mask used to extract mantissa from double bits. */
+    private static final long MASK_DOUBLE_MANTISSA = 0x000fffffffffffffL;
+    /** Mask used to add implicit high order bit for normalized double. */
+    private static final long IMPLICIT_DOUBLE_HIGH_BIT = 0x0010000000000000L;
+    /** Mask used to extract exponent from float bits. */
+    private static final int MASK_FLOAT_EXPONENT = 0x7f800000;
+    /** Mask used to extract mantissa from float bits. */
+    private static final int MASK_FLOAT_MANTISSA = 0x007fffff;
+    /** Mask used to add implicit high order bit for normalized float. */
+    private static final int IMPLICIT_FLOAT_HIGH_BIT = 0x00800000;
 
     static {
         /*
@@ -572,6 +584,45 @@ public class Precision {
         return unscaled;
     }
 
+    /** Check is x is a mathematical integer.
+     * @param x number to check
+     * @return true if x is a mathematical integer
+     * @since 1.7
+     */
+    public static boolean isMathematicalInteger(final double x) {
+        final long bits   = Double.doubleToRawLongBits(x);
+        final int  rawExp = (int) ((bits & MASK_DOUBLE_EXPONENT) >> 52);
+        if (rawExp == 2047) {
+            // NaN or infinite
+            return false;
+        } else {
+            // a double that may have a fractional part
+            final long rawMantissa    = bits & MASK_DOUBLE_MANTISSA;
+            final long fullMantissa   = rawExp > 0 ? (IMPLICIT_DOUBLE_HIGH_BIT | rawMantissa) : rawMantissa;
+            final long fractionalMask = (IMPLICIT_DOUBLE_HIGH_BIT | MASK_DOUBLE_MANTISSA) >> FastMath.min(53, FastMath.max(0, rawExp - 1022));
+            return (fullMantissa & fractionalMask) == 0l;
+        }
+    }
+
+    /** Check is x is a mathematical integer.
+     * @param x number to check
+     * @return true if x is a mathematical integer
+     * @since 1.7
+     */
+    public static boolean isMathematicalInteger(final float x) {
+        final int bits   = Float.floatToRawIntBits(x);
+        final int rawExp = (int) ((bits & MASK_FLOAT_EXPONENT) >> 23);
+        if (rawExp == 255) {
+            // NaN or infinite
+            return false;
+        } else {
+            // a float that may have a fractional part
+            final int rawMantissa    = bits & MASK_FLOAT_MANTISSA;
+            final int fullMantissa   = rawExp > 0 ? (IMPLICIT_FLOAT_HIGH_BIT | rawMantissa) : rawMantissa;
+            final int fractionalMask = (IMPLICIT_FLOAT_HIGH_BIT | MASK_FLOAT_MANTISSA) >> FastMath.min(24, FastMath.max(0, rawExp - 126));
+            return (fullMantissa & fractionalMask) == 0;
+        }
+    }
 
     /**
      * Computes a number {@code delta} close to {@code originalDelta} with
