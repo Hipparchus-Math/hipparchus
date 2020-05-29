@@ -1689,6 +1689,43 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
         }
     }
 
+    @Test
+    public void testIsMathematicalInteger() {
+        doTestIsMathmeaticalInteger(-0.0, true);
+        doTestIsMathmeaticalInteger(+0.0, true);
+        doTestIsMathmeaticalInteger(-0.5, false);
+        doTestIsMathmeaticalInteger(+0.5, false);
+        doTestIsMathmeaticalInteger(Double.NaN, false);
+        doTestIsMathmeaticalInteger(Double.POSITIVE_INFINITY, false);
+        doTestIsMathmeaticalInteger(Double.NEGATIVE_INFINITY, false);
+        doTestIsMathmeaticalInteger(Double.MIN_NORMAL, false);
+        doTestIsMathmeaticalInteger(Double.MIN_VALUE, false);
+    }
+
+    private void doTestIsMathmeaticalInteger(double imaginary, boolean expectedForInteger) {
+        Assert.assertFalse(new Complex(Double.NaN, imaginary).isMathematicalInteger());
+        Assert.assertFalse(new Complex(Double.POSITIVE_INFINITY, imaginary).isMathematicalInteger());
+        Assert.assertFalse(new Complex(Double.NEGATIVE_INFINITY, imaginary).isMathematicalInteger());
+        Assert.assertFalse(new Complex(Double.MIN_NORMAL, imaginary).isMathematicalInteger());
+        Assert.assertFalse(new Complex(Double.MIN_VALUE, imaginary).isMathematicalInteger());
+
+        Assert.assertEquals(expectedForInteger, new Complex(-0.0, imaginary).isMathematicalInteger());
+        Assert.assertEquals(expectedForInteger, new Complex(+0.0, imaginary).isMathematicalInteger());
+
+        for (int i = -1000; i < 1000; ++i) {
+            final double d = i;
+            Assert.assertEquals(expectedForInteger, new Complex(d, imaginary).isMathematicalInteger());
+            Assert.assertFalse(new Complex(FastMath.nextAfter(d, Double.POSITIVE_INFINITY), imaginary).isMathematicalInteger());
+            Assert.assertFalse(new Complex(FastMath.nextAfter(d, Double.NEGATIVE_INFINITY), imaginary).isMathematicalInteger());
+        }
+
+        double minNoFractional = 0x1l << 52;
+        Assert.assertEquals(expectedForInteger, new Complex(minNoFractional, imaginary).isMathematicalInteger());
+        Assert.assertFalse(new Complex(minNoFractional - 0.5, imaginary).isMathematicalInteger());
+        Assert.assertEquals(expectedForInteger, new Complex(minNoFractional + 0.5, imaginary).isMathematicalInteger());
+
+    }
+
     /**
      * Test standard values
      */
