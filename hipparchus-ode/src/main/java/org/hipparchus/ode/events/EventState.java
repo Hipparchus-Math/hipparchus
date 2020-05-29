@@ -447,8 +447,8 @@ public class EventState {
                 final double oldPendingEventTime = pendingEventTime;
                 final boolean foundRoot = findRoot(interpolator, t0, g0, t, g);
                 // make sure the new root is not the same as the old root, if one exists
-                meFirst = foundRoot && (Double.isNaN(oldPendingEventTime)
-                        || oldPendingEventTime != pendingEventTime);
+                meFirst = foundRoot &&
+                          (Double.isNaN(oldPendingEventTime) || oldPendingEventTime != pendingEventTime);
             }
         }
 
