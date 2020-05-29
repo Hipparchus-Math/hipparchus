@@ -4272,7 +4272,7 @@ public class FastMath {
      * @return exponent for d in IEEE754 representation, without bias
      */
     public static int getExponent(final double d) {
-        // NaN and Infinite will return 1024 anywho so can use raw bits
+        // NaN and Infinite will return 1024 anyhow so can use raw bits
         return (int) ((Double.doubleToRawLongBits(d) >>> 52) & 0x7ff) - 1023;
     }
 
@@ -4286,7 +4286,7 @@ public class FastMath {
      * @return exponent for d in IEEE754 representation, without bias
      */
     public static int getExponent(final float f) {
-        // NaN and Infinite will return the same exponent anywho so can use raw bits
+        // NaN and Infinite will return the same exponent anyhow so can use raw bits
         return ((Float.floatToRawIntBits(f) >>> 23) & 0xff) - 127;
     }
 
