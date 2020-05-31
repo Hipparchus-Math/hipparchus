@@ -56,10 +56,6 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="add" >
         Added isMathematicalInteger to Precision for double and float numbers.
       </action>
-      <action dev="luc" type="add" issue="issues/92">
-        Moved round() upward from RealFieldElement interface to CalculusFieldElement
-        interface.
-      </action>
       <action dev="luc" type="add" issue="issues/93">
         Added UnivariateDerivative1, UnivariateDerivative2 and Gradient
         for computing derivatives in simple cases with less overhead than

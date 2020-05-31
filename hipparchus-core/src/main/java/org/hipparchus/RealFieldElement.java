@@ -22,6 +22,7 @@
 package org.hipparchus;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.FastMath;
 
 /**
  * Interface representing a <a href="http://mathworld.wolfram.com/RealNumber.html">real</a>
@@ -46,6 +47,13 @@ public interface RealFieldElement<T> extends CalculusFieldElement<T> {
      */
     T remainder(T a)
         throws MathIllegalArgumentException;
+
+    /** Get the closest long to instance real value.
+     * @return closest long to {@link #getReal()}
+     */
+    default long round() {
+        return FastMath.round(getReal());
+    }
 
     /** absolute value.
      * @return abs(this)
