@@ -1351,6 +1351,84 @@ public class FastMathTest {
     }
 
     @Test
+    public void testCopySignDouble() {
+
+        assertEquals(-2.0, FastMath.copySign(-2.0, -5.0),                     1.0e-10);
+        assertEquals(-2.0, FastMath.copySign(+2.0, -5.0),                     1.0e-10);
+        assertEquals(+2.0, FastMath.copySign(-2.0, +5.0),                     1.0e-10);
+        assertEquals(+2.0, FastMath.copySign(+2.0, +5.0),                     1.0e-10);
+        assertEquals(-2.0, FastMath.copySign(-2.0, Double.NEGATIVE_INFINITY), 1.0e-10);
+        assertEquals(-2.0, FastMath.copySign(+2.0, Double.NEGATIVE_INFINITY), 1.0e-10);
+        assertEquals(+2.0, FastMath.copySign(-2.0, Double.POSITIVE_INFINITY), 1.0e-10);
+        assertEquals(+2.0, FastMath.copySign(+2.0, Double.POSITIVE_INFINITY), 1.0e-10);
+        assertEquals(+2.0, FastMath.copySign(-2.0, Double.NaN),               1.0e-10);
+        assertEquals(+2.0, FastMath.copySign(-2.0, Double.NaN),               1.0e-10);
+        assertEquals(+2.0, FastMath.copySign(-2.0, -Double.NaN),              1.0e-10);
+        assertEquals(+2.0, FastMath.copySign(-2.0, -Double.NaN),              1.0e-10);
+        assertEquals(-2.0, FastMath.copySign(-2.0, -0.0),                     1.0e-10);
+        assertEquals(-2.0, FastMath.copySign(+2.0, -0.0),                     1.0e-10);
+        assertEquals(+2.0, FastMath.copySign(-2.0, +0.0),                     1.0e-10);
+        assertEquals(+2.0, FastMath.copySign(+2.0, +0.0),                     1.0e-10);
+
+        assertEquals(-3.0, FastMath.copySign(+3.0, FastMath.copySign(-0.0, -5.0)),                     1.0e-10);
+        assertEquals(-3.0, FastMath.copySign(+3.0, FastMath.copySign(+0.0, -5.0)),                     1.0e-10);
+        assertEquals(+3.0, FastMath.copySign(+3.0, FastMath.copySign(-0.0, +5.0)),                     1.0e-10);
+        assertEquals(+3.0, FastMath.copySign(+3.0, FastMath.copySign(+0.0, +5.0)),                     1.0e-10);
+        assertEquals(-3.0, FastMath.copySign(+3.0, FastMath.copySign(-0.0, Double.NEGATIVE_INFINITY)), 1.0e-10);
+        assertEquals(-3.0, FastMath.copySign(+3.0, FastMath.copySign(+0.0, Double.NEGATIVE_INFINITY)), 1.0e-10);
+        assertEquals(+3.0, FastMath.copySign(+3.0, FastMath.copySign(-0.0, Double.POSITIVE_INFINITY)), 1.0e-10);
+        assertEquals(+3.0, FastMath.copySign(+3.0, FastMath.copySign(+0.0, Double.POSITIVE_INFINITY)), 1.0e-10);
+        assertEquals(+3.0, FastMath.copySign(+3.0, FastMath.copySign(-0.0, Double.NaN)),               1.0e-10);
+        assertEquals(+3.0, FastMath.copySign(+3.0, FastMath.copySign(-0.0, Double.NaN)),               1.0e-10);
+        assertEquals(+3.0, FastMath.copySign(+3.0, FastMath.copySign(-0.0, -Double.NaN)),              1.0e-10);
+        assertEquals(+3.0, FastMath.copySign(+3.0, FastMath.copySign(-0.0, -Double.NaN)),              1.0e-10);
+        assertEquals(-3.0, FastMath.copySign(+3.0, FastMath.copySign(-0.0, -0.0)),                     1.0e-10);
+        assertEquals(-3.0, FastMath.copySign(+3.0, FastMath.copySign(+0.0, -0.0)),                     1.0e-10);
+        assertEquals(+3.0, FastMath.copySign(+3.0, FastMath.copySign(-0.0, +0.0)),                     1.0e-10);
+        assertEquals(+3.0, FastMath.copySign(+3.0, FastMath.copySign(+0.0, +0.0)),                     1.0e-10);
+
+    }
+
+    @Test
+    public void testCopySignFloat() {
+
+        assertEquals(-2.0f, FastMath.copySign(-2.0f, -5.0f),                   1.0e-10f);
+        assertEquals(-2.0f, FastMath.copySign(+2.0f, -5.0f),                   1.0e-10f);
+        assertEquals(+2.0f, FastMath.copySign(-2.0f, +5.0f),                   1.0e-10f);
+        assertEquals(+2.0f, FastMath.copySign(+2.0f, +5.0f),                   1.0e-10f);
+        assertEquals(-2.0f, FastMath.copySign(-2.0f, Float.NEGATIVE_INFINITY), 1.0e-10f);
+        assertEquals(-2.0f, FastMath.copySign(+2.0f, Float.NEGATIVE_INFINITY), 1.0e-10f);
+        assertEquals(+2.0f, FastMath.copySign(-2.0f, Float.POSITIVE_INFINITY), 1.0e-10f);
+        assertEquals(+2.0f, FastMath.copySign(+2.0f, Float.POSITIVE_INFINITY), 1.0e-10f);
+        assertEquals(+2.0f, FastMath.copySign(-2.0f, Float.NaN),               1.0e-10f);
+        assertEquals(+2.0f, FastMath.copySign(-2.0f, Float.NaN),               1.0e-10f);
+        assertEquals(+2.0f, FastMath.copySign(-2.0f, -Float.NaN),              1.0e-10f);
+        assertEquals(+2.0f, FastMath.copySign(-2.0f, -Float.NaN),              1.0e-10f);
+        assertEquals(-2.0f, FastMath.copySign(-2.0f, -0.0f),                   1.0e-10f);
+        assertEquals(-2.0f, FastMath.copySign(+2.0f, -0.0f),                   1.0e-10f);
+        assertEquals(+2.0f, FastMath.copySign(-2.0f, +0.0f),                   1.0e-10f);
+        assertEquals(+2.0f, FastMath.copySign(+2.0f, +0.0f),                   1.0e-10f);
+
+        assertEquals(-3.0f, FastMath.copySign(+3.0f, FastMath.copySign(-0.0f, -5.0f)),                   1.0e-10f);
+        assertEquals(-3.0f, FastMath.copySign(+3.0f, FastMath.copySign(+0.0f, -5.0f)),                   1.0e-10f);
+        assertEquals(+3.0f, FastMath.copySign(+3.0f, FastMath.copySign(-0.0f, +5.0f)),                   1.0e-10f);
+        assertEquals(+3.0f, FastMath.copySign(+3.0f, FastMath.copySign(+0.0f, +5.0f)),                   1.0e-10f);
+        assertEquals(-3.0f, FastMath.copySign(+3.0f, FastMath.copySign(-0.0f, Float.NEGATIVE_INFINITY)), 1.0e-10f);
+        assertEquals(-3.0f, FastMath.copySign(+3.0f, FastMath.copySign(+0.0f, Float.NEGATIVE_INFINITY)), 1.0e-10f);
+        assertEquals(+3.0f, FastMath.copySign(+3.0f, FastMath.copySign(-0.0f, Float.POSITIVE_INFINITY)), 1.0e-10f);
+        assertEquals(+3.0f, FastMath.copySign(+3.0f, FastMath.copySign(+0.0f, Float.POSITIVE_INFINITY)), 1.0e-10f);
+        assertEquals(+3.0f, FastMath.copySign(+3.0f, FastMath.copySign(-0.0f, Float.NaN)),               1.0e-10f);
+        assertEquals(+3.0f, FastMath.copySign(+3.0f, FastMath.copySign(-0.0f, Float.NaN)),               1.0e-10f);
+        assertEquals(+3.0f, FastMath.copySign(+3.0f, FastMath.copySign(-0.0f, -Float.NaN)),              1.0e-10f);
+        assertEquals(+3.0f, FastMath.copySign(+3.0f, FastMath.copySign(-0.0f, -Float.NaN)),              1.0e-10f);
+        assertEquals(-3.0f, FastMath.copySign(+3.0f, FastMath.copySign(-0.0f, -0.0f)),                   1.0e-10f);
+        assertEquals(-3.0f, FastMath.copySign(+3.0f, FastMath.copySign(+0.0f, -0.0f)),                   1.0e-10f);
+        assertEquals(+3.0f, FastMath.copySign(+3.0f, FastMath.copySign(-0.0f, +0.0f)),                   1.0e-10f);
+        assertEquals(+3.0f, FastMath.copySign(+3.0f, FastMath.copySign(+0.0f, +0.0f)),                   1.0e-10f);
+
+    }
+
+    @Test
     public void testSignumDouble() {
         final double delta = 0.0;
         assertEquals(1.0, FastMath.signum(2.0), delta);
