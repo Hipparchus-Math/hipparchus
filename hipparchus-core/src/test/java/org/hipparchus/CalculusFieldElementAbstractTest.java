@@ -386,6 +386,24 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     }
 
     @Test
+    public void testRemainderField() {
+        for (double x = -3; x < 3; x += 0.2) {
+            for (double y = -3; y < 3; y += 0.2) {
+                checkRelative(FastMath.IEEEremainder(x, y), build(x).remainder(build(y)));
+            }
+        }
+    }
+
+    @Test
+    public void testRemainderDouble() {
+        for (double x = -3; x < 3; x += 0.2) {
+            for (double y = -3.2; y < 3.2; y += 0.25) {
+                checkRelative(FastMath.IEEEremainder(x, y), build(x).remainder(y));
+            }
+        }
+    }
+
+    @Test
     public void testCopySignField() {
         for (double x = -3; x < 3; x += 0.2) {
             for (double y = -3; y < 3; y += 0.2) {

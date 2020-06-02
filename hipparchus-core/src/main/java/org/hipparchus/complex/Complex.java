@@ -1674,6 +1674,32 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
     }
 
     /** {@inheritDoc}
+     * <p>
+     * for complex numbers, the integer n corresponding to {@code this.subtract(remainder(a)).divide(a)}
+     * is a <a href="https://en.wikipedia.org/wiki/Gaussian_integer">Wikipedia - Gaussian integer</a>.
+     * </p>
+    * @since 1.7
+     */
+    public Complex remainder(final double a) {
+        return createComplex(FastMath.IEEEremainder(getReal(), a), FastMath.IEEEremainder(getImaginary(), a));
+    }
+
+    /** {@inheritDoc}
+     * <p>
+     * for complex numbers, the integer n corresponding to {@code this.subtract(remainder(a)).divide(a)}
+     * is a <a href="https://en.wikipedia.org/wiki/Gaussian_integer">Wikipedia - Gaussian integer</a>.
+     * </p>
+    * @since 1.7
+     */
+    public Complex remainder(final Complex a) {
+        final Complex complexQuotient = divide(a);
+        final double  qRInt           = FastMath.rint(complexQuotient.real);
+        final double  qIInt           = FastMath.rint(complexQuotient.imaginary);
+        return createComplex(real - qRInt * a.real + qIInt * a.imaginary,
+                             imaginary - qRInt * a.imaginary - qIInt * a.real);
+    }
+
+    /** {@inheritDoc}
      * @since 1.7
      */
     @Override

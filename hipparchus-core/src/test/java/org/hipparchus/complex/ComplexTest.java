@@ -33,6 +33,7 @@ import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.Decimal64;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -1853,6 +1854,61 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
                 Assert.assertEquals(FastMath.rint(y), z.rint().getImaginary(), 1.0e-15);
             }
         }
+    }
+
+    @Test
+    public void testRemainderComplexComplex() {
+        for (double x1 = -3.9; x1 < 3.9; x1 += 0.125) {
+            for (double y1 = -3.9; y1 < 3.9; y1 += 0.125) {
+                final Complex z1 = new Complex(x1, y1);
+                for (double x2 = -3.92; x2 < 3.9; x2 += 0.125) {
+                    for (double y2 = -3.92; y2 < 3.9; y2 += 0.125) {
+                        final Complex z2 = new Complex(x2, y2);
+                        final Complex r  = z1.remainder(z2);
+                        final Complex q  = z1.subtract(r).divide(z2);
+                        Assert.assertTrue(r.abs() <= z2.abs());
+                        Assert.assertEquals(FastMath.rint(q.getReal()), q.getReal(), 2.0e-14);
+                        Assert.assertEquals(FastMath.rint(q.getImaginary()), q.getImaginary(), 2.0e-14);
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testRemainderComplexDouble() {
+        for (double x1 = -3.9; x1 < 3.9; x1 += 0.125) {
+            for (double y1 = -3.9; y1 < 3.9; y1 += 0.125) {
+                final Complex z1 = new Complex(x1, y1);
+                for (double a = -3.92; a < 3.9; a += 0.125) {
+                        final Complex r  = z1.remainder(a);
+                        final Complex q  = z1.subtract(r).divide(a);
+                        Assert.assertTrue(r.abs() <= FastMath.abs(a));
+                        Assert.assertEquals(FastMath.rint(q.getReal()), q.getReal(), 2.0e-14);
+                        Assert.assertEquals(FastMath.rint(q.getImaginary()), q.getImaginary(), 2.0e-14);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testRemainderAxKr() {
+        checkRemainder(new Complex(14, -5), new Complex(3, 4), new Complex(-1.0,  0.0));
+        checkRemainder(new Complex(26, 120), new Complex(37, 226), new Complex(-11.0, -106.0));
+        checkRemainder(new Complex(9.4, 6), new Complex(1.0, 1.0), new Complex(-0.6, 0.0));
+        checkRemainder(new Complex(-5.89, 0.33), new Complex(2.4, -0.123), new Complex(-1.09, 0.084));
+    }
+
+    private void checkRemainder(final Complex c1, final Complex c2, final Complex expectedRemainder) {
+
+        final Complex remainder = c1.remainder(c2);
+        Assert.assertEquals(expectedRemainder.getReal(),      remainder.getReal(),      1.0e-15);
+        Assert.assertEquals(expectedRemainder.getImaginary(), remainder.getImaginary(), 1.0e-15);
+
+        final Complex crossCheck = c1.subtract(remainder).divide(c2);
+        Assert.assertTrue(Precision.isMathematicalInteger(crossCheck.getReal()));
+        Assert.assertTrue(Precision.isMathematicalInteger(crossCheck.getImaginary()));
+
     }
 
     @Test
