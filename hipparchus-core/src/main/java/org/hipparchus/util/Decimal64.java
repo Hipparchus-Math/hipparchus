@@ -21,6 +21,7 @@
  */
 package org.hipparchus.util;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -28,10 +29,9 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * This class wraps a {@code double} value in an object. It is similar to the
  * standard class {@link Double}, while also implementing the
- * {@link RealFieldElement} interface.
+ * {@link CalculusFieldElement} interface.
  */
-public class Decimal64 extends Number
-                       implements RealFieldElement<Decimal64>, Comparable<Decimal64> {
+public class Decimal64 extends Number implements RealFieldElement<Decimal64>, Comparable<Decimal64> {
 
     /** The constant value of {@code 0d} as a {@code Decimal64}. */
     public static final Decimal64 ZERO;
@@ -366,7 +366,7 @@ public class Decimal64 extends Number
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 abs() {
+    public Decimal64 norm() {
         return new Decimal64(FastMath.abs(value));
     }
 

@@ -22,8 +22,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -46,8 +46,8 @@ import org.hipparchus.ode.TestFieldProblemAbstract;
 import org.hipparchus.ode.TestFieldProblemHandler;
 import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.FieldODEEventHandler;
-import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
+import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -56,13 +56,13 @@ import org.junit.Test;
 
 public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
-    protected abstract <T extends RealFieldElement<T>> RungeKuttaFieldIntegrator<T>
+    protected abstract <T extends CalculusFieldElement<T>> RungeKuttaFieldIntegrator<T>
         createIntegrator(Field<T> field, T step);
 
     @Test
     public abstract void testNonFieldIntegratorConsistency();
 
-    protected <T extends RealFieldElement<T>> void doTestNonFieldIntegratorConsistency(final Field<T> field) {
+    protected <T extends CalculusFieldElement<T>> void doTestNonFieldIntegratorConsistency(final Field<T> field) {
         try {
 
             // get the Butcher arrays from the field integrator
@@ -98,7 +98,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         }
     }
 
-    private <T extends RealFieldElement<T>> void checkArray(double[] regularArray, T[] fieldArray) {
+    private <T extends CalculusFieldElement<T>> void checkArray(double[] regularArray, T[] fieldArray) {
         Assert.assertEquals(regularArray.length, fieldArray.length);
         for (int i = 0; i < regularArray.length; ++i) {
             if (regularArray[i] == 0) {
@@ -112,7 +112,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testMissedEndEvent();
 
-    protected <T extends RealFieldElement<T>> void doTestMissedEndEvent(final Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doTestMissedEndEvent(final Field<T> field,
                                                                         final double epsilonT, final double epsilonY)
         throws MathIllegalArgumentException, MathIllegalStateException {
         final T   t0     = field.getZero().add(1878250320.0000029);
@@ -181,7 +181,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testSanityChecks();
 
-    protected <T extends RealFieldElement<T>> void doTestSanityChecks(Field<T> field)
+    protected <T extends CalculusFieldElement<T>> void doTestSanityChecks(Field<T> field)
         throws MathIllegalArgumentException, MathIllegalStateException {
         RungeKuttaFieldIntegrator<T> integrator = createIntegrator(field, field.getZero().add(0.01));
         try  {
@@ -207,7 +207,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testDecreasingSteps();
 
-    protected <T extends RealFieldElement<T>> void doTestDecreasingSteps(Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doTestDecreasingSteps(Field<T> field,
                                                                          final double safetyValueFactor,
                                                                          final double safetyTimeFactor,
                                                                          final double epsilonT)
@@ -249,14 +249,14 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
                 T error = handler.getMaximalValueError();
                 if (i > 4) {
-                    Assert.assertTrue(error.subtract(previousValueError.abs().multiply(safetyValueFactor)).getReal() < 0);
+                    Assert.assertTrue(error.subtract(previousValueError.norm().multiply(safetyValueFactor)).getReal() < 0);
                 }
                 previousValueError = error;
 
                 T timeError = handler.getMaximalTimeError();
                 if (i > 4) {
                     // can't expect time error to be less than event finding tolerance
-                    T timeTol = max(eventTol, previousTimeError.abs().multiply(safetyTimeFactor));
+                    T timeTol = max(eventTol, previousTimeError.norm().multiply(safetyTimeFactor));
                     Assert.assertTrue(timeError.subtract(timeTol).getReal() <= 0);
                 }
                 previousTimeError = timeError;
@@ -276,14 +276,14 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
      * @param b second number.
      * @return the larger of a and b.
      */
-    private <T extends RealFieldElement<T>> T max(T a, T b) {
+    private <T extends CalculusFieldElement<T>> T max(T a, T b) {
         return a.getReal() > b.getReal() ? a : b;
     }
 
     @Test
     public abstract void testSmallStep();
 
-    protected <T extends RealFieldElement<T>> void doTestSmallStep(Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doTestSmallStep(Field<T> field,
                                                                    final double epsilonLast,
                                                                    final double epsilonMaxValue,
                                                                    final double epsilonMaxTime,
@@ -308,7 +308,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testBigStep();
 
-    protected <T extends RealFieldElement<T>> void doTestBigStep(Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doTestBigStep(Field<T> field,
                                                                  final double belowLast,
                                                                  final double belowMaxValue,
                                                                  final double epsilonMaxTime,
@@ -333,7 +333,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testBackward();
 
-    protected <T extends RealFieldElement<T>> void doTestBackward(Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doTestBackward(Field<T> field,
                                                                   final double epsilonLast,
                                                                   final double epsilonMaxValue,
                                                                   final double epsilonMaxTime,
@@ -341,7 +341,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         TestFieldProblem5<T> pb = new TestFieldProblem5<T>(field);
-        T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.001).abs();
+        T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.001).norm();
 
         RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
         TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
@@ -358,7 +358,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testKepler();
 
-    protected <T extends RealFieldElement<T>> void doTestKepler(Field<T> field, double expectedMaxError, double epsilon)
+    protected <T extends CalculusFieldElement<T>> void doTestKepler(Field<T> field, double expectedMaxError, double epsilon)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         final TestFieldProblem3<T> pb  = new TestFieldProblem3<T>(field.getZero().add(0.9));
@@ -369,7 +369,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
     }
 
-    private static class KeplerHandler<T extends RealFieldElement<T>> implements FieldODEStepHandler<T> {
+    private static class KeplerHandler<T extends CalculusFieldElement<T>> implements FieldODEStepHandler<T> {
         private T maxError;
         private final TestFieldProblem3<T> pb;
         private final double expectedMaxError;
@@ -403,7 +403,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testStepSize();
 
-    protected <T extends RealFieldElement<T>> void doTestStepSize(final Field<T> field, final double epsilon)
+    protected <T extends CalculusFieldElement<T>> void doTestStepSize(final Field<T> field, final double epsilon)
         throws MathIllegalArgumentException, MathIllegalStateException {
         final T step = field.getZero().add(1.23456);
         RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
@@ -431,7 +431,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testSingleStep();
 
-    protected <T extends RealFieldElement<T>> void doTestSingleStep(final Field<T> field, final double epsilon) {
+    protected <T extends CalculusFieldElement<T>> void doTestSingleStep(final Field<T> field, final double epsilon) {
 
         final TestFieldProblem3<T> pb  = new TestFieldProblem3<T>(field.getZero().add(0.9));
         T h = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.0003);
@@ -453,7 +453,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testTooLargeFirstStep();
 
-    protected <T extends RealFieldElement<T>> void doTestTooLargeFirstStep(final Field<T> field) {
+    protected <T extends CalculusFieldElement<T>> void doTestTooLargeFirstStep(final Field<T> field) {
 
         RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, field.getZero().add(0.5));
         final T t0 = field.getZero();
@@ -483,7 +483,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testUnstableDerivative();
 
-    protected <T extends RealFieldElement<T>> void doTestUnstableDerivative(Field<T> field, double epsilon) {
+    protected <T extends CalculusFieldElement<T>> void doTestUnstableDerivative(Field<T> field, double epsilon) {
       final StepFieldProblem<T> stepProblem = new StepFieldProblem<T>(field,
                                                                       field.getZero().add(0.0),
                                                                       field.getZero().add(1.0),
@@ -499,7 +499,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testDerivativesConsistency();
 
-    protected <T extends RealFieldElement<T>> void doTestDerivativesConsistency(final Field<T> field, double epsilon) {
+    protected <T extends CalculusFieldElement<T>> void doTestDerivativesConsistency(final Field<T> field, double epsilon) {
         TestFieldProblem3<T> pb = new TestFieldProblem3<T>(field);
         T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.001);
         RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
@@ -556,9 +556,9 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testSecondaryEquations();
 
-    protected <T extends RealFieldElement<T>> void doTestSecondaryEquations(final Field<T> field,
-                                                                            final double epsilonSinCos,
-                                                                            final double epsilonLinear) {
+    protected <T extends CalculusFieldElement<T>> void doTestSecondaryEquations(final Field<T> field,
+                                                                                final double epsilonSinCos,
+                                                                                final double epsilonLinear) {
         FieldOrdinaryDifferentialEquation<T> sinCos = new FieldOrdinaryDifferentialEquation<T>() {
 
             @Override
@@ -623,11 +623,11 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                     Assert.assertEquals(1, state.getSecondaryStateDimension(1));
                     Assert.assertEquals(3, state.getCompleteStateDimension());
                     max[0] = FastMath.max(max[0],
-                                          t.sin().subtract(state.getPrimaryState()[0]).abs().getReal());
+                                          t.sin().subtract(state.getPrimaryState()[0]).norm().getReal());
                     max[0] = FastMath.max(max[0],
-                                          t.cos().subtract(state.getPrimaryState()[1]).abs().getReal());
+                                          t.cos().subtract(state.getPrimaryState()[1]).norm().getReal());
                     max[1] = FastMath.max(max[1],
-                                          field.getOne().subtract(t).subtract(state.getSecondaryState(1)[0]).abs().getReal());
+                                          field.getOne().subtract(t).subtract(state.getSecondaryState(1)[0]).norm().getReal());
                 }
             }
         });

@@ -19,7 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.Decimal64Field;
@@ -27,7 +27,7 @@ import org.junit.Test;
 
 public class DormandPrince54FieldStateInterpolatorTest extends RungeKuttaFieldStateInterpolatorAbstractTest {
 
-    protected <T extends RealFieldElement<T>> RungeKuttaFieldStateInterpolator<T>
+    protected <T extends CalculusFieldElement<T>> RungeKuttaFieldStateInterpolator<T>
     createInterpolator(Field<T> field, boolean forward, T[][] yDotK,
                        FieldODEStateAndDerivative<T> globalPreviousState,
                        FieldODEStateAndDerivative<T> globalCurrentState,
@@ -40,7 +40,7 @@ public class DormandPrince54FieldStateInterpolatorTest extends RungeKuttaFieldSt
                                                            mapper);
     }
 
-    protected <T extends RealFieldElement<T>> FieldButcherArrayProvider<T>
+    protected <T extends CalculusFieldElement<T>> FieldButcherArrayProvider<T>
     createButcherArrayProvider(final Field<T> field) {
         return new DormandPrince54FieldIntegrator<T>(field, 0, 1, 1, 1);
     }

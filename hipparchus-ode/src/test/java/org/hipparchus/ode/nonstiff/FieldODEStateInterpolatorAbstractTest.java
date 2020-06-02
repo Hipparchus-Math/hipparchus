@@ -21,7 +21,7 @@ package org.hipparchus.ode.nonstiff;
 import java.lang.reflect.InvocationTargetException;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
@@ -41,7 +41,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
     @Test
     public abstract void interpolationAtBounds();
 
-    protected <T extends RealFieldElement<T>> void doInterpolationAtBounds(final Field<T> field, double epsilon) {
+    protected <T extends CalculusFieldElement<T>> void doInterpolationAtBounds(final Field<T> field, double epsilon) {
 
         FieldODEStateInterpolator<T> interpolator = setUpInterpolator(field,
                                                                       new SinCos<T>(field),
@@ -67,7 +67,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
     @Test
     public abstract void interpolationInside();
 
-    protected <T extends RealFieldElement<T>> void doInterpolationInside(final Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doInterpolationInside(final Field<T> field,
                                                                          double epsilonSin, double epsilonCos) {
 
         ReferenceFieldODE<T> sinCos =  new SinCos<T>(field);
@@ -83,8 +83,8 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
                   divide(n);
             FieldODEStateAndDerivative<T> state = interpolator.getInterpolatedState(t);
             T[] ref = sinCos.theoreticalState(t);
-            maxErrorSin = FastMath.max(maxErrorSin, state.getPrimaryState()[0].subtract(ref[0]).abs().getReal());
-            maxErrorCos = FastMath.max(maxErrorCos, state.getPrimaryState()[1].subtract(ref[1]).abs().getReal());
+            maxErrorSin = FastMath.max(maxErrorSin, state.getPrimaryState()[0].subtract(ref[0]).norm().getReal());
+            maxErrorCos = FastMath.max(maxErrorCos, state.getPrimaryState()[1].subtract(ref[1]).norm().getReal());
         }
         Assert.assertEquals(0.0, maxErrorSin, epsilonSin);
         Assert.assertEquals(0.0, maxErrorCos, epsilonCos);
@@ -98,7 +98,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
         doRestrictPrevious(Decimal64Field.getInstance(), 1e-15, 1e-15);
     }
 
-    protected <T extends RealFieldElement<T>> void doRestrictPrevious(
+    protected <T extends CalculusFieldElement<T>> void doRestrictPrevious(
             Field<T> field,
             double epsilon,
             double epsilonDot) {
@@ -132,7 +132,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
         doRestrictCurrent(Decimal64Field.getInstance(), 1e-15, 1e-15);
     }
 
-    protected <T extends RealFieldElement<T>> void doRestrictCurrent(Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doRestrictCurrent(Field<T> field,
                                                                      double epsilon,
                                                                      double epsilonDot) {
 
@@ -165,7 +165,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
         doRestrictBothEnds(Decimal64Field.getInstance(), 1e-15, 1e-15);
     }
 
-    protected <T extends RealFieldElement<T>> void doRestrictBothEnds(Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doRestrictBothEnds(Field<T> field,
                                                                       double epsilon,
                                                                       double epsilonDot) {
 
@@ -194,7 +194,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
 
     }
 
-    private <T extends RealFieldElement<T>> void checkRestricted(
+    private <T extends CalculusFieldElement<T>> void checkRestricted(
             AbstractFieldODEStateInterpolator<T> original,
             AbstractFieldODEStateInterpolator<T> restricted,
             double epsilon,
@@ -226,7 +226,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
     @Test
     public abstract void nonFieldInterpolatorConsistency();
 
-    protected <T extends RealFieldElement<T>> void doNonFieldInterpolatorConsistency(final Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doNonFieldInterpolatorConsistency(final Field<T> field,
                                                                                      double epsilonSin, double epsilonCos,
                                                                                      double epsilonSinDot, double epsilonCosDot) {
 
@@ -254,10 +254,10 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
             double[] regularY     = regularState.getPrimaryState();
             double[] regularYDot  = regularState.getPrimaryDerivative();
 
-            maxErrorSin    = FastMath.max(maxErrorSin,    fieldY[0].subtract(regularY[0]).abs().getReal());
-            maxErrorCos    = FastMath.max(maxErrorCos,    fieldY[1].subtract(regularY[1]).abs().getReal());
-            maxErrorSinDot = FastMath.max(maxErrorSinDot, fieldYDot[0].subtract(regularYDot[0]).abs().getReal());
-            maxErrorCosDot = FastMath.max(maxErrorCosDot, fieldYDot[1].subtract(regularYDot[1]).abs().getReal());
+            maxErrorSin    = FastMath.max(maxErrorSin,    fieldY[0].subtract(regularY[0]).norm().getReal());
+            maxErrorCos    = FastMath.max(maxErrorCos,    fieldY[1].subtract(regularY[1]).norm().getReal());
+            maxErrorSinDot = FastMath.max(maxErrorSinDot, fieldYDot[0].subtract(regularYDot[0]).norm().getReal());
+            maxErrorCosDot = FastMath.max(maxErrorCosDot, fieldYDot[1].subtract(regularYDot[1]).norm().getReal());
 
         }
         Assert.assertEquals(0.0, maxErrorSin,    epsilonSin);
@@ -267,22 +267,22 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
 
     }
 
-    public interface ReferenceFieldODE<T extends RealFieldElement<T>> extends FieldOrdinaryDifferentialEquation<T> {
+    public interface ReferenceFieldODE<T extends CalculusFieldElement<T>> extends FieldOrdinaryDifferentialEquation<T> {
         T[] theoreticalState(T t);
     }
 
-    protected abstract <T extends RealFieldElement<T>>
+    protected abstract <T extends CalculusFieldElement<T>>
     AbstractFieldODEStateInterpolator<T> setUpInterpolator(final Field<T> field,
                                                            final ReferenceFieldODE<T> eqn,
                                                            final double t0,
                                                            final double[] y0,
                                                            final double t1);
 
-    protected abstract <T extends RealFieldElement<T>>
+    protected abstract <T extends CalculusFieldElement<T>>
     ODEStateInterpolator convertInterpolator(final FieldODEStateInterpolator<T> fieldInterpolator,
                                              final FieldOrdinaryDifferentialEquation<T> eqn);
 
-    protected <T extends RealFieldElement<T>>
+    protected <T extends CalculusFieldElement<T>>
     ODEStateAndDerivative convertODEStateAndDerivative(final FieldODEStateAndDerivative<T> s) {
         final double[][] secondaryStates;
         final double[][] secondaryDerivatives;
@@ -304,7 +304,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
                                          secondaryDerivatives);
     }
 
-    protected <T extends RealFieldElement<T>> double[][] convertArray(final T[][] fieldArray) {
+    protected <T extends CalculusFieldElement<T>> double[][] convertArray(final T[][] fieldArray) {
         if (fieldArray == null) {
             return null;
         }
@@ -315,7 +315,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
         return array;
     }
 
-    protected <T extends RealFieldElement<T>> double[] convertArray(final T[] fieldArray) {
+    protected <T extends CalculusFieldElement<T>> double[] convertArray(final T[] fieldArray) {
         if (fieldArray == null) {
             return null;
         }
@@ -326,7 +326,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
         return array;
     }
 
-    protected <T extends RealFieldElement<T>>
+    protected <T extends CalculusFieldElement<T>>
     EquationsMapper convertMapper(final FieldEquationsMapper<T> fieldmapper)
         throws NoSuchMethodException, SecurityException, NoSuchFieldException,
                IllegalArgumentException, IllegalAccessException,
@@ -347,7 +347,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
         return regularMapper;
     }
 
-    private static class SinCos<T extends RealFieldElement<T>> implements ReferenceFieldODE<T> {
+    private static class SinCos<T extends CalculusFieldElement<T>> implements ReferenceFieldODE<T> {
         private final Field<T> field;
         protected SinCos(final Field<T> field) {
             this.field = field;

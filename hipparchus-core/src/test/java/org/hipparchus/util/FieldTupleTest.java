@@ -21,11 +21,11 @@
  */
 package org.hipparchus.util;
 
-import org.hipparchus.RealFieldElementAbstractTest;
+import org.hipparchus.CalculusFieldElementAbstractTest;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class FieldTupleTest extends RealFieldElementAbstractTest<FieldTuple<Decimal64>> {
+public class FieldTupleTest extends CalculusFieldElementAbstractTest<FieldTuple<Decimal64>> {
     public static final Decimal64 X = new Decimal64(1.2345);
 
     public static final FieldTuple<Decimal64> PLUS_X = new FieldTuple<Decimal64>(X, X);

@@ -16,8 +16,8 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
@@ -51,8 +51,8 @@ import org.hipparchus.util.MathUtils;
  * @see FieldGradient
  * @since 1.7
  */
-public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
-    implements RealFieldElement<FieldUnivariateDerivative1<T>> {
+public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
+    implements CalculusFieldElement<FieldUnivariateDerivative1<T>> {
 
     /** Value of the function. */
     private final T f0;
@@ -231,7 +231,7 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public FieldUnivariateDerivative1<T> abs() {
+    public FieldUnivariateDerivative1<T> norm() {
         if (Double.doubleToLongBits(f0.getReal()) < 0) {
             // we use the bits representation to also handle -0.0
             return negate();
@@ -314,10 +314,10 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
             final int expY = y.getExponent();
             if (expX > expY + 27) {
                 // y is neglectible with respect to x
-                return abs();
+                return norm();
             } else if (expY > expX + 27) {
                 // x is neglectible with respect to y
-                return y.abs();
+                return y.norm();
             } else {
 
                 // find an intermediate scale to avoid both overflow and underflow
@@ -395,7 +395,7 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
      * @param <T> the type of the function parameters and value
      * @return a<sup>x</sup>
      */
-    public static <T extends RealFieldElement<T>> FieldUnivariateDerivative1<T> pow(final double a, final FieldUnivariateDerivative1<T> x) {
+    public static <T extends CalculusFieldElement<T>> FieldUnivariateDerivative1<T> pow(final double a, final FieldUnivariateDerivative1<T> x) {
         if (a == 0) {
             return x.getField().getZero();
         } else {

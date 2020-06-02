@@ -18,7 +18,7 @@ package org.hipparchus.analysis.interpolation;
 
 import java.io.Serializable;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.analysis.FieldBivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -137,7 +137,7 @@ public class BilinearInterpolatingFunction implements BivariateFunction, FieldBi
      * @since 1.5
      */
     @Override
-    public <T extends RealFieldElement<T>> T value(T x, T y) {
+    public <T extends CalculusFieldElement<T>> T value(T x, T y) {
 
         // get the interpolation nodes
         final int    i   = xGrid.interpolationIndex(x.getReal());

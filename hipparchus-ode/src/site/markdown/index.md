@@ -55,8 +55,8 @@ the initial state or some parameters (see below for an example).
 Two parallel APIs are available. The first is devoted to solve ode for which the integration free
 variable t and the state y(t) are primitive double and primitive double array respectively. The
 second API is devoted to solve ode for which the integration free variable t and the state y(t)
-are [RealFieldElement](../apidocs/org/hipparchus/RealFieldElement.html) and
-[RealFieldElement](../apidocs/org/hipparchus/RealFieldElement.html) array respectively. This
+are [CalculusFieldElement](../apidocs/org/hipparchus/CalculusFieldElement.html) and
+[CalculusFieldElement](../apidocs/org/hipparchus/CalculusFieldElement.html) array respectively. This
 allow for example users to integrate ode where the computation values
 are for example [DerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html)
 elements, hence automatically computing partial derivatives with respect to some equations parameters

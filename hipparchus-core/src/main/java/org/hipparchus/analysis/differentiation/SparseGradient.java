@@ -28,7 +28,7 @@ import java.util.Map;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
@@ -48,7 +48,7 @@ import org.hipparchus.util.SinCos;
  * </p>
  *
  */
-public class SparseGradient implements RealFieldElement<SparseGradient>, Serializable {
+public class SparseGradient implements CalculusFieldElement<SparseGradient>, Serializable {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20131025L;
@@ -404,7 +404,7 @@ public class SparseGradient implements RealFieldElement<SparseGradient>, Seriali
 
     /** {@inheritDoc} */
     @Override
-    public SparseGradient abs() {
+    public SparseGradient norm() {
         if (Double.doubleToLongBits(value) < 0) {
             // we use the bits representation to also handle -0.0
             return negate();
@@ -482,10 +482,10 @@ public class SparseGradient implements RealFieldElement<SparseGradient>, Seriali
             final int expY = FastMath.getExponent(y.value);
             if (expX > expY + 27) {
                 // y is negligible with respect to x
-                return abs();
+                return norm();
             } else if (expY > expX + 27) {
                 // x is negligible with respect to y
-                return y.abs();
+                return y.norm();
             } else {
 
                 // find an intermediate scale to avoid both overflow and underflow

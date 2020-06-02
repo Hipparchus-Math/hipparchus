@@ -1024,11 +1024,9 @@ public class Dfp implements RealFieldElement<Dfp> {
 
     }
 
-    /** Get the absolute value of instance.
-     * @return absolute value of instance
-     */
+    /** {@inheritDoc} */
     @Override
-    public Dfp abs() {
+    public Dfp norm() {
         Dfp result = newInstance(this);
         result.sign = 1;
         return result;

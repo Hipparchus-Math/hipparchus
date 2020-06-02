@@ -19,7 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.Decimal64Field;
@@ -27,19 +27,19 @@ import org.junit.Test;
 
 public class EulerFieldStateInterpolatorTest extends RungeKuttaFieldStateInterpolatorAbstractTest {
 
-    protected <T extends RealFieldElement<T>> RungeKuttaFieldStateInterpolator<T>
+    protected <T extends CalculusFieldElement<T>> RungeKuttaFieldStateInterpolator<T>
     createInterpolator(Field<T> field, boolean forward, T[][] yDotK,
                        FieldODEStateAndDerivative<T> globalPreviousState,
                        FieldODEStateAndDerivative<T> globalCurrentState,
                        FieldODEStateAndDerivative<T> softPreviousState,
                        FieldODEStateAndDerivative<T> softCurrentState, FieldEquationsMapper<T> mapper) {
         return new EulerFieldStateInterpolator<T>(field, forward, yDotK,
-                                                 globalPreviousState, globalCurrentState,
-                                                 softPreviousState, softCurrentState,
-                                                 mapper);
+                                                  globalPreviousState, globalCurrentState,
+                                                  softPreviousState, softCurrentState,
+                                                  mapper);
     }
 
-    protected <T extends RealFieldElement<T>> FieldButcherArrayProvider<T>
+    protected <T extends CalculusFieldElement<T>> FieldButcherArrayProvider<T>
     createButcherArrayProvider(final Field<T> field) {
         return new EulerFieldIntegrator<T>(field, field.getOne());
     }

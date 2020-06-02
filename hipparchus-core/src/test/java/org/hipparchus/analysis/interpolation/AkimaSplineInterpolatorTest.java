@@ -25,7 +25,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -346,10 +346,10 @@ public class AkimaSplineInterpolatorTest {
         assertEquals( 0.0, ( sumError / (double) numberOfSamples ), tolerance );
     }
 
-    private <T extends RealFieldElement<T>> void testInterpolation(T minimumX, T maximumX,
-                                                                   int numberOfElements, int numberOfSamples,
-                                                                   RealFieldUnivariateFunction<T> f,
-                                                                   double tolerance, double maxTolerance)
+    private <T extends CalculusFieldElement<T>> void testInterpolation(T minimumX, T maximumX,
+                                                                       int numberOfElements, int numberOfSamples,
+                                                                       RealFieldUnivariateFunction<T> f,
+                                                                       double tolerance, double maxTolerance)
     {
         final Field<T> field = minimumX.getField();
         T expected;
@@ -386,7 +386,7 @@ public class AkimaSplineInterpolatorTest {
             currentX = field.getZero().add(r);
             expected = f.value( currentX );
             actual = interpolation.value( currentX );
-            sumError += FastMath.abs(actual.subtract(expected)).getReal();
+            sumError += FastMath.norm(actual.subtract(expected)).getReal();
             assertEquals(expected.getReal(), actual.getReal(), maxTolerance);
         }
 

@@ -18,8 +18,8 @@
 package org.hipparchus.ode.nonstiff;
 
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Decimal64Field;
@@ -27,7 +27,7 @@ import org.junit.Test;
 
 public class LutherFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractTest {
 
-    protected <T extends RealFieldElement<T>> RungeKuttaFieldIntegrator<T>
+    protected <T extends CalculusFieldElement<T>> RungeKuttaFieldIntegrator<T>
     createIntegrator(Field<T> field, T step) {
         return new LutherFieldIntegrator<T>(field, step);
     }

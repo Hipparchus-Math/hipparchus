@@ -22,8 +22,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.MathArrays;
@@ -63,7 +63,7 @@ import org.hipparchus.util.MathUtils;
  * @param <T> the type of the field elements
  */
 
-public class DormandPrince853FieldIntegrator<T extends RealFieldElement<T>>
+public class DormandPrince853FieldIntegrator<T extends CalculusFieldElement<T>>
     extends EmbeddedRungeKuttaFieldIntegrator<T> {
 
     /** Integrator method name. */
@@ -439,7 +439,7 @@ public class DormandPrince853FieldIntegrator<T extends RealFieldElement<T>>
                                add(yDotK[10][j].multiply(e2_11)).
                                add(yDotK[11][j].multiply(e2_12));
 
-            final T yScale = MathUtils.max(y0[j].abs(), y1[j].abs());
+            final T yScale = MathUtils.max(y0[j].norm(), y1[j].norm());
             final T tol = vecAbsoluteTolerance == null ?
                           yScale.multiply(scalRelativeTolerance).add(scalAbsoluteTolerance) :
                           yScale.multiply(vecRelativeTolerance[j]).add(vecAbsoluteTolerance[j]);
@@ -454,7 +454,7 @@ public class DormandPrince853FieldIntegrator<T extends RealFieldElement<T>>
             den = h.getField().getOne();
         }
 
-        return h.abs().multiply(error1).divide(den.multiply(mainSetDimension).sqrt());
+        return h.norm().multiply(error1).divide(den.multiply(mainSetDimension).sqrt());
 
     }
 

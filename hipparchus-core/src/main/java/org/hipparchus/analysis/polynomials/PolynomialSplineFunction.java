@@ -23,7 +23,7 @@ package org.hipparchus.analysis.polynomials;
 
 import java.util.Arrays;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.FieldUnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
@@ -185,7 +185,7 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
      * {@inheritDoc}
      */
     @Override
-    public <T extends RealFieldElement<T>> T value(final T t) {
+    public <T extends CalculusFieldElement<T>> T value(final T t) {
         final double t0 = t.getReal();
         MathUtils.checkRangeInclusive(t0, knots[0], knots[n]);
         int i = Arrays.binarySearch(knots, t0);

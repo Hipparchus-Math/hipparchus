@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hipparchus.RealFieldElement;
-import org.hipparchus.RealFieldElementAbstractTest;
+import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.CalculusFieldElementAbstractTest;
 import org.hipparchus.Field;
 import org.hipparchus.analysis.polynomials.FieldPolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
@@ -45,8 +45,8 @@ import org.junit.Test;
 /**
  * Abstract test for class {@link FieldDerivativeStructure}.
  */
-public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldElement<T>>
-    extends RealFieldElementAbstractTest<FieldDerivativeStructure<T>> {
+public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFieldElement<T>>
+    extends CalculusFieldElementAbstractTest<FieldDerivativeStructure<T>> {
 
     protected abstract Field<T> getField();
 
@@ -807,7 +807,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
         FieldDerivativeStructure<T> dsSmall = factory.variable(0, +3.0e-10);
         FieldDerivativeStructure<T> dsLarge = factory.variable(1, -4.0e25);
 
-        Assert.assertEquals(dsLarge.abs().getReal(),
+        Assert.assertEquals(dsLarge.norm().getReal(),
                             FieldDerivativeStructure.hypot(dsSmall, dsLarge).getReal(),
                             1.0e-10);
         Assert.assertEquals(0,
@@ -817,7 +817,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
                             FieldDerivativeStructure.hypot(dsSmall, dsLarge).getPartialDerivative(0, 1).getReal(),
                             1.0e-10);
 
-        Assert.assertEquals(dsLarge.abs().getReal(),
+        Assert.assertEquals(dsLarge.norm().getReal(),
                             FieldDerivativeStructure.hypot(dsLarge, dsSmall).getReal(),
                             1.0e-10);
         Assert.assertEquals(0,
@@ -1428,26 +1428,25 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
         }
     }
 
-    @Override
     @Test
-    public void testAbs() {
+    public void testNorm() {
 
         final FDSFactory<T> factory = buildFactory(1, 1);
         FieldDerivativeStructure<T> minusOne = factory.variable(0, -1.0);
-        Assert.assertEquals(+1.0, minusOne.abs().getPartialDerivative(0).getReal(), 1.0e-15);
-        Assert.assertEquals(-1.0, minusOne.abs().getPartialDerivative(1).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, minusOne.norm().getPartialDerivative(0).getReal(), 1.0e-15);
+        Assert.assertEquals(-1.0, minusOne.norm().getPartialDerivative(1).getReal(), 1.0e-15);
 
         FieldDerivativeStructure<T> plusOne = factory.variable(0, +1.0);
-        Assert.assertEquals(+1.0, plusOne.abs().getPartialDerivative(0).getReal(), 1.0e-15);
-        Assert.assertEquals(+1.0, plusOne.abs().getPartialDerivative(1).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, plusOne.norm().getPartialDerivative(0).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, plusOne.norm().getPartialDerivative(1).getReal(), 1.0e-15);
 
         FieldDerivativeStructure<T> minusZero = factory.variable(0, buildScalar(-0.0));
-        Assert.assertEquals(+0.0, minusZero.abs().getPartialDerivative(0).getReal(), 1.0e-15);
-        Assert.assertEquals(-1.0, minusZero.abs().getPartialDerivative(1).getReal(), 1.0e-15);
+        Assert.assertEquals(+0.0, minusZero.norm().getPartialDerivative(0).getReal(), 1.0e-15);
+        Assert.assertEquals(-1.0, minusZero.norm().getPartialDerivative(1).getReal(), 1.0e-15);
 
         FieldDerivativeStructure<T> plusZero = factory.variable(0, buildScalar(+0.0));
-        Assert.assertEquals(+0.0, plusZero.abs().getPartialDerivative(0).getReal(), 1.0e-15);
-        Assert.assertEquals(+1.0, plusZero.abs().getPartialDerivative(1).getReal(), 1.0e-15);
+        Assert.assertEquals(+0.0, plusZero.norm().getPartialDerivative(0).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, plusZero.norm().getPartialDerivative(1).getReal(), 1.0e-15);
 
     }
 
@@ -1490,7 +1489,6 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
         Assert.assertEquals(-2.0, x.rint().getPartialDerivative(0).getReal(), 1.0e-15);
         Assert.assertEquals(+0.0, x.rint().getPartialDerivative(1).getReal(), 1.0e-15);
         Assert.assertEquals(-2.0, x.subtract(x.getField().getOne()).rint().getPartialDerivative(0).getReal(), 1.0e-15);
-        Assert.assertEquals(-1l, x.round());
 
     }
 

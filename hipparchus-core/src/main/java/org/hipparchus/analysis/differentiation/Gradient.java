@@ -19,7 +19,7 @@ package org.hipparchus.analysis.differentiation;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
@@ -52,7 +52,7 @@ import org.hipparchus.util.SinCos;
  * @see FieldGradient
  * @since 1.7
  */
-public class Gradient implements RealFieldElement<Gradient>, Serializable {
+public class Gradient implements CalculusFieldElement<Gradient>, Serializable {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20200520L;
@@ -293,7 +293,7 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public Gradient abs() {
+    public Gradient norm() {
         if (Double.doubleToLongBits(value) < 0) {
             // we use the bits representation to also handle -0.0
             return negate();
@@ -378,10 +378,10 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
             final int expY = y.getExponent();
             if (expX > expY + 27) {
                 // y is neglectible with respect to x
-                return abs();
+                return norm();
             } else if (expY > expX + 27) {
                 // x is neglectible with respect to y
-                return y.abs();
+                return y.norm();
             } else {
 
                 // find an intermediate scale to avoid both overflow and underflow

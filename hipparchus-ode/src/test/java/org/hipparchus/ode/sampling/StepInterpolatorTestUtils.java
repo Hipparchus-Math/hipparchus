@@ -22,7 +22,7 @@
 package org.hipparchus.ode.sampling;
 
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldExpandableODE;
@@ -81,9 +81,9 @@ public class StepInterpolatorTestUtils {
 
     }
 
-    public static <T extends RealFieldElement<T>> void checkDerivativesConsistency(final FieldODEIntegrator<T> integrator,
-                                                                                   final TestFieldProblemAbstract<T> problem,
-                                                                                   final double threshold) {
+    public static <T extends CalculusFieldElement<T>> void checkDerivativesConsistency(final FieldODEIntegrator<T> integrator,
+                                                                                       final TestFieldProblemAbstract<T> problem,
+                                                                                       final double threshold) {
         integrator.addStepHandler(new FieldODEStepHandler<T>() {
 
             public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast)
@@ -92,7 +92,7 @@ public class StepInterpolatorTestUtils {
                 final T h = interpolator.getCurrentState().getTime().subtract(interpolator.getPreviousState().getTime()).multiply(0.001);
                 final T t = interpolator.getCurrentState().getTime().subtract(h.multiply(300));
 
-                if (h.abs().subtract(FastMath.ulp(t.getReal()) * 10).getReal() < 0) {
+                if (h.norm().subtract(FastMath.ulp(t.getReal()) * 10).getReal() < 0) {
                     return;
                 }
 

@@ -22,8 +22,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.MathArrays;
@@ -53,7 +53,7 @@ import org.hipparchus.util.MathArrays;
  * @param <T> the type of the field elements
  */
 
-public class ClassicalRungeKuttaFieldIntegrator<T extends RealFieldElement<T>>
+public class ClassicalRungeKuttaFieldIntegrator<T extends CalculusFieldElement<T>>
     extends RungeKuttaFieldIntegrator<T> {
 
     /** Simple constructor.

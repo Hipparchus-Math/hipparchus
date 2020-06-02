@@ -21,7 +21,7 @@
  */
 package org.hipparchus.analysis.polynomials;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.Decimal64;
@@ -300,7 +300,7 @@ public final class FieldPolynomialFunctionTest {
         p.integrate(0, -1);
     }
 
-    private <T extends RealFieldElement<T>> void checkInverseDifferentiation(FieldPolynomialFunction<T> p) {
+    private <T extends CalculusFieldElement<T>> void checkInverseDifferentiation(FieldPolynomialFunction<T> p) {
         final T[] c0 = p.getCoefficients();
         final T[] c1 = p.antiDerivative().polynomialDerivative().getCoefficients();
         Assert.assertEquals(c0.length, c1.length);
@@ -309,8 +309,8 @@ public final class FieldPolynomialFunctionTest {
         }
     }
 
-    private <T extends RealFieldElement<T>> void checkCoeffs(final double tolerance, final FieldPolynomialFunction<T> p,
-                                                             final double... ref) {
+    private <T extends CalculusFieldElement<T>> void checkCoeffs(final double tolerance, final FieldPolynomialFunction<T> p,
+                                                                 final double... ref) {
         final T[] c = p.getCoefficients();
         Assert.assertEquals(ref.length, c.length);
         for (int i = 0; i < ref.length; ++i) {
@@ -318,7 +318,7 @@ public final class FieldPolynomialFunctionTest {
         }
     }
 
-    private <T extends RealFieldElement<T>> void checkNullPolynomial(FieldPolynomialFunction<T> p) {
+    private <T extends CalculusFieldElement<T>> void checkNullPolynomial(FieldPolynomialFunction<T> p) {
         for (T coefficient : p.getCoefficients()) {
             Assert.assertEquals(0, coefficient.getReal(), 1e-15);
         }

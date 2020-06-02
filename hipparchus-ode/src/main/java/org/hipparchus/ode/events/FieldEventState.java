@@ -22,7 +22,7 @@
 
 package org.hipparchus.ode.events;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver.Interval;
@@ -46,7 +46,7 @@ import org.hipparchus.util.FastMath;
  *
  * @param <T> the type of the field elements
  */
-public class FieldEventState<T extends RealFieldElement<T>> {
+public class FieldEventState<T extends CalculusFieldElement<T>> {
 
     /** Event handler. */
     private final FieldODEEventHandler<T> handler;
@@ -116,7 +116,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
                            final BracketedRealFieldUnivariateSolver<T> solver) {
         this.handler           = handler;
         this.maxCheckInterval  = maxCheckInterval;
-        this.convergence       = convergence.abs();
+        this.convergence       = convergence.norm();
         this.maxIterationCount = maxIterationCount;
         this.solver            = solver;
 
@@ -188,7 +188,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
             // extremely rare case: there is a zero EXACTLY at interval start
             // we will use the sign slightly after step beginning to force ignoring this zero
             final T epsilon = max(solver.getAbsoluteAccuracy(),
-                    solver.getRelativeAccuracy().multiply(t0).abs());
+                    solver.getRelativeAccuracy().multiply(t0).norm());
             T tStart = t0.add(epsilon.multiply(forward ? 0.5 : -0.5));
             if (tStart.equals(t0)) {
                 tStart = nextAfter(t0);
@@ -239,7 +239,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
         final FieldODEStateAndDerivative<T> s1 = interpolator.getCurrentState();
         final T t1 = s1.getTime();
         final T dt = t1.subtract(t0);
-        if (dt.abs().subtract(convergence).getReal() < 0) {
+        if (dt.norm().subtract(convergence).getReal() < 0) {
             // we cannot do anything on such a small step, don't trigger any events
             return false;
         }
@@ -588,7 +588,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
      * to modify integration.
      * @param <T> the type of the field elements
      */
-    public static class EventOccurrence<T extends RealFieldElement<T>> {
+    public static class EventOccurrence<T extends CalculusFieldElement<T>> {
 
         /** User requested action. */
         private final Action action;

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.analysis;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 
 /**
  * An interface representing a univariate matrix function.
@@ -24,7 +24,7 @@ import org.hipparchus.RealFieldElement;
  * @param <T> the type of the field elements
  * @since 1.3
  */
-public interface RealFieldUnivariateMatrixFunction<T extends RealFieldElement<T>> {
+public interface RealFieldUnivariateMatrixFunction<T extends CalculusFieldElement<T>> {
 
     /**
      * Compute the value for the function.

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.ode.sampling;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEIntegrator;
 import org.hipparchus.ode.FieldODEState;
@@ -114,7 +114,7 @@ public class FieldStepNormalizerTest {
         doTestStepsAtIntegerTimes(StepNormalizerMode.INCREMENT, 2.0, 2.5, 7.5, 2.5, 6.5);
     }
 
-    private <T extends RealFieldElement<T>> void doTestBoundaries(final TestFieldProblemAbstract<T> pb,
+    private <T extends CalculusFieldElement<T>> void doTestBoundaries(final TestFieldProblemAbstract<T> pb,
                                                                   final StepNormalizerBounds bounds,
                                                                   final T stepSize,
                                                                   final T expectedFirst,
@@ -156,7 +156,7 @@ public class FieldStepNormalizerTest {
         Assert.assertEquals(expectedLast, checker.lastTime.getReal(),  1.0e-10);
     }
 
-    private static class Checker<T extends RealFieldElement<T>> implements FieldODEFixedStepHandler<T> {
+    private static class Checker<T extends CalculusFieldElement<T>> implements FieldODEFixedStepHandler<T> {
 
         private T firstTime = null;
         private T lastTime = null;

@@ -21,7 +21,7 @@
  */
 package org.hipparchus.analysis.polynomials;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.FieldUnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
@@ -123,7 +123,7 @@ public class PolynomialFunctionNewtonForm implements UnivariateDifferentiableFun
      * {@inheritDoc}
      */
     @Override
-    public <T extends RealFieldElement<T>> T value(final T t) {
+    public <T extends CalculusFieldElement<T>> T value(final T t) {
         verifyInputArray(a, c);
 
         final int n = c.length;

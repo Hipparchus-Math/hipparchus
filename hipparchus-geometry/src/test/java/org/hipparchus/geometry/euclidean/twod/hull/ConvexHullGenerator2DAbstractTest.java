@@ -25,8 +25,6 @@ import java.util.List;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
-import org.hipparchus.geometry.euclidean.twod.hull.ConvexHull2D;
-import org.hipparchus.geometry.euclidean.twod.hull.ConvexHullGenerator2D;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.Region.Location;
 import org.hipparchus.random.MersenneTwister;

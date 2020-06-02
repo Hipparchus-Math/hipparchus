@@ -25,7 +25,7 @@ package org.hipparchus.ode;
 import java.lang.reflect.Array;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.util.FastMath;
@@ -47,7 +47,7 @@ import org.hipparchus.util.MathArrays;
 
  * @param <T> the type of the field elements
  */
-public class TestFieldProblem4<T extends RealFieldElement<T>>
+public class TestFieldProblem4<T extends CalculusFieldElement<T>>
     extends TestFieldProblemAbstract<T> {
 
     private static final double OFFSET = 1.2;
@@ -66,7 +66,7 @@ public class TestFieldProblem4<T extends RealFieldElement<T>>
         a = convert(field, OFFSET);
     }
 
-    private static <T extends RealFieldElement<T>> T[] createY0(final Field<T> field) {
+    private static <T extends CalculusFieldElement<T>> T[] createY0(final Field<T> field) {
         final T a = convert(field, OFFSET);
         T[] y0 = MathArrays.buildArray(field, 2);
         y0[0] = a.sin();
@@ -112,12 +112,12 @@ public class TestFieldProblem4<T extends RealFieldElement<T>>
         T sin = t.add(a).sin();
         T cos = t.add(a).cos();
         final T[] y = MathArrays.buildArray(getField(), getDimension());
-        y[0] = sin.abs();
+        y[0] = sin.norm();
         y[1] = (sin.getReal() >= 0) ? cos : cos.negate();
         return y;
     }
 
-    private static class Bounce<T extends RealFieldElement<T>> implements FieldODEEventHandler<T> {
+    private static class Bounce<T extends CalculusFieldElement<T>> implements FieldODEEventHandler<T> {
 
         private int sign;
 
@@ -147,7 +147,7 @@ public class TestFieldProblem4<T extends RealFieldElement<T>>
 
     }
 
-    private static class Stop<T extends RealFieldElement<T>> implements FieldODEEventHandler<T> {
+    private static class Stop<T extends CalculusFieldElement<T>> implements FieldODEEventHandler<T> {
 
         public Stop() {
         }

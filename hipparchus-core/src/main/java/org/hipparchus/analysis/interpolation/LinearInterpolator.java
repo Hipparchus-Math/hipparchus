@@ -23,7 +23,7 @@ package org.hipparchus.analysis.interpolation;
 
 import java.lang.reflect.Array;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.polynomials.FieldPolynomialFunction;
 import org.hipparchus.analysis.polynomials.FieldPolynomialSplineFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
@@ -102,7 +102,7 @@ public class LinearInterpolator implements UnivariateInterpolator, FieldUnivaria
      * @since 1.5
      */
     @Override
-    public <T extends RealFieldElement<T>> FieldPolynomialSplineFunction<T> interpolate(final T x[], final T y[])
+    public <T extends CalculusFieldElement<T>> FieldPolynomialSplineFunction<T> interpolate(final T x[], final T y[])
         throws MathIllegalArgumentException {
         MathUtils.checkNotNull(x);
         MathUtils.checkNotNull(y);

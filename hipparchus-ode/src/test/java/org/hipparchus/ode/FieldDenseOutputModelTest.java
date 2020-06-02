@@ -25,7 +25,7 @@ package org.hipparchus.ode;
 import java.util.Random;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ode.nonstiff.DormandPrince54FieldIntegrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
@@ -45,7 +45,7 @@ public class FieldDenseOutputModelTest {
         doTestBoundaries(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestBoundaries(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestBoundaries(final Field<T> field) {
         TestFieldProblem3<T> pb = new TestFieldProblem3<T>(field.getZero().add(0.9));
         double minStep = 0;
         double maxStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).getReal();
@@ -63,7 +63,7 @@ public class FieldDenseOutputModelTest {
         doTestRandomAccess(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestRandomAccess(final Field<T> field)  {
+    private <T extends CalculusFieldElement<T>> void doTestRandomAccess(final Field<T> field)  {
 
         TestFieldProblem3<T> pb = new TestFieldProblem3<T>(field.getZero().add(0.9));
         double minStep = 0;
@@ -102,7 +102,7 @@ public class FieldDenseOutputModelTest {
         doTestModelsMerging(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestModelsMerging(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestModelsMerging(final Field<T> field) {
 
         // theoretical solution: y[0] = cos(t), y[1] = sin(t)
         FieldOrdinaryDifferentialEquation<T> problem =
@@ -167,7 +167,7 @@ public class FieldDenseOutputModelTest {
         doTestErrorConditions(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestErrorConditions(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestErrorConditions(final Field<T> field) {
         FieldDenseOutputModel<T> cm = new FieldDenseOutputModel<T>();
         cm.handleStep(buildInterpolator(field, 0, 1, new double[] { 0.0, 1.0, -2.0 }), true);
 
@@ -185,7 +185,7 @@ public class FieldDenseOutputModelTest {
 
     }
 
-    private <T extends RealFieldElement<T>> boolean checkAppendError(Field<T> field, FieldDenseOutputModel<T> cm,
+    private <T extends CalculusFieldElement<T>> boolean checkAppendError(Field<T> field, FieldDenseOutputModel<T> cm,
                                                                      double t0, double t1, double[] y) {
         try {
             FieldDenseOutputModel<T> otherCm = new FieldDenseOutputModel<T>();
@@ -197,8 +197,8 @@ public class FieldDenseOutputModelTest {
         return false; // no allowable error
     }
 
-    private <T extends RealFieldElement<T>> FieldODEStateInterpolator<T> buildInterpolator(Field<T> field,
-                                                                                       double t0, double t1, double[] y) {
+    private <T extends CalculusFieldElement<T>> FieldODEStateInterpolator<T> buildInterpolator(Field<T> field,
+                                                                                               double t0, double t1, double[] y) {
         T[] fieldY = MathArrays.buildArray(field, y.length);
         for (int i = 0; i < y.length; ++i) {
             fieldY[i] = field.getZero().add(y[i]);

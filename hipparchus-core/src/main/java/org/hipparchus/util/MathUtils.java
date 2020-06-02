@@ -24,7 +24,7 @@ package org.hipparchus.util;
 
 import java.util.Arrays;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.Localizable;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -125,7 +125,7 @@ public final class MathUtils {
       * @param center center of the desired 2&pi; interval for the result
       * @return a-2k&pi; with integer k and center-&pi; &lt;= a-2k&pi; &lt;= center+&pi;
       */
-      public static <T extends RealFieldElement<T>> T normalizeAngle(T a, T center) {
+      public static <T extends CalculusFieldElement<T>> T normalizeAngle(T a, T center) {
           return a.subtract(FastMath.floor(a.add(FastMath.PI).subtract(center).divide(TWO_PI)).multiply(TWO_PI));
       }
 
@@ -135,7 +135,7 @@ public final class MathUtils {
       * @param e2 second element
       * @return max(a1, e2)
       */
-     public static <T extends RealFieldElement<T>> T max(final T e1, final T e2) {
+     public static <T extends CalculusFieldElement<T>> T max(final T e1, final T e2) {
          return e1.subtract(e2).getReal() >= 0 ? e1 : e2;
      }
 
@@ -145,7 +145,7 @@ public final class MathUtils {
       * @param e2 second element
       * @return min(a1, e2)
       */
-     public static <T extends RealFieldElement<T>> T min(final T e1, final T e2) {
+     public static <T extends CalculusFieldElement<T>> T min(final T e1, final T e2) {
          return e1.subtract(e2).getReal() >= 0 ? e2 : e1;
      }
 

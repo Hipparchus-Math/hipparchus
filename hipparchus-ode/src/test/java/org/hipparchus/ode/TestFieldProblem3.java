@@ -23,7 +23,7 @@
 package org.hipparchus.ode;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -44,7 +44,7 @@ import org.hipparchus.util.MathArrays;
 
  * @param <T> the type of the field elements
  */
-public class TestFieldProblem3<T extends RealFieldElement<T>>
+public class TestFieldProblem3<T extends CalculusFieldElement<T>>
 extends TestFieldProblemAbstract<T> {
 
     /** Eccentricity */
@@ -62,7 +62,7 @@ extends TestFieldProblemAbstract<T> {
         this.e = e;
     }
 
-    private static <T extends RealFieldElement<T>> T[] createY0(final T e) {
+    private static <T extends CalculusFieldElement<T>> T[] createY0(final T e) {
         T[] y0 = MathArrays.buildArray(e.getField(), 4);
         y0[0] = e.subtract(1).negate();
         y0[1] = e.getField().getZero();
@@ -107,7 +107,7 @@ extends TestFieldProblemAbstract<T> {
         T E = t;
         T d = convert(t.getField(), 0);
         T corr = convert(t.getField(), 999.0);
-        for (int i = 0; (i < 50) && (corr.abs().getReal() > 1.0e-12); ++i) {
+        for (int i = 0; (i < 50) && (corr.norm().getReal() > 1.0e-12); ++i) {
             T f2  = e.multiply(E.sin());
             T f0  = d.subtract(f2);
             T f1  = e.multiply(E.cos()).subtract(1).negate();

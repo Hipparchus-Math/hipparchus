@@ -22,8 +22,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -71,7 +71,7 @@ import org.hipparchus.util.MathUtils;
  *
  */
 
-public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement<T>>
+public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldElement<T>>
     extends AbstractFieldIntegrator<T> {
 
     /** Allowed absolute scalar error. */
@@ -150,7 +150,7 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
      * <p>
      * A side effect of this method is to also reset the initial
      * step so it will be automatically computed by the integrator
-     * if {@link #setInitialStepSize(RealFieldElement) setInitialStepSize}
+     * if {@link #setInitialStepSize(CalculusFieldElement) setInitialStepSize}
      * is not called by the user.
      * </p>
      * @param minimalStep minimal step (must be positive even for backward
@@ -179,7 +179,7 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
      * <p>
      * A side effect of this method is to also reset the initial
      * step so it will be automatically computed by the integrator
-     * if {@link #setInitialStepSize(RealFieldElement) setInitialStepSize}
+     * if {@link #setInitialStepSize(CalculusFieldElement) setInitialStepSize}
      * is not called by the user.
      * </p>
      * @param minimalStep minimal step (must be positive even for backward
@@ -304,10 +304,10 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
         // h^order * max (||y'/tol||, ||y''/tol||) = 0.01
         final T maxInv2 = MathUtils.max(yDotOnScale2.sqrt(), yDDotOnScale);
         final T h1 = maxInv2.getReal() < 1.0e-15 ?
-                     MathUtils.max(getField().getZero().add(1.0e-6), h.abs().multiply(0.001)) :
+                     MathUtils.max(getField().getZero().add(1.0e-6), h.norm().multiply(0.001)) :
                      maxInv2.multiply(100).reciprocal().pow(1.0 / order);
-        h = MathUtils.min(h.abs().multiply(100), h1);
-        h = MathUtils.max(h, state0.getTime().abs().multiply(1.0e-12));  // avoids cancellation when computing t1 - t0
+        h = MathUtils.min(h.norm().multiply(100), h1);
+        h = MathUtils.max(h, state0.getTime().norm().multiply(1.0e-12));  // avoids cancellation when computing t1 - t0
         h = MathUtils.max(minStep, MathUtils.min(maxStep, h));
         if (! forward) {
             h = h.negate();
@@ -330,12 +330,12 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
         throws MathIllegalArgumentException {
 
         T filteredH = h;
-        if (h.abs().subtract(minStep).getReal() < 0) {
+        if (h.norm().subtract(minStep).getReal() < 0) {
             if (acceptSmall) {
                 filteredH = forward ? minStep : minStep.negate();
             } else {
                 throw new MathIllegalArgumentException(LocalizedODEFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
-                                                       h.abs().getReal(), minStep.getReal(), true);
+                                                       h.norm().getReal(), minStep.getReal(), true);
             }
         }
 

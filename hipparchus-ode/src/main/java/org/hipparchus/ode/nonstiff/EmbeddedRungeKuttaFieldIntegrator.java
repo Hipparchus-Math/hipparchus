@@ -22,8 +22,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldEquationsMapper;
@@ -69,7 +69,7 @@ import org.hipparchus.util.MathUtils;
  * @param <T> the type of the field elements
  */
 
-public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends RealFieldElement<T>>
+public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldElement<T>>
     extends AdaptiveStepsizeFieldIntegrator<T>
     implements FieldButcherArrayProvider<T> {
 
@@ -249,11 +249,11 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends RealFieldEleme
                     final T[] scale = MathArrays.buildArray(getField(), mainSetDimension);
                     if (vecAbsoluteTolerance == null) {
                         for (int i = 0; i < scale.length; ++i) {
-                            scale[i] = y[i].abs().multiply(scalRelativeTolerance).add(scalAbsoluteTolerance);
+                            scale[i] = y[i].norm().multiply(scalRelativeTolerance).add(scalAbsoluteTolerance);
                         }
                     } else {
                         for (int i = 0; i < scale.length; ++i) {
-                            scale[i] = y[i].abs().multiply(vecRelativeTolerance[i]).add(vecAbsoluteTolerance[i]);
+                            scale[i] = y[i].norm().multiply(vecRelativeTolerance[i]).add(vecAbsoluteTolerance[i]);
                         }
                     }
                     hNew = initializeStep(forward, getOrder(), scale, getStepStart(), equations.getMapper());

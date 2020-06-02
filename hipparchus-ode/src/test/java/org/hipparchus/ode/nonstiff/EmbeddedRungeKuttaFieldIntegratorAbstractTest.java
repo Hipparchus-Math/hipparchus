@@ -21,18 +21,18 @@ package org.hipparchus.ode.nonstiff;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldExpandableODE;
+import org.hipparchus.ode.FieldODEIntegrator;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.ode.FieldSecondaryODE;
-import org.hipparchus.ode.FieldODEIntegrator;
 import org.hipparchus.ode.TestFieldProblem1;
 import org.hipparchus.ode.TestFieldProblem3;
 import org.hipparchus.ode.TestFieldProblem4;
@@ -40,8 +40,8 @@ import org.hipparchus.ode.TestFieldProblem5;
 import org.hipparchus.ode.TestFieldProblemHandler;
 import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.FieldODEEventHandler;
-import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
+import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -49,18 +49,18 @@ import org.junit.Test;
 
 public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
-    protected abstract <T extends RealFieldElement<T>> EmbeddedRungeKuttaFieldIntegrator<T>
+    protected abstract <T extends CalculusFieldElement<T>> EmbeddedRungeKuttaFieldIntegrator<T>
     createIntegrator(Field<T> field, final double minStep, final double maxStep,
                      final double scalAbsoluteTolerance, final double scalRelativeTolerance);
 
-    protected abstract <T extends RealFieldElement<T>> EmbeddedRungeKuttaFieldIntegrator<T>
+    protected abstract <T extends CalculusFieldElement<T>> EmbeddedRungeKuttaFieldIntegrator<T>
     createIntegrator(Field<T> field, final double minStep, final double maxStep,
                      final double[] vecAbsoluteTolerance, final double[] vecRelativeTolerance);
 
     @Test
     public abstract void testNonFieldIntegratorConsistency();
 
-    protected <T extends RealFieldElement<T>> void doTestNonFieldIntegratorConsistency(final Field<T> field) {
+    protected <T extends CalculusFieldElement<T>> void doTestNonFieldIntegratorConsistency(final Field<T> field) {
         try {
 
             // get the Butcher arrays from the field integrator
@@ -99,7 +99,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         }
     }
 
-    private <T extends RealFieldElement<T>> void checkArray(double[] regularArray, T[] fieldArray) {
+    private <T extends CalculusFieldElement<T>> void checkArray(double[] regularArray, T[] fieldArray) {
         Assert.assertEquals(regularArray.length, fieldArray.length);
         for (int i = 0; i < regularArray.length; ++i) {
             if (regularArray[i] == 0) {
@@ -113,7 +113,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testForwardBackwardExceptions();
 
-    protected <T extends RealFieldElement<T>> void doTestForwardBackwardExceptions(final Field<T> field) {
+    protected <T extends CalculusFieldElement<T>> void doTestForwardBackwardExceptions(final Field<T> field) {
         FieldOrdinaryDifferentialEquation<T> equations = new FieldOrdinaryDifferentialEquation<T>() {
 
             public int getDimension() {
@@ -162,7 +162,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
     @Test(expected=MathIllegalArgumentException.class)
     public abstract void testMinStep();
 
-    protected <T extends RealFieldElement<T>> void doTestMinStep(final Field<T> field)
+    protected <T extends CalculusFieldElement<T>> void doTestMinStep(final Field<T> field)
         throws MathIllegalArgumentException {
 
         TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
@@ -183,7 +183,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testIncreasingTolerance();
 
-    protected <T extends RealFieldElement<T>> void doTestIncreasingTolerance(final Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doTestIncreasingTolerance(final Field<T> field,
                                                                              double factor,
                                                                              double epsilon) {
 
@@ -216,7 +216,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testEvents();
 
-    protected <T extends RealFieldElement<T>> void doTestEvents(final Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doTestEvents(final Field<T> field,
                                                                 final double epsilonMaxValue,
                                                                 final String name) {
 
@@ -250,7 +250,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
     @Test(expected=LocalException.class)
     public abstract void testEventsErrors();
 
-    protected <T extends RealFieldElement<T>> void doTestEventsErrors(final Field<T> field)
+    protected <T extends CalculusFieldElement<T>> void doTestEventsErrors(final Field<T> field)
         throws LocalException {
         final TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
         double minStep = 0;
@@ -289,7 +289,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testEventsNoConvergence();
 
-    protected <T extends RealFieldElement<T>> void doTestEventsNoConvergence(final Field<T> field){
+    protected <T extends CalculusFieldElement<T>> void doTestEventsNoConvergence(final Field<T> field){
 
         final TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
         double minStep = 0;
@@ -330,7 +330,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testSanityChecks();
 
-    protected <T extends RealFieldElement<T>> void doTestSanityChecks(Field<T> field) {
+    protected <T extends CalculusFieldElement<T>> void doTestSanityChecks(Field<T> field) {
         TestFieldProblem3<T> pb = new TestFieldProblem3<T>(field);
         try  {
             EmbeddedRungeKuttaFieldIntegrator<T> integrator = createIntegrator(field, 0,
@@ -366,7 +366,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testBackward();
 
-    protected <T extends RealFieldElement<T>> void doTestBackward(Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doTestBackward(Field<T> field,
                                                                   final double epsilonLast,
                                                                   final double epsilonMaxValue,
                                                                   final double epsilonMaxTime,
@@ -375,7 +375,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
         TestFieldProblem5<T> pb = new TestFieldProblem5<T>(field);
         double minStep = 0;
-        double maxStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).abs().getReal();
+        double maxStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).norm().getReal();
         double scalAbsoluteTolerance = 1.0e-8;
         double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
 
@@ -396,7 +396,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testKepler();
 
-    protected <T extends RealFieldElement<T>> void doTestKepler(Field<T> field, double epsilon) {
+    protected <T extends CalculusFieldElement<T>> void doTestKepler(Field<T> field, double epsilon) {
 
         final TestFieldProblem3<T> pb  = new TestFieldProblem3<T>(field.getZero().add(0.9));
         double minStep = 0;
@@ -410,7 +410,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
     }
 
-    private static class KeplerHandler<T extends RealFieldElement<T>> implements FieldODEStepHandler<T> {
+    private static class KeplerHandler<T extends CalculusFieldElement<T>> implements FieldODEStepHandler<T> {
         private T maxError;
         private final TestFieldProblem3<T> pb;
         private final double epsilon;
@@ -442,9 +442,9 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
     @Test
     public abstract void testSecondaryEquations();
 
-    protected <T extends RealFieldElement<T>> void doTestSecondaryEquations(final Field<T> field,
-                                                                            final double epsilonSinCos,
-                                                                            final double epsilonLinear) {
+    protected <T extends CalculusFieldElement<T>> void doTestSecondaryEquations(final Field<T> field,
+                                                                                final double epsilonSinCos,
+                                                                                final double epsilonLinear) {
         FieldOrdinaryDifferentialEquation<T> sinCos = new FieldOrdinaryDifferentialEquation<T>() {
 
             @Override
@@ -497,11 +497,11 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                     Assert.assertEquals(1, state.getSecondaryStateDimension(1));
                     Assert.assertEquals(3, state.getCompleteStateDimension());
                     max[0] = FastMath.max(max[0],
-                                          t.sin().subtract(state.getPrimaryState()[0]).abs().getReal());
+                                          t.sin().subtract(state.getPrimaryState()[0]).norm().getReal());
                     max[0] = FastMath.max(max[0],
-                                          t.cos().subtract(state.getPrimaryState()[1]).abs().getReal());
+                                          t.cos().subtract(state.getPrimaryState()[1]).norm().getReal());
                     max[1] = FastMath.max(max[1],
-                                          field.getOne().subtract(t).subtract(state.getSecondaryState(1)[0]).abs().getReal());
+                                          field.getOne().subtract(t).subtract(state.getSecondaryState(1)[0]).norm().getReal());
                 }
             }
         });

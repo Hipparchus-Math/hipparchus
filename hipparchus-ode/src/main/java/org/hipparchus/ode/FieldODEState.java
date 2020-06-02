@@ -22,7 +22,7 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.util.MathArrays;
 
 /** Container for time, main and secondary state vectors.
@@ -34,7 +34,7 @@ import org.hipparchus.util.MathArrays;
  * @param <T> the type of the field elements
  */
 
-public class FieldODEState<T extends RealFieldElement<T>> {
+public class FieldODEState<T extends CalculusFieldElement<T>> {
 
     /** Time. */
     private final T time;
@@ -50,7 +50,7 @@ public class FieldODEState<T extends RealFieldElement<T>> {
 
     /** Simple constructor.
      * <p>Calling this constructor is equivalent to call {@link
-     * #FieldODEState(RealFieldElement, RealFieldElement[], RealFieldElement[][])
+     * #FieldODEState(CalculusFieldElement, CalculusFieldElement[], CalculusFieldElement[][])
      * FieldODEState(time, state, null)}.</p>
      * @param time time
      * @param primaryState primary state at time

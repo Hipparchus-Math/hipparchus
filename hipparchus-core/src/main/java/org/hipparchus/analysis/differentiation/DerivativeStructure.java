@@ -23,8 +23,8 @@ package org.hipparchus.analysis.differentiation;
 
 import java.io.Serializable;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
@@ -62,7 +62,7 @@ import org.hipparchus.util.MathUtils;
  * @see DSCompiler
  * @see FieldDerivativeStructure
  */
-public class DerivativeStructure implements RealFieldElement<DerivativeStructure>, Serializable {
+public class DerivativeStructure implements CalculusFieldElement<DerivativeStructure>, Serializable {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20161220L;
@@ -447,7 +447,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /** {@inheritDoc}
      */
     @Override
-    public DerivativeStructure abs() {
+    public DerivativeStructure norm() {
         if (Double.doubleToLongBits(data[0]) < 0) {
             // we use the bits representation to also handle -0.0
             return negate();
@@ -552,10 +552,10 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
             final int expY = y.getExponent();
             if (expX > expY + 27) {
                 // y is neglectible with respect to x
-                return abs();
+                return norm();
             } else if (expY > expX + 27) {
                 // x is neglectible with respect to y
-                return y.abs();
+                return y.norm();
             } else {
 
                 // find an intermediate scale to avoid both overflow and underflow

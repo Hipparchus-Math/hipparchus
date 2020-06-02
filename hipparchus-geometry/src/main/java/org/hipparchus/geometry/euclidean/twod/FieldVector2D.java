@@ -19,7 +19,7 @@ package org.hipparchus.geometry.euclidean.twod;
 import java.text.NumberFormat;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -28,12 +28,12 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
 /**
- * This class is a re-implementation of {@link Vector2D} using {@link RealFieldElement}.
+ * This class is a re-implementation of {@link Vector2D} using {@link CalculusFieldElement}.
  * <p>Instance of this class are guaranteed to be immutable.</p>
  * @param <T> the type of the field elements
  * @since 1.6
  */
-public class FieldVector2D<T extends RealFieldElement<T>> {
+public class FieldVector2D<T extends CalculusFieldElement<T>> {
 
     /** Abscissa. */
     private final T x;
@@ -276,7 +276,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector2D<T> getZero(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector2D<T> getZero(final Field<T> field) {
         return new FieldVector2D<>(field, Vector2D.ZERO);
     }
 
@@ -285,7 +285,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector2D<T> getPlusI(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector2D<T> getPlusI(final Field<T> field) {
         return new FieldVector2D<>(field, Vector2D.PLUS_I);
     }
 
@@ -294,7 +294,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector2D<T> getMinusI(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector2D<T> getMinusI(final Field<T> field) {
         return new FieldVector2D<>(field, Vector2D.MINUS_I);
     }
 
@@ -303,7 +303,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector2D<T> getPlusJ(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector2D<T> getPlusJ(final Field<T> field) {
         return new FieldVector2D<>(field, Vector2D.PLUS_J);
     }
 
@@ -312,7 +312,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector2D<T> getMinusJ(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector2D<T> getMinusJ(final Field<T> field) {
         return new FieldVector2D<>(field, Vector2D.MINUS_J);
     }
 
@@ -321,7 +321,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector2D<T> getNaN(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector2D<T> getNaN(final Field<T> field) {
         return new FieldVector2D<>(field, Vector2D.NaN);
     }
 
@@ -330,7 +330,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector2D<T> getPositiveInfinity(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector2D<T> getPositiveInfinity(final Field<T> field) {
         return new FieldVector2D<>(field, Vector2D.POSITIVE_INFINITY);
     }
 
@@ -339,13 +339,13 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector2D<T> getNegativeInfinity(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector2D<T> getNegativeInfinity(final Field<T> field) {
         return new FieldVector2D<>(field, Vector2D.NEGATIVE_INFINITY);
     }
 
     /** Get the abscissa of the vector.
      * @return abscissa of the vector
-     * @see #FieldVector2D(RealFieldElement, RealFieldElement)
+     * @see #FieldVector2D(CalculusFieldElement, CalculusFieldElement)
      */
     public T getX() {
         return x;
@@ -353,7 +353,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
 
     /** Get the ordinate of the vector.
      * @return ordinate of the vector
-    * @see #FieldVector2D(RealFieldElement, RealFieldElement)
+    * @see #FieldVector2D(CalculusFieldElement, CalculusFieldElement)
      */
     public T getY() {
         return y;
@@ -361,7 +361,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
 
     /** Get the vector coordinates as a dimension 2 array.
      * @return vector coordinates
-     * @see #FieldVector2D(RealFieldElement[])
+     * @see #FieldVector2D(CalculusFieldElement[])
      */
     public T[] toArray() {
         final T[] array = MathArrays.buildArray(x.getField(), 2);
@@ -381,7 +381,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return L<sub>1</sub> norm for the vector
      */
     public T getNorm1() {
-        return x.abs().add(y.abs());
+        return x.norm().add(y.norm());
     }
 
     /** Get the L<sub>2</sub> norm for the vector.
@@ -404,7 +404,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return L<sub>&infin;</sub> norm for the vector
      */
     public T getNormInf() {
-        return FastMath.max(FastMath.abs(x), FastMath.abs(y));
+        return FastMath.max(FastMath.norm(x), FastMath.norm(y));
     }
 
     /** Add a vector to the instance.
@@ -539,7 +539,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return angular separation between v1 and v2
      * @exception MathRuntimeException if either vector has a null norm
      */
-    public static <T extends RealFieldElement<T>> T angle(final FieldVector2D<T> v1, final FieldVector2D<T> v2)
+    public static <T extends CalculusFieldElement<T>> T angle(final FieldVector2D<T> v1, final FieldVector2D<T> v2)
         throws MathRuntimeException {
 
         final T normProduct = v1.getNorm().multiply(v2.getNorm());
@@ -551,7 +551,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
         final double threshold = normProduct.getReal() * 0.9999;
         if (FastMath.abs(dot.getReal()) > threshold) {
             // the vectors are almost aligned, compute using the sine
-            final T n = FastMath.abs(dot.linearCombination(v1.x, v2.y, v1.y.negate(), v2.x));
+            final T n = FastMath.norm(dot.linearCombination(v1.x, v2.y, v1.y.negate(), v2.x));
             if (dot.getReal() >= 0) {
                 return FastMath.asin(n.divide(normProduct));
             }
@@ -575,7 +575,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return angular separation between v1 and v2
      * @exception MathRuntimeException if either vector has a null norm
      */
-    public static <T extends RealFieldElement<T>> T angle(final FieldVector2D<T> v1, final Vector2D v2)
+    public static <T extends CalculusFieldElement<T>> T angle(final FieldVector2D<T> v1, final Vector2D v2)
         throws MathRuntimeException {
 
         final T normProduct = v1.getNorm().multiply(v2.getNorm());
@@ -587,7 +587,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
         final double threshold = normProduct.getReal() * 0.9999;
         if (FastMath.abs(dot.getReal()) > threshold) {
             // the vectors are almost aligned, compute using the sine
-            final T n = FastMath.abs(dot.linearCombination(v2.getY(), v1.x, v2.getX(), v1.y.negate()));
+            final T n = FastMath.norm(dot.linearCombination(v2.getY(), v1.x, v2.getX(), v1.y.negate()));
             if (dot.getReal() >= 0) {
                 return FastMath.asin(n.divide(normProduct));
             }
@@ -611,7 +611,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return angular separation between v1 and v2
      * @exception MathRuntimeException if either vector has a null norm
      */
-    public static <T extends RealFieldElement<T>> T angle(final Vector2D v1, final FieldVector2D<T> v2)
+    public static <T extends CalculusFieldElement<T>> T angle(final Vector2D v1, final FieldVector2D<T> v2)
         throws MathRuntimeException {
         return angle(v2, v1);
     }
@@ -661,7 +661,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * Test for the equality of two 2D vectors.
      * <p>
      * If all coordinates of two 2D vectors are exactly the same, and none of their
-     * {@link RealFieldElement#getReal() real part} are <code>NaN</code>, the
+     * {@link CalculusFieldElement#getReal() real part} are <code>NaN</code>, the
      * two 2D vectors are considered to be equal.
      * </p>
      * <p>
@@ -719,8 +719,8 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return the distance between the instance and p according to the L<sub>1</sub> norm
      */
     public T distance1(final FieldVector2D<T> v) {
-        final T dx = v.x.subtract(x).abs();
-        final T dy = v.y.subtract(y).abs();
+        final T dx = v.x.subtract(x).norm();
+        final T dy = v.y.subtract(y).norm();
         return dx.add(dy);
     }
 
@@ -732,8 +732,8 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return the distance between the instance and p according to the L<sub>1</sub> norm
      */
     public T distance1(final Vector2D v) {
-        final T dx = x.subtract(v.getX()).abs();
-        final T dy = y.subtract(v.getY()).abs();
+        final T dx = x.subtract(v.getX()).norm();
+        final T dy = y.subtract(v.getY()).norm();
         return dx.add(dy);
     }
 
@@ -771,8 +771,8 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return the distance between the instance and p according to the L<sub>&infin;</sub> norm
      */
     public T distanceInf(final FieldVector2D<T> v) {
-        final T dx = FastMath.abs(x.subtract(v.x));
-        final T dy = FastMath.abs(y.subtract(v.y));
+        final T dx = FastMath.norm(x.subtract(v.x));
+        final T dy = FastMath.norm(y.subtract(v.y));
         return FastMath.max(dx, dy);
     }
 
@@ -784,8 +784,8 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @return the distance between the instance and p according to the L<sub>&infin;</sub> norm
      */
     public T distanceInf(final Vector2D v) {
-        final T dx = FastMath.abs(x.subtract(v.getX()));
-        final T dy = FastMath.abs(y.subtract(v.getY()));
+        final T dx = FastMath.norm(x.subtract(v.getX()));
+        final T dy = FastMath.norm(y.subtract(v.getY()));
         return FastMath.max(dx, dy);
     }
 
@@ -909,7 +909,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T  distance1(final FieldVector2D<T> p1, final FieldVector2D<T> p2) {
+    public static <T extends CalculusFieldElement<T>> T  distance1(final FieldVector2D<T> p1, final FieldVector2D<T> p2) {
         return p1.distance1(p2);
     }
 
@@ -922,7 +922,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T  distance1(final FieldVector2D<T> p1, final Vector2D p2) {
+    public static <T extends CalculusFieldElement<T>> T  distance1(final FieldVector2D<T> p1, final Vector2D p2) {
         return p1.distance1(p2);
     }
 
@@ -935,7 +935,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T  distance1(final Vector2D p1, final FieldVector2D<T> p2) {
+    public static <T extends CalculusFieldElement<T>> T  distance1(final Vector2D p1, final FieldVector2D<T> p2) {
         return p2.distance1(p1);
     }
 
@@ -948,7 +948,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T distance(final FieldVector2D<T> p1, final FieldVector2D<T> p2) {
+    public static <T extends CalculusFieldElement<T>> T distance(final FieldVector2D<T> p1, final FieldVector2D<T> p2) {
         return p1.distance(p2);
     }
 
@@ -961,7 +961,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T distance(final FieldVector2D<T> p1, final Vector2D p2) {
+    public static <T extends CalculusFieldElement<T>> T distance(final FieldVector2D<T> p1, final Vector2D p2) {
         return p1.distance(p2);
     }
 
@@ -974,7 +974,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>2</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T distance( final Vector2D p1, final FieldVector2D<T> p2) {
+    public static <T extends CalculusFieldElement<T>> T distance( final Vector2D p1, final FieldVector2D<T> p2) {
         return p2.distance(p1);
     }
 
@@ -987,7 +987,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>&infin;</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T distanceInf(final FieldVector2D<T> p1, final FieldVector2D<T> p2) {
+    public static <T extends CalculusFieldElement<T>> T distanceInf(final FieldVector2D<T> p1, final FieldVector2D<T> p2) {
         return p1.distanceInf(p2);
     }
 
@@ -1000,7 +1000,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>&infin;</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T distanceInf(final FieldVector2D<T> p1, final Vector2D p2) {
+    public static <T extends CalculusFieldElement<T>> T distanceInf(final FieldVector2D<T> p1, final Vector2D p2) {
         return p1.distanceInf(p2);
     }
 
@@ -1013,7 +1013,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @param <T> the type of the field elements
      * @return the distance between p1 and p2 according to the L<sub>&infin;</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T distanceInf(final Vector2D p1, final FieldVector2D<T> p2) {
+    public static <T extends CalculusFieldElement<T>> T distanceInf(final Vector2D p1, final FieldVector2D<T> p2) {
         return p2.distanceInf(p1);
     }
 
@@ -1026,7 +1026,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @param <T> the type of the field elements
      * @return the square of the distance between p1 and p2
      */
-    public static <T extends RealFieldElement<T>> T distanceSq(final FieldVector2D<T> p1, final FieldVector2D<T> p2) {
+    public static <T extends CalculusFieldElement<T>> T distanceSq(final FieldVector2D<T> p1, final FieldVector2D<T> p2) {
         return p1.distanceSq(p2);
     }
 
@@ -1039,7 +1039,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @param <T> the type of the field elements
      * @return the square of the distance between p1 and p2
      */
-    public static <T extends RealFieldElement<T>> T distanceSq(final FieldVector2D<T> p1, final Vector2D p2) {
+    public static <T extends CalculusFieldElement<T>> T distanceSq(final FieldVector2D<T> p1, final Vector2D p2) {
         return p1.distanceSq(p2);
     }
 
@@ -1052,7 +1052,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * @param <T> the type of the field elements
      * @return the square of the distance between p1 and p2
      */
-    public static <T extends RealFieldElement<T>> T distanceSq(final Vector2D p1, final FieldVector2D<T> p2) {
+    public static <T extends CalculusFieldElement<T>> T distanceSq(final Vector2D p1, final FieldVector2D<T> p2) {
         return p2.distanceSq(p1);
     }
 
@@ -1066,7 +1066,7 @@ public class FieldVector2D<T extends RealFieldElement<T>> {
      * triangle, and 0 if (p, q, r) are collinear or some points are equal
      * @since 1.2
      */
-    public static <T extends RealFieldElement<T>> T orientation(final FieldVector2D<T> p, final FieldVector2D<T> q, final FieldVector2D<T> r) {
+    public static <T extends CalculusFieldElement<T>> T orientation(final FieldVector2D<T> p, final FieldVector2D<T> q, final FieldVector2D<T> r) {
         final T prototype = p.getX();
         final T[] a = MathArrays.buildArray(prototype.getField(), 6);
         a[0] = p.getX();

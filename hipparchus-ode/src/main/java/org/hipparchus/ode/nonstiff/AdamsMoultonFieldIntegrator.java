@@ -25,7 +25,7 @@ package org.hipparchus.ode.nonstiff;
 import java.util.Arrays;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
@@ -169,7 +169,7 @@ import org.hipparchus.util.MathUtils;
  *
  * @param <T> the type of the field elements
  */
-public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends AdamsFieldIntegrator<T> {
+public class AdamsMoultonFieldIntegrator<T extends CalculusFieldElement<T>> extends AdamsFieldIntegrator<T> {
 
     /** Integrator method name. */
     private static final String METHOD_NAME = "Adams-Moulton";
@@ -426,7 +426,7 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
             for (int i = 0; i < after.length; ++i) {
                 after[i] = after[i].add(previous[i].add(scaled[i]));
                 if (i < mainSetDimension) {
-                    final T yScale = MathUtils.max(previous[i].abs(), after[i].abs());
+                    final T yScale = MathUtils.max(previous[i].norm(), after[i].norm());
                     final T tol = (vecAbsoluteTolerance == null) ?
                                   yScale.multiply(scalRelativeTolerance).add(scalAbsoluteTolerance) :
                                   yScale.multiply(vecRelativeTolerance[i]).add(vecAbsoluteTolerance[i]);

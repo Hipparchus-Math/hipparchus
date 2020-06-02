@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 
@@ -39,7 +39,7 @@ import org.hipparchus.exception.MathIllegalStateException;
  * @see FieldExpandableODE
  * @param <T> the type of the field elements
  */
-public interface FieldSecondaryODE<T extends RealFieldElement<T>> {
+public interface FieldSecondaryODE<T extends CalculusFieldElement<T>> {
 
     /** Get the dimension of the secondary state parameters.
      * @return dimension of the secondary state parameters

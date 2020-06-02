@@ -21,12 +21,12 @@
  */
 package org.hipparchus.util;
 
-import org.hipparchus.RealFieldElementAbstractTest;
+import org.hipparchus.CalculusFieldElementAbstractTest;
 import org.hipparchus.util.Tuple;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TupleTest extends RealFieldElementAbstractTest<Tuple> {
+public class TupleTest extends CalculusFieldElementAbstractTest<Tuple> {
     public static final double X = 1.2345;
 
     public static final Tuple PLUS_X = new Tuple(X, X);

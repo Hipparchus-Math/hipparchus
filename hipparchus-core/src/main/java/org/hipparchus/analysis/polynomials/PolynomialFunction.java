@@ -24,7 +24,7 @@ package org.hipparchus.analysis.polynomials;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.FieldUnivariateFunction;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
@@ -171,7 +171,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Fie
      * @since 1.3
      */
     @Override
-    public <T extends RealFieldElement<T>> T value(final T t)
+    public <T extends CalculusFieldElement<T>> T value(final T t)
         throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(coefficients);
         int n = coefficients.length;

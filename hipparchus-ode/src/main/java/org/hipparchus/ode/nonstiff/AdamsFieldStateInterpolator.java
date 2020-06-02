@@ -24,7 +24,7 @@ package org.hipparchus.ode.nonstiff;
 
 import java.util.Arrays;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
@@ -42,7 +42,7 @@ import org.hipparchus.util.MathArrays;
  * @param <T> the type of the field elements
  */
 
-class AdamsFieldStateInterpolator<T extends RealFieldElement<T>> extends AbstractFieldODEStateInterpolator<T> {
+class AdamsFieldStateInterpolator<T extends CalculusFieldElement<T>> extends AbstractFieldODEStateInterpolator<T> {
 
     /** Step size used in the first scaled derivative and Nordsieck vector. */
     private T scalingH;
@@ -152,11 +152,11 @@ class AdamsFieldStateInterpolator<T extends RealFieldElement<T>> extends Abstrac
      * @return estimated state
      * @param <S> the type of the field elements
      */
-    public static <S extends RealFieldElement<S>> FieldODEStateAndDerivative<S> taylor(final FieldEquationsMapper<S> equationsMapper,
-                                                                                       final FieldODEStateAndDerivative<S> reference,
-                                                                                       final S time, final S stepSize,
-                                                                                       final S[] scaled,
-                                                                                       final Array2DRowFieldMatrix<S> nordsieck) {
+    public static <S extends CalculusFieldElement<S>> FieldODEStateAndDerivative<S> taylor(final FieldEquationsMapper<S> equationsMapper,
+                                                                                           final FieldODEStateAndDerivative<S> reference,
+                                                                                           final S time, final S stepSize,
+                                                                                           final S[] scaled,
+                                                                                           final Array2DRowFieldMatrix<S> nordsieck) {
 
         final S x = time.subtract(reference.getTime());
         final S normalizedAbscissa = x.divide(stepSize);

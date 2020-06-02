@@ -21,7 +21,7 @@
  */
 package org.hipparchus.analysis.interpolation;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
 import org.hipparchus.analysis.UnivariateFunction;
@@ -260,8 +260,8 @@ public abstract class UnivariateInterpolatorAbstractTest {
     /**
      * verifies that f(x[i]) = y[i] for i = 0..n-1 where n is common length.
      */
-    protected <T extends RealFieldElement<T>> void verifyInterpolation(RealFieldUnivariateFunction<T> f,
-                                                                       T x[], T y[]) {
+    protected <T extends CalculusFieldElement<T>> void verifyInterpolation(RealFieldUnivariateFunction<T> f,
+                                                                           T x[], T y[]) {
         for (int i = 0; i < x.length; i++) {
             Assert.assertEquals( y[i].getReal(), f.value(x[i]).getReal(), knotTolerance);
         }
@@ -275,8 +275,8 @@ public abstract class UnivariateInterpolatorAbstractTest {
         return array;
     }
 
-    protected <T extends RealFieldElement<T>> void checkCoeffs(final double tolerance, final FieldPolynomialFunction<T> p,
-                                                             final double... ref) {
+    protected <T extends CalculusFieldElement<T>> void checkCoeffs(final double tolerance, final FieldPolynomialFunction<T> p,
+                                                                   final double... ref) {
         final T[] c = p.getCoefficients();
         Assert.assertEquals(ref.length, c.length);
         for (int i = 0; i < ref.length; ++i) {

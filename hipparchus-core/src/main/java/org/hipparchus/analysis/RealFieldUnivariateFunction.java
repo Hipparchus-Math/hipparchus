@@ -21,13 +21,13 @@
  */
 package org.hipparchus.analysis;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 
 /**
  * An interface representing a univariate real function.
  * <p>
  * When a <em>user-defined</em> function encounters an error during
- * evaluation, the {@link #value(RealFieldElement) value} method should throw a
+ * evaluation, the {@link #value(CalculusFieldElement) value} method should throw a
  * <em>user-defined</em> unchecked exception.</p>
  * <p>
  * The following code excerpt shows the recommended way to do that using
@@ -74,7 +74,7 @@ import org.hipparchus.RealFieldElement;
  * @see UnivariateFunction
  * @see FieldUnivariateFunction
  */
-public interface RealFieldUnivariateFunction<T extends RealFieldElement<T>> {
+public interface RealFieldUnivariateFunction<T extends CalculusFieldElement<T>> {
     /**
      * Compute the value of the function.
      *

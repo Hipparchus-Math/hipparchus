@@ -25,7 +25,7 @@ package org.hipparchus.ode;
 import java.lang.reflect.Array;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.util.MathArrays;
 
@@ -34,7 +34,7 @@ import org.hipparchus.util.MathArrays;
  * integrated during the junit tests for the ODE integrators.
  * @param <T> the type of the field elements
  */
-public abstract class TestFieldProblemAbstract<T extends RealFieldElement<T>>
+public abstract class TestFieldProblemAbstract<T extends CalculusFieldElement<T>>
     implements FieldOrdinaryDifferentialEquation<T> {
 
     /** Number of functions calls. */
@@ -158,7 +158,7 @@ public abstract class TestFieldProblemAbstract<T extends RealFieldElement<T>>
      * @param d double to convert
      * @return converted double
      */
-    protected static <T extends RealFieldElement<T>> T convert(Field<T> field, double d) {
+    protected static <T extends CalculusFieldElement<T>> T convert(Field<T> field, double d) {
         return field.getZero().add(d);
     }
 
@@ -166,7 +166,7 @@ public abstract class TestFieldProblemAbstract<T extends RealFieldElement<T>>
      * @param elements array elements
      * @return converted array
      */
-    protected static <T extends RealFieldElement<T>> T[] convert(Field<T> field, double ... elements) {
+    protected static <T extends CalculusFieldElement<T>> T[] convert(Field<T> field, double ... elements) {
         T[] array = MathArrays.buildArray(field, elements.length);
         for (int i = 0; i < elements.length; ++i) {
             array[i] = convert(field, elements[i]);

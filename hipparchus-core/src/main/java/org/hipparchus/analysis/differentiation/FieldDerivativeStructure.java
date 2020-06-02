@@ -16,8 +16,8 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FieldSinCos;
@@ -26,15 +26,15 @@ import org.hipparchus.util.MathUtils;
 
 /** Class representing both the value and the differentials of a function.
  * <p>This class is similar to {@link DerivativeStructure} except function
- * parameters and value can be any {@link RealFieldElement}.</p>
+ * parameters and value can be any {@link CalculusFieldElement}.</p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
  * @see DerivativeStructure
  * @see FDSFactory
  * @see DSCompiler
  * @param <T> the type of the field elements
  */
-public class FieldDerivativeStructure<T extends RealFieldElement<T>>
-    implements RealFieldElement<FieldDerivativeStructure<T>> {
+public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
+    implements CalculusFieldElement<FieldDerivativeStructure<T>> {
 
     /** Factory that built the instance. */
     private final FDSFactory<T> factory;
@@ -333,7 +333,7 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
     /** {@inheritDoc}
      */
     @Override
-    public FieldDerivativeStructure<T> abs() {
+    public FieldDerivativeStructure<T> norm() {
         if (Double.doubleToLongBits(data[0].getReal()) < 0) {
             // we use the bits representation to also handle -0.0
             return negate();
@@ -454,10 +454,10 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
             final int expY = y.getExponent();
             if (expX > expY + 27) {
                 // y is neglectible with respect to x
-                return abs();
+                return norm();
             } else if (expY > expX + 27) {
                 // x is neglectible with respect to y
-                return y.abs();
+                return y.norm();
             } else {
 
                 // find an intermediate scale to avoid both overflow and underflow
@@ -496,7 +496,7 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
      * or orders do not match
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldDerivativeStructure<T>
+    public static <T extends CalculusFieldElement<T>> FieldDerivativeStructure<T>
         hypot(final FieldDerivativeStructure<T> x, final FieldDerivativeStructure<T> y)
         throws MathIllegalArgumentException {
         return x.hypot(y);
@@ -580,7 +580,7 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
      * @param <T> the type of the field elements
      * @return a<sup>x</sup>
      */
-    public static <T extends RealFieldElement<T>> FieldDerivativeStructure<T> pow(final double a, final FieldDerivativeStructure<T> x) {
+    public static <T extends CalculusFieldElement<T>> FieldDerivativeStructure<T> pow(final double a, final FieldDerivativeStructure<T> x) {
         final FieldDerivativeStructure<T> result = x.factory.build();
         x.factory.getCompiler().pow(a, x.data, 0, result.data, 0);
         return result;
@@ -746,8 +746,8 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
      */
-    public static <T extends RealFieldElement<T>> FieldDerivativeStructure<T> atan2(final FieldDerivativeStructure<T> y,
-                                                                                    final FieldDerivativeStructure<T> x)
+    public static <T extends CalculusFieldElement<T>> FieldDerivativeStructure<T> atan2(final FieldDerivativeStructure<T> y,
+                                                                                        final FieldDerivativeStructure<T> x)
         throws MathIllegalArgumentException {
         return y.atan2(x);
     }
@@ -811,7 +811,7 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
     public FieldDerivativeStructure<T> toDegrees() {
         final FieldDerivativeStructure<T> ds = factory.build();
         for (int i = 0; i < ds.data.length; ++i) {
-            ds.data[i] = data[i].multiply(RealFieldElement.RAD_TO_DEG);
+            ds.data[i] = data[i].multiply(CalculusFieldElement.RAD_TO_DEG);
         }
         return ds;
     }
@@ -821,7 +821,7 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
     public FieldDerivativeStructure<T> toRadians() {
         final FieldDerivativeStructure<T> ds = factory.build();
         for (int i = 0; i < ds.data.length; ++i) {
-            ds.data[i] = data[i].multiply(RealFieldElement.DEG_TO_RAD);
+            ds.data[i] = data[i].multiply(CalculusFieldElement.DEG_TO_RAD);
         }
         return ds;
     }

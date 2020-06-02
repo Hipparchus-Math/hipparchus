@@ -25,7 +25,7 @@ package org.hipparchus.ode;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -42,10 +42,10 @@ import org.hipparchus.util.FastMath;
  * view. It is called iteratively during the integration process and
  * stores a copy of all steps information in a sorted collection for
  * later use. Once the integration process is over, the user can use
- * the {@link #getInterpolatedState(RealFieldElement) getInterpolatedState}
+ * the {@link #getInterpolatedState(CalculusFieldElement) getInterpolatedState}
  * method to retrieve this information at any time. It is important to wait
  * for the integration to be over before attempting to call {@link
- * #getInterpolatedState(RealFieldElement)} because some internal
+ * #getInterpolatedState(CalculusFieldElement)} because some internal
  * variables are set only once the last step has been handled.</p>
  *
  * <p>This is useful for example if the main loop of the user
@@ -81,7 +81,7 @@ import org.hipparchus.util.FastMath;
  * @param <T> the type of the field elements
  */
 
-public class FieldDenseOutputModel<T extends RealFieldElement<T>>
+public class FieldDenseOutputModel<T extends CalculusFieldElement<T>>
     implements FieldODEStepHandler<T> {
 
     /** Initial integration time. */
@@ -150,9 +150,9 @@ public class FieldDenseOutputModel<T extends RealFieldElement<T>>
             final T previous = lastInterpolator.getPreviousState().getTime();
             final T step = current.subtract(previous);
             final T gap = model.getInitialTime().subtract(current);
-            if (gap.abs().subtract(step.abs().multiply(1.0e-3)).getReal() > 0) {
+            if (gap.norm().subtract(step.norm().multiply(1.0e-3)).getReal() > 0) {
                 throw new MathIllegalArgumentException(LocalizedODEFormats.HOLE_BETWEEN_MODELS_TIME_RANGES,
-                                                       gap.abs().getReal());
+                                                       gap.norm().getReal());
             }
 
         }
@@ -280,8 +280,8 @@ public class FieldDenseOutputModel<T extends RealFieldElement<T>>
             final FieldODEStateInterpolator<T> sMed = steps.get(iMed);
             final T tMed = sMed.getPreviousState().getTime().add(sMed.getCurrentState().getTime()).multiply(0.5);
 
-            if (tMed.subtract(tMin).abs().subtract(1.0e-6).getReal() < 0 ||
-                tMax.subtract(tMed).abs().subtract(1.0e-6).getReal() < 0) {
+            if (tMed.subtract(tMin).norm().subtract(1.0e-6).getReal() < 0 ||
+                tMax.subtract(tMed).norm().subtract(1.0e-6).getReal() < 0) {
                 // too close to the bounds, we estimate using a simple dichotomy
                 index = iMed;
             } else {

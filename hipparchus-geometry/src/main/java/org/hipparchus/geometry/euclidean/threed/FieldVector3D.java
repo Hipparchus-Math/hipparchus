@@ -25,8 +25,8 @@ package org.hipparchus.geometry.euclidean.threed;
 import java.io.Serializable;
 import java.text.NumberFormat;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -36,11 +36,11 @@ import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
 
 /**
- * This class is a re-implementation of {@link Vector3D} using {@link RealFieldElement}.
+ * This class is a re-implementation of {@link Vector3D} using {@link CalculusFieldElement}.
  * <p>Instance of this class are guaranteed to be immutable.</p>
  * @param <T> the type of the field elements
  */
-public class FieldVector3D<T extends RealFieldElement<T>> implements Serializable {
+public class FieldVector3D<T extends CalculusFieldElement<T>> implements Serializable {
 
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20130224L;
@@ -323,7 +323,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector3D<T> getZero(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector3D<T> getZero(final Field<T> field) {
         return new FieldVector3D<>(field, Vector3D.ZERO);
     }
 
@@ -332,7 +332,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector3D<T> getPlusI(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector3D<T> getPlusI(final Field<T> field) {
         return new FieldVector3D<>(field, Vector3D.PLUS_I);
     }
 
@@ -341,7 +341,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector3D<T> getMinusI(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector3D<T> getMinusI(final Field<T> field) {
         return new FieldVector3D<>(field, Vector3D.MINUS_I);
     }
 
@@ -350,7 +350,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector3D<T> getPlusJ(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector3D<T> getPlusJ(final Field<T> field) {
         return new FieldVector3D<>(field, Vector3D.PLUS_J);
     }
 
@@ -359,7 +359,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector3D<T> getMinusJ(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector3D<T> getMinusJ(final Field<T> field) {
         return new FieldVector3D<>(field, Vector3D.MINUS_J);
     }
 
@@ -368,7 +368,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector3D<T> getPlusK(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector3D<T> getPlusK(final Field<T> field) {
         return new FieldVector3D<>(field, Vector3D.PLUS_K);
     }
 
@@ -377,7 +377,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector3D<T> getMinusK(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector3D<T> getMinusK(final Field<T> field) {
         return new FieldVector3D<>(field, Vector3D.MINUS_K);
     }
 
@@ -386,7 +386,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector3D<T> getNaN(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector3D<T> getNaN(final Field<T> field) {
         return new FieldVector3D<>(field, Vector3D.NaN);
     }
 
@@ -395,7 +395,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector3D<T> getPositiveInfinity(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector3D<T> getPositiveInfinity(final Field<T> field) {
         return new FieldVector3D<>(field, Vector3D.POSITIVE_INFINITY);
     }
 
@@ -404,13 +404,13 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return a new vector
      * @param <T> the type of the field elements
      */
-    public static <T extends RealFieldElement<T>> FieldVector3D<T> getNegativeInfinity(final Field<T> field) {
+    public static <T extends CalculusFieldElement<T>> FieldVector3D<T> getNegativeInfinity(final Field<T> field) {
         return new FieldVector3D<>(field, Vector3D.NEGATIVE_INFINITY);
     }
 
     /** Get the abscissa of the vector.
      * @return abscissa of the vector
-     * @see #FieldVector3D(RealFieldElement, RealFieldElement, RealFieldElement)
+     * @see #FieldVector3D(CalculusFieldElement, CalculusFieldElement, CalculusFieldElement)
      */
     public T getX() {
         return x;
@@ -418,7 +418,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
 
     /** Get the ordinate of the vector.
      * @return ordinate of the vector
-     * @see #FieldVector3D(RealFieldElement, RealFieldElement, RealFieldElement)
+     * @see #FieldVector3D(CalculusFieldElement, CalculusFieldElement, CalculusFieldElement)
      */
     public T getY() {
         return y;
@@ -426,7 +426,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
 
     /** Get the height of the vector.
      * @return height of the vector
-     * @see #FieldVector3D(RealFieldElement, RealFieldElement, RealFieldElement)
+     * @see #FieldVector3D(CalculusFieldElement, CalculusFieldElement, CalculusFieldElement)
      */
     public T getZ() {
         return z;
@@ -434,7 +434,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
 
     /** Get the vector coordinates as a dimension 3 array.
      * @return vector coordinates
-     * @see #FieldVector3D(RealFieldElement[])
+     * @see #FieldVector3D(CalculusFieldElement[])
      */
     public T[] toArray() {
         final T[] array = MathArrays.buildArray(x.getField(), 3);
@@ -455,7 +455,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return L<sub>1</sub> norm for the vector
      */
     public T getNorm1() {
-        return x.abs().add(y.abs()).add(z.abs());
+        return x.norm().add(y.norm()).add(z.norm());
     }
 
     /** Get the L<sub>2</sub> norm for the vector.
@@ -478,12 +478,12 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return L<sub>&infin;</sub> norm for the vector
      */
     public T getNormInf() {
-        return FastMath.max(FastMath.abs(x), FastMath.max(FastMath.abs(y), FastMath.abs(z)));
+        return FastMath.max(FastMath.norm(x), FastMath.max(FastMath.norm(y), FastMath.norm(z)));
     }
 
     /** Get the azimuth of the vector.
      * @return azimuth (&alpha;) of the vector, between -&pi; and +&pi;
-     * @see #FieldVector3D(RealFieldElement, RealFieldElement)
+     * @see #FieldVector3D(CalculusFieldElement, CalculusFieldElement)
      */
     public T getAlpha() {
         return y.atan2(x);
@@ -491,7 +491,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
 
     /** Get the elevation of the vector.
      * @return elevation (&delta;) of the vector, between -&pi;/2 and +&pi;/2
-     * @see #FieldVector3D(RealFieldElement, RealFieldElement)
+     * @see #FieldVector3D(CalculusFieldElement, CalculusFieldElement)
      */
     public T getDelta() {
         return z.divide(getNorm()).asin();
@@ -668,7 +668,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return angular separation between v1 and v2
      * @exception MathRuntimeException if either vector has a null norm
      */
-    public static <T extends RealFieldElement<T>> T angle(final FieldVector3D<T> v1, final FieldVector3D<T> v2)
+    public static <T extends CalculusFieldElement<T>> T angle(final FieldVector3D<T> v1, final FieldVector3D<T> v2)
         throws MathRuntimeException {
 
         final T normProduct = v1.getNorm().multiply(v2.getNorm());
@@ -704,7 +704,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return angular separation between v1 and v2
      * @exception MathRuntimeException if either vector has a null norm
      */
-    public static <T extends RealFieldElement<T>> T angle(final FieldVector3D<T> v1, final Vector3D v2)
+    public static <T extends CalculusFieldElement<T>> T angle(final FieldVector3D<T> v1, final Vector3D v2)
         throws MathRuntimeException {
 
         final T normProduct = v1.getNorm().multiply(v2.getNorm());
@@ -740,7 +740,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return angular separation between v1 and v2
      * @exception MathRuntimeException if either vector has a null norm
      */
-    public static <T extends RealFieldElement<T>> T angle(final Vector3D v1, final FieldVector3D<T> v2)
+    public static <T extends CalculusFieldElement<T>> T angle(final Vector3D v1, final FieldVector3D<T> v2)
         throws MathRuntimeException {
         return angle(v2, v1);
     }
@@ -790,7 +790,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * Test for the equality of two 3D vectors.
      * <p>
      * If all coordinates of two 3D vectors are exactly the same, and none of their
-     * {@link RealFieldElement#getReal() real part} are <code>NaN</code>, the
+     * {@link CalculusFieldElement#getReal() real part} are <code>NaN</code>, the
      * two 3D vectors are considered to be equal.
      * </p>
      * <p>
@@ -896,9 +896,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the distance between the instance and p according to the L<sub>1</sub> norm
      */
     public T distance1(final FieldVector3D<T> v) {
-        final T dx = v.x.subtract(x).abs();
-        final T dy = v.y.subtract(y).abs();
-        final T dz = v.z.subtract(z).abs();
+        final T dx = v.x.subtract(x).norm();
+        final T dy = v.y.subtract(y).norm();
+        final T dz = v.z.subtract(z).norm();
         return dx.add(dy).add(dz);
     }
 
@@ -910,9 +910,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the distance between the instance and p according to the L<sub>1</sub> norm
      */
     public T distance1(final Vector3D v) {
-        final T dx = x.subtract(v.getX()).abs();
-        final T dy = y.subtract(v.getY()).abs();
-        final T dz = z.subtract(v.getZ()).abs();
+        final T dx = x.subtract(v.getX()).norm();
+        final T dy = y.subtract(v.getY()).norm();
+        final T dz = z.subtract(v.getZ()).norm();
         return dx.add(dy).add(dz);
     }
 
@@ -952,9 +952,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the distance between the instance and p according to the L<sub>&infin;</sub> norm
      */
     public T distanceInf(final FieldVector3D<T> v) {
-        final T dx = v.x.subtract(x).abs();
-        final T dy = v.y.subtract(y).abs();
-        final T dz = v.z.subtract(z).abs();
+        final T dx = v.x.subtract(x).norm();
+        final T dy = v.y.subtract(y).norm();
+        final T dz = v.z.subtract(z).norm();
         if (dx.getReal() <= dy.getReal()) {
             if (dy.getReal() <= dz.getReal()) {
                 return dz;
@@ -978,9 +978,9 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @return the distance between the instance and p according to the L<sub>&infin;</sub> norm
      */
     public T distanceInf(final Vector3D v) {
-        final T dx = x.subtract(v.getX()).abs();
-        final T dy = y.subtract(v.getY()).abs();
-        final T dz = z.subtract(v.getZ()).abs();
+        final T dx = x.subtract(v.getX()).norm();
+        final T dy = y.subtract(v.getY()).norm();
+        final T dz = z.subtract(v.getZ()).norm();
         if (dx.getReal() <= dy.getReal()) {
             if (dy.getReal() <= dz.getReal()) {
                 return dz;
@@ -1030,8 +1030,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the dot product v1.v2
      */
-    public static <T extends RealFieldElement<T>> T dotProduct(final FieldVector3D<T> v1,
-                                                               final FieldVector3D<T> v2) {
+    public static <T extends CalculusFieldElement<T>> T dotProduct(final FieldVector3D<T> v1,
+                                                                   final FieldVector3D<T> v2) {
         return v1.dotProduct(v2);
     }
 
@@ -1041,8 +1041,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the dot product v1.v2
      */
-    public static <T extends RealFieldElement<T>> T dotProduct(final FieldVector3D<T> v1,
-                                                               final Vector3D v2) {
+    public static <T extends CalculusFieldElement<T>> T dotProduct(final FieldVector3D<T> v1,
+                                                                   final Vector3D v2) {
         return v1.dotProduct(v2);
     }
 
@@ -1052,8 +1052,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the dot product v1.v2
      */
-    public static <T extends RealFieldElement<T>> T dotProduct(final Vector3D v1,
-                                                               final FieldVector3D<T> v2) {
+    public static <T extends CalculusFieldElement<T>> T dotProduct(final Vector3D v1,
+                                                                   final FieldVector3D<T> v2) {
         return v2.dotProduct(v1);
     }
 
@@ -1063,8 +1063,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the cross product v1 ^ v2 as a new Vector
      */
-    public static <T extends RealFieldElement<T>> FieldVector3D<T> crossProduct(final FieldVector3D<T> v1,
-                                                                                final FieldVector3D<T> v2) {
+    public static <T extends CalculusFieldElement<T>> FieldVector3D<T> crossProduct(final FieldVector3D<T> v1,
+                                                                                    final FieldVector3D<T> v2) {
         return v1.crossProduct(v2);
     }
 
@@ -1074,8 +1074,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the cross product v1 ^ v2 as a new Vector
      */
-    public static <T extends RealFieldElement<T>> FieldVector3D<T> crossProduct(final FieldVector3D<T> v1,
-                                                                                final Vector3D v2) {
+    public static <T extends CalculusFieldElement<T>> FieldVector3D<T> crossProduct(final FieldVector3D<T> v1,
+                                                                                    final Vector3D v2) {
         return v1.crossProduct(v2);
     }
 
@@ -1085,8 +1085,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the cross product v1 ^ v2 as a new Vector
      */
-    public static <T extends RealFieldElement<T>> FieldVector3D<T> crossProduct(final Vector3D v1,
-                                                                                final FieldVector3D<T> v2) {
+    public static <T extends CalculusFieldElement<T>> FieldVector3D<T> crossProduct(final Vector3D v1,
+                                                                                    final FieldVector3D<T> v2) {
         return new FieldVector3D<T>(v2.x.linearCombination(v1.getY(), v2.z, -v1.getZ(), v2.y),
                                     v2.y.linearCombination(v1.getZ(), v2.x, -v1.getX(), v2.z),
                                     v2.z.linearCombination(v1.getX(), v2.y, -v1.getY(), v2.x));
@@ -1101,8 +1101,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>1</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T distance1(final FieldVector3D<T> v1,
-                                                              final FieldVector3D<T> v2) {
+    public static <T extends CalculusFieldElement<T>> T distance1(final FieldVector3D<T> v1,
+                                                                  final FieldVector3D<T> v2) {
         return v1.distance1(v2);
     }
 
@@ -1115,8 +1115,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>1</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T distance1(final FieldVector3D<T> v1,
-                                                              final Vector3D v2) {
+    public static <T extends CalculusFieldElement<T>> T distance1(final FieldVector3D<T> v1,
+                                                                  final Vector3D v2) {
         return v1.distance1(v2);
     }
 
@@ -1129,8 +1129,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>1</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T distance1(final Vector3D v1,
-                                                              final FieldVector3D<T> v2) {
+    public static <T extends CalculusFieldElement<T>> T distance1(final Vector3D v1,
+                                                                  final FieldVector3D<T> v2) {
         return v2.distance1(v1);
     }
 
@@ -1143,8 +1143,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>2</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T distance(final FieldVector3D<T> v1,
-                                                             final FieldVector3D<T> v2) {
+    public static <T extends CalculusFieldElement<T>> T distance(final FieldVector3D<T> v1,
+                                                                 final FieldVector3D<T> v2) {
         return v1.distance(v2);
     }
 
@@ -1157,8 +1157,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>2</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T distance(final FieldVector3D<T> v1,
-                                                             final Vector3D v2) {
+    public static <T extends CalculusFieldElement<T>> T distance(final FieldVector3D<T> v1,
+                                                                 final Vector3D v2) {
         return v1.distance(v2);
     }
 
@@ -1171,8 +1171,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>2</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T distance(final Vector3D v1,
-                                                             final FieldVector3D<T> v2) {
+    public static <T extends CalculusFieldElement<T>> T distance(final Vector3D v1,
+                                                                 final FieldVector3D<T> v2) {
         return v2.distance(v1);
     }
 
@@ -1185,8 +1185,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>&infin;</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T distanceInf(final FieldVector3D<T> v1,
-                                                                final FieldVector3D<T> v2) {
+    public static <T extends CalculusFieldElement<T>> T distanceInf(final FieldVector3D<T> v1,
+                                                                    final FieldVector3D<T> v2) {
         return v1.distanceInf(v2);
     }
 
@@ -1199,8 +1199,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>&infin;</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T distanceInf(final FieldVector3D<T> v1,
-                                                                final Vector3D v2) {
+    public static <T extends CalculusFieldElement<T>> T distanceInf(final FieldVector3D<T> v1,
+                                                                    final Vector3D v2) {
         return v1.distanceInf(v2);
     }
 
@@ -1213,8 +1213,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the distance between v1 and v2 according to the L<sub>&infin;</sub> norm
      */
-    public static <T extends RealFieldElement<T>> T distanceInf(final Vector3D v1,
-                                                                final FieldVector3D<T> v2) {
+    public static <T extends CalculusFieldElement<T>> T distanceInf(final Vector3D v1,
+                                                                    final FieldVector3D<T> v2) {
         return v2.distanceInf(v1);
     }
 
@@ -1227,8 +1227,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the square of the distance between v1 and v2
      */
-    public static <T extends RealFieldElement<T>> T distanceSq(final FieldVector3D<T> v1,
-                                                               final FieldVector3D<T> v2) {
+    public static <T extends CalculusFieldElement<T>> T distanceSq(final FieldVector3D<T> v1,
+                                                                   final FieldVector3D<T> v2) {
         return v1.distanceSq(v2);
     }
 
@@ -1241,8 +1241,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the square of the distance between v1 and v2
      */
-    public static <T extends RealFieldElement<T>> T distanceSq(final FieldVector3D<T> v1,
-                                                               final Vector3D v2) {
+    public static <T extends CalculusFieldElement<T>> T distanceSq(final FieldVector3D<T> v1,
+                                                                   final Vector3D v2) {
         return v1.distanceSq(v2);
     }
 
@@ -1255,8 +1255,8 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param <T> the type of the field elements
      * @return the square of the distance between v1 and v2
      */
-    public static <T extends RealFieldElement<T>> T distanceSq(final Vector3D v1,
-                                                               final FieldVector3D<T> v2) {
+    public static <T extends CalculusFieldElement<T>> T distanceSq(final Vector3D v1,
+                                                                   final FieldVector3D<T> v2) {
         return v2.distanceSq(v1);
     }
 

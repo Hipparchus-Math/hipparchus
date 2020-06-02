@@ -19,7 +19,7 @@ package org.hipparchus.analysis.function;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
@@ -227,7 +227,7 @@ public class FunctionsWithFastMathVersionTest {
     private void doTestFn(final UnivariateDifferentiableFunction f, double... x) {
         try {
             final Method fastMathVersion = FastMath.class.getMethod(f.getClass().getSimpleName().toLowerCase(),
-                                                                    RealFieldElement.class);
+                                                                    CalculusFieldElement.class);
             for (double xi : x) {
                 checkFnEqualities(f, fastMathVersion, xi);
             }

@@ -22,8 +22,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.MathArrays;
@@ -43,7 +43,7 @@ import org.hipparchus.util.MathUtils;
  * @param <T> the type of the field elements
  */
 
-public class HighamHall54FieldIntegrator<T extends RealFieldElement<T>>
+public class HighamHall54FieldIntegrator<T extends CalculusFieldElement<T>>
     extends EmbeddedRungeKuttaFieldIntegrator<T> {
 
     /** Integrator method name. */
@@ -196,7 +196,7 @@ public class HighamHall54FieldIntegrator<T extends RealFieldElement<T>>
                 errSum = errSum.add(yDotK[l][j].multiply(e[l]));
             }
 
-            final T yScale = MathUtils.max(y0[j].abs(), y1[j].abs());
+            final T yScale = MathUtils.max(y0[j].norm(), y1[j].norm());
             final T tol    = (vecAbsoluteTolerance == null) ?
                              yScale.multiply(scalRelativeTolerance).add(scalAbsoluteTolerance) :
                              yScale.multiply(vecRelativeTolerance[j]).add(vecAbsoluteTolerance[j]);
