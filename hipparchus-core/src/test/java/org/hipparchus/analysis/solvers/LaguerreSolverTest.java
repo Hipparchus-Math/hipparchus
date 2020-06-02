@@ -131,7 +131,7 @@ public final class LaguerreSolverTest {
                                                 new Complex(-1, 0),
                                                 new Complex(0.5, -0.5 * FastMath.sqrt(3.0)) }) {
             final double tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
-                                                  FastMath.abs(expected.abs() * solver.getRelativeAccuracy()));
+                                                  FastMath.abs(expected.norm().getReal() * solver.getRelativeAccuracy()));
             UnitTestUtils.assertContains(result, expected, tolerance);
         }
     }

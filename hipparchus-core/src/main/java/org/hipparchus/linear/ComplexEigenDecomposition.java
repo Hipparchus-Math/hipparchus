@@ -253,7 +253,7 @@ public class ComplexEigenDecomposition {
         for (int i = 0; i < vector.getDimension(); i++) {
             if (norm == null) {
                 norm = vector.getEntry(i);
-            } else if (norm.abs() < vector.getEntry(i).abs()) {
+            } else if (norm.norm().getReal() < vector.getEntry(i).norm().getReal()) {
                 norm = vector.getEntry(i);
             }
         }
@@ -298,7 +298,7 @@ public class ComplexEigenDecomposition {
             for (int j = 0; j < matrix1.getColumnDimension(); j++) {
                 Complex c1 = matrix1.getEntry(i, j);
                 Complex c2 = matrix2.getEntry(i, j);
-                if (c1.add(c2.negate()).abs() > tolerance) {
+                if (c1.add(c2.negate()).norm().getReal() > tolerance) {
                     toRet = false;
                     break;
                 }
