@@ -405,6 +405,18 @@ public interface CalculusFieldElement<T> extends FieldElement<T> {
      */
     T rint();
 
+    /** IEEE remainder operator.
+     * @param a right hand side parameter of the operator
+     * @return this - n &times; a where n is the closest integer to this/a
+     */
+    T remainder(double a);
+
+    /** IEEE remainder operator.
+     * @param a right hand side parameter of the operator
+     * @return this - n &times; a where n is the closest integer to this/a
+     */
+    T remainder(T a);
+
     /** Compute the signum of the instance.
      * The signum is -1 for negative numbers, +1 for positive numbers and 0 otherwise
      * @return -1.0, -0.0, +0.0, +1.0 or NaN depending on sign of a

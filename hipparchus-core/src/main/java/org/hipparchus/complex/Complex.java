@@ -121,6 +121,20 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
     }
 
     /**
+     * Return the norm of this complex number.
+     * Returns {@code NaN} if either real or imaginary part is {@code NaN}
+     * and {@code Double.POSITIVE_INFINITY} if neither part is {@code NaN},
+     * but at least one part is infinite.
+     *
+     * @return the norm.
+     * @since 1.7
+     */
+    public Complex norm() {
+        // we check NaN here because FastMath.hypot checks it after infinity
+        return isNaN ? NaN : createComplex(FastMath.hypot(real, imaginary), 0.0);
+    }
+
+    /**
      * Return the absolute value of this complex number.
      * Returns {@code NaN} if either real or imaginary part is {@code NaN}
      * and {@code Double.POSITIVE_INFINITY} if neither part is {@code NaN},
@@ -129,8 +143,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * @return the absolute value.
      */
     public double abs() {
-        // we check NaN here because FastMath.hypot checks it after infinity
-        return isNaN ? Double.NaN : FastMath.hypot(real, imaginary);
+        return norm().getReal();
     }
 
     /**
@@ -896,7 +909,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return NaN;
         }
 
-        return createComplex(FastMath.log(abs()),
+        return createComplex(FastMath.log(FastMath.hypot(real, imaginary)),
                              FastMath.atan2(imaginary, real));
     }
 
@@ -1202,7 +1215,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return ZERO;
         }
 
-        double t = FastMath.sqrt((FastMath.abs(real) + abs()) / 2.0);
+        double t = FastMath.sqrt((FastMath.abs(real) + FastMath.hypot(real, imaginary)) / 2.0);
         if (real >= 0.0) {
             return createComplex(t, imaginary / (2.0 * t));
         } else {
@@ -1239,7 +1252,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      */
     @Override
     public Complex cbrt() {
-        final double magnitude = FastMath.cbrt(abs());
+        final double magnitude = FastMath.cbrt(norm().getReal());
         final SinCos sc        = FastMath.sinCos(getArgument() / 3);
         return createComplex(magnitude * sc.cos(), magnitude * sc.sin());
     }
@@ -1252,7 +1265,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      */
     @Override
     public Complex rootN(int n) {
-        final double magnitude = FastMath.pow(abs(), 1.0 / n);
+        final double magnitude = FastMath.pow(norm().getReal(), 1.0 / n);
         final SinCos sc        = FastMath.sinCos(getArgument() / n);
         return createComplex(magnitude * sc.cos(), magnitude * sc.sin());
     }
@@ -1420,7 +1433,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
         }
 
         // nth root of abs -- faster / more accurate to use a solver here?
-        final double nthRootOfAbs = FastMath.pow(abs(), 1.0 / n);
+        final double nthRootOfAbs = FastMath.pow(FastMath.hypot(real, imaginary), 1.0 / n);
 
         // Compute nth roots of complex number with k = 0, 1, ... n-1
         final double nthPhi = getArgument() / n;
@@ -1671,6 +1684,32 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
     @Override
     public Complex rint() {
         return createComplex(FastMath.rint(getReal()), FastMath.rint(getImaginary()));
+    }
+
+    /** {@inheritDoc}
+     * <p>
+     * for complex numbers, the integer n corresponding to {@code this.subtract(remainder(a)).divide(a)}
+     * is a <a href="https://en.wikipedia.org/wiki/Gaussian_integer">Wikipedia - Gaussian integer</a>.
+     * </p>
+    * @since 1.7
+     */
+    public Complex remainder(final double a) {
+        return createComplex(FastMath.IEEEremainder(getReal(), a), FastMath.IEEEremainder(getImaginary(), a));
+    }
+
+    /** {@inheritDoc}
+     * <p>
+     * for complex numbers, the integer n corresponding to {@code this.subtract(remainder(a)).divide(a)}
+     * is a <a href="https://en.wikipedia.org/wiki/Gaussian_integer">Wikipedia - Gaussian integer</a>.
+     * </p>
+    * @since 1.7
+     */
+    public Complex remainder(final Complex a) {
+        final Complex complexQuotient = divide(a);
+        final double  qRInt           = FastMath.rint(complexQuotient.real);
+        final double  qIInt           = FastMath.rint(complexQuotient.imaginary);
+        return createComplex(real - qRInt * a.real + qIInt * a.imaginary,
+                             imaginary - qRInt * a.imaginary - qIInt * a.real);
     }
 
     /** {@inheritDoc}

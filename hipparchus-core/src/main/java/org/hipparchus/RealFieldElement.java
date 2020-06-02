@@ -21,7 +21,6 @@
  */
 package org.hipparchus;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -31,22 +30,6 @@ import org.hipparchus.util.FastMath;
  * @see FieldElement
  */
 public interface RealFieldElement<T> extends CalculusFieldElement<T> {
-
-    /** IEEE remainder operator.
-     * @param a right hand side parameter of the operator
-     * @return this - n &times; a where n is the closest integer to this/a
-     * (the even integer is chosen for n if this/a is halfway between two integers)
-     */
-    T remainder(double a);
-
-    /** IEEE remainder operator.
-     * @param a right hand side parameter of the operator
-     * @return this - n &times; a where n is the closest integer to this/a
-     * (the even integer is chosen for n if this/a is halfway between two integers)
-     * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
-     */
-    T remainder(T a)
-        throws MathIllegalArgumentException;
 
     /** Get the closest long to instance real value.
      * @return closest long to {@link #getReal()}

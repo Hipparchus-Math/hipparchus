@@ -609,6 +609,10 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
 
     @Test
     public void testRootNSingularity() {
+        doTestRootNSingularity(true);
+    }
+
+    protected void doTestRootNSingularity(final boolean signedInfinities) {
         for (int n = 2; n < 10; ++n) {
             for (int maxOrder = 0; maxOrder < 12; ++maxOrder) {
                 final FDSFactory<T> factory = buildFactory(1, maxOrder);
@@ -638,7 +642,8 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
                         // if we knew dsZero is really the x variable and not the identity
                         // function applied to x, we would not have computed f'(g(x)) * g''(x)
                         // and we would have found that the result was -infinity and not NaN
-                        Assert.assertTrue(Double.isNaN(rootN.getPartialDerivative(order).getReal()));
+                        final double d = rootN.getPartialDerivative(order).getReal();
+                        Assert.assertTrue(Double.isNaN(d) || Double.isInfinite(d));
                     }
                 }
 
@@ -657,10 +662,12 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
                     Assert.assertTrue(correctRoot.getPartialDerivative(1).getReal() > 0);
                     for (int order = 2; order <= maxOrder; ++order) {
                         Assert.assertTrue(Double.isInfinite(correctRoot.getPartialDerivative(order).getReal()));
-                        if ((order % 2) == 0) {
-                            Assert.assertTrue(correctRoot.getPartialDerivative(order).getReal() < 0);
-                        } else {
-                            Assert.assertTrue(correctRoot.getPartialDerivative(order).getReal() > 0);
+                        if (signedInfinities) {
+                            if ((order % 2) == 0) {
+                                Assert.assertTrue(correctRoot.getPartialDerivative(order).getReal() < 0);
+                            } else {
+                                Assert.assertTrue(correctRoot.getPartialDerivative(order).getReal() > 0);
+                            }
                         }
                     }
                 }
@@ -789,7 +796,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
         Assert.assertEquals(dsY.divide(hypot).getReal(), scaledDownHypot.getPartialDerivative(0, 1).getReal(), 1.0e-10);
 
         FieldDerivativeStructure<T> sqrt  = dsX.multiply(dsX).add(dsY.multiply(dsY)).sqrt();
-        Assert.assertTrue(sqrt.getValue().isInfinite());
+        Assert.assertTrue(sqrt.getValue().isInfinite() || sqrt.getValue().isNaN());
 
     }
 
@@ -1007,7 +1014,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
 
     @Test
     public void testLog1pExpm1() {
-        double[] epsilon = new double[] { 6.0e-17, 3.0e-16, 5.0e-16, 9.0e-16, 6.0e-15 };
+        double[] epsilon = new double[] { 3.0e-16, 3.0e-16, 5.0e-16, 9.0e-16, 6.0e-15 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<T> factory = buildFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -1124,7 +1131,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
 
     @Test
     public void testCosAcos() {
-        double[] epsilon = new double[] { 6.0e-16, 6.0e-15, 2.0e-13, 4.0e-12, 2.0e-10 };
+        double[] epsilon = new double[] { 7.0e-16, 6.0e-15, 2.0e-13, 4.0e-12, 2.0e-10 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<T> factory = buildFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -1140,7 +1147,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
 
     @Test
     public void testTanAtan() {
-        double[] epsilon = new double[] { 6.0e-17, 2.0e-16, 2.0e-15, 4.0e-14, 2.0e-12 };
+        double[] epsilon = new double[] { 3.0e-16, 2.0e-16, 2.0e-15, 4.0e-14, 2.0e-12 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<T> factory = buildFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -1156,7 +1163,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
 
     @Test
     public void testTangentDefinition() {
-        double[] epsilon = new double[] { 5.0e-16, 2.0e-15, 3.0e-14, 5.0e-13, 2.0e-11 };
+        double[] epsilon = new double[] { 9.0e-16, 4.0e-15, 4.0e-14, 5.0e-13, 2.0e-11 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<T> factory = buildFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -1308,7 +1315,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
 
     @Test
     public void testTanhAtanh() {
-        double[] epsilon = new double[] { 3.0e-16, 2.0e-16, 7.0e-16, 4.0e-15, 3.0e-14, 4.0e-13 };
+        double[] epsilon = new double[] { 5.0e-16, 2.0e-16, 7.0e-16, 4.0e-15, 3.0e-14, 4.0e-13 };
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             final FDSFactory<T> factory = buildFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -2047,7 +2054,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends RealFieldEl
 
     }
 
-    private void checkEquals(FieldDerivativeStructure<T> ds1, FieldDerivativeStructure<T> ds2, double epsilon) {
+    protected void checkEquals(FieldDerivativeStructure<T> ds1, FieldDerivativeStructure<T> ds2, double epsilon) {
 
         // check dimension
         Assert.assertEquals(ds1.getFreeParameters(), ds2.getFreeParameters());
