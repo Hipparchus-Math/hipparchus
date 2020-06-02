@@ -135,18 +135,6 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
     }
 
     /**
-     * Return the absolute value of this complex number.
-     * Returns {@code NaN} if either real or imaginary part is {@code NaN}
-     * and {@code Double.POSITIVE_INFINITY} if neither part is {@code NaN},
-     * but at least one part is infinite.
-     *
-     * @return the absolute value.
-     */
-    public double abs() {
-        return norm().getReal();
-    }
-
-    /**
      * Returns a {@code Complex} whose value is
      * {@code (this + addend)}.
      * Uses the definitional formula
