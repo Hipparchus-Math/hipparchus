@@ -22,10 +22,6 @@
 
 package org.hipparchus.dfp;
 
-import org.hipparchus.dfp.Dfp;
-import org.hipparchus.dfp.DfpDec;
-import org.hipparchus.dfp.DfpField;
-
 public class Decimal10 extends DfpDec {
 
     Decimal10(final DfpField factory) {
