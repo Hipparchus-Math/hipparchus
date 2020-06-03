@@ -43,6 +43,10 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
                                                 valueField.getZero());
     }
 
+    protected T buildScalar(double value) {
+        return getValueField().getZero().newInstance(value);
+    }
+
     private int getMaxOrder() {
         return 2;
     }
@@ -52,6 +56,26 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         return new FieldUnivariateDerivative2<>(prototype.newInstance(f0),
                                                 prototype.newInstance(f1),
                                                 prototype.newInstance(f2));
+    }
+
+    @Test
+    public void testFieldAdd() {
+        check(build(1.0, 1.0, 1.0).add(buildScalar(5.0)), 6.0, 1.0, 1.0);
+    }
+
+    @Test
+    public void testFieldSubtract() {
+        check(build(1.0, 1.0, 1.0).subtract(buildScalar(5.0)), -4.0, 1.0, 1.0);
+    }
+
+    @Test
+    public void testFieldMultiply() {
+        check(build(1.0, 1.0, 1.0).multiply(buildScalar(5.0)), 5.0, 5.0, 5.0);
+    }
+
+    @Test
+    public void testFieldDivide() {
+        check(build(1.0, 1.0, 1.0).divide(buildScalar(5.0)), 0.2, 0.2, 0.2);
     }
 
     @Test
@@ -114,6 +138,40 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
                                    return y.negate().divide(4).divide(x).add(y).subtract(x).multiply(2).reciprocal();
                                }
                            });
+        }
+    }
+
+    @Test
+    public void testCopySignField() {
+
+        FieldUnivariateDerivative2<T> minusOne = build(-1.0);
+        Assert.assertEquals(+1.0, minusOne.copySign(buildScalar(+1.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(-1.0, minusOne.copySign(buildScalar(-1.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, minusOne.copySign(buildScalar(+0.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(-1.0, minusOne.copySign(buildScalar(-0.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, minusOne.copySign(buildScalar(Double.NaN)).getReal(), 1.0e-15);
+
+        FieldUnivariateDerivative2<T> plusOne = build(1.0);
+        Assert.assertEquals(+1.0, plusOne.copySign(buildScalar(+1.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(-1.0, plusOne.copySign(buildScalar(-1.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, plusOne.copySign(buildScalar(+0.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(-1.0, plusOne.copySign(buildScalar(-0.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, plusOne.copySign(buildScalar(Double.NaN)).getReal(), 1.0e-15);
+
+    }
+
+    @Test
+    public void testRemainderField() {
+        double epsilon = 2.0e-15;
+        for (double x = -1.7; x < 2; x += 0.2) {
+            FieldUnivariateDerivative2<T> dsX = build(x);
+            for (double y = -1.7; y < 2; y += 0.2) {
+                FieldUnivariateDerivative2<T> remainder = dsX.remainder(buildScalar(y));
+                FieldUnivariateDerivative2<T> ref = dsX.subtract(x - FastMath.IEEEremainder(x, y));
+                FieldUnivariateDerivative2<T> zero = remainder.subtract(ref);
+                Assert.assertEquals(0, zero.getFirstDerivative().getReal(), epsilon);
+                Assert.assertEquals(0, zero.getSecondDerivative().getReal(), epsilon);
+            }
         }
     }
 
@@ -389,6 +447,27 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
     }
 
     @Test
+    public void testLinearCombinationField() {
+        final T[] a = MathArrays.buildArray(getValueField(), 3);
+        a[0] = buildScalar(-1321008684645961.0 / 268435456.0);
+        a[1] = buildScalar(-5774608829631843.0 / 268435456.0);
+        a[2] = buildScalar(-7645843051051357.0 / 8589934592.0);
+        final FieldUnivariateDerivative2<T>[] b = MathArrays.buildArray(FieldUnivariateDerivative2Field.getUnivariateDerivative2Field(getValueField()), 3);
+        b[0] = build(-5712344449280879.0 / 2097152.0);
+        b[1] = build(-4550117129121957.0 / 2097152.0);
+        b[2] = build(8846951984510141.0 / 131072.0);
+
+        final FieldUnivariateDerivative2<T> abSumInline = b[0].linearCombination(a[0], b[0],
+                                                                                 a[1], b[1],
+                                                                                 a[2], b[2]);
+        final FieldUnivariateDerivative2<T> abSumArray = b[0].linearCombination(a, b);
+        Assert.assertEquals(abSumInline.getReal(), abSumArray.getReal(), 3.0e-8);
+        Assert.assertEquals(-1.8551294182586248737720779899, abSumInline.getReal(), 5.0e-8);
+        Assert.assertEquals(abSumInline.getFirstDerivative().getReal(), abSumArray.getFirstDerivative().getReal(), 3.0e-8);
+        Assert.assertEquals(abSumInline.getSecondDerivative().getReal(), abSumArray.getSecondDerivative().getReal(), 3.0e-8);
+    }
+
+    @Test
     public void testGetFirstAndSecondDerivative() {
         FieldUnivariateDerivative2<T> ud2 = build(-0.5, 2.5, 4.5);
         Assert.assertEquals(-0.5, ud2.getReal(), 1.0e-15);
@@ -462,6 +541,18 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
     public void testRunTimeClass() {
         Field<FieldUnivariateDerivative2<T>> field = build(0.0).getField();
         Assert.assertEquals(FieldUnivariateDerivative2.class, field.getRuntimeClass());
+    }
+
+    private void check(FieldUnivariateDerivative2<T> ud2, double value,
+                       double derivative1, double derivative2) {
+
+        // check value
+        Assert.assertEquals(value, ud2.getReal(), 1.0e-15);
+
+        // check derivatives
+        Assert.assertEquals(derivative1, ud2.getFirstDerivative().getReal(), 1.0e-15);
+        Assert.assertEquals(derivative2, ud2.getSecondDerivative().getReal(), 1.0e-15);
+
     }
 
 }

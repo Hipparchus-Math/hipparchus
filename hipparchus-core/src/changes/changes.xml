@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.7"  date="TBD" description="TBD.">
+      <action dev="bryan" type="add" issue="issues/95">
+        Added new mathematical methods for FieldGradient,
+        FieldUnivariateDerivative1 and FieldUnivariateDerivative2.
+      </action>
       <action dev="luc" type="add" issue="issues/92">
         Added isMathematicalInteger to Complex.
       </action>

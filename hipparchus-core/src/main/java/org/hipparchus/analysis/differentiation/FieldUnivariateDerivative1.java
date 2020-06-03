@@ -146,6 +146,14 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
         return getField().getConversionFactory().build(f0, f1);
     }
 
+    /** '+' operator.
+     * @param a right hand side parameter of the operator
+     * @return this+a
+     */
+    public FieldUnivariateDerivative1<T> add(final T a) {
+        return new FieldUnivariateDerivative1<>(f0.add(a), f1);
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative1<T> add(final double a) {
@@ -158,6 +166,14 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
         return new FieldUnivariateDerivative1<>(f0.add(a.f0), f1.add(a.f1));
     }
 
+    /** '-' operator.
+     * @param a right hand side parameter of the operator
+     * @return this-a
+     */
+    public FieldUnivariateDerivative1<T> subtract(final T a) {
+        return new FieldUnivariateDerivative1<>(f0.subtract(a), f1);
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative1<T> subtract(final double a) {
@@ -168,6 +184,14 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
     @Override
     public FieldUnivariateDerivative1<T> subtract(final FieldUnivariateDerivative1<T> a) {
         return new FieldUnivariateDerivative1<>(f0.subtract(a.f0), f1.subtract(a.f1));
+    }
+
+    /** '&times;' operator.
+     * @param a right hand side parameter of the operator
+     * @return this&times;a
+     */
+    public FieldUnivariateDerivative1<T> multiply(final T a) {
+        return new FieldUnivariateDerivative1<>(f0.multiply(a), f1.multiply(a));
     }
 
     /** {@inheritDoc} */
@@ -189,6 +213,15 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
                                                 a.f0.linearCombination(f1, a.f0, f0, a.f1));
     }
 
+    /** '&divide;' operator.
+     * @param a right hand side parameter of the operator
+     * @return this&divide;a
+     */
+    public FieldUnivariateDerivative1<T> divide(final T a) {
+        final T inv1 = a.reciprocal();
+        return new FieldUnivariateDerivative1<>(f0.multiply(inv1), f1.multiply(inv1));
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative1<T> divide(final double a) {
@@ -203,6 +236,15 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
         final T inv2 = inv1.multiply(inv1);
         return new FieldUnivariateDerivative1<>(f0.multiply(inv1),
                                                 a.f0.linearCombination(f1, a.f0, f0.negate(), a.f1).multiply(inv2));
+    }
+
+    /** IEEE remainder operator.
+     * @param a right hand side parameter of the operator
+     * @return this - n &times; a where n is the closest integer to this/a
+     * (the even integer is chosen for n if this/a is halfway between two integers)
+     */
+    public FieldUnivariateDerivative1<T> remainder(final T a) {
+        return new FieldUnivariateDerivative1<>(FastMath.IEEEremainder(f0, a), f1);
     }
 
     /** {@inheritDoc} */
@@ -262,6 +304,22 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
     @Override
     public FieldUnivariateDerivative1<T> signum() {
         return new FieldUnivariateDerivative1<>(FastMath.signum(f0), f0.getField().getZero());
+    }
+
+    /**
+     * Returns the instance with the sign of the argument.
+     * A NaN {@code sign} argument is treated as positive.
+     *
+     * @param sign the sign for the returned value
+     * @return the instance with the same sign as the {@code sign} argument
+     */
+    public FieldUnivariateDerivative1<T> copySign(final T sign) {
+        long m = Double.doubleToLongBits(f0.getReal());
+        long s = Double.doubleToLongBits(sign.getReal());
+        if ((m >= 0 && s >= 0) || (m < 0 && s < 0)) { // Sign is currently OK
+            return this;
+        }
+        return negate(); // flip sign
     }
 
     /** {@inheritDoc} */
@@ -585,6 +643,30 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
         return f0.add(f1.multiply(delta));
     }
 
+    /**
+     * Compute a linear combination.
+     * @param a Factors.
+     * @param b Factors.
+     * @return <code>&Sigma;<sub>i</sub> a<sub>i</sub> b<sub>i</sub></code>.
+     * @throws MathIllegalArgumentException if arrays dimensions don't match
+     */
+    public FieldUnivariateDerivative1<T> linearCombination(final T[] a, final FieldUnivariateDerivative1<T>[] b) {
+
+        // extract values and first derivatives
+        final Field<T> field = b[0].f0.getField();
+        final int      n  = b.length;
+        final T[] b0 = MathArrays.buildArray(field, n);
+        final T[] b1 = MathArrays.buildArray(field, n);
+        for (int i = 0; i < n; ++i) {
+            b0[i] = b[i].f0;
+            b1[i] = b[i].f1;
+        }
+
+        return new FieldUnivariateDerivative1<>(b[0].f0.linearCombination(a, b0),
+                                                b[0].f0.linearCombination(a, b1));
+
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative1<T> linearCombination(final FieldUnivariateDerivative1<T>[] a,
@@ -678,6 +760,31 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
                                                                         a2.f0, b2.f0,
                                                                         a3.f0, b3.f0),
                                                 a1.f0.linearCombination(a, b));
+    }
+
+    /**
+     * Compute a linear combination.
+     * @param a1 first factor of the first term
+     * @param b1 second factor of the first term
+     * @param a2 first factor of the second term
+     * @param b2 second factor of the second term
+     * @param a3 first factor of the third term
+     * @param b3 second factor of the third term
+     * @return a<sub>1</sub>&times;b<sub>1</sub> +
+     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
+     * @see #linearCombination(double, Object, double, Object)
+     * @see #linearCombination(double, Object, double, Object, double, Object, double, Object)
+     * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
+     */
+    public FieldUnivariateDerivative1<T> linearCombination(final T a1, final FieldUnivariateDerivative1<T> b1,
+                                                           final T a2, final FieldUnivariateDerivative1<T> b2,
+                                                           final T a3, final FieldUnivariateDerivative1<T> b3) {
+        return new FieldUnivariateDerivative1<>(b1.f0.linearCombination(a1, b1.f0,
+                                                                        a2, b2.f0,
+                                                                        a3, b3.f0),
+                                                b1.f0.linearCombination(a1, b1.f1,
+                                                                        a2, b2.f1,
+                                                                        a3, b3.f1));
     }
 
     /** {@inheritDoc} */
