@@ -50,6 +50,11 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.7"  date="TBD" description="TBD.">
+      <action dev="luc" type="add">
+        Added intermediate interface {Field}Derivative.
+        The interface is implemented by both {Field}DerivativeStructure, {Field}Gradient,
+        {Field}UnivariateDerivative1and {Field}UnivariateDerivative2
+      </action>
       <action dev="bryan" type="add" issue="issues/95">
         Added new mathematical methods for FieldGradient,
         FieldUnivariateDerivative1 and FieldUnivariateDerivative2.
