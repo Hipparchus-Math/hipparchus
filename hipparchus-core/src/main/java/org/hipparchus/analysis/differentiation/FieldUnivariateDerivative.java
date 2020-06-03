@@ -21,6 +21,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** Abstract class representing both the value and the differentials of a function.
+ * @param <S> the type of the field elements
  * @param <T> the type of the function derivative
  * @since 1.7
  */

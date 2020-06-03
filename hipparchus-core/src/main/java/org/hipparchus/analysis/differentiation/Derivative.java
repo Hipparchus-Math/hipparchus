@@ -20,6 +20,7 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** Interface representing both the value and the differentials of a function.
+ * @param <T> the type of the field elements
  * @since 1.7
  */
 public interface Derivative<T extends RealFieldElement<T>> extends RealFieldElement<T> {
