@@ -28,6 +28,7 @@ import static org.hamcrest.CoreMatchers.sameInstance;
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.hamcrest.MatcherAssert;
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -554,7 +555,7 @@ public abstract class AbstractLeastSquaresOptimizerAbstractTest {
         final LeastSquaresBuilder builder = problem.getBuilder()
                 .checker(new ConvergenceChecker<Evaluation>() {
                     public boolean converged(int iteration, Evaluation previous, Evaluation current) {
-                        Assert.assertThat(
+                        MatcherAssert.assertThat(
                                 previous.getPoint(),
                                 not(sameInstance(current.getPoint())));
                         Assert.assertArrayEquals(new double[3], previous.getPoint().toArray(), 0);
@@ -565,7 +566,7 @@ public abstract class AbstractLeastSquaresOptimizerAbstractTest {
                 });
         optimizer.optimize(builder.build());
 
-        Assert.assertThat(checked[0], is(true));
+        MatcherAssert.assertThat(checked[0], is(true));
     }
 
     class LinearProblem {

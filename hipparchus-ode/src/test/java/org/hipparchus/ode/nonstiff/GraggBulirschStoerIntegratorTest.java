@@ -17,6 +17,7 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -196,8 +197,7 @@ public class GraggBulirschStoerIntegratorTest {
         Assert.assertEquals(functions.length, integ.getEventHandlers().size());
         integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
-        Assert.assertThat(handler.getMaximalValueError(),
-                Matchers.lessThan(2.5e-11));
+        MatcherAssert.assertThat(handler.getMaximalValueError(), Matchers.lessThan(2.5e-11));
         // integration error builds up by the last event,
         // so tolerance is slightly more than the convergence.
         Assert.assertEquals(0, handler.getMaximalTimeError(), 1.5 * convergence);

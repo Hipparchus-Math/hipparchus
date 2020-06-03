@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.hipparchus.clustering.distance.CanberraDistance;
 import org.hipparchus.clustering.distance.DistanceMeasure;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -105,8 +106,8 @@ public class FuzzyKMeansClustererTest {
         Assert.assertEquals(2.0, clusterer.getFuzziness(), 1e-6);
         Assert.assertEquals(100, clusterer.getMaxIterations());
         Assert.assertEquals(1e-6, clusterer.getEpsilon(), 1e-12);
-        Assert.assertThat(clusterer.getDistanceMeasure(), CoreMatchers.is(measure));
-        Assert.assertThat(clusterer.getRandomGenerator(), CoreMatchers.is(random));
+        MatcherAssert.assertThat(clusterer.getDistanceMeasure(), CoreMatchers.is(measure));
+        MatcherAssert.assertThat(clusterer.getRandomGenerator(), CoreMatchers.is(random));
     }
 
     @Test
