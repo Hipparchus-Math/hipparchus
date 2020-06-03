@@ -16,8 +16,6 @@
  */
 package org.hipparchus.analysis.differentiation;
 
-import java.io.Serializable;
-
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -26,11 +24,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * @param <T> the type of the function derivative
  * @since 1.7
  */
-public abstract class UnivariateDerivative<T extends UnivariateDerivative<T>>
-    implements Derivative<T>, RealFieldElement<T>, Serializable {
-
-    /** Serializable UID. */
-    private static final long serialVersionUID = 20200519L;
+public abstract class FieldUnivariateDerivative<S extends RealFieldElement<S>, T extends FieldUnivariateDerivative<S, T>>
+    implements FieldDerivative<S, T> {
 
     /** {@inheritDoc} */
     @Override
@@ -40,7 +35,7 @@ public abstract class UnivariateDerivative<T extends UnivariateDerivative<T>>
 
     /** {@inheritDoc} */
     @Override
-    public double getPartialDerivative(final int ... orders) throws MathIllegalArgumentException {
+    public S getPartialDerivative(final int ... orders) throws MathIllegalArgumentException {
         if (orders.length != 1) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    orders.length, 1);
@@ -54,11 +49,11 @@ public abstract class UnivariateDerivative<T extends UnivariateDerivative<T>>
      * @exception MathIllegalArgumentException if n is
      * either negative or strictly larger than {@link #getOrder()}
      */
-    public abstract double getDerivative(int n) throws MathIllegalArgumentException;
+    public abstract S getDerivative(int n) throws MathIllegalArgumentException;
 
     /** Convert the instance to a {@link DerivativeStructure}.
      * @return derivative structure with same value and derivative as the instance
      */
-    public abstract DerivativeStructure toDerivativeStructure();
+    public abstract FieldDerivativeStructure<S> toDerivativeStructure();
 
 }

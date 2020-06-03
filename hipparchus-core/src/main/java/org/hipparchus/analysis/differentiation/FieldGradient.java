@@ -52,7 +52,7 @@ import org.hipparchus.util.MathUtils;
  * @see FieldUnivariateDerivative2
  * @since 1.7
  */
-public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldElement<FieldGradient<T>> {
+public class FieldGradient<T extends RealFieldElement<T>> implements FieldDerivative<T, FieldGradient<T>> {
 
     /** Value of the function. */
     private final T value;
@@ -177,6 +177,41 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
      */
     public int getFreeParameters() {
         return grad.length;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getOrder() {
+        return 1;
+    }
+
+    @Override
+    /** {@inheritDoc} */
+    public T getPartialDerivative(final int ... orders)
+        throws MathIllegalArgumentException {
+
+        // check the number of components
+        if (orders.length != grad.length) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   orders.length, grad.length);
+        }
+
+        // check that either all derivation orders are set to 0,
+        // or that only one is set to 1 and all other ones are set to 0
+        int selected = -1;
+        for (int i = 0; i < orders.length; ++i) {
+            if (orders[i] != 0) {
+                if (selected >= 0 || orders[i] != 1) {
+                     throw new MathIllegalArgumentException(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED,
+                                                           orders[i]);
+                }
+                // found the component set to derivation order 1
+                selected = i;
+            }
+        }
+
+        return (selected < 0) ? value : grad[selected];
+
     }
 
     /** Get the partial derivative with respect to one parameter.

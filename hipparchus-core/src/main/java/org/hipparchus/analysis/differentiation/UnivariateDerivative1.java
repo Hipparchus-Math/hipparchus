@@ -89,6 +89,12 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
+    public double getReal() {
+        return getValue();
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public double getValue() {
         return f0;
     }
@@ -102,7 +108,7 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
             case 1 :
                 return f1;
             default :
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, n, 0, 1);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, n);
         }
     }
 

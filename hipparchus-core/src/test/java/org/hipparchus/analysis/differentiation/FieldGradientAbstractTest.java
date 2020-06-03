@@ -143,6 +143,46 @@ public abstract class FieldGradientAbstractTest<T extends RealFieldElement<T>>
     }
 
     @Test
+    public void testOrder() {
+        Assert.assertEquals(1, build(2).getOrder());
+    }
+
+    @Test
+    public void testGetPartialDerivative() {
+        final FieldGradient<T> g = build(2);
+        Assert.assertEquals(2.0,        g.getPartialDerivative(0, 0).getReal(), 1.0e-15); // f(x,y)
+        Assert.assertEquals(1.0,        g.getPartialDerivative(1, 0).getReal(), 1.0e-15); // ∂f/∂x
+        Assert.assertEquals(1.0 / 1024, g.getPartialDerivative(0, 1).getReal(), 1.0e-15); // ∂f/∂y
+    }
+
+    @Test
+    public void testGetPartialDerivativeErrors() {
+        final FieldGradient<T> g = build(2);
+        try {
+            g.getPartialDerivative(0, 0, 0);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+        }
+        try {
+            g.getPartialDerivative(0, 5);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
+            Assert.assertEquals(5, ((Integer) miae.getParts()[0]).intValue());
+        }
+        try {
+            g.getPartialDerivative(1, 1);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
+            Assert.assertEquals(1, ((Integer) miae.getParts()[0]).intValue());
+        }
+    }
+
+    @Test
     public void testHashcode() {
         Assert.assertEquals(1608501298, build(2, 1, -0.25).hashCode());
     }

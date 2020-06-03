@@ -43,6 +43,7 @@ CONTRACTION_CRITERIA_SMALLER_THAN_EXPANSION_FACTOR = critère de contraction ({0
 CONTRACTION_CRITERIA_SMALLER_THAN_ONE = critère de contraction inférieur à un ({0}). Ceci induit une boucle infinie d''extensions/contractions car tout tableau de stockage de longueur égale au nombre d''éléments respecte le critère de contraction.
 CONVERGENCE_FAILED = Échec de convergence
 CUMULATIVE_PROBABILITY_RETURNED_NAN = Fonction de probabilité cumulative retourné NaN à l''argument de {0} p = {1}
+DERIVATION_ORDER_NOT_ALLOWED = l''ordre de dérivation {0} n''est pas autorisé ici
 DIFFERENT_ROWS_LENGTHS = certaines lignes ont une longueur de {0} alors que d''autres ont une longueur de {1}
 DIGEST_NOT_INITIALIZED = modèle empirique non initialisé
 DIMENSIONS_MISMATCH_2x2 = {0}x{1} à la place de {2}x{3}

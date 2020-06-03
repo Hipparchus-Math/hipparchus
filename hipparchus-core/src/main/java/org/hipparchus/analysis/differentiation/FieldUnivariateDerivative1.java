@@ -52,7 +52,7 @@ import org.hipparchus.util.MathUtils;
  * @since 1.7
  */
 public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
-    implements RealFieldElement<FieldUnivariateDerivative1<T>> {
+    extends FieldUnivariateDerivative<T, FieldUnivariateDerivative1<T>> {
 
     /** Value of the function. */
     private final T f0;
@@ -113,7 +113,7 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
             case 1 :
                 return f1;
             default :
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, n, 0, 1);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, n);
         }
     }
 

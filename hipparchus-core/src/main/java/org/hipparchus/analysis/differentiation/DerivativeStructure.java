@@ -24,7 +24,6 @@ package org.hipparchus.analysis.differentiation;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
@@ -62,7 +61,7 @@ import org.hipparchus.util.MathUtils;
  * @see DSCompiler
  * @see FieldDerivativeStructure
  */
-public class DerivativeStructure implements RealFieldElement<DerivativeStructure>, Serializable {
+public class DerivativeStructure implements Derivative<DerivativeStructure>, Serializable {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20161220L;
@@ -233,16 +232,14 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         return factory;
     }
 
-    /** Get the number of free parameters.
-     * @return number of free parameters
-     */
+    @Override
+    /** {@inheritDoc} */
     public int getFreeParameters() {
         return getFactory().getCompiler().getFreeParameters();
     }
 
-    /** Get the derivation order.
-     * @return derivation order
-     */
+    @Override
+    /** {@inheritDoc} */
     public int getOrder() {
         return getFactory().getCompiler().getOrder();
     }
@@ -291,16 +288,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         return data[0];
     }
 
-    /** Get a partial derivative.
-     * @param orders derivation orders with respect to each variable (if all orders are 0,
-     * the value is returned)
-     * @return partial derivative
-     * @see #getValue()
-     * @exception MathIllegalArgumentException if the numbers of variables does not
-     * match the instance
-     * @exception MathIllegalArgumentException if sum of derivation orders is larger
-     * than the instance limits
-     */
+    @Override
+    /** {@inheritDoc} */
     public double getPartialDerivative(final int ... orders)
         throws MathIllegalArgumentException {
         return data[getFactory().getCompiler().getPartialDerivativeIndex(orders)];

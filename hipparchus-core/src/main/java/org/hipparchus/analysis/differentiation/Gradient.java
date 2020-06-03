@@ -52,7 +52,7 @@ import org.hipparchus.util.SinCos;
  * @see FieldGradient
  * @since 1.7
  */
-public class Gradient implements RealFieldElement<Gradient>, Serializable {
+public class Gradient implements Derivative<Gradient>, RealFieldElement<Gradient>, Serializable {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20200520L;
@@ -145,11 +145,45 @@ public class Gradient implements RealFieldElement<Gradient>, Serializable {
         return grad.clone();
     }
 
-    /** Get the number of free parameters.
-     * @return number of free parameters
-     */
+    /** {@inheritDoc} */
+    @Override
     public int getFreeParameters() {
         return grad.length;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getOrder() {
+        return 1;
+    }
+
+    @Override
+    /** {@inheritDoc} */
+    public double getPartialDerivative(final int ... orders)
+        throws MathIllegalArgumentException {
+
+        // check the number of components
+        if (orders.length != grad.length) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   orders.length, grad.length);
+        }
+
+        // check that either all derivation orders are set to 0,
+        // or that only one is set to 1 and all other ones are set to 0
+        int selected = -1;
+        for (int i = 0; i < orders.length; ++i) {
+            if (orders[i] != 0) {
+                if (selected >= 0 || orders[i] != 1) {
+                     throw new MathIllegalArgumentException(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED,
+                                                           orders[i]);
+                }
+                // found the component set to derivation order 1
+                selected = i;
+            }
+        }
+
+        return (selected < 0) ? value : grad[selected];
+
     }
 
     /** Get the partial derivative with respect to one parameter.

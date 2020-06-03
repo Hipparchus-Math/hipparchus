@@ -34,7 +34,7 @@ import org.hipparchus.util.MathUtils;
  * @param <T> the type of the field elements
  */
 public class FieldDerivativeStructure<T extends RealFieldElement<T>>
-    implements RealFieldElement<FieldDerivativeStructure<T>> {
+    implements FieldDerivative<T, FieldDerivativeStructure<T>> {
 
     /** Factory that built the instance. */
     private final FDSFactory<T> factory;
@@ -73,16 +73,14 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
         return factory;
     }
 
-    /** Get the number of free parameters.
-     * @return number of free parameters
-     */
+    @Override
+    /** {@inheritDoc} */
     public int getFreeParameters() {
         return getFactory().getCompiler().getFreeParameters();
     }
 
-    /** Get the derivation order.
-     * @return derivation order
-     */
+    @Override
+    /** {@inheritDoc} */
     public int getOrder() {
         return getFactory().getCompiler().getOrder();
     }
@@ -117,16 +115,8 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
         return data[0];
     }
 
-    /** Get a partial derivative.
-     * @param orders derivation orders with respect to each variable (if all orders are 0,
-     * the value is returned)
-     * @return partial derivative
-     * @see #getValue()
-     * @exception MathIllegalArgumentException if the numbers of variables does not
-     * match the instance
-     * @exception MathIllegalArgumentException if sum of derivation orders is larger
-     * than the instance limits
-     */
+    @Override
+    /** {@inheritDoc} */
     public T getPartialDerivative(final int ... orders)
         throws MathIllegalArgumentException {
         return data[factory.getCompiler().getPartialDerivativeIndex(orders)];

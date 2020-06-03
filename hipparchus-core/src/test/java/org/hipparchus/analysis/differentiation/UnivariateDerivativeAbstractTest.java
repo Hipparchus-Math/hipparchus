@@ -55,6 +55,18 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
     }
 
     @Test
+    public void testGetPartialDerivative() {
+        try {
+            build(3.0).getPartialDerivative(0, 1);
+            Assert.fail("an exception should have been thrown");
+        } catch( MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(1, ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
+
+    @Test
     public void testGetDerivative() {
         T x  = build(3.0);
         T ud = x.multiply(x);
@@ -62,7 +74,7 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
             ud.getDerivative(-1);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
         }
         Assert.assertEquals(9.0, ud.getValue(), 1.0e-15);
         Assert.assertEquals(9.0, ud.getDerivative(0), 1.0e-15);
@@ -74,8 +86,13 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
             ud.getDerivative(getMaxOrder() + 1);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
         }
+    }
+
+    @Test
+    public void testGetFreeParameters() {
+        Assert.assertEquals(1, build(3.0).getFreeParameters());
     }
 
     protected void checkAgainstDS(final double x, final FieldUnivariateFunction f) {
