@@ -202,6 +202,14 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         return getField().getConversionFactory().build(derivatives);
     }
 
+    /** '+' operator.
+     * @param a right hand side parameter of the operator
+     * @return this+a
+     */
+    public FieldGradient<T> add(final T a) {
+        return new FieldGradient<>(value.add(a), grad);
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> add(final double a) {
@@ -218,6 +226,14 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         return result;
     }
 
+    /** '-' operator.
+     * @param a right hand side parameter of the operator
+     * @return this-a
+     */
+    public FieldGradient<T> subtract(final T a) {
+        return new FieldGradient<>(value.subtract(a), grad);
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> subtract(final double a) {
@@ -230,6 +246,18 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         final FieldGradient<T> result = newInstance(value.subtract(a.value));
         for (int i = 0; i < grad.length; ++i) {
             result.grad[i] = grad[i].subtract(a.grad[i]);
+        }
+        return result;
+    }
+
+    /** '&times;' operator.
+     * @param a right hand side parameter of the operator
+     * @return this&times;a
+     */
+    public FieldGradient<T> multiply(final T n) {
+        final FieldGradient<T> result = newInstance(value.multiply(n));
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i].multiply(n);
         }
         return result;
     }
@@ -264,6 +292,18 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
         return result;
     }
 
+    /** '&divide;' operator.
+     * @param a right hand side parameter of the operator
+     * @return this&divide;a
+     */
+    public FieldGradient<T> divide(final T a) {
+        final FieldGradient<T> result = newInstance(value.divide(a));
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i].divide(a);
+        }
+        return result;
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> divide(final double a) {
@@ -284,6 +324,15 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
             result.grad[i] = grad[i].multiply(a.value).subtract(value.multiply(a.grad[i])).multiply(inv2);
         }
         return result;
+    }
+
+    /** IEEE remainder operator.
+     * @param a right hand side parameter of the operator
+     * @return this - n &times; a where n is the closest integer to this/a
+     * (the even integer is chosen for n if this/a is halfway between two integers)
+     */
+    public FieldGradient<T> remainder(final T a) {
+        return new FieldGradient<>(FastMath.IEEEremainder(value, a), grad);
     }
 
     /** {@inheritDoc} */
@@ -351,6 +400,22 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
     @Override
     public FieldGradient<T> signum() {
         return newInstance(FastMath.signum(value));
+    }
+
+    /**
+     * Returns the instance with the sign of the argument.
+     * A NaN {@code sign} argument is treated as positive.
+     *
+     * @param sign the sign for the returned value
+     * @return the instance with the same sign as the {@code sign} argument
+     */
+    public FieldGradient<T> copySign(final T sign) {
+        long m = Double.doubleToLongBits(value.getReal());
+        long s = Double.doubleToLongBits(sign.getReal());
+        if ((m >= 0 && s >= 0) || (m < 0 && s < 0)) { // Sign is currently OK
+            return this;
+        }
+        return negate(); // flip sign
     }
 
     /** {@inheritDoc} */
@@ -748,6 +813,35 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
 
     }
 
+    /**
+     * Compute a linear combination.
+     * @param a Factors.
+     * @param b Factors.
+     * @return <code>&Sigma;<sub>i</sub> a<sub>i</sub> b<sub>i</sub></code>.
+     * @throws MathIllegalArgumentException if arrays dimensions don't match
+     */
+    public FieldGradient<T> linearCombination(final T[] a, final FieldGradient<T>[] b) {
+
+        // extract values and first derivatives
+        final Field<T> field = b[0].value.getField();
+        final int      n  = b.length;
+        final T[] b0 = MathArrays.buildArray(field, n);
+        final T[] b1 = MathArrays.buildArray(field, n);
+        for (int i = 0; i < n; ++i) {
+            b0[i] = b[i].value;
+        }
+
+        final FieldGradient<T> result = newInstance(b[0].value.linearCombination(a, b0));
+        for (int k = 0; k < grad.length; ++k) {
+            for (int i = 0; i < n; ++i) {
+                b1[i] = b[i].grad[k];
+            }
+            result.grad[k] = b[0].value.linearCombination(a, b1);
+        }
+        return result;
+
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> linearCombination(final double[] a, final FieldGradient<T>[] b) {
@@ -825,6 +919,34 @@ public class FieldGradient<T extends RealFieldElement<T>> implements RealFieldEl
             b[2] = b2.grad[i];
             b[4] = b3.grad[i];
             result.grad[i] = a1.value.linearCombination(a, b);
+        }
+        return result;
+    }
+
+    /**
+     * Compute a linear combination.
+     * @param a1 first factor of the first term
+     * @param b1 second factor of the first term
+     * @param a2 first factor of the second term
+     * @param b2 second factor of the second term
+     * @param a3 first factor of the third term
+     * @param b3 second factor of the third term
+     * @return a<sub>1</sub>&times;b<sub>1</sub> +
+     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
+     * @see #linearCombination(double, Object, double, Object)
+     * @see #linearCombination(double, Object, double, Object, double, Object, double, Object)
+     * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
+     */
+    public FieldGradient<T> linearCombination(final T a1, final FieldGradient<T> b1,
+                                              final T a2, final FieldGradient<T> b2,
+                                              final T a3, final FieldGradient<T> b3) {
+        final FieldGradient<T> result = newInstance(b1.value.linearCombination(a1, b1.value,
+                                                                               a2, b2.value,
+                                                                               a3, b3.value));
+        for (int i = 0; i < b1.grad.length; ++i) {
+            result.grad[i] = b1.value.linearCombination(a1, b1.grad[i],
+                                                        a2, b2.grad[i],
+                                                        a3, b3.grad[i]);
         }
         return result;
     }
