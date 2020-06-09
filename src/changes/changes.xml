@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.7"  date="TBD" description="TBD.">
+      <action dev="bryan" type="add" issue="issues/97">
+      Added ExtendedUnivariateDifferentiableVectorFunction interface
+      for differentiable vectorial function.
+      </action>
       <action dev="luc" type="add">
         Added intermediate interface {Field}Derivative.
         The interface is implemented by both {Field}DerivativeStructure, {Field}Gradient,
