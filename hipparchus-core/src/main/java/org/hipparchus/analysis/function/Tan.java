@@ -22,15 +22,16 @@
 
 package org.hipparchus.analysis.function;
 
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
+import org.hipparchus.analysis.differentiation.ExtendedUnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
 
 /**
  * Tangent function.
  *
  */
-public class Tan implements UnivariateDifferentiableFunction {
+public class Tan implements ExtendedUnivariateDifferentiableFunction {
     /** {@inheritDoc} */
     @Override
     public double value(double x) {
@@ -42,6 +43,12 @@ public class Tan implements UnivariateDifferentiableFunction {
     @Override
     public DerivativeStructure value(final DerivativeStructure t) {
         return t.tan();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public <T extends Derivative<T>> T value(T x) {
+        return x.tan();
     }
 
 }

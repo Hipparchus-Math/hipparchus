@@ -22,15 +22,16 @@
 
 package org.hipparchus.analysis.function;
 
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
+import org.hipparchus.analysis.differentiation.ExtendedUnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
 
 /**
  * <code>e<sup>x</sup>-1</code> function.
  *
  */
-public class Expm1 implements UnivariateDifferentiableFunction {
+public class Expm1 implements ExtendedUnivariateDifferentiableFunction {
     /** {@inheritDoc} */
     @Override
     public double value(double x) {
@@ -42,6 +43,12 @@ public class Expm1 implements UnivariateDifferentiableFunction {
     @Override
     public DerivativeStructure value(final DerivativeStructure t) {
         return t.expm1();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public <T extends Derivative<T>> T value(T x) {
+        return x.expm1();
     }
 
 }

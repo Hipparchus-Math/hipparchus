@@ -22,15 +22,16 @@
 
 package org.hipparchus.analysis.function;
 
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
+import org.hipparchus.analysis.differentiation.ExtendedUnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
 
 /**
  * Hyperbolic arc-cosine function.
  *
  */
-public class Acosh implements UnivariateDifferentiableFunction {
+public class Acosh implements ExtendedUnivariateDifferentiableFunction {
     /** {@inheritDoc} */
     @Override
     public double value(double x) {
@@ -42,6 +43,12 @@ public class Acosh implements UnivariateDifferentiableFunction {
     @Override
     public DerivativeStructure value(final DerivativeStructure t) {
         return t.acosh();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public <T extends Derivative<T>> T value(T x) {
+        return x.acosh();
     }
 
 }

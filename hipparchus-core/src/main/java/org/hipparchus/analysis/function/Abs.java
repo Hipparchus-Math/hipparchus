@@ -22,17 +22,33 @@
 
 package org.hipparchus.analysis.function;
 
-import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.differentiation.Derivative;
+import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.ExtendedUnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
 
 /**
  * Absolute value function.
  *
  */
-public class Abs implements UnivariateFunction {
+public class Abs implements ExtendedUnivariateDifferentiableFunction {
+
     /** {@inheritDoc} */
     @Override
     public double value(double x) {
         return FastMath.abs(x);
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public DerivativeStructure value(DerivativeStructure x) {
+        return FastMath.abs(x);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public <T extends Derivative<T>> T value(T x) {
+        return FastMath.abs(x);
+    }
+
 }
