@@ -66,12 +66,12 @@ at fork time.
 
  ---
 
-## 1.6 Release is out!
+## 1.7 Release is out!
 
-Hipparchus 1.6 is now available for download from the [Hipparchus download page](downloads.html) or on
-Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.6 release are:
+Hipparchus 1.7 is now available for download from the [Hipparchus download page](downloads.html) or on
+Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.7 release are:
 
-  * field version of Vector2D
-  * Optimum.of(...) factory method
-  * AbstractEvaluation constructor is now public
-  * bug fixes in multi-step integrators, integration and exception messages
+  * fixed a bug in ODE events handling
+  * improved a lot the Complex class so it implements the new CalculusFieldElement interface
+  * added several new differentiation classes to handle simpler cases (univariate derivatives
+    at orders 1 and 2 and gradients) with less overhead than the existing DerivativeStructure.
