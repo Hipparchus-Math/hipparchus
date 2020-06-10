@@ -49,7 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
-    <release version="1.7"  date="TBD" description="TBD.">
+    <release version="1.7"  date="2020-06-14" description="This is a maintenance release.
+    It fixes several bugs, including a nasty one in ODE events handling, improves a lot
+    the Complex class so it implements the new CalculusFieldElement interface, and adds
+    several new differentiation classes to handle simpler cases (univariate derivatives
+    at orders 1 and 2 and gradients) with less overhead than the existing DerivativeStructure.">
       <action dev="bryan" type="add" issue="issues/97">
       Added ExtendedUnivariateDifferentiableVectorFunction interface
       for differentiable vectorial function.
@@ -68,6 +72,11 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
       <action dev="luc" type="add" >
         Added isMathematicalInteger to Precision for double and float numbers.
+      </action>
+      <action dev="evan" type="fix" issue="issues/94" due-to="Mikael">
+        Fix infinite loop in event handling when a RESET_STATE or RESET_DERIVATIVES event
+        causes two other event detectors to trigger simultaneously and discontinuously at
+        the same time.
       </action>
       <action dev="luc" type="add" issue="issues/93">
         Added UnivariateDerivative1, UnivariateDerivative2 and Gradient
@@ -103,6 +112,9 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
        <action dev="luc" type="fix" issue="issues/76">
         Fixed MathArrays.linearCombination when signed zeros are involved.
+      </action>
+      <action dev="evan" type="add" issue="issues/78">
+        Add Line.fromDirection(...).
       </action>
       <action dev="bryan" type="update" issue="issues/72">
         Changed RotationOrder from final class to enum.

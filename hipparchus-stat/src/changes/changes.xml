@@ -49,7 +49,8 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
-    <release version="1.7"  date="TBD" description="TBD.">
+    <release version="1.7"  date="2020-06-14" description="This is a maintenance release. The only change is
+    use of try with resources instead of ignoring exceptions.">
       <action dev="luc" type="fix" issue="issues/71">
         Don't ignore exceptions, use try with resources.
       </action>
