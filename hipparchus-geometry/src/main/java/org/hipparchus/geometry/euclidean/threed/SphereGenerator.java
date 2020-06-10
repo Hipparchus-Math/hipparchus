@@ -41,11 +41,11 @@ public class SphereGenerator implements SupportBallGenerator<Euclidean3D, Vector
     public EnclosingBall<Euclidean3D, Vector3D> ballOnSupport(final List<Vector3D> support) {
 
         if (support.isEmpty()) {
-            return new EnclosingBall<Euclidean3D, Vector3D>(Vector3D.ZERO, Double.NEGATIVE_INFINITY);
+            return new EnclosingBall<>(Vector3D.ZERO, Double.NEGATIVE_INFINITY);
         } else {
             final Vector3D vA = support.get(0);
             if (support.size() < 2) {
-                return new EnclosingBall<Euclidean3D, Vector3D>(vA, 0, vA);
+                return new EnclosingBall<>(vA, 0, vA);
             } else {
                 final Vector3D vB = support.get(1);
                 if (support.size() < 3) {
@@ -61,7 +61,7 @@ public class SphereGenerator implements SupportBallGenerator<Euclidean3D, Vector
                     // see <https://github.com/Hipparchus-Math/hipparchus/issues/20>
                     final double r = FastMath.max(Vector3D.distance(vA, center),
                                                   Vector3D.distance(vB, center));
-                    return new EnclosingBall<Euclidean3D, Vector3D>(center, r, vA, vB);
+                    return new EnclosingBall<>(center, r, vA, vB);
 
                 } else {
                     final Vector3D vC = support.get(2);
@@ -88,7 +88,7 @@ public class SphereGenerator implements SupportBallGenerator<Euclidean3D, Vector
                         final double r = FastMath.max(Vector3D.distance(vA, center),
                                                       FastMath.max(Vector3D.distance(vB, center),
                                                                    Vector3D.distance(vC, center)));
-                        return new EnclosingBall<Euclidean3D, Vector3D>(center, r, vA, vB, vC);
+                        return new EnclosingBall<>(center, r, vA, vB, vC);
 
                     } else {
                         final Vector3D vD = support.get(3);
@@ -115,19 +115,19 @@ public class SphereGenerator implements SupportBallGenerator<Euclidean3D, Vector
                         //      z_0 = +m_14 / (2 m_11)
                         // Note that the minors m_11, m_12, m_13 and m_14 all have the last column
                         // filled with 1.0, hence simplifying the computation
-                        final BigFraction[] c2 = new BigFraction[] {
+                        final BigFraction[] c2 = {
                             new BigFraction(vA.getX()), new BigFraction(vB.getX()),
                             new BigFraction(vC.getX()), new BigFraction(vD.getX())
                         };
-                        final BigFraction[] c3 = new BigFraction[] {
+                        final BigFraction[] c3 = {
                             new BigFraction(vA.getY()), new BigFraction(vB.getY()),
                             new BigFraction(vC.getY()), new BigFraction(vD.getY())
                         };
-                        final BigFraction[] c4 = new BigFraction[] {
+                        final BigFraction[] c4 = {
                             new BigFraction(vA.getZ()), new BigFraction(vB.getZ()),
                             new BigFraction(vC.getZ()), new BigFraction(vD.getZ())
                         };
-                        final BigFraction[] c1 = new BigFraction[] {
+                        final BigFraction[] c1 = {
                             c2[0].multiply(c2[0]).add(c3[0].multiply(c3[0])).add(c4[0].multiply(c4[0])),
                             c2[1].multiply(c2[1]).add(c3[1].multiply(c3[1])).add(c4[1].multiply(c4[1])),
                             c2[2].multiply(c2[2]).add(c3[2].multiply(c3[2])).add(c4[2].multiply(c4[2])),
@@ -152,7 +152,7 @@ public class SphereGenerator implements SupportBallGenerator<Euclidean3D, Vector
                                                       FastMath.max(Vector3D.distance(vB, center),
                                                                    FastMath.max(Vector3D.distance(vC, center),
                                                                                 Vector3D.distance(vD, center))));
-                        return new EnclosingBall<Euclidean3D, Vector3D>(center, r, vA, vB, vC, vD);
+                        return new EnclosingBall<>(center, r, vA, vB, vC, vD);
 
                     }
                 }

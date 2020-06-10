@@ -133,6 +133,7 @@ public class Gradient implements Derivative<Gradient>, RealFieldElement<Gradient
     /** Get the value part of the function.
      * @return value part of the value of the function
      */
+    @Override
     public double getValue() {
         return value;
     }
@@ -157,8 +158,8 @@ public class Gradient implements Derivative<Gradient>, RealFieldElement<Gradient
         return 1;
     }
 
-    @Override
     /** {@inheritDoc} */
+    @Override
     public double getPartialDerivative(final int ... orders)
         throws MathIllegalArgumentException {
 
@@ -794,10 +795,10 @@ public class Gradient implements Derivative<Gradient>, RealFieldElement<Gradient
     public Gradient linearCombination(final Gradient a1, final Gradient b1,
                                       final Gradient a2, final Gradient b2,
                                       final Gradient a3, final Gradient b3) {
-        final double[] a = new double[] {
+        final double[] a = {
             a1.value, 0, a2.value, 0, a3.value, 0
         };
-        final double[] b = new double[] {
+        final double[] b = {
             0, b1.value, 0, b2.value, 0, b3.value
         };
         final Gradient result = newInstance(MathArrays.linearCombination(a1.value, b1.value,
@@ -837,10 +838,10 @@ public class Gradient implements Derivative<Gradient>, RealFieldElement<Gradient
                                       final Gradient a2, final Gradient b2,
                                       final Gradient a3, final Gradient b3,
                                       final Gradient a4, final Gradient b4) {
-        final double[] a = new double[] {
+        final double[] a = {
             a1.value, 0, a2.value, 0, a3.value, 0, a4.value, 0
         };
-        final double[] b = new double[] {
+        final double[] b = {
             0, b1.value, 0, b2.value, 0, b3.value, 0, b4.value
         };
         final Gradient result = newInstance(MathArrays.linearCombination(a1.value, b1.value,

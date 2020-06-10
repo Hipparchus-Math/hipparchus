@@ -161,6 +161,7 @@ public class FieldGradient<T extends RealFieldElement<T>> implements FieldDeriva
     /** Get the value part of the function.
      * @return value part of the value of the function
      */
+    @Override
     public T getValue() {
         return value;
     }
@@ -175,6 +176,7 @@ public class FieldGradient<T extends RealFieldElement<T>> implements FieldDeriva
     /** Get the number of free parameters.
      * @return number of free parameters
      */
+    @Override
     public int getFreeParameters() {
         return grad.length;
     }
@@ -185,8 +187,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements FieldDeriva
         return 1;
     }
 
-    @Override
     /** {@inheritDoc} */
+    @Override
     public T getPartialDerivative(final int ... orders)
         throws MathIllegalArgumentException {
 

@@ -97,6 +97,7 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
     /** Get the value part of the univariate derivative.
      * @return value part of the univariate derivative
      */
+    @Override
     public T getValue() {
         return f0;
     }
@@ -106,6 +107,7 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
      * @return n<sup>th</sup> derivative, or {@code NaN} if n is
      * either negative or strictly larger than {@link #getOrder()}
      */
+    @Override
     public T getDerivative(final int n) {
         switch (n) {
             case 0 :
@@ -120,6 +122,7 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
     /** Get the derivation order.
      * @return derivation order
      */
+    @Override
     public int getOrder() {
         return 1;
     }
@@ -142,6 +145,7 @@ public class FieldUnivariateDerivative1<T extends RealFieldElement<T>>
     /** Convert the instance to a {@link FieldDerivativeStructure}.
      * @return derivative structure with same value and derivative as the instance
      */
+    @Override
     public FieldDerivativeStructure<T> toDerivativeStructure() {
         return getField().getConversionFactory().build(f0, f1);
     }

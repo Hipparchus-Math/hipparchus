@@ -37,11 +37,11 @@ public class DiskGenerator implements SupportBallGenerator<Euclidean2D, Vector2D
     public EnclosingBall<Euclidean2D, Vector2D> ballOnSupport(final List<Vector2D> support) {
 
         if (support.isEmpty()) {
-            return new EnclosingBall<Euclidean2D, Vector2D>(Vector2D.ZERO, Double.NEGATIVE_INFINITY);
+            return new EnclosingBall<>(Vector2D.ZERO, Double.NEGATIVE_INFINITY);
         } else {
             final Vector2D vA = support.get(0);
             if (support.size() < 2) {
-                return new EnclosingBall<Euclidean2D, Vector2D>(vA, 0, vA);
+                return new EnclosingBall<>(vA, 0, vA);
             } else {
                 final Vector2D vB = support.get(1);
                 if (support.size() < 3) {
@@ -56,7 +56,7 @@ public class DiskGenerator implements SupportBallGenerator<Euclidean2D, Vector2D
                     // see <https://github.com/Hipparchus-Math/hipparchus/issues/20>
                     final double r = FastMath.max(Vector2D.distance(vA, center),
                                                   Vector2D.distance(vB, center));
-                    return new EnclosingBall<Euclidean2D, Vector2D>(center, r, vA, vB);
+                    return new EnclosingBall<>(center, r, vA, vB);
 
                 } else {
                     final Vector2D vC = support.get(2);
@@ -81,13 +81,13 @@ public class DiskGenerator implements SupportBallGenerator<Euclidean2D, Vector2D
                     //      y_0 = -m_13 / (2 m_11)
                     // Note that the minors m_11, m_12 and m_13 all have the last column
                     // filled with 1.0, hence simplifying the computation
-                    final BigFraction[] c2 = new BigFraction[] {
+                    final BigFraction[] c2 = {
                         new BigFraction(vA.getX()), new BigFraction(vB.getX()), new BigFraction(vC.getX())
                     };
-                    final BigFraction[] c3 = new BigFraction[] {
+                    final BigFraction[] c3 = {
                         new BigFraction(vA.getY()), new BigFraction(vB.getY()), new BigFraction(vC.getY())
                     };
-                    final BigFraction[] c1 = new BigFraction[] {
+                    final BigFraction[] c1 = {
                         c2[0].multiply(c2[0]).add(c3[0].multiply(c3[0])),
                         c2[1].multiply(c2[1]).add(c3[1].multiply(c3[1])),
                         c2[2].multiply(c2[2]).add(c3[2].multiply(c3[2]))
@@ -108,7 +108,7 @@ public class DiskGenerator implements SupportBallGenerator<Euclidean2D, Vector2D
                      final double r = FastMath.max(Vector2D.distance(vA, center),
                                                    FastMath.max(Vector2D.distance(vB, center),
                                                                 Vector2D.distance(vC, center)));
-                    return new EnclosingBall<Euclidean2D, Vector2D>(center, r, vA, vB, vC);
+                    return new EnclosingBall<>(center, r, vA, vB, vC);
 
                 }
             }

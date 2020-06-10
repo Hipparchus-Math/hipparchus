@@ -311,7 +311,7 @@ public class Combinations implements Iterable<int[]> {
         public int[] next() {
             if (more) {
                 more = false;
-                return singleton;
+                return singleton.clone();
             } else {
                 throw new NoSuchElementException();
             }

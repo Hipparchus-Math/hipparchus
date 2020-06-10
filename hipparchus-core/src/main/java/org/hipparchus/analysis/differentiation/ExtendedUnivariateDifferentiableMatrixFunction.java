@@ -28,6 +28,7 @@ public interface ExtendedUnivariateDifferentiableMatrixFunction
     /**
      * Compute the value for the function.
      * @param x the point for which the function value should be computed
+     * @param <T> the type of the field elements
      * @return the value
      * @exception MathIllegalArgumentException if {@code x} does not
      * satisfy the function's constraints (argument out of bound, or unsupported

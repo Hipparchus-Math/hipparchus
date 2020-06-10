@@ -781,16 +781,16 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
                 throw new MathIllegalArgumentException(LocalizedStatFormats.NOT_ENOUGH_DATA_REGRESSION);
             }
             if (FastMath.abs(sumXX) > Precision.SAFE_MIN) {
-                final double[] params = new double[] { getIntercept(), getSlope() };
+                final double[] params = { getIntercept(), getSlope() };
                 final double mse = getMeanSquareError();
                 final double _syy = sumYY + sumY * sumY / n;
-                final double[] vcv = new double[] { mse * (xbar * xbar / sumXX + 1.0 / n), -xbar * mse / sumXX, mse / sumXX };
+                final double[] vcv = { mse * (xbar * xbar / sumXX + 1.0 / n), -xbar * mse / sumXX, mse / sumXX };
                 return new RegressionResults(params, new double[][] { vcv }, true, n, 2, sumY, _syy, getSumSquaredErrors(), true,
                         false);
             } else {
-                final double[] params = new double[] { sumY / n, Double.NaN };
+                final double[] params = { sumY / n, Double.NaN };
                 // final double mse = getMeanSquareError();
-                final double[] vcv = new double[] { ybar / (n - 1.0), Double.NaN, Double.NaN };
+                final double[] vcv = { ybar / (n - 1.0), Double.NaN, Double.NaN };
                 return new RegressionResults(params, new double[][] { vcv }, true, n, 1, sumY, sumYY, getSumSquaredErrors(), true,
                         false);
             }
@@ -799,13 +799,13 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
                 throw new MathIllegalArgumentException(LocalizedStatFormats.NOT_ENOUGH_DATA_REGRESSION);
             }
             if (!Double.isNaN(sumXX)) {
-                final double[] vcv = new double[] { getMeanSquareError() / sumXX };
-                final double[] params = new double[] { sumXY / sumXX };
+                final double[] vcv = { getMeanSquareError() / sumXX };
+                final double[] params = { sumXY / sumXX };
                 return new RegressionResults(params, new double[][] { vcv }, true, n, 1, sumY, sumYY, getSumSquaredErrors(), false,
                         false);
             } else {
-                final double[] vcv = new double[] { Double.NaN };
-                final double[] params = new double[] { Double.NaN };
+                final double[] vcv = { Double.NaN };
+                final double[] params = { Double.NaN };
                 return new RegressionResults(params, new double[][] { vcv }, true, n, 1, Double.NaN, Double.NaN, Double.NaN, false,
                         false);
             }
@@ -853,10 +853,10 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
                 final double _syy = sumYY + _mean;
                 if( variablesToInclude[0] == 0 ){
                     //just the mean
-                    final double[] vcv = new double[]{ sumYY/(((n-1)*n)) };
-                    final double[] params = new double[]{ ybar };
+                    final double[] vcv = { sumYY/(((n-1)*n)) };
+                    final double[] params = { ybar };
                     return new RegressionResults(
-                      params, new double[][]{vcv}, true, n, 1,
+                      params, new double[][] {vcv}, true, n, 1,
                       sumY, _syy+_mean, sumYY,true,false);
 
                 }else if( variablesToInclude[0] == 1){
@@ -866,16 +866,16 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
                     final double _sse = FastMath.max(0d, _syy - _sxy * _sxy / _sxx);
                     final double _mse = _sse/((n-1));
                     if( !Double.isNaN(_sxx) ){
-                        final double[] vcv = new double[]{ _mse / _sxx };
-                        final double[] params = new double[]{ _sxy/_sxx };
+                        final double[] vcv = { _mse / _sxx };
+                        final double[] params = { _sxy/_sxx };
                         return new RegressionResults(
-                                    params, new double[][]{vcv}, true, n, 1,
+                                    params, new double[][] {vcv}, true, n, 1,
                                     sumY, _syy, _sse,false,false);
                     }else{
-                        final double[] vcv = new double[]{Double.NaN };
-                        final double[] params = new double[]{ Double.NaN };
+                        final double[] vcv = {Double.NaN };
+                        final double[] params = { Double.NaN };
                         return new RegressionResults(
-                                    params, new double[][]{vcv}, true, n, 1,
+                                    params, new double[][] {vcv}, true, n, 1,
                                     Double.NaN, Double.NaN, Double.NaN,false,false);
                     }
                 }

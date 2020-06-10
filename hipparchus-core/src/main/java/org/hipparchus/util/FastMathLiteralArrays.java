@@ -29,7 +29,7 @@ class FastMathLiteralArrays {
     /** Exponential evaluated at integer values,
      * exp(x) =  expIntTableA[x + EXP_INT_TABLE_MAX_INDEX] + expIntTableB[x+EXP_INT_TABLE_MAX_INDEX].
      */
-    private static final double[] EXP_INT_A = new double[] {
+    private static final double[] EXP_INT_A = {
         +0.0d,
         Double.NaN,
         Double.NaN,
@@ -1535,7 +1535,7 @@ class FastMathLiteralArrays {
     /** Exponential evaluated at integer values,
      * exp(x) =  expIntTableA[x + EXP_INT_TABLE_MAX_INDEX] + expIntTableB[x+EXP_INT_TABLE_MAX_INDEX]
      */
-    private static final double[] EXP_INT_B = new double[] {
+    private static final double[] EXP_INT_B = {
         +0.0d,
         Double.NaN,
         Double.NaN,
@@ -3043,7 +3043,7 @@ class FastMathLiteralArrays {
      * exp(x/1024) =  expFracTableA[x] + expFracTableB[x].
      * 1024 = 2^10
      */
-    private static final double[] EXP_FRAC_A = new double[] {
+    private static final double[] EXP_FRAC_A = {
       +1.0d,
       +1.0009770393371582d,
       +1.0019550323486328d,
@@ -4074,7 +4074,7 @@ class FastMathLiteralArrays {
     /** Exponential over the range of 0 - 1 in increments of 2^-10
      * exp(x/1024) =  expFracTableA[x] + expFracTableB[x].
      */
-    private static final double[] EXP_FRAC_B = new double[] {
+    private static final double[] EXP_FRAC_B = {
       +0.0d,
       +1.552583321178453E-10d,
       +1.2423699995465188E-9d,
@@ -5103,7 +5103,7 @@ class FastMathLiteralArrays {
     };
 
     /** Extended precision logarithm table over the range 1 - 2 in increments of 2^-10. */
-    private static final double[][] LN_MANT = new double[][] {
+    private static final double[][] LN_MANT = {
       {+0.0d,                   +0.0d,                   }, // 0
       {+9.760860120877624E-4d,  -3.903230345984362E-11d, }, // 1
       {+0.0019512202125042677d, -8.124251825289188E-11d, }, // 2

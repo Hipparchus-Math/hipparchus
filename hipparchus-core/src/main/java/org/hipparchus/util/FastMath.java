@@ -21,8 +21,6 @@
  */
 package org.hipparchus.util;
 
-import java.io.PrintStream;
-
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
@@ -255,7 +253,7 @@ public class FastMath {
     };
 
     /** Bits of 1/(2*pi), need for reducePayneHanek(). */
-    private static final long RECIP_2PI[] = new long[] {
+    private static final long RECIP_2PI[] = {
         (0x28be60dbL << 32) | 0x9391054aL,
         (0x7f09d5f4L << 32) | 0x7d4d3770L,
         (0x36d8a566L << 32) | 0x4f10e410L,
@@ -276,7 +274,7 @@ public class FastMath {
          0x9afed7ecL << 32  };
 
     /** Bits of pi/4, need for reducePayneHanek(). */
-    private static final long PI_O_4_BITS[] = new long[] {
+    private static final long PI_O_4_BITS[] = {
         (0xc90fdaa2L << 32) | 0x2168c234L,
         (0xc4c6628bL << 32) | 0x80dc1cd1L };
 
@@ -4839,18 +4837,17 @@ public class FastMath {
      * @param a unused
      */
     public static void main(String[] a) {
-        PrintStream out = System.out;
-        FastMathCalc.printarray(out, "EXP_INT_TABLE_A", EXP_INT_TABLE_LEN, ExpIntTable.EXP_INT_TABLE_A);
-        FastMathCalc.printarray(out, "EXP_INT_TABLE_B", EXP_INT_TABLE_LEN, ExpIntTable.EXP_INT_TABLE_B);
-        FastMathCalc.printarray(out, "EXP_FRAC_TABLE_A", EXP_FRAC_TABLE_LEN, ExpFracTable.EXP_FRAC_TABLE_A);
-        FastMathCalc.printarray(out, "EXP_FRAC_TABLE_B", EXP_FRAC_TABLE_LEN, ExpFracTable.EXP_FRAC_TABLE_B);
-        FastMathCalc.printarray(out, "LN_MANT",LN_MANT_LEN, lnMant.LN_MANT);
-        FastMathCalc.printarray(out, "SINE_TABLE_A", SINE_TABLE_LEN, SINE_TABLE_A);
-        FastMathCalc.printarray(out, "SINE_TABLE_B", SINE_TABLE_LEN, SINE_TABLE_B);
-        FastMathCalc.printarray(out, "COSINE_TABLE_A", SINE_TABLE_LEN, COSINE_TABLE_A);
-        FastMathCalc.printarray(out, "COSINE_TABLE_B", SINE_TABLE_LEN, COSINE_TABLE_B);
-        FastMathCalc.printarray(out, "TANGENT_TABLE_A", SINE_TABLE_LEN, TANGENT_TABLE_A);
-        FastMathCalc.printarray(out, "TANGENT_TABLE_B", SINE_TABLE_LEN, TANGENT_TABLE_B);
+        FastMathCalc.printarray(System.out, "EXP_INT_TABLE_A", EXP_INT_TABLE_LEN, ExpIntTable.EXP_INT_TABLE_A);
+        FastMathCalc.printarray(System.out, "EXP_INT_TABLE_B", EXP_INT_TABLE_LEN, ExpIntTable.EXP_INT_TABLE_B);
+        FastMathCalc.printarray(System.out, "EXP_FRAC_TABLE_A", EXP_FRAC_TABLE_LEN, ExpFracTable.EXP_FRAC_TABLE_A);
+        FastMathCalc.printarray(System.out, "EXP_FRAC_TABLE_B", EXP_FRAC_TABLE_LEN, ExpFracTable.EXP_FRAC_TABLE_B);
+        FastMathCalc.printarray(System.out, "LN_MANT",LN_MANT_LEN, lnMant.LN_MANT);
+        FastMathCalc.printarray(System.out, "SINE_TABLE_A", SINE_TABLE_LEN, SINE_TABLE_A);
+        FastMathCalc.printarray(System.out, "SINE_TABLE_B", SINE_TABLE_LEN, SINE_TABLE_B);
+        FastMathCalc.printarray(System.out, "COSINE_TABLE_A", SINE_TABLE_LEN, COSINE_TABLE_A);
+        FastMathCalc.printarray(System.out, "COSINE_TABLE_B", SINE_TABLE_LEN, COSINE_TABLE_B);
+        FastMathCalc.printarray(System.out, "TANGENT_TABLE_A", SINE_TABLE_LEN, TANGENT_TABLE_A);
+        FastMathCalc.printarray(System.out, "TANGENT_TABLE_B", SINE_TABLE_LEN, TANGENT_TABLE_B);
     }
 
     /** Enclose large data table in nested static class so it's only loaded on first access. */

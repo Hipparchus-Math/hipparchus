@@ -111,12 +111,13 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
      * @return value part of the derivative structure
      * @see #getPartialDerivative(int...)
      */
+    @Override
     public T getValue() {
         return data[0];
     }
 
-    @Override
     /** {@inheritDoc} */
+    @Override
     public T getPartialDerivative(final int ... orders)
         throws MathIllegalArgumentException {
         return data[factory.getCompiler().getPartialDerivativeIndex(orders)];
