@@ -25,14 +25,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.differentiation.UnivariateDifferentiableVectorFunction;
+import org.hipparchus.analysis.differentiation.ExtendedUnivariateDifferentiableVectorFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.CombinatoricsUtils;
+import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
 /** Polynomial interpolator using both sample values and sample derivatives.
@@ -50,7 +52,7 @@ import org.hipparchus.util.MathUtils;
  * </p>
  *
  */
-public class HermiteInterpolator implements UnivariateDifferentiableVectorFunction {
+public class HermiteInterpolator implements ExtendedUnivariateDifferentiableVectorFunction {
 
     /** Sample abscissae. */
     private final List<Double> abscissae;
@@ -223,6 +225,31 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
         return value;
 
     }
+
+    /** {@inheritDoc}. */
+    @Override
+    public <T extends Derivative<T>> T[] value(T x)
+        throws MathIllegalArgumentException {
+
+        // safety check
+        checkInterpolation();
+
+        final T[] value = MathArrays.buildArray(x.getField(), topDiagonal.get(0).length);
+        Arrays.fill(value, x.getField().getZero());
+        T valueCoeff = x.getField().getOne();
+        for (int i = 0; i < topDiagonal.size(); ++i) {
+            double[] dividedDifference = topDiagonal.get(i);
+            for (int k = 0; k < value.length; ++k) {
+                value[k] = value[k].add(valueCoeff.multiply(dividedDifference[k]));
+            }
+            final T deltaX = x.subtract(abscissae.get(i));
+            valueCoeff = valueCoeff.multiply(deltaX);
+        }
+
+        return value;
+
+    }
+
 
     /** Interpolate value and first derivatives at a specified abscissa.
      * @param x interpolation abscissa

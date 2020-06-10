@@ -22,17 +22,32 @@
 
 package org.hipparchus.analysis.function;
 
-import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.differentiation.Derivative;
+import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.ExtendedUnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
 
 /**
  * {@code rint} function.
  *
  */
-public class Rint implements UnivariateFunction {
+public class Rint implements ExtendedUnivariateDifferentiableFunction {
     /** {@inheritDoc} */
     @Override
     public double value(double x) {
         return FastMath.rint(x);
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public DerivativeStructure value(DerivativeStructure x) {
+        return x.rint();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public <T extends Derivative<T>> T value(T x) {
+        return x.rint();
+    }
+
 }

@@ -22,17 +22,32 @@
 
 package org.hipparchus.analysis.function;
 
-import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.differentiation.Derivative;
+import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.ExtendedUnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
 
 /**
  * {@code ceil} function.
  *
  */
-public class Ceil implements UnivariateFunction {
+public class Ceil implements ExtendedUnivariateDifferentiableFunction {
     /** {@inheritDoc} */
     @Override
     public double value(double x) {
         return FastMath.ceil(x);
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public DerivativeStructure value(DerivativeStructure x) {
+        return x.ceil();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public <T extends Derivative<T>> T value(T x) {
+        return x.ceil();
+    }
+
 }
