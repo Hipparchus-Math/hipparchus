@@ -327,15 +327,14 @@ public class RandomPercentile
         double estimateRank = getRank(estimate);
         double lower;
         double upper;
-        if (estimateRank == targetRank) {
-            return estimate;
-        }
         if (estimateRank > targetRank) {
             upper = estimate;
             lower = min;
-        } else {
+        } else if (estimateRank < targetRank) {
             lower = estimate;
             upper = max;
+        } else {
+            return estimate;
         }
         final double eps = epsilon / 2;
         final double rankTolerance = eps * n;
@@ -1150,15 +1149,14 @@ public class RandomPercentile
         double estimateRank = getAggregateRank(estimate, aggregates);
         double lower;
         double upper;
-        if (estimateRank == targetRank) {
-            return estimate;
-        }
         if (estimateRank > targetRank) {
             upper = estimate;
             lower = min;
-        } else {
+        } else if (estimateRank < targetRank) {
             lower = estimate;
             upper = max;
+        } else {
+            return estimate;
         }
         final double eps = epsilon / 2;
         double intervalWidth = FastMath.abs(upper - lower);
