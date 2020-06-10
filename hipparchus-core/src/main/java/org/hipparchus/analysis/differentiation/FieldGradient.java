@@ -286,8 +286,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements FieldDeriva
     }
 
     /** '&times;' operator.
-     * @param a right hand side parameter of the operator
-     * @return this&times;a
+     * @param n right hand side parameter of the operator
+     * @return this&times;n
      */
     public FieldGradient<T> multiply(final T n) {
         final FieldGradient<T> result = newInstance(value.multiply(n));
