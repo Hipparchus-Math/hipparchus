@@ -158,6 +158,10 @@
             <!-- trivial -->
             <exclude>src/site/resources/css/site.css</exclude>
 
+            <!-- build files -->
+            <exclude>.github/workflows/maven.yml</exclude>
+            <exclude>.CI/maven-settings.xml</exclude>
+
             <!-- attributed in NOTICE -->
             <exclude>src/site/resources/js/html5.js</exclude>
             <exclude>src/site/resources/js/jquery.min.js</exclude>
