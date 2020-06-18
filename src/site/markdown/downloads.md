@@ -48,7 +48,7 @@ Maven's internal mechanism will automatically download any internal dependencies
 |  source (tar.bz2) | [hipparchus-1.7-src.tar.bz2](downloads/hipparchus-1.7-src.tar.bz2) | [md5](downloads/hipparchus-1.7-src.tar.bz2.md5) | [sig](downloads/hipparchus-1.7-src.tar.bz2.asc)|
 |  binary (zip)     | [hipparchus-1.7-bin.zip](downloads/hipparchus-1.7-bin.zip)| [md5](downloads/hipparchus-1.7-bin.zip.md5) | [sig](downloads/hipparchus-1.7-bin.zip.asc)|
 |  binary (tar.bz2) | [hipparchus-1.7-bin.tar.bz2](downloads/hipparchus-1.7-bin.tar.bz2) | [md5](downloads/hipparchus-1.7-bin.tar.bz2.md5) | [sig](downloads/hipparchus-1.7-bin.tar.bz2.asc)
-version 1.7 downloads (release date: 2020-06-14)
+version 1.7 downloads (release date: 2020-06-23)
 
 ---
 

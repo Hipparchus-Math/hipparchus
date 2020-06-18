@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
-    <release version="1.7"  date="2020-06-14" description="This is a maintenance release.
+    <release version="1.7"  date="2020-06-23" description="This is a maintenance release.
     It fixes several bugs, including a nasty one in ODE events handling, improves a lot
     the Complex class so it implements the new CalculusFieldElement interface, and adds
     several new differentiation classes to handle simpler cases (univariate derivatives
