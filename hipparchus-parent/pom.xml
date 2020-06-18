@@ -63,6 +63,10 @@
 
   <developers>
     <developer>
+      <name>Bryan Cazabonne</name>
+      <id>bryan</id>
+    </developer>
+    <developer>
       <name>Otmar Ertl</name>
       <id>oertl</id>
       <email>oertl at hipparchus dot org</email>
