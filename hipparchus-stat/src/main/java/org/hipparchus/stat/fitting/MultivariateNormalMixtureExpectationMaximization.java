@@ -436,10 +436,10 @@ public class MultivariateNormalMixtureExpectationMaximization {
         }
         /**
          * Get a data row.
-         * @return data row array
+         * @return data row array (a reference to the stored array is returned)
          */
         public double[] getRow() {
-            return row;
+            return row; // NOPMD - returning a reference to an internal array is documented here
         }
     }
 }

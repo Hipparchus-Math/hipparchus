@@ -284,12 +284,13 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
      * @return value part of the derivative structure
      * @see #getPartialDerivative(int...)
      */
+    @Override
     public double getValue() {
         return data[0];
     }
 
-    @Override
     /** {@inheritDoc} */
+    @Override
     public double getPartialDerivative(final int ... orders)
         throws MathIllegalArgumentException {
         return data[getFactory().getCompiler().getPartialDerivativeIndex(orders)];

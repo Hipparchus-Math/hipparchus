@@ -35,7 +35,7 @@ import org.hipparchus.special.Gamma;
 public final class CombinatoricsUtils {
 
     /** All long-representable factorials */
-    static final long[] FACTORIALS = new long[] {
+    static final long[] FACTORIALS = {
                        1l,                  1l,                   2l,
                        6l,                 24l,                 120l,
                      720l,               5040l,               40320l,

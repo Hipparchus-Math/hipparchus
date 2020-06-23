@@ -362,7 +362,7 @@ public class FastFourierTransformer implements Serializable {
      * @throws MathIllegalArgumentException if the length of the data array is not a power of two
      */
     public Complex[] transform(final double[] f, final TransformType type) {
-        final double[][] dataRI = new double[][] { f.clone(), new double[f.length] };
+        final double[][] dataRI = { f.clone(), new double[f.length] };
         transformInPlace(dataRI, normalization, type);
         return TransformUtils.createComplexArray(dataRI);
     }

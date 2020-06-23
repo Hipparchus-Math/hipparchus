@@ -50,7 +50,7 @@ public interface Derivative<T extends RealFieldElement<T>> extends RealFieldElem
      * @exception MathIllegalArgumentException if sum of derivation orders is larger
      * than the instance limits
      */
-    double getPartialDerivative(final int ... orders)
+    double getPartialDerivative(int ... orders)
         throws MathIllegalArgumentException;
 
 }

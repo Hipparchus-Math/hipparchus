@@ -51,7 +51,7 @@ public interface FieldDerivative<S extends RealFieldElement<S>, T extends FieldD
      * @exception MathIllegalArgumentException if sum of derivation orders is larger
      * than the instance limits
      */
-    S getPartialDerivative(final int ... orders)
+    S getPartialDerivative(int ... orders)
         throws MathIllegalArgumentException;
 
 }

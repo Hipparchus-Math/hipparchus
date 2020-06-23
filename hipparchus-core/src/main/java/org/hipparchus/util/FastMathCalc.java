@@ -35,8 +35,7 @@ class FastMathCalc {
     private static final long HEX_40000000 = 0x40000000L; // 1073741824L
 
     /** Factorial table, for Taylor series expansions. 0!, 1!, 2!, ... 19! */
-    private static final double FACT[] = new double[]
-        {
+    private static final double FACT[] = {
         +1.0d,                        // 0
         +1.0d,                        // 1
         +2.0d,                        // 2

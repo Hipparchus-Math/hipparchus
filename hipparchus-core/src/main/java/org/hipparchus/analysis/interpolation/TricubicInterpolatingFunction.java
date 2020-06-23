@@ -281,7 +281,7 @@ public class TricubicInterpolatingFunction
                     final double yRzR = yR * zR;
                     final double xRyRzR = xR * yRzR;
 
-                    final double[] beta = new double[] {
+                    final double[] beta = {
                         f[i][j][k], f[ip1][j][k],
                         f[i][jp1][k], f[ip1][jp1][k],
                         f[i][j][kp1], f[ip1][j][kp1],
