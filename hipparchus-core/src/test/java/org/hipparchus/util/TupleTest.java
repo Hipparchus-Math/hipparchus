@@ -22,7 +22,6 @@
 package org.hipparchus.util;
 
 import org.hipparchus.RealFieldElementAbstractTest;
-import org.hipparchus.util.Tuple;
 import org.junit.Assert;
 import org.junit.Test;
 

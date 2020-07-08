@@ -21,13 +21,11 @@
  */
 package org.hipparchus.distribution.multivariate;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.distribution.multivariate.MixtureMultivariateRealDistribution;
-import org.hipparchus.distribution.multivariate.MultivariateNormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;

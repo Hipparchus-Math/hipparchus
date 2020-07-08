@@ -22,7 +22,6 @@
 package org.hipparchus.util;
 
 import org.hipparchus.RealFieldElementAbstractTest;
-import org.hipparchus.util.Decimal64;
 import org.junit.Assert;
 import org.junit.Test;
 
