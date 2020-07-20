@@ -659,6 +659,28 @@ public class EigenDecompositionTest {
     }
 
     /**
+     * Verifies that a custom epsilon value is used when testing for singular
+     */
+    @Test
+    public void testCustomEpsilon() {
+        RealMatrix matrix = MatrixUtils.createRealMatrix(new double[][] {
+            {1.76208738E-13,	-9.37625373E-13,	-1.94760551E-12,	-2.56572222E-11,	-7.30093964E-11,	-1.98340808E-09},
+            {-9.37625373E-13,	5.00812620E-12,	1.06017205E-11,	1.40431472E-10,	3.62452521E-10,	1.05830167E-08},
+            {-1.94760551E-12,	1.06017205E-11,	3.15658331E-11,	2.32155752E-09,	-1.53067748E-09,	2.23110293E-08},
+            {-2.56572222E-11,	1.40431472E-10,	2.32155752E-09,	8.81161492E-07,	-8.70304198E-07,	2.93564832E-07},
+            {-7.30093964E-11,	3.62452521E-10,	-1.53067748E-09,	-8.70304198E-07,	9.42413982E-07,	7.81029359E-07},
+            {-1.98340808E-09,	1.05830167E-08,	2.23110293E-08,	2.93564832E-07,	7.81029359E-07,	2.23721205E-05}
+        });
+
+        final EigenDecomposition defaultEd = new EigenDecomposition(matrix);
+        Assert.assertFalse(defaultEd.getSolver().isNonSingular());
+
+        final double customEpsilon = 1e-20;
+        final EigenDecomposition customEd = new EigenDecomposition(matrix, customEpsilon);
+        Assert.assertTrue(customEd.getSolver().isNonSingular());
+    }
+
+    /**
      * Verifies that the given EigenDecomposition has eigenvalues equivalent to
      * the targetValues, ignoring the order of the values and allowing
      * values to differ by tolerance.

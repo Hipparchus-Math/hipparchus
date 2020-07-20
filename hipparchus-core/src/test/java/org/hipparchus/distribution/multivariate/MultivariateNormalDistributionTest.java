@@ -28,6 +28,7 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -157,4 +158,22 @@ public class MultivariateNormalDistributionTest {
             Assert.assertEquals(uni.density(v), multi.density(new double[] { v }), tol);
         }
     }
+
+    /**
+     * Test getting/setting custom singularMatrixTolerance
+     */
+    @Test
+    public void testGetSingularMatrixTolerance() {
+        final double[] mu = { -1.5 };
+        final double[][] sigma = { { 1 } };
+
+        final double tolerance1 = 1e-2;
+        final MultivariateNormalDistribution mvd1 = new MultivariateNormalDistribution(mu, sigma, tolerance1);
+        Assert.assertEquals(tolerance1, mvd1.getSingularMatrixCheckTolerance(), Precision.EPSILON);
+
+        final double tolerance2 = 1e-3;
+        final MultivariateNormalDistribution mvd2 = new MultivariateNormalDistribution(mu, sigma, tolerance1);
+        Assert.assertEquals(tolerance1, mvd1.getSingularMatrixCheckTolerance(), Precision.EPSILON);
+    }
+
 }
