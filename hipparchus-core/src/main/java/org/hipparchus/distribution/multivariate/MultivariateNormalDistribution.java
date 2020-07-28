@@ -29,6 +29,7 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.Precision;
 
 /**
  * Implementation of the multivariate normal (Gaussian) distribution.
@@ -40,6 +41,9 @@ import org.hipparchus.util.FastMath;
  */
 public class MultivariateNormalDistribution
     extends AbstractMultivariateRealDistribution {
+    /** Default singular matrix tolerance check value **/
+    private static final double DEFAULT_TOLERANCE = Precision.EPSILON;
+
     /** Vector of means. */
     private final double[] means;
     /** Covariance matrix. */
@@ -50,6 +54,8 @@ public class MultivariateNormalDistribution
     private final double covarianceMatrixDeterminant;
     /** Matrix used in computation of samples. */
     private final RealMatrix samplingMatrix;
+    /** Inverse singular check tolerance when testing if invertable **/
+    private final double singularMatrixCheckTolerance;
 
     /**
      * Creates a multivariate normal distribution with the given mean vector and
@@ -78,8 +84,41 @@ public class MultivariateNormalDistribution
     public MultivariateNormalDistribution(final double[] means,
                                           final double[][] covariances)
         throws MathIllegalArgumentException {
-        this(new Well19937c(), means, covariances);
+        this(means, covariances, DEFAULT_TOLERANCE);
     }
+
+    /**
+     * Creates a multivariate normal distribution with the given mean vector and
+     * covariance matrix.
+     * <br/>
+     * The number of dimensions is equal to the length of the mean vector
+     * and to the number of rows and columns of the covariance matrix.
+     * It is frequently written as "p" in formulae.
+     * <p>
+     * <b>Note:</b> this constructor will implicitly create an instance of
+     * {@link Well19937c} as random generator to be used for sampling only (see
+     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
+     * needed for the created distribution, it is advised to pass {@code null}
+     * as random generator via the appropriate constructors to avoid the
+     * additional initialisation overhead.
+     *
+     * @param means Vector of means.
+     * @param covariances Covariance matrix.
+     * @param singularMatrixCheckTolerance Tolerance used during the singular matrix check before inversion
+     * @throws MathIllegalArgumentException if the arrays length are
+     * inconsistent.
+     * @throws MathIllegalArgumentException if the eigenvalue decomposition cannot
+     * be performed on the provided covariance matrix.
+     * @throws MathIllegalArgumentException if any of the eigenvalues is
+     * negative.
+     */
+    public MultivariateNormalDistribution(final double[] means,
+                                          final double[][] covariances,
+                                          final double singularMatrixCheckTolerance)
+        throws MathIllegalArgumentException {
+        this(new Well19937c(), means, covariances, singularMatrixCheckTolerance);
+    }
+
 
     /**
      * Creates a multivariate normal distribution with the given mean vector and
@@ -101,7 +140,33 @@ public class MultivariateNormalDistribution
      */
     public MultivariateNormalDistribution(RandomGenerator rng,
                                           final double[] means,
-                                          final double[][] covariances)
+                                          final double[][] covariances) {
+        this(rng, means, covariances, DEFAULT_TOLERANCE);
+    }
+
+    /**
+     * Creates a multivariate normal distribution with the given mean vector and
+     * covariance matrix.
+     * <br/>
+     * The number of dimensions is equal to the length of the mean vector
+     * and to the number of rows and columns of the covariance matrix.
+     * It is frequently written as "p" in formulae.
+     *
+     * @param rng Random Number Generator.
+     * @param means Vector of means.
+     * @param covariances Covariance matrix.
+     * @param singularMatrixCheckTolerance Tolerance used during the singular matrix check before inversion
+     * @throws MathIllegalArgumentException if the arrays length are
+     * inconsistent.
+     * @throws MathIllegalArgumentException if the eigenvalue decomposition cannot
+     * be performed on the provided covariance matrix.
+     * @throws MathIllegalArgumentException if any of the eigenvalues is
+     * negative.
+     */
+    public MultivariateNormalDistribution(RandomGenerator rng,
+                                          final double[] means,
+                                          final double[][] covariances,
+                                          final double singularMatrixCheckTolerance)
             throws MathIllegalArgumentException {
         super(rng, means.length);
 
@@ -120,11 +185,12 @@ public class MultivariateNormalDistribution
         }
 
         this.means = means.clone();
+        this.singularMatrixCheckTolerance = singularMatrixCheckTolerance;
 
         covarianceMatrix = new Array2DRowRealMatrix(covariances);
 
         // Covariance matrix eigen decomposition.
-        final EigenDecomposition covMatDec = new EigenDecomposition(covarianceMatrix);
+        final EigenDecomposition covMatDec = new EigenDecomposition(covarianceMatrix, singularMatrixCheckTolerance);
 
         // Compute and store the inverse.
         covarianceMatrixInverse = covMatDec.getSolver().getInverse();
@@ -177,6 +243,11 @@ public class MultivariateNormalDistribution
     public RealMatrix getCovariances() {
         return covarianceMatrix.copy();
     }
+
+    /**
+     * Gets the current setting for the tolerance check used during singular checks before inversion
+     */
+    public double getSingularMatrixCheckTolerance() { return singularMatrixCheckTolerance; }
 
     /** {@inheritDoc} */
     @Override
