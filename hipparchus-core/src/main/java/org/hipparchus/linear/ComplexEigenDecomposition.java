@@ -16,6 +16,8 @@
  */
 package org.hipparchus.linear;
 
+import java.lang.reflect.Array;
+
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexField;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -46,10 +48,12 @@ public class ComplexEigenDecomposition {
     private static final double EPSILON = 1e-12;
     /** Internally used epsilon criteria for equals. */
     private static final double EPSILON_EQUALS = 1e-6;
+    /** Maximum number of inverse iterations. */
+    private static final int MAX_ITER = 10;
     /** complex eigenvalues. */
     private Complex[] eigenvalues;
     /** Eigenvectors. */
-    private ArrayFieldVector<Complex>[] eigenvectors;
+    private FieldVector<Complex>[] eigenvectors;
     /** Cached value of V. */
     private FieldMatrix<Complex> V;
     /** Cached value of D. */
@@ -198,47 +202,85 @@ public class ComplexEigenDecomposition {
         // number of eigen values/vectors
         int n = eigenvalues.length;
 
-        // identity
-        final FieldMatrix<Complex> ident =
-                        MatrixUtils.createFieldIdentityMatrix(ComplexField.getInstance(), n);
-
         // eigen vectors
-        eigenvectors = (ArrayFieldVector<Complex>[]) new ArrayFieldVector[n];
+        eigenvectors = (FieldVector<Complex>[]) Array.newInstance(FieldVector.class, n);
 
         // computing eigen vector based on eigen values and inverse iteration
         for (int i = 0; i < eigenvalues.length; i++) {
-            Complex eigenValue = eigenvalues[i];
 
-            // mu multiplied by Identity
-            // muI
-            FieldMatrix<Complex> eigv = ident.scalarMultiply(eigenValue.add(EPSILON));
-
-            // A-muI
-            FieldMatrix<Complex> Aeigv = (FieldMatrix<Complex>) matrix.subtract(eigv);
-
-            // finding inverse of (A - muI)
-            // (A - muI) (A - muI)^{-1} = I
-            FieldLUDecomposition<Complex> luDecomp = new FieldLUDecomposition<>(Aeigv);
-            FieldMatrix<Complex> inv_Aeigv = luDecomp.getSolver().getInverse();
-
-            // starting with a unitary vector
-            Complex[] unityVector = new Complex[n];
-            for (int k = 0; k < n; k++) {
-                unityVector[k] = new Complex(1, 0);
-            }
-            FieldVector<Complex> eigenVector = MatrixUtils.createFieldVector(unityVector);
-
-            for (int k = 0; k < 2; k++) {
-                FieldVector<Complex> eigenVector_new = inv_Aeigv.operate(eigenVector);
-                // normalizing
-                Complex norm = getNormInf(eigenVector_new);
-                eigenVector = eigenVector_new.mapDivide(norm);
+            // shifted non-singular matrix matrix A-(λ+ε)I that is close to the singular matrix A-λI
+            Complex mu = eigenvalues[i].add(EPSILON);
+            final FieldMatrix<Complex> shifted = matrix.copy();
+            for (int k = 0; k < matrix.getColumnDimension(); ++k) {
+                shifted.setEntry(k, k, shifted.getEntry(k, k).subtract(mu));
             }
 
-            eigenVector = eigenVector.mapAdd(Complex.ZERO);
+            // solver for linear system (A - (λ+ε)I) Bₖ₊₁ = Bₖ
+            FieldDecompositionSolver<Complex> solver = new FieldLUDecomposition<>(shifted).getSolver();
 
-            eigenvectors[i] = new ArrayFieldVector<>(eigenVector.toArray());
+            // loop over possible start vectors
+            for (int p = 0; eigenvectors[i] == null && p < matrix.getColumnDimension(); ++p) {
+
+                // find a start vector orthogonal to already found normalized eigenvectors
+                FieldVector<Complex> b = findStart(p);
+
+                if (getNormInf(b) > EPSILON) {
+                    // start vector is a good candidate for inverse iteration
+
+                    // perform inverse iteration
+                    for (int k = 0; k < MAX_ITER; k++) {
+
+                        // solve (A - (λ+ε)) Bₖ₊₁ = Bₖ
+                        final FieldVector<Complex> bNext = solver.solve(b);
+
+                        // normalize according to L∞ norm
+                        final double invNorm = 1.0 / getNormInf(bNext);
+                        for (int j = 0; j < n; ++j) {
+                            bNext.setEntry(j, bNext.getEntry(j).multiply(invNorm));
+                        }
+
+                        b = bNext;
+                        if (invNorm <= EPSILON) {
+                            // we have found an eigenvector
+                            eigenvectors[i] = b;
+                            break;
+                        }
+
+                    }
+
+                }
+            }
+
         }
+    }
+
+    /** Find a start vector orthogonal to all already found normalized eigenvectors.
+     * @param index index of the vector
+     * @return start vector
+     */
+    private FieldVector<Complex> findStart(final int index) {
+
+        // create vector
+        final FieldVector<Complex> start =
+                        MatrixUtils.createFieldVector(ComplexField.getInstance(),
+                                                      eigenvalues.length);
+
+        // initialize with a canonical vector
+        start.setEntry(index, Complex.ONE);
+
+        // project the vector to vectorial subspace orthogonal to already fund eigenvectors
+        for (final FieldVector<Complex> v : eigenvectors) {
+            if (v == null) {
+                break;
+            }
+            final Complex uvOvv = start.dotProduct(v).multiply(v.dotProduct(v));
+            for (int l = 0; l < start.getDimension(); ++l) {
+                start.setEntry(l, start.getEntry(l).subtract(uvOvv.multiply(v.getEntry(l))));
+            }
+        }
+
+        return start;
+
     }
 
     /**
@@ -248,14 +290,11 @@ public class ComplexEigenDecomposition {
      *            vector.
      * @return infinity norm.
      */
-    private Complex getNormInf(FieldVector<Complex> vector) {
-        Complex norm = null;
+    private double getNormInf(FieldVector<Complex> vector) {
+        double norm = 0;
         for (int i = 0; i < vector.getDimension(); i++) {
-            if (norm == null) {
-                norm = vector.getEntry(i);
-            } else if (norm.norm().getReal() < vector.getEntry(i).norm().getReal()) {
-                norm = vector.getEntry(i);
-            }
+            final Complex ci = vector.getEntry(i);
+            norm = FastMath.max(norm, FastMath.hypot(ci.getReal(), ci.getImaginary()));
         }
         return norm;
     }
