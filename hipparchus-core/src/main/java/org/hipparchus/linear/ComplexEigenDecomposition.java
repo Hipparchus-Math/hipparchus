@@ -30,10 +30,10 @@ import org.hipparchus.util.Precision;
  * Given a matrix A, it computes a complex eigen decomposition A = VDV^{T}. It
  * checks the definition in runtime using AV = VD.
  *
- * Complex Eigen Decomposition, it differs from the EigenDecomposition since it
+ * Complex Eigen Decomposition differs from the {@link EigenDecomposition} since it
  * computes the eigen vectors as complex eigen vectors (if applicable).
  *
- * Compute complex eigen values from the schur transform. Compute complex eigen
+ * Compute complex eigen values from the Schur transform. Compute complex eigen
  * vectors based on eigen values and the inverse iteration method.
  *
  * see: https://en.wikipedia.org/wiki/Inverse_iteration
@@ -224,11 +224,12 @@ public class ComplexEigenDecomposition {
                 // find a start vector orthogonal to already found normalized eigenvectors
                 FieldVector<Complex> b = findStart(p);
 
-                if (getNormInf(b) > EPSILON) {
+                if (getNormInf(b) > Precision.SAFE_MIN) {
                     // start vector is a good candidate for inverse iteration
 
                     // perform inverse iteration
-                    for (int k = 0; k < MAX_ITER; k++) {
+                    double delta = Double.POSITIVE_INFINITY;
+                    for (int k = 0; delta > EPSILON && k < MAX_ITER; k++) {
 
                         // solve (A - (λ+ε)) Bₖ₊₁ = Bₖ
                         final FieldVector<Complex> bNext = solver.solve(b);
@@ -239,14 +240,28 @@ public class ComplexEigenDecomposition {
                             bNext.setEntry(j, bNext.getEntry(j).multiply(invNorm));
                         }
 
-                        b = bNext;
-                        if (invNorm <= EPSILON) {
-                            // we have found an eigenvector
-                            eigenvectors[i] = b;
-                            break;
+                        // compute convergence criterion, comparing Bₖ and both ±Bₖ₊₁
+                        // as iterations sometimes flip between two opposite vectors
+                        double deltaPlus  = 0;
+                        double deltaMinus = 0;
+                        for (int j = 0; j < n; ++j) {
+                            final Complex bCurrj = b.getEntry(j);
+                            final Complex bNextj = bNext.getEntry(j);
+                            deltaPlus  = FastMath.max(deltaPlus,
+                                                      FastMath.hypot(bNextj.getReal()      + bCurrj.getReal(),
+                                                                     bNextj.getImaginary() + bCurrj.getImaginary()));
+                            deltaMinus = FastMath.max(deltaMinus,
+                                                      FastMath.hypot(bNextj.getReal()      - bCurrj.getReal(),
+                                                                     bNextj.getImaginary() - bCurrj.getImaginary()));
                         }
+                        delta = FastMath.min(deltaPlus, deltaMinus);
+
+                        // prepare next iteration
+                        b = bNext;
 
                     }
+
+                    eigenvectors[i] = b;
 
                 }
             }
