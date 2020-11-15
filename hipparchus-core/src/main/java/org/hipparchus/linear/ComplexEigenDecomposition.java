@@ -27,11 +27,34 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
 /**
- * Given a matrix A, it computes a complex eigen decomposition A = VDV^{T}. It
- * checks the definition in runtime using AV = VD.
+ * Given a matrix A, it computes a complex eigen decomposition AV = VD.
  *
+ * <p>
  * Complex Eigen Decomposition differs from the {@link EigenDecomposition} since it
  * computes the eigen vectors as complex eigen vectors (if applicable).
+ * </p>
+ *
+ * <p>
+ * Beware that in the complex case, you do not always have \(V \times V^{T} = I\) or even a
+ * diagonal matrix, even if the eigenvectors that form the columns of the V
+ * matrix are independent. On example is the square matrix
+ * \[
+ * A = \left(\begin{matrix}
+ * 3 & -2\\
+ * 4 & -1
+ * \end{matrix}\right)
+ * \]
+ * which has two conjugate eigenvalues \(\lambda_1=1+2i\) and \(\lambda_2=1-2i\)
+ * with associated eigenvectors \(v_1^T = (1, 1-i)\) and \(v_2^T = (1, 1+i)\).
+ * \[
+ * V\timesV^T = \left(\begin{matrix}
+ * 2 & 2\\
+ * 2 & 0
+ * \end{matrix}\right)
+ * \]
+ * which is not the identity matrix. Therefore, despite \(A \times V = V \times D\),
+ * \(A \ne V \times D \time V^T\), which would hold for real eigendecomposition.
+ * </p>
  *
  * Compute complex eigen values from the Schur transform. Compute complex eigen
  * vectors based on eigen values and the inverse iteration method.
@@ -224,7 +247,7 @@ public class ComplexEigenDecomposition {
                 // find a start vector orthogonal to already found normalized eigenvectors
                 FieldVector<Complex> b = findStart(p);
 
-                if (getNormInf(b) > Precision.SAFE_MIN) {
+                if (getNorm(b).abs() > Precision.SAFE_MIN) {
                     // start vector is a good candidate for inverse iteration
 
                     // perform inverse iteration
@@ -235,7 +258,7 @@ public class ComplexEigenDecomposition {
                         final FieldVector<Complex> bNext = solver.solve(b);
 
                         // normalize according to L∞ norm
-                        final double invNorm = 1.0 / getNormInf(bNext);
+                        final Complex invNorm = getNorm(bNext).reciprocal();
                         for (int j = 0; j < n; ++j) {
                             bNext.setEntry(j, bNext.getEntry(j).multiply(invNorm));
                         }
@@ -299,19 +322,24 @@ public class ComplexEigenDecomposition {
     }
 
     /**
-     * Compute the infinity norm of the a given vector.
+     * Compute the L∞ norm of the a given vector.
      *
      * @param vector
      *            vector.
-     * @return infinity norm.
+     * @return L∞ norm.
      */
-    private double getNormInf(FieldVector<Complex> vector) {
-        double norm = 0;
+    private Complex getNorm(FieldVector<Complex> vector) {
+        double  normR = 0;
+        Complex normC = Complex.ZERO;
         for (int i = 0; i < vector.getDimension(); i++) {
             final Complex ci = vector.getEntry(i);
-            norm = FastMath.max(norm, FastMath.hypot(ci.getReal(), ci.getImaginary()));
+            final double  ni = FastMath.hypot(ci.getReal(), ci.getImaginary());
+            if (ni > normR) {
+                normR = ni;
+                normC = ci;
+            }
         }
-        return norm;
+        return normC;
     }
 
     /**
