@@ -29,7 +29,7 @@ public class ComplexEigenDecompositionTest {
     @Test
     public void testNonSquare() {
         try {
-            new ComplexEigenDecomposition(MatrixUtils.createRealMatrix(2, 3));
+            new ComplexEigenDecomposition(MatrixUtils.createRealMatrix(2, 3), 1.0e-5, 1.0e-12, 1.0e-6);
             Assert.fail("an axception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
             Assert.assertEquals(LocalizedCoreFormats.NON_SQUARE_MATRIX, miae.getSpecifier());

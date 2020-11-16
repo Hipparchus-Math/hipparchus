@@ -16,17 +16,10 @@
  */
 package org.hipparchus.linear;
 
-import static org.junit.Assert.assertEquals;
-
-import java.text.DecimalFormat;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 public class RiccatiEquationSolverTest {
-
-    static private final RealMatrixFormat f =
-                    new RealMatrixFormat("", "", "\n", "", "", "\t\t",
-                                         new DecimalFormat(" ##############0.0000;-##############0.0000"));
 
     @Test
     public void test_real_2_2() {
@@ -50,7 +43,7 @@ public class RiccatiEquationSolverTest {
             { 0.3221, 0.7407 }, { 0.7407, 3.2277 }
         });
 
-        assertEquals(f.format(P_expected), f.format(a.getP()));
+        checkEquals(P_expected, a.getP(), 1.0e-4);
 
         // P
         // 0.3221 0.7407
@@ -81,7 +74,7 @@ public class RiccatiEquationSolverTest {
             { 19.7598, -7.6430 }, { -7.6430, 4.7072 }
         });
 
-        assertEquals(f.format(P_expected), f.format(a.getP()));
+        checkEquals(P_expected, a.getP(), 1.0e-4);
 
         // P
         // 19.7598 -7.6430
@@ -119,8 +112,7 @@ public class RiccatiEquationSolverTest {
             { 0.0628, 0.0029, -0.0011, 0.0305, 0.0746, -0.0387 },
             { 0.0982, -0.0011, 0.0034, 0.0479, -0.0387, 0.0967 } });
 
-        assertEquals(f.format(P_expected),
-                     f.format(a.getP().scalarMultiply(1e-05)));
+        checkEquals(P_expected, a.getP().scalarMultiply(1e-05), 1.0e-4);
 
         // 1.0e+05 *
         // 2.2791 0.0036 0.0045 2.1121 0.0628 0.0982
@@ -164,7 +156,18 @@ public class RiccatiEquationSolverTest {
             { -0.0, -0.0, 526.3158, 0.0, -0.0, 17084.0482 }
         });
 
-        assertEquals(f.format(P_expected), f.format(a.getP()));
+        checkEquals(P_expected, a.getP(), 1.0e-4);
+
+    }
+
+    private void checkEquals(final RealMatrix reference, final RealMatrix m, final double tol) {
+        Assert.assertEquals(reference.getRowDimension(), m.getRowDimension());
+        Assert.assertEquals(reference.getColumnDimension(), m.getColumnDimension());
+        for (int i = 0; i < reference.getRowDimension(); ++i) {
+            for (int j = 0; j < reference.getColumnDimension(); ++j) {
+                Assert.assertEquals(reference.getEntry(i, j), m.getEntry(i, j), tol);
+            }
+        }
     }
 
 }

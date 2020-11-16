@@ -67,10 +67,12 @@ import org.hipparchus.util.Precision;
  */
 public class ComplexEigenDecomposition {
 
-    /** Internally used epsilon criteria. */
-    private static final double EPSILON = 1e-12;
-    /** Internally used epsilon criteria for equals. */
-    private static final double EPSILON_EQUALS = 1e-6;
+    /** Default threshold below which eigenvectors are considered equal. */
+    public static final double DEFAULT_EIGENVECTORS_EQUALITY = 1.0e-5;
+    /** Default value to use for internal epsilon. */
+    public static final double DEFAULT_EPSILON = 1e-12;
+    /** Internally used epsilon criteria for final AV=VD check. */
+    public static final double DEFAULT_EPSILON_AV_VD_CHECK = 1e-6;
     /** Maximum number of inverse iterations. */
     private static final int MAX_ITER = 10;
     /** complex eigenvalues. */
@@ -81,19 +83,53 @@ public class ComplexEigenDecomposition {
     private FieldMatrix<Complex> V;
     /** Cached value of D. */
     private FieldMatrix<Complex> D;
+    /** Internally used threshold below which eigenvectors are considered equal. */
+    private final double eigenVectorsEquality;
+    /** Internally used epsilon criteria. */
+    private final double epsilon;   
+    /** Internally used epsilon criteria for final AV=VD check. */
+    private final double epsilonAVVDCheck;   
 
     /**
      * Constructor for decomposition.
-     *
+     * <p>
+     * This constructor uses the default values {@link #DEFAULT_EIGENVECTORS_EQUALITY},
+     * {@link #DEFAULT_EPSILON} and {@link #DEFAULT_EPSILON_AV_VD_CHECK}
+     * </p>
      * @param matrix
      *            real matrix.
      */
     public ComplexEigenDecomposition(final RealMatrix matrix) {
+        this(matrix, DEFAULT_EIGENVECTORS_EQUALITY,
+             DEFAULT_EPSILON, DEFAULT_EPSILON_AV_VD_CHECK);
+    }
+
+    /**
+     * Constructor for decomposition.
+     * <p>
+     * The {@code eigenVectorsEquality} threshold is used to ensure the L∞-normalized
+     * eigenvectors found using inverse iteration are different from each other.
+     * if \(min(|e_i-e_j|,|e_i+e_j|)\) is smaller than this threshold, the algorithm
+     * considers it has found again an already known vector, so it drops it and attempts
+     * a new inverse iteration with a different start vector. This value should be
+     * much larger than {@code epsilon} which is used for convergence
+     * </p>
+     * @param matrix real matrix.
+     * @param eigenVectorsEquality threshold below which eigenvectors are considered equal
+     * @param epsilon Epsilon used for internal tests (e.g. is singular, eigenvalue ratio, etc.)
+     * @param epsilonAVVDCheck Epsilon criteria for final AV=VD check
+     * @since 1.8
+     */
+    public ComplexEigenDecomposition(final RealMatrix matrix, final double eigenVectorsEquality,
+                                     final double epsilon, final double epsilonAVVDCheck) {
 
         if (!matrix.isSquare()) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());
         }
+        this.eigenVectorsEquality = eigenVectorsEquality;
+        this.epsilon              = epsilon;
+        this.epsilonAVVDCheck     = epsilonAVVDCheck;
 
         // computing the eigen values
         findEigenValues(matrix);
@@ -140,7 +176,7 @@ public class ComplexEigenDecomposition {
      */
     public boolean hasComplexEigenvalues() {
         for (int i = 0; i < eigenvalues.length; i++) {
-            if (!Precision.equals(eigenvalues[i].getImaginary(), 0.0, EPSILON)) {
+            if (!Precision.equals(eigenvalues[i].getImaginary(), 0.0, epsilon)) {
                 return true;
             }
         }
@@ -200,7 +236,7 @@ public class ComplexEigenDecomposition {
         eigenvalues = new Complex[matT.length];
 
         for (int i = 0; i < eigenvalues.length; i++) {
-            if (i == (eigenvalues.length - 1) || Precision.equals(matT[i + 1][i], 0.0, EPSILON)) {
+            if (i == (eigenvalues.length - 1) || Precision.equals(matT[i + 1][i], 0.0, epsilon)) {
                 eigenvalues[i] = new Complex(matT[i][i]);
             } else {
                 final double x = matT[i + 1][i + 1];
@@ -232,7 +268,7 @@ public class ComplexEigenDecomposition {
         for (int i = 0; i < eigenvalues.length; i++) {
 
             // shifted non-singular matrix matrix A-(λ+ε)I that is close to the singular matrix A-λI
-            Complex mu = eigenvalues[i].add(EPSILON);
+            Complex mu = eigenvalues[i].add(epsilon);
             final FieldMatrix<Complex> shifted = matrix.copy();
             for (int k = 0; k < matrix.getColumnDimension(); ++k) {
                 shifted.setEntry(k, k, shifted.getEntry(k, k).subtract(mu));
@@ -244,7 +280,7 @@ public class ComplexEigenDecomposition {
             // loop over possible start vectors
             for (int p = 0; eigenvectors[i] == null && p < matrix.getColumnDimension(); ++p) {
 
-                // find a start vector orthogonal to already found normalized eigenvectors
+                // find a vector to start iterations
                 FieldVector<Complex> b = findStart(p);
 
                 if (getNorm(b).abs() > Precision.SAFE_MIN) {
@@ -252,38 +288,31 @@ public class ComplexEigenDecomposition {
 
                     // perform inverse iteration
                     double delta = Double.POSITIVE_INFINITY;
-                    for (int k = 0; delta > EPSILON && k < MAX_ITER; k++) {
+                    for (int k = 0; delta > epsilon && k < MAX_ITER; k++) {
 
                         // solve (A - (λ+ε)) Bₖ₊₁ = Bₖ
                         final FieldVector<Complex> bNext = solver.solve(b);
 
                         // normalize according to L∞ norm
-                        final Complex invNorm = getNorm(bNext).reciprocal();
-                        for (int j = 0; j < n; ++j) {
-                            bNext.setEntry(j, bNext.getEntry(j).multiply(invNorm));
-                        }
+                        normalize(bNext);
 
                         // compute convergence criterion, comparing Bₖ and both ±Bₖ₊₁
                         // as iterations sometimes flip between two opposite vectors
-                        double deltaPlus  = 0;
-                        double deltaMinus = 0;
-                        for (int j = 0; j < n; ++j) {
-                            final Complex bCurrj = b.getEntry(j);
-                            final Complex bNextj = bNext.getEntry(j);
-                            deltaPlus  = FastMath.max(deltaPlus,
-                                                      FastMath.hypot(bNextj.getReal()      + bCurrj.getReal(),
-                                                                     bNextj.getImaginary() + bCurrj.getImaginary()));
-                            deltaMinus = FastMath.max(deltaMinus,
-                                                      FastMath.hypot(bNextj.getReal()      - bCurrj.getReal(),
-                                                                     bNextj.getImaginary() - bCurrj.getImaginary()));
-                        }
-                        delta = FastMath.min(deltaPlus, deltaMinus);
+                        delta = separation(b, bNext);
 
                         // prepare next iteration
                         b = bNext;
 
                     }
 
+                    // check we have not found again an already known vector
+                    for (int j = 0; b != null && j < i; ++j) {
+                        if (separation(eigenvectors[j], b) <= eigenVectorsEquality) {
+                            // the selected start vector leads us to found a known vector again,
+                            // we must try another start
+                            b = null;
+                        }
+                    }
                     eigenvectors[i] = b;
 
                 }
@@ -305,17 +334,6 @@ public class ComplexEigenDecomposition {
 
         // initialize with a canonical vector
         start.setEntry(index, Complex.ONE);
-
-        // project the vector to vectorial subspace orthogonal to already fund eigenvectors
-        for (final FieldVector<Complex> v : eigenvectors) {
-            if (v == null) {
-                break;
-            }
-            final Complex uvOvv = start.dotProduct(v).multiply(v.dotProduct(v));
-            for (int l = 0; l < start.getDimension(); ++l) {
-                start.setEntry(l, start.getEntry(l).subtract(uvOvv.multiply(v.getEntry(l))));
-            }
-        }
 
         return start;
 
@@ -342,6 +360,37 @@ public class ComplexEigenDecomposition {
         return normC;
     }
 
+    /** Normalize a vector with respect to L∞ norm.
+     * @param v vector to normalized
+     */
+    private void normalize(final FieldVector<Complex> v) {
+        final Complex invNorm = getNorm(v).reciprocal();
+        for (int j = 0; j < v.getDimension(); ++j) {
+            v.setEntry(j, v.getEntry(j).multiply(invNorm));
+        }
+    }
+
+    /** Compute the separation between two normalized vectors (which may be in opposite directions).
+     * @param v1 first normalized vector
+     * @param v2 second normalized vector
+     * @return min (|v1 - v2|, |v1+v2|)
+     */
+    private double separation(final FieldVector<Complex> v1, final FieldVector<Complex> v2) {
+        double deltaPlus  = 0;
+        double deltaMinus = 0;
+        for (int j = 0; j < v1.getDimension(); ++j) {
+            final Complex bCurrj = v1.getEntry(j);
+            final Complex bNextj = v2.getEntry(j);
+            deltaPlus  = FastMath.max(deltaPlus,
+                                      FastMath.hypot(bNextj.getReal()      + bCurrj.getReal(),
+                                                     bNextj.getImaginary() + bCurrj.getImaginary()));
+            deltaMinus = FastMath.max(deltaMinus,
+                                      FastMath.hypot(bNextj.getReal()      - bCurrj.getReal(),
+                                                     bNextj.getImaginary() - bCurrj.getImaginary()));
+        }
+        return FastMath.min(deltaPlus, deltaMinus);
+    }
+
     /**
      * Check definition of the decomposition in runtime.
      *
@@ -355,7 +404,7 @@ public class ComplexEigenDecomposition {
         // testing A*V = V*D
         FieldMatrix<Complex> AV = matrixC.multiply(getV());
         FieldMatrix<Complex> VD = getV().multiply(getD());
-        if (!equalsWithPrecision(AV, VD, EPSILON_EQUALS)) {
+        if (!equalsWithPrecision(AV, VD, epsilonAVVDCheck)) {
             throw new MathRuntimeException(LocalizedCoreFormats.FAILED_DECOMPOSITION,
                                            matrix.getRowDimension(), matrix.getColumnDimension());
 
