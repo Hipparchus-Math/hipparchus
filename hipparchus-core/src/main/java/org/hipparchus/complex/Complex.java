@@ -464,6 +464,18 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             MathUtils.hash(real));
     }
 
+    /** {@inheritDoc}
+     * <p>
+     * This implementation considers +0.0 and -0.0 to be equal for both
+     * real and imaginary components.
+     * </p>
+     * @since 1.8
+     */
+    @Override
+    public boolean isZero() {
+        return real == 0.0 && imaginary == 0.0;
+    }
+
     /**
      * Access the imaginary part.
      *
@@ -1691,9 +1703,8 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * for complex numbers, the integer n corresponding to {@code this.subtract(remainder(a)).divide(a)}
      * is a <a href="https://en.wikipedia.org/wiki/Gaussian_integer">Wikipedia - Gaussian integer</a>.
      * </p>
-     * @since 1.7
+    * @since 1.7
      */
-    @Override
     public Complex remainder(final double a) {
         return createComplex(FastMath.IEEEremainder(getReal(), a), FastMath.IEEEremainder(getImaginary(), a));
     }
@@ -1703,9 +1714,8 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * for complex numbers, the integer n corresponding to {@code this.subtract(remainder(a)).divide(a)}
      * is a <a href="https://en.wikipedia.org/wiki/Gaussian_integer">Wikipedia - Gaussian integer</a>.
      * </p>
-     * @since 1.7
+    * @since 1.7
      */
-    @Override
     public Complex remainder(final Complex a) {
         final Complex complexQuotient = divide(a);
         final double  qRInt           = FastMath.rint(complexQuotient.real);

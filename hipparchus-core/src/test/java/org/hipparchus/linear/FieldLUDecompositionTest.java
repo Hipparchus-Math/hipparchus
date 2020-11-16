@@ -23,6 +23,7 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.UnitTestUtils;
+import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.fraction.Fraction;
@@ -306,4 +307,21 @@ public class FieldLUDecompositionTest {
         Assert.assertTrue(u == lu.getU());
         Assert.assertTrue(p == lu.getP());
     }
+
+    @Test
+    public void testSignedZeroPivot() {
+        FieldMatrix<Complex> m = new Array2DRowFieldMatrix<>(new Complex[][] {
+            { new Complex(-0.0, 0.0), Complex.ONE },
+            { Complex.ONE, Complex.ZERO }
+        });
+        FieldVector<Complex> v = new ArrayFieldVector<>(new Complex[] {
+            new Complex(2, 0),
+            new Complex(0, 2)
+        });
+        FieldDecompositionSolver<Complex> solver = new FieldLUDecomposition<>(m).getSolver();
+        FieldVector<Complex> u = solver.solve(v);
+        Assert.assertEquals(u.getEntry(0), new Complex(0, 2));
+        Assert.assertEquals(u.getEntry(1), new Complex(2, 0));
+    }
+
 }

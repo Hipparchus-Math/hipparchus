@@ -132,7 +132,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
                 }
                 luRow[col] = sum;
 
-                if (lu[nonZero][col].equals(field.getZero())) {
+                if (lu[nonZero][col].isZero()) {
                     // try to select a better permutation choice
                     ++nonZero;
                 }
