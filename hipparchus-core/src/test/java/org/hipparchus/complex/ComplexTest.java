@@ -1979,6 +1979,21 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
     }
 
     @Test
+    public void testSignedZeroEquality() {
+
+        Assert.assertTrue(new Complex(-0.0, -0.0).isZero());
+        Assert.assertTrue(new Complex(-0.0, +0.0).isZero());
+        Assert.assertTrue(new Complex(+0.0, -0.0).isZero());
+        Assert.assertTrue(new Complex(+0.0, +0.0).isZero());
+
+        Assert.assertFalse(new Complex(-0.0, -0.0).equals(Complex.ZERO));
+        Assert.assertFalse(new Complex(-0.0, +0.0).equals(Complex.ZERO));
+        Assert.assertFalse(new Complex(+0.0, -0.0).equals(Complex.ZERO));
+        Assert.assertTrue(new Complex(+0.0, +0.0).equals(Complex.ZERO));
+
+    }
+
+    @Test
     public void testSerial() {
         Complex z = new Complex(3.0, 4.0);
         Assert.assertEquals(z, UnitTestUtils.serializeAndRecover(z));
