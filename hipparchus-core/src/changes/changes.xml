@@ -49,6 +49,14 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
+    <release version="1.8"  date="TBD" description="TBD.">
+      <action dev="luc" type="add" issue="issues/104">
+        Fixed LU-decomposition issue with signed zero complex numbers on diagonal.
+      </action>
+      <action dev="luc" type="add" issue="issues/99">
+        Fixed complex eigendecomposition when several eigenvalues are equals.
+      </action>
+    </release>
     <release version="1.7"  date="TBD" description="TBD.">
       <action dev="bryan" type="add" issue="issues/97">
       Added ExtendedUnivariateDifferentiableVectorFunction interface

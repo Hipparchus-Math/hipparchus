@@ -470,4 +470,11 @@ public class Decimal64Test extends RealFieldElementAbstractTest<Decimal64> {
         Assert.assertTrue(root2Neg64.isNaN());
     }
 
+    @Test
+    public void testSignedZeroEquality() {
+        Assert.assertTrue(new Decimal64(-0.0).isZero());
+        Assert.assertTrue(new Decimal64(+0.0).isZero());
+        Assert.assertFalse(new Decimal64(+0.0).equals(new Decimal64(-0.0)));
+    }
+
 }
