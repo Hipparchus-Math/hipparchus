@@ -21,9 +21,13 @@
  */
 package org.hipparchus.geometry.spherical.twod;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.IntPredicate;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -801,6 +805,24 @@ public class SphericalPolygonsSetTest {
                 new S2Point(circle.getPointAt(-0.1)));
         Assert.assertEquals(sps.getSize(), 2*FastMath.PI, tol);
         Assert.assertEquals(sps.getBarycenter().distance(new S2Point(Vector3D.PLUS_K)), 0, tol);
+    }
+
+    @Test
+    public void testDefensiveProgrammingCheck() {
+        // this tests defensive programming code that seems almost unreachable otherwise
+        try {
+            Method searchHelper = SphericalPolygonsSet.class.getDeclaredMethod("searchHelper",
+                                                                               IntPredicate.class,
+                                                                               Integer.TYPE, Integer.TYPE);
+            searchHelper.setAccessible(true);
+            searchHelper.invoke(null, (IntPredicate) (n -> true), 1, 0);
+            Assert.fail("an exception should have been thrown");
+        } catch (InvocationTargetException ite) {
+            MathIllegalArgumentException miae = (MathIllegalArgumentException) ite.getCause();
+            Assert.assertEquals(LocalizedCoreFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT, miae.getSpecifier());
+        } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException e) {
+            Assert.fail(e.getLocalizedMessage());
+        }
     }
 
     private SubCircle create(Vector3D pole, Vector3D x, Vector3D y,

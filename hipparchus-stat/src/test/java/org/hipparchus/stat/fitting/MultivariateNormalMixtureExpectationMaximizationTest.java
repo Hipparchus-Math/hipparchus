@@ -16,12 +16,15 @@
  */
 package org.hipparchus.stat.fitting;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.distribution.multivariate.MixtureMultivariateNormalDistribution;
 import org.hipparchus.distribution.multivariate.MultivariateNormalDistribution;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -185,6 +188,42 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
             final RealMatrix covMat = component.getValue().getCovariances();
             Assert.assertEquals(correctCovMats[i], covMat);
             i++;
+        }
+    }
+
+    @Test
+    public void testWrongData() {
+        checkWrongData(new double[1][1], 2, LocalizedCoreFormats.NUMBER_TOO_SMALL);
+        checkWrongData(new double[3][3], 1, LocalizedCoreFormats.NUMBER_TOO_SMALL);
+        checkWrongData(new double[3][3], 4, LocalizedCoreFormats.NUMBER_TOO_LARGE);
+    }
+
+    private void checkWrongData(final double[][] data, final int numComponents,
+                                final LocalizedCoreFormats expected) {
+        try {
+            MultivariateNormalMixtureExpectationMaximization.estimate(data, numComponents);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(expected, miae.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testUnusedInheritedMethods() {
+        // this test is just meant for coverage issues
+        try {
+            Class<?> dataRowClass = MultivariateNormalMixtureExpectationMaximization.class.getDeclaredClasses()[0];
+            Constructor<?> dataRowConstructor = dataRowClass.getDeclaredConstructor(double[].class);
+            dataRowConstructor.setAccessible(true);
+            Object dr1 = dataRowConstructor.newInstance(new double[] { 1, 2, 3 });
+            Assert.assertEquals(66614367, dr1.hashCode());
+            Assert.assertTrue(dr1.equals(dr1));
+            Assert.assertFalse(dr1.equals(""));
+            Assert.assertTrue(dr1.equals(dataRowConstructor.newInstance(new double[] { 1, 2, 3 })));
+            Assert.assertFalse(dr1.equals(dataRowConstructor.newInstance(new double[] { 3, 2, 1 })));
+        } catch (InvocationTargetException | NoSuchMethodException | SecurityException |
+                 InstantiationException | IllegalAccessException | IllegalArgumentException e) {
+            Assert.fail(e.getLocalizedMessage());
         }
     }
 

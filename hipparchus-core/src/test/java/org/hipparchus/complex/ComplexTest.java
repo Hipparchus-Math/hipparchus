@@ -1981,6 +1981,11 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
     @Test
     public void testSignedZeroEquality() {
 
+        Assert.assertFalse(new Complex(-0.0, 1.0).isZero());
+        Assert.assertFalse(new Complex(+0.0, 1.0).isZero());
+        Assert.assertFalse(new Complex( 1.0, -0.0).isZero());
+        Assert.assertFalse(new Complex( 1.0, +0.0).isZero());
+
         Assert.assertTrue(new Complex(-0.0, -0.0).isZero());
         Assert.assertTrue(new Complex(-0.0, +0.0).isZero());
         Assert.assertTrue(new Complex(+0.0, -0.0).isZero());

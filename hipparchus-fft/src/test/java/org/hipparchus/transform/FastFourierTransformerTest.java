@@ -163,6 +163,16 @@ public final class FastFourierTransformerTest {
         }
     }
 
+    @Test
+    public void testTransformOnePoint() {
+        double[][] data = new double[][] { { 1.0 }, { 2.0} };
+        FastFourierTransformer.transformInPlace(data,
+                                                DftNormalization.STANDARD,
+                                                TransformType.FORWARD);
+        Assert.assertEquals(1.0, data[0][0], 1.0e-15);
+        Assert.assertEquals(2.0, data[1][0], 1.0e-15);
+    }
+
     /*
      * Utility methods for checking (successful) transforms.
      */

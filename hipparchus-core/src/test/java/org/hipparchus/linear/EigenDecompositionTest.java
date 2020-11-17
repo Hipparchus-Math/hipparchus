@@ -25,6 +25,8 @@ package org.hipparchus.linear;
 import java.util.Arrays;
 import java.util.Random;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.random.RandomGenerator;
@@ -678,6 +680,37 @@ public class EigenDecompositionTest {
         final double customEpsilon = 1e-20;
         final EigenDecomposition customEd = new EigenDecomposition(matrix, customEpsilon);
         Assert.assertTrue(customEd.getSolver().isNonSingular());
+        Assert.assertEquals(customEpsilon, customEd.getEpsilon(), 1.0e-25);
+    }
+
+    @Test
+    public void testComplexEigenValues() {
+        final RealMatrix m = MatrixUtils.createRealMatrix(new double[][] { { 3, -2 }, { 4, -1 } });
+        EigenDecomposition ed = new EigenDecomposition(m);
+        try {
+            ed.getSolver();
+            Assert.fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            Assert.assertEquals(LocalizedCoreFormats.UNSUPPORTED_OPERATION, mre.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testSingular() {
+        final RealMatrix m = MatrixUtils.createRealMatrix(new double[][] { { 1, 0 }, { 0, 0 } });
+        DecompositionSolver solver = new EigenDecomposition(m).getSolver();
+        try {
+            solver.solve(new ArrayRealVector(new double[] { 1.0, 1.0 }));
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.SINGULAR_MATRIX, miae.getSpecifier());
+        }
+        try {
+            solver.solve(new Array2DRowRealMatrix(new double[][] { { 1.0, 1.0 }, { 1.0, 2.0 } }));
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.SINGULAR_MATRIX, miae.getSpecifier());
+        }
     }
 
     /**

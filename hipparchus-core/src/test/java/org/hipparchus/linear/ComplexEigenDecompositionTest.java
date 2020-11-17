@@ -37,6 +37,13 @@ public class ComplexEigenDecompositionTest {
     }
 
     @Test
+    public void testRealEigenValues() {
+        final RealMatrix m = MatrixUtils.createRealMatrix(new double[][] { { 2, 0 }, { 0, 3 } });
+        ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(m);
+        Assert.assertFalse(eigenDecomp.hasComplexEigenvalues());
+    }
+
+    @Test
     public void testGetEigenValues() {
         final RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { 3, -2 }, { 4, -1 } });
         ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(A);

@@ -16,7 +16,13 @@
  */
 package org.hipparchus.util;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import org.junit.Assert;
@@ -84,6 +90,128 @@ public class FastMathCalcTest {
             }
         }
 
+    }
+
+    @Test
+    public void testSplit() {
+        checkSplit(0x3ffe0045dab7321fl, 0x3ffe0045c0000000l, 0x3e7ab7321f000000l);
+        checkSplit(0x3ffe0045fab7321fl, 0x3ffe004600000000l, 0xbe55233784000000l);
+        checkSplit(0x7dfedcba9876543fl, 0x7dfedcba80000000l, 0x7c7876543f000000l);
+        checkSplit(0x7dfedcbaf876543fl, 0x7dfedcbb00000000l, 0xfc5e26af04000000l);
+        checkSplit(0xfdfedcba9876543fl, 0xfdfedcba80000000l, 0xfc7876543f000000l);
+        checkSplit(0xfdfedcbaf876543fl, 0xfdfedcbb00000000l, 0x7c5e26af04000000l);
+    }
+
+    private void checkSplit(final long bits, final long high, final long low) {
+        try {
+            Method split = FastMathCalc.class.getDeclaredMethod("split", Double.TYPE, double[].class);
+            split.setAccessible(true);
+            double   d      = Double.longBitsToDouble(bits);
+            double[] result = new double[2];
+            split.invoke(null, d, result);
+            Assert.assertEquals(bits, Double.doubleToRawLongBits(result[0] + result[1]));
+            Assert.assertEquals(high, Double.doubleToRawLongBits(result[0]));
+            Assert.assertEquals(low,  Double.doubleToRawLongBits(result[1]));
+
+        } catch (NoSuchMethodException | SecurityException | IllegalArgumentException |
+                 IllegalAccessException | InvocationTargetException e) {
+            Assert.fail(e.getLocalizedMessage());
+        }
+    }
+
+    @Test
+    public void testSinCosTanTables() {
+        try {
+            final double[] sinA = getFastMathTable("SINE_TABLE_A");
+            final double[] sinB = getFastMathTable("SINE_TABLE_B");
+            final double[] cosA = getFastMathTable("COSINE_TABLE_A");
+            final double[] cosB = getFastMathTable("COSINE_TABLE_B");
+            final double[] tanA = getFastMathTable("TANGENT_TABLE_A");
+            final double[] tanB = getFastMathTable("TANGENT_TABLE_B");
+            Method buildSinCosTables = FastMathCalc.class.getDeclaredMethod("buildSinCosTables",
+                                                                            double[].class, double[].class, double[].class, double[].class,
+                                                                            Integer.TYPE,
+                                                                            double[].class, double[].class);
+            buildSinCosTables.setAccessible(true);
+            final double[] calcSinA = new double[sinA.length];
+            final double[] calcSinB = new double[sinB.length];
+            final double[] calcCosA = new double[cosA.length];
+            final double[] calcCosB = new double[cosB.length];
+            final double[] calcTanA = new double[tanA.length];
+            final double[] calcTanB = new double[tanB.length];
+            buildSinCosTables.invoke(null, calcSinA, calcSinB, calcCosA, calcCosB, sinA.length, calcTanA, calcTanB);
+            checkTable(sinA, calcSinA, 0);
+            checkTable(sinB, calcSinB, 0);
+            checkTable(cosA, calcCosA, 0);
+            checkTable(cosB, calcCosB, 0);
+            checkTable(tanA, calcTanA, 0);
+            checkTable(tanB, calcTanB, 0);
+
+        } catch (NoSuchMethodException | SecurityException | IllegalArgumentException |
+                 IllegalAccessException | InvocationTargetException e) {
+            Assert.fail(e.getLocalizedMessage());
+        }
+    }
+
+    private double[] getFastMathTable(final String name) {
+        try {
+            final Field field = FastMath.class.getDeclaredField(name);
+            field.setAccessible(true);
+            return (double[]) field.get(null);
+        } catch (NoSuchFieldException | SecurityException |
+                 IllegalArgumentException | IllegalAccessException e) {
+            Assert.fail(e.getLocalizedMessage());
+            return null;
+        }
+    }
+
+    private void checkTable(final double[] reference, final double[] actual, int maxUlps) {
+        Assert.assertEquals(reference.length, actual.length);
+        for (int i = 0; i < reference.length; ++i) {
+            Assert.assertTrue(Precision.equals(reference[i], actual[i], maxUlps));
+        }
+    }
+
+    @Test
+    public void testPrintArray1() {
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             PrintStream ps = new PrintStream(bos, true, StandardCharsets.UTF_8.name())) {
+            Method printArray = FastMathCalc.class.getDeclaredMethod("printarray", PrintStream.class,
+                                                                     String.class, Integer.TYPE, double[].class);
+            printArray.setAccessible(true);
+            printArray.invoke(null, ps, "name", 2, new double[] { 1.25, -0.5 });
+            Assert.assertEquals("name=\n" + 
+                                "    {\n" + 
+                                "        +1.25d,\n" + 
+                                "        -0.5d,\n" + 
+                                "    };\n",
+                                bos.toString(StandardCharsets.UTF_8.name()));
+        } catch (IOException | NoSuchMethodException | IllegalAccessException |
+                 IllegalArgumentException | InvocationTargetException e) {
+            e.printStackTrace();
+            Assert.fail(e.getLocalizedMessage());
+        }
+    }
+
+    @Test
+    public void testPrintArray2() {
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             PrintStream ps = new PrintStream(bos, true, StandardCharsets.UTF_8.name())) {
+            Method printArray = FastMathCalc.class.getDeclaredMethod("printarray", PrintStream.class,
+                                                                     String.class, Integer.TYPE, double[][].class);
+            printArray.setAccessible(true);
+            printArray.invoke(null, ps, "name", 2, new double[][] { { 1.25, -0.5 }, { 0.0, 3.0 } });
+            Assert.assertEquals("name\n" + 
+                                "    { \n" + 
+                                "        {+1.25d,                  -0.5d,                   }, // 0\n" +
+                                "        {+0.0d,                   +3.0d,                   }, // 1\n" +
+                                "    };\n",
+                                bos.toString(StandardCharsets.UTF_8.name()));
+        } catch (IOException | NoSuchMethodException | IllegalAccessException |
+                 IllegalArgumentException | InvocationTargetException e) {
+            e.printStackTrace();
+            Assert.fail(e.getLocalizedMessage());
+        }
     }
 
     private double[] getD1(final String innerClassName, final String tableName) {

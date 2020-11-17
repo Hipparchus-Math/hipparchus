@@ -154,6 +154,23 @@ public class RotationTest {
   }
 
   @Test
+  public void testWrongMatrix() {
+      checkWrongMatrix(new double[2][2]);
+      checkWrongMatrix(new double[][] { new double[2], new double[3], new double[3]});
+      checkWrongMatrix(new double[][] { new double[3], new double[2], new double[3]});
+      checkWrongMatrix(new double[][] { new double[3], new double[3], new double[2]});
+  }
+
+  private void checkWrongMatrix(final double[][] m) {
+      try {
+          new Rotation(m, 0.001);
+          Assert.fail("an exception should have been thrown");
+      } catch (MathIllegalArgumentException miae) {
+          Assert.assertEquals(LocalizedGeometryFormats.ROTATION_MATRIX_DIMENSIONS, miae.getSpecifier());
+      }
+  }
+
+  @Test
   public void testRevertDeprecated() {
     Rotation r = new Rotation(0.001, 0.36, 0.48, 0.8, true);
     Rotation reverted = r.revert();

@@ -218,13 +218,25 @@ public class FieldLUDecompositionTest {
     /** test singular */
     @Test
     public void testSingular() {
-        FieldLUDecomposition<Fraction> lu =
-            new FieldLUDecomposition<Fraction>(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), testData));
+        final FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), testData);
+        FieldLUDecomposition<Fraction> lu = new FieldLUDecomposition<Fraction>(m);
         Assert.assertTrue(lu.getSolver().isNonSingular());
+        Assert.assertEquals(new Fraction(-1, 1), lu.getDeterminant());
+        lu = new FieldLUDecomposition<>(m.getSubMatrix(0, 1, 0, 1));
+        Assert.assertTrue(lu.getSolver().isNonSingular());
+        Assert.assertEquals(new Fraction(+1, 1), lu.getDeterminant());
         lu = new FieldLUDecomposition<Fraction>(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), singular));
         Assert.assertFalse(lu.getSolver().isNonSingular());
+        Assert.assertEquals(new Fraction(0, 1), lu.getDeterminant());
         lu = new FieldLUDecomposition<Fraction>(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), bigSingular));
         Assert.assertFalse(lu.getSolver().isNonSingular());
+        Assert.assertEquals(new Fraction(0, 1), lu.getDeterminant());
+        try {
+            lu.getSolver().solve(new ArrayFieldVector<>(new Fraction[] { Fraction.ONE, Fraction.ONE, Fraction.ONE, Fraction.ONE }));
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.SINGULAR_MATRIX, miae.getSpecifier());
+        }
     }
 
     /** test matrices values */
@@ -322,6 +334,26 @@ public class FieldLUDecompositionTest {
         FieldVector<Complex> u = solver.solve(v);
         Assert.assertEquals(u.getEntry(0), new Complex(0, 2));
         Assert.assertEquals(u.getEntry(1), new Complex(2, 0));
+    }
+
+    @Test
+    public void testsolve() {
+        FieldLUDecomposition<Fraction> lu =
+                        new FieldLUDecomposition<Fraction>(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), testData));
+        FieldDecompositionSolver<Fraction> solver = lu.getSolver();
+        FieldVector<Fraction> solution = solver.solve(new ArrayFieldVector<>(new Fraction[] {
+            new Fraction(1, 2), new Fraction(2, 3), new Fraction(3,4)
+        }));
+        Assert.assertEquals(testData.length, solution.getDimension());
+        Assert.assertEquals(new Fraction(-31, 12), solution.getEntry(0));
+        Assert.assertEquals(new Fraction( 11, 12), solution.getEntry(1));
+        Assert.assertEquals(new Fraction(  5, 12), solution.getEntry(2));
+        try {
+            solver.solve(new ArrayFieldVector<>(new Fraction[] { Fraction.ONE, Fraction.ONE }));
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+        }
     }
 
 }

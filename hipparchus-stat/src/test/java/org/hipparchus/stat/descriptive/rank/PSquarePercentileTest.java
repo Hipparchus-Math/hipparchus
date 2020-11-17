@@ -333,6 +333,7 @@ public class PSquarePercentileTest extends
         ptile.incrementAll(d);
         assertEquals(ptile, ptile);
         assertEquals(1d, ptile.getResult(), 1e-02);// this calls min
+        assertEquals(0.0, ptile.getQuantile(), 1.0e-15);
     }
 
     @Test
@@ -345,6 +346,7 @@ public class PSquarePercentileTest extends
         assertNotNull(ptile.toString());
         assertEquals(expectedValue(), ptile.evaluate(testArray), getTolerance());
         assertNotNull(ptile.toString());
+        assertEquals(0.95, ptile.getQuantile(), 1.0e-15);
     }
 
     @Test
