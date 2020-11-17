@@ -135,7 +135,6 @@ public class FastMath {
     };
 
     /** Sine, Cosine, Tangent tables are for 0, 1/8, 2/8, ... 13/8 = PI/2 approx. */
-    private static final int SINE_TABLE_LEN = 14;
 
     /** Sine table (high bits). */
     private static final double SINE_TABLE_A[] =
@@ -4831,24 +4830,24 @@ public class FastMath {
         return magnitude.copySign(sign);
     }
 
-    /**
-     * Print out contents of arrays, and check the length.
-     * <p>used to generate the preset arrays originally.</p>
-     * @param a unused
-     */
-    public static void main(String[] a) {
-        FastMathCalc.printarray(System.out, "EXP_INT_TABLE_A", EXP_INT_TABLE_LEN, ExpIntTable.EXP_INT_TABLE_A);
-        FastMathCalc.printarray(System.out, "EXP_INT_TABLE_B", EXP_INT_TABLE_LEN, ExpIntTable.EXP_INT_TABLE_B);
-        FastMathCalc.printarray(System.out, "EXP_FRAC_TABLE_A", EXP_FRAC_TABLE_LEN, ExpFracTable.EXP_FRAC_TABLE_A);
-        FastMathCalc.printarray(System.out, "EXP_FRAC_TABLE_B", EXP_FRAC_TABLE_LEN, ExpFracTable.EXP_FRAC_TABLE_B);
-        FastMathCalc.printarray(System.out, "LN_MANT",LN_MANT_LEN, lnMant.LN_MANT);
-        FastMathCalc.printarray(System.out, "SINE_TABLE_A", SINE_TABLE_LEN, SINE_TABLE_A);
-        FastMathCalc.printarray(System.out, "SINE_TABLE_B", SINE_TABLE_LEN, SINE_TABLE_B);
-        FastMathCalc.printarray(System.out, "COSINE_TABLE_A", SINE_TABLE_LEN, COSINE_TABLE_A);
-        FastMathCalc.printarray(System.out, "COSINE_TABLE_B", SINE_TABLE_LEN, COSINE_TABLE_B);
-        FastMathCalc.printarray(System.out, "TANGENT_TABLE_A", SINE_TABLE_LEN, TANGENT_TABLE_A);
-        FastMathCalc.printarray(System.out, "TANGENT_TABLE_B", SINE_TABLE_LEN, TANGENT_TABLE_B);
-    }
+//    /**
+//     * Print out contents of arrays, and check the length.
+//     * <p>used to generate the preset arrays originally.</p>
+//     * @param a unused
+//     */
+//    public static void main(String[] a) {
+//        FastMathCalc.printarray(System.out, "EXP_INT_TABLE_A", EXP_INT_TABLE_LEN, ExpIntTable.EXP_INT_TABLE_A);
+//        FastMathCalc.printarray(System.out, "EXP_INT_TABLE_B", EXP_INT_TABLE_LEN, ExpIntTable.EXP_INT_TABLE_B);
+//        FastMathCalc.printarray(System.out, "EXP_FRAC_TABLE_A", EXP_FRAC_TABLE_LEN, ExpFracTable.EXP_FRAC_TABLE_A);
+//        FastMathCalc.printarray(System.out, "EXP_FRAC_TABLE_B", EXP_FRAC_TABLE_LEN, ExpFracTable.EXP_FRAC_TABLE_B);
+//        FastMathCalc.printarray(System.out, "LN_MANT",LN_MANT_LEN, lnMant.LN_MANT);
+//        FastMathCalc.printarray(System.out, "SINE_TABLE_A", SINE_TABLE_LEN, SINE_TABLE_A);
+//        FastMathCalc.printarray(System.out, "SINE_TABLE_B", SINE_TABLE_LEN, SINE_TABLE_B);
+//        FastMathCalc.printarray(System.out, "COSINE_TABLE_A", SINE_TABLE_LEN, COSINE_TABLE_A);
+//        FastMathCalc.printarray(System.out, "COSINE_TABLE_B", SINE_TABLE_LEN, COSINE_TABLE_B);
+//        FastMathCalc.printarray(System.out, "TANGENT_TABLE_A", SINE_TABLE_LEN, TANGENT_TABLE_A);
+//        FastMathCalc.printarray(System.out, "TANGENT_TABLE_B", SINE_TABLE_LEN, TANGENT_TABLE_B);
+//    }
 
     /** Enclose large data table in nested static class so it's only loaded on first access. */
     private static class ExpIntTable {

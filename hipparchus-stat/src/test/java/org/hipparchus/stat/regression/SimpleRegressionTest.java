@@ -25,6 +25,7 @@ import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.ISAACRandom;
+import org.hipparchus.stat.LocalizedStatFormats;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -606,6 +607,7 @@ public final class SimpleRegressionTest {
     public void testRemoveXY() {
         // Create regression with inference data then remove to test
         SimpleRegression regression = new SimpleRegression();
+        Assert.assertTrue(regression.hasIntercept());
         regression.addData(infData);
         regression.removeData(removeX, removeY);
         regression.addData(removeX, removeY);
@@ -620,12 +622,12 @@ public final class SimpleRegressionTest {
                 regression.getSlopeConfidenceInterval(),1E-8);
      }
 
-
     // Test remove single observation in array
     @Test
     public void testRemoveSingle() {
         // Create regression with inference data then remove to test
         SimpleRegression regression = new SimpleRegression();
+        Assert.assertTrue(regression.hasIntercept());
         regression.addData(infData);
         regression.removeData(removeSingle);
         regression.addData(removeSingle);
@@ -645,6 +647,7 @@ public final class SimpleRegressionTest {
     public void testRemoveMultiple() {
         // Create regression with inference data then remove to test
         SimpleRegression regression = new SimpleRegression();
+        Assert.assertTrue(regression.hasIntercept());
         regression.addData(infData);
         regression.removeData(removeMultiple);
         regression.addData(removeMultiple);
@@ -656,6 +659,27 @@ public final class SimpleRegressionTest {
         Assert.assertEquals("significance", 4.596e-07,
                 regression.getSignificance(),1E-8);
         Assert.assertEquals("slope conf interval half-width", 0.0270713794287,
+                regression.getSlopeConfidenceInterval(),1E-8);
+     }
+
+    // Test remove multiple observations
+    @Test
+    public void testRemoveMultipleNoIntercept() {
+        // Create regression with inference data then remove to test
+        SimpleRegression regression = new SimpleRegression(false);
+        Assert.assertFalse(regression.hasIntercept());
+        Assert.assertEquals(0.0, regression.getIntercept(), 1.0e-15);
+        regression.addData(infData);
+        Assert.assertEquals(0.30593, regression.predict(1.25), 1.0e-5);
+        regression.removeData(removeMultiple);
+        regression.addData(removeMultiple);
+        // Use the inference assertions to make sure that everything worked
+        Assert.assertEquals("slope std err", 0.0103629732,
+                regression.getSlopeStdErr(), 1E-10);
+        Assert.assertTrue("std err intercept", Double.isNaN(regression.getInterceptStdErr()));
+        Assert.assertEquals("significance", 6.199e-08,
+                regression.getSignificance(),1E-10);
+        Assert.assertEquals("slope conf interval half-width", 0.02450454,
                 regression.getSlopeConfidenceInterval(),1E-8);
      }
 
@@ -693,4 +717,90 @@ public final class SimpleRegressionTest {
         regression.removeData(removeMultiple);
         Assert.assertEquals(regression.getN(), 0);
     }
+
+    @Test
+    public void testWrongDimensions() {
+        try {
+            new SimpleRegression().addData(new double[1][1]);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedStatFormats.INVALID_REGRESSION_OBSERVATION, miae.getSpecifier());
+        }
+        try {
+            new SimpleRegression().addObservation(null, 0.0);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedStatFormats.INVALID_REGRESSION_OBSERVATION, miae.getSpecifier());
+        }
+        try {
+            new SimpleRegression().addObservation(new double[0], 0.0);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedStatFormats.INVALID_REGRESSION_OBSERVATION, miae.getSpecifier());
+        }
+        try {
+            new SimpleRegression().addObservations(new double[][] { null, null }, new double[2]);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedStatFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS, miae.getSpecifier());
+        }
+        try {
+            new SimpleRegression().addObservations(new double[][] { new double[0], new double[0] }, new double[2]);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedStatFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS, miae.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testFewPoints() {
+        SimpleRegression sr = new SimpleRegression();
+        sr.addObservations(new double[][] { new double[] { 1.0, 1.5 }}, new double[] { 1.0 });
+        Assert.assertEquals(1, sr.getN());
+        Assert.assertTrue(Double.isNaN(sr.getXSumSquares()));
+        sr.addObservations(new double[][] { new double[] { 1.0, 1.5 }}, new double[] { 1.0 });
+        Assert.assertEquals(2, sr.getN());
+        Assert.assertFalse(Double.isNaN(sr.getXSumSquares()));
+        Assert.assertTrue(Double.isNaN(sr.getSlopeConfidenceInterval()));
+        Assert.assertTrue(Double.isNaN(sr.getSignificance()));
+        try {
+            sr.regress();
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedStatFormats.NOT_ENOUGH_DATA_REGRESSION, miae.getSpecifier());
+        }
+        sr.addObservations(new double[][] { new double[] { 1.0, 1.5 }}, new double[] { 1.0 });
+        RegressionResults results = sr.regress();
+        Assert.assertTrue(Double.isNaN(results.getParameterEstimate(1)));
+        results = sr.regress(new int[] { 1 });
+        Assert.assertEquals(1.0, results.getParameterEstimate(0), 1.0e-15);
+        sr.addObservations(new double[][] { new double[] { 2.0, 2.5 }}, new double[] { 2.0 });
+        results = sr.regress();
+        Assert.assertFalse(Double.isNaN(results.getParameterEstimate(1)));
+        sr.addObservations(new double[][] { new double[] { Double.NaN, Double.NaN }}, new double[] { Double.NaN });
+        results = sr.regress(new int[] { 1 });
+        Assert.assertTrue(Double.isNaN(results.getParameterEstimate(0)));
+
+    }
+
+    @Test
+    public void testFewPointsWithoutIntercept() {
+        SimpleRegression sr = new SimpleRegression(false);
+        sr.addObservations(new double[][] { new double[] { 1.0, 1.5 }}, new double[] { 1.0 });
+        Assert.assertEquals(1, sr.getN());
+        Assert.assertTrue(Double.isNaN(sr.getXSumSquares()));
+        try {
+            sr.regress();
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedStatFormats.NOT_ENOUGH_DATA_REGRESSION, miae.getSpecifier());
+        }
+        sr.addObservations(new double[][] { new double[] { 1.0, 1.5 }}, new double[] { 1.0 });
+        RegressionResults results = sr.regress();
+        Assert.assertFalse(Double.isNaN(results.getParameterEstimate(0)));
+        sr.addObservations(new double[][] { new double[] { Double.NaN, 1.0 }}, new double[] { 2.0 });
+        results = sr.regress();
+        Assert.assertTrue(Double.isNaN(results.getParameterEstimate(0)));
+    }
+
 }

@@ -2062,6 +2062,36 @@ public class FastMathTest {
         }
     }
 
+    @Test
+    public void testFloorDivModLongInt() {
+        RandomGenerator generator = new Well1024a(0xe03b6a1800d92fa7l);
+        for (int i = 0; i < 10000; ++i) {
+            long a = (long) generator.nextInt();
+            int b = generator.nextInt();
+            if (b == 0) {
+                try {
+                    FastMath.floorDiv(a, b);
+                    fail("an exception should have been thrown");
+                } catch (MathRuntimeException mae) {
+                    // expected
+                }
+            } else {
+                long d = FastMath.floorDiv(a, b);
+                long m = FastMath.floorMod(a, b);
+                assertEquals(poorManFloorDiv(a, b), d);
+                assertEquals(poorManFloorMod(a, b), m);
+                assertEquals(a, d * b + m);
+                if (b < 0) {
+                    assertTrue(m <= 0);
+                    assertTrue(-m < -b);
+                } else {
+                    assertTrue(m >= 0);
+                    assertTrue(m < b);
+                }
+            }
+        }
+    }
+
     private long poorManFloorDiv(long a, long b) {
 
         // find q0, r0 such that a = q0 b + r0
