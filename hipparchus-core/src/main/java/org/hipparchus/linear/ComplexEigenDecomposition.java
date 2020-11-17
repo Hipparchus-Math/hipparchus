@@ -86,9 +86,9 @@ public class ComplexEigenDecomposition {
     /** Internally used threshold below which eigenvectors are considered equal. */
     private final double eigenVectorsEquality;
     /** Internally used epsilon criteria. */
-    private final double epsilon;   
+    private final double epsilon;
     /** Internally used epsilon criteria for final AV=VD check. */
-    private final double epsilonAVVDCheck;   
+    private final double epsilonAVVDCheck;
 
     /**
      * Constructor for decomposition.
