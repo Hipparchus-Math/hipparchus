@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.hipparchus</groupId>
     <artifactId>hipparchus</artifactId>
-    <version>1.8-SNAPSHOT</version>
+    <version>1.8</version>
     <relativePath>../hipparchus-parent</relativePath>
   </parent>
 
