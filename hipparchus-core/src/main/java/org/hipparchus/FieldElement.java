@@ -93,8 +93,8 @@ public interface FieldElement<T> {
      * <p>
      * The default implementation simply calls {@code equals(getField().getZero())}.
      * However, this may need to be overridden in some cases as due to
-     * compatibility with {@link #hashCode()} some classes implements
-     * {@link #equals(Object)} in such a way that -0.0 and +0.0 are different,
+     * compatibility with {@code hashCode()} some classes implements
+     * {@code equals(Object)} in such a way that -0.0 and +0.0 are different,
      * which may be a problem. It prevents for example identifying a diagonal
      * element is zero and should be avoided when doing partial pivoting in
      * LU decomposition.
