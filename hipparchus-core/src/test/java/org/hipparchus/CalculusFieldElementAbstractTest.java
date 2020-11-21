@@ -25,9 +25,11 @@ import java.util.function.DoubleFunction;
 
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
+import org.hipparchus.random.Well19937a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.SinCos;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -164,6 +166,36 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
             FieldSinCos<T> sinCos = build(x).sinCos();
             checkRelative(FastMath.sin(x), sinCos.sin());
             checkRelative(FastMath.cos(x), sinCos.cos());
+        }
+    }
+
+    @Test
+    public void testSinCosSum() {
+        final RandomGenerator random = new Well19937a(0x4aab62a42c9eb940l);
+        for (int i = 0; i < 10000; ++i) {
+            final double alpha  = 10.0 * (2.0 * random.nextDouble() - 1.0);
+            final double beta   = 10.0 * (2.0 * random.nextDouble() - 1.0);
+            final T      alphaT = build(alpha);
+            final T      betaT  = build(beta);
+            final SinCos scSum = SinCos.sum(FastMath.sinCos(alpha), FastMath.sinCos(beta));
+            final FieldSinCos<T> scSumT = FieldSinCos.sum(alphaT.sinCos(), betaT.sinCos());
+            checkRelative(scSum.sin(), scSumT.sin());
+            checkRelative(scSum.cos(), scSumT.cos());
+        }
+    }
+
+    @Test
+    public void testSinCosdifference() {
+        final RandomGenerator random = new Well19937a(0x589aaf49471b03d5l);
+        for (int i = 0; i < 10000; ++i) {
+            final double alpha  = 10.0 * (2.0 * random.nextDouble() - 1.0);
+            final double beta   = 10.0 * (2.0 * random.nextDouble() - 1.0);
+            final T      alphaT = build(alpha);
+            final T      betaT  = build(beta);
+            final SinCos scDifference = SinCos.difference(FastMath.sinCos(alpha), FastMath.sinCos(beta));
+            final FieldSinCos<T> scDifferenceT = FieldSinCos.difference(alphaT.sinCos(), betaT.sinCos());
+            checkRelative(scDifference.sin(), scDifferenceT.sin());
+            checkRelative(scDifference.cos(), scDifferenceT.cos());
         }
     }
 
