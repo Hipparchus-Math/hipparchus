@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.8"  date="TBD" description="TBD.">
+      <action dev="luc" type="fix" issue="issues/106">
+        Added sum and difference of angles in SinCos and FieldSinCos.
+      </action>
       <action dev="luc" type="fix" issue="issues/105">
         Removed spurious reduction of BigFraction in equality test.
       </action>
