@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.8"  date="TBD" description="TBD.">
+      <action dev="luc" type="fix" issue="issues/105">
+        Removed spurious reduction of BigFraction in equality test.
+      </action>
       <action dev="luc" type="add" issue="issues/104">
         Fixed LU-decomposition issue with signed zero complex numbers on diagonal.
       </action>

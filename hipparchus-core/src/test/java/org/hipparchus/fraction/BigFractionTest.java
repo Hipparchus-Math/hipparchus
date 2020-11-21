@@ -641,6 +641,11 @@ public class BigFractionTest {
     }
 
     @Test
+    public void testNormalizedEquals() {
+        Assert.assertEquals(new BigFraction(237, -3871), new BigFraction(-51l, 833l));
+    }
+
+    @Test
     public void testSerial() {
         BigFraction[] fractions = {
             new BigFraction(3, 4), BigFraction.ONE, BigFraction.ZERO,
