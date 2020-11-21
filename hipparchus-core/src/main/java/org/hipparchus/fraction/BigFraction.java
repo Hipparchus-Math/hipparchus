@@ -764,9 +764,8 @@ public class BigFraction
         if (this == other) {
             ret = true;
         } else if (other instanceof BigFraction) {
-            BigFraction rhs = ((BigFraction) other).reduce();
-            BigFraction thisOne = this.reduce();
-            ret = thisOne.numerator.equals(rhs.numerator) && thisOne.denominator.equals(rhs.denominator);
+            BigFraction rhs = (BigFraction) other;
+            ret = numerator.equals(rhs.numerator) && denominator.equals(rhs.denominator);
         }
 
         return ret;

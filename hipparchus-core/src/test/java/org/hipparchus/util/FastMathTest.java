@@ -781,6 +781,36 @@ public class FastMathTest {
     }
 
     @Test
+    public void testSinCosSum() {
+        final RandomGenerator random = new Well19937a(0x4aab62a42c9eb940l);
+        for (int i = 0; i < 1000000; ++i) {
+            final double alpha = 10.0 * (2.0 * random.nextDouble() - 1.0);
+            final double beta  = 10.0 * (2.0 * random.nextDouble() - 1.0);
+            final SinCos scAlpha         = FastMath.sinCos(alpha);
+            final SinCos scBeta          = FastMath.sinCos(beta);
+            final SinCos scAlphaPlusBeta = FastMath.sinCos(alpha + beta);
+            final SinCos scSum           = SinCos.sum(scAlpha, scBeta);
+            Assert.assertEquals(scAlphaPlusBeta.sin(), scSum.sin(), 2.0e-15);
+            Assert.assertEquals(scAlphaPlusBeta.cos(), scSum.cos(), 2.0e-15);
+        }
+    }
+
+    @Test
+    public void testSinCosdifference() {
+        final RandomGenerator random = new Well19937a(0x589aaf49471b03d5l);
+        for (int i = 0; i < 1000000; ++i) {
+            final double alpha = 10.0 * (2.0 * random.nextDouble() - 1.0);
+            final double beta  = 10.0 * (2.0 * random.nextDouble() - 1.0);
+            final SinCos scAlpha          = FastMath.sinCos(alpha);
+            final SinCos scBeta           = FastMath.sinCos(beta);
+            final SinCos scAlphaMinusBeta = FastMath.sinCos(alpha - beta);
+            final SinCos scdifference     = SinCos.difference(scAlpha, scBeta);
+            Assert.assertEquals(scAlphaMinusBeta.sin(), scdifference.sin(), 2.0e-15);
+            Assert.assertEquals(scAlphaMinusBeta.cos(), scdifference.cos(), 2.0e-15);
+        }
+    }
+
+    @Test
     public void testSinAccuracy() {
         double maxerrulp = 0.0;
 
