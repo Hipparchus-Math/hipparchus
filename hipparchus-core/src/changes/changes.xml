@@ -49,7 +49,9 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
-    <release version="1.8"  date="TBD" description="TBD.">
+    <release version="1.8" date="2020-12-05" description="This is a maintenance release.
+    It fixes a few bugs, mainly a serious one for complex eigendecomposition when
+    several eigenvalues are equal. It also add sum and angle differences in SinCos and FieldSinCos.">
       <action dev="luc" type="fix" issue="issues/106">
         Added sum and difference of angles in SinCos and FieldSinCos.
       </action>
@@ -63,7 +65,11 @@ If the output is not quite correct, check for invisible trailing spaces!
         Fixed complex eigendecomposition when several eigenvalues are equals.
       </action>
     </release>
-    <release version="1.7"  date="TBD" description="TBD.">
+    <release version="1.7" date="2020-06-23" description="This is a maintenance release.
+    It fixes several bugs, including a nasty one in ODE events handling, improves a lot
+    the Complex class so it implements the new CalculusFieldElement interface, and adds
+    several new differentiation classes to handle simpler cases (univariate derivatives
+    at orders 1 and 2 and gradients) with less overhead than the existing DerivativeStructure.">
       <action dev="bryan" type="add" issue="issues/97">
       Added ExtendedUnivariateDifferentiableVectorFunction interface
       for differentiable vectorial function.
