@@ -60,6 +60,7 @@ public class FieldSinCos<T> {
     /** Compute sine and cosine of angles sum.
      * @param scAlpha \((sin \alpha, \cos \alpha)\)
      * @param scBeta \((sin \beta, \cos \beta)\)
+     * @param <S> the type of the field elements
      * @return \((sin \alpha+\beta, \cos \alpha+\beta)\)
      * @since 1.8
      */
@@ -71,6 +72,7 @@ public class FieldSinCos<T> {
     /** Compute sine and cosine of angles difference.
      * @param scAlpha \((sin \alpha, \cos \alpha)\)
      * @param scBeta \((sin \beta, \cos \beta)\)
+     * @param <S> the type of the field elements
      * @return \((sin \alpha+\beta, \cos \alpha-\beta)\)
      * @since 1.8
      */
