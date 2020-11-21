@@ -623,6 +623,11 @@ public class FractionTest {
     }
 
     @Test
+    public void testNormalizedEquals() {
+        Assert.assertEquals(new Fraction(237, -3871), new Fraction(-51, 833));
+    }
+
+    @Test
     public void testToString() {
         Assert.assertEquals("0", new Fraction(0, 3).toString());
         Assert.assertEquals("3", new Fraction(6, 2).toString());
