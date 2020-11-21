@@ -1049,6 +1049,7 @@ public class Dfp implements RealFieldElement<Dfp> {
     /** Check if instance is equal to zero.
      * @return true if instance is equal to zero
      */
+    @Override
     public boolean isZero() {
 
         if (isNaN()) {
