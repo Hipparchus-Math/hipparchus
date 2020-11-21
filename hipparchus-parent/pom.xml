@@ -517,8 +517,6 @@
             <skipAssembly>true</skipAssembly>
           </configuration>
         </plugin>
-        <!-- disable maven-changes-plugin until either https://issues.apache.org/jira/browse/MCHANGES-{378,396,400} are solved,
-             or https://issues.apache.org/jira/browse/MCHANGES-409 is available
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-changes-plugin</artifactId>
@@ -536,7 +534,6 @@
             </reportSets>
           </configuration>
         </plugin>
-        -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
@@ -895,14 +892,18 @@
         <artifactId>apache-rat-plugin</artifactId>
         <version>${hipparchus.apache-rat-plugin.version}</version>
       </plugin>
-      <!-- disable maven-changes-plugin until either https://issues.apache.org/jira/browse/MCHANGES-{378,396,400} are solved,
-           or https://issues.apache.org/jira/browse/MCHANGES-409 is available
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
         <version>${hipparchus.maven-changes-plugin.version}</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>changes-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
       </plugin>
-      -->
       <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
         <version>${hipparchus.maven-pmd-plugin.version}</version>
