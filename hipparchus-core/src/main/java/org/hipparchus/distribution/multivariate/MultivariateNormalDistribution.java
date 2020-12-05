@@ -246,6 +246,7 @@ public class MultivariateNormalDistribution
 
     /**
      * Gets the current setting for the tolerance check used during singular checks before inversion
+     * @return tolerance
      */
     public double getSingularMatrixCheckTolerance() { return singularMatrixCheckTolerance; }
 

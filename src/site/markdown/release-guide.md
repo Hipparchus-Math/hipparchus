@@ -68,7 +68,7 @@ The properties name all follow the pattern `hipparchus.some-plugin-name.version`
 name should be used in the web form to check for available versions.
 
 Beware that in some cases, the latest version cannot be used due to incompatibilities. For
-example, as of releases 1.0 to 1.7, the site generation was based on `reflow-maven-skin`
+example, as of releases 1.0 to 1.8, the site generation was based on `reflow-maven-skin`
 and this skin was not updated for recent versions of either site plugin and velocity. Hence
 the `maven-site-plugin` version, `maven-project-info-reports-plugin` version,
 `reflow-velocity-tools` version and `velocity `version were not updated (and should probably

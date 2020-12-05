@@ -66,12 +66,12 @@ at fork time.
 
  ---
 
-## 1.7 Release is out!
+## 1.8 Release is out!
 
-Hipparchus 1.7 is now available for download from the [Hipparchus download page](downloads.html) or on
-Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.7 release are:
+Hipparchus 1.8 is now available for download from the [Hipparchus download page](downloads.html) or on
+Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.8 release are:
 
-  * fixed a bug in ODE events handling
-  * improved a lot the Complex class so it implements the new CalculusFieldElement interface
-  * added several new differentiation classes to handle simpler cases (univariate derivatives
-    at orders 1 and 2 and gradients) with less overhead than the existing DerivativeStructure.
+  * fixed LU-decomposition issue with signed zero complex numbers on diagonal
+  * fixed complex eigendecomposition when several eigenvalues are equals
+  * added sum and difference of angles in SinCos and FieldSinCos
+  * removed spurious reduction of BigFraction in equality test

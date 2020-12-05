@@ -1,57 +1,25 @@
 
-              Hipparchus 1.7 RELEASE NOTES
+              Hipparchus 1.8 RELEASE NOTES
 
-The Hipparchus team is pleased to announce the release of hipparchus-1.7
+The Hipparchus team is pleased to announce the release of hipparchus-1.8
 
 The Hipparchus library is a library of mathematical components. It started as a fork of Apache Commons Math.
 
 This is a maintenance release.
 
-It fixes several bugs, including a nasty one in ODE events handling, improves a lot
-the Complex class so it implements the new CalculusFieldElement interface, and adds
-several new differentiation classes to handle simpler cases (univariate derivatives
-at orders 1 and 2 and gradients) with less overhead than the existing DerivativeStructure.
+ It fixes a few bugs, mainly a serious one for complex eigendecomposition when several eigenvalues
+ are equal. It also add sum and angle differences in SinCosand FieldSinCos.
 
 Changes in this version include:
 
 New features:
-o issues/97:  Added ExtendedUnivariateDifferentiableVectorFunction interface
-              for differentiable vectorial function. 
-o             Added intermediate interface {Field}Derivative.
-              The interface is implemented by both {Field}DerivativeStructure, {Field}Gradient,
-              {Field}UnivariateDerivative1and {Field}UnivariateDerivative2 
-o issues/95:  Added new mathematical methods for FieldGradient,
-              FieldUnivariateDerivative1 and FieldUnivariateDerivative2. 
-o issues/92:  Added isMathematicalInteger to Complex. 
-o             Added isMathematicalInteger to Precision for double and float numbers. 
-o issues/93:  Added UnivariateDerivative1, UnivariateDerivative2 and Gradient
-              for computing derivatives in simple cases with less overhead than
-              DerivativeStructure. 
-o issues/81:  Added map and mapToSelf to RealMatrix. 
-o             Added Dfp conversion to either larger or smaller number of digits. 
-o issues/78:  Add Line.fromDirection(...). 
-o             Added Complex.pow(int n) with integer power computed more accurately by
-              successive squarings rather than complex logarithm and exponential. 
+o issues/104:  Fixed LU-decomposition issue with signed zero complex numbers on diagonal. 
+o issues/99:   Fixed complex eigendecomposition when several eigenvalues are equals. 
 
 Fixed Bugs:
-o issues/94:  Fix infinite loop in event handling when a RESET_STATE or RESET_DERIVATIVES event
-        causes two other event detectors to trigger simultaneously and discontinuously at
-        the same time. Thanks to Mikael. 
-o issues/71:  Don't ignore exceptions, use try with resources. 
-o issues/91:  Fixed accuracy of linear combination for Dfp. 
-o issues/88:  Fixed handling of special cases in Dfp.atan2(y, x). 
-o issues/87:  Prevent overflow of Dfp.hypot. 
-o issues/86:  Fixed Dfp.floor and Dfp.ceil for numbers close to zero. 
-o issues/82:  Fixed Decimal64.rootN for negative arguments and even roots. 
-o issues/77:  Provide both L_1 and L_infinity norms for matrices. 
-o issues/76:  Fixed MathArrays.linearCombination when signed zeros are involved. 
-o issues/74:  Fixed Complex.pow(Complex p) and Complex.pow(double p) for special cases
-              (real arguments, integer power, 0). 
-o issues/63:  Added signum to Fraction and BigFraction. 
-o             Prevent random failure of micro-sphere test case. 
+o issues/106:  Added sum and difference of angles in SinCos and FieldSinCos. 
+o issues/105:  Removed spurious reduction of BigFraction in equality test. 
 
-Changes:
-o issues/72:  Changed RotationOrder from final class to enum. 
 
 
 For complete information on Hipparchus, including instructions on how to submit bug reports,

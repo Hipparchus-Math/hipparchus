@@ -44,6 +44,16 @@ Maven's internal mechanism will automatically download any internal dependencies
 
 |     package       |                                  link                                                     | hash | signature |
 |-------------------|-------------------------------------------------------------------------------------------|------|-----------|
+|  source (zip)     | [hipparchus-1.8-src.zip](downloads/hipparchus-1.8-src.zip) | [md5](downloads/hipparchus-1.8-src.zip.md5)| [sig](downloads/hipparchus-1.8-src.zip.asc)|
+|  source (tar.bz2) | [hipparchus-1.8-src.tar.bz2](downloads/hipparchus-1.8-src.tar.bz2) | [md5](downloads/hipparchus-1.8-src.tar.bz2.md5) | [sig](downloads/hipparchus-1.8-src.tar.bz2.asc)|
+|  binary (zip)     | [hipparchus-1.8-bin.zip](downloads/hipparchus-1.8-bin.zip)| [md5](downloads/hipparchus-1.8-bin.zip.md5) | [sig](downloads/hipparchus-1.8-bin.zip.asc)|
+|  binary (tar.bz2) | [hipparchus-1.8-bin.tar.bz2](downloads/hipparchus-1.8-bin.tar.bz2) | [md5](downloads/hipparchus-1.8-bin.tar.bz2.md5) | [sig](downloads/hipparchus-1.8-bin.tar.bz2.asc)
+version 1.8 downloads (release date: 2020-12-05)
+
+---
+
+|     package       |                                  link                                                     | hash | signature |
+|-------------------|-------------------------------------------------------------------------------------------|------|-----------|
 |  source (zip)     | [hipparchus-1.7-src.zip](downloads/hipparchus-1.7-src.zip) | [md5](downloads/hipparchus-1.7-src.zip.md5)| [sig](downloads/hipparchus-1.7-src.zip.asc)|
 |  source (tar.bz2) | [hipparchus-1.7-src.tar.bz2](downloads/hipparchus-1.7-src.tar.bz2) | [md5](downloads/hipparchus-1.7-src.tar.bz2.md5) | [sig](downloads/hipparchus-1.7-src.tar.bz2.asc)|
 |  binary (zip)     | [hipparchus-1.7-bin.zip](downloads/hipparchus-1.7-bin.zip)| [md5](downloads/hipparchus-1.7-bin.zip.md5) | [sig](downloads/hipparchus-1.7-bin.zip.asc)|
