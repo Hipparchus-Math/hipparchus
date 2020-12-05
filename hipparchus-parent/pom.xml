@@ -497,7 +497,7 @@
     <hipparchus.maven-gpg-plugin.version>1.6</hipparchus.maven-gpg-plugin.version>
     <hipparchus.maven-install-plugin.version>3.0.0-M1</hipparchus.maven-install-plugin.version>
     <hipparchus.apache-rat-plugin.version>0.13</hipparchus.apache-rat-plugin.version>
-    <hipparchus.junit.version>4.13</hipparchus.junit.version>
+    <hipparchus.junit.version>4.13.1</hipparchus.junit.version>
     <hipparchus.hamcrest.version>2.2</hipparchus.hamcrest.version>
     <hipparchus.reflow-velocity-tools.version>1.1.1</hipparchus.reflow-velocity-tools.version>
     <hipparchus.velocity.version>1.7</hipparchus.velocity.version>
