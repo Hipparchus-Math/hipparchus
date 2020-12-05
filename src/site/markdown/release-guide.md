@@ -332,7 +332,7 @@ After the release branch has been completed, it should be merged back to the mas
 must be updated with the `-SNAPSHOT`flag for the next release number. On a system with Unix utilities, you can do
 it with the single following line:
 
-    for pom in pom.xml hipparchus-*/pom.xml ; do mv $pom $pom.old ; sed 's,<version>X.Y</version>,<version>X.Z-SNAPSHOT</version>' < $pom.old > $pom ; rm $pom.old ; done
+    for pom in pom.xml hipparchus-*/pom.xml ; do mv $pom $pom.old ; sed 's,<version>X.Y</version>,<version>X.Z-SNAPSHOT</version>,' < $pom.old > $pom ; rm $pom.old ; done
 
 Commit the change:
 
