@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="X.Y" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/111">
+        Allow selecting customized threshold for tests in OrderedComplexEigenDecomposition.
+      </action>
       <action dev="luc" type="fix" issue="issues/110">
         Added FieldZeroChecker for linear some linear algebra algorithms.
       </action>

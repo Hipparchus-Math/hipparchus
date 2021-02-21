@@ -34,8 +34,31 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
      * @param matrix real matrix.
      */
     public OrderedComplexEigenDecomposition(final RealMatrix matrix) {
-        super(matrix);
+        this(matrix,
+             ComplexEigenDecomposition.DEFAULT_EIGENVECTORS_EQUALITY,
+             ComplexEigenDecomposition.DEFAULT_EPSILON,
+             ComplexEigenDecomposition.DEFAULT_EPSILON_AV_VD_CHECK);
+    }
 
+    /**
+     * Constructor for decomposition.
+     * <p>
+     * The {@code eigenVectorsEquality} threshold is used to ensure the L∞-normalized
+     * eigenvectors found using inverse iteration are different from each other.
+     * if \(min(|e_i-e_j|,|e_i+e_j|)\) is smaller than this threshold, the algorithm
+     * considers it has found again an already known vector, so it drops it and attempts
+     * a new inverse iteration with a different start vector. This value should be
+     * much larger than {@code epsilon} which is used for convergence
+     * </p>
+     * @param matrix real matrix.
+     * @param eigenVectorsEquality threshold below which eigenvectors are considered equal
+     * @param epsilon Epsilon used for internal tests (e.g. is singular, eigenvalue ratio, etc.)
+     * @param epsilonAVVDCheck Epsilon criteria for final AV=VD check
+     * @since 1.9
+     */
+    public OrderedComplexEigenDecomposition(final RealMatrix matrix, final double eigenVectorsEquality,
+                                            final double epsilon, final double epsilonAVVDCheck) {
+        super(matrix, eigenVectorsEquality, epsilon, epsilonAVVDCheck);
         final FieldMatrix<Complex> D = this.getD();
         final FieldMatrix<Complex> V = this.getV();
 
