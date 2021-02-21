@@ -134,7 +134,7 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
         final T a = (qrtMinor[minor].getReal() > 0) ? xNormSqr.sqrt().negate() : xNormSqr.sqrt();
         rDiag[minor] = a;
 
-        if (a.getReal() != 0.0) {
+        if (!a.isZero()) {
 
             /*
              * Calculate the normalized reflection vector v and transform
@@ -239,7 +239,7 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
             for (int minor = FastMath.min(m, n)-1; minor >= 0; minor--){
                 final T[] qrtMinor = qrt[minor];
                 qta[minor][minor] = threshold.getField().getOne();
-                if (qrtMinor[minor].getReal() != 0.0) {
+                if (!qrtMinor[minor].isZero()) {
                     for (int col = minor; col < m; col++) {
                         T alpha = threshold.getField().getZero();
                         for (int row = minor; row < m; row++) {
