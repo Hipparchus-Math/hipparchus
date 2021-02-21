@@ -16,7 +16,7 @@
  */
 package org.hipparchus.linear;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Assert;
 
 import org.hipparchus.complex.Complex;
 import org.junit.Test;
@@ -35,15 +35,27 @@ public class OrderedComplexEigenDecompositionTest {
             { new Complex(4, 0), new Complex(-1, 0) } });
 
         // testing AV = lamba V - [0]
-        assertEquals(A.operate(eigenDecomp.getEigenvector(0)),
-                     eigenDecomp.getEigenvector(0).mapMultiply(eigenDecomp.getEigenvalues()[0]));
+        Assert.assertEquals(A.operate(eigenDecomp.getEigenvector(0)),
+                            eigenDecomp.getEigenvector(0).mapMultiply(eigenDecomp.getEigenvalues()[0]));
 
         // testing AV = lamba V - [1]
-        assertEquals(A.operate(eigenDecomp.getEigenvector(1)),
-                     eigenDecomp.getEigenvector(1).mapMultiply(eigenDecomp.getEigenvalues()[1]));
+        Assert.assertEquals(A.operate(eigenDecomp.getEigenvector(1)),
+                            eigenDecomp.getEigenvector(1).mapMultiply(eigenDecomp.getEigenvalues()[1]));
 
         // checking definition of the decomposition A*V = V*D
-        assertEquals(A.multiply(eigenDecomp.getV()),
-                     eigenDecomp.getV().multiply(eigenDecomp.getD()));
+        Assert.assertEquals(A.multiply(eigenDecomp.getV()),
+                            eigenDecomp.getV().multiply(eigenDecomp.getD()));
     }
+
+    @Test
+    public void testEqualEigenValues() {
+        double[][] d = {{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}};
+        Array2DRowRealMatrix matrix = new Array2DRowRealMatrix(d);
+        ComplexEigenDecomposition ed = new OrderedComplexEigenDecomposition(matrix);
+        for (Complex z : ed.getEigenvalues()) {
+            Assert.assertEquals(1.0, z.getReal(),      1.0e-15);
+            Assert.assertEquals(0.0, z.getImaginary(), 1.0e-15);
+        }
+    }
+
 }

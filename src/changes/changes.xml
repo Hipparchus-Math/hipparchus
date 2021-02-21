@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
+    <release version="X.Y" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/110">
+        Fixed exception in OrderedComplexEigenDecomposition when eigenvalues are equal.
+      </action>
+    </release>
     <release version="1.8" date="2020-12-05" description="This is a maintenance release.
     It fixes a few bugs, mainly a serious one for complex eigendecomposition when
     several eigenvalues are equal. It also add sum and angle differences in SinCos and FieldSinCos.">
