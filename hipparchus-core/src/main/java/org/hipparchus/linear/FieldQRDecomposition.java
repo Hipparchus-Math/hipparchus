@@ -24,6 +24,7 @@ package org.hipparchus.linear;
 
 import java.util.Arrays;
 
+import org.hipparchus.FieldZeroChecker;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -67,6 +68,8 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
     private FieldMatrix<T> cachedH;
     /** Singularity threshold. */
     private final T threshold;
+    /** checker for zero. */
+    private final FieldZeroChecker<T> zeroChecker;
 
     /**
      * Calculates the QR-decomposition of the given matrix.
@@ -87,7 +90,19 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
      * @param threshold Singularity threshold.
      */
     public FieldQRDecomposition(FieldMatrix<T> matrix, T threshold) {
-        this.threshold = threshold;
+        this(matrix, threshold, e -> e.isZero());
+    }
+
+    /**
+     * Calculates the QR-decomposition of the given matrix.
+     *
+     * @param matrix The matrix to decompose.
+     * @param threshold Singularity threshold.
+     * @param zeroChecker checker for zero
+     */
+    public FieldQRDecomposition(FieldMatrix<T> matrix, T threshold, FieldZeroChecker<T> zeroChecker) {
+        this.threshold   = threshold;
+        this.zeroChecker = zeroChecker;
 
         final int m = matrix.getRowDimension();
         final int n = matrix.getColumnDimension();
@@ -134,7 +149,7 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
         final T a = (qrtMinor[minor].getReal() > 0) ? xNormSqr.sqrt().negate() : xNormSqr.sqrt();
         rDiag[minor] = a;
 
-        if (!a.isZero()) {
+        if (!zeroChecker.isZero(a)) {
 
             /*
              * Calculate the normalized reflection vector v and transform
