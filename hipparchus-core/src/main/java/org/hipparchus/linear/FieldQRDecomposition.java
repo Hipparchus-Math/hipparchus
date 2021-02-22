@@ -23,8 +23,8 @@
 package org.hipparchus.linear;
 
 import java.util.Arrays;
+import java.util.function.Predicate;
 
-import org.hipparchus.FieldZeroChecker;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -69,7 +69,7 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
     /** Singularity threshold. */
     private final T threshold;
     /** checker for zero. */
-    private final FieldZeroChecker<T> zeroChecker;
+    private final Predicate<T> zeroChecker;
 
     /**
      * Calculates the QR-decomposition of the given matrix.
@@ -100,7 +100,7 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
      * @param threshold Singularity threshold.
      * @param zeroChecker checker for zero
      */
-    public FieldQRDecomposition(FieldMatrix<T> matrix, T threshold, FieldZeroChecker<T> zeroChecker) {
+    public FieldQRDecomposition(FieldMatrix<T> matrix, T threshold, Predicate<T> zeroChecker) {
         this.threshold   = threshold;
         this.zeroChecker = zeroChecker;
 
@@ -149,7 +149,7 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
         final T a = (qrtMinor[minor].getReal() > 0) ? xNormSqr.sqrt().negate() : xNormSqr.sqrt();
         rDiag[minor] = a;
 
-        if (!zeroChecker.isZero(a)) {
+        if (!zeroChecker.test(a)) {
 
             /*
              * Calculate the normalized reflection vector v and transform
