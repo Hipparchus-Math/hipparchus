@@ -54,7 +54,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         Allow selecting customized threshold for tests in OrderedComplexEigenDecomposition.
       </action>
       <action dev="luc" type="fix" issue="issues/110">
-        Added zero checker predicate for linear some linear algebra algorithms.
+        Added zero checker predicate for some linear algebra algorithms.
       </action>
       <action dev="luc" type="fix" issue="issues/109">
         Fixed exception in OrderedComplexEigenDecomposition when eigenvalues are equal.
