@@ -356,7 +356,8 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
 
                     final EventOccurrence occurrence = currentEvent.doEvent(eventState);
                     final Action action = occurrence.getAction();
-                    isLastStep = action == Action.STOP;
+                    isLastStep = action == Action.STOP ||
+                            FastMath.abs(currentState.getTime() - tEnd) <= FastMath.ulp(tEnd);
 
                     if (isLastStep) {
                         // ensure the event is after the root if it is returned STOP

@@ -367,7 +367,8 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
 
                     final EventOccurrence<T> occurrence = currentEvent.doEvent(eventState);
                     final Action action = occurrence.getAction();
-                    isLastStep = action == Action.STOP;
+                    isLastStep = action == Action.STOP ||
+                            currentState.getTime().subtract(tEnd).abs().getReal() <= FastMath.ulp(tEnd.getReal());
 
                     if (isLastStep) {
                         // ensure the event is after the root if it is returned STOP
