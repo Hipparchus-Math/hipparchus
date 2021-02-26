@@ -42,9 +42,10 @@ Making Changes
   + Only use spaces for indentation.
   + Create minimal diffs - disable on save actions like reformat source code or organize imports. If you feel the source code should be reformatted create a separate PR for this change.
   + Check for unnecessary whitespace with git diff --check before committing.
-+ Make sure your commit messages are in the proper format.
 + Make sure you have added the necessary tests for your changes.
-+ Run all the tests with `mvn clean verify` to assure nothing else was accidentally broken.
+  + Run all the tests with `mvn clean verify` to assure nothing else was accidentally broken.
++ Edit the relevant `changes.xml` file(s).
++ Make sure your commit messages are in the proper format.
 
 Making Trivial Changes
 ----------------------
