@@ -68,4 +68,9 @@ public class DormandPrince853StateInterpolatorTest extends RungeKuttaStateInterp
         doRestrictBothEnds(1.0e-15, 1.0e-15);
     }
 
+    @Override
+    public void degenerateInterpolation() {
+        doDegenerateInterpolation();
+    }
+
 }

@@ -49,6 +49,14 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
+    <release version="1.9" date="TBD" description="TBD">
+      <action dev="andrewsgoetz" type="fix" issue="issues/112" due-to="andrewsgoetz">
+        Fix interpolation of a pair of ODE states times are the same. Such a pair can
+        appear when a RESET_STATE or RESET_DERIVATIVES event occurs at the integration
+        stop time.
+        Github: fixes #112.
+      </action>
+    </release>
     <release version="1.8" date="2020-12-05" description="This is a maintenance release.">
       <action dev="luc" type="update">
         No changes directly in this module. However, lower level Hipparchus modules did change,

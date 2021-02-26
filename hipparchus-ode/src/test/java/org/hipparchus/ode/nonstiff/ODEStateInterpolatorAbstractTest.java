@@ -160,6 +160,19 @@ public abstract class ODEStateInterpolatorAbstractTest {
 
     }
 
+    @Test
+    public abstract void degenerateInterpolation();
+
+    protected void doDegenerateInterpolation() {
+        AbstractODEStateInterpolator interpolator = setUpInterpolator(new SinCos(), 0.0, new double[] { 0.0, 1.0 }, 0.0);
+        ODEStateAndDerivative interpolatedState = interpolator.getInterpolatedState(0.0);
+        Assert.assertEquals(0.0, interpolatedState.getTime(), 0.0);
+        Assert.assertEquals(0.0, interpolatedState.getPrimaryState()[0], 0.0);
+        Assert.assertEquals(1.0, interpolatedState.getPrimaryState()[1], 0.0);
+        Assert.assertEquals(1.0, interpolatedState.getPrimaryDerivative()[0], 0.0);
+        Assert.assertEquals(0.0, interpolatedState.getPrimaryDerivative()[1], 0.0);
+    }
+
     private void checkRestricted(AbstractODEStateInterpolator original, AbstractODEStateInterpolator restricted,
                                  double epsilon, double epsilonDot) {
         for (double t = restricted.getPreviousState().getTime();
