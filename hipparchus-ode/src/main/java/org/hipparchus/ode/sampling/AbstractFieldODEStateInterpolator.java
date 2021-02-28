@@ -26,6 +26,7 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.util.FastMath;
 
 /** This abstract class represents an interpolator over the last step
  * during an ODE integration.
@@ -158,6 +159,10 @@ public abstract class AbstractFieldODEStateInterpolator<T extends RealFieldEleme
     /** {@inheritDoc} */
     @Override
     public FieldODEStateAndDerivative<T> getInterpolatedState(final T time) {
+        if (globalCurrentState.getTime().subtract(globalPreviousState.getTime()).abs().getReal() <=
+                FastMath.ulp(globalCurrentState.getTime().getReal())) {
+            return globalCurrentState;
+        }
         final T thetaH         = time.subtract(globalPreviousState.getTime());
         final T oneMinusThetaH = globalCurrentState.getTime().subtract(time);
         final T theta          = thetaH.divide(globalCurrentState.getTime().subtract(globalPreviousState.getTime()));

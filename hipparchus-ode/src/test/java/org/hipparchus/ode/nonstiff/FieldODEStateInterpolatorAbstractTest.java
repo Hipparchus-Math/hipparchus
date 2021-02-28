@@ -194,6 +194,22 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
 
     }
 
+    @Test
+    public void degenerateInterpolation() {
+        doDegenerateInterpolation(Decimal64Field.getInstance());
+    }
+
+    protected <T extends RealFieldElement<T>> void doDegenerateInterpolation(Field<T> field) {
+        AbstractFieldODEStateInterpolator<T> interpolator = setUpInterpolator(
+                field, new SinCos<>(field), 0.0, new double[] { 0.0, 1.0 }, 0.0);
+        FieldODEStateAndDerivative<T> interpolatedState = interpolator.getInterpolatedState(field.getZero());
+        Assert.assertEquals(0.0, interpolatedState.getTime().getReal(), 0.0);
+        Assert.assertEquals(0.0, interpolatedState.getPrimaryState()[0].getReal(), 0.0);
+        Assert.assertEquals(1.0, interpolatedState.getPrimaryState()[1].getReal(), 0.0);
+        Assert.assertEquals(1.0, interpolatedState.getPrimaryDerivative()[0].getReal(), 0.0);
+        Assert.assertEquals(0.0, interpolatedState.getPrimaryDerivative()[1].getReal(), 0.0);
+    }
+
     private <T extends RealFieldElement<T>> void checkRestricted(
             AbstractFieldODEStateInterpolator<T> original,
             AbstractFieldODEStateInterpolator<T> restricted,

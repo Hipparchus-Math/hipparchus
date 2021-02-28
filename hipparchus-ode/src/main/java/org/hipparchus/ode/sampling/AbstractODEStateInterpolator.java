@@ -25,6 +25,7 @@ package org.hipparchus.ode.sampling;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.util.FastMath;
 
 /** This abstract class represents an interpolator over the last step
  * during an ODE integration.
@@ -158,6 +159,10 @@ public abstract class AbstractODEStateInterpolator
     /** {@inheritDoc} */
     @Override
     public ODEStateAndDerivative getInterpolatedState(final double time) {
+        if (FastMath.abs(globalCurrentState.getTime() - globalPreviousState.getTime()) <=
+                FastMath.ulp(globalCurrentState.getTime())) {
+            return globalCurrentState;
+        }
         final double thetaH         = time - globalPreviousState.getTime();
         final double oneMinusThetaH = globalCurrentState.getTime() - time;
         final double theta          = thetaH / (globalCurrentState.getTime() - globalPreviousState.getTime());

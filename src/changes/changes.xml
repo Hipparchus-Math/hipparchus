@@ -50,6 +50,12 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="X.Y" date="TBD" description="TBD">
+      <action dev="andrewsgoetz" type="fix" issue="issues/112" due-to="andrewsgoetz">
+        Fix interpolation of a pair of ODE states times are the same. Such a pair can
+        appear when a RESET_STATE or RESET_DERIVATIVES event occurs at the integration
+        stop time.
+        Github: fixes #112.
+      </action>
       <action dev="luc" type="fix" issue="issues/111">
         Allow selecting customized threshold for tests in OrderedComplexEigenDecomposition.
       </action>
