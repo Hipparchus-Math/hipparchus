@@ -45,6 +45,8 @@ public final class MathUtils {
     /** \(\pi^2\) */
     public static final double PI_SQUARED = FastMath.PI * FastMath.PI;
 
+    /** \(\pi/2\). */
+    public static final double SEMI_PI = 0.5 * FastMath.PI;
 
     /**
      * Class contains only static methods.
