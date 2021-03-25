@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="X.Y" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issues/115">
+        Added isInteger predicate for Fraction and BigFraction.
+      </action>
       <action dev="luc" type="add">
         Added the Ryū algorithm to generate very fast the shortest decimal
         representation of a floating point number that maintains round-trip safety.
