@@ -118,7 +118,7 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
 
         /** Build the container from its fields.
          * @param index index in the diagonal matrix
-         * @param eigenalue eigenvalue
+         * @param eigenvalue eigenvalue
          */
         IndexedEigenvalue(final int index, final Complex eigenvalue) {
             this.index      = index;
