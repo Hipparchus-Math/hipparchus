@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="X.Y" date="TBD" description="TBD">
+      <action dev="luc" type="add">
+        Added the Ryū algorithm to generate very fast the shortest decimal
+        representation of a floating point number that maintains round-trip safety.
+      </action>
       <action dev="andrewsgoetz" type="add" issue="issues/116">
         Added Møller's 2Sum algorithm to MathUtils.
       </action>
