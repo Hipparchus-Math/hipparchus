@@ -141,6 +141,32 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
             }
         }
 
+        /** {@inheritDoc} */
+        @Override
+        public boolean equals(final Object other) {
+
+            if (this == other) {
+                return true;
+            }
+
+            if (other instanceof IndexedEigenvalue) {
+                final IndexedEigenvalue rhs = (IndexedEigenvalue) other;
+                return eigenValue.equals(rhs.eigenValue);
+            }
+
+            return false;
+
+        }
+
+        /**
+         * Get a hashCode for the pair.
+         * @return a hash code value for this object
+         */
+        @Override
+        public int hashCode() {
+            return 4563 + index + eigenValue.hashCode();
+        }
+
     }
 
 }
