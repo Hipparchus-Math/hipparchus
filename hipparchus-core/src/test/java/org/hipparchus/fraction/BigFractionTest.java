@@ -96,6 +96,12 @@ public class BigFractionTest {
         }
     }
 
+    @Test
+    public void testIsInteger() {
+        Assert.assertTrue(new BigFraction(12, 12).isInteger());
+        Assert.assertFalse(new BigFraction(12, 11).isInteger());
+    }
+
     @Test(expected=MathIllegalStateException.class)
     public void testGoldenRatio() {
         // the golden ratio is notoriously a difficult number for continuous fraction

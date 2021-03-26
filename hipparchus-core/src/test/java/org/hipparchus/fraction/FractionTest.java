@@ -70,6 +70,12 @@ public class FractionTest {
         assertFraction(15, 1, new Fraction(15.0000000000001));
     }
 
+    @Test
+    public void testIsInteger() {
+        Assert.assertTrue(new Fraction(12, 12).isInteger());
+        Assert.assertFalse(new Fraction(12, 11).isInteger());
+    }
+
     @Test(expected=MathIllegalStateException.class)
     public void testGoldenRatio() {
         // the golden ratio is notoriously a difficult number for continuous fraction

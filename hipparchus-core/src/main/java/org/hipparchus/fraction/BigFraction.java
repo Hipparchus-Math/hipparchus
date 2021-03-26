@@ -458,6 +458,13 @@ public class BigFraction
         return (numerator.signum() == 1) ? this : negate();
     }
 
+    /** Check if a fraction is an integer.
+     * @return true of fraction is an integer
+     */
+    public boolean isInteger() {
+        return numerator.equals(BigInteger.ONE);
+    }
+
     /** Returns the signum function of this {@link BigFraction}.
      * <p>
      * The return value is -1 if the specified value is negative;
