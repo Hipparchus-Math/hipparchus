@@ -78,6 +78,12 @@ public final class RyuDouble {
     /** Split table for negative exponents. */
     private static final int[][] POW5_INV_SPLIT = new int[NEG_TABLE_SIZE][4];
 
+    /** Default low switch level to scientific notation. */
+    public static final int DEFAULT_LOW_EXP = -3;
+
+    /** Default high switch level to scientific notation. */
+    public static final int DEFAULT_HIGH_EXP = 7;
+
     /** Create the tables. */
     static {
         final BigInteger mask = BigInteger.valueOf(1).shiftLeft(POW5_QUARTER_BITCOUNT).subtract(BigInteger.ONE);
@@ -125,9 +131,11 @@ public final class RyuDouble {
      * @param value double number to convert
      * @return shortest string representation
      * @see #doubleToString(double, int, int)
+     * @see #DEFAULT_LOW_EXP
+     * @see #DEFAULT_HIGH_EXP
      */
     public static String doubleToString(double value) {
-        return doubleToString(value, -3, 7);
+        return doubleToString(value, DEFAULT_LOW_EXP, DEFAULT_HIGH_EXP);
     }
 
     /** Convert a double to shortest string representation, preserving full accuracy.
@@ -141,6 +149,8 @@ public final class RyuDouble {
      * @param highExp highest decimal exponent for which decimal notation can be used
      * @return shortest string representation
      * @see #doubleToString(double)
+     * @see #DEFAULT_LOW_EXP
+     * @see #DEFAULT_HIGH_EXP
      */
     public static String doubleToString(double value, int lowExp, int highExp) {
         // Step 1: Decode the floating point number, and unify normalized and subnormal cases.
