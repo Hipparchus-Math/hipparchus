@@ -39,6 +39,12 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  */
 public final class RyuDouble {
 
+    /** Default low switch level to scientific notation. */
+    public static final int DEFAULT_LOW_EXP = -3;
+
+    /** Default high switch level to scientific notation. */
+    public static final int DEFAULT_HIGH_EXP = 7;
+
     /** Number of bits in a double mantissa. */
     private static final int DOUBLE_MANTISSA_BITS = 52;
 
@@ -77,12 +83,6 @@ public final class RyuDouble {
 
     /** Split table for negative exponents. */
     private static final int[][] POW5_INV_SPLIT = new int[NEG_TABLE_SIZE][4];
-
-    /** Default low switch level to scientific notation. */
-    public static final int DEFAULT_LOW_EXP = -3;
-
-    /** Default high switch level to scientific notation. */
-    public static final int DEFAULT_HIGH_EXP = 7;
 
     /** Create the tables. */
     static {
