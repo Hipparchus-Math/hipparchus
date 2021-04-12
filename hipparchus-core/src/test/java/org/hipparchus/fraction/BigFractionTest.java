@@ -99,6 +99,7 @@ public class BigFractionTest {
     @Test
     public void testIsInteger() {
         Assert.assertTrue(new BigFraction(12, 12).isInteger());
+        Assert.assertTrue(new BigFraction(14, 7).isInteger());
         Assert.assertFalse(new BigFraction(12, 11).isInteger());
     }
 

@@ -462,7 +462,7 @@ public class BigFraction
      * @return true of fraction is an integer
      */
     public boolean isInteger() {
-        return numerator.equals(BigInteger.ONE);
+        return denominator.equals(BigInteger.ONE);
     }
 
     /** Returns the signum function of this {@link BigFraction}.

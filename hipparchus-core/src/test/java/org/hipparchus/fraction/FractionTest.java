@@ -73,6 +73,7 @@ public class FractionTest {
     @Test
     public void testIsInteger() {
         Assert.assertTrue(new Fraction(12, 12).isInteger());
+        Assert.assertTrue(new Fraction(14, 7).isInteger());
         Assert.assertFalse(new Fraction(12, 11).isInteger());
     }
 

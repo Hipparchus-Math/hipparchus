@@ -293,7 +293,7 @@ public class Fraction
      * @return true of fraction is an integer
      */
     public boolean isInteger() {
-        return numerator == 1;
+        return denominator == 1;
     }
 
     /** Returns the signum function of this fraction.
