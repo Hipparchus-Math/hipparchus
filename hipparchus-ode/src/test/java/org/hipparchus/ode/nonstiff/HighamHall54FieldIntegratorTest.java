@@ -92,7 +92,7 @@ public class HighamHall54FieldIntegratorTest extends EmbeddedRungeKuttaFieldInte
 
     @Override
     public void testPartialDerivatives() {
-        doTestPartialDerivatives(1.2e-11, new double[] { 6.4e-11, 1.8e-11, 2.4e-12, 2.2e-12, 1.8e-11 });
+        doTestPartialDerivatives(1.2e-11, new double[] { 8.0e-11, 1.8e-11, 2.6e-12, 2.6e-12, 1.8e-11 });
     }
 
     @Test

@@ -21,7 +21,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus</artifactId>
-  <version>1.9-SNAPSHOT</version>
+  <version>2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Hipparchus</name>
@@ -474,7 +474,7 @@
     <!-- Project specific plugin versions -->
 
     <hipparchus.spotbugs-maven-plugin.version>4.1.4</hipparchus.spotbugs-maven-plugin.version>
-    <hipparchus.jacoco-maven-plugin.version>0.8.5</hipparchus.jacoco-maven-plugin.version>
+    <hipparchus.jacoco-maven-plugin.version>0.8.6</hipparchus.jacoco-maven-plugin.version>
     <hipparchus.maven-assembly-plugin.version>3.3.0</hipparchus.maven-assembly-plugin.version>
     <hipparchus.maven-bundle-plugin.version>5.1.1</hipparchus.maven-bundle-plugin.version>
     <hipparchus.build-helper-maven-plugin>3.2.0</hipparchus.build-helper-maven-plugin>

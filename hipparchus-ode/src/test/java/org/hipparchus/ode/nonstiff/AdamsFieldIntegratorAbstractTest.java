@@ -20,6 +20,8 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
+import org.hipparchus.analysis.differentiation.DSFactory;
+import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
@@ -282,8 +284,8 @@ public abstract class AdamsFieldIntegratorAbstractTest {
     @Test(expected=MathIllegalStateException.class)
     public abstract void testStartFailure();
 
-        protected <T extends RealFieldElement<T>> void doTestStartFailure(final Field<T> field) {
-            TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
+    protected <T extends RealFieldElement<T>> void doTestStartFailure(final Field<T> field) {
+        TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
         double minStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.0001).getReal();
         double maxStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).getReal();
         double scalAbsoluteTolerance = 1.0e-6;
@@ -296,6 +298,49 @@ public abstract class AdamsFieldIntegratorAbstractTest {
         TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
         integ.addStepHandler(handler);
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
+
+    }
+
+    @Test
+    public void testIssue118() {
+
+        // init DerivativeStructure factory
+        final DSFactory factory = new DSFactory(3, 3);
+
+        // initial state
+        final double a     = 2.0;
+        final double b     = 1.0;
+        final double omega = 0.5;
+        final Ellipse<DerivativeStructure> ellipse =
+                        new Ellipse<>(factory.variable(0, a), factory.variable(1, b), factory.variable(2, omega));
+        final DerivativeStructure[] initState = ellipse.computeTheoreticalState(factory.constant(0.0));
+
+        // integration over one period
+        final DerivativeStructure t0 = factory.constant(0.0);
+        final DerivativeStructure tf = factory.constant(2.0 * FastMath.PI / omega);
+
+        // ODEs and integrator
+        final FieldExpandableODE<DerivativeStructure> ode = new FieldExpandableODE<>(ellipse);
+        MultistepFieldIntegrator<DerivativeStructure> integrator =
+                        createIntegrator(factory.getDerivativeField(), 6, 1e-3, 1e3, 1e-12, 1e-12);
+
+        integrator.addStepHandler((interpolator, isLast) -> {
+            DerivativeStructure   tK         = interpolator.getCurrentState().getTime();
+            DerivativeStructure[] integrated = interpolator.getCurrentState().getPrimaryState();
+            DerivativeStructure[] thK        = ellipse.computeTheoreticalState(tK);
+            DerivativeStructure[] tkKtrunc   = ellipse.computeTheoreticalState(factory.constant(tK.getReal()));
+            for (int i = 0 ; i < integrated.length; ++i) {
+                final double[] integratedI  = integrated[i].getAllDerivatives();
+                final double[] theoreticalI = thK[i].getAllDerivatives();
+                final double[] truncatedI   = tkKtrunc[i].getAllDerivatives();
+                for (int k = 0; k < factory.getCompiler().getSize(); ++k) {
+                    Assert.assertEquals(truncatedI[k], theoreticalI[k], 1e-15);
+                    Assert.assertEquals(truncatedI[k], integratedI[k],  3e-6);
+                }
+            }
+        });
+
+        integrator.integrate(ode, new FieldODEState<>(t0, initState), tf);
 
     }
 

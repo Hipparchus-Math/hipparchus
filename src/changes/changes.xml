@@ -49,7 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
-    <release version="X.Y" date="TBD" description="TBD">
+    <release version="2.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/118" >
+        Use primitive double for initial step and error factors in Field adaptive step size integrators.
+        Github: fixes #118.
+      </action>
       <action dev="luc" type="add">
         Added the Ryū algorithm to generate very fast the shortest decimal
         representation of a floating point number that maintains round-trip safety.

@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
-    <release version="X.Y" date="TBD" description="TBD">
+    <release version="2.0" date="TBD" description="TBD">
       <action dev="luc" type="add" issue="issues/115">
         Added isInteger predicate for Fraction and BigFraction.
       </action>
