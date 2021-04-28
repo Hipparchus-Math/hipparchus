@@ -3150,7 +3150,33 @@ public class FastMath {
     /**
      * Absolute value.
      * @param x number from which absolute value is requested
+     * @return abs(x), or throws an exception for {@code Integer.MIN_VALUE}
+     */
+    public static int absExact(final int x) {
+        if (x == Integer.MIN_VALUE) {
+            throw new ArithmeticException();
+        }
+        return abs(x);
+    }
+
+    /**
+     * Absolute value.
+     * @param x number from which absolute value is requested
+     * @return abs(x), or throws an exception for {@code Long.MIN_VALUE}
+     * @since 2.0
+     */
+    public static long absExact(final long x) {
+        if (x == Long.MIN_VALUE) {
+            throw new ArithmeticException();
+        }
+        return abs(x);
+    }
+
+    /**
+     * Absolute value.
+     * @param x number from which absolute value is requested
      * @return abs(x)
+     * @since 2.0
      */
     public static float abs(final float x) {
         return Float.intBitsToFloat(MASK_NON_SIGN_INT & Float.floatToRawIntBits(x));
@@ -3163,6 +3189,32 @@ public class FastMath {
      */
     public static double abs(double x) {
         return Double.longBitsToDouble(MASK_NON_SIGN_LONG & Double.doubleToRawLongBits(x));
+    }
+
+    /**
+     * Negates the argument.
+     * @param x number from which opposite value is requested
+     * @return -x, or throws an exception for {@code Integer.MIN_VALUE}
+     * @since 2.0
+     */
+    public static int negateExact(final int x) {
+        if (x == Integer.MIN_VALUE) {
+            throw new ArithmeticException();
+        }
+        return -x;
+    }
+
+    /**
+     * Negates the argument.
+     * @param x number from which opposite value is requested
+     * @return -x, or throws an exception for {@code Long.MIN_VALUE}
+     * @since 2.0
+     */
+    public static long negateExact(final long x) {
+        if (x == Long.MIN_VALUE) {
+            throw new ArithmeticException();
+        }
+        return -x;
     }
 
     /**

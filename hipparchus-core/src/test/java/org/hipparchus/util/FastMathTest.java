@@ -1940,6 +1940,62 @@ public class FastMathTest {
     }
 
     @Test
+    public void testAbsExactInt() {
+        Assert.assertEquals(12, FastMath.absExact(+12));
+        Assert.assertEquals(12, FastMath.absExact(-12));
+        Assert.assertEquals(Integer.MAX_VALUE, FastMath.absExact(Integer.MAX_VALUE));
+        Assert.assertEquals(Integer.MAX_VALUE, FastMath.absExact(-Integer.MAX_VALUE));
+        try {
+            FastMath.absExact(Integer.MIN_VALUE);
+            Assert.fail("an exception should have been thrown");
+        } catch (ArithmeticException ae) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testAbsExactLong() {
+        Assert.assertEquals(12l, FastMath.absExact(+12l));
+        Assert.assertEquals(12l, FastMath.absExact(-12l));
+        Assert.assertEquals(Long.MAX_VALUE, FastMath.absExact(Long.MAX_VALUE));
+        Assert.assertEquals(Long.MAX_VALUE, FastMath.absExact(-Long.MAX_VALUE));
+        try {
+            FastMath.absExact(Long.MIN_VALUE);
+            Assert.fail("an exception should have been thrown");
+        } catch (ArithmeticException ae) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testNegateExactInt() {
+        Assert.assertEquals(-12, FastMath.negateExact(+12));
+        Assert.assertEquals(12, FastMath.negateExact(-12));
+        Assert.assertEquals(-Integer.MAX_VALUE, FastMath.negateExact(Integer.MAX_VALUE));
+        Assert.assertEquals(Integer.MAX_VALUE, FastMath.negateExact(-Integer.MAX_VALUE));
+        try {
+            FastMath.absExact(Integer.MIN_VALUE);
+            Assert.fail("an exception should have been thrown");
+        } catch (ArithmeticException ae) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testNegateExactLong() {
+        Assert.assertEquals(-12l, FastMath.negateExact(+12l));
+        Assert.assertEquals(12l, FastMath.negateExact(-12l));
+        Assert.assertEquals(-Long.MAX_VALUE, FastMath.negateExact(Long.MAX_VALUE));
+        Assert.assertEquals(Long.MAX_VALUE, FastMath.negateExact(-Long.MAX_VALUE));
+        try {
+            FastMath.absExact(Long.MIN_VALUE);
+            Assert.fail("an exception should have been thrown");
+        } catch (ArithmeticException ae) {
+            // expected
+        }
+    }
+
+    @Test
     public void testToIntExact() {
         for (int n = -1000; n < 1000; ++n) {
             assertEquals(n, FastMath.toIntExact(0l + n));
