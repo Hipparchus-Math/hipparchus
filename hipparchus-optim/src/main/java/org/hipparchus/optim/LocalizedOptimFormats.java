@@ -57,7 +57,8 @@ public enum LocalizedOptimFormats implements Localizable {
     TRUST_REGION_STEP_FAILED("trust region step has failed to reduce Q"),
     UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN("unable to perform Q.R decomposition on the {0}x{1} jacobian matrix"),
     UNABLE_TO_SOLVE_SINGULAR_PROBLEM("unable to solve: singular problem"),
-    UNBOUNDED_SOLUTION("unbounded solution");
+    UNBOUNDED_SOLUTION("unbounded solution"),
+    UNEQUAL_VECTOR_DIMENSIONS("unequal vector dimensions : {0} and {1}");
 
     // CHECKSTYLE: resume JavadocVariable
     // CHECKSTYLE: resume MultipleVariableDeclarations
