@@ -33,6 +33,7 @@ import org.hipparchus.linear.FieldMatrixPreservingVisitor;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -249,8 +250,8 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
             T[] predictedY = null;
             final T[] predictedScaled = MathArrays.buildArray(getField(), y.length);
             Array2DRowFieldMatrix<T> predictedNordsieck = null;
-            T error = getField().getZero().add(10);
-            while (error.subtract(1.0).getReal() >= 0.0) {
+            double error = 10;
+            while (error >= 1.0) {
 
                 // predict a first estimate of the state at step end (P in the PECE sequence)
                 predictedY = stepEnd.getCompleteState();
@@ -266,11 +267,15 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
                 updateHighOrderDerivativesPhase2(scaled, predictedScaled, predictedNordsieck);
 
                 // apply correction (C in the PECE sequence)
-                error = predictedNordsieck.walkInOptimizedOrder(new Corrector(y, predictedScaled, predictedY));
+                error = predictedNordsieck.walkInOptimizedOrder(new Corrector(y, predictedScaled, predictedY)).getReal();
+                if (Double.isNaN(error)) {
+                    throw new MathIllegalStateException(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION,
+                                                        stepEnd.getTime());
+                }
 
-                if (error.subtract(1.0).getReal() >= 0.0) {
+                if (error >= 1.0) {
                     // reject the step and attempt to reduce error by stepsize control
-                    final T factor = computeStepGrowShrinkFactor(error);
+                    final double factor = computeStepGrowShrinkFactor(error);
                     rescale(filterStep(getStepSize().multiply(factor), forward, false));
                     stepEnd = AdamsFieldStateInterpolator.taylor(equations.getMapper(), getStepStart(),
                                                                  getStepStart().getTime().add(getStepSize()),
@@ -320,9 +325,9 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
                 } else {
 
                     // stepsize control for next step
-                    final T  factor     = computeStepGrowShrinkFactor(error);
-                    final T  scaledH    = getStepSize().multiply(factor);
-                    final T  nextT      = getStepStart().getTime().add(scaledH);
+                    final double  factor     = computeStepGrowShrinkFactor(error);
+                    final T       scaledH    = getStepSize().multiply(factor);
+                    final T       nextT      = getStepStart().getTime().add(scaledH);
                     final boolean nextIsLast = forward ?
                                                nextT.subtract(finalTime).getReal() >= 0 :
                                                nextT.subtract(finalTime).getReal() <= 0;

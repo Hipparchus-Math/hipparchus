@@ -26,8 +26,8 @@ import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
-import org.hipparchus.util.MathUtils;
 
 
 /**
@@ -62,24 +62,24 @@ public class DormandPrince54FieldIntegrator<T extends RealFieldElement<T>>
     private static final String METHOD_NAME = "Dormand-Prince 5(4)";
 
     /** Error array, element 1. */
-    private final T e1;
+    private static final double E1 =     71.0 / 57600.0;
 
     // element 2 is zero, so it is neither stored nor used
 
     /** Error array, element 3. */
-    private final T e3;
+    private static final double E3 =    -71.0 / 16695.0;
 
     /** Error array, element 4. */
-    private final T e4;
+    private static final double E4 =     71.0 / 1920.0;
 
     /** Error array, element 5. */
-    private final T e5;
+    private static final double E5 = -17253.0 / 339200.0;
 
     /** Error array, element 6. */
-    private final T e6;
+    private static final double E6 =     22.0 / 525.0;
 
     /** Error array, element 7. */
-    private final T e7;
+    private static final double E7 =     -1.0 / 40.0;
 
     /** Simple constructor.
      * Build a fifth order Dormand-Prince integrator with the given step bounds
@@ -99,12 +99,6 @@ public class DormandPrince54FieldIntegrator<T extends RealFieldElement<T>>
                                           final double scalRelativeTolerance) {
         super(field, METHOD_NAME, 6,
               minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
-        e1 = fraction(    71,  57600);
-        e3 = fraction(   -71,  16695);
-        e4 = fraction(    71,   1920);
-        e5 = fraction(-17253, 339200);
-        e6 = fraction(    22,    525);
-        e7 = fraction(    -1,     40);
     }
 
     /** Simple constructor.
@@ -125,12 +119,6 @@ public class DormandPrince54FieldIntegrator<T extends RealFieldElement<T>>
                                           final double[] vecRelativeTolerance) {
         super(field, METHOD_NAME, 6,
               minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
-        e1 = fraction(    71,  57600);
-        e3 = fraction(   -71,  16695);
-        e4 = fraction(    71,   1920);
-        e5 = fraction(-17253, 339200);
-        e6 = fraction(    22,    525);
-        e7 = fraction(    -1,     40);
     }
 
     /** {@inheritDoc} */
@@ -211,28 +199,25 @@ public class DormandPrince54FieldIntegrator<T extends RealFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    protected T estimateError(final T[][] yDotK, final T[] y0, final T[] y1, final T h) {
+    protected double estimateError(final T[][] yDotK, final T[] y0, final T[] y1, final T h) {
 
-        T error = getField().getZero();
+        double error = 0;
 
         for (int j = 0; j < mainSetDimension; ++j) {
-            final T errSum =     yDotK[0][j].multiply(e1).
-                             add(yDotK[2][j].multiply(e3)).
-                             add(yDotK[3][j].multiply(e4)).
-                             add(yDotK[4][j].multiply(e5)).
-                             add(yDotK[5][j].multiply(e6)).
-                             add(yDotK[6][j].multiply(e7));
+            final double errSum = E1 * yDotK[0][j].getReal() +  E3 * yDotK[2][j].getReal() +
+                                  E4 * yDotK[3][j].getReal() +  E5 * yDotK[4][j].getReal() +
+                                  E6 * yDotK[5][j].getReal() +  E7 * yDotK[6][j].getReal();
 
-            final T yScale = MathUtils.max(y0[j].abs(), y1[j].abs());
-            final T tol    = (vecAbsoluteTolerance == null) ?
-                             yScale.multiply(scalRelativeTolerance).add(scalAbsoluteTolerance) :
-                             yScale.multiply(vecRelativeTolerance[j]).add(vecAbsoluteTolerance[j]);
-            final T ratio  = h.multiply(errSum).divide(tol);
-            error = error.add(ratio.multiply(ratio));
+            final double yScale = FastMath.max(FastMath.abs(y0[j].getReal()), FastMath.abs(y1[j].getReal()));
+            final double tol = (vecAbsoluteTolerance == null) ?
+                               (scalAbsoluteTolerance + scalRelativeTolerance * yScale) :
+                               (vecAbsoluteTolerance[j] + vecRelativeTolerance[j] * yScale);
+            final double ratio  = h.getReal() * errSum / tol;
+            error += ratio * ratio;
 
         }
 
-        return error.divide(mainSetDimension).sqrt();
+        return FastMath.sqrt(error / mainSetDimension);
 
     }
 
