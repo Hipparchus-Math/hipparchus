@@ -211,12 +211,10 @@ public class AdamsBashforthIntegrator extends AdamsIntegrator {
                                    final double[] predictedScaled,
                                    final RealMatrix predictedNordsieck) {
 
+        final StepsizeHelper helper = getStepSizeHelper();
         double error = 0;
-        for (int i = 0; i < mainSetDimension; ++i) {
-            final double yScale = FastMath.abs(predictedState[i]);
-            final double tol = (vecAbsoluteTolerance == null) ?
-                               (scalAbsoluteTolerance + scalRelativeTolerance * yScale) :
-                               (vecAbsoluteTolerance[i] + vecRelativeTolerance[i] * yScale);
+        for (int i = 0; i < helper.getMainSetDimension(); ++i) {
+            final double tol = helper.getTolerance(i, FastMath.abs(predictedState[i]));
 
             // apply Taylor formula from high order to low order,
             // for the sake of numerical accuracy
@@ -233,7 +231,7 @@ public class AdamsBashforthIntegrator extends AdamsIntegrator {
 
         }
 
-        return FastMath.sqrt(error / mainSetDimension);
+        return FastMath.sqrt(error / helper.getMainSetDimension());
 
     }
 

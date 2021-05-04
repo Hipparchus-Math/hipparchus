@@ -37,10 +37,10 @@ import org.hipparchus.util.FastMath;
 public class HighamHall54Integrator extends EmbeddedRungeKuttaIntegrator {
 
     /** Integrator method name. */
-    private static final String METHOD_NAME = "Higham-Hall 5(4)";
+    static final String METHOD_NAME = "Higham-Hall 5(4)";
 
     /** Error weights Butcher array. */
-    private static final double[] STATIC_E = {
+    static final double[] STATIC_E = {
         -1.0/20.0, 0.0, 81.0/160.0, -6.0/5.0, 25.0/32.0, 1.0/16.0, -1.0/10.0
     };
 
@@ -134,24 +134,22 @@ public class HighamHall54Integrator extends EmbeddedRungeKuttaIntegrator {
                                    final double[] y0, final double[] y1,
                                    final double h) {
 
+        final StepsizeHelper helper = getStepSizeHelper();
         double error = 0;
 
-        for (int j = 0; j < mainSetDimension; ++j) {
+        for (int j = 0; j < helper.getMainSetDimension(); ++j) {
             double errSum = STATIC_E[0] * yDotK[0][j];
             for (int l = 1; l < STATIC_E.length; ++l) {
                 errSum += STATIC_E[l] * yDotK[l][j];
             }
 
-            final double yScale = FastMath.max(FastMath.abs(y0[j]), FastMath.abs(y1[j]));
-            final double tol = (vecAbsoluteTolerance == null) ?
-                               (scalAbsoluteTolerance + scalRelativeTolerance * yScale) :
-                               (vecAbsoluteTolerance[j] + vecRelativeTolerance[j] * yScale);
+            final double tol = helper.getTolerance(j, FastMath.max(FastMath.abs(y0[j]), FastMath.abs(y1[j])));
             final double ratio  = h * errSum / tol;
             error += ratio * ratio;
 
         }
 
-        return FastMath.sqrt(error / mainSetDimension);
+        return FastMath.sqrt(error / helper.getMainSetDimension());
 
     }
 

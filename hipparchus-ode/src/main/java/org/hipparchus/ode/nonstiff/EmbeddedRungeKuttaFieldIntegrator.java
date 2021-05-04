@@ -247,15 +247,10 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends RealFieldEleme
                 yDotK[0] = getStepStart().getCompleteDerivative();
 
                 if (firstTime) {
-                    final T[] scale = MathArrays.buildArray(getField(), mainSetDimension);
-                    if (vecAbsoluteTolerance == null) {
-                        for (int i = 0; i < scale.length; ++i) {
-                            scale[i] = y[i].abs().multiply(scalRelativeTolerance).add(scalAbsoluteTolerance);
-                        }
-                    } else {
-                        for (int i = 0; i < scale.length; ++i) {
-                            scale[i] = y[i].abs().multiply(vecRelativeTolerance[i]).add(vecAbsoluteTolerance[i]);
-                        }
+                    final StepsizeHelper helper = getStepSizeHelper();
+                    final T[] scale = MathArrays.buildArray(getField(), helper.getMainSetDimension());
+                    for (int i = 0; i < scale.length; ++i) {
+                        scale[i] = helper.getTolerance(i, y[i].abs());
                     }
                     hNew = getField().getZero().add(initializeStep(forward, getOrder(), scale, getStepStart(), equations.getMapper()));
                     firstTime = false;

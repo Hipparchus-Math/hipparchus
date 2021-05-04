@@ -58,29 +58,6 @@ import org.hipparchus.util.MathArrays;
 public class DormandPrince54FieldIntegrator<T extends RealFieldElement<T>>
     extends EmbeddedRungeKuttaFieldIntegrator<T> {
 
-    /** Integrator method name. */
-    private static final String METHOD_NAME = "Dormand-Prince 5(4)";
-
-    /** Error array, element 1. */
-    private static final double E1 =     71.0 / 57600.0;
-
-    // element 2 is zero, so it is neither stored nor used
-
-    /** Error array, element 3. */
-    private static final double E3 =    -71.0 / 16695.0;
-
-    /** Error array, element 4. */
-    private static final double E4 =     71.0 / 1920.0;
-
-    /** Error array, element 5. */
-    private static final double E5 = -17253.0 / 339200.0;
-
-    /** Error array, element 6. */
-    private static final double E6 =     22.0 / 525.0;
-
-    /** Error array, element 7. */
-    private static final double E7 =     -1.0 / 40.0;
-
     /** Simple constructor.
      * Build a fifth order Dormand-Prince integrator with the given step bounds
      * @param field field to which the time and state vector elements belong
@@ -97,7 +74,7 @@ public class DormandPrince54FieldIntegrator<T extends RealFieldElement<T>>
                                           final double minStep, final double maxStep,
                                           final double scalAbsoluteTolerance,
                                           final double scalRelativeTolerance) {
-        super(field, METHOD_NAME, 6,
+        super(field, DormandPrince54Integrator.METHOD_NAME, 6,
               minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
     }
 
@@ -117,7 +94,7 @@ public class DormandPrince54FieldIntegrator<T extends RealFieldElement<T>>
                                           final double minStep, final double maxStep,
                                           final double[] vecAbsoluteTolerance,
                                           final double[] vecRelativeTolerance) {
-        super(field, METHOD_NAME, 6,
+        super(field, DormandPrince54Integrator.METHOD_NAME, 6,
               minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
     }
 
@@ -201,23 +178,20 @@ public class DormandPrince54FieldIntegrator<T extends RealFieldElement<T>>
     @Override
     protected double estimateError(final T[][] yDotK, final T[] y0, final T[] y1, final T h) {
 
+        final StepsizeHelper helper = getStepSizeHelper();
         double error = 0;
 
-        for (int j = 0; j < mainSetDimension; ++j) {
-            final double errSum = E1 * yDotK[0][j].getReal() +  E3 * yDotK[2][j].getReal() +
-                                  E4 * yDotK[3][j].getReal() +  E5 * yDotK[4][j].getReal() +
-                                  E6 * yDotK[5][j].getReal() +  E7 * yDotK[6][j].getReal();
-
-            final double yScale = FastMath.max(FastMath.abs(y0[j].getReal()), FastMath.abs(y1[j].getReal()));
-            final double tol = (vecAbsoluteTolerance == null) ?
-                               (scalAbsoluteTolerance + scalRelativeTolerance * yScale) :
-                               (vecAbsoluteTolerance[j] + vecRelativeTolerance[j] * yScale);
+        for (int j = 0; j < helper.getMainSetDimension(); ++j) {
+            final double errSum = DormandPrince54Integrator.E1 * yDotK[0][j].getReal() +  DormandPrince54Integrator.E3 * yDotK[2][j].getReal() +
+                                  DormandPrince54Integrator.E4 * yDotK[3][j].getReal() +  DormandPrince54Integrator.E5 * yDotK[4][j].getReal() +
+                                  DormandPrince54Integrator.E6 * yDotK[5][j].getReal() +  DormandPrince54Integrator.E7 * yDotK[6][j].getReal();
+            final double tol = helper.getTolerance(j, FastMath.max(FastMath.abs(y0[j].getReal()), FastMath.abs(y1[j].getReal())));
             final double ratio  = h.getReal() * errSum / tol;
             error += ratio * ratio;
 
         }
 
-        return FastMath.sqrt(error / mainSetDimension);
+        return FastMath.sqrt(error / helper.getMainSetDimension());
 
     }
 

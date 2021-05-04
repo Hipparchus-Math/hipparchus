@@ -412,20 +412,18 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
         @Override
         public double end() {
 
+            final StepsizeHelper helper = getStepSizeHelper();
             double error = 0;
             for (int i = 0; i < after.length; ++i) {
                 after[i] += previous[i] + scaled[i];
-                if (i < mainSetDimension) {
-                    final double yScale = FastMath.max(FastMath.abs(previous[i]), FastMath.abs(after[i]));
-                    final double tol    = (vecAbsoluteTolerance == null) ?
-                                          (scalAbsoluteTolerance + scalRelativeTolerance * yScale) :
-                                          (vecAbsoluteTolerance[i] + vecRelativeTolerance[i] * yScale);
-                    final double ratio  = (after[i] - before[i]) / tol; // (corrected-predicted)/tol
+                if (i < helper.getMainSetDimension()) {
+                    final double tol   = helper.getTolerance(i, FastMath.max(FastMath.abs(previous[i]), FastMath.abs(after[i])));
+                    final double ratio = (after[i] - before[i]) / tol; // (corrected-predicted)/tol
                     error += ratio * ratio;
                 }
             }
 
-            return FastMath.sqrt(error / mainSetDimension);
+            return FastMath.sqrt(error / helper.getMainSetDimension());
 
         }
     }

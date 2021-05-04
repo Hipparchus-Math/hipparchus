@@ -396,16 +396,9 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
      * @param scale scaling array to update (can be shorter than state)
      */
     private void rescale(final double[] y1, final double[] y2, final double[] scale) {
-        if (vecAbsoluteTolerance == null) {
-            for (int i = 0; i < scale.length; ++i) {
-                final double yi = FastMath.max(FastMath.abs(y1[i]), FastMath.abs(y2[i]));
-                scale[i] = scalAbsoluteTolerance + scalRelativeTolerance * yi;
-            }
-        } else {
-            for (int i = 0; i < scale.length; ++i) {
-                final double yi = FastMath.max(FastMath.abs(y1[i]), FastMath.abs(y2[i]));
-                scale[i] = vecAbsoluteTolerance[i] + vecRelativeTolerance[i] * yi;
-            }
+        final StepsizeHelper helper = getStepSizeHelper();
+        for (int i = 0; i < scale.length; ++i) {
+            scale[i] = helper.getTolerance(i, FastMath.max(FastMath.abs(y1[i]), FastMath.abs(y2[i])));
         }
     }
 
@@ -543,11 +536,12 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
         final double[][] yMidDots = new double[1 + 2 * sequence.length][y.length];
 
         // initial scaling
+        final int mainSetDimension = getStepSizeHelper().getMainSetDimension();
         final double[] scale = new double[mainSetDimension];
         rescale(y, y, scale);
 
         // initial order selection
-        final double tol = (vecRelativeTolerance == null) ? scalRelativeTolerance : vecRelativeTolerance[0];
+        final double tol    = getStepSizeHelper().getRelativeTolerance(0);
         final double log10R = FastMath.log10(FastMath.max(1.0e-10, tol));
         int targetIter = FastMath.max(1,
                                       FastMath.min(sequence.length - 2,

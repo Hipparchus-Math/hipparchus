@@ -24,7 +24,6 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
@@ -73,29 +72,8 @@ import org.hipparchus.util.MathArrays;
 public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement<T>>
     extends AbstractFieldIntegrator<T> {
 
-    /** Allowed absolute scalar error. */
-    protected double scalAbsoluteTolerance;
-
-    /** Allowed relative scalar error. */
-    protected double scalRelativeTolerance;
-
-    /** Allowed absolute vectorial error. */
-    protected double[] vecAbsoluteTolerance;
-
-    /** Allowed relative vectorial error. */
-    protected double[] vecRelativeTolerance;
-
-    /** Main set dimension. */
-    protected int mainSetDimension;
-
-    /** User supplied initial step. */
-    private double initialStep;
-
-    /** Minimal step. */
-    private double minStep;
-
-    /** Maximal step. */
-    private double maxStep;
+    /** Helper for step size control. */
+    private StepsizeHelper stepsizeHelper;
 
     /** Build an integrator with the given stepsize bounds.
      * The default step handler does nothing.
@@ -114,11 +92,9 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
                                            final double minStep, final double maxStep,
                                            final double scalAbsoluteTolerance,
                                            final double scalRelativeTolerance) {
-
         super(field, name);
-        setStepSizeControl(minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
+        stepsizeHelper = new StepsizeHelper(minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
         resetInternalState();
-
     }
 
     /** Build an integrator with the given stepsize bounds.
@@ -138,11 +114,9 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
                                            final double minStep, final double maxStep,
                                            final double[] vecAbsoluteTolerance,
                                            final double[] vecRelativeTolerance) {
-
         super(field, name);
-        setStepSizeControl(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
+        stepsizeHelper = new StepsizeHelper(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
         resetInternalState();
-
     }
 
     /** Set the adaptive step size control parameters.
@@ -160,18 +134,8 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
      * @param relativeTolerance allowed relative error
      */
     public void setStepSizeControl(final double minimalStep, final double maximalStep,
-                                   final double absoluteTolerance,
-                                   final double relativeTolerance) {
-
-        minStep     = FastMath.abs(minimalStep);
-        maxStep     = FastMath.abs(maximalStep);
-        initialStep = -1;
-
-        scalAbsoluteTolerance = absoluteTolerance;
-        scalRelativeTolerance = relativeTolerance;
-        vecAbsoluteTolerance  = null;
-        vecRelativeTolerance  = null;
-
+                                   final double absoluteTolerance, final double relativeTolerance) {
+        stepsizeHelper = new StepsizeHelper(minimalStep, maximalStep, absoluteTolerance, relativeTolerance);
     }
 
     /** Set the adaptive step size control parameters.
@@ -191,16 +155,15 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
     public void setStepSizeControl(final double minimalStep, final double maximalStep,
                                    final double[] absoluteTolerance,
                                    final double[] relativeTolerance) {
+        stepsizeHelper = new StepsizeHelper(minimalStep, maximalStep, absoluteTolerance, relativeTolerance);
+    }
 
-        minStep     = FastMath.abs(minimalStep);
-        maxStep     = FastMath.abs(maximalStep);
-        initialStep = -1;
-
-        scalAbsoluteTolerance = 0;
-        scalRelativeTolerance = 0;
-        vecAbsoluteTolerance  = absoluteTolerance.clone();
-        vecRelativeTolerance  = relativeTolerance.clone();
-
+    /** Get the stepsize helper.
+     * @return stepsize helper
+     * @since 2.0
+     */
+    protected StepsizeHelper getStepSizeHelper() {
+        return stepsizeHelper;
     }
 
     /** Set the initial step size.
@@ -215,32 +178,15 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
      * ignore the value and compute the initial step size by itself)
      */
     public void setInitialStepSize(final double initialStepSize) {
-        if (initialStepSize < minStep || initialStepSize > maxStep) {
-            initialStep = -1;
-        } else {
-            initialStep = initialStepSize;
-        }
+        stepsizeHelper.setInitialStepSize(initialStepSize);
     }
 
     /** {@inheritDoc} */
     @Override
     protected void sanityChecks(final FieldODEState<T> initialState, final T t)
         throws MathIllegalArgumentException {
-
         super.sanityChecks(initialState, t);
-
-        mainSetDimension = initialState.getPrimaryStateDimension();
-
-        if (vecAbsoluteTolerance != null && vecAbsoluteTolerance.length != mainSetDimension) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   mainSetDimension, vecAbsoluteTolerance.length);
-        }
-
-        if (vecRelativeTolerance != null && vecRelativeTolerance.length != mainSetDimension) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   mainSetDimension, vecRelativeTolerance.length);
-        }
-
+        stepsizeHelper.setMainSetDimension(initialState.getPrimaryStateDimension());
     }
 
     /** Initialize the integration step.
@@ -258,9 +204,9 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
                                  final FieldEquationsMapper<T> mapper)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
-        if (initialStep > 0) {
+        if (stepsizeHelper.getInitialStep() > 0) {
             // use the user provided value
-            return forward ? initialStep : -initialStep;
+            return forward ? stepsizeHelper.getInitialStep() : -stepsizeHelper.getInitialStep();
         }
 
         // very rough first guess : h = 0.01 * ||y/scale|| / ||y'/scale||
@@ -331,6 +277,9 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
     protected T filterStep(final T h, final boolean forward, final boolean acceptSmall)
         throws MathIllegalArgumentException {
 
+        final double minStep = stepsizeHelper.getMinStep();
+        final double maxStep = stepsizeHelper.getMaxStep();
+
         T filteredH = h;
         if (h.abs().subtract(minStep).getReal() < 0) {
             if (acceptSmall) {
@@ -354,21 +303,21 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
     /** Reset internal state to dummy values. */
     protected void resetInternalState() {
         setStepStart(null);
-        setStepSize(getField().getZero().add(FastMath.sqrt(minStep * maxStep)));
+        setStepSize(getField().getZero().add(stepsizeHelper.getDummyStepsize()));
     }
 
     /** Get the minimal step.
      * @return minimal step
      */
     public double getMinStep() {
-        return minStep;
+        return stepsizeHelper.getMinStep();
     }
 
     /** Get the maximal step.
      * @return maximal step
      */
     public double getMaxStep() {
-        return maxStep;
+        return stepsizeHelper.getMaxStep();
     }
 
 }

@@ -221,12 +221,10 @@ public class AdamsBashforthFieldIntegrator<T extends RealFieldElement<T>> extend
                                    final T[] predictedScaled,
                                    final FieldMatrix<T> predictedNordsieck) {
 
+        final StepsizeHelper helper = getStepSizeHelper();
         double error = 0;
-        for (int i = 0; i < mainSetDimension; ++i) {
-            final double yScale = FastMath.abs(predictedState[i].getReal());
-            final double tol = (vecAbsoluteTolerance == null) ?
-                                                               (scalAbsoluteTolerance + scalRelativeTolerance * yScale) :
-                                                                   (vecAbsoluteTolerance[i] + vecRelativeTolerance[i] * yScale);
+        for (int i = 0; i < helper.getMainSetDimension(); ++i) {
+            final double tol = helper.getTolerance(i, FastMath.abs(predictedState[i].getReal()));
 
             // apply Taylor formula from high order to low order,
             // for the sake of numerical accuracy
@@ -243,7 +241,7 @@ public class AdamsBashforthFieldIntegrator<T extends RealFieldElement<T>> extend
 
         }
 
-        return FastMath.sqrt(error / mainSetDimension);
+        return FastMath.sqrt(error / helper.getMainSetDimension());
 
     }
 

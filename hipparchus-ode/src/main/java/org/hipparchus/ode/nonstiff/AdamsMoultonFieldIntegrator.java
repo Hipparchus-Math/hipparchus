@@ -427,20 +427,18 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
         @Override
         public T end() {
 
+            final StepsizeHelper helper = getStepSizeHelper();
             T error = getField().getZero();
             for (int i = 0; i < after.length; ++i) {
                 after[i] = after[i].add(previous[i].add(scaled[i]));
-                if (i < mainSetDimension) {
-                    final T yScale = MathUtils.max(previous[i].abs(), after[i].abs());
-                    final T tol = (vecAbsoluteTolerance == null) ?
-                                  yScale.multiply(scalRelativeTolerance).add(scalAbsoluteTolerance) :
-                                  yScale.multiply(vecRelativeTolerance[i]).add(vecAbsoluteTolerance[i]);
-                    final T ratio  = after[i].subtract(before[i]).divide(tol); // (corrected-predicted)/tol
+                if (i < helper.getMainSetDimension()) {
+                    final T tol   = helper.getTolerance(i, MathUtils.max(previous[i].abs(), after[i].abs()));
+                    final T ratio = after[i].subtract(before[i]).divide(tol); // (corrected-predicted)/tol
                     error = error.add(ratio.multiply(ratio));
                 }
             }
 
-            return error.divide(mainSetDimension).sqrt();
+            return error.divide(helper.getMainSetDimension()).sqrt();
 
         }
     }

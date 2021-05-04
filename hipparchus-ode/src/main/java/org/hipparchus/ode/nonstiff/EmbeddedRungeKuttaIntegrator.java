@@ -218,15 +218,10 @@ public abstract class EmbeddedRungeKuttaIntegrator
                 yDotK[0] = getStepStart().getCompleteDerivative();
 
                 if (firstTime) {
-                    final double[] scale = new double[mainSetDimension];
-                    if (vecAbsoluteTolerance == null) {
-                        for (int i = 0; i < scale.length; ++i) {
-                            scale[i] = scalAbsoluteTolerance + scalRelativeTolerance * FastMath.abs(y[i]);
-                        }
-                    } else {
-                        for (int i = 0; i < scale.length; ++i) {
-                            scale[i] = vecAbsoluteTolerance[i] + vecRelativeTolerance[i] * FastMath.abs(y[i]);
-                        }
+                    final StepsizeHelper helper = getStepSizeHelper();
+                    final double[] scale = new double[helper.getMainSetDimension()];
+                    for (int i = 0; i < scale.length; ++i) {
+                        scale[i] = helper.getTolerance(i, FastMath.abs(y[i]));
                     }
                     hNew = initializeStep(forward, getOrder(), scale, getStepStart(), equations.getMapper());
                     firstTime = false;

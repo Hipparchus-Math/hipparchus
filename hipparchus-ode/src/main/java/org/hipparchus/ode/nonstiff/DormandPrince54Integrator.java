@@ -49,27 +49,27 @@ import org.hipparchus.util.FastMath;
 public class DormandPrince54Integrator extends EmbeddedRungeKuttaIntegrator {
 
     /** Integrator method name. */
-    private static final String METHOD_NAME = "Dormand-Prince 5(4)";
+    static final String METHOD_NAME = "Dormand-Prince 5(4)";
 
     /** Error array, element 1. */
-    private static final double E1 =     71.0 / 57600.0;
+    static final double E1 =     71.0 / 57600.0;
 
     // element 2 is zero, so it is neither stored nor used
 
     /** Error array, element 3. */
-    private static final double E3 =    -71.0 / 16695.0;
+    static final double E3 =    -71.0 / 16695.0;
 
     /** Error array, element 4. */
-    private static final double E4 =     71.0 / 1920.0;
+    static final double E4 =     71.0 / 1920.0;
 
     /** Error array, element 5. */
-    private static final double E5 = -17253.0 / 339200.0;
+    static final double E5 = -17253.0 / 339200.0;
 
     /** Error array, element 6. */
-    private static final double E6 =     22.0 / 525.0;
+    static final double E6 =     22.0 / 525.0;
 
     /** Error array, element 7. */
-    private static final double E7 =     -1.0 / 40.0;
+    static final double E7 =     -1.0 / 40.0;
 
     /** Simple constructor.
      * Build a fifth order Dormand-Prince integrator with the given step bounds
@@ -161,23 +161,21 @@ public class DormandPrince54Integrator extends EmbeddedRungeKuttaIntegrator {
                                    final double[] y0, final double[] y1,
                                    final double h) {
 
+        final StepsizeHelper helper = getStepSizeHelper();
         double error = 0;
 
-        for (int j = 0; j < mainSetDimension; ++j) {
+        for (int j = 0; j < helper.getMainSetDimension(); ++j) {
             final double errSum = E1 * yDotK[0][j] +  E3 * yDotK[2][j] +
                                   E4 * yDotK[3][j] +  E5 * yDotK[4][j] +
                                   E6 * yDotK[5][j] +  E7 * yDotK[6][j];
 
-            final double yScale = FastMath.max(FastMath.abs(y0[j]), FastMath.abs(y1[j]));
-            final double tol = (vecAbsoluteTolerance == null) ?
-                               (scalAbsoluteTolerance + scalRelativeTolerance * yScale) :
-                               (vecAbsoluteTolerance[j] + vecRelativeTolerance[j] * yScale);
+            final double tol = helper.getTolerance(j, FastMath.max(FastMath.abs(y0[j]), FastMath.abs(y1[j])));
             final double ratio  = h * errSum / tol;
             error += ratio * ratio;
 
         }
 
-        return FastMath.sqrt(error / mainSetDimension);
+        return FastMath.sqrt(error / helper.getMainSetDimension());
 
     }
 
