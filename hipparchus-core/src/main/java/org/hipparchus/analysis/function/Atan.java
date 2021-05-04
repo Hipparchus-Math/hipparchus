@@ -22,7 +22,7 @@
 
 package org.hipparchus.analysis.function;
 
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
 
@@ -37,11 +37,10 @@ public class Atan implements UnivariateDifferentiableFunction {
         return FastMath.atan(x);
     }
 
-    /** {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
-    public DerivativeStructure value(final DerivativeStructure t) {
-        return t.atan();
+    public <T extends Derivative<T>> T value(T x) {
+        return x.atan();
     }
 
 }

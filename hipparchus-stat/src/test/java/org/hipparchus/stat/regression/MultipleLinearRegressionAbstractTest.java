@@ -25,7 +25,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.stat.regression.AbstractMultipleLinearRegression;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

@@ -26,8 +26,8 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
-import org.hipparchus.util.MathUtils;
 
 
 /**
@@ -50,7 +50,9 @@ public class HighamHall54FieldIntegrator<T extends CalculusFieldElement<T>>
     private static final String METHOD_NAME = "Higham-Hall 5(4)";
 
     /** Error weights Butcher array. */
-    private final T[] e ;
+    private static final double[] STATIC_E = {
+        -1.0/20.0, 0.0, 81.0/160.0, -6.0/5.0, 25.0/32.0, 1.0/16.0, -1.0/10.0
+    };
 
     /** Simple constructor.
      * Build a fifth order Higham and Hall integrator with the given step bounds
@@ -70,14 +72,6 @@ public class HighamHall54FieldIntegrator<T extends CalculusFieldElement<T>>
                                        final double scalRelativeTolerance) {
         super(field, METHOD_NAME, -1,
               minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
-        e = MathArrays.buildArray(field, 7);
-        e[0] = fraction(-1,  20);
-        e[1] = field.getZero();
-        e[2] = fraction(81, 160);
-        e[3] = fraction(-6,   5);
-        e[4] = fraction(25,  32);
-        e[5] = fraction( 1,  16);
-        e[6] = fraction(-1,  10);
     }
 
     /** Simple constructor.
@@ -98,14 +92,6 @@ public class HighamHall54FieldIntegrator<T extends CalculusFieldElement<T>>
                                        final double[] vecRelativeTolerance) {
         super(field, METHOD_NAME, -1,
               minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
-        e = MathArrays.buildArray(field, 7);
-        e[0] = fraction(-1,  20);
-        e[1] = field.getZero();
-        e[2] = fraction(81, 160);
-        e[3] = fraction(-6,   5);
-        e[4] = fraction(25,  32);
-        e[5] = fraction( 1,  16);
-        e[6] = fraction(-1,  10);
     }
 
     /** {@inheritDoc} */
@@ -186,26 +172,26 @@ public class HighamHall54FieldIntegrator<T extends CalculusFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    protected T estimateError(final T[][] yDotK, final T[] y0, final T[] y1, final T h) {
+    protected double estimateError(final T[][] yDotK, final T[] y0, final T[] y1, final T h) {
 
-        T error = getField().getZero();
+        double error = 0;
 
         for (int j = 0; j < mainSetDimension; ++j) {
-            T errSum = yDotK[0][j].multiply(e[0]);
-            for (int l = 1; l < e.length; ++l) {
-                errSum = errSum.add(yDotK[l][j].multiply(e[l]));
+            double errSum = STATIC_E[0] * yDotK[0][j].getReal();
+            for (int l = 1; l < STATIC_E.length; ++l) {
+                errSum += STATIC_E[l] * yDotK[l][j].getReal();
             }
 
-            final T yScale = MathUtils.max(y0[j].norm(), y1[j].norm());
-            final T tol    = (vecAbsoluteTolerance == null) ?
-                             yScale.multiply(scalRelativeTolerance).add(scalAbsoluteTolerance) :
-                             yScale.multiply(vecRelativeTolerance[j]).add(vecAbsoluteTolerance[j]);
-            final T ratio  = h.multiply(errSum).divide(tol);
-            error = error.add(ratio.multiply(ratio));
+            final double yScale = FastMath.max(FastMath.abs(y0[j].getReal()), FastMath.abs(y1[j].getReal()));
+            final double tol = (vecAbsoluteTolerance == null) ?
+                               (scalAbsoluteTolerance + scalRelativeTolerance * yScale) :
+                               (vecAbsoluteTolerance[j] + vecRelativeTolerance[j] * yScale);
+            final double ratio  = h.getReal() * errSum / tol;
+            error += ratio * ratio;
 
         }
 
-        return error.divide(mainSetDimension).sqrt();
+        return FastMath.sqrt(error / mainSetDimension);
 
     }
 

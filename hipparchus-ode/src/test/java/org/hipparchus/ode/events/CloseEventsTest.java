@@ -2042,20 +2042,6 @@ public class CloseEventsTest {
 
     }
 
-    /** Same as {@link FlatDetector} except it is never 0. */
-    private static class JumpDetector extends TimeDetector {
-
-        public JumpDetector(final double... eventTs) {
-            super(eventTs);
-        }
-
-        @Override
-        public double g(ODEStateAndDerivative state) {
-            final double g = super.g(state);
-            return g > 0 ? 1 : -1;
-        }
-    }
-
     /** Linear on both ends, parabolic in the middle. */
     private static class ContinuousDetector extends TimeDetector {
 
@@ -2109,10 +2095,6 @@ public class CloseEventsTest {
     private static class StateDetector extends BaseDetector {
 
         private final double triggerState;
-
-        public StateDetector(double triggerState) {
-            this(new ArrayList<>(), triggerState);
-        }
 
         public StateDetector(List<Event> events, double triggerState) {
             super(Action.CONTINUE, events);

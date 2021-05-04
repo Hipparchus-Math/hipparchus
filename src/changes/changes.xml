@@ -49,12 +49,75 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
-    <release version="1.7"  date="TBD" description="TBD.">
+    <release version="2.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/118" sdue-to="afossa">
+        Use primitive double for initial step and error factors in Field adaptive step size integrators.
+        Github: fixes #118.
+      </action>
+      <action dev="luc" type="add">
+        Added the Ryū algorithm to generate very fast the shortest decimal
+        representation of a floating point number that maintains round-trip safety.
+      </action>
+      <action dev="andrewsgoetz" type="fix" issue="issues/112" due-to="andrewsgoetz">
+        Fix interpolation of a pair of ODE states times are the same. Such a pair can
+        appear when a RESET_STATE or RESET_DERIVATIVES event occurs at the integration
+        stop time.
+        Github: fixes #112.
+      </action>
+      <action dev="luc" type="fix" issue="issues/111">
+        Allow selecting customized threshold for tests in OrderedComplexEigenDecomposition.
+      </action>
+      <action dev="luc" type="fix" issue="issues/110">
+        Added zero checker predicate for some linear algebra algorithms.
+      </action>
+      <action dev="luc" type="fix" issue="issues/109">
+        Fixed exception in OrderedComplexEigenDecomposition when eigenvalues are equal.
+      </action>
+    </release>
+    <release version="1.8" date="2020-12-05" description="This is a maintenance release.
+    It fixes a few bugs, mainly a serious one for complex eigendecomposition when
+    several eigenvalues are equal. It also add sum and angle differences in SinCos and FieldSinCos.">
+      <action dev="luc" type="fix" issue="issues/106">
+        Added sum and difference of angles in SinCos and FieldSinCos.
+      </action>
+      <action dev="luc" type="fix" issue="issues/105">
+        Removed spurious reduction of BigFraction in equality test.
+      </action>
+      <action dev="luc" type="add" issue="issues/104">
+        Fixed LU-decomposition issue with signed zero complex numbers on diagonal.
+      </action>
+      <action dev="luc" type="add" issue="issues/99">
+        Fixed complex eigendecomposition when several eigenvalues are equals.
+      </action>
+    </release>
+    <release version="1.7"  date="2020-06-23" description="This is a maintenance release.
+    It fixes several bugs, including a nasty one in ODE events handling, improves a lot
+    the Complex class so it implements the new CalculusFieldElement interface, and adds
+    several new differentiation classes to handle simpler cases (univariate derivatives
+    at orders 1 and 2 and gradients) with less overhead than the existing DerivativeStructure.">
+      <action dev="bryan" type="add" issue="issues/97">
+      Added ExtendedUnivariateDifferentiableVectorFunction interface
+      for differentiable vectorial function.
+      </action>
+      <action dev="luc" type="add">
+        Added intermediate interface {Field}Derivative.
+        The interface is implemented by both {Field}DerivativeStructure, {Field}Gradient,
+        {Field}UnivariateDerivative1and {Field}UnivariateDerivative2
+      </action>
+      <action dev="bryan" type="add" issue="issues/95">
+        Added new mathematical methods for FieldGradient,
+        FieldUnivariateDerivative1 and FieldUnivariateDerivative2.
+      </action>
       <action dev="luc" type="add" issue="issues/92">
         Added isMathematicalInteger to Complex.
       </action>
       <action dev="luc" type="add" >
         Added isMathematicalInteger to Precision for double and float numbers.
+      </action>
+      <action dev="evan" type="fix" issue="issues/94" due-to="Mikael">
+        Fix infinite loop in event handling when a RESET_STATE or RESET_DERIVATIVES event
+        causes two other event detectors to trigger simultaneously and discontinuously at
+        the same time.
       </action>
       <action dev="luc" type="add" issue="issues/93">
         Added UnivariateDerivative1, UnivariateDerivative2 and Gradient
@@ -90,6 +153,9 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
        <action dev="luc" type="fix" issue="issues/76">
         Fixed MathArrays.linearCombination when signed zeros are involved.
+      </action>
+      <action dev="evan" type="add" issue="issues/78">
+        Add Line.fromDirection(...).
       </action>
       <action dev="bryan" type="update" issue="issues/72">
         Changed RotationOrder from final class to enum.

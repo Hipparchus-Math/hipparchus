@@ -269,6 +269,17 @@ public class Decimal64 extends Number implements RealFieldElement<Decimal64>, Co
         return false;
     }
 
+    /** {@inheritDoc}
+     * <p>
+     * This implementation considers +0.0 and -0.0 to be equal.
+     * </p>
+     * @since 1.8
+     */
+    @Override
+    public boolean isZero() {
+        return value == 0.0;
+    }
+
     /**
      * {@inheritDoc}
      *

@@ -29,11 +29,10 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.ode.nonstiff.AdaptiveStepsizeFieldIntegrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
-import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
+import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
-import org.hipparchus.util.MathUtils;
 
 /**
  * This class is the base class for multistep integrators for Ordinary
@@ -347,10 +346,8 @@ public abstract class MultistepFieldIntegrator<T extends CalculusFieldElement<T>
      * @param error normalized error of the current step
      * @return grow/shrink factor for next step
      */
-    protected T computeStepGrowShrinkFactor(final T error) {
-        return MathUtils.min(error.getField().getZero().add(maxGrowth),
-                             MathUtils.max(error.getField().getZero().add(minReduction),
-                                           error.pow(exp).multiply(safety)));
+    protected double computeStepGrowShrinkFactor(final double error) {
+        return FastMath.min(maxGrowth, FastMath.max(minReduction, safety * FastMath.pow(error, exp)));
     }
 
     /** Specialized step handler storing the first step.

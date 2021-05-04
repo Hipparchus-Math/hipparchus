@@ -228,13 +228,15 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
     @Override
     public String toString() {
         synchronized (this) {
-            if (markers == null) {
-                return String.format("obs=%s pValue=%s",
-                                     DECIMAL_FORMAT.format(lastObservation),
-                                     DECIMAL_FORMAT.format(pValue));
-            } else {
-                return String.format("obs=%s markers=%s",
-                                     DECIMAL_FORMAT.format(lastObservation), markers.toString());
+            synchronized (DECIMAL_FORMAT) {
+                if (markers == null) {
+                    return String.format("obs=%s pValue=%s",
+                                         DECIMAL_FORMAT.format(lastObservation),
+                                         DECIMAL_FORMAT.format(pValue));
+                } else {
+                    return String.format("obs=%s markers=%s",
+                                         DECIMAL_FORMAT.format(lastObservation), markers.toString());
+                }
             }
         }
    }
@@ -756,12 +758,8 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
 
             if (di >= 1 && isNextHigher || di <= -1 && isPreviousLower) {
                 final int d = di >= 0 ? 1 : -1;
-                final double[] xval =
-                        new double[] { previous.intMarkerPosition,
-                                intMarkerPosition, next.intMarkerPosition };
-                final double[] yval =
-                        new double[] { previous.markerHeight, markerHeight,
-                                next.markerHeight };
+                final double[] xval = { previous.intMarkerPosition, intMarkerPosition, next.intMarkerPosition };
+                final double[] yval = { previous.markerHeight, markerHeight, next.markerHeight };
                 final double xD = intMarkerPosition + d;
 
                 UnivariateFunction univariateFunction =
@@ -771,10 +769,8 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
                 // If parabolic estimate is bad then turn linear
                 if (isEstimateBad(yval, markerHeight)) {
                     int delta = xD - xval[1] > 0 ? 1 : -1;
-                    final double[] xBad =
-                            new double[] { xval[1], xval[1 + delta] };
-                    final double[] yBad =
-                            new double[] { yval[1], yval[1 + delta] };
+                    final double[] xBad = { xval[1], xval[1 + delta] };
+                    final double[] yBad = { yval[1], yval[1 + delta] };
                     MathArrays.sortInPlace(xBad, yBad);// since d can be +/- 1
                     univariateFunction = linear.interpolate(xBad, yBad);
                     markerHeight = univariateFunction.value(xD);

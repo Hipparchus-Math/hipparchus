@@ -26,8 +26,8 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
-import org.hipparchus.util.MathUtils;
 
 
 /**
@@ -70,57 +70,57 @@ public class DormandPrince853FieldIntegrator<T extends CalculusFieldElement<T>>
     private static final String METHOD_NAME = "Dormand-Prince 8 (5, 3)";
 
     /** First error weights array, element 1. */
-    private final T e1_01;
+    private static final double E1_01 =         116092271.0 / 8848465920.0;
 
     // elements 2 to 5 are zero, so they are neither stored nor used
 
     /** First error weights array, element 6. */
-    private final T e1_06;
+    private static final double E1_06 =          -1871647.0 / 1527680.0;
 
     /** First error weights array, element 7. */
-    private final T e1_07;
+    private static final double E1_07 =         -69799717.0 / 140793660.0;
 
     /** First error weights array, element 8. */
-    private final T e1_08;
+    private static final double E1_08 =     1230164450203.0 / 739113984000.0;
 
     /** First error weights array, element 9. */
-    private final T e1_09;
+    private static final double E1_09 = -1980813971228885.0 / 5654156025964544.0;
 
     /** First error weights array, element 10. */
-    private final T e1_10;
+    private static final double E1_10 =         464500805.0 / 1389975552.0;
 
     /** First error weights array, element 11. */
-    private final T e1_11;
+    private static final double E1_11 =     1606764981773.0 / 19613062656000.0;
 
     /** First error weights array, element 12. */
-    private final T e1_12;
+    private static final double E1_12 =           -137909.0 / 6168960.0;
 
 
     /** Second error weights array, element 1. */
-    private final T e2_01;
+    private static final double E2_01 =           -364463.0 / 1920240.0;
 
     // elements 2 to 5 are zero, so they are neither stored nor used
 
     /** Second error weights array, element 6. */
-    private final T e2_06;
+    private static final double E2_06 =           3399327.0 / 763840.0;
 
     /** Second error weights array, element 7. */
-    private final T e2_07;
+    private static final double E2_07 =          66578432.0 / 35198415.0;
 
     /** Second error weights array, element 8. */
-    private final T e2_08;
+    private static final double E2_08 =       -1674902723.0 / 288716400.0;
 
     /** Second error weights array, element 9. */
-    private final T e2_09;
+    private static final double E2_09 =   -74684743568175.0 / 176692375811392.0;
 
     /** Second error weights array, element 10. */
-    private final T e2_10;
+    private static final double E2_10 =           -734375.0 / 4826304.0;
 
     /** Second error weights array, element 11. */
-    private final T e2_11;
+    private static final double E2_11 =         171414593.0 / 851261400.0;
 
     /** Second error weights array, element 12. */
-    private final T e2_12;
+    private static final double E2_12 =             69869.0 / 3084480.0;
 
     /** Simple constructor.
      * Build an eighth order Dormand-Prince integrator with the given step bounds
@@ -140,22 +140,6 @@ public class DormandPrince853FieldIntegrator<T extends CalculusFieldElement<T>>
                                            final double scalRelativeTolerance) {
         super(field, METHOD_NAME, 12,
               minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
-        e1_01 = fraction(        116092271.0,       8848465920.0);
-        e1_06 = fraction(         -1871647.0,          1527680.0);
-        e1_07 = fraction(        -69799717.0,        140793660.0);
-        e1_08 = fraction(    1230164450203.0,     739113984000.0);
-        e1_09 = fraction(-1980813971228885.0, 5654156025964544.0);
-        e1_10 = fraction(        464500805.0,       1389975552.0);
-        e1_11 = fraction(    1606764981773.0,   19613062656000.0);
-        e1_12 = fraction(          -137909.0,          6168960.0);
-        e2_01 = fraction(          -364463.0,          1920240.0);
-        e2_06 = fraction(          3399327.0,           763840.0);
-        e2_07 = fraction(         66578432.0,         35198415.0);
-        e2_08 = fraction(      -1674902723.0,        288716400.0);
-        e2_09 = fraction(  -74684743568175.0,  176692375811392.0);
-        e2_10 = fraction(          -734375.0,          4826304.0);
-        e2_11 = fraction(        171414593.0,        851261400.0);
-        e2_12 = fraction(            69869.0,          3084480.0);
     }
 
     /** Simple constructor.
@@ -176,22 +160,6 @@ public class DormandPrince853FieldIntegrator<T extends CalculusFieldElement<T>>
                                            final double[] vecRelativeTolerance) {
         super(field, METHOD_NAME, 12,
               minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
-        e1_01 = fraction(        116092271.0,       8848465920.0);
-        e1_06 = fraction(         -1871647.0,          1527680.0);
-        e1_07 = fraction(        -69799717.0,        140793660.0);
-        e1_08 = fraction(    1230164450203.0,     739113984000.0);
-        e1_09 = fraction(-1980813971228885.0, 5654156025964544.0);
-        e1_10 = fraction(        464500805.0,       1389975552.0);
-        e1_11 = fraction(    1606764981773.0,   19613062656000.0);
-        e1_12 = fraction(          -137909.0,          6168960.0);
-        e2_01 = fraction(          -364463.0,          1920240.0);
-        e2_06 = fraction(          3399327.0,           763840.0);
-        e2_07 = fraction(         66578432.0,         35198415.0);
-        e2_08 = fraction(      -1674902723.0,        288716400.0);
-        e2_09 = fraction(  -74684743568175.0,  176692375811392.0);
-        e2_10 = fraction(          -734375.0,          4826304.0);
-        e2_11 = fraction(        171414593.0,        851261400.0);
-        e2_12 = fraction(            69869.0,          3084480.0);
     }
 
     /** {@inheritDoc} */
@@ -417,44 +385,38 @@ public class DormandPrince853FieldIntegrator<T extends CalculusFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    protected T estimateError(final T[][] yDotK, final T[] y0, final T[] y1, final T h) {
-        T error1 = h.getField().getZero();
-        T error2 = h.getField().getZero();
+    protected double estimateError(final T[][] yDotK, final T[] y0, final T[] y1, final T h) {
+
+        double error1 = 0;
+        double error2 = 0;
 
         for (int j = 0; j < mainSetDimension; ++j) {
-            final T errSum1 =      yDotK[ 0][j].multiply(e1_01).
-                               add(yDotK[ 5][j].multiply(e1_06)).
-                               add(yDotK[ 6][j].multiply(e1_07)).
-                               add(yDotK[ 7][j].multiply(e1_08)).
-                               add(yDotK[ 8][j].multiply(e1_09)).
-                               add(yDotK[ 9][j].multiply(e1_10)).
-                               add(yDotK[10][j].multiply(e1_11)).
-                               add(yDotK[11][j].multiply(e1_12));
-            final T errSum2 =      yDotK[ 0][j].multiply(e2_01).
-                               add(yDotK[ 5][j].multiply(e2_06)).
-                               add(yDotK[ 6][j].multiply(e2_07)).
-                               add(yDotK[ 7][j].multiply(e2_08)).
-                               add(yDotK[ 8][j].multiply(e2_09)).
-                               add(yDotK[ 9][j].multiply(e2_10)).
-                               add(yDotK[10][j].multiply(e2_11)).
-                               add(yDotK[11][j].multiply(e2_12));
+            final double errSum1 = E1_01 * yDotK[ 0][j].getReal() + E1_06 * yDotK[ 5][j].getReal() +
+                                   E1_07 * yDotK[ 6][j].getReal() + E1_08 * yDotK[ 7][j].getReal() +
+                                   E1_09 * yDotK[ 8][j].getReal() + E1_10 * yDotK[ 9][j].getReal() +
+                                   E1_11 * yDotK[10][j].getReal() + E1_12 * yDotK[11][j].getReal();
+            final double errSum2 = E2_01 * yDotK[ 0][j].getReal() + E2_06 * yDotK[ 5][j].getReal() +
+                                   E2_07 * yDotK[ 6][j].getReal() + E2_08 * yDotK[ 7][j].getReal() +
+                                   E2_09 * yDotK[ 8][j].getReal() + E2_10 * yDotK[ 9][j].getReal() +
+                                   E2_11 * yDotK[10][j].getReal() + E2_12 * yDotK[11][j].getReal();
 
-            final T yScale = MathUtils.max(y0[j].norm(), y1[j].norm());
-            final T tol = vecAbsoluteTolerance == null ?
-                          yScale.multiply(scalRelativeTolerance).add(scalAbsoluteTolerance) :
-                          yScale.multiply(vecRelativeTolerance[j]).add(vecAbsoluteTolerance[j]);
-            final T ratio1  = errSum1.divide(tol);
-            error1        = error1.add(ratio1.multiply(ratio1));
-            final T ratio2  = errSum2.divide(tol);
-            error2        = error2.add(ratio2.multiply(ratio2));
+            final double yScale = FastMath.max(FastMath.abs(y0[j].getReal()), FastMath.abs(y1[j].getReal()));
+            final double tol = (vecAbsoluteTolerance == null) ?
+                               (scalAbsoluteTolerance + scalRelativeTolerance * yScale) :
+                               (vecAbsoluteTolerance[j] + vecRelativeTolerance[j] * yScale);
+            final double ratio1  = errSum1 / tol;
+            error1        += ratio1 * ratio1;
+            final double ratio2  = errSum2 / tol;
+            error2        += ratio2 * ratio2;
+
         }
 
-        T den = error1.add(error2.multiply(0.01));
-        if (den.getReal() <= 0.0) {
-            den = h.getField().getOne();
+        double den = error1 + 0.01 * error2;
+        if (den <= 0.0) {
+            den = 1.0;
         }
 
-        return h.norm().multiply(error1).divide(den.multiply(mainSetDimension).sqrt());
+        return FastMath.abs(h.getReal()) * error1 / FastMath.sqrt(mainSetDimension * den);
 
     }
 

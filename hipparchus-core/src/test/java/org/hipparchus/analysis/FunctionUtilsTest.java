@@ -23,6 +23,7 @@
 package org.hipparchus.analysis;
 
 import org.hipparchus.analysis.differentiation.DSFactory;
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.MultivariateDifferentiableFunction;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
@@ -384,7 +385,7 @@ public class FunctionUtilsTest {
             }
 
             @Override
-            public DerivativeStructure value(DerivativeStructure x) {
+            public <T extends Derivative<T>> T value(T x) {
                 return x.multiply(x);
             }
 

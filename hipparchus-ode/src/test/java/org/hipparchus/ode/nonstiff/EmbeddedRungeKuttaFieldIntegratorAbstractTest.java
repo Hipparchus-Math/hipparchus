@@ -42,6 +42,7 @@ import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
+import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -565,6 +566,54 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                 Assert.assertEquals(derivatives[i][parameter], dYdP(result.getPrimaryState()[i], parameter), epsilonPartials[parameter]);
             }
         }
+
+    }
+
+    @Test
+    public void testIssue118() {
+
+        // init DerivativeStructure factory
+        final DSFactory factory = new DSFactory(3, 3);
+
+        // initial state
+        final double a     = 2.0;
+        final double b     = 1.0;
+        final double omega = 0.5;
+        final Ellipse<DerivativeStructure> ellipse =
+                        new Ellipse<>(factory.variable(0, a), factory.variable(1, b), factory.variable(2, omega));
+        final DerivativeStructure[] initState = ellipse.computeTheoreticalState(factory.constant(0.0));
+
+        // integration over one period
+        final DerivativeStructure t0 = factory.constant(0.0);
+        final DerivativeStructure tf = factory.constant(2.0 * FastMath.PI / omega);
+
+        // ODEs and integrator
+        final FieldExpandableODE<DerivativeStructure> ode = new FieldExpandableODE<>(ellipse);
+        EmbeddedRungeKuttaFieldIntegrator<DerivativeStructure> integrator =
+                        createIntegrator(factory.getDerivativeField(), 1e-3, 1e3, 1e-12, 1e-12);
+
+        integrator.addStepHandler((interpolator, isLast) -> {
+            DerivativeStructure   tK         = interpolator.getCurrentState().getTime();
+            DerivativeStructure[] integrated = interpolator.getCurrentState().getPrimaryState();
+            DerivativeStructure[] thK        = ellipse.computeTheoreticalState(tK);
+            DerivativeStructure[] tkKtrunc   = ellipse.computeTheoreticalState(factory.constant(tK.getReal()));
+            for (int i = 0 ; i < integrated.length; ++i) {
+                final double[] integratedI  = integrated[i].getAllDerivatives();
+                final double[] theoreticalI = thK[i].getAllDerivatives();
+                final double[] truncatedI   = tkKtrunc[i].getAllDerivatives();
+                for (int k = 0; k < factory.getCompiler().getSize(); ++k) {
+                    final int[] orders = factory.getCompiler().getPartialDerivativeOrders(k);
+                    double scaler = 1.0;
+                    for (int ord : orders) {
+                        scaler *= CombinatoricsUtils.factorialDouble(ord);
+                    }
+                    Assert.assertEquals(truncatedI[k], theoreticalI[k], 1e-15 * scaler);
+                    Assert.assertEquals(truncatedI[k], integratedI[k],  1e-8  * scaler);
+                }
+            }
+        });
+
+        integrator.integrate(ode, new FieldODEState<>(t0, initState), tf);
 
     }
 

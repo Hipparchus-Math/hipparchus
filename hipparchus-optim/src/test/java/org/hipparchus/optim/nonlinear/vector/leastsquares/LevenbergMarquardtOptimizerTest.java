@@ -27,6 +27,7 @@ import static org.hamcrest.CoreMatchers.is;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hamcrest.MatcherAssert;
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -348,8 +349,8 @@ public class LevenbergMarquardtOptimizerTest
 
         //verify
         //check iterations and evaluations are not switched.
-        Assert.assertThat(optimum.getIterations(), is(1));
-        Assert.assertThat(optimum.getEvaluations(), is(2));
+        MatcherAssert.assertThat(optimum.getIterations(), is(1));
+        MatcherAssert.assertThat(optimum.getEvaluations(), is(2));
     }
 
     private static class BevingtonProblem {

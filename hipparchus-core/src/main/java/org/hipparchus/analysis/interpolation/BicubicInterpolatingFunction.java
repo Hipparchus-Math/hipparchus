@@ -124,7 +124,7 @@ public class BicubicInterpolatingFunction
                 final int jp1 = j + 1;
                 final double yR = yval[jp1] - yval[j];
                 final double xRyR = xR * yR;
-                final double[] beta = new double[] {
+                final double[] beta = {
                     f[i][j], f[ip1][j], f[i][jp1], f[ip1][jp1],
                     dFdX[i][j] * xR, dFdX[ip1][j] * xR, dFdX[i][jp1] * xR, dFdX[ip1][jp1] * xR,
                     dFdY[i][j] * yR, dFdY[ip1][j] * yR, dFdY[i][jp1] * yR, dFdY[ip1][jp1] * yR,

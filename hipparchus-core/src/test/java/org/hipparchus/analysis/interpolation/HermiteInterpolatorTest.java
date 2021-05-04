@@ -25,6 +25,7 @@ import java.util.Random;
 
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.Gradient;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
@@ -221,6 +222,26 @@ public class HermiteInterpolatorTest {
             double x8 = x4 * x4;
             Assert.assertEquals(x8 + 1, y.getValue(), 1.0e-15);
             Assert.assertEquals(8 * x4 * x2 * x, y.getPartialDerivative(1), 1.0e-15);
+        }
+        checkPolynomial(new PolynomialFunction(new double[] { 1, 0, 0, 0, 0, 0, 0, 0, 1 }),
+                        interpolator.getPolynomials()[0]);
+    }
+
+    @Test
+    public void testWikipediaGradient() {
+        // this test corresponds to the example from Wikipedia page:
+        // http://en.wikipedia.org/wiki/Hermite_interpolation
+        HermiteInterpolator interpolator = new HermiteInterpolator();
+        interpolator.addSamplePoint(-1, new double[] { 2 }, new double[] { -8 }, new double[] { 56 });
+        interpolator.addSamplePoint( 0, new double[] { 1 }, new double[] {  0 }, new double[] {  0 });
+        interpolator.addSamplePoint( 1, new double[] { 2 }, new double[] {  8 }, new double[] { 56 });
+        for (double x = -1.0; x <= 1.0; x += 0.125) {
+            Gradient y = interpolator.value(Gradient.variable(1, 0, x))[0];
+            double x2 = x * x;
+            double x4 = x2 * x2;
+            double x8 = x4 * x4;
+            Assert.assertEquals(x8 + 1, y.getValue(), 1.0e-15);
+            Assert.assertEquals(8 * x4 * x2 * x, y.getPartialDerivative(0), 1.0e-15);
         }
         checkPolynomial(new PolynomialFunction(new double[] { 1, 0, 0, 0, 0, 0, 0, 0, 1 }),
                         interpolator.getPolynomials()[0]);

@@ -34,7 +34,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
-import org.hipparchus.util.MathUtils;
 
 /**
  * This abstract class holds the common part of all adaptive
@@ -90,13 +89,13 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldEle
     protected int mainSetDimension;
 
     /** User supplied initial step. */
-    private T initialStep;
+    private double initialStep;
 
     /** Minimal step. */
-    private T minStep;
+    private double minStep;
 
     /** Maximal step. */
-    private T maxStep;
+    private double maxStep;
 
     /** Build an integrator with the given stepsize bounds.
      * The default step handler does nothing.
@@ -164,9 +163,9 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldEle
                                    final double absoluteTolerance,
                                    final double relativeTolerance) {
 
-        minStep     = getField().getZero().add(FastMath.abs(minimalStep));
-        maxStep     = getField().getZero().add(FastMath.abs(maximalStep));
-        initialStep = getField().getOne().negate();
+        minStep     = FastMath.abs(minimalStep);
+        maxStep     = FastMath.abs(maximalStep);
+        initialStep = -1;
 
         scalAbsoluteTolerance = absoluteTolerance;
         scalRelativeTolerance = relativeTolerance;
@@ -193,9 +192,9 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldEle
                                    final double[] absoluteTolerance,
                                    final double[] relativeTolerance) {
 
-        minStep     = getField().getZero().add(FastMath.abs(minimalStep));
-        maxStep     = getField().getZero().add(FastMath.abs(maximalStep));
-        initialStep = getField().getOne().negate();
+        minStep     = FastMath.abs(minimalStep);
+        maxStep     = FastMath.abs(maximalStep);
+        initialStep = -1;
 
         scalAbsoluteTolerance = 0;
         scalRelativeTolerance = 0;
@@ -215,10 +214,9 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldEle
      * outside of the min/max step interval will lead the integrator to
      * ignore the value and compute the initial step size by itself)
      */
-    public void setInitialStepSize(final T initialStepSize) {
-        if (initialStepSize.subtract(minStep).getReal() < 0 ||
-            initialStepSize.subtract(maxStep).getReal() > 0) {
-            initialStep = getField().getOne().negate();
+    public void setInitialStepSize(final double initialStepSize) {
+        if (initialStepSize < minStep || initialStepSize > maxStep) {
+            initialStep = -1;
         } else {
             initialStep = initialStepSize;
         }
@@ -255,34 +253,33 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldEle
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
-    public T initializeStep(final boolean forward, final int order, final T[] scale,
-                            final FieldODEStateAndDerivative<T> state0,
-                            final FieldEquationsMapper<T> mapper)
+    public double initializeStep(final boolean forward, final int order, final T[] scale,
+                                 final FieldODEStateAndDerivative<T> state0,
+                                 final FieldEquationsMapper<T> mapper)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
-        if (initialStep.getReal() > 0) {
+        if (initialStep > 0) {
             // use the user provided value
-            return forward ? initialStep : initialStep.negate();
+            return forward ? initialStep : -initialStep;
         }
 
         // very rough first guess : h = 0.01 * ||y/scale|| / ||y'/scale||
         // this guess will be used to perform an Euler step
         final T[] y0    = state0.getCompleteState();
         final T[] yDot0 = state0.getCompleteDerivative();
-        T yOnScale2     = getField().getZero();
-        T yDotOnScale2  = getField().getZero();
+        double yOnScale2     = 0;
+        double yDotOnScale2  = 0;
         for (int j = 0; j < scale.length; ++j) {
-            final T ratio    = y0[j].divide(scale[j]);
-            yOnScale2        = yOnScale2.add(ratio.multiply(ratio));
-            final T ratioDot = yDot0[j].divide(scale[j]);
-            yDotOnScale2     = yDotOnScale2.add(ratioDot.multiply(ratioDot));
+            final double ratio    = y0[j].getReal() / scale[j].getReal();
+            yOnScale2            += ratio * ratio;
+            final double ratioDot = yDot0[j].getReal() / scale[j].getReal();
+            yDotOnScale2         += ratioDot * ratioDot;
         }
 
-        T h = (yOnScale2.getReal() < 1.0e-10 || yDotOnScale2.getReal() < 1.0e-10) ?
-              getField().getZero().add(1.0e-6) :
-              yOnScale2.divide(yDotOnScale2).sqrt().multiply(0.01);
+        double h = ((yOnScale2 < 1.0e-10) || (yDotOnScale2 < 1.0e-10)) ?
+                   1.0e-6 : (0.01 * FastMath.sqrt(yOnScale2 / yDotOnScale2));
         if (! forward) {
-            h = h.negate();
+            h = -h;
         }
 
         // perform an Euler step using the preceding rough guess
@@ -293,24 +290,30 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldEle
         final T[] yDot1 = computeDerivatives(state0.getTime().add(h), y1);
 
         // estimate the second derivative of the solution
-        T yDDotOnScale = getField().getZero();
+        double yDDotOnScale = 0;
         for (int j = 0; j < scale.length; ++j) {
-            final T ratioDotDot = yDot1[j].subtract(yDot0[j]).divide(scale[j]);
-            yDDotOnScale = yDDotOnScale.add(ratioDotDot.multiply(ratioDotDot));
+            final double ratioDotDot = (yDot1[j].getReal() - yDot0[j].getReal()) / scale[j].getReal();
+            yDDotOnScale += ratioDotDot * ratioDotDot;
         }
-        yDDotOnScale = yDDotOnScale.sqrt().divide(h);
+        yDDotOnScale = FastMath.sqrt(yDDotOnScale) / h;
 
         // step size is computed such that
         // h^order * max (||y'/tol||, ||y''/tol||) = 0.01
-        final T maxInv2 = MathUtils.max(yDotOnScale2.sqrt(), yDDotOnScale);
-        final T h1 = maxInv2.getReal() < 1.0e-15 ?
-                     MathUtils.max(getField().getZero().add(1.0e-6), h.norm().multiply(0.001)) :
-                     maxInv2.multiply(100).reciprocal().pow(1.0 / order);
-        h = MathUtils.min(h.norm().multiply(100), h1);
-        h = MathUtils.max(h, state0.getTime().norm().multiply(1.0e-12));  // avoids cancellation when computing t1 - t0
-        h = MathUtils.max(minStep, MathUtils.min(maxStep, h));
+        final double maxInv2 = FastMath.max(FastMath.sqrt(yDotOnScale2), yDDotOnScale);
+        final double h1 = (maxInv2 < 1.0e-15) ?
+                          FastMath.max(1.0e-6, 0.001 * FastMath.abs(h)) :
+                          FastMath.pow(0.01 / maxInv2, 1.0 / order);
+        h = FastMath.min(100.0 * FastMath.abs(h), h1);
+        h = FastMath.max(h, 1.0e-12 * FastMath.abs(state0.getTime().getReal()));  // avoids cancellation when computing t1 - t0
+        if (h < getMinStep()) {
+            h = getMinStep();
+        }
+        if (h > getMaxStep()) {
+            h = getMaxStep();
+        }
+
         if (! forward) {
-            h = h.negate();
+            h = -h;
         }
 
         return h;
@@ -332,17 +335,17 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldEle
         T filteredH = h;
         if (h.norm().subtract(minStep).getReal() < 0) {
             if (acceptSmall) {
-                filteredH = forward ? minStep : minStep.negate();
+                filteredH = forward ? getField().getZero().add(minStep) : getField().getZero().add(-minStep);
             } else {
                 throw new MathIllegalArgumentException(LocalizedODEFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
-                                                       h.norm().getReal(), minStep.getReal(), true);
+                                                       FastMath.abs(h.getReal()), minStep, true);
             }
         }
 
         if (filteredH.subtract(maxStep).getReal() > 0) {
-            filteredH = maxStep;
+            filteredH = getField().getZero().add(maxStep);
         } else if (filteredH.add(maxStep).getReal() < 0) {
-            filteredH = maxStep.negate();
+            filteredH = getField().getZero().add(-maxStep);
         }
 
         return filteredH;
@@ -352,20 +355,20 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldEle
     /** Reset internal state to dummy values. */
     protected void resetInternalState() {
         setStepStart(null);
-        setStepSize(minStep.multiply(maxStep).sqrt());
+        setStepSize(getField().getZero().add(FastMath.sqrt(minStep * maxStep)));
     }
 
     /** Get the minimal step.
      * @return minimal step
      */
-    public T getMinStep() {
+    public double getMinStep() {
         return minStep;
     }
 
     /** Get the maximal step.
      * @return maximal step
      */
-    public T getMaxStep() {
+    public double getMaxStep() {
         return maxStep;
     }
 

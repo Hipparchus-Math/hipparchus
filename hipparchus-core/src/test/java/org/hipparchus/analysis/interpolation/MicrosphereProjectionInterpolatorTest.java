@@ -21,10 +21,17 @@
  */
 package org.hipparchus.analysis.interpolation;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.hipparchus.analysis.MultivariateFunction;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.random.Well1024a;
+import org.hipparchus.random.Well19937a;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -142,6 +149,77 @@ public final class MicrosphereProjectionInterpolatorTest {
         Assert.assertTrue(result + " should be NaN", Double.isNaN(result));
         result2D = p2D.value(c);
         Assert.assertTrue(result2D + " should be NaN", Double.isNaN(result2D));
+    }
+    
+    @Test
+    public void testWrongDimensions() {
+        checkWrongArguments(0, 1, 0.5, 0.0, 0.0,
+                            LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED);
+        checkWrongArguments(1, 0, 0.5, 0.0, 0.0,
+                            LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED);
+        checkWrongArguments(1, 1, 0.5, -1.0, 0.0,
+                            LocalizedCoreFormats.NUMBER_TOO_SMALL);
+    }
+
+    private void checkWrongArguments(int dimension,
+                                     int size,
+                                     double maxDarkFraction,
+                                     double darkThreshold,
+                                     double background,
+                                     LocalizedCoreFormats expected) {
+        try {
+            new InterpolatingMicrosphere(dimension, size, maxDarkFraction, darkThreshold, background, null);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(expected, miae.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testCopy() {
+        UnitSphereRandomVectorGenerator random =
+                        new UnitSphereRandomVectorGenerator(3, new Well19937a(0x265318ael));
+        InterpolatingMicrosphere original = new InterpolatingMicrosphere(3, 30, 0.5, 0.2, 0.0, random);
+        InterpolatingMicrosphere copy     = original.copy();
+        Assert.assertFalse(original == copy);
+        Assert.assertEquals(original.getDimension(), copy.getDimension());
+        Assert.assertEquals(original.getSize(),      copy.getSize());
+    }
+
+    @Test
+    public void testSizeLimit() {
+        UnitSphereRandomVectorGenerator random =
+                        new UnitSphereRandomVectorGenerator(3, new Well19937a(0x453l));
+        InterpolatingMicrosphere ims = new InterpolatingMicrosphere(3, 30, 0.5, 0.2, 0.0, random);
+        try {
+            Method add = InterpolatingMicrosphere.class.getDeclaredMethod("add", double[].class, Boolean.TYPE);
+            add.setAccessible(true);
+            try {
+                add.invoke(ims, random.nextVector(), true);
+                Assert.fail("an exception should have been thrown");
+            } catch (InvocationTargetException ite) {
+                MathIllegalStateException miae = (MathIllegalStateException) ite.getCause();
+                Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, miae.getSpecifier());
+            }
+        } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException e) {
+            Assert.fail(e.getLocalizedMessage());
+        }
+    }
+
+    @Test
+    public void testInconsistentDimensions() {
+        final int d1 = 5;
+        final int d2 = 3;
+        try {
+            UnitSphereRandomVectorGenerator random =
+                            new UnitSphereRandomVectorGenerator(d1, new Well19937a(0x1l));
+            new InterpolatingMicrosphere(d2, 30, 0.5, 0.2, 0.0, random);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(d1, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(d2, ((Integer) miae.getParts()[1]).intValue());
+        }
     }
 
     /**

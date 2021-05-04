@@ -52,7 +52,7 @@ import org.hipparchus.util.MathUtils;
  * @since 1.7
  */
 public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
-    implements CalculusFieldElement<FieldUnivariateDerivative2<T>> {
+    extends FieldUnivariateDerivative<T, FieldUnivariateDerivative2<T>> {
 
     /** Value of the function. */
     private final T f0;
@@ -103,6 +103,7 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     /** Get the value part of the univariate derivative.
      * @return value part of the univariate derivative
      */
+    @Override
     public T getValue() {
         return f0;
     }
@@ -112,6 +113,7 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
      * @return n<sup>th</sup> derivative, or {@code NaN} if n is
      * either negative or strictly larger than {@link #getOrder()}
      */
+    @Override
     public T getDerivative(final int n) {
         switch (n) {
             case 0 :
@@ -121,13 +123,14 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
             case 2 :
                 return f2;
             default :
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, n, 0, 2);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, n);
         }
     }
 
     /** Get the derivation order.
      * @return derivation order
      */
+    @Override
     public int getOrder() {
         return 2;
     }
@@ -159,8 +162,17 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     /** Convert the instance to a {@link FieldDerivativeStructure}.
      * @return derivative structure with same value and derivative as the instance
      */
+    @Override
     public FieldDerivativeStructure<T> toDerivativeStructure() {
         return getField().getConversionFactory().build(f0, f1, f2);
+    }
+
+    /** '+' operator.
+     * @param a right hand side parameter of the operator
+     * @return this+a
+     */
+    public FieldUnivariateDerivative2<T> add(final T a) {
+        return new FieldUnivariateDerivative2<>(f0.add(a), f1, f2);
     }
 
     /** {@inheritDoc} */
@@ -175,6 +187,14 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
         return new FieldUnivariateDerivative2<>(f0.add(a.f0), f1.add(a.f1), f2.add(a.f2));
     }
 
+    /** '-' operator.
+     * @param a right hand side parameter of the operator
+     * @return this-a
+     */
+    public FieldUnivariateDerivative2<T> subtract(final T a) {
+        return new FieldUnivariateDerivative2<>(f0.subtract(a), f1, f2);
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative2<T> subtract(final double a) {
@@ -185,6 +205,14 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     @Override
     public FieldUnivariateDerivative2<T> subtract(final FieldUnivariateDerivative2<T> a) {
         return new FieldUnivariateDerivative2<>(f0.subtract(a.f0), f1.subtract(a.f1), f2.subtract(a.f2));
+    }
+
+    /** '&times;' operator.
+     * @param a right hand side parameter of the operator
+     * @return this&times;a
+     */
+    public FieldUnivariateDerivative2<T> multiply(final T a) {
+        return new FieldUnivariateDerivative2<>(f0.multiply(a), f1.multiply(a), f2.multiply(a));
     }
 
     /** {@inheritDoc} */
@@ -207,6 +235,15 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
                                                 a.f0.linearCombination(f2, a.f0, f1.add(f1), a.f1, f0, a.f2));
     }
 
+    /** '&divide;' operator.
+     * @param a right hand side parameter of the operator
+     * @return this&divide;a
+     */
+    public FieldUnivariateDerivative2<T> divide(final T a) {
+        final T inv1 = a.reciprocal();
+        return new FieldUnivariateDerivative2<>(f0.multiply(inv1), f1.multiply(inv1), f2.multiply(inv1));
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative2<T> divide(final double a) {
@@ -226,6 +263,15 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
                                                                        f1.multiply(-2), a.f0.multiply(a.f1),
                                                                        f0.add(f0), a.f1.multiply(a.f1),
                                                                        f0.negate(), a.f0.multiply(a.f2)).multiply(inv3));
+    }
+
+    /** IEEE remainder operator.
+     * @param a right hand side parameter of the operator
+     * @return this - n &times; a where n is the closest integer to this/a
+     * (the even integer is chosen for n if this/a is halfway between two integers)
+     */
+    public FieldUnivariateDerivative2<T> remainder(final T a) {
+        return new FieldUnivariateDerivative2<>(FastMath.IEEEremainder(f0, a), f1, f2);
     }
 
     /** {@inheritDoc} */
@@ -291,6 +337,22 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     public FieldUnivariateDerivative2<T> signum() {
         final T zero = f0.getField().getZero();
         return new FieldUnivariateDerivative2<>(FastMath.signum(f0), zero, zero);
+    }
+
+    /**
+     * Returns the instance with the sign of the argument.
+     * A NaN {@code sign} argument is treated as positive.
+     *
+     * @param sign the sign for the returned value
+     * @return the instance with the same sign as the {@code sign} argument
+     */
+    public FieldUnivariateDerivative2<T> copySign(final T sign) {
+        long m = Double.doubleToLongBits(f0.getReal());
+        long s = Double.doubleToLongBits(sign.getReal());
+        if ((m >= 0 && s >= 0) || (m < 0 && s < 0)) { // Sign is currently OK
+            return this;
+        }
+        return negate(); // flip sign
     }
 
     /** {@inheritDoc} */
@@ -665,6 +727,33 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
         return f0.add(f1.add(f2.multiply(delta.multiply(0.5))).multiply(delta));
     }
 
+    /**
+     * Compute a linear combination.
+     * @param a Factors.
+     * @param b Factors.
+     * @return <code>&Sigma;<sub>i</sub> a<sub>i</sub> b<sub>i</sub></code>.
+     * @throws MathIllegalArgumentException if arrays dimensions don't match
+     */
+    public FieldUnivariateDerivative2<T> linearCombination(final T[] a, final FieldUnivariateDerivative2<T>[] b) {
+
+        // extract values and derivatives
+        final Field<T> field = b[0].f0.getField();
+        final int      n  = b.length;
+        final T[] b0 = MathArrays.buildArray(field, n);
+        final T[] b1 = MathArrays.buildArray(field, n);
+        final T[] b2 = MathArrays.buildArray(field, n);
+        for (int i = 0; i < n; ++i) {
+            b0[i] = b[i].f0;
+            b1[i] = b[i].f1;
+            b2[i] = b[i].f2;
+        }
+
+        return new FieldUnivariateDerivative2<>(b[0].f0.linearCombination(a, b0),
+                                                b[0].f0.linearCombination(a, b1),
+                                                b[0].f0.linearCombination(a, b2));
+
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative2<T> linearCombination(final FieldUnivariateDerivative2<T>[] a,
@@ -809,6 +898,34 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
                                                                         a3.f0, b3.f0),
                                                 a1.f0.linearCombination(u1, v1),
                                                 a1.f0.linearCombination(u2, v2));
+    }
+
+    /**
+     * Compute a linear combination.
+     * @param a1 first factor of the first term
+     * @param b1 second factor of the first term
+     * @param a2 first factor of the second term
+     * @param b2 second factor of the second term
+     * @param a3 first factor of the third term
+     * @param b3 second factor of the third term
+     * @return a<sub>1</sub>&times;b<sub>1</sub> +
+     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
+     * @see #linearCombination(double, Object, double, Object)
+     * @see #linearCombination(double, Object, double, Object, double, Object, double, Object)
+     * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
+     */
+    public FieldUnivariateDerivative2<T> linearCombination(final T a1, final FieldUnivariateDerivative2<T> b1,
+                                                           final T a2, final FieldUnivariateDerivative2<T> b2,
+                                                           final T a3, final FieldUnivariateDerivative2<T> b3) {
+        return new FieldUnivariateDerivative2<>(b1.f0.linearCombination(a1, b1.f0,
+                                                                        a2, b2.f0,
+                                                                        a3, b3.f0),
+                                                b1.f0.linearCombination(a1, b1.f1,
+                                                                        a2, b2.f1,
+                                                                        a3, b3.f1),
+                                                b1.f0.linearCombination(a1, b1.f2,
+                                                                        a2, b2.f2,
+                                                                        a3, b3.f2));
     }
 
     /** {@inheritDoc} */

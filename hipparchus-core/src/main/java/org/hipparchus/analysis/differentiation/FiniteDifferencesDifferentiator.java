@@ -29,6 +29,7 @@ import org.hipparchus.analysis.UnivariateVectorFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathArrays;
 
 /** Univariate functions differentiator using finite differences.
  * <p>
@@ -191,12 +192,12 @@ public class FiniteDifferencesDifferentiator
      * @param t evaluation abscissa value and derivatives
      * @param t0 first sample point abscissa
      * @param y function values sample {@code y[i] = f(t[i]) = f(t0 + i * stepSize)}
+     * @param <T> the type of the field elements
      * @return value and derivatives at {@code t}
      * @exception MathIllegalArgumentException if the requested derivation order
      * is larger or equal to the number of points
      */
-    private DerivativeStructure evaluate(final DerivativeStructure t, final double t0,
-                                         final double[] y)
+    private <T extends Derivative<T>> T evaluate(final T t, final double t0, final double[] y)
         throws MathIllegalArgumentException {
 
         // create divided differences diagonal arrays
@@ -217,18 +218,15 @@ public class FiniteDifferencesDifferentiator
         }
 
         // evaluate interpolation polynomial (represented by top diagonal) at t
-        final double[] derivatives = t.getAllDerivatives();
-        final double dt0           = t.getValue() - t0;
-        DerivativeStructure interpolation = t.getFactory().constant(0.0);
-        DerivativeStructure monomial = null;
+        T interpolation = t.getField().getZero();
+        T monomial      = null;
         for (int i = 0; i < nbPoints; ++i) {
             if (i == 0) {
                 // start with monomial(t) = 1
-                monomial = t.getFactory().constant(1.0);
+                monomial = t.getField().getOne();
             } else {
                 // monomial(t) = (t - t0) * (t - t1) * ... * (t - t(i-1))
-                derivatives[0] = dt0 - (i - 1) * stepSize;
-                final DerivativeStructure deltaX = t.getFactory().build(derivatives);
+                final T deltaX = t.subtract(t0 + (i - 1) * stepSize);
                 monomial = monomial.multiply(deltaX);
             }
             interpolation = interpolation.add(monomial.multiply(top[i]));
@@ -256,7 +254,7 @@ public class FiniteDifferencesDifferentiator
 
             /** {@inheritDoc} */
             @Override
-            public DerivativeStructure value(final DerivativeStructure t)
+            public <T extends Derivative<T>> T value(T t)
                 throws MathIllegalArgumentException {
 
                 // check we can achieve the requested derivation order with the sample
@@ -300,7 +298,7 @@ public class FiniteDifferencesDifferentiator
 
             /** {@inheritDoc} */
             @Override
-            public DerivativeStructure[] value(final DerivativeStructure t)
+            public <T extends Derivative<T>> T[] value(T t)
                 throws MathIllegalArgumentException {
 
                 // check we can achieve the requested derivation order with the sample
@@ -325,7 +323,7 @@ public class FiniteDifferencesDifferentiator
                 }
 
                 // evaluate derivatives
-                final DerivativeStructure[] value = new DerivativeStructure[y.length];
+                final T[] value = MathArrays.buildArray(t.getField(), y.length);
                 for (int j = 0; j < value.length; ++j) {
                     value[j] = evaluate(t, t0, y[j]);
                 }
@@ -355,7 +353,7 @@ public class FiniteDifferencesDifferentiator
 
             /** {@inheritDoc} */
             @Override
-            public DerivativeStructure[][]  value(final DerivativeStructure t)
+            public <T extends Derivative<T>> T[][] value(T t)
                 throws MathIllegalArgumentException {
 
                 // check we can achieve the requested derivation order with the sample
@@ -382,7 +380,7 @@ public class FiniteDifferencesDifferentiator
                 }
 
                 // evaluate derivatives
-                final DerivativeStructure[][] value = new DerivativeStructure[y.length][y[0].length];
+                final T[][] value = MathArrays.buildArray(t.getField(), y.length, y[0].length);
                 for (int j = 0; j < value.length; ++j) {
                     for (int k = 0; k < y[j].length; ++k) {
                         value[j][k] = evaluate(t, t0, y[j][k]);

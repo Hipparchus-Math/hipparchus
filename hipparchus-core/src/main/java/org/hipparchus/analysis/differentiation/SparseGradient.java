@@ -780,19 +780,22 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
     }
 
     /** Compute composition of the instance by a univariate function.
-     * @param f0 value of the function at (i.e. f({@link #getValue()}))
-     * @param f1 first derivative of the function at
-     * the current point (i.e. f'({@link #getValue()}))
+     * @param f array of value and derivatives of the function at
+     * the current point (i.e. [f({@link #getValue()}),
+     * f'({@link #getValue()}), f''({@link #getValue()})...]).
      * @return f(this)
-    */
-    public SparseGradient compose(final double f0, final double f1) {
-        return new SparseGradient(f0, f1, derivatives);
+     * @exception MathIllegalArgumentException if the number of derivatives
+     * in the array is not equal to {@link #getOrder() order} + 1
+     */
+    public SparseGradient compose(final double... f) {
+        MathUtils.checkDimension(f.length, 2);
+        return new SparseGradient(f[0], f[1], derivatives);
     }
 
     /** {@inheritDoc} */
     @Override
     public SparseGradient linearCombination(final SparseGradient[] a,
-                                              final SparseGradient[] b)
+                                            final SparseGradient[] b)
         throws MathIllegalArgumentException {
 
         // compute a simple value, with all partial derivatives

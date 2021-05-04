@@ -22,7 +22,6 @@
 package org.hipparchus.util;
 
 import org.hipparchus.RealFieldElementAbstractTest;
-import org.hipparchus.util.Decimal64;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -469,6 +468,32 @@ public class Decimal64Test extends RealFieldElementAbstractTest<Decimal64> {
         final Decimal64 root2Neg64 = neg64.rootN(2);
         Assert.assertEquals(-4.0, root3Neg64.getReal(), 1.0e-15);
         Assert.assertTrue(root2Neg64.isNaN());
+    }
+
+    @Test
+    public void testSignedZeroEquality() {
+        Assert.assertFalse(new Decimal64(1.0).isZero());
+        Assert.assertTrue(new Decimal64(-0.0).isZero());
+        Assert.assertTrue(new Decimal64(+0.0).isZero());
+        Assert.assertFalse(new Decimal64(+0.0).equals(new Decimal64(-0.0)));
+    }
+
+    @Test
+    public void testValues() {
+        Assert.assertEquals(1,    new Decimal64(1.2).byteValue());
+        Assert.assertEquals(1,    new Decimal64(1.2).shortValue());
+        Assert.assertEquals(1,    new Decimal64(1.2).intValue());
+        Assert.assertEquals(1l,   new Decimal64(1.2).longValue());
+        Assert.assertEquals(1.2f, new Decimal64(1.2).floatValue(),  0.00001f);
+        Assert.assertEquals(1.2 , new Decimal64(1.2).doubleValue(), 1.0e-15);
+    }
+
+    @SuppressWarnings("unlikely-arg-type")
+    @Test
+    public void testEquals() {
+        Assert.assertTrue(new Decimal64(1.25).equals(new Decimal64(1.0).add(new Decimal64(0.25))));
+        Assert.assertFalse(new Decimal64(1.25).equals(new Decimal64(1.0).add(new Decimal64(1.25))));
+        Assert.assertFalse(new Decimal64(1.25).equals("1.25"));
     }
 
 }

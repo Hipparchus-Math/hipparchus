@@ -68,10 +68,11 @@ The properties name all follow the pattern `hipparchus.some-plugin-name.version`
 name should be used in the web form to check for available versions.
 
 Beware that in some cases, the latest version cannot be used due to incompatibilities. For
-example, as of releases 1.0 to 1.6, the site generation was based on `reflow-maven-skin`
+example, as of releases 1.0 to 1.8, the site generation was based on `reflow-maven-skin`
 and this skin was not updated for recent versions of either site plugin and velocity. Hence
-the `maven-site-plugin` version, `reflow-velocity-tools` version and `velocity `version were
-not updated (and should probably remain frozen until the site skin is changed).
+the `maven-site-plugin` version, `maven-project-info-reports-plugin` version,
+`reflow-velocity-tools` version and `velocity `version were not updated (and should probably
+remain frozen until the site skin is changed).
 
 Beware also that some plugins use configuration files that may need update too. This is
 typically the case with `maven-checkstyle-plugin` and `maven-pmd-plugin`. The
@@ -331,7 +332,7 @@ After the release branch has been completed, it should be merged back to the mas
 must be updated with the `-SNAPSHOT`flag for the next release number. On a system with Unix utilities, you can do
 it with the single following line:
 
-    for pom in pom.xml hipparchus-*/pom.xml ; do mv $pom $pom.old ; sed 's,<version>X.Y</version>,<version>X.Z-SNAPSHOT</version>' < $pom.old > $pom ; rm $pom.old ; done
+    for pom in pom.xml hipparchus-*/pom.xml ; do mv $pom $pom.old ; sed 's,<version>X.Y</version>,<version>X.Z-SNAPSHOT</version>,' < $pom.old > $pom ; rm $pom.old ; done
 
 Commit the change:
 

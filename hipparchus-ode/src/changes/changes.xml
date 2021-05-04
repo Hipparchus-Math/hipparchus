@@ -49,7 +49,26 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
-    <release version="1.7" date="TBD" description="TBD">
+    <release version="2.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/118" due-to="afossa">
+        Use primitive double for initial step and error factors in Field adaptive step size integrators.
+        Github: fixes #118.
+      </action>
+      <action dev="andrewsgoetz" type="fix" issue="issues/112" due-to="andrewsgoetz">
+        Fix interpolation of a pair of ODE states times are the same. Such a pair can
+        appear when a RESET_STATE or RESET_DERIVATIVES event occurs at the integration
+        stop time.
+        Github: fixes #112.
+      </action>
+    </release>
+    <release version="1.8" date="2020-12-05" description="This is a maintenance release.">
+      <action dev="luc" type="update">
+        No changes directly in this module. However, lower level Hipparchus modules did change,
+        hence a new release was needed.
+      </action>
+    </release>
+    <release version="1.7" date="2020-06-23" description="This is a maintenance release. It fixes
+    an infinite loop in event handling.">
       <action dev="evan" type="fix" issue="issues/94" due-to="Mikael">
         Fix infinite loop in event handling when a RESET_STATE or RESET_DERIVATIVES event
         causes two other event detectors to trigger simultaneously and discontinuously at

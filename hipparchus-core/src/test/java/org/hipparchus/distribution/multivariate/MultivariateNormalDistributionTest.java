@@ -26,8 +26,12 @@ import java.util.Random;
 
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.continuous.NormalDistribution;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.random.Well19937c;
+import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -155,6 +159,71 @@ public class MultivariateNormalDistributionTest {
         for (int i = 0; i < numCases; i++) {
             final double v = rng.nextDouble() * 10 - 5;
             Assert.assertEquals(uni.density(v), multi.density(new double[] { v }), tol);
+        }
+    }
+
+    /**
+     * Test getting/setting custom singularMatrixTolerance
+     */
+    @Test
+    public void testGetSingularMatrixTolerance() {
+        final double[] mu = { -1.5 };
+        final double[][] sigma = { { 1 } };
+
+        final double tolerance1 = 1e-2;
+        final MultivariateNormalDistribution mvd1 = new MultivariateNormalDistribution(mu, sigma, tolerance1);
+        Assert.assertEquals(tolerance1, mvd1.getSingularMatrixCheckTolerance(), Precision.EPSILON);
+
+        final double tolerance2 = 1e-3;
+        final MultivariateNormalDistribution mvd2 = new MultivariateNormalDistribution(mu, sigma, tolerance2);
+        Assert.assertEquals(tolerance2, mvd2.getSingularMatrixCheckTolerance(), Precision.EPSILON);
+    }
+
+    @Test
+    public void testNotPositiveDefinite() {
+        try {
+            new MultivariateNormalDistribution(new Well19937c(0x543l), new double[2],
+                                               new double[][] { { -1.0, 0.0 }, { 0.0, -2.0 } });
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.NOT_POSITIVE_DEFINITE_MATRIX, miae.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testStd() {
+        MultivariateNormalDistribution d = new MultivariateNormalDistribution(new Well19937c(0x543l), new double[2],
+                                                                              new double[][] { { 4.0, 0.0 }, { 0.0, 9.0 } });
+        double[] s = d.getStandardDeviations();
+        Assert.assertEquals(2, s.length);
+        Assert.assertEquals(2.0, s[0], 1.0e-15);
+        Assert.assertEquals(3.0, s[1], 1.0e-15);
+    }
+
+    @Test
+    public void testWrongDensity() {
+        try {
+            MultivariateNormalDistribution d = new MultivariateNormalDistribution(new Well19937c(0x543l), new double[2],
+                                                                                  new double[][] { { 4.0, 0.0 }, { 0.0, 4.0 } });
+            d.density(new double[3]);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testWrongArguments() {
+        checkWrongArguments(new double[3], new double[6][6]);
+        checkWrongArguments(new double[3], new double[3][6]);
+    }
+
+    private void checkWrongArguments(double[] means, double[][] covariances) {
+        try {
+            new MultivariateNormalDistribution(new Well19937c(0x543l), means, covariances);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
         }
     }
 }

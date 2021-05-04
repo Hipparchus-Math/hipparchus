@@ -23,6 +23,7 @@
 package org.hipparchus.linear;
 
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -67,6 +68,8 @@ public class FieldQRDecomposition<T extends CalculusFieldElement<T>> {
     private FieldMatrix<T> cachedH;
     /** Singularity threshold. */
     private final T threshold;
+    /** checker for zero. */
+    private final Predicate<T> zeroChecker;
 
     /**
      * Calculates the QR-decomposition of the given matrix.
@@ -87,7 +90,19 @@ public class FieldQRDecomposition<T extends CalculusFieldElement<T>> {
      * @param threshold Singularity threshold.
      */
     public FieldQRDecomposition(FieldMatrix<T> matrix, T threshold) {
-        this.threshold = threshold;
+        this(matrix, threshold, e -> e.isZero());
+    }
+
+    /**
+     * Calculates the QR-decomposition of the given matrix.
+     *
+     * @param matrix The matrix to decompose.
+     * @param threshold Singularity threshold.
+     * @param zeroChecker checker for zero
+     */
+    public FieldQRDecomposition(FieldMatrix<T> matrix, T threshold, Predicate<T> zeroChecker) {
+        this.threshold   = threshold;
+        this.zeroChecker = zeroChecker;
 
         final int m = matrix.getRowDimension();
         final int n = matrix.getColumnDimension();
@@ -134,7 +149,7 @@ public class FieldQRDecomposition<T extends CalculusFieldElement<T>> {
         final T a = (qrtMinor[minor].getReal() > 0) ? xNormSqr.sqrt().negate() : xNormSqr.sqrt();
         rDiag[minor] = a;
 
-        if (a.getReal() != 0.0) {
+        if (!zeroChecker.test(a)) {
 
             /*
              * Calculate the normalized reflection vector v and transform
@@ -239,7 +254,7 @@ public class FieldQRDecomposition<T extends CalculusFieldElement<T>> {
             for (int minor = FastMath.min(m, n)-1; minor >= 0; minor--){
                 final T[] qrtMinor = qrt[minor];
                 qta[minor][minor] = threshold.getField().getOne();
-                if (qrtMinor[minor].getReal() != 0.0) {
+                if (!qrtMinor[minor].isZero()) {
                     for (int col = minor; col < m; col++) {
                         T alpha = threshold.getField().getZero();
                         for (int row = minor; row < m; row++) {

@@ -22,6 +22,8 @@
 
 package org.hipparchus.linear;
 
+import java.util.function.Predicate;
+
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -87,6 +89,16 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
      * @throws MathIllegalArgumentException if matrix is not square
      */
     public FieldLUDecomposition(FieldMatrix<T> matrix) {
+        this(matrix, e -> e.isZero());
+    }
+
+    /**
+     * Calculates the LU-decomposition of the given matrix.
+     * @param matrix The matrix to decompose.
+     * @param zeroChecker checker for zero elements
+     * @throws MathIllegalArgumentException if matrix is not square
+     */
+    public FieldLUDecomposition(FieldMatrix<T> matrix, final Predicate<T> zeroChecker) {
         if (!matrix.isSquare()) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());
@@ -132,7 +144,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
                 }
                 luRow[col] = sum;
 
-                if (lu[nonZero][col].equals(field.getZero())) {
+                if (zeroChecker.test(lu[nonZero][col])) {
                     // try to select a better permutation choice
                     ++nonZero;
                 }

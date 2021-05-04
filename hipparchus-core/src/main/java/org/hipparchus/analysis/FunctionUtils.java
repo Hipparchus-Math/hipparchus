@@ -23,6 +23,7 @@
 package org.hipparchus.analysis;
 
 import org.hipparchus.analysis.differentiation.DSFactory;
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.MultivariateDifferentiableFunction;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
@@ -89,8 +90,8 @@ public class FunctionUtils {
 
             /** {@inheritDoc} */
             @Override
-            public DerivativeStructure value(final DerivativeStructure t) {
-                DerivativeStructure r = t;
+            public <T extends Derivative<T>> T value(final T t) {
+                T r = t;
                 for (int i = f.length - 1; i >= 0; i--) {
                     r = f[i].value(r);
                 }
@@ -143,9 +144,9 @@ public class FunctionUtils {
              * @throws MathIllegalArgumentException if functions are not consistent with each other
              */
             @Override
-            public DerivativeStructure value(final DerivativeStructure t)
+            public <T extends Derivative<T>> T value(final T t)
                 throws MathIllegalArgumentException {
-                DerivativeStructure r = f[0].value(t);
+                T r = f[0].value(t);
                 for (int i = 1; i < f.length; i++) {
                     r = r.add(f[i].value(t));
                 }
@@ -196,8 +197,8 @@ public class FunctionUtils {
 
             /** {@inheritDoc} */
             @Override
-            public DerivativeStructure value(final DerivativeStructure t) {
-                DerivativeStructure r = f[0].value(t);
+            public <T extends Derivative<T>> T value(final T t) {
+                T r = f[0].value(t);
                 for (int i = 1; i < f.length; i++) {
                     r = r.multiply(f[i].value(t));
                 }
@@ -366,7 +367,7 @@ public class FunctionUtils {
      * @see #derivative(UnivariateDifferentiableFunction, int)
      */
     public static UnivariateDifferentiableFunction toDifferentiable(final UnivariateFunction f,
-                                                                       final UnivariateFunction ... derivatives) {
+                                                                    final UnivariateFunction ... derivatives) {
 
         return new UnivariateDifferentiableFunction() {
 
@@ -378,7 +379,7 @@ public class FunctionUtils {
 
             /** {@inheritDoc} */
             @Override
-            public DerivativeStructure value(final DerivativeStructure x) {
+            public <T extends Derivative<T>> T value(final T x) {
                 if (x.getOrder() > derivatives.length) {
                     throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
                                                            x.getOrder(), derivatives.length);

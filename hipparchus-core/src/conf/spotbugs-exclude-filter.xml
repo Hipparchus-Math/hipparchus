@@ -39,7 +39,6 @@
     <Class name="org.hipparchus.distribution.discrete.SaddlePointExpansion" />
     <Or>
       <Method name="getDeviancePart" params="double,double" returns="double" />
-      <Method name="getStirlingError" params="double" returns="double" />
     </Or>
     <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
   </Match>

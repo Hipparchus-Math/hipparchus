@@ -22,6 +22,7 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.TrivariateFunction;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.FastMath;
@@ -47,6 +48,47 @@ public final class TricubicInterpolatingFunctionTest {
         TrivariateFunction tcf = new TricubicInterpolatingFunction(xval, yval, zval,
                                                                    fval, fval, fval, fval,
                                                                    fval, fval, fval, fval);
+
+        try {
+            tcf = new TricubicInterpolatingFunction(new double[0], yval, zval,
+                                                    fval, fval, fval, fval,
+                                                    fval, fval, fval, fval);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            // Expected
+        }
+        try {
+            tcf = new TricubicInterpolatingFunction(xval, new double[0], zval,
+                                                    fval, fval, fval, fval,
+                                                    fval, fval, fval, fval);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            // Expected
+        }
+        try {
+            tcf = new TricubicInterpolatingFunction(xval, yval, new double[0],
+                                                    fval, fval, fval, fval,
+                                                    fval, fval, fval, fval);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            // Expected
+        }
+        try {
+            tcf = new TricubicInterpolatingFunction(xval, yval, zval,
+                                                    new double[0][][], fval, fval, fval,
+                                                    fval, fval, fval, fval);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            // Expected
+        }
+        try {
+            tcf = new TricubicInterpolatingFunction(xval, yval, zval,
+                                                    new double[1][0][], fval, fval, fval,
+                                                    fval, fval, fval, fval);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            // Expected
+        }
 
         double[] wxval = new double[] {3, 2, 5, 6.5};
         try {
@@ -354,7 +396,7 @@ public final class TricubicInterpolatingFunctionTest {
             }
         }
 
-        final TrivariateFunction interpolation
+        final TricubicInterpolatingFunction interpolation
             = new TricubicInterpolatingFunction(xValues,
                                                 yValues,
                                                 zValues,
@@ -405,6 +447,33 @@ public final class TricubicInterpolatingFunctionTest {
 
         final double meanError = sumError / numberOfSamples;
         Assert.assertEquals(0, meanError, meanRelativeTolerance);
+
+        for (double inf : new double[] { Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY }) {
+            Assert.assertFalse(interpolation.isValidPoint(inf, 0.5 * (minimumY + maximumY), 0.5 * (minimumZ + maximumZ)));
+            Assert.assertFalse(interpolation.isValidPoint(0.5 * (minimumX + maximumX), inf, 0.5 * (minimumZ + maximumZ)));
+            Assert.assertFalse(interpolation.isValidPoint(0.5 * (minimumX + maximumX), 0.5 * (minimumY + maximumY), inf));
+            try {
+                interpolation.value(inf, 0.5 * (minimumY + maximumY), 0.5 * (minimumZ + maximumZ));
+                Assert.fail("an exception should have been thrown");
+            } catch (MathIllegalArgumentException miae) {
+                Assert.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
+            }
+
+            try {
+                interpolation.value(0.5 * (minimumX + maximumX), inf, 0.5 * (minimumZ + maximumZ));
+                Assert.fail("an exception should have been thrown");
+            } catch (MathIllegalArgumentException miae) {
+                Assert.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
+            }
+
+            try {
+                interpolation.value(0.5 * (minimumX + maximumX), 0.5 * (minimumY + maximumY), inf);
+                Assert.fail("an exception should have been thrown");
+            } catch (MathIllegalArgumentException miae) {
+                Assert.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
+            }
+        }
+
     }
 
     /**

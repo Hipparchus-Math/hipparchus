@@ -153,7 +153,11 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
         // the
         // Kleinman Algorithm
         // it must be ordered in order to work with submatrices
-        final OrderedComplexEigenDecomposition eigenDecomposition = new OrderedComplexEigenDecomposition(m);
+        final OrderedComplexEigenDecomposition eigenDecomposition =
+                        new OrderedComplexEigenDecomposition(m,
+                                                             EPSILON,
+                                                             ComplexEigenDecomposition.DEFAULT_EPSILON,
+                                                             ComplexEigenDecomposition.DEFAULT_EPSILON_AV_VD_CHECK);
         final FieldMatrix<Complex> u = eigenDecomposition.getV();
 
         // solving linear system

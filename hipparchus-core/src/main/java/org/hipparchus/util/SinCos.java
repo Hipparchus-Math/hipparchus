@@ -54,4 +54,26 @@ public class SinCos {
         return cos;
     }
 
+    /** Compute sine and cosine of angles sum.
+     * @param scAlpha \((sin \alpha, \cos \alpha)\)
+     * @param scBeta \((sin \beta, \cos \beta)\)
+     * @return \((sin \alpha+\beta, \cos \alpha+\beta)\)
+     * @since 1.8
+     */
+    public static SinCos sum(final SinCos scAlpha, final SinCos scBeta) {
+        return new SinCos(MathArrays.linearCombination(scAlpha.sin, scBeta.cos,  scAlpha.cos, scBeta.sin),
+                          MathArrays.linearCombination(scAlpha.cos, scBeta.cos, -scAlpha.sin, scBeta.sin));
+    }
+
+    /** Compute sine and cosine of angles difference.
+     * @param scAlpha \((sin \alpha, \cos \alpha)\)
+     * @param scBeta \((sin \beta, \cos \beta)\)
+     * @return \((sin \alpha+\beta, \cos \alpha-\beta)\)
+     * @since 1.8
+     */
+    public static SinCos difference(final SinCos scAlpha, final SinCos scBeta) {
+        return new SinCos(MathArrays.linearCombination(scAlpha.sin, scBeta.cos, -scAlpha.cos, scBeta.sin),
+                          MathArrays.linearCombination(scAlpha.cos, scBeta.cos,  scAlpha.sin, scBeta.sin));
+    }
+
 }

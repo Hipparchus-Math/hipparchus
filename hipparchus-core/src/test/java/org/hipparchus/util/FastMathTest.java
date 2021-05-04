@@ -781,6 +781,36 @@ public class FastMathTest {
     }
 
     @Test
+    public void testSinCosSum() {
+        final RandomGenerator random = new Well19937a(0x4aab62a42c9eb940l);
+        for (int i = 0; i < 1000000; ++i) {
+            final double alpha = 10.0 * (2.0 * random.nextDouble() - 1.0);
+            final double beta  = 10.0 * (2.0 * random.nextDouble() - 1.0);
+            final SinCos scAlpha         = FastMath.sinCos(alpha);
+            final SinCos scBeta          = FastMath.sinCos(beta);
+            final SinCos scAlphaPlusBeta = FastMath.sinCos(alpha + beta);
+            final SinCos scSum           = SinCos.sum(scAlpha, scBeta);
+            Assert.assertEquals(scAlphaPlusBeta.sin(), scSum.sin(), 2.0e-15);
+            Assert.assertEquals(scAlphaPlusBeta.cos(), scSum.cos(), 2.0e-15);
+        }
+    }
+
+    @Test
+    public void testSinCosdifference() {
+        final RandomGenerator random = new Well19937a(0x589aaf49471b03d5l);
+        for (int i = 0; i < 1000000; ++i) {
+            final double alpha = 10.0 * (2.0 * random.nextDouble() - 1.0);
+            final double beta  = 10.0 * (2.0 * random.nextDouble() - 1.0);
+            final SinCos scAlpha          = FastMath.sinCos(alpha);
+            final SinCos scBeta           = FastMath.sinCos(beta);
+            final SinCos scAlphaMinusBeta = FastMath.sinCos(alpha - beta);
+            final SinCos scdifference     = SinCos.difference(scAlpha, scBeta);
+            Assert.assertEquals(scAlphaMinusBeta.sin(), scdifference.sin(), 2.0e-15);
+            Assert.assertEquals(scAlphaMinusBeta.cos(), scdifference.cos(), 2.0e-15);
+        }
+    }
+
+    @Test
     public void testSinAccuracy() {
         double maxerrulp = 0.0;
 
@@ -1910,6 +1940,62 @@ public class FastMathTest {
     }
 
     @Test
+    public void testAbsExactInt() {
+        Assert.assertEquals(12, FastMath.absExact(+12));
+        Assert.assertEquals(12, FastMath.absExact(-12));
+        Assert.assertEquals(Integer.MAX_VALUE, FastMath.absExact(Integer.MAX_VALUE));
+        Assert.assertEquals(Integer.MAX_VALUE, FastMath.absExact(-Integer.MAX_VALUE));
+        try {
+            FastMath.absExact(Integer.MIN_VALUE);
+            Assert.fail("an exception should have been thrown");
+        } catch (ArithmeticException ae) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testAbsExactLong() {
+        Assert.assertEquals(12l, FastMath.absExact(+12l));
+        Assert.assertEquals(12l, FastMath.absExact(-12l));
+        Assert.assertEquals(Long.MAX_VALUE, FastMath.absExact(Long.MAX_VALUE));
+        Assert.assertEquals(Long.MAX_VALUE, FastMath.absExact(-Long.MAX_VALUE));
+        try {
+            FastMath.absExact(Long.MIN_VALUE);
+            Assert.fail("an exception should have been thrown");
+        } catch (ArithmeticException ae) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testNegateExactInt() {
+        Assert.assertEquals(-12, FastMath.negateExact(+12));
+        Assert.assertEquals(12, FastMath.negateExact(-12));
+        Assert.assertEquals(-Integer.MAX_VALUE, FastMath.negateExact(Integer.MAX_VALUE));
+        Assert.assertEquals(Integer.MAX_VALUE, FastMath.negateExact(-Integer.MAX_VALUE));
+        try {
+            FastMath.absExact(Integer.MIN_VALUE);
+            Assert.fail("an exception should have been thrown");
+        } catch (ArithmeticException ae) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testNegateExactLong() {
+        Assert.assertEquals(-12l, FastMath.negateExact(+12l));
+        Assert.assertEquals(12l, FastMath.negateExact(-12l));
+        Assert.assertEquals(-Long.MAX_VALUE, FastMath.negateExact(Long.MAX_VALUE));
+        Assert.assertEquals(Long.MAX_VALUE, FastMath.negateExact(-Long.MAX_VALUE));
+        try {
+            FastMath.absExact(Long.MIN_VALUE);
+            Assert.fail("an exception should have been thrown");
+        } catch (ArithmeticException ae) {
+            // expected
+        }
+    }
+
+    @Test
     public void testToIntExact() {
         for (int n = -1000; n < 1000; ++n) {
             assertEquals(n, FastMath.toIntExact(0l + n));
@@ -2038,6 +2124,36 @@ public class FastMathTest {
         for (int i = 0; i < 10000; ++i) {
             long a = generator.nextLong();
             long b = generator.nextLong();
+            if (b == 0) {
+                try {
+                    FastMath.floorDiv(a, b);
+                    fail("an exception should have been thrown");
+                } catch (MathRuntimeException mae) {
+                    // expected
+                }
+            } else {
+                long d = FastMath.floorDiv(a, b);
+                long m = FastMath.floorMod(a, b);
+                assertEquals(poorManFloorDiv(a, b), d);
+                assertEquals(poorManFloorMod(a, b), m);
+                assertEquals(a, d * b + m);
+                if (b < 0) {
+                    assertTrue(m <= 0);
+                    assertTrue(-m < -b);
+                } else {
+                    assertTrue(m >= 0);
+                    assertTrue(m < b);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testFloorDivModLongInt() {
+        RandomGenerator generator = new Well1024a(0xe03b6a1800d92fa7l);
+        for (int i = 0; i < 10000; ++i) {
+            long a = (long) generator.nextInt();
+            int b = generator.nextInt();
             if (b == 0) {
                 try {
                     FastMath.floorDiv(a, b);

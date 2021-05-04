@@ -52,7 +52,7 @@ import org.hipparchus.util.MathUtils;
  * @see FieldUnivariateDerivative2
  * @since 1.7
  */
-public class FieldGradient<T extends CalculusFieldElement<T>> implements CalculusFieldElement<FieldGradient<T>> {
+public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDerivative<T, FieldGradient<T>> {
 
     /** Value of the function. */
     private final T value;
@@ -161,6 +161,7 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements Calculu
     /** Get the value part of the function.
      * @return value part of the value of the function
      */
+    @Override
     public T getValue() {
         return value;
     }
@@ -175,8 +176,44 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements Calculu
     /** Get the number of free parameters.
      * @return number of free parameters
      */
+    @Override
     public int getFreeParameters() {
         return grad.length;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getOrder() {
+        return 1;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public T getPartialDerivative(final int ... orders)
+        throws MathIllegalArgumentException {
+
+        // check the number of components
+        if (orders.length != grad.length) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   orders.length, grad.length);
+        }
+
+        // check that either all derivation orders are set to 0,
+        // or that only one is set to 1 and all other ones are set to 0
+        int selected = -1;
+        for (int i = 0; i < orders.length; ++i) {
+            if (orders[i] != 0) {
+                if (selected >= 0 || orders[i] != 1) {
+                     throw new MathIllegalArgumentException(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED,
+                                                           orders[i]);
+                }
+                // found the component set to derivation order 1
+                selected = i;
+            }
+        }
+
+        return (selected < 0) ? value : grad[selected];
+
     }
 
     /** Get the partial derivative with respect to one parameter.
@@ -202,6 +239,14 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements Calculu
         return getField().getConversionFactory().build(derivatives);
     }
 
+    /** '+' operator.
+     * @param a right hand side parameter of the operator
+     * @return this+a
+     */
+    public FieldGradient<T> add(final T a) {
+        return new FieldGradient<>(value.add(a), grad);
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> add(final double a) {
@@ -218,6 +263,14 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements Calculu
         return result;
     }
 
+    /** '-' operator.
+     * @param a right hand side parameter of the operator
+     * @return this-a
+     */
+    public FieldGradient<T> subtract(final T a) {
+        return new FieldGradient<>(value.subtract(a), grad);
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> subtract(final double a) {
@@ -230,6 +283,18 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements Calculu
         final FieldGradient<T> result = newInstance(value.subtract(a.value));
         for (int i = 0; i < grad.length; ++i) {
             result.grad[i] = grad[i].subtract(a.grad[i]);
+        }
+        return result;
+    }
+
+    /** '&times;' operator.
+     * @param n right hand side parameter of the operator
+     * @return this&times;n
+     */
+    public FieldGradient<T> multiply(final T n) {
+        final FieldGradient<T> result = newInstance(value.multiply(n));
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i].multiply(n);
         }
         return result;
     }
@@ -264,6 +329,18 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements Calculu
         return result;
     }
 
+    /** '&divide;' operator.
+     * @param a right hand side parameter of the operator
+     * @return this&divide;a
+     */
+    public FieldGradient<T> divide(final T a) {
+        final FieldGradient<T> result = newInstance(value.divide(a));
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i].divide(a);
+        }
+        return result;
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> divide(final double a) {
@@ -284,6 +361,15 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements Calculu
             result.grad[i] = grad[i].multiply(a.value).subtract(value.multiply(a.grad[i])).multiply(inv2);
         }
         return result;
+    }
+
+    /** IEEE remainder operator.
+     * @param a right hand side parameter of the operator
+     * @return this - n &times; a where n is the closest integer to this/a
+     * (the even integer is chosen for n if this/a is halfway between two integers)
+     */
+    public FieldGradient<T> remainder(final T a) {
+        return new FieldGradient<>(FastMath.IEEEremainder(value, a), grad);
     }
 
     /** {@inheritDoc} */
@@ -351,6 +437,22 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements Calculu
     @Override
     public FieldGradient<T> signum() {
         return newInstance(FastMath.signum(value));
+    }
+
+    /**
+     * Returns the instance with the sign of the argument.
+     * A NaN {@code sign} argument is treated as positive.
+     *
+     * @param sign the sign for the returned value
+     * @return the instance with the same sign as the {@code sign} argument
+     */
+    public FieldGradient<T> copySign(final T sign) {
+        long m = Double.doubleToLongBits(value.getReal());
+        long s = Double.doubleToLongBits(sign.getReal());
+        if ((m >= 0 && s >= 0) || (m < 0 && s < 0)) { // Sign is currently OK
+            return this;
+        }
+        return negate(); // flip sign
     }
 
     /** {@inheritDoc} */
@@ -748,6 +850,35 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements Calculu
 
     }
 
+    /**
+     * Compute a linear combination.
+     * @param a Factors.
+     * @param b Factors.
+     * @return <code>&Sigma;<sub>i</sub> a<sub>i</sub> b<sub>i</sub></code>.
+     * @throws MathIllegalArgumentException if arrays dimensions don't match
+     */
+    public FieldGradient<T> linearCombination(final T[] a, final FieldGradient<T>[] b) {
+
+        // extract values and first derivatives
+        final Field<T> field = b[0].value.getField();
+        final int      n  = b.length;
+        final T[] b0 = MathArrays.buildArray(field, n);
+        final T[] b1 = MathArrays.buildArray(field, n);
+        for (int i = 0; i < n; ++i) {
+            b0[i] = b[i].value;
+        }
+
+        final FieldGradient<T> result = newInstance(b[0].value.linearCombination(a, b0));
+        for (int k = 0; k < grad.length; ++k) {
+            for (int i = 0; i < n; ++i) {
+                b1[i] = b[i].grad[k];
+            }
+            result.grad[k] = b[0].value.linearCombination(a, b1);
+        }
+        return result;
+
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> linearCombination(final double[] a, final FieldGradient<T>[] b) {
@@ -825,6 +956,34 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements Calculu
             b[2] = b2.grad[i];
             b[4] = b3.grad[i];
             result.grad[i] = a1.value.linearCombination(a, b);
+        }
+        return result;
+    }
+
+    /**
+     * Compute a linear combination.
+     * @param a1 first factor of the first term
+     * @param b1 second factor of the first term
+     * @param a2 first factor of the second term
+     * @param b2 second factor of the second term
+     * @param a3 first factor of the third term
+     * @param b3 second factor of the third term
+     * @return a<sub>1</sub>&times;b<sub>1</sub> +
+     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
+     * @see #linearCombination(double, Object, double, Object)
+     * @see #linearCombination(double, Object, double, Object, double, Object, double, Object)
+     * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
+     */
+    public FieldGradient<T> linearCombination(final T a1, final FieldGradient<T> b1,
+                                              final T a2, final FieldGradient<T> b2,
+                                              final T a3, final FieldGradient<T> b3) {
+        final FieldGradient<T> result = newInstance(b1.value.linearCombination(a1, b1.value,
+                                                                               a2, b2.value,
+                                                                               a3, b3.value));
+        for (int i = 0; i < b1.grad.length; ++i) {
+            result.grad[i] = b1.value.linearCombination(a1, b1.grad[i],
+                                                        a2, b2.grad[i],
+                                                        a3, b3.grad[i]);
         }
         return result;
     }

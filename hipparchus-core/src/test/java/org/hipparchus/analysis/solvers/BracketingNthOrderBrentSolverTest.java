@@ -25,7 +25,7 @@ package org.hipparchus.analysis.solvers;
 import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.differentiation.DSFactory;
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -123,37 +123,37 @@ public final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbs
         // 80 digits and checked with emacs (only the first 20 digits are reproduced here)
         compare(new TestFunction(0.0, -2, 2) {
             @Override
-            public DerivativeStructure value(DerivativeStructure x) {
+            public <T extends Derivative<T>> T value(T x) {
                 return x.sin().subtract(x.multiply(0.5));
             }
         });
         compare(new TestFunction(6.3087771299726890947, -5, 10) {
             @Override
-            public DerivativeStructure value(DerivativeStructure x) {
+            public <T extends Derivative<T>> T value(T x) {
                 return x.pow(5).add(x).subtract(10000);
             }
         });
         compare(new TestFunction(9.6335955628326951924, 0.001, 10) {
             @Override
-            public DerivativeStructure value(DerivativeStructure x) {
+            public <T extends Derivative<T>> T value(T x) {
                 return x.sqrt().subtract(x.reciprocal()).subtract(3);
             }
         });
         compare(new TestFunction(2.8424389537844470678, -5, 5) {
             @Override
-            public DerivativeStructure value(DerivativeStructure x) {
+            public <T extends Derivative<T>> T value(T x) {
                 return x.exp().add(x).subtract(20);
             }
         });
         compare(new TestFunction(8.3094326942315717953, 0.001, 10) {
             @Override
-            public DerivativeStructure value(DerivativeStructure x) {
+            public <T extends Derivative<T>> T value(T x) {
                 return x.log().add(x.sqrt()).subtract(5);
             }
         });
         compare(new TestFunction(1.4655712318767680266, -0.5, 1.5) {
             @Override
-            public DerivativeStructure value(DerivativeStructure x) {
+            public <T extends Derivative<T>> T value(T x) {
                 return x.subtract(1).multiply(x).multiply(x).subtract(1);
             }
         });
@@ -222,7 +222,7 @@ public final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbs
             return value(new DSFactory(0, 0).constant(x)).getValue();
         }
 
-        public abstract DerivativeStructure value(final DerivativeStructure t);
+        public abstract <T extends Derivative<T>> T value(final T t);
 
     }
 

@@ -827,12 +827,10 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
             support[i] = new S2Point(support3D[i]);
         }
 
-        final EnclosingBall<Sphere2D, S2Point> enclosingS2 =
-                new EnclosingBall<>(new S2Point(enclosing3D.getCenter()),
-                                    FastMath.acos((1 + h * h - r * r) / (2 * h)),
-                                    support);
+        return new EnclosingBall<>(new S2Point(enclosing3D.getCenter()),
+                                   FastMath.acos((1 + h * h - r * r) / (2 * h)),
+                                   support);
 
-        return enclosingS2;
 
     }
 

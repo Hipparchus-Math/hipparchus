@@ -71,6 +71,7 @@ public enum LocalizedCoreFormats implements Localizable {
     CONTRACTION_CRITERIA_SMALLER_THAN_ONE("contraction criteria smaller than one ({0}).  This would lead to a never ending loop of expansion and contraction as an internal storage array length equal to the number of elements would satisfy the contraction criteria."),
     CONVERGENCE_FAILED("convergence failed"), /* keep */
     CUMULATIVE_PROBABILITY_RETURNED_NAN("Cumulative probability function returned NaN for argument {0} p = {1}"),
+    DERIVATION_ORDER_NOT_ALLOWED("derivation order {0} is not allowed here"),
     DIFFERENT_ROWS_LENGTHS("some rows have length {0} while others have length {1}"),
     DIGEST_NOT_INITIALIZED("digest not initialized"),
     DIMENSIONS_MISMATCH_2x2("got {0}x{1} but expected {2}x{3}"), /* keep */

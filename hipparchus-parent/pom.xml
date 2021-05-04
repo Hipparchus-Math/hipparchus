@@ -21,7 +21,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus</artifactId>
-  <version>1.7-SNAPSHOT</version>
+  <version>2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Hipparchus</name>
@@ -62,6 +62,10 @@
   </distributionManagement>
 
   <developers>
+    <developer>
+      <name>Bryan Cazabonne</name>
+      <id>bryan</id>
+    </developer>
     <developer>
       <name>Otmar Ertl</name>
       <id>oertl</id>
@@ -207,10 +211,16 @@
       <name>Ajo Fod</name>
     </contributor>
     <contributor>
+      <name>Alberto Foss&#224;</name>
+    </contributor>
+    <contributor>
       <name>John Gant</name>
     </contributor>
     <contributor>
       <name>Ken Geis</name>
+    </contributor>
+    <contributor>
+      <name>Andrew Goetz</name>
     </contributor>
     <contributor>
       <name>Hank Grabowski</name>
@@ -435,7 +445,13 @@
       <dependency>
         <groupId>org.hamcrest</groupId>
         <artifactId>hamcrest-library</artifactId>
-        <version>${hipparchus.hamcrest-library.version}</version>
+        <version>${hipparchus.hamcrest.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-core</artifactId>
+        <version>${hipparchus.hamcrest.version}</version>
         <scope>test</scope>
       </dependency>
     </dependencies>
@@ -460,35 +476,35 @@
 
     <!-- Project specific plugin versions -->
 
-    <hipparchus.spotbugs-maven-plugin.version>3.1.12.2</hipparchus.spotbugs-maven-plugin.version>
-    <hipparchus.jacoco-maven-plugin.version>0.8.5</hipparchus.jacoco-maven-plugin.version>
-    <hipparchus.maven-assembly-plugin.version>3.1.1</hipparchus.maven-assembly-plugin.version>
-    <hipparchus.maven-bundle-plugin.version>4.2.1</hipparchus.maven-bundle-plugin.version>
-    <hipparchus.build-helper-maven-plugin>3.0.0</hipparchus.build-helper-maven-plugin>
+    <hipparchus.spotbugs-maven-plugin.version>4.1.4</hipparchus.spotbugs-maven-plugin.version>
+    <hipparchus.jacoco-maven-plugin.version>0.8.6</hipparchus.jacoco-maven-plugin.version>
+    <hipparchus.maven-assembly-plugin.version>3.3.0</hipparchus.maven-assembly-plugin.version>
+    <hipparchus.maven-bundle-plugin.version>5.1.1</hipparchus.maven-bundle-plugin.version>
+    <hipparchus.build-helper-maven-plugin>3.2.0</hipparchus.build-helper-maven-plugin>
     <hipparchus.maven-changes-plugin.version>2.12.1</hipparchus.maven-changes-plugin.version>
-    <hipparchus.maven-checkstyle-plugin.version>3.1.0</hipparchus.maven-checkstyle-plugin.version>
-    <hipparchus.checkstyle.version>8.29</hipparchus.checkstyle.version>
+    <hipparchus.maven-checkstyle-plugin.version>3.1.1</hipparchus.maven-checkstyle-plugin.version>
+    <hipparchus.checkstyle.version>8.37</hipparchus.checkstyle.version>
     <hipparchus.maven-clean-plugin.version>3.1.0</hipparchus.maven-clean-plugin.version>
     <hipparchus.maven-compiler-plugin.version>3.8.1</hipparchus.maven-compiler-plugin.version>
-    <hipparchus.maven-javadoc-plugin.version>3.1.1</hipparchus.maven-javadoc-plugin.version>
-    <hipparchus.maven-jar-plugin.version>3.1.2</hipparchus.maven-jar-plugin.version>
+    <hipparchus.maven-javadoc-plugin.version>3.2.0</hipparchus.maven-javadoc-plugin.version>
+    <hipparchus.maven-jar-plugin.version>3.2.0</hipparchus.maven-jar-plugin.version>
     <hipparchus.maven-jxr-plugin.version>3.0.0</hipparchus.maven-jxr-plugin.version>
     <hipparchus.plantuml-maven-plugin.version>1.2</hipparchus.plantuml-maven-plugin.version>
-    <hipparchus.plantuml.version>1.2019.11</hipparchus.plantuml.version>
-    <hipparchus.maven-pmd-plugin.version>3.12.0</hipparchus.maven-pmd-plugin.version>
-    <hipparchus.maven-resources-plugin.version>3.1.0</hipparchus.maven-resources-plugin.version>
+    <hipparchus.plantuml.version>1.2020.19</hipparchus.plantuml.version>
+    <hipparchus.maven-pmd-plugin.version>3.13.0</hipparchus.maven-pmd-plugin.version>
+    <hipparchus.maven-resources-plugin.version>3.2.0</hipparchus.maven-resources-plugin.version>
     <hipparchus.maven-site-plugin.version>3.4</hipparchus.maven-site-plugin.version>
     <hipparchus.maven-project-info-reports-plugin.version>2.9</hipparchus.maven-project-info-reports-plugin.version>
-    <hipparchus.maven-source-plugin.version>3.1.0</hipparchus.maven-source-plugin.version>
-    <hipparchus.maven-surefire-plugin.version>3.0.0-M3</hipparchus.maven-surefire-plugin.version>
-    <hipparchus.maven-surefire-report-plugin.version>3.0.0-M3</hipparchus.maven-surefire-report-plugin.version>
-    <hipparchus.maven-enforcer-plugin.version>3.0.0-M2</hipparchus.maven-enforcer-plugin.version>
+    <hipparchus.maven-source-plugin.version>3.2.1</hipparchus.maven-source-plugin.version>
+    <hipparchus.maven-surefire-plugin.version>3.0.0-M5</hipparchus.maven-surefire-plugin.version>
+    <hipparchus.maven-surefire-report-plugin.version>3.0.0-M5</hipparchus.maven-surefire-report-plugin.version>
+    <hipparchus.maven-enforcer-plugin.version>3.0.0-M3</hipparchus.maven-enforcer-plugin.version>
     <hipparchus.nexus-staging-maven-plugin.version>1.6.8</hipparchus.nexus-staging-maven-plugin.version>
     <hipparchus.maven-gpg-plugin.version>1.6</hipparchus.maven-gpg-plugin.version>
     <hipparchus.maven-install-plugin.version>3.0.0-M1</hipparchus.maven-install-plugin.version>
     <hipparchus.apache-rat-plugin.version>0.13</hipparchus.apache-rat-plugin.version>
-    <hipparchus.junit.version>4.13-beta-3</hipparchus.junit.version>
-    <hipparchus.hamcrest-library.version>1.3</hipparchus.hamcrest-library.version>
+    <hipparchus.junit.version>4.13.1</hipparchus.junit.version>
+    <hipparchus.hamcrest.version>2.2</hipparchus.hamcrest.version>
     <hipparchus.reflow-velocity-tools.version>1.1.1</hipparchus.reflow-velocity-tools.version>
     <hipparchus.velocity.version>1.7</hipparchus.velocity.version>
     <!-- sonar related properties -->
@@ -886,6 +902,13 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-changes-plugin</artifactId>
         <version>${hipparchus.maven-changes-plugin.version}</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>changes-report</report>
+            </reports>
+          </reportSet>
+        </reportSets>
       </plugin>
       <plugin>
         <artifactId>maven-pmd-plugin</artifactId>

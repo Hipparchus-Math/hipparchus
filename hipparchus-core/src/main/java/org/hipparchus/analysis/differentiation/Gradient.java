@@ -52,7 +52,7 @@ import org.hipparchus.util.SinCos;
  * @see FieldGradient
  * @since 1.7
  */
-public class Gradient implements CalculusFieldElement<Gradient>, Serializable {
+public class Gradient implements Derivative<Gradient>, CalculusFieldElement<Gradient>, Serializable {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20200520L;
@@ -133,6 +133,7 @@ public class Gradient implements CalculusFieldElement<Gradient>, Serializable {
     /** Get the value part of the function.
      * @return value part of the value of the function
      */
+    @Override
     public double getValue() {
         return value;
     }
@@ -145,11 +146,45 @@ public class Gradient implements CalculusFieldElement<Gradient>, Serializable {
         return grad.clone();
     }
 
-    /** Get the number of free parameters.
-     * @return number of free parameters
-     */
+    /** {@inheritDoc} */
+    @Override
     public int getFreeParameters() {
         return grad.length;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getOrder() {
+        return 1;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public double getPartialDerivative(final int ... orders)
+        throws MathIllegalArgumentException {
+
+        // check the number of components
+        if (orders.length != grad.length) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   orders.length, grad.length);
+        }
+
+        // check that either all derivation orders are set to 0,
+        // or that only one is set to 1 and all other ones are set to 0
+        int selected = -1;
+        for (int i = 0; i < orders.length; ++i) {
+            if (orders[i] != 0) {
+                if (selected >= 0 || orders[i] != 1) {
+                     throw new MathIllegalArgumentException(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED,
+                                                           orders[i]);
+                }
+                // found the component set to derivation order 1
+                selected = i;
+            }
+        }
+
+        return (selected < 0) ? value : grad[selected];
+
     }
 
     /** Get the partial derivative with respect to one parameter.
@@ -415,15 +450,13 @@ public class Gradient implements CalculusFieldElement<Gradient>, Serializable {
         return result;
     }
 
-    /** Compute composition of the instance by a function.
-     * @param g0 value of the function at the current point (i.e. at {@code g(getValue())})
-     * @param g1 first derivative of the function at the current point (i.e. at {@code g'(getValue())})
-     * @return g(this)
-     */
-    public Gradient compose(final double g0, final double g1) {
-        final Gradient result = newInstance(g0);
+    /** {@inheritDoc} */
+    @Override
+    public Gradient compose(final double... f) {
+       MathUtils.checkDimension(f.length, getOrder() + 1);
+       final Gradient result = newInstance(f[0]);
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = g1 * grad[i];
+            result.grad[i] = f[1] * grad[i];
         }
         return result;
     }
@@ -760,10 +793,10 @@ public class Gradient implements CalculusFieldElement<Gradient>, Serializable {
     public Gradient linearCombination(final Gradient a1, final Gradient b1,
                                       final Gradient a2, final Gradient b2,
                                       final Gradient a3, final Gradient b3) {
-        final double[] a = new double[] {
+        final double[] a = {
             a1.value, 0, a2.value, 0, a3.value, 0
         };
-        final double[] b = new double[] {
+        final double[] b = {
             0, b1.value, 0, b2.value, 0, b3.value
         };
         final Gradient result = newInstance(MathArrays.linearCombination(a1.value, b1.value,
@@ -803,10 +836,10 @@ public class Gradient implements CalculusFieldElement<Gradient>, Serializable {
                                       final Gradient a2, final Gradient b2,
                                       final Gradient a3, final Gradient b3,
                                       final Gradient a4, final Gradient b4) {
-        final double[] a = new double[] {
+        final double[] a = {
             a1.value, 0, a2.value, 0, a3.value, 0, a4.value, 0
         };
-        final double[] b = new double[] {
+        final double[] b = {
             0, b1.value, 0, b2.value, 0, b3.value, 0, b4.value
         };
         final Gradient result = newInstance(MathArrays.linearCombination(a1.value, b1.value,

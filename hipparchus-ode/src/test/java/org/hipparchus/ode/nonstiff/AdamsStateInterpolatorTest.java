@@ -85,4 +85,9 @@ public class AdamsStateInterpolatorTest extends ODEStateInterpolatorAbstractTest
         doRestrictBothEnds(1.0e-15, 1.0e-15);
     }
 
+    @Override
+    public void degenerateInterpolation() {
+        doDegenerateInterpolation();
+    }
+
 }

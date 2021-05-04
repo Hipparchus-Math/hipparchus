@@ -25,7 +25,7 @@ import java.util.Arrays;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.FieldUnivariateFunction;
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -165,8 +165,8 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
     /** {@inheritDoc}
      */
     @Override
-    public DerivativeStructure value(final DerivativeStructure t) {
-        final double t0 = t.getValue();
+    public <T extends Derivative<T>> T value(final T t) {
+        final double t0 = t.getReal();
         MathUtils.checkRangeInclusive(t0, knots[0], knots[n]);
         int i = Arrays.binarySearch(knots, t0);
         if (i < 0) {

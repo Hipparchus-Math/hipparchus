@@ -23,7 +23,7 @@
 package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.ParametricUnivariateFunction;
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -210,7 +210,7 @@ public class Logistic implements UnivariateDifferentiableFunction {
     /** {@inheritDoc}
      */
     @Override
-    public DerivativeStructure value(final DerivativeStructure t) {
+    public <T extends Derivative<T>> T value(T t) {
         return t.negate().add(m).multiply(b).exp().multiply(q).add(1).pow(oneOverN).reciprocal().multiply(k - a).add(a);
     }
 

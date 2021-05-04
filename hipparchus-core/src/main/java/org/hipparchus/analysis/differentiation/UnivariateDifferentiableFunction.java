@@ -33,15 +33,15 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  */
 public interface UnivariateDifferentiableFunction extends UnivariateFunction {
 
-    /** Simple mathematical function.
-     * <p>{@link UnivariateDifferentiableFunction} classes compute both the
-     * value and the first derivative of the function.</p>
-     * @param t function input value
-     * @return function result
-     * @exception MathIllegalArgumentException if t is inconsistent with the
-     * function's free parameters or order
+    /**
+     * Compute the value for the function.
+     * @param x the point for which the function value should be computed
+     * @param <T> the type of the field elements
+     * @return the value
+     * @exception MathIllegalArgumentException if {@code x} does not
+     * satisfy the function's constraints (argument out of bound, or unsupported
+     * derivative order for example)
      */
-    DerivativeStructure value(DerivativeStructure t)
-        throws MathIllegalArgumentException;
+    <T extends Derivative<T>> T value(T x) throws MathIllegalArgumentException;
 
 }

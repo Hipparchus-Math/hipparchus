@@ -66,12 +66,12 @@ at fork time.
 
  ---
 
-## 1.6 Release is out!
+## 1.8 Release is out!
 
-Hipparchus 1.6 is now available for download from the [Hipparchus download page](downloads.html) or on
-Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.6 release are:
+Hipparchus 1.8 is now available for download from the [Hipparchus download page](downloads.html) or on
+Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.8 release are:
 
-  * field version of Vector2D
-  * Optimum.of(...) factory method
-  * AbstractEvaluation constructor is now public
-  * bug fixes in multi-step integrators, integration and exception messages
+  * fixed LU-decomposition issue with signed zero complex numbers on diagonal
+  * fixed complex eigendecomposition when several eigenvalues are equals
+  * added sum and difference of angles in SinCos and FieldSinCos
+  * removed spurious reduction of BigFraction in equality test

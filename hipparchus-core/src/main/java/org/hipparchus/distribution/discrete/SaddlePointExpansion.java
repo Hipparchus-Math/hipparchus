@@ -24,6 +24,7 @@ package org.hipparchus.distribution.discrete;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.Precision;
 
 /**
  * Utility class used by various distributions to accurately compute their
@@ -103,7 +104,7 @@ final class SaddlePointExpansion {
     static double getStirlingError(double z) {
         if (z < 15.0) {
             double z2 = 2.0 * z;
-            if (FastMath.floor(z2) == z2) {
+            if (Precision.isMathematicalInteger(z2)) {
                 return EXACT_STIRLING_ERRORS[(int) z2];
             } else {
                 return Gamma.logGamma(z + 1.0) - (z + 0.5) * FastMath.log(z) +
@@ -111,13 +112,12 @@ final class SaddlePointExpansion {
             }
         } else {
             double z2 = z * z;
-            double ret = (0.083333333333333333333 -
+            return (0.083333333333333333333 -
                            (0.00277777777777777777778 -
                              (0.00079365079365079365079365 -
                                (0.000595238095238095238095238 -
                                  0.0008417508417508417508417508 /
                                    z2) / z2) / z2) / z2) / z;
-            return ret;
         }
     }
 

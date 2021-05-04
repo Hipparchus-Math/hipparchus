@@ -89,4 +89,21 @@ public interface FieldElement<T> {
      */
     Field<T> getField();
 
+    /** Check if an element is semantically equal to zero.
+     * <p>
+     * The default implementation simply calls {@code equals(getField().getZero())}.
+     * However, this may need to be overridden in some cases as due to
+     * compatibility with {@code hashCode()} some classes implements
+     * {@code equals(Object)} in such a way that -0.0 and +0.0 are different,
+     * which may be a problem. It prevents for example identifying a diagonal
+     * element is zero and should be avoided when doing partial pivoting in
+     * LU decomposition.
+     * </p>
+     * @return true if the element is semantically equal to zero
+     * @since 1.8
+     */
+    default boolean isZero() {
+        return equals(getField().getZero());
+    }
+
 }

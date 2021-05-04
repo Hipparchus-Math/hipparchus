@@ -16,10 +16,9 @@
  */
 package org.hipparchus.linear;
 
-import java.util.TreeSet;
+import java.util.Arrays;
 
 import org.hipparchus.complex.Complex;
-import org.hipparchus.complex.ComplexComparator;
 
 /**
  * Given a matrix A, it computes a complex eigen decomposition A = VDV^{T}.
@@ -35,42 +34,68 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
      * @param matrix real matrix.
      */
     public OrderedComplexEigenDecomposition(final RealMatrix matrix) {
-        super(matrix);
+        this(matrix,
+             ComplexEigenDecomposition.DEFAULT_EIGENVECTORS_EQUALITY,
+             ComplexEigenDecomposition.DEFAULT_EPSILON,
+             ComplexEigenDecomposition.DEFAULT_EPSILON_AV_VD_CHECK);
+    }
 
+    /**
+     * Constructor for decomposition.
+     * <p>
+     * The {@code eigenVectorsEquality} threshold is used to ensure the L∞-normalized
+     * eigenvectors found using inverse iteration are different from each other.
+     * if \(min(|e_i-e_j|,|e_i+e_j|)\) is smaller than this threshold, the algorithm
+     * considers it has found again an already known vector, so it drops it and attempts
+     * a new inverse iteration with a different start vector. This value should be
+     * much larger than {@code epsilon} which is used for convergence
+     * </p>
+     * @param matrix real matrix.
+     * @param eigenVectorsEquality threshold below which eigenvectors are considered equal
+     * @param epsilon Epsilon used for internal tests (e.g. is singular, eigenvalue ratio, etc.)
+     * @param epsilonAVVDCheck Epsilon criteria for final AV=VD check
+     * @since 1.9
+     */
+    public OrderedComplexEigenDecomposition(final RealMatrix matrix, final double eigenVectorsEquality,
+                                            final double epsilon, final double epsilonAVVDCheck) {
+        super(matrix, eigenVectorsEquality, epsilon, epsilonAVVDCheck);
         final FieldMatrix<Complex> D = this.getD();
         final FieldMatrix<Complex> V = this.getV();
 
         // getting eigen values
-        TreeSet<Complex> eigenValues = new TreeSet<>(new ComplexComparator());
+        IndexedEigenvalue[] eigenValues = new IndexedEigenvalue[D.getRowDimension()];
         for (int ij = 0; ij < matrix.getRowDimension(); ij++) {
-            eigenValues.add(D.getEntry(ij, ij));
+            eigenValues[ij] = new IndexedEigenvalue(ij, D.getEntry(ij, ij));
         }
 
         // ordering
+        Arrays.sort(eigenValues);
         for (int ij = 0; ij < matrix.getRowDimension() - 1; ij++) {
-            final Complex eigValue = eigenValues.pollFirst();
-            int currentIndex = -1;
-            // searching the current index
-            for (currentIndex = ij; currentIndex < matrix.getRowDimension(); currentIndex++) {
-                Complex compCurrent = D.getEntry(currentIndex, currentIndex);
-                if (eigValue.equals(compCurrent)) {
-                    break;
-                }
-            }
+            final IndexedEigenvalue eij = eigenValues[ij];
 
-            if (ij == currentIndex) {
+            if (ij == eij.index) {
                 continue;
             }
 
             // exchanging D
-            Complex previousValue = D.getEntry(ij, ij);
-            D.setEntry(ij, ij, eigValue);
-            D.setEntry(currentIndex, currentIndex, previousValue);
+            final Complex previousValue = D.getEntry(ij, ij);
+            D.setEntry(ij, ij, eij.eigenValue);
+            D.setEntry(eij.index, eij.index, previousValue);
 
             // exchanging V
-            final Complex[] previousColumnV = V.getColumn(ij);
-            V.setColumn(ij, V.getColumn(currentIndex));
-            V.setColumn(currentIndex, previousColumnV);
+            for (int k = 0; k  < matrix.getRowDimension(); ++k) {
+                final Complex previous = V.getEntry(k, ij);
+                V.setEntry(k, ij, V.getEntry(k, eij.index));
+                V.setEntry(k, eij.index, previous);
+            }
+
+            // exchanging eigenvalue
+            for (int k = ij + 1; k < matrix.getRowDimension(); ++k) {
+                if (eigenValues[k].index == ij) {
+                    eigenValues[k].index = eij.index;
+                    break;
+                }
+            }
         }
 
         checkDefinition(matrix);
@@ -81,4 +106,67 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
     public FieldMatrix<Complex> getVT() {
         return getV().transpose();
     }
+
+    /** Container for index and eigenvalue pair. */
+    private static class IndexedEigenvalue implements Comparable<IndexedEigenvalue> {
+
+        /** Index in the diagonal matrix. */
+        private int index;
+
+        /** Eigenvalue. */
+        private final Complex eigenValue;
+
+        /** Build the container from its fields.
+         * @param index index in the diagonal matrix
+         * @param eigenvalue eigenvalue
+         */
+        IndexedEigenvalue(final int index, final Complex eigenvalue) {
+            this.index      = index;
+            this.eigenValue = eigenvalue;
+        }
+
+        /** {@inheritDoc}
+         * <p>
+         * Ordering uses real ordering as the primary sort order and
+         * imaginary ordering as the secondary sort order.
+         * </p>
+         */
+        @Override
+        public int compareTo(final IndexedEigenvalue other) {
+            final int cR = Double.compare(eigenValue.getReal(), other.eigenValue.getReal());
+            if (cR == 0) {
+                return Double.compare(eigenValue.getImaginary(),other.eigenValue.getImaginary());
+            } else {
+                return cR;
+            }
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public boolean equals(final Object other) {
+
+            if (this == other) {
+                return true;
+            }
+
+            if (other instanceof IndexedEigenvalue) {
+                final IndexedEigenvalue rhs = (IndexedEigenvalue) other;
+                return eigenValue.equals(rhs.eigenValue);
+            }
+
+            return false;
+
+        }
+
+        /**
+         * Get a hashCode for the pair.
+         * @return a hash code value for this object
+         */
+        @Override
+        public int hashCode() {
+            return 4563 + index + eigenValue.hashCode();
+        }
+
+    }
+
 }

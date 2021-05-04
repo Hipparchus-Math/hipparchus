@@ -289,6 +289,13 @@ public class Fraction
         this.denominator = den;
     }
 
+    /** Check if a fraction is an integer.
+     * @return true of fraction is an integer
+     */
+    public boolean isInteger() {
+        return denominator == 1;
+    }
+
     /** Returns the signum function of this fraction.
      * <p>
      * The return value is -1 if the specified value is negative;

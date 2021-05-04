@@ -25,6 +25,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Random;
 
+import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -192,7 +193,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                 // can't expect time error to be less than event finding tolerance
                 double timeTol = FastMath.max(eventTol, FastMath.abs(previousTimeError * safetyTimeFactor));
                 if (i > 4) {
-                    Assert.assertThat(
+                    MatcherAssert.assertThat(
                             "Problem=" + pb + ", i=" + i + ", step=" + step,
                             timeError,
                             Matchers.lessThanOrEqualTo(timeTol));

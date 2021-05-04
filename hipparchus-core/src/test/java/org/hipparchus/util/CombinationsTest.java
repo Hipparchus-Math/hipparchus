@@ -21,8 +21,12 @@
  */
 package org.hipparchus.util;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
@@ -197,4 +201,82 @@ public class CombinationsTest {
             // ignored
         }
     }
+
+    @Test
+    public void testLexicographicIteratorUnreachable() {
+        // this tests things that could really never happen,
+        // as the conditions are tested in the enclosing class before
+        // the lexicographic iterator is built
+        try {
+            Class<?> lexicographicIteratorClass = null;
+            for (Class<?> c : Combinations.class.getDeclaredClasses()) {
+                if (c.getCanonicalName().endsWith(".LexicographicIterator")) {
+                    lexicographicIteratorClass = c;
+                }
+            }
+            Constructor<?> ctr = lexicographicIteratorClass.getDeclaredConstructor(Integer.TYPE, Integer.TYPE);
+            Method hasNext = lexicographicIteratorClass.getDeclaredMethod("hasNext");
+            Method next = lexicographicIteratorClass.getDeclaredMethod("next");
+            Method remove = lexicographicIteratorClass.getDeclaredMethod("remove");
+            Assert.assertFalse((Boolean) hasNext.invoke(ctr.newInstance(3, 0)));
+            Assert.assertFalse((Boolean) hasNext.invoke(ctr.newInstance(3, 3)));
+            Assert.assertTrue((Boolean) hasNext.invoke(ctr.newInstance(3, 2)));
+            try {
+                next.invoke(ctr.newInstance(3, 0));
+                Assert.fail("an exception should have been thrown");
+            } catch (InvocationTargetException ite) {
+                Assert.assertTrue(ite.getCause() instanceof NoSuchElementException);
+            }
+            try {
+                remove.invoke(ctr.newInstance(3, 2));
+                Assert.fail("an exception should have been thrown");
+            } catch (InvocationTargetException ite) {
+                Assert.assertTrue(ite.getCause() instanceof UnsupportedOperationException);
+            }
+        } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException |
+                 InvocationTargetException | InstantiationException e) {
+            Assert.fail(e.getLocalizedMessage());
+        }
+    }
+
+    @Test
+    public void testSingletonIteratorUnreachable() {
+        // this tests things that could really never happen,
+        try {
+            Class<?> singletonIteratorClass = null;
+            for (Class<?> c : Combinations.class.getDeclaredClasses()) {
+                if (c.getCanonicalName().endsWith(".SingletonIterator")) {
+                    singletonIteratorClass = c;
+                }
+            }
+            Constructor<?> ctr = singletonIteratorClass.getDeclaredConstructor(Integer.TYPE);
+            Method hasNext = singletonIteratorClass.getDeclaredMethod("hasNext");
+            Method next = singletonIteratorClass.getDeclaredMethod("next");
+            Method remove = singletonIteratorClass.getDeclaredMethod("remove");
+            Object iterator = ctr.newInstance(3);
+            Assert.assertTrue((Boolean) hasNext.invoke(iterator));
+            int[] ret = (int[]) next.invoke(iterator);
+            Assert.assertEquals(3, ret.length);
+            Assert.assertEquals(0, ret[0]);
+            Assert.assertEquals(1, ret[1]);
+            Assert.assertEquals(2, ret[2]);
+            Assert.assertFalse((Boolean) hasNext.invoke(iterator));
+            try {
+                next.invoke(iterator);
+                Assert.fail("an exception should have been thrown");
+            } catch (InvocationTargetException ite) {
+                Assert.assertTrue(ite.getCause() instanceof NoSuchElementException);
+            }
+            try {
+                remove.invoke(iterator);
+                Assert.fail("an exception should have been thrown");
+            } catch (InvocationTargetException ite) {
+                Assert.assertTrue(ite.getCause() instanceof UnsupportedOperationException);
+            }
+        } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException |
+                 InvocationTargetException | InstantiationException e) {
+            Assert.fail(e.getLocalizedMessage());
+        }
+    }
+
 }

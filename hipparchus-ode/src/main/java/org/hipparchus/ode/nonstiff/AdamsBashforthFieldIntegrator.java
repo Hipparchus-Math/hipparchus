@@ -31,6 +31,7 @@ import org.hipparchus.linear.FieldMatrix;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
 
@@ -215,34 +216,34 @@ public class AdamsBashforthFieldIntegrator<T extends CalculusFieldElement<T>> ex
      * @param predictedNordsieck predicted value of the Nordsieck vector at step end
      * @return estimated normalized local discretization error
      */
-    private T errorEstimation(final T[] previousState,
-                              final T[] predictedState,
-                              final T[] predictedScaled,
-                              final FieldMatrix<T> predictedNordsieck) {
+    private double errorEstimation(final T[] previousState,
+                                   final T[] predictedState,
+                                   final T[] predictedScaled,
+                                   final FieldMatrix<T> predictedNordsieck) {
 
-        T error = getField().getZero();
+        double error = 0;
         for (int i = 0; i < mainSetDimension; ++i) {
-            final T yScale = predictedState[i].norm();
-            final T tol = (vecAbsoluteTolerance == null) ?
-                          yScale.multiply(scalRelativeTolerance).add(scalAbsoluteTolerance) :
-                          yScale.multiply(vecRelativeTolerance[i]).add(vecAbsoluteTolerance[i]);
+            final double yScale = FastMath.abs(predictedState[i].getReal());
+            final double tol = (vecAbsoluteTolerance == null) ?
+                               (scalAbsoluteTolerance + scalRelativeTolerance * yScale) :
+                               (vecAbsoluteTolerance[i] + vecRelativeTolerance[i] * yScale);
 
             // apply Taylor formula from high order to low order,
             // for the sake of numerical accuracy
-            T variation = getField().getZero();
+            double variation = 0;
             int sign = predictedNordsieck.getRowDimension() % 2 == 0 ? -1 : 1;
             for (int k = predictedNordsieck.getRowDimension() - 1; k >= 0; --k) {
-                variation = variation.add(predictedNordsieck.getEntry(k, i).multiply(sign));
-                sign      = -sign;
+                variation += sign * predictedNordsieck.getEntry(k, i).getReal();
+                sign       = -sign;
             }
-            variation = variation.subtract(predictedScaled[i]);
+            variation -= predictedScaled[i].getReal();
 
-            final T ratio  = predictedState[i].subtract(previousState[i]).add(variation).divide(tol);
-            error = error.add(ratio.multiply(ratio));
+            final double ratio  = (predictedState[i].getReal() - previousState[i].getReal() + variation) / tol;
+            error              += ratio * ratio;
 
         }
 
-        return error.divide(mainSetDimension).sqrt();
+        return FastMath.sqrt(error / mainSetDimension);
 
     }
 
@@ -274,8 +275,8 @@ public class AdamsBashforthFieldIntegrator<T extends CalculusFieldElement<T>> ex
             T[] predictedY = null;
             final T[] predictedScaled = MathArrays.buildArray(getField(), y.length);
             Array2DRowFieldMatrix<T> predictedNordsieck = null;
-            T error = getField().getZero().add(10);
-            while (error.subtract(1.0).getReal() >= 0.0) {
+            double error = 10;
+            while (error >= 1.0) {
 
                 // predict a first estimate of the state at step end
                 predictedY = stepEnd.getCompleteState();
@@ -293,9 +294,9 @@ public class AdamsBashforthFieldIntegrator<T extends CalculusFieldElement<T>> ex
                 // evaluate error
                 error = errorEstimation(y, predictedY, predictedScaled, predictedNordsieck);
 
-                if (error.subtract(1.0).getReal() >= 0.0) {
+                if (error >= 1.0) {
                     // reject the step and attempt to reduce error by stepsize control
-                    final T factor = computeStepGrowShrinkFactor(error);
+                    final double factor = computeStepGrowShrinkFactor(error);
                     rescale(filterStep(getStepSize().multiply(factor), forward, false));
                     stepEnd = AdamsFieldStateInterpolator.taylor(equations.getMapper(), getStepStart(),
                                                                  getStepStart().getTime().add(getStepSize()),
@@ -335,7 +336,7 @@ public class AdamsBashforthFieldIntegrator<T extends CalculusFieldElement<T>> ex
                 } else {
 
                     // stepsize control for next step
-                    final T       factor     = computeStepGrowShrinkFactor(error);
+                    final double  factor     = computeStepGrowShrinkFactor(error);
                     final T       scaledH    = getStepSize().multiply(factor);
                     final T       nextT      = getStepStart().getTime().add(scaledH);
                     final boolean nextIsLast = forward ?

@@ -481,6 +481,7 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
     protected T getStepSize() {
         return stepSize;
     }
+
     /** Set current step start.
      * @param stepStart step start
      */

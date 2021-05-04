@@ -30,6 +30,7 @@ import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -86,7 +87,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
     private final T[] b;
 
     /** Stepsize control exponent. */
-    private final T exp;
+    private final double exp;
 
     /** Safety factor for stepsize control. */
     private T safety;
@@ -123,7 +124,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
         this.a    = getA();
         this.b    = getB();
 
-        exp = field.getOne().divide(-getOrder());
+        exp = -1.0 / getOrder();
 
         // set the default values of the algorithm control parameters
         setSafety(field.getZero().add(0.9));
@@ -156,7 +157,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
         this.a    = getA();
         this.b    = getB();
 
-        exp = field.getOne().divide(-getOrder());
+        exp = -1.0 / getOrder();
 
         // set the default values of the algorithm control parameters
         setSafety(field.getZero().add(0.9));
@@ -238,8 +239,8 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
         do {
 
             // iterate over step size, ensuring local normalized error is smaller than 1
-            T error = getField().getZero().add(10);
-            while (error.subtract(1.0).getReal() >= 0) {
+            double error = 10.0;
+            while (error >= 1.0) {
 
                 // first stage
                 final T[] y = getStepStart().getCompleteState();
@@ -256,7 +257,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
                             scale[i] = y[i].norm().multiply(vecRelativeTolerance[i]).add(vecAbsoluteTolerance[i]);
                         }
                     }
-                    hNew = initializeStep(forward, getOrder(), scale, getStepStart(), equations.getMapper());
+                    hNew = getField().getZero().add(initializeStep(forward, getOrder(), scale, getStepStart(), equations.getMapper()));
                     firstTime = false;
                 }
 
@@ -297,10 +298,10 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
 
                 // estimate the error at the end of the step
                 error = estimateError(yDotK, y, yTmp, getStepSize());
-                if (error.subtract(1.0).getReal() >= 0) {
+                if (error >= 1.0) {
                     // reject the step and attempt to reduce error by stepsize control
                     final T factor = MathUtils.min(maxGrowth,
-                                                   MathUtils.max(minReduction, safety.multiply(error.pow(exp))));
+                                                   MathUtils.max(minReduction, safety.multiply(FastMath.pow(error, exp))));
                     hNew = filterStep(getStepSize().multiply(factor), forward, false);
                 }
 
@@ -317,7 +318,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
 
                 // stepsize control for next step
                 final T factor = MathUtils.min(maxGrowth,
-                                               MathUtils.max(minReduction, safety.multiply(error.pow(exp))));
+                                               MathUtils.max(minReduction, safety.multiply(FastMath.pow(error, exp))));
                 final T  scaledH    = getStepSize().multiply(factor);
                 final T  nextT      = getStepStart().getTime().add(scaledH);
                 final boolean nextIsLast = forward ?
@@ -378,6 +379,6 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
      * @param h  current step
      * @return error ratio, greater than 1 if step should be rejected
      */
-    protected abstract T estimateError(T[][] yDotK, T[] y0, T[] y1, T h);
+    protected abstract double estimateError(T[][] yDotK, T[] y0, T[] y1, T h);
 
 }

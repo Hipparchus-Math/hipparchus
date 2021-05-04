@@ -95,6 +95,12 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
+    public double getReal() {
+        return getValue();
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public double getValue() {
         return f0;
     }
@@ -110,7 +116,7 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
             case 2 :
                 return f2;
             default :
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, n, 0, 2);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, n);
         }
     }
 
@@ -350,14 +356,13 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
         return new UnivariateDerivative2(inv1, -f1 * inv2, MathArrays.linearCombination(2 * f1, f1, -f0, f2) * inv3);
     }
 
-    /** Compute composition of the instance by a function.
-     * @param g0 value of the function at the current point (i.e. at {@code g(getValue())})
-     * @param g1 first derivative of the function at the current point (i.e. at {@code g'(getValue())})
-     * @param g2 second derivative of the function at the current point (i.e. at {@code g''(getValue())})
-     * @return g(this)
-     */
-    public UnivariateDerivative2 compose(final double g0, final double g1, final double g2) {
-        return new UnivariateDerivative2(g0, g1 * f1, MathArrays.linearCombination(g1, f2, g2, f1 * f1));
+    /** {@inheritDoc} */
+    @Override
+    public UnivariateDerivative2 compose(final double... f) {
+        MathUtils.checkDimension(f.length, getOrder() + 1);
+        return new UnivariateDerivative2(f[0],
+                                         f[1] * f1,
+                                         MathArrays.linearCombination(f[1], f2, f[2], f1 * f1));
     }
 
     /** {@inheritDoc} */

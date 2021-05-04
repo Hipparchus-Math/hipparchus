@@ -19,6 +19,7 @@ package org.hipparchus.analysis.differentiation;
 import java.io.Serializable;
 
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** Abstract class representing both the value and the differentials of a function.
@@ -26,21 +27,26 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * @since 1.7
  */
 public abstract class UnivariateDerivative<T extends UnivariateDerivative<T>>
-    implements CalculusFieldElement<T>, Serializable {
+    implements Derivative<T>, CalculusFieldElement<T>, Serializable {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20200519L;
 
     /** {@inheritDoc} */
     @Override
-    public double getReal() {
-        return getValue();
+    public int getFreeParameters() {
+        return 1;
     }
 
-    /** Get the value part of the univariate derivative.
-     * @return value part of the univariate derivative
-     */
-    public abstract double getValue();
+    /** {@inheritDoc} */
+    @Override
+    public double getPartialDerivative(final int ... orders) throws MathIllegalArgumentException {
+        if (orders.length != 1) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   orders.length, 1);
+        }
+        return getDerivative(orders[0]);
+    }
 
     /** Get a derivative from the univariate derivative.
      * @param n derivation order (must be between 0 and {@link #getOrder()}, both inclusive)
@@ -49,11 +55,6 @@ public abstract class UnivariateDerivative<T extends UnivariateDerivative<T>>
      * either negative or strictly larger than {@link #getOrder()}
      */
     public abstract double getDerivative(int n) throws MathIllegalArgumentException;
-
-    /** Get the derivation order.
-     * @return derivation order
-     */
-    public abstract int getOrder();
 
     /** Convert the instance to a {@link DerivativeStructure}.
      * @return derivative structure with same value and derivative as the instance

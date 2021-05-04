@@ -24,6 +24,7 @@ package org.hipparchus.linear;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.fraction.Fraction;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -206,13 +207,25 @@ public class LUDecompositionTest {
     /** test singular */
     @Test
     public void testSingular() {
-        LUDecomposition lu =
-            new LUDecomposition(MatrixUtils.createRealMatrix(testData));
+        final RealMatrix m = MatrixUtils.createRealMatrix(testData);
+        LUDecomposition lu = new LUDecomposition(m);
         Assert.assertTrue(lu.getSolver().isNonSingular());
+        Assert.assertEquals(-1.0, lu.getDeterminant(), 1.0e-15);
+        lu = new LUDecomposition(m.getSubMatrix(0, 1, 0, 1));
+        Assert.assertTrue(lu.getSolver().isNonSingular());
+        Assert.assertEquals(+1.0, lu.getDeterminant(), 1.0e-15);
         lu = new LUDecomposition(MatrixUtils.createRealMatrix(singular));
         Assert.assertFalse(lu.getSolver().isNonSingular());
+        Assert.assertEquals(0.0, lu.getDeterminant(), 1.0e-15);
         lu = new LUDecomposition(MatrixUtils.createRealMatrix(bigSingular));
         Assert.assertFalse(lu.getSolver().isNonSingular());
+        Assert.assertEquals(0.0, lu.getDeterminant(), 1.0e-15);
+        try {
+            lu.getSolver().solve(new ArrayRealVector(new double[] { 1, 1, 1, 1 }));
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.SINGULAR_MATRIX, miae.getSpecifier());
+        }
     }
 
     /** test matrices values */
@@ -295,4 +308,25 @@ public class LUDecompositionTest {
         Assert.assertTrue(u == lu.getU());
         Assert.assertTrue(p == lu.getP());
     }
+
+    @Test
+    public void testsolve() {
+        LUDecomposition lu =
+                        new LUDecomposition(new Array2DRowRealMatrix(testData));
+        DecompositionSolver solver = lu.getSolver();
+        RealVector solution = solver.solve(new ArrayRealVector(new double[] {
+            new Fraction(1, 2).doubleValue(), new Fraction(2, 3).doubleValue(), new Fraction(3,4).doubleValue()
+        }));
+        Assert.assertEquals(testData.length, solution.getDimension());
+        Assert.assertEquals(new Fraction(-31, 12).doubleValue(), solution.getEntry(0), 1.0e-14);
+        Assert.assertEquals(new Fraction( 11, 12).doubleValue(), solution.getEntry(1), 1.0e-14);
+        Assert.assertEquals(new Fraction(  5, 12).doubleValue(), solution.getEntry(2), 1.0e-14);
+        try {
+            solver.solve(new ArrayRealVector(new double[] { 1, 1 }));
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+        }
+    }
+
 }

@@ -40,7 +40,7 @@ Alternatively you can pull it from the central Maven repositories using `pom.xml
 ```xml
 <properties>
   <!-- change the Hipparchus version number to the one suiting your needs -->
-  <myprojectname.hipparchus.version>1.6</myprojectname.hipparchus.version>
+  <myprojectname.hipparchus.version>1.8</myprojectname.hipparchus.version>
 </properties>
 
 <dependency>
@@ -104,11 +104,8 @@ There are some guidelines which
 will make applying contributions easier for us. Please read through our
 [contributing guidelines](https://github.com/Hipparchus-Math/hipparchus/blob/master/CONTRIBUTING.md).
 
-To contact us, there are (temporarily) two communication channels. The recommended
-one is a shared [forum](https://forum.orekit.org/categories) where several categories
-are dedicated to Hipparchus. The oldedr one is a [developers mailing list](mailto:developers@hipparchus.org).
-Beware that the mail-based channel is buggy (read loses messages) and unmaintained, so the forum
-is probably a safer channel as of release 1.6.
+To contact us, use the shared [forum](https://forum.orekit.org/categories) where several categories
+are dedicated to Hipparchus.
 
 License
 -------

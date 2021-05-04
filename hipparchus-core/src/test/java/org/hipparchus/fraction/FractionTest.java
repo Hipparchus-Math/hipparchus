@@ -70,6 +70,13 @@ public class FractionTest {
         assertFraction(15, 1, new Fraction(15.0000000000001));
     }
 
+    @Test
+    public void testIsInteger() {
+        Assert.assertTrue(new Fraction(12, 12).isInteger());
+        Assert.assertTrue(new Fraction(14, 7).isInteger());
+        Assert.assertFalse(new Fraction(12, 11).isInteger());
+    }
+
     @Test(expected=MathIllegalStateException.class)
     public void testGoldenRatio() {
         // the golden ratio is notoriously a difficult number for continuous fraction
@@ -620,6 +627,11 @@ public class FractionTest {
                 (2, Integer.MIN_VALUE).getNumerator(),-1);
         Assert.assertEquals(Fraction.getReducedFraction
                 (1, -1).getNumerator(), -1);
+    }
+
+    @Test
+    public void testNormalizedEquals() {
+        Assert.assertEquals(new Fraction(237, -3871), new Fraction(-51, 833));
     }
 
     @Test

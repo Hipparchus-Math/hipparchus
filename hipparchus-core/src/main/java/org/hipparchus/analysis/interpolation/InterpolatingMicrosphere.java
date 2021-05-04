@@ -348,7 +348,7 @@ public class InterpolatingMicrosphere {
          * @return the normal vector.
          */
         public double[] getNormal() {
-            return normal;
+            return normal; // NOPMD - returning an internal array is intentional and documented here
         }
     }
 

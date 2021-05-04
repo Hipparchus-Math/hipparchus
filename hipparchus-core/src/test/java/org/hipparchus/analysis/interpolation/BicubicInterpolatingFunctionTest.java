@@ -46,6 +46,35 @@ public final class BicubicInterpolatingFunctionTest {
         BivariateFunction bcf = new BicubicInterpolatingFunction(xval, yval, zval,
                                                                  zval, zval, zval);
 
+        try {
+            bcf = new BicubicInterpolatingFunction(new double[0], yval,
+                                                   zval, zval, zval, zval);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            // Expected
+        }
+        try {
+            bcf = new BicubicInterpolatingFunction(xval, new double[0],
+                                                   zval, zval, zval, zval);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            // Expected
+        }
+        try {
+            bcf = new BicubicInterpolatingFunction(xval, yval,
+                                                    new double[0][], zval, zval, zval);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            // Expected
+        }
+        try {
+            bcf = new BicubicInterpolatingFunction(xval, yval,
+                                                    new double[1][0], zval, zval, zval);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            // Expected
+        }
+
         double[] wxval = new double[] {3, 2, 5, 6.5};
         try {
             bcf = new BicubicInterpolatingFunction(wxval, yval, zval, zval, zval, zval);

@@ -50,6 +50,30 @@ public abstract class FieldGradientAbstractTest<T extends CalculusFieldElement<T
         return new FieldGradient<>(valueField.getZero().newInstance(x), gradient);
     }
 
+    protected T buildScalar(double value) {
+        return getValueField().getZero().newInstance(value);
+    }
+
+    @Test
+    public void testFieldAdd() {
+        check(build(1.0).add(buildScalar(5.0)), 6.0, 1.0);
+    }
+
+    @Test
+    public void testFieldSubtract() {
+        check(build(1.0).subtract(buildScalar(5.0)), -4.0, 1.0);
+    }
+
+    @Test
+    public void testFieldMultiply() {
+        check(build(1.0).multiply(buildScalar(5.0)), 5.0, 5.0);
+    }
+
+    @Test
+    public void testFieldDivide() {
+        check(build(1.0).divide(buildScalar(5.0)), 0.2, 0.2);
+    }
+
     @Test
     public void testgetGradient() {
         FieldGradient<T> g = build(-0.5, 2.5, 10.0, -1.0);
@@ -116,6 +140,46 @@ public abstract class FieldGradientAbstractTest<T extends CalculusFieldElement<T
     @Test
     public void testTaylor() {
         Assert.assertEquals(2.75, build(2, 1, 0.125).taylor(0.5, 2.0).getReal(), 1.0e-15);
+    }
+
+    @Test
+    public void testOrder() {
+        Assert.assertEquals(1, build(2).getOrder());
+    }
+
+    @Test
+    public void testGetPartialDerivative() {
+        final FieldGradient<T> g = build(2);
+        Assert.assertEquals(2.0,        g.getPartialDerivative(0, 0).getReal(), 1.0e-15); // f(x,y)
+        Assert.assertEquals(1.0,        g.getPartialDerivative(1, 0).getReal(), 1.0e-15); // ∂f/∂x
+        Assert.assertEquals(1.0 / 1024, g.getPartialDerivative(0, 1).getReal(), 1.0e-15); // ∂f/∂y
+    }
+
+    @Test
+    public void testGetPartialDerivativeErrors() {
+        final FieldGradient<T> g = build(2);
+        try {
+            g.getPartialDerivative(0, 0, 0);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+        }
+        try {
+            g.getPartialDerivative(0, 5);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
+            Assert.assertEquals(5, ((Integer) miae.getParts()[0]).intValue());
+        }
+        try {
+            g.getPartialDerivative(1, 1);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
+            Assert.assertEquals(1, ((Integer) miae.getParts()[0]).intValue());
+        }
     }
 
     @Test
@@ -200,6 +264,39 @@ public abstract class FieldGradientAbstractTest<T extends CalculusFieldElement<T
                                    return y.negate().divide(4).divide(x).add(y).subtract(x).multiply(2).reciprocal();
                                }
                            });
+        }
+    }
+
+    @Test
+    public void testCopySignField() {
+
+        FieldGradient<T> minusOne = build(-1.0);
+        Assert.assertEquals(+1.0, minusOne.copySign(buildScalar(+1.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(-1.0, minusOne.copySign(buildScalar(-1.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, minusOne.copySign(buildScalar(+0.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(-1.0, minusOne.copySign(buildScalar(-0.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, minusOne.copySign(buildScalar(Double.NaN)).getReal(), 1.0e-15);
+
+        FieldGradient<T> plusOne = build(1.0);
+        Assert.assertEquals(+1.0, plusOne.copySign(buildScalar(+1.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(-1.0, plusOne.copySign(buildScalar(-1.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, plusOne.copySign(buildScalar(+0.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(-1.0, plusOne.copySign(buildScalar(-0.0)).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, plusOne.copySign(buildScalar(Double.NaN)).getReal(), 1.0e-15);
+
+    }
+
+    @Test
+    public void testRemainderField() {
+        double epsilon = 2.0e-15;
+        for (double x = -1.7; x < 2; x += 0.2) {
+            FieldGradient<T> dsX = build(x);
+            for (double y = -1.7; y < 2; y += 0.2) {
+                FieldGradient<T> remainder = dsX.remainder(buildScalar(y));
+                FieldGradient<T> ref = dsX.subtract(x - FastMath.IEEEremainder(x, y));
+                FieldGradient<T> zero = remainder.subtract(ref);
+                Assert.assertEquals(0, zero.getPartialDerivative(0).getReal(), epsilon);
+            }
         }
     }
 
@@ -475,6 +572,26 @@ public abstract class FieldGradientAbstractTest<T extends CalculusFieldElement<T
     }
 
     @Test
+    public void testLinearCombinationField() {
+        final T[] a = MathArrays.buildArray(getValueField(), 3);
+        a[0] = buildScalar(-1321008684645961.0 / 268435456.0);
+        a[1] = buildScalar(-5774608829631843.0 / 268435456.0);
+        a[2] = buildScalar(-7645843051051357.0 / 8589934592.0);
+        final FieldGradient<T>[] b = MathArrays.buildArray(FieldGradientField.getField(getValueField(), 1), 3);
+        b[0] = build(-5712344449280879.0 / 2097152.0);
+        b[1] = build(-4550117129121957.0 / 2097152.0);
+        b[2] = build(8846951984510141.0 / 131072.0);
+
+        final FieldGradient<T> abSumInline = b[0].linearCombination(a[0], b[0],
+                                                                    a[1], b[1],
+                                                                    a[2], b[2]);
+        final FieldGradient<T> abSumArray = b[0].linearCombination(a, b);
+        Assert.assertEquals(abSumInline.getReal(), abSumArray.getReal(), 3.0e-8);
+        Assert.assertEquals(-1.8551294182586248737720779899, abSumInline.getReal(), 5.0e-8);
+        Assert.assertEquals(abSumInline.getPartialDerivative(0).getReal(), abSumArray.getPartialDerivative(0).getReal(), 3.0e-8);
+    }
+
+    @Test
     public void testZero() {
         FieldGradient<T> zero = build(17.0).getField().getZero();
         Assert.assertEquals(0.0, zero.getValue().getReal(), 1.0e-15);
@@ -492,4 +609,15 @@ public abstract class FieldGradientAbstractTest<T extends CalculusFieldElement<T
         }
     }
 
+    private void check(FieldGradient<T> g, double value, double... derivatives) {
+
+        // check value
+        Assert.assertEquals(value, g.getReal(), 1.0e-15);
+
+        // check derivatives
+        for (int i = 0; i < derivatives.length; ++i) {
+            Assert.assertEquals(derivatives[i], g.getPartialDerivative(i).getReal(), 1.0e-15);
+        }
+
+    }
 }

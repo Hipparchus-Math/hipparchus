@@ -292,7 +292,7 @@ public class Rotation implements Serializable {
       v1 = v1.normalize();
 
       // buid a matrix transforming the first base into the second one
-      final double[][] m = new double[][] {
+      final double[][] m = {
           {
               MathArrays.linearCombination(u1.getX(), v1.getX(), u2.getX(), v2.getX(), u3.getX(), v3.getX()),
               MathArrays.linearCombination(u1.getY(), v1.getX(), u2.getY(), v2.getX(), u3.getY(), v3.getX()),

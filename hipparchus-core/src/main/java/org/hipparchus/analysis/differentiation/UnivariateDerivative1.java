@@ -89,6 +89,12 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
+    public double getReal() {
+        return getValue();
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public double getValue() {
         return f0;
     }
@@ -102,7 +108,7 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
             case 1 :
                 return f1;
             default :
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, n, 0, 1);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, n);
         }
     }
 
@@ -325,13 +331,11 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
         return new UnivariateDerivative1(inv1, -f1 * inv2);
     }
 
-    /** Compute composition of the instance by a function.
-     * @param g0 value of the function at the current point (i.e. at {@code g(getValue())})
-     * @param g1 first derivative of the function at the current point (i.e. at {@code g'(getValue())})
-     * @return g(this)
-     */
-    public UnivariateDerivative1 compose(final double g0, final double g1) {
-        return new UnivariateDerivative1(g0, g1 * f1);
+    /** {@inheritDoc} */
+    @Override
+    public UnivariateDerivative1 compose(final double... f) {
+        MathUtils.checkDimension(f.length, getOrder() + 1);
+        return new UnivariateDerivative1(f[0], f[1] * f1);
     }
 
     /** {@inheritDoc} */

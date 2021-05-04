@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.hipparchus</groupId>
     <artifactId>hipparchus</artifactId>
-    <version>1.7-SNAPSHOT</version>
+    <version>2.0-SNAPSHOT</version>
     <relativePath>hipparchus-parent</relativePath>
   </parent>
 
@@ -157,6 +157,10 @@
 
             <!-- trivial -->
             <exclude>src/site/resources/css/site.css</exclude>
+
+            <!-- build files -->
+            <exclude>.github/workflows/maven.yml</exclude>
+            <exclude>.CI/maven-settings.xml</exclude>
 
             <!-- attributed in NOTICE -->
             <exclude>src/site/resources/js/html5.js</exclude>

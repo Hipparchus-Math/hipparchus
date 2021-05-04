@@ -21,20 +21,19 @@
  */
 package org.hipparchus.analysis.integration.gauss;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.hipparchus.analysis.integration.gauss.BaseRuleFactory;
 import org.hipparchus.util.Pair;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test for {@link BaseRuleFactory}.
