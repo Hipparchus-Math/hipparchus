@@ -134,6 +134,20 @@ class AdamsFieldStateInterpolator<T extends RealFieldElement<T>> extends Abstrac
 
     }
 
+    /** Get the first scaled derivative.
+     * @return first scaled derivative
+     */
+    public T[] getScaled() {
+        return scaled.clone();
+    }
+
+    /** Get the Nordsieck vector.
+     * @return Nordsieck vector
+     */
+    public Array2DRowFieldMatrix<T> getNordsieck() {
+        return nordsieck;
+    }
+
     /** {@inheritDoc} */
     @Override
     protected FieldODEStateAndDerivative<T> computeInterpolatedStateAndDerivatives(final FieldEquationsMapper<T> equationsMapper,

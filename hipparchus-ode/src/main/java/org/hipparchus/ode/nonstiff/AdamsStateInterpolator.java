@@ -128,6 +128,20 @@ class AdamsStateInterpolator extends AbstractODEStateInterpolator {
 
     }
 
+    /** Get the first scaled derivative.
+     * @return first scaled derivative
+     */
+    public double[] getScaled() {
+        return scaled.clone();
+    }
+
+    /** Get the Nordsieck vector.
+     * @return Nordsieck vector
+     */
+    public Array2DRowRealMatrix getNordsieck() {
+        return nordsieck;
+    }
+
     /** {@inheritDoc} */
     @Override
     protected ODEStateAndDerivative computeInterpolatedStateAndDerivatives(final EquationsMapper equationsMapper,

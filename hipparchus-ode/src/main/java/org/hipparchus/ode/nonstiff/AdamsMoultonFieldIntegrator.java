@@ -29,9 +29,9 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
+import org.hipparchus.linear.FieldMatrix;
 import org.hipparchus.linear.FieldMatrixPreservingVisitor;
-import org.hipparchus.ode.FieldExpandableODE;
-import org.hipparchus.ode.FieldODEState;
+import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.util.MathArrays;
@@ -223,141 +223,40 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
 
     /** {@inheritDoc} */
     @Override
-    public FieldODEStateAndDerivative<T> integrate(final FieldExpandableODE<T> equations,
-                                                   final FieldODEState<T> initialState,
-                                                   final T finalTime)
-        throws MathIllegalArgumentException, MathIllegalStateException {
+    protected double errorEstimation(final T[] previousState, final T predictedTime,
+                                     final T[] predictedState, final T[] predictedScaled,
+                                     final FieldMatrix<T> predictedNordsieck) {
+        final double error = predictedNordsieck.walkInOptimizedOrder(new Corrector(previousState, predictedScaled, predictedState)).getReal();
+        if (Double.isNaN(error)) {
+            throw new MathIllegalStateException(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION,
+                                                predictedTime.getReal());
+        }
+        return error;
+    }
 
-        sanityChecks(initialState, finalTime);
-        setStepStart(initIntegration(equations, initialState, finalTime));
-        final boolean forward = finalTime.subtract(initialState.getTime()).getReal() > 0;
+    /** {@inheritDoc} */
+    @Override
+    protected AdamsFieldStateInterpolator<T> finalizeStep(final T stepSize, final T[] predictedY,
+                                                          final T[] predictedScaled, final Array2DRowFieldMatrix<T> predictedNordsieck,
+                                                          final boolean isForward,
+                                                          final FieldODEStateAndDerivative<T> globalPreviousState,
+                                                          final FieldODEStateAndDerivative<T> globalCurrentState,
+                                                          final FieldEquationsMapper<T> equationsMapper) {
 
-        // compute the initial Nordsieck vector using the configured starter integrator
-        start(equations, getStepStart(), finalTime);
+        final T[] correctedYDot = computeDerivatives(globalCurrentState.getTime(), predictedY);
 
-        // reuse the step that was chosen by the starter integrator
-        FieldODEStateAndDerivative<T> stepStart = getStepStart();
-        FieldODEStateAndDerivative<T> stepEnd   =
-                        AdamsFieldStateInterpolator.taylor(equations.getMapper(), stepStart,
-                                                           stepStart.getTime().add(getStepSize()),
-                                                           getStepSize(), scaled, nordsieck);
+        // update Nordsieck vector
+        final T[] correctedScaled = MathArrays.buildArray(getField(), predictedY.length);
+        for (int j = 0; j < correctedScaled.length; ++j) {
+            correctedScaled[j] = getStepSize().multiply(correctedYDot[j]);
+        }
+        updateHighOrderDerivativesPhase2(predictedScaled, correctedScaled, predictedNordsieck);
 
-        // main integration loop
-        setIsLastStep(false);
-        final T[] y = stepStart.getCompleteState();
-        do {
-
-            T[] predictedY = null;
-            final T[] predictedScaled = MathArrays.buildArray(getField(), y.length);
-            Array2DRowFieldMatrix<T> predictedNordsieck = null;
-            double error = 10;
-            while (error >= 1.0) {
-
-                // predict a first estimate of the state at step end (P in the PECE sequence)
-                predictedY = stepEnd.getCompleteState();
-
-                // evaluate a first estimate of the derivative (first E in the PECE sequence)
-                final T[] yDot = computeDerivatives(stepEnd.getTime(), predictedY);
-
-                // update Nordsieck vector
-                for (int j = 0; j < predictedScaled.length; ++j) {
-                    predictedScaled[j] = getStepSize().multiply(yDot[j]);
-                }
-                predictedNordsieck = updateHighOrderDerivativesPhase1(nordsieck);
-                updateHighOrderDerivativesPhase2(scaled, predictedScaled, predictedNordsieck);
-
-                // apply correction (C in the PECE sequence)
-                error = predictedNordsieck.walkInOptimizedOrder(new Corrector(y, predictedScaled, predictedY)).getReal();
-                if (Double.isNaN(error)) {
-                    throw new MathIllegalStateException(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION,
-                                                        stepEnd.getTime());
-                }
-
-                if (error >= 1.0) {
-                    // reject the step and attempt to reduce error by stepsize control
-                    final double factor = computeStepGrowShrinkFactor(error);
-                    rescale(filterStep(getStepSize().multiply(factor), forward, false));
-                    stepEnd = AdamsFieldStateInterpolator.taylor(equations.getMapper(), getStepStart(),
-                                                                 getStepStart().getTime().add(getStepSize()),
-                                                                 getStepSize(),
-                                                                 scaled,
-                                                                 nordsieck);
-                }
-            }
-
-            // evaluate a final estimate of the derivative (second E in the PECE sequence)
-            final T[] correctedYDot = computeDerivatives(stepEnd.getTime(), predictedY);
-
-            // update Nordsieck vector
-            final T[] correctedScaled = MathArrays.buildArray(getField(), y.length);
-            for (int j = 0; j < correctedScaled.length; ++j) {
-                correctedScaled[j] = getStepSize().multiply(correctedYDot[j]);
-            }
-            updateHighOrderDerivativesPhase2(predictedScaled, correctedScaled, predictedNordsieck);
-
-            // discrete events handling
-            stepEnd = new FieldODEStateAndDerivative<>(stepEnd.getTime(), predictedY, correctedYDot);
-            setStepStart(acceptStep(new AdamsFieldStateInterpolator<>(getStepSize(), stepEnd,
-                                                                      correctedScaled, predictedNordsieck, forward,
-                                                                      getStepStart(), stepEnd,
-                                                                      equations.getMapper()),
-                                    finalTime));
-            scaled    = correctedScaled;
-            nordsieck = predictedNordsieck;
-
-            if (!isLastStep()) {
-
-                if (resetOccurred()) {
-
-                    // some events handler has triggered changes that
-                    // invalidate the derivatives, we need to restart from scratch
-                    start(equations, getStepStart(), finalTime);
-
-                    final T  nextT      = getStepStart().getTime().add(getStepSize());
-                    final boolean nextIsLast = forward ?
-                                               nextT.subtract(finalTime).getReal() >= 0 :
-                                               nextT.subtract(finalTime).getReal() <= 0;
-                    final T hNew = nextIsLast ? finalTime.subtract(getStepStart().getTime()) : getStepSize();
-
-                    rescale(hNew);
-                    System.arraycopy(getStepStart().getCompleteState(), 0, y, 0, y.length);
-
-                } else {
-
-                    // stepsize control for next step
-                    final double  factor     = computeStepGrowShrinkFactor(error);
-                    final T       scaledH    = getStepSize().multiply(factor);
-                    final T       nextT      = getStepStart().getTime().add(scaledH);
-                    final boolean nextIsLast = forward ?
-                                               nextT.subtract(finalTime).getReal() >= 0 :
-                                               nextT.subtract(finalTime).getReal() <= 0;
-                    T hNew = filterStep(scaledH, forward, nextIsLast);
-
-                    final T  filteredNextT      = getStepStart().getTime().add(hNew);
-                    final boolean filteredNextIsLast = forward ?
-                                                       filteredNextT.subtract(finalTime).getReal() >= 0 :
-                                                       filteredNextT.subtract(finalTime).getReal() <= 0;
-                    if (filteredNextIsLast) {
-                        hNew = finalTime.subtract(getStepStart().getTime());
-                    }
-
-                    rescale(hNew);
-                    System.arraycopy(predictedY, 0, y, 0, y.length);
-
-                }
-
-                stepEnd = AdamsFieldStateInterpolator.taylor(equations.getMapper(), getStepStart(),
-                                                             getStepStart().getTime().add(getStepSize()),
-                                                             getStepSize(), scaled, nordsieck);
-
-            }
-
-        } while (!isLastStep());
-
-        final FieldODEStateAndDerivative<T> finalState = getStepStart();
-        setStepStart(null);
-        setStepSize(null);
-        return finalState;
+        final FieldODEStateAndDerivative<T> updatedStepEnd = new FieldODEStateAndDerivative<>(globalCurrentState.getTime(), predictedY, correctedYDot);
+        return new AdamsFieldStateInterpolator<>(getStepSize(), updatedStepEnd,
+                                                          correctedScaled, predictedNordsieck, isForward,
+                                                          getStepStart(), updatedStepEnd,
+                                                          equationsMapper);
 
     }
 

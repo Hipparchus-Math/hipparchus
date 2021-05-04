@@ -20,7 +20,10 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
+import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ExpandableODE;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.MultistepIntegrator;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
@@ -86,10 +89,129 @@ public abstract class AdamsIntegrator extends MultistepIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    public abstract ODEStateAndDerivative integrate(ExpandableODE equations,
-                                                    ODEState initialState,
-                                                    double finalTime)
-        throws MathIllegalArgumentException, MathIllegalStateException;
+    public ODEStateAndDerivative integrate(final ExpandableODE equations,
+                                           final ODEState initialState,
+                                           final double finalTime)
+        throws MathIllegalArgumentException, MathIllegalStateException {
+
+        sanityChecks(initialState, finalTime);
+        setStepStart(initIntegration(equations, initialState, finalTime));
+        final boolean forward = finalTime > initialState.getTime();
+
+        // compute the initial Nordsieck vector using the configured starter integrator
+        start(equations, getStepStart(), finalTime);
+
+        // reuse the step that was chosen by the starter integrator
+        ODEStateAndDerivative stepEnd   =
+                        AdamsStateInterpolator.taylor(equations.getMapper(), getStepStart(),
+                                                      getStepStart().getTime() + getStepSize(),
+                                                      getStepSize(), scaled, nordsieck);
+
+        // main integration loop
+        setIsLastStep(false);
+        final double[] y  = getStepStart().getCompleteState();
+        do {
+
+            double[] predictedY  = null;
+            final double[] predictedScaled = new double[y.length];
+            Array2DRowRealMatrix predictedNordsieck = null;
+            double error = 10;
+            while (error >= 1.0) {
+
+                // predict a first estimate of the state at step end
+                predictedY = stepEnd.getCompleteState();
+
+                // evaluate the derivative
+                final double[] yDot = computeDerivatives(stepEnd.getTime(), predictedY);
+
+                // predict Nordsieck vector at step end
+                for (int j = 0; j < predictedScaled.length; ++j) {
+                    predictedScaled[j] = getStepSize() * yDot[j];
+                }
+                predictedNordsieck = updateHighOrderDerivativesPhase1(nordsieck);
+                updateHighOrderDerivativesPhase2(scaled, predictedScaled, predictedNordsieck);
+
+                // evaluate error
+                error = errorEstimation(y, stepEnd.getTime(), predictedY, predictedScaled, predictedNordsieck);
+                if (Double.isNaN(error)) {
+                    throw new MathIllegalStateException(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION,
+                                                        stepEnd.getTime());
+                }
+
+                if (error >= 1.0) {
+                    // reject the step and attempt to reduce error by stepsize control
+                    final double factor = computeStepGrowShrinkFactor(error);
+                    rescale(filterStep(getStepSize() * factor, forward, false));
+                    stepEnd = AdamsStateInterpolator.taylor(equations.getMapper(), getStepStart(),
+                                                            getStepStart().getTime() + getStepSize(),
+                                                            getStepSize(),
+                                                            scaled,
+                                                            nordsieck);
+
+                }
+            }
+
+            final AdamsStateInterpolator interpolator =
+                            finalizeStep(getStepSize(), predictedY, predictedScaled, predictedNordsieck,
+                                         forward, getStepStart(), stepEnd, equations.getMapper());
+
+            // discrete events handling
+            setStepStart(acceptStep(interpolator, finalTime));
+            scaled    = interpolator.getScaled();
+            nordsieck = interpolator.getNordsieck();
+
+            if (!isLastStep()) {
+
+                if (resetOccurred()) {
+
+                    // some events handler has triggered changes that
+                    // invalidate the derivatives, we need to restart from scratch
+                    start(equations, getStepStart(), finalTime);
+
+                    final double  nextT      = getStepStart().getTime() + getStepSize();
+                    final boolean nextIsLast = forward ?
+                                               (nextT >= finalTime) :
+                                               (nextT <= finalTime);
+                    final double hNew = nextIsLast ? finalTime - getStepStart().getTime() : getStepSize();
+
+                    rescale(hNew);
+                    System.arraycopy(getStepStart().getCompleteState(), 0, y, 0, y.length);
+
+                } else {
+
+                    // stepsize control for next step
+                    final double  factor     = computeStepGrowShrinkFactor(error);
+                    final double  scaledH    = getStepSize() * factor;
+                    final double  nextT      = getStepStart().getTime() + scaledH;
+                    final boolean nextIsLast = forward ?
+                                               (nextT >= finalTime) :
+                                               (nextT <= finalTime);
+                    double hNew = filterStep(scaledH, forward, nextIsLast);
+
+                    final double  filteredNextT      = getStepStart().getTime() + hNew;
+                    final boolean filteredNextIsLast = forward ? (filteredNextT >= finalTime) : (filteredNextT <= finalTime);
+                    if (filteredNextIsLast) {
+                        hNew = finalTime - getStepStart().getTime();
+                    }
+
+                    rescale(hNew);
+                    System.arraycopy(predictedY, 0, y, 0, y.length);
+
+                }
+
+                stepEnd = AdamsStateInterpolator.taylor(equations.getMapper(), getStepStart(), getStepStart().getTime() + getStepSize(),
+                                                        getStepSize(), scaled, nordsieck);
+
+            }
+
+        } while (!isLastStep());
+
+        final ODEStateAndDerivative finalState = getStepStart();
+        setStepStart(null);
+        setStepSize(Double.NaN);
+        return finalState;
+
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -132,5 +254,37 @@ public abstract class AdamsIntegrator extends MultistepIntegrator {
                                                  final Array2DRowRealMatrix highOrder) {
         transformer.updateHighOrderDerivativesPhase2(start, end, highOrder);
     }
+
+    /** Estimate error.
+     * @param previousState state vector at step start
+     * @param predictedTime time at step end
+     * @param predictedState predicted state vector at step end
+     * @param predictedScaled predicted value of the scaled derivatives at step end
+     * @param predictedNordsieck predicted value of the Nordsieck vector at step end
+     * @return estimated normalized local discretization error
+     * @since 2.0
+     */
+    protected abstract double errorEstimation(double[] previousState, double predictedTime,
+                                              double[] predictedState, double[] predictedScaled,
+                                              RealMatrix predictedNordsieck);
+
+    /** Finalize the step.
+     * @param stepSize step size used in the scaled and Nordsieck arrays
+     * @param predictedState predicted state at end of step
+     * @param predictedScaled predicted first scaled derivative
+     * @param predictedNordsieck predicted Nordsieck vector
+     * @param isForward integration direction indicator
+     * @param globalPreviousState start of the global step
+     * @param globalCurrentState end of the global step
+     * @param equationsMapper mapper for ODE equations primary and secondary components
+     * @return step interpolator
+     * @since 2.0
+     */
+    protected abstract AdamsStateInterpolator finalizeStep(double stepSize, double[] predictedState,
+                                                           double[] predictedScaled, Array2DRowRealMatrix predictedNordsieck,
+                                                           boolean isForward,
+                                                           ODEStateAndDerivative globalPreviousState,
+                                                           ODEStateAndDerivative globalCurrentState,
+                                                           EquationsMapper equationsMapper);
 
 }
