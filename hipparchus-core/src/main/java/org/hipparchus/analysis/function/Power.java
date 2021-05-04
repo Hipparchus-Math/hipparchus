@@ -22,7 +22,7 @@
 
 package org.hipparchus.analysis.function;
 
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
 
@@ -50,7 +50,7 @@ public class Power implements UnivariateDifferentiableFunction {
     /** {@inheritDoc}
      */
     @Override
-    public DerivativeStructure value(final DerivativeStructure t) {
+    public <T extends Derivative<T>> T value(T t) {
         return t.pow(p);
     }
 

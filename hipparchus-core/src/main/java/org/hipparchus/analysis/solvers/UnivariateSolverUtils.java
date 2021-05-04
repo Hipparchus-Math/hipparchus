@@ -21,7 +21,7 @@
  */
 package org.hipparchus.analysis.solvers;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -356,8 +356,8 @@ public class UnivariateSolverUtils {
 
     /**
      * This method simply calls {@link #bracket(RealFieldUnivariateFunction,
-     * RealFieldElement, RealFieldElement, RealFieldElement, RealFieldElement,
-     * RealFieldElement, int) bracket(function, initial, lowerBound, upperBound, q, r, maximumIterations)}
+     * CalculusFieldElement, CalculusFieldElement, CalculusFieldElement, CalculusFieldElement,
+     * CalculusFieldElement, int) bracket(function, initial, lowerBound, upperBound, q, r, maximumIterations)}
      * with {@code q} and {@code r} set to 1.0 and {@code maximumIterations} set to {@code Integer.MAX_VALUE}.
      * <p>
      * <strong>Note: </strong> this method can take {@code Integer.MAX_VALUE}
@@ -381,7 +381,7 @@ public class UnivariateSolverUtils {
      * @throws NullArgumentException if {@code function} is {@code null}.
      * @since 1.2
      */
-    public static <T extends RealFieldElement<T>> T[] bracket(RealFieldUnivariateFunction<T> function,
+    public static <T extends CalculusFieldElement<T>> T[] bracket(RealFieldUnivariateFunction<T> function,
                                                               T initial,
                                                               T lowerBound, T upperBound)
         throws MathIllegalArgumentException, NullArgumentException {
@@ -392,8 +392,8 @@ public class UnivariateSolverUtils {
 
      /**
      * This method simply calls {@link #bracket(RealFieldUnivariateFunction,
-     * RealFieldElement, RealFieldElement, RealFieldElement, RealFieldElement,
-     * RealFieldElement, int) bracket(function, initial, lowerBound, upperBound, q, r, maximumIterations)}
+     * CalculusFieldElement, CalculusFieldElement, CalculusFieldElement, CalculusFieldElement,
+     * CalculusFieldElement, int) bracket(function, initial, lowerBound, upperBound, q, r, maximumIterations)}
      * with {@code q} and {@code r} set to 1.0.
      * @param function Function.
      * @param initial Initial midpoint of interval being expanded to
@@ -410,7 +410,7 @@ public class UnivariateSolverUtils {
      * @throws NullArgumentException if {@code function} is {@code null}.
      * @since 1.2
      */
-    public static <T extends RealFieldElement<T>> T[] bracket(RealFieldUnivariateFunction<T> function,
+    public static <T extends CalculusFieldElement<T>> T[] bracket(RealFieldUnivariateFunction<T> function,
                                                               T initial,
                                                               T lowerBound, T upperBound,
                                                               int maximumIterations)
@@ -483,7 +483,7 @@ public class UnivariateSolverUtils {
      * @exception MathIllegalArgumentException if function cannot be bracketed in the search interval
      * @since 1.2
      */
-    public static <T extends RealFieldElement<T>> T[] bracket(final RealFieldUnivariateFunction<T> function,
+    public static <T extends CalculusFieldElement<T>> T[] bracket(final RealFieldUnivariateFunction<T> function,
                                                               final T initial,
                                                               final T lowerBound, final T upperBound,
                                                               final T q, final T r,
@@ -567,7 +567,7 @@ public class UnivariateSolverUtils {
      * @return b if a is lesser or equal to b, a otherwise
      * @since 1.2
      */
-    private static <T extends RealFieldElement<T>> T max(final T a, final T b) {
+    private static <T extends CalculusFieldElement<T>> T max(final T a, final T b) {
         return (a.subtract(b).getReal() <= 0) ? b : a;
     }
 
@@ -578,7 +578,7 @@ public class UnivariateSolverUtils {
      * @return a if a is lesser or equal to b, b otherwise
      * @since 1.2
      */
-    private static <T extends RealFieldElement<T>> T min(final T a, final T b) {
+    private static <T extends CalculusFieldElement<T>> T min(final T a, final T b) {
         return (a.subtract(b).getReal() <= 0) ? a : b;
     }
 

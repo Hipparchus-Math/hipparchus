@@ -23,7 +23,7 @@
 package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
@@ -40,7 +40,7 @@ import org.hipparchus.util.MathArrays;
  * {@link AdamsMoultonFieldIntegrator Adams-Moulton} integrators.
  * @param <T> the type of the field elements
  */
-public abstract class AdamsFieldIntegrator<T extends RealFieldElement<T>> extends MultistepFieldIntegrator<T> {
+public abstract class AdamsFieldIntegrator<T extends CalculusFieldElement<T>> extends MultistepFieldIntegrator<T> {
 
     /** Transformer. */
     private final AdamsNordsieckFieldTransformer<T> transformer;
@@ -242,7 +242,7 @@ public abstract class AdamsFieldIntegrator<T extends RealFieldElement<T>> extend
      * @param highOrder high order scaled derivatives
      * (h<sup>2</sup>/2 y'', ... h<sup>k</sup>/k! y(k))
      * @return updated high order derivatives
-     * @see #updateHighOrderDerivativesPhase2(RealFieldElement[], RealFieldElement[], Array2DRowFieldMatrix)
+     * @see #updateHighOrderDerivativesPhase2(CalculusFieldElement[], CalculusFieldElement[], Array2DRowFieldMatrix)
      */
     public Array2DRowFieldMatrix<T> updateHighOrderDerivativesPhase1(final Array2DRowFieldMatrix<T> highOrder) {
         return transformer.updateHighOrderDerivativesPhase1(highOrder);

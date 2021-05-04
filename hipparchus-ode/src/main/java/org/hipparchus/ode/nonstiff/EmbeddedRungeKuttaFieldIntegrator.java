@@ -22,8 +22,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldEquationsMapper;
@@ -70,7 +70,7 @@ import org.hipparchus.util.MathUtils;
  * @param <T> the type of the field elements
  */
 
-public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends RealFieldElement<T>>
+public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldElement<T>>
     extends AdaptiveStepsizeFieldIntegrator<T>
     implements FieldButcherArrayProvider<T> {
 
@@ -250,7 +250,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends RealFieldEleme
                     final StepsizeHelper helper = getStepSizeHelper();
                     final T[] scale = MathArrays.buildArray(getField(), helper.getMainSetDimension());
                     for (int i = 0; i < scale.length; ++i) {
-                        scale[i] = helper.getTolerance(i, y[i].abs());
+                        scale[i] = helper.getTolerance(i, y[i].norm());
                     }
                     hNew = getField().getZero().add(initializeStep(forward, getOrder(), scale, getStepStart(), equations.getMapper()));
                     firstTime = false;

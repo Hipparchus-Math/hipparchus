@@ -19,7 +19,7 @@ package org.hipparchus.ode;
 
 import java.util.Collection;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -38,7 +38,7 @@ import org.hipparchus.ode.sampling.FieldODEStepHandler;
  * @param <T> the type of the field elements
  */
 
-public interface FieldODEIntegrator<T extends RealFieldElement<T>> {
+public interface FieldODEIntegrator<T extends CalculusFieldElement<T>> {
 
     /** Get the name of the method.
      * @return name of the method

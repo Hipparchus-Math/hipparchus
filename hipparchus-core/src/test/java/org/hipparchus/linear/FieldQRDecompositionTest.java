@@ -25,7 +25,7 @@ package org.hipparchus.linear;
 import java.util.Random;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -130,7 +130,7 @@ public class FieldQRDecompositionTest {
         InvertShortWide(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestDimensions(Field<T> field){
+    private <T extends CalculusFieldElement<T>> void doTestDimensions(Field<T> field){
         T[][] data3x3NS= convert(field, testData3x3NonSingular ); 
         T[][] data3x4= convert(field, testData3x4            );
         T[][] data4x3= convert(field, testData4x3            );
@@ -148,7 +148,7 @@ public class FieldQRDecompositionTest {
 
     }
 
-    private <T extends RealFieldElement<T>> void checkDimension(FieldMatrix<T> m) {
+    private <T extends CalculusFieldElement<T>> void checkDimension(FieldMatrix<T> m) {
         int rows = m.getRowDimension();
         int columns = m.getColumnDimension();
         FieldQRDecomposition<T> qr = new FieldQRDecomposition<T>(m);
@@ -158,7 +158,7 @@ public class FieldQRDecompositionTest {
         Assert.assertEquals(columns, qr.getR().getColumnDimension());
     }
 
-    private  <T extends RealFieldElement<T>> void AEqualQR(Field<T> field) {
+    private  <T extends CalculusFieldElement<T>> void AEqualQR(Field<T> field) {
         T[][] data3x3NS= convert(field, testData3x3NonSingular ); 
         T[][] data3x3S= convert(field, testData3x3Singular    );
         T[][] data3x4= convert(field, testData3x4            );
@@ -180,13 +180,13 @@ public class FieldQRDecompositionTest {
 
     }
 
-    private  <T extends RealFieldElement<T>> void checkAEqualQR(FieldMatrix<T> m) {
+    private  <T extends CalculusFieldElement<T>> void checkAEqualQR(FieldMatrix<T> m) {
         FieldQRDecomposition<T> qr = new FieldQRDecomposition<>(m);
         T norm = norm(qr.getQ().multiply(qr.getR()).subtract(m));
         Assert.assertEquals(0, norm.getReal(), normTolerance);
     }
 
-    private  <T extends RealFieldElement<T>> void QOrthogonal(Field<T> field) {
+    private  <T extends CalculusFieldElement<T>> void QOrthogonal(Field<T> field) {
         T[][] data3x3NS= convert(field, testData3x3NonSingular ); 
         T[][] data3x3S= convert(field, testData3x3Singular    );
         T[][] data3x4= convert(field, testData3x4            );
@@ -208,14 +208,14 @@ public class FieldQRDecompositionTest {
 
     }
 
-    private  <T extends RealFieldElement<T>> void checkQOrthogonal(FieldMatrix<T> m) {
+    private  <T extends CalculusFieldElement<T>> void checkQOrthogonal(FieldMatrix<T> m) {
         FieldQRDecomposition<T> qr = new FieldQRDecomposition<T>(m);
         FieldMatrix<T> eye = MatrixUtils.createFieldIdentityMatrix(m.getField(),m.getRowDimension());
         T norm = norm(qr.getQT().multiply(qr.getQ()).subtract(eye));
         Assert.assertEquals(0, norm.getReal(), normTolerance);
     }
 
-    private  <T extends RealFieldElement<T>> void RUpperTriangular(Field<T> field) {
+    private  <T extends CalculusFieldElement<T>> void RUpperTriangular(Field<T> field) {
         T[][] data3x3NS= convert(field, testData3x3NonSingular ); 
         T[][] data3x3S= convert(field, testData3x3Singular    );
         T[][] data3x4= convert(field, testData3x4            );
@@ -243,7 +243,7 @@ public class FieldQRDecompositionTest {
 
     }
 
-    private  <T extends RealFieldElement<T>> void checkUpperTriangular(FieldMatrix<T> m) {
+    private  <T extends CalculusFieldElement<T>> void checkUpperTriangular(FieldMatrix<T> m) {
         m.walkInOptimizedOrder(new DefaultFieldMatrixPreservingVisitor<T>(m.getField().getZero()) {
             @Override
             public void visit(int row, int column, T value) {
@@ -254,7 +254,7 @@ public class FieldQRDecompositionTest {
         });
     }
 
-    private <T extends RealFieldElement<T>> void HTrapezoidal(Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void HTrapezoidal(Field<T> field) {
         T[][] data3x3NS= convert(field, testData3x3NonSingular ); 
         T[][] data3x3S= convert(field, testData3x3Singular    );
         T[][] data3x4= convert(field, testData3x4            );
@@ -282,7 +282,7 @@ public class FieldQRDecompositionTest {
 
     }
 
-    private  <T extends RealFieldElement<T>> void checkTrapezoidal(FieldMatrix<T> m) {
+    private  <T extends CalculusFieldElement<T>> void checkTrapezoidal(FieldMatrix<T> m) {
         m.walkInOptimizedOrder(new DefaultFieldMatrixPreservingVisitor<T>(m.getField().getZero()) {
             @Override
             public void visit(int row, int column, T value) {
@@ -293,7 +293,7 @@ public class FieldQRDecompositionTest {
         });
     }
     
-    private  <T extends RealFieldElement<T>> void MatricesValues(Field<T> field) {
+    private  <T extends CalculusFieldElement<T>> void MatricesValues(Field<T> field) {
         T[][] data3x3NS= convert(field, testData3x3NonSingular ); 
         FieldQRDecomposition<T> qr =
             new FieldQRDecomposition<T>(MatrixUtils.createFieldMatrix( data3x3NS));
@@ -330,21 +330,21 @@ public class FieldQRDecompositionTest {
 
     }
 
-    private  <T extends RealFieldElement<T>> void NonInvertible(Field<T> field) {
+    private  <T extends CalculusFieldElement<T>> void NonInvertible(Field<T> field) {
         T[][] data3x3S= convert(field, testData3x3Singular    );
         FieldQRDecomposition<T> qr =
             new FieldQRDecomposition<T>(MatrixUtils.createFieldMatrix( data3x3S));
         qr.getSolver().getInverse();
     }
 
-    private  <T extends RealFieldElement<T>> void InvertTallSkinny(Field<T> field) {
+    private  <T extends CalculusFieldElement<T>> void InvertTallSkinny(Field<T> field) {
         T[][] data4x3= convert(field, testData4x3            );
         FieldMatrix<T> a     = MatrixUtils.createFieldMatrix(data4x3);
         FieldMatrix<T> pinv  = new FieldQRDecomposition<T>(a).getSolver().getInverse();
         Assert.assertEquals(0, norm(pinv.multiply(a).subtract(MatrixUtils.createFieldIdentityMatrix(field, 3))).getReal(), 1.0e-6);
     }
 
-    private  <T extends RealFieldElement<T>> void InvertShortWide(Field<T> field) {
+    private  <T extends CalculusFieldElement<T>> void InvertShortWide(Field<T> field) {
         T[][] data3x4= convert(field, testData3x4            );
         FieldMatrix<T> a = MatrixUtils.createFieldMatrix( data3x4);
         FieldMatrix<T> pinv  = new FieldQRDecomposition<T>(a).getSolver().getInverse();
@@ -352,7 +352,7 @@ public class FieldQRDecompositionTest {
         Assert.assertEquals(0,norm( pinv.multiply(a).getSubMatrix(0, 2, 0, 2).subtract(MatrixUtils.createFieldIdentityMatrix(field, 3))).getReal(), 1.0e-6);
     }
 
-    private  <T extends RealFieldElement<T>> FieldMatrix<T> createTestMatrix(Field<T> field, final Random r, final int rows, final int columns) {
+    private  <T extends CalculusFieldElement<T>> FieldMatrix<T> createTestMatrix(Field<T> field, final Random r, final int rows, final int columns) {
         FieldMatrix<T> m = MatrixUtils.createFieldMatrix(field, rows, columns);
         m.walkInOptimizedOrder(new DefaultFieldMatrixChangingVisitor<T>(field.getOne()){
             @Override
@@ -363,7 +363,7 @@ public class FieldQRDecompositionTest {
         return m;
     }
 
-    private  <T extends RealFieldElement<T>> void QRSingular(Field<T> field) {
+    private  <T extends CalculusFieldElement<T>> void QRSingular(Field<T> field) {
         final FieldMatrix<T> a = MatrixUtils.createFieldMatrix(convert( field, new double[][] {
             { 1, 6, 4 }, { 2, 4, -1 }, { -1, 2, 5 }
         }));
@@ -376,7 +376,7 @@ public class FieldQRDecompositionTest {
         new FieldQRDecomposition<T>(a, field.getZero().add(1.0e-15)).getSolver().solve(b);
     }
     
-    private <T extends RealFieldElement<T>> T norm(FieldMatrix<T> FM ){
+    private <T extends CalculusFieldElement<T>> T norm(FieldMatrix<T> FM ){
         return walkInColumnOrder(FM, new FieldMatrixPreservingVisitor<T>() {
 
             /** Last row index. */
@@ -401,7 +401,7 @@ public class FieldQRDecompositionTest {
             /** {@inheritDoc} */
             @Override
             public void visit(final int row, final int column, final T value) {
-                columnSum = columnSum.add(value).abs();
+                columnSum = columnSum.add(value).norm();
                 if (row == endRow) {
                     maxColSum = (maxColSum.getReal() > columnSum.getReal()) ? maxColSum : columnSum ;
                     columnSum = FM.getField().getZero();
@@ -417,7 +417,7 @@ public class FieldQRDecompositionTest {
         });
     }
     
-    private <T extends RealFieldElement<T>> T walkInColumnOrder(FieldMatrix<T> FM, FieldMatrixPreservingVisitor<T> visitor) {
+    private <T extends CalculusFieldElement<T>> T walkInColumnOrder(FieldMatrix<T> FM, FieldMatrixPreservingVisitor<T> visitor) {
         final int rows    = FM.getRowDimension();
         final int columns = FM.getColumnDimension();
         visitor.start(rows, columns, 0, rows - 1, 0, columns - 1);
@@ -429,7 +429,7 @@ public class FieldQRDecompositionTest {
         return visitor.end();
     }
     
-    private <T extends RealFieldElement<T>> T[][] convert(Field<T> field, double[][] value){
+    private <T extends CalculusFieldElement<T>> T[][] convert(Field<T> field, double[][] value){
         T[][] res = MathArrays.buildArray(field, value.length, value[0].length);
         for (int ii = 0; ii < (value.length); ii++){
             for (int jj = 0; jj < (value[0].length); jj++){

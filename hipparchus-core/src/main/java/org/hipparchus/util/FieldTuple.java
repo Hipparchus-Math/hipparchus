@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -28,7 +28,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * @param <T> the type of the field elements
  * @since 1.2
  */
-public class FieldTuple<T extends RealFieldElement<T>> implements RealFieldElement<FieldTuple<T>> {
+public class FieldTuple<T extends CalculusFieldElement<T>> implements CalculusFieldElement<FieldTuple<T>> {
 
     /** Components of the tuple. */
     private final T[] values;
@@ -251,10 +251,10 @@ public class FieldTuple<T extends RealFieldElement<T>> implements RealFieldEleme
 
     /** {@inheritDoc} */
     @Override
-    public FieldTuple<T> abs() {
+    public FieldTuple<T> norm() {
         final FieldTuple<T> result = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
         for (int i = 0; i < values.length; ++i) {
-            result.values[i] = values[i].abs();
+            result.values[i] = values[i].norm();
         }
         return result;
     }
@@ -733,7 +733,7 @@ public class FieldTuple<T extends RealFieldElement<T>> implements RealFieldEleme
     /** Field for {link FieldTuple} instances.
      * @param <T> the type of the field elements
      */
-    private static class FieldTupleField<T extends RealFieldElement<T>> implements Field<FieldTuple<T>> {
+    private static class FieldTupleField<T extends CalculusFieldElement<T>> implements Field<FieldTuple<T>> {
 
         /** Constant function evaluating to 0.0. */
         private final FieldTuple<T> zero;

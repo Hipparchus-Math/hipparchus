@@ -25,7 +25,7 @@ package org.hipparchus.linear;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
@@ -48,7 +48,7 @@ import org.hipparchus.util.MathArrays;
  * @see <a href="http://en.wikipedia.org/wiki/QR_decomposition">Wikipedia</a>
  *
  */
-public class FieldQRDecomposition<T extends RealFieldElement<T>> {
+public class FieldQRDecomposition<T extends CalculusFieldElement<T>> {
     /**
      * A packed TRANSPOSED representation of the QR decomposition.
      * <p>The elements BELOW the diagonal are the elements of the UPPER triangular
@@ -77,7 +77,7 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
      *
      * @param matrix The matrix to decompose.
      *
-     * @see #FieldQRDecomposition(FieldMatrix, RealFieldElement)
+     * @see #FieldQRDecomposition(FieldMatrix, CalculusFieldElement)
      */
     public FieldQRDecomposition(FieldMatrix<T> matrix) {
         this(matrix, matrix.getField().getZero());
@@ -307,7 +307,7 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
      * (i.e. a system with more equations than unknowns, which corresponds to a tall A
      * matrix with more rows than columns). In any case, if the matrix is singular
      * within the tolerance set at {@link #FieldQRDecomposition(FieldMatrix,
-     * RealFieldElement) construction}, an error will be triggered when
+     * CalculusFieldElement) construction}, an error will be triggered when
      * the {@link DecompositionSolver#solve(RealVector) solve} method will be called.
      * </p>
      * @return a solver

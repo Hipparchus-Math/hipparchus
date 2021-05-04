@@ -24,7 +24,7 @@ package org.hipparchus.analysis.interpolation;
 import java.lang.reflect.Array;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.polynomials.FieldPolynomialFunction;
 import org.hipparchus.analysis.polynomials.FieldPolynomialSplineFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
@@ -150,7 +150,7 @@ public class AkimaSplineInterpolator
      * @since 1.5
      */
     @Override
-    public <T extends RealFieldElement<T>> FieldPolynomialSplineFunction<T> interpolate(final T[] xvals,
+    public <T extends CalculusFieldElement<T>> FieldPolynomialSplineFunction<T> interpolate(final T[] xvals,
                                                                                         final T[] yvals)
         throws MathIllegalArgumentException {
         if (xvals == null ||
@@ -179,7 +179,7 @@ public class AkimaSplineInterpolator
         }
 
         for (int i = 1; i < weights.length; i++) {
-            weights[i] = FastMath.abs(differences[i].subtract(differences[i - 1]));
+            weights[i] = FastMath.norm(differences[i].subtract(differences[i - 1]));
         }
 
         // Prepare Hermite interpolation scheme.
@@ -263,7 +263,7 @@ public class AkimaSplineInterpolator
      * @return the derivative
      * @since 1.5
      */
-    private <T extends RealFieldElement<T>> T differentiateThreePoint(T[] xvals, T[] yvals,
+    private <T extends CalculusFieldElement<T>> T differentiateThreePoint(T[] xvals, T[] yvals,
                                                                       int indexOfDifferentiation,
                                                                       int indexOfFirstSample,
                                                                       int indexOfSecondsample,
@@ -342,9 +342,9 @@ public class AkimaSplineInterpolator
      * @return polynomial that fits the function
      * @since 1.5
      */
-    private <T extends RealFieldElement<T>> FieldPolynomialSplineFunction<T> interpolateHermiteSorted(T[] xvals,
-                                                                                                      T[] yvals,
-                                                                                                      T[] firstDerivatives) {
+    private <T extends CalculusFieldElement<T>> FieldPolynomialSplineFunction<T> interpolateHermiteSorted(T[] xvals,
+                                                                                                          T[] yvals,
+                                                                                                          T[] firstDerivatives) {
         MathArrays.checkEqualLength(xvals, yvals);
         MathArrays.checkEqualLength(xvals, firstDerivatives);
 

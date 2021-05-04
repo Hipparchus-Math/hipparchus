@@ -437,7 +437,7 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
     /** {@inheritDoc}
      */
     @Override
-    public DerivativeStructure abs() {
+    public DerivativeStructure norm() {
         if (Double.doubleToLongBits(data[0]) < 0) {
             // we use the bits representation to also handle -0.0
             return negate();
@@ -542,10 +542,10 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
             final int expY = y.getExponent();
             if (expX > expY + 27) {
                 // y is neglectible with respect to x
-                return abs();
+                return norm();
             } else if (expY > expX + 27) {
                 // x is neglectible with respect to y
-                return y.abs();
+                return y.norm();
             } else {
 
                 // find an intermediate scale to avoid both overflow and underflow

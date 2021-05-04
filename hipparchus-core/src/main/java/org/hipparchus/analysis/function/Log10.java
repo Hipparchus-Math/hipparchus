@@ -23,27 +23,19 @@
 package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.differentiation.Derivative;
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.differentiation.ExtendedUnivariateDifferentiableFunction;
+import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
 
 /**
  * Base 10 logarithm function.
  *
  */
-public class Log10 implements ExtendedUnivariateDifferentiableFunction {
+public class Log10 implements UnivariateDifferentiableFunction {
 
     /** {@inheritDoc} */
     @Override
     public double value(double x) {
         return FastMath.log10(x);
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public DerivativeStructure value(final DerivativeStructure t) {
-        return t.log10();
     }
 
     /** {@inheritDoc} */

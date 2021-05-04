@@ -217,7 +217,7 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
-    public UnivariateDerivative1 abs() {
+    public UnivariateDerivative1 norm() {
         if (Double.doubleToLongBits(f0) < 0) {
             // we use the bits representation to also handle -0.0
             return negate();
@@ -298,10 +298,10 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
             final int expY = y.getExponent();
             if (expX > expY + 27) {
                 // y is neglectible with respect to x
-                return abs();
+                return norm();
             } else if (expY > expX + 27) {
                 // x is neglectible with respect to y
-                return y.abs();
+                return y.norm();
             } else {
 
                 // find an intermediate scale to avoid both overflow and underflow
@@ -331,13 +331,11 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
         return new UnivariateDerivative1(inv1, -f1 * inv2);
     }
 
-    /** Compute composition of the instance by a function.
-     * @param g0 value of the function at the current point (i.e. at {@code g(getValue())})
-     * @param g1 first derivative of the function at the current point (i.e. at {@code g'(getValue())})
-     * @return g(this)
-     */
-    public UnivariateDerivative1 compose(final double g0, final double g1) {
-        return new UnivariateDerivative1(g0, g1 * f1);
+    /** {@inheritDoc} */
+    @Override
+    public UnivariateDerivative1 compose(final double... f) {
+        MathUtils.checkDimension(f.length, getOrder() + 1);
+        return new UnivariateDerivative1(f[0], f[1] * f1);
     }
 
     /** {@inheritDoc} */

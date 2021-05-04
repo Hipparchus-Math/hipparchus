@@ -18,13 +18,13 @@
 package org.hipparchus.ode.nonstiff;
 
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
 
-public class Ellipse<T extends RealFieldElement<T>> implements FieldOrdinaryDifferentialEquation<T> {
+public class Ellipse<T extends CalculusFieldElement<T>> implements FieldOrdinaryDifferentialEquation<T> {
 
     private final T a;
     private final T b;

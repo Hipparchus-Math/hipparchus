@@ -18,8 +18,8 @@
 package org.hipparchus.ode.nonstiff;
 
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -48,18 +48,18 @@ import org.junit.Test;
 
 public abstract class AdamsFieldIntegratorAbstractTest {
 
-    protected abstract <T extends RealFieldElement<T>> AdamsFieldIntegrator<T>
+    protected abstract <T extends CalculusFieldElement<T>> AdamsFieldIntegrator<T>
     createIntegrator(Field<T> field, final int nSteps, final double minStep, final double maxStep,
                      final double scalAbsoluteTolerance, final double scalRelativeTolerance);
 
-    protected abstract <T extends RealFieldElement<T>> AdamsFieldIntegrator<T>
+    protected abstract <T extends CalculusFieldElement<T>> AdamsFieldIntegrator<T>
     createIntegrator(Field<T> field, final int nSteps, final double minStep, final double maxStep,
                      final double[] vecAbsoluteTolerance, final double[] vecRelativeTolerance);
 
     @Test(expected=MathIllegalArgumentException.class)
     public abstract void testMinStep();
 
-    protected <T extends RealFieldElement<T>> void doDimensionCheck(final Field<T> field) {
+    protected <T extends CalculusFieldElement<T>> void doDimensionCheck(final Field<T> field) {
         TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
 
         double minStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.1).getReal();
@@ -99,7 +99,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
     @Test
     public abstract void testIncreasingTolerance();
 
-    protected <T extends RealFieldElement<T>> void doTestIncreasingTolerance(final Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doTestIncreasingTolerance(final Field<T> field,
                                                                              double ratioMin, double ratioMax) {
 
         int previousCalls = Integer.MAX_VALUE;
@@ -138,7 +138,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
     @Test(expected = MathIllegalStateException.class)
     public abstract void exceedMaxEvaluations();
 
-    protected <T extends RealFieldElement<T>> void doExceedMaxEvaluations(final Field<T> field, final int max) {
+    protected <T extends CalculusFieldElement<T>> void doExceedMaxEvaluations(final Field<T> field, final int max) {
 
         TestFieldProblem1<T> pb  = new TestFieldProblem1<T>(field);
         double range = pb.getFinalTime().subtract(pb.getInitialState().getTime()).getReal();
@@ -154,7 +154,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
     @Test
     public abstract void backward();
 
-    protected <T extends RealFieldElement<T>> void doBackward(final Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doBackward(final Field<T> field,
                                                               final double epsilonLast,
                                                               final double epsilonMaxValue,
                                                               final double epsilonMaxTime,
@@ -177,12 +177,12 @@ public abstract class AdamsFieldIntegratorAbstractTest {
     @Test
     public abstract void polynomial();
 
-    protected <T extends RealFieldElement<T>> void doPolynomial(final Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doPolynomial(final Field<T> field,
                                                                 final int nLimit,
                                                                 final double epsilonBad,
                                                                 final double epsilonGood) {
         TestFieldProblem6<T> pb = new TestFieldProblem6<T>(field);
-        double range = pb.getFinalTime().subtract(pb.getInitialState().getTime()).abs().getReal();
+        double range = pb.getFinalTime().subtract(pb.getInitialState().getTime()).norm().getReal();
 
         for (int nSteps = 2; nSteps < 8; ++nSteps) {
             AdamsFieldIntegrator<T> integ = createIntegrator(field, nSteps, 1.0e-6 * range, 0.1 * range, 1.0e-4, 1.0e-4);
@@ -202,7 +202,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
     @Test
     public abstract void testSecondaryEquations();
 
-    protected <T extends RealFieldElement<T>> void doTestSecondaryEquations(final Field<T> field,
+    protected <T extends CalculusFieldElement<T>> void doTestSecondaryEquations(final Field<T> field,
                                                                             final double epsilonSinCos,
                                                                             final double epsilonLinear) {
         FieldOrdinaryDifferentialEquation<T> sinCos = new FieldOrdinaryDifferentialEquation<T>() {
@@ -257,11 +257,11 @@ public abstract class AdamsFieldIntegratorAbstractTest {
                     Assert.assertEquals(1, state.getSecondaryStateDimension(1));
                     Assert.assertEquals(3, state.getCompleteStateDimension());
                     max[0] = FastMath.max(max[0],
-                                          t.sin().subtract(state.getPrimaryState()[0]).abs().getReal());
+                                          t.sin().subtract(state.getPrimaryState()[0]).norm().getReal());
                     max[0] = FastMath.max(max[0],
-                                          t.cos().subtract(state.getPrimaryState()[1]).abs().getReal());
+                                          t.cos().subtract(state.getPrimaryState()[1]).norm().getReal());
                     max[1] = FastMath.max(max[1],
-                                          field.getOne().subtract(t).subtract(state.getSecondaryState(1)[0]).abs().getReal());
+                                          field.getOne().subtract(t).subtract(state.getSecondaryState(1)[0]).norm().getReal());
                 }
             }
         });
@@ -284,8 +284,8 @@ public abstract class AdamsFieldIntegratorAbstractTest {
     @Test(expected=MathIllegalStateException.class)
     public abstract void testStartFailure();
 
-    protected <T extends RealFieldElement<T>> void doTestStartFailure(final Field<T> field) {
-        TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
+        protected <T extends CalculusFieldElement<T>> void doTestStartFailure(final Field<T> field) {
+            TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
         double minStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.0001).getReal();
         double maxStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).getReal();
         double scalAbsoluteTolerance = 1.0e-6;
@@ -344,7 +344,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
 
     }
 
-    private static class PerfectStarter<T extends RealFieldElement<T>> extends AbstractFieldIntegrator<T> {
+    private static class PerfectStarter<T extends CalculusFieldElement<T>> extends AbstractFieldIntegrator<T> {
 
         private final PerfectInterpolator<T> interpolator;
         private final int nbSteps;
@@ -373,7 +373,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
 
     }
 
-    private static class PerfectInterpolator<T extends RealFieldElement<T>> implements FieldODEStateInterpolator<T> {
+    private static class PerfectInterpolator<T extends CalculusFieldElement<T>> implements FieldODEStateInterpolator<T> {
         private final TestFieldProblemAbstract<T> problem;
         private T previousTime;
         private T currentTime;

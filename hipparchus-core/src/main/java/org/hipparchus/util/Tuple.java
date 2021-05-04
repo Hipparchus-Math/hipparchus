@@ -20,14 +20,14 @@ import java.util.Arrays;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * This class allows to perform the same computation of all components of a Tuple at once.
  * @since 1.2
  */
-public class Tuple implements RealFieldElement<Tuple> {
+public class Tuple implements CalculusFieldElement<Tuple> {
 
     /** Components of the tuple. */
     private final double[] values;
@@ -247,7 +247,7 @@ public class Tuple implements RealFieldElement<Tuple> {
 
     /** {@inheritDoc} */
     @Override
-    public Tuple abs() {
+    public Tuple norm() {
         final Tuple result = new Tuple(field, new double[values.length]);
         for (int i = 0; i < values.length; ++i) {
             result.values[i] = FastMath.abs(values[i]);

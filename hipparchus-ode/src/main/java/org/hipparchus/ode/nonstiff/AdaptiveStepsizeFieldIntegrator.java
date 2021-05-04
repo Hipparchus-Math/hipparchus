@@ -22,8 +22,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
@@ -69,7 +69,7 @@ import org.hipparchus.util.MathArrays;
  *
  */
 
-public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement<T>>
+public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldElement<T>>
     extends AbstractFieldIntegrator<T> {
 
     /** Helper for step size control. */
@@ -123,7 +123,7 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
      * <p>
      * A side effect of this method is to also reset the initial
      * step so it will be automatically computed by the integrator
-     * if {@link #setInitialStepSize(RealFieldElement) setInitialStepSize}
+     * if {@link #setInitialStepSize(CalculusFieldElement) setInitialStepSize}
      * is not called by the user.
      * </p>
      * @param minimalStep minimal step (must be positive even for backward
@@ -142,7 +142,7 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
      * <p>
      * A side effect of this method is to also reset the initial
      * step so it will be automatically computed by the integrator
-     * if {@link #setInitialStepSize(RealFieldElement) setInitialStepSize}
+     * if {@link #setInitialStepSize(CalculusFieldElement) setInitialStepSize}
      * is not called by the user.
      * </p>
      * @param minimalStep minimal step (must be positive even for backward
@@ -257,6 +257,7 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
         if (h > getMaxStep()) {
             h = getMaxStep();
         }
+
         if (! forward) {
             h = -h;
         }
@@ -281,12 +282,12 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
         final double maxStep = stepsizeHelper.getMaxStep();
 
         T filteredH = h;
-        if (h.abs().subtract(minStep).getReal() < 0) {
+        if (h.norm().subtract(minStep).getReal() < 0) {
             if (acceptSmall) {
                 filteredH = forward ? getField().getZero().add(minStep) : getField().getZero().add(-minStep);
             } else {
                 throw new MathIllegalArgumentException(LocalizedODEFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
-                                                       h.abs().getReal(), minStep, true);
+                                                       FastMath.abs(h.getReal()), minStep, true);
             }
         }
 

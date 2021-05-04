@@ -18,8 +18,8 @@ package org.hipparchus.analysis.differentiation;
 
 import java.util.Arrays;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
@@ -52,7 +52,7 @@ import org.hipparchus.util.MathUtils;
  * @see FieldUnivariateDerivative2
  * @since 1.7
  */
-public class FieldGradient<T extends RealFieldElement<T>> implements FieldDerivative<T, FieldGradient<T>> {
+public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDerivative<T, FieldGradient<T>> {
 
     /** Value of the function. */
     private final T value;
@@ -96,7 +96,7 @@ public class FieldGradient<T extends RealFieldElement<T>> implements FieldDeriva
      * @param <T> the type of the function parameters and value
      * @return a {@code FieldGradient} with a constant value and all derivatives set to 0.0
      */
-    public static <T extends RealFieldElement<T>> FieldGradient<T> constant(final int freeParameters, final T value) {
+    public static <T extends CalculusFieldElement<T>> FieldGradient<T> constant(final int freeParameters, final T value) {
         final FieldGradient<T> g = new FieldGradient<>(value, freeParameters);
         Arrays.fill(g.grad, value.getField().getZero());
         return g;
@@ -114,8 +114,8 @@ public class FieldGradient<T extends RealFieldElement<T>> implements FieldDeriva
      * @return a {@code FieldGradient} with a constant value and all derivatives set to 0.0 except the
      * one at {@code index} which will be set to 1.0
      */
-    public static <T extends RealFieldElement<T>> FieldGradient<T> variable(final int freeParameters,
-                                                                            final int index, final T value) {
+    public static <T extends CalculusFieldElement<T>> FieldGradient<T> variable(final int freeParameters,
+                                                                                final int index, final T value) {
         final FieldGradient<T> g = new FieldGradient<>(value, freeParameters);
         final Field<T> field = value.getField();
         Arrays.fill(g.grad, field.getZero());
@@ -406,7 +406,7 @@ public class FieldGradient<T extends RealFieldElement<T>> implements FieldDeriva
 
     /** {@inheritDoc} */
     @Override
-    public FieldGradient<T> abs() {
+    public FieldGradient<T> norm() {
         if (Double.doubleToLongBits(value.getReal()) < 0) {
             // we use the bits representation to also handle -0.0
             return negate();
@@ -507,10 +507,10 @@ public class FieldGradient<T extends RealFieldElement<T>> implements FieldDeriva
             final int expY = y.getExponent();
             if (expX > expY + 27) {
                 // y is neglectible with respect to x
-                return abs();
+                return norm();
             } else if (expY > expX + 27) {
                 // x is neglectible with respect to y
-                return y.abs();
+                return y.norm();
             } else {
 
                 // find an intermediate scale to avoid both overflow and underflow
@@ -596,7 +596,7 @@ public class FieldGradient<T extends RealFieldElement<T>> implements FieldDeriva
      * @param <T> the type of the function parameters and value
      * @return a<sup>x</sup>
      */
-    public static <T extends RealFieldElement<T>> FieldGradient<T> pow(final double a, final FieldGradient<T> x) {
+    public static <T extends CalculusFieldElement<T>> FieldGradient<T> pow(final double a, final FieldGradient<T> x) {
         if (a == 0) {
             return x.getField().getZero();
         } else {

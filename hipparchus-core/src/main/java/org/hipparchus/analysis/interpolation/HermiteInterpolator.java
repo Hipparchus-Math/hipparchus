@@ -26,8 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.analysis.differentiation.Derivative;
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.differentiation.ExtendedUnivariateDifferentiableVectorFunction;
+import org.hipparchus.analysis.differentiation.UnivariateDifferentiableVectorFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -52,7 +51,7 @@ import org.hipparchus.util.MathUtils;
  * </p>
  *
  */
-public class HermiteInterpolator implements ExtendedUnivariateDifferentiableVectorFunction {
+public class HermiteInterpolator implements UnivariateDifferentiableVectorFunction {
 
     /** Sample abscissae. */
     private final List<Double> abscissae;
@@ -186,40 +185,6 @@ public class HermiteInterpolator implements ExtendedUnivariateDifferentiableVect
             }
             final double deltaX = x - abscissae.get(i);
             valueCoeff *= deltaX;
-        }
-
-        return value;
-
-    }
-
-    /** Interpolate value at a specified abscissa.
-     * <p>
-     * Calling this method is equivalent to call the {@link
-     * PolynomialFunction#value(DerivativeStructure) value} methods of all polynomials
-     * returned by {@link #getPolynomials() getPolynomials}, except it does not build the
-     * intermediate polynomials, so this method is faster and numerically more stable.
-     * </p>
-     * @param x interpolation abscissa
-     * @return interpolated value
-     * @exception MathIllegalArgumentException if sample is empty
-     */
-    @Override
-    public DerivativeStructure[] value(final DerivativeStructure x)
-        throws MathIllegalArgumentException {
-
-        // safety check
-        checkInterpolation();
-
-        final DerivativeStructure[] value = new DerivativeStructure[topDiagonal.get(0).length];
-        Arrays.fill(value, x.getField().getZero());
-        DerivativeStructure valueCoeff = x.getField().getOne();
-        for (int i = 0; i < topDiagonal.size(); ++i) {
-            double[] dividedDifference = topDiagonal.get(i);
-            for (int k = 0; k < value.length; ++k) {
-                value[k] = value[k].add(valueCoeff.multiply(dividedDifference[k]));
-            }
-            final DerivativeStructure deltaX = x.subtract(abscissae.get(i));
-            valueCoeff = valueCoeff.multiply(deltaX);
         }
 
         return value;

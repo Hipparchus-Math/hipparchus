@@ -22,7 +22,7 @@ import org.hipparchus.CalculusFieldElement;
  * <p>
  * This class is a simple container, it does not provide any computational method.
  * </p>
- * @see FastMath#sinCos(org.hipparchus.RealFieldElement)
+ * @see FastMath#sinCos(org.hipparchus.CalculusFieldElement)
  * @param <T> the type of the field elements
  * @since 1.4
  */

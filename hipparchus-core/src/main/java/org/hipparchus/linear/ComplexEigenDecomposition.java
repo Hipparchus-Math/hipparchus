@@ -283,7 +283,7 @@ public class ComplexEigenDecomposition {
                 // find a vector to start iterations
                 FieldVector<Complex> b = findStart(p);
 
-                if (getNorm(b).abs() > Precision.SAFE_MIN) {
+                if (getNorm(b).norm().getReal() > Precision.SAFE_MIN) {
                     // start vector is a good candidate for inverse iteration
 
                     // perform inverse iteration

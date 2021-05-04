@@ -22,11 +22,11 @@
 
 package org.hipparchus.ode.sampling;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 
-public class DummyFieldStepInterpolator<T extends RealFieldElement<T>>
+public class DummyFieldStepInterpolator<T extends CalculusFieldElement<T>>
     extends AbstractFieldODEStateInterpolator<T> {
 
     public DummyFieldStepInterpolator(final boolean forward,

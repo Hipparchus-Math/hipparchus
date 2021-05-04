@@ -24,7 +24,7 @@ package org.hipparchus.ode;
 
 import java.io.Serializable;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
@@ -39,7 +39,7 @@ import org.hipparchus.util.MathUtils;
  * @see FieldExpandableODE
  * @param <T> the type of the field elements
  */
-public class FieldEquationsMapper<T extends RealFieldElement<T>> implements Serializable {
+public class FieldEquationsMapper<T extends CalculusFieldElement<T>> implements Serializable {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20151114L;

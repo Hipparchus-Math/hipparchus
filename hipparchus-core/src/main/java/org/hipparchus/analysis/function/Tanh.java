@@ -23,26 +23,18 @@
 package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.differentiation.Derivative;
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.differentiation.ExtendedUnivariateDifferentiableFunction;
+import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
 
 /**
  * Hyperbolic tangent function.
  *
  */
-public class Tanh implements ExtendedUnivariateDifferentiableFunction {
+public class Tanh implements UnivariateDifferentiableFunction {
     /** {@inheritDoc} */
     @Override
     public double value(double x) {
         return FastMath.tanh(x);
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public DerivativeStructure value(final DerivativeStructure t) {
-        return t.tanh();
     }
 
     /** {@inheritDoc} */

@@ -22,7 +22,7 @@
 
 package org.hipparchus.ode.sampling;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
@@ -95,7 +95,7 @@ import org.hipparchus.util.Precision;
  * @see StepNormalizerBounds
  */
 
-public class FieldStepNormalizer<T extends RealFieldElement<T>> implements FieldODEStepHandler<T> {
+public class FieldStepNormalizer<T extends CalculusFieldElement<T>> implements FieldODEStepHandler<T> {
 
     /** Fixed time step. */
     private double h;

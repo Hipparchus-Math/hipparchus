@@ -21,7 +21,7 @@
  */
 package org.hipparchus.analysis;
 
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 
 /**
@@ -39,7 +39,7 @@ public class XMinus5Function implements UnivariateDifferentiableFunction {
     }
 
     @Override
-    public DerivativeStructure value(DerivativeStructure t) {
+    public <T extends Derivative<T>> T value(T t) {
         return t.subtract(5);
     }
 

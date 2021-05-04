@@ -16,7 +16,7 @@
  */
 package org.hipparchus.analysis;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.util.Decimal64;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.MathArrays;
@@ -28,7 +28,7 @@ public class FieldFunctionsTest {
     @Test
     public void testScalarFunctionConversion() {
         FieldUnivariateFunction f1 = new FieldUnivariateFunction() {
-            public <T extends RealFieldElement<T>> T value(T x) {
+            public <T extends CalculusFieldElement<T>> T value(T x) {
                 return x.multiply(2);
             }
         };
@@ -45,7 +45,7 @@ public class FieldFunctionsTest {
     @Test
     public void testVectorFunctionConversion() {
         FieldUnivariateVectorFunction f1 = new FieldUnivariateVectorFunction() {
-            public <T extends RealFieldElement<T>> T[] value(T x) {
+            public <T extends CalculusFieldElement<T>> T[] value(T x) {
                 T[] y = MathArrays.buildArray(x.getField(), 3);
                 y[0] = x.add(1);
                 y[1] = x.multiply(2);
@@ -70,7 +70,7 @@ public class FieldFunctionsTest {
     @Test
     public void testMatrixFunctionConversion() {
         FieldUnivariateMatrixFunction f1 = new FieldUnivariateMatrixFunction() {
-            public <T extends RealFieldElement<T>> T[][] value(T x) {
+            public <T extends CalculusFieldElement<T>> T[][] value(T x) {
                 T[][] y = MathArrays.buildArray(x.getField(), 2, 2);
                 y[0][0] = x.add(1);
                 y[0][1] = x.multiply(2);

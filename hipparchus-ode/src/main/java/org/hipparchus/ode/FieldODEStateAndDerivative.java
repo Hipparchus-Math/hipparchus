@@ -22,7 +22,7 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.util.MathArrays;
 
 /** Container for time, main and secondary state vectors as well as their derivatives.
@@ -33,7 +33,7 @@ import org.hipparchus.util.MathArrays;
  * @param <T> the type of the field elements
  */
 
-public class FieldODEStateAndDerivative<T extends RealFieldElement<T>> extends FieldODEState<T> {
+public class FieldODEStateAndDerivative<T extends CalculusFieldElement<T>> extends FieldODEState<T> {
 
     /** Derivative of the primary state at time. */
     private final T[] primaryDerivative;
@@ -43,8 +43,8 @@ public class FieldODEStateAndDerivative<T extends RealFieldElement<T>> extends F
 
     /** Simple constructor.
      * <p>Calling this constructor is equivalent to call {@link
-     * #FieldODEStateAndDerivative(RealFieldElement, RealFieldElement[], RealFieldElement[],
-     * RealFieldElement[][], RealFieldElement[][]) FieldODEStateAndDerivative(time, state,
+     * #FieldODEStateAndDerivative(CalculusFieldElement, CalculusFieldElement[], CalculusFieldElement[],
+     * CalculusFieldElement[][], CalculusFieldElement[][]) FieldODEStateAndDerivative(time, state,
      * derivative, null, null)}.</p>
      * @param time time
      * @param primaryState primary state at time

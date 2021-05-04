@@ -22,7 +22,6 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.analysis.function.Abs;
 import org.hipparchus.analysis.function.Acos;
 import org.hipparchus.analysis.function.Asin;
 import org.hipparchus.analysis.function.Atan;
@@ -147,7 +146,7 @@ public class SparseRealVectorTest extends RealVectorAbstractTest {
             new Power(2.0), new Exp(), new Expm1(),
             new Log1p(), new Cosh(), new Sinh(), new Tanh(), new Cos(),
             new Sin(), new Tan(), new Acos(), new Asin(), new Atan(),
-            new Abs(), new Sqrt(), new Cbrt(), new Ceil(),
+            new Sqrt(), new Cbrt(), new Ceil(),
             new Floor(), new Rint(), new Signum()
         };
     }

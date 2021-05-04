@@ -23,26 +23,18 @@
 package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.differentiation.Derivative;
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.differentiation.ExtendedUnivariateDifferentiableFunction;
+import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
 
 /**
  * Arc-sine function.
  *
  */
-public class Asin implements ExtendedUnivariateDifferentiableFunction {
+public class Asin implements UnivariateDifferentiableFunction {
     /** {@inheritDoc} */
     @Override
     public double value(double x) {
         return FastMath.asin(x);
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public DerivativeStructure value(final DerivativeStructure t) {
-        return t.asin();
     }
 
     /** {@inheritDoc} */

@@ -18,20 +18,20 @@
 package org.hipparchus.ode.nonstiff;
 
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.util.Decimal64Field;
 import org.junit.Test;
 
 public class DormandPrince853FieldIntegratorTest extends EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
-    protected <T extends RealFieldElement<T>> EmbeddedRungeKuttaFieldIntegrator<T>
+    protected <T extends CalculusFieldElement<T>> EmbeddedRungeKuttaFieldIntegrator<T>
     createIntegrator(Field<T> field, final double minStep, final double maxStep,
                      final double scalAbsoluteTolerance, final double scalRelativeTolerance) {
         return new DormandPrince853FieldIntegrator<T>(field, minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
     }
 
-    protected <T extends RealFieldElement<T>> EmbeddedRungeKuttaFieldIntegrator<T>
+    protected <T extends CalculusFieldElement<T>> EmbeddedRungeKuttaFieldIntegrator<T>
     createIntegrator(Field<T> field, final double minStep, final double maxStep,
                      final double[] vecAbsoluteTolerance, final double[] vecRelativeTolerance) {
         return new DormandPrince853FieldIntegrator<T>(field, minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);

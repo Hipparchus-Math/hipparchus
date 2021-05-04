@@ -23,7 +23,7 @@
 package org.hipparchus.ode;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
@@ -64,7 +64,7 @@ import org.hipparchus.util.MathArrays;
  * @see org.hipparchus.ode.nonstiff.AdamsMoultonFieldIntegrator
  * @param <T> the type of the field elements
  */
-public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
+public abstract class MultistepFieldIntegrator<T extends CalculusFieldElement<T>>
     extends AdaptiveStepsizeFieldIntegrator<T> {
 
     /** First scaled derivative (h y'). */

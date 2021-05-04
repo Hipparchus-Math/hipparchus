@@ -22,7 +22,7 @@
 
 package org.hipparchus.analysis.function;
 
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 
 /**
@@ -49,8 +49,8 @@ public class Constant implements UnivariateDifferentiableFunction {
     /** {@inheritDoc}
      */
     @Override
-    public DerivativeStructure value(final DerivativeStructure t) {
-        return t.getFactory().constant(c);
+    public <T extends Derivative<T>> T value(T t) {
+        return t.getField().getZero().add(c);
     }
 
 }

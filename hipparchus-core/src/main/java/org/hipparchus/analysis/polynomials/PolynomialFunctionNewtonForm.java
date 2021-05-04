@@ -21,9 +21,9 @@
  */
 package org.hipparchus.analysis.polynomials;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.FieldUnivariateFunction;
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -106,11 +106,11 @@ public class PolynomialFunctionNewtonForm implements UnivariateDifferentiableFun
      * {@inheritDoc}
      */
     @Override
-    public DerivativeStructure value(final DerivativeStructure t) {
+    public <T extends Derivative<T>> T value(final T t) {
         verifyInputArray(a, c);
 
         final int n = c.length;
-        DerivativeStructure value = t.getFactory().constant(a[n]);
+        T value = t.getField().getZero().add(a[n]);
         for (int i = n - 1; i >= 0; i--) {
             value = t.subtract(c[i]).multiply(value).add(a[i]);
         }
@@ -123,7 +123,7 @@ public class PolynomialFunctionNewtonForm implements UnivariateDifferentiableFun
      * {@inheritDoc}
      */
     @Override
-    public <T extends RealFieldElement<T>> T value(final T t) {
+    public <T extends CalculusFieldElement<T>> T value(final T t) {
         verifyInputArray(a, c);
 
         final int n = c.length;

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.analysis.interpolation;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.analysis.FieldBivariateFunction;
 import org.hipparchus.analysis.RealFieldBivariateFunction;
@@ -73,7 +73,7 @@ public class BilinearInterpolatorTest {
         BivariateFunction f = (x, y) -> 2 * x - y;
         RealFieldBivariateFunction<Decimal64> fT = new FieldBivariateFunction() {
             @Override
-            public <T extends RealFieldElement<T>> T value(T x, T y) {
+            public <T extends CalculusFieldElement<T>> T value(T x, T y) {
                 return x.multiply(2).subtract(y);
             }
         }.toRealFieldBivariateFunction(Decimal64Field.getInstance());

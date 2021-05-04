@@ -22,8 +22,8 @@
 package org.hipparchus.analysis.solvers;
 
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -48,7 +48,7 @@ import org.hipparchus.util.MathUtils;
  *
  * @param <T> the type of the field elements
  */
-public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
+public class FieldBracketingNthOrderBrentSolver<T extends CalculusFieldElement<T>>
     implements BracketedRealFieldUnivariateSolver<T> {
 
    /** Maximal aging triggering an attempt to balance the bracketing interval. */
@@ -280,13 +280,13 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
         // current tightest bracketing of the root
         T xA    = x[signChangeIndex - 1];
         T yA    = y[signChangeIndex - 1];
-        T absXA = xA.abs();
-        T absYA = yA.abs();
+        T absXA = xA.norm();
+        T absYA = yA.norm();
         int agingA   = 0;
         T xB    = x[signChangeIndex];
         T yB    = y[signChangeIndex];
-        T absXB = xB.abs();
-        T absYB = yB.abs();
+        T absXB = xB.norm();
+        T absYB = yB.norm();
         int agingB   = 0;
 
         // search loop
@@ -400,14 +400,14 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
                 // the sign change occurs before the inserted point
                 xB = nextX;
                 yB = nextY;
-                absYB = yB.abs();
+                absYB = yB.norm();
                 ++agingA;
                 agingB = 0;
             } else {
                 // the sign change occurs after the inserted point
                 xA = nextX;
                 yA = nextY;
-                absYA = yA.abs();
+                absYA = yA.norm();
                 agingA = 0;
                 ++agingB;
 

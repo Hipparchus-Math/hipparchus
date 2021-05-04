@@ -22,7 +22,7 @@
 
 package org.hipparchus.analysis.solvers;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.FieldUnivariateFunction;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
 import org.hipparchus.dfp.Dfp;
@@ -61,7 +61,7 @@ public final class FieldBracketingNthOrderBrentSolverTest {
                 new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy, absoluteAccuracy,
                                                             field.newDfp(1.0e-20), 20);
         FieldUnivariateFunction f = new FieldUnivariateFunction() {
-            public <T extends RealFieldElement<T>> T value(T x) {
+            public <T extends CalculusFieldElement<T>> T value(T x) {
                 T one     = x.getField().getOne();
                 T oneHalf = one.divide(2);
                 T xMo     = x.subtract(one);

@@ -22,8 +22,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
@@ -63,7 +63,7 @@ import org.hipparchus.util.MathArrays;
  * @param <T> the type of the field elements
  */
 
-public class DormandPrince853FieldIntegrator<T extends RealFieldElement<T>>
+public class DormandPrince853FieldIntegrator<T extends CalculusFieldElement<T>>
     extends EmbeddedRungeKuttaFieldIntegrator<T> {
 
     /** Simple constructor.
@@ -349,6 +349,7 @@ public class DormandPrince853FieldIntegrator<T extends RealFieldElement<T>>
             error1        += ratio1 * ratio1;
             final double ratio2  = errSum2 / tol;
             error2        += ratio2 * ratio2;
+
         }
 
         double den = error1 + 0.01 * error2;

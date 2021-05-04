@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hipparchus.RealFieldElementAbstractTest;
+import org.hipparchus.CalculusFieldElementAbstractTest;
 import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
@@ -46,7 +46,7 @@ import org.junit.Test;
 /**
  * Test for class {@link DerivativeStructure}.
  */
-public class DerivativeStructureTest extends RealFieldElementAbstractTest<DerivativeStructure> {
+public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<DerivativeStructure> {
 
     @Override
     protected DerivativeStructure build(final double x) {
@@ -758,7 +758,7 @@ public class DerivativeStructureTest extends RealFieldElementAbstractTest<Deriva
         DerivativeStructure dsSmall = factory.variable(0, +3.0e-10);
         DerivativeStructure dsLarge = factory.variable(1, -4.0e25);
 
-        Assert.assertEquals(dsLarge.abs().getValue(),
+        Assert.assertEquals(dsLarge.norm().getValue(),
                             DerivativeStructure.hypot(dsSmall, dsLarge).getValue(),
                             1.0e-10);
         Assert.assertEquals(0,
@@ -768,7 +768,7 @@ public class DerivativeStructureTest extends RealFieldElementAbstractTest<Deriva
                             DerivativeStructure.hypot(dsSmall, dsLarge).getPartialDerivative(0, 1),
                             1.0e-10);
 
-        Assert.assertEquals(dsLarge.abs().getValue(),
+        Assert.assertEquals(dsLarge.norm().getValue(),
                             DerivativeStructure.hypot(dsLarge, dsSmall).getValue(),
                             1.0e-10);
         Assert.assertEquals(0,
@@ -1334,26 +1334,25 @@ public class DerivativeStructureTest extends RealFieldElementAbstractTest<Deriva
         }
     }
 
-    @Override
     @Test
-    public void testAbs() {
+    public void testNorm() {
 
         DSFactory factory = new DSFactory(1, 1);
         DerivativeStructure minusOne = factory.variable(0, -1.0);
-        Assert.assertEquals(+1.0, FastMath.abs(minusOne).getPartialDerivative(0), 1.0e-15);
-        Assert.assertEquals(-1.0, FastMath.abs(minusOne).getPartialDerivative(1), 1.0e-15);
+        Assert.assertEquals(+1.0, FastMath.norm(minusOne).getPartialDerivative(0), 1.0e-15);
+        Assert.assertEquals(-1.0, FastMath.norm(minusOne).getPartialDerivative(1), 1.0e-15);
 
         DerivativeStructure plusOne = factory.variable(0, +1.0);
-        Assert.assertEquals(+1.0, FastMath.abs(plusOne).getPartialDerivative(0), 1.0e-15);
-        Assert.assertEquals(+1.0, FastMath.abs(plusOne).getPartialDerivative(1), 1.0e-15);
+        Assert.assertEquals(+1.0, FastMath.norm(plusOne).getPartialDerivative(0), 1.0e-15);
+        Assert.assertEquals(+1.0, FastMath.norm(plusOne).getPartialDerivative(1), 1.0e-15);
 
         DerivativeStructure minusZero = factory.variable(0, -0.0);
-        Assert.assertEquals(+0.0, FastMath.abs(minusZero).getPartialDerivative(0), 1.0e-15);
-        Assert.assertEquals(-1.0, FastMath.abs(minusZero).getPartialDerivative(1), 1.0e-15);
+        Assert.assertEquals(+0.0, FastMath.norm(minusZero).getPartialDerivative(0), 1.0e-15);
+        Assert.assertEquals(-1.0, FastMath.norm(minusZero).getPartialDerivative(1), 1.0e-15);
 
         DerivativeStructure plusZero = factory.variable(0, +0.0);
-        Assert.assertEquals(+0.0, FastMath.abs(plusZero).getPartialDerivative(0), 1.0e-15);
-        Assert.assertEquals(+1.0, FastMath.abs(plusZero).getPartialDerivative(1), 1.0e-15);
+        Assert.assertEquals(+0.0, FastMath.norm(plusZero).getPartialDerivative(0), 1.0e-15);
+        Assert.assertEquals(+1.0, FastMath.norm(plusZero).getPartialDerivative(1), 1.0e-15);
 
     }
 
@@ -1396,7 +1395,6 @@ public class DerivativeStructureTest extends RealFieldElementAbstractTest<Deriva
         Assert.assertEquals(-2.0, FastMath.rint(x).getPartialDerivative(0), 1.0e-15);
         Assert.assertEquals(+0.0, FastMath.rint(x).getPartialDerivative(1), 1.0e-15);
         Assert.assertEquals(-2.0, x.subtract(x.getField().getOne()).rint().getPartialDerivative(0), 1.0e-15);
-        Assert.assertEquals(-1l, FastMath.round(x));
 
     }
 

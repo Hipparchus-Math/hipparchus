@@ -22,7 +22,7 @@
 
 package org.hipparchus.ode.sampling;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
@@ -42,7 +42,7 @@ import org.hipparchus.util.FastMath;
  * @param <T> the type of the field elements
  */
 
-public abstract class AbstractFieldODEStateInterpolator<T extends RealFieldElement<T>>
+public abstract class AbstractFieldODEStateInterpolator<T extends CalculusFieldElement<T>>
     implements FieldODEStateInterpolator<T> {
 
     /** Global previous state. */
@@ -159,8 +159,8 @@ public abstract class AbstractFieldODEStateInterpolator<T extends RealFieldEleme
     /** {@inheritDoc} */
     @Override
     public FieldODEStateAndDerivative<T> getInterpolatedState(final T time) {
-        if (globalCurrentState.getTime().subtract(globalPreviousState.getTime()).abs().getReal() <=
-                FastMath.ulp(globalCurrentState.getTime().getReal())) {
+        if (FastMath.abs(globalCurrentState.getTime().subtract(globalPreviousState.getTime()).getReal()) <=
+            FastMath.ulp(globalCurrentState.getTime().getReal())) {
             return globalCurrentState;
         }
         final T thetaH         = time.subtract(globalPreviousState.getTime());

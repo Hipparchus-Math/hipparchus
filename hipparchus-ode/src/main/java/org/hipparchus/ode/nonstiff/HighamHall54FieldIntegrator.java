@@ -22,8 +22,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
@@ -43,7 +43,7 @@ import org.hipparchus.util.MathArrays;
  * @param <T> the type of the field elements
  */
 
-public class HighamHall54FieldIntegrator<T extends RealFieldElement<T>>
+public class HighamHall54FieldIntegrator<T extends CalculusFieldElement<T>>
     extends EmbeddedRungeKuttaFieldIntegrator<T> {
 
     /** Simple constructor.
@@ -174,7 +174,7 @@ public class HighamHall54FieldIntegrator<T extends RealFieldElement<T>>
             for (int l = 1; l < HighamHall54Integrator.STATIC_E.length; ++l) {
                 errSum += HighamHall54Integrator.STATIC_E[l] * yDotK[l][j].getReal();
             }
-            final double tol   = helper.getTolerance(j, FastMath.max(FastMath.abs(y0[j].getReal()), FastMath.abs(y1[j]).getReal()));
+            final double tol   = helper.getTolerance(j, FastMath.max(FastMath.abs(y0[j].getReal()), FastMath.abs(y1[j].getReal())));
             final double ratio = h.getReal() * errSum / tol;
             error += ratio * ratio;
 

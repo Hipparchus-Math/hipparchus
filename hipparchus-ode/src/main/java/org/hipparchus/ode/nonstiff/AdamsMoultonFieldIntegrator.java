@@ -25,7 +25,7 @@ package org.hipparchus.ode.nonstiff;
 import java.util.Arrays;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
@@ -170,7 +170,7 @@ import org.hipparchus.util.MathUtils;
  *
  * @param <T> the type of the field elements
  */
-public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends AdamsFieldIntegrator<T> {
+public class AdamsMoultonFieldIntegrator<T extends CalculusFieldElement<T>> extends AdamsFieldIntegrator<T> {
 
     /** Integrator method name. */
     private static final String METHOD_NAME = "Adams-Moulton";
@@ -331,7 +331,7 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
             for (int i = 0; i < after.length; ++i) {
                 after[i] = after[i].add(previous[i].add(scaled[i]));
                 if (i < helper.getMainSetDimension()) {
-                    final T tol   = helper.getTolerance(i, MathUtils.max(previous[i].abs(), after[i].abs()));
+                    final T tol   = helper.getTolerance(i, MathUtils.max(previous[i].norm(), after[i].norm()));
                     final T ratio = after[i].subtract(before[i]).divide(tol); // (corrected-predicted)/tol
                     error = error.add(ratio.multiply(ratio));
                 }

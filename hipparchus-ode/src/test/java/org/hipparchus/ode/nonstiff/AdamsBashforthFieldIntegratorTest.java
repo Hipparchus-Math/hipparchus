@@ -19,7 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Decimal64Field;
@@ -27,14 +27,14 @@ import org.junit.Test;
 
 public class AdamsBashforthFieldIntegratorTest extends AdamsFieldIntegratorAbstractTest {
 
-    protected <T extends RealFieldElement<T>> AdamsFieldIntegrator<T>
+    protected <T extends CalculusFieldElement<T>> AdamsFieldIntegrator<T>
     createIntegrator(Field<T> field, final int nSteps, final double minStep, final double maxStep,
                      final double scalAbsoluteTolerance, final double scalRelativeTolerance) {
         return new AdamsBashforthFieldIntegrator<T>(field, nSteps, minStep, maxStep,
                         scalAbsoluteTolerance, scalRelativeTolerance);
     }
 
-    protected <T extends RealFieldElement<T>> AdamsFieldIntegrator<T>
+    protected <T extends CalculusFieldElement<T>> AdamsFieldIntegrator<T>
     createIntegrator(Field<T> field, final int nSteps, final double minStep, final double maxStep,
                      final double[] vecAbsoluteTolerance, final double[] vecRelativeTolerance) {
         return new AdamsBashforthFieldIntegrator<T>(field, nSteps, minStep, maxStep,

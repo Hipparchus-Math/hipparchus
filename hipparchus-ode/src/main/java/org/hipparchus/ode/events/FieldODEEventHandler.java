@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode.events;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 
@@ -48,7 +48,7 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  *
  * @param <T> the type of the field elements
  */
-public interface FieldODEEventHandler<T extends RealFieldElement<T>>  {
+public interface FieldODEEventHandler<T extends CalculusFieldElement<T>>  {
 
     /** Initialize event handler at the start of an ODE integration.
      * <p>

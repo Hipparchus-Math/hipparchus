@@ -21,6 +21,7 @@
  */
 package org.hipparchus.util;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
@@ -2493,7 +2494,7 @@ public class FastMath {
      * @return [sin(x), cos(x)]
      * @since 1.4
      */
-    public static <T extends RealFieldElement<T>> FieldSinCos<T> sinCos(T x) {
+    public static <T extends CalculusFieldElement<T>> FieldSinCos<T> sinCos(T x) {
         return x.sinCos();
     }
 
@@ -4388,7 +4389,7 @@ public class FastMath {
      * @return square root of a
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T sqrt(final T a) {
+    public static <T extends CalculusFieldElement<T>> T sqrt(final T a) {
         return a.sqrt();
     }
 
@@ -4398,7 +4399,7 @@ public class FastMath {
      * @return hyperbolic cosine of x
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T cosh(final T x) {
+    public static <T extends CalculusFieldElement<T>> T cosh(final T x) {
         return x.cosh();
     }
 
@@ -4408,7 +4409,7 @@ public class FastMath {
      * @return hyperbolic sine of x
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T sinh(final T x) {
+    public static <T extends CalculusFieldElement<T>> T sinh(final T x) {
         return x.sinh();
     }
 
@@ -4418,7 +4419,7 @@ public class FastMath {
      * @return hyperbolic tangent of x
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T tanh(final T x) {
+    public static <T extends CalculusFieldElement<T>> T tanh(final T x) {
         return x.tanh();
     }
 
@@ -4428,7 +4429,7 @@ public class FastMath {
      * @return inverse hyperbolic cosine of a
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T acosh(final T a) {
+    public static <T extends CalculusFieldElement<T>> T acosh(final T a) {
         return a.acosh();
     }
 
@@ -4438,7 +4439,7 @@ public class FastMath {
      * @return inverse hyperbolic sine of a
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T asinh(final T a) {
+    public static <T extends CalculusFieldElement<T>> T asinh(final T a) {
         return a.asinh();
     }
 
@@ -4448,7 +4449,7 @@ public class FastMath {
      * @return inverse hyperbolic tangent of a
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T atanh(final T a) {
+    public static <T extends CalculusFieldElement<T>> T atanh(final T a) {
         return a.atanh();
     }
 
@@ -4459,7 +4460,7 @@ public class FastMath {
      * @return -1.0, -0.0, +0.0, +1.0 or NaN depending on sign of a
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T signum(final T a) {
+    public static <T extends CalculusFieldElement<T>> T signum(final T a) {
         return a.signum();
     }
 
@@ -4485,7 +4486,7 @@ public class FastMath {
      * @return double e<sup>x</sup>
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T exp(final T x) {
+    public static <T extends CalculusFieldElement<T>> T exp(final T x) {
         return x.exp();
     }
 
@@ -4495,7 +4496,7 @@ public class FastMath {
      * @return exp(x) - 1
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T expm1(final T x) {
+    public static <T extends CalculusFieldElement<T>> T expm1(final T x) {
         return x.expm1();
     }
 
@@ -4507,7 +4508,7 @@ public class FastMath {
      * @return log(x)
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T log(final T x) {
+    public static <T extends CalculusFieldElement<T>> T log(final T x) {
         return x.log();
     }
 
@@ -4519,7 +4520,7 @@ public class FastMath {
      * @return {@code log(1 + x)}.
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T log1p(final T x) {
+    public static <T extends CalculusFieldElement<T>> T log1p(final T x) {
         return x.log1p();
     }
 
@@ -4529,7 +4530,7 @@ public class FastMath {
      * @return log10(x)
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T log10(final T x) {
+    public static <T extends CalculusFieldElement<T>> T log10(final T x) {
         return x.log10();
     }
 
@@ -4542,7 +4543,7 @@ public class FastMath {
      * @return x<sup>y</sup>
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T pow(final T x, final T y) {
+    public static <T extends CalculusFieldElement<T>> T pow(final T x, final T y) {
         return x.pow(y);
     }
 
@@ -4555,7 +4556,7 @@ public class FastMath {
      * @return x<sup>y</sup>
      * @since 1.7
      */
-    public static <T extends RealFieldElement<T>> T pow(final T x, final double y) {
+    public static <T extends CalculusFieldElement<T>> T pow(final T x, final double y) {
         return x.pow(y);
     }
 
@@ -4568,7 +4569,7 @@ public class FastMath {
      * @return d<sup>e</sup>
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T pow(T d, int e) {
+    public static <T extends CalculusFieldElement<T>> T pow(T d, int e) {
         return d.pow(e);
     }
 
@@ -4580,7 +4581,7 @@ public class FastMath {
      * @return sin(x)
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T sin(final T x) {
+    public static <T extends CalculusFieldElement<T>> T sin(final T x) {
         return x.sin();
     }
 
@@ -4592,7 +4593,7 @@ public class FastMath {
      * @return cos(x)
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T cos(final T x) {
+    public static <T extends CalculusFieldElement<T>> T cos(final T x) {
         return x.cos();
     }
 
@@ -4604,7 +4605,7 @@ public class FastMath {
      * @return tan(x)
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T tan(final T x) {
+    public static <T extends CalculusFieldElement<T>> T tan(final T x) {
         return x.tan();
     }
 
@@ -4615,7 +4616,7 @@ public class FastMath {
      *  @return atan(x)
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T atan(final T x) {
+    public static <T extends CalculusFieldElement<T>> T atan(final T x) {
         return x.atan();
     }
 
@@ -4627,7 +4628,7 @@ public class FastMath {
      * @return phase angle of point (x,y) between {@code -PI} and {@code PI}
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T atan2(final T y, final T x) {
+    public static <T extends CalculusFieldElement<T>> T atan2(final T y, final T x) {
         return y.atan2(x);
     }
 
@@ -4637,7 +4638,7 @@ public class FastMath {
      * @return arc sine of x
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T asin(final T x) {
+    public static <T extends CalculusFieldElement<T>> T asin(final T x) {
         return x.asin();
     }
 
@@ -4647,7 +4648,7 @@ public class FastMath {
      * @return arc cosine of x
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T acos(final T x) {
+    public static <T extends CalculusFieldElement<T>> T acos(final T x) {
         return x.acos();
     }
 
@@ -4657,7 +4658,7 @@ public class FastMath {
      * @return cubic root of x
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T cbrt(final T x) {
+    public static <T extends CalculusFieldElement<T>> T cbrt(final T x) {
         return x.cbrt();
     }
 
@@ -4673,12 +4674,23 @@ public class FastMath {
     }
 
     /**
+     * Absolute value.
+     * @param x number from which absolute value is requested
+     * @param <T> the type of the field element
+     * @return abs(x)
+     * @since 2.0
+     */
+    public static <T extends CalculusFieldElement<T>> T norm(final T x) {
+        return x.norm();
+    }
+
+    /**
      *  Convert degrees to radians, with error of less than 0.5 ULP
      *  @param x angle in degrees
      *  @param <T> the type of the field element
      *  @return x converted into radians
      */
-    public static <T extends RealFieldElement<T>> T toRadians(T x) {
+    public static <T extends CalculusFieldElement<T>> T toRadians(T x) {
         return x.toRadians();
     }
 
@@ -4688,7 +4700,7 @@ public class FastMath {
      *  @param <T> the type of the field element
      *  @return x converted into degrees
      */
-    public static <T extends RealFieldElement<T>> T toDegrees(T x) {
+    public static <T extends CalculusFieldElement<T>> T toDegrees(T x) {
         return x.toDegrees();
     }
 
@@ -4700,7 +4712,7 @@ public class FastMath {
      * @return d &times; 2<sup>n</sup>
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T scalb(final T d, final int n) {
+    public static <T extends CalculusFieldElement<T>> T scalb(final T d, final int n) {
         return d.scalb(n);
     }
 
@@ -4710,7 +4722,7 @@ public class FastMath {
      * @return a double number f such that f is an integer f &lt;= x &lt; f + 1.0
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T floor(final T x) {
+    public static <T extends CalculusFieldElement<T>> T floor(final T x) {
         return x.floor();
     }
 
@@ -4720,7 +4732,7 @@ public class FastMath {
      * @return a double number c such that c is an integer c - 1.0 &lt; x &lt;= c
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T ceil(final T x) {
+    public static <T extends CalculusFieldElement<T>> T ceil(final T x) {
         return x.ceil();
     }
 
@@ -4730,7 +4742,7 @@ public class FastMath {
      * @return a double number r such that r is an integer r - 0.5 &lt;= x &lt;= r + 0.5
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T rint(final T x) {
+    public static <T extends CalculusFieldElement<T>> T rint(final T x) {
         return x.rint();
     }
 
@@ -4751,7 +4763,7 @@ public class FastMath {
      * @return a if a is lesser or equal to b, b otherwise
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T min(final T a, final T b) {
+    public static <T extends CalculusFieldElement<T>> T min(final T a, final T b) {
         final double aR = a.getReal();
         final double bR = b.getReal();
         if (aR < bR) {
@@ -4771,7 +4783,7 @@ public class FastMath {
      * @return b if a is lesser or equal to b, a otherwise
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T max(final T a, final T b) {
+    public static <T extends CalculusFieldElement<T>> T max(final T a, final T b) {
         final double aR = a.getReal();
         final double bR = b.getReal();
         if (aR < bR) {
@@ -4800,7 +4812,7 @@ public class FastMath {
      * @return sqrt(<i>x</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T hypot(final T x, final T y) {
+    public static <T extends CalculusFieldElement<T>> T hypot(final T x, final T y) {
         return x.hypot(y);
     }
 
@@ -4825,7 +4837,7 @@ public class FastMath {
      * @return the remainder, rounded
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T IEEEremainder(final T dividend, final double divisor) {
+    public static <T extends CalculusFieldElement<T>> T IEEEremainder(final T dividend, final double divisor) {
         return dividend.remainder(divisor);
     }
 
@@ -4850,7 +4862,7 @@ public class FastMath {
      * @return the remainder, rounded
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T IEEEremainder(final T dividend, final T divisor) {
+    public static <T extends CalculusFieldElement<T>> T IEEEremainder(final T dividend, final T divisor) {
         return dividend.remainder(divisor);
     }
 
@@ -4864,7 +4876,7 @@ public class FastMath {
      * @return the magnitude with the same sign as the {@code sign} argument
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T copySign(T magnitude, T sign) {
+    public static <T extends CalculusFieldElement<T>> T copySign(T magnitude, T sign) {
         return magnitude.copySign(sign);
     }
 
@@ -4878,7 +4890,7 @@ public class FastMath {
      * @return the magnitude with the same sign as the {@code sign} argument
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T copySign(T magnitude, double sign) {
+    public static <T extends CalculusFieldElement<T>> T copySign(T magnitude, double sign) {
         return magnitude.copySign(sign);
     }
 

@@ -22,7 +22,7 @@
 
 package org.hipparchus.analysis.solvers;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -51,7 +51,7 @@ import org.hipparchus.exception.MathRuntimeException;
  * @see AllowedSolution
  * @param <T> the type of the field elements
  */
-public interface BracketedRealFieldUnivariateSolver<T extends RealFieldElement<T>> {
+public interface BracketedRealFieldUnivariateSolver<T extends CalculusFieldElement<T>> {
 
     /**
      * Get the maximum number of function evaluations.
@@ -212,11 +212,11 @@ public interface BracketedRealFieldUnivariateSolver<T extends RealFieldElement<T
      * <p>
      * Contains two end points and the value of the function at the two end points.
      *
-     * @see #solveInterval(int, RealFieldUnivariateFunction, RealFieldElement,
-     * RealFieldElement)
+     * @see #solveInterval(int, RealFieldUnivariateFunction, CalculusFieldElement,
+     * CalculusFieldElement)
      * @param <T> the element type
      */
-    class Interval<T extends RealFieldElement<T>> {
+    class Interval<T extends CalculusFieldElement<T>> {
 
         /** Abscissa on the left end of the interval. */
         private final T leftAbscissa;
@@ -294,8 +294,8 @@ public interface BracketedRealFieldUnivariateSolver<T extends RealFieldElement<T
             final T xB = this.getRightAbscissa();
             switch (allowed) {
                 case ANY_SIDE:
-                    final T absYA = this.getLeftValue().abs();
-                    final T absYB = this.getRightValue().abs();
+                    final T absYA = this.getLeftValue().norm();
+                    final T absYB = this.getRightValue().norm();
                     return absYA.subtract(absYB).getReal() < 0 ? xA : xB;
                 case LEFT_SIDE:
                     return xA;

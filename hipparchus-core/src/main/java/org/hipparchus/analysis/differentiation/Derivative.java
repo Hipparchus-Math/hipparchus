@@ -16,14 +16,14 @@
  */
 package org.hipparchus.analysis.differentiation;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** Interface representing both the value and the differentials of a function.
  * @param <T> the type of the field elements
  * @since 1.7
  */
-public interface Derivative<T extends RealFieldElement<T>> extends RealFieldElement<T> {
+public interface Derivative<T extends CalculusFieldElement<T>> extends CalculusFieldElement<T> {
 
     /** Get the number of free parameters.
      * @return number of free parameters
@@ -51,6 +51,17 @@ public interface Derivative<T extends RealFieldElement<T>> extends RealFieldElem
      * than the instance limits
      */
     double getPartialDerivative(int ... orders)
+        throws MathIllegalArgumentException;
+
+    /** Compute composition of the instance by a univariate function.
+     * @param f array of value and derivatives of the function at
+     * the current point (i.e. [f({@link #getValue()}),
+     * f'({@link #getValue()}), f''({@link #getValue()})...]).
+     * @return f(this)
+     * @exception MathIllegalArgumentException if the number of derivatives
+     * in the array is not equal to {@link #getOrder() order} + 1
+     */
+    T compose(final double... f)
         throws MathIllegalArgumentException;
 
 }

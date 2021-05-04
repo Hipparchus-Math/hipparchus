@@ -23,7 +23,7 @@
 package org.hipparchus.ode;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -41,7 +41,7 @@ import org.hipparchus.util.MathArrays;
 
  * @param <T> the type of the field elements
  */
-public class TestFieldProblem1<T extends RealFieldElement<T>>
+public class TestFieldProblem1<T extends CalculusFieldElement<T>>
     extends TestFieldProblemAbstract<T> {
 
     /**

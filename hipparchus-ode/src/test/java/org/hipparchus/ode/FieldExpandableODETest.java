@@ -24,7 +24,7 @@ package org.hipparchus.ode;
 
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.MathArrays;
@@ -38,7 +38,7 @@ public class FieldExpandableODETest {
         doTestOnlyMainEquation(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestOnlyMainEquation(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestOnlyMainEquation(final Field<T> field) {
         FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
         FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);
         Assert.assertEquals(main.getDimension(), equation.getMapper().getTotalDimension());
@@ -68,7 +68,7 @@ public class FieldExpandableODETest {
         doTestPrimaryAndSecondary(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestPrimaryAndSecondary(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestPrimaryAndSecondary(final Field<T> field) {
 
         FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
         FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);
@@ -125,7 +125,7 @@ public class FieldExpandableODETest {
         doTestMap(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestMap(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestMap(final Field<T> field) {
 
         FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
         FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);
@@ -212,7 +212,7 @@ public class FieldExpandableODETest {
         doTestExtractDimensionMismatch(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestExtractDimensionMismatch(final Field<T> field)
+    private <T extends CalculusFieldElement<T>> void doTestExtractDimensionMismatch(final Field<T> field)
         throws MathIllegalArgumentException {
 
         FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
@@ -228,7 +228,7 @@ public class FieldExpandableODETest {
         doTestInsertTooShortComplete(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestInsertTooShortComplete(final Field<T> field)
+    private <T extends CalculusFieldElement<T>> void doTestInsertTooShortComplete(final Field<T> field)
         throws MathIllegalArgumentException {
 
         FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
@@ -245,7 +245,7 @@ public class FieldExpandableODETest {
         doTestInsertWrongEquationData(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestInsertWrongEquationData(final Field<T> field)
+    private <T extends CalculusFieldElement<T>> void doTestInsertWrongEquationData(final Field<T> field)
         throws MathIllegalArgumentException {
 
         FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
@@ -262,7 +262,7 @@ public class FieldExpandableODETest {
         doTestNegativeIndex(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestNegativeIndex(final Field<T> field)
+    private <T extends CalculusFieldElement<T>> void doTestNegativeIndex(final Field<T> field)
         throws MathIllegalArgumentException {
 
         FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
@@ -276,7 +276,7 @@ public class FieldExpandableODETest {
         doTestTooLargeIndex(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestTooLargeIndex(final Field<T> field)
+    private <T extends CalculusFieldElement<T>> void doTestTooLargeIndex(final Field<T> field)
         throws MathIllegalArgumentException {
 
         FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
@@ -285,7 +285,7 @@ public class FieldExpandableODETest {
         equation.getMapper().extractEquationData(+1, complete);
     }
 
-    private static class  Linear<T extends RealFieldElement<T>>
+    private static class  Linear<T extends CalculusFieldElement<T>>
         implements  FieldOrdinaryDifferentialEquation<T>, FieldSecondaryODE<T> {
 
         private final Field<T> field;

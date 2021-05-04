@@ -19,15 +19,15 @@ package org.hipparchus.analysis.differentiation;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.RealFieldElement;
 
 /** Field for {@link FieldUnivariateDerivative2} instances.
  * @param <T> the type of the function parameters and value
  * @since 1.7
  */
-public class FieldUnivariateDerivative2Field<T extends RealFieldElement<T>> implements Field<FieldUnivariateDerivative2<T>> {
+public class FieldUnivariateDerivative2Field<T extends CalculusFieldElement<T>> implements Field<FieldUnivariateDerivative2<T>> {
 
     /** Cached fields. */
     private static final Map<Field<?>, FieldUnivariateDerivative2Field<?>> CACHE = new HashMap<>();
@@ -55,7 +55,7 @@ public class FieldUnivariateDerivative2Field<T extends RealFieldElement<T>> impl
      * @param <T> the type of the function parameters and value
      * @return univariate derivative field
      */
-    public static <T extends RealFieldElement<T>> FieldUnivariateDerivative2Field<T> getUnivariateDerivative2Field(final Field<T> valueField) {
+    public static <T extends CalculusFieldElement<T>> FieldUnivariateDerivative2Field<T> getUnivariateDerivative2Field(final Field<T> valueField) {
         synchronized (CACHE) {
             FieldUnivariateDerivative2Field<?> cached = CACHE.get(valueField);
             if (cached == null) {

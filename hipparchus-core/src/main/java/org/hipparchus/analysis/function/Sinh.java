@@ -23,26 +23,18 @@
 package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.differentiation.Derivative;
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.differentiation.ExtendedUnivariateDifferentiableFunction;
+import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
 
 /**
  * Hyperbolic sine function.
  *
  */
-public class Sinh implements ExtendedUnivariateDifferentiableFunction {
+public class Sinh implements UnivariateDifferentiableFunction {
     /** {@inheritDoc} */
     @Override
     public double value(double x) {
         return FastMath.sinh(x);
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public DerivativeStructure value(final DerivativeStructure t) {
-        return t.sinh();
     }
 
     /** {@inheritDoc} */

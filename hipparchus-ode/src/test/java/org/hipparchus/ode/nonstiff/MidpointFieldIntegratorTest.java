@@ -18,14 +18,14 @@
 package org.hipparchus.ode.nonstiff;
 
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.util.Decimal64Field;
 import org.junit.Test;
 
 public class MidpointFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractTest {
 
-    protected <T extends RealFieldElement<T>> RungeKuttaFieldIntegrator<T>
+    protected <T extends CalculusFieldElement<T>> RungeKuttaFieldIntegrator<T>
     createIntegrator(Field<T> field, T step) {
         return new MidpointFieldIntegrator<T>(field, step);
     }

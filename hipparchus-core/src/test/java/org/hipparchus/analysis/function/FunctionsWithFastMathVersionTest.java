@@ -19,11 +19,10 @@ package org.hipparchus.analysis.function;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.differentiation.ExtendedUnivariateDifferentiableFunction;
 import org.hipparchus.analysis.differentiation.Gradient;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
@@ -31,13 +30,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class FunctionsWithFastMathVersionTest {
-
-    @Test
-    public void testAbs() {
-        doTestF0(new Abs(), -10.0, -1.25, 0.0, 1.25, 10.0);
-        doTestFn(new Abs(), -10.0, -1.25, 0.0, 1.25, 10.0);
-        doTestF1(new Abs(), -10.0, -1.25, 0.0, 1.25, 10.0);
-    }
 
     @Test
     public void testAcos() {
@@ -258,7 +250,7 @@ public class FunctionsWithFastMathVersionTest {
     private void doTestFn(final UnivariateDifferentiableFunction f, double... x) {
         try {
             final Method fastMathVersion = FastMath.class.getMethod(f.getClass().getSimpleName().toLowerCase(),
-                                                                    RealFieldElement.class);
+                                                                    CalculusFieldElement.class);
             for (double xi : x) {
                 checkFnEqualities(f, fastMathVersion, xi);
             }
@@ -291,10 +283,10 @@ public class FunctionsWithFastMathVersionTest {
         }
     }
 
-    private void doTestF1(final ExtendedUnivariateDifferentiableFunction f, double... x) {
+    private void doTestF1(final UnivariateDifferentiableFunction f, double... x) {
         try {
             final Method fastMathVersion = FastMath.class.getMethod(f.getClass().getSimpleName().toLowerCase(),
-                                                                    RealFieldElement.class);
+                                                                    CalculusFieldElement.class);
             for (double xi : x) {
                 checkF1Equalities(f, fastMathVersion, xi);
             }
@@ -306,7 +298,7 @@ public class FunctionsWithFastMathVersionTest {
         }
     }
 
-    private void checkF1Equalities(final ExtendedUnivariateDifferentiableFunction f, final Method ref, final double x) {
+    private void checkF1Equalities(final UnivariateDifferentiableFunction f, final Method ref, final double x) {
         try {
             Gradient xDS     = Gradient.variable(1, 0, x);
             Gradient yRef    = (Gradient) ref.invoke(null, xDS);

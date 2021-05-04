@@ -457,4 +457,10 @@ public interface CalculusFieldElement<T> extends FieldElement<T> {
         return Double.isNaN(getReal());
     }
 
+    /** norm.
+     * @return norm(this)
+     * @since 2.0
+     */
+    T norm();
+
 }

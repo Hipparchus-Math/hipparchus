@@ -16,14 +16,14 @@
  */
 package org.hipparchus.analysis;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 
 /**
  * An interface representing a bivariate field function.
  * @param <T> type of the field elements
  * @since 1.5
  */
-public interface RealFieldBivariateFunction<T extends RealFieldElement<T>> {
+public interface RealFieldBivariateFunction<T extends CalculusFieldElement<T>> {
 
     /**
      * Compute the value for the function.

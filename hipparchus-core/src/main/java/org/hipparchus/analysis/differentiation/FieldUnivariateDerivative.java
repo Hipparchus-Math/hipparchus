@@ -16,7 +16,7 @@
  */
 package org.hipparchus.analysis.differentiation;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
@@ -25,7 +25,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * @param <T> the type of the function derivative
  * @since 1.7
  */
-public abstract class FieldUnivariateDerivative<S extends RealFieldElement<S>, T extends FieldUnivariateDerivative<S, T>>
+public abstract class FieldUnivariateDerivative<S extends CalculusFieldElement<S>, T extends FieldUnivariateDerivative<S, T>>
     implements FieldDerivative<S, T> {
 
     /** {@inheritDoc} */

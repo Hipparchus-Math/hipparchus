@@ -16,7 +16,7 @@
  */
 package org.hipparchus.analysis.differentiation;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** Interface representing both the value and the differentials of a function.
@@ -24,7 +24,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * @param <T> the type of the function derivative
  * @since 1.7
  */
-public interface FieldDerivative<S extends RealFieldElement<S>, T extends FieldDerivative<S, T>> extends RealFieldElement<T> {
+public interface FieldDerivative<S extends CalculusFieldElement<S>, T extends FieldDerivative<S, T>> extends CalculusFieldElement<T> {
 
     /** Get the number of free parameters.
      * @return number of free parameters

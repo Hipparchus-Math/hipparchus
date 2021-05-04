@@ -16,9 +16,9 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
@@ -29,7 +29,7 @@ import org.hipparchus.util.MathArrays;
  * @see FieldDerivativeStructure
  * @param <T> the type of the function parameters and value
  */
-public class FDSFactory<T extends RealFieldElement<T>> {
+public class FDSFactory<T extends CalculusFieldElement<T>> {
 
     /** Compiler for the current dimensions. */
     private final DSCompiler compiler;
@@ -232,7 +232,7 @@ public class FDSFactory<T extends RealFieldElement<T>> {
     /** Field for {link FieldDerivativeStructure} instances.
      * @param <T> the type of the function parameters and value
      */
-    private static class DerivativeField<T extends RealFieldElement<T>> implements Field<FieldDerivativeStructure<T>> {
+    private static class DerivativeField<T extends CalculusFieldElement<T>> implements Field<FieldDerivativeStructure<T>> {
 
         /** Constant function evaluating to 0.0. */
         private final FieldDerivativeStructure<T> zero;

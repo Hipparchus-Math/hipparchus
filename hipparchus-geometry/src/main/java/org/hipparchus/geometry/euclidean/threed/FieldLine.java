@@ -21,7 +21,7 @@
  */
 package org.hipparchus.geometry.euclidean.threed;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
@@ -37,7 +37,7 @@ import org.hipparchus.util.Precision;
  * direction.</p>
  * @param <T> the type of the field elements
  */
-public class FieldLine<T extends RealFieldElement<T>> {
+public class FieldLine<T extends CalculusFieldElement<T>> {
 
     /** Line direction. */
     private FieldVector3D<T> direction;
@@ -223,7 +223,7 @@ public class FieldLine<T extends RealFieldElement<T>> {
         // signed separation of the two parallel planes that contains the lines
         final T offset = line.zero.subtract(zero).dotProduct(normal).divide(n);
 
-        return offset.abs();
+        return offset.norm();
 
     }
 

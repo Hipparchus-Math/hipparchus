@@ -16,7 +16,7 @@
  */
 package org.hipparchus.analysis.interpolation;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
@@ -37,6 +37,6 @@ public interface FieldUnivariateInterpolator {
      * algorithm.
      * @throws MathIllegalArgumentException if arrays lengthes do not match
      */
-    <T extends RealFieldElement<T>> RealFieldUnivariateFunction<T> interpolate(T xval[], T yval[])
+    <T extends CalculusFieldElement<T>> RealFieldUnivariateFunction<T> interpolate(T xval[], T yval[])
         throws MathIllegalArgumentException;
 }

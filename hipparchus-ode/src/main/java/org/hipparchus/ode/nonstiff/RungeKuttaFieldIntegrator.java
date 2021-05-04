@@ -23,8 +23,8 @@
 package org.hipparchus.ode.nonstiff;
 
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
@@ -59,7 +59,7 @@ import org.hipparchus.util.MathArrays;
  * @param <T> the type of the field elements
  */
 
-public abstract class RungeKuttaFieldIntegrator<T extends RealFieldElement<T>>
+public abstract class RungeKuttaFieldIntegrator<T extends CalculusFieldElement<T>>
     extends AbstractFieldIntegrator<T>
     implements FieldButcherArrayProvider<T> {
 
@@ -87,7 +87,7 @@ public abstract class RungeKuttaFieldIntegrator<T extends RealFieldElement<T>>
         this.c    = getC();
         this.a    = getA();
         this.b    = getB();
-        this.step = step.abs();
+        this.step = step.norm();
     }
 
     /** Create a fraction.
@@ -212,7 +212,7 @@ public abstract class RungeKuttaFieldIntegrator<T extends RealFieldElement<T>>
      * so it can be embedded in outer loops.</p>
      * <p>
      * This method is <em>not</em> used at all by the {@link #integrate(FieldExpandableODE,
-     * FieldODEState, RealFieldElement)} method. It also completely ignores the step set at
+     * FieldODEState, CalculusFieldElement)} method. It also completely ignores the step set at
      * construction time, and uses only a single step to go from {@code t0} to {@code t}.
      * </p>
      * <p>

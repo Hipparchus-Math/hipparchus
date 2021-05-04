@@ -20,7 +20,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -119,7 +119,7 @@ public class FieldVector2DTest {
         doTestOrientation(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestConstructors(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestConstructors(final Field<T> field) {
         final T p40 = field.getZero().add( 4.0);
         final T p20 = field.getZero().add( 2.0);
         final T p25 = field.getZero().add( 2.5);
@@ -168,7 +168,7 @@ public class FieldVector2DTest {
               17.5, -24.0, 1.0e-15);
     }
 
-    private <T extends RealFieldElement<T>> void doTestConstants(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestConstants(final Field<T> field) {
         check(FieldVector2D.getZero(field),    0.0,  0.0, 1.0e-15);
         check(FieldVector2D.getPlusI(field),   1.0,  0.0, 1.0e-15);
         check(FieldVector2D.getMinusI(field), -1.0,  0.0, 1.0e-15);
@@ -180,7 +180,7 @@ public class FieldVector2DTest {
         Assert.assertTrue(Double.isNaN(FieldVector2D.getNaN(field).getY().getReal()));
     }
 
-    private <T extends RealFieldElement<T>> void doTestToMethods(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestToMethods(final Field<T> field) {
         final FieldVector2D<T> v = new FieldVector2D<>(field, new Vector2D(2.5, -0.5));
         Assert.assertEquals( 2,   v.toArray().length);
         Assert.assertEquals( 2.5, v.toArray()[0].getReal(), 1.0e-15);
@@ -190,7 +190,7 @@ public class FieldVector2DTest {
         Assert.assertEquals("{2,5; -0,5}", v.toString(NumberFormat.getInstance(Locale.FRENCH)));
     }
 
-    private <T extends RealFieldElement<T>> void doTestNorms(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestNorms(final Field<T> field) {
         final FieldVector2D<T> v = new FieldVector2D<>(field, new Vector2D(3.0, -4.0));
         Assert.assertEquals( 7.0, v.getNorm1().getReal(),   1.0e-15);
         Assert.assertEquals( 5.0, v.getNorm().getReal(),    1.0e-15);
@@ -198,7 +198,7 @@ public class FieldVector2DTest {
         Assert.assertEquals( 4.0, v.getNormInf().getReal(), 1.0e-15);
     }
 
-    private <T extends RealFieldElement<T>> void doTestDistances(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestDistances(final Field<T> field) {
         final FieldVector2D<T> u = new FieldVector2D<>(field, new Vector2D( 2.0, -2.0));
         final FieldVector2D<T> v = new FieldVector2D<>(field, new Vector2D(-1.0,  2.0));
         Assert.assertEquals( 7.0, FieldVector2D.distance1(u, v).getReal(),   1.0e-15);
@@ -215,7 +215,7 @@ public class FieldVector2DTest {
         Assert.assertEquals( 4.0, FieldVector2D.distanceInf(u.toVector2D(), v).getReal(), 1.0e-15);
     }
 
-    private <T extends RealFieldElement<T>> void doTestAdd(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestAdd(final Field<T> field) {
         final FieldVector2D<T> u = new FieldVector2D<>(field, new Vector2D( 2.0, -2.0));
         final FieldVector2D<T> v = new FieldVector2D<>(field, new Vector2D(-1.0,  2.0));
         check(u.add(v), 1.0, 0.0, 1.0e-15);
@@ -226,7 +226,7 @@ public class FieldVector2DTest {
         check(u.add(5.0, v.toVector2D()), -3.0, 8.0, 1.0e-15);
     }
 
-    private <T extends RealFieldElement<T>> void doTestSubtract(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestSubtract(final Field<T> field) {
         final FieldVector2D<T> u = new FieldVector2D<>(field, new Vector2D( 2.0, -2.0));
         final FieldVector2D<T> v = new FieldVector2D<>(field, new Vector2D( 1.0, -2.0));
         check(u.subtract(v), 1.0, 0.0, 1.0e-15);
@@ -237,7 +237,7 @@ public class FieldVector2DTest {
         check(u.subtract(5.0, v.toVector2D()), -3.0, 8.0, 1.0e-15);
     }
 
-    private <T extends RealFieldElement<T>> void doTestNormalize(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestNormalize(final Field<T> field) {
         try {
             FieldVector2D.getZero(field).normalize();
             Assert.fail("an exception should habe been thrown");
@@ -247,7 +247,7 @@ public class FieldVector2DTest {
         check(new FieldVector2D<>(field, new Vector2D(3, -4)).normalize(), 0.6, -0.8, 1.0e-15);
     }
 
-    private <T extends RealFieldElement<T>> void doTestAngle(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestAngle(final Field<T> field) {
         try {
             FieldVector2D.angle(FieldVector2D.getZero(field), FieldVector2D.getPlusI(field));
             Assert.fail("an exception should habe been thrown");
@@ -319,16 +319,16 @@ public class FieldVector2DTest {
     }
 
 
-    private <T extends RealFieldElement<T>> void doTestNegate(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestNegate(final Field<T> field) {
         check(new FieldVector2D<>(field, new Vector2D(3.0, -4.0)).negate(), -3.0, 4.0, 1.0e-15);
     }
 
-    private <T extends RealFieldElement<T>> void doTestScalarMultiply(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestScalarMultiply(final Field<T> field) {
         check(new FieldVector2D<>(field, new Vector2D(3.0, -4.0)).scalarMultiply(2.0), 6.0, -8.0, 1.0e-15);
         check(new FieldVector2D<>(field, new Vector2D(3.0, -4.0)).scalarMultiply(field.getZero().add(2.0)), 6.0, -8.0, 1.0e-15);
     }
 
-    private <T extends RealFieldElement<T>> void doTestIsNaN(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestIsNaN(final Field<T> field) {
         Assert.assertTrue(new FieldVector2D<>(field, new Vector2D(Double.NaN, 0.0)).isNaN());
         Assert.assertTrue(new FieldVector2D<>(field, new Vector2D(0.0, Double.NaN)).isNaN());
         Assert.assertTrue(new FieldVector2D<>(field, new Vector2D(Double.NaN, Double.NaN)).isNaN());
@@ -337,7 +337,7 @@ public class FieldVector2DTest {
         Assert.assertFalse(FieldVector2D.getMinusI(field).isNaN());
     }
 
-    private <T extends RealFieldElement<T>> void doTestIsInfinite(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestIsInfinite(final Field<T> field) {
         Assert.assertFalse(new FieldVector2D<>(field, new Vector2D(Double.NaN, 0.0)).isInfinite());
         Assert.assertTrue(new FieldVector2D<>(field, new Vector2D(Double.POSITIVE_INFINITY, 0.0)).isInfinite());
         Assert.assertTrue(new FieldVector2D<>(field, new Vector2D(0.0, Double.POSITIVE_INFINITY)).isInfinite());
@@ -349,7 +349,7 @@ public class FieldVector2DTest {
         Assert.assertFalse(FieldVector2D.getMinusI(field).isInfinite());
     }
 
-    private <T extends RealFieldElement<T>> void doTestEquals(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestEquals(final Field<T> field) {
         final FieldVector2D<T> u1 = new FieldVector2D<>(field, Vector2D.PLUS_I);
         final FieldVector2D<T> u2 = new FieldVector2D<>(field, Vector2D.MINUS_I.negate());
         final FieldVector2D<T> v1 = new FieldVector2D<>(field, new Vector2D(1.0, 0.001));
@@ -365,12 +365,12 @@ public class FieldVector2DTest {
         Assert.assertNotEquals(FieldVector2D.getNaN(field), v2);
     }
 
-    private <T extends RealFieldElement<T>> void doTestHashCode(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestHashCode(final Field<T> field) {
         Assert.assertEquals(542, FieldVector2D.getNaN(field).hashCode());
         Assert.assertEquals(1325400064, new FieldVector2D<>(field, new Vector2D(1.5, -0.5)).hashCode());
     }
 
-    private <T extends RealFieldElement<T>> void doTestCrossProduct(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestCrossProduct(final Field<T> field) {
         final double epsilon = 1e-10;
 
         FieldVector2D<T> p1 = new FieldVector2D<>(field, new Vector2D(1, 1));
@@ -387,7 +387,7 @@ public class FieldVector2DTest {
         Assert.assertEquals(-1.0, p5.crossProduct(p1.toVector2D(), p2.toVector2D()).getReal(), epsilon);
     }
 
-    private <T extends RealFieldElement<T>> void doTestOrientation(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestOrientation(final Field<T> field) {
         Assert.assertTrue(FieldVector2D.orientation(new FieldVector2D<>(field, new Vector2D(0, 0)),
                                                     new FieldVector2D<>(field, new Vector2D(1, 0)),
                                                     new FieldVector2D<>(field, new Vector2D(1, 1))).getReal() > 0);
@@ -406,7 +406,7 @@ public class FieldVector2DTest {
                             1.0e-15);
     }
 
-    private <T extends RealFieldElement<T>> void check(final FieldVector2D<T> v,
+    private <T extends CalculusFieldElement<T>> void check(final FieldVector2D<T> v,
                                                        final double x, final double y, final double tol) {
         Assert.assertEquals(x, v.getX().getReal(), tol);
         Assert.assertEquals(y, v.getY().getReal(), tol);

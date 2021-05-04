@@ -24,10 +24,10 @@ package org.hipparchus.analysis.polynomials;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.FieldUnivariateFunction;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -151,14 +151,14 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Fie
      * @throws NullArgumentException if {@code coefficients} is {@code null}.
      */
     @Override
-    public DerivativeStructure value(final DerivativeStructure t)
+    public <T extends Derivative<T>> T value(final T t)
         throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(coefficients);
         int n = coefficients.length;
         if (n == 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
         }
-        DerivativeStructure result = t.getFactory().constant(coefficients[n - 1]);
+        T result = t.getField().getZero().add(coefficients[n - 1]);
         for (int j = n - 2; j >= 0; j--) {
             result = result.multiply(t).add(coefficients[j]);
         }
@@ -171,7 +171,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Fie
      * @since 1.3
      */
     @Override
-    public <T extends RealFieldElement<T>> T value(final T t)
+    public <T extends CalculusFieldElement<T>> T value(final T t)
         throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(coefficients);
         int n = coefficients.length;

@@ -93,10 +93,10 @@ public class ComplexEigenDecompositionTest {
         final RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { 3, -2 }, { 4, -1 } });
         ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(A);
         FieldMatrix<Complex> V = eigenDecomp.getV();        
-        Assert.assertEquals(0.0, new Complex(.5, .5).subtract(V.getEntry(0, 0)).abs(), 1.0e-15);
-        Assert.assertEquals(0.0, new Complex(.5, -.5).subtract(V.getEntry(0, 1)).abs(), 1.0e-15);
-        Assert.assertEquals(0.0, new Complex(1).subtract(V.getEntry(1, 0)).abs(), 1.0e-15);
-        Assert.assertEquals(0.0, new Complex(1).subtract(V.getEntry(1, 1)).abs(), 1.0e-15);
+        Assert.assertEquals(0.0, new Complex(.5, .5).subtract(V.getEntry(0, 0)).norm().getReal(), 1.0e-15);
+        Assert.assertEquals(0.0, new Complex(.5, -.5).subtract(V.getEntry(0, 1)).norm().getReal(), 1.0e-15);
+        Assert.assertEquals(0.0, new Complex(1).subtract(V.getEntry(1, 0)).norm().getReal(), 1.0e-15);
+        Assert.assertEquals(0.0, new Complex(1).subtract(V.getEntry(1, 1)).norm().getReal(), 1.0e-15);
     }
 
     @Test
@@ -104,10 +104,10 @@ public class ComplexEigenDecompositionTest {
         final RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { 3, -2 }, { 4, -1 } });
         ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(A);
         FieldMatrix<Complex> V = eigenDecomp.getVT();
-        Assert.assertEquals(0.0, new Complex(.5, .5).subtract(V.getEntry(0, 0)).abs(), 1.0e-15);
-        Assert.assertEquals(0.0, new Complex(.5, -.5).subtract(V.getEntry(1, 0)).abs(), 1.0e-15);
-        Assert.assertEquals(0.0, new Complex(1).subtract(V.getEntry(0, 1)).abs(), 1.0e-15);
-        Assert.assertEquals(0.0, new Complex(1).subtract(V.getEntry(1, 1)).abs(), 1.0e-15);
+        Assert.assertEquals(0.0, new Complex(.5, .5).subtract(V.getEntry(0, 0)).norm().getReal(), 1.0e-15);
+        Assert.assertEquals(0.0, new Complex(.5, -.5).subtract(V.getEntry(1, 0)).norm().getReal(), 1.0e-15);
+        Assert.assertEquals(0.0, new Complex(1).subtract(V.getEntry(0, 1)).norm().getReal(), 1.0e-15);
+        Assert.assertEquals(0.0, new Complex(1).subtract(V.getEntry(1, 1)).norm().getReal(), 1.0e-15);
     }
 
     @Test
@@ -115,10 +115,10 @@ public class ComplexEigenDecompositionTest {
         final RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { 3, -2 }, { 4, -1 } });
         ComplexEigenDecomposition eigenDecomp = new ComplexEigenDecomposition(A);
         FieldMatrix<Complex> D = eigenDecomp.getD();
-        Assert.assertEquals(0.0, new Complex(1, +2).subtract(D.getEntry(0, 0)).abs(), 1.0e-15);
-        Assert.assertEquals(0.0, new Complex(0).subtract(D.getEntry(0, 1)).abs(), 1.0e-15);
-        Assert.assertEquals(0.0, new Complex(0).subtract(D.getEntry(0, 1)).abs(), 1.0e-15);
-        Assert.assertEquals(0.0, new Complex(1, -2).subtract(D.getEntry(1, 1)).abs(), 1.0e-15);
+        Assert.assertEquals(0.0, new Complex(1, +2).subtract(D.getEntry(0, 0)).norm().getReal(), 1.0e-15);
+        Assert.assertEquals(0.0, new Complex(0).subtract(D.getEntry(0, 1)).norm().getReal(), 1.0e-15);
+        Assert.assertEquals(0.0, new Complex(0).subtract(D.getEntry(0, 1)).norm().getReal(), 1.0e-15);
+        Assert.assertEquals(0.0, new Complex(1, -2).subtract(D.getEntry(1, 1)).norm().getReal(), 1.0e-15);
     }
 
     @Test

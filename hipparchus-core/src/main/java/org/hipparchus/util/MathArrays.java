@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -420,7 +420,7 @@ public class MathArrays {
      * @param <T> the type of the field elements
      * @since 1.5
      */
-    public static <T extends RealFieldElement<T>> boolean checkEqualLength(final T[] a,
+    public static <T extends CalculusFieldElement<T>> boolean checkEqualLength(final T[] a,
                                                                            final T[] b,
                                            boolean abort) {
         if (a.length == b.length) {
@@ -443,7 +443,7 @@ public class MathArrays {
      * @param <T> the type of the field elements
      * @since 1.5
      */
-    public static <T extends RealFieldElement<T>> void checkEqualLength(final T[] a, final T[] b) {
+    public static <T extends CalculusFieldElement<T>> void checkEqualLength(final T[] a, final T[] b) {
         checkEqualLength(a, b, true);
     }
 
@@ -590,7 +590,7 @@ public class MathArrays {
      * @param <T> the type of the field elements
      * @since 1.5
      */
-    public static <T extends RealFieldElement<T>>boolean checkOrder(T[] val, OrderDirection dir,
+    public static <T extends CalculusFieldElement<T>>boolean checkOrder(T[] val, OrderDirection dir,
                                                                     boolean strict, boolean abort)
         throws MathIllegalArgumentException {
         double previous = val[0].getReal();
@@ -660,7 +660,7 @@ public class MathArrays {
      * @param <T> the type of the field elements
      * @since 1.5
      */
-    public static <T extends RealFieldElement<T>> void checkOrder(T[] val, OrderDirection dir,
+    public static <T extends CalculusFieldElement<T>> void checkOrder(T[] val, OrderDirection dir,
                                                                   boolean strict) throws MathIllegalArgumentException {
         checkOrder(val, dir, strict, true);
     }
@@ -673,7 +673,7 @@ public class MathArrays {
      * @param <T> the type of the field elements
      * @since 1.5
      */
-    public static <T extends RealFieldElement<T>> void checkOrder(T[] val) throws MathIllegalArgumentException {
+    public static <T extends CalculusFieldElement<T>> void checkOrder(T[] val) throws MathIllegalArgumentException {
         checkOrder(val, OrderDirection.INCREASING, true);
     }
 

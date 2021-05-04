@@ -22,7 +22,7 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
@@ -33,7 +33,7 @@ import org.hipparchus.util.MathUtils;
  * integrated during the junit tests for the ODE integrators.
  * @param <T> the type of the field elements
  */
-public class TestFieldProblemHandler<T extends RealFieldElement<T>>
+public class TestFieldProblemHandler<T extends CalculusFieldElement<T>>
     implements FieldODEStepHandler<T> {
 
     /** Associated problem. */
@@ -79,15 +79,15 @@ public class TestFieldProblemHandler<T extends RealFieldElement<T>>
     public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast) throws MathIllegalStateException {
 
         T start = integrator.getStepStart().getTime();
-        if (start.subtract(problem.getInitialState().getTime()).divide(integrator.getCurrentSignedStepsize()).abs().getReal() > 0.001) {
+        if (start.subtract(problem.getInitialState().getTime()).divide(integrator.getCurrentSignedStepsize()).norm().getReal() > 0.001) {
             // multistep integrators do not handle the first steps themselves
             // so we have to make sure the integrator we look at has really started its work
             if (expectedStepStart != null) {
                 // the step should either start at the end of the integrator step
                 // or at an event if the step is split into several substeps
-                T stepError = MathUtils.max(maxTimeError, start.subtract(expectedStepStart).abs());
+                T stepError = MathUtils.max(maxTimeError, start.subtract(expectedStepStart).norm());
                 for (T eventTime : problem.getTheoreticalEventsTimes()) {
-                    stepError = MathUtils.min(stepError, start.subtract(eventTime).abs());
+                    stepError = MathUtils.min(stepError, start.subtract(eventTime).norm());
                 }
                 maxTimeError = MathUtils.max(maxTimeError, stepError);
             }
@@ -103,7 +103,7 @@ public class TestFieldProblemHandler<T extends RealFieldElement<T>>
             T[] interpolatedY = interpolator.getInterpolatedState(cT).getPrimaryState();
             T[] theoreticalY  = problem.computeTheoreticalState(cT);
             for (int i = 0; i < interpolatedY.length; ++i) {
-                T error = interpolatedY[i].subtract(theoreticalY[i]).abs();
+                T error = interpolatedY[i].subtract(theoreticalY[i]).norm();
                 lastError = MathUtils.max(error, lastError);
             }
             lastTime = cT;
@@ -118,7 +118,7 @@ public class TestFieldProblemHandler<T extends RealFieldElement<T>>
 
             // update the errors
             for (int i = 0; i < interpolatedY.length; ++i) {
-                T error = errorScale[i].multiply(interpolatedY[i].subtract(theoreticalY[i]).abs());
+                T error = errorScale[i].multiply(interpolatedY[i].subtract(theoreticalY[i]).norm());
                 maxValueError = MathUtils.max(error, maxValueError);
             }
         }

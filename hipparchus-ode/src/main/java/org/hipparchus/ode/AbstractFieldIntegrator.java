@@ -22,8 +22,16 @@
 
 package org.hipparchus.ode;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
+
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -37,19 +45,11 @@ import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Incrementor;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
-
 /**
  * Base class managing common boilerplate for all integrators.
  * @param <T> the type of the field elements
  */
-public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> implements FieldODEIntegrator<T> {
+public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>> implements FieldODEIntegrator<T> {
 
     /** Default relative accuracy. */
     private static final double DEFAULT_RELATIVE_ACCURACY = 0;
@@ -263,7 +263,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception NullPointerException if the ODE equations have not been set (i.e. if this method
      * is called outside of a call to {@link #integrate(FieldExpandableODE, FieldODEState,
-     * RealFieldElement) integrate}
+     * CalculusFieldElement) integrate}
      */
     public T[] computeDerivatives(final T t, final T[] y)
         throws MathIllegalArgumentException, MathIllegalStateException, NullPointerException {
@@ -430,7 +430,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
         } while (!doneWithStep);
 
 
-        isLastStep = isLastStep || currentState.getTime().subtract(tEnd).abs().getReal() <= FastMath.ulp(tEnd.getReal());
+        isLastStep = isLastStep || currentState.getTime().subtract(tEnd).norm().getReal() <= FastMath.ulp(tEnd.getReal());
 
         // handle the remaining part of the step, after all events if any
         for (FieldODEStepHandler<T> handler : stepHandlers) {
@@ -453,7 +453,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
 
         final double threshold = 1000 * FastMath.ulp(FastMath.max(FastMath.abs(initialState.getTime().getReal()),
                                                                   FastMath.abs(t.getReal())));
-        final double dt = initialState.getTime().subtract(t).abs().getReal();
+        final double dt = initialState.getTime().subtract(t).norm().getReal();
         if (dt <= threshold) {
             throw new MathIllegalArgumentException(LocalizedODEFormats.TOO_SMALL_INTEGRATION_INTERVAL,
                                                    dt, threshold, false);

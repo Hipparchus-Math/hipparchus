@@ -17,7 +17,7 @@
 package org.hipparchus.analysis;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 
 /**
  * An interface representing a bivariate field function.
@@ -30,7 +30,7 @@ public interface FieldBivariateFunction {
      * @param field field for the argument and value
      * @return converted function
      */
-    default <T extends RealFieldElement<T>> RealFieldBivariateFunction<T> toRealFieldBivariateFunction(Field<T> field) {
+    default <T extends CalculusFieldElement<T>> RealFieldBivariateFunction<T> toRealFieldBivariateFunction(Field<T> field) {
         return this::value;
     }
 
@@ -42,6 +42,6 @@ public interface FieldBivariateFunction {
      * @param <T> type of the field elements
      * @return the value.
      */
-    <T extends RealFieldElement<T>> T value(T x, T y);
+    <T extends CalculusFieldElement<T>> T value(T x, T y);
 
 }

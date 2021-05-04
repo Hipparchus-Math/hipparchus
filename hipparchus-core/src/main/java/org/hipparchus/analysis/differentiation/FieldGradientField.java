@@ -20,16 +20,16 @@ import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.util.MathArrays;
 
 /** Field for {@link Gradient} instances.
  * @param <T> the type of the function parameters and value
  * @since 1.7
  */
-public class FieldGradientField<T extends RealFieldElement<T>> implements Field<FieldGradient<T>> {
+public class FieldGradientField<T extends CalculusFieldElement<T>> implements Field<FieldGradient<T>> {
 
     /** Cached fields. */
     private static final Map<Field<?>, FieldGradientField<?>[]> CACHE = new HashMap<>();
@@ -59,7 +59,7 @@ public class FieldGradientField<T extends RealFieldElement<T>> implements Field<
      * @param <T> the type of the function parameters and value
      * @return cached field
      */
-    public static <T extends RealFieldElement<T>> FieldGradientField<T> getField(final Field<T> valueField, final int parameters) {
+    public static <T extends CalculusFieldElement<T>> FieldGradientField<T> getField(final Field<T> valueField, final int parameters) {
 
         FieldGradientField<?>[] cachedFields;
         synchronized (CACHE) {

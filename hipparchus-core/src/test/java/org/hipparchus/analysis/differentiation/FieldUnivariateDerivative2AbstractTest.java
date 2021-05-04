@@ -17,8 +17,8 @@
 package org.hipparchus.analysis.differentiation;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
-import org.hipparchus.RealFieldElementAbstractTest;
+import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.CalculusFieldElementAbstractTest;
 import org.hipparchus.analysis.FieldUnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -31,8 +31,8 @@ import org.junit.Test;
 /**
  * Test for class {@link FieldUnivariateDerivative2}.
  */
-public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealFieldElement<T>>
-    extends RealFieldElementAbstractTest<FieldUnivariateDerivative2<T>> {
+public abstract class FieldUnivariateDerivative2AbstractTest<T extends CalculusFieldElement<T>>
+    extends CalculusFieldElementAbstractTest<FieldUnivariateDerivative2<T>> {
 
     protected abstract Field<T> getValueField();
 
@@ -150,7 +150,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -1.25; x < 1.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    final S y = x.add(3).multiply(x).subtract(5).multiply(0.5);
                                    return y.negate().divide(4).divide(x).add(y).subtract(x).multiply(2).reciprocal();
                                }
@@ -197,7 +197,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -1.25; x < 1.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    return x.remainder(0.5);
                                }
                            });
@@ -209,7 +209,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -1.25; x < 1.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                              public <S extends RealFieldElement<S>> S value(S x) {
+                              public <S extends CalculusFieldElement<S>> S value(S x) {
                                   return x.remainder(x.divide(0.7));
                               }
                            });
@@ -221,8 +221,8 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -1.25; x < 1.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
-                                   return x.abs();
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
+                                   return x.norm();
                                }
                            });
         }
@@ -235,7 +235,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
             for (double x = -1.25; x < 1.25; x+= 0.5) {
                 checkAgainstDS(x,
                                new FieldUnivariateFunction() {
-                                   public <S extends RealFieldElement<S>> S value(S x) {
+                                   public <S extends CalculusFieldElement<S>> S value(S x) {
                                        return x.scalb(theN);
                                    }
                                });
@@ -248,7 +248,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -3.25; x < 3.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    return x.cos().multiply(5).hypot(x.sin().multiply(2));
                                }
                            });
@@ -260,7 +260,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -3.25; x < 3.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    return x.cos().multiply(5).atan2(x.sin().multiply(2));
                                }
                            });
@@ -272,9 +272,9 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -3.25; x < 3.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    final FieldSinCos<S> sc = x.sinCos();
-                                   return x.pow(3.2).add(x.pow(2)).subtract(sc.cos().abs().pow(sc.sin()));
+                                   return x.pow(3.2).add(x.pow(2)).subtract(sc.cos().norm().pow(sc.sin()));
                                }
                            });
         }
@@ -285,7 +285,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = 0.001; x < 3.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    return x.rootN(5);//x.sqrt().add(x.cbrt()).subtract(x.rootN(5));
                                }
                            });
@@ -297,7 +297,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = 2.5; x < 3.25; x+= 0.125) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    return x.exp().add(x.multiply(0.5).expm1()).log().log10().log1p();
                                }
                            });
@@ -309,7 +309,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -3.25; x < 3.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    return x.cos().multiply(x.sin()).atan().divide(12).asin().multiply(0.1).acos().tan();
                                }
                            });
@@ -321,8 +321,8 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -1.25; x < 1.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
-                                   return x.cosh().multiply(x.sinh()).multiply(12).abs().acosh().asinh().divide(7).tanh().multiply(0.1).atanh();
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
+                                   return x.cosh().multiply(x.sinh()).multiply(12).norm().acosh().asinh().divide(7).tanh().multiply(0.1).atanh();
                                }
                            });
         }
@@ -333,7 +333,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -1.25; x < 1.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    return x.multiply(5).toDegrees().subtract(x).toRadians();
                                }
                            });
@@ -345,7 +345,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -1.25; x < 1.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    return x.linearCombination(1.0, x.multiply(0.9),
                                                               2.0, x.multiply(0.8));
                                }
@@ -358,7 +358,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -1.25; x < 1.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    return x.linearCombination(x.add(1), x.multiply(0.9),
                                                               x.add(2), x.multiply(0.8));
                                }
@@ -371,7 +371,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -1.25; x < 1.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    return x.linearCombination(1.0, x.multiply(0.9),
                                                               2.0, x.multiply(0.8),
                                                               3.0, x.multiply(0.7));
@@ -385,7 +385,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -1.25; x < 1.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    return x.linearCombination(x.add(1), x.multiply(0.9),
                                                               x.add(2), x.multiply(0.8),
                                                               x.add(3), x.multiply(0.7));
@@ -399,7 +399,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -1.25; x < 1.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    return x.linearCombination(1.0, x.multiply(0.9),
                                                               2.0, x.multiply(0.8),
                                                               3.0, x.multiply(0.7),
@@ -414,7 +414,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -1.25; x < 1.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    return x.linearCombination(x.add(1), x.multiply(0.9),
                                                               x.add(2), x.multiply(0.8),
                                                               x.add(3), x.multiply(0.7),
@@ -429,7 +429,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -1.25; x < 1.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    final S[] b = MathArrays.buildArray(x.getField(), 4);
                                    b[0] = x.add(0.9);
                                    b[1] = x.add(0.8);
@@ -446,7 +446,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends RealField
         for (double x = -1.25; x < 1.25; x+= 0.5) {
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
-                               public <S extends RealFieldElement<S>> S value(S x) {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
                                    final S[] a = MathArrays.buildArray(x.getField(), 4);
                                    a[0] = x.add(1);
                                    a[1] = x.add(2);

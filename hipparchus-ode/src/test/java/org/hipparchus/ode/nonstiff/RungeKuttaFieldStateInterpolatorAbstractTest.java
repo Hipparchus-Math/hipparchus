@@ -21,7 +21,7 @@ package org.hipparchus.ode.nonstiff;
 import java.lang.reflect.InvocationTargetException;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldExpandableODE;
@@ -35,7 +35,7 @@ import org.junit.Assert;
 
 public abstract class RungeKuttaFieldStateInterpolatorAbstractTest extends FieldODEStateInterpolatorAbstractTest {
 
-    protected abstract <T extends RealFieldElement<T>> RungeKuttaFieldStateInterpolator<T>
+    protected abstract <T extends CalculusFieldElement<T>> RungeKuttaFieldStateInterpolator<T>
         createInterpolator(Field<T> field, boolean forward, T[][] yDotK,
                            FieldODEStateAndDerivative<T> globalPreviousState,
                            FieldODEStateAndDerivative<T> globalCurrentState,
@@ -43,10 +43,10 @@ public abstract class RungeKuttaFieldStateInterpolatorAbstractTest extends Field
                            FieldODEStateAndDerivative<T> softCurrentState,
                            FieldEquationsMapper<T> mapper);
 
-    protected abstract <T extends RealFieldElement<T>> FieldButcherArrayProvider<T>
+    protected abstract <T extends CalculusFieldElement<T>> FieldButcherArrayProvider<T>
         createButcherArrayProvider(final Field<T> field);
 
-    protected <T extends RealFieldElement<T>>
+    protected <T extends CalculusFieldElement<T>>
     RungeKuttaFieldStateInterpolator<T> setUpInterpolator(final Field<T> field,
                                                           final ReferenceFieldODE<T> eqn,
                                                           final double t0, final double[] y0,
@@ -96,7 +96,7 @@ public abstract class RungeKuttaFieldStateInterpolatorAbstractTest extends Field
 
     }
 
-    protected <T extends RealFieldElement<T>>
+    protected <T extends CalculusFieldElement<T>>
     RungeKuttaStateInterpolator convertInterpolator(final FieldODEStateInterpolator<T> fieldInterpolator,
                                                     final FieldOrdinaryDifferentialEquation<T> eqn) {
 

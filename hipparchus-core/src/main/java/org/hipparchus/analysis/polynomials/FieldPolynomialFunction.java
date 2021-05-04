@@ -16,8 +16,8 @@
  */
 package org.hipparchus.analysis.polynomials;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -35,7 +35,7 @@ import org.hipparchus.util.MathUtils;
  * @since 1.5
  *
  */
-public class FieldPolynomialFunction<T extends RealFieldElement<T>> implements RealFieldUnivariateFunction<T> {
+public class FieldPolynomialFunction<T extends CalculusFieldElement<T>> implements RealFieldUnivariateFunction<T> {
 
     /**
      * The coefficients of the polynomial, ordered by degree -- i.e.,
@@ -145,7 +145,7 @@ public class FieldPolynomialFunction<T extends RealFieldElement<T>> implements R
      * @throws MathIllegalArgumentException if {@code coefficients} is empty.
      * @throws NullArgumentException if {@code coefficients} is {@code null}.
      */
-    protected static <T extends RealFieldElement<T>> T evaluate(T[] coefficients, T argument)
+    protected static <T extends CalculusFieldElement<T>> T evaluate(T[] coefficients, T argument)
         throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(coefficients);
         int n = coefficients.length;
@@ -256,7 +256,7 @@ public class FieldPolynomialFunction<T extends RealFieldElement<T>> implements R
      * @throws MathIllegalArgumentException if {@code coefficients} is empty.
      * @throws NullArgumentException if {@code coefficients} is {@code null}.
      */
-    protected static <T extends RealFieldElement<T>> T[] differentiate(T[] coefficients)
+    protected static <T extends CalculusFieldElement<T>> T[] differentiate(T[] coefficients)
         throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(coefficients);
         int n = coefficients.length;

@@ -23,7 +23,7 @@
 package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.ParametricUnivariateFunction;
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
@@ -151,7 +151,7 @@ public class HarmonicOscillator implements UnivariateDifferentiableFunction {
     /** {@inheritDoc}
      */
     @Override
-    public DerivativeStructure value(final DerivativeStructure t)
+    public <T extends Derivative<T>> T value(T t)
         throws MathIllegalArgumentException {
         final double x = t.getValue();
         double[] f = new double[t.getOrder() + 1];

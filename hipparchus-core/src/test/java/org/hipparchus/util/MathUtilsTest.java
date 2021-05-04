@@ -14,7 +14,7 @@
 package org.hipparchus.util;
 
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -164,7 +164,7 @@ public final class MathUtilsTest {
         doTestFieldNormalizeAngle(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestFieldNormalizeAngle(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestFieldNormalizeAngle(final Field<T> field) {
         final T zero = field.getZero();
         for (double a = -15.0; a <= 15.0; a += 0.1) {
             for (double b = -15.0; b <= 15.0; b += 0.2) {

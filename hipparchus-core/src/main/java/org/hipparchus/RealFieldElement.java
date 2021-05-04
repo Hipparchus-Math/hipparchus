@@ -41,6 +41,8 @@ public interface RealFieldElement<T> extends CalculusFieldElement<T> {
     /** absolute value.
      * @return abs(this)
      */
-    T abs();
+    default T abs() {
+        return norm();
+    }
 
 }

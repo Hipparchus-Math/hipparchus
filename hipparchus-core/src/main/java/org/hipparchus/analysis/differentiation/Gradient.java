@@ -19,7 +19,7 @@ package org.hipparchus.analysis.differentiation;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
@@ -52,7 +52,7 @@ import org.hipparchus.util.SinCos;
  * @see FieldGradient
  * @since 1.7
  */
-public class Gradient implements Derivative<Gradient>, RealFieldElement<Gradient>, Serializable {
+public class Gradient implements Derivative<Gradient>, CalculusFieldElement<Gradient>, Serializable {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20200520L;
@@ -328,7 +328,7 @@ public class Gradient implements Derivative<Gradient>, RealFieldElement<Gradient
 
     /** {@inheritDoc} */
     @Override
-    public Gradient abs() {
+    public Gradient norm() {
         if (Double.doubleToLongBits(value) < 0) {
             // we use the bits representation to also handle -0.0
             return negate();
@@ -413,10 +413,10 @@ public class Gradient implements Derivative<Gradient>, RealFieldElement<Gradient
             final int expY = y.getExponent();
             if (expX > expY + 27) {
                 // y is neglectible with respect to x
-                return abs();
+                return norm();
             } else if (expY > expX + 27) {
                 // x is neglectible with respect to y
-                return y.abs();
+                return y.norm();
             } else {
 
                 // find an intermediate scale to avoid both overflow and underflow
@@ -450,15 +450,13 @@ public class Gradient implements Derivative<Gradient>, RealFieldElement<Gradient
         return result;
     }
 
-    /** Compute composition of the instance by a function.
-     * @param g0 value of the function at the current point (i.e. at {@code g(getValue())})
-     * @param g1 first derivative of the function at the current point (i.e. at {@code g'(getValue())})
-     * @return g(this)
-     */
-    public Gradient compose(final double g0, final double g1) {
-        final Gradient result = newInstance(g0);
+    /** {@inheritDoc} */
+    @Override
+    public Gradient compose(final double... f) {
+       MathUtils.checkDimension(f.length, getOrder() + 1);
+       final Gradient result = newInstance(f[0]);
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = g1 * grad[i];
+            result.grad[i] = f[1] * grad[i];
         }
         return result;
     }

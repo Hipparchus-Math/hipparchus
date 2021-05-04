@@ -22,7 +22,7 @@
 
 package org.hipparchus.ode.sampling;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 
@@ -44,7 +44,7 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * @param <T> the type of the field elements
  */
 
-public interface FieldODEStepHandler<T extends RealFieldElement<T>> {
+public interface FieldODEStepHandler<T extends CalculusFieldElement<T>> {
 
     /** Initialize step handler at the start of an ODE integration.
      * <p>
