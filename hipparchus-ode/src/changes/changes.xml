@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/120">
+        Added event filtering for field ODE.
+        Github: fixes #120.
+      </action>
       <action dev="luc" type="fix" issue="issues/118" due-to="afossa">
         Use primitive double for initial step and error factors in Field adaptive step size integrators.
         Github: fixes #118.
