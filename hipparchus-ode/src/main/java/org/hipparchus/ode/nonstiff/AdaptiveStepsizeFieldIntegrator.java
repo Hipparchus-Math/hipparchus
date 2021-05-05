@@ -30,7 +30,6 @@ import org.hipparchus.ode.AbstractFieldIntegrator;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -263,41 +262,6 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldEle
         }
 
         return h;
-
-    }
-
-    /** Filter the integration step.
-     * @param h signed step
-     * @param forward forward integration indicator
-     * @param acceptSmall if true, steps smaller than the minimal value
-     * are silently increased up to this value, if false such small
-     * steps generate an exception
-     * @return a bounded integration step (h if no bound is reach, or a bounded value)
-     * @exception MathIllegalArgumentException if the step is too small and acceptSmall is false
-     */
-    protected T filterStep(final T h, final boolean forward, final boolean acceptSmall)
-        throws MathIllegalArgumentException {
-
-        final double minStep = stepsizeHelper.getMinStep();
-        final double maxStep = stepsizeHelper.getMaxStep();
-
-        T filteredH = h;
-        if (h.norm().subtract(minStep).getReal() < 0) {
-            if (acceptSmall) {
-                filteredH = forward ? getField().getZero().add(minStep) : getField().getZero().add(-minStep);
-            } else {
-                throw new MathIllegalArgumentException(LocalizedODEFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
-                                                       FastMath.abs(h.getReal()), minStep, true);
-            }
-        }
-
-        if (filteredH.subtract(maxStep).getReal() > 0) {
-            filteredH = getField().getZero().add(maxStep);
-        } else if (filteredH.add(maxStep).getReal() < 0) {
-            filteredH = getField().getZero().add(-maxStep);
-        }
-
-        return filteredH;
 
     }
 

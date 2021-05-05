@@ -18,6 +18,8 @@
 package org.hipparchus.ode.nonstiff;
 
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -341,12 +343,25 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
     protected void doTestKepler(double epsilon) {
 
         final TestProblem3 pb  = new TestProblem3(0.9);
-        double minStep = 0;
+        double minStep = 1.0e-10;
         double maxStep = pb.getFinalTime() - pb.getInitialState().getTime();
         double[] vecAbsoluteTolerance = { 1.0e-8, 1.0e-8, 1.0e-10, 1.0e-10 };
         double[] vecRelativeTolerance = { 1.0e-10, 1.0e-10, 1.0e-8, 1.0e-8 };
 
-        ODEIntegrator integ = createIntegrator(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
+        AdaptiveStepsizeIntegrator integ = createIntegrator(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
+
+        try {
+            Method getStepSizeHelper = AdaptiveStepsizeIntegrator.class.getDeclaredMethod("getStepSizeHelper", (Class<?>[]) null);
+            getStepSizeHelper.setAccessible(true);
+            StepsizeHelper helper = (StepsizeHelper) getStepSizeHelper.invoke(integ, (Object[]) null);
+            integ.setInitialStepSize(-999);
+            Assert.assertEquals(-1.0, helper.getInitialStep(), 1.0e-10);
+            integ.setInitialStepSize(+999);
+            Assert.assertEquals(-1.0, helper.getInitialStep(), 1.0e-10);
+        } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            Assert.fail(e.getLocalizedMessage());
+        }
+
         integ.addStepHandler(new KeplerHandler(pb, epsilon));
         integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
     }

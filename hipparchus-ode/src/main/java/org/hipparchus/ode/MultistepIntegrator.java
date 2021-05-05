@@ -396,7 +396,7 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
                 // this was the last point we needed, we can compute the derivatives
                 setStepStart(savedStart);
                 final double rawStep = (t[t.length - 1] - t[0]) / (t.length - 1);
-                setStepSize(filterStep(rawStep, rawStep >= 0, true));
+                setStepSize(getStepSizeHelper().filterStep(rawStep, rawStep >= 0, true));
 
                 // first scaled derivative
                 scaled = yDot[0].clone();

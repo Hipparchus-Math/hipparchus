@@ -21,7 +21,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.EquationsMapper;
-import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
@@ -253,41 +252,6 @@ public abstract class AdaptiveStepsizeIntegrator
         }
 
         return h;
-
-    }
-
-    /** Filter the integration step.
-     * @param h signed step
-     * @param forward forward integration indicator
-     * @param acceptSmall if true, steps smaller than the minimal value
-     * are silently increased up to this value, if false such small
-     * steps generate an exception
-     * @return a bounded integration step (h if no bound is reach, or a bounded value)
-     * @exception MathIllegalArgumentException if the step is too small and acceptSmall is false
-     */
-    protected double filterStep(final double h, final boolean forward, final boolean acceptSmall)
-                    throws MathIllegalArgumentException {
-
-        final double minStep = stepsizeHelper.getMinStep();
-        final double maxStep = stepsizeHelper.getMaxStep();
-
-        double filteredH = h;
-        if (FastMath.abs(h) < minStep) {
-            if (acceptSmall) {
-                filteredH = forward ? minStep : -minStep;
-            } else {
-                throw new MathIllegalArgumentException(LocalizedODEFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
-                                                       FastMath.abs(h), minStep, true);
-            }
-        }
-
-        if (filteredH > maxStep) {
-            filteredH = maxStep;
-        } else if (filteredH < -maxStep) {
-            filteredH = -maxStep;
-        }
-
-        return filteredH;
 
     }
 

@@ -101,25 +101,6 @@ public class StepsizeHelper {
 
     }
 
-    /** Set the initial step size.
-     * <p>This method allows the user to specify an initial positive
-     * step size instead of letting the integrator guess it by
-     * itself. If this method is not called before integration is
-     * started, the initial step size will be estimated by the
-     * integrator.</p>
-     * @param initialStepSize initial step size to use (must be positive even
-     * for backward integration ; providing a negative value or a value
-     * outside of the min/max step interval will lead the integrator to
-     * ignore the value and compute the initial step size by itself)
-     */
-    public void setInitialStepSize(final double initialStepSize) {
-        if ((initialStepSize < minStep) || (initialStepSize > maxStep)) {
-            initialStep = -1.0;
-        } else {
-            initialStep = initialStepSize;
-        }
-    }
-
     /** Set main set dimension.
      * @param mainSetDimension dimension of the main set
      * @exception MathIllegalArgumentException if adaptive step size integrators
@@ -168,6 +149,7 @@ public class StepsizeHelper {
     /** Get the tolerance for one component.
      * @param i component to select
      * @param scale scale factor for relative tolerance (i.e. y[i])
+     * @param <T> type of the field elements
      * @return tolerance for selected component
      */
     public <T extends CalculusFieldElement<T>> T getTolerance(final int i, final T scale) {
@@ -185,7 +167,7 @@ public class StepsizeHelper {
      * @return a bounded integration step (h if no bound is reach, or a bounded value)
      * @exception MathIllegalArgumentException if the step is too small and acceptSmall is false
      */
-    protected double filterStep(final double h, final boolean forward, final boolean acceptSmall)
+    public double filterStep(final double h, final boolean forward, final boolean acceptSmall)
         throws MathIllegalArgumentException {
 
         double filteredH = h;
@@ -206,6 +188,58 @@ public class StepsizeHelper {
 
         return filteredH;
 
+    }
+
+    /** Filter the integration step.
+     * @param h signed step
+     * @param forward forward integration indicator
+     * @param acceptSmall if true, steps smaller than the minimal value
+     * are silently increased up to this value, if false such small
+     * steps generate an exception
+     * @param <T> type of the field elements
+     * @return a bounded integration step (h if no bound is reach, or a bounded value)
+     * @exception MathIllegalArgumentException if the step is too small and acceptSmall is false
+     */
+    public <T extends CalculusFieldElement<T>> T filterStep(final T h, final boolean forward, final boolean acceptSmall)
+        throws MathIllegalArgumentException {
+
+        T filteredH = h;
+        if (h.norm().subtract(minStep).getReal() < 0) {
+            if (acceptSmall) {
+                filteredH = h.getField().getZero().add(forward ? minStep : -minStep);
+            } else {
+                throw new MathIllegalArgumentException(LocalizedODEFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
+                                                       FastMath.abs(h.getReal()), minStep, true);
+            }
+        }
+
+        if (filteredH.subtract(maxStep).getReal() > 0) {
+            filteredH = h.getField().getZero().add(maxStep);
+        } else if (filteredH.add(maxStep).getReal() < 0) {
+            filteredH = h.getField().getZero().add(-maxStep);
+        }
+
+        return filteredH;
+
+    }
+
+    /** Set the initial step size.
+     * <p>This method allows the user to specify an initial positive
+     * step size instead of letting the integrator guess it by
+     * itself. If this method is not called before integration is
+     * started, the initial step size will be estimated by the
+     * integrator.</p>
+     * @param initialStepSize initial step size to use (must be positive even
+     * for backward integration ; providing a negative value or a value
+     * outside of the min/max step interval will lead the integrator to
+     * ignore the value and compute the initial step size by itself)
+     */
+    public void setInitialStepSize(final double initialStepSize) {
+        if ((initialStepSize < minStep) || (initialStepSize > maxStep)) {
+            initialStep = -1.0;
+        } else {
+            initialStep = initialStepSize;
+        }
     }
 
     /** Get the initial step.

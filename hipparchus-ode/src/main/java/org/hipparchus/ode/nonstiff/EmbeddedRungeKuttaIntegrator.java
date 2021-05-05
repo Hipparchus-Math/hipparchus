@@ -273,7 +273,7 @@ public abstract class EmbeddedRungeKuttaIntegrator
                     final double factor =
                                     FastMath.min(maxGrowth,
                                                  FastMath.max(minReduction, safety * FastMath.pow(error, exp)));
-                    hNew = filterStep(getStepSize() * factor, forward, false);
+                    hNew = getStepSizeHelper().filterStep(getStepSize() * factor, forward, false);
                 }
 
             }
@@ -293,7 +293,7 @@ public abstract class EmbeddedRungeKuttaIntegrator
                 final double  scaledH    = getStepSize() * factor;
                 final double  nextT      = getStepStart().getTime() + scaledH;
                 final boolean nextIsLast = forward ? (nextT >= finalTime) : (nextT <= finalTime);
-                hNew = filterStep(scaledH, forward, nextIsLast);
+                hNew = getStepSizeHelper().filterStep(scaledH, forward, nextIsLast);
 
                 final double  filteredNextT      = getStepStart().getTime() + hNew;
                 final boolean filteredNextIsLast = forward ? (filteredNextT >= finalTime) : (filteredNextT <= finalTime);

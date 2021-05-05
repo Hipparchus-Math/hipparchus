@@ -297,7 +297,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
                     // reject the step and attempt to reduce error by stepsize control
                     final T factor = MathUtils.min(maxGrowth,
                                                    MathUtils.max(minReduction, safety.multiply(FastMath.pow(error, exp))));
-                    hNew = filterStep(getStepSize().multiply(factor), forward, false);
+                    hNew = getStepSizeHelper().filterStep(getStepSize().multiply(factor), forward, false);
                 }
 
             }
@@ -319,7 +319,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
                 final boolean nextIsLast = forward ?
                                            nextT.subtract(finalTime).getReal() >= 0 :
                                            nextT.subtract(finalTime).getReal() <= 0;
-                hNew = filterStep(scaledH, forward, nextIsLast);
+                hNew = getStepSizeHelper().filterStep(scaledH, forward, nextIsLast);
 
                 final T  filteredNextT      = getStepStart().getTime().add(hNew);
                 final boolean filteredNextIsLast = forward ?

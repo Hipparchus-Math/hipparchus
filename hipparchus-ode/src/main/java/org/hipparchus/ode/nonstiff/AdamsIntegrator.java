@@ -141,7 +141,7 @@ public abstract class AdamsIntegrator extends MultistepIntegrator {
                 if (error >= 1.0) {
                     // reject the step and attempt to reduce error by stepsize control
                     final double factor = computeStepGrowShrinkFactor(error);
-                    rescale(filterStep(getStepSize() * factor, forward, false));
+                    rescale(getStepSizeHelper().filterStep(getStepSize() * factor, forward, false));
                     stepEnd = AdamsStateInterpolator.taylor(equations.getMapper(), getStepStart(),
                                                             getStepStart().getTime() + getStepSize(),
                                                             getStepSize(),
@@ -186,7 +186,7 @@ public abstract class AdamsIntegrator extends MultistepIntegrator {
                     final boolean nextIsLast = forward ?
                                                (nextT >= finalTime) :
                                                (nextT <= finalTime);
-                    double hNew = filterStep(scaledH, forward, nextIsLast);
+                    double hNew = getStepSizeHelper().filterStep(scaledH, forward, nextIsLast);
 
                     final double  filteredNextT      = getStepStart().getTime() + hNew;
                     final boolean filteredNextIsLast = forward ? (filteredNextT >= finalTime) : (filteredNextT <= finalTime);

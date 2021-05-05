@@ -604,7 +604,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                                (k == 0) ? y1 : y1Diag[k - 1])) {
 
                     // the stability check failed, we reduce the global step
-                    hNew   = FastMath.abs(filterStep(getStepSize() * stabilityReduction, forward, false));
+                    hNew   = FastMath.abs(getStepSizeHelper().filterStep(getStepSize() * stabilityReduction, forward, false));
                     reject = true;
                     loop   = false;
 
@@ -632,7 +632,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
 
                         if ((error > 1.0e15) || ((k > 1) && (error > maxError))) {
                             // error is too big, we reduce the global step
-                            hNew   = FastMath.abs(filterStep(getStepSize() * stabilityReduction, forward, false));
+                            hNew   = FastMath.abs(getStepSizeHelper().filterStep(getStepSize() * stabilityReduction, forward, false));
                             reject = true;
                             loop   = false;
                         } else {
@@ -645,7 +645,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                             final double pow = FastMath.pow(stepControl3, exp);
                             fac = FastMath.max(pow / stepControl4, FastMath.min(1 / pow, fac));
                             final boolean acceptSmall = k < targetIter;
-                            optimalStep[k]     = FastMath.abs(filterStep(getStepSize() * fac, forward, acceptSmall));
+                            optimalStep[k]     = FastMath.abs(getStepSizeHelper().filterStep(getStepSize() * fac, forward, acceptSmall));
                             costPerTimeUnit[k] = costPerStep[k] / optimalStep[k];
 
                             // check convergence
@@ -675,7 +675,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                                                                     orderControl1 * costPerTimeUnit[targetIter])) {
                                                     --targetIter;
                                                 }
-                                                hNew = filterStep(optimalStep[targetIter], forward, false);
+                                                hNew = getStepSizeHelper().filterStep(optimalStep[targetIter], forward, false);
                                             }
                                         }
                                     }
@@ -700,7 +700,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                                                                  orderControl1 * costPerTimeUnit[targetIter])) {
                                                 --targetIter;
                                             }
-                                            hNew = filterStep(optimalStep[targetIter], forward, false);
+                                            hNew = getStepSizeHelper().filterStep(optimalStep[targetIter], forward, false);
                                         }
                                     }
                                     break;
@@ -713,7 +713,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                                                             orderControl1 * costPerTimeUnit[targetIter])) {
                                             --targetIter;
                                         }
-                                        hNew = filterStep(optimalStep[targetIter], forward, false);
+                                        hNew = getStepSizeHelper().filterStep(optimalStep[targetIter], forward, false);
                                     }
                                     loop = false;
                                     break;
@@ -792,7 +792,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                     hInt = FastMath.abs(getStepSize() /
                                         FastMath.max(FastMath.pow(interpError, 1.0 / (mu + 4)), 0.01));
                     if (interpError > 10.0) {
-                        hNew   = filterStep(hInt, forward, false);
+                        hNew   = getStepSizeHelper().filterStep(hInt, forward, false);
                         reject = true;
                     }
                 }
@@ -843,15 +843,15 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                 } else {
                     // stepsize control
                     if (optimalIter <= k) {
-                        hNew = filterStep(optimalStep[optimalIter], forward, false);
+                        hNew = getStepSizeHelper().filterStep(optimalStep[optimalIter], forward, false);
                     } else {
                         if ((k < targetIter) &&
                                         (costPerTimeUnit[k] < orderControl2 * costPerTimeUnit[k - 1])) {
-                            hNew = filterStep(optimalStep[k] * costPerStep[optimalIter + 1] / costPerStep[k],
-                                              forward, false);
+                            hNew = getStepSizeHelper().
+                                   filterStep(optimalStep[k] * costPerStep[optimalIter + 1] / costPerStep[k], forward, false);
                         } else {
-                            hNew = filterStep(optimalStep[k] * costPerStep[optimalIter] / costPerStep[k],
-                                              forward, false);
+                            hNew = getStepSizeHelper().
+                                   filterStep(optimalStep[k] * costPerStep[optimalIter] / costPerStep[k], forward, false);
                         }
                     }
 

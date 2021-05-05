@@ -150,7 +150,7 @@ public abstract class AdamsFieldIntegrator<T extends CalculusFieldElement<T>> ex
                 if (error >= 1.0) {
                     // reject the step and attempt to reduce error by stepsize control
                     final double factor = computeStepGrowShrinkFactor(error);
-                    rescale(filterStep(getStepSize().multiply(factor), forward, false));
+                    rescale(getStepSizeHelper().filterStep(getStepSize().multiply(factor), forward, false));
                     stepEnd = AdamsFieldStateInterpolator.taylor(equations.getMapper(), getStepStart(),
                                                                  getStepStart().getTime().add(getStepSize()),
                                                                  getStepSize(),
@@ -195,7 +195,7 @@ public abstract class AdamsFieldIntegrator<T extends CalculusFieldElement<T>> ex
                     final boolean nextIsLast = forward ?
                                                nextT.subtract(finalTime).getReal() >= 0 :
                                                nextT.subtract(finalTime).getReal() <= 0;
-                    T hNew = filterStep(scaledH, forward, nextIsLast);
+                    T hNew = getStepSizeHelper().filterStep(scaledH, forward, nextIsLast);
 
                     final T       filteredNextT      = getStepStart().getTime().add(hNew);
                     final boolean filteredNextIsLast = forward ?
