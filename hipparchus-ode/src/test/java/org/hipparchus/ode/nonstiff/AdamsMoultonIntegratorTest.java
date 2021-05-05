@@ -68,7 +68,7 @@ public class AdamsMoultonIntegratorTest extends AdamsIntegratorAbstractTest {
 
     @Test
     public void polynomial() {
-        doPolynomial(5, 2.2e-05, 1.1e-11);
+        doPolynomial(5, 2.2e-05, 2.0e-11);
     }
 
     @Test

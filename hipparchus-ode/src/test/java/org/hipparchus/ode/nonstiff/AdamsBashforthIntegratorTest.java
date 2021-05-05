@@ -68,7 +68,7 @@ public class AdamsBashforthIntegratorTest extends AdamsIntegratorAbstractTest {
 
     @Test
     public void polynomial() {
-        doPolynomial(5, 0.004, 6.0e-10);
+        doPolynomial(5, 9.0e-4, 9.3e-10);
     }
 
     @Test(expected=MathIllegalStateException.class)

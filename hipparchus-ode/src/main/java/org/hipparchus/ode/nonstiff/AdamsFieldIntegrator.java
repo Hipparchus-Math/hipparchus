@@ -32,6 +32,7 @@ import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.MultistepFieldIntegrator;
 import org.hipparchus.util.MathArrays;
 
@@ -146,6 +147,10 @@ public abstract class AdamsFieldIntegrator<T extends CalculusFieldElement<T>> ex
 
                 // evaluate error
                 error = errorEstimation(y, stepEnd.getTime(), predictedY, predictedScaled, predictedNordsieck);
+                if (Double.isNaN(error)) {
+                    throw new MathIllegalStateException(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION,
+                                                        stepEnd.getTime().getReal());
+                }
 
                 if (error >= 1.0) {
                     // reject the step and attempt to reduce error by stepsize control

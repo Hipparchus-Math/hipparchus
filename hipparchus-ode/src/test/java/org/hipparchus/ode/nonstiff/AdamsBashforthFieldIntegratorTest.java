@@ -71,7 +71,7 @@ public class AdamsBashforthFieldIntegratorTest extends AdamsFieldIntegratorAbstr
 
     @Test
     public void polynomial() {
-        doPolynomial(Decimal64Field.getInstance(), 5, 0.004, 6.0e-10);
+        doPolynomial(Decimal64Field.getInstance(), 5, 9.0e-4, 9.3e-10);
     }
 
     @Test

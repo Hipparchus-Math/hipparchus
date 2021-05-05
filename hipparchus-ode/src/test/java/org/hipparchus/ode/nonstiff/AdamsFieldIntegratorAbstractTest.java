@@ -22,6 +22,7 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
@@ -38,6 +39,8 @@ import org.hipparchus.ode.TestFieldProblem5;
 import org.hipparchus.ode.TestFieldProblem6;
 import org.hipparchus.ode.TestFieldProblemAbstract;
 import org.hipparchus.ode.TestFieldProblemHandler;
+import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.util.Decimal64Field;
@@ -155,15 +158,41 @@ public abstract class AdamsFieldIntegratorAbstractTest {
     public abstract void backward();
 
     protected <T extends CalculusFieldElement<T>> void doBackward(final Field<T> field,
-                                                              final double epsilonLast,
-                                                              final double epsilonMaxValue,
-                                                              final double epsilonMaxTime,
-                                                              final String name) {
+                                                                  final double epsilonLast,
+                                                                  final double epsilonMaxValue,
+                                                                  final double epsilonMaxTime,
+                                                                  final String name) {
 
-        TestFieldProblem5<T> pb = new TestFieldProblem5<T>(field);
+        final double resetTime = -3.98;
+        final TestFieldProblem5<T> pb = new TestFieldProblem5<T>(field) {
+            @Override
+            public T[] getTheoreticalEventsTimes() {
+                final T[] tEv = MathArrays.buildArray(field, 1);
+                tEv[0] = field.getZero().add(resetTime);
+                return tEv;
+            }
+        };
         double range = pb.getFinalTime().subtract(pb.getInitialState().getTime()).getReal();
 
         AdamsFieldIntegrator<T> integ = createIntegrator(field, 4, 0, range, 1.0e-12, 1.0e-12);
+        FieldODEEventHandler<T> event = new FieldODEEventHandler<T>() {
+
+            @Override
+            public T g(FieldODEStateAndDerivative<T> state) {
+                return state.getTime().subtract(resetTime);
+            }
+
+            @Override
+            public Action eventOccurred(FieldODEStateAndDerivative<T> state,
+                                        boolean increasing) {
+                return Action.RESET_STATE;
+            }
+        };
+        integ.addEventHandler(event, 0.5 * range, 1.0e-6 * range, 100,
+                              new FieldBracketingNthOrderBrentSolver<T>(field.getZero().add(1.0e-7),
+                                                                        field.getZero().add(1.0e-14),
+                                                                        field.getZero().add(1.0e-15),
+                                                                        5));
         TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
         integ.addStepHandler(handler);
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
@@ -181,11 +210,29 @@ public abstract class AdamsFieldIntegratorAbstractTest {
                                                                 final int nLimit,
                                                                 final double epsilonBad,
                                                                 final double epsilonGood) {
-        TestFieldProblem6<T> pb = new TestFieldProblem6<T>(field);
-        double range = pb.getFinalTime().subtract(pb.getInitialState().getTime()).norm().getReal();
+        final TestFieldProblem6<T> pb = new TestFieldProblem6<T>(field);
+        final double range = pb.getFinalTime().subtract(pb.getInitialState().getTime()).norm().getReal();
 
         for (int nSteps = 2; nSteps < 8; ++nSteps) {
             AdamsFieldIntegrator<T> integ = createIntegrator(field, nSteps, 1.0e-6 * range, 0.1 * range, 1.0e-4, 1.0e-4);
+            FieldODEEventHandler<T> event = new FieldODEEventHandler<T>() {
+
+                @Override
+                public T g(FieldODEStateAndDerivative<T> state) {
+                    return state.getTime().subtract(pb.getInitialState().getTime().getReal() + 0.5 * range);
+                }
+
+                @Override
+                public Action eventOccurred(FieldODEStateAndDerivative<T> state,
+                                            boolean increasing) {
+                    return Action.RESET_STATE;
+                }
+            };
+            integ.addEventHandler(event, 0.5 * range, 1.0e-6 * range, 100,
+                                  new FieldBracketingNthOrderBrentSolver<T>(field.getZero().add(1.0e-7),
+                                                                            field.getZero().add(1.0e-14),
+                                                                            field.getZero().add(1.0e-15),
+                                                                            5));
             integ.setStarterIntegrator(new PerfectStarter<T>(pb, nSteps));
             TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
             integ.addStepHandler(handler);
@@ -197,6 +244,36 @@ public abstract class AdamsFieldIntegratorAbstractTest {
             }
         }
 
+    }
+
+    @Test
+    public void testNaNAppearing() {
+        doTestNaNAppearing(Decimal64Field.getInstance());
+    }
+
+    private <T extends CalculusFieldElement<T>> void doTestNaNAppearing(final Field<T> field) {
+        try {
+            AdamsFieldIntegrator<T> integ = createIntegrator(field, 8, 0.01, 1.0, 0.1, 0.1);
+            final FieldOrdinaryDifferentialEquation<T> ode = new FieldOrdinaryDifferentialEquation<T>() {
+                public int getDimension() {
+                    return 1;
+                }
+                public T[] computeDerivatives(T t, T[] y) {
+                    T[] yDot = MathArrays.buildArray(t.getField(), getDimension());
+                    yDot[0] = FastMath.log(t);
+                    return yDot;
+                }
+            };
+            final T t0 = field.getZero().add(10.0);
+            final T t1 = field.getZero().add(-1.0);
+            final T[] y0 = MathArrays.buildArray(field, ode.getDimension());
+            y0[0] = field.getZero().add(1.0);
+            integ.integrate(new FieldExpandableODE<>(ode), new FieldODEState<>(t0, y0), t1);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalStateException mise) {
+            Assert.assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
+            Assert.assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
+        }
     }
 
     @Test

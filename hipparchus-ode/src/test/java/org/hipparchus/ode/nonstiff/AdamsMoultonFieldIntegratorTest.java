@@ -71,7 +71,7 @@ public class AdamsMoultonFieldIntegratorTest extends AdamsFieldIntegratorAbstrac
 
     @Test
     public void polynomial() {
-        doPolynomial(Decimal64Field.getInstance(), 5, 2.2e-05, 1.1e-11);
+        doPolynomial(Decimal64Field.getInstance(), 5, 2.2e-05, 2.0e-11);
     }
 
     @Test
