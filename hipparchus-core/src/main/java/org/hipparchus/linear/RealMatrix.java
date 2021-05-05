@@ -177,18 +177,6 @@ public interface RealMatrix extends AnyMatrix {
      * maximum absolute column sum norm</a> (L<sub>1</sub>) of the matrix.
      *
      * @return norm
-     * @deprecated as of 1.7, replaced with either {@link #getNorm1()} or {@link #getNormInfty()}
-     */
-    @Deprecated
-    default double getNorm() {
-        return getNorm1();
-    }
-
-    /**
-     * Returns the <a href="http://mathworld.wolfram.com/MaximumAbsoluteColumnSumNorm.html">
-     * maximum absolute column sum norm</a> (L<sub>1</sub>) of the matrix.
-     *
-     * @return norm
      */
     default double getNorm1() {
         return walkInColumnOrder(new RealMatrixPreservingVisitor() {

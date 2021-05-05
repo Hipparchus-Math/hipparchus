@@ -715,21 +715,6 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
 
     }
 
-    /** Compute the relative position of the instance with respect
-     * to an arc.
-     * <p>
-     * The {@link Side#MINUS} side of the arc is the one covered by the arc.
-     * </p>
-     * @param arc arc to check instance against
-     * @return one of {@link Side#PLUS}, {@link Side#MINUS}, {@link Side#BOTH}
-     * or {@link Side#HYPER}
-     * @deprecated as of 3.6, replaced with {@link #split(Arc)}.{@link Split#getSide()}
-     */
-    @Deprecated
-    public Side side(final Arc arc) {
-        return split(arc).getSide();
-    }
-
     /** Split the instance in two parts by an arc.
      * @param arc splitting arc
      * @return an object containing both the part of the instance

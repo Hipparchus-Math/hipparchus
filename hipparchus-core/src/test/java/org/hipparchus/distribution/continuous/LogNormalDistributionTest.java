@@ -163,13 +163,6 @@ public class LogNormalDistributionTest extends RealDistributionAbstractTest {
         verifyInverseCumulativeProbabilities();
     }
 
-    @Deprecated
-    @Test
-    public void testGetScaleDeprecated() {
-        LogNormalDistribution distribution = (LogNormalDistribution)getDistribution();
-        Assert.assertEquals(2.1, distribution.getScale(), 0);
-    }
-
     @Test
     public void testGetLocation() {
         LogNormalDistribution distribution = (LogNormalDistribution)getDistribution();

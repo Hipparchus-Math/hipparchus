@@ -29,7 +29,9 @@ import java.util.Random;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.EquationsMapper;
+import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.ODEIntegrator;
+import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.TestProblem3;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
@@ -112,15 +114,17 @@ public class ContinuousOutputModelTest {
         ContinuousOutputModel cm1 = new ContinuousOutputModel();
         ODEIntegrator integ1 = new DormandPrince853Integrator(0, 1.0, 1.0e-8, 1.0e-8);
         integ1.addStepHandler(cm1);
-        integ1.integrate(problem, FastMath.PI, new double[] { -1.0, 0.0 },
-                         0, new double[2]);
+        integ1.integrate(new ExpandableODE(problem),
+                         new ODEState(FastMath.PI, new double[] { -1.0, 0.0 }),
+                         0);
 
         // integrate backward from 2&pi; to &pi;
         ContinuousOutputModel cm2 = new ContinuousOutputModel();
         ODEIntegrator integ2 = new DormandPrince853Integrator(0, 0.1, 1.0e-12, 1.0e-12);
         integ2.addStepHandler(cm2);
-        integ2.integrate(problem, 2.0 * FastMath.PI, new double[] { 1.0, 0.0 },
-                         FastMath.PI, new double[2]);
+        integ2.integrate(new ExpandableODE(problem),
+                         new ODEState(2.0 * FastMath.PI, new double[] { 1.0, 0.0 }),
+                         FastMath.PI);
 
         // merge the two half circles
         ContinuousOutputModel cm = new ContinuousOutputModel();

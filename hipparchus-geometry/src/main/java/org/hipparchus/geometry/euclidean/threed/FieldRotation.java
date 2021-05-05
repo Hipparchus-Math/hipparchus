@@ -116,35 +116,6 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * attitude community or in the graphics community.</p>
      * @param axis axis around which to rotate
      * @param angle rotation angle.
-     * @exception MathIllegalArgumentException if the axis norm is zero
-     * @deprecated as of 3.6, replaced with {@link
-     * #FieldRotation(FieldVector3D, CalculusFieldElement, RotationConvention)}
-     */
-    @Deprecated
-    public FieldRotation(final FieldVector3D<T> axis, final T angle)
-        throws MathIllegalArgumentException {
-        this(axis, angle, RotationConvention.VECTOR_OPERATOR);
-    }
-
-    /** Build a rotation from an axis and an angle.
-     * <p>We use the convention that angles are oriented according to
-     * the effect of the rotation on vectors around the axis. That means
-     * that if (i, j, k) is a direct frame and if we first provide +k as
-     * the axis and &pi;/2 as the angle to this constructor, and then
-     * {@link #applyTo(FieldVector3D) apply} the instance to +i, we will get
-     * +j.</p>
-     * <p>Another way to represent our convention is to say that a rotation
-     * of angle &theta; about the unit vector (x, y, z) is the same as the
-     * rotation build from quaternion components { cos(-&theta;/2),
-     * x * sin(-&theta;/2), y * sin(-&theta;/2), z * sin(-&theta;/2) }.
-     * Note the minus sign on the angle!</p>
-     * <p>On the one hand this convention is consistent with a vectorial
-     * perspective (moving vectors in fixed frames), on the other hand it
-     * is different from conventions with a frame perspective (fixed vectors
-     * viewed from different frames) like the ones used for example in spacecraft
-     * attitude community or in the graphics community.</p>
-     * @param axis axis around which to rotate
-     * @param angle rotation angle.
      * @param convention convention to use for the semantics of the angle
      * @exception MathIllegalArgumentException if the axis norm is zero
      */
@@ -351,33 +322,6 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * widespread in the aerospace business where Roll, Pitch and Yaw angles
      * are often wrongly tagged as Euler angles).</p>
 
-     * @param order order of rotations to use
-     * @param alpha1 angle of the first elementary rotation
-     * @param alpha2 angle of the second elementary rotation
-     * @param alpha3 angle of the third elementary rotation
-     * @deprecated as of 3.6, replaced with {@link
-     * #FieldRotation(RotationOrder, RotationConvention,
-     * CalculusFieldElement, CalculusFieldElement, CalculusFieldElement)}
-     */
-    @Deprecated
-    public FieldRotation(final RotationOrder order, final T alpha1, final T alpha2, final T alpha3) {
-        this(order, RotationConvention.VECTOR_OPERATOR, alpha1, alpha2, alpha3);
-    }
-
-    /** Build a rotation from three Cardan or Euler elementary rotations.
-
-     * <p>Cardan rotations are three successive rotations around the
-     * canonical axes X, Y and Z, each axis being used once. There are
-     * 6 such sets of rotations (XYZ, XZY, YXZ, YZX, ZXY and ZYX). Euler
-     * rotations are three successive rotations around the canonical
-     * axes X, Y and Z, the first and last rotations being around the
-     * same axis. There are 6 such sets of rotations (XYX, XZX, YXY,
-     * YZY, ZXZ and ZYZ), the most popular one being ZXZ.</p>
-     * <p>Beware that many people routinely use the term Euler angles even
-     * for what really are Cardan angles (this confusion is especially
-     * widespread in the aerospace business where Roll, Pitch and Yaw angles
-     * are often wrongly tagged as Euler angles).</p>
-
      * @param order order of rotations to compose, from left to right
      * (i.e. we will use {@code r1.compose(r2.compose(r3, convention), convention)})
      * @param convention convention to use for the semantics of the angle
@@ -508,16 +452,6 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
     }
 
     /** Get the normalized axis of the rotation.
-     * @return normalized axis of the rotation
-     * @see #FieldRotation(FieldVector3D, CalculusFieldElement)
-     * @deprecated as of 3.6, replaced with {@link #getAxis(RotationConvention)}
-     */
-    @Deprecated
-    public FieldVector3D<T> getAxis() {
-        return getAxis(RotationConvention.VECTOR_OPERATOR);
-    }
-
-    /** Get the normalized axis of the rotation.
      * <p>
      * Note that as {@link #getAngle()} always returns an angle
      * between 0 and &pi;, changing the convention changes the
@@ -556,48 +490,6 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
             return q0.negate().acos().multiply(2);
         }
         return q0.acos().multiply(2);
-    }
-
-    /** Get the Cardan or Euler angles corresponding to the instance.
-
-     * <p>The equations show that each rotation can be defined by two
-     * different values of the Cardan or Euler angles set. For example
-     * if Cardan angles are used, the rotation defined by the angles
-     * a<sub>1</sub>, a<sub>2</sub> and a<sub>3</sub> is the same as
-     * the rotation defined by the angles &pi; + a<sub>1</sub>, &pi;
-     * - a<sub>2</sub> and &pi; + a<sub>3</sub>. This method implements
-     * the following arbitrary choices:</p>
-     * <ul>
-     *   <li>for Cardan angles, the chosen set is the one for which the
-     *   second angle is between -&pi;/2 and &pi;/2 (i.e its cosine is
-     *   positive),</li>
-     *   <li>for Euler angles, the chosen set is the one for which the
-     *   second angle is between 0 and &pi; (i.e its sine is positive).</li>
-     * </ul>
-
-     * <p>Cardan and Euler angle have a very disappointing drawback: all
-     * of them have singularities. This means that if the instance is
-     * too close to the singularities corresponding to the given
-     * rotation order, it will be impossible to retrieve the angles. For
-     * Cardan angles, this is often called gimbal lock. There is
-     * <em>nothing</em> to do to prevent this, it is an intrinsic problem
-     * with Cardan and Euler representation (but not a problem with the
-     * rotation itself, which is perfectly well defined). For Cardan
-     * angles, singularities occur when the second angle is close to
-     * -&pi;/2 or +&pi;/2, for Euler angle singularities occur when the
-     * second angle is close to 0 or &pi;, this implies that the identity
-     * rotation is always singular for Euler angles!</p>
-
-     * @param order rotation order to use
-     * @return an array of three angles, in the order specified by the set
-     * @exception MathIllegalStateException if the rotation is
-     * singular with respect to the angles set specified
-     * @deprecated as of 3.6, replaced with {@link #getAngles(RotationOrder, RotationConvention)}
-     */
-    @Deprecated
-    public T[] getAngles(final RotationOrder order)
-        throws MathIllegalStateException {
-        return getAngles(order, RotationConvention.VECTOR_OPERATOR);
     }
 
     /** Get the Cardan or Euler angles corresponding to the instance.

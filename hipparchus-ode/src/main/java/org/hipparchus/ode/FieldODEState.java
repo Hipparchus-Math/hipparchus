@@ -113,29 +113,11 @@ public class FieldODEState<T extends CalculusFieldElement<T>> {
 
     /** Get primary state dimension.
      * @return primary state dimension
-     * @deprecated as of 1.0, replaced with {@link #getPrimaryStateDimension()}
-     */
-    @Deprecated
-    public int getStateDimension() {
-        return getPrimaryStateDimension();
-    }
-
-    /** Get primary state dimension.
-     * @return primary state dimension
      * @see #getSecondaryStateDimension(int)
      * @see #getCompleteStateDimension()
      */
     public int getPrimaryStateDimension() {
         return primaryState.length;
-    }
-
-    /** Get primary state at time.
-     * @return primary state at time
-     * @deprecated as of 1.0, replaced with {@link #getPrimaryState()}
-     */
-    @Deprecated
-    public T[] getState() {
-        return getPrimaryState();
     }
 
     /** Get primary state at time.

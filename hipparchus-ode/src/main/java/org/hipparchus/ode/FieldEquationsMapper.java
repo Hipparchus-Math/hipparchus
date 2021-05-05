@@ -83,26 +83,6 @@ public class FieldEquationsMapper<T extends CalculusFieldElement<T>> implements 
         return start[start.length - 1];
     }
 
-    /** Map a state to a complete flat array.
-     * @param state state to map
-     * @return flat array containing the mapped state, including primary and secondary components
-     * @deprecated as of 1.0, replaced with {@link FieldODEState#getCompleteState()}
-     */
-    @Deprecated
-    public T[] mapState(final FieldODEState<T> state) {
-        return state.getCompleteState();
-    }
-
-    /** Map a state derivative to a complete flat array.
-     * @param state state to map
-     * @return flat array containing the mapped state derivative, including primary and secondary components
-     * @deprecated as of 1.0, replaced with {@link FieldODEStateAndDerivative#getCompleteDerivative()}
-     */
-    @Deprecated
-    public T[] mapDerivative(final FieldODEStateAndDerivative<T> state) {
-        return state.getCompleteDerivative();
-    }
-
     /** Map flat arrays to a state and derivative.
      * @param t time
      * @param y state array to map, including primary and secondary components

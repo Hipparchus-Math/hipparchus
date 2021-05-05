@@ -169,16 +169,6 @@ public final class Array2DRowRealMatrixTest {
         Assert.assertEquals("testData2 norm",7d,m2.getNorm1(),entryTolerance);
     }
 
-    /** test deprecated norm */
-    @Deprecated
-    @Test
-    public void testDeprecatedNorm() {
-        Array2DRowRealMatrix m = new Array2DRowRealMatrix(testData);
-        Array2DRowRealMatrix m2 = new Array2DRowRealMatrix(testData2);
-        Assert.assertEquals("testData norm",m.getNorm1(),m.getNorm(),entryTolerance);
-        Assert.assertEquals("testData2 norm",m2.getNorm1(),m2.getNorm(),entryTolerance);
-    }
-
     /** test Frobenius norm */
     @Test
     public void testFrobeniusNorm() {

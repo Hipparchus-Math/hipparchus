@@ -197,17 +197,6 @@ public class AdamsNordsieckTransformer {
         }
     }
 
-    /** Get the number of steps of the method
-     * (excluding the one being computed).
-     * @return number of steps of the method
-     * (excluding the one being computed)
-     * @deprecated as of 3.6, this method is not used anymore
-     */
-    @Deprecated
-    public int getNSteps() {
-        return c1.length;
-    }
-
     /** Build the P matrix.
      * <p>The P matrix general terms are shifted (j+1) (-i)<sup>j</sup> terms
      * with i being the row number starting from 1 and j being the column

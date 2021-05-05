@@ -68,36 +68,6 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    @Deprecated
-    public void testAxisAngleDeprecated() throws MathIllegalArgumentException {
-
-        FieldRotation<Dfp> r = new FieldRotation<Dfp>(createAxis(10, 10, 10), createAngle(2 * FastMath.PI / 3));
-        checkVector(r.applyTo(createVector(1, 0, 0)), createVector(0, 1, 0));
-        checkVector(r.applyTo(createVector(0, 1, 0)), createVector(0, 0, 1));
-        checkVector(r.applyTo(createVector(0, 0, 1)), createVector(1, 0, 0));
-        double s = 1 / FastMath.sqrt(3);
-        checkVector(r.getAxis(), createVector(s, s, s));
-        checkAngle(r.getAngle(), 2 * FastMath.PI / 3);
-
-        try {
-            new FieldRotation<Dfp>(createAxis(0, 0, 0), createAngle(2 * FastMath.PI / 3));
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalArgumentException e) {
-        }
-
-        r = new FieldRotation<Dfp>(createAxis(0, 0, 1), createAngle(1.5 * FastMath.PI));
-        checkVector(r.getAxis(), createVector(0, 0, -1));
-        checkAngle(r.getAngle(), 0.5 * FastMath.PI);
-
-        r = new FieldRotation<Dfp>(createAxis(0, 1, 0), createAngle(FastMath.PI));
-        checkVector(r.getAxis(), createVector(0, 1, 0));
-        checkAngle(r.getAngle(), FastMath.PI);
-
-        checkVector(createRotation(1, 0, 0, 0, false).getAxis(), createVector(1, 0, 0));
-
-    }
-
-    @Test
     public void testAxisAngleVectorOperator() throws MathIllegalArgumentException {
 
         FieldRotation<Dfp> r = new FieldRotation<Dfp>(createAxis(10, 10, 10),
@@ -437,59 +407,6 @@ public class FieldRotationDfpTest {
             Assert.fail("got " + r + ", should have caught an exception");
         } catch (MathIllegalArgumentException e) {
             // expected
-        }
-
-    }
-
-    @Test
-    @Deprecated
-    public void testAnglesDeprecated()
-            throws MathIllegalStateException {
-
-        DfpField field = new DfpField(15);
-
-        RotationOrder[] CardanOrders = {
-            RotationOrder.XYZ, RotationOrder.XZY, RotationOrder.YXZ,
-            RotationOrder.YZX, RotationOrder.ZXY, RotationOrder.ZYX
-        };
-
-        for (int i = 0; i < CardanOrders.length; ++i) {
-            for (double alpha1 = 0.1; alpha1 < 6.2; alpha1 += 2.0) {
-                for (double alpha2 = -1.55; alpha2 < 1.55; alpha2 += 0.8) {
-                    for (double alpha3 = 0.1; alpha3 < 6.2; alpha3 += 2.0) {
-                        FieldRotation<Dfp> r = new FieldRotation<Dfp>(CardanOrders[i],
-                                                                      field.newDfp(alpha1),
-                                                                      field.newDfp(alpha2),
-                                                                      field.newDfp(alpha3));
-                        Dfp[] angles = r.getAngles(CardanOrders[i]);
-                        checkAngle(angles[0], alpha1);
-                        checkAngle(angles[1], alpha2);
-                        checkAngle(angles[2], alpha3);
-                    }
-                }
-            }
-        }
-
-        RotationOrder[] EulerOrders = {
-            RotationOrder.XYX, RotationOrder.XZX, RotationOrder.YXY,
-            RotationOrder.YZY, RotationOrder.ZXZ, RotationOrder.ZYZ
-        };
-
-        for (int i = 0; i < EulerOrders.length; ++i) {
-            for (double alpha1 = 0.1; alpha1 < 6.2; alpha1 += 2.0) {
-                for (double alpha2 = 0.05; alpha2 < 3.1; alpha2 += 0.8) {
-                    for (double alpha3 = 0.1; alpha3 < 6.2; alpha3 += 2.0) {
-                        FieldRotation<Dfp> r = new FieldRotation<Dfp>(EulerOrders[i],
-                                                                      field.newDfp(alpha1),
-                                                                      field.newDfp(alpha2),
-                                                                      field.newDfp(alpha3));
-                        Dfp[] angles = r.getAngles(EulerOrders[i]);
-                        checkAngle(angles[0], alpha1);
-                        checkAngle(angles[1], alpha2);
-                        checkAngle(angles[2], alpha3);
-                    }
-                }
-            }
         }
 
     }
