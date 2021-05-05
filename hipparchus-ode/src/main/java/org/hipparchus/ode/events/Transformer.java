@@ -22,6 +22,7 @@
 
 package org.hipparchus.ode.events;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -39,11 +40,19 @@ enum Transformer {
      * </p>
      */
     UNINITIALIZED {
+
         /**  {@inheritDoc} */
         @Override
         protected double transformed(final double g) {
             return 0;
         }
+
+        /**  {@inheritDoc} */
+        @Override
+        protected <T extends CalculusFieldElement<T>> T transformed(final T g) {
+            return g.getField().getZero();
+        }
+
     },
 
     /** Transformer computing transformed = g.
@@ -53,11 +62,19 @@ enum Transformer {
      * </p>
      */
     PLUS {
+
         /**  {@inheritDoc} */
         @Override
         protected double transformed(final double g) {
             return g;
         }
+
+        /**  {@inheritDoc} */
+        @Override
+        protected <T extends CalculusFieldElement<T>> T transformed(final T g) {
+            return g;
+        }
+
     },
 
     /** Transformer computing transformed = -g.
@@ -67,11 +84,19 @@ enum Transformer {
      * </p>
      */
     MINUS {
+
         /**  {@inheritDoc} */
         @Override
         protected double transformed(final double g) {
             return -g;
         }
+
+        /**  {@inheritDoc} */
+        @Override
+        protected <T extends CalculusFieldElement<T>> T transformed(final T g) {
+            return g.negate();
+        }
+
     },
 
     /** Transformer computing transformed = min(-{@link Precision#SAFE_MIN}, -g, +g).
@@ -81,11 +106,19 @@ enum Transformer {
      * </p>
      */
     MIN {
+
         /**  {@inheritDoc} */
         @Override
         protected double transformed(final double g) {
-            return FastMath.min(-Precision.SAFE_MIN, FastMath.min(-g, +g));
+            return FastMath.min(FastMath.min(-g, +g), -Precision.SAFE_MIN);
         }
+
+        /**  {@inheritDoc} */
+        @Override
+        protected <T extends CalculusFieldElement<T>> T transformed(final T g) {
+            return FastMath.min(FastMath.min(g.negate(), g), -Precision.SAFE_MIN);
+        }
+
     },
 
     /** Transformer computing transformed = max(+{@link Precision#SAFE_MIN}, -g, +g).
@@ -95,11 +128,19 @@ enum Transformer {
      * </p>
      */
     MAX {
+
         /**  {@inheritDoc} */
         @Override
         protected double transformed(final double g) {
-            return FastMath.max(+Precision.SAFE_MIN, FastMath.max(-g, +g));
+            return FastMath.max(FastMath.max(-g, +g), Precision.SAFE_MIN);
         }
+
+        /**  {@inheritDoc} */
+        @Override
+        protected <T extends CalculusFieldElement<T>> T transformed(final T g) {
+            return FastMath.max(FastMath.max(g.negate(), g), Precision.SAFE_MIN);
+        }
+
     };
 
     /** Transform value of function g.
@@ -107,5 +148,13 @@ enum Transformer {
      * @return transformed value of function g
      */
     protected abstract double transformed(double g);
+
+    /** Transform value of function g.
+     * @param g raw value of function g
+     * @return transformed value of function g
+     * @param <T> the type of the field elements
+     * @since 2.0
+     */
+    protected abstract <T extends CalculusFieldElement<T>> T transformed(T g);
 
 }

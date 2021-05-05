@@ -4776,6 +4776,25 @@ public class FastMath {
         }
     }
 
+    /** Compute the minimum of two values
+     * @param a first value
+     * @param b second value
+     * @param <T> the type of the field element
+     * @return a if a is lesser or equal to b, b otherwise
+     * @since 1.3
+     */
+    public static <T extends CalculusFieldElement<T>> T min(final T a, final double b) {
+        final double aR = a.getReal();
+        if (aR < b) {
+            return a;
+        } else if (b < aR) {
+            return a.getField().getZero().add(b);
+        } else {
+            // either the numbers are equal, or one of them is a NaN
+            return Double.isNaN(aR) ? a : a.getField().getZero().add(b);
+        }
+    }
+
     /** Compute the maximum of two values
      * @param a first value
      * @param b second value
@@ -4793,6 +4812,25 @@ public class FastMath {
         } else {
             // either the numbers are equal, or one of them is a NaN
             return Double.isNaN(aR) ? a : b;
+        }
+    }
+
+    /** Compute the maximum of two values
+     * @param a first value
+     * @param b second value
+     * @param <T> the type of the field element
+     * @return b if a is lesser or equal to b, a otherwise
+     * @since 1.3
+     */
+    public static <T extends CalculusFieldElement<T>> T max(final T a, final double b) {
+        final double aR = a.getReal();
+        if (aR < b) {
+            return a.getField().getZero().add(b);
+        } else if (b < aR) {
+            return a;
+        } else {
+            // either the numbers are equal, or one of them is a NaN
+            return Double.isNaN(aR) ? a : a.getField().getZero().add(b);
         }
     }
 
