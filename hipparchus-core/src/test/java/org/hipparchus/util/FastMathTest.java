@@ -1318,6 +1318,10 @@ public class FastMathTest {
 
     @Test
     public void testDoubleScalbSpecialCases() {
+        assertEquals(0d,                       FastMath.scalb(0d, 1100),                0d);
+        assertEquals(Double.POSITIVE_INFINITY,  FastMath.scalb(Double.POSITIVE_INFINITY, 1100), 0);
+        assertEquals(Double.NEGATIVE_INFINITY,  FastMath.scalb(Double.NEGATIVE_INFINITY, 1100), 0);
+        assertTrue(Double.isNaN(FastMath.scalb(Double.NaN, 1100)));
         assertEquals(2.5269841324701218E-175,  FastMath.scalb(2.2250738585072014E-308, 442), 0D);
         assertEquals(1.307993905256674E297,    FastMath.scalb(1.1102230246251565E-16, 1040), 0D);
         assertEquals(7.2520887996488946E-217,  FastMath.scalb(Double.MIN_VALUE,        356), 0D);
@@ -1328,6 +1332,7 @@ public class FastMathTest {
         assertEquals(Double.MIN_VALUE,         FastMath.scalb(Double.MAX_VALUE,      -2098), 0D);
         assertEquals(0,                        FastMath.scalb(Double.MAX_VALUE,      -2099), 0D);
         assertEquals(Double.POSITIVE_INFINITY, FastMath.scalb(Double.POSITIVE_INFINITY, -1000000), 0D);
+        assertEquals(Double.POSITIVE_INFINITY, FastMath.scalb( 1.1102230246251565E-16, 1078), 0D);
         assertEquals(Double.NEGATIVE_INFINITY, FastMath.scalb(-1.1102230246251565E-16, 1078), 0D);
         assertEquals(Double.NEGATIVE_INFINITY, FastMath.scalb(-1.1102230246251565E-16,  1079), 0D);
         assertEquals(Double.NEGATIVE_INFINITY, FastMath.scalb(-2.2250738585072014E-308, 2047), 0D);
@@ -1338,10 +1343,28 @@ public class FastMathTest {
         assertEquals(Double.POSITIVE_INFINITY, FastMath.scalb( 1.1102230246251565E-16,  2147483647), 0D);
         assertEquals(Double.NEGATIVE_INFINITY, FastMath.scalb(-2.2250738585072014E-308, 2147483647), 0D);
         assertEquals(Double.POSITIVE_INFINITY, FastMath.scalb( 2.2250738585072014E-308, 2147483647), 0D);
+        assertEquals(0l, Double.doubleToRawLongBits(FastMath.scalb(4.0, -2099)));
+        assertEquals(1l << 63, Double.doubleToRawLongBits(FastMath.scalb(-4.0, -2099)));
+        assertEquals(0l, Double.doubleToRawLongBits(FastMath.scalb(0.0, 12)));
+        assertEquals(1l << 63, Double.doubleToRawLongBits(FastMath.scalb(-0.0, 12)));
+        assertTrue(Double.isNaN(FastMath.scalb(Double.NaN, 12)));
+        assertEquals(Double.POSITIVE_INFINITY, FastMath.scalb(Double.POSITIVE_INFINITY, 12), 1.0);
+        assertEquals(Double.NEGATIVE_INFINITY, FastMath.scalb(Double.NEGATIVE_INFINITY, 12), 1.0);
+        assertEquals(0x1.2345p-1022, FastMath.scalb(0x1.2345p28, -1050), 0x1.0p-1070);
+        assertEquals(0l,       Double.doubleToRawLongBits(FastMath.scalb( 0x1.2345p28, -1104)));
+        assertEquals(1l << 63, Double.doubleToRawLongBits(FastMath.scalb(-0x1.2345p28, -1104)));
+        assertEquals(0x1.2345p27, FastMath.scalb(0x1.2345p-1023, 1050), 0x1.0p-25);
+        assertEquals(Double.POSITIVE_INFINITY, FastMath.scalb( 0x1.2345p-1023, 2047), 1.0);
+        assertEquals(Double.NEGATIVE_INFINITY, FastMath.scalb(-0x1.2345p-1023, 2047), 1.0);
+        assertEquals(0x1p-1057, FastMath.scalb(0x1.0p23, -1080), 0x1.0p-1073);
     }
 
     @Test
     public void testFloatScalbSpecialCases() {
+        assertEquals(0f,                       FastMath.scalb(0f, 130),                0F);
+        assertEquals(Float.POSITIVE_INFINITY,  FastMath.scalb(Float.POSITIVE_INFINITY, 130), 0F);
+        assertEquals(Float.NEGATIVE_INFINITY,  FastMath.scalb(Float.NEGATIVE_INFINITY, 130), 0F);
+        assertTrue(Float.isNaN(FastMath.scalb(Float.NaN, 130)));
         assertEquals(0f,                       FastMath.scalb(Float.MIN_VALUE,  -30), 0F);
         assertEquals(2 * Float.MIN_VALUE,      FastMath.scalb(Float.MIN_VALUE,    1), 0F);
         assertEquals(7.555786e22f,             FastMath.scalb(Float.MAX_VALUE,  -52), 0F);
@@ -1356,6 +1379,22 @@ public class FastMathTest {
         assertEquals(Float.NEGATIVE_INFINITY,  FastMath.scalb(-1.1e-7f,         152), 0F);
         assertEquals(Float.POSITIVE_INFINITY,  FastMath.scalb(3.4028235E38f,  2147483647), 0F);
         assertEquals(Float.NEGATIVE_INFINITY,  FastMath.scalb(-3.4028235E38f, 2147483647), 0F);
+        assertEquals(0, Float.floatToRawIntBits(FastMath.scalb(4.0f, -278)));
+        assertEquals(1 << 63, Float.floatToRawIntBits(FastMath.scalb(-4.0f, -278)));
+        assertEquals(0, Float.floatToRawIntBits(FastMath.scalb(0.0f, 12)));
+        assertEquals(1 << 31, Float.floatToRawIntBits(FastMath.scalb(-0.0f, 12)));
+        assertTrue(Float.isNaN(FastMath.scalb(Float.NaN, 12)));
+        assertEquals(Float.POSITIVE_INFINITY, FastMath.scalb(Float.POSITIVE_INFINITY, 12), 1.0);
+        assertEquals(Float.NEGATIVE_INFINITY, FastMath.scalb(Float.NEGATIVE_INFINITY, 12), 1.0);
+        assertEquals(0x1.2345p-106f, FastMath.scalb(0x1.2345p28f, -134), 0x1.0p-130f);
+        assertEquals(0,       Float.floatToRawIntBits(FastMath.scalb( 0x1.2345p28f, -179)));
+        assertEquals(1 << 31, Float.floatToRawIntBits(FastMath.scalb(-0x1.2345p28f, -179)));
+        assertEquals(0x1.2345p127f, FastMath.scalb(0x1.2345p-123f, 250), 0x1.0p3f);
+        assertEquals(Float.POSITIVE_INFINITY, FastMath.scalb( 0x1.2345p-127f, 255), 1.0f);
+        assertEquals(Float.NEGATIVE_INFINITY, FastMath.scalb(-0x1.2345p-127f, 255), 1.0f);
+        assertEquals(Float.POSITIVE_INFINITY, FastMath.scalb( 0x1.2345p-123f, 252), 1.0f);
+        assertEquals(Float.NEGATIVE_INFINITY, FastMath.scalb(-0x1.2345p-123f, 252), 1.0f);
+        assertEquals(0x1p-130f, FastMath.scalb(0x1.0p23f, -153), 0x1.0p-148f);
     }
 
     private boolean compareClassMethods(Class<?> class1, Class<?> class2){
@@ -1378,6 +1417,30 @@ public class FastMathTest {
     public void checkMissingFastMathClasses() {
         boolean ok = compareClassMethods(StrictMath.class, FastMath.class);
         assertTrue("FastMath should implement all StrictMath methods", ok);
+    }
+
+    @Test
+    public void testUlpDouble() {
+        Assert.assertTrue(Double.isNaN(FastMath.ulp(Double.NaN)));
+        Assert.assertEquals(Double.POSITIVE_INFINITY, FastMath.ulp(Double.POSITIVE_INFINITY), 1.0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, FastMath.ulp(Double.NEGATIVE_INFINITY), 1.0);
+        Assert.assertEquals(0.0, FastMath.ulp(+0.0), Precision.SAFE_MIN);
+        Assert.assertEquals(0.0, FastMath.ulp(-0.0), Precision.SAFE_MIN);
+        Assert.assertEquals(0x1.0p-53, FastMath.ulp(0x1.fffffffffffffp-1), 0x1.0p-100);
+        Assert.assertEquals(0x1.0p-52, FastMath.ulp(+1.0), 0x1.0p-100);
+        Assert.assertEquals(0x1.0p-52, FastMath.ulp(-1.0), 0x1.0p-100);
+    }
+
+    @Test
+    public void testUlpFloat() {
+        Assert.assertTrue(Float.isNaN(FastMath.ulp(Float.NaN)));
+        Assert.assertEquals(Float.POSITIVE_INFINITY, FastMath.ulp(Float.POSITIVE_INFINITY), 1.0f);
+        Assert.assertEquals(Float.POSITIVE_INFINITY, FastMath.ulp(Float.NEGATIVE_INFINITY), 1.0f);
+        Assert.assertEquals(0.0f, FastMath.ulp(+0.0f), 1.0e-8f);
+        Assert.assertEquals(0.0f, FastMath.ulp(-0.0f), 1.0e-8f);
+        Assert.assertEquals(0x1.0p-24f, FastMath.ulp(0x1.fffffcp-1f), 0x1.0p-50f);
+        Assert.assertEquals(0x1.0p-23f, FastMath.ulp(+1.0f), 0x1.0p-50f);
+        Assert.assertEquals(0x1.0p-23f, FastMath.ulp(-1.0f), 0x1.0p-50f);
     }
 
     @Test
@@ -1730,6 +1793,32 @@ public class FastMathTest {
     }
 
     @Test
+    public void testIncrementExactLong() {
+        long[] specialValues = new long[] {
+            Long.MIN_VALUE, Long.MIN_VALUE + 1, Long.MIN_VALUE + 2,
+            Long.MAX_VALUE, Long.MAX_VALUE - 1, Long.MAX_VALUE - 2,
+            -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            -1 - (Long.MIN_VALUE / 2), 0 - (Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
+            -1 + (Long.MAX_VALUE / 2), 0 + (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
+        };
+        for (long a : specialValues) {
+            BigInteger bdA   = BigInteger.valueOf(a);
+            BigInteger bdSum = bdA.add(BigInteger.ONE);
+            if (bdSum.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) < 0 ||
+                bdSum.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
+                try {
+                    FastMath.incrementExact(a);
+                    fail("an exception should have been thrown");
+                } catch (MathRuntimeException mae) {
+                    // expected
+                }
+            } else {
+                assertEquals(bdSum, BigInteger.valueOf(FastMath.incrementExact(a)));
+            }
+        }
+    }
+
+    @Test
     public void testDecrementExactInt() {
         int[] specialValues = new int[] {
             Integer.MIN_VALUE, Integer.MIN_VALUE + 1, Integer.MIN_VALUE + 2,
@@ -1743,6 +1832,32 @@ public class FastMathTest {
             BigInteger bdSub = bdA.subtract(BigInteger.ONE);
             if (bdSub.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) < 0 ||
                 bdSub.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) > 0) {
+                try {
+                    FastMath.decrementExact(a);
+                    fail("an exception should have been thrown");
+                } catch (MathRuntimeException mae) {
+                    // expected
+                }
+            } else {
+                assertEquals(bdSub, BigInteger.valueOf(FastMath.decrementExact(a)));
+            }
+        }
+    }
+
+    @Test
+    public void testDecrementExactLong() {
+        long[] specialValues = new long[] {
+            Long.MIN_VALUE, Long.MIN_VALUE + 1, Long.MIN_VALUE + 2,
+            Long.MAX_VALUE, Long.MAX_VALUE - 1, Long.MAX_VALUE - 2,
+            -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            -1 - (Long.MIN_VALUE / 2), 0 - (Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
+            -1 + (Long.MAX_VALUE / 2), 0 + (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
+        };
+        for (long a : specialValues) {
+            BigInteger bdA   = BigInteger.valueOf(a);
+            BigInteger bdSub = bdA.subtract(BigInteger.ONE);
+            if (bdSub.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) < 0 ||
+                bdSub.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
                 try {
                     FastMath.decrementExact(a);
                     fail("an exception should have been thrown");
@@ -1896,6 +2011,43 @@ public class FastMathTest {
                 } else {
                     assertEquals(bdMul, BigInteger.valueOf(FastMath.multiplyExact(a, b)));
                 }
+                assertEquals(bdMul.longValue(), FastMath.multiplyFull(a, b));
+            }
+        }
+    }
+
+    @Test
+    public void testMultiplyExactLongInt() {
+        long[] specialValuesL = new long[] {
+            Long.MIN_VALUE, Long.MIN_VALUE + 1, Long.MIN_VALUE + 2,
+            Long.MAX_VALUE, Long.MAX_VALUE - 1, Long.MAX_VALUE - 2,
+            -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            -1 - (Long.MIN_VALUE / 2), 0 - (Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
+            -1 + (Long.MAX_VALUE / 2), 0 + (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
+        };
+        int[] specialValuesI = new int[] {
+            Integer.MIN_VALUE, Integer.MIN_VALUE + 1, Integer.MIN_VALUE + 2,
+            Integer.MAX_VALUE, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 2,
+            -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            -1 - (Integer.MIN_VALUE / 2), 0 - (Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
+            -1 + (Integer.MAX_VALUE / 2), 0 + (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
+        };
+        for (long a : specialValuesL) {
+            for (int b : specialValuesI) {
+                BigInteger bdA   = BigInteger.valueOf(a);
+                BigInteger bdB   = BigInteger.valueOf(b);
+                BigInteger bdMul = bdA.multiply(bdB);
+                if (bdMul.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) < 0 ||
+                    bdMul.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
+                    try {
+                        FastMath.multiplyExact(a, b);
+                        fail("an exception should have been thrown " + a + b);
+                    } catch (MathRuntimeException mae) {
+                        // expected
+                    }
+                } else {
+                    assertEquals(bdMul, BigInteger.valueOf(FastMath.multiplyExact(a, b)));
+                }
             }
         }
     }
@@ -1974,7 +2126,7 @@ public class FastMathTest {
         Assert.assertEquals(-Integer.MAX_VALUE, FastMath.negateExact(Integer.MAX_VALUE));
         Assert.assertEquals(Integer.MAX_VALUE, FastMath.negateExact(-Integer.MAX_VALUE));
         try {
-            FastMath.absExact(Integer.MIN_VALUE);
+            FastMath.negateExact(Integer.MIN_VALUE);
             Assert.fail("an exception should have been thrown");
         } catch (ArithmeticException ae) {
             // expected
@@ -1988,7 +2140,7 @@ public class FastMathTest {
         Assert.assertEquals(-Long.MAX_VALUE, FastMath.negateExact(Long.MAX_VALUE));
         Assert.assertEquals(Long.MAX_VALUE, FastMath.negateExact(-Long.MAX_VALUE));
         try {
-            FastMath.absExact(Long.MIN_VALUE);
+            FastMath.negateExact(Long.MIN_VALUE);
             Assert.fail("an exception should have been thrown");
         } catch (ArithmeticException ae) {
             // expected
@@ -2327,6 +2479,40 @@ public class FastMathTest {
             long m = random.nextLong();
             long n = random.nextLong();
             Assert.assertEquals(poorManMultiplyHigh(m, n), FastMath.multiplyHigh(m, n));
+        }
+    }
+
+    @Test
+    public void testGetExponentDouble() {
+        Assert.assertEquals( 1024, FastMath.getExponent(Double.NaN));
+        Assert.assertEquals( 1024, FastMath.getExponent(Double.POSITIVE_INFINITY));
+        Assert.assertEquals( 1024, FastMath.getExponent(Double.NEGATIVE_INFINITY));
+        Assert.assertEquals(-1023, FastMath.getExponent(+0.0));
+        Assert.assertEquals(-1023, FastMath.getExponent(-0.0));
+        Assert.assertEquals(    1, FastMath.getExponent(+2.0));
+        Assert.assertEquals(    1, FastMath.getExponent(-2.0));
+        for (int i = -1022; i < 1024; ++i) {
+            Assert.assertEquals(i, FastMath.getExponent(FastMath.scalb(1.0,   i)));
+            Assert.assertEquals(i, FastMath.getExponent(FastMath.scalb(1.2,   i)));
+            Assert.assertEquals(i, FastMath.getExponent(FastMath.scalb(1.5,   i)));
+            Assert.assertEquals(i, FastMath.getExponent(FastMath.scalb(1.999, i)));
+        }
+    }
+
+    @Test
+    public void testGetExponentFloat() {
+        Assert.assertEquals( 128, FastMath.getExponent(Float.NaN));
+        Assert.assertEquals( 128, FastMath.getExponent(Float.POSITIVE_INFINITY));
+        Assert.assertEquals( 128, FastMath.getExponent(Float.NEGATIVE_INFINITY));
+        Assert.assertEquals(-127, FastMath.getExponent(+0.0f));
+        Assert.assertEquals(-127, FastMath.getExponent(-0.0f));
+        Assert.assertEquals(   1, FastMath.getExponent(+2.0f));
+        Assert.assertEquals(   1, FastMath.getExponent(-2.0f));
+        for (int i = -126; i < 128; ++i) {
+            Assert.assertEquals(i, FastMath.getExponent(FastMath.scalb(1.0f,   i)));
+            Assert.assertEquals(i, FastMath.getExponent(FastMath.scalb(1.2f,   i)));
+            Assert.assertEquals(i, FastMath.getExponent(FastMath.scalb(1.5f,   i)));
+            Assert.assertEquals(i, FastMath.getExponent(FastMath.scalb(1.999f, i)));
         }
     }
 

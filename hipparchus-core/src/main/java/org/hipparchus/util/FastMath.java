@@ -3239,7 +3239,7 @@ public class FastMath {
         if (Float.isInfinite(x)) {
             return Float.POSITIVE_INFINITY;
         }
-        return abs(x - Float.intBitsToFloat(Float.floatToIntBits(x) ^ 1));
+        return abs(x - Float.intBitsToFloat(Float.floatToRawIntBits(x) ^ 1));
     }
 
     /**
