@@ -135,18 +135,6 @@ public class ConjugateGradient
      * matrix and preconditioner.
      *
      * @return {@code true} if the tests are to be performed
-     * @deprecated as of 1.4, replaced by {@link #shouldCheck()}
-     */
-    @Deprecated
-    public final boolean getCheck() { // NOPMD - violation addressed by renaming method as of 1.4
-        return shouldCheck();
-    }
-
-    /**
-     * Returns {@code true} if positive-definiteness should be checked for both
-     * matrix and preconditioner.
-     *
-     * @return {@code true} if the tests are to be performed
      * @since 1.4
      */
     public final boolean shouldCheck() {

@@ -142,14 +142,4 @@ public class GaussNewtonOptimizerWithSVDTest
         Assert.assertEquals(expected, actual, TOl);
     }
 
-    @Test
-    @Deprecated
-    public void testDeprecated() {
-        new GaussNewtonOptimizerWithSVDTest() {
-            public LeastSquaresOptimizer getOptimizer() {
-                return new GaussNewtonOptimizer(GaussNewtonOptimizer.Decomposition.SVD);
-            }
-        }.testTrivial();
-    }
-
 }

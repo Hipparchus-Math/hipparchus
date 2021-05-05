@@ -859,18 +859,6 @@ public class SymmLQ
      * positive definiteness of the preconditioner should be checked.
      *
      * @return {@code true} if the tests are to be performed
-     * @deprecated as of 1.4, replaced by {@link #shouldCheck()}
-     */
-    @Deprecated
-    public final boolean getCheck() { // NOPMD - violation addressed by renaming method as of 1.4
-        return shouldCheck();
-    }
-
-    /**
-     * Returns {@code true} if symmetry of the matrix, and symmetry as well as
-     * positive definiteness of the preconditioner should be checked.
-     *
-     * @return {@code true} if the tests are to be performed
      * @since 1.4
      */
     public final boolean shouldCheck() {

@@ -53,38 +53,6 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
         return new DSFactory(2, 1).variable(0, x);
     }
 
-    @Deprecated
-    @Test
-    public void testDeprecatedConstructors() {
-        checkF0F1(new DerivativeStructure(2, 1), 0.0, 0.0, 0.0);
-        checkF0F1(new DerivativeStructure(2, 1, 3.0), 3.0, 0.0, 0.0);
-        checkF0F1(new DerivativeStructure(2, 1, 1, 3.0), 3.0, 0.0, 1.0);
-        checkF0F1(new DerivativeStructure(2, new DerivativeStructure(2, 1, 0, 1.0),
-                                          3, new DerivativeStructure(2, 1, 1, 5.0)),
-                  17.0, 2.0, 3.0);
-        checkF0F1(new DerivativeStructure(2, new DerivativeStructure(2, 1, 0, 1.0),
-                                          3, new DerivativeStructure(2, 1, 1, 5.0),
-                                          4, new DerivativeStructure(2, 1, 1, 1.0)),
-                  21.0, 2.0, 7.0);
-        checkF0F1(new DerivativeStructure(2, new DerivativeStructure(2, 1, 0, 1.0),
-                                          3, new DerivativeStructure(2, 1, 1, 5.0),
-                                          4, new DerivativeStructure(2, 1, 1, 1.0),
-                                          5, new DerivativeStructure(2, 1, 0, 3.0)),
-                  36.0, 7.0, 7.0);
-        checkF0F1(new DerivativeStructure(3, 1, 1.0, 2.0, 3.0, 4.0),
-                  1.0, 2.0, 3.0, 4.0);
-    }
-
-    @Deprecated
-    @Test
-    public void testCreateConstant() {
-        DerivativeStructure a = new DerivativeStructure(3, 2, 0, 1.3);
-        DerivativeStructure b = a.createConstant(2.5);
-        Assert.assertEquals(a.getFreeParameters(), b.getFreeParameters());
-        Assert.assertEquals(a.getOrder(), b.getOrder());
-        checkEquals(a.getField().getOne().multiply(2.5), b, 1.0e-15);
-    }
-
     @Test(expected=MathIllegalArgumentException.class)
     public void testWrongVariableIndex() {
         new DSFactory(3, 1).variable(3, 1.0);

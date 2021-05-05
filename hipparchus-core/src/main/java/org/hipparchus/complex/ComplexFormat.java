@@ -39,7 +39,6 @@ import org.hipparchus.util.MathUtils;
  * be replaced with 'j' (or anything else), and the number format for both real
  * and imaginary parts can be configured.
  */
-@SuppressWarnings("PMD.SingleMethodSingleton") // the violations have been taken care of as of 1.4, they correspond to deprecated methods
 public class ComplexFormat {
 
      /** The default imaginary character. */
@@ -302,16 +301,6 @@ public class ComplexFormat {
     }
 
     /**
-     * Returns the default complex format for the current locale.
-     * @return the default complex format.
-     * @deprecated as of 1.4, replaced by {@link #getComplexFormat()}
-     */
-    @Deprecated
-    public static ComplexFormat getInstance() {
-        return getComplexFormat();
-    }
-
-    /**
      * Returns the default complex format for the given locale.
      * @param locale the specific locale used by the format.
      * @return the complex format specific to the given locale.
@@ -320,17 +309,6 @@ public class ComplexFormat {
     public static ComplexFormat getComplexFormat(Locale locale) {
         NumberFormat f = CompositeFormat.getDefaultNumberFormat(locale);
         return new ComplexFormat(f);
-    }
-
-    /**
-     * Returns the default complex format for the given locale.
-     * @param locale the specific locale used by the format.
-     * @return the complex format specific to the given locale.
-     * @deprecated as of 1.4, replaced by {@link #getComplexFormat(Locale)}
-     */
-    @Deprecated
-    public static ComplexFormat getInstance(Locale locale) {
-        return getComplexFormat(locale);
     }
 
     /**
@@ -348,23 +326,6 @@ public class ComplexFormat {
         throws MathIllegalArgumentException, NullArgumentException {
         NumberFormat f = CompositeFormat.getDefaultNumberFormat(locale);
         return new ComplexFormat(imaginaryCharacter, f);
-    }
-
-    /**
-     * Returns the default complex format for the given locale.
-     * @param locale the specific locale used by the format.
-     * @param imaginaryCharacter Imaginary character.
-     * @return the complex format specific to the given locale.
-     * @throws NullArgumentException if {@code imaginaryCharacter} is
-     * {@code null}.
-     * @throws MathIllegalArgumentException if {@code imaginaryCharacter} is an
-     * empty string.
-     * @deprecated as of 1.4, replaced by {@link #getComplexFormat(String, Locale)}
-     */
-    @Deprecated
-    public static ComplexFormat getInstance(String imaginaryCharacter, Locale locale)
-        throws MathIllegalArgumentException, NullArgumentException {
-        return getComplexFormat(imaginaryCharacter, locale);
     }
 
     /**

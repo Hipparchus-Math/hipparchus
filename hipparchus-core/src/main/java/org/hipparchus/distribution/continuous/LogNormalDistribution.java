@@ -116,17 +116,6 @@ public class LogNormalDistribution extends AbstractRealDistribution {
     }
 
     /**
-     * Returns the scale parameter of this distribution.
-     *
-     * @return the scale parameter
-     * @deprecated as of 1.4, replaced by {@link #getLocation()}
-     */
-    @Deprecated
-    public double getScale() {
-        return getLocation();
-    }
-
-    /**
      * Returns the location parameter of this distribution.
      *
      * @return the location parameter

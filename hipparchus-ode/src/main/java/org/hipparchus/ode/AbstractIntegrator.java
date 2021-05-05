@@ -165,13 +165,6 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    @Deprecated
-    public double getCurrentStepStart() {
-        return stepStart.getTime();
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public double getCurrentSignedStepsize() {
         return stepSize;
     }

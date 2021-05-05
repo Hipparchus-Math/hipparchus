@@ -333,17 +333,6 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
              direction = b;
          }
 
-         /**
-          * Returns the value of this Direction. True corresponds to UPSIDE.
-          *
-          * @return true if direction is UPSIDE; false otherwise
-          * @deprecated as of 1.4 replaced by {@link #considerObservation(double, double)}
-          */
-         @Deprecated
-         boolean getDirection () { // NOPMD - violation has been taken care as of 1.4 by deprecating this method and introcuding a new one
-             return direction;
-         }
-
          /** Check if observation should be considered.
           * @param value observation value
           * @param cutoff cutoff point

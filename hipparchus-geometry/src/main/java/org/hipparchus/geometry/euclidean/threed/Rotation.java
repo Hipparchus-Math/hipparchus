@@ -157,22 +157,6 @@ public class Rotation implements Serializable {
   }
 
   /** Build a rotation from an axis and an angle.
-   * <p>
-   * Calling this constructor is equivalent to call
-   * {@link #Rotation(Vector3D, double, RotationConvention)
-   * new Rotation(axis, angle, RotationConvention.VECTOR_OPERATOR)}
-   * </p>
-   * @param axis axis around which to rotate
-   * @param angle rotation angle.
-   * @exception MathIllegalArgumentException if the axis norm is zero
-   * @deprecated as of 3.6, replaced with {@link #Rotation(Vector3D, double, RotationConvention)}
-   */
-  @Deprecated
-  public Rotation(Vector3D axis, double angle) throws MathIllegalArgumentException {
-      this(axis, angle, RotationConvention.VECTOR_OPERATOR);
-  }
-
-  /** Build a rotation from an axis and an angle.
    * @param axis axis around which to rotate
    * @param angle rotation angle
    * @param convention convention to use for the semantics of the angle
@@ -363,27 +347,6 @@ public class Rotation implements Serializable {
 
   /** Build a rotation from three Cardan or Euler elementary rotations.
 
-   * <p>
-   * Calling this constructor is equivalent to call
-   * {@link #Rotation(RotationOrder, RotationConvention, double, double, double)
-   * new Rotation(order, RotationConvention.VECTOR_OPERATOR, alpha1, alpha2, alpha3)}
-   * </p>
-
-   * @param order order of rotations to use
-   * @param alpha1 angle of the first elementary rotation
-   * @param alpha2 angle of the second elementary rotation
-   * @param alpha3 angle of the third elementary rotation
-   * @deprecated as of 3.6, replaced with {@link
-   * #Rotation(RotationOrder, RotationConvention, double, double, double)}
-   */
-  @Deprecated
-  public Rotation(RotationOrder order,
-                  double alpha1, double alpha2, double alpha3) {
-      this(order, RotationConvention.VECTOR_OPERATOR, alpha1, alpha2, alpha3);
-  }
-
-  /** Build a rotation from three Cardan or Euler elementary rotations.
-
    * <p>Cardan rotations are three successive rotations around the
    * canonical axes X, Y and Z, each axis being used once. There are
    * 6 such sets of rotations (XYZ, XZY, YXZ, YZX, ZXY and ZYX). Euler
@@ -517,20 +480,6 @@ public class Rotation implements Serializable {
 
   /** Get the normalized axis of the rotation.
    * <p>
-   * Calling this method is equivalent to call
-   * {@link #getAxis(RotationConvention) getAxis(RotationConvention.VECTOR_OPERATOR)}
-   * </p>
-   * @return normalized axis of the rotation
-   * @see #Rotation(Vector3D, double, RotationConvention)
-   * @deprecated as of 3.6, replaced with {@link #getAxis(RotationConvention)}
-   */
-  @Deprecated
-  public Vector3D getAxis() {
-    return getAxis(RotationConvention.VECTOR_OPERATOR);
-  }
-
-  /** Get the normalized axis of the rotation.
-   * <p>
    * Note that as {@link #getAngle()} always returns an angle
    * between 0 and &pi;, changing the convention changes the
    * direction of the axis, not the sign of the angle.
@@ -565,26 +514,6 @@ public class Rotation implements Serializable {
       return 2 * FastMath.acos(-q0);
     }
     return 2 * FastMath.acos(q0);
-  }
-
-  /** Get the Cardan or Euler angles corresponding to the instance.
-
-   * <p>
-   * Calling this method is equivalent to call
-   * {@link #getAngles(RotationOrder, RotationConvention)
-   * getAngles(order, RotationConvention.VECTOR_OPERATOR)}
-   * </p>
-
-   * @param order rotation order to use
-   * @return an array of three angles, in the order specified by the set
-   * @exception MathIllegalStateException if the rotation is
-   * singular with respect to the angles set specified
-   * @deprecated as of 3.6, replaced with {@link #getAngles(RotationOrder, RotationConvention)}
-   */
-  @Deprecated
-  public double[] getAngles(RotationOrder order)
-      throws MathIllegalStateException {
-      return getAngles(order, RotationConvention.VECTOR_OPERATOR);
   }
 
   /** Get the Cardan or Euler angles corresponding to the instance.

@@ -58,36 +58,6 @@ public class RotationTest {
   }
 
   @Test
-  @Deprecated
-  public void testAxisAngleDeprecated() throws MathIllegalArgumentException {
-
-    Rotation r = new Rotation(new Vector3D(10, 10, 10), 2 * FastMath.PI / 3);
-    checkVector(r.applyTo(Vector3D.PLUS_I), Vector3D.PLUS_J);
-    checkVector(r.applyTo(Vector3D.PLUS_J), Vector3D.PLUS_K);
-    checkVector(r.applyTo(Vector3D.PLUS_K), Vector3D.PLUS_I);
-    double s = 1 / FastMath.sqrt(3);
-    checkVector(r.getAxis(), new Vector3D(s, s, s));
-    checkAngle(r.getAngle(), 2 * FastMath.PI / 3);
-
-    try {
-      new Rotation(new Vector3D(0, 0, 0), 2 * FastMath.PI / 3);
-      Assert.fail("an exception should have been thrown");
-    } catch (MathIllegalArgumentException e) {
-    }
-
-    r = new Rotation(Vector3D.PLUS_K, 1.5 * FastMath.PI);
-    checkVector(r.getAxis(), new Vector3D(0, 0, -1));
-    checkAngle(r.getAngle(), 0.5 * FastMath.PI);
-
-    r = new Rotation(Vector3D.PLUS_J, FastMath.PI);
-    checkVector(r.getAxis(), Vector3D.PLUS_J);
-    checkAngle(r.getAngle(), FastMath.PI);
-
-    checkVector(Rotation.IDENTITY.getAxis(), Vector3D.PLUS_I);
-
-  }
-
-  @Test
   public void testAxisAngleVectorOperator() throws MathIllegalArgumentException {
 
     Rotation r = new Rotation(new Vector3D(10, 10, 10), 2 * FastMath.PI / 3, RotationConvention.VECTOR_OPERATOR);
@@ -168,19 +138,6 @@ public class RotationTest {
       } catch (MathIllegalArgumentException miae) {
           Assert.assertEquals(LocalizedGeometryFormats.ROTATION_MATRIX_DIMENSIONS, miae.getSpecifier());
       }
-  }
-
-  @Test
-  public void testRevertDeprecated() {
-    Rotation r = new Rotation(0.001, 0.36, 0.48, 0.8, true);
-    Rotation reverted = r.revert();
-    checkRotation(r.applyTo(reverted), 1, 0, 0, 0);
-    checkRotation(reverted.applyTo(r), 1, 0, 0, 0);
-    Assert.assertEquals(r.getAngle(), reverted.getAngle(), 1.0e-12);
-    Assert.assertEquals(-1,
-                        Vector3D.dotProduct(r.getAxis(RotationConvention.VECTOR_OPERATOR),
-                                           reverted.getAxis(RotationConvention.VECTOR_OPERATOR)),
-                        1.0e-12);
   }
 
   @Test
@@ -410,52 +367,6 @@ public class RotationTest {
       Assert.fail("got " + r + ", should have caught an exception");
     } catch (MathIllegalArgumentException e) {
       // expected
-    }
-
-  }
-
-  @Test
-  @Deprecated
-  public void testAnglesDeprecated()
-    throws MathIllegalStateException {
-
-    RotationOrder[] CardanOrders = {
-      RotationOrder.XYZ, RotationOrder.XZY, RotationOrder.YXZ,
-      RotationOrder.YZX, RotationOrder.ZXY, RotationOrder.ZYX
-    };
-
-    for (int i = 0; i < CardanOrders.length; ++i) {
-      for (double alpha1 = 0.1; alpha1 < 6.2; alpha1 += 0.3) {
-        for (double alpha2 = -1.55; alpha2 < 1.55; alpha2 += 0.3) {
-          for (double alpha3 = 0.1; alpha3 < 6.2; alpha3 += 0.3) {
-            Rotation r = new Rotation(CardanOrders[i], alpha1, alpha2, alpha3);
-            double[] angles = r.getAngles(CardanOrders[i]);
-            checkAngle(angles[0], alpha1);
-            checkAngle(angles[1], alpha2);
-            checkAngle(angles[2], alpha3);
-          }
-        }
-      }
-    }
-
-    RotationOrder[] EulerOrders = {
-            RotationOrder.XYX, RotationOrder.XZX, RotationOrder.YXY,
-            RotationOrder.YZY, RotationOrder.ZXZ, RotationOrder.ZYZ
-    };
-
-    for (int i = 0; i < EulerOrders.length; ++i) {
-      for (double alpha1 = 0.1; alpha1 < 6.2; alpha1 += 0.3) {
-        for (double alpha2 = 0.05; alpha2 < 3.1; alpha2 += 0.3) {
-          for (double alpha3 = 0.1; alpha3 < 6.2; alpha3 += 0.3) {
-            Rotation r = new Rotation(EulerOrders[i],
-                                      alpha1, alpha2, alpha3);
-            double[] angles = r.getAngles(EulerOrders[i]);
-            checkAngle(angles[0], alpha1);
-            checkAngle(angles[1], alpha2);
-            checkAngle(angles[2], alpha3);
-          }
-        }
-      }
     }
 
   }
