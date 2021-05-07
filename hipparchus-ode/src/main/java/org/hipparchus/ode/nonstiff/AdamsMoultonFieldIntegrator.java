@@ -252,7 +252,8 @@ public class AdamsMoultonFieldIntegrator<T extends CalculusFieldElement<T>> exte
         }
         updateHighOrderDerivativesPhase2(predictedScaled, correctedScaled, predictedNordsieck);
 
-        final FieldODEStateAndDerivative<T> updatedStepEnd = new FieldODEStateAndDerivative<>(globalCurrentState.getTime(), predictedY, correctedYDot);
+        final FieldODEStateAndDerivative<T> updatedStepEnd =
+                        equationsMapper.mapStateAndDerivative(globalCurrentState.getTime(), predictedY, correctedYDot);
         return new AdamsFieldStateInterpolator<>(getStepSize(), updatedStepEnd,
                                                           correctedScaled, predictedNordsieck, isForward,
                                                           getStepStart(), updatedStepEnd,

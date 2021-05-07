@@ -242,7 +242,9 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
         }
         updateHighOrderDerivativesPhase2(predictedScaled, correctedScaled, predictedNordsieck);
 
-        final ODEStateAndDerivative updatedStepEnd = new ODEStateAndDerivative(globalCurrentState.getTime(), predictedState, correctedYDot);
+        final ODEStateAndDerivative updatedStepEnd =
+                        equationsMapper.mapStateAndDerivative(globalCurrentState.getTime(),
+                                                              predictedState, correctedYDot);
         return new AdamsStateInterpolator(getStepSize(), updatedStepEnd,
                                           correctedScaled, predictedNordsieck, isForward,
                                           getStepStart(), updatedStepEnd,
