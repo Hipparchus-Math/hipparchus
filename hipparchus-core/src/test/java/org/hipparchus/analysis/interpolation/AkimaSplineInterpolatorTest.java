@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.analysis.RealFieldUnivariateFunction;
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
@@ -208,7 +208,7 @@ public class AkimaSplineInterpolatorTest {
         final double interpolationTolerance = 1e-15;
         final double maxTolerance = 1e-15;
 
-        RealFieldUnivariateFunction<Decimal64> f = x -> x.multiply(2).subtract(5);
+        CalculusFieldUnivariateFunction<Decimal64> f = x -> x.multiply(2).subtract(5);
 
         testInterpolation( minimumX, maximumX, numberOfElements, numberOfSamples, f, interpolationTolerance,
                            maxTolerance );
@@ -252,7 +252,7 @@ public class AkimaSplineInterpolatorTest {
         final double interpolationTolerance = 7e-15;
         final double maxTolerance = 6e-14;
 
-        RealFieldUnivariateFunction<Decimal64> f = x -> x.multiply(x).multiply(3).
+        CalculusFieldUnivariateFunction<Decimal64> f = x -> x.multiply(x).multiply(3).
                                                         subtract(x.multiply(5)).
                                                         add(7);
 
@@ -296,7 +296,7 @@ public class AkimaSplineInterpolatorTest {
         final double interpolationTolerance = 0.37;
         final double maxTolerance = 3.8;
 
-        RealFieldUnivariateFunction<Decimal64> f = x -> x.multiply(x).multiply(x).multiply(3).
+        CalculusFieldUnivariateFunction<Decimal64> f = x -> x.multiply(x).multiply(x).multiply(3).
                                                         subtract(x.multiply(x).multiply(0.5)).
                                                         add(x).
                                                         subtract(1);
@@ -348,7 +348,7 @@ public class AkimaSplineInterpolatorTest {
 
     private <T extends CalculusFieldElement<T>> void testInterpolation(T minimumX, T maximumX,
                                                                        int numberOfElements, int numberOfSamples,
-                                                                       RealFieldUnivariateFunction<T> f,
+                                                                       CalculusFieldUnivariateFunction<T> f,
                                                                        double tolerance, double maxTolerance)
     {
         final Field<T> field = minimumX.getField();
@@ -365,7 +365,7 @@ public class AkimaSplineInterpolatorTest {
             yValues[i] = f.value(xValues[i]);
         }
 
-        RealFieldUnivariateFunction<T> interpolation =
+        CalculusFieldUnivariateFunction<T> interpolation =
                         new AkimaSplineInterpolator().interpolate( xValues, yValues );
 
         for ( int i = 0; i < numberOfElements; i++ )

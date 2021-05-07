@@ -74,7 +74,7 @@ import org.hipparchus.CalculusFieldElement;
  * @see UnivariateFunction
  * @see FieldUnivariateFunction
  */
-public interface RealFieldUnivariateFunction<T extends CalculusFieldElement<T>> {
+public interface CalculusFieldUnivariateFunction<T extends CalculusFieldElement<T>> {
     /**
      * Compute the value of the function.
      *

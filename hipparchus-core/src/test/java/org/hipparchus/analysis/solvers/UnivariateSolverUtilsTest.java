@@ -23,7 +23,7 @@
 package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.QuinticFunction;
-import org.hipparchus.analysis.RealFieldUnivariateFunction;
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -38,7 +38,7 @@ import org.junit.Test;
 public class UnivariateSolverUtilsTest {
 
     private UnivariateFunction sin = new Sin();
-    private RealFieldUnivariateFunction<Decimal64> fieldSin = x -> x.sin();
+    private CalculusFieldUnivariateFunction<Decimal64> fieldSin = x -> x.sin();
 
     @Test(expected=NullArgumentException.class)
     public void testSolveNull() {
@@ -232,7 +232,7 @@ public class UnivariateSolverUtilsTest {
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testFieldBracketLinear(){
-        UnivariateSolverUtils.bracket(new RealFieldUnivariateFunction<Decimal64>() {
+        UnivariateSolverUtils.bracket(new CalculusFieldUnivariateFunction<Decimal64>() {
             public Decimal64 value(Decimal64 x) {
                 return x.negate().add(1);
             }
@@ -244,7 +244,7 @@ public class UnivariateSolverUtilsTest {
 
     @Test
     public void testFieldBracketExponential(){
-        Decimal64[] result = UnivariateSolverUtils.bracket(new RealFieldUnivariateFunction<Decimal64>() {
+        Decimal64[] result = UnivariateSolverUtils.bracket(new CalculusFieldUnivariateFunction<Decimal64>() {
             public Decimal64 value(Decimal64 x) {
                 return x.negate().add(1);
             }

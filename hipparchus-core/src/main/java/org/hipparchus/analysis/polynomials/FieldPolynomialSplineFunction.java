@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.analysis.RealFieldUnivariateFunction;
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
@@ -63,7 +63,7 @@ import org.hipparchus.util.MathUtils;
  * @param <T> the type of the field elements
  * @since 1.5
  */
-public class FieldPolynomialSplineFunction<T extends CalculusFieldElement<T>> implements RealFieldUnivariateFunction<T> {
+public class FieldPolynomialSplineFunction<T extends CalculusFieldElement<T>> implements CalculusFieldUnivariateFunction<T> {
 
     /**
      * Spline segment interval delimiters (knots).

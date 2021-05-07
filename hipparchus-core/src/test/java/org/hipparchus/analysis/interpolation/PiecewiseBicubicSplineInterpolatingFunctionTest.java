@@ -22,7 +22,7 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.BivariateFunction;
-import org.hipparchus.analysis.RealFieldBivariateFunction;
+import org.hipparchus.analysis.CalculusFieldBivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
@@ -147,7 +147,7 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
 
         // Function values
         BivariateFunction f = (x, y) -> 2 * x - 3 * y + 5;
-        RealFieldBivariateFunction<Decimal64> fT = (x, y) -> x.multiply(2).subtract(y.multiply(3)).add(5);
+        CalculusFieldBivariateFunction<Decimal64> fT = (x, y) -> x.multiply(2).subtract(y.multiply(3)).add(5);
 
         testInterpolation(minimumX,
                           maximumX,
@@ -179,7 +179,7 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
 
         // Function values
         BivariateFunction f = (x, y) -> 2 * x * x - 3 * y * y + 4 * x * y - 5;
-        RealFieldBivariateFunction<Decimal64> fT = (x, y) -> x.multiply(x).multiply(2).
+        CalculusFieldBivariateFunction<Decimal64> fT = (x, y) -> x.multiply(x).multiply(2).
                                                              subtract(y.multiply(y).multiply(3)).
                                                              add(x.multiply(y).multiply(4)).
                                                              subtract(5);
@@ -214,7 +214,7 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
                                    int numberOfElements,
                                    int numberOfSamples,
                                    BivariateFunction f,
-                                   final RealFieldBivariateFunction<Decimal64> fT,
+                                   final CalculusFieldBivariateFunction<Decimal64> fT,
                                    double meanTolerance,
                                    double maxTolerance) {
         double expected;

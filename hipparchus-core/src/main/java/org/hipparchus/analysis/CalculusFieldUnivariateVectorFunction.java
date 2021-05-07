@@ -24,7 +24,7 @@ import org.hipparchus.CalculusFieldElement;
      * @param <T> the type of the field elements
  * @since 1.3
  */
-public interface RealFieldUnivariateVectorFunction<T extends CalculusFieldElement<T>>  {
+public interface CalculusFieldUnivariateVectorFunction<T extends CalculusFieldElement<T>>  {
 
     /**
      * Compute the value for the function.

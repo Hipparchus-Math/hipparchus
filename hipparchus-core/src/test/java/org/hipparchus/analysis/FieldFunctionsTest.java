@@ -32,8 +32,8 @@ public class FieldFunctionsTest {
                 return x.multiply(2);
             }
         };
-        RealFieldUnivariateFunction<Decimal64> f1Converted = f1.toRealFieldUnivariateFunction(Decimal64Field.getInstance());
-        RealFieldUnivariateFunction<Decimal64> f2 = x -> x.multiply(2);
+        CalculusFieldUnivariateFunction<Decimal64> f1Converted = f1.toCalculusFieldUnivariateFunction(Decimal64Field.getInstance());
+        CalculusFieldUnivariateFunction<Decimal64> f2 = x -> x.multiply(2);
 
         for (double x = 0; x < 1; x += 0.01) {
             Assert.assertEquals(f2.value(new Decimal64(x)).getReal(),
@@ -53,8 +53,8 @@ public class FieldFunctionsTest {
                 return y;
             }
         };
-        RealFieldUnivariateVectorFunction<Decimal64> f1Converted = f1.toRealFieldUnivariateVectorFunction(Decimal64Field.getInstance());
-        RealFieldUnivariateVectorFunction<Decimal64> f2 = x -> new Decimal64[] {
+        CalculusFieldUnivariateVectorFunction<Decimal64> f1Converted = f1.toCalculusFieldUnivariateVectorFunction(Decimal64Field.getInstance());
+        CalculusFieldUnivariateVectorFunction<Decimal64> f2 = x -> new Decimal64[] {
             x.add(1), x.multiply(2), x.multiply(x)
         };
 
@@ -79,8 +79,8 @@ public class FieldFunctionsTest {
                 return y;
             }
         };
-        RealFieldUnivariateMatrixFunction<Decimal64> f1Converted = f1.toRealFieldUnivariateMatrixFunction(Decimal64Field.getInstance());
-        RealFieldUnivariateMatrixFunction<Decimal64> f2 = x -> new Decimal64[][] {
+        CalculusFieldUnivariateMatrixFunction<Decimal64> f1Converted = f1.toCalculusFieldUnivariateMatrixFunction(Decimal64Field.getInstance());
+        CalculusFieldUnivariateMatrixFunction<Decimal64> f2 = x -> new Decimal64[][] {
             { x.add(1), x.multiply(2) },
             { x.multiply(x), x.sin() }
         };

@@ -18,7 +18,7 @@ package org.hipparchus.analysis.polynomials;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.analysis.RealFieldUnivariateFunction;
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
@@ -35,7 +35,7 @@ import org.hipparchus.util.MathUtils;
  * @since 1.5
  *
  */
-public class FieldPolynomialFunction<T extends CalculusFieldElement<T>> implements RealFieldUnivariateFunction<T> {
+public class FieldPolynomialFunction<T extends CalculusFieldElement<T>> implements CalculusFieldUnivariateFunction<T> {
 
     /**
      * The coefficients of the polynomial, ordered by degree -- i.e.,

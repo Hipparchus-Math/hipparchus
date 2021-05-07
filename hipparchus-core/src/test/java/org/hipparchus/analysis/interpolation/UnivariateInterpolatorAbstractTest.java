@@ -23,7 +23,7 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.analysis.RealFieldUnivariateFunction;
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.polynomials.FieldPolynomialFunction;
 import org.hipparchus.analysis.polynomials.FieldPolynomialSplineFunction;
@@ -81,7 +81,7 @@ public abstract class UnivariateInterpolatorAbstractTest {
         Decimal64 x[] = buildD64(0.0, 0.5, 1.0);
         Decimal64 y[] = buildD64(0.0, 0.5, 1.0);
         FieldUnivariateInterpolator i = buildFieldInterpolator();
-        RealFieldUnivariateFunction<Decimal64> f = i.interpolate(x, y);
+        CalculusFieldUnivariateFunction<Decimal64> f = i.interpolate(x, y);
         verifyInterpolation(f, x, y);
 
         // Verify coefficients using analytical values
@@ -125,7 +125,7 @@ public abstract class UnivariateInterpolatorAbstractTest {
         Decimal64 x[] = buildD64(0.0, 0.5, 1.0, 1.5);
         Decimal64 y[] = buildD64(0.0, 0.5, 1.0, 1.5);
         FieldUnivariateInterpolator i = buildFieldInterpolator();
-        RealFieldUnivariateFunction<Decimal64> f = i.interpolate(x, y);
+        CalculusFieldUnivariateFunction<Decimal64> f = i.interpolate(x, y);
         verifyInterpolation(f, x, y);
 
         // Verify coefficients using analytical values
@@ -260,7 +260,7 @@ public abstract class UnivariateInterpolatorAbstractTest {
     /**
      * verifies that f(x[i]) = y[i] for i = 0..n-1 where n is common length.
      */
-    protected <T extends CalculusFieldElement<T>> void verifyInterpolation(RealFieldUnivariateFunction<T> f,
+    protected <T extends CalculusFieldElement<T>> void verifyInterpolation(CalculusFieldUnivariateFunction<T> f,
                                                                            T x[], T y[]) {
         for (int i = 0; i < x.length; i++) {
             Assert.assertEquals( y[i].getReal(), f.value(x[i]).getReal(), knotTolerance);

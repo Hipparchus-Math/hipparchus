@@ -22,7 +22,7 @@
 package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.analysis.RealFieldUnivariateFunction;
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -355,7 +355,7 @@ public class UnivariateSolverUtils {
     }
 
     /**
-     * This method simply calls {@link #bracket(RealFieldUnivariateFunction,
+     * This method simply calls {@link #bracket(CalculusFieldUnivariateFunction,
      * CalculusFieldElement, CalculusFieldElement, CalculusFieldElement, CalculusFieldElement,
      * CalculusFieldElement, int) bracket(function, initial, lowerBound, upperBound, q, r, maximumIterations)}
      * with {@code q} and {@code r} set to 1.0 and {@code maximumIterations} set to {@code Integer.MAX_VALUE}.
@@ -381,7 +381,7 @@ public class UnivariateSolverUtils {
      * @throws NullArgumentException if {@code function} is {@code null}.
      * @since 1.2
      */
-    public static <T extends CalculusFieldElement<T>> T[] bracket(RealFieldUnivariateFunction<T> function,
+    public static <T extends CalculusFieldElement<T>> T[] bracket(CalculusFieldUnivariateFunction<T> function,
                                                               T initial,
                                                               T lowerBound, T upperBound)
         throws MathIllegalArgumentException, NullArgumentException {
@@ -391,7 +391,7 @@ public class UnivariateSolverUtils {
     }
 
      /**
-     * This method simply calls {@link #bracket(RealFieldUnivariateFunction,
+     * This method simply calls {@link #bracket(CalculusFieldUnivariateFunction,
      * CalculusFieldElement, CalculusFieldElement, CalculusFieldElement, CalculusFieldElement,
      * CalculusFieldElement, int) bracket(function, initial, lowerBound, upperBound, q, r, maximumIterations)}
      * with {@code q} and {@code r} set to 1.0.
@@ -410,7 +410,7 @@ public class UnivariateSolverUtils {
      * @throws NullArgumentException if {@code function} is {@code null}.
      * @since 1.2
      */
-    public static <T extends CalculusFieldElement<T>> T[] bracket(RealFieldUnivariateFunction<T> function,
+    public static <T extends CalculusFieldElement<T>> T[] bracket(CalculusFieldUnivariateFunction<T> function,
                                                               T initial,
                                                               T lowerBound, T upperBound,
                                                               int maximumIterations)
@@ -483,7 +483,7 @@ public class UnivariateSolverUtils {
      * @exception MathIllegalArgumentException if function cannot be bracketed in the search interval
      * @since 1.2
      */
-    public static <T extends CalculusFieldElement<T>> T[] bracket(final RealFieldUnivariateFunction<T> function,
+    public static <T extends CalculusFieldElement<T>> T[] bracket(final CalculusFieldUnivariateFunction<T> function,
                                                               final T initial,
                                                               final T lowerBound, final T upperBound,
                                                               final T q, final T r,

@@ -24,7 +24,7 @@ package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.analysis.RealFieldUnivariateFunction;
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -172,7 +172,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends CalculusFieldElement<T
      * @exception MathIllegalArgumentException if root cannot be bracketed
      */
     @Override
-    public T solve(final int maxEval, final RealFieldUnivariateFunction<T> f,
+    public T solve(final int maxEval, final CalculusFieldUnivariateFunction<T> f,
                    final T min, final T max, final AllowedSolution allowedSolution)
         throws MathIllegalArgumentException, NullArgumentException {
         return solve(maxEval, f, min, max, min.add(max).divide(2), allowedSolution);
@@ -196,7 +196,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends CalculusFieldElement<T
      * @exception MathIllegalArgumentException if root cannot be bracketed
      */
     @Override
-    public T solve(final int maxEval, final RealFieldUnivariateFunction<T> f,
+    public T solve(final int maxEval, final CalculusFieldUnivariateFunction<T> f,
                    final T min, final T max, final T startValue,
                    final AllowedSolution allowedSolution)
         throws MathIllegalArgumentException, NullArgumentException {
@@ -207,7 +207,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends CalculusFieldElement<T
     /** {@inheritDoc} */
     @Override
     public Interval<T> solveInterval(int maxEval,
-                                     RealFieldUnivariateFunction<T> f,
+                                     CalculusFieldUnivariateFunction<T> f,
                                      T min,
                                      T max,
                                      T startValue)

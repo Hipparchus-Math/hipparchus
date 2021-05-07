@@ -19,7 +19,7 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.analysis.FieldBivariateFunction;
-import org.hipparchus.analysis.RealFieldBivariateFunction;
+import org.hipparchus.analysis.CalculusFieldBivariateFunction;
 import org.hipparchus.random.RandomVectorGenerator;
 import org.hipparchus.random.SobolSequenceGenerator;
 import org.hipparchus.util.Decimal64;
@@ -44,7 +44,7 @@ public class BilinearInterpolatorTest {
         double[] yVal = createLinearGrid(yMin, yMax, ny);
 
         BivariateFunction f = (x, y) -> 3.5;
-        RealFieldBivariateFunction<Decimal64> fT = (x, y) -> new Decimal64(3.5);
+        CalculusFieldBivariateFunction<Decimal64> fT = (x, y) -> new Decimal64(3.5);
         BilinearInterpolatingFunction bif = createInterpolatingFunction(xVal, yVal, f);
 
         Assert.assertEquals(xMin, bif.getXInf(), 1.0e-15);
@@ -71,12 +71,12 @@ public class BilinearInterpolatorTest {
         double[] yVal = createLinearGrid(yMin, yMax, ny);
 
         BivariateFunction f = (x, y) -> 2 * x - y;
-        RealFieldBivariateFunction<Decimal64> fT = new FieldBivariateFunction() {
+        CalculusFieldBivariateFunction<Decimal64> fT = new FieldBivariateFunction() {
             @Override
             public <T extends CalculusFieldElement<T>> T value(T x, T y) {
                 return x.multiply(2).subtract(y);
             }
-        }.toRealFieldBivariateFunction(Decimal64Field.getInstance());
+        }.toCalculusFieldBivariateFunction(Decimal64Field.getInstance());
         BilinearInterpolatingFunction bif = createInterpolatingFunction(xVal, yVal, f);
 
         Assert.assertEquals(xMin, bif.getXInf(), 1.0e-15);
@@ -103,7 +103,7 @@ public class BilinearInterpolatorTest {
         double[] yVal = createLinearGrid(yMin, yMax, ny);
 
         BivariateFunction f = (x, y) -> (3 * x - 2) * (6 - 0.5 * y);
-        RealFieldBivariateFunction<Decimal64> fT = (x, y) -> x.multiply(3).subtract(2).multiply(y.multiply(-0.5).add(6));
+        CalculusFieldBivariateFunction<Decimal64> fT = (x, y) -> x.multiply(3).subtract(2).multiply(y.multiply(-0.5).add(6));
         BilinearInterpolatingFunction bif = createInterpolatingFunction(xVal, yVal, f);
 
         Assert.assertEquals(xMin, bif.getXInf(), 1.0e-15);
@@ -133,7 +133,7 @@ public class BilinearInterpolatorTest {
         double[] yVal = createLinearGrid(yMin, yMax, ny);
 
         BivariateFunction f = (x, y) -> FastMath.sin(x) * FastMath.cos(y);
-        RealFieldBivariateFunction<Decimal64> fT = (x, y) -> FastMath.sin(x).multiply(FastMath.cos(y));
+        CalculusFieldBivariateFunction<Decimal64> fT = (x, y) -> FastMath.sin(x).multiply(FastMath.cos(y));
         BilinearInterpolatingFunction bif = createInterpolatingFunction(xVal, yVal, f);
 
         Assert.assertEquals(xMin, bif.getXInf(), 1.0e-15);
@@ -169,7 +169,7 @@ public class BilinearInterpolatorTest {
                                            final double[] yVal,
                                            final BilinearInterpolatingFunction bif,
                                            final BivariateFunction f,
-                                           final RealFieldBivariateFunction<Decimal64> fT,
+                                           final CalculusFieldBivariateFunction<Decimal64> fT,
                                            final double tol) {
 
         for (int i = 0; i < xVal.length; ++i) {
@@ -192,7 +192,7 @@ public class BilinearInterpolatorTest {
                                           final double yMin, final double yMax,
                                           final BilinearInterpolatingFunction bif,
                                           final BivariateFunction f,
-                                          final RealFieldBivariateFunction<Decimal64> fT,
+                                          final CalculusFieldBivariateFunction<Decimal64> fT,
                                           final double tol) {
         double maxError = 0.0;
         for (int i = 0; i < 10000; ++i) {

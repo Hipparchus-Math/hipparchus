@@ -23,7 +23,7 @@
 package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.analysis.RealFieldUnivariateFunction;
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -121,7 +121,7 @@ public interface BracketedRealFieldUnivariateSolver<T extends CalculusFieldEleme
      * @throws org.hipparchus.exception.MathIllegalStateException if
      * the allowed number of evaluations is exceeded.
      */
-    T solve(int maxEval, RealFieldUnivariateFunction<T> f, T min, T max,
+    T solve(int maxEval, CalculusFieldUnivariateFunction<T> f, T min, T max,
             AllowedSolution allowedSolution);
 
     /**
@@ -143,7 +143,7 @@ public interface BracketedRealFieldUnivariateSolver<T extends CalculusFieldEleme
      * @throws org.hipparchus.exception.MathIllegalStateException if
      * the allowed number of evaluations is exceeded.
      */
-    T solve(int maxEval, RealFieldUnivariateFunction<T> f, T min, T max, T startValue,
+    T solve(int maxEval, CalculusFieldUnivariateFunction<T> f, T min, T max, T startValue,
             AllowedSolution allowedSolution);
 
     /**
@@ -170,7 +170,7 @@ public interface BracketedRealFieldUnivariateSolver<T extends CalculusFieldEleme
      *                                      exceeded.
      */
     default Interval<T> solveInterval(int maxEval,
-                                      RealFieldUnivariateFunction<T> f,
+                                      CalculusFieldUnivariateFunction<T> f,
                                       T min,
                                       T max)
             throws MathIllegalArgumentException, MathIllegalStateException {
@@ -201,7 +201,7 @@ public interface BracketedRealFieldUnivariateSolver<T extends CalculusFieldEleme
      *                                      exceeded.
      */
     Interval<T> solveInterval(int maxEval,
-                              RealFieldUnivariateFunction<T> f,
+                              CalculusFieldUnivariateFunction<T> f,
                               T min,
                               T max,
                               T startValue)
@@ -212,7 +212,7 @@ public interface BracketedRealFieldUnivariateSolver<T extends CalculusFieldEleme
      * <p>
      * Contains two end points and the value of the function at the two end points.
      *
-     * @see #solveInterval(int, RealFieldUnivariateFunction, CalculusFieldElement,
+     * @see #solveInterval(int, CalculusFieldUnivariateFunction, CalculusFieldElement,
      * CalculusFieldElement)
      * @param <T> the element type
      */

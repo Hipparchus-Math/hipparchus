@@ -22,21 +22,21 @@ import org.hipparchus.Field;
 /**
  * An interface representing a univariate real function for any field type.
  * <p>
- * This interface is more general than {@link RealFieldUnivariateFunction} because
+ * This interface is more general than {@link CalculusFieldUnivariateFunction} because
  * the same instance can accept any field type, not just one.
  * </p>
  * @see UnivariateFunction
- * @see RealFieldUnivariateFunction
+ * @see CalculusFieldUnivariateFunction
  * @since 1.3
  */
 public interface FieldUnivariateFunction {
 
-    /** Convert to a {@link RealFieldUnivariateFunction} with a specific type.
+    /** Convert to a {@link CalculusFieldUnivariateFunction} with a specific type.
      * @param <T> the type of the field elements
      * @param field field for the argument and value
      * @return converted function
      */
-    default <T extends CalculusFieldElement<T>> RealFieldUnivariateFunction<T> toRealFieldUnivariateFunction(Field<T> field) {
+    default <T extends CalculusFieldElement<T>> CalculusFieldUnivariateFunction<T> toCalculusFieldUnivariateFunction(Field<T> field) {
         return this::value;
     }
 

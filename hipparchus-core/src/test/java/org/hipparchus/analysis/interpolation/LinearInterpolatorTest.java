@@ -22,7 +22,7 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.analysis.RealFieldUnivariateFunction;
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.polynomials.FieldPolynomialFunction;
 import org.hipparchus.analysis.polynomials.FieldPolynomialSplineFunction;
@@ -65,7 +65,7 @@ public class LinearInterpolatorTest extends UnivariateInterpolatorAbstractTest {
         Decimal64 x[] = buildD64(0.0, 0.5, 1.0);
         Decimal64 y[] = buildD64(0.0, 0.5, 0.0);
         FieldUnivariateInterpolator i = buildFieldInterpolator();
-        RealFieldUnivariateFunction<Decimal64> f = i.interpolate(x, y);
+        CalculusFieldUnivariateFunction<Decimal64> f = i.interpolate(x, y);
         verifyInterpolation(f, x, y);
 
         // Verify coefficients using analytical values

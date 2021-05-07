@@ -24,7 +24,7 @@ package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.FieldUnivariateFunction;
-import org.hipparchus.analysis.RealFieldUnivariateFunction;
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
 import org.hipparchus.dfp.DfpMath;
@@ -72,12 +72,12 @@ public final class FieldBracketingNthOrderBrentSolverTest {
             }
         };
 
-        Dfp result = solver.solve(20, f.toRealFieldUnivariateFunction(field), field.newDfp(0.2), field.newDfp(0.9),
+        Dfp result = solver.solve(20, f.toCalculusFieldUnivariateFunction(field), field.newDfp(0.2), field.newDfp(0.9),
                                   field.newDfp(0.4), AllowedSolution.BELOW_SIDE);
         Assert.assertTrue(f.value(result).abs().lessThan(solver.getFunctionValueAccuracy()));
         Assert.assertTrue(f.value(result).negativeOrNull());
         Assert.assertTrue(result.subtract(field.newDfp(0.5)).subtract(solver.getAbsoluteAccuracy()).positiveOrNull());
-        result = solver.solve(20, f.toRealFieldUnivariateFunction(field), field.newDfp(-0.9), field.newDfp(-0.2),
+        result = solver.solve(20, f.toCalculusFieldUnivariateFunction(field), field.newDfp(-0.9), field.newDfp(-0.2),
                               field.newDfp(-0.4), AllowedSolution.ABOVE_SIDE);
         Assert.assertTrue(f.value(result).abs().lessThan(solver.getFunctionValueAccuracy()));
         Assert.assertTrue(f.value(result).positiveOrNull());
@@ -89,7 +89,7 @@ public final class FieldBracketingNthOrderBrentSolverTest {
         // function that is never zero
         Dfp zero = field.getZero();
         Dfp one = field.getOne();
-        RealFieldUnivariateFunction<Dfp> f = (x) -> x.getReal() <= 2.1 ? one.negate(): one;
+        CalculusFieldUnivariateFunction<Dfp> f = (x) -> x.getReal() <= 2.1 ? one.negate(): one;
         // tolerance less than 1 ulp(x)
         FieldBracketingNthOrderBrentSolver<Dfp> solver =
                 new FieldBracketingNthOrderBrentSolver<>(zero, field.newDfp(1e-55), zero, 5);
@@ -108,37 +108,37 @@ public final class FieldBracketingNthOrderBrentSolverTest {
         // intern J. Computer Math Vol 23 pp 265-282
         // available here: http://www.math.nps.navy.mil/~bneta/SeveralNewMethods.PDF
         for (AllowedSolution allowed : AllowedSolution.values()) {
-            check(new RealFieldUnivariateFunction<Dfp>() {
+            check(new CalculusFieldUnivariateFunction<Dfp>() {
                 public Dfp value(Dfp x) {
                     return DfpMath.sin(x).subtract(x.divide(2));
                 }
             }, 200, -2.0, 2.0, allowed);
 
-            check(new RealFieldUnivariateFunction<Dfp>() {
+            check(new CalculusFieldUnivariateFunction<Dfp>() {
                 public Dfp value(Dfp x) {
                     return DfpMath.pow(x, 5).add(x).subtract(field.newDfp(10000));
                 }
             }, 200, -5.0, 10.0, allowed);
 
-            check(new RealFieldUnivariateFunction<Dfp>() {
+            check(new CalculusFieldUnivariateFunction<Dfp>() {
                 public Dfp value(Dfp x) {
                     return x.sqrt().subtract(field.getOne().divide(x)).subtract(field.newDfp(3));
                 }
             }, 200, 0.001, 10.0, allowed);
 
-            check(new RealFieldUnivariateFunction<Dfp>() {
+            check(new CalculusFieldUnivariateFunction<Dfp>() {
                 public Dfp value(Dfp x) {
                     return DfpMath.exp(x).add(x).subtract(field.newDfp(20));
                 }
             }, 200, -5.0, 5.0, allowed);
 
-            check(new RealFieldUnivariateFunction<Dfp>() {
+            check(new CalculusFieldUnivariateFunction<Dfp>() {
                 public Dfp value(Dfp x) {
                     return DfpMath.log(x).add(x.sqrt()).subtract(field.newDfp(5));
                 }
             }, 200, 0.001, 10.0, allowed);
 
-            check(new RealFieldUnivariateFunction<Dfp>() {
+            check(new CalculusFieldUnivariateFunction<Dfp>() {
                 public Dfp value(Dfp x) {
                     return x.subtract(field.getOne()).multiply(x).multiply(x).subtract(field.getOne());
                 }
@@ -147,7 +147,7 @@ public final class FieldBracketingNthOrderBrentSolverTest {
 
     }
 
-    private void check(RealFieldUnivariateFunction<Dfp> f, int maxEval, double min, double max,
+    private void check(CalculusFieldUnivariateFunction<Dfp> f, int maxEval, double min, double max,
                        AllowedSolution allowedSolution) {
         FieldBracketingNthOrderBrentSolver<Dfp> solver =
                 new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy, absoluteAccuracy,

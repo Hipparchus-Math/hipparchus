@@ -25,12 +25,12 @@ import org.hipparchus.CalculusFieldElement;
  */
 public interface FieldBivariateFunction {
 
-    /** Convert to a {@link RealFieldBivariateFunction} with a specific type.
+    /** Convert to a {@link CalculusFieldBivariateFunction} with a specific type.
      * @param <T> the type of the field elements
      * @param field field for the argument and value
      * @return converted function
      */
-    default <T extends CalculusFieldElement<T>> RealFieldBivariateFunction<T> toRealFieldBivariateFunction(Field<T> field) {
+    default <T extends CalculusFieldElement<T>> CalculusFieldBivariateFunction<T> toCalculusFieldBivariateFunction(Field<T> field) {
         return this::value;
     }
 

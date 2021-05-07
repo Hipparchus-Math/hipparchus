@@ -26,12 +26,12 @@ import org.hipparchus.CalculusFieldElement;
  */
 public interface FieldUnivariateVectorFunction {
 
-    /** Convert to a {@link RealFieldUnivariateVectorFunction} with a specific type.
+    /** Convert to a {@link CalculusFieldUnivariateVectorFunction} with a specific type.
      * @param <T> the type of the field elements
      * @param field field for the argument and value
      * @return converted function
      */
-    default <T extends CalculusFieldElement<T>> RealFieldUnivariateVectorFunction<T> toRealFieldUnivariateVectorFunction(Field<T> field) {
+    default <T extends CalculusFieldElement<T>> CalculusFieldUnivariateVectorFunction<T> toCalculusFieldUnivariateVectorFunction(Field<T> field) {
         return this::value;
     }
 

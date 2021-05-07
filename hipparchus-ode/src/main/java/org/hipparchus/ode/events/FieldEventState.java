@@ -23,7 +23,7 @@
 package org.hipparchus.ode.events;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.analysis.RealFieldUnivariateFunction;
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver.Interval;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -298,7 +298,7 @@ public class FieldEventState<T extends CalculusFieldElement<T>> {
                 (ga.getReal() > 0.0 && gb.getReal() < 0.0) ||
                 (ga.getReal() < 0.0 && gb.getReal() > 0.0));
 
-        final RealFieldUnivariateFunction<T> f =
+        final CalculusFieldUnivariateFunction<T> f =
                 t -> handler.g(interpolator.getInterpolatedState(t));
 
         // event time, just at or before the actual root.
