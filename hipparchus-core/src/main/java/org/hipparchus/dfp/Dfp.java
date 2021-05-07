@@ -24,7 +24,7 @@ package org.hipparchus.dfp;
 
 import java.util.Arrays;
 
-import org.hipparchus.RealFieldElement;
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
@@ -100,7 +100,7 @@ import org.hipparchus.util.MathUtils;
  *  this can be rendered invisible by a subclass.</p>
  * @see DfpField
  */
-public class Dfp implements RealFieldElement<Dfp> {
+public class Dfp implements CalculusFieldElement<Dfp> {
 
     /** The radix, or base of this system.  Set to 10000 */
     public static final int RADIX = 10000;

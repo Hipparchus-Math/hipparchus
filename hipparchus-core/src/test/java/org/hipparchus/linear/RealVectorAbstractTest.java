@@ -28,6 +28,7 @@ import java.util.NoSuchElementException;
 
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.function.Abs;
 import org.hipparchus.analysis.function.Acos;
 import org.hipparchus.analysis.function.Asin;
 import org.hipparchus.analysis.function.Atan;
@@ -875,7 +876,7 @@ public abstract class RealVectorAbstractTest {
             new Power(2.0), new Exp(), new Expm1(), new Log(), new Log10(),
             new Log1p(), new Cosh(), new Sinh(), new Tanh(), new Cos(),
             new Sin(), new Tan(), new Acos(), new Asin(), new Atan(),
-            new Inverse(), new Sqrt(), new Cbrt(), new Ceil(),
+            new Inverse(), new Abs(), new Sqrt(), new Cbrt(), new Ceil(),
             new Floor(), new Rint(), new Signum(), new Ulp()
         };
     }

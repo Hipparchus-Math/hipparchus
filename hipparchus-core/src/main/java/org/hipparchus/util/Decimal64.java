@@ -23,7 +23,6 @@ package org.hipparchus.util;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -31,7 +30,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * standard class {@link Double}, while also implementing the
  * {@link CalculusFieldElement} interface.
  */
-public class Decimal64 extends Number implements RealFieldElement<Decimal64>, Comparable<Decimal64> {
+public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>, Comparable<Decimal64> {
 
     /** The constant value of {@code 0d} as a {@code Decimal64}. */
     public static final Decimal64 ZERO;

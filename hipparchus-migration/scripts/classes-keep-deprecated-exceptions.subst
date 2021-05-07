@@ -648,7 +648,7 @@ ${fromprefix}.random.Well19937c                                                 
 ${fromprefix}.random.Well44497a                                                      ${toprefix}.random.Well44497a
 ${fromprefix}.random.Well44497b                                                      ${toprefix}.random.Well44497b
 ${fromprefix}.random.Well512a                                                        ${toprefix}.random.Well512a
-${fromprefix}.RealFieldElement                                                       ${toprefix}.RealFieldElement
+${fromprefix}.RealFieldElement                                                       ${toprefix}.CalculusFieldElement
 ${fromprefix}.special.BesselJ                                                        ${toprefix}.special.BesselJ
 ${fromprefix}.special.Beta                                                           ${toprefix}.special.Beta
 ${fromprefix}.special.Erf                                                            ${toprefix}.special.Erf

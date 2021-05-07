@@ -463,4 +463,21 @@ public interface CalculusFieldElement<T> extends FieldElement<T> {
      */
     T norm();
 
+    /** absolute value.
+     * <p>
+     * Just another name for {@link #norm()}
+     * </p>
+     * @return abs(this)
+     */
+    default T abs() {
+        return norm();
+    }
+
+    /** Get the closest long to instance real value.
+     * @return closest long to {@link #getReal()}
+     */
+    default long round() {
+        return FastMath.round(getReal());
+    }
+
 }

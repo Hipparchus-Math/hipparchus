@@ -142,7 +142,7 @@
          for example getCompiler().subtract() in DerivativeStructure -->
     <exclude name="LawOfDemeter"/>
 
-    <!-- All implementations of RealFieldElement *needs* to have many methods. -->
+    <!-- All implementations of CalculusFieldElement *needs* to have many methods. -->
     <exclude name="ExcessivePublicCount"/>
     <exclude name="ExcessiveClassLength"/>
     <exclude name="ExcessiveImports"/>

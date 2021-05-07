@@ -22,7 +22,6 @@
 package org.hipparchus.util;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 
@@ -4669,7 +4668,7 @@ public class FastMath {
      * @return abs(x)
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> T abs(final T x) {
+    public static <T extends CalculusFieldElement<T>> T abs(final T x) {
         return x.abs();
     }
 
@@ -4752,7 +4751,7 @@ public class FastMath {
      * @return closest long to x
      * @since 1.3
      */
-    public static <T extends RealFieldElement<T>> long round(final T x) {
+    public static <T extends CalculusFieldElement<T>> long round(final T x) {
         return x.round();
     }
 

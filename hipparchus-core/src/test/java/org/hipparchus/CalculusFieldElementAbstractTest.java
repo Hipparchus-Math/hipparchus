@@ -676,6 +676,19 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
         checkRelative(0.0, build(-10).getField().getZero());
     }
 
+    @Test
+    public void testAbs() {
+        for (double x = -0.9; x < 0.9; x += 0.05) {
+            checkRelative(FastMath.abs(x), build(x).abs());
+        }
+    }
+
+    @Test
+    public void testRound() {
+        for (double x = -0.9; x < 0.9; x += 0.05) {
+            Assert.assertEquals(FastMath.round(x), build(x).round());
+        }
+    }
     protected void checkRelative(double expected, T obtained) {
         Assert.assertEquals(expected, obtained.getReal(), 1.0e-15 * (1 + FastMath.abs(expected)));
     }

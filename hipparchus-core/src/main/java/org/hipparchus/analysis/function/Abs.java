@@ -19,30 +19,29 @@
  * This is not the original file distributed by the Apache Software Foundation
  * It has been modified by the Hipparchus project
  */
-package org.hipparchus;
 
+package org.hipparchus.analysis.function;
+
+import org.hipparchus.analysis.differentiation.Derivative;
+import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
 
 /**
- * Interface representing a <a href="http://mathworld.wolfram.com/RealNumber.html">real</a>
- * <a href="http://mathworld.wolfram.com/Field.html">field</a>.
- * @param <T> the type of the field elements
- * @see FieldElement
+ * Absolute value function.
+ *
  */
-public interface RealFieldElement<T> extends CalculusFieldElement<T> {
+public class Abs implements UnivariateDifferentiableFunction {
 
-    /** Get the closest long to instance real value.
-     * @return closest long to {@link #getReal()}
-     */
-    default long round() {
-        return FastMath.round(getReal());
+    /** {@inheritDoc} */
+    @Override
+    public double value(double x) {
+        return FastMath.abs(x);
     }
 
-    /** absolute value.
-     * @return abs(this)
-     */
-    default T abs() {
-        return norm();
+    /** {@inheritDoc} */
+    @Override
+    public <T extends Derivative<T>> T value(T x) {
+        return x.abs();
     }
 
 }

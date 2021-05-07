@@ -413,7 +413,7 @@ public final class MathUtilsTest {
     }
 
     /**
-     * Tests {@link TwoSum#twoSum(RealFieldElement, RealFieldElement)}.
+     * Tests {@link TwoSum#twoSum(CalculusFieldElement, CalculusFieldElement)}.
      */
     @Test
     public void testTwoSumField() {
