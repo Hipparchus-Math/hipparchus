@@ -50,28 +50,28 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/119">
+        Added the twelve Jacobi elliptic functions sn, cn, dn,
+        cs, ds, ns, dc, nc, sc, nd, sd, and cd.
+      </action>
       <action dev="luc" type="fix" issue="issues/122">
         Added a way to compute both sinh and cosh at once faster than performing two calls.
         This also speeds up all derivatives implementations as well as complex computations.
       </action>
       <action dev="luc" type="fix" issue="issues/121">
         Removed methods and constants deprecated during the 1.x series.
-        Github: fixes #120.
       </action>
       <action dev="luc" type="fix" issue="issues/67">
         Replaced RealFieldElement by CalculusFieldElement interface and have Complex
         implement it so it can be used in many Hipparchus algorithms (like ODE).
         Also replaced RealField{Univariate|Bivariate|Vector|Matrix}Function by
         CalculusField{Univariate|Bivariate|Vector|Matrix}Function.
-        Github: fixes #67.
       </action>
       <action dev="luc" type="fix" issue="issues/120">
         Added event filtering for field ODE.
-        Github: fixes #120.
       </action>
       <action dev="luc" type="fix" issue="issues/118" sdue-to="afossa">
         Use primitive double for initial step and error factors in Field adaptive step size integrators.
-        Github: fixes #118.
       </action>
       <action dev="luc" type="add">
         Added the Ryū algorithm to generate very fast the shortest decimal
@@ -81,7 +81,6 @@ If the output is not quite correct, check for invisible trailing spaces!
         Fix interpolation of a pair of ODE states times are the same. Such a pair can
         appear when a RESET_STATE or RESET_DERIVATIVES event occurs at the integration
         stop time.
-        Github: fixes #112.
       </action>
       <action dev="luc" type="fix" issue="issues/111">
         Allow selecting customized threshold for tests in OrderedComplexEigenDecomposition.

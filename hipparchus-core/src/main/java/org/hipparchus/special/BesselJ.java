@@ -33,7 +33,7 @@ import org.hipparchus.util.FastMath;
  * functions of the first kind. Detailed descriptions of these functions are
  * available in <a
  * href="http://en.wikipedia.org/wiki/Bessel_function">Wikipedia</a>, <a
- * href="http://en.wikipedia.org/wiki/Abramowitz_and_Stegun">Abrabowitz and
+ * href="http://en.wikipedia.org/wiki/Abramowitz_and_Stegun">Abramowitz and
  * Stegun</a> (Ch. 9-11), and <a href="http://dlmf.nist.gov/">DLMF</a> (Ch. 10).
  * <p>
  * This implementation is based on the rjbesl Fortran routine at
