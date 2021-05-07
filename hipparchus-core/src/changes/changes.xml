@@ -57,6 +57,8 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="fix" issue="issues/67">
         Replaced RealFieldElement by CalculusFieldElement interface and have Complex
         implement it so it can be used in many Hipparchus algorithms (like ODE).
+        Also replaced RealField{Univariate|Bivariate|Vector|Matrix}Function by
+        CalculusField{Univariate|Bivariate|Vector|Matrix}Function.
         Github: fixes #67.
       </action>
       <action dev="luc" type="add" issue="issues/115">
