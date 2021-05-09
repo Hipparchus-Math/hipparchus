@@ -28,6 +28,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -690,6 +691,16 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
         final DerivativeStructure result = factory.build();
         factory.getCompiler().sinh(data, 0, result.data, 0);
         return result;
+    }
+
+    /** {@inheritDoc}
+     */
+    @Override
+    public FieldSinhCosh<DerivativeStructure> sinhCosh() {
+        final DerivativeStructure sinh = factory.build();
+        final DerivativeStructure cosh = factory.build();
+        factory.getCompiler().sinhCosh(data, 0, sinh.data, 0, cosh.data, 0);
+        return new FieldSinhCosh<>(sinh, cosh);
     }
 
     /** {@inheritDoc}

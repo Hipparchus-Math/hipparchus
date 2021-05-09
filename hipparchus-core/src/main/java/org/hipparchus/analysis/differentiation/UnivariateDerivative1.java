@@ -20,9 +20,11 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.SinCos;
+import org.hipparchus.util.SinhCosh;
 
 /** Class representing both the value and the differentials of a function.
  * <p>This class is a stripped-down version of {@link DerivativeStructure}
@@ -511,6 +513,14 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
     @Override
     public UnivariateDerivative1 sinh() {
         return compose(FastMath.sinh(f0), FastMath.cosh(f0));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FieldSinhCosh<UnivariateDerivative1> sinhCosh() {
+        final SinhCosh sinhCosh = FastMath.sinhCosh(f0);
+        return new FieldSinhCosh<>(new UnivariateDerivative1(sinhCosh.sinh(), f1 * sinhCosh.cosh()),
+                                   new UnivariateDerivative1(sinhCosh.cosh(), f1 * sinhCosh.sinh()));
     }
 
     /** {@inheritDoc} */

@@ -26,17 +26,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.SinCos;
+import org.hipparchus.util.SinhCosh;
 
 /** Class holding "compiled" computation rules for derivative structures.
  * <p>This class implements the computation rules described in Dan Kalman's paper <a
@@ -2668,6 +2670,80 @@ public class DSCompiler {
 
         // apply function composition
         compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
+    /** Compute combined hyperbolic sine and cosine of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param sinh array where hyperbolic sine must be stored (for
+     * sine the result array <em>cannot</em> be the input
+     * array)
+     * @param sinhOffset offset of the result in its array
+     * @param cosh array where hyperbolic <em>cannot</em> be the input
+     * array)
+     * @param coshOffset offset of the result in its array
+     * @since 2.0
+     */
+    public void sinhCosh(final double[] operand, final int operandOffset,
+                         final double[] sinh, final int sinhOffset,
+                         final double[] cosh, final int coshOffset) {
+
+        // create the function value and derivatives
+        double[] functionSinh = new double[1 + order];
+        double[] functionCosh = new double[1 + order];
+        final SinhCosh sinhCosh = FastMath.sinhCosh(operand[operandOffset]);
+        functionSinh[0] = sinhCosh.sinh();
+        functionCosh[0] = sinhCosh.cosh();
+        if (order > 0) {
+            functionSinh[1] = sinhCosh.cosh();
+            functionCosh[1] = sinhCosh.sinh();
+            for (int i = 2; i <= order; ++i) {
+                functionSinh[i] = functionSinh[i - 2];
+                functionCosh[i] = functionCosh[i - 2];
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, functionSinh, sinh, sinhOffset);
+        compose(operand, operandOffset, functionCosh, cosh, coshOffset);
+
+    }
+
+    /** Compute combined hyperbolic sine and cosine of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param sinh array where hyperbolic sine must be stored (for
+     * sine the result array <em>cannot</em> be the input
+     * array)
+     * @param sinhOffset offset of the result in its array
+     * @param cosh array where hyperbolic cosine must be stored (for
+     * cosine the result array <em>cannot</em> be the input
+     * array)
+     * @param coshOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
+     * @since 1.4
+     */
+    public <T extends CalculusFieldElement<T>> void sinhCosh(final T[] operand, final int operandOffset,
+                                                             final T[] sinh, final int sinhOffset,
+                                                             final T[] cosh, final int coshOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] functionSinh = MathArrays.buildArray(field, 1 + order);
+        T[] functionCosh = MathArrays.buildArray(field, 1 + order);
+        final FieldSinhCosh<T> sinhCosh = FastMath.sinhCosh(operand[operandOffset]);
+        functionSinh[0] = sinhCosh.sinh();
+        functionCosh[0] = sinhCosh.cosh();
+        for (int i = 1; i <= order; ++i) {
+            functionSinh[i] = functionCosh[i - 1];
+            functionCosh[i] = functionSinh[i - 1];
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, functionSinh, sinh, sinhOffset);
+        compose(operand, operandOffset, functionCosh, cosh, coshOffset);
 
     }
 

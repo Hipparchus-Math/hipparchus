@@ -563,6 +563,13 @@ public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>
 
     /** {@inheritDoc} */
     @Override
+    public FieldSinhCosh<Decimal64> sinhCosh() {
+        final SinhCosh sch = FastMath.sinhCosh(value);
+        return new FieldSinhCosh<>(new Decimal64(sch.sinh()), new Decimal64(sch.cosh()));
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public Decimal64 tanh() {
         return new Decimal64(FastMath.tanh(value));
     }

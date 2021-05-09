@@ -32,10 +32,12 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
 import org.hipparchus.util.SinCos;
+import org.hipparchus.util.SinhCosh;
 
 /**
  * Representation of a Complex number, i.e. a number which has both a
@@ -769,10 +771,9 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return NaN;
         }
 
-        final SinCos scr = FastMath.sinCos(real);
-        final double chi = FastMath.cosh(imaginary);
-        final double shi = FastMath.sinh(imaginary);
-        return createComplex(scr.cos() * chi, -scr.sin() * shi);
+        final SinCos   scr  = FastMath.sinCos(real);
+        final SinhCosh schi = FastMath.sinhCosh(imaginary);
+        return createComplex(scr.cos() * schi.cosh(), -scr.sin() * schi.sinh());
     }
 
     /**
@@ -811,9 +812,9 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return NaN;
         }
 
-        final SinCos sci = FastMath.sinCos(imaginary);
-        return createComplex(FastMath.cosh(real) * sci.cos(),
-                             FastMath.sinh(real) * sci.sin());
+        final SinhCosh schr = FastMath.sinhCosh(real);
+        final SinCos   sci  = FastMath.sinCos(imaginary);
+        return createComplex(schr.cosh() * sci.cos(), schr.sinh() * sci.sin());
     }
 
     /**
@@ -1074,10 +1075,9 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return NaN;
         }
 
-        final SinCos scr = FastMath.sinCos(real);
-        final double chi = FastMath.cosh(imaginary);
-        final double shi = FastMath.sinh(imaginary);
-        return createComplex(scr.sin() * chi, scr.cos() * shi);
+        final SinCos   scr  = FastMath.sinCos(real);
+        final SinhCosh schi = FastMath.sinhCosh(imaginary);
+        return createComplex(scr.sin() * schi.cosh(), scr.cos() * schi.sinh());
 
     }
 
@@ -1090,10 +1090,9 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
         }
 
         final SinCos scr = FastMath.sinCos(real);
-        final double chi = FastMath.cosh(imaginary);
-        final double shi = FastMath.sinh(imaginary);
-        return new FieldSinCos<>(createComplex(scr.sin() * chi,  scr.cos() * shi),
-                                 createComplex(scr.cos() * chi, -scr.sin() * shi));
+        final SinhCosh schi = FastMath.sinhCosh(imaginary);
+        return new FieldSinCos<>(createComplex(scr.sin() * schi.cosh(),  scr.cos() * schi.sinh()),
+                                 createComplex(scr.cos() * schi.cosh(), -scr.sin() * schi.sinh()));
     }
 
     /** {@inheritDoc}
@@ -1187,9 +1186,23 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return NaN;
         }
 
-        final SinCos sci = FastMath.sinCos(imaginary);
-        return createComplex(FastMath.sinh(real) * sci.cos(),
-                             FastMath.cosh(real) * sci.sin());
+        final SinhCosh schr = FastMath.sinhCosh(real);
+        final SinCos   sci  = FastMath.sinCos(imaginary);
+        return createComplex(schr.sinh() * sci.cos(), schr.cosh() * sci.sin());
+    }
+
+    /** {@inheritDoc}
+     */
+    @Override
+    public FieldSinhCosh<Complex> sinhCosh() {
+        if (isNaN) {
+            return new FieldSinhCosh<>(NaN, NaN);
+        }
+
+        final SinhCosh schr = FastMath.sinhCosh(real);
+        final SinCos   sci  = FastMath.sinCos(imaginary);
+        return new FieldSinhCosh<>(createComplex(schr.sinh() * sci.cos(), schr.cosh() * sci.sin()),
+                                   createComplex(schr.cosh() * sci.cos(), schr.sinh() * sci.sin()));
     }
 
     /**

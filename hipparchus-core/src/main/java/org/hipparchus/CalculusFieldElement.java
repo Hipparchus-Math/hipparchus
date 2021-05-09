@@ -24,6 +24,7 @@ package org.hipparchus;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.FieldSinhCosh;
 
 /**
  * Interface representing a <a href="http://mathworld.wolfram.com/Field.html">field</a>
@@ -229,6 +230,12 @@ public interface CalculusFieldElement<T> extends FieldElement<T> {
      * @return sinh(this)
      */
     T sinh();
+
+    /** Combined hyperbolic sine and sosine operation.
+     * @return [sinh(this), cosh(this)]
+     * @since 2.0
+     */
+    FieldSinhCosh<T> sinhCosh();
 
     /** Hyperbolic tangent operation.
      * @return tanh(this)

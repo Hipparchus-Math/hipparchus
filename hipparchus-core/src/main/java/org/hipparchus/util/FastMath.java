@@ -502,10 +502,10 @@ public class FastMath {
           negate = true;
       }
 
+      double hiPrec[] = new double[2];
       double result;
 
       if (x > 0.25) {
-          double hiPrec[] = new double[2];
           exp(x, 0.0, hiPrec);
 
           double ya = hiPrec[0] + hiPrec[1];
@@ -529,7 +529,7 @@ public class FastMath {
           recipa = -recipa;
           recipb = -recipb;
 
-          // y = y + 1/y
+          // y = y - 1/y
           temp = ya + recipa;
           yb += -(temp - ya - recipa);
           ya = temp;
@@ -539,9 +539,7 @@ public class FastMath {
 
           result = ya + yb;
           result *= 0.5;
-      }
-      else {
-          double hiPrec[] = new double[2];
+      } else {
           expm1(x, hiPrec);
 
           double ya = hiPrec[0] + hiPrec[1];
@@ -583,6 +581,165 @@ public class FastMath {
       }
 
       return result;
+    }
+
+    /**
+     * Combined hyperbolic sine and hyperbolic cosine function.
+     *
+     * @param x Argument.
+     * @return [sinh(x), cosh(x)]
+     */
+    public static SinhCosh sinhCosh(double x) {
+      boolean negate = false;
+      if (Double.isNaN(x)) {
+          return new SinhCosh(x, x);
+      }
+
+      // sinh[z] = (exp(z) - exp(-z) / 2
+      // cosh[z] = (exp(z) + exp(-z))/2
+
+      // for values of z larger than about 20,
+      // exp(-z) can be ignored in comparison with exp(z)
+
+      if (x > 20) {
+          final double e;
+          if (x >= LOG_MAX_VALUE) {
+              // Avoid overflow (MATH-905).
+              final double t = exp(0.5 * x);
+              e = (0.5 * t) * t;
+          } else {
+              e = 0.5 * exp(x);
+          }
+          return new SinhCosh(e, e);
+      } else if (x < -20) {
+          final double e;
+          if (x <= -LOG_MAX_VALUE) {
+              // Avoid overflow (MATH-905).
+              final double t = exp(-0.5 * x);
+              e = (-0.5 * t) * t;
+          } else {
+              e = -0.5 * exp(-x);
+          }
+          return new SinhCosh(e, -e);
+      }
+
+      if (x == 0) {
+          return new SinhCosh(x, 1.0);
+      }
+
+      if (x < 0.0) {
+          x = -x;
+          negate = true;
+      }
+
+      double hiPrec[] = new double[2];
+      double resultM;
+      double resultP;
+
+      if (x > 0.25) {
+          exp(x, 0.0, hiPrec);
+
+          final double ya = hiPrec[0] + hiPrec[1];
+          final double yb = -(ya - hiPrec[0] - hiPrec[1]);
+
+          double temp = ya * HEX_40000000;
+          double yaa = ya + temp - temp;
+          double yab = ya - yaa;
+
+          // recip = 1/y
+          double recip = 1.0/ya;
+          temp = recip * HEX_40000000;
+          double recipa = recip + temp - temp;
+          double recipb = recip - recipa;
+
+          // Correct for rounding in division
+          recipb += (1.0 - yaa*recipa - yaa*recipb - yab*recipa - yab*recipb) * recip;
+          // Account for yb
+          recipb += -yb * recip * recip;
+
+          // y = y - 1/y
+          temp = ya - recipa;
+          double ybM = yb - (temp - ya + recipa);
+          double yaM = temp;
+          temp = yaM - recipb;
+          ybM += -(temp - yaM + recipb);
+          yaM = temp;
+          resultM = yaM + ybM;
+          resultM *= 0.5;
+
+          // y = y + 1/y
+          temp = ya + recipa;
+          double ybP = yb - (temp - ya - recipa);
+          double yaP = temp;
+          temp = yaP + recipb;
+          ybP += -(temp - yaP - recipb);
+          yaP = temp;
+          resultP = yaP + ybP;
+          resultP *= 0.5;
+
+      } else {
+          expm1(x, hiPrec);
+
+          final double ya = hiPrec[0] + hiPrec[1];
+          final double yb = -(ya - hiPrec[0] - hiPrec[1]);
+
+          /* Compute expm1(-x) = -expm1(x) / (expm1(x) + 1) */
+          double denom = 1.0 + ya;
+          double denomr = 1.0 / denom;
+          double denomb = -(denom - 1.0 - ya) + yb;
+          double ratio = ya * denomr;
+          double temp = ratio * HEX_40000000;
+          double ra = ratio + temp - temp;
+          double rb = ratio - ra;
+
+          temp = denom * HEX_40000000;
+          double za = denom + temp - temp;
+          double zb = denom - za;
+
+          rb += (ya - za*ra - za*rb - zb*ra - zb*rb) * denomr;
+
+          // Adjust for yb
+          rb += yb*denomr;                        // numerator
+          rb += -ya * denomb * denomr * denomr;   // denominator
+
+          // y = y - 1/y
+          temp = ya + ra;
+          double ybM = yb - (temp - ya - ra);
+          double yaM = temp;
+          temp = yaM + rb;
+          ybM += -(temp - yaM - rb);
+          yaM = temp;
+          resultM = yaM + ybM;
+          resultM *= 0.5;
+
+          // y = y + 1/y + 2
+          temp = ya - ra;
+          double ybP = yb - (temp - ya + ra);
+          double yaP = temp;
+          temp = yaP - rb;
+          ybP += -(temp - yaP + rb);
+          yaP = temp;
+          resultP = yaP + ybP + 2;
+          resultP *= 0.5;
+      }
+
+      if (negate) {
+          resultM = -resultM;
+      }
+
+      return new SinhCosh(resultM, resultP);
+
+    }
+
+    /**
+     * Combined hyperbolic sine and hyperbolic cosine function.
+     *
+     * @param x Argument.
+     * @param <T> the type of the field element
+     * @return [sinh(x), cosh(x)]
+     */
+    public static <T extends CalculusFieldElement<T>> FieldSinhCosh<T> sinhCosh(T x) {
+        return x.sinhCosh();
     }
 
     /** Compute the hyperbolic tangent of a number.

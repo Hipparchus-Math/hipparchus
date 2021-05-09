@@ -37,6 +37,7 @@ import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -1228,6 +1229,29 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
                 FieldDerivativeStructure.atan2(factory.variable(1, buildScalar(-0.0)), factory.variable(1, buildScalar(-0.0)));
         Assert.assertEquals(-FastMath.PI, nn.getReal(), 1.0e-15);
 
+    }
+
+    @Test
+    public void testSinhCoshCombined() {
+        double epsilon = 5.0e-16;
+        for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
+            final FDSFactory<T> factory = buildFactory(1, maxOrder);
+            for (double x = 0.1; x < 1.2; x += 0.001) {
+                FieldDerivativeStructure<T> dsX = factory.variable(0, x);
+                FieldSinhCosh<FieldDerivativeStructure<T>> sinhCosh = dsX.sinhCosh();
+                double sh = FastMath.sinh(x);
+                double ch = FastMath.cosh(x);
+                for (int n = 0; n <= maxOrder; ++n) {
+                    if (n % 2 == 0) {
+                        Assert.assertEquals(sh, sinhCosh.sinh().getPartialDerivative(n).getReal(), epsilon);
+                        Assert.assertEquals(ch, sinhCosh.cosh().getPartialDerivative(n).getReal(), epsilon);
+                    } else {
+                        Assert.assertEquals(ch, sinhCosh.sinh().getPartialDerivative(n).getReal(), epsilon);
+                        Assert.assertEquals(sh, sinhCosh.cosh().getPartialDerivative(n).getReal(), epsilon);
+                    }
+                }
+            }
+        }
     }
 
     @Test

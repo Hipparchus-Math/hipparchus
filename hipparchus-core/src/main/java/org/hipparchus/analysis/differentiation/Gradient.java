@@ -24,9 +24,11 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.SinCos;
+import org.hipparchus.util.SinhCosh;
 
 /** Class representing both the value and the differentials of a function.
  * <p>This class is a stripped-down version of {@link DerivativeStructure}
@@ -647,6 +649,19 @@ public class Gradient implements Derivative<Gradient>, CalculusFieldElement<Grad
     @Override
     public Gradient sinh() {
         return compose(FastMath.sinh(value), FastMath.cosh(value));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FieldSinhCosh<Gradient> sinhCosh() {
+        final SinhCosh sinhCosh = FastMath.sinhCosh(value);
+        final Gradient sinh = newInstance(sinhCosh.sinh());
+        final Gradient cosh = newInstance(sinhCosh.cosh());
+        for (int i = 0; i < grad.length; ++i) {
+            sinh.grad[i] = grad[i] * sinhCosh.cosh();
+            cosh.grad[i] = grad[i] * sinhCosh.sinh();
+        }
+        return new FieldSinhCosh<>(sinh, cosh);
     }
 
     /** {@inheritDoc} */

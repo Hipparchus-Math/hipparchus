@@ -1079,6 +1079,66 @@ public class FastMathTest {
     }
 
     @Test
+    public void testSinhCoshSpecialCases() {
+        for (double x : new double[] {
+            -0.0, +0.0, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
+            Double.NaN, Precision.EPSILON, -Precision.EPSILON,
+            Precision.SAFE_MIN, -Precision.SAFE_MIN,
+            FastMath.PI, MathUtils.TWO_PI
+        }) {
+            doTestSinhCosh(x);
+        }
+    }
+
+    @Test
+    public void testSinhCoshRandom() {
+        final RandomGenerator random = new Well19937a(0xa7babe18705d756fl);
+        for (int i = 0; i < 1000000; ++i) {
+            doTestSinhCosh(1000.0 * (2.0 * random.nextDouble() - 1.0));
+        }
+    }
+
+    private void doTestSinhCosh(final double x) {
+        final SinhCosh sinhCosh = FastMath.sinhCosh(x);
+        UnitTestUtils.assertSame(FastMath.sinh(x), sinhCosh.sinh());
+        UnitTestUtils.assertSame(FastMath.cosh(x), sinhCosh.cosh());
+    }
+
+    @Test
+    public void testSinhCoshSum() {
+        final RandomGenerator random = new Well19937a(0x11cf5123446bc9ffl);
+        for (int i = 0; i < 1000000; ++i) {
+            final double alpha = 2.0 * (2.0 * random.nextDouble() - 1.0);
+            final double beta  = 2.0 * (2.0 * random.nextDouble() - 1.0);
+            final SinhCosh schAlpha         = FastMath.sinhCosh(alpha);
+            final SinhCosh schBeta          = FastMath.sinhCosh(beta);
+            final SinhCosh schAlphaPlusBeta = FastMath.sinhCosh(alpha + beta);
+            final SinhCosh schSum           = SinhCosh.sum(schAlpha, schBeta);
+            final double tol = 8 * FastMath.max(FastMath.max(FastMath.ulp(schAlpha.sinh()), FastMath.ulp(schAlpha.cosh())),
+                                                FastMath.max(FastMath.ulp(schBeta.sinh()), FastMath.ulp(schBeta.cosh())));
+            Assert.assertEquals(schAlphaPlusBeta.sinh(), schSum.sinh(), tol);
+            Assert.assertEquals(schAlphaPlusBeta.cosh(), schSum.cosh(), tol);
+        }
+    }
+
+    @Test
+    public void testSinhCoshdifference() {
+        final RandomGenerator random = new Well19937a(0x219fd680c53974bbl);
+        for (int i = 0; i < 1000000; ++i) {
+            final double alpha = 2.0 * (2.0 * random.nextDouble() - 1.0);
+            final double beta  = 2.0 * (2.0 * random.nextDouble() - 1.0);
+            final SinhCosh schAlpha          = FastMath.sinhCosh(alpha);
+            final SinhCosh schBeta           = FastMath.sinhCosh(beta);
+            final SinhCosh schAlphaMinusBeta = FastMath.sinhCosh(alpha - beta);
+            final SinhCosh schDifference     = SinhCosh.difference(schAlpha, schBeta);
+            final double tol = 8 * FastMath.max(FastMath.max(FastMath.ulp(schAlpha.sinh()), FastMath.ulp(schAlpha.cosh())),
+                                                FastMath.max(FastMath.ulp(schBeta.sinh()), FastMath.ulp(schBeta.cosh())));
+            Assert.assertEquals(schAlphaMinusBeta.sinh(), schDifference.sinh(), tol);
+            Assert.assertEquals(schAlphaMinusBeta.cosh(), schDifference.cosh(), tol);
+        }
+    }
+
+    @Test
     public void testSinhAccuracy() {
         double maxerrulp = 0.0;
 

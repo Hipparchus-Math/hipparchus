@@ -28,6 +28,7 @@ import org.hipparchus.random.Well1024a;
 import org.hipparchus.random.Well19937a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.SinCos;
 import org.junit.Assert;
@@ -255,6 +256,15 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     public void testAsinh() {
         for (double x = -0.9; x < 0.9; x += 0.05) {
             checkRelative(FastMath.asinh(x), build(x).asinh());
+        }
+    }
+
+    @Test
+    public void testSinhCosh() {
+        for (double x = -0.9; x < 0.9; x += 0.05) {
+            FieldSinhCosh<T> sinhCosh = build(x).sinhCosh();
+            checkRelative(FastMath.sinh(x), sinhCosh.sinh());
+            checkRelative(FastMath.cosh(x), sinhCosh.cosh());
         }
     }
 

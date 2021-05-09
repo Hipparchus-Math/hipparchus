@@ -39,6 +39,7 @@ import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
@@ -1128,6 +1129,29 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                                           factory.variable(1, -0.0));
         Assert.assertEquals(-FastMath.PI, nn.getValue(), 1.0e-15);
 
+    }
+
+    @Test
+    public void testSinhCoshCombined() {
+        double epsilon = 5.0e-16;
+        for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
+            DSFactory factory = new DSFactory(1, maxOrder);
+            for (double x = 0.1; x < 1.2; x += 0.001) {
+                DerivativeStructure dsX = factory.variable(0, x);
+                FieldSinhCosh<DerivativeStructure> sinhCosh = FastMath.sinhCosh(dsX);
+                double sh = FastMath.sinh(x);
+                double ch = FastMath.cosh(x);
+                for (int n = 0; n <= maxOrder; ++n) {
+                    if (n % 2 == 0) {
+                        Assert.assertEquals(sh, sinhCosh.sinh().getPartialDerivative(n), epsilon);
+                        Assert.assertEquals(ch, sinhCosh.cosh().getPartialDerivative(n), epsilon);
+                    } else {
+                        Assert.assertEquals(ch, sinhCosh.sinh().getPartialDerivative(n), epsilon);
+                        Assert.assertEquals(sh, sinhCosh.cosh().getPartialDerivative(n), epsilon);
+                    }
+                }
+            }
+        }
     }
 
     @Test
