@@ -514,6 +514,13 @@ public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>
 
     /** {@inheritDoc} */
     @Override
+    public FieldSinCos<Decimal64> sinCos() {
+        final SinCos sc = FastMath.sinCos(value);
+        return new FieldSinCos<>(new Decimal64(sc.sin()), new Decimal64(sc.cos()));
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public Decimal64 tan() {
         return new Decimal64(FastMath.tan(value));
     }

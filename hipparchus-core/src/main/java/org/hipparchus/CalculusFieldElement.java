@@ -41,22 +41,10 @@ public interface CalculusFieldElement<T> extends FieldElement<T> {
     double RAD_TO_DEG = 180.0 / FastMath.PI;
 
     /** Create an instance corresponding to a constant real value.
-     * <p>
-     * The default implementation creates the instance by adding
-     * the value to {@code getField().getZero()}. This is not optimal
-     * and does not work when called with a negative zero as the
-     * sign of zero is lost with the addition. The default implementation
-     * should therefore be overridden in concrete classes. The default
-     * implementation will be removed at the next major version.
-     * </p>
      * @param value constant real value
      * @return instance corresponding to a constant real value
      */
-    default T newInstance(final double value) {
-        @SuppressWarnings("unchecked")
-        final CalculusFieldElement<T> zero = (CalculusFieldElement<T>) getField().getZero();
-        return zero.add(value);
-    }
+    T newInstance(final double value);
 
     /** Get the real value of the number.
      * @return real value
@@ -202,9 +190,7 @@ public interface CalculusFieldElement<T> extends FieldElement<T> {
      * @return [sin(this), cos(this)]
      * @since 1.4
      */
-    default FieldSinCos<T> sinCos() {
-        return new FieldSinCos<>(sin(), cos());
-    }
+    FieldSinCos<T> sinCos();
 
     /** Tangent operation.
      * @return tan(this)
