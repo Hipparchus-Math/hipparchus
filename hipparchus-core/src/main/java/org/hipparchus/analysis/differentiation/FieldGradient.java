@@ -24,6 +24,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -747,6 +748,19 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
     @Override
     public FieldGradient<T> sinh() {
         return compose(FastMath.sinh(value), FastMath.cosh(value));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FieldSinhCosh<FieldGradient<T>> sinhCosh() {
+        final FieldSinhCosh<T> sinhCosh = FastMath.sinhCosh(value);
+        final FieldGradient<T> sinh = newInstance(sinhCosh.sinh());
+        final FieldGradient<T> cosh = newInstance(sinhCosh.cosh());
+        for (int i = 0; i < grad.length; ++i) {
+            sinh.grad[i] = grad[i].multiply(sinhCosh.cosh());
+            cosh.grad[i] = grad[i].multiply(sinhCosh.sinh());
+        }
+        return new FieldSinhCosh<>(sinh, cosh);
     }
 
     /** {@inheritDoc} */

@@ -26,16 +26,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
 import org.hipparchus.util.SinCos;
+import org.hipparchus.util.SinhCosh;
 
 /**
  * First derivative computation with large number of variables.
@@ -728,6 +730,14 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
     @Override
     public SparseGradient sinh() {
         return new SparseGradient(FastMath.sinh(value), FastMath.cosh(value), derivatives);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FieldSinhCosh<SparseGradient> sinhCosh() {
+        final SinhCosh sch = FastMath.sinhCosh(value);
+        return new FieldSinhCosh<>(new SparseGradient(sch.sinh(), sch.cosh(), derivatives),
+                                   new SparseGradient(sch.cosh(), sch.sinh(), derivatives));
     }
 
     /** {@inheritDoc} */

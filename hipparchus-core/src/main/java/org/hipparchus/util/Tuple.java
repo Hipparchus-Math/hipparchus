@@ -554,6 +554,19 @@ public class Tuple implements CalculusFieldElement<Tuple> {
 
     /** {@inheritDoc} */
     @Override
+    public FieldSinhCosh<Tuple> sinhCosh() {
+        final Tuple sinh = new Tuple(field, new double[values.length]);
+        final Tuple cosh = new Tuple(field, new double[values.length]);
+        for (int i = 0; i < values.length; ++i) {
+            final SinhCosh sch = FastMath.sinhCosh(values[i]);
+            sinh.values[i] = sch.sinh();
+            cosh.values[i] = sch.cosh();
+        }
+        return new FieldSinhCosh<>(sinh, cosh);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public Tuple tanh() {
         final Tuple result = new Tuple(field, new double[values.length]);
         for (int i = 0; i < values.length; ++i) {

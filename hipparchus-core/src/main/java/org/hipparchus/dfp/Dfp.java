@@ -29,6 +29,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -2973,14 +2974,23 @@ public class Dfp implements CalculusFieldElement<Dfp> {
      */
     @Override
     public Dfp cosh() {
-        return DfpMath.exp(this).add(DfpMath.exp(negate())).divide(2);
+        return DfpMath.exp(this).add(DfpMath.exp(negate())).multiply(0.5);
     }
 
     /** {@inheritDoc}
      */
     @Override
     public Dfp sinh() {
-        return DfpMath.exp(this).subtract(DfpMath.exp(negate())).divide(2);
+        return DfpMath.exp(this).subtract(DfpMath.exp(negate())).multiply(0.5);
+    }
+
+    /** {@inheritDoc}
+     */
+    @Override
+    public FieldSinhCosh<Dfp> sinhCosh() {
+        final Dfp p = DfpMath.exp(this);
+        final Dfp m = DfpMath.exp(negate());
+        return new FieldSinhCosh<>(p.subtract(m).multiply(0.5), p.add(m).multiply(0.5));
     }
 
     /** {@inheritDoc}

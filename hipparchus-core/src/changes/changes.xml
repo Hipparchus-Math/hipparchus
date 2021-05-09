@@ -50,16 +50,18 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/122">
+        Added a way to compute both sinh and cosh at once faster than performing two calls.
+        This also speeds up all derivatives implementations as well as complex computations.
+      </action>
       <action dev="luc" type="fix" issue="issues/121">
         Removed methods and constants deprecated during the 1.x series.
-        Github: fixes #120.
       </action>
       <action dev="luc" type="fix" issue="issues/67">
         Replaced RealFieldElement by CalculusFieldElement interface and have Complex
         implement it so it can be used in many Hipparchus algorithms (like ODE).
         Also replaced RealField{Univariate|Bivariate|Vector|Matrix}Function by
         CalculusField{Univariate|Bivariate|Vector|Matrix}Function.
-        Github: fixes #67.
       </action>
       <action dev="luc" type="add" issue="issues/115">
         Added isInteger predicate for Fraction and BigFraction.

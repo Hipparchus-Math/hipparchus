@@ -22,6 +22,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -592,6 +593,14 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
     @Override
     public FieldUnivariateDerivative1<T> sinh() {
         return compose(FastMath.sinh(f0), FastMath.cosh(f0));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FieldSinhCosh<FieldUnivariateDerivative1<T>> sinhCosh() {
+        final FieldSinhCosh<T> sinhCosh = FastMath.sinhCosh(f0);
+        return new FieldSinhCosh<>(new FieldUnivariateDerivative1<>(sinhCosh.sinh(), f1.multiply(sinhCosh.cosh())),
+                                   new FieldUnivariateDerivative1<>(sinhCosh.cosh(), f1.multiply(sinhCosh.sinh())));
     }
 
     /** {@inheritDoc} */

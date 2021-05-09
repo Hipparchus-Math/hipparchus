@@ -21,6 +21,7 @@ import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -759,6 +760,16 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
         final FieldDerivativeStructure<T> result = factory.build();
         factory.getCompiler().sinh(data, 0, result.data, 0);
         return result;
+    }
+
+    /** {@inheritDoc}
+     */
+    @Override
+    public FieldSinhCosh<FieldDerivativeStructure<T>> sinhCosh() {
+        final FieldDerivativeStructure<T> sinh = factory.build();
+        final FieldDerivativeStructure<T> cosh = factory.build();
+        factory.getCompiler().sinhCosh(data, 0, sinh.data, 0, cosh.data, 0);
+        return new FieldSinhCosh<>(sinh, cosh);
     }
 
     /** {@inheritDoc}
