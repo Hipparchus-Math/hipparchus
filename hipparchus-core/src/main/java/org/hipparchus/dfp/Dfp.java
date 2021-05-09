@@ -28,6 +28,7 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -2898,6 +2899,13 @@ public class Dfp implements CalculusFieldElement<Dfp> {
     @Override
     public Dfp sin() {
         return DfpMath.sin(this);
+    }
+
+    /** {@inheritDoc}
+     */
+    @Override
+    public FieldSinCos<Dfp> sinCos() {
+        return new FieldSinCos<>(DfpMath.sin(this), DfpMath.cos(this));
     }
 
     /** {@inheritDoc}

@@ -202,9 +202,7 @@ public interface CalculusFieldElement<T> extends FieldElement<T> {
      * @return [sin(this), cos(this)]
      * @since 1.4
      */
-    default FieldSinCos<T> sinCos() {
-        return new FieldSinCos<>(sin(), cos());
-    }
+    FieldSinCos<T> sinCos();
 
     /** Tangent operation.
      * @return tan(this)

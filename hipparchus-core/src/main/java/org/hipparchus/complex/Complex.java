@@ -31,6 +31,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
@@ -768,8 +769,10 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return NaN;
         }
 
-        return createComplex(FastMath.cos(real) * FastMath.cosh(imaginary),
-                             -FastMath.sin(real) * FastMath.sinh(imaginary));
+        final SinCos scr = FastMath.sinCos(real);
+        final double chi = FastMath.cosh(imaginary);
+        final double shi = FastMath.sinh(imaginary);
+        return createComplex(scr.cos() * chi, -scr.sin() * shi);
     }
 
     /**
@@ -1072,8 +1075,25 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
         }
 
         final SinCos scr = FastMath.sinCos(real);
-        return createComplex(scr.sin() * FastMath.cosh(imaginary),
-                             scr.cos() * FastMath.sinh(imaginary));
+        final double chi = FastMath.cosh(imaginary);
+        final double shi = FastMath.sinh(imaginary);
+        return createComplex(scr.sin() * chi, scr.cos() * shi);
+
+    }
+
+    /** {@inheritDoc}
+     */
+    @Override
+    public FieldSinCos<Complex> sinCos() {
+        if (isNaN) {
+            return new FieldSinCos<>(NaN, NaN);
+        }
+
+        final SinCos scr = FastMath.sinCos(real);
+        final double chi = FastMath.cosh(imaginary);
+        final double shi = FastMath.sinh(imaginary);
+        return new FieldSinCos<>(createComplex(scr.sin() * chi,  scr.cos() * shi),
+                                 createComplex(scr.cos() * chi, -scr.sin() * shi));
     }
 
     /** {@inheritDoc}
