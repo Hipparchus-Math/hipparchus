@@ -18,7 +18,7 @@ package org.hipparchus.util;
 
 import org.hipparchus.CalculusFieldElement;
 
-/** Holder for both sin and cosine values.
+/** Holder for both sine and cosine values.
  * <p>
  * This class is a simple container, it does not provide any computational method.
  * </p>
@@ -58,10 +58,10 @@ public class FieldSinCos<T> {
     }
 
     /** Compute sine and cosine of angles sum.
-     * @param scAlpha \((sin \alpha, \cos \alpha)\)
-     * @param scBeta \((sin \beta, \cos \beta)\)
+     * @param scAlpha \((\sin \alpha, \cos \alpha)\)
+     * @param scBeta \((\sin \beta, \cos \beta)\)
      * @param <S> the type of the field elements
-     * @return \((sin \alpha+\beta, \cos \alpha+\beta)\)
+     * @return \((\sin \alpha+\beta, \cos \alpha+\beta)\)
      * @since 1.8
      */
     public static <S extends CalculusFieldElement<S>> FieldSinCos<S> sum(final FieldSinCos<S> scAlpha, final FieldSinCos<S> scBeta) {
@@ -70,10 +70,10 @@ public class FieldSinCos<T> {
     }
 
     /** Compute sine and cosine of angles difference.
-     * @param scAlpha \((sin \alpha, \cos \alpha)\)
-     * @param scBeta \((sin \beta, \cos \beta)\)
+     * @param scAlpha \((\sin \alpha, \cos \alpha)\)
+     * @param scBeta \((\sin \beta, \cos \beta)\)
      * @param <S> the type of the field elements
-     * @return \((sin \alpha+\beta, \cos \alpha-\beta)\)
+     * @return \((\sin \alpha+\beta, \cos \alpha-\beta)\)
      * @since 1.8
      */
     public static <S extends CalculusFieldElement<S>> FieldSinCos<S> difference(final FieldSinCos<S> scAlpha, final FieldSinCos<S> scBeta) {
