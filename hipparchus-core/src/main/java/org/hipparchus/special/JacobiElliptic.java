@@ -20,6 +20,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.SinCos;
+import org.hipparchus.util.SinhCosh;
 
 /** Computation of Jacobi elliptic functions.
  * The Jacobi elliptic functions are related to elliptic integrals.
@@ -248,11 +249,10 @@ public class JacobiElliptic {
         /** {@inheritDoc} */
         @Override
         public CopolarN values(final double u) {
-            final double s      = FastMath.sinh(u);
-            final double c      = FastMath.cosh(u);
-            final double sech   =  1.0 / c;
-            final double t      = s * sech;
-            final double factor = 0.25 * m1 * (s * c  - u) * sech;
+            final SinhCosh sch  = FastMath.sinhCosh(u);
+            final double sech   =  1.0 / sch.cosh();
+            final double t      = sch.sinh() * sech;
+            final double factor = 0.25 * m1 * (sch.sinh() * sch.cosh()  - u) * sech;
             return new CopolarN(t + factor * sech,  // 16.15.1
                                 sech - factor * t,  // 16.15.2
                                 sech + factor * t); // 16.15.3
