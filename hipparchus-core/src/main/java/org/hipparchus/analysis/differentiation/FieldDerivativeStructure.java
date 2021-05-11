@@ -20,6 +20,7 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
@@ -423,6 +424,19 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
         for (int i = 0; i < ds.data.length; ++i) {
             ds.data[i] = data[i].scalb(n);
         }
+        return ds;
+    }
+
+    /** {@inheritDoc}
+     * <p>
+     * The {@code ulp} function is a step function, hence all its derivatives are 0.
+     * </p>
+     * @since 2.0
+     */
+    @Override
+    public FieldDerivativeStructure<T> ulp() {
+        final FieldDerivativeStructure<T> ds = factory.build();
+        ds.data[0] = FastMath.ulp(data[0]);
         return ds;
     }
 

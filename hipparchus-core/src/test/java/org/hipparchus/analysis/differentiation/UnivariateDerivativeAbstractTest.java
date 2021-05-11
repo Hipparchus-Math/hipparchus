@@ -171,6 +171,18 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
     }
 
     @Test
+    public void testUlpVsDS() {
+        for (double x = -1.25; x < 1.25; x+= 0.0001) {
+            checkAgainstDS(x,
+                           new FieldUnivariateFunction() {
+                               public <S extends CalculusFieldElement<S>> S value(S x) {
+                                   return x.ulp();
+                           }
+            });
+        }
+    }
+
+    @Test
     public void testHypotVsDS() {
         for (double x = -3.25; x < 3.25; x+= 0.5) {
             checkAgainstDS(x,

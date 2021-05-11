@@ -286,6 +286,17 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
         return new UnivariateDerivative1(FastMath.scalb(f0, n), FastMath.scalb(f1, n));
     }
 
+    /** {@inheritDoc}
+     * <p>
+     * The {@code ulp} function is a step function, hence all its derivatives are 0.
+     * </p>
+     * @since 2.0
+     */
+    @Override
+    public UnivariateDerivative1 ulp() {
+        return new UnivariateDerivative1(FastMath.ulp(f0), 0.0);
+    }
+
     /** {@inheritDoc} */
     @Override
     public UnivariateDerivative1 hypot(final UnivariateDerivative1 y) {

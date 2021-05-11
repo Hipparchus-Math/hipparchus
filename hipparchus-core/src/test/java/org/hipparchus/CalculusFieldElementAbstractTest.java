@@ -407,6 +407,15 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     }
 
     @Test
+    public void testUlp() {
+        final RandomGenerator random = new Well19937a(0x36d4f8862421e0e4l);
+        for (int i = -300; i < 300; ++i) {
+            final double x = FastMath.scalb(2.0 * random.nextDouble() - 1.0, i);
+            Assert.assertTrue(FastMath.ulp(x) >= build(x).ulp().getReal());
+        }
+    }
+
+    @Test
     public void testCeil() {
         for (double x = -0.9; x < 0.9; x += 0.05) {
             checkRelative(FastMath.ceil(x), build(x).ceil());

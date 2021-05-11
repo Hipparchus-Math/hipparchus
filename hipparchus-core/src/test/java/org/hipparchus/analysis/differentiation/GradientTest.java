@@ -268,21 +268,6 @@ public class GradientTest extends CalculusFieldElementAbstractTest<Gradient> {
     }
 
     @Test
-    public void testScalbVsDS() {
-        for (int n = -4; n < 4; ++n) {
-            final int theN = n;
-            for (double x = -1.25; x < 1.25; x+= 0.5) {
-                checkAgainstDS(x,
-                               new FieldUnivariateFunction() {
-                                   public <S extends CalculusFieldElement<S>> S value(S x) {
-                                       return x.scalb(theN);
-                                   }
-                               });
-            }
-        }
-    }
-
-    @Test
     public void testHypotVsDS() {
         for (double x = -3.25; x < 3.25; x+= 0.5) {
             checkAgainstDS(x,

@@ -327,6 +327,16 @@ public class Tuple implements CalculusFieldElement<Tuple> {
 
     /** {@inheritDoc} */
     @Override
+    public Tuple ulp() {
+        final Tuple result = new Tuple(field, new double[values.length]);
+        for (int i = 0; i < values.length; ++i) {
+            result.values[i] = FastMath.ulp(values[i]);
+        }
+        return result;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public Tuple hypot(final Tuple y) {
         final Tuple result = new Tuple(field, new double[values.length]);
         for (int i = 0; i < values.length; ++i) {
