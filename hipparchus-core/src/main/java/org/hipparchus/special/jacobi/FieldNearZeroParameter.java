@@ -16,41 +16,36 @@
  */
 package org.hipparchus.special.jacobi;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.FieldSinCos;
 
-/** Algorithm for computing the principal Jacobi functions for negative parameter m.
+/** Algorithm for computing the principal Jacobi functions for parameters slightly above zero.
  * <p>
- * The rules for negative parameter change are given in Abramowitz and Stegun, section 16.10.
+ * The algorithm for evaluating the functions is based on approximation
+ * in terms of circular functions. It is given in Abramowitz and Stegun,
+ * sections 16.13.
  * </p>
+ * @param <T> the type of the field elements
  * @since 2.0
  */
-class NegativeParameter extends JacobiElliptic {
-
-    /** Algorithm to use for the positive parameter. */
-    private final JacobiElliptic algorithm;
-
-    /** Input scaling factor. */
-    private final double inputScale;
-
-    /** output scaling factor. */
-    private final double outputScale;
+class FieldNearZeroParameter<T extends CalculusFieldElement<T>> extends FieldJacobiElliptic<T> {
 
     /** Simple constructor.
      * @param m parameter of the Jacobi elliptic function (must be negative here)
      */
-    NegativeParameter(final double m) {
+    FieldNearZeroParameter(final T m) {
         super(m);
-        final double omM = 1.0 - m;
-        algorithm        = JacobiEllipticBuilder.build(-m / omM);
-        inputScale       = FastMath.sqrt(omM);
-        outputScale      = 1.0 / inputScale;
     }
 
     /** {@inheritDoc} */
     @Override
-    public CopolarN valuesN(final double u) {
-        final CopolarD trioD = new CopolarD(algorithm.valuesN(u * inputScale));
-        return new CopolarN(outputScale * trioD.sd(), trioD.cd(), trioD.nd());
+    public FieldCopolarN<T> valuesN(final T u) {
+        final FieldSinCos<T> sc     = FastMath.sinCos(u);
+        final T              factor = getM().multiply(u.subtract(sc.sin().multiply(sc.cos()))).multiply(0.25);
+        return new FieldCopolarN<>(sc.sin().subtract(factor.multiply(sc.cos())),             // equation 16.13.1
+                        sc.cos().add(factor.multiply(sc.sin())),                             // equation 16.13.2
+                        getM().multiply(sc.sin()).multiply(sc.sin()).multiply(-0.5).add(1)); // equation 16.13.3
     }
 
 }

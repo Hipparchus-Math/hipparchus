@@ -16,52 +16,55 @@
  */
 package org.hipparchus.special.jacobi;
 
-/** Copolar trio with pole at point d in Glaisher’s Notation.
+import org.hipparchus.CalculusFieldElement;
+
+/** Copolar trio with pole at point s in Glaisher’s Notation.
  * <p>
  * This is a container for the three subsidiary Jacobi elliptic functions
- * {@code nd(u|m)}, {@code sd(u|m)}, and {@code cd(u|m)}.
+ * {@code cs(u|m)}, {@code ds(u|m)} and {@code ns(u|m)}.
  * </p>
+ * @param <T> the type of the field elements
  * @since 2.0
  */
-public class CopolarD {
+public class FieldCopolarS<T extends CalculusFieldElement<T>> {
 
-    /** Value of the nd function. */
-    private final double nd;
+    /** Value of the cs function. */
+    private final T cs;
 
-    /** Value of the sd function. */
-    private final double sd;
+    /** Value of the dn function. */
+    private final T ds;
 
-    /** Value of the cd function. */
-    private final double cd;
+    /** Value of the ns function. */
+    private final T ns;
 
     /** Simple constructor.
      * @param trioN copolar trio with pole at point n in Glaisher’s Notation
      */
-    CopolarD(final CopolarN trioN) {
-        this.nd = 1.0 / trioN.dn();
-        this.sd = nd  * trioN.sn();
-        this.cd = nd  * trioN.cn();
+    FieldCopolarS(final FieldCopolarN<T> trioN) {
+        this.ns = trioN.sn().reciprocal();
+        this.cs = ns.multiply(trioN.cn());
+        this.ds = ns.multiply(trioN.dn());
     }
 
-    /** Get the value of the nd function.
-     * @return nd(u|m)
+    /** Get the value of the cs function.
+     * @return cs(u|m)
      */
-    public double nd() {
-        return nd;
+    public T cs() {
+        return cs;
     }
 
-    /** Get the value of the sd function.
-     * @return sd(u|m)
+    /** Get the value of the ds function.
+     * @return ds(u|m)
      */
-    public double sd() {
-        return sd;
+    public T ds() {
+        return ds;
     }
 
-    /** Get the value of the cd function.
-     * @return cd(u|m)
+    /** Get the value of the ns function.
+     * @return ns(u|m)
      */
-    public double cd() {
-        return cd;
+    public T ns() {
+        return ns;
     }
 
 }

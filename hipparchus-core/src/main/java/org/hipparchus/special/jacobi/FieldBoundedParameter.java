@@ -16,31 +16,40 @@
  */
 package org.hipparchus.special.jacobi;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.SinCos;
+import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.MathArrays;
 
 /** Algorithm for computing the principal Jacobi functions for parameter m in [0; 1].
+ * @param <T> the type of the field elements
  * @since 2.0
  */
-class BoundedParameter extends JacobiElliptic {
+class FieldBoundedParameter<T extends CalculusFieldElement<T>> extends FieldJacobiElliptic<T> {
 
-    /** Max number of iterations of the AGM scale. */
+    /** Max number of iterations of the AGM scale.
+     * <p>
+     * This value seems sufficient even for Dfp with high accuracy as the number
+     * of digits doubles at each iteration. An experiment with 300 significant
+     * digits showed we reached convergence at iteration 10
+     * </p>
+     */
     private static final int N_MAX = 16;
 
     /** Initial value for arithmetic-geometric mean. */
-    private final double b0;
+    private final T b0;
 
     /** Initial value for arithmetic-geometric mean. */
-    private final double c0;
+    private final T c0;
 
     /** Simple constructor.
      * @param m parameter of the Jacobi elliptic function
      */
-    BoundedParameter(final double m) {
+    FieldBoundedParameter(final T m) {
         super(m);
-        this.b0 = FastMath.sqrt(1.0 - m);
+        this.b0 = FastMath.sqrt(m.getField().getOne().subtract(m));
         this.c0 = FastMath.sqrt(m);
     }
 
@@ -53,43 +62,44 @@ class BoundedParameter extends JacobiElliptic {
      * @return copolar trio containing the three principal Jacobi
      * elliptic functions {@code sn(u|m)}, {@code cn(u|m)}, and {@code dn(u|m)}.
      */
-    public CopolarN valuesN(double u) {
+    public FieldCopolarN<T> valuesN(T u) {
 
         // initialize scale
-        final double[] a = new double[N_MAX];
-        final double[] c = new double[N_MAX];
-        a[0]      = 1.0;
-        double bi = b0;
-        c[0]      = c0;
+        final T[] a = MathArrays.buildArray(u.getField(), N_MAX);
+        final T[] c = MathArrays.buildArray(u.getField(), N_MAX);
+        a[0]        = u.getField().getOne();
+        T bi        = b0;
+        c[0]        = c0;
 
         // iterate down
-        double phi = u;
+        T phi = u;
         for (int i = 1; i < N_MAX; ++i) {
 
             // 2ⁿ u
-            phi += phi;
-            c[i] = 0.5 * (a[i - 1] - bi);
+            phi = phi.add(phi);
+            c[i] = a[i - 1].subtract(bi).multiply(0.5);
 
             // arithmetic mean
-            a[i] = 0.5 * (a[i - 1] + bi);
+            a[i] = a[i - 1].add(bi).multiply(0.5);
 
             // geometric mean
-            bi = FastMath.sqrt(a[i - 1] * bi);
+            bi = FastMath.sqrt(a[i - 1].multiply(bi));
 
             // convergence (by the inequality of arithmetic and geometric means, this is non-negative)
-            if (c[i] <= FastMath.ulp(a[i])) {
+            final T one = getM().getField().getOne();
+            if (c[i].getReal() <= FastMath.ulp(a[i]).getReal()) {
                 // convergence has been reached
 
                 // iterate up
-                phi *= a[i];
+                phi = phi.multiply(a[i]);
                 for (int j = i; j > 0; --j) {
                     // equation 16.4.3 in Abramowitz and Stegun
-                    phi = 0.5 * (phi + FastMath.asin(c[j] * FastMath.sin(phi) / a[j]));
+                    phi = phi.add(FastMath.asin(c[j].multiply(FastMath.sin(phi)).divide(a[j]))).multiply(0.5);
                 }
                 // using 16.1.5 rather than 16.4.4 to avoid computing another cosine
-                final SinCos scPhi0 = FastMath.sinCos(phi);
-                return new CopolarN(scPhi0.sin(), scPhi0.cos(),
-                                    FastMath.sqrt(1 - getM() * scPhi0.sin() * scPhi0.sin()));
+                final FieldSinCos<T> scPhi0 = FastMath.sinCos(phi);
+                return new FieldCopolarN<>(scPhi0.sin(), scPhi0.cos(),
+                                FastMath.sqrt(one.subtract(getM().multiply(scPhi0.sin()).multiply(scPhi0.sin()))));
 
             }
 

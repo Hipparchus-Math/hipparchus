@@ -16,6 +16,8 @@
  */
 package org.hipparchus.special.jacobi;
 
+import org.hipparchus.CalculusFieldElement;
+
 /** Builder for algorithms compmuting Jacobi elliptic functions.
  * The Jacobi elliptic functions are related to elliptic integrals.
  * We use hare the notations from <a
@@ -55,6 +57,24 @@ public class JacobiEllipticBuilder {
             return new NearOneParameter(m);
         } else {
             return new BoundedParameter(m);
+        }
+    }
+
+    /** Build an algorithm for computing Jacobi elliptic functions.
+     * @param m parameter of the Jacobi elliptic function
+     * @return selected algorithm
+     */
+    public static <T extends CalculusFieldElement<T>> FieldJacobiElliptic<T> build(final T m) {
+        if (m.getReal() < 0) {
+            return new FieldNegativeParameter<>(m);
+        } else if (m.getReal() > 1) {
+            return new FieldBigParameter<>(m);
+        } else if (m.getReal() < NEAR_ZERO) {
+            return new FieldNearZeroParameter<>(m);
+        } else if (m.getReal() > NEAR_ONE) {
+            return new FieldNearOneParameter<>(m);
+        } else {
+            return new FieldBoundedParameter<>(m);
         }
     }
 

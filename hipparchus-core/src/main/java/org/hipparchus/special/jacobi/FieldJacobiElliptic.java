@@ -16,7 +16,9 @@
  */
 package org.hipparchus.special.jacobi;
 
-/** Algorithm computing Jacobi elliptic functions.
+import org.hipparchus.CalculusFieldElement;
+
+/** Computation of Jacobi elliptic functions.
  * The Jacobi elliptic functions are related to elliptic integrals.
  * We use hare the notations from <a
  * href="https://en.wikipedia.org/wiki/Abramowitz_and_Stegun">Abramowitz and
@@ -24,24 +26,25 @@ package org.hipparchus.special.jacobi;
  * <a href="https://dlmf.nist.gov/22">Digital Library of Mathematical Functions (Ch. 22)</a>
  * are different as they use modulus {@code k} instead of parameter {@code m},
  * with {@code k² = m}.
+ * @param <T> the type of the field elements
  * @since 2.0
  */
-public abstract class JacobiElliptic {
+public abstract class FieldJacobiElliptic<T extends CalculusFieldElement<T>> {
 
     /** Parameter of the function. */
-    private final double m;
+    private final T m;
 
     /** Simple constructor.
      * @param m parameter of the function
      */
-    protected JacobiElliptic(final double m) {
+    protected FieldJacobiElliptic(final T m) {
         this.m = m;
     }
 
     /** Get the parameter of the function.
      * @return parameter of the function
      */
-    public double getM() {
+    public T getM() {
         return m;
     }
 
@@ -50,15 +53,33 @@ public abstract class JacobiElliptic {
      * @return copolar trio containing the three principal Jacobi
      * elliptic functions {@code sn(u|m)}, {@code cn(u|m)}, and {@code dn(u|m)}.
      */
-    public abstract CopolarN valuesN(double u);
+    public abstract FieldCopolarN<T> valuesN(T u);
+
+    /** Evaluate the three principal Jacobi elliptic functions with pole at point n in Glaisher’s Notation.
+     * @param u argument of the functions
+     * @return copolar trio containing the three principal Jacobi
+     * elliptic functions {@code sn(u|m)}, {@code cn(u|m)}, and {@code dn(u|m)}.
+     */
+    public FieldCopolarN<T> valuesN(final double u) {
+        return valuesN(m.newInstance(u));
+    }
 
     /** Evaluate the three subsidiary Jacobi elliptic functions with pole at point s in Glaisher’s Notation.
      * @param u argument of the functions
      * @return copolar trio containing the three subsidiary Jacobi
      * elliptic functions {@code cs(u|m)}, {@code ds(u|m)} and {@code ns(u|m)}.
      */
-    public CopolarS valuesS(final double u) {
-        return new CopolarS(valuesN(u));
+    public FieldCopolarS<T> valuesS(final T u) {
+        return new FieldCopolarS<>(valuesN(u));
+    }
+
+    /** Evaluate the three subsidiary Jacobi elliptic functions with pole at point s in Glaisher’s Notation.
+     * @param u argument of the functions
+     * @return copolar trio containing the three subsidiary Jacobi
+     * elliptic functions {@code cs(u|m)}, {@code ds(u|m)} and {@code ns(u|m)}.
+     */
+    public FieldCopolarS<T> valuesS(final double u) {
+        return new FieldCopolarS<>(valuesN(u));
     }
 
     /** Evaluate the three subsidiary Jacobi elliptic functions with pole at point c in Glaisher’s Notation.
@@ -66,8 +87,17 @@ public abstract class JacobiElliptic {
      * @return copolar trio containing the three subsidiary Jacobi
      * elliptic functions {@code dc(u|m)}, {@code nc(u|m)}, and {@code sc(u|m)}.
      */
-    public CopolarC valuesC(final double u) {
-        return new CopolarC(valuesN(u));
+    public FieldCopolarC<T> valuesC(final T u) {
+        return new FieldCopolarC<>(valuesN(u));
+    }
+
+    /** Evaluate the three subsidiary Jacobi elliptic functions with pole at point c in Glaisher’s Notation.
+     * @param u argument of the functions
+     * @return copolar trio containing the three subsidiary Jacobi
+     * elliptic functions {@code dc(u|m)}, {@code nc(u|m)}, and {@code sc(u|m)}.
+     */
+    public FieldCopolarC<T> valuesC(final double u) {
+        return new FieldCopolarC<>(valuesN(u));
     }
 
     /** Evaluate the three subsidiary Jacobi elliptic functions with pole at point d in Glaisher’s Notation.
@@ -75,8 +105,17 @@ public abstract class JacobiElliptic {
      * @return copolar trio containing the three subsidiary Jacobi
      * elliptic functions {@code nd(u|m)}, {@code sd(u|m)}, and {@code cd(u|m)}.
      */
-    public CopolarD valuesD(final double u) {
-        return new CopolarD(valuesN(u));
+    public FieldCopolarD<T> valuesD(final T u) {
+        return new FieldCopolarD<>(valuesN(u));
+    }
+
+    /** Evaluate the three subsidiary Jacobi elliptic functions with pole at point d in Glaisher’s Notation.
+     * @param u argument of the functions
+     * @return copolar trio containing the three subsidiary Jacobi
+     * elliptic functions {@code nd(u|m)}, {@code sd(u|m)}, and {@code cd(u|m)}.
+     */
+    public FieldCopolarD<T> valuesD(final double u) {
+        return new FieldCopolarD<>(valuesN(u));
     }
 
 }

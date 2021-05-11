@@ -39,6 +39,7 @@ class BigParameter extends JacobiElliptic {
      * @param m parameter of the Jacobi elliptic function (must be greater than 1 here)
      */
     BigParameter(final double m) {
+        super(m);
         algorithm   = JacobiEllipticBuilder.build(1.0 / m);
         inputScale  = FastMath.sqrt(m);
         outputScale = 1.0 / inputScale;

@@ -16,52 +16,55 @@
  */
 package org.hipparchus.special.jacobi;
 
-/** Copolar trio with pole at point d in Glaisher’s Notation.
+import org.hipparchus.CalculusFieldElement;
+
+/** Copolar trio with pole at point c in Glaisher’s Notation.
  * <p>
  * This is a container for the three subsidiary Jacobi elliptic functions
- * {@code nd(u|m)}, {@code sd(u|m)}, and {@code cd(u|m)}.
+ * {@code dc(u|m)}, {@code nc(u|m)}, and {@code sc(u|m)}.
  * </p>
+ * @param <T> the type of the field elements
  * @since 2.0
  */
-public class CopolarD {
+public class FieldCopolarC<T extends CalculusFieldElement<T>> {
 
-    /** Value of the nd function. */
-    private final double nd;
+    /** Value of the dc function. */
+    private final T dc;
 
-    /** Value of the sd function. */
-    private final double sd;
+    /** Value of the nc function. */
+    private final T nc;
 
-    /** Value of the cd function. */
-    private final double cd;
+    /** Value of the sc function. */
+    private final T sc;
 
     /** Simple constructor.
      * @param trioN copolar trio with pole at point n in Glaisher’s Notation
      */
-    CopolarD(final CopolarN trioN) {
-        this.nd = 1.0 / trioN.dn();
-        this.sd = nd  * trioN.sn();
-        this.cd = nd  * trioN.cn();
+    FieldCopolarC(final FieldCopolarN<T> trioN) {
+        this.nc = trioN.cn().reciprocal();
+        this.sc = nc.multiply(trioN.sn());
+        this.dc = nc.multiply(trioN.dn());
     }
 
-    /** Get the value of the nd function.
-     * @return nd(u|m)
+    /** Get the value of the dc function.
+     * @return dc(u|m)
      */
-    public double nd() {
-        return nd;
+    public T dc() {
+        return dc;
     }
 
-    /** Get the value of the sd function.
-     * @return sd(u|m)
+    /** Get the value of the nc function.
+     * @return nc(u|m)
      */
-    public double sd() {
-        return sd;
+    public T nc() {
+        return nc;
     }
 
-    /** Get the value of the cd function.
-     * @return cd(u|m)
+    /** Get the value of the sc function.
+     * @return sc(u|m)
      */
-    public double cd() {
-        return cd;
+    public T sc() {
+        return sc;
     }
 
 }

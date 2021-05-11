@@ -29,24 +29,21 @@ import org.hipparchus.util.SinCos;
  */
 class NearZeroParameter extends JacobiElliptic {
 
-    /** Parameter of the Jacobi elliptic function. */
-    private final double m;
-
     /** Simple constructor.
      * @param m parameter of the Jacobi elliptic function (must be negative here)
      */
     NearZeroParameter(final double m) {
-        this.m = m;
+        super(m);
     }
 
     /** {@inheritDoc} */
     @Override
     public CopolarN valuesN(final double u) {
         final SinCos sc     = FastMath.sinCos(u);
-        final double factor = 0.25 * m * (u - sc.sin() * sc.cos());
-        return new CopolarN(sc.sin() - factor * sc.cos(),       // equation 16.13.1
-                            sc.cos() + factor * sc.sin(),       // equation 16.13.2
-                            1 - 0.5 * m * sc.sin() * sc.sin()); // equation 16.13.3
+        final double factor = 0.25 * getM() * (u - sc.sin() * sc.cos());
+        return new CopolarN(sc.sin() - factor * sc.cos(),            // equation 16.13.1
+                            sc.cos() + factor * sc.sin(),            // equation 16.13.2
+                            1 - 0.5 * getM() * sc.sin() * sc.sin()); // equation 16.13.3
     }
 
 }

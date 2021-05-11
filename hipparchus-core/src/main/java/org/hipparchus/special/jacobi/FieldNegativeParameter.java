@@ -16,41 +16,43 @@
  */
 package org.hipparchus.special.jacobi;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.util.FastMath;
 
 /** Algorithm for computing the principal Jacobi functions for negative parameter m.
  * <p>
  * The rules for negative parameter change are given in Abramowitz and Stegun, section 16.10.
  * </p>
+ * @param <T> the type of the field elements
  * @since 2.0
  */
-class NegativeParameter extends JacobiElliptic {
+class FieldNegativeParameter<T extends CalculusFieldElement<T>> extends FieldJacobiElliptic<T> {
 
     /** Algorithm to use for the positive parameter. */
-    private final JacobiElliptic algorithm;
+    private final FieldJacobiElliptic<T> algorithm;
 
     /** Input scaling factor. */
-    private final double inputScale;
+    private final T inputScale;
 
     /** output scaling factor. */
-    private final double outputScale;
+    private final T outputScale;
 
     /** Simple constructor.
      * @param m parameter of the Jacobi elliptic function (must be negative here)
      */
-    NegativeParameter(final double m) {
+    FieldNegativeParameter(final T m) {
         super(m);
-        final double omM = 1.0 - m;
-        algorithm        = JacobiEllipticBuilder.build(-m / omM);
-        inputScale       = FastMath.sqrt(omM);
-        outputScale      = 1.0 / inputScale;
+        final T omM = m.getField().getOne().subtract(m);
+        algorithm   = JacobiEllipticBuilder.build(m.negate().divide(omM));
+        inputScale  = FastMath.sqrt(omM);
+        outputScale = inputScale.reciprocal();
     }
 
     /** {@inheritDoc} */
     @Override
-    public CopolarN valuesN(final double u) {
-        final CopolarD trioD = new CopolarD(algorithm.valuesN(u * inputScale));
-        return new CopolarN(outputScale * trioD.sd(), trioD.cd(), trioD.nd());
+    public FieldCopolarN<T> valuesN(final T u) {
+        final FieldCopolarD<T> trioD = new FieldCopolarD<>(algorithm.valuesN(u.multiply(inputScale)));
+        return new FieldCopolarN<>(outputScale.multiply(trioD.sd()), trioD.cd(), trioD.nd());
     }
 
 }
