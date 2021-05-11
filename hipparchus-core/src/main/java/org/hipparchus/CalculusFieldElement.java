@@ -96,6 +96,14 @@ public interface CalculusFieldElement<T> extends FieldElement<T> {
     T scalb(int n);
 
     /**
+     * Compute least significant bit (Unit in Last Position) for a number.
+     * @param <T> the type of the field element
+     * @return ulp(this)
+     * @since 2.0
+     */
+    T ulp();
+
+    /**
      * Returns the hypotenuse of a triangle with sides {@code this} and {@code y}
      * - sqrt(<i>this</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)
      * avoiding intermediate overflow or underflow.

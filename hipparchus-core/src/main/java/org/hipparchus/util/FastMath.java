@@ -4872,6 +4872,20 @@ public class FastMath {
         return d.scalb(n);
     }
 
+    /**
+     * Compute least significant bit (Unit in Last Position) for a number.
+     * @param x number from which ulp is requested
+     * @param <T> the type of the field element
+     * @return ulp(x)
+     * @since 2.0
+     */
+    public static <T extends CalculusFieldElement<T>> T ulp(final T x) {
+        if (Double.isInfinite(x.getReal())) {
+            return x.newInstance(Double.POSITIVE_INFINITY);
+        }
+        return x.ulp();
+    }
+
     /** Get the largest whole number smaller than x.
      * @param x number from which floor is requested
      * @param <T> the type of the field element

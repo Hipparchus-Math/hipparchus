@@ -494,6 +494,17 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
         return result;
     }
 
+    /** {@inheritDoc}
+     * <p>
+     * The {@code ulp} function is a step function, hence all its derivatives are 0.
+     * </p>
+     * @since 2.0
+     */
+    @Override
+    public FieldGradient<T> ulp() {
+        return newInstance(FastMath.ulp(value));
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> hypot(final FieldGradient<T> y) {
