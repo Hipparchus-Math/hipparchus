@@ -381,6 +381,19 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
     }
 
     /** {@inheritDoc}
+     * <p>
+     * The {@code ulp} function is a step function, hence all its derivatives are 0.
+     * </p>
+     * @since 2.0
+     */
+    @Override
+    public DerivativeStructure ulp() {
+        final DerivativeStructure ds = factory.build();
+        ds.data[0] = FastMath.ulp(data[0]);
+        return ds;
+    }
+
+    /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
      */

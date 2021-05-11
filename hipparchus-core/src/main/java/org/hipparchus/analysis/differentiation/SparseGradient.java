@@ -471,6 +471,17 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
         return out;
     }
 
+    /** {@inheritDoc}
+     * <p>
+     * The {@code ulp} function is a step function, hence all its derivatives are 0.
+     * </p>
+     * @since 2.0
+     */
+    @Override
+    public SparseGradient ulp() {
+        return newInstance(FastMath.ulp(value));
+    }
+
     /** {@inheritDoc} */
     @Override
     public SparseGradient hypot(final SparseGradient y) {

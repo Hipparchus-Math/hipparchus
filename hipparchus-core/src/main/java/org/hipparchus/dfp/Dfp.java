@@ -2789,6 +2789,16 @@ public class Dfp implements CalculusFieldElement<Dfp> {
     /** {@inheritDoc}
      */
     @Override
+    public Dfp ulp() {
+        final Dfp result = new Dfp(field);
+        result.mant[0] = 1;
+        result.exp     = exp;
+        return result;
+    }
+
+    /** {@inheritDoc}
+     */
+    @Override
     public Dfp hypot(final Dfp y) {
 
         if (isInfinite() || y.isInfinite()) {

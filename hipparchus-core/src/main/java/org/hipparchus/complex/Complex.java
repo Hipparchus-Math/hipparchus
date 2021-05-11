@@ -1565,6 +1565,13 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
     }
 
     /** {@inheritDoc}
+     */
+    @Override
+    public Complex ulp() {
+        return createComplex(FastMath.ulp(real), FastMath.ulp(imaginary));
+    }
+
+    /** {@inheritDoc}
      * @since 1.7
      */
     @Override

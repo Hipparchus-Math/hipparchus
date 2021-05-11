@@ -331,6 +331,16 @@ public class FieldTuple<T extends CalculusFieldElement<T>> implements CalculusFi
 
     /** {@inheritDoc} */
     @Override
+    public FieldTuple<T> ulp() {
+        final FieldTuple<T> result = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
+        for (int i = 0; i < values.length; ++i) {
+            result.values[i] = values[i].ulp();
+        }
+        return result;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public FieldTuple<T> hypot(final FieldTuple<T> y) {
         final FieldTuple<T> result = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
         for (int i = 0; i < values.length; ++i) {

@@ -401,6 +401,17 @@ public class Gradient implements Derivative<Gradient>, CalculusFieldElement<Grad
         return result;
     }
 
+    /** {@inheritDoc}
+     * <p>
+     * The {@code ulp} function is a step function, hence all its derivatives are 0.
+     * </p>
+     * @since 2.0
+     */
+    @Override
+    public Gradient ulp() {
+        return newInstance(FastMath.ulp(value));
+    }
+
     /** {@inheritDoc} */
     @Override
     public Gradient hypot(final Gradient y) {

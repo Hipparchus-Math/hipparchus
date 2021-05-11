@@ -424,6 +424,12 @@ public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>
 
     /** {@inheritDoc} */
     @Override
+    public Decimal64 ulp() {
+        return new Decimal64(FastMath.ulp(value));
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public Decimal64 hypot(final Decimal64 y) {
         return new Decimal64(FastMath.hypot(value, y.value));
     }

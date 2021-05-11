@@ -361,6 +361,17 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
         return new FieldUnivariateDerivative1<>(FastMath.scalb(f0, n), FastMath.scalb(f1, n));
     }
 
+    /** {@inheritDoc}
+     * <p>
+     * The {@code ulp} function is a step function, hence all its derivatives are 0.
+     * </p>
+     * @since 2.0
+     */
+    @Override
+    public FieldUnivariateDerivative1<T> ulp() {
+        return new FieldUnivariateDerivative1<>(FastMath.ulp(f0), getValueField().getZero());
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative1<T> hypot(final FieldUnivariateDerivative1<T> y) {

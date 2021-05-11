@@ -33,7 +33,9 @@ import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
+import org.hipparchus.random.Well19937a;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.Decimal64Field;
@@ -394,6 +396,25 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                     }
                 }
                 s *= 2;
+            }
+        }
+    }
+
+    @Test
+    public void testUlp() {
+        final RandomGenerator random = new Well19937a(0x85d201920b5be954l);
+        for (int k = 0; k < 10000; ++k) {
+            int maxOrder = 1 + random.nextInt(5);
+            DSFactory factory = new DSFactory(3, maxOrder);
+            DerivativeStructure x = factory.variable(0, FastMath.scalb(2 * random.nextDouble() - 1, random.nextInt(600) - 300));
+            DerivativeStructure y = factory.variable(1, FastMath.scalb(2 * random.nextDouble() - 1, random.nextInt(600) - 300));
+            DerivativeStructure z = factory.variable(2, FastMath.scalb(2 * random.nextDouble() - 1, random.nextInt(600) - 300));
+            DerivativeStructure xyz = x.multiply(y.multiply(z));
+            DerivativeStructure ulp = xyz.ulp();
+            boolean first = true;
+            for (double d : ulp.getAllDerivatives()) {
+                Assert.assertEquals(first ? FastMath.ulp(xyz.getValue()) : 0.0, d, 1.0e-15 * FastMath.ulp(xyz.getValue()));
+                first = false;
             }
         }
     }
