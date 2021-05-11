@@ -24,8 +24,8 @@ package org.hipparchus.util;
 
 import static org.junit.Assert.assertEquals;
 
-import org.apache.commons.math3.random.RandomGenerator;
-import org.apache.commons.math3.random.Well19937a;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.random.Well19937a;
 import org.junit.Assert;
 import org.junit.Test;
 
