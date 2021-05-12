@@ -62,6 +62,7 @@ class FieldBoundedParameter<T extends CalculusFieldElement<T>> extends FieldJaco
      * @return copolar trio containing the three principal Jacobi
      * elliptic functions {@code sn(u|m)}, {@code cn(u|m)}, and {@code dn(u|m)}.
      */
+    @Override
     public FieldCopolarN<T> valuesN(T u) {
 
         // initialize scale

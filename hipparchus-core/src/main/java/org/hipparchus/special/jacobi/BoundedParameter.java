@@ -53,6 +53,7 @@ class BoundedParameter extends JacobiElliptic {
      * @return copolar trio containing the three principal Jacobi
      * elliptic functions {@code sn(u|m)}, {@code cn(u|m)}, and {@code dn(u|m)}.
      */
+    @Override
     public CopolarN valuesN(double u) {
 
         // initialize scale
