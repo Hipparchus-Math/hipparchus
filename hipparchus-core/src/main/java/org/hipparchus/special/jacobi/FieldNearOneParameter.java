@@ -35,7 +35,7 @@ class FieldNearOneParameter<T extends CalculusFieldElement<T>> extends FieldJaco
     private final T m1Fourth;
 
     /** Simple constructor.
-     * @param m parameter of the Jacobi elliptic function (must be negative here)
+     * @param m parameter of the Jacobi elliptic function (must be one or slightly below one here)
      */
     FieldNearOneParameter(final T m) {
         super(m);

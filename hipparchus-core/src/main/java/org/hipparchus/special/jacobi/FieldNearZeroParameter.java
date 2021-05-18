@@ -32,7 +32,7 @@ import org.hipparchus.util.FieldSinCos;
 class FieldNearZeroParameter<T extends CalculusFieldElement<T>> extends FieldJacobiElliptic<T> {
 
     /** Simple constructor.
-     * @param m parameter of the Jacobi elliptic function (must be negative here)
+     * @param m parameter of the Jacobi elliptic function (must be zero or slightly positive here)
      */
     FieldNearZeroParameter(final T m) {
         super(m);

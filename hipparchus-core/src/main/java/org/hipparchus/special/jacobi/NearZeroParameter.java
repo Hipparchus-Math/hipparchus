@@ -30,7 +30,7 @@ import org.hipparchus.util.SinCos;
 class NearZeroParameter extends JacobiElliptic {
 
     /** Simple constructor.
-     * @param m parameter of the Jacobi elliptic function (must be negative here)
+     * @param m parameter of the Jacobi elliptic function (must be zero or slightly positive here)
      */
     NearZeroParameter(final double m) {
         super(m);
