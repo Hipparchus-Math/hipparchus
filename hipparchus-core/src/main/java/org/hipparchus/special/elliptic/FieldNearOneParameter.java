@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.SinhCosh;
+import org.hipparchus.util.FieldSinhCosh;
 
 /** Algorithm for computing the principal Jacobi functions for parameters slightly below one.
  * <p>
@@ -25,31 +26,32 @@ import org.hipparchus.util.SinhCosh;
  * in terms of hyperbolic functions. It is given in Abramowitz and Stegun,
  * sections 16.15.
  * </p>
+ * @param <T> the type of the field elements
  * @since 2.0
  */
-class NearOneParameter extends JacobiElliptic {
+class FieldNearOneParameter<T extends CalculusFieldElement<T>> extends FieldJacobiElliptic<T> {
 
     /** Complementary parameter of the Jacobi elliptic function. */
-    private final double m1;
+    private final T m1Fourth;
 
     /** Simple constructor.
      * @param m parameter of the Jacobi elliptic function (must be one or slightly below one here)
      */
-    NearOneParameter(final double m) {
+    FieldNearOneParameter(final T m) {
         super(m);
-        this.m1 = 1.0 - m;
+        this.m1Fourth = m.getField().getOne().subtract(m).multiply(0.25);
     }
 
     /** {@inheritDoc} */
     @Override
-    public CopolarN valuesN(final double u) {
-        final SinhCosh sch  = FastMath.sinhCosh(u);
-        final double sech   =  1.0 / sch.cosh();
-        final double t      = sch.sinh() * sech;
-        final double factor = 0.25 * m1 * (sch.sinh() * sch.cosh()  - u) * sech;
-        return new CopolarN(t + factor * sech,  // equation 16.15.1
-                            sech - factor * t,  // equation 16.15.2
-                            sech + factor * t); // equation 16.15.3
+    public FieldCopolarN<T> valuesN(final T u) {
+        final FieldSinhCosh<T> sch    = FastMath.sinhCosh(u);
+        final T                sech   = sch.cosh().reciprocal();
+        final T                t      = sch.sinh().multiply(sech);
+        final T                factor = sch.sinh().multiply(sch.cosh()).subtract(u).multiply(sech).multiply(m1Fourth);
+        return new FieldCopolarN<>(t.add(factor.multiply(sech)),  // equation 16.15.1
+                        sech.subtract(factor.multiply(t)),        // equation 16.15.2
+                        sech.add(factor.multiply(t)));            // equation 16.15.3
     }
 
 }

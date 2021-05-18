@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 /**
- * Implementations of Jacobi elliptic functions.
+ * Implementations of Jacobi elliptic functions and elliptic integrals.
  * @since 2.0
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;

@@ -14,53 +14,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
+
+import org.hipparchus.CalculusFieldElement;
 
 /** Copolar trio with pole at point d in Glaisher’s Notation.
  * <p>
  * This is a container for the three subsidiary Jacobi elliptic functions
  * {@code nd(u|m)}, {@code sd(u|m)}, and {@code cd(u|m)}.
  * </p>
+ * @param <T> the type of the field elements
  * @since 2.0
  */
-public class CopolarD {
+public class FieldCopolarD<T extends CalculusFieldElement<T>> {
 
     /** Value of the nd function. */
-    private final double nd;
+    private final T nd;
 
     /** Value of the sd function. */
-    private final double sd;
+    private final T sd;
 
     /** Value of the cd function. */
-    private final double cd;
+    private final T cd;
 
     /** Simple constructor.
      * @param trioN copolar trio with pole at point n in Glaisher’s Notation
      */
-    CopolarD(final CopolarN trioN) {
-        this.nd = 1.0 / trioN.dn();
-        this.sd = nd  * trioN.sn();
-        this.cd = nd  * trioN.cn();
+    FieldCopolarD(final FieldCopolarN<T> trioN) {
+        this.nd = trioN.dn().reciprocal();
+        this.sd = nd.multiply(trioN.sn());
+        this.cd = nd.multiply(trioN.cn());
     }
 
     /** Get the value of the nd function.
      * @return nd(u|m)
      */
-    public double nd() {
+    public T nd() {
         return nd;
     }
 
     /** Get the value of the sd function.
      * @return sd(u|m)
      */
-    public double sd() {
+    public T sd() {
         return sd;
     }
 
     /** Get the value of the cd function.
      * @return cd(u|m)
      */
-    public double cd() {
+    public T cd() {
         return cd;
     }
 

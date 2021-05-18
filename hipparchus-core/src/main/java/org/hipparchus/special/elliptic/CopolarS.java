@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
 /** Copolar trio with pole at point s in Glaisher’s Notation.
  * <p>

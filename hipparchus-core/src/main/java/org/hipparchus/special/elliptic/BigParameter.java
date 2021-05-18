@@ -14,17 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
 import org.hipparchus.util.FastMath;
 
-/** Algorithm for computing the principal Jacobi functions for negative parameter m.
+/** Algorithm for computing the principal Jacobi functions for parameter m greater than 1.
  * <p>
- * The rules for negative parameter change are given in Abramowitz and Stegun, section 16.10.
+ * The rules for reciprocal parameter change are given in Abramowitz and Stegun,
+ * sections 16.11 and 17.4.15.
  * </p>
  * @since 2.0
  */
-class NegativeParameter extends JacobiElliptic {
+class BigParameter extends JacobiElliptic {
 
     /** Algorithm to use for the positive parameter. */
     private final JacobiElliptic algorithm;
@@ -36,21 +37,20 @@ class NegativeParameter extends JacobiElliptic {
     private final double outputScale;
 
     /** Simple constructor.
-     * @param m parameter of the Jacobi elliptic function (must be negative here)
+     * @param m parameter of the Jacobi elliptic function (must be greater than 1 here)
      */
-    NegativeParameter(final double m) {
+    BigParameter(final double m) {
         super(m);
-        final double omM = 1.0 - m;
-        algorithm        = JacobiEllipticBuilder.build(-m / omM);
-        inputScale       = FastMath.sqrt(omM);
-        outputScale      = 1.0 / inputScale;
+        algorithm   = JacobiEllipticBuilder.build(1.0 / m);
+        inputScale  = FastMath.sqrt(m);
+        outputScale = 1.0 / inputScale;
     }
 
     /** {@inheritDoc} */
     @Override
     public CopolarN valuesN(final double u) {
-        final CopolarD trioD = new CopolarD(algorithm.valuesN(u * inputScale));
-        return new CopolarN(outputScale * trioD.sd(), trioD.cd(), trioD.nd());
+        final CopolarN trioN = algorithm.valuesN(u * inputScale);
+        return new CopolarN(outputScale * trioN.sn(), trioN.dn(), trioN.cn());
     }
 
 }

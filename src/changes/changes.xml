@@ -50,7 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.0" date="TBD" description="TBD">
-      <action dev="luc" type="fix" issue="issues/119">
+      <action dev="luc" type="add">
+        Added elliptic integrals, both for primitive double and fields.
+      </action>
+      <action dev="luc" type="add" issue="issues/119">
         Added the twelve Jacobi elliptic functions sn, cn, dn,
         cs, ds, ns, dc, nc, sc, nd, sd, and cd, both for primitive double
         and fields.

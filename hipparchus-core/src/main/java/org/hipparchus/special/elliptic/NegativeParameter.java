@@ -14,36 +14,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.SinCos;
 
-/** Algorithm for computing the principal Jacobi functions for parameters slightly above zero.
+/** Algorithm for computing the principal Jacobi functions for negative parameter m.
  * <p>
- * The algorithm for evaluating the functions is based on approximation
- * in terms of circular functions. It is given in Abramowitz and Stegun,
- * sections 16.13.
+ * The rules for negative parameter change are given in Abramowitz and Stegun, section 16.10.
  * </p>
  * @since 2.0
  */
-class NearZeroParameter extends JacobiElliptic {
+class NegativeParameter extends JacobiElliptic {
+
+    /** Algorithm to use for the positive parameter. */
+    private final JacobiElliptic algorithm;
+
+    /** Input scaling factor. */
+    private final double inputScale;
+
+    /** output scaling factor. */
+    private final double outputScale;
 
     /** Simple constructor.
-     * @param m parameter of the Jacobi elliptic function (must be zero or slightly positive here)
+     * @param m parameter of the Jacobi elliptic function (must be negative here)
      */
-    NearZeroParameter(final double m) {
+    NegativeParameter(final double m) {
         super(m);
+        final double omM = 1.0 - m;
+        algorithm        = JacobiEllipticBuilder.build(-m / omM);
+        inputScale       = FastMath.sqrt(omM);
+        outputScale      = 1.0 / inputScale;
     }
 
     /** {@inheritDoc} */
     @Override
     public CopolarN valuesN(final double u) {
-        final SinCos sc     = FastMath.sinCos(u);
-        final double factor = 0.25 * getM() * (u - sc.sin() * sc.cos());
-        return new CopolarN(sc.sin() - factor * sc.cos(),            // equation 16.13.1
-                            sc.cos() + factor * sc.sin(),            // equation 16.13.2
-                            1 - 0.5 * getM() * sc.sin() * sc.sin()); // equation 16.13.3
+        final CopolarD trioD = new CopolarD(algorithm.valuesN(u * inputScale));
+        return new CopolarN(outputScale * trioD.sd(), trioD.cd(), trioD.nd());
     }
 
 }

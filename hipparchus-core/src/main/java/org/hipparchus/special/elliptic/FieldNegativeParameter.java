@@ -14,42 +14,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.util.FastMath;
 
-/** Algorithm for computing the principal Jacobi functions for parameter m greater than 1.
+/** Algorithm for computing the principal Jacobi functions for negative parameter m.
  * <p>
- * The rules for reciprocal parameter change are given in Abramowitz and Stegun, section 16.11.
+ * The rules for negative parameter change are given in Abramowitz and Stegun, section 16.10.
  * </p>
+ * @param <T> the type of the field elements
  * @since 2.0
  */
-class BigParameter extends JacobiElliptic {
+class FieldNegativeParameter<T extends CalculusFieldElement<T>> extends FieldJacobiElliptic<T> {
 
     /** Algorithm to use for the positive parameter. */
-    private final JacobiElliptic algorithm;
+    private final FieldJacobiElliptic<T> algorithm;
 
     /** Input scaling factor. */
-    private final double inputScale;
+    private final T inputScale;
 
     /** output scaling factor. */
-    private final double outputScale;
+    private final T outputScale;
 
     /** Simple constructor.
-     * @param m parameter of the Jacobi elliptic function (must be greater than 1 here)
+     * @param m parameter of the Jacobi elliptic function (must be negative here)
      */
-    BigParameter(final double m) {
+    FieldNegativeParameter(final T m) {
         super(m);
-        algorithm   = JacobiEllipticBuilder.build(1.0 / m);
-        inputScale  = FastMath.sqrt(m);
-        outputScale = 1.0 / inputScale;
+        final T omM = m.getField().getOne().subtract(m);
+        algorithm   = JacobiEllipticBuilder.build(m.negate().divide(omM));
+        inputScale  = FastMath.sqrt(omM);
+        outputScale = inputScale.reciprocal();
     }
 
     /** {@inheritDoc} */
     @Override
-    public CopolarN valuesN(final double u) {
-        final CopolarN trioN = algorithm.valuesN(u * inputScale);
-        return new CopolarN(outputScale * trioN.sn(), trioN.dn(), trioN.cn());
+    public FieldCopolarN<T> valuesN(final T u) {
+        final FieldCopolarD<T> trioD = new FieldCopolarD<>(algorithm.valuesN(u.multiply(inputScale)));
+        return new FieldCopolarN<>(outputScale.multiply(trioD.sd()), trioD.cd(), trioD.nd());
     }
 
 }

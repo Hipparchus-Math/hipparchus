@@ -14,11 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
-import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.FieldSinCos;
+import org.hipparchus.util.SinCos;
 
 /** Algorithm for computing the principal Jacobi functions for parameters slightly above zero.
  * <p>
@@ -26,26 +25,25 @@ import org.hipparchus.util.FieldSinCos;
  * in terms of circular functions. It is given in Abramowitz and Stegun,
  * sections 16.13.
  * </p>
- * @param <T> the type of the field elements
  * @since 2.0
  */
-class FieldNearZeroParameter<T extends CalculusFieldElement<T>> extends FieldJacobiElliptic<T> {
+class NearZeroParameter extends JacobiElliptic {
 
     /** Simple constructor.
      * @param m parameter of the Jacobi elliptic function (must be zero or slightly positive here)
      */
-    FieldNearZeroParameter(final T m) {
+    NearZeroParameter(final double m) {
         super(m);
     }
 
     /** {@inheritDoc} */
     @Override
-    public FieldCopolarN<T> valuesN(final T u) {
-        final FieldSinCos<T> sc     = FastMath.sinCos(u);
-        final T              factor = getM().multiply(u.subtract(sc.sin().multiply(sc.cos()))).multiply(0.25);
-        return new FieldCopolarN<>(sc.sin().subtract(factor.multiply(sc.cos())),             // equation 16.13.1
-                        sc.cos().add(factor.multiply(sc.sin())),                             // equation 16.13.2
-                        getM().multiply(sc.sin()).multiply(sc.sin()).multiply(-0.5).add(1)); // equation 16.13.3
+    public CopolarN valuesN(final double u) {
+        final SinCos sc     = FastMath.sinCos(u);
+        final double factor = 0.25 * getM() * (u - sc.sin() * sc.cos());
+        return new CopolarN(sc.sin() - factor * sc.cos(),            // equation 16.13.1
+                            sc.cos() + factor * sc.sin(),            // equation 16.13.2
+                            1 - 0.5 * getM() * sc.sin() * sc.sin()); // equation 16.13.3
     }
 
 }

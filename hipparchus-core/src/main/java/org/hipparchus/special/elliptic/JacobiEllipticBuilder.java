@@ -14,18 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
 import org.hipparchus.CalculusFieldElement;
 
 /** Builder for algorithms compmuting Jacobi elliptic functions.
+ * <p>
  * The Jacobi elliptic functions are related to elliptic integrals.
- * We use hare the notations from <a
- * href="https://en.wikipedia.org/wiki/Abramowitz_and_Stegun">Abramowitz and
- * Stegun</a> (Ch. 16) with a parameter {@code m}. The notations from
- * <a href="https://dlmf.nist.gov/22">Digital Library of Mathematical Functions (Ch. 22)</a>
- * are different as they use modulus {@code k} instead of parameter {@code m},
- * with {@code k² = m}.
+ * </p>
  * @since 2.0
  */
 public class JacobiEllipticBuilder {
@@ -43,6 +39,11 @@ public class JacobiEllipticBuilder {
     }
 
     /** Build an algorithm for computing Jacobi elliptic functions.
+     * <p>
+     * Beware that elliptic integrals are defined in terms of elliptic modulus {@code k}
+     * whereas Jacobi elliptic functions (which are their inverse) are defined
+     * in terms of parameter {@code m}. Both are related as {@code k² = m}.
+     * </p>
      * @param m parameter of the Jacobi elliptic function
      * @return selected algorithm
      */
@@ -61,6 +62,11 @@ public class JacobiEllipticBuilder {
     }
 
     /** Build an algorithm for computing Jacobi elliptic functions.
+     * <p>
+     * Beware that elliptic integrals are defined in terms of elliptic modulus {@code k}
+     * whereas Jacobi elliptic functions (which are their inverse) are defined
+     * in terms of parameter {@code m}. Both are related as {@code k² = m}.
+     * </p>
      * @param m parameter of the Jacobi elliptic function
      * @return selected algorithm
      */

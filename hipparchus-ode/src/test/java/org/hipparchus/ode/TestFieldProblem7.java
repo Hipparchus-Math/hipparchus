@@ -19,9 +19,9 @@ package org.hipparchus.ode;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.special.jacobi.FieldCopolarN;
-import org.hipparchus.special.jacobi.FieldJacobiElliptic;
-import org.hipparchus.special.jacobi.JacobiEllipticBuilder;
+import org.hipparchus.special.elliptic.FieldCopolarN;
+import org.hipparchus.special.elliptic.FieldJacobiElliptic;
+import org.hipparchus.special.elliptic.JacobiEllipticBuilder;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
