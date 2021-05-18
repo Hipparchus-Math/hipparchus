@@ -49,7 +49,7 @@ class BoundedParameter extends JacobiElliptic {
      * The algorithm for evaluating the functions is based on arithmetic-geometric
      * mean. It is given in Abramowitz and Stegun, sections 16.4 and 17.6.
      * </p>
-     * @param u argument of the functions, must be close far from boundaries here
+     * @param u argument of the functions, must be far from boundaries here
      * @return copolar trio containing the three principal Jacobi
      * elliptic functions {@code sn(u|m)}, {@code cn(u|m)}, and {@code dn(u|m)}.
      */
