@@ -37,6 +37,7 @@ import org.hipparchus.ode.TestFieldProblem1;
 import org.hipparchus.ode.TestFieldProblem3;
 import org.hipparchus.ode.TestFieldProblem4;
 import org.hipparchus.ode.TestFieldProblem5;
+import org.hipparchus.ode.TestFieldProblem7;
 import org.hipparchus.ode.TestFieldProblemHandler;
 import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.FieldODEEventHandler;
@@ -431,6 +432,52 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             T dx = current.getPrimaryState()[0].subtract(theoreticalY[0]);
             T dy = current.getPrimaryState()[1].subtract(theoreticalY[1]);
             T error = dx.multiply(dx).add(dy.multiply(dy));
+            if (error.subtract(maxError).getReal() > 0) {
+                maxError = error;
+            }
+            if (isLast) {
+                Assert.assertEquals(0.0, maxError.getReal(), epsilon);
+            }
+        }
+    }
+
+    @Test
+    public abstract void testTorqueFreeMotion();
+
+    protected <T extends CalculusFieldElement<T>> void doTestTorqueFreeMotion(Field<T> field, double epsilon) {
+
+        final TestFieldProblem7<T> pb  = new TestFieldProblem7<>(field);
+        double minStep = 1.0e-10;
+        double maxStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).getReal();
+        double[] vecAbsoluteTolerance = { 1.0e-8, 1.0e-8, 1.0e-8 };
+        double[] vecRelativeTolerance = { 1.0e-10, 1.0e-10, 1.0e-10 };
+
+        FieldODEIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
+                                                       vecAbsoluteTolerance, vecRelativeTolerance);
+        integ.addStepHandler(new TorqueFreeHandler<>(pb, epsilon));
+        integ.integrate(new FieldExpandableODE<>(pb), pb.getInitialState(), pb.getFinalTime());
+    }
+
+    private static class TorqueFreeHandler<T extends CalculusFieldElement<T>> implements FieldODEStepHandler<T> {
+        private T maxError;
+        private final TestFieldProblem7<T> pb;
+        private final double epsilon;
+        public TorqueFreeHandler(TestFieldProblem7<T> pb, double epsilon) {
+            this.pb      = pb;
+            this.epsilon = epsilon;
+            maxError     = pb.getField().getZero();
+        }
+        public void init(FieldODEStateAndDerivative<T> state0, T t) {
+            maxError = pb.getField().getZero();
+        }
+        public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast) {
+
+            FieldODEStateAndDerivative<T> current = interpolator.getCurrentState();
+            T[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
+            T do1   = current.getPrimaryState()[0].subtract(theoreticalY[0]);
+            T do2   = current.getPrimaryState()[1].subtract(theoreticalY[1]);
+            T do3   = current.getPrimaryState()[2].subtract(theoreticalY[2]);
+            T error = do1.multiply(do1).add(do2.multiply(do2)).add(do3.multiply(do3));
             if (error.subtract(maxError).getReal() > 0) {
                 maxError = error;
             }
