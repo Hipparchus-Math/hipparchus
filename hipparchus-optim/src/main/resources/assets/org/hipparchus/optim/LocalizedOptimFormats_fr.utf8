@@ -27,4 +27,3 @@ TRUST_REGION_STEP_FAILED = l''étape de la région de confiance n''a pas réduit
 UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN = impossible de calculer la factorisation Q.R de la matrice jacobienne {0}x{1}
 UNABLE_TO_SOLVE_SINGULAR_PROBLEM = résolution impossible : problème singulier
 UNBOUNDED_SOLUTION = solution non bornée
-UNEQUAL_VECTOR_DIMENSIONS = dimensions de vecteur non égales : {0} and {1}

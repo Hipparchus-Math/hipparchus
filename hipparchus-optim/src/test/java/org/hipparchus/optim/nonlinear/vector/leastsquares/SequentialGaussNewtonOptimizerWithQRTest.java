@@ -1,8 +1,8 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Hipparchus project under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -15,15 +15,11 @@
  * limitations under the License.
  */
 
-/*
- * This is not the original file distributed by the Apache Software Foundation
- * It has been modified by the Hipparchus project
- */
-
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
 import java.io.IOException;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.QRDecomposer;
 import org.hipparchus.optim.LocalizedOptimFormats;
@@ -118,7 +114,7 @@ public class SequentialGaussNewtonOptimizerWithQRTest
              */
             super.testHahn1();
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedOptimFormats.UNEQUAL_VECTOR_DIMENSIONS, mise.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, mise.getSpecifier());
         }
     }
 

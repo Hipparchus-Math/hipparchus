@@ -1,8 +1,8 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Hipparchus project under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -13,11 +13,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-
-/*
- * This is not the original file distributed by the Apache Software Foundation
- * It has been modified by the Hipparchus project
  */
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
@@ -31,6 +26,7 @@ import java.util.Arrays;
 import org.hamcrest.MatcherAssert;
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -41,7 +37,6 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.ConvergenceChecker;
-import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.SimpleVectorValueChecker;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Evaluation;
@@ -487,7 +482,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
             optimizer.optimize(lsp);
             fail(optimizer);
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedOptimFormats.UNEQUAL_VECTOR_DIMENSIONS, mise.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, mise.getSpecifier());
         }
     }
 

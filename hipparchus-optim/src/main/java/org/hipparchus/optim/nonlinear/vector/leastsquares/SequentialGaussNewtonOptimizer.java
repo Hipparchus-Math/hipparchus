@@ -1,8 +1,8 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Hipparchus project under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -14,13 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This is not the original file distributed by the Apache Software Foundation
- * It has been modified by the Hipparchus project
- */
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -122,7 +118,6 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
     @Override
     public Optimum optimize(final LeastSquaresProblem lsp) {
         // create local evaluation and iteration counts
-        final Incrementor evaluationCounter = lsp.getEvaluationCounter();
         final Incrementor iterationCounter = lsp.getIterationCounter();
         final ConvergenceChecker<Evaluation> checker =
             lsp.getConvergenceChecker();
@@ -135,20 +130,21 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
         RealVector currentPoint = lsp.getStart();
         
         if (currentPoint.getDimension() != oldEvaluation.getPoint().getDimension()) {
-            throw new MathIllegalStateException(LocalizedOptimFormats.UNEQUAL_VECTOR_DIMENSIONS, 
+            throw new MathIllegalStateException(LocalizedCoreFormats.DIMENSIONS_MISMATCH, 
                       currentPoint.getDimension(), oldEvaluation.getPoint().getDimension());
         }
 
         // iterate until convergence is reached
         Evaluation current = null;
         while (true) {
+            
+            // the number of evaluations is equal to the number of iterations
             iterationCounter.increment();
 
             // evaluate the objective function and its jacobian
             final Evaluation previous = current;
             
             // Value of the objective function at "currentPoint".
-            evaluationCounter.increment();
             current = lsp.evaluate(currentPoint);
             final RealVector currentResiduals = current.getResiduals();
             final RealMatrix weightedJacobian = current.getJacobian();
@@ -161,7 +157,7 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
                                   current)) {
                 // combine old and new evaluations
                 final Evaluation combinedEvaluation = new CombinedEvaluation(this.oldEvaluation, current);
-                return Optimum.of(combinedEvaluation, evaluationCounter.getCount(),
+                return Optimum.of(combinedEvaluation, iterationCounter.getCount(),
                                   iterationCounter.getCount());
             }
 
