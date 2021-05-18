@@ -14,57 +14,54 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
-import org.hipparchus.CalculusFieldElement;
-
-/** Copolar trio with pole at point d in Glaisher’s Notation.
+/** Copolar trio with pole at point c in Glaisher’s Notation.
  * <p>
  * This is a container for the three subsidiary Jacobi elliptic functions
- * {@code nd(u|m)}, {@code sd(u|m)}, and {@code cd(u|m)}.
+ * {@code dc(u|m)}, {@code nc(u|m)}, and {@code sc(u|m)}.
  * </p>
- * @param <T> the type of the field elements
  * @since 2.0
  */
-public class FieldCopolarD<T extends CalculusFieldElement<T>> {
+public class CopolarC {
 
-    /** Value of the nd function. */
-    private final T nd;
+    /** Value of the dc function. */
+    private final double dc;
 
-    /** Value of the sd function. */
-    private final T sd;
+    /** Value of the nc function. */
+    private final double nc;
 
-    /** Value of the cd function. */
-    private final T cd;
+    /** Value of the sc function. */
+    private final double sc;
 
     /** Simple constructor.
      * @param trioN copolar trio with pole at point n in Glaisher’s Notation
      */
-    FieldCopolarD(final FieldCopolarN<T> trioN) {
-        this.nd = trioN.dn().reciprocal();
-        this.sd = nd.multiply(trioN.sn());
-        this.cd = nd.multiply(trioN.cn());
+    CopolarC(final CopolarN trioN) {
+        this.nc = 1.0 / trioN.cn();
+        this.sc = nc  * trioN.sn();
+        this.dc = nc  * trioN.dn();
     }
 
-    /** Get the value of the nd function.
-     * @return nd(u|m)
+    /** Get the value of the dc function.
+     * @return dc(u|m)
      */
-    public T nd() {
-        return nd;
+    public double dc() {
+        return dc;
     }
 
-    /** Get the value of the sd function.
-     * @return sd(u|m)
+    /** Get the value of the nc function.
+     * @return nc(u|m)
      */
-    public T sd() {
-        return sd;
+    public double nc() {
+        return nc;
     }
 
-    /** Get the value of the cd function.
-     * @return cd(u|m)
+    /** Get the value of the sc function.
+     * @return sc(u|m)
      */
-    public T cd() {
-        return cd;
+    public double sc() {
+        return sc;
     }
 
 }

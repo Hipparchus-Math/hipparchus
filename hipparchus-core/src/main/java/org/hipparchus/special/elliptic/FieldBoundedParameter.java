@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -58,17 +58,15 @@ class FieldBoundedParameter<T extends CalculusFieldElement<T>> extends FieldJaco
      * The algorithm for evaluating the functions is based on arithmetic-geometric
      * mean. It is given in Abramowitz and Stegun, sections 16.4 and 17.6.
      * </p>
-     * @param u argument of the functions, must be close far from boundaries here
-     * @return copolar trio containing the three principal Jacobi
-     * elliptic functions {@code sn(u|m)}, {@code cn(u|m)}, and {@code dn(u|m)}.
      */
     @Override
     public FieldCopolarN<T> valuesN(T u) {
 
         // initialize scale
+        final T one = getM().getField().getOne();
         final T[] a = MathArrays.buildArray(u.getField(), N_MAX);
         final T[] c = MathArrays.buildArray(u.getField(), N_MAX);
-        a[0]        = u.getField().getOne();
+        a[0]        = one;
         T bi        = b0;
         c[0]        = c0;
 
@@ -87,7 +85,6 @@ class FieldBoundedParameter<T extends CalculusFieldElement<T>> extends FieldJaco
             bi = FastMath.sqrt(a[i - 1].multiply(bi));
 
             // convergence (by the inequality of arithmetic and geometric means, this is non-negative)
-            final T one = getM().getField().getOne();
             if (c[i].getReal() <= FastMath.ulp(a[i]).getReal()) {
                 // convergence has been reached
 
@@ -99,8 +96,9 @@ class FieldBoundedParameter<T extends CalculusFieldElement<T>> extends FieldJaco
                 }
                 // using 16.1.5 rather than 16.4.4 to avoid computing another cosine
                 final FieldSinCos<T> scPhi0 = FastMath.sinCos(phi);
-                return new FieldCopolarN<>(scPhi0.sin(), scPhi0.cos(),
-                                FastMath.sqrt(one.subtract(getM().multiply(scPhi0.sin()).multiply(scPhi0.sin()))));
+                return new FieldCopolarN<>(scPhi0.sin(),
+                                           scPhi0.cos(),
+                                           FastMath.sqrt(one.subtract(getM().multiply(scPhi0.sin()).multiply(scPhi0.sin()))));
 
             }
 

@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
+import org.hipparchus.analysis.differentiation.UnivariateDerivative1;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -102,6 +103,44 @@ public class FieldJacobiEllipticTest {
         // this value was computed using Wolfram Alpha
         Dfp reference = field.newDfp("0.8929235150418389265984488063926925504375953835259703680383");
         Assert.assertTrue(sn.subtract(reference).abs().getReal() < 2.0e-46);
+    }
+
+    @Test
+    public void testDerivatives() {
+
+        final double m  = 0.75;
+        final double m1 = 1 - m;
+        final double u  = 1.3;
+
+        JacobiElliptic jeD = JacobiEllipticBuilder.build(m);
+        CopolarN valuesND = jeD.valuesN(u);
+        CopolarC valuesCD = jeD.valuesC(u);
+        CopolarS valuesSD = jeD.valuesS(u);
+        CopolarD valuesDD = jeD.valuesD(u);
+
+        FieldJacobiElliptic<UnivariateDerivative1> jeU = JacobiEllipticBuilder.build(new UnivariateDerivative1(m, 0.0));
+        FieldCopolarN<UnivariateDerivative1> valuesNU = jeU.valuesN(new UnivariateDerivative1(u, 1.0));
+        FieldCopolarC<UnivariateDerivative1> valuesCU = jeU.valuesC(new UnivariateDerivative1(u, 1.0));
+        FieldCopolarS<UnivariateDerivative1> valuesSU = jeU.valuesS(new UnivariateDerivative1(u, 1.0));
+        FieldCopolarD<UnivariateDerivative1> valuesDU = jeU.valuesD(new UnivariateDerivative1(u, 1.0));
+
+        // see Abramowitz and Stegun section 16.16
+        Assert.assertEquals(      valuesND.cn() * valuesND.dn(), valuesNU.sn().getFirstDerivative(), 1.0e-15);
+        Assert.assertEquals(-1  * valuesND.sn() * valuesND.dn(), valuesNU.cn().getFirstDerivative(), 1.0e-15);
+        Assert.assertEquals(-m  * valuesND.sn() * valuesND.cn(), valuesNU.dn().getFirstDerivative(), 1.0e-15);
+
+        Assert.assertEquals(-m1 * valuesDD.sd() * valuesDD.nd(), valuesDU.cd().getFirstDerivative(), 1.0e-15);
+        Assert.assertEquals(      valuesDD.cd() * valuesDD.nd(), valuesDU.sd().getFirstDerivative(), 1.0e-15);
+        Assert.assertEquals( m  * valuesDD.sd() * valuesDD.cd(), valuesDU.nd().getFirstDerivative(), 1.0e-15);
+
+        Assert.assertEquals( m1 * valuesCD.sc() * valuesCD.nc(), valuesCU.dc().getFirstDerivative(), 1.0e-15);
+        Assert.assertEquals(      valuesCD.sc() * valuesCD.dc(), valuesCU.nc().getFirstDerivative(), 1.0e-15);
+        Assert.assertEquals(      valuesCD.dc() * valuesCD.nc(), valuesCU.sc().getFirstDerivative(), 1.0e-15);
+
+        Assert.assertEquals(-1  * valuesSD.ds() * valuesSD.cs(), valuesSU.ns().getFirstDerivative(), 1.0e-15);
+        Assert.assertEquals(-1  * valuesSD.cs() * valuesSD.ns(), valuesSU.ds().getFirstDerivative(), 1.0e-15);
+        Assert.assertEquals(-1  * valuesSD.ns() * valuesSD.ds(), valuesSU.cs().getFirstDerivative(), 1.0e-15);
+
     }
 
     private <T extends CalculusFieldElement<T>> void doTestCircular(final Field<T> field) {

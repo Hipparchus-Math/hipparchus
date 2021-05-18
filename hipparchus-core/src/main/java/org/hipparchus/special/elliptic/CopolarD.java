@@ -14,57 +14,54 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
-import org.hipparchus.CalculusFieldElement;
-
-/** Copolar trio with pole at point s in Glaisher’s Notation.
+/** Copolar trio with pole at point d in Glaisher’s Notation.
  * <p>
  * This is a container for the three subsidiary Jacobi elliptic functions
- * {@code cs(u|m)}, {@code ds(u|m)} and {@code ns(u|m)}.
+ * {@code nd(u|m)}, {@code sd(u|m)}, and {@code cd(u|m)}.
  * </p>
- * @param <T> the type of the field elements
  * @since 2.0
  */
-public class FieldCopolarS<T extends CalculusFieldElement<T>> {
+public class CopolarD {
 
-    /** Value of the cs function. */
-    private final T cs;
+    /** Value of the nd function. */
+    private final double nd;
 
-    /** Value of the dn function. */
-    private final T ds;
+    /** Value of the sd function. */
+    private final double sd;
 
-    /** Value of the ns function. */
-    private final T ns;
+    /** Value of the cd function. */
+    private final double cd;
 
     /** Simple constructor.
      * @param trioN copolar trio with pole at point n in Glaisher’s Notation
      */
-    FieldCopolarS(final FieldCopolarN<T> trioN) {
-        this.ns = trioN.sn().reciprocal();
-        this.cs = ns.multiply(trioN.cn());
-        this.ds = ns.multiply(trioN.dn());
+    CopolarD(final CopolarN trioN) {
+        this.nd = 1.0 / trioN.dn();
+        this.sd = nd  * trioN.sn();
+        this.cd = nd  * trioN.cn();
     }
 
-    /** Get the value of the cs function.
-     * @return cs(u|m)
+    /** Get the value of the nd function.
+     * @return nd(u|m)
      */
-    public T cs() {
-        return cs;
+    public double nd() {
+        return nd;
     }
 
-    /** Get the value of the ds function.
-     * @return ds(u|m)
+    /** Get the value of the sd function.
+     * @return sd(u|m)
      */
-    public T ds() {
-        return ds;
+    public double sd() {
+        return sd;
     }
 
-    /** Get the value of the ns function.
-     * @return ns(u|m)
+    /** Get the value of the cd function.
+     * @return cd(u|m)
      */
-    public T ns() {
-        return ns;
+    public double cd() {
+        return cd;
     }
 
 }

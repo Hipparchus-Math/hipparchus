@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.util.FastMath;
@@ -35,7 +35,7 @@ class FieldNearOneParameter<T extends CalculusFieldElement<T>> extends FieldJaco
     private final T m1Fourth;
 
     /** Simple constructor.
-     * @param m parameter of the Jacobi elliptic function (must be negative here)
+     * @param m parameter of the Jacobi elliptic function (must be one or slightly below one here)
      */
     FieldNearOneParameter(final T m) {
         super(m);

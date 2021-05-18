@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.SinhCosh;
@@ -33,7 +33,7 @@ class NearOneParameter extends JacobiElliptic {
     private final double m1;
 
     /** Simple constructor.
-     * @param m parameter of the Jacobi elliptic function (must be negative here)
+     * @param m parameter of the Jacobi elliptic function (must be one or slightly below one here)
      */
     NearOneParameter(final double m) {
         super(m);

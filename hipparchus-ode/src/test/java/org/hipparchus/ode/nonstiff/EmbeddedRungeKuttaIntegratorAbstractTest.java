@@ -37,6 +37,7 @@ import org.hipparchus.ode.TestProblem1;
 import org.hipparchus.ode.TestProblem3;
 import org.hipparchus.ode.TestProblem4;
 import org.hipparchus.ode.TestProblem5;
+import org.hipparchus.ode.TestProblem7;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.VariationalEquation;
 import org.hipparchus.ode.events.Action;
@@ -385,6 +386,51 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             double dx = current.getPrimaryState()[0] - theoreticalY[0];
             double dy = current.getPrimaryState()[1] - theoreticalY[1];
             double error = dx * dx + dy * dy;
+            if (error > maxError) {
+                maxError = error;
+            }
+            if (isLast) {
+                Assert.assertEquals(0.0, maxError, epsilon);
+            }
+        }
+    }
+
+    @Test
+    public abstract void testTorqueFreeMotion();
+
+    protected void doTestTorqueFreeMotion(double epsilon) {
+
+        final TestProblem7 pb  = new TestProblem7();
+        double minStep = 1.0e-10;
+        double maxStep = pb.getFinalTime() - pb.getInitialState().getTime();
+        double[] vecAbsoluteTolerance = { 1.0e-8, 1.0e-8, 1.0e-8 };
+        double[] vecRelativeTolerance = { 1.0e-10, 1.0e-10, 1.0e-10 };
+
+        EmbeddedRungeKuttaIntegrator integ = createIntegrator(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
+        integ.addStepHandler(new TorqueFreeHandler(pb, epsilon));
+        integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
+    }
+
+    private static class TorqueFreeHandler implements ODEStepHandler {
+        private double maxError;
+        private final TestProblem7 pb;
+        private final double epsilon;
+        public TorqueFreeHandler(TestProblem7 pb, double epsilon) {
+            this.pb      = pb;
+            this.epsilon = epsilon;
+            maxError     = 0;
+        }
+        public void init(ODEStateAndDerivative state0, double t) {
+            maxError = 0;
+        }
+        public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
+
+            ODEStateAndDerivative current = interpolator.getCurrentState();
+            double[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
+            double do1   = current.getPrimaryState()[0] - theoreticalY[0];
+            double do2   = current.getPrimaryState()[1] - theoreticalY[1];
+            double do3   = current.getPrimaryState()[2] - theoreticalY[2];
+            double error = do1 * do1 + do2 * do2 + do3 * do3;
             if (error > maxError) {
                 maxError = error;
             }

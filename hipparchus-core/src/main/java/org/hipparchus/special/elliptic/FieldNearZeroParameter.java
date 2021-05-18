@@ -14,45 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.FieldSinCos;
 
-/** Algorithm for computing the principal Jacobi functions for negative parameter m.
+/** Algorithm for computing the principal Jacobi functions for parameters slightly above zero.
  * <p>
- * The rules for negative parameter change are given in Abramowitz and Stegun, section 16.10.
+ * The algorithm for evaluating the functions is based on approximation
+ * in terms of circular functions. It is given in Abramowitz and Stegun,
+ * sections 16.13.
  * </p>
  * @param <T> the type of the field elements
  * @since 2.0
  */
-class FieldNegativeParameter<T extends CalculusFieldElement<T>> extends FieldJacobiElliptic<T> {
-
-    /** Algorithm to use for the positive parameter. */
-    private final FieldJacobiElliptic<T> algorithm;
-
-    /** Input scaling factor. */
-    private final T inputScale;
-
-    /** output scaling factor. */
-    private final T outputScale;
+class FieldNearZeroParameter<T extends CalculusFieldElement<T>> extends FieldJacobiElliptic<T> {
 
     /** Simple constructor.
-     * @param m parameter of the Jacobi elliptic function (must be negative here)
+     * @param m parameter of the Jacobi elliptic function (must be zero or slightly positive here)
      */
-    FieldNegativeParameter(final T m) {
+    FieldNearZeroParameter(final T m) {
         super(m);
-        final T omM = m.getField().getOne().subtract(m);
-        algorithm   = JacobiEllipticBuilder.build(m.negate().divide(omM));
-        inputScale  = FastMath.sqrt(omM);
-        outputScale = inputScale.reciprocal();
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldCopolarN<T> valuesN(final T u) {
-        final FieldCopolarD<T> trioD = new FieldCopolarD<>(algorithm.valuesN(u.multiply(inputScale)));
-        return new FieldCopolarN<>(outputScale.multiply(trioD.sd()), trioD.cd(), trioD.nd());
+        final FieldSinCos<T> sc     = FastMath.sinCos(u);
+        final T              factor = getM().multiply(u.subtract(sc.sin().multiply(sc.cos()))).multiply(0.25);
+        return new FieldCopolarN<>(sc.sin().subtract(factor.multiply(sc.cos())),             // equation 16.13.1
+                        sc.cos().add(factor.multiply(sc.sin())),                             // equation 16.13.2
+                        getM().multiply(sc.sin()).multiply(sc.sin()).multiply(-0.5).add(1)); // equation 16.13.3
     }
 
 }

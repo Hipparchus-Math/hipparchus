@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.SinCos;
@@ -30,7 +30,7 @@ import org.hipparchus.util.SinCos;
 class NearZeroParameter extends JacobiElliptic {
 
     /** Simple constructor.
-     * @param m parameter of the Jacobi elliptic function (must be negative here)
+     * @param m parameter of the Jacobi elliptic function (must be zero or slightly positive here)
      */
     NearZeroParameter(final double m) {
         super(m);

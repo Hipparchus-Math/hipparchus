@@ -14,53 +14,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
+
+import org.hipparchus.CalculusFieldElement;
 
 /** Copolar trio with pole at point c in Glaisher’s Notation.
  * <p>
  * This is a container for the three subsidiary Jacobi elliptic functions
  * {@code dc(u|m)}, {@code nc(u|m)}, and {@code sc(u|m)}.
  * </p>
+ * @param <T> the type of the field elements
  * @since 2.0
  */
-public class CopolarC {
+public class FieldCopolarC<T extends CalculusFieldElement<T>> {
 
     /** Value of the dc function. */
-    private final double dc;
+    private final T dc;
 
     /** Value of the nc function. */
-    private final double nc;
+    private final T nc;
 
     /** Value of the sc function. */
-    private final double sc;
+    private final T sc;
 
     /** Simple constructor.
      * @param trioN copolar trio with pole at point n in Glaisher’s Notation
      */
-    CopolarC(final CopolarN trioN) {
-        this.nc = 1.0 / trioN.cn();
-        this.sc = nc  * trioN.sn();
-        this.dc = nc  * trioN.dn();
+    FieldCopolarC(final FieldCopolarN<T> trioN) {
+        this.nc = trioN.cn().reciprocal();
+        this.sc = nc.multiply(trioN.sn());
+        this.dc = nc.multiply(trioN.dn());
     }
 
     /** Get the value of the dc function.
      * @return dc(u|m)
      */
-    public double dc() {
+    public T dc() {
         return dc;
     }
 
     /** Get the value of the nc function.
      * @return nc(u|m)
      */
-    public double nc() {
+    public T nc() {
         return nc;
     }
 
     /** Get the value of the sc function.
      * @return sc(u|m)
      */
-    public double sc() {
+    public T sc() {
         return sc;
     }
 

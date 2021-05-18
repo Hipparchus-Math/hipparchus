@@ -14,57 +14,57 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
 import org.hipparchus.CalculusFieldElement;
 
-/** Copolar trio with pole at point c in Glaisher’s Notation.
+/** Copolar trio with pole at point s in Glaisher’s Notation.
  * <p>
  * This is a container for the three subsidiary Jacobi elliptic functions
- * {@code dc(u|m)}, {@code nc(u|m)}, and {@code sc(u|m)}.
+ * {@code cs(u|m)}, {@code ds(u|m)} and {@code ns(u|m)}.
  * </p>
  * @param <T> the type of the field elements
  * @since 2.0
  */
-public class FieldCopolarC<T extends CalculusFieldElement<T>> {
+public class FieldCopolarS<T extends CalculusFieldElement<T>> {
 
-    /** Value of the dc function. */
-    private final T dc;
+    /** Value of the cs function. */
+    private final T cs;
 
-    /** Value of the nc function. */
-    private final T nc;
+    /** Value of the dn function. */
+    private final T ds;
 
-    /** Value of the sc function. */
-    private final T sc;
+    /** Value of the ns function. */
+    private final T ns;
 
     /** Simple constructor.
      * @param trioN copolar trio with pole at point n in Glaisher’s Notation
      */
-    FieldCopolarC(final FieldCopolarN<T> trioN) {
-        this.nc = trioN.cn().reciprocal();
-        this.sc = nc.multiply(trioN.sn());
-        this.dc = nc.multiply(trioN.dn());
+    FieldCopolarS(final FieldCopolarN<T> trioN) {
+        this.ns = trioN.sn().reciprocal();
+        this.cs = ns.multiply(trioN.cn());
+        this.ds = ns.multiply(trioN.dn());
     }
 
-    /** Get the value of the dc function.
-     * @return dc(u|m)
+    /** Get the value of the cs function.
+     * @return cs(u|m)
      */
-    public T dc() {
-        return dc;
+    public T cs() {
+        return cs;
     }
 
-    /** Get the value of the nc function.
-     * @return nc(u|m)
+    /** Get the value of the ds function.
+     * @return ds(u|m)
      */
-    public T nc() {
-        return nc;
+    public T ds() {
+        return ds;
     }
 
-    /** Get the value of the sc function.
-     * @return sc(u|m)
+    /** Get the value of the ns function.
+     * @return ns(u|m)
      */
-    public T sc() {
-        return sc;
+    public T ns() {
+        return ns;
     }
 
 }

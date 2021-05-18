@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.special.jacobi;
+package org.hipparchus.special.elliptic;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -49,9 +49,6 @@ class BoundedParameter extends JacobiElliptic {
      * The algorithm for evaluating the functions is based on arithmetic-geometric
      * mean. It is given in Abramowitz and Stegun, sections 16.4 and 17.6.
      * </p>
-     * @param u argument of the functions, must be close far from boundaries here
-     * @return copolar trio containing the three principal Jacobi
-     * elliptic functions {@code sn(u|m)}, {@code cn(u|m)}, and {@code dn(u|m)}.
      */
     @Override
     public CopolarN valuesN(double u) {
