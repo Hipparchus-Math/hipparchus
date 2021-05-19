@@ -76,6 +76,8 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
         Complex z = new Complex(3.0, 4.0);
         Assert.assertEquals(3.0, z.getReal(), 1.0e-5);
         Assert.assertEquals(4.0, z.getImaginary(), 1.0e-5);
+        Assert.assertEquals(3.0, z.getRealPart(), 1.0e-5);
+        Assert.assertEquals(4.0, z.getImaginaryPart(), 1.0e-5);
     }
 
     @Test
@@ -1538,18 +1540,18 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
         // The complex number we want to compute all third-roots for.
         Complex z = new Complex(-2,2);
         // The List holding all third roots
-        Complex[] thirdRootsOfZ = z.nthRoot(3).toArray(new Complex[0]);
+        List<Complex> thirdRootsOfZ = z.nthRoot(3);
         // Returned Collection must not be empty!
-        Assert.assertEquals(3, thirdRootsOfZ.length);
+        Assert.assertEquals(3, thirdRootsOfZ.size());
         // test z_0
-        Assert.assertEquals(1.0,                  thirdRootsOfZ[0].getReal(),      1.0e-5);
-        Assert.assertEquals(1.0,                  thirdRootsOfZ[0].getImaginary(), 1.0e-5);
+        Assert.assertEquals(1.0,                  thirdRootsOfZ.get(0).getReal(),      1.0e-5);
+        Assert.assertEquals(1.0,                  thirdRootsOfZ.get(0).getImaginary(), 1.0e-5);
         // test z_1
-        Assert.assertEquals(-1.3660254037844386,  thirdRootsOfZ[1].getReal(),      1.0e-5);
-        Assert.assertEquals(0.36602540378443843,  thirdRootsOfZ[1].getImaginary(), 1.0e-5);
+        Assert.assertEquals(-1.3660254037844386,  thirdRootsOfZ.get(1).getReal(),      1.0e-5);
+        Assert.assertEquals(0.36602540378443843,  thirdRootsOfZ.get(1).getImaginary(), 1.0e-5);
         // test z_2
-        Assert.assertEquals(0.366025403784439,    thirdRootsOfZ[2].getReal(),      1.0e-5);
-        Assert.assertEquals(-1.3660254037844384,  thirdRootsOfZ[2].getImaginary(), 1.0e-5);
+        Assert.assertEquals(0.366025403784439,    thirdRootsOfZ.get(2).getReal(),      1.0e-5);
+        Assert.assertEquals(-1.3660254037844384,  thirdRootsOfZ.get(2).getImaginary(), 1.0e-5);
     }
 
 
@@ -1570,21 +1572,21 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
         // The complex number we want to compute all third-roots for.
         Complex z = new Complex(5,-2);
         // The List holding all fourth roots
-        Complex[] fourthRootsOfZ = z.nthRoot(4).toArray(new Complex[0]);
+        List<Complex> fourthRootsOfZ = z.nthRoot(4);
         // Returned Collection must not be empty!
-        Assert.assertEquals(4, fourthRootsOfZ.length);
+        Assert.assertEquals(4, fourthRootsOfZ.size());
         // test z_0
-        Assert.assertEquals(1.5164629308487783,     fourthRootsOfZ[0].getReal(),      1.0e-5);
-        Assert.assertEquals(-0.14469266210702247,   fourthRootsOfZ[0].getImaginary(), 1.0e-5);
+        Assert.assertEquals(1.5164629308487783,     fourthRootsOfZ.get(0).getReal(),      1.0e-5);
+        Assert.assertEquals(-0.14469266210702247,   fourthRootsOfZ.get(0).getImaginary(), 1.0e-5);
         // test z_1
-        Assert.assertEquals(0.14469266210702256,    fourthRootsOfZ[1].getReal(),      1.0e-5);
-        Assert.assertEquals(1.5164629308487783,     fourthRootsOfZ[1].getImaginary(), 1.0e-5);
+        Assert.assertEquals(0.14469266210702256,    fourthRootsOfZ.get(1).getReal(),      1.0e-5);
+        Assert.assertEquals(1.5164629308487783,     fourthRootsOfZ.get(1).getImaginary(), 1.0e-5);
         // test z_2
-        Assert.assertEquals(-1.5164629308487783,    fourthRootsOfZ[2].getReal(),      1.0e-5);
-        Assert.assertEquals(0.14469266210702267,    fourthRootsOfZ[2].getImaginary(), 1.0e-5);
+        Assert.assertEquals(-1.5164629308487783,    fourthRootsOfZ.get(2).getReal(),      1.0e-5);
+        Assert.assertEquals(0.14469266210702267,    fourthRootsOfZ.get(2).getImaginary(), 1.0e-5);
         // test z_3
-        Assert.assertEquals(-0.14469266210702275,   fourthRootsOfZ[3].getReal(),      1.0e-5);
-        Assert.assertEquals(-1.5164629308487783,    fourthRootsOfZ[3].getImaginary(), 1.0e-5);
+        Assert.assertEquals(-0.14469266210702275,   fourthRootsOfZ.get(3).getReal(),      1.0e-5);
+        Assert.assertEquals(-1.5164629308487783,    fourthRootsOfZ.get(3).getImaginary(), 1.0e-5);
     }
 
     /**
@@ -1604,18 +1606,18 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
         // But there are two more complex roots.
         Complex z = new Complex(8,0);
         // The List holding all third roots
-        Complex[] thirdRootsOfZ = z.nthRoot(3).toArray(new Complex[0]);
+        List<Complex> thirdRootsOfZ = z.nthRoot(3);
         // Returned Collection must not be empty!
-        Assert.assertEquals(3, thirdRootsOfZ.length);
+        Assert.assertEquals(3, thirdRootsOfZ.size());
         // test z_0
-        Assert.assertEquals(2.0,                thirdRootsOfZ[0].getReal(),      1.0e-5);
-        Assert.assertEquals(0.0,                thirdRootsOfZ[0].getImaginary(), 1.0e-5);
+        Assert.assertEquals(2.0,                thirdRootsOfZ.get(0).getReal(),      1.0e-5);
+        Assert.assertEquals(0.0,                thirdRootsOfZ.get(0).getImaginary(), 1.0e-5);
         // test z_1
-        Assert.assertEquals(-1.0,               thirdRootsOfZ[1].getReal(),      1.0e-5);
-        Assert.assertEquals(1.7320508075688774, thirdRootsOfZ[1].getImaginary(), 1.0e-5);
+        Assert.assertEquals(-1.0,               thirdRootsOfZ.get(1).getReal(),      1.0e-5);
+        Assert.assertEquals(1.7320508075688774, thirdRootsOfZ.get(1).getImaginary(), 1.0e-5);
         // test z_2
-        Assert.assertEquals(-1.0,               thirdRootsOfZ[2].getReal(),      1.0e-5);
-        Assert.assertEquals(-1.732050807568877, thirdRootsOfZ[2].getImaginary(), 1.0e-5);
+        Assert.assertEquals(-1.0,               thirdRootsOfZ.get(2).getReal(),      1.0e-5);
+        Assert.assertEquals(-1.732050807568877, thirdRootsOfZ.get(2).getImaginary(), 1.0e-5);
     }
 
 
@@ -1635,18 +1637,18 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
         // complex number with only imaginary part
         Complex z = new Complex(0,2);
         // The List holding all third roots
-        Complex[] thirdRootsOfZ = z.nthRoot(3).toArray(new Complex[0]);
+        List<Complex> thirdRootsOfZ = z.nthRoot(3);
         // Returned Collection must not be empty!
-        Assert.assertEquals(3, thirdRootsOfZ.length);
+        Assert.assertEquals(3, thirdRootsOfZ.size());
         // test z_0
-        Assert.assertEquals(1.0911236359717216,      thirdRootsOfZ[0].getReal(),      1.0e-5);
-        Assert.assertEquals(0.6299605249474365,      thirdRootsOfZ[0].getImaginary(), 1.0e-5);
+        Assert.assertEquals(1.0911236359717216,      thirdRootsOfZ.get(0).getReal(),      1.0e-5);
+        Assert.assertEquals(0.6299605249474365,      thirdRootsOfZ.get(0).getImaginary(), 1.0e-5);
         // test z_1
-        Assert.assertEquals(-1.0911236359717216,     thirdRootsOfZ[1].getReal(),      1.0e-5);
-        Assert.assertEquals(0.6299605249474365,      thirdRootsOfZ[1].getImaginary(), 1.0e-5);
+        Assert.assertEquals(-1.0911236359717216,     thirdRootsOfZ.get(1).getReal(),      1.0e-5);
+        Assert.assertEquals(0.6299605249474365,      thirdRootsOfZ.get(1).getImaginary(), 1.0e-5);
         // test z_2
-        Assert.assertEquals(-2.3144374213981936E-16, thirdRootsOfZ[2].getReal(),      1.0e-5);
-        Assert.assertEquals(-1.2599210498948732,     thirdRootsOfZ[2].getImaginary(), 1.0e-5);
+        Assert.assertEquals(-2.3144374213981936E-16, thirdRootsOfZ.get(2).getReal(),      1.0e-5);
+        Assert.assertEquals(-1.2599210498948732,     thirdRootsOfZ.get(2).getImaginary(), 1.0e-5);
     }
 
     /**
@@ -1913,11 +1915,11 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
 
     @Test
     public void testCopySignFieldComplex() {
-        for (double x1 = -3.9; x1 < 3.9; x1 += 0.05) {
-            for (double y1 = -3.9; y1 < 3.9; y1 += 0.05) {
+        for (double x1 = -3.9; x1 < 3.9; x1 += 0.08) {
+            for (double y1 = -3.9; y1 < 3.9; y1 += 0.08) {
                 final Complex z1 = new Complex(x1, y1);
-                for (double x2 = -3.9; x2 < 3.9; x2 += 0.05) {
-                    for (double y2 = -3.9; y2 < 3.9; y2 += 0.05) {
+                for (double x2 = -3.9; x2 < 3.9; x2 += 0.08) {
+                    for (double y2 = -3.9; y2 < 3.9; y2 += 0.08) {
                         final Complex z2 = new Complex(x2, y2);
                         Assert.assertEquals(FastMath.copySign(x1, x2), z1.copySign(z2).getReal(), 1.0e-15);
                         Assert.assertEquals(FastMath.copySign(y1, y2), z1.copySign(z2).getImaginary(), 1.0e-15);

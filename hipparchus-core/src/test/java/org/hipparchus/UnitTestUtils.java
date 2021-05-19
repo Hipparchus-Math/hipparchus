@@ -36,12 +36,14 @@ import java.util.Map;
 
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexFormat;
+import org.hipparchus.complex.FieldComplex;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.ChiSquaredDistribution;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.FieldMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
+import org.hipparchus.util.Decimal64;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -91,8 +93,8 @@ public class UnitTestUtils {
      * are exactly the same.  Also ensures that NaN / infinite components match.
      */
     public static void assertSame(Complex expected, Complex actual) {
-        assertSame(expected.getReal(), actual.getReal());
-        assertSame(expected.getImaginary(), actual.getImaginary());
+        assertSame(expected.getRealPart(), actual.getRealPart());
+        assertSame(expected.getImaginaryPart(), actual.getImaginaryPart());
     }
 
     /**
@@ -100,8 +102,26 @@ public class UnitTestUtils {
      * differ by at most delta.  Also ensures that NaN / infinite components match.
      */
     public static void assertEquals(Complex expected, Complex actual, double delta) {
-        Assert.assertEquals(expected.getReal(), actual.getReal(), delta);
-        Assert.assertEquals(expected.getImaginary(), actual.getImaginary(), delta);
+        Assert.assertEquals(expected.getRealPart(), actual.getRealPart(), delta);
+        Assert.assertEquals(expected.getImaginaryPart(), actual.getImaginaryPart(), delta);
+    }
+
+    /**
+     * Verifies that real and imaginary parts of the two complex arguments
+     * differ by at most delta.  Also ensures that NaN / infinite components match.
+     */
+    public static void assertEquals(FieldComplex<Decimal64> expected, FieldComplex<Decimal64> actual, double delta) {
+        Assert.assertEquals(expected.getRealPart().getReal(), actual.getRealPart().getReal(), delta);
+        Assert.assertEquals(expected.getImaginaryPart().getReal(), actual.getImaginaryPart().getReal(), delta);
+    }
+
+    /**
+     * Verifies that real and imaginary parts of the two complex arguments
+     * are exactly the same.  Also ensures that NaN / infinite components match.
+     */
+    public static void assertSame(FieldComplex<Decimal64> expected, FieldComplex<Decimal64> actual) {
+        assertSame(expected.getRealPart().getReal(), actual.getRealPart().getReal());
+        assertSame(expected.getImaginaryPart().getReal(), actual.getImaginaryPart().getReal());
     }
 
     /**
