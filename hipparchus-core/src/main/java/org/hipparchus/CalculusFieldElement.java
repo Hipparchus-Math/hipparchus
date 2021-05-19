@@ -447,6 +447,15 @@ public interface CalculusFieldElement<T> extends FieldElement<T> {
      * @return true if the instance is infinite
      */
     default boolean isInfinite() {
+        return Double.isInfinite(getReal());
+    }
+
+    /**
+     * Check if the instance is finite (neither infinite nor NaN).
+     * @return true if the instance is finite (neither infinite nor NaN)
+     * @since 2.0
+     */
+    default boolean isFinite() {
         return Double.isFinite(getReal());
     }
 
