@@ -171,6 +171,13 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     }
 
     @Test
+    public void testSinCosNaN() {
+        FieldSinCos<T> sinCos = build(Double.NaN).sinCos();
+        Assert.assertTrue(sinCos.sin().isNaN());
+        Assert.assertTrue(sinCos.cos().isNaN());
+    }
+
+    @Test
     public void testSinCosSum() {
         final RandomGenerator random = new Well19937a(0x4aab62a42c9eb940l);
         for (int i = 0; i < 10000; ++i) {
@@ -266,6 +273,13 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
             checkRelative(FastMath.sinh(x), sinhCosh.sinh());
             checkRelative(FastMath.cosh(x), sinhCosh.cosh());
         }
+    }
+
+    @Test
+    public void testSinhCoshNaN() {
+        FieldSinhCosh<T> sinhCosh = build(Double.NaN).sinhCosh();
+        Assert.assertTrue(sinhCosh.sinh().isNaN());
+        Assert.assertTrue(sinhCosh.cosh().isNaN());
     }
 
     @Test
