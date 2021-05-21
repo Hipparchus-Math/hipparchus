@@ -25,6 +25,7 @@ package org.hipparchus.random;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.SinCos;
 
 /**
  * Base class with default implementations for common methods.
@@ -93,9 +94,10 @@ abstract class BaseRandomGenerator implements RandomGenerator {
             final double x = nextDouble();
             final double y = nextDouble();
             final double alpha = 2 * FastMath.PI * x;
-            final double r      = FastMath.sqrt(-2 * FastMath.log(y));
-            random       = r * FastMath.cos(alpha);
-            nextGaussian = r * FastMath.sin(alpha);
+            final double r     = FastMath.sqrt(-2 * FastMath.log(y));
+            final SinCos scAlpha = FastMath.sinCos(alpha);
+            random       = r * scAlpha.cos();
+            nextGaussian = r * scAlpha.sin();
         } else {
             // use the second element of the pair already generated
             random = nextGaussian;

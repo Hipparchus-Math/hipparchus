@@ -406,8 +406,9 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
     public void setAngle(final double angle) {
         unlinkReverse();
         this.angle = MathUtils.normalizeAngle(angle, FastMath.PI);
-        cos        = FastMath.cos(this.angle);
-        sin        = FastMath.sin(this.angle);
+        final SinCos sinCos = FastMath.sinCos(this.angle);
+        cos        = sinCos.cos();
+        sin        = sinCos.sin();
     }
 
     /** Get the offset of the origin.

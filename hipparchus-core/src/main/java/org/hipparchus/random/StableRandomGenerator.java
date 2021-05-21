@@ -26,6 +26,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.SinCos;
 
 /**
  * <p>This class provides a stable normalized random generator. It samples from a stable
@@ -117,10 +118,10 @@ public class StableRandomGenerator implements NormalizedRandomGenerator {
             double cosPhi = FastMath.cos(phi);
             // to avoid rounding errors around alpha = 1
             if (FastMath.abs(alpha - 1d) > 1e-8) {
-                double alphaPhi = alpha * phi;
-                double invAlphaPhi = phi - alphaPhi;
-                x = (FastMath.sin(alphaPhi) + zeta * FastMath.cos(alphaPhi)) / cosPhi *
-                    (FastMath.cos(invAlphaPhi) + zeta * FastMath.sin(invAlphaPhi)) /
+                final SinCos scAlphaPhi    = FastMath.sinCos(alpha * phi);
+                final SinCos scInvAlphaPhi = FastMath.sinCos(phi * (1.0 - alpha));
+                x = (scAlphaPhi.sin()    + zeta * scAlphaPhi.cos()) / cosPhi *
+                    (scInvAlphaPhi.cos() + zeta * scInvAlphaPhi.sin()) /
                      FastMath.pow(omega * cosPhi, (1 - alpha) / alpha);
             } else {
                 double betaPhi = FastMath.PI / 2 + beta * phi;

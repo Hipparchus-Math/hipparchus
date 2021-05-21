@@ -35,6 +35,7 @@ import org.hipparchus.geometry.spherical.oned.ArcsSet;
 import org.hipparchus.geometry.spherical.oned.S1Point;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.SinCos;
 
 /** This class represents an oriented great circle on the 2-sphere.
 
@@ -198,7 +199,8 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
      * @see #getYAxis()
      */
     public Vector3D getPointAt(final double alpha) {
-        return new Vector3D(FastMath.cos(alpha), x, FastMath.sin(alpha), y);
+        final SinCos sc = FastMath.sinCos(alpha);
+        return new Vector3D(sc.cos(), x, sc.sin(), y);
     }
 
     /** Get the X axis of the circle.

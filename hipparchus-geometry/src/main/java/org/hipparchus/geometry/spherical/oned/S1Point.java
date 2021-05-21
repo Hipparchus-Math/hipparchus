@@ -26,6 +26,7 @@ import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.SinCos;
 
 /** This class represents a point on the 1-sphere.
  * <p>Instances of this class are guaranteed to be immutable.</p>
@@ -52,8 +53,7 @@ public class S1Point implements Point<Sphere1D> {
      * @see #getAlpha()
      */
     public S1Point(final double alpha) {
-        this(MathUtils.normalizeAngle(alpha, FastMath.PI),
-             new Vector2D(FastMath.cos(alpha), FastMath.sin(alpha)));
+        this(MathUtils.normalizeAngle(alpha, FastMath.PI), buildVector(alpha));
     }
 
     /** Build a point from its internal components.
@@ -159,6 +159,16 @@ public class S1Point implements Point<Sphere1D> {
             return 542;
         }
         return 1759 * MathUtils.hash(alpha);
+    }
+
+    /**
+     * Build the 2D vector corresponding to the given angle.
+     * @param alpha angle
+     * @return the corresponding 2D vector
+     */
+    private static Vector2D buildVector(final double alpha) {
+        final SinCos sc = FastMath.sinCos(alpha);
+        return new Vector2D(sc.cos(), sc.sin());
     }
 
 }

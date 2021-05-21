@@ -27,6 +27,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.SinCos;
 
 /**
  * A helper class for the computation and caching of the {@code n}-th roots
@@ -128,9 +129,8 @@ public class RootsOfUnity implements Serializable {
             }
 
             // calculate everything from scratch
-            final double t = 2.0 * FastMath.PI / absN;
-            final double cosT = FastMath.cos(t);
-            final double sinT = FastMath.sin(t);
+            final double t  = 2.0 * FastMath.PI / absN;
+            final SinCos sc = FastMath.sinCos(t);
             omegaReal = new double[absN];
             omegaImaginaryCounterClockwise = new double[absN];
             omegaImaginaryClockwise = new double[absN];
@@ -138,10 +138,10 @@ public class RootsOfUnity implements Serializable {
             omegaImaginaryCounterClockwise[0] = 0.0;
             omegaImaginaryClockwise[0] = 0.0;
             for (int i = 1; i < absN; i++) {
-                omegaReal[i] = omegaReal[i - 1] * cosT -
-                                omegaImaginaryCounterClockwise[i - 1] * sinT;
-                omegaImaginaryCounterClockwise[i] = omegaReal[i - 1] * sinT +
-                                omegaImaginaryCounterClockwise[i - 1] * cosT;
+                omegaReal[i] = omegaReal[i - 1] * sc.cos() -
+                                omegaImaginaryCounterClockwise[i - 1] * sc.sin();
+                omegaImaginaryCounterClockwise[i] = omegaReal[i - 1] * sc.sin() +
+                                omegaImaginaryCounterClockwise[i - 1] * sc.cos();
                 omegaImaginaryClockwise[i] = -omegaImaginaryCounterClockwise[i];
             }
             omegaCount = absN;
