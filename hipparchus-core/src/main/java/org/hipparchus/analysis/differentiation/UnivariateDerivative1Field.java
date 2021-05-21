@@ -19,7 +19,6 @@ package org.hipparchus.analysis.differentiation;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 
 /** Field for {@link UnivariateDerivative1} instances.
  * <p>
@@ -85,7 +84,7 @@ public class UnivariateDerivative1Field implements Field<UnivariateDerivative1>,
 
     /** {@inheritDoc} */
     @Override
-    public Class<? extends FieldElement<UnivariateDerivative1>> getRuntimeClass() {
+    public Class<UnivariateDerivative1> getRuntimeClass() {
         return UnivariateDerivative1.class;
     }
 

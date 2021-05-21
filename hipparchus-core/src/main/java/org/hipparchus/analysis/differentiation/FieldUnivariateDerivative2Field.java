@@ -21,7 +21,6 @@ import java.util.Map;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 
 /** Field for {@link FieldUnivariateDerivative2} instances.
  * @param <T> the type of the function parameters and value
@@ -98,8 +97,8 @@ public class FieldUnivariateDerivative2Field<T extends CalculusFieldElement<T>> 
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
     @Override
-    public Class<? extends FieldElement<FieldUnivariateDerivative2<T>>> getRuntimeClass() {
-        return (Class<? extends FieldElement<FieldUnivariateDerivative2<T>>>) zero.getClass();
+    public Class<FieldUnivariateDerivative2<T>> getRuntimeClass() {
+        return (Class<FieldUnivariateDerivative2<T>>) zero.getClass();
     }
 
     /** {@inheritDoc} */

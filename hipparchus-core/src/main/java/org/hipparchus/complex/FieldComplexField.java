@@ -21,7 +21,6 @@ import java.util.Map;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 
 /**
  * Representation of the complex numbers field.
@@ -87,8 +86,8 @@ public class FieldComplexField<T extends CalculusFieldElement<T>> implements Fie
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
     @Override
-    public Class<? extends FieldElement<FieldComplex<T>>> getRuntimeClass() {
-        return (Class<? extends FieldElement<FieldComplex<T>>>) getZero().getClass();
+    public Class<FieldComplex<T>> getRuntimeClass() {
+        return (Class<FieldComplex<T>>) getZero().getClass();
     }
 
     /** {@inheritDoc} */

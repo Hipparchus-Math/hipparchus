@@ -33,7 +33,7 @@ import org.hipparchus.util.FieldSinhCosh;
  * @see FieldElement
  * @since 1.7
  */
-public interface CalculusFieldElement<T> extends FieldElement<T> {
+public interface CalculusFieldElement<T extends CalculusFieldElement<T>> extends FieldElement<T> {
 
     /** Degrees to radians conversion factor. */
     double DEG_TO_RAD = FastMath.PI / 180.0;
@@ -471,7 +471,9 @@ public interface CalculusFieldElement<T> extends FieldElement<T> {
      * @return norm(this)
      * @since 2.0
      */
-    T norm();
+    default double norm() {
+        return abs().getReal();
+    }
 
     /** absolute value.
      * <p>
@@ -479,9 +481,7 @@ public interface CalculusFieldElement<T> extends FieldElement<T> {
      * </p>
      * @return abs(this)
      */
-    default T abs() {
-        return norm();
-    }
+    T abs();
 
     /** Get the closest long to instance real value.
      * @return closest long to {@link #getReal()}

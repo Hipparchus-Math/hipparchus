@@ -124,15 +124,16 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
     }
 
     /**
-     * Return the norm of this complex number.
+     * Return the absolute value of this complex number.
      * Returns {@code NaN} if either real or imaginary part is {@code NaN}
      * and {@code Double.POSITIVE_INFINITY} if neither part is {@code NaN},
      * but at least one part is infinite.
      *
      * @return the norm.
-     * @since 1.7
+     * @since 2.0
      */
-    public Complex norm() {
+    @Override
+    public Complex abs() {
         // we check NaN here because FastMath.hypot checks it after infinity
         return isNaN ? NaN : createComplex(FastMath.hypot(real, imaginary), 0.0);
     }
@@ -1321,7 +1322,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      */
     @Override
     public Complex cbrt() {
-        final double magnitude = FastMath.cbrt(norm().getRealPart());
+        final double magnitude = FastMath.cbrt(norm());
         final SinCos sc        = FastMath.sinCos(getArgument() / 3);
         return createComplex(magnitude * sc.cos(), magnitude * sc.sin());
     }
@@ -1334,7 +1335,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      */
     @Override
     public Complex rootN(int n) {
-        final double magnitude = FastMath.pow(norm().getRealPart(), 1.0 / n);
+        final double magnitude = FastMath.pow(norm(), 1.0 / n);
         final SinCos sc        = FastMath.sinCos(getArgument() / n);
         return createComplex(magnitude * sc.cos(), magnitude * sc.sin());
     }

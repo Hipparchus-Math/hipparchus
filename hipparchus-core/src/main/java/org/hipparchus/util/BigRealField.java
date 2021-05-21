@@ -25,7 +25,6 @@ package org.hipparchus.util;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 
 /**
  * Representation of real numbers with arbitrary precision field.
@@ -65,7 +64,7 @@ public class BigRealField implements Field<BigReal>, Serializable  {
 
     /** {@inheritDoc} */
     @Override
-    public Class<? extends FieldElement<BigReal>> getRuntimeClass() {
+    public Class<BigReal> getRuntimeClass() {
         return BigReal.class;
     }
 

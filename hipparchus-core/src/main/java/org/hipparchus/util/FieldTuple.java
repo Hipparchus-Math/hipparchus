@@ -18,9 +18,8 @@ package org.hipparchus.util;
 
 import java.util.Arrays;
 
-import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -251,10 +250,10 @@ public class FieldTuple<T extends CalculusFieldElement<T>> implements CalculusFi
 
     /** {@inheritDoc} */
     @Override
-    public FieldTuple<T> norm() {
+    public FieldTuple<T> abs() {
         final FieldTuple<T> result = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
         for (int i = 0; i < values.length; ++i) {
-            result.values[i] = values[i].norm();
+            result.values[i] = values[i].abs();
         }
         return result;
     }
@@ -792,8 +791,8 @@ public class FieldTuple<T extends CalculusFieldElement<T>> implements CalculusFi
         /** {@inheritDoc} */
         @SuppressWarnings("unchecked")
         @Override
-        public Class<? extends FieldElement<FieldTuple<T>>> getRuntimeClass() {
-            return (Class<? extends FieldElement<FieldTuple<T>>>) zero.getClass();
+        public Class<FieldTuple<T>> getRuntimeClass() {
+            return (Class<FieldTuple<T>>) zero.getClass();
         }
 
         /** {@inheritDoc} */

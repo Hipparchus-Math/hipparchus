@@ -4819,14 +4819,14 @@ public class FastMath {
     }
 
     /**
-     * Absolute value.
-     * @param x number from which absolute value is requested
+     * Norm.
+     * @param x number from which norm is requested
      * @param <T> the type of the field element
-     * @return abs(x)
-     * @since 1.3
+     * @return norm(x)
+     * @since 2.0
      */
-    public static <T extends CalculusFieldElement<T>> T abs(final T x) {
-        return x.abs();
+    public static <T extends CalculusFieldElement<T>> double norm(final T x) {
+        return x.norm();
     }
 
     /**
@@ -4836,8 +4836,8 @@ public class FastMath {
      * @return abs(x)
      * @since 2.0
      */
-    public static <T extends CalculusFieldElement<T>> T norm(final T x) {
-        return x.norm();
+    public static <T extends CalculusFieldElement<T>> T abs(final T x) {
+        return x.abs();
     }
 
     /**

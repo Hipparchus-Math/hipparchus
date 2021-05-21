@@ -19,7 +19,6 @@ package org.hipparchus.analysis.differentiation;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 import org.hipparchus.util.FastMath;
 
 /** Field for {@link Gradient} instances.
@@ -94,7 +93,7 @@ public class GradientField implements Field<Gradient> {
 
     /** {@inheritDoc} */
     @Override
-    public Class<? extends FieldElement<Gradient>> getRuntimeClass() {
+    public Class<Gradient> getRuntimeClass() {
         return Gradient.class;
     }
 

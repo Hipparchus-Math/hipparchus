@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.hipparchus.Field;
+import org.hipparchus.FieldElement;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -1627,7 +1628,7 @@ public class MathArrays {
      * @param length of the array
      * @return a new array
      */
-    public static <T> T[] buildArray(final Field<T> field, final int length) {
+    public static <T extends FieldElement<T>> T[] buildArray(final Field<T> field, final int length) {
         @SuppressWarnings("unchecked") // OK because field must be correct class
         T[] array = (T[]) Array.newInstance(field.getRuntimeClass(), length);
         Arrays.fill(array, field.getZero());
@@ -1646,7 +1647,7 @@ public class MathArrays {
      * @return a new array
      */
     @SuppressWarnings("unchecked")
-    public static <T> T[][] buildArray(final Field<T> field, final int rows, final int columns) {
+    public static <T extends FieldElement<T>> T[][] buildArray(final Field<T> field, final int rows, final int columns) {
         final T[][] array;
         if (columns < 0) {
             T[] dummyRow = buildArray(field, 0);
@@ -1677,7 +1678,7 @@ public class MathArrays {
      * @since 1.4
      */
     @SuppressWarnings("unchecked")
-    public static <T> T[][][] buildArray(final Field<T> field, final int l1, final int l2, final int l3) {
+    public static <T extends FieldElement<T>> T[][][] buildArray(final Field<T> field, final int l1, final int l2, final int l3) {
         final T[][][] array;
         if (l3 < 0) {
             T[] dummyRow = buildArray(field, 0);

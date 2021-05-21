@@ -377,7 +377,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
         TestFieldProblem5<T> pb = new TestFieldProblem5<T>(field);
         double minStep = 0;
-        double maxStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).norm().getReal();
+        double maxStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).norm();
         double scalAbsoluteTolerance = 1.0e-8;
         double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
 
@@ -545,11 +545,11 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                     Assert.assertEquals(1, state.getSecondaryStateDimension(1));
                     Assert.assertEquals(3, state.getCompleteStateDimension());
                     max[0] = FastMath.max(max[0],
-                                          t.sin().subtract(state.getPrimaryState()[0]).norm().getReal());
+                                          t.sin().subtract(state.getPrimaryState()[0]).norm());
                     max[0] = FastMath.max(max[0],
-                                          t.cos().subtract(state.getPrimaryState()[1]).norm().getReal());
+                                          t.cos().subtract(state.getPrimaryState()[1]).norm());
                     max[1] = FastMath.max(max[1],
-                                          field.getOne().subtract(t).subtract(state.getSecondaryState(1)[0]).norm().getReal());
+                                          field.getOne().subtract(t).subtract(state.getSecondaryState(1)[0]).norm());
                 }
             }
         });

@@ -89,24 +89,24 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     @Test
     public void testNorm() {
         FieldComplex<Decimal64> z = build(3.0, 4.0);
-        Assert.assertEquals(5.0, z.norm().getRealPart().getReal(), 1.0e-5);
+        Assert.assertEquals(5.0, z.norm(), 1.0e-5);
     }
 
     @Test
     public void testNormNaN() {
-        Assert.assertTrue(Double.isNaN(FieldComplex.getNaN(Decimal64Field.getInstance()).norm().getReal()));
+        Assert.assertTrue(Double.isNaN(FieldComplex.getNaN(Decimal64Field.getInstance()).norm()));
         FieldComplex<Decimal64> z = build(Double.POSITIVE_INFINITY, Double.NaN);
-        Assert.assertTrue(Double.isNaN(z.norm().getReal()));
+        Assert.assertTrue(Double.isNaN(z.norm()));
     }
 
     @Test
     public void testNormInfinite() {
         FieldComplex<Decimal64> z = FieldComplex.getNaN(Decimal64Field.getInstance()).newInstance(Double.POSITIVE_INFINITY);
-        Assert.assertEquals(Double.POSITIVE_INFINITY, z.norm().getRealPart().getReal(), 0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, z.norm(), 0);
         z = build(0, Double.NEGATIVE_INFINITY);
-        Assert.assertEquals(Double.POSITIVE_INFINITY, z.norm().getRealPart().getReal(), 0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, z.norm(), 0);
         z = build(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-        Assert.assertEquals(Double.POSITIVE_INFINITY, z.norm().getRealPart().getReal(), 0);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, z.norm(), 0);
     }
 
     @Test
@@ -1965,7 +1965,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
                         final FieldComplex<Decimal64> z2 = build(x2, y2);
                         final FieldComplex<Decimal64> r  = z1.remainder(z2);
                         final FieldComplex<Decimal64> q  = z1.subtract(r).divide(z2);
-                        Assert.assertTrue(r.norm().getReal() <= z2.norm().getReal());
+                        Assert.assertTrue(r.norm() <= z2.norm());
                         Assert.assertEquals(FastMath.rint(q.getRealPart().getReal()), q.getRealPart().getReal(), 2.0e-14);
                         Assert.assertEquals(FastMath.rint(q.getImaginaryPart().getReal()), q.getImaginaryPart().getReal(), 2.0e-14);
                     }
@@ -1982,7 +1982,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
                 for (double a = -3.92; a < 3.9; a += 0.125) {
                         final FieldComplex<Decimal64> r  = z1.remainder(a);
                         final FieldComplex<Decimal64> q  = z1.subtract(r).divide(a);
-                        Assert.assertTrue(r.norm().getReal() <= FastMath.abs(a));
+                        Assert.assertTrue(r.norm() <= FastMath.abs(a));
                         Assert.assertEquals(FastMath.rint(q.getRealPart().getReal()), q.getRealPart().getReal(), 2.0e-14);
                         Assert.assertEquals(FastMath.rint(q.getImaginaryPart().getReal()), q.getImaginaryPart().getReal(), 2.0e-14);
                 }
@@ -2067,7 +2067,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
         UnitTestUtils.assertEquals(-1.8551294182586248737720779899, abSumInline.getRealPart().getReal(), 1.0e-15);
 
         final FieldComplex<Decimal64> naive = a[0].multiply(b[0]).add(a[1].multiply(b[1]));
-        Assert.assertTrue(naive.subtract(abSumInline).norm().getReal() > 1.5);
+        Assert.assertTrue(naive.subtract(abSumInline).norm() > 1.5);
 
     }
 

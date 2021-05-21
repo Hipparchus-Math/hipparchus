@@ -303,7 +303,7 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public FieldUnivariateDerivative2<T> norm() {
+    public FieldUnivariateDerivative2<T> abs() {
         if (Double.doubleToLongBits(f0.getReal()) < 0) {
             // we use the bits representation to also handle -0.0
             return negate();
@@ -422,10 +422,10 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
             final int expY = y.getExponent();
             if (expX > expY + 27) {
                 // y is neglectible with respect to x
-                return norm();
+                return abs();
             } else if (expY > expX + 27) {
                 // x is neglectible with respect to y
-                return y.norm();
+                return y.abs();
             } else {
 
                 // find an intermediate scale to avoid both overflow and underflow

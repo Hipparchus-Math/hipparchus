@@ -23,7 +23,6 @@
 package org.hipparchus.dfp;
 
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 
 /** Field for Decimal floating point instances.
  */
@@ -427,7 +426,7 @@ public class DfpField implements Field<Dfp> {
 
     /** {@inheritDoc} */
     @Override
-    public Class<? extends FieldElement<Dfp>> getRuntimeClass() {
+    public Class<Dfp> getRuntimeClass() {
         return Dfp.class;
     }
 

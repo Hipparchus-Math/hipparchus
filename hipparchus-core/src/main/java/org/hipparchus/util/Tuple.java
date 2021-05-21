@@ -18,9 +18,8 @@ package org.hipparchus.util;
 
 import java.util.Arrays;
 
-import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -247,7 +246,7 @@ public class Tuple implements CalculusFieldElement<Tuple> {
 
     /** {@inheritDoc} */
     @Override
-    public Tuple norm() {
+    public Tuple abs() {
         final Tuple result = new Tuple(field, new double[values.length]);
         for (int i = 0; i < values.length; ++i) {
             result.values[i] = FastMath.abs(values[i]);
@@ -788,7 +787,7 @@ public class Tuple implements CalculusFieldElement<Tuple> {
 
         /** {@inheritDoc} */
         @Override
-        public Class<? extends FieldElement<Tuple>> getRuntimeClass() {
+        public Class<Tuple> getRuntimeClass() {
             return Tuple.class;
         }
 
