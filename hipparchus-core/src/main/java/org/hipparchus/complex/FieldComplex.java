@@ -163,14 +163,14 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
     }
 
     /**
-     * Return the norm of this complex number.
+     * Return the absolute value of this complex number.
      * Returns {@code NaN} if either real or imaginary part is {@code NaN}
      * and {@code Double.POSITIVE_INFINITY} if neither part is {@code NaN},
      * but at least one part is infinite.
      *
-     * @return the norm.
+     * @return the absolute value.
      */
-    public FieldComplex<T> norm() {
+    public FieldComplex<T> abs() {
         // we check NaN here because FastMath.hypot checks it after infinity
         return isNaN ? getNaN(getPartsField()) : createComplex(FastMath.hypot(real, imaginary), getPartsField().getZero());
     }
@@ -1451,7 +1451,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      */
     @Override
     public FieldComplex<T> cbrt() {
-        final T              magnitude = FastMath.cbrt(norm().getRealPart());
+        final T              magnitude = FastMath.cbrt(abs().getRealPart());
         final FieldSinCos<T> sc        = FastMath.sinCos(getArgument().divide(3));
         return createComplex(magnitude.multiply(sc.cos()), magnitude.multiply(sc.sin()));
     }
@@ -1463,7 +1463,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      */
     @Override
     public FieldComplex<T> rootN(int n) {
-        final T              magnitude = FastMath.pow(norm().getRealPart(), 1.0 / n);
+        final T              magnitude = FastMath.pow(abs().getRealPart(), 1.0 / n);
         final FieldSinCos<T> sc        = FastMath.sinCos(getArgument().divide(n));
         return createComplex(magnitude.multiply(sc.cos()), magnitude.multiply(sc.sin()));
     }

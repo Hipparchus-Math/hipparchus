@@ -223,7 +223,7 @@ public class FieldLine<T extends CalculusFieldElement<T>> {
         // signed separation of the two parallel planes that contains the lines
         final T offset = line.zero.subtract(zero).dotProduct(normal).divide(n);
 
-        return offset.norm();
+        return offset.abs();
 
     }
 

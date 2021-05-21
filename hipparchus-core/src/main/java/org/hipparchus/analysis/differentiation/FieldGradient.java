@@ -407,7 +407,7 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
 
     /** {@inheritDoc} */
     @Override
-    public FieldGradient<T> norm() {
+    public FieldGradient<T> abs() {
         if (Double.doubleToLongBits(value.getReal()) < 0) {
             // we use the bits representation to also handle -0.0
             return negate();
@@ -519,10 +519,10 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
             final int expY = y.getExponent();
             if (expX > expY + 27) {
                 // y is neglectible with respect to x
-                return norm();
+                return abs();
             } else if (expY > expX + 27) {
                 // x is neglectible with respect to y
-                return y.norm();
+                return y.abs();
             } else {
 
                 // find an intermediate scale to avoid both overflow and underflow

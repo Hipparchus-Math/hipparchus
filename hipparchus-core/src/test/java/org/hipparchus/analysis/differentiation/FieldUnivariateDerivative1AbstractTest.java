@@ -219,7 +219,7 @@ public abstract class FieldUnivariateDerivative1AbstractTest<T extends CalculusF
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
                                public <S extends CalculusFieldElement<S>> S value(S x) {
-                                   return x.norm();
+                                   return x.abs();
                                }
                            });
         }
@@ -283,7 +283,7 @@ public abstract class FieldUnivariateDerivative1AbstractTest<T extends CalculusF
                            new FieldUnivariateFunction() {
                                public <S extends CalculusFieldElement<S>> S value(S x) {
                                    final FieldSinCos<S> sc = x.sinCos();
-                                   return x.pow(3.2).add(x.pow(2)).subtract(sc.cos().norm().pow(sc.sin()));
+                                   return x.pow(3.2).add(x.pow(2)).subtract(sc.cos().abs().pow(sc.sin()));
                                }
                            });
         }
@@ -331,7 +331,7 @@ public abstract class FieldUnivariateDerivative1AbstractTest<T extends CalculusF
             checkAgainstDS(x,
                            new FieldUnivariateFunction() {
                                public <S extends CalculusFieldElement<S>> S value(S x) {
-                                   return x.cosh().multiply(x.sinh()).multiply(12).norm().acosh().asinh().divide(7).tanh().multiply(0.1).atanh();
+                                   return x.cosh().multiply(x.sinh()).multiply(12).abs().acosh().asinh().divide(7).tanh().multiply(0.1).atanh();
                                }
                            });
         }

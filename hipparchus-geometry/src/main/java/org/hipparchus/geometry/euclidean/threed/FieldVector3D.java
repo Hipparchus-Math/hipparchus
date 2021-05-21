@@ -455,7 +455,7 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements Seriali
      * @return L<sub>1</sub> norm for the vector
      */
     public T getNorm1() {
-        return x.norm().add(y.norm()).add(z.norm());
+        return x.abs().add(y.abs()).add(z.abs());
     }
 
     /** Get the L<sub>2</sub> norm for the vector.
@@ -478,7 +478,7 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements Seriali
      * @return L<sub>&infin;</sub> norm for the vector
      */
     public T getNormInf() {
-        return FastMath.max(FastMath.norm(x), FastMath.max(FastMath.norm(y), FastMath.norm(z)));
+        return FastMath.max(FastMath.abs(x), FastMath.max(FastMath.abs(y), FastMath.abs(z)));
     }
 
     /** Get the azimuth of the vector.
@@ -896,9 +896,9 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements Seriali
      * @return the distance between the instance and p according to the L<sub>1</sub> norm
      */
     public T distance1(final FieldVector3D<T> v) {
-        final T dx = v.x.subtract(x).norm();
-        final T dy = v.y.subtract(y).norm();
-        final T dz = v.z.subtract(z).norm();
+        final T dx = v.x.subtract(x).abs();
+        final T dy = v.y.subtract(y).abs();
+        final T dz = v.z.subtract(z).abs();
         return dx.add(dy).add(dz);
     }
 
@@ -910,9 +910,9 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements Seriali
      * @return the distance between the instance and p according to the L<sub>1</sub> norm
      */
     public T distance1(final Vector3D v) {
-        final T dx = x.subtract(v.getX()).norm();
-        final T dy = y.subtract(v.getY()).norm();
-        final T dz = z.subtract(v.getZ()).norm();
+        final T dx = x.subtract(v.getX()).abs();
+        final T dy = y.subtract(v.getY()).abs();
+        final T dz = z.subtract(v.getZ()).abs();
         return dx.add(dy).add(dz);
     }
 
@@ -952,9 +952,9 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements Seriali
      * @return the distance between the instance and p according to the L<sub>&infin;</sub> norm
      */
     public T distanceInf(final FieldVector3D<T> v) {
-        final T dx = v.x.subtract(x).norm();
-        final T dy = v.y.subtract(y).norm();
-        final T dz = v.z.subtract(z).norm();
+        final T dx = v.x.subtract(x).abs();
+        final T dy = v.y.subtract(y).abs();
+        final T dz = v.z.subtract(z).abs();
         if (dx.getReal() <= dy.getReal()) {
             if (dy.getReal() <= dz.getReal()) {
                 return dz;
@@ -978,9 +978,9 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements Seriali
      * @return the distance between the instance and p according to the L<sub>&infin;</sub> norm
      */
     public T distanceInf(final Vector3D v) {
-        final T dx = x.subtract(v.getX()).norm();
-        final T dy = y.subtract(v.getY()).norm();
-        final T dz = z.subtract(v.getZ()).norm();
+        final T dx = x.subtract(v.getX()).abs();
+        final T dy = y.subtract(v.getY()).abs();
+        final T dz = z.subtract(v.getZ()).abs();
         if (dx.getReal() <= dy.getReal()) {
             if (dy.getReal() <= dz.getReal()) {
                 return dz;

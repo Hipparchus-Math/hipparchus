@@ -468,7 +468,7 @@ public class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseG
         SparseGradient sgSmall = SparseGradient.createVariable(0, +3.0e-10);
         SparseGradient sgLarge = SparseGradient.createVariable(1, -4.0e25);
 
-        Assert.assertEquals(sgLarge.norm().getValue(),
+        Assert.assertEquals(sgLarge.abs().getValue(),
                             SparseGradient.hypot(sgSmall, sgLarge).getValue(),
                             1.0e-10);
         Assert.assertEquals(0,
@@ -478,7 +478,7 @@ public class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseG
                             SparseGradient.hypot(sgSmall, sgLarge).getDerivative(1),
                             1.0e-10);
 
-        Assert.assertEquals(sgLarge.norm().getValue(),
+        Assert.assertEquals(sgLarge.abs().getValue(),
                             SparseGradient.hypot(sgLarge, sgSmall).getValue(),
                             1.0e-10);
         Assert.assertEquals(0,
@@ -829,23 +829,23 @@ public class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseG
     }
 
     @Test
-    public void testNorm() {
+    public void testAbs() {
 
         SparseGradient minusOne = SparseGradient.createVariable(0, -1.0);
-        Assert.assertEquals(+1.0, minusOne.norm().getValue(), 1.0e-15);
-        Assert.assertEquals(-1.0, minusOne.norm().getDerivative(0), 1.0e-15);
+        Assert.assertEquals(+1.0, minusOne.abs().getValue(), 1.0e-15);
+        Assert.assertEquals(-1.0, minusOne.abs().getDerivative(0), 1.0e-15);
 
         SparseGradient plusOne = SparseGradient.createVariable(0, +1.0);
-        Assert.assertEquals(+1.0, plusOne.norm().getValue(), 1.0e-15);
-        Assert.assertEquals(+1.0, plusOne.norm().getDerivative(0), 1.0e-15);
+        Assert.assertEquals(+1.0, plusOne.abs().getValue(), 1.0e-15);
+        Assert.assertEquals(+1.0, plusOne.abs().getDerivative(0), 1.0e-15);
 
         SparseGradient minusZero = SparseGradient.createVariable(0, -0.0);
-        Assert.assertEquals(+0.0, minusZero.norm().getValue(), 1.0e-15);
-        Assert.assertEquals(-1.0, minusZero.norm().getDerivative(0), 1.0e-15);
+        Assert.assertEquals(+0.0, minusZero.abs().getValue(), 1.0e-15);
+        Assert.assertEquals(-1.0, minusZero.abs().getDerivative(0), 1.0e-15);
 
         SparseGradient plusZero = SparseGradient.createVariable(0, +0.0);
-        Assert.assertEquals(+0.0, plusZero.norm().getValue(), 1.0e-15);
-        Assert.assertEquals(+1.0, plusZero.norm().getDerivative(0), 1.0e-15);
+        Assert.assertEquals(+0.0, plusZero.abs().getValue(), 1.0e-15);
+        Assert.assertEquals(+1.0, plusZero.abs().getDerivative(0), 1.0e-15);
 
     }
 

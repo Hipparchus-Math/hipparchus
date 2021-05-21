@@ -1028,7 +1028,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
 
     /** {@inheritDoc} */
     @Override
-    public Dfp norm() {
+    public Dfp abs() {
         Dfp result = newInstance(this);
         result.sign = 1;
         return result;

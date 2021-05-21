@@ -243,7 +243,7 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
-    public UnivariateDerivative2 norm() {
+    public UnivariateDerivative2 abs() {
         if (Double.doubleToLongBits(f0) < 0) {
             // we use the bits representation to also handle -0.0
             return negate();
@@ -335,10 +335,10 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
             final int expY = y.getExponent();
             if (expX > expY + 27) {
                 // y is neglectible with respect to x
-                return norm();
+                return abs();
             } else if (expY > expX + 27) {
                 // x is neglectible with respect to y
-                return y.norm();
+                return y.abs();
             } else {
 
                 // find an intermediate scale to avoid both overflow and underflow

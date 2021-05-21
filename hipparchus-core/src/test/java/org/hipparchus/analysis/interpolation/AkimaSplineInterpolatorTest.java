@@ -386,7 +386,7 @@ public class AkimaSplineInterpolatorTest {
             currentX = field.getZero().add(r);
             expected = f.value( currentX );
             actual = interpolation.value( currentX );
-            sumError += FastMath.norm(actual.subtract(expected)).getReal();
+            sumError += FastMath.norm(actual.subtract(expected));
             assertEquals(expected.getReal(), actual.getReal(), maxTolerance);
         }
 

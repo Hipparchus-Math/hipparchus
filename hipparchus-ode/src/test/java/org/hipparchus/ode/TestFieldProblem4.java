@@ -112,7 +112,7 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
         T sin = t.add(a).sin();
         T cos = t.add(a).cos();
         final T[] y = MathArrays.buildArray(getField(), getDimension());
-        y[0] = sin.norm();
+        y[0] = sin.abs();
         y[1] = (sin.getReal() >= 0) ? cos : cos.negate();
         return y;
     }

@@ -92,7 +92,7 @@ public class StepInterpolatorTestUtils {
                 final T h = interpolator.getCurrentState().getTime().subtract(interpolator.getPreviousState().getTime()).multiply(0.001);
                 final T t = interpolator.getCurrentState().getTime().subtract(h.multiply(300));
 
-                if (h.norm().subtract(FastMath.ulp(t.getReal()) * 10).getReal() < 0) {
+                if (h.abs().subtract(FastMath.ulp(t.getReal()) * 10).getReal() < 0) {
                     return;
                 }
 

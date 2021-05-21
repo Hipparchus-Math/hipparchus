@@ -249,14 +249,14 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
                 T error = handler.getMaximalValueError();
                 if (i > 4) {
-                    Assert.assertTrue(error.subtract(previousValueError.norm().multiply(safetyValueFactor)).getReal() < 0);
+                    Assert.assertTrue(error.subtract(previousValueError.abs().multiply(safetyValueFactor)).getReal() < 0);
                 }
                 previousValueError = error;
 
                 T timeError = handler.getMaximalTimeError();
                 if (i > 4) {
                     // can't expect time error to be less than event finding tolerance
-                    T timeTol = max(eventTol, previousTimeError.norm().multiply(safetyTimeFactor));
+                    T timeTol = max(eventTol, previousTimeError.abs().multiply(safetyTimeFactor));
                     Assert.assertTrue(timeError.subtract(timeTol).getReal() <= 0);
                 }
                 previousTimeError = timeError;
@@ -341,7 +341,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         TestFieldProblem5<T> pb = new TestFieldProblem5<T>(field);
-        T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.001).norm();
+        T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.001).abs();
 
         RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
         TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
@@ -623,11 +623,11 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                     Assert.assertEquals(1, state.getSecondaryStateDimension(1));
                     Assert.assertEquals(3, state.getCompleteStateDimension());
                     max[0] = FastMath.max(max[0],
-                                          t.sin().subtract(state.getPrimaryState()[0]).norm().getReal());
+                                          t.sin().subtract(state.getPrimaryState()[0]).norm());
                     max[0] = FastMath.max(max[0],
-                                          t.cos().subtract(state.getPrimaryState()[1]).norm().getReal());
+                                          t.cos().subtract(state.getPrimaryState()[1]).norm());
                     max[1] = FastMath.max(max[1],
-                                          field.getOne().subtract(t).subtract(state.getSecondaryState(1)[0]).norm().getReal());
+                                          field.getOne().subtract(t).subtract(state.getSecondaryState(1)[0]).norm());
                 }
             }
         });

@@ -250,7 +250,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
                     final StepsizeHelper helper = getStepSizeHelper();
                     final T[] scale = MathArrays.buildArray(getField(), helper.getMainSetDimension());
                     for (int i = 0; i < scale.length; ++i) {
-                        scale[i] = helper.getTolerance(i, y[i].norm());
+                        scale[i] = helper.getTolerance(i, y[i].abs());
                     }
                     hNew = getField().getZero().add(initializeStep(forward, getOrder(), scale, getStepStart(), equations.getMapper()));
                     firstTime = false;

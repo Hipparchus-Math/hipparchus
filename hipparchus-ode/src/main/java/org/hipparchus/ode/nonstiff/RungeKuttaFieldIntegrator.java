@@ -87,7 +87,7 @@ public abstract class RungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
         this.c    = getC();
         this.a    = getA();
         this.b    = getB();
-        this.step = step.norm();
+        this.step = step.abs();
     }
 
     /** Create a fraction.

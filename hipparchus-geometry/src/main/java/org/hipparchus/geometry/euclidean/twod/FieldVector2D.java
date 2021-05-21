@@ -381,7 +381,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
      * @return L<sub>1</sub> norm for the vector
      */
     public T getNorm1() {
-        return x.norm().add(y.norm());
+        return x.abs().add(y.abs());
     }
 
     /** Get the L<sub>2</sub> norm for the vector.
@@ -404,7 +404,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
      * @return L<sub>&infin;</sub> norm for the vector
      */
     public T getNormInf() {
-        return FastMath.max(FastMath.norm(x), FastMath.norm(y));
+        return FastMath.max(FastMath.abs(x), FastMath.abs(y));
     }
 
     /** Add a vector to the instance.
@@ -551,7 +551,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
         final double threshold = normProduct.getReal() * 0.9999;
         if (FastMath.abs(dot.getReal()) > threshold) {
             // the vectors are almost aligned, compute using the sine
-            final T n = FastMath.norm(dot.linearCombination(v1.x, v2.y, v1.y.negate(), v2.x));
+            final T n = FastMath.abs(dot.linearCombination(v1.x, v2.y, v1.y.negate(), v2.x));
             if (dot.getReal() >= 0) {
                 return FastMath.asin(n.divide(normProduct));
             }
@@ -587,7 +587,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
         final double threshold = normProduct.getReal() * 0.9999;
         if (FastMath.abs(dot.getReal()) > threshold) {
             // the vectors are almost aligned, compute using the sine
-            final T n = FastMath.norm(dot.linearCombination(v2.getY(), v1.x, v2.getX(), v1.y.negate()));
+            final T n = FastMath.abs(dot.linearCombination(v2.getY(), v1.x, v2.getX(), v1.y.negate()));
             if (dot.getReal() >= 0) {
                 return FastMath.asin(n.divide(normProduct));
             }
@@ -719,8 +719,8 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
      * @return the distance between the instance and p according to the L<sub>1</sub> norm
      */
     public T distance1(final FieldVector2D<T> v) {
-        final T dx = v.x.subtract(x).norm();
-        final T dy = v.y.subtract(y).norm();
+        final T dx = v.x.subtract(x).abs();
+        final T dy = v.y.subtract(y).abs();
         return dx.add(dy);
     }
 
@@ -732,8 +732,8 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
      * @return the distance between the instance and p according to the L<sub>1</sub> norm
      */
     public T distance1(final Vector2D v) {
-        final T dx = x.subtract(v.getX()).norm();
-        final T dy = y.subtract(v.getY()).norm();
+        final T dx = x.subtract(v.getX()).abs();
+        final T dy = y.subtract(v.getY()).abs();
         return dx.add(dy);
     }
 
@@ -771,8 +771,8 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
      * @return the distance between the instance and p according to the L<sub>&infin;</sub> norm
      */
     public T distanceInf(final FieldVector2D<T> v) {
-        final T dx = FastMath.norm(x.subtract(v.x));
-        final T dy = FastMath.norm(y.subtract(v.y));
+        final T dx = FastMath.abs(x.subtract(v.x));
+        final T dy = FastMath.abs(y.subtract(v.y));
         return FastMath.max(dx, dy);
     }
 
@@ -784,8 +784,8 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
      * @return the distance between the instance and p according to the L<sub>&infin;</sub> norm
      */
     public T distanceInf(final Vector2D v) {
-        final T dx = FastMath.norm(x.subtract(v.getX()));
-        final T dy = FastMath.norm(y.subtract(v.getY()));
+        final T dx = FastMath.abs(x.subtract(v.getX()));
+        final T dy = FastMath.abs(y.subtract(v.getY()));
         return FastMath.max(dx, dy);
     }
 

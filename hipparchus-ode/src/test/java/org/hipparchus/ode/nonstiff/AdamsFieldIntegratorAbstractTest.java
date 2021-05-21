@@ -211,7 +211,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
                                                                 final double epsilonBad,
                                                                 final double epsilonGood) {
         final TestFieldProblem6<T> pb = new TestFieldProblem6<T>(field);
-        final double range = pb.getFinalTime().subtract(pb.getInitialState().getTime()).norm().getReal();
+        final double range = pb.getFinalTime().subtract(pb.getInitialState().getTime()).norm();
 
         for (int nSteps = 2; nSteps < 8; ++nSteps) {
             AdamsFieldIntegrator<T> integ = createIntegrator(field, nSteps, 1.0e-6 * range, 0.1 * range, 1.0e-4, 1.0e-4);
@@ -334,11 +334,11 @@ public abstract class AdamsFieldIntegratorAbstractTest {
                     Assert.assertEquals(1, state.getSecondaryStateDimension(1));
                     Assert.assertEquals(3, state.getCompleteStateDimension());
                     max[0] = FastMath.max(max[0],
-                                          t.sin().subtract(state.getPrimaryState()[0]).norm().getReal());
+                                          t.sin().subtract(state.getPrimaryState()[0]).norm());
                     max[0] = FastMath.max(max[0],
-                                          t.cos().subtract(state.getPrimaryState()[1]).norm().getReal());
+                                          t.cos().subtract(state.getPrimaryState()[1]).norm());
                     max[1] = FastMath.max(max[1],
-                                          field.getOne().subtract(t).subtract(state.getSecondaryState(1)[0]).norm().getReal());
+                                          field.getOne().subtract(t).subtract(state.getSecondaryState(1)[0]).norm());
                 }
             }
         });

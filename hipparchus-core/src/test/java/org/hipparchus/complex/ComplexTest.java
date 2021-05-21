@@ -95,24 +95,24 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
     @Test
     public void testNorm() {
         Complex z = new Complex(3.0, 4.0);
-        Assert.assertEquals(5.0, z.norm().getReal(), 1.0e-5);
+        Assert.assertEquals(5.0, z.norm(), 1.0e-5);
     }
 
     @Test
     public void testNormNaN() {
-        Assert.assertTrue(Double.isNaN(Complex.NaN.norm().getReal()));
+        Assert.assertTrue(Double.isNaN(Complex.NaN.norm()));
         Complex z = new Complex(inf, nan);
-        Assert.assertTrue(Double.isNaN(z.norm().getReal()));
+        Assert.assertTrue(Double.isNaN(z.norm()));
     }
 
     @Test
     public void testNormInfinite() {
         Complex z = Complex.NaN.newInstance(inf);
-        Assert.assertEquals(inf, z.norm().getReal(), 0);
+        Assert.assertEquals(inf, z.norm(), 0);
         z = new Complex(0, neginf);
-        Assert.assertEquals(inf, z.norm().getReal(), 0);
+        Assert.assertEquals(inf, z.norm(), 0);
         z = new Complex(inf, neginf);
-        Assert.assertEquals(inf, z.norm().getReal(), 0);
+        Assert.assertEquals(inf, z.norm(), 0);
     }
 
     @Test
@@ -1868,7 +1868,7 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
                         final Complex z2 = new Complex(x2, y2);
                         final Complex r  = z1.remainder(z2);
                         final Complex q  = z1.subtract(r).divide(z2);
-                        Assert.assertTrue(r.norm().getReal() <= z2.norm().getReal());
+                        Assert.assertTrue(r.norm() <= z2.norm());
                         Assert.assertEquals(FastMath.rint(q.getReal()), q.getReal(), 2.0e-14);
                         Assert.assertEquals(FastMath.rint(q.getImaginary()), q.getImaginary(), 2.0e-14);
                     }
@@ -1885,7 +1885,7 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
                 for (double a = -3.92; a < 3.9; a += 0.125) {
                         final Complex r  = z1.remainder(a);
                         final Complex q  = z1.subtract(r).divide(a);
-                        Assert.assertTrue(r.norm().getReal() <= FastMath.abs(a));
+                        Assert.assertTrue(r.norm() <= FastMath.abs(a));
                         Assert.assertEquals(FastMath.rint(q.getReal()), q.getReal(), 2.0e-14);
                         Assert.assertEquals(FastMath.rint(q.getImaginary()), q.getImaginary(), 2.0e-14);
                 }
@@ -1976,7 +1976,7 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
         UnitTestUtils.assertEquals(-1.8551294182586248737720779899, abSumInline.getReal(), 1.0e-15);
 
         final Complex naive = a[0].multiply(b[0]).add(a[1].multiply(b[1]));
-        Assert.assertTrue(naive.subtract(abSumInline).norm().getReal() > 1.5);
+        Assert.assertTrue(naive.subtract(abSumInline).norm() > 1.5);
 
     }
 

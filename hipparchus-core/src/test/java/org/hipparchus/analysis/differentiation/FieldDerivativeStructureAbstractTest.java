@@ -808,7 +808,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
         FieldDerivativeStructure<T> dsSmall = factory.variable(0, +3.0e-10);
         FieldDerivativeStructure<T> dsLarge = factory.variable(1, -4.0e25);
 
-        Assert.assertEquals(dsLarge.norm().getReal(),
+        Assert.assertEquals(dsLarge.norm(),
                             FieldDerivativeStructure.hypot(dsSmall, dsLarge).getReal(),
                             1.0e-10);
         Assert.assertEquals(0,
@@ -818,7 +818,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
                             FieldDerivativeStructure.hypot(dsSmall, dsLarge).getPartialDerivative(0, 1).getReal(),
                             1.0e-10);
 
-        Assert.assertEquals(dsLarge.norm().getReal(),
+        Assert.assertEquals(dsLarge.norm(),
                             FieldDerivativeStructure.hypot(dsLarge, dsSmall).getReal(),
                             1.0e-10);
         Assert.assertEquals(0,
@@ -1457,20 +1457,20 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
 
         final FDSFactory<T> factory = buildFactory(1, 1);
         FieldDerivativeStructure<T> minusOne = factory.variable(0, -1.0);
-        Assert.assertEquals(+1.0, minusOne.norm().getPartialDerivative(0).getReal(), 1.0e-15);
-        Assert.assertEquals(-1.0, minusOne.norm().getPartialDerivative(1).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, minusOne.abs().getPartialDerivative(0).getReal(), 1.0e-15);
+        Assert.assertEquals(-1.0, minusOne.abs().getPartialDerivative(1).getReal(), 1.0e-15);
 
         FieldDerivativeStructure<T> plusOne = factory.variable(0, +1.0);
-        Assert.assertEquals(+1.0, plusOne.norm().getPartialDerivative(0).getReal(), 1.0e-15);
-        Assert.assertEquals(+1.0, plusOne.norm().getPartialDerivative(1).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, plusOne.abs().getPartialDerivative(0).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, plusOne.abs().getPartialDerivative(1).getReal(), 1.0e-15);
 
         FieldDerivativeStructure<T> minusZero = factory.variable(0, buildScalar(-0.0));
-        Assert.assertEquals(+0.0, minusZero.norm().getPartialDerivative(0).getReal(), 1.0e-15);
-        Assert.assertEquals(-1.0, minusZero.norm().getPartialDerivative(1).getReal(), 1.0e-15);
+        Assert.assertEquals(+0.0, minusZero.abs().getPartialDerivative(0).getReal(), 1.0e-15);
+        Assert.assertEquals(-1.0, minusZero.abs().getPartialDerivative(1).getReal(), 1.0e-15);
 
         FieldDerivativeStructure<T> plusZero = factory.variable(0, buildScalar(+0.0));
-        Assert.assertEquals(+0.0, plusZero.norm().getPartialDerivative(0).getReal(), 1.0e-15);
-        Assert.assertEquals(+1.0, plusZero.norm().getPartialDerivative(1).getReal(), 1.0e-15);
+        Assert.assertEquals(+0.0, plusZero.abs().getPartialDerivative(0).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, plusZero.abs().getPartialDerivative(1).getReal(), 1.0e-15);
 
     }
 
