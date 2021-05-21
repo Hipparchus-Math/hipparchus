@@ -28,6 +28,7 @@ import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.SinCos;
 
 /** This class represents a point on the 2-sphere.
  * <p>
@@ -121,12 +122,10 @@ public class S2Point implements Point<Sphere2D> {
 
         MathUtils.checkRangeInclusive(phi, 0, FastMath.PI);
 
-        final double cosTheta = FastMath.cos(theta);
-        final double sinTheta = FastMath.sin(theta);
-        final double cosPhi   = FastMath.cos(phi);
-        final double sinPhi   = FastMath.sin(phi);
+        final SinCos scTheta = FastMath.sinCos(theta);
+        final SinCos scPhi   = FastMath.sinCos(phi);
 
-        return new Vector3D(cosTheta * sinPhi, sinTheta * sinPhi, cosPhi);
+        return new Vector3D(scTheta.cos() * scPhi.sin(), scTheta.sin() * scPhi.sin(), scPhi.cos());
 
     }
 

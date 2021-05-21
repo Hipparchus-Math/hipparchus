@@ -51,6 +51,7 @@ import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.samples.ExampleUtils;
 import org.hipparchus.samples.ExampleUtils.ExampleFrame;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.SinCos;
 import org.piccolo2d.PCamera;
 import org.piccolo2d.PCanvas;
 import org.piccolo2d.PNode;
@@ -89,7 +90,7 @@ public class GeometryExample {
         double range = 2.0 * FastMath.PI;
         double step = range / (samples + 1);
         for (double angle = 0; angle < range; angle += step) {
-            Vector2D circle = new Vector2D(FastMath.cos(angle), FastMath.sin(angle));
+            Vector2D circle = buildVector(angle);
             points.add(circle.scalarMultiply(200).add(center));
         }
 
@@ -149,6 +150,16 @@ public class GeometryExample {
         canvas.addInputEventListener(mouseWheelZoomEventHandler);
 
         return canvas;
+    }
+
+    /**
+     * Build the 2D vector corresponding to the given angle.
+     * @param alpha angle
+     * @return the corresponding 2D vector
+     */
+    private static Vector2D buildVector(final double alpha) {
+        final SinCos sc = FastMath.sinCos(alpha);
+        return new Vector2D(sc.cos(), sc.sin());
     }
 
     @SuppressWarnings("serial")

@@ -27,6 +27,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.SinCos;
 
 /**
  * This class provides computation methods related to Bessel
@@ -344,8 +345,9 @@ public class BesselJ
                 // ---------------------------------------------------------------------
                 double t = (double) ((int) ((x / TWOPI) + 0.5));
                 final double z = x - t * TOWPI1 - t * TWOPI2 - (alpha + 0.5) / PI2;
-                double vsin = FastMath.sin(z);
-                double vcos = FastMath.cos(z);
+                final SinCos vsc = FastMath.sinCos(z);
+                double vsin = vsc.sin();
+                double vcos = vsc.cos();
                 double gnu = 2 * alpha;
                 double capq;
                 double capp;

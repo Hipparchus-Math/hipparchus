@@ -29,6 +29,7 @@ import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.SinCos;
 
 /**
  * Implements the Fast Cosine Transform for transformation of one-dimensional
@@ -160,9 +161,10 @@ public class FastCosineTransformer implements RealTransformer, Serializable {
         // temporary variable for transformed[1]
         double t1 = 0.5 * (f[0] - f[n]);
         for (int i = 1; i < (n >> 1); i++) {
-            final double a = 0.5 * (f[i] + f[n - i]);
-            final double b = FastMath.sin(i * FastMath.PI / n) * (f[i] - f[n - i]);
-            final double c = FastMath.cos(i * FastMath.PI / n) * (f[i] - f[n - i]);
+            final SinCos sc = FastMath.sinCos(i * FastMath.PI / n);
+            final double a  = 0.5 * (f[i] + f[n - i]);
+            final double b  = sc.sin() * (f[i] - f[n - i]);
+            final double c  = sc.cos() * (f[i] - f[n - i]);
             x[i] = a - b;
             x[n - i] = a + b;
             t1 += c;

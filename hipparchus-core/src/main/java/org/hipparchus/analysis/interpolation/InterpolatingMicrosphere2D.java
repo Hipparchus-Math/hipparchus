@@ -23,6 +23,7 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.SinCos;
 
 /**
  * Utility class for the {@link MicrosphereProjectionInterpolator} algorithm.
@@ -62,10 +63,11 @@ public class InterpolatingMicrosphere2D extends InterpolatingMicrosphere {
 
         // Generate the microsphere normals.
         for (int i = 0; i < size; i++) {
-            final double angle = i * MathUtils.TWO_PI / size;
+            final double angle   = i * MathUtils.TWO_PI / size;
+            final SinCos scAngle = FastMath.sinCos(angle);
 
-            add(new double[] { FastMath.cos(angle),
-                               FastMath.sin(angle) },
+            add(new double[] { scAngle.cos(),
+                               scAngle.sin() },
                 false);
         }
     }

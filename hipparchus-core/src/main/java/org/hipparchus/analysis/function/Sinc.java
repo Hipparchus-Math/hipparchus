@@ -26,6 +26,7 @@ import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.SinCos;
 
 /**
  * <a href="http://en.wikipedia.org/wiki/Sinc_function">Sinc</a> function,
@@ -102,8 +103,8 @@ public class Sinc implements UnivariateDifferentiableFunction {
     public <T extends Derivative<T>> T value(T t)
         throws MathIllegalArgumentException {
 
-        final double scaledX  = (normalized ? FastMath.PI : 1) * t.getValue();
-        final double scaledX2 = scaledX * scaledX;
+        final double scaledX   = (normalized ? FastMath.PI : 1) * t.getValue();
+        final double scaledX2  = scaledX * scaledX;
 
         double[] f = new double[t.getOrder() + 1];
 
@@ -124,11 +125,10 @@ public class Sinc implements UnivariateDifferentiableFunction {
 
         } else {
 
-            final double inv = 1 / scaledX;
-            final double cos = FastMath.cos(scaledX);
-            final double sin = FastMath.sin(scaledX);
+            final double inv    = 1 / scaledX;
+            final SinCos sinCos = FastMath.sinCos(scaledX);
 
-            f[0] = inv * sin;
+            f[0] = inv * sinCos.sin();
 
             // the nth order derivative of sinc has the form:
             // dn(sinc(x)/dxn = [S_n(x) sin(x) + C_n(x) cos(x)] / x^(n+1)
@@ -178,7 +178,7 @@ public class Sinc implements UnivariateDifferentiableFunction {
                 s      = s * scaledX2 + sc[0];
 
                 coeff *= inv;
-                f[n]   = coeff * (s * sin + c * scaledX * cos);
+                f[n]   = coeff * (s * sinCos.sin() + c * scaledX * sinCos.cos());
 
             }
 

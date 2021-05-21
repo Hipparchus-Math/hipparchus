@@ -29,6 +29,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.SinCos;
 
 /**
  * <a href="http://en.wikipedia.org/wiki/Harmonic_oscillator">
@@ -156,10 +157,11 @@ public class HarmonicOscillator implements UnivariateDifferentiableFunction {
         final double x = t.getValue();
         double[] f = new double[t.getOrder() + 1];
 
-        final double alpha = omega * x + phase;
-        f[0] = amplitude * FastMath.cos(alpha);
+        final double alpha   = omega * x + phase;
+        final SinCos scAlpha = FastMath.sinCos(alpha);
+        f[0] = amplitude * scAlpha.cos();
         if (f.length > 1) {
-            f[1] = -amplitude * omega * FastMath.sin(alpha);
+            f[1] = -amplitude * omega * scAlpha.sin();
             final double mo2 = - omega * omega;
             for (int i = 2; i < f.length; ++i) {
                 f[i] = mo2 * f[i - 2];

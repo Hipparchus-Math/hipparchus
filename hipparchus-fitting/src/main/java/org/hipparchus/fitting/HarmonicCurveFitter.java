@@ -33,6 +33,7 @@ import org.hipparchus.linear.DiagonalMatrix;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresBuilder;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.SinCos;
 
 /**
  * Fits points to a {@link
@@ -436,10 +437,9 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
                 final double currentYPrime = (currentY - previousY) / (currentX - previousX);
 
                 double omegaX = omega * currentX;
-                double cosine = FastMath.cos(omegaX);
-                double sine = FastMath.sin(omegaX);
-                fcMean += omega * currentY * cosine - currentYPrime * sine;
-                fsMean += omega * currentY * sine + currentYPrime * cosine;
+                SinCos sc     = FastMath.sinCos(omegaX);
+                fcMean += omega * currentY * sc.cos() - currentYPrime * sc.sin();
+                fsMean += omega * currentY * sc.sin() + currentYPrime * sc.cos();
             }
 
             return FastMath.atan2(-fsMean, fcMean);
