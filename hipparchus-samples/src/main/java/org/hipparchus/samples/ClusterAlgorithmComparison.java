@@ -56,6 +56,7 @@ import org.hipparchus.random.Well19937c;
 import org.hipparchus.samples.ExampleUtils.ExampleFrame;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Pair;
+import org.hipparchus.util.SinCos;
 
 /**
  * Plots clustering results for various algorithms and datasets.
@@ -73,7 +74,7 @@ public class ClusterAlgorithmComparison {
         double range = 2.0 * FastMath.PI;
         double step = range / (samples / 2.0 + 1);
         for (double angle = 0; angle < range; angle += step) {
-            Vector2D outerCircle = new Vector2D(FastMath.cos(angle), FastMath.sin(angle));
+            Vector2D outerCircle = buildVector(angle);
             Vector2D innerCircle = outerCircle.scalarMultiply(factor);
 
             points.add(outerCircle.add(generateNoiseVector(random, noise)));
@@ -96,13 +97,14 @@ public class ClusterAlgorithmComparison {
         double range = FastMath.PI;
         double step = range / (nSamplesOut / 2.0);
         for (double angle = 0; angle < range; angle += step) {
-            Vector2D outerCircle = new Vector2D(FastMath.cos(angle), FastMath.sin(angle));
+            Vector2D outerCircle = buildVector(angle);
             points.add(outerCircle.add(generateNoiseVector(random, noise)));
         }
 
         step = range / (nSamplesIn / 2.0);
         for (double angle = 0; angle < range; angle += step) {
-            Vector2D innerCircle = new Vector2D(1 - FastMath.cos(angle), 1 - FastMath.sin(angle) - 0.5);
+            final SinCos sc = FastMath.sinCos(angle);
+            Vector2D innerCircle = new Vector2D(1 - sc.cos(), 1 - sc.sin() - 0.5);
             points.add(innerCircle.add(generateNoiseVector(random, noise)));
         }
 
@@ -182,6 +184,16 @@ public class ClusterAlgorithmComparison {
             points.add(new DoublePoint(arr));
         }
         return points;
+    }
+
+    /**
+     * Build the 2D vector corresponding to the given angle.
+     * @param alpha angle
+     * @return the corresponding 2D vector
+     */
+    private static Vector2D buildVector(final double alpha) {
+        final SinCos sc = FastMath.sinCos(alpha);
+        return new Vector2D(sc.cos(), sc.sin());
     }
 
     @SuppressWarnings("serial")
