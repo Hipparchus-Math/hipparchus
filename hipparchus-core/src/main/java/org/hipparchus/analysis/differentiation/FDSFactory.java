@@ -18,7 +18,6 @@ package org.hipparchus.analysis.differentiation;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
@@ -265,8 +264,8 @@ public class FDSFactory<T extends CalculusFieldElement<T>> {
         /** {@inheritDoc} */
         @SuppressWarnings("unchecked")
         @Override
-        public Class<? extends FieldElement<FieldDerivativeStructure<T>>> getRuntimeClass() {
-            return (Class<? extends FieldElement<FieldDerivativeStructure<T>>>) zero.getClass();
+        public Class<FieldDerivativeStructure<T>> getRuntimeClass() {
+            return (Class<FieldDerivativeStructure<T>>) zero.getClass();
         }
 
         /** {@inheritDoc} */

@@ -25,7 +25,6 @@ package org.hipparchus.fraction;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 
 /**
  * Representation of the fractional numbers  without any overflow field.
@@ -65,7 +64,7 @@ public class BigFractionField implements Field<BigFraction>, Serializable  {
 
     /** {@inheritDoc} */
     @Override
-    public Class<? extends FieldElement<BigFraction>> getRuntimeClass() {
+    public Class<BigFraction> getRuntimeClass() {
         return BigFraction.class;
     }
 

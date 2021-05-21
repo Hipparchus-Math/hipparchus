@@ -30,7 +30,7 @@ import org.hipparchus.exception.NullArgumentException;
  * @param <T> the type of the field elements
  * @see Field
  */
-public interface FieldElement<T> {
+public interface FieldElement<T extends FieldElement<T>> {
 
     /** Compute this + a.
      * @param a element to add

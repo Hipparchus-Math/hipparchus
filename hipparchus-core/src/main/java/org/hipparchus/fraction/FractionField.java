@@ -25,7 +25,6 @@ package org.hipparchus.fraction;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 
 /**
  * Representation of the fractional numbers field.
@@ -65,7 +64,7 @@ public class FractionField implements Field<Fraction>, Serializable  {
 
     /** {@inheritDoc} */
     @Override
-    public Class<? extends FieldElement<Fraction>> getRuntimeClass() {
+    public Class<Fraction> getRuntimeClass() {
         return Fraction.class;
     }
 

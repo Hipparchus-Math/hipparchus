@@ -20,7 +20,6 @@ import java.util.Arrays;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -792,8 +791,8 @@ public class FieldTuple<T extends CalculusFieldElement<T>> implements CalculusFi
         /** {@inheritDoc} */
         @SuppressWarnings("unchecked")
         @Override
-        public Class<? extends FieldElement<FieldTuple<T>>> getRuntimeClass() {
-            return (Class<? extends FieldElement<FieldTuple<T>>>) zero.getClass();
+        public Class<FieldTuple<T>> getRuntimeClass() {
+            return (Class<FieldTuple<T>>) zero.getClass();
         }
 
         /** {@inheritDoc} */

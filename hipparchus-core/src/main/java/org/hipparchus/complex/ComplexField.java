@@ -25,7 +25,6 @@ package org.hipparchus.complex;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 
 /**
  * Representation of the complex numbers field.
@@ -65,7 +64,7 @@ public class ComplexField implements Field<Complex>, Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public Class<? extends FieldElement<Complex>> getRuntimeClass() {
+    public Class<Complex> getRuntimeClass() {
         return Complex.class;
     }
 

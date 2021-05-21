@@ -28,7 +28,6 @@ import java.util.Map;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
@@ -358,7 +357,7 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
 
         /** {@inheritDoc} */
         @Override
-        public Class<? extends FieldElement<SparseGradient>> getRuntimeClass() {
+        public Class<SparseGradient> getRuntimeClass() {
             return SparseGradient.class;
         }
 

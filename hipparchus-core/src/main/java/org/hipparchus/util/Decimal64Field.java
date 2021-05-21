@@ -24,7 +24,6 @@ package org.hipparchus.util;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 
 /**
  * The field of double precision floating-point numbers.
@@ -64,7 +63,7 @@ public class Decimal64Field implements Field<Decimal64>, Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public Class<? extends FieldElement<Decimal64>> getRuntimeClass() {
+    public Class<Decimal64> getRuntimeClass() {
         return Decimal64.class;
     }
 

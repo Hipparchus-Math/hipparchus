@@ -29,7 +29,7 @@ package org.hipparchus;
  * @param <T> the type of the field elements
  * @see FieldElement
  */
-public interface Field<T> {
+public interface Field<T extends FieldElement<T>> {
 
     /** Get the additive identity of the field.
      * <p>
@@ -57,6 +57,6 @@ public interface Field<T> {
      * @return The {@code Class} object that represents the runtime
      *         class of this object.
      */
-    Class<? extends FieldElement<T>> getRuntimeClass();
+    Class<T> getRuntimeClass();
 
 }

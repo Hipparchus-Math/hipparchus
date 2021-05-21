@@ -22,7 +22,6 @@ import java.util.Map;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 import org.hipparchus.util.MathArrays;
 
 /** Field for {@link Gradient} instances.
@@ -102,8 +101,8 @@ public class FieldGradientField<T extends CalculusFieldElement<T>> implements Fi
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
     @Override
-    public Class<? extends FieldElement<FieldGradient<T>>> getRuntimeClass() {
-        return (Class<? extends FieldElement<FieldGradient<T>>>) getZero().getClass();
+    public Class<FieldGradient<T>> getRuntimeClass() {
+        return (Class<FieldGradient<T>>) getZero().getClass();
     }
 
     /** Get the factory for converting to {@link DerivativeStructure}.

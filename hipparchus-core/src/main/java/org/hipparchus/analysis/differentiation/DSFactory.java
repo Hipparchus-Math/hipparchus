@@ -19,7 +19,6 @@ package org.hipparchus.analysis.differentiation;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
@@ -218,7 +217,7 @@ public class DSFactory implements Serializable {
 
         /** {@inheritDoc} */
         @Override
-        public Class<? extends FieldElement<DerivativeStructure>> getRuntimeClass() {
+        public Class<DerivativeStructure> getRuntimeClass() {
             return DerivativeStructure.class;
         }
 
