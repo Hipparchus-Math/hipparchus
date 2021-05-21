@@ -17,13 +17,6 @@
 package org.hipparchus.special.elliptic;
 
 /** Algorithm computing Jacobi elliptic functions.
- * The Jacobi elliptic functions are related to elliptic integrals.
- * We use hare the notations from <a
- * href="https://en.wikipedia.org/wiki/Abramowitz_and_Stegun">Abramowitz and
- * Stegun</a> (Ch. 16) with a parameter {@code m}. The notations from
- * <a href="https://dlmf.nist.gov/22">Digital Library of Mathematical Functions (Ch. 22)</a>
- * are different as they use modulus {@code k} instead of parameter {@code m},
- * with {@code k² = m}.
  * @since 2.0
  */
 public abstract class JacobiElliptic {
