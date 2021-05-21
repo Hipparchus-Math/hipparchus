@@ -289,6 +289,12 @@ public class Fraction
         this.denominator = den;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public double getReal() {
+        return doubleValue();
+    }
+
     /** Check if a fraction is an integer.
      * @return true of fraction is an integer
      */

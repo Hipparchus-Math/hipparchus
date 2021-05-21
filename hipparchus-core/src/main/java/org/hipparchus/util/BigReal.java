@@ -192,6 +192,12 @@ public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Seri
         d = new BigDecimal(val, mc);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public double getReal() {
+        return doubleValue();
+    }
+
     /***
      * Gets the rounding mode for division operations
      * The default is {@code RoundingMode.HALF_UP}
