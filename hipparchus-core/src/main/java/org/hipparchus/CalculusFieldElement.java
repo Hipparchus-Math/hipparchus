@@ -33,7 +33,7 @@ import org.hipparchus.util.FieldSinhCosh;
  * @see FieldElement
  * @since 1.7
  */
-public interface CalculusFieldElement<T extends CalculusFieldElement<T>> extends FieldElement<T> {
+public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldElement<T> {
 
     /** Degrees to radians conversion factor. */
     double DEG_TO_RAD = FastMath.PI / 180.0;
@@ -46,11 +46,6 @@ public interface CalculusFieldElement<T extends CalculusFieldElement<T>> extends
      * @return instance corresponding to a constant real value
      */
     T newInstance(final double value);
-
-    /** Get the real value of the number.
-     * @return real value
-     */
-    double getReal();
 
     /** '+' operator.
      * @param a right hand side parameter of the operator

@@ -32,6 +32,11 @@ import org.hipparchus.exception.NullArgumentException;
  */
 public interface FieldElement<T extends FieldElement<T>> {
 
+    /** Get the real value of the number.
+     * @return real value
+     */
+    double getReal();
+
     /** Compute this + a.
      * @param a element to add
      * @return a new element representing this + a

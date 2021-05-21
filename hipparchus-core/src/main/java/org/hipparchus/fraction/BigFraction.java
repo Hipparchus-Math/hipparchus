@@ -419,6 +419,12 @@ public class BigFraction
         this(BigInteger.valueOf(num), BigInteger.valueOf(den));
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public double getReal() {
+        return doubleValue();
+    }
+
     /**
      * <p>
      * Creates a <code>BigFraction</code> instance with the 2 parts of a fraction
