@@ -294,8 +294,8 @@ public interface BracketedRealFieldUnivariateSolver<T extends CalculusFieldEleme
             final T xB = this.getRightAbscissa();
             switch (allowed) {
                 case ANY_SIDE:
-                    final T absYA = this.getLeftValue().norm();
-                    final T absYB = this.getRightValue().norm();
+                    final T absYA = this.getLeftValue().abs();
+                    final T absYB = this.getRightValue().abs();
                     return absYA.subtract(absYB).getReal() < 0 ? xA : xB;
                 case LEFT_SIDE:
                     return xA;

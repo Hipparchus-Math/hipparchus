@@ -83,8 +83,8 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
                   divide(n);
             FieldODEStateAndDerivative<T> state = interpolator.getInterpolatedState(t);
             T[] ref = sinCos.theoreticalState(t);
-            maxErrorSin = FastMath.max(maxErrorSin, state.getPrimaryState()[0].subtract(ref[0]).norm().getReal());
-            maxErrorCos = FastMath.max(maxErrorCos, state.getPrimaryState()[1].subtract(ref[1]).norm().getReal());
+            maxErrorSin = FastMath.max(maxErrorSin, state.getPrimaryState()[0].subtract(ref[0]).norm());
+            maxErrorCos = FastMath.max(maxErrorCos, state.getPrimaryState()[1].subtract(ref[1]).norm());
         }
         Assert.assertEquals(0.0, maxErrorSin, epsilonSin);
         Assert.assertEquals(0.0, maxErrorCos, epsilonCos);
@@ -270,10 +270,10 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
             double[] regularY     = regularState.getPrimaryState();
             double[] regularYDot  = regularState.getPrimaryDerivative();
 
-            maxErrorSin    = FastMath.max(maxErrorSin,    fieldY[0].subtract(regularY[0]).norm().getReal());
-            maxErrorCos    = FastMath.max(maxErrorCos,    fieldY[1].subtract(regularY[1]).norm().getReal());
-            maxErrorSinDot = FastMath.max(maxErrorSinDot, fieldYDot[0].subtract(regularYDot[0]).norm().getReal());
-            maxErrorCosDot = FastMath.max(maxErrorCosDot, fieldYDot[1].subtract(regularYDot[1]).norm().getReal());
+            maxErrorSin    = FastMath.max(maxErrorSin,    fieldY[0].subtract(regularY[0]).norm());
+            maxErrorCos    = FastMath.max(maxErrorCos,    fieldY[1].subtract(regularY[1]).norm());
+            maxErrorSinDot = FastMath.max(maxErrorSinDot, fieldYDot[0].subtract(regularYDot[0]).norm());
+            maxErrorCosDot = FastMath.max(maxErrorCosDot, fieldYDot[1].subtract(regularYDot[1]).norm());
 
         }
         Assert.assertEquals(0.0, maxErrorSin,    epsilonSin);

@@ -332,7 +332,7 @@ public class AdamsMoultonFieldIntegrator<T extends CalculusFieldElement<T>> exte
             for (int i = 0; i < after.length; ++i) {
                 after[i] = after[i].add(previous[i].add(scaled[i]));
                 if (i < helper.getMainSetDimension()) {
-                    final T tol   = helper.getTolerance(i, MathUtils.max(previous[i].norm(), after[i].norm()));
+                    final T tol   = helper.getTolerance(i, MathUtils.max(previous[i].abs(), after[i].abs()));
                     final T ratio = after[i].subtract(before[i]).divide(tol); // (corrected-predicted)/tol
                     error = error.add(ratio.multiply(ratio));
                 }

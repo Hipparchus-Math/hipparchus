@@ -280,13 +280,13 @@ public class FieldBracketingNthOrderBrentSolver<T extends CalculusFieldElement<T
         // current tightest bracketing of the root
         T xA    = x[signChangeIndex - 1];
         T yA    = y[signChangeIndex - 1];
-        T absXA = xA.norm();
-        T absYA = yA.norm();
+        T absXA = xA.abs();
+        T absYA = yA.abs();
         int agingA   = 0;
         T xB    = x[signChangeIndex];
         T yB    = y[signChangeIndex];
-        T absXB = xB.norm();
-        T absYB = yB.norm();
+        T absXB = xB.abs();
+        T absYB = yB.abs();
         int agingB   = 0;
 
         // search loop
@@ -400,14 +400,14 @@ public class FieldBracketingNthOrderBrentSolver<T extends CalculusFieldElement<T
                 // the sign change occurs before the inserted point
                 xB = nextX;
                 yB = nextY;
-                absYB = yB.norm();
+                absYB = yB.abs();
                 ++agingA;
                 agingB = 0;
             } else {
                 // the sign change occurs after the inserted point
                 xA = nextX;
                 yA = nextY;
-                absYA = yA.norm();
+                absYA = yA.abs();
                 agingA = 0;
                 ++agingB;
 

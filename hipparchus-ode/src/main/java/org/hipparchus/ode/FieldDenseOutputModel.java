@@ -150,9 +150,9 @@ public class FieldDenseOutputModel<T extends CalculusFieldElement<T>>
             final T previous = lastInterpolator.getPreviousState().getTime();
             final T step = current.subtract(previous);
             final T gap = model.getInitialTime().subtract(current);
-            if (gap.norm().subtract(step.norm().multiply(1.0e-3)).getReal() > 0) {
+            if (gap.abs().subtract(step.abs().multiply(1.0e-3)).getReal() > 0) {
                 throw new MathIllegalArgumentException(LocalizedODEFormats.HOLE_BETWEEN_MODELS_TIME_RANGES,
-                                                       gap.norm().getReal());
+                                                       gap.norm());
             }
 
         }
@@ -280,8 +280,8 @@ public class FieldDenseOutputModel<T extends CalculusFieldElement<T>>
             final FieldODEStateInterpolator<T> sMed = steps.get(iMed);
             final T tMed = sMed.getPreviousState().getTime().add(sMed.getCurrentState().getTime()).multiply(0.5);
 
-            if (tMed.subtract(tMin).norm().subtract(1.0e-6).getReal() < 0 ||
-                tMax.subtract(tMed).norm().subtract(1.0e-6).getReal() < 0) {
+            if (tMed.subtract(tMin).abs().subtract(1.0e-6).getReal() < 0 ||
+                tMax.subtract(tMed).abs().subtract(1.0e-6).getReal() < 0) {
                 // too close to the bounds, we estimate using a simple dichotomy
                 index = iMed;
             } else {

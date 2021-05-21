@@ -204,7 +204,7 @@ public class StepsizeHelper {
         throws MathIllegalArgumentException {
 
         T filteredH = h;
-        if (h.norm().subtract(minStep).getReal() < 0) {
+        if (h.abs().subtract(minStep).getReal() < 0) {
             if (acceptSmall) {
                 filteredH = h.getField().getZero().add(forward ? minStep : -minStep);
             } else {

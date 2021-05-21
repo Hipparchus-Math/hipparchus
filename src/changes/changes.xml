@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.0" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issues/124">
+        Changed return types for field elements methods (including Complex):
+        norm() → double, abs() → field element.
+      </action>
       <action dev="luc" type="add" issue="issues/126">
         Added field-based complex numbers.
       </action>

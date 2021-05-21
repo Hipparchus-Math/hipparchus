@@ -79,15 +79,15 @@ public class TestFieldProblemHandler<T extends CalculusFieldElement<T>>
     public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast) throws MathIllegalStateException {
 
         T start = integrator.getStepStart().getTime();
-        if (start.subtract(problem.getInitialState().getTime()).divide(integrator.getCurrentSignedStepsize()).norm().getReal() > 0.001) {
+        if (start.subtract(problem.getInitialState().getTime()).divide(integrator.getCurrentSignedStepsize()).norm() > 0.001) {
             // multistep integrators do not handle the first steps themselves
             // so we have to make sure the integrator we look at has really started its work
             if (expectedStepStart != null) {
                 // the step should either start at the end of the integrator step
                 // or at an event if the step is split into several substeps
-                T stepError = MathUtils.max(maxTimeError, start.subtract(expectedStepStart).norm());
+                T stepError = MathUtils.max(maxTimeError, start.subtract(expectedStepStart).abs());
                 for (T eventTime : problem.getTheoreticalEventsTimes()) {
-                    stepError = MathUtils.min(stepError, start.subtract(eventTime).norm());
+                    stepError = MathUtils.min(stepError, start.subtract(eventTime).abs());
                 }
                 maxTimeError = MathUtils.max(maxTimeError, stepError);
             }
@@ -103,7 +103,7 @@ public class TestFieldProblemHandler<T extends CalculusFieldElement<T>>
             T[] interpolatedY = interpolator.getInterpolatedState(cT).getPrimaryState();
             T[] theoreticalY  = problem.computeTheoreticalState(cT);
             for (int i = 0; i < interpolatedY.length; ++i) {
-                T error = interpolatedY[i].subtract(theoreticalY[i]).norm();
+                T error = interpolatedY[i].subtract(theoreticalY[i]).abs();
                 lastError = MathUtils.max(error, lastError);
             }
             lastTime = cT;

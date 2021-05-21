@@ -401,7 +401,7 @@ public class FieldQRDecompositionTest {
             /** {@inheritDoc} */
             @Override
             public void visit(final int row, final int column, final T value) {
-                columnSum = columnSum.add(value).norm();
+                columnSum = columnSum.add(value).abs();
                 if (row == endRow) {
                     maxColSum = (maxColSum.getReal() > columnSum.getReal()) ? maxColSum : columnSum ;
                     columnSum = FM.getField().getZero();

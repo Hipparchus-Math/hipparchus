@@ -239,7 +239,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
          */
         public boolean isRoot(double min, double max, Complex z) {
             if (isSequence(min, z.getReal(), max)) {
-                final double zAbs = z.norm().getReal();
+                final double zAbs = z.norm();
                 double tolerance = FastMath.max(getRelativeAccuracy() * zAbs, getAbsoluteAccuracy());
                 return (FastMath.abs(z.getImaginary()) <= tolerance) ||
                      (zAbs <= getFunctionValueAccuracy());
@@ -344,12 +344,12 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
                 d2v = d2v.multiply(new Complex(2.0, 0.0));
 
                 // Check for convergence.
-                final double tolerance = FastMath.max(relativeAccuracy * z.norm().getReal(),
+                final double tolerance = FastMath.max(relativeAccuracy * z.norm(),
                                                       absoluteAccuracy);
-                if ((z.subtract(oldz)).norm().getReal() <= tolerance) {
+                if ((z.subtract(oldz)).norm() <= tolerance) {
                     return z;
                 }
-                if (pv.norm().getReal() <= functionValueAccuracy) {
+                if (pv.norm() <= functionValueAccuracy) {
                     return z;
                 }
 
@@ -362,7 +362,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
                 final Complex deltaSqrt = delta.sqrt();
                 final Complex dplus = G.add(deltaSqrt);
                 final Complex dminus = G.subtract(deltaSqrt);
-                final Complex denominator = dplus.norm().getReal() > dminus.norm().getReal() ? dplus : dminus;
+                final Complex denominator = dplus.norm() > dminus.norm() ? dplus : dminus;
                 // Perturb z if denominator is zero, for instance,
                 // p(x) = x^3 + 1, z = 0.
                 if (denominator.equals(new Complex(0.0, 0.0))) {

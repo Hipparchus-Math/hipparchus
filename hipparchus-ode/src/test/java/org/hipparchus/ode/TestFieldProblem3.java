@@ -107,7 +107,7 @@ extends TestFieldProblemAbstract<T> {
         T E = t;
         T d = convert(t.getField(), 0);
         T corr = convert(t.getField(), 999.0);
-        for (int i = 0; (i < 50) && (corr.norm().getReal() > 1.0e-12); ++i) {
+        for (int i = 0; (i < 50) && (corr.norm() > 1.0e-12); ++i) {
             T f2  = e.multiply(E.sin());
             T f0  = d.subtract(f2);
             T f1  = e.multiply(E.cos()).subtract(1).negate();

@@ -376,7 +376,7 @@ public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 norm() {
+    public Decimal64 abs() {
         return new Decimal64(FastMath.abs(value));
     }
 
