@@ -715,6 +715,11 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
     }
 
     @Test
+    public void testAcosNaN() {
+        Assert.assertTrue(Complex.NaN.acos().isNaN());
+    }
+
+    @Test
     public void testAcosInf() {
         UnitTestUtils.assertSame(Complex.NaN, oneInf.acos());
         UnitTestUtils.assertSame(Complex.NaN, oneNegInf.acos());
@@ -727,8 +732,19 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
     }
 
     @Test
-    public void testAcosNaN() {
-        Assert.assertTrue(Complex.NaN.acos().isNaN());
+    public void testAcosBranchCuts() {
+        UnitTestUtils.assertEquals(new Complex(3.141592653589793238462, -0.76103968373182660633),
+                                   FastMath.acos(new Complex(-1.3038404810405297, +0.0)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(new Complex(3.141592653589793238462, +0.76103968373182660633),
+                                   FastMath.acos(new Complex(-1.3038404810405297, -0.0)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(new Complex(0.0, -0.76103968373182660633),
+                                   FastMath.acos(new Complex(1.3038404810405297, +0.0)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(new Complex(0.0, +0.76103968373182660633),
+                                   FastMath.acos(new Complex(1.3038404810405297, -0.0)),
+                                   1.0e-14);
     }
 
     @Test
@@ -755,6 +771,21 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
         UnitTestUtils.assertSame(Complex.NaN, negInfNegInf.asin());
     }
 
+    @Test
+    public void testAsinBranchCuts() {
+        UnitTestUtils.assertEquals(new Complex(-1.57079632679489661923, +0.76103968373182660633),
+                                   FastMath.asin(new Complex(-1.3038404810405297, +0.0)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(new Complex(-1.57079632679489661923, -0.76103968373182660633),
+                                   FastMath.asin(new Complex(-1.3038404810405297, -0.0)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(new Complex(1.57079632679489661923, +0.76103968373182660633),
+                                   FastMath.asin(new Complex(1.3038404810405297, +0.0)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(new Complex(1.57079632679489661923, -0.76103968373182660633),
+                                   FastMath.asin(new Complex(1.3038404810405297, -0.0)),
+                                   1.0e-14);
+    }
 
     @Test
     public void testAtanComplex() {
@@ -783,6 +814,38 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
     @Test
     public void testAtanNaN() {
         Assert.assertTrue(Complex.NaN.atan().isNaN());
+    }
+
+    @Test
+    public void testAtanBranchCuts() {
+        UnitTestUtils.assertEquals(new Complex(+1.5707963267948966192, +1.0986122886681096913),
+                                   FastMath.atan(new Complex(+0.0, 1.25)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(new Complex(-1.5707963267948966192, +1.0986122886681096913),
+                                   FastMath.atan(new Complex(-0.0, 1.25)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(new Complex(+1.5707963267948966192, -1.0986122886681096913),
+                                   FastMath.atan(new Complex(+0.0, -1.25)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(new Complex(-1.5707963267948966192, -1.0986122886681096913),
+                                   FastMath.atan(new Complex(-0.0, -1.25)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(new Complex(0.0, +0.25541281188299534160),
+                                   FastMath.atan(new Complex(+0.0, 0.25)),
+                                   1.0e-14);
+        Assert.assertTrue(FastMath.copySign(1.0, FastMath.atan(new Complex(+0.0, 0.25)).getReal()) > 0.0);
+        UnitTestUtils.assertEquals(new Complex(0.0, +0.25541281188299534160),
+                                   FastMath.atan(new Complex(-0.0, 0.25)),
+                                   1.0e-14);
+        Assert.assertTrue(FastMath.copySign(1.0, FastMath.atan(new Complex(-0.0, 0.25)).getReal()) < 0.0);
+        UnitTestUtils.assertEquals(new Complex(0.0, -0.25541281188299534160),
+                                   FastMath.atan(new Complex(+0.0, -0.25)),
+                                   1.0e-14);
+        Assert.assertTrue(FastMath.copySign(1.0, FastMath.atan(new Complex(+0.0, -0.25)).getReal()) > 0.0);
+        UnitTestUtils.assertEquals(new Complex(0.0, -0.25541281188299534160),
+                                   FastMath.atan(new Complex(-0.0, -0.25)),
+                                   1.0e-14);
+        Assert.assertTrue(FastMath.copySign(1.0, FastMath.atan(new Complex(-0.0, -0.25)).getReal()) < 0.0);
     }
 
     @Test
@@ -984,6 +1047,16 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
                 negInfInf.log(), 10e-12);
         UnitTestUtils.assertEquals(new Complex(inf, - 3d * pi / 4),
                 negInfNegInf.log(), 10e-12);
+    }
+
+    @Test
+    public void testLogBranchCut() {
+        UnitTestUtils.assertEquals(new Complex(0.6931471805599453094, +3.1415926535897932384),
+                                   FastMath.log(new Complex(-2.0, +0.0)),
+                                   10e-12);
+        UnitTestUtils.assertEquals(new Complex(0.6931471805599453094, -3.1415926535897932384),
+                                   FastMath.log(new Complex(-2.0, -0.0)),
+                                   10e-12);
     }
 
     @Test
