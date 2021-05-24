@@ -852,7 +852,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * inverse tangent</a> of this complex number.
      * Implements the formula:
      * <p>
-     * {@code atan(z) = (i/2) log((i + z)/(i - z))}
+     * {@code atan(z) = (i/2) log((1 - iz)/(1 + iz))}
      * </p><p>
      * Returns {@link FieldComplex#NaN} if either real or imaginary part of the
      * input argument is {@code NaN} or infinite.</p>
@@ -865,8 +865,27 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
             return getNaN(getPartsField());
         }
 
-        final FieldComplex<T> i = getI(getPartsField());
-        return this.add(i).divide(i.subtract(this)).log().multIp().multiply(0.5);
+        final T one = getPartsField().getOne();
+        if (real.isZero()) {
+
+            // singularity at ±i
+            if (imaginary.multiply(imaginary).subtract(one).isZero()) {
+                return getNaN(getPartsField());
+            }
+
+            // branch cut on imaginary axis
+            final T zero = getPartsField().getZero();
+            final FieldComplex<T> tmp = createComplex(one.add(imaginary).divide(one.subtract(imaginary)), zero).
+                                        log().multIp().multiply(0.5);
+            return createComplex(FastMath.copySign(tmp.real, real), tmp.imaginary);
+
+        } else {
+            // regular formula
+            final FieldComplex<T> n = createComplex(one.add(imaginary), real.negate());
+            final FieldComplex<T> d = createComplex(one.subtract(imaginary),  real);
+            return n.divide(d).log().multIp().multiply(0.5);
+        }
+
     }
 
     /**
