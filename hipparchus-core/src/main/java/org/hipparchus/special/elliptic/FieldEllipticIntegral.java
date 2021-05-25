@@ -39,9 +39,14 @@ public class FieldEllipticIntegral<T extends CalculusFieldElement<T>> {
 
     /** Simple constructor.
      * <p>
-     * Beware that elliptic integrals are defined in terms of elliptic modulus {@code k}
-     * whereas Jacobi elliptic functions (which are their inverse) are defined
-     * in terms of parameter {@code m}. Both are related as {@code k² = m}.
+     * Beware that {@link FieldEllipticIntegral#FieldEllipticIntegral elliptic
+     * integrals} are defined in terms of elliptic modulus {@code k} whereas
+     * {@link JacobiEllipticBuilder#build(CalculusFieldElement) Jacobi elliptic
+     * functions} (which are their inverses) are defined in terms of parameter
+     * {@code m} and {@link FieldJacobiTheta#FieldJacobiTheta Jacobi theta
+     * functions} are defined in terms of the {@link FieldEllipticIntegral#getNome()
+     * nome q}. All are related as {@code k² = m} and the nome can be computed
+     * from ratios of complete elliptic integrals.
      * </p>
      * @param k elliptic modulus
      */
@@ -54,6 +59,13 @@ public class FieldEllipticIntegral<T extends CalculusFieldElement<T>> {
      */
     public T getK() {
         return k;
+    }
+
+    /** Get the nome q.
+     * @return nome q
+     */
+    public T getNome() {
+        return FastMath.exp(getBigKPrime().divide(getBigK()).multiply(- FastMath.PI));
     }
 
     /** Get the complete elliptic integral of the first kind K(m).

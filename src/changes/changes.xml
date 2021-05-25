@@ -57,6 +57,10 @@ If the output is not quite correct, check for invisible trailing spaces!
         Changed return types for field elements methods (including Complex):
         norm() → double, abs() → field element.
       </action>
+      <action dev="luc" type="add">
+        Added the four Jacobi theta functions θ₁(z|τ), θ₂(z|τ), θ₃(z|τ), and θ₄(z|τ),
+        both for complex and field complex.
+      </action>
       <action dev="luc" type="add" issue="issues/126">
         Added field-based complex numbers.
       </action>

@@ -20,12 +20,6 @@ import org.hipparchus.CalculusFieldElement;
 
 /** Computation of Jacobi elliptic functions.
  * The Jacobi elliptic functions are related to elliptic integrals.
- * We use hare the notations from <a
- * href="https://en.wikipedia.org/wiki/Abramowitz_and_Stegun">Abramowitz and
- * Stegun</a> (Ch. 16) with a parameter {@code m}. The notations from
- * <a href="https://dlmf.nist.gov/22">Digital Library of Mathematical Functions (Ch. 22)</a>
- * are different as they use modulus {@code k} instead of parameter {@code m},
- * with {@code k² = m}.
  * @param <T> the type of the field elements
  * @since 2.0
  */
