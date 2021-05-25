@@ -771,6 +771,11 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     }
 
     @Test
+    public void testAcosNaN() {
+        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).acos().isNaN());
+    }
+
+    @Test
     public void testAcosInf() {
         UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneInf.acos());
         UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneNegInf.acos());
@@ -783,10 +788,20 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     }
 
     @Test
-    public void testAcosNaN() {
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).acos().isNaN());
+    public void testAcosBranchCuts() {
+        UnitTestUtils.assertEquals(build(3.141592653589793238462, -0.76103968373182660633),
+                                   FastMath.acos(build(-1.3038404810405297, +0.0)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(build(3.141592653589793238462, +0.76103968373182660633),
+                                   FastMath.acos(build(-1.3038404810405297, -0.0)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(build(0.0, -0.76103968373182660633),
+                                   FastMath.acos(build(1.3038404810405297, +0.0)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(build(0.0, +0.76103968373182660633),
+                                   FastMath.acos(build(1.3038404810405297, -0.0)),
+                                   1.0e-14);
     }
-
     @Test
     public void testAsinComplex() {
         FieldComplex<Decimal64> z = build(3, 4);
@@ -811,6 +826,21 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
         UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.asin());
     }
 
+    @Test
+    public void testAsinBranchCuts() {
+        UnitTestUtils.assertEquals(build(-1.57079632679489661923, +0.76103968373182660633),
+                                   FastMath.asin(build(-1.3038404810405297, +0.0)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(build(-1.57079632679489661923, -0.76103968373182660633),
+                                   FastMath.asin(build(-1.3038404810405297, -0.0)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(build(1.57079632679489661923, +0.76103968373182660633),
+                                   FastMath.asin(build(1.3038404810405297, +0.0)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(build(1.57079632679489661923, -0.76103968373182660633),
+                                   FastMath.asin(build(1.3038404810405297, -0.0)),
+                                   1.0e-14);
+    }
 
     @Test
     public void testAtanComplex() {
@@ -839,6 +869,38 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     @Test
     public void testAtanNaN() {
         Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).atan().isNaN());
+    }
+
+    @Test
+    public void testAtanBranchCuts() {
+        UnitTestUtils.assertEquals(build(+1.5707963267948966192, +1.0986122886681096913),
+                                   FastMath.atan(build(+0.0, 1.25)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(build(-1.5707963267948966192, +1.0986122886681096913),
+                                   FastMath.atan(build(-0.0, 1.25)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(build(+1.5707963267948966192, -1.0986122886681096913),
+                                   FastMath.atan(build(+0.0, -1.25)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(build(-1.5707963267948966192, -1.0986122886681096913),
+                                   FastMath.atan(build(-0.0, -1.25)),
+                                   1.0e-14);
+        UnitTestUtils.assertEquals(build(0.0, +0.25541281188299534160),
+                                   FastMath.atan(build(+0.0, 0.25)),
+                                   1.0e-14);
+        Assert.assertTrue(FastMath.copySign(1.0, FastMath.atan(build(+0.0, 0.25)).getReal()) > 0.0);
+        UnitTestUtils.assertEquals(build(0.0, +0.25541281188299534160),
+                                   FastMath.atan(build(-0.0, 0.25)),
+                                   1.0e-14);
+        Assert.assertTrue(FastMath.copySign(1.0, FastMath.atan(build(-0.0, 0.25)).getReal()) < 0.0);
+        UnitTestUtils.assertEquals(build(0.0, -0.25541281188299534160),
+                                   FastMath.atan(build(+0.0, -0.25)),
+                                   1.0e-14);
+        Assert.assertTrue(FastMath.copySign(1.0, FastMath.atan(build(+0.0, -0.25)).getReal()) > 0.0);
+        UnitTestUtils.assertEquals(build(0.0, -0.25541281188299534160),
+                                   FastMath.atan(build(-0.0, -0.25)),
+                                   1.0e-14);
+        Assert.assertTrue(FastMath.copySign(1.0, FastMath.atan(build(-0.0, -0.25)).getReal()) < 0.0);
     }
 
     @Test

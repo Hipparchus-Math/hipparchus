@@ -741,7 +741,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * inverse tangent</a> of this complex number.
      * Implements the formula:
      * <p>
-     * {@code atan(z) = (i/2) log((i + z)/(i - z))}
+     * {@code atan(z) = (i/2) log((1 - iz)/(1 + iz))}
      * </p><p>
      * Returns {@link Complex#NaN} if either real or imaginary part of the
      * input argument is {@code NaN} or infinite.</p>
@@ -754,7 +754,24 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return NaN;
         }
 
-        return this.add(I).divide(I.subtract(this)).log().multIp().multiply(0.5);
+        if (real == 0.0) {
+
+            // singularity at ±i
+            if (imaginary * imaginary - 1.0 == 0.0) {
+                return NaN;
+            }
+
+            // branch cut on imaginary axis
+            final Complex tmp = createComplex((1 + imaginary) / (1 - imaginary), 0.0).log().multIp().multiply(0.5);
+            return createComplex(FastMath.copySign(tmp.real, real), tmp.imaginary);
+
+        } else {
+            // regular formula
+            final Complex n = createComplex(1 + imaginary, -real);
+            final Complex d = createComplex(1 - imaginary,  real);
+            return n.divide(d).log().multIp().multiply(0.5);
+        }
+
     }
 
     /**
