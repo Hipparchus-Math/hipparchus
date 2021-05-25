@@ -27,7 +27,7 @@ import org.hipparchus.util.FieldSinCos;
  * @param <T> the type of the field elements
  * @since 2.0
  */
-public abstract class FieldJacobiTheta<T extends CalculusFieldElement<T>> {
+public class FieldJacobiTheta<T extends CalculusFieldElement<T>> {
 
     /** Maximum number of terms in the Fourier series. */
     private static final int N_MAX = 100;
@@ -82,8 +82,8 @@ public abstract class FieldJacobiTheta<T extends CalculusFieldElement<T>> {
 
         // recursion rules initialization
         double                       sgn   = 1.0;
-        T                            qTwoN = q.getField().getOne();
         T                            qNN   = q.getField().getOne();
+        T                            qTwoN = q.getField().getOne();
         T                            qNNp1 = q.getField().getOne();
         FieldSinCos<FieldComplex<T>> sc2n1 = sc1;
         final double                 eps   = FastMath.ulp(q.getField().getOne()).getReal();
@@ -95,9 +95,9 @@ public abstract class FieldJacobiTheta<T extends CalculusFieldElement<T>> {
         FieldComplex<T> sum4 = FieldComplex.getZero(q.getField());
         for (int n = 1; n < N_MAX; ++n) {
 
-            sgn   = -sgn;                            // -1ⁿ⁻¹       ← -1ⁿ
-            qTwoN = qTwoN.multiply(qSquare);         // q²⁽ⁿ⁻¹⁾     ← q²ⁿ
+            sgn   = -sgn;                            // (-1)ⁿ⁻¹     ← (-1)ⁿ
             qNN   = qNN.multiply(qTwoN).multiply(q); // q⁽ⁿ⁻¹⁾⁽ⁿ⁻¹⁾ ← qⁿⁿ
+            qTwoN = qTwoN.multiply(qSquare);         // q²⁽ⁿ⁻¹⁾     ← q²ⁿ
             qNNp1 = qNNp1.multiply(qTwoN);           // q⁽ⁿ⁻¹⁾ⁿ     ← qⁿ⁽ⁿ⁺¹⁾
 
             sc2n1 = FieldSinCos.sum(sc2n1, sc1); // {sin|cos}([2n-1] z) ← {sin|cos}(2n z)
