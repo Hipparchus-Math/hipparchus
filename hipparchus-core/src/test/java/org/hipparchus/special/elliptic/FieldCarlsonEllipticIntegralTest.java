@@ -16,31 +16,33 @@
  */
 package org.hipparchus.special.elliptic;
 
-import org.hipparchus.complex.Complex;
+import org.hipparchus.complex.FieldComplex;
+import org.hipparchus.util.Decimal64;
 
-public class CarlsonEllipticIntegralTest extends CarlsonEllipticIntegralAbstractTest<Complex> {
+public class FieldCarlsonEllipticIntegralTest extends CarlsonEllipticIntegralAbstractTest<FieldComplex<Decimal64>> {
 
-    protected Complex buildComplex(double realPart) {
-        return new Complex(realPart);
+    protected FieldComplex<Decimal64> buildComplex(double realPart) {
+        return new FieldComplex<>(new Decimal64(realPart));
     }
 
-    protected Complex buildComplex(double realPart, double imaginaryPart) {
-        return new Complex(realPart, imaginaryPart);
+    protected FieldComplex<Decimal64> buildComplex(double realPart, double imaginaryPart) {
+        return new FieldComplex<>(new Decimal64(realPart), new Decimal64(imaginaryPart));
     }
 
-    protected Complex rF(Complex x, Complex y, Complex z) {
+    protected FieldComplex<Decimal64> rF(FieldComplex<Decimal64> x, FieldComplex<Decimal64> y, FieldComplex<Decimal64> z) {
         return CarlsonEllipticIntegral.rF(x, y, z);
     }
 
-    protected Complex rC(Complex x, Complex y) {
+    protected FieldComplex<Decimal64> rC(FieldComplex<Decimal64> x, FieldComplex<Decimal64> y) {
         return CarlsonEllipticIntegral.rC(x, y);
     }
 
-    protected Complex rJ(Complex x, Complex y, Complex z, Complex p) {
+    protected FieldComplex<Decimal64> rJ(FieldComplex<Decimal64> x, FieldComplex<Decimal64> y,
+                                         FieldComplex<Decimal64> z, FieldComplex<Decimal64> p) {
         return CarlsonEllipticIntegral.rJ(x, y, z, p);
     }
 
-    protected Complex rD(Complex x, Complex y, Complex z) {
+    protected FieldComplex<Decimal64> rD(FieldComplex<Decimal64> x, FieldComplex<Decimal64> y, FieldComplex<Decimal64> z) {
         return CarlsonEllipticIntegral.rD(x, y, z);
     }
 
