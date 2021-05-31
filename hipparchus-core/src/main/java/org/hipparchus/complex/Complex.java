@@ -1248,32 +1248,35 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
      * square root</a> of this complex number.
      * Implements the following algorithm to compute {@code sqrt(a + bi)}:
      * <ol><li>Let {@code t = sqrt((|a| + |a + bi|) / 2)}</li>
-     * <li><pre>if {@code  a &#8805; 0} return {@code t + (b/2t)i}
+     * <li><pre>if {@code  a ≥ 0} return {@code t + (b/2t)i}
      *  else return {@code |b|/2t + sign(b)t i }</pre></li>
      * </ol>
      * where <ul>
-     * <li>{@code |a| = }{@link FastMath#abs}(a)</li>
-     * <li>{@code |a + bi| = }{@link Complex#abs}(a + bi)</li>
-     * <li>{@code sign(b) =  }{@link FastMath#copySign(double,double) copySign(1d, b)}
+     * <li>{@code |a| = }{@link FastMath#abs(double) abs(a)}</li>
+     * <li>{@code |a + bi| = }{@link FastMath#hypot(double, double) hypot(a, b)}</li>
+     * <li>{@code sign(b) = }{@link FastMath#copySign(double, double) copySign(1, b)}
      * </ul>
+     * The real part is therefore always nonnegative.
      * <p>
      * Returns {@link Complex#NaN} if either real or imaginary part of the
      * input argument is {@code NaN}.
      * </p>
+     * <p>
      * Infinite values in real or imaginary parts of the input may result in
      * infinite or NaN values returned in parts of the result.
+     * </p>
      * <pre>
      *  Examples:
      *  <code>
-     *   sqrt(1 &plusmn; INFINITY i) = INFINITY + NaN i
-     *   sqrt(INFINITY + i) = INFINITY + 0i
-     *   sqrt(-INFINITY + i) = 0 + INFINITY i
-     *   sqrt(INFINITY &plusmn; INFINITY i) = INFINITY + NaN i
-     *   sqrt(-INFINITY &plusmn; INFINITY i) = NaN &plusmn; INFINITY i
+     *   sqrt(1 ± ∞ i) = ∞ + NaN i
+     *   sqrt(∞ + i) = ∞ + 0i
+     *   sqrt(-∞ + i) = 0 + ∞ i
+     *   sqrt(∞ ± ∞ i) = ∞ + NaN i
+     *   sqrt(-∞ ± ∞ i) = NaN ± ∞ i
      *  </code>
      * </pre>
      *
-     * @return the square root of {@code this}.
+     * @return the square root of {@code this} with nonnegative real part.
      */
     @Override
     public Complex sqrt() {

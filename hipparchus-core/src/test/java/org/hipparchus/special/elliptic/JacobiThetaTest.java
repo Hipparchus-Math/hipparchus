@@ -38,7 +38,7 @@ public class JacobiThetaTest {
 
     @Test
     public void testRealZero() {
-        final EllipticIntegral ei     = new EllipticIntegral(0.675);
+        final LegendreEllipticIntegral ei     = new LegendreEllipticIntegral(0.675);
         final double           q      = ei.getNome();
         final double           t3Ref  = 1 + 2 * (q + FastMath.pow(q, 4) + FastMath.pow(q, 9) + FastMath.pow(q, 16));
         final double           theta3 = new JacobiTheta(q).values(Complex.ZERO).theta3().getRealPart();
@@ -47,7 +47,7 @@ public class JacobiThetaTest {
 
     @Test
     public void testQuarterPeriod() {
-        final EllipticIntegral ei     = new EllipticIntegral(0.675);
+        final LegendreEllipticIntegral ei     = new LegendreEllipticIntegral(0.675);
         final double           q      = ei.getNome();
         final double           theta3 = new JacobiTheta(q).values(Complex.ZERO).theta3().getRealPart();
         Assert.assertEquals(ei.getBigK(), MathUtils.SEMI_PI * theta3 * theta3, 1.0e-12);
@@ -57,7 +57,7 @@ public class JacobiThetaTest {
     public void testEllipticFunctions() {
 
         final double z = 1.3;
-        final EllipticIntegral ei = new EllipticIntegral(0.675);
+        final LegendreEllipticIntegral ei = new LegendreEllipticIntegral(0.675);
         final double zeta = MathUtils.SEMI_PI * z / ei.getBigK();
         final JacobiTheta      jt = new JacobiTheta(ei.getNome());
         final Theta            theta0 = jt.values(Complex.ZERO);

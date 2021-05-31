@@ -42,12 +42,12 @@ public class JacobiTheta {
 
     /** Simple constructor.
      * <p>
-     * Beware that {@link EllipticIntegral#EllipticIntegral elliptic integrals}
+     * Beware that {@link LegendreEllipticIntegral#LegendreEllipticIntegral Legendre elliptic integrals}
      * are defined in terms of elliptic modulus {@code k} whereas {@link
      * JacobiEllipticBuilder#build(double) Jacobi elliptic functions} (which are
      * their inverses) are defined in terms of parameter {@code m} and {@link
      * JacobiTheta#JacobiTheta Jacobi theta functions} are defined in terms of
-     * the {@link EllipticIntegral#getNome() nome q}. All are related as {@code k² = m}
+     * the {@link LegendreEllipticIntegral#getNome() nome q}. All are related as {@code k² = m}
      * and the nome can be computed from ratios of complete elliptic integrals.
      * </p>
      * @param q nome
