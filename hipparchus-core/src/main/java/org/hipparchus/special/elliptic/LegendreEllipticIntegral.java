@@ -21,13 +21,13 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
-/** Algorithm computing elliptic integrals.
+/** Elliptic integrals in Legendre form.
  * <p>
  * The elliptic integrals are related to Jacobi elliptic functions.
  * </p>
  * @since 2.0
  */
-public class EllipticIntegral {
+public class LegendreEllipticIntegral {
 
     /** Max number of iterations of the AGM scale. */
     private static final int N_MAX = 16;
@@ -37,17 +37,17 @@ public class EllipticIntegral {
 
     /** Simple constructor.
      * <p>
-     * Beware that {@link EllipticIntegral#EllipticIntegral elliptic integrals}
+     * Beware that {@link LegendreEllipticIntegral#LegendreEllipticIntegral Legendre elliptic integrals}
      * are defined in terms of elliptic modulus {@code k} whereas {@link
      * JacobiEllipticBuilder#build(double) Jacobi elliptic functions} (which are
      * their inverses) are defined in terms of parameter {@code m} and {@link
      * JacobiTheta#JacobiTheta Jacobi theta functions} are defined in terms of
-     * the {@link EllipticIntegral#getNome() nome q}. All are related as {@code k² = m}
+     * the {@link LegendreEllipticIntegral#getNome() nome q}. All are related as {@code k² = m}
      * and the nome can be computed from ratios of complete elliptic integrals.
      * </p>
      * @param k elliptic modulus
      */
-    public EllipticIntegral(final double k) {
+    public LegendreEllipticIntegral(final double k) {
         this.k = k;
     }
 
@@ -65,11 +65,11 @@ public class EllipticIntegral {
         return FastMath.exp(-FastMath.PI * getBigKPrime() / getBigK());
     }
 
-    /** Get the complete elliptic integral of the first kind K(m).
+    /** Get the complete elliptic integral of the first kind K(k).
      * <p>
-     * The complete elliptic integral of the first kind K(m) is
+     * The complete elliptic integral of the first kind K(k) is
      * \[
-     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}
+     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-k^2 \sin^2\theta}}
      * \]
      * it corresponds to the real quarter-period of Jacobi elliptic functions
      * </p>
@@ -77,25 +77,26 @@ public class EllipticIntegral {
      * The algorithm for evaluating the functions is based on arithmetic-geometric
      * mean. It is given in Abramowitz and Stegun, section 17.6.
      * </p>
+     * @return complete elliptic integral of the first kind K(k)
      * @see #getBigKPrime()
      */
     public double getBigK() {
         return MathUtils.SEMI_PI / arithmeticGeometricMean(1, FastMath.sqrt(1.0 - k * k));
     }
 
-    /** Get the complete elliptic integral of the first kind K'(m).
+    /** Get the complete elliptic integral of the first kind K'(k).
      * <p>
-     * The complete elliptic integral of the first kind K'(m) is
+     * The complete elliptic integral of the first kind K'(k) is
      * \[
-     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-(1-m) \sin^2\theta}}
+     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-(1-k^2) \sin^2\theta}}
      * \]
      * it corresponds to the imaginary quarter-period of Jacobi elliptic functions
      * </p>
-     * @return complete elliptic integral of the first kind K'
      * <p>
      * The algorithm for evaluating the functions is based on arithmetic-geometric
      * mean. It is given in Abramowitz and Stegun, section 17.6.
      * </p>
+     * @return complete elliptic integral of the first kind K'(k)
      * @see #getBigK()
      */
     public double getBigKPrime() {

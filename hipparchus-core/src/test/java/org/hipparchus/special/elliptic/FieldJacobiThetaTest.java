@@ -49,7 +49,7 @@ public class FieldJacobiThetaTest {
     }
 
     private <T extends CalculusFieldElement<T>> void doTestRealZero(Field<T> field) {
-        final FieldEllipticIntegral<T> ei     = new FieldEllipticIntegral<>(field.getZero().newInstance(0.675));
+        final FieldLegendreEllipticIntegral<T> ei     = new FieldLegendreEllipticIntegral<>(field.getZero().newInstance(0.675));
         final T                        q      = ei.getNome();
         final T                        t3Ref  = field.getOne().add(q.
                                                                    add(FastMath.pow(q, 4)).
@@ -65,7 +65,7 @@ public class FieldJacobiThetaTest {
     }
 
     private <T extends CalculusFieldElement<T>> void doTestQuarterPeriod(Field<T> field) {
-        final FieldEllipticIntegral<T> ei     = new FieldEllipticIntegral<>(field.getZero().newInstance(0.675));
+        final FieldLegendreEllipticIntegral<T> ei     = new FieldLegendreEllipticIntegral<>(field.getZero().newInstance(0.675));
         final T                        q      = ei.getNome();
         final T                        theta3 = new FieldJacobiTheta<>(q).values(FieldComplex.getZero(field)).theta3().getRealPart();
         Assert.assertEquals(ei.getBigK().getReal(),
@@ -81,7 +81,7 @@ public class FieldJacobiThetaTest {
     private <T extends CalculusFieldElement<T>> void doTestEllipticFunctions(Field<T> field) {
 
         final T z = field.getZero().newInstance(1.3);
-        final FieldEllipticIntegral<T> ei     = new FieldEllipticIntegral<>(field.getZero().newInstance(0.675));
+        final FieldLegendreEllipticIntegral<T> ei     = new FieldLegendreEllipticIntegral<>(field.getZero().newInstance(0.675));
         final T                        zeta   = z.divide(ei.getBigK()).multiply(MathUtils.SEMI_PI);
         final FieldJacobiTheta<T>      jt     = new FieldJacobiTheta<>(ei.getNome());
         final FieldTheta<T>            theta0 = jt.values(FieldComplex.getZero(field));

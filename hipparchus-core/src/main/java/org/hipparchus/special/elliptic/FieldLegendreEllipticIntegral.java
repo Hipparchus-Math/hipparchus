@@ -22,14 +22,14 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
-/** Computation of elliptic integrals.
+/** Elliptic integrals in Legendre form.
  * <p>
  * The elliptic integrals are related to Jacobi elliptic functions.
  * </p>
  * @param <T> the type of the field elements
  * @since 2.0
  */
-public class FieldEllipticIntegral<T extends CalculusFieldElement<T>> {
+public class FieldLegendreEllipticIntegral<T extends CalculusFieldElement<T>> {
 
     /** Max number of iterations of the AGM scale. */
     private static final int N_MAX = 16;
@@ -39,18 +39,18 @@ public class FieldEllipticIntegral<T extends CalculusFieldElement<T>> {
 
     /** Simple constructor.
      * <p>
-     * Beware that {@link FieldEllipticIntegral#FieldEllipticIntegral elliptic
+     * Beware that {@link FieldLegendreEllipticIntegral#FieldEllipticIntegral elliptic
      * integrals} are defined in terms of elliptic modulus {@code k} whereas
      * {@link JacobiEllipticBuilder#build(CalculusFieldElement) Jacobi elliptic
      * functions} (which are their inverses) are defined in terms of parameter
      * {@code m} and {@link FieldJacobiTheta#FieldJacobiTheta Jacobi theta
-     * functions} are defined in terms of the {@link FieldEllipticIntegral#getNome()
+     * functions} are defined in terms of the {@link FieldLegendreEllipticIntegral#getNome()
      * nome q}. All are related as {@code k² = m} and the nome can be computed
      * from ratios of complete elliptic integrals.
      * </p>
      * @param k elliptic modulus
      */
-    public FieldEllipticIntegral(final T k) {
+    public FieldLegendreEllipticIntegral(final T k) {
         this.k = k;
     }
 
@@ -68,11 +68,11 @@ public class FieldEllipticIntegral<T extends CalculusFieldElement<T>> {
         return FastMath.exp(getBigKPrime().divide(getBigK()).multiply(- FastMath.PI));
     }
 
-    /** Get the complete elliptic integral of the first kind K(m).
+    /** Get the complete elliptic integral of the first kind K(k).
      * <p>
-     * The complete elliptic integral of the first kind K(m) is
+     * The complete elliptic integral of the first kind K(k) is
      * \[
-     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}
+     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-k^2 \sin^2\theta}}
      * \]
      * it corresponds to the real quarter-period of Jacobi elliptic functions
      * </p>
@@ -80,7 +80,7 @@ public class FieldEllipticIntegral<T extends CalculusFieldElement<T>> {
      * The algorithm for evaluating the functions is based on arithmetic-geometric
      * mean. It is given in Abramowitz and Stegun, section 17.6.
      * </p>
-     * @return complete elliptic integral of the first kind K
+     * @return complete elliptic integral of the first kind K(k)
      * @see #getBigKPrime()
      */
     public T getBigK() {
@@ -89,11 +89,11 @@ public class FieldEllipticIntegral<T extends CalculusFieldElement<T>> {
                reciprocal().multiply(MathUtils.SEMI_PI);
     }
 
-    /** Get the complete elliptic integral of the first kind K'(m).
+    /** Get the complete elliptic integral of the first kind K'(k).
      * <p>
-     * The complete elliptic integral of the first kind K'(m) is
+     * The complete elliptic integral of the first kind K'(k) is
      * \[
-     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-(1-m) \sin^2\theta}}
+     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-(1-k^2) \sin^2\theta}}
      * \]
      * it corresponds to the imaginary quarter-period of Jacobi elliptic functions
      * </p>
@@ -101,7 +101,7 @@ public class FieldEllipticIntegral<T extends CalculusFieldElement<T>> {
      * The algorithm for evaluating the functions is based on arithmetic-geometric
      * mean. It is given in Abramowitz and Stegun, section 17.6.
      * </p>
-     * @return complete elliptic integral of the first kind K'
+     * @return complete elliptic integral of the first kind K'(k)
      * @see #getBigK()
      */
     public T getBigKPrime() {
