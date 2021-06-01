@@ -22,6 +22,8 @@
 
 package org.hipparchus.linear;
 
+import java.util.function.Predicate;
+
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -53,9 +55,6 @@ import org.hipparchus.util.MathArrays;
  * @see <a href="http://en.wikipedia.org/wiki/LU_decomposition">Wikipedia</a>
  */
 public class FieldLUDecomposition<T extends FieldElement<T>> {
-
-    /** Default bound to determine effective singularity in LU decomposition. */
-    private static final double DEFAULT_TOO_SMALL = 1e-11;
 
     /** Field to which the elements belong. */
     private final Field<T> field;
@@ -90,17 +89,16 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
      * @throws MathIllegalArgumentException if matrix is not square
      */
     public FieldLUDecomposition(FieldMatrix<T> matrix) {
-        this(matrix, DEFAULT_TOO_SMALL);
+        this(matrix, e -> e.isZero());
     }
 
     /**
      * Calculates the LU-decomposition of the given matrix.
      * @param matrix The matrix to decompose.
-     * @param singularityThreshold threshold (based on partial row norm)
-     * under which a matrix is considered singular
+     * @param zeroChecker checker for zero elements
      * @throws MathIllegalArgumentException if matrix is not square
      */
-    public FieldLUDecomposition(FieldMatrix<T> matrix, double singularityThreshold) {
+    public FieldLUDecomposition(FieldMatrix<T> matrix, final Predicate<T> zeroChecker) {
         if (!matrix.isSquare()) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());
@@ -154,7 +152,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
             }
 
             // Singularity check
-            if (FastMath.abs(lu[max][col].getReal()) < singularityThreshold) {
+            if (zeroChecker.test(lu[max][col])) {
                 singular = true;
                 return;
             }
