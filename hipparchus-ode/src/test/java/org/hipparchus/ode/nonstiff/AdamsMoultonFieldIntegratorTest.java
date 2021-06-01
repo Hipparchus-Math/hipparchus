@@ -76,7 +76,7 @@ public class AdamsMoultonFieldIntegratorTest extends AdamsFieldIntegratorAbstrac
 
     @Test
     public void testSecondaryEquations() {
-        doTestSecondaryEquations(Decimal64Field.getInstance(), 1.9e-11, 7.2e-15);
+        doTestSecondaryEquations(Decimal64Field.getInstance(), 1.9e-11, 1.1e-14);
     }
 
     @Test(expected=MathIllegalStateException.class)

@@ -22,12 +22,11 @@
 
 package org.hipparchus.linear;
 
-import java.util.function.Predicate;
-
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -36,10 +35,6 @@ import org.hipparchus.util.MathArrays;
  * L, U and P that satisfy: PA = LU, L is lower triangular, and U is
  * upper triangular and P is a permutation matrix. All matrices are
  * m&times;m.</p>
- * <p>Since {@link FieldElement field elements} do not provide an ordering
- * operator, the permutation matrix is computed here only in order to avoid
- * a zero pivot element, no attempt is done to get the largest pivot
- * element.</p>
  * <p>This class is based on the class with similar name from the
  * <a href="http://math.nist.gov/javanumerics/jama/">JAMA</a> library.</p>
  * <ul>
@@ -58,6 +53,9 @@ import org.hipparchus.util.MathArrays;
  * @see <a href="http://en.wikipedia.org/wiki/LU_decomposition">Wikipedia</a>
  */
 public class FieldLUDecomposition<T extends FieldElement<T>> {
+
+    /** Default bound to determine effective singularity in LU decomposition. */
+    private static final double DEFAULT_TOO_SMALL = 1e-11;
 
     /** Field to which the elements belong. */
     private final Field<T> field;
@@ -85,20 +83,24 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 
     /**
      * Calculates the LU-decomposition of the given matrix.
+     * By default, this constructor uses 1e-11 as default value
+     * for the singularity threshold.
+     *
      * @param matrix The matrix to decompose.
      * @throws MathIllegalArgumentException if matrix is not square
      */
     public FieldLUDecomposition(FieldMatrix<T> matrix) {
-        this(matrix, e -> e.isZero());
+        this(matrix, DEFAULT_TOO_SMALL);
     }
 
     /**
      * Calculates the LU-decomposition of the given matrix.
      * @param matrix The matrix to decompose.
-     * @param zeroChecker checker for zero elements
+     * @param singularityThreshold threshold (based on partial row norm)
+     * under which a matrix is considered singular
      * @throws MathIllegalArgumentException if matrix is not square
      */
-    public FieldLUDecomposition(FieldMatrix<T> matrix, final Predicate<T> zeroChecker) {
+    public FieldLUDecomposition(FieldMatrix<T> matrix, double singularityThreshold) {
         if (!matrix.isSquare()) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());
@@ -122,12 +124,10 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
         // Loop over columns
         for (int col = 0; col < m; col++) {
 
-            T sum = field.getZero();
-
             // upper
             for (int row = 0; row < col; row++) {
                 final T[] luRow = lu[row];
-                sum = luRow[col];
+                T sum = luRow[col];
                 for (int i = 0; i < row; i++) {
                     sum = sum.subtract(luRow[i].multiply(lu[i][col]));
                 }
@@ -135,37 +135,42 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
             }
 
             // lower
-            int nonZero = col; // permutation row
+            int max = col; // permutation row
+            double largest = Double.NEGATIVE_INFINITY;
             for (int row = col; row < m; row++) {
                 final T[] luRow = lu[row];
-                sum = luRow[col];
+                T sum = luRow[col];
                 for (int i = 0; i < col; i++) {
                     sum = sum.subtract(luRow[i].multiply(lu[i][col]));
                 }
                 luRow[col] = sum;
 
-                if (zeroChecker.test(lu[nonZero][col])) {
-                    // try to select a better permutation choice
-                    ++nonZero;
+                // maintain best permutation choice
+                double absSum = FastMath.abs(sum.getReal());
+                if (absSum > largest) {
+                    largest = absSum;
+                    max = row;
                 }
             }
 
             // Singularity check
-            if (nonZero >= m) {
+            if (FastMath.abs(lu[max][col].getReal()) < singularityThreshold) {
                 singular = true;
                 return;
             }
 
             // Pivot if necessary
-            if (nonZero != col) {
+            if (max != col) {
                 T tmp = field.getZero();
+                final T[] luMax = lu[max];
+                final T[] luCol = lu[col];
                 for (int i = 0; i < m; i++) {
-                    tmp = lu[nonZero][i];
-                    lu[nonZero][i] = lu[col][i];
-                    lu[col][i] = tmp;
+                    tmp = luMax[i];
+                    luMax[i] = luCol[i];
+                    luCol[i] = tmp;
                 }
-                int temp = pivot[nonZero];
-                pivot[nonZero] = pivot[col];
+                int temp = pivot[max];
+                pivot[max] = pivot[col];
                 pivot[col] = temp;
                 even = !even;
             }
@@ -173,8 +178,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
             // Divide the lower elements by the "winning" diagonal elt.
             final T luDiag = lu[col][col];
             for (int row = col + 1; row < m; row++) {
-                final T[] luRow = lu[row];
-                luRow[col] = luRow[col].divide(luDiag);
+                lu[row][col] = lu[row][col].divide(luDiag);
             }
         }
 
@@ -430,13 +434,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
         /** {@inheritDoc} */
         @Override
         public FieldMatrix<T> getInverse() {
-            final int m = pivot.length;
-            final T one = field.getOne();
-            FieldMatrix<T> identity = new Array2DRowFieldMatrix<>(field, m, m);
-            for (int i = 0; i < m; ++i) {
-                identity.setEntry(i, i, one);
-            }
-            return solve(identity);
+            return solve(MatrixUtils.createFieldIdentityMatrix(field, pivot.length));
         }
     }
 }
