@@ -52,7 +52,7 @@ public class JacobiTheta {
      * </p>
      * @param q nome
      */
-    protected JacobiTheta(final double q) {
+    public JacobiTheta(final double q) {
         this.q       = q;
         this.qSquare = q * q;
         this.qFourth = FastMath.sqrt(FastMath.sqrt(q));
