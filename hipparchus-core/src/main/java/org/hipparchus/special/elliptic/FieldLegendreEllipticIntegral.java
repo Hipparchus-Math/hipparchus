@@ -39,11 +39,12 @@ public class FieldLegendreEllipticIntegral<T extends CalculusFieldElement<T>> {
 
     /** Simple constructor.
      * <p>
-     * Beware that {@link FieldLegendreEllipticIntegral#FieldEllipticIntegral elliptic
-     * integrals} are defined in terms of elliptic modulus {@code k} whereas
+     * Beware that {@link
+     * FieldLegendreEllipticIntegral#FieldLegendreEllipticIntegral(CalculusFieldElement)
+     * elliptic integrals} are defined in terms of elliptic modulus {@code k} whereas
      * {@link JacobiEllipticBuilder#build(CalculusFieldElement) Jacobi elliptic
      * functions} (which are their inverses) are defined in terms of parameter
-     * {@code m} and {@link FieldJacobiTheta#FieldJacobiTheta Jacobi theta
+     * {@code m} and {@link FieldJacobiTheta#FieldJacobiTheta(CalculusFieldElement) Jacobi theta
      * functions} are defined in terms of the {@link FieldLegendreEllipticIntegral#getNome()
      * nome q}. All are related as {@code k² = m} and the nome can be computed
      * from ratios of complete elliptic integrals.

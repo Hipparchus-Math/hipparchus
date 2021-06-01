@@ -28,12 +28,12 @@ import org.hipparchus.util.FastMath;
  * This utility class computes the various symmetric elliptic
  * integrals defined as:
  * \[
- *   \begin{eqnarray}
- *   R_F(x,y,z)   = \frac{1}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{s(t)}\\
- *   R_J(x,y,z,p) = \frac{3}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{s(t)(t+p)}\\
- *   R_D(x,y,z)   = R_J(x,y,z,z)\\
- *   R_C(x,y)     = R_F(x,y,y)
- *   \end{eqnarray}
+ *   \left\{\begin{align}
+ *   R_F(x,y,z)   &= \frac{1}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{s(t)}\\
+ *   R_J(x,y,z,p) &= \frac{3}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{s(t)(t+p)}\\
+ *   R_D(x,y,z)   &= R_J(x,y,z,z)\\
+ *   R_C(x,y)     &= R_F(x,y,y)
+ *   \end{align}\right.
  * \]
  * </p>
  * <p>

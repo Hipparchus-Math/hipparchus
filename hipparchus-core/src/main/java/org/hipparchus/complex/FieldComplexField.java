@@ -51,8 +51,7 @@ public class FieldComplexField<T extends CalculusFieldElement<T>> implements Fie
 
     /** Get the field for complex numbers.
      * @param partsField field for the real and imaginary parts
-     * @param <S> the type of the field elements
-     * @param <T> the type of the complex
+     * @param <T> the type of the field elements
      * @return cached field
      */
     public static <T extends CalculusFieldElement<T>> FieldComplexField<T> getField(final Field<T> partsField) {

@@ -995,8 +995,8 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
      * @param b3 second factor of the third term
      * @return a<sub>1</sub>&times;b<sub>1</sub> +
      * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
-     * @see #linearCombination(double, Object, double, Object)
-     * @see #linearCombination(double, Object, double, Object, double, Object, double, Object)
+     * @see #linearCombination(double, FieldGradient, double, FieldGradient)
+     * @see #linearCombination(double, FieldGradient, double, FieldGradient, double, FieldGradient, double, FieldGradient)
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
      */
     public FieldGradient<T> linearCombination(final T a1, final FieldGradient<T> b1,

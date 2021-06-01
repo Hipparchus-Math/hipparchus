@@ -101,7 +101,6 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * @param field field the complex components belong to
      * @return number representing "0.0 + 1.0i"
      * @param <T> the type of the field elements
-     * @param <T> the type of the complex
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> getI(final Field<T> field) {
         return new FieldComplex<>(field.getZero(), field.getOne());
@@ -111,7 +110,6 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * @param field field the complex components belong to
      * @return number representing "0.0 _ 1.0i"
      * @param <T> the type of the field elements
-     * @param <T> the type of the complex
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> getMinusI(final Field<T> field) {
         return new FieldComplex<>(field.getZero(), field.getOne().negate());
@@ -120,7 +118,6 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
     /** Get a complex number representing "NaN + NaNi".
      * @return complex number representing "NaN + NaNi"
      * @param <T> the type of the field elements
-     * @param <T> the type of the complex
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> getNaN(final Field<T> field) {
         return new FieldComplex<>(field.getZero().add(Double.NaN), field.getZero().add(Double.NaN));
@@ -129,7 +126,6 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
     /** Get a complex number representing "+INF + INFi".
      * @return complex number representing "+INF + INFi"
      * @param <T> the type of the field elements
-     * @param <T> the type of the complex
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> getInf(final Field<T> field) {
         return new FieldComplex<>(field.getZero().add(Double.POSITIVE_INFINITY), field.getZero().add(Double.POSITIVE_INFINITY));
@@ -138,7 +134,6 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
     /** Get a complex number representing "1.0 + 0.0i".
      * @return complex number representing "1.0 + 0.0i"
      * @param <T> the type of the field elements
-     * @param <T> the type of the complex
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> getOne(final Field<T> field) {
         return new FieldComplex<>(field.getOne(), field.getZero());
@@ -147,7 +142,6 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
     /** Get a complex number representing "-1.0 + 0.0i".
      * @return complex number representing "-1.0 + 0.0i"
      * @param <T> the type of the field elements
-     * @param <T> the type of the complex
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> getMinusOne(final Field<T> field) {
         return new FieldComplex<>(field.getOne().negate(), field.getZero());
@@ -156,7 +150,6 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
     /** Get a complex number representing "0.0 + 0.0i".
      * @return complex number representing "0.0 + 0.0i
      * @param <T> the type of the field elements
-     * @param <T> the type of the complex
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> getZero(final Field<T> field) {
         return new FieldComplex<>(field.getZero(), field.getZero());
@@ -183,7 +176,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      *   {@code (a + bi) + (c + di) = (a+c) + (b+d)i}
      * </p>
      * If either {@code this} or {@code addend} has a {@code NaN} value in
-     * either part, {@link #NaN} is returned; otherwise {@code Infinite}
+     * either part, {@link #getNaN(Field)} is returned; otherwise {@code Infinite}
      * and {@code NaN} values are returned in the parts of the result
      * according to the rules for {@link java.lang.Double} arithmetic.
      *
@@ -239,7 +232,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * Returns the conjugate of this complex number.
      * The conjugate of {@code a + bi} is {@code a - bi}.
      * <p>
-     * {@link #NaN} is returned if either the real or imaginary
+     * {@link #getNaN(Field)} is returned if either the real or imaginary
      * part of this Complex number equals {@code Double.NaN}.
      * </p><p>
      * If the imaginary part is infinite, and the real part is not
@@ -277,16 +270,16 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * following rules, applied in the order presented:
      * <ul>
      *  <li>If either {@code this} or {@code divisor} has a {@code NaN} value
-     *   in either part, {@link #NaN} is returned.
+     *   in either part, {@link #getNaN(Field)} is returned.
      *  </li>
-     *  <li>If {@code divisor} equals {@link #ZERO}, {@link #NaN} is returned.
+     *  <li>If {@code divisor} equals {@link #getZero(Field)}, {@link #getNaN(Field)} is returned.
      *  </li>
      *  <li>If {@code this} and {@code divisor} are both infinite,
-     *   {@link #NaN} is returned.
+     *   {@link #getNaN(Field)} is returned.
      *  </li>
      *  <li>If {@code this} is finite (i.e., has no {@code Infinite} or
      *   {@code NaN} parts) and {@code divisor} is infinite (one or both parts
-     *   infinite), {@link #ZERO} is returned.
+     *   infinite), {@link #getZero(Field)} is returned.
      *  </li>
      *  <li>If {@code this} is infinite and {@code divisor} is finite,
      *   {@code NaN} values are returned in the parts of the result if the
@@ -451,7 +444,6 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * values between the real (resp. imaginary) parts of {@code x} and
      * {@code y}.
      * @param <T> the type of the field elements
-     * @param <T> the type of the complex
      * @return {@code true} if there are fewer than {@code maxUlps} floating
      * point values between the real (resp. imaginary) parts of {@code x}
      * and {@code y}.
@@ -470,7 +462,6 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * @param x First value (cannot be {@code null}).
      * @param y Second value (cannot be {@code null}).
      * @param <T> the type of the field elements
-     * @param <T> the type of the complex
      * @return {@code true} if the values are equal.
      */
     public static <T extends CalculusFieldElement<T>>boolean equals(FieldComplex<T> x, FieldComplex<T> y) {
@@ -487,7 +478,6 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * @param y Second value (cannot be {@code null}).
      * @param eps Amount of allowed absolute error.
      * @param <T> the type of the field elements
-     * @param <T> the type of the complex
      * @return {@code true} if the values are two adjacent floating point
      * numbers or they are within range of each other.
      *
@@ -509,7 +499,6 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * @param y Second value (cannot be {@code null}).
      * @param eps Amount of allowed relative error.
      * @param <T> the type of the field elements
-     * @param <T> the type of the complex
      * @return {@code true} if the values are two adjacent floating point
      * numbers or they are within range of each other.
      *
@@ -632,10 +621,10 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * <p>
      *   {@code (a + bi)(c + di) = (ac - bd) + (ad + bc)i}
      * </p>
-     * Returns {@link #NaN} if either {@code this} or {@code factor} has one or
+     * Returns {@link #getNaN(Field)} if either {@code this} or {@code factor} has one or
      * more {@code NaN} parts.
      * <p>
-     * Returns {@link #INF} if neither {@code this} nor {@code factor} has one
+     * Returns {@link #getInf(Field)} if neither {@code this} nor {@code factor} has one
      * or more {@code NaN} parts and if either {@code this} or {@code factor}
      * has one or more infinite parts (same result is returned regardless of
      * the sign of the components).
@@ -751,7 +740,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      *  {@code (a + bi) - (c + di) = (a-c) + (b-d)i}
      * </p>
      * If either {@code this} or {@code subtrahend} has a {@code NaN]} value in either part,
-     * {@link #NaN} is returned; otherwise infinite and {@code NaN} values are
+     * {@link #getNaN(Field)} is returned; otherwise infinite and {@code NaN} values are
      * returned in the parts of the result according to the rules for
      * {@link java.lang.Double} arithmetic.
      *
@@ -810,7 +799,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * <p>
      *  {@code acos(z) = -i (log(z + i (sqrt(1 - z<sup>2</sup>))))}
      * </p>
-     * Returns {@link FieldComplex#NaN} if either real or imaginary part of the
+     * Returns {@link #getNaN(Field)} if either real or imaginary part of the
      * input argument is {@code NaN} or infinite.
      *
      * @return the inverse cosine of this complex number.
@@ -832,7 +821,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * <p>
      *  {@code asin(z) = -i (log(sqrt(1 - z<sup>2</sup>) + iz))}
      * </p><p>
-     * Returns {@link FieldComplex#NaN} if either real or imaginary part of the
+     * Returns {@link #getNaN(Field)} if either real or imaginary part of the
      * input argument is {@code NaN} or infinite.</p>
      *
      * @return the inverse sine of this complex number.
@@ -854,7 +843,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * <p>
      * {@code atan(z) = (i/2) log((1 - iz)/(1 + iz))}
      * </p><p>
-     * Returns {@link FieldComplex#NaN} if either real or imaginary part of the
+     * Returns {@link #getNaN(Field)} if either real or imaginary part of the
      * input argument is {@code NaN} or infinite.</p>
      *
      * @return the inverse tangent of this complex number
@@ -900,7 +889,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * {@link FastMath#sin}, {@link FastMath#cos},
      * {@link FastMath#cosh} and {@link FastMath#sinh}.
      * </p><p>
-     * Returns {@link FieldComplex#NaN} if either real or imaginary part of the
+     * Returns {@link #getNaN(Field)} if either real or imaginary part of the
      * input argument is {@code NaN}.
      * </p><p>
      * Infinite values in real or imaginary parts of the input may result in
@@ -941,7 +930,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * {@link FastMath#sin}, {@link FastMath#cos},
      * {@link FastMath#cosh} and {@link FastMath#sinh}.
      * <p>
-     * Returns {@link FieldComplex#NaN} if either real or imaginary part of the
+     * Returns {@link #getNaN(Field)} if either real or imaginary part of the
      * input argument is {@code NaN}.
      * </p>
      * Infinite values in real or imaginary parts of the input may result in
@@ -982,7 +971,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * {@link FastMath#exp}, {@link FastMath#cos}, and
      * {@link FastMath#sin}.
      * <p>
-     * Returns {@link FieldComplex#NaN} if either real or imaginary part of the
+     * Returns {@link #getNaN(Field)} if either real or imaginary part of the
      * input argument is {@code NaN}.
      * </p>
      * Infinite values in real or imaginary parts of the input may result in
@@ -1033,10 +1022,10 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      *  </code>
      * </pre>
      * where ln on the right hand side is {@link FastMath#log},
-     * {@code |a + bi|} is the modulus, {@link FieldComplex#abs},  and
+     * {@code |a + bi|} is the modulus, {@link #abs},  and
      * {@code arg(a + bi) = }{@link FastMath#atan2}(b, a).
      * <p>
-     * Returns {@link FieldComplex#NaN} if either real or imaginary part of the
+     * Returns {@link #getNaN(Field)} if either real or imaginary part of the
      * input argument is {@code NaN}.
      * </p>
      * Infinite (or critical) values in real or imaginary parts of the input may
@@ -1229,7 +1218,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * {@link FastMath#sin}, {@link FastMath#cos},
      * {@link FastMath#cosh} and {@link FastMath#sinh}.
      * <p>
-     * Returns {@link FieldComplex#NaN} if either real or imaginary part of the
+     * Returns {@link #getNaN(Field)} if either real or imaginary part of the
      * input argument is {@code NaN}.
      * </p><p>
      * Infinite values in real or imaginary parts of the input may result in
@@ -1335,7 +1324,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * {@link FastMath#sin}, {@link FastMath#cos},
      * {@link FastMath#cosh} and {@link FastMath#sinh}.
      * <p>
-     * Returns {@link FieldComplex#NaN} if either real or imaginary part of the
+     * Returns {@link #getNaN(Field)} if either real or imaginary part of the
      * input argument is {@code NaN}.
      * </p><p>
      * Infinite values in real or imaginary parts of the input may result in
@@ -1392,7 +1381,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * </ul>
      * The real part is therefore always nonnegative.
      * <p>
-     * Returns {@link FieldComplex#getNaN(Field) NaN} if either real or imaginary part of the
+     * Returns {@link #getNaN(Field) NaN} if either real or imaginary part of the
      * input argument is {@code NaN}.
      * </p>
      * <p>
@@ -1453,7 +1442,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * Computes the result directly as
      * {@code sqrt(ONE.subtract(z.multiply(z)))}.
      * <p>
-     * Returns {@link FieldComplex#NaN} if either real or imaginary part of the
+     * Returns {@link #getNaN(Field)} if either real or imaginary part of the
      * input argument is {@code NaN}.
      * </p>
      * Infinite values in real or imaginary parts of the input may result in
@@ -1504,7 +1493,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * {@link FastMath#sin}, {@link FastMath#cos}, {@link FastMath#cosh} and
      * {@link FastMath#sinh}.
      * <p>
-     * Returns {@link FieldComplex#NaN} if either real or imaginary part of the
+     * Returns {@link #getNaN(Field)} if either real or imaginary part of the
      * input argument is {@code NaN}.
      * </p>
      * Infinite (or critical) values in real or imaginary parts of the input may
@@ -1555,7 +1544,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * {@link FastMath#sin}, {@link FastMath#cos}, {@link FastMath#cosh} and
      * {@link FastMath#sinh}.
      * <p>
-     * Returns {@link FieldComplex#NaN} if either real or imaginary part of the
+     * Returns {@link #getNaN(Field)} if either real or imaginary part of the
      * input argument is {@code NaN}.
      * </p>
      * Infinite values in real or imaginary parts of the input may result in
@@ -1626,9 +1615,9 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * {@link #getArgument() argument} of this complex number.
      * <p>
      * If one or both parts of this complex number is NaN, a list with just
-     * one element, {@link #NaN} is returned.
+     * one element, {@link #getNaN(Field)} is returned.
      * if neither part is NaN, but at least one part is infinite, the result
-     * is a one-element list containing {@link #INF}.
+     * is a one-element list containing {@link #getInf(Field)}.
      *
      * @param n Degree of root.
      * @return a List of all {@code n}-th roots of {@code this}.
@@ -1678,7 +1667,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * @param imaginaryPart Imaginary part.
      * @return a new complex number instance.
      *
-     * @see #valueOf(double, double)
+     * @see #valueOf(CalculusFieldElement, CalculusFieldElement)
      */
     protected FieldComplex<T> createComplex(final T realPart, final T imaginaryPart) {
         return new FieldComplex<>(realPart, imaginaryPart);
@@ -1690,7 +1679,6 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * @param realPart Real part.
      * @param imaginaryPart Imaginary part.
      * @param <T> the type of the field elements
-     * @param <T> the type of the complex
      * @return a Complex instance.
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T>
@@ -1706,7 +1694,6 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      *
      * @param realPart Real part.
      * @param <T> the type of the field elements
-     * @param <T> the type of the complex
      * @return a Complex instance.
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T>

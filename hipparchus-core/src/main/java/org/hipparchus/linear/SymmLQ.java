@@ -868,7 +868,7 @@ public class SymmLQ
     /**
      * {@inheritDoc}
      *
-     * @throws MathIllegalArgumentException if {@link #getCheck()} is
+     * @throws MathIllegalArgumentException if {@link #shouldCheck()} is
      * {@code true}, and {@code a} or {@code m} is not self-adjoint
      * @throws MathIllegalArgumentException if {@code m} is not
      * positive definite
@@ -917,7 +917,7 @@ public class SymmLQ
      * unless a custom
      * {@link org.hipparchus.util.Incrementor.MaxCountExceededCallback callback}
      * has been set at construction of the {@link IterationManager}
-     * @throws MathIllegalArgumentException if {@link #getCheck()} is
+     * @throws MathIllegalArgumentException if {@link #shouldCheck()} is
      * {@code true}, and {@code a} or {@code m} is not self-adjoint
      * @throws MathIllegalArgumentException if {@code m} is not
      * positive definite
@@ -936,7 +936,7 @@ public class SymmLQ
      *
      * @param x not meaningful in this implementation; should not be considered
      * as an initial guess (<a href="#initguess">more</a>)
-     * @throws MathIllegalArgumentException if {@link #getCheck()} is
+     * @throws MathIllegalArgumentException if {@link #shouldCheck()} is
      * {@code true}, and {@code a} or {@code m} is not self-adjoint
      * @throws MathIllegalArgumentException if {@code m} is not positive
      * definite
@@ -955,7 +955,7 @@ public class SymmLQ
     /**
      * {@inheritDoc}
      *
-     * @throws MathIllegalArgumentException if {@link #getCheck()} is
+     * @throws MathIllegalArgumentException if {@link #shouldCheck()} is
      * {@code true}, and {@code a} is not self-adjoint
      * @throws MathIllegalArgumentException if {@code a} is ill-conditioned
      */
@@ -1000,7 +1000,7 @@ public class SymmLQ
      * unless a custom
      * {@link org.hipparchus.util.Incrementor.MaxCountExceededCallback callback}
      * has been set at construction of the {@link IterationManager}
-     * @throws MathIllegalArgumentException if {@link #getCheck()} is
+     * @throws MathIllegalArgumentException if {@link #shouldCheck()} is
      * {@code true}, and {@code a} is not self-adjoint
      * @throws MathIllegalArgumentException if {@code a} is ill-conditioned
      */
@@ -1017,7 +1017,7 @@ public class SymmLQ
      *
      * @param x not meaningful in this implementation; should not be considered
      * as an initial guess (<a href="#initguess">more</a>)
-     * @throws MathIllegalArgumentException if {@link #getCheck()} is
+     * @throws MathIllegalArgumentException if {@link #shouldCheck()} is
      * {@code true}, and {@code a} is not self-adjoint
      * @throws MathIllegalArgumentException if {@code a} is ill-conditioned
      */
@@ -1034,7 +1034,7 @@ public class SymmLQ
      *
      * @param x the vector to be updated with the solution; {@code x} should
      * not be considered as an initial guess (<a href="#initguess">more</a>)
-     * @throws MathIllegalArgumentException if {@link #getCheck()} is
+     * @throws MathIllegalArgumentException if {@link #shouldCheck()} is
      * {@code true}, and {@code a} or {@code m} is not self-adjoint
      * @throws MathIllegalArgumentException if {@code m} is not
      * positive definite
@@ -1085,7 +1085,7 @@ public class SymmLQ
      * unless a custom
      * {@link org.hipparchus.util.Incrementor.MaxCountExceededCallback callback}
      * has been set at construction of the {@link IterationManager}
-     * @throws MathIllegalArgumentException if {@link #getCheck()} is
+     * @throws MathIllegalArgumentException if {@link #shouldCheck()} is
      * {@code true}, and {@code a} or {@code m} is not self-adjoint
      * @throws MathIllegalArgumentException if {@code m} is not positive definite
      * @throws MathIllegalArgumentException if {@code a} is ill-conditioned
@@ -1153,7 +1153,7 @@ public class SymmLQ
      *
      * @param x the vector to be updated with the solution; {@code x} should
      * not be considered as an initial guess (<a href="#initguess">more</a>)
-     * @throws MathIllegalArgumentException if {@link #getCheck()} is
+     * @throws MathIllegalArgumentException if {@link #shouldCheck()} is
      * {@code true}, and {@code a} is not self-adjoint
      * @throws MathIllegalArgumentException if {@code a} is ill-conditioned
      */

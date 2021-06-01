@@ -804,8 +804,8 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
      * the current point (i.e. [f({@link #getValue()}),
      * f'({@link #getValue()}), f''({@link #getValue()})...]).
      * @return f(this)
-     * @exception MathIllegalArgumentException if the number of derivatives
-     * in the array is not equal to {@link #getOrder() order} + 1
+     * @exception MathIllegalArgumentException if the number of elements
+     * in the array is not equal to 2 (i.e. value and first derivative)
      */
     public SparseGradient compose(final double... f) {
         MathUtils.checkDimension(f.length, 2);

@@ -983,8 +983,8 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
      * @param b2 second factor of the second term
      * @return a<sub>1</sub>&times;b<sub>1</sub> +
      * a<sub>2</sub>&times;b<sub>2</sub>
-     * @see #linearCombination(double, Object, double, Object, double, Object)
-     * @see #linearCombination(double, Object, double, Object, double, Object, double, Object)
+     * @see #linearCombination(double, FieldDerivativeStructure, double, FieldDerivativeStructure)
+     * @see #linearCombination(double, FieldDerivativeStructure, double, FieldDerivativeStructure, double, FieldDerivativeStructure, double, FieldDerivativeStructure)
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
      */
     public FieldDerivativeStructure<T> linearCombination(final T a1, final FieldDerivativeStructure<T> b1,
@@ -1059,8 +1059,8 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
      * @param b3 second factor of the third term
      * @return a<sub>1</sub>&times;b<sub>1</sub> +
      * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
-     * @see #linearCombination(double, Object, double, Object)
-     * @see #linearCombination(double, Object, double, Object, double, Object, double, Object)
+     * @see #linearCombination(double, FieldDerivativeStructure, double, FieldDerivativeStructure)
+     * @see #linearCombination(double, FieldDerivativeStructure, double, FieldDerivativeStructure, double, FieldDerivativeStructure, double, FieldDerivativeStructure)
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
      */
     public FieldDerivativeStructure<T> linearCombination(final T a1, final FieldDerivativeStructure<T> b1,
@@ -1146,8 +1146,8 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
      * @return a<sub>1</sub>&times;b<sub>1</sub> +
      * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub> +
      * a<sub>4</sub>&times;b<sub>4</sub>
-     * @see #linearCombination(double, Object, double, Object)
-     * @see #linearCombination(double, Object, double, Object, double, Object)
+     * @see #linearCombination(double, FieldDerivativeStructure, double, FieldDerivativeStructure)
+     * @see #linearCombination(double, FieldDerivativeStructure, double, FieldDerivativeStructure, double, FieldDerivativeStructure)
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
      */
     public FieldDerivativeStructure<T> linearCombination(final T a1, final FieldDerivativeStructure<T> b1,
