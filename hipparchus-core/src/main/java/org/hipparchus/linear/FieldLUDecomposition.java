@@ -82,9 +82,6 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 
     /**
      * Calculates the LU-decomposition of the given matrix.
-     * By default, this constructor uses 1e-11 as default value
-     * for the singularity threshold.
-     *
      * @param matrix The matrix to decompose.
      * @throws MathIllegalArgumentException if matrix is not square
      */
