@@ -163,7 +163,14 @@ public class CarlsonEllipticIntegral {
      * @param y second symmetric variable of the integral
      */
     public static Complex rC(final Complex x, final Complex y) {
-        return computeRc(x, y);
+        if (y.getImaginaryPart() == 0 && y.getRealPart() < 0) {
+            // y is on the branch cut, we must use a transformation to get the Cauchy principal value
+            // see equation 2.14 in Carlson[1995]
+            final Complex xMy = x.subtract(y);
+            return FastMath.sqrt(x.divide(xMy)).multiply(computeRc(xMy, y.negate()));
+        } else {
+            return computeRc(x, y);
+        }
     }
 
     /** Compute Carlson elliptic integral R<sub>C</sub>.
@@ -178,10 +185,20 @@ public class CarlsonEllipticIntegral {
      * @param <T> type of the field elements
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> rC(final FieldComplex<T> x, final FieldComplex<T> y) {
-        return computeRc(x, y);
+        if (y.getImaginaryPart().isZero() && y.getRealPart().getReal() < 0) {
+            // y is on the branch cut, we must use a transformation to get the Cauchy principal value
+            // see equation 2.14 in Carlson[1995]
+            final FieldComplex<T> xMy = x.subtract(y);
+            return FastMath.sqrt(x.divide(xMy)).multiply(computeRc(xMy, y.negate()));
+        } else {
+            return computeRc(x, y);
+        }
     }
 
-    /** Compute Carlson elliptic integral R<sub>C</sub>.
+    /** Compute Carlson elliptic integral R<sub>C</sub>, with restrictions on {@code y}.
+     * <p>
+     * Here {@code y} must not be real and negative.
+     * </p>
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      * @param <T> type of the field elements (really {@link Complex} or {@link FieldComplex})

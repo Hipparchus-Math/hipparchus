@@ -81,7 +81,7 @@ public abstract class CarlsonEllipticIntegralAbstractTest<T extends CalculusFiel
     @Test
     public void testCarlson1995ConsistencyRf() {
         RandomGenerator random = new Well19937c(0x57f2689b3f4028b4l);
-        for (int i = 0; i < 100000; ++i) {
+        for (int i = 0; i < 10000; ++i) {
             T x      = buildComplex(random.nextDouble() * 3);
             T y      = buildComplex(random.nextDouble() * 3);
             T lambda = buildComplex(random.nextDouble() * 6 - 3, random.nextDouble() * 3);
@@ -118,46 +118,39 @@ public abstract class CarlsonEllipticIntegralAbstractTest<T extends CalculusFiel
         T rc4 = rC(buildComplex(0, -1), buildComplex(0, 1));
         check( 1.2260849569072, -0.34471136988768, rc4, 1.0e-13);
 
-        // the 1995 paper does not show any imaginary part for this case,
-        // but it seems to be non-zero, which is consistent with R_F(x, y, y)
         T rc5 = rC(buildComplex(0.25), buildComplex(-2));
-        check(FastMath.log(2) / 3.0, -1.047197551196598, rc5, 1.0e-15);
+        check(FastMath.log(2) / 3.0, 0.0, rc5, 1.0e-15);
 
-        // there is probably a confusion in the 1995 paper as the following
-        // results were expected to be R_C(i, -1), but we found it was rather R_C(2, 1 - i)
-        // or R_C(4 + 3i, -i)
-        T rc6A = rC(buildComplex(2), buildComplex(1, -1));
-        check( 0.77778596920447, 0.19832484993429, rc6A, 1.0e-13);
-        T rc6B = rC(buildComplex(4, 3), buildComplex(0, -1));
-        check( 0.77778596920447, 0.19832484993429, rc6B, 1.0e-13);
+        T rc6 = rC(buildComplex(0, 1), buildComplex(-1));
+        check( 0.77778596920447, 0.19832484993429, rc6, 1.0e-13);
 
     }
 
     @Test
     public void testCarlson1995ConsistencyRc() {
         RandomGenerator random = new Well19937c(0xf1170b6fc1a199cal);
-        for (int i = 0; i < 100000; ++i) {
+        for (int i = 0; i < 10000; ++i) {
             T x      = buildComplex(random.nextDouble() * 3);
             T lambda = buildComplex(random.nextDouble() * 6 - 3, random.nextDouble() * 3);
             T mu     = x.multiply(x).divide(lambda);
             T rcL    = rC(lambda,          x.add(lambda));
             T rcM    = rC(mu,              x.add(mu));
             T rc0    = rC(buildComplex(0), x);
-            Assert.assertEquals(0.0, rcL.add(rcM).subtract(rc0).norm(), 2.0e-13);
+            Assert.assertEquals(0.0, rcL.add(rcM).subtract(rc0).norm(), 3.0e-14);
         }
     }
 
     @Test
     public void testRfRc() {
         RandomGenerator random = new Well19937a(0x7e8041334a8c20edl);
-        for (int i = 0; i < 100000; ++i) {
+        for (int i = 0; i < 10000; ++i) {
             final T x = buildComplex(6 * random.nextDouble() - 3,
                                           6 * random.nextDouble() - 3);
             final T y = buildComplex(6 * random.nextDouble() - 3,
                                           6 * random.nextDouble() - 3);
             final T rf = rF(x, y, y);
             final T rc = rC(x, y);
-            Assert.assertEquals(0.0, rf.subtract(rc).norm(), 3.0e-14 * rf.norm());
+            Assert.assertEquals(0.0, rf.subtract(rc).norm(), 4.0e-15);
         }
     }
 
@@ -209,7 +202,7 @@ public abstract class CarlsonEllipticIntegralAbstractTest<T extends CalculusFiel
     @Test
     public void testCarlson1995ConsistencyRj() {
         RandomGenerator random = new Well19937c(0x4af7bb722712e64el);
-        for (int i = 0; i < 100000; ++i) {
+        for (int i = 0; i < 10000; ++i) {
             T x      = buildComplex(random.nextDouble() * 3);
             T y      = buildComplex(random.nextDouble() * 3);
             T p      = buildComplex(random.nextDouble() * 3);
@@ -221,7 +214,7 @@ public abstract class CarlsonEllipticIntegralAbstractTest<T extends CalculusFiel
             T rjM    = rJ(x.add(mu),     y.add(mu),     mu,              p.add(mu));
             T rj0    = rJ(x,             y,             buildComplex(0), p);
             T rc     = rC(a, b);
-            Assert.assertEquals(0.0, rjL.add(rjM).subtract(rj0.subtract(rc.multiply(3))).norm(), 2.0e-12);
+            Assert.assertEquals(0.0, rjL.add(rjM).subtract(rj0.subtract(rc.multiply(3))).norm(), 2.0e-13);
         }
     }
 
@@ -261,7 +254,7 @@ public abstract class CarlsonEllipticIntegralAbstractTest<T extends CalculusFiel
     @Test
     public void testCarlson1995ConsistencyRd() {
         RandomGenerator random = new Well19937c(0x17dea97eeb78206al);
-        for (int i = 0; i < 100000; ++i) {
+        for (int i = 0; i < 10000; ++i) {
             T x      = buildComplex(random.nextDouble() * 3);
             T y      = buildComplex(random.nextDouble() * 3);
             T lambda = buildComplex(random.nextDouble() * 6 - 3, random.nextDouble() * 3);
@@ -270,7 +263,7 @@ public abstract class CarlsonEllipticIntegralAbstractTest<T extends CalculusFiel
             T rdM    = rD(mu,              x.add(mu),     y.add(mu));
             T rd0    = rD(buildComplex(0), x,             y);
             T frac   = y.multiply(x.add(y).add(lambda).add(mu).sqrt()).reciprocal().multiply(3);
-            Assert.assertEquals(0.0, rdL.add(rdM).subtract(rd0.subtract(frac)).norm(), 3.0e-9);
+            Assert.assertEquals(0.0, rdL.add(rdM).subtract(rd0.subtract(frac)).norm(), 9.0e-12);
         }
     }
 
