@@ -46,4 +46,8 @@ public class FieldCarlsonEllipticIntegralTest extends CarlsonEllipticIntegralAbs
         return CarlsonEllipticIntegral.rD(x, y, z);
     }
 
+    protected FieldComplex<Decimal64> rG(FieldComplex<Decimal64> x, FieldComplex<Decimal64> y, FieldComplex<Decimal64> z) {
+        return CarlsonEllipticIntegral.rG(x, y, z);
+    }
+
 }

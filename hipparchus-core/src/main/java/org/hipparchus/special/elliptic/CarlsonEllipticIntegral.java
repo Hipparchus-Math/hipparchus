@@ -31,6 +31,8 @@ import org.hipparchus.util.FastMath;
  *   \left\{\begin{align}
  *   R_F(x,y,z)   &= \frac{1}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{s(t)}\\
  *   R_J(x,y,z,p) &= \frac{3}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{s(t)(t+p)}\\
+ *   R_G(x,y,z)   &= \frac{1}{4}\int_{0}^{\infty}\frac{1}{s(t)}
+                     \left(\frac{x}{t+x}+\frac{y}{t+y}+\frac{z}{t+z}\right)t\mathrm{d}t\\
  *   R_D(x,y,z)   &= R_J(x,y,z,z)\\
  *   R_C(x,y)     &= R_F(x,y,y)
  *   \end{align}\right.
@@ -512,7 +514,7 @@ public class CarlsonEllipticIntegral {
      * @param z third symmetric variable of the integral
      */
     public static Complex rD(final Complex x, final Complex y, final Complex z) {
-        return computeRD(x, y, z);
+        return computeRd(x, y, z);
     }
 
     /** Compute Carlson elliptic integral R<sub>D</sub>.
@@ -529,7 +531,7 @@ public class CarlsonEllipticIntegral {
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> rD(final FieldComplex<T> x, final FieldComplex<T> y,
                                                                          final FieldComplex<T> z) {
-        return computeRD(x, y, z);
+        return computeRd(x, y, z);
     }
 
     /** Compute Carlson elliptic integral R<sub>D</sub>.
@@ -538,7 +540,7 @@ public class CarlsonEllipticIntegral {
      * @param z third symmetric variable of the integral
      * @param <T> type of the field elements (really {@link Complex} or {@link FieldComplex})
      */
-    private static <T extends CalculusFieldElement<T>> T computeRD(final T x, final T y, final T z) {
+    private static <T extends CalculusFieldElement<T>> T computeRd(final T x, final T y, final T z) {
 
         // compute tolerance
         final T a0     = x.add(y).add(z.multiply(3)).divide(5.0);
@@ -625,6 +627,64 @@ public class CarlsonEllipticIntegral {
         // we were not able to compute the value
         throw new MathIllegalStateException(LocalizedCoreFormats.CONVERGENCE_FAILED);
 
+    }
+
+    /** Compute Carlson elliptic integral R<sub>G</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>G</sub>is defined as
+     * \[
+     *   R_{G}(x,y,z)=\frac{1}{4}\int_{0}^{\infty}\frac{1}{s(t)}
+     *                \left(\frac{x}{t+x}+\frac{y}{t+y}+\frac{z}{t+z}\right)t\mathrm{d}t
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z second symmetric variable of the integral
+     */
+    public static Complex rG(final Complex x, final Complex y, final Complex z) {
+        return computeRg(x, y, z);
+    }
+
+    /** Compute Carlson elliptic integral R<sub>G</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>G</sub>is defined as
+     * \[
+     *   R_{G}(x,y,z)=\frac{1}{4}\int_{0}^{\infty}\frac{1}{s(t)}
+     *                \left(\frac{x}{t+x}+\frac{y}{t+y}+\frac{z}{t+z}\right)t\mathrm{d}t
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z second symmetric variable of the integral
+     * @param <T> type of the field elements
+     */
+    public static <T extends CalculusFieldElement<T>> FieldComplex<T> rG(final FieldComplex<T> x,
+                                                                         final FieldComplex<T> y,
+                                                                         final FieldComplex<T> z) {
+        return computeRg(x, y, z);
+    }
+
+    /** Compute Carlson elliptic integral R<sub>G</sub>.
+     * <p>
+     * This corresponds to equation 19.21.11 in DLFM.
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z third symmetric variable of the integral
+     * @param <T> type of the field elements (really {@link Complex} or {@link FieldComplex})
+     */
+    private static <T extends CalculusFieldElement<T>> T computeRg(final T x, final T y, final T z) {
+        return d(x, y, z).add(d(y, z, x)).add(d(z, x, y)).divide(6);
+    }
+
+    /** Compute one R<sub>D</sub> term from DLFM 19.21.11.
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z third symmetric variable of the integral
+     * @param <T> type of the field elements (really {@link Complex} or {@link FieldComplex})
+     */
+    private static <T extends CalculusFieldElement<T>> T d(final T u, final T v, final T w) {
+        return u.isZero() ? u : u.multiply(v.add(w)).multiply(computeRd(v, w, u));
     }
 
 }
