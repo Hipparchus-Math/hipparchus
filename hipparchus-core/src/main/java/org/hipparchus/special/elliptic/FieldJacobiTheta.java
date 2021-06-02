@@ -55,7 +55,7 @@ public class FieldJacobiTheta<T extends CalculusFieldElement<T>> {
      * </p>
      * @param q nome
      */
-    protected FieldJacobiTheta(final T q) {
+    public FieldJacobiTheta(final T q) {
         this.q       = q;
         this.qSquare = q.multiply(q);
         this.qFourth = FastMath.sqrt(FastMath.sqrt(q));
