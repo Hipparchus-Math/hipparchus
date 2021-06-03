@@ -275,7 +275,7 @@ public class ComplexEigenDecomposition {
             }
 
             // solver for linear system (A - (λ+ε)I) Bₖ₊₁ = Bₖ
-            FieldDecompositionSolver<Complex> solver = new FieldLUDecomposition<>(shifted).getSolver();
+            FieldDecompositionSolver<Complex> solver = new FieldQRDecomposition<>(shifted).getSolver();
 
             // loop over possible start vectors
             for (int p = 0; eigenvectors[i] == null && p < matrix.getColumnDimension(); ++p) {

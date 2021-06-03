@@ -22,12 +22,16 @@
 
 package org.hipparchus.linear;
 
+import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
+import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -44,8 +48,8 @@ public class FieldLUDecompositionTest {
     };
     private Fraction[][] luData = {
             { new Fraction(2), new Fraction(3), new Fraction(3) },
-            { new Fraction(2), new Fraction(3), new Fraction(7) },
-            { new Fraction(6), new Fraction(6), new Fraction(8) }
+            { new Fraction(0), new Fraction(5), new Fraction(7) },
+            { new Fraction(6), new Fraction(9), new Fraction(8) }
     };
 
     // singular matrices
@@ -245,21 +249,21 @@ public class FieldLUDecompositionTest {
        FieldLUDecomposition<Fraction> lu =
             new FieldLUDecomposition<Fraction>(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), testData));
         FieldMatrix<Fraction> lRef = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), new Fraction[][] {
-                { new Fraction(1), new Fraction(0), new Fraction(0) },
-                { new Fraction(2), new Fraction(1), new Fraction(0) },
-                { new Fraction(1), new Fraction(-2), new Fraction(1) }
+                { new Fraction(1),   new Fraction(0),   new Fraction(0) },
+                { new Fraction(0.5), new Fraction(1),   new Fraction(0) },
+                { new Fraction(0.5), new Fraction(0.2), new Fraction(1) }
         });
         FieldMatrix<Fraction> uRef = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), new Fraction[][] {
-                { new Fraction(1),  new Fraction(2), new Fraction(3) },
-                { new Fraction(0), new Fraction(1), new Fraction(-3) },
-                { new Fraction(0),  new Fraction(0), new Fraction(-1) }
+                { new Fraction(2), new Fraction(5),    new Fraction(3)   },
+                { new Fraction(0), new Fraction(-2.5), new Fraction(6.5) },
+                { new Fraction(0), new Fraction(0),    new Fraction(0.2) }
         });
         FieldMatrix<Fraction> pRef = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), new Fraction[][] {
-                { new Fraction(1), new Fraction(0), new Fraction(0) },
                 { new Fraction(0), new Fraction(1), new Fraction(0) },
-                { new Fraction(0), new Fraction(0), new Fraction(1) }
+                { new Fraction(0), new Fraction(0), new Fraction(1) },
+                { new Fraction(1), new Fraction(0), new Fraction(0) }
         });
-        int[] pivotRef = { 0, 1, 2 };
+        int[] pivotRef = { 1, 2, 0 };
 
         // check values against known references
         FieldMatrix<Fraction> l = lu.getL();
@@ -286,21 +290,21 @@ public class FieldLUDecompositionTest {
        FieldLUDecomposition<Fraction> lu =
             new FieldLUDecomposition<Fraction>(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), luData));
         FieldMatrix<Fraction> lRef = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), new Fraction[][] {
-                { new Fraction(1), new Fraction(0), new Fraction(0) },
-                { new Fraction(3), new Fraction(1), new Fraction(0) },
-                { new Fraction(1), new Fraction(0), new Fraction(1) }
+                { new Fraction(1),         new Fraction(0), new Fraction(0) },
+                { new Fraction(0),         new Fraction(1), new Fraction(0) },
+                { new Fraction(1.0 / 3.0), new Fraction(0), new Fraction(1) }
         });
         FieldMatrix<Fraction> uRef = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), new Fraction[][] {
-                { new Fraction(2), new Fraction(3), new Fraction(3)    },
-                { new Fraction(0), new Fraction(-3), new Fraction(-1)  },
-                { new Fraction(0), new Fraction(0), new Fraction(4) }
+                { new Fraction(6), new Fraction(9), new Fraction(8)         },
+                { new Fraction(0), new Fraction(5), new Fraction(7)         },
+                { new Fraction(0), new Fraction(0), new Fraction(1.0 / 3.0) }
         });
         FieldMatrix<Fraction> pRef = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), new Fraction[][] {
-                { new Fraction(1), new Fraction(0), new Fraction(0) },
                 { new Fraction(0), new Fraction(0), new Fraction(1) },
-                { new Fraction(0), new Fraction(1), new Fraction(0) }
+                { new Fraction(0), new Fraction(1), new Fraction(0) },
+                { new Fraction(1), new Fraction(0), new Fraction(0) }
         });
-        int[] pivotRef = { 0, 2, 1 };
+        int[] pivotRef = { 2, 1, 0 };
 
         // check values against known references
         FieldMatrix<Fraction> l = lu.getL();
@@ -354,6 +358,56 @@ public class FieldLUDecompositionTest {
         } catch (MathIllegalArgumentException miae) {
             Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
         }
+    }
+
+    @Test
+    public void testComparisonWithReal() {
+        doTestComparisonWithReal(Decimal64Field.getInstance());
+    }
+
+    private <T extends CalculusFieldElement<T>> void doTestComparisonWithReal(final Field<T> field) {
+
+        ////////////
+        // Test with a real version
+        ////////////
+
+        final double[][] jacobianReal = new double[][] {
+            {-1.8079069467383695, -0.5276841137999425, -0.06927544502469293, 575.7094908176842, -1864.684268657213, -820.8524955582242},
+            {1.121475385353888E-7, 4.3674817490819154E-8, 9.740062323061996E-9, -6.304893098996501E-5, 2.48921714502984E-4, 1.083365579991483E-4},
+            {4.395254068576291E-8, -1.0258110498819202E-7, -5.5724863389796155E-8, -1.4063182668276462E-4, -1.609675082956865E-5, 6.006390276284299E-6},
+            {-8.949490536614748E-10, 4.4866323700855295E-9, -1.0819706965376411E-8, -1.09340948914072E-5, 5.481570585126429E-5, -1.32190432709699E-4},
+            {2.423811020572752E-8, -1.2151249212880152E-7, 2.9303260196492917E-7, -2.6617404304907148E-6, 1.334405654416438E-5, -3.2179766387795136E-5},
+            {-5.564319851994915E-8, 2.1983585343061848E-7, -2.2238994423695564E-7, 2.768985626446657E-4, 6.781392777371218E-5, 4.0155285354156046E-5}
+        };
+
+        final RealMatrix matrixReal = MatrixUtils.createRealMatrix(jacobianReal);
+
+        final DecompositionSolver solverReal = new LUDecomposition(matrixReal).getSolver();
+        final RealMatrix inverseReal = solverReal.getInverse();
+
+        ////////////
+        // Test with a field version
+        ////////////
+
+        final T[][] jacobianField = MathArrays.buildArray(field, 6, 6);
+        for (int row = 0; row < matrixReal.getRowDimension(); row++) {
+            for (int column = 0; column < matrixReal.getColumnDimension(); column++) {
+                jacobianField[row][column] = field.getZero().add(jacobianReal[row][column]);
+            }
+        }
+
+        final FieldMatrix<T> matrixField = MatrixUtils.createFieldMatrix(jacobianField);
+
+        final FieldDecompositionSolver<T> solverField = new FieldLUDecomposition<>(matrixField).getSolver();
+        final FieldMatrix<T> inverseField = solverField.getInverse();
+
+        // Verify
+        for (int row = 0; row < inverseReal.getRowDimension(); row++) {
+            for (int column = 0; column < inverseReal.getColumnDimension(); column++) {
+               Assert.assertEquals(inverseReal.getEntry(row, column), inverseField.getEntry(row, column).getReal(), 1.0e-15); 
+            }
+        }
+
     }
 
 }

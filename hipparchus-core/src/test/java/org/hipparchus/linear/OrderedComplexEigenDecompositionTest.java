@@ -34,17 +34,23 @@ public class OrderedComplexEigenDecompositionTest {
             { new Complex(3, 0), new Complex(-2, 0) },
             { new Complex(4, 0), new Complex(-1, 0) } });
 
+        double threshold = 1.0e-15;
+
         // testing AV = lamba V - [0]
-        Assert.assertEquals(A.operate(eigenDecomp.getEigenvector(0)),
-                            eigenDecomp.getEigenvector(0).mapMultiply(eigenDecomp.getEigenvalues()[0]));
+        compareVectors(A.operate(eigenDecomp.getEigenvector(0)),
+                       eigenDecomp.getEigenvector(0).mapMultiply(eigenDecomp.getEigenvalues()[0]),
+                       threshold);
 
         // testing AV = lamba V - [1]
-        Assert.assertEquals(A.operate(eigenDecomp.getEigenvector(1)),
-                            eigenDecomp.getEigenvector(1).mapMultiply(eigenDecomp.getEigenvalues()[1]));
+        compareVectors(A.operate(eigenDecomp.getEigenvector(1)),
+                       eigenDecomp.getEigenvector(1).mapMultiply(eigenDecomp.getEigenvalues()[1]),
+                       threshold);
 
         // checking definition of the decomposition A*V = V*D
-        Assert.assertEquals(A.multiply(eigenDecomp.getV()),
-                            eigenDecomp.getV().multiply(eigenDecomp.getD()));
+        compareMatrices(A.multiply(eigenDecomp.getV()),
+                        eigenDecomp.getV().multiply(eigenDecomp.getD()),
+                        threshold);
+
     }
 
     @Test
@@ -135,6 +141,56 @@ public class OrderedComplexEigenDecompositionTest {
                                                                   ComplexEigenDecomposition.DEFAULT_EPSILON,
                                                                   ComplexEigenDecomposition.DEFAULT_EPSILON_AV_VD_CHECK));
         
+    }
+
+    /**
+     * Verify two complex vectors.
+     * @param vector1 first vector
+     * @param vector2 second vector
+     * @param threshold threshold
+     */
+    private static void compareVectors(final FieldVector<Complex> vector1,
+                                       final FieldVector<Complex> vector2,
+                                       final double threshold) {
+
+        // Verify size
+        Assert.assertEquals(vector1.getDimension(), vector2.getDimension());
+
+        // Loop on vector entries
+        for (int index = 0; index < vector1.getDimension(); index++) {
+            final Complex complex1 = vector1.getEntry(index);
+            final Complex complex2 = vector2.getEntry(index);
+            Assert.assertEquals(complex1.getReal(),      complex2.getReal(),      threshold);
+            Assert.assertEquals(complex1.getImaginary(), complex2.getImaginary(), threshold);
+        }
+
+    }
+
+    /**
+     * Verify two complex matrices.
+     * @param vector1 first vector
+     * @param vector2 second vector
+     * @param threshold threshold
+     */
+    private static void compareMatrices(final FieldMatrix<Complex> matrix1,
+                                        final FieldMatrix<Complex> matrix2,
+                                        final double threshold) {
+
+        // Verify size
+        Assert.assertEquals(matrix1.getRowDimension(),    matrix2.getRowDimension());
+        Assert.assertEquals(matrix1.getColumnDimension(), matrix2.getColumnDimension());
+
+        // Loop on matrices entries
+        for (int row = 0; row < matrix1.getRowDimension(); row++) {
+            for (int column = 0; column < matrix1.getColumnDimension(); column++) {
+                final Complex complex1 = matrix1.getEntry(row, column);
+                final Complex complex2 = matrix2.getEntry(row, column);
+                Assert.assertEquals(complex1.getReal(),      complex2.getReal(),      threshold);
+                Assert.assertEquals(complex1.getImaginary(), complex2.getImaginary(), threshold);
+            }
+
+        }
+
     }
 
 }

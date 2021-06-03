@@ -76,7 +76,7 @@ public class AdamsBashforthFieldIntegratorTest extends AdamsFieldIntegratorAbstr
 
     @Test
     public void testSecondaryEquations() {
-        doTestSecondaryEquations(Decimal64Field.getInstance(), 4.3e-10, 5.6e-16);
+        doTestSecondaryEquations(Decimal64Field.getInstance(), 4.3e-10, 8.9e-16);
     }
 
     @Test(expected=MathIllegalStateException.class)

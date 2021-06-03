@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.0" date="TBD" description="TBD">
+      <action dev="bryan" type="fix" issue="issues/131">
+        Fixed consistent implementations between {Field}LUDecomposition classes.
+      </action>
       <action dev="luc" type="add">
         Added Carlson elliptic integrals, both for Complex and FieldComplex.
       </action>
