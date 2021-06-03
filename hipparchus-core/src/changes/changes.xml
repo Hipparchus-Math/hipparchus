@@ -54,7 +54,8 @@ If the output is not quite correct, check for invisible trailing spaces!
         Fixed consistent implementations between {Field}LUDecomposition classes.
       </action>
       <action dev="luc" type="add">
-        Added Carlson elliptic integrals, both for Complex and FieldComplex.
+        Added Carlson elliptic integrals (R_F, R_J, R_G, R_D, and R_C)
+        both for Complex and FieldComplex.
       </action>
       <action dev="luc" type="fix" issue="issues/129">
         Fixed branch cut on imaginary axis for complex atan.

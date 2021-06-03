@@ -19,6 +19,7 @@ package org.hipparchus.special.elliptic;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.analysis.differentiation.UnivariateDerivative1;
+import org.hipparchus.complex.Complex;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -141,6 +142,18 @@ public class FieldJacobiEllipticTest {
         Assert.assertEquals(-1  * valuesSD.cs() * valuesSD.ns(), valuesSU.ds().getFirstDerivative(), 1.0e-15);
         Assert.assertEquals(-1  * valuesSD.ns() * valuesSD.ds(), valuesSU.cs().getFirstDerivative(), 1.0e-15);
 
+    }
+
+    @Test
+    public void testComplex() {
+      final Complex z = Complex.valueOf(5.2, -2.5);
+      final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.3, 1.0)); 
+      final FieldCopolarC<Complex> valuesC = je.valuesC(z);
+
+      // should return -0.246094...
+      Assert.assertEquals(valuesC.sc().getReal(), 0.22606757155248666, 1.0e-15);
+      // should return 0.742022...
+      Assert.assertEquals(valuesC.sc().getImaginary(), -0.9241484785898338, 1.0e-15);
     }
 
     private <T extends CalculusFieldElement<T>> void doTestCircular(final Field<T> field) {

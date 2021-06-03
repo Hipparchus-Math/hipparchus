@@ -44,4 +44,8 @@ public class CarlsonEllipticIntegralTest extends CarlsonEllipticIntegralAbstract
         return CarlsonEllipticIntegral.rD(x, y, z);
     }
 
+    protected Complex rG(Complex x, Complex y, Complex z) {
+        return CarlsonEllipticIntegral.rG(x, y, z);
+    }
+
 }
