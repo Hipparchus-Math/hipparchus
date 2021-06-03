@@ -283,26 +283,72 @@ public abstract class CarlsonEllipticIntegralAbstractTest<T extends CalculusFiel
     @Test
     public void testCarlson1995rG() {
 
-//        T rg1 = rG(buildComplex(0), buildComplex(16), buildComplex(16));
-//        check(FastMath.PI, 0.0, rg1, 1.0e-13);
-//
-//        T rg2 = rG(buildComplex(2), buildComplex(3), buildComplex(4));
-//        check(1.7255030280692, 0.0, rg2, 1.0e-13);
-//
-//        T rg3 = rG(buildComplex(0), buildComplex(0, 1), buildComplex(0, -1));
-//        check( 0.42360654239699, 0.0, rg3, 1.0e-13);
-//
-//        T rg4 = rG(buildComplex(-1, 1), buildComplex(0, 1), buildComplex(0));
-//        check(0.44660591677018, 0.70768352357515, rg4, 1.0e-13);
+        T rg1 = rG(buildComplex(0), buildComplex(16), buildComplex(16));
+        check(FastMath.PI, 0.0, rg1, 1.0e-13);
 
-        rG(buildComplex(-0.6906872795519567, -0.5808319065461292),
-           buildComplex(-0.3313238668985594, -0.7001782928750058),
-           buildComplex(0.9581406852168293, 0.24380613590709377));
+        T rg2 = rG(buildComplex(2), buildComplex(3), buildComplex(4));
+        check(1.7255030280692, 0.0, rg2, 1.0e-13);
+
+        T rg3 = rG(buildComplex(0), buildComplex(0, 1), buildComplex(0, -1));
+        check( 0.42360654239699, 0.0, rg3, 1.0e-13);
+
+        T rg4 = rG(buildComplex(-1, 1), buildComplex(0, 1), buildComplex(0));
+        check(0.44660591677018, 0.70768352357515, rg4, 1.0e-13);
+
         T rg5 = rG(buildComplex(0, -1), buildComplex(-1, 1), buildComplex(0, 1));
         check(0.36023392184473, 0.40348623401722, rg5, 1.0e-13);
 
-//        T rg6 = rG(buildComplex(0), buildComplex(0.0796), buildComplex(4));
-//        check( 1.0284758090288, 0.0, rg6, 1.0e-13);
+        T rg6 = rG(buildComplex(0), buildComplex(0.0796), buildComplex(4));
+        check( 1.0284758090288, 0.0, rg6, 1.0e-13);
 
     }
+
+    @Test
+    public void testAlternateRG() {
+        RandomGenerator random = new Well19937c(0xa2946e4a55d133a6l);
+        for (int i = 0; i < 10000; ++i) {
+            T x = buildComplex(random.nextDouble() * 3);
+            T y = buildComplex(random.nextDouble() * 3);
+            T z = buildComplex(random.nextDouble() * 3);
+            Assert.assertEquals(0.0, rG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(), 2.0e-15);
+        }
+    }
+
+    @Test
+    public void testRgBuggySquareRoot() {
+
+        // xy/z ≈ -0.566379 - 7.791 10⁻⁹ i ⇒ √(xy/z) ≈ 5.176 10⁻⁹ - 0.752582 i
+        T x = buildComplex(FastMath.scalb(7745000, -24), -0.5625);
+        T y = buildComplex(-0.3125, -0.6875);
+        T z = buildComplex( 0.9375,  0.25);
+
+        // on this side, all implementations match
+        Assert.assertEquals(0.0,     rG(x, y, z).     subtract(rgAlternateImplementation(x, y, z)).norm(), 2.0e-16);
+        Assert.assertEquals(0.0, buggyRG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(),     2.0e-16);
+
+        // slightly shift x, so xy/z imaginary part changes sign
+        // the selected square root also changes dramatically sign so implementation becomes wrong
+        // xy/z ≈ -0.566379 + 2.807 10⁻⁸ i ⇒ √(xy/z) ≈ 1.865 10⁻⁸ + 0.752582 i
+        x = buildComplex(FastMath.scalb(7744999, -24), -0.5625);
+        Assert.assertEquals(0.0,     rG(x, y, z).     subtract(rgAlternateImplementation(x, y, z)).norm(), 2.0e-16);
+        Assert.assertEquals(0.75258, buggyRG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(), 1.0e-5);
+
+    }
+
+    private T buggyRG(final T x, final T y, final T z) {
+        final T termF = new RfDuplication<>(x, y, z).integral().multiply(z);
+        final T termD = x.subtract(z).multiply(y.subtract(z)).multiply(new RdDuplication<>(x, y, z).integral()).divide(3);
+        final T termS = x.multiply(y).divide(z).sqrt(); // ← the error is here, we must compute roots for each x, y and z before computing the fraction
+        return termF.subtract(termD).add(termS).multiply(0.5);
+    }
+
+    private T rgAlternateImplementation(final T x, final T y, final T z) {
+        // this implementation uses DLFM equation 19.21.11
+        return d(x, y, z).add(d(y, z, x)).add(d(z, x, y)).divide(6);
+    }
+
+    private T d(final T u, final T v, final T w) {
+        return u.isZero() ? u : u.multiply(v.add(w)).multiply(new RdDuplication<>(v, w, u).integral());
+    }
+
 }

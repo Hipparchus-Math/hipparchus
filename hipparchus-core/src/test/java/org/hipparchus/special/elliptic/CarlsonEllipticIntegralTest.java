@@ -17,10 +17,6 @@
 package org.hipparchus.special.elliptic;
 
 import org.hipparchus.complex.Complex;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well1024a;
-import org.hipparchus.util.FastMath;
-import org.junit.Test;
 
 public class CarlsonEllipticIntegralTest extends CarlsonEllipticIntegralAbstractTest<Complex> {
 
@@ -52,20 +48,4 @@ public class CarlsonEllipticIntegralTest extends CarlsonEllipticIntegralAbstract
         return CarlsonEllipticIntegral.rG(x, y, z);
     }
 
-    @Test
-    public void testTmp() {
-        Complex x = new Complex(0.4375, -0.58);
-        Complex y = new Complex(-0.33, -0.70);
-        Complex z = new Complex(0.96, 0.25);
-        for (double dxR = 0; dxR < 1; dxR += FastMath.scalb(1.0, -7)) {
-            CarlsonEllipticIntegral.checkRG(x.add(dxR), y, z);
-        }
-//        RandomGenerator random = new Well1024a(0x123456l);
-//        for (int i = 0; i < 20; ++i) {
-//            Complex x = new Complex(2 * random.nextDouble() - 1, 2 * random.nextDouble() - 1);
-//            Complex y = new Complex(2 * random.nextDouble() - 1, 2 * random.nextDouble() - 1);
-//            Complex z = new Complex(2 * random.nextDouble() - 1, 2 * random.nextDouble() - 1);
-//            CarlsonEllipticIntegral.checkRG(x, y, z);
-//        }
-    }
 }

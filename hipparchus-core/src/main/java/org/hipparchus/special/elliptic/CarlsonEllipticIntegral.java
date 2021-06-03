@@ -213,13 +213,6 @@ public class CarlsonEllipticIntegral {
      * @param z second symmetric variable of the integral
      */
     public static Complex rG(final Complex x, final Complex y, final Complex z) {
-        safeComputeRg(x, y, z);
-        safeComputeRg(y, x, z);
-        safeComputeRg(x, z, y);
-        safeComputeRg(z, x, y);
-        safeComputeRg(y, z, x);
-        safeComputeRg(z, y, x);
-        System.out.println();
         return generalComputeRg(x, y, z);
     }
 
@@ -291,22 +284,6 @@ public class CarlsonEllipticIntegral {
         }
     }
 
-    public static void checkRG(final Complex x, final Complex y, final Complex z) {
-        Complex g1 = new RfDuplication<>(x, y, z).integral().multiply(z).
-                        subtract(x.subtract(z).multiply(y.subtract(z)).multiply(new RdDuplication<>(x, y, z).integral()).divide(3)).
-                        add(x.multiply(y).divide(z).sqrt()).
-                        multiply(0.5);
-        Complex g2 = d(x, y, z).add(d(y, z, x)).add(d(z, x, y)).divide(6);
-        System.out.println(x + " " + y + " " + z + ": " +
-                        g1 + " " + g2 + " " + (g1.subtract(g2).norm() > 1.0e-6) + " " +
-                        (intersect(x, y) || intersect(x, z) || intersect(y, z)));
-    }
-
-    private static boolean intersect(Complex a, Complex b) {
-        return (b.getReal() * a.getImaginary() - a.getReal() * b.getImaginary() <= a.getImaginary() - b.getImaginary()) &&
-               (a.getImaginary() * b.getImaginary() <= 0);
-    }
-
     /** Compute Carlson elliptic integral R<sub>G</sub> with non-zero third variable.
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
@@ -315,26 +292,21 @@ public class CarlsonEllipticIntegral {
      * @see <a href="https://dlmf.nist.gov/19.21#E10">Digital Library of Mathematical Functions, equation 19.21.10</a>
      */
     private static <T extends CalculusFieldElement<T>> T safeComputeRg(final T x, final T y, final T z) {
-        System.out.println(x + " " + y + " " + z + ": " +
-                           new RfDuplication<>(x, y, z).integral().multiply(z).
-                           subtract(x.subtract(z).multiply(y.subtract(z)).multiply(new RdDuplication<>(x, y, z).integral()).divide(3)).
-                           add(x.multiply(y).divide(z).sqrt()).
-                           multiply(0.5) + " " +
-                           d(x, y, z).add(d(y, z, x)).add(d(z, x, y)).divide(6));
-        return new RfDuplication<>(x, y, z).integral().multiply(z).
-               subtract(x.subtract(z).multiply(y.subtract(z)).multiply(new RdDuplication<>(x, y, z).integral()).divide(3)).
-               add(x.multiply(y).divide(z).sqrt()).
-               multiply(0.5);
-    }
 
-    /** Compute one R<sub>D</sub> term from DLFM 19.21.11.
-     * @param x first symmetric variable of the integral
-     * @param y second symmetric variable of the integral
-     * @param z third symmetric variable of the integral
-     * @param <T> type of the field elements (really {@link Complex} or {@link FieldComplex})
-     */
-    private static <T extends CalculusFieldElement<T>> T d(final T u, final T v, final T w) {
-        return u.isZero() ? u : u.multiply(v.add(w)).multiply(new RdDuplication<>(v, w, u).integral());
+        // contribution of the R_F integral
+        final T termF = new RfDuplication<>(x, y, z).integral().multiply(z);
+
+        // contribution of the R_D integral
+        final T termD = x.subtract(z).multiply(y.subtract(z)).multiply(new RdDuplication<>(x, y, z).integral()).divide(3);
+
+        // contribution of the square roots
+        // BEWARE: this term MUST be computed as √x√y/√z with all square roots selected with positive real part
+        // and NOT as √(xy/z), otherwise sign errors may occur
+        final T termS = x.sqrt().multiply(y.sqrt()).divide(z.sqrt());
+
+        // equation 19.21.10
+        return termF.subtract(termD).add(termS).multiply(0.5);
+
     }
 
 }
