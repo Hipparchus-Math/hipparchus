@@ -34,6 +34,7 @@ public abstract class CarlsonEllipticIntegralAbstractTest<T extends CalculusFiel
     protected abstract T rC(T x, T y);
     protected abstract T rJ(T x, T y, T z, T p);
     protected abstract T rD(T x, T y, T z);
+    protected abstract T rG(T x, T y, T z);
 
     private void check(double expectedReal, double expectedImaginary, T result, double tol) {
         Assert.assertEquals(0, buildComplex(expectedReal, expectedImaginary).subtract(result).norm(), tol);
@@ -76,6 +77,18 @@ public abstract class CarlsonEllipticIntegralAbstractTest<T extends CalculusFiel
         T rf6 = rF(buildComplex(-1, 1), buildComplex(0, 1), buildComplex(1, -1));
         check( 0.93912050218619, -0.53296252018635, rf6, 1.0e-13);
 
+    }
+
+    @Test
+    public void testRfAlongImaginaryAxis() {
+        final T      x   = buildComplex(0,  1);
+        final T      yN  = buildComplex(0, -1 - 1.0e-13);
+        final T      y0  = buildComplex(0, -1);
+        final T      yP  = buildComplex(0, -1 + 1.0e-13);
+        final T      z   = buildComplex(0);
+        check(1.8540746773013255, +2.12e-14, rF(x, yN, z), 1.0e-15);
+        check(1.8540746773013719,  0.0,      rF(x, y0, z), 1.0e-15);
+        check(1.8540746773014183, -2.11e-14, rF(x, yP, z), 1.0e-15);
     }
 
     @Test
@@ -267,4 +280,29 @@ public abstract class CarlsonEllipticIntegralAbstractTest<T extends CalculusFiel
         }
     }
 
+    @Test
+    public void testCarlson1995rG() {
+
+//        T rg1 = rG(buildComplex(0), buildComplex(16), buildComplex(16));
+//        check(FastMath.PI, 0.0, rg1, 1.0e-13);
+//
+//        T rg2 = rG(buildComplex(2), buildComplex(3), buildComplex(4));
+//        check(1.7255030280692, 0.0, rg2, 1.0e-13);
+//
+//        T rg3 = rG(buildComplex(0), buildComplex(0, 1), buildComplex(0, -1));
+//        check( 0.42360654239699, 0.0, rg3, 1.0e-13);
+//
+//        T rg4 = rG(buildComplex(-1, 1), buildComplex(0, 1), buildComplex(0));
+//        check(0.44660591677018, 0.70768352357515, rg4, 1.0e-13);
+
+        rG(buildComplex(-0.6906872795519567, -0.5808319065461292),
+           buildComplex(-0.3313238668985594, -0.7001782928750058),
+           buildComplex(0.9581406852168293, 0.24380613590709377));
+        T rg5 = rG(buildComplex(0, -1), buildComplex(-1, 1), buildComplex(0, 1));
+        check(0.36023392184473, 0.40348623401722, rg5, 1.0e-13);
+
+//        T rg6 = rG(buildComplex(0), buildComplex(0.0796), buildComplex(4));
+//        check( 1.0284758090288, 0.0, rg6, 1.0e-13);
+
+    }
 }
