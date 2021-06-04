@@ -410,4 +410,29 @@ public class FieldLUDecompositionTest {
 
     }
 
+    @Test
+    public void testIssue134() {
+
+        FieldMatrix<Fraction> matrix = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), testData);
+        FieldLUDecomposition<Fraction> lu = new FieldLUDecomposition<Fraction>(matrix, e -> e.isZero(), false);
+
+        // L
+        final FieldMatrix<Fraction> l = lu.getL();
+        for (int i = 0; i < l.getRowDimension(); i++) {
+            Assert.assertEquals(Fraction.ONE, l.getEntry(i, i));
+            for (int j = i + 1; j < l.getColumnDimension(); j++) {
+                Assert.assertEquals(Fraction.ZERO, l.getEntry(i, j));
+            }
+        }
+
+        // U
+        final FieldMatrix<Fraction> u = lu.getU();
+        for (int i = 0; i < u.getRowDimension(); i++) {
+            for (int j = 0; j < i; j++) {
+                Assert.assertEquals(Fraction.ZERO, u.getEntry(i, j));
+            }
+        }
+
+    }
+
 }

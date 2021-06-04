@@ -82,8 +82,13 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 
     /**
      * Calculates the LU-decomposition of the given matrix.
+     * <p>
+     * By default, <code>numericPermutationChoice</code> is set to <code>true</code>.
+     * </p>
      * @param matrix The matrix to decompose.
      * @throws MathIllegalArgumentException if matrix is not square
+     * @see #FieldLUDecomposition(FieldMatrix, Predicate)
+     * @see #FieldLUDecomposition(FieldMatrix, Predicate, boolean)
      */
     public FieldLUDecomposition(FieldMatrix<T> matrix) {
         this(matrix, e -> e.isZero());
@@ -91,11 +96,27 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 
     /**
      * Calculates the LU-decomposition of the given matrix.
+     * <p>
+     * By default, <code>numericPermutationChoice</code> is set to <code>true</code>.
+     * </p>
      * @param matrix The matrix to decompose.
      * @param zeroChecker checker for zero elements
+     * @param numericPermutationChoice if <code>true</code> choose permutation index with numeric calculations, otherwise choose with <code>zeroChecker</code>
+     * @throws MathIllegalArgumentException if matrix is not square
+     * @see #FieldLUDecomposition(FieldMatrix, Predicate, boolean)
+     */
+    public FieldLUDecomposition(FieldMatrix<T> matrix, final Predicate<T> zeroChecker ) {
+    	this(matrix, zeroChecker, true);
+    }
+
+    /**
+     * Calculates the LU-decomposition of the given matrix.
+     * @param matrix The matrix to decompose.
+     * @param zeroChecker checker for zero elements
+     * @param numericPermutationChoice if <code>true</code> choose permutation index with numeric calculations, otherwise choose with <code>zeroChecker</code>
      * @throws MathIllegalArgumentException if matrix is not square
      */
-    public FieldLUDecomposition(FieldMatrix<T> matrix, final Predicate<T> zeroChecker) {
+    public FieldLUDecomposition(FieldMatrix<T> matrix, final Predicate<T> zeroChecker, boolean numericPermutationChoice) {
         if (!matrix.isSquare()) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());
@@ -128,24 +149,48 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
                 }
                 luRow[col] = sum;
             }
-
-            // lower
+ 
             int max = col; // permutation row
-            double largest = Double.NEGATIVE_INFINITY;
-            for (int row = col; row < m; row++) {
-                final T[] luRow = lu[row];
-                T sum = luRow[col];
-                for (int i = 0; i < col; i++) {
-                    sum = sum.subtract(luRow[i].multiply(lu[i][col]));
-                }
-                luRow[col] = sum;
+            if (numericPermutationChoice) {
 
-                // maintain best permutation choice
-                double absSum = FastMath.abs(sum.getReal());
-                if (absSum > largest) {
-                    largest = absSum;
-                    max = row;
+                // lower
+                double largest = Double.NEGATIVE_INFINITY;
+
+                for (int row = col; row < m; row++) {
+                    final T[] luRow = lu[row];
+                    T sum = luRow[col];
+                    for (int i = 0; i < col; i++) {
+                        sum = sum.subtract(luRow[i].multiply(lu[i][col]));
+                    }
+                    luRow[col] = sum;
+                
+                    // maintain best permutation choice
+                    double absSum = FastMath.abs(sum.getReal());
+                    if (absSum > largest) {
+                        largest = absSum;
+                        max = row;
+                    }
                 }
+
+            } else {
+
+            	// lower
+                int nonZero = col; // permutation row
+                for (int row = col; row < m; row++) {
+                    final T[] luRow = lu[row];
+                    T sum = luRow[col];
+                    for (int i = 0; i < col; i++) {
+                        sum = sum.subtract(luRow[i].multiply(lu[i][col]));
+                    }
+                    luRow[col] = sum;
+
+                    if (zeroChecker.test(lu[nonZero][col])) {
+                        // try to select a better permutation choice
+                        ++nonZero;
+                    }
+                }
+                max = nonZero;
+
             }
 
             // Singularity check
