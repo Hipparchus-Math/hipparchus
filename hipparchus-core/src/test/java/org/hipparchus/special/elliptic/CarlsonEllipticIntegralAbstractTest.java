@@ -281,6 +281,66 @@ public abstract class CarlsonEllipticIntegralAbstractTest<T extends CalculusFiel
     }
 
     @Test
+    public void testRdNonSymmetry1() {
+        RandomGenerator random = new Well19937c(0x66db170b5ee1afc2l);
+        int countWrongRoot = 0;
+        for (int i = 0; i < 10000; ++i) {
+            T x = buildComplex(random.nextDouble() * 2 - 1, random.nextDouble() * 2 - 1);
+            T y = buildComplex(random.nextDouble() * 2 - 1, random.nextDouble() * 2 - 1);
+            T z = buildComplex(random.nextDouble() * 2 - 1, random.nextDouble() * 2 - 1);
+            if (x.isZero() || y.isZero()) {
+                continue;
+            }
+            // this is DLMF equation 19.21.7, computing square roots both after the fraction
+            // (i.e. √x √y / √z) and before the fraction (i.e. √(xy/z))
+            // the second form is used in DLMF as of 2021-06-04 and selects the wrong root
+            // 25% of times when x, y, z are real and 33% of times when they are complex
+            T lhs           = x.subtract(y).multiply(rD(y, z, x)).add(z.subtract(y).multiply(rD(x, y, z)));
+            T rootGlobal    = y.divide(x.multiply(z)).sqrt();
+            T rootSeparated = y.sqrt().divide(x.sqrt().multiply(z.sqrt()));
+            T rhsGlobal     = rF(x, y, z).subtract(rootGlobal).multiply(3);
+            T rhsSeparated  = rF(x, y, z).subtract(rootSeparated).multiply(3);
+            if (lhs.subtract(rhsGlobal).norm() > 1.0e-3) {
+                ++countWrongRoot;
+                // when the wrong root is selected, the result is really bad
+                Assert.assertTrue(lhs.subtract(rhsGlobal).norm() > 0.1);
+            }
+            Assert.assertEquals(0.0, lhs.subtract(rhsSeparated).norm(), 1.0e-10);
+        }
+        Assert.assertTrue(countWrongRoot > 3300);
+    }
+
+    @Test
+    public void testRdNonSymmetry2() {
+        RandomGenerator random = new Well19937c(0x1a8994acc807438dl);
+        int countWrongRoot = 0;
+        for (int i = 0; i < 10000; ++i) {
+            T x = buildComplex(random.nextDouble() * 2 - 1, random.nextDouble() * 2 - 1);
+            T y = buildComplex(random.nextDouble() * 2 - 1, random.nextDouble() * 2 - 1);
+            T z = buildComplex(random.nextDouble() * 2 - 1, random.nextDouble() * 2 - 1);
+            if (x.isZero() || y.isZero() || z.isZero()) {
+                continue;
+            }
+            // this is DLMF equation 19.21.8, computing square roots both after the multiplication
+            // (i.e. 1 / (√x √y √z)) and before the multiplication (i.e. 1 / √(xyz))
+            // the second form is used in DLMF as of 2021-06-04 and selects the wrong root
+            // 50% of times when x, y, z are real and 33% of times when they are complex
+            T lhs           = rD(y, z, x).add(rD(z, x, y)).add(rD(x, y, z));
+            T rootGlobal    = x.multiply(y.multiply(z)).sqrt();
+            T rootSeparated = x.sqrt().multiply(y.sqrt().multiply(z.sqrt()));
+            T rhsGlobal     = rootGlobal.reciprocal().multiply(3);
+            T rhsSeparated  = rootSeparated.reciprocal().multiply(3);
+            if (lhs.subtract(rhsGlobal).norm() > 1.0e-3) {
+                ++countWrongRoot;
+                // when the wrong root is selected, the result is really bad
+                Assert.assertTrue(lhs.subtract(rhsGlobal).norm() > 3.0);
+            }
+            Assert.assertEquals(0.0, lhs.subtract(rhsSeparated).norm(), 2.0e-11);
+        }
+        Assert.assertTrue(countWrongRoot > 3300);
+    }
+
+    @Test
     public void testCarlson1995rG() {
 
         T rg1 = rG(buildComplex(0), buildComplex(16), buildComplex(16));
