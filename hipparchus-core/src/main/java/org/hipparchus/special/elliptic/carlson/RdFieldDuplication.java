@@ -27,45 +27,6 @@ import org.hipparchus.util.FastMath;
  */
 class RdFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplication<T> {
 
-    /** Constant term in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double CONSTANT = 4084080;
-
-    /** Coefficient of E₂ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E2 = -875160;
-
-    /** Coefficient of E₃ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E3 = 680680;
-
-    /** Coefficient of E₂² in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E2_E2 = 417690;
-
-    /** Coefficient of E₄ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E4 = -556920;
-
-    /** Coefficient of E₂E₃ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E2_E3 = -706860;
-
-    /** Coefficient of E₅ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E5 = 471240;
-
-    /** Coefficient of E₂³ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E2_E2_E2 = -255255;
-
-    /** Coefficient of E₃² in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E3_E3 = 306306;
-
-    /** Coefficient of E₂E₄ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E2_E4 = 612612;
-
-    /** Coefficient of E₂²E₃ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E2_E2_E3 = 675675;
-
-    /** Coefficient of E₃E₄+E₂E₅ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E3_E4_P_E2_E5 = -540540;
-
-    /** Denominator in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double DENOMINATOR = 4084080;
-
     /** Partial sum. */
     T sum;
 
@@ -81,7 +42,7 @@ class RdFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
 
     /** {@inheritDoc} */
     @Override
-    protected T initialMeanPoint(T[] v) {
+    protected T initialMeanPoint(final T[] v) {
         return v[0].add(v[1]).add(v[2].multiply(3)).divide(5.0);
     }
 
@@ -94,9 +55,15 @@ class RdFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
     /** {@inheritDoc} */
     @Override
     protected T lambda(final int m, final T[] vM, final T[] sqrtM, final  double fourM) {
+
+        // equation 2.29 in Carlson[1995]
         final T lambda = sqrtM[0].multiply(sqrtM[1].add(sqrtM[2])).add(sqrtM[1].multiply(sqrtM[2]));
+
+        // running sum in equation 2.34 in Carlson[1995]
         sum = sum.add(vM[2].add(lambda).multiply(sqrtM[2]).multiply(fourM).reciprocal());
+
         return lambda;
+
     }
 
     /** {@inheritDoc} */
@@ -128,19 +95,19 @@ class RdFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
 
         // evaluate integral using equation 19.36.1 in DLMF
         // (which add more terms than equation 2.7 in Carlson[1995])
-        final T poly = e3e4.add(e2e5).multiply(E3_E4_P_E2_E5).
-                       add(e2e2e3.multiply(E2_E2_E3)).
-                       add(e2e4.multiply(E2_E4)).
-                       add(e3e3.multiply(E3_E3)).
-                       add(e2e2e2.multiply(E2_E2_E2)).
-                       add(e5.multiply(E5)).
-                       add(e2e3.multiply(E2_E3)).
-                       add(e4.multiply(E4)).
-                       add(e2e2.multiply(E2_E2)).
-                       add(e3.multiply(E3)).
-                       add(e2.multiply(E2)).
-                       add(CONSTANT).
-                       divide(DENOMINATOR);
+        final T poly = e3e4.add(e2e5).multiply(RdRealDuplication.E3_E4_P_E2_E5).
+                       add(e2e2e3.multiply(RdRealDuplication.E2_E2_E3)).
+                       add(e2e4.multiply(RdRealDuplication.E2_E4)).
+                       add(e3e3.multiply(RdRealDuplication.E3_E3)).
+                       add(e2e2e2.multiply(RdRealDuplication.E2_E2_E2)).
+                       add(e5.multiply(RdRealDuplication.E5)).
+                       add(e2e3.multiply(RdRealDuplication.E2_E3)).
+                       add(e4.multiply(RdRealDuplication.E4)).
+                       add(e2e2.multiply(RdRealDuplication.E2_E2)).
+                       add(e3.multiply(RdRealDuplication.E3)).
+                       add(e2.multiply(RdRealDuplication.E2)).
+                       add(RdRealDuplication.CONSTANT).
+                       divide(RdRealDuplication.DENOMINATOR);
         final T polyTerm = poly.divide(aM.multiply(FastMath.sqrt(aM)).multiply(fourM));
 
         return polyTerm.add(sum.multiply(3));

@@ -29,33 +29,6 @@ import org.hipparchus.util.FastMath;
  */
 class RfFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplication<T> {
 
-    /** Max number of iterations in the AGM scale. */
-    private static final int AGM_MAX = 16;
-
-    /** Constant term in R<sub>F</sub> polynomial. */
-    private static final double CONSTANT = 240240;
-
-    /** Coefficient of E₂ in R<sub>F</sub> polynomial. */
-    private static final double E2 = -24024;
-
-    /** Coefficient of E₃ in R<sub>F</sub> polynomial. */
-    private static final double E3 = 17160;
-
-    /** Coefficient of E₂² in R<sub>F</sub> polynomial. */
-    private static final double E2_E2 = 10010;
-
-    /** Coefficient of E₂E₃ in R<sub>F</sub> polynomial. */
-    private static final double E2_E3 = -16380;
-
-    /** Coefficient of E₃² in R<sub>F</sub> polynomial. */
-    private static final double E3_E3 = 6930;
-
-    /** Coefficient of E₂³ in R<sub>F</sub> polynomial. */
-    private static final double E2_E2_E2 = -5775;
-
-    /** Denominator in R<sub>F</sub> polynomial. */
-    private static final double DENOMINATOR = 240240;
-
     /** Simple constructor.
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
@@ -67,7 +40,7 @@ class RfFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
 
     /** {@inheritDoc} */
     @Override
-    protected T initialMeanPoint(T[] v) {
+    protected T initialMeanPoint(final T[] v) {
         return v[0].add(v[1]).add(v[2]).divide(3.0);
     }
 
@@ -104,14 +77,14 @@ class RfFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
 
         // evaluate integral using equation 19.36.1 in DLMF
         // (which add more terms than equation 2.7 in Carlson[1995])
-        final T poly = e2e2e2.multiply(E2_E2_E2).
-                       add(e3e3.multiply(E3_E3)).
-                       add(e2e3.multiply(E2_E3)).
-                       add(e2e2.multiply(E2_E2)).
-                       add(e3.multiply(E3)).
-                       add(e2.multiply(E2)).
-                       add(CONSTANT).
-                       divide(DENOMINATOR);
+        final T poly = e2e2e2.multiply(RfRealDuplication.E2_E2_E2).
+                       add(e3e3.multiply(RfRealDuplication.E3_E3)).
+                       add(e2e3.multiply(RfRealDuplication.E2_E3)).
+                       add(e2e2.multiply(RfRealDuplication.E2_E2)).
+                       add(e3.multiply(RfRealDuplication.E3)).
+                       add(e2.multiply(RfRealDuplication.E2)).
+                       add(RfRealDuplication.CONSTANT).
+                       divide(RfRealDuplication.DENOMINATOR);
         return poly.divide(FastMath.sqrt(aM));
 
     }
@@ -144,7 +117,7 @@ class RfFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
         T yM = y.sqrt();
 
         // iterate down
-        for (int i = 1; i < AGM_MAX; ++i) {
+        for (int i = 1; i < RfRealDuplication.AGM_MAX; ++i) {
 
             final T xM1 = xM;
             final T yM1 = yM;

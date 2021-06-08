@@ -70,6 +70,27 @@ public class CarlsonEllipticIntegral {
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      */
+    public static double rC(final double x, final double y) {
+        if (y < 0) {
+            // y is on the branch cut, we must use a transformation to get the Cauchy principal value
+            // see equation 2.14 in Carlson[1995]
+            final double xMy = x - y;
+            return FastMath.sqrt(x / xMy * new RcRealDuplication(xMy, -y).integral());
+        } else {
+            return new RcRealDuplication(x, y).integral();
+        }
+    }
+
+    /** Compute Carlson elliptic integral R<sub>C</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>C</sub>is defined as
+     * \[
+     *   R_C(x,y,z)=R_F(x,y,y)=\frac{1}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{\sqrt{t+x}(t+y)}
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     */
     public static Complex rC(final Complex x, final Complex y) {
         if (y.getImaginaryPart() == 0 && y.getRealPart() < 0) {
             // y is on the branch cut, we must use a transformation to get the Cauchy principal value
@@ -114,6 +135,21 @@ public class CarlsonEllipticIntegral {
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
      */
+    public static double rF(final double x, final double y, final double z) {
+        return new RfRealDuplication(x, y, z).integral();
+    }
+
+    /** Compute Carlson elliptic integral R<sub>F</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>F</sub> is defined as
+     * \[
+     *   R_F(x,y,z)=\frac{1}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{\sqrt{t+x}\sqrt{t+y}\sqrt{t+z}}
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z third symmetric variable of the integral
+     */
     public static Complex rF(final Complex x, final Complex y, final Complex z) {
         return new RfFieldDuplication<>(x, y, z).integral();
     }
@@ -132,6 +168,22 @@ public class CarlsonEllipticIntegral {
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> rF(final FieldComplex<T> x, final FieldComplex<T> y, final FieldComplex<T> z) {
         return new RfFieldDuplication<>(x, y, z).integral();
+    }
+
+    /** Compute Carlson elliptic integral R<sub>J</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>J</sub> is defined as
+     * \[
+     *   R_J(x,y,z,p)=\frac{3}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{\sqrt{t+x}\sqrt{t+y}\sqrt{t+z}(t+p)}
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z third symmetric variable of the integral
+     * @param p fourth <em>not</em> symmetric variable of the integral
+     */
+    public static double rJ(final double x, final double y, final double z, final double p) {
+        return new RjRealDuplication(x, y, z, p).integral();
     }
 
     /** Compute Carlson elliptic integral R<sub>J</sub>.
@@ -179,6 +231,21 @@ public class CarlsonEllipticIntegral {
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
      */
+    public static double rD(final double x, final double y, final double z) {
+        return new RdRealDuplication(x, y, z).integral();
+    }
+
+    /** Compute Carlson elliptic integral R<sub>D</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>D</sub> is defined as
+     * \[
+     *   R_D(x,y,z)=\frac{3}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{\sqrt{t+x}\sqrt{t+y}\sqrt{t+z}(t+z)}
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z third symmetric variable of the integral
+     */
     public static Complex rD(final Complex x, final Complex y, final Complex z) {
         return new RdFieldDuplication<>(x, y, z).integral();
     }
@@ -198,6 +265,22 @@ public class CarlsonEllipticIntegral {
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> rD(final FieldComplex<T> x, final FieldComplex<T> y,
                                                                          final FieldComplex<T> z) {
         return new RdFieldDuplication<>(x, y, z).integral();
+    }
+
+    /** Compute Carlson elliptic integral R<sub>G</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>G</sub>is defined as
+     * \[
+     *   R_{G}(x,y,z)=\frac{1}{4}\int_{0}^{\infty}\frac{1}{s(t)}
+     *                \left(\frac{x}{t+x}+\frac{y}{t+y}+\frac{z}{t+z}\right)t\mathrm{d}t
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z second symmetric variable of the integral
+     */
+    public static double rG(final double x, final double y, final double z) {
+        return generalComputeRg(x, y, z);
     }
 
     /** Compute Carlson elliptic integral R<sub>G</sub>.
@@ -239,6 +322,36 @@ public class CarlsonEllipticIntegral {
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
+     */
+    private static double generalComputeRg(final double x, final double y, final double z) {
+        // permute parameters if needed to avoid cancellations
+        if (x <= y) {
+            if (y <= z) {
+                // x ≤ y ≤ z
+                return permutedComputeRg(x, z, y);
+            } else if (x <= z) {
+                // x ≤ z < y
+                return permutedComputeRg(x, y, z);
+            } else {
+                // z < x ≤ y
+                return permutedComputeRg(z, y, x);
+            }
+        } else if (x <= z) {
+            // y < x ≤ z
+            return permutedComputeRg(y, z, x);
+        } else if (y <= z) {
+            // y ≤ z < x
+            return permutedComputeRg(y, x, z);
+        } else {
+            // z < y < x
+            return permutedComputeRg(z, x, y);
+        }
+    }
+
+    /** Compute Carlson elliptic integral R<sub>G</sub> in the general case.
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z third symmetric variable of the integral
      * @param <T> type of the field elements (really {@link Complex} or {@link FieldComplex})
      */
     private static <T extends CalculusFieldElement<T>> T generalComputeRg(final T x, final T y, final T z) {
@@ -273,6 +386,20 @@ public class CarlsonEllipticIntegral {
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
+     */
+    private static double permutedComputeRg(final double x, final double y, final double z) {
+        // permute parameters if needed to avoid divisions by zero
+        if (z == 0) {
+            return x == 0 ? safeComputeRg(z, x, y) : safeComputeRg(y, z, x);
+        } else {
+            return safeComputeRg(x, y, z);
+        }
+    }
+
+    /** Compute Carlson elliptic integral R<sub>G</sub> with already permuted variables to avoid cancellations.
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z third symmetric variable of the integral
      * @param <T> type of the field elements (really {@link Complex} or {@link FieldComplex})
      */
     private static <T extends CalculusFieldElement<T>> T permutedComputeRg(final T x, final T y, final T z) {
@@ -282,6 +409,28 @@ public class CarlsonEllipticIntegral {
         } else {
             return safeComputeRg(x, y, z);
         }
+    }
+
+    /** Compute Carlson elliptic integral R<sub>G</sub> with non-zero third variable.
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z third symmetric variable of the integral
+     * @see <a href="https://dlmf.nist.gov/19.21#E10">Digital Library of Mathematical Functions, equation 19.21.10</a>
+     */
+    private static double safeComputeRg(final double x, final double y, final double z) {
+
+        // contribution of the R_F integral
+        final double termF = new RfRealDuplication(x, y, z).integral() * z;
+
+        // contribution of the R_D integral
+        final double termD = (x - z) * (y - z) * new RdRealDuplication(x, y, z).integral() / 3;
+
+        // contribution of the square roots
+        final double termS = FastMath.sqrt(x * y / z);
+
+        // equation 19.21.10
+        return (termF - termD + termS) * 0.5;
+
     }
 
     /** Compute Carlson elliptic integral R<sub>G</sub> with non-zero third variable.

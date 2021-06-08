@@ -27,30 +27,6 @@ import org.hipparchus.util.FastMath;
  */
 class RcFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplication<T> {
 
-    /** Constant term in R<sub>C</sub> polynomial. */
-    private static final double S0 = 80080;
-
-    /** Coefficient of s² in R<sub>C</sub> polynomial. */
-    private static final double S2 = 24024;
-
-    /** Coefficient of s³ in R<sub>C</sub> polynomial. */
-    private static final double S3 = 11440;
-
-    /** Coefficient of s⁴ in R<sub>C</sub> polynomial. */
-    private static final double S4 = 30030;
-
-    /** Coefficient of s⁵ in R<sub>C</sub> polynomial. */
-    private static final double S5 = 32760;
-
-    /** Coefficient of s⁶ in R<sub>C</sub> polynomial. */
-    private static final double S6 = 61215;
-
-    /** Coefficient of s⁷ in R<sub>C</sub> polynomial. */
-    private static final double S7 = 90090;
-
-    /** Denominator in R<sub>C</sub> polynomial. */
-    private static final double DENOMINATOR = 80080;
-
     /** Simple constructor.
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
@@ -61,7 +37,7 @@ class RcFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
 
     /** {@inheritDoc} */
     @Override
-    protected T initialMeanPoint(T[] v) {
+    protected T initialMeanPoint(final T[] v) {
         return v[0].add(v[1].multiply(2)).divide(3.0);
     }
 
@@ -85,15 +61,15 @@ class RcFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
         final T s = v0[1].subtract(a0).divide(aM.multiply(fourM));
 
         // evaluate integral using equation 2.13 in Carlson[1995]
-        final T poly = s.multiply(S7).
-                       add(S6).multiply(s).
-                       add(S5).multiply(s).
-                       add(S4).multiply(s).
-                       add(S3).multiply(s).
-                       add(S2).multiply(s).
+        final T poly = s.multiply(RcRealDuplication.S7).
+                       add(RcRealDuplication.S6).multiply(s).
+                       add(RcRealDuplication.S5).multiply(s).
+                       add(RcRealDuplication.S4).multiply(s).
+                       add(RcRealDuplication.S3).multiply(s).
+                       add(RcRealDuplication.S2).multiply(s).
                        multiply(s).
-                       add(S0).
-                       divide(DENOMINATOR);
+                       add(RcRealDuplication.S0).
+                       divide(RcRealDuplication.DENOMINATOR);
         return poly.divide(FastMath.sqrt(aM));
 
     }

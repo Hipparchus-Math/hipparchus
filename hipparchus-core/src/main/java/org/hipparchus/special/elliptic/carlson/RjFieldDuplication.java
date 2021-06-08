@@ -27,45 +27,6 @@ import org.hipparchus.util.FastMath;
  */
 class RjFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplication<T> {
 
-    /** Constant term in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double CONSTANT = 4084080;
-
-    /** Coefficient of E₂ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E2 = -875160;
-
-    /** Coefficient of E₃ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E3 = 680680;
-
-    /** Coefficient of E₂² in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E2_E2 = 417690;
-
-    /** Coefficient of E₄ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E4 = -556920;
-
-    /** Coefficient of E₂E₃ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E2_E3 = -706860;
-
-    /** Coefficient of E₅ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E5 = 471240;
-
-    /** Coefficient of E₂³ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E2_E2_E2 = -255255;
-
-    /** Coefficient of E₃² in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E3_E3 = 306306;
-
-    /** Coefficient of E₂E₄ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E2_E4 = 612612;
-
-    /** Coefficient of E₂²E₃ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E2_E2_E3 = 675675;
-
-    /** Coefficient of E₃E₄+E₂E₅ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double E3_E4_P_E2_E5 = -540540;
-
-    /** Denominator in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    private static final double DENOMINATOR = 4084080;
-
     /** Delta product. */
     private T delta;
 
@@ -85,7 +46,7 @@ class RjFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
 
     /** {@inheritDoc} */
     @Override
-    protected T initialMeanPoint(T[] v) {
+    protected T initialMeanPoint(final T[] v) {
         return v[0].add(v[1]).add(v[2]).add(v[3].multiply(2)).divide(5.0);
     }
 
@@ -145,19 +106,19 @@ class RjFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
 
         // evaluate integral using equation 19.36.1 in DLMF
         // (which add more terms than equation 2.7 in Carlson[1995])
-        final T poly = e3e4.add(e2e5).multiply(E3_E4_P_E2_E5).
-                       add(e2e2e3.multiply(E2_E2_E3)).
-                       add(e2e4.multiply(E2_E4)).
-                       add(e3e3.multiply(E3_E3)).
-                       add(e2e2e2.multiply(E2_E2_E2)).
-                       add(e5.multiply(E5)).
-                       add(e2e3.multiply(E2_E3)).
-                       add(e4.multiply(E4)).
-                       add(e2e2.multiply(E2_E2)).
-                       add(e3.multiply(E3)).
-                       add(e2.multiply(E2)).
-                       add(CONSTANT).
-                       divide(DENOMINATOR);
+        final T poly = e3e4.add(e2e5).multiply(RjRealDuplication.E3_E4_P_E2_E5).
+                       add(e2e2e3.multiply(RjRealDuplication.E2_E2_E3)).
+                       add(e2e4.multiply(RjRealDuplication.E2_E4)).
+                       add(e3e3.multiply(RjRealDuplication.E3_E3)).
+                       add(e2e2e2.multiply(RjRealDuplication.E2_E2_E2)).
+                       add(e5.multiply(RjRealDuplication.E5)).
+                       add(e2e3.multiply(RjRealDuplication.E2_E3)).
+                       add(e4.multiply(RjRealDuplication.E4)).
+                       add(e2e2.multiply(RjRealDuplication.E2_E2)).
+                       add(e3.multiply(RjRealDuplication.E3)).
+                       add(e2.multiply(RjRealDuplication.E2)).
+                       add(RjRealDuplication.CONSTANT).
+                       divide(RjRealDuplication.DENOMINATOR);
         final T polyTerm = poly.divide(aM.multiply(FastMath.sqrt(aM)).multiply(fourM));
 
         // compute a single R_C term
