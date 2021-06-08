@@ -55,7 +55,7 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
       <action dev="luc" type="add">
         Added Carlson elliptic integrals (R_F, R_J, R_G, R_D, and R_C)
-        both for Complex and FieldComplex.
+        both for real, CalculusFieldElement, Complex, and FieldComplex.
       </action>
       <action dev="luc" type="fix" issue="issues/129">
         Fixed branch cut on imaginary axis for complex atan.

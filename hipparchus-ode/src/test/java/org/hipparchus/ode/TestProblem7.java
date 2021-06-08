@@ -17,9 +17,9 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.special.elliptic.CopolarN;
-import org.hipparchus.special.elliptic.JacobiElliptic;
-import org.hipparchus.special.elliptic.JacobiEllipticBuilder;
+import org.hipparchus.special.elliptic.jacobi.CopolarN;
+import org.hipparchus.special.elliptic.jacobi.JacobiElliptic;
+import org.hipparchus.special.elliptic.jacobi.JacobiEllipticBuilder;
 import org.hipparchus.util.FastMath;
 
 /**

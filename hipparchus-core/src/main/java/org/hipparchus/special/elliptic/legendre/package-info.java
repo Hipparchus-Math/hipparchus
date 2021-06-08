@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 /**
- * Implementations of elliptic functions and integrals.
+ * Implementations of Legendre elliptic integrals.
  * @since 2.0
  */
-package org.hipparchus.special.elliptic;
+package org.hipparchus.special.elliptic.legendre;
