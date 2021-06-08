@@ -19,7 +19,7 @@ package org.hipparchus.special.elliptic.carlson;
 import org.hipparchus.complex.FieldComplex;
 import org.hipparchus.util.Decimal64;
 
-public class FieldCarlsonEllipticIntegralTest extends CarlsonEllipticIntegralAbstractTest<FieldComplex<Decimal64>> {
+public class CarlsonEllipticIntegralFieldComplexTest extends CarlsonEllipticIntegralAbstractComplexTest<FieldComplex<Decimal64>> {
 
     protected FieldComplex<Decimal64> buildComplex(double realPart) {
         return new FieldComplex<>(new Decimal64(realPart));

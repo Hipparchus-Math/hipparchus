@@ -16,7 +16,6 @@
  */
 package org.hipparchus.special.elliptic.carlson;
 
-import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.RandomGenerator;
@@ -62,14 +61,14 @@ public class CarlsonEllipticIntegralRealTest {
     public void testCarlson1995ConsistencyRf() {
         RandomGenerator random = new Well19937c(0x57f2689b3f4028b4l);
         for (int i = 0; i < 10000; ++i) {
-            double x      = random.nextDouble() * 3);
-            double y      = buildComplex(random.nextDouble() * 3);
-            double lambda = buildComplex(random.nextDouble( * 6 - 3, random.nextDouble() * 3);
-            double mu     = x.multiply(y).divide(lambda);
-            double rfL    = CarlsonEllipticIntegral.rF(x.add(lambda), y.add(lambda), lambda);
-            double rfM    = CarlsonEllipticIntegral.rF(x.add(mu),     y.add(mu),     mu);
+            double x      = random.nextDouble() * 3;
+            double y      = random.nextDouble() * 3;
+            double lambda = random.nextDouble() * 3;
+            double mu     = x * y / lambda;
+            double rfL    = CarlsonEllipticIntegral.rF(x + lambda, y + lambda, lambda);
+            double rfM    = CarlsonEllipticIntegral.rF(x + mu,     y + mu,     mu);
             double rf0    = CarlsonEllipticIntegral.rF(x,             y,             0);
-            Assert.assertEquals(0.0, rfL.add(rfM).subtract(rf0).norm(), 2.0e-14);
+            Assert.assertEquals(0.0, FastMath.abs(rfL + rfM - rf0), 2.0e-14);
         }
     }
 
@@ -93,7 +92,7 @@ public class CarlsonEllipticIntegralRealTest {
         Assert.assertEquals(FastMath.log(2), rc2, 1.0e-15);
 
         double rc5 = CarlsonEllipticIntegral.rC(0.25, -2);
-        Assert.assertEquals(FastMath.log(2 / 3.0), rc5, 1.0e-15);
+        Assert.assertEquals(FastMath.log(2) / 3.0, rc5, 1.0e-15);
 
     }
 
@@ -101,13 +100,13 @@ public class CarlsonEllipticIntegralRealTest {
     public void testCarlson1995ConsistencyRc() {
         RandomGenerator random = new Well19937c(0xf1170b6fc1a199cal);
         for (int i = 0; i < 10000; ++i) {
-            double x      = random.nextDouble() * 3);
-            double lambda = buildComplex(random.nextDouble( * 6 - 3, random.nextDouble() * 3);
-            double mu     = x.multiply(x).divide(lambda);
-            double rcL    = CarlsonEllipticIntegral.rC(lambda,          x.add(lambda));
-            double rcM    = CarlsonEllipticIntegral.rC(mu,              x.add(mu));
+            double x      = random.nextDouble() * 3;
+            double lambda = random.nextDouble() * 3;
+            double mu     = x * x / lambda;
+            double rcL    = CarlsonEllipticIntegral.rC(lambda,          x + lambda);
+            double rcM    = CarlsonEllipticIntegral.rC(mu,              x + mu);
             double rc0    = CarlsonEllipticIntegral.rC(0, x);
-            Assert.assertEquals(0.0, rcL.add(rcM).subtract(rc0).norm(), 3.0e-14);
+            Assert.assertEquals(0.0, FastMath.abs(rcL + rcM - rc0), 3.0e-14);
         }
     }
 
@@ -115,8 +114,8 @@ public class CarlsonEllipticIntegralRealTest {
     public void testRfRc() {
         RandomGenerator random = new Well19937a(0x7e8041334a8c20edl);
         for (int i = 0; i < 10000; ++i) {
-            final double x = 6 * random.nextDouble() - 3;
-            final double y = 6 * random.nextDouble() - 3;
+            final double x = 3 * random.nextDouble();
+            final double y = 3 * random.nextDouble();
             final double rf = CarlsonEllipticIntegral.rF(x, y, y);
             final double rc = CarlsonEllipticIntegral.rC(x, y);
             Assert.assertEquals(0.0, FastMath.abs(rf - rc), 4.0e-15);
@@ -148,18 +147,18 @@ public class CarlsonEllipticIntegralRealTest {
     public void testCarlson1995ConsistencyRj() {
         RandomGenerator random = new Well19937c(0x4af7bb722712e64el);
         for (int i = 0; i < 10000; ++i) {
-            double x      = random.nextDouble() * 3);
-            double y      = buildComplex(random.nextDouble() * 3);
-            double p      = buildComplex(random.nextDouble() * 3);
-            double lambda = buildComplex(random.nextDouble( * 6 - 3, random.nextDouble() * 3);
-            double mu     = x.multiply(y).divide(lambda);
-            double a      = p.multiply(p).multiply(lambda.add(mu).add(x).add(y));
-            double b      = p.multiply(p.add(lambda)).multiply(p.add(mu));
-            double rjL    = CarlsonEllipticIntegral.rJ(x.add(lambda), y.add(lambda), lambda,          p.add(lambda));
-            double rjM    = CarlsonEllipticIntegral.rJ(x.add(mu),     y.add(mu),     mu,              p.add(mu));
-            double rj0    = CarlsonEllipticIntegral.rJ(x,             y,             0, p);
+            double x      = random.nextDouble() * 3;
+            double y      = random.nextDouble() * 3;
+            double p      = random.nextDouble() * 3;
+            double lambda = random.nextDouble() * 3;
+            double mu     = x * y / lambda;
+            double a      = p * p * (lambda + mu + x + y);
+            double b      = p * (p + lambda) * (p + mu);
+            double rjL    = CarlsonEllipticIntegral.rJ(x + lambda, y + lambda, lambda,  p + lambda);
+            double rjM    = CarlsonEllipticIntegral.rJ(x + mu,     y + mu,     mu,      p + mu);
+            double rj0    = CarlsonEllipticIntegral.rJ(x,          y,          0,       p);
             double rc     = CarlsonEllipticIntegral.rC(a, b);
-            Assert.assertEquals(0.0, rjL.add(rjM).subtract(rj0.subtract(rc.multiply(3))).norm(), 2.0e-13);
+            Assert.assertEquals(0.0, FastMath.abs(rjL + rjM - (rj0 - rc * 3)), 3.0e-13);
         }
     }
 
@@ -189,97 +188,62 @@ public class CarlsonEllipticIntegralRealTest {
         RandomGenerator random = new Well19937c(0x17dea97eeb78206al);
         for (int i = 0; i < 10000; ++i) {
             double x      = random.nextDouble() * 3;
-            double y      = buildComplex(random.nextDouble() * 3);
-            double lambda = buildComplex(random.nextDouble( * 6 - 3, random.nextDouble() * 3);
-            double mu     = x.multiply(y).divide(lambda);
-            double rdL    = CarlsonEllipticIntegral.rD(lambda,          x.add(lambda), y.add(lambda));
-            double rdM    = CarlsonEllipticIntegral.rD(mu,              x.add(mu),     y.add(mu));
-            double rd0    = CarlsonEllipticIntegral.rD(0, x,             y);
-            double frac   = y.multiply(x.add(y).add(lambda).add(mu).sqrt()).reciprocal().multiply(3);
-            Assert.assertEquals(0.0, rdL.add(rdM).subtract(rd0.subtract(frac)).norm(), 9.0e-12);
+            double y      = random.nextDouble() * 3;
+            double lambda = random.nextDouble() * 3;
+            double mu     = x * y / lambda;
+            double rdL    = CarlsonEllipticIntegral.rD(lambda,          x + lambda, y + lambda);
+            double rdM    = CarlsonEllipticIntegral.rD(mu,              x + mu,     y + mu);
+            double rd0    = CarlsonEllipticIntegral.rD(0,               x,          y);
+            double frac   = 3 / (y * FastMath.sqrt(x + y + lambda + mu));
+            Assert.assertEquals(0.0, FastMath.abs(rdL + rdM - rd0 + frac), 9.0e-12);
         }
     }
 
     @Test
     public void testRdNonSymmetry1() {
         RandomGenerator random = new Well19937c(0x66db170b5ee1afc2l);
-        int countWrongRoot = 0;
         for (int i = 0; i < 10000; ++i) {
-            double x = random.nextDouble( * 2 - 1, random.nextDouble() * 2 - 1);
-            double y = random.nextDouble( * 2 - 1, random.nextDouble() * 2 - 1);
-            double z = random.nextDouble( * 2 - 1, random.nextDouble() * 2 - 1);
-            if (x.isZero() || y.isZero()) {
+            double x = random.nextDouble();
+            double y = random.nextDouble();
+            double z = random.nextDouble();
+            if (x == 0 || y == 0) {
                 continue;
             }
-            // this is DLMF equation 19.21.7, computing square roots both after the fraction
-            // (i.e. √x √y / √z) and before the fraction (i.e. √(xy/z))
-            // the second form is used in DLMF as of 2021-06-04 and selects the wrong root
-            // 25% of times when x, y, z are real and 33% of times when they are complex
-            double lhs           = x.subtract(y).multiply(CarlsonEllipticIntegral.rD(y, z, x)).add(z.subtract(y).multiply(CarlsonEllipticIntegral.rD(x, y, z)));
-            double rootGlobal    = y.divide(x.multiply(z)).sqrt();
-            double rootSeparated = y.sqrt().divide(x.sqrt().multiply(z.sqrt()));
-            double rhsGlobal     = CarlsonEllipticIntegral.rF(x, y, z).subtract(rootGlobal).multiply(3);
-            double rhsSeparated  = CarlsonEllipticIntegral.rF(x, y, z).subtract(rootSeparated).multiply(3);
-            if (lhs.subtract(rhsGlobal).norm() > 1.0e-3) {
-                ++countWrongRoot;
-                // when the wrong root is selected, the result is really bad
-                Assert.assertTrue(lhs.subtract(rhsGlobal).norm() > 0.1);
-            }
-            Assert.assertEquals(0.0, lhs.subtract(rhsSeparated).norm(), 1.0e-10);
+            // this is DLMF equation 19.21.7
+            double lhs = (x - y) * CarlsonEllipticIntegral.rD(y, z, x) + (z - y) * CarlsonEllipticIntegral.rD(x, y, z);
+            double rhs = (CarlsonEllipticIntegral.rF(x, y, z) - FastMath.sqrt(y / (x * z))) * 3;
+            Assert.assertEquals(0.0, FastMath.abs(lhs - rhs), 1.0e-10);
         }
-        Assert.assertTrue(countWrongRoot > 3300);
     }
 
     @Test
     public void testRdNonSymmetry2() {
         RandomGenerator random = new Well19937c(0x1a8994acc807438dl);
-        int countWrongRoot = 0;
         for (int i = 0; i < 10000; ++i) {
-            double x = random.nextDouble( * 2 - 1, random.nextDouble() * 2 - 1);
-            double y = random.nextDouble( * 2 - 1, random.nextDouble() * 2 - 1);
-            double z = random.nextDouble( * 2 - 1, random.nextDouble() * 2 - 1);
-            if (x.isZero() || y.isZero() || z.isZero()) {
+            double x = random.nextDouble();
+            double y = random.nextDouble();
+            double z = random.nextDouble();
+            if (x == 0 || y == 0 || z == 0) {
                 continue;
             }
-            // this is DLMF equation 19.21.8, computing square roots both after the multiplication
-            // (i.e. 1 / (√x √y √z)) and before the multiplication (i.e. 1 / √(xyz))
-            // the second form is used in DLMF as of 2021-06-04 and selects the wrong root
-            // 50% of times when x, y, z are real and 33% of times when they are complex
-            double lhs           = CarlsonEllipticIntegral.rD(y, z, x).add(CarlsonEllipticIntegral.rD(z, x, y)).add(CarlsonEllipticIntegral.rD(x, y, z));
-            double rootGlobal    = x.multiply(y.multiply(z)).sqrt();
-            double rootSeparated = x.sqrt().multiply(y.sqrt().multiply(z.sqrt()));
-            double rhsGlobal     = rootGlobal.reciprocal().multiply(3);
-            double rhsSeparated  = rootSeparated.reciprocal().multiply(3);
-            if (lhs.subtract(rhsGlobal).norm() > 1.0e-3) {
-                ++countWrongRoot;
-                // when the wrong root is selected, the result is really bad
-                Assert.assertTrue(lhs.subtract(rhsGlobal).norm() > 3.0);
-            }
-            Assert.assertEquals(0.0, lhs.subtract(rhsSeparated).norm(), 2.0e-11);
+            // this is DLMF equation 19.21.8
+            double lhs = CarlsonEllipticIntegral.rD(y, z, x) + CarlsonEllipticIntegral.rD(z, x, y) + CarlsonEllipticIntegral.rD(x, y, z);
+            double rhs = 3 / FastMath.sqrt(x * y * z);
+            Assert.assertEquals(0.0, FastMath.abs(lhs - rhs), 2.0e-11);
         }
-        Assert.assertTrue(countWrongRoot > 3300);
     }
 
     @Test
     public void testCarlson1995rG() {
 
         double rg1 = CarlsonEllipticIntegral.rG(0, 16, 16);
-        Assert.assertEquals(FastMath.PI, 0.0, rg1, 1.0e-13);
+        Assert.assertEquals(FastMath.PI, rg1, 1.0e-13);
 
         double rg2 = CarlsonEllipticIntegral.rG(2, 3, 4);
-        Assert.assertEquals(1.7255030280692, 0.0, rg2, 1.0e-13);
-
-        double rg3 = CarlsonEllipticIntegral.rG(0, buildComplex(0, 1), buildComplex(0, -1));
-        Assert.assertEquals( 0.42360654239699, 0.0, rg3, 1.0e-13);
-
-        double rg4 = CarlsonEllipticIntegral.rG(buildComplex(-1, 1), buildComplex(0, 1), 0);
-        Assert.assertEquals(0.44660591677018, 0.70768352357515, rg4, 1.0e-13);
-
-        double rg5 = CarlsonEllipticIntegral.rG(buildComplex(0, -1), buildComplex(-1, 1), buildComplex(0, 1));
-        Assert.assertEquals(0.36023392184473, 0.40348623401722, rg5, 1.0e-13);
+        Assert.assertEquals(1.7255030280692, rg2, 1.0e-13);
 
         double rg6 = CarlsonEllipticIntegral.rG(0, 0.0796, 4);
-        Assert.assertEquals( 1.0284758090288, 0.0, rg6, 1.0e-13);
+        Assert.assertEquals( 1.0284758090288, rg6, 1.0e-13);
 
     }
 
@@ -287,48 +251,20 @@ public class CarlsonEllipticIntegralRealTest {
     public void testAlternateRG() {
         RandomGenerator random = new Well19937c(0xa2946e4a55d133a6l);
         for (int i = 0; i < 10000; ++i) {
-            double x = random.nextDouble() * 3);
-            double y = buildComplex(random.nextDouble() * 3);
-            double z = buildComplex(random.nextDouble() * 3;
-            Assert.assertEquals(0.0, CarlsonEllipticIntegral.rG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(), 2.0e-15);
+            double x = random.nextDouble() * 3;
+            double y = random.nextDouble() * 3;
+            double z = random.nextDouble() * 3;
+            Assert.assertEquals(0.0, FastMath.abs(CarlsonEllipticIntegral.rG(x, y, z) - rgAlternateImplementation(x, y, z)), 2.0e-15);
         }
-    }
-
-    @Test
-    public void testRgBuggySquareRoot() {
-
-        // xy/z ≈ -0.566379 - 7.791 10⁻⁹ i ⇒ √(xy/z) ≈ 5.176 10⁻⁹ - 0.752582 i
-        double x = buildComplex(FastMath.scalb(7745000, -24), -0.5625);
-        double y = buildComplex(-0.3125, -0.6875);
-        double z = buildComplex( 0.9375,  0.25);
-
-        // on this side, all implementations match
-        Assert.assertEquals(0.0,     CarlsonEllipticIntegral.rG(x, y, z).     subtract(rgAlternateImplementation(x, y, z)).norm(), 2.0e-16);
-        Assert.assertEquals(0.0, buggyRG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(),     2.0e-16);
-
-        // slightly shift x, so xy/z imaginary part changes sign
-        // the selected square root also changes dramatically sign so implementation becomes wrong
-        // xy/z ≈ -0.566379 + 2.807 10⁻⁸ i ⇒ √(xy/z) ≈ 1.865 10⁻⁸ + 0.752582 i
-        x = buildComplex(FastMath.scalb(7744999, -24), -0.5625);
-        Assert.assertEquals(0.0,     CarlsonEllipticIntegral.rG(x, y, z).     subtract(rgAlternateImplementation(x, y, z)).norm(), 2.0e-16);
-        Assert.assertEquals(0.75258, buggyRG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(), 1.0e-5);
-
-    }
-
-    private double buggyRG(final double x, final double y, final double z) {
-        final double termF = new RfFieldDuplication<>(x, y, z).integral().multiply(z);
-        final double termD = x.subtract(z).multiply(y.subtract(z)).multiply(new RdFieldDuplication<>(x, y, z).integral()).divide(3);
-        final double termS = x.multiply(y).divide(z).sqrt(); // ← the error is here, we must compute roots for each x, y and z before computing the fraction
-        return termF.subtract(termD).add(termS).multiply(0.5);
     }
 
     private double rgAlternateImplementation(final double x, final double y, final double z) {
         // this implementation uses DLFM equation 19.21.11
-        return d(x, y, z).add(d(y, z, x)).add(d(z, x, y)).divide(6);
+        return (d(x, y, z) + d(y, z, x) + d(z, x, y)) / 6;
     }
 
     private double d(final double u, final double v, final double w) {
-        return u.isZero() ? u : u.multiply(v.add(w)).multiply(new RdFieldDuplication<>(v, w, u).integral());
+        return u == 0 ? u : u * (v + w) * (new RdRealDuplication(v, w, u).integral());
     }
 
 }

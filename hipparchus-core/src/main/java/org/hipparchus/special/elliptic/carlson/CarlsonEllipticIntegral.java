@@ -75,9 +75,31 @@ public class CarlsonEllipticIntegral {
             // y is on the branch cut, we must use a transformation to get the Cauchy principal value
             // see equation 2.14 in Carlson[1995]
             final double xMy = x - y;
-            return FastMath.sqrt(x / xMy * new RcRealDuplication(xMy, -y).integral());
+            return FastMath.sqrt(x / xMy) * new RcRealDuplication(xMy, -y).integral();
         } else {
             return new RcRealDuplication(x, y).integral();
+        }
+    }
+
+    /** Compute Carlson elliptic integral R<sub>C</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>C</sub>is defined as
+     * \[
+     *   R_C(x,y,z)=R_F(x,y,y)=\frac{1}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{\sqrt{t+x}(t+y)}
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param <T> type of the field elements
+     */
+    public static <T extends CalculusFieldElement<T>> T rC(final T x, final T y) {
+        if (y.getReal() < 0) {
+            // y is on the branch cut, we must use a transformation to get the Cauchy principal value
+            // see equation 2.14 in Carlson[1995]
+            final T xMy = x.subtract(y);
+            return FastMath.sqrt(x.divide(xMy)).multiply(new RcFieldDuplication<>(xMy, y.negate()).integral());
+        } else {
+            return new RcFieldDuplication<>(x, y).integral();
         }
     }
 
@@ -149,6 +171,22 @@ public class CarlsonEllipticIntegral {
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
+     * @param <T> type of the field elements
+     */
+    public static <T extends CalculusFieldElement<T>> T rF(final T x, final T y, final T z) {
+        return new RfFieldDuplication<>(x, y, z).integral();
+    }
+
+    /** Compute Carlson elliptic integral R<sub>F</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>F</sub> is defined as
+     * \[
+     *   R_F(x,y,z)=\frac{1}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{\sqrt{t+x}\sqrt{t+y}\sqrt{t+z}}
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z third symmetric variable of the integral
      */
     public static Complex rF(final Complex x, final Complex y, final Complex z) {
         return new RfFieldDuplication<>(x, y, z).integral();
@@ -184,6 +222,23 @@ public class CarlsonEllipticIntegral {
      */
     public static double rJ(final double x, final double y, final double z, final double p) {
         return new RjRealDuplication(x, y, z, p).integral();
+    }
+
+    /** Compute Carlson elliptic integral R<sub>J</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>J</sub> is defined as
+     * \[
+     *   R_J(x,y,z,p)=\frac{3}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{\sqrt{t+x}\sqrt{t+y}\sqrt{t+z}(t+p)}
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z third symmetric variable of the integral
+     * @param p fourth <em>not</em> symmetric variable of the integral
+     * @param <T> type of the field elements
+     */
+    public static <T extends CalculusFieldElement<T>> T rJ(final T x, final T y, final T z, final T p) {
+        return new RjFieldDuplication<>(x, y, z, p).integral();
     }
 
     /** Compute Carlson elliptic integral R<sub>J</sub>.
@@ -245,6 +300,22 @@ public class CarlsonEllipticIntegral {
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
+     * @param <T> type of the field elements
+     */
+    public static <T extends CalculusFieldElement<T>> T rD(final T x, final T y, final T z) {
+        return new RdFieldDuplication<>(x, y, z).integral();
+    }
+
+    /** Compute Carlson elliptic integral R<sub>D</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>D</sub> is defined as
+     * \[
+     *   R_D(x,y,z)=\frac{3}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{\sqrt{t+x}\sqrt{t+y}\sqrt{t+z}(t+z)}
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z third symmetric variable of the integral
      */
     public static Complex rD(final Complex x, final Complex y, final Complex z) {
         return new RdFieldDuplication<>(x, y, z).integral();
@@ -280,6 +351,23 @@ public class CarlsonEllipticIntegral {
      * @param z second symmetric variable of the integral
      */
     public static double rG(final double x, final double y, final double z) {
+        return generalComputeRg(x, y, z);
+    }
+
+    /** Compute Carlson elliptic integral R<sub>G</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>G</sub>is defined as
+     * \[
+     *   R_{G}(x,y,z)=\frac{1}{4}\int_{0}^{\infty}\frac{1}{s(t)}
+     *                \left(\frac{x}{t+x}+\frac{y}{t+y}+\frac{z}{t+z}\right)t\mathrm{d}t
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z second symmetric variable of the integral
+     * @param <T> type of the field elements
+     */
+    public static <T extends CalculusFieldElement<T>> T rG(final T x, final T y, final T z) {
         return generalComputeRg(x, y, z);
     }
 

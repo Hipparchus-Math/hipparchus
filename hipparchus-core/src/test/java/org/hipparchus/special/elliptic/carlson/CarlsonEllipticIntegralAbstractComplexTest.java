@@ -26,7 +26,7 @@ import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
 
-public abstract class CarlsonEllipticIntegralAbstractTest<T extends CalculusFieldElement<T>> {
+public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends CalculusFieldElement<T>> {
 
     protected abstract T buildComplex(double realPart);
     protected abstract T buildComplex(double realPart, double imaginaryPart);

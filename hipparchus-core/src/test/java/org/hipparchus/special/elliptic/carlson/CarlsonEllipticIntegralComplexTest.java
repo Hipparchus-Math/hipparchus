@@ -18,7 +18,7 @@ package org.hipparchus.special.elliptic.carlson;
 
 import org.hipparchus.complex.Complex;
 
-public class CarlsonEllipticIntegralTest extends CarlsonEllipticIntegralAbstractTest<Complex> {
+public class CarlsonEllipticIntegralComplexTest extends CarlsonEllipticIntegralAbstractComplexTest<Complex> {
 
     protected Complex buildComplex(double realPart) {
         return new Complex(realPart);
