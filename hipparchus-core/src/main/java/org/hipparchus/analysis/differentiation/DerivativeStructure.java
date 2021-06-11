@@ -328,7 +328,7 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
     /** {@inheritDoc}
      */
     @Override
-    public DerivativeStructure signum() {
+    public DerivativeStructure sign() {
         return factory.constant(FastMath.signum(data[0]));
     }
 

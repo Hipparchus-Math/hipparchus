@@ -2106,8 +2106,20 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
         for (double x = -3.9; x < 3.9; x += 0.05) {
             for (double y = -3.9; y < 3.9; y += 0.05) {
                 final FieldComplex<Decimal64> z = build(x, y);
-                Assert.assertEquals(FastMath.signum(x), z.signum().getRealPart().getReal(), 1.0e-15);
-                Assert.assertEquals(FastMath.signum(y), z.signum().getImaginaryPart().getReal(), 1.0e-15);
+                Assert.assertEquals(1.0, z.sign().norm(), 1.0e-15);
+                Assert.assertEquals(FastMath.copySign(1, FastMath.signum(x)), FastMath.copySign(Decimal64.ONE, z.sign().getRealPart()).getReal(), 1.0e-15);
+                Assert.assertEquals(FastMath.copySign(1, FastMath.signum(y)), FastMath.copySign(Decimal64.ONE, z.sign().getImaginaryPart()).getReal(), 1.0e-15);
+            }
+        }
+        Assert.assertTrue(Complex.NaN.sign().isNaN());
+        for (int sR : Arrays.asList(-1, +1)) {
+            for (int sI : Arrays.asList(-1, +1)) {
+                FieldComplex<Decimal64> z = build(FastMath.copySign(0, sR), FastMath.copySign(0, sI));
+                Assert.assertTrue(z.isZero());
+                FieldComplex<Decimal64> zSign = z.sign();
+                Assert.assertTrue(zSign.isZero());
+                Assert.assertEquals(sR, FastMath.copySign(Decimal64.ONE, zSign.getRealPart()).getReal(), 1.0e-15);
+                Assert.assertEquals(sI, FastMath.copySign(Decimal64.ONE, zSign.getImaginaryPart()).getReal(), 1.0e-15);
             }
         }
     }

@@ -412,11 +412,13 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      */
     T remainder(T a);
 
-    /** Compute the signum of the instance.
-     * The signum is -1 for negative numbers, +1 for positive numbers and 0 otherwise
+    /** Compute the sign of the instance.
+     * The sign is -1 for negative numbers, +1 for positive numbers and 0 otherwise,
+     * for Complex number, it is extended on the unit circle (equivalent to z/|z|,
+     * with special handling for 0 and NaN)
      * @return -1.0, -0.0, +0.0, +1.0 or NaN depending on sign of a
      */
-    T signum();
+    T sign();
 
     /**
      * Returns the instance with the sign of the argument.
