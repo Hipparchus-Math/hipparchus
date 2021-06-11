@@ -4609,15 +4609,17 @@ public class FastMath {
         return a.atanh();
     }
 
-    /** Compute the signum of a number.
-     * The signum is -1 for negative numbers, +1 for positive numbers and 0 otherwise
+    /** Compute the sign of a number.
+     * The sign is -1 for negative numbers, +1 for positive numbers and 0 otherwise,
+     * for Complex number, it is extended on the unit circle (equivalent to z/|z|,
+     * with special handling for 0 and NaN)
      * @param a number on which evaluation is done
      * @param <T> the type of the field element
      * @return -1.0, -0.0, +0.0, +1.0 or NaN depending on sign of a
-     * @since 1.3
+     * @since 2.0
      */
-    public static <T extends CalculusFieldElement<T>> T signum(final T a) {
-        return a.signum();
+    public static <T extends CalculusFieldElement<T>> T sign(final T a) {
+        return a.sign();
     }
 
     /**

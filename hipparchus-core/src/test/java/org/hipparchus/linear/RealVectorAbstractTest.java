@@ -45,7 +45,6 @@ import org.hipparchus.analysis.function.Log10;
 import org.hipparchus.analysis.function.Log1p;
 import org.hipparchus.analysis.function.Power;
 import org.hipparchus.analysis.function.Rint;
-import org.hipparchus.analysis.function.Signum;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.Sinh;
 import org.hipparchus.analysis.function.Sqrt;
@@ -877,7 +876,7 @@ public abstract class RealVectorAbstractTest {
             new Log1p(), new Cosh(), new Sinh(), new Tanh(), new Cos(),
             new Sin(), new Tan(), new Acos(), new Asin(), new Atan(),
             new Inverse(), new Abs(), new Sqrt(), new Cbrt(), new Ceil(),
-            new Floor(), new Rint(), new Signum(), new Ulp()
+            new Floor(), new Rint(), new Ulp()
         };
     }
 

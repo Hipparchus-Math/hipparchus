@@ -436,8 +436,8 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
 
     /** {@inheritDoc} */
     @Override
-    public FieldGradient<T> signum() {
-        return newInstance(FastMath.signum(value));
+    public FieldGradient<T> sign() {
+        return newInstance(FastMath.sign(value));
     }
 
     /**

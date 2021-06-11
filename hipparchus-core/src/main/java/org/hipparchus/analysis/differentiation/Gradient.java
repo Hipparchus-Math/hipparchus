@@ -359,7 +359,7 @@ public class Gradient implements Derivative<Gradient>, CalculusFieldElement<Grad
 
     /** {@inheritDoc} */
     @Override
-    public Gradient signum() {
+    public Gradient sign() {
         return newInstance(FastMath.signum(value));
     }
 

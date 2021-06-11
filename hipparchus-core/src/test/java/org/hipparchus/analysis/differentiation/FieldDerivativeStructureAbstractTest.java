@@ -1476,26 +1476,26 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
 
     @Override
     @Test
-    public void testSignum() {
+    public void testSign() {
 
         final FDSFactory<T> factory = buildFactory(1, 1);
         FieldDerivativeStructure<T> minusOne = factory.variable(0, -1.0);
-        Assert.assertEquals(-1.0, minusOne.signum().getPartialDerivative(0).getReal(), 1.0e-15);
-        Assert.assertEquals( 0.0, minusOne.signum().getPartialDerivative(1).getReal(), 1.0e-15);
+        Assert.assertEquals(-1.0, minusOne.sign().getPartialDerivative(0).getReal(), 1.0e-15);
+        Assert.assertEquals( 0.0, minusOne.sign().getPartialDerivative(1).getReal(), 1.0e-15);
 
         FieldDerivativeStructure<T> plusOne = factory.variable(0, +1.0);
-        Assert.assertEquals(+1.0, plusOne.signum().getPartialDerivative(0).getReal(), 1.0e-15);
-        Assert.assertEquals( 0.0, plusOne.signum().getPartialDerivative(1).getReal(), 1.0e-15);
+        Assert.assertEquals(+1.0, plusOne.sign().getPartialDerivative(0).getReal(), 1.0e-15);
+        Assert.assertEquals( 0.0, plusOne.sign().getPartialDerivative(1).getReal(), 1.0e-15);
 
         FieldDerivativeStructure<T> minusZero = factory.variable(0, buildScalar(-0.0));
-        Assert.assertEquals(-0.0, minusZero.signum().getPartialDerivative(0).getReal(), 1.0e-15);
-        Assert.assertTrue(Double.doubleToLongBits(minusZero.signum().getReal()) < 0);
-        Assert.assertEquals( 0.0, minusZero.signum().getPartialDerivative(1).getReal(), 1.0e-15);
+        Assert.assertEquals(-0.0, minusZero.sign().getPartialDerivative(0).getReal(), 1.0e-15);
+        Assert.assertTrue(Double.doubleToLongBits(minusZero.sign().getReal()) < 0);
+        Assert.assertEquals( 0.0, minusZero.sign().getPartialDerivative(1).getReal(), 1.0e-15);
 
         FieldDerivativeStructure<T> plusZero = factory.variable(0, buildScalar(+0.0));
-        Assert.assertEquals(+0.0, plusZero.signum().getPartialDerivative(0).getReal(), 1.0e-15);
-        Assert.assertTrue(Double.doubleToLongBits(plusZero.signum().getReal()) == 0);
-        Assert.assertEquals( 0.0, plusZero.signum().getPartialDerivative(1).getReal(), 1.0e-15);
+        Assert.assertEquals(+0.0, plusZero.sign().getPartialDerivative(0).getReal(), 1.0e-15);
+        Assert.assertTrue(Double.doubleToLongBits(plusZero.sign().getReal()) == 0);
+        Assert.assertEquals( 0.0, plusZero.sign().getPartialDerivative(1).getReal(), 1.0e-15);
 
     }
 

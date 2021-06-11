@@ -1371,26 +1371,26 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
     @Override
     @Test
-    public void testSignum() {
+    public void testSign() {
 
         DSFactory factory = new DSFactory(1, 1);
         DerivativeStructure minusOne = factory.variable(0, -1.0);
-        Assert.assertEquals(-1.0, FastMath.signum(minusOne).getPartialDerivative(0), 1.0e-15);
-        Assert.assertEquals( 0.0, FastMath.signum(minusOne).getPartialDerivative(1), 1.0e-15);
+        Assert.assertEquals(-1.0, FastMath.sign(minusOne).getPartialDerivative(0), 1.0e-15);
+        Assert.assertEquals( 0.0, FastMath.sign(minusOne).getPartialDerivative(1), 1.0e-15);
 
         DerivativeStructure plusOne = factory.variable(0, +1.0);
-        Assert.assertEquals(+1.0, FastMath.signum(plusOne).getPartialDerivative(0), 1.0e-15);
-        Assert.assertEquals( 0.0, FastMath.signum(plusOne).getPartialDerivative(1), 1.0e-15);
+        Assert.assertEquals(+1.0, FastMath.sign(plusOne).getPartialDerivative(0), 1.0e-15);
+        Assert.assertEquals( 0.0, FastMath.sign(plusOne).getPartialDerivative(1), 1.0e-15);
 
         DerivativeStructure minusZero = factory.variable(0, -0.0);
-        Assert.assertEquals(-0.0, FastMath.signum(minusZero).getPartialDerivative(0), 1.0e-15);
-        Assert.assertTrue(Double.doubleToLongBits(FastMath.signum(minusZero).getValue()) < 0);
-        Assert.assertEquals( 0.0, FastMath.signum(minusZero).getPartialDerivative(1), 1.0e-15);
+        Assert.assertEquals(-0.0, FastMath.sign(minusZero).getPartialDerivative(0), 1.0e-15);
+        Assert.assertTrue(Double.doubleToLongBits(FastMath.sign(minusZero).getValue()) < 0);
+        Assert.assertEquals( 0.0, FastMath.sign(minusZero).getPartialDerivative(1), 1.0e-15);
 
         DerivativeStructure plusZero = factory.variable(0, +0.0);
-        Assert.assertEquals(+0.0, FastMath.signum(plusZero).getPartialDerivative(0), 1.0e-15);
-        Assert.assertTrue(Double.doubleToLongBits(FastMath.signum(plusZero).getValue()) == 0);
-        Assert.assertEquals( 0.0, FastMath.signum(plusZero).getPartialDerivative(1), 1.0e-15);
+        Assert.assertEquals(+0.0, FastMath.sign(plusZero).getPartialDerivative(0), 1.0e-15);
+        Assert.assertTrue(Double.doubleToLongBits(FastMath.sign(plusZero).getValue()) == 0);
+        Assert.assertEquals( 0.0, FastMath.sign(plusZero).getPartialDerivative(1), 1.0e-15);
 
     }
 

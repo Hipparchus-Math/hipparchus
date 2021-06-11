@@ -151,13 +151,6 @@ public class FunctionsWithFastMathVersionTest {
     }
 
     @Test
-    public void testSignum() {
-        doTestF0(new Signum(), -10.0, -1.25, 0.0, 1.25, 10.0);
-        doTestFn(new Signum(), -10.0, -1.25, 0.0, 1.25, 10.0);
-        doTestF1(new Signum(), -10.0, -1.25, 0.0, 1.25, 10.0);
-    }
-
-    @Test
     public void testSin() {
         doTestF0(new Sin(), -10.0, -1.25, 0.0, 1.25, 10.0);
         doTestFn(new Sin(), -10.0, -1.25, 0.0, 1.25, 10.0);

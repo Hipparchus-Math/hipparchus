@@ -2016,12 +2016,24 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
     }
 
     @Test
-    public void testSignumComplex() {
+    public void testSignComplex() {
         for (double x = -3.9; x < 3.9; x += 0.05) {
             for (double y = -3.9; y < 3.9; y += 0.05) {
                 final Complex z = new Complex(x, y);
-                Assert.assertEquals(FastMath.signum(x), z.signum().getReal(), 1.0e-15);
-                Assert.assertEquals(FastMath.signum(y), z.signum().getImaginary(), 1.0e-15);
+                Assert.assertEquals(1.0, z.sign().norm(), 1.0e-15);
+                Assert.assertEquals(FastMath.copySign(1, FastMath.signum(x)), FastMath.copySign(1, z.sign().getRealPart()), 1.0e-15);
+                Assert.assertEquals(FastMath.copySign(1, FastMath.signum(y)), FastMath.copySign(1, z.sign().getImaginaryPart()), 1.0e-15);
+            }
+        }
+        Assert.assertTrue(Complex.NaN.sign().isNaN());
+        for (int sR : Arrays.asList(-1, +1)) {
+            for (int sI : Arrays.asList(-1, +1)) {
+                Complex z = new Complex(FastMath.copySign(0, sR), FastMath.copySign(0, sI));
+                Assert.assertTrue(z.isZero());
+                Complex zSign = z.sign();
+                Assert.assertTrue(zSign.isZero());
+                Assert.assertEquals(sR, FastMath.copySign(1, zSign.getRealPart()), 1.0e-15);
+                Assert.assertEquals(sI, FastMath.copySign(1, zSign.getImaginaryPart()), 1.0e-15);
             }
         }
     }

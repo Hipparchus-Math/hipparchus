@@ -434,7 +434,7 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
 
     /** {@inheritDoc} */
     @Override
-    public SparseGradient signum() {
+    public SparseGradient sign() {
         return createConstant(FastMath.signum(value));
     }
 

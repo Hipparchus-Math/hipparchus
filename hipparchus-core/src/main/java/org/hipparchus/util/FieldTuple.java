@@ -290,10 +290,10 @@ public class FieldTuple<T extends CalculusFieldElement<T>> implements CalculusFi
 
     /** {@inheritDoc} */
     @Override
-    public FieldTuple<T> signum() {
+    public FieldTuple<T> sign() {
         final FieldTuple<T> result = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
         for (int i = 0; i < values.length; ++i) {
-            result.values[i] = values[i].signum();
+            result.values[i] = values[i].sign();
         }
         return result;
     }
