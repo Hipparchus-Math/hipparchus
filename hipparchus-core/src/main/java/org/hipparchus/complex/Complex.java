@@ -1812,11 +1812,15 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
     }
 
     /** {@inheritDoc}
-     * @since 1.7
+     * @since 2.0
      */
     @Override
-    public Complex signum() {
-        return createComplex(FastMath.signum(getRealPart()), FastMath.signum(getImaginaryPart()));
+    public Complex sign() {
+        if (isNaN() || isZero()) {
+            return this;
+        } else {
+            return this.divide(FastMath.hypot(real, imaginary));
+        }
     }
 
     /** {@inheritDoc}

@@ -565,9 +565,9 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     }
 
     @Test
-    public void testSignum() {
+    public void testSign() {
         for (double x = -0.9; x < 0.9; x += 0.05) {
-            checkRelative(FastMath.signum(x), build(x).signum());
+            checkRelative(FastMath.signum(x), build(x).sign());
         }
     }
 

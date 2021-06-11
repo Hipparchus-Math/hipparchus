@@ -307,8 +307,8 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public FieldUnivariateDerivative1<T> signum() {
-        return new FieldUnivariateDerivative1<>(FastMath.signum(f0), f0.getField().getZero());
+    public FieldUnivariateDerivative1<T> sign() {
+        return new FieldUnivariateDerivative1<>(FastMath.sign(f0), f0.getField().getZero());
     }
 
     /**

@@ -286,7 +286,7 @@ public class Tuple implements CalculusFieldElement<Tuple> {
 
     /** {@inheritDoc} */
     @Override
-    public Tuple signum() {
+    public Tuple sign() {
         final Tuple result = new Tuple(field, new double[values.length]);
         for (int i = 0; i < values.length; ++i) {
             result.values[i] = FastMath.signum(values[i]);

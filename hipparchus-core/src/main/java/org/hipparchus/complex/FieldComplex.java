@@ -1923,8 +1923,12 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
 
     /** {@inheritDoc} */
     @Override
-    public FieldComplex<T> signum() {
-        return createComplex(FastMath.signum(getRealPart()), FastMath.signum(getImaginaryPart()));
+    public FieldComplex<T> sign() {
+        if (isNaN() || isZero()) {
+            return this;
+        } else {
+            return this.divide(FastMath.hypot(real, imaginary));
+        }
     }
 
     /** {@inheritDoc}

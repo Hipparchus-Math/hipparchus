@@ -2722,7 +2722,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
     /** {@inheritDoc}
      */
     @Override
-    public Dfp signum() {
+    public Dfp sign() {
         if (isNaN() || isZero()) {
             return this;
         } else {

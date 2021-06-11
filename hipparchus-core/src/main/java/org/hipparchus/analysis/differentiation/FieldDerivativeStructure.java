@@ -359,8 +359,8 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
     /** {@inheritDoc}
      */
     @Override
-    public FieldDerivativeStructure<T> signum() {
-        return factory.constant(data[0].signum());
+    public FieldDerivativeStructure<T> sign() {
+        return factory.constant(data[0].sign());
     }
 
     /**

@@ -2053,7 +2053,7 @@ public class FieldCloseEventsTest {
         @Override
         public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
             final Decimal64 g = super.g(state);
-            return g.signum();
+            return g.sign();
         }
 
     }

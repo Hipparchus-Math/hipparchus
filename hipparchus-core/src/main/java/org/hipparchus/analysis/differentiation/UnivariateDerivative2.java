@@ -272,7 +272,7 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
-    public UnivariateDerivative2 signum() {
+    public UnivariateDerivative2 sign() {
         return new UnivariateDerivative2(FastMath.signum(f0), 0.0, 0.0);
     }
 

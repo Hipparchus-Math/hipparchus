@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/138">
+        Renamed signum into sign in field classes, and improved implementation for complex numbers.
+      </action>
       <action dev="bryan" type="fix" issue="issues/131">
         Fixed consistent implementations between {Field}LUDecomposition classes.
       </action>
