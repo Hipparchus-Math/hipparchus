@@ -459,7 +459,7 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * </p>
      * @param convention convention to use for the semantics of the angle
      * @return normalized axis of the rotation
-     * @see #FieldRotation(FieldVector3D, CalculusFieldElement)
+     * @see #FieldRotation(FieldVector3D, CalculusFieldElement, RotationConvention)
      */
     public FieldVector3D<T> getAxis(final RotationConvention convention) {
         final T squaredSine = q1.multiply(q1).add(q2.multiply(q2)).add(q3.multiply(q3));
@@ -481,7 +481,7 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
 
     /** Get the angle of the rotation.
      * @return angle of the rotation (between 0 and &pi;)
-     * @see #FieldRotation(FieldVector3D, CalculusFieldElement)
+     * @see #FieldRotation(FieldVector3D, CalculusFieldElement, RotationConvention)
      */
     public T getAngle() {
         if ((q0.getReal() < -0.1) || (q0.getReal() > 0.1)) {

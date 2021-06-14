@@ -101,7 +101,6 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
      * </p>
      * @param matrix The matrix to decompose.
      * @param zeroChecker checker for zero elements
-     * @param numericPermutationChoice if <code>true</code> choose permutation index with numeric calculations, otherwise choose with <code>zeroChecker</code>
      * @throws MathIllegalArgumentException if matrix is not square
      * @see #FieldLUDecomposition(FieldMatrix, Predicate, boolean)
      */

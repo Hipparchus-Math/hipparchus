@@ -102,7 +102,7 @@ public class LegendreEllipticIntegral {
      * @param k elliptic modulus
      * @param <T> the type of the field elements
      * @return complete elliptic integral of the first kind K(k)
-     * @see #bigKPrime(CalculusFieldElement))
+     * @see #bigKPrime(CalculusFieldElement)
      * @see #bigF(CalculusFieldElement, CalculusFieldElement)
      */
     public static <T extends CalculusFieldElement<T>> T bigK(final T k) {

@@ -35,7 +35,7 @@ import org.hipparchus.geometry.LocalizedGeometryFormats;
  *
  * This class cannot be instanciated by the user. He can only use one
  * of the twelve predefined supported orders as an argument to either
- * the {@link Rotation#Rotation(RotationOrder,double,double,double)}
+ * the {@link Rotation#Rotation(RotationOrder, RotationConvention, double, double, double)}
  * constructor or the {@link Rotation#getAngles} method.
  *
  * Since Hipparchus 1.7 this class is an enumerate class.
