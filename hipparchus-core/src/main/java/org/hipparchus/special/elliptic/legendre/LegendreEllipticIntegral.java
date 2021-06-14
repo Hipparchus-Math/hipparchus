@@ -624,8 +624,8 @@ public class LegendreEllipticIntegral {
         final double k2   = k * k;
         final double cM1  = c - 1.0;
         final double cMk2 = c - k2;
-        return CarlsonEllipticIntegral.rF(cM1, cMk2, 1) -
-               CarlsonEllipticIntegral.rD(cM1, cMk2, 1) * (k2 / 3);
+        return CarlsonEllipticIntegral.rF(cM1, cMk2, c) -
+               CarlsonEllipticIntegral.rD(cM1, cMk2, c) * (k2 / 3);
     }
 
     /** Get the incomplete elliptic integral of the second kind E(Φ, k).
@@ -652,8 +652,8 @@ public class LegendreEllipticIntegral {
         final T k2   = k.multiply(k);
         final T cM1  = c.subtract(one);
         final T cMk2 = c.subtract(k2);
-        return CarlsonEllipticIntegral.rF(cM1, cMk2, one).
-               subtract(CarlsonEllipticIntegral.rD(cM1, cMk2, one).multiply(k2.divide(3)));
+        return CarlsonEllipticIntegral.rF(cM1, cMk2, c).
+               subtract(CarlsonEllipticIntegral.rD(cM1, cMk2, c).multiply(k2.divide(3)));
     }
 
     /** Get the incomplete elliptic integral of the second kind E(Φ, k).
@@ -678,8 +678,8 @@ public class LegendreEllipticIntegral {
         final Complex k2   = k.multiply(k);
         final Complex cM1  = c.subtract(Complex.ONE);
         final Complex cMk2 = c.subtract(k2);
-        return CarlsonEllipticIntegral.rF(cM1, cMk2, Complex.ONE).
-               subtract(CarlsonEllipticIntegral.rD(cM1, cMk2, Complex.ONE).multiply(k2.divide(3)));
+        return CarlsonEllipticIntegral.rF(cM1, cMk2, c).
+               subtract(CarlsonEllipticIntegral.rD(cM1, cMk2, c).multiply(k2.divide(3)));
     }
 
     /** Get the incomplete elliptic integral of the second kind E(Φ, k).
@@ -706,8 +706,8 @@ public class LegendreEllipticIntegral {
         final FieldComplex<T> k2   = k.multiply(k);
         final FieldComplex<T> cM1  = c.subtract(one);
         final FieldComplex<T> cMk2 = c.subtract(k2);
-        return CarlsonEllipticIntegral.rF(cM1, cMk2, one).
-               subtract(CarlsonEllipticIntegral.rD(cM1, cMk2, one).multiply(k2.divide(3)));
+        return CarlsonEllipticIntegral.rF(cM1, cMk2, c).
+               subtract(CarlsonEllipticIntegral.rD(cM1, cMk2, c).multiply(k2.divide(3)));
     }
 
     /** Get the incomplete elliptic integral D(Φ, k) = [F(Φ, k) - E(Φ, k)]/k².
