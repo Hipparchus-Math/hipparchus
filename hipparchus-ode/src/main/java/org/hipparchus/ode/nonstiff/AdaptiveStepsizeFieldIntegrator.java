@@ -122,7 +122,7 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldEle
      * <p>
      * A side effect of this method is to also reset the initial
      * step so it will be automatically computed by the integrator
-     * if {@link #setInitialStepSize(CalculusFieldElement) setInitialStepSize}
+     * if {@link #setInitialStepSize(double) setInitialStepSize}
      * is not called by the user.
      * </p>
      * @param minimalStep minimal step (must be positive even for backward
@@ -141,7 +141,7 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends CalculusFieldEle
      * <p>
      * A side effect of this method is to also reset the initial
      * step so it will be automatically computed by the integrator
-     * if {@link #setInitialStepSize(CalculusFieldElement) setInitialStepSize}
+     * if {@link #setInitialStepSize(double) setInitialStepSize}
      * is not called by the user.
      * </p>
      * @param minimalStep minimal step (must be positive even for backward

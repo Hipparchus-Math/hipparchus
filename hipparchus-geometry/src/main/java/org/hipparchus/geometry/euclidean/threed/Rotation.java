@@ -505,7 +505,7 @@ public class Rotation implements Serializable {
 
   /** Get the angle of the rotation.
    * @return angle of the rotation (between 0 and &pi;)
-   * @see #Rotation(Vector3D, double)
+   * @see #Rotation(Vector3D, double, RotationConvention)
    */
   public double getAngle() {
     if ((q0 < -0.1) || (q0 > 0.1)) {

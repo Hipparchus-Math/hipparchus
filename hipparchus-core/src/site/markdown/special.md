@@ -101,3 +101,53 @@ with the [Maxima](http://maxima.sourceforge.net/) Computer Algebra System.
 ### Regularized Beta
 
 (see [MathWorld](http://mathworld.wolfram.com/RegularizedBetaFunction.html)\)
+
+### Elliptic functions and integrals
+
+Notations in the domain of elliptic functions and integrals is often confusing. Hipparchus implementation
+follows mathematical tradition and defines Jacobi elliptic functions using the `parameter m`, Jacobi
+theta functions using the `nome q` and Legendre elliptic integrals using elliptic modulus `k`. All these
+parameters are linked together. The elliptic modulus `k` is the square of the parameter `m`and the nome `q`
+can be computed by a ratio of elliptic integrals.
+
+`JacobiEllipticBuilder.build(m)` builds a `JacobiElliptic` (or `FieldJacobiElliptic`) implementation for the parameter
+`m` that computes the twelve elliptic functions `\(sn(u|m)\)`, `\(cn(u|m)\)`, `\(dn(u|m)\)`,
+`\(cs(u|m)\)`, `\(ds(u|m)\)`, `\(ns(u|m)\)`, `\(dc(u|m)\)`, `\(nc(u|m)\)`, `\(sc(u|m)\)`, `\(nd(u|m)\)`,
+`\(sd(u|m)\)`, and `\(cd(u|m)\)`. The functions are computed as copolar triplets as when one function is needed
+in an expression, the two other are often also needed and the (very fast) arithmetic-geometric mean algorithm gives
+all three values at once.
+
+`JacobiTheta` (and `FieldJacobiTheta`) computes the four Jacobi theta functions`\(\theta_1(z|τ)\)`, `\(\theta_2(z|τ)\)`,
+`\(\theta_3(z|τ)\)`, and `\(\theta_4(z|τ)\)`. Here again, the four functions are computed at once and a quadruplet
+is returned.
+
+`CarlsonEllipticIntegrals` is a utility class that computes the following integrals in Carlson symmetric form,
+for both primitive double, `CalculusFieldElement`, `Complex` and `FieldComplex`:
+
+| Name               |  Definition                                                                                                         |
+|--------------------|---------------------------------------------------------------------------------------------------------------------|
+| `\(R_F(x,y,z)\)`   | `\(\frac{1}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{s(t)}\)`                                                          |
+| `\(R_J(x,y,z,p)\)` | `\(\frac{3}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{s(t)(t+p)}\)`                                                     |
+| `\(R_G(x,y,z)\)`   | `\(\frac{1}{4}\int_{0}^{\infty}\frac{1}{s(t)}\left(\frac{x}{t+x}+\frac{y}{t+y}+\frac{z}{t+z}\right)t\mathrm{d}t \)` |
+| `\(R_D(x,y,z)\)`   | `\(R_J(x,y,z,z)\)`                                                                                                  |
+| `\(R_C(x,y)\)`     | `\(R_F(x,y,y)\)`                                                                                                    |
+
+where `\(s(t) = \sqrt{t+x}\sqrt{t+y}\sqrt{t+z}\)`.
+
+`LegendreEllipticIntegrals` is a utility class that computes the following integrals,
+for both primitive double, `CalculusFieldElement`, `Complex` and `FieldComplex`.
+(the implementation uses `CarlsonEllipticIntegrals` internally):
+
+| Name                         | Type       |  Definition                                                                                     |
+|------------------------------|------------|-------------------------------------------------------------------------------------------------|
+| `\(K(k)\)`                   |  complete  | `\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-k^2 \sin^2\theta}}\)`                          |
+| `\(K'(k)\)`                  |  complete  | `\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-(1-k^2) \sin^2\theta}}\)`                      |
+| `\(E(k) \)`                  |  complete  | `\(\int_0^{\frac{\pi}{2}} \sqrt{1-k^2 \sin^2\theta} d\theta\)`                                  |
+| `\(D(k) \)`                  |  complete  | `\(\frac{K(k) - E(k)}{k^2}\)`                                                                   |
+| `\(\Pi(\alpha^2, k)\)`       |  complete  | `\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-k^2 \sin^2\theta}(1-\alpha^2 \sin^2\theta)}\)` |
+| `\(F(\phi, k)\)`             | incomplete | `\(\int_0^{\phi} \frac{d\theta}{\sqrt{1-k^2 \sin^2\theta}}\)`                                   |
+| `\(E(\phi, k)\)`             | incomplete | `\(\int_0^{\phi} \sqrt{1-k^2 \sin^2\theta} d\theta\)`                                           |
+| `\(D(\phi, k)\)`             | incomplete | `\(\frac{K(\phi, k) - E(\phi, k)}{k^2}\)`                                                       |
+| `\(\Pi(\phi, \alpha^2, k)\)` | incomplete | `\(\int_0^{\phi} \frac{d\theta}{\sqrt{1-k^2 \sin^2\theta}(1-\alpha^2 \sin^2\theta)}\)`          |
+
+

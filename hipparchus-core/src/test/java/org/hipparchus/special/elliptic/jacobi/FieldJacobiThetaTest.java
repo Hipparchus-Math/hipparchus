@@ -21,12 +21,7 @@ import org.hipparchus.Field;
 import org.hipparchus.complex.FieldComplex;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.special.elliptic.jacobi.FieldCopolarC;
-import org.hipparchus.special.elliptic.jacobi.FieldCopolarD;
-import org.hipparchus.special.elliptic.jacobi.FieldCopolarN;
-import org.hipparchus.special.elliptic.jacobi.FieldJacobiElliptic;
-import org.hipparchus.special.elliptic.jacobi.JacobiEllipticBuilder;
-import org.hipparchus.special.elliptic.legendre.FieldLegendreEllipticIntegral;
+import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -55,13 +50,13 @@ public class FieldJacobiThetaTest {
     }
 
     private <T extends CalculusFieldElement<T>> void doTestRealZero(Field<T> field) {
-        final FieldLegendreEllipticIntegral<T> ei     = new FieldLegendreEllipticIntegral<>(field.getZero().newInstance(0.675));
-        final T                        q      = ei.getNome();
-        final T                        t3Ref  = field.getOne().add(q.
-                                                                   add(FastMath.pow(q, 4)).
-                                                                   add(FastMath.pow(q, 9)).
-                                                                   add(FastMath.pow(q, 16)).multiply(2));
-        final T                        theta3 = new FieldJacobiTheta<>(q).values(FieldComplex.getZero(field)).theta3().getRealPart();
+        final T k      = field.getZero().newInstance(0.675);
+        final T q      = LegendreEllipticIntegral.nome(k);
+        final T t3Ref  = field.getOne().add(q.
+                                            add(FastMath.pow(q, 4)).
+                                            add(FastMath.pow(q, 9)).
+                                            add(FastMath.pow(q, 16)).multiply(2));
+        final T theta3 = new FieldJacobiTheta<>(q).values(FieldComplex.getZero(field)).theta3().getRealPart();
         Assert.assertEquals(t3Ref.getReal(), theta3.getReal(), 1.0e-12);
     }
 
@@ -71,10 +66,10 @@ public class FieldJacobiThetaTest {
     }
 
     private <T extends CalculusFieldElement<T>> void doTestQuarterPeriod(Field<T> field) {
-        final FieldLegendreEllipticIntegral<T> ei     = new FieldLegendreEllipticIntegral<>(field.getZero().newInstance(0.675));
-        final T                        q      = ei.getNome();
-        final T                        theta3 = new FieldJacobiTheta<>(q).values(FieldComplex.getZero(field)).theta3().getRealPart();
-        Assert.assertEquals(ei.getBigK().getReal(),
+        final T k      = field.getZero().newInstance(0.675);
+        final T q      = LegendreEllipticIntegral.nome(k);
+        final T theta3 = new FieldJacobiTheta<>(q).values(FieldComplex.getZero(field)).theta3().getRealPart();
+        Assert.assertEquals(LegendreEllipticIntegral.bigK(k).getReal(),
                             theta3.multiply(theta3).multiply(MathUtils.SEMI_PI).getReal(),
                             1.0e-12);
     }
@@ -86,16 +81,18 @@ public class FieldJacobiThetaTest {
 
     private <T extends CalculusFieldElement<T>> void doTestEllipticFunctions(Field<T> field) {
 
-        final T z = field.getZero().newInstance(1.3);
-        final FieldLegendreEllipticIntegral<T> ei     = new FieldLegendreEllipticIntegral<>(field.getZero().newInstance(0.675));
-        final T                        zeta   = z.divide(ei.getBigK()).multiply(MathUtils.SEMI_PI);
-        final FieldJacobiTheta<T>      jt     = new FieldJacobiTheta<>(ei.getNome());
-        final FieldTheta<T>            theta0 = jt.values(FieldComplex.getZero(field));
-        final FieldTheta<T>            thetaZ = jt.values(new FieldComplex<>(zeta));
+        final T                   z      = field.getZero().newInstance(1.3);
+        final T                   k      = field.getZero().newInstance(0.675);
+        final T                   q      =  LegendreEllipticIntegral.nome(k);
+        final T                   bigK   = LegendreEllipticIntegral.bigK(k);
+        final T                   zeta   = z.divide(bigK).multiply(MathUtils.SEMI_PI);
+        final FieldJacobiTheta<T> jt     = new FieldJacobiTheta<>(q);
+        final FieldTheta<T>       theta0 = jt.values(FieldComplex.getZero(field));
+        final FieldTheta<T>       thetaZ = jt.values(new FieldComplex<>(zeta));
 
         // the theta functions are related to the elliptic functions
         // see https://dlmf.nist.gov/22.2
-        final FieldJacobiElliptic<T> je = JacobiEllipticBuilder.build(ei.getK().multiply(ei.getK()));
+        final FieldJacobiElliptic<T> je = JacobiEllipticBuilder.build(k.multiply(k));
         final FieldCopolarN<T> valuesN = je.valuesN(z);
         final FieldCopolarD<T> valuesD = je.valuesD(z);
         final FieldCopolarC<T> valuesC = je.valuesC(z);

@@ -17,8 +17,6 @@
 package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.special.elliptic.legendre.FieldLegendreEllipticIntegral;
-import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 
 /** Builder for algorithms compmuting Jacobi elliptic functions.
  * <p>
@@ -42,13 +40,15 @@ public class JacobiEllipticBuilder {
 
     /** Build an algorithm for computing Jacobi elliptic functions.
      * <p>
-     * Beware that {@link LegendreEllipticIntegral#LegendreEllipticIntegral(double)
-     * Legendre elliptic integrals} are defined in terms of elliptic modulus {@code k}
-     * whereas {@link JacobiEllipticBuilder#build(double) Jacobi elliptic functions}
-     * (which are their inverses) are defined in terms of parameter {@code m} and {@link
-     * JacobiTheta#JacobiTheta(double) Jacobi theta functions} are defined in terms of
-     * the {@link LegendreEllipticIntegral#getNome() nome q}. All are related as {@code k² = m}
-     * and the nome can be computed from ratios of complete elliptic integrals.
+     * Beware that {@link org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral
+     * Legendre elliptic integrals} are defined in terms of elliptic modulus {@code k} whereas
+     * {@link JacobiEllipticBuilder#build(double) Jacobi elliptic functions} (which
+     * are their inverses) are defined in terms of parameter {@code m} and {@link
+     * JacobiTheta#JacobiTheta(double) Jacobi theta functions} are defined
+     * in terms of the {@link
+     * org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral#nome(double)
+     * nome q}. All are related as {@code k² = m} and the nome can be computed from ratios of complete
+     * elliptic integrals.
      * </p>
      * @param m parameter of the Jacobi elliptic function
      * @return selected algorithm
@@ -69,15 +69,15 @@ public class JacobiEllipticBuilder {
 
     /** Build an algorithm for computing Jacobi elliptic functions.
      * <p>
-     * Beware that {@link
-     * FieldLegendreEllipticIntegral#FieldLegendreEllipticIntegral(CalculusFieldElement)
-     * elliptic integrals} are defined in terms of elliptic modulus {@code k} whereas
-     * {@link JacobiEllipticBuilder#build(CalculusFieldElement) Jacobi elliptic
-     * functions} (which are their inverses) are defined in terms of parameter
-     * {@code m} and {@link FieldJacobiTheta#FieldJacobiTheta(CalculusFieldElement) Jacobi theta
-     * functions} are defined in terms of the {@link FieldLegendreEllipticIntegral#getNome()
-     * nome q}. All are related as {@code k² = m} and the nome can be computed
-     * from ratios of complete elliptic integrals.
+     * Beware that {@link org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral
+     * Legendre elliptic integrals} are defined in terms of elliptic modulus {@code k} whereas
+     * {@link JacobiEllipticBuilder#build(CalculusFieldElement) Jacobi elliptic functions} (which
+     * are their inverses) are defined in terms of parameter {@code m} and {@link
+     * FieldJacobiTheta#FieldJacobiTheta(CalculusFieldElement) Jacobi theta functions} are defined
+     * in terms of the {@link
+     * org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral#nome(CalculusFieldElement)
+     * nome q}. All are related as {@code k² = m} and the nome can be computed from ratios of complete
+     * elliptic integrals.
      * </p>
      * @param m parameter of the Jacobi elliptic function
      * @return selected algorithm
