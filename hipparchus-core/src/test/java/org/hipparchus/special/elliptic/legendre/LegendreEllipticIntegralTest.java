@@ -18,7 +18,6 @@ package org.hipparchus.special.elliptic.legendre;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,7 +27,7 @@ public class LegendreEllipticIntegralTest {
     @Test
     public void testNoConvergence() {
         try {
-            new LegendreEllipticIntegral(Double.NaN).getBigK();
+            LegendreEllipticIntegral.bigK(Double.NaN);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalStateException mise) {
             Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
@@ -38,17 +37,17 @@ public class LegendreEllipticIntegralTest {
     @Test
     public void testComplementary() {
         for (double k = 0.01; k < 1; k += 0.01) {
-            LegendreEllipticIntegral ei1 = new LegendreEllipticIntegral(k);
-            LegendreEllipticIntegral ei2 = new LegendreEllipticIntegral(FastMath.sqrt(1 - k * k));
-            Assert.assertEquals(ei1.getBigK(), ei2.getBigKPrime(), FastMath.ulp(ei1.getBigK()));
+            double k1 = LegendreEllipticIntegral.bigK(k);
+            double k2 = LegendreEllipticIntegral.bigKPrime(FastMath.sqrt(1 - k * k));
+            Assert.assertEquals(k1, k2, FastMath.ulp(k1));
         }
     }
 
     @Test
     public void testAbramowitzStegunExample3() {
-        final LegendreEllipticIntegral ei = new LegendreEllipticIntegral(FastMath.sqrt(80.0 / 81.0));
-        Assert.assertEquals(80.0 / 81.0, ei.getK() * ei.getK(), 1.0e-15);
-        Assert.assertEquals(3.591545001, ei.getBigK(), 2.0e-9);
+        Assert.assertEquals(3.591545001,
+                            LegendreEllipticIntegral.bigK(FastMath.sqrt(80.0 / 81.0)),
+                            2.0e-9);
     }
 
 }

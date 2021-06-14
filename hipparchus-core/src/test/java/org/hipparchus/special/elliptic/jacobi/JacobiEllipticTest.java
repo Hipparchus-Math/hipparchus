@@ -18,9 +18,6 @@ package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.special.elliptic.jacobi.CopolarN;
-import org.hipparchus.special.elliptic.jacobi.JacobiElliptic;
-import org.hipparchus.special.elliptic.jacobi.JacobiEllipticBuilder;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
