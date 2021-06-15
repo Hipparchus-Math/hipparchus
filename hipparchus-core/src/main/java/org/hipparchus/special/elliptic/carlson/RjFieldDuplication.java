@@ -106,19 +106,19 @@ class RjFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
 
         // evaluate integral using equation 19.36.1 in DLMF
         // (which add more terms than equation 2.7 in Carlson[1995])
-        final T poly = e3e4.add(e2e5).multiply(RjRealDuplication.E3_E4_P_E2_E5).
-                       add(e2e2e3.multiply(RjRealDuplication.E2_E2_E3)).
-                       add(e2e4.multiply(RjRealDuplication.E2_E4)).
-                       add(e3e3.multiply(RjRealDuplication.E3_E3)).
-                       add(e2e2e2.multiply(RjRealDuplication.E2_E2_E2)).
-                       add(e5.multiply(RjRealDuplication.E5)).
-                       add(e2e3.multiply(RjRealDuplication.E2_E3)).
-                       add(e4.multiply(RjRealDuplication.E4)).
-                       add(e2e2.multiply(RjRealDuplication.E2_E2)).
-                       add(e3.multiply(RjRealDuplication.E3)).
-                       add(e2.multiply(RjRealDuplication.E2)).
-                       add(RjRealDuplication.CONSTANT).
-                       divide(RjRealDuplication.DENOMINATOR);
+        final T poly = e3e4.add(e2e5).multiply(RdRealDuplication.E3_E4_P_E2_E5).
+                       add(e2e2e3.multiply(RdRealDuplication.E2_E2_E3)).
+                       add(e2e4.multiply(RdRealDuplication.E2_E4)).
+                       add(e3e3.multiply(RdRealDuplication.E3_E3)).
+                       add(e2e2e2.multiply(RdRealDuplication.E2_E2_E2)).
+                       add(e5.multiply(RdRealDuplication.E5)).
+                       add(e2e3.multiply(RdRealDuplication.E2_E3)).
+                       add(e4.multiply(RdRealDuplication.E4)).
+                       add(e2e2.multiply(RdRealDuplication.E2_E2)).
+                       add(e3.multiply(RdRealDuplication.E3)).
+                       add(e2.multiply(RdRealDuplication.E2)).
+                       add(RdRealDuplication.CONSTANT).
+                       divide(RdRealDuplication.DENOMINATOR);
         final T polyTerm = poly.divide(aM.multiply(FastMath.sqrt(aM)).multiply(fourM));
 
         // compute a single R_C term
