@@ -42,10 +42,10 @@ abstract class FieldDuplication<T extends CalculusFieldElement<T>> {
     private static final int M_MAX = 16;
 
     /** Symmetric variables of the integral. */
-    private final T[] v0;
+    private final T[] initialV;
 
     /** Mean point. */
-    protected final T a0;
+    private final T initialA;
 
     /** Convergence criterion. */
     private final double q;
@@ -56,14 +56,14 @@ abstract class FieldDuplication<T extends CalculusFieldElement<T>> {
     @SafeVarargs
     FieldDuplication(final T... v) {
 
-        this.v0 = v;
-        this.a0 = initialMeanPoint(v0);
+        this.initialV = v;
+        this.initialA = initialMeanPoint(initialV);
 
-        T max = a0.getField().getZero();
+        T max = initialA.getField().getZero();
         for (final T vi : v) {
-            max = FastMath.max(max, a0.subtract(vi).abs());
+            max = FastMath.max(max, initialA.subtract(vi).abs());
         }
-        this.q = convergenceCriterion(FastMath.ulp(a0.getField().getOne()), max).getReal();
+        this.q = convergenceCriterion(FastMath.ulp(initialA.getField().getOne()), max).getReal();
 
     }
 
@@ -72,14 +72,14 @@ abstract class FieldDuplication<T extends CalculusFieldElement<T>> {
      * @return i<sup>th</sup> symmetric variable
      */
     protected T getVi(final int i) {
-        return v0[i];
+        return initialV[i];
     }
 
     /** Compute initial mean point.
-     * @param v0 symmetric variables of the integral
+     * @param v symmetric variables of the integral
      * @return initial mean point
      */
-    protected abstract T initialMeanPoint(T[] v0);
+    protected abstract T initialMeanPoint(T[] v);
 
     /** Compute convergence criterion.
      * @param r relative tolerance
@@ -112,14 +112,14 @@ abstract class FieldDuplication<T extends CalculusFieldElement<T>> {
     public T integral() {
 
         // duplication iterations
-        final T[] vM    = v0.clone();
-        final T[] sqrtM = v0.clone();
-        T         aM    = a0;
+        final T[] vM    = initialV.clone();
+        final T[] sqrtM = initialV.clone();
+        T         aM    = initialA;
         double fourM = 1.0;
         for (int m = 0; m < M_MAX; ++m) {
 
             if (m > 0 && q < fourM * aM.norm()) {
-                return evaluate(v0, a0, aM, fourM);
+                return evaluate(initialV, initialA, aM, fourM);
             }
 
             // apply duplication once more

@@ -105,7 +105,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
      * @see #FieldLUDecomposition(FieldMatrix, Predicate, boolean)
      */
     public FieldLUDecomposition(FieldMatrix<T> matrix, final Predicate<T> zeroChecker ) {
-    	this(matrix, zeroChecker, true);
+        this(matrix, zeroChecker, true);
     }
 
     /**
@@ -148,7 +148,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
                 }
                 luRow[col] = sum;
             }
- 
+
             int max = col; // permutation row
             if (numericPermutationChoice) {
 
@@ -162,7 +162,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
                         sum = sum.subtract(luRow[i].multiply(lu[i][col]));
                     }
                     luRow[col] = sum;
-                
+
                     // maintain best permutation choice
                     double absSum = FastMath.abs(sum.getReal());
                     if (absSum > largest) {
@@ -173,7 +173,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 
             } else {
 
-            	// lower
+                // lower
                 int nonZero = col; // permutation row
                 for (int row = col; row < m; row++) {
                     final T[] luRow = lu[row];

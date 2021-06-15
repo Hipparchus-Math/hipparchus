@@ -63,7 +63,7 @@ class RdRealDuplication extends RealDuplication {
     static final double DENOMINATOR = 4084080;
 
     /** Partial sum. */
-    double sum;
+    private double sum;
 
     /** Simple constructor.
      * @param x first symmetric variable of the integral
