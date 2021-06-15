@@ -166,7 +166,10 @@ public class KendallsCorrelation {
             pairs[i] = new DoublePair(xArray[i], yArray[i]);
         }
 
-        Arrays.sort(pairs);
+        Arrays.sort(pairs, (p1, p2) -> {
+            int compareKey = Double.compare(p1.getFirst(), p2.getFirst());
+            return compareKey != 0 ? compareKey : Double.compare(p1.getSecond(), p2.getSecond());
+        });
 
         long tiedXPairs = 0;
         long tiedXYPairs = 0;
@@ -265,7 +268,7 @@ public class KendallsCorrelation {
     /**
      * Helper data structure holding a (double, double) pair.
      */
-    private static class DoublePair implements Comparable<DoublePair> {
+    private static class DoublePair {
         /** The first value */
         private final double first;
         /** The second value */
@@ -290,12 +293,6 @@ public class KendallsCorrelation {
             return second;
         }
 
-        /** {@inheritDoc} */
-        @Override
-        public int compareTo(DoublePair other) {
-            int compareKey = Double.compare(getFirst(), other.getFirst());
-            return compareKey != 0 ? compareKey : Double.compare(getSecond(), other.getSecond());
-        }
     }
 
 }

@@ -508,7 +508,7 @@ public class BesselJ
                 tempa = 1 / p;
                 int m = (2 * n) - 4 * (n / 2);
                 double sum = 0;
-                double em = (double) (n / 2);
+                int em = n / 2;
                 alpem = em - 1 + alpha;
                 alp2em = 2 * em + alpha;
                 if (m != 0) {
