@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/140">
+        Clarified arguments in the one-argument version of the two-arguments atan2
+        function in CalculusFieldElement.
+      </action>
       <action dev="luc" type="fix" issue="issues/138">
         Renamed signum into sign in field classes, and improved implementation for complex numbers.
       </action>

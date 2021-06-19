@@ -216,6 +216,19 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
     T atan();
 
     /** Two arguments arc tangent operation.
+     * <p>
+     * Beware of the order or arguments! As this is based on a
+     * two-arguments functions, in order to be consistent with
+     * arguments order, the instance is the <em>first</em> argument
+     * and the single provided argument is the <em>second</em> argument.
+     * In order to be consistent with programming languages {@code atan2},
+     * this method computes {@code atan2(this, x)}, i.e. the instance
+     * represents the {@code y} argument and the {@code x} argument is
+     * the one passed as a single argument. This may seem confusing especially
+     * for users of Wolfram alpha, as this site is <em>not</em> consistent
+     * with programming languages {@code atan2} two-arguments arc tangent
+     * and puts {@code x} as its first argument.
+     * </p>
      * @param x second argument of the arc tangent
      * @return atan2(this, x)
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
