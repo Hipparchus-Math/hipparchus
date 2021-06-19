@@ -23,45 +23,6 @@ import org.hipparchus.util.FastMath;
  */
 class RjRealDuplication extends RealDuplication {
 
-    /** Constant term in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    static final double CONSTANT = 4084080;
-
-    /** Coefficient of E₂ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    static final double E2 = -875160;
-
-    /** Coefficient of E₃ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    static final double E3 = 680680;
-
-    /** Coefficient of E₂² in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    static final double E2_E2 = 417690;
-
-    /** Coefficient of E₄ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    static final double E4 = -556920;
-
-    /** Coefficient of E₂E₃ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    static final double E2_E3 = -706860;
-
-    /** Coefficient of E₅ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    static final double E5 = 471240;
-
-    /** Coefficient of E₂³ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    static final double E2_E2_E2 = -255255;
-
-    /** Coefficient of E₃² in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    static final double E3_E3 = 306306;
-
-    /** Coefficient of E₂E₄ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    static final double E2_E4 = 612612;
-
-    /** Coefficient of E₂²E₃ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    static final double E2_E2_E3 = 675675;
-
-    /** Coefficient of E₃E₄+E₂E₅ in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    static final double E3_E4_P_E2_E5 = -540540;
-
-    /** Denominator in R<sub>J</sub> and R<sub>D</sub> polynomials. */
-    static final double DENOMINATOR = 4084080;
-
     /** Delta product. */
     private double delta;
 
@@ -137,19 +98,19 @@ class RjRealDuplication extends RealDuplication {
 
         // evaluate integral using equation 19.36.1 in DLMF
         // (which add more terms than equation 2.7 in Carlson[1995])
-        final double poly = ((e3e4 + e2e5) * E3_E4_P_E2_E5 +
-                              e2e2e3       * E2_E2_E3 +
-                              e2e4         * E2_E4 +
-                              e3e3         * E3_E3 +
-                              e2e2e2       * E2_E2_E2 +
-                              e5           * E5 +
-                              e2e3         * E2_E3 +
-                              e4           * E4 +
-                              e2e2         * E2_E2 +
-                              e3           * E3 +
-                              e2           * E2 +
-                              CONSTANT) /
-                             DENOMINATOR;
+        final double poly = ((e3e4 + e2e5) * RdRealDuplication.E3_E4_P_E2_E5 +
+                              e2e2e3       * RdRealDuplication.E2_E2_E3 +
+                              e2e4         * RdRealDuplication.E2_E4 +
+                              e3e3         * RdRealDuplication.E3_E3 +
+                              e2e2e2       * RdRealDuplication.E2_E2_E2 +
+                              e5           * RdRealDuplication.E5 +
+                              e2e3         * RdRealDuplication.E2_E3 +
+                              e4           * RdRealDuplication.E4 +
+                              e2e2         * RdRealDuplication.E2_E2 +
+                              e3           * RdRealDuplication.E3 +
+                              e2           * RdRealDuplication.E2 +
+                              RdRealDuplication.CONSTANT) /
+                             RdRealDuplication.DENOMINATOR;
         final double polyTerm = poly / (aM * FastMath.sqrt(aM) * fourM);
 
         // compute a single R_C term

@@ -28,7 +28,7 @@ import org.hipparchus.util.FastMath;
 class RdFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplication<T> {
 
     /** Partial sum. */
-    T sum;
+    private T sum;
 
     /** Simple constructor.
      * @param x first symmetric variable of the integral

@@ -38,10 +38,10 @@ abstract class RealDuplication {
     private static final int M_MAX = 16;
 
     /** Symmetric variables of the integral. */
-    private final double[] v0;
+    private final double[] initialV;
 
     /** Mean point. */
-    protected final double a0;
+    private final double initialA;
 
     /** Convergence criterion. */
     private final double q;
@@ -51,12 +51,12 @@ abstract class RealDuplication {
      */
     RealDuplication(final double... v) {
 
-        this.v0 = v;
-        this.a0 = initialMeanPoint(v0);
+        this.initialV = v;
+        this.initialA = initialMeanPoint(initialV);
 
         double max = 0;
         for (final double vi : v) {
-            max = FastMath.max(max, FastMath.abs(a0 - vi));
+            max = FastMath.max(max, FastMath.abs(initialA - vi));
         }
         this.q = convergenceCriterion(FastMath.ulp(1.0), max);
 
@@ -67,7 +67,7 @@ abstract class RealDuplication {
      * @return i<sup>th</sup> symmetric variable
      */
     protected double getVi(final int i) {
-        return v0[i];
+        return initialV[i];
     }
 
     /** Compute initial mean point.
@@ -107,14 +107,14 @@ abstract class RealDuplication {
     public double integral() {
 
         // duplication iterations
-        final double[] vM    = v0.clone();
-        final double[] sqrtM = v0.clone();
-        double         aM    = a0;
+        final double[] vM    = initialV.clone();
+        final double[] sqrtM = initialV.clone();
+        double         aM    = initialA;
         double fourM = 1.0;
         for (int m = 0; m < M_MAX; ++m) {
 
             if (m > 0 && q < fourM * FastMath.abs(aM)) {
-                return evaluate(v0, a0, aM, fourM);
+                return evaluate(initialV, initialA, aM, fourM);
             }
 
             // apply duplication once more
