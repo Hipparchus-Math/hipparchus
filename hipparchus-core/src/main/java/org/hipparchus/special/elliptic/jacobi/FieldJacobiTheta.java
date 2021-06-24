@@ -17,7 +17,6 @@
 package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.complex.FieldComplex;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
@@ -72,28 +71,30 @@ public class FieldJacobiTheta<T extends CalculusFieldElement<T>> {
      * @param z argument of the functions
      * @return container for the four Jacobi theta functions θ₁(z|τ), θ₂(z|τ), θ₃(z|τ), and θ₄(z|τ)
      */
-    public FieldTheta<T> values(final FieldComplex<T> z) {
+    public FieldTheta<T> values(final T z) {
 
         // the computation is based on Fourier series,
         // see Digital Library of Mathematical Functions section 20.2
         // https://dlmf.nist.gov/20.2
+        final T zero = q.getField().getZero();
+        final T one  = q.getField().getOne();
 
         // base angle for Fourier Series
-        final FieldSinCos<FieldComplex<T>> sc1 = FastMath.sinCos(z);
+        final FieldSinCos<T> sc1 = FastMath.sinCos(z);
 
         // recursion rules initialization
-        double                       sgn   = 1.0;
-        T                            qNN   = q.getField().getOne();
-        T                            qTwoN = q.getField().getOne();
-        T                            qNNp1 = q.getField().getOne();
-        FieldSinCos<FieldComplex<T>> sc2n1 = sc1;
-        final double                 eps   = FastMath.ulp(q.getField().getOne()).getReal();
+        double         sgn   = 1.0;
+        T              qNN   = one;
+        T              qTwoN = one;
+        T              qNNp1 = one;
+        FieldSinCos<T> sc2n1 = sc1;
+        final double   eps   = FastMath.ulp(one).getReal();
 
         // Fourier series
-        FieldComplex<T> sum1 = sc1.sin();
-        FieldComplex<T> sum2 = sc1.cos();
-        FieldComplex<T> sum3 = FieldComplex.getZero(q.getField());
-        FieldComplex<T> sum4 = FieldComplex.getZero(q.getField());
+        T sum1 = sc1.sin();
+        T sum2 = sc1.cos();
+        T sum3 = zero;
+        T sum4 = zero;
         for (int n = 1; n < N_MAX; ++n) {
 
             sgn   = -sgn;                            // (-1)ⁿ⁻¹     ← (-1)ⁿ
