@@ -47,6 +47,19 @@ public class JacobiThetaTest {
     }
 
     @Test
+    public void testWolframAlpha() {
+        final Theta theta = new JacobiTheta(0.25).values(new Complex(2, 1));
+        Assert.assertEquals( 2.21896723745108057500, theta.theta1().getRealPart(),      1.0e-15);
+        Assert.assertEquals(-1.56332891301806559779, theta.theta1().getImaginaryPart(), 1.0e-15);
+        Assert.assertEquals(-0.07520617984531674751, theta.theta2().getRealPart(),      1.0e-15);
+        Assert.assertEquals(-1.24993491278546664559, theta.theta2().getImaginaryPart(), 1.0e-15);
+        Assert.assertEquals(-0.25931139474579522847, theta.theta3().getRealPart(),      1.0e-15);
+        Assert.assertEquals( 1.16230083178353441578, theta.theta3().getImaginaryPart(), 1.0e-15);
+        Assert.assertEquals( 2.19722649038852886551, theta.theta4().getRealPart(),      1.0e-15);
+        Assert.assertEquals(-1.58416769196278632848, theta.theta4().getImaginaryPart(), 1.0e-15);
+    }
+
+    @Test
     public void testQuarterPeriod() {
         final double           k      = 0.675;
         final double           q      = LegendreEllipticIntegral.nome(k);
