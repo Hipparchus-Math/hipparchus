@@ -17,6 +17,8 @@
 package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
+import org.hipparchus.util.MathUtils;
 
 /** Computation of Jacobi elliptic functions.
  * The Jacobi elliptic functions are related to elliptic integrals.
@@ -28,11 +30,32 @@ public abstract class FieldJacobiElliptic<T extends CalculusFieldElement<T>> {
     /** Parameter of the function. */
     private final T m;
 
+    /** Jacobi θ functions. */
+    private final FieldJacobiTheta<T> jacobiTheta;
+
+    /** Value of Jacobi θ functions at origin. */
+    private final FieldTheta<T> theta0;
+
+    /** Scaling factor. */
+    private final T scaling;
+
     /** Simple constructor.
      * @param m parameter of the function
      */
-    protected FieldJacobiElliptic(final T m) {
+    FieldJacobiElliptic(final T m) {
+
+        // store parameter
         this.m = m;
+
+        // compute nome
+        final T k   = m.multiply(m);
+        final T q   = LegendreEllipticIntegral.nome(k);
+
+        // prepare underlying Jacobi θ functions
+        this.jacobiTheta = new FieldJacobiTheta<>(q);
+        this.theta0      = jacobiTheta.values(m.getField().getZero());
+        this.scaling     = LegendreEllipticIntegral.bigK(k).reciprocal().multiply(MathUtils.SEMI_PI);
+
     }
 
     /** Get the parameter of the function.
@@ -42,12 +65,39 @@ public abstract class FieldJacobiElliptic<T extends CalculusFieldElement<T>> {
         return m;
     }
 
+    /** Get the underlying Jacobi θ functions.
+     * @return underlying Jacobi θ functions
+     */
+    public FieldJacobiTheta<T> getJacobiThetaFunctions() {
+        return jacobiTheta;
+    }
+
     /** Evaluate the three principal Jacobi elliptic functions with pole at point n in Glaisher’s Notation.
      * @param u argument of the functions
      * @return copolar trio containing the three principal Jacobi
      * elliptic functions {@code sn(u|m)}, {@code cn(u|m)}, and {@code dn(u|m)}.
      */
-    public abstract FieldCopolarN<T> valuesN(T u);
+    public FieldCopolarN<T> valuesN(T u) {
+
+        // evaluate Jacobi θ functions at argument
+        final FieldTheta<T> thetaZ = jacobiTheta.values(u.multiply(scaling));
+
+        // convert to Jacobi elliptic functions
+        final T t02 = theta0.theta2();
+        final T t03 = theta0.theta3();
+        final T t04 = theta0.theta4();
+        final T tz1 = thetaZ.theta1();
+        final T tz2 = thetaZ.theta2();
+        final T tz3 = thetaZ.theta3();
+        final T tz4 = thetaZ.theta4();
+
+        final T sn = t03.multiply(tz1).divide(t02.multiply(tz4));
+        final T cn = t04.multiply(tz2).divide(t02.multiply(tz4));
+        final T dn = t04.multiply(tz3).divide(t03.multiply(tz4));
+
+        return new FieldCopolarN<>(sn, cn, dn);
+
+    }
 
     /** Evaluate the three principal Jacobi elliptic functions with pole at point n in Glaisher’s Notation.
      * @param u argument of the functions
