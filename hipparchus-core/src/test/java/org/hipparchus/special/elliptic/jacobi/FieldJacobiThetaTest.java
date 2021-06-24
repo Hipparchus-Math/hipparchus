@@ -18,7 +18,6 @@ package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.complex.FieldComplex;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
@@ -37,7 +36,7 @@ public class FieldJacobiThetaTest {
 
     private <T extends CalculusFieldElement<T>> void doTestNoConvergence(Field<T> field) {
         try {
-            new FieldJacobiTheta<>(field.getZero().newInstance(Double.NaN)).values(FieldComplex.getZero(field));
+            new FieldJacobiTheta<>(field.getZero().newInstance(Double.NaN)).values(field.getZero());
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalStateException mise) {
             Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
@@ -56,7 +55,7 @@ public class FieldJacobiThetaTest {
                                             add(FastMath.pow(q, 4)).
                                             add(FastMath.pow(q, 9)).
                                             add(FastMath.pow(q, 16)).multiply(2));
-        final T theta3 = new FieldJacobiTheta<>(q).values(FieldComplex.getZero(field)).theta3().getRealPart();
+        final T theta3 = new FieldJacobiTheta<>(q).values(field.getZero()).theta3();
         Assert.assertEquals(t3Ref.getReal(), theta3.getReal(), 1.0e-12);
     }
 
@@ -68,7 +67,7 @@ public class FieldJacobiThetaTest {
     private <T extends CalculusFieldElement<T>> void doTestQuarterPeriod(Field<T> field) {
         final T k      = field.getZero().newInstance(0.675);
         final T q      = LegendreEllipticIntegral.nome(k);
-        final T theta3 = new FieldJacobiTheta<>(q).values(FieldComplex.getZero(field)).theta3().getRealPart();
+        final T theta3 = new FieldJacobiTheta<>(q).values(field.getZero()).theta3();
         Assert.assertEquals(LegendreEllipticIntegral.bigK(k).getReal(),
                             theta3.multiply(theta3).multiply(MathUtils.SEMI_PI).getReal(),
                             1.0e-12);
@@ -87,8 +86,8 @@ public class FieldJacobiThetaTest {
         final T                   bigK   = LegendreEllipticIntegral.bigK(k);
         final T                   zeta   = z.divide(bigK).multiply(MathUtils.SEMI_PI);
         final FieldJacobiTheta<T> jt     = new FieldJacobiTheta<>(q);
-        final FieldTheta<T>       theta0 = jt.values(FieldComplex.getZero(field));
-        final FieldTheta<T>       thetaZ = jt.values(new FieldComplex<>(zeta));
+        final FieldTheta<T>       theta0 = jt.values(field.getZero());
+        final FieldTheta<T>       thetaZ = jt.values(zeta);
 
         // the theta functions are related to the elliptic functions
         // see https://dlmf.nist.gov/22.2
@@ -96,13 +95,13 @@ public class FieldJacobiThetaTest {
         final FieldCopolarN<T> valuesN = je.valuesN(z);
         final FieldCopolarD<T> valuesD = je.valuesD(z);
         final FieldCopolarC<T> valuesC = je.valuesC(z);
-        final T t02 = theta0.theta2().getRealPart();
-        final T t03 = theta0.theta3().getRealPart();
-        final T t04 = theta0.theta4().getRealPart();
-        final T tz1 = thetaZ.theta1().getRealPart();
-        final T tz2 = thetaZ.theta2().getRealPart();
-        final T tz3 = thetaZ.theta3().getRealPart();
-        final T tz4 = thetaZ.theta4().getRealPart();
+        final T t02 = theta0.theta2();
+        final T t03 = theta0.theta3();
+        final T t04 = theta0.theta4();
+        final T tz1 = thetaZ.theta1();
+        final T tz2 = thetaZ.theta2();
+        final T tz3 = thetaZ.theta3();
+        final T tz4 = thetaZ.theta4();
         Assert.assertEquals(valuesN.sn().getReal(), t03.multiply(tz1)              .divide(t02.multiply(tz4)).getReal(),               1.0e-15);
         Assert.assertEquals(valuesN.cn().getReal(), t04.multiply(tz2)              .divide(t02.multiply(tz4)).getReal(),               1.0e-15);
         Assert.assertEquals(valuesN.dn().getReal(), t04.multiply(tz3)              .divide(t03.multiply(tz4)).getReal(),               1.0e-15);
