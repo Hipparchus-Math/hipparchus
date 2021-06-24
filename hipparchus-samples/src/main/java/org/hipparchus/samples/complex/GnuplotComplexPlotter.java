@@ -26,28 +26,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 import org.hipparchus.complex.Complex;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.special.elliptic.jacobi.FieldJacobiElliptic;
 import org.hipparchus.special.elliptic.jacobi.JacobiEllipticBuilder;
-import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.FieldSinCos;
-import org.hipparchus.util.MathUtils;
 
 public class GnuplotComplexPlotter {
 
     /** Jacobi functions computer. */
     private FieldJacobiElliptic<Complex> jacobi;
-
-    /** Elliptic module. */
-    private Complex k;
-
-    /** Nome. */
-    private Complex q;
-
-    /** Quarter period. */
-    private Complex bigK;
 
     /** Function to plot. */
     private Predefined f;
@@ -79,7 +65,7 @@ public class GnuplotComplexPlotter {
     /** Default constructor.
      */
     private GnuplotComplexPlotter() {
-        setK(new Complex(0.8));
+        final Complex k = new Complex(0.8);
         jacobi   = JacobiEllipticBuilder.build(k.multiply(k));
         f        = Predefined.sn;
         output   = null;
@@ -90,15 +76,6 @@ public class GnuplotComplexPlotter {
         xMax     = +7;
         yMin     = -7;
         yMax     = +7;
-    }
-
-    /** Set the elliptic module.
-     * @param k elliptic module
-     */
-    private void setK(final Complex k) {
-        this.k    = k;
-        this.q    = LegendreEllipticIntegral.nome(k);
-        this.bigK = LegendreEllipticIntegral.bigK(k);
     }
 
     /** Main program.
@@ -154,7 +131,8 @@ public class GnuplotComplexPlotter {
                         plotter.yMax = Double.parseDouble(args[++i]);
                         break;
                     case "--k" : {
-                        plotter.setK(new Complex(Double.parseDouble(args[++i]), Double.parseDouble(args[++i])));
+                        final Complex k = new Complex(Double.parseDouble(args[++i]), Double.parseDouble(args[++i]));
+                        plotter.jacobi = JacobiEllipticBuilder.build(k.multiply(k));
                         break;
                     }
                     case "--function" :
@@ -251,62 +229,6 @@ public class GnuplotComplexPlotter {
         }
     }
 
-    /** Evaluate the Jacobi theta functions.
-     * @param z argument of the functions
-     * @return container for the four Jacobi theta functions θ₁(z|τ), θ₂(z|τ), θ₃(z|τ), and θ₄(z|τ)
-     */
-    public Complex[] values(final Complex q, final Complex z) {
-
-        Complex qSquare = q.multiply(q);
-        Complex qFourth = FastMath.sqrt(FastMath.sqrt(q));
-        // the computation is based on Fourier series,
-        // see Digital Library of Mathematical Functions section 20.2
-        // https://dlmf.nist.gov/20.2
-
-        // base angle for Fourier Series
-        final FieldSinCos<Complex> sc1 = FastMath.sinCos(z);
-
-        // recursion rules initialization
-        double                       sgn   = 1.0;
-        Complex                            qNN   = q.getField().getOne();
-        Complex                            qTwoN = q.getField().getOne();
-        Complex                            qNNp1 = q.getField().getOne();
-        FieldSinCos<Complex> sc2n1 = sc1;
-        final double                 eps   = FastMath.ulp(q.getField().getOne()).getReal();
-
-        // Fourier series
-        Complex sum1 = sc1.sin();
-        Complex sum2 = sc1.cos();
-        Complex sum3 = Complex.ZERO;
-        Complex sum4 = Complex.ZERO;
-        for (int n = 1; n < 16; ++n) {
-
-            sgn   = -sgn;                            // (-1)ⁿ⁻¹     ← (-1)ⁿ
-            qNN   = qNN.multiply(qTwoN).multiply(q); // q⁽ⁿ⁻¹⁾⁽ⁿ⁻¹⁾ ← qⁿⁿ
-            qTwoN = qTwoN.multiply(qSquare);         // q²⁽ⁿ⁻¹⁾     ← q²ⁿ
-            qNNp1 = qNNp1.multiply(qTwoN);           // q⁽ⁿ⁻¹⁾ⁿ     ← qⁿ⁽ⁿ⁺¹⁾
-
-            sc2n1 = FieldSinCos.sum(sc2n1, sc1); // {sin|cos}([2n-1] z) ← {sin|cos}(2n z)
-            sum3  = sum3.add(sc2n1.cos().multiply(qNN));
-            sum4  = sum4.add(sc2n1.cos().multiply(qNN.multiply(sgn)));
-
-            sc2n1 = FieldSinCos.sum(sc2n1, sc1); // {sin|cos}(2n z) ← {sin|cos}([2n+1] z)
-            sum1  = sum1.add(sc2n1.sin().multiply(qNNp1.multiply(sgn)));
-            sum2  = sum2.add(sc2n1.cos().multiply(qNNp1));
-
-            if (qNNp1.getReal() <= eps) {
-                // we have reach convergence
-                return new Complex[] {sum1.multiply(qFourth.multiply(2)), sum2.multiply(qFourth.multiply(2)),
-                                               sum3.multiply(2).add(1),            sum4.multiply(2).add(1)};
-            }
-
-        }
-
-        // we were not able to compute the value
-        throw new MathIllegalStateException(LocalizedCoreFormats.CONVERGENCE_FAILED);
-
-    }
-
     /** Interface for evaluating complex functions. */
     private static interface Evaluator {
 
@@ -321,35 +243,15 @@ public class GnuplotComplexPlotter {
     /** Predefined complex functions for plotting. */
     private static enum Predefined {
 
-        sn((plotter, z) -> plotter.jacobi.valuesN(z).sn()),
-        cn((plotter, z) -> plotter.jacobi.valuesN(z).cn()),
-        dn((plotter, z) -> plotter.jacobi.valuesN(z).dn()),
-        cs((plotter, z) -> plotter.jacobi.valuesS(z).cs()),
-        ds((plotter, z) -> plotter.jacobi.valuesS(z).ds()),
-        ns((plotter, z) -> plotter.jacobi.valuesS(z).ns()),
-        dc((plotter, z) -> plotter.jacobi.valuesC(z).dc()),
-        nc((plotter, z) -> plotter.jacobi.valuesC(z).nc()),
-        sc((plotter, z) -> plotter.jacobi.valuesC(z).sc()),
-        sc2((plotter, z) -> {
-            final Complex   zeta   = z.multiply(MathUtils.SEMI_PI).divide(plotter.bigK);
-            final Complex[] theta0 = plotter.values(plotter.q, Complex.ZERO);
-            final Complex[] thetaZ = plotter.values(plotter.q, zeta);
-
-            final Complex t02 = theta0[1];
-            final Complex t03 = theta0[2];
-            final Complex t04 = theta0[3];
-            final Complex tz1 = thetaZ[0];
-            final Complex tz2 = thetaZ[1];
-            final Complex tz3 = thetaZ[2];
-            final Complex tz4 = thetaZ[3];
-            Complex sn = t03.multiply(tz1)               .divide(t02.multiply(tz4));
-            Complex cn = t04.multiply(tz2)               .divide(t02.multiply(tz4));
-            Complex dn = t04.multiply(tz3)               .divide(t03.multiply(tz4));
-            Complex sd = t03.multiply(t03).multiply(tz1) .divide(t02.multiply(t04).multiply(tz3));
-            Complex cd = t03.multiply(tz2)               .divide(t02.multiply(tz3));
-            Complex sc = t03.multiply(tz1)               .divide(t04.multiply(tz2));
-            return sc;
-        }),
+        sn((plotter, z)    -> plotter.jacobi.valuesN(z).sn()),
+        cn((plotter, z)    -> plotter.jacobi.valuesN(z).cn()),
+        dn((plotter, z)    -> plotter.jacobi.valuesN(z).dn()),
+        cs((plotter, z)    -> plotter.jacobi.valuesS(z).cs()),
+        ds((plotter, z)    -> plotter.jacobi.valuesS(z).ds()),
+        ns((plotter, z)    -> plotter.jacobi.valuesS(z).ns()),
+        dc((plotter, z)    -> plotter.jacobi.valuesC(z).dc()),
+        nc((plotter, z)    -> plotter.jacobi.valuesC(z).nc()),
+        sc((plotter, z)    -> plotter.jacobi.valuesC(z).sc()),
         nd((plotter, z)    -> plotter.jacobi.valuesD(z).nd()),
         sd((plotter, z)    -> plotter.jacobi.valuesD(z).sd()),
         cd((plotter, z)    -> plotter.jacobi.valuesD(z).cd()),

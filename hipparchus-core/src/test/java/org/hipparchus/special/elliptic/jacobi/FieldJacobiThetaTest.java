@@ -102,12 +102,12 @@ public class FieldJacobiThetaTest {
         final T tz2 = thetaZ.theta2();
         final T tz3 = thetaZ.theta3();
         final T tz4 = thetaZ.theta4();
-        Assert.assertEquals(valuesN.sn().getReal(), t03.multiply(tz1)              .divide(t02.multiply(tz4)).getReal(),               1.0e-15);
-        Assert.assertEquals(valuesN.cn().getReal(), t04.multiply(tz2)              .divide(t02.multiply(tz4)).getReal(),               1.0e-15);
-        Assert.assertEquals(valuesN.dn().getReal(), t04.multiply(tz3)              .divide(t03.multiply(tz4)).getReal(),               1.0e-15);
-        Assert.assertEquals(valuesD.sd().getReal(), t03.multiply(t03).multiply(tz1).divide(t02.multiply(t04).multiply(tz3)).getReal(), 1.0e-15);
-        Assert.assertEquals(valuesD.cd().getReal(), t03.multiply(tz2)              .divide(t02.multiply(tz3)).getReal(),               1.0e-15);
-        Assert.assertEquals(valuesC.sc().getReal(), t03.multiply(tz1)              .divide(t04.multiply(tz2)).getReal(),               1.0e-15);
+        Assert.assertEquals(valuesN.sn().getReal(), t03.multiply(tz1)              .divide(t02.multiply(tz4)).getReal(),               3.0e-15);
+        Assert.assertEquals(valuesN.cn().getReal(), t04.multiply(tz2)              .divide(t02.multiply(tz4)).getReal(),               3.0e-15);
+        Assert.assertEquals(valuesN.dn().getReal(), t04.multiply(tz3)              .divide(t03.multiply(tz4)).getReal(),               3.0e-15);
+        Assert.assertEquals(valuesD.sd().getReal(), t03.multiply(t03).multiply(tz1).divide(t02.multiply(t04).multiply(tz3)).getReal(), 3.0e-15);
+        Assert.assertEquals(valuesD.cd().getReal(), t03.multiply(tz2)              .divide(t02.multiply(tz3)).getReal(),               3.0e-15);
+        Assert.assertEquals(valuesC.sc().getReal(), t03.multiply(tz1)              .divide(t04.multiply(tz2)).getReal(),               3.0e-15);
 
     }
 

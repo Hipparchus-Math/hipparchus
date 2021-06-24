@@ -72,7 +72,7 @@ public class JacobiEllipticTest {
     @Test
     public void testAbramowitzStegunExample1() {
         // Abramowitz and Stegun give a result of -1667, but Wolfram Alpha gives the following value
-        Assert.assertEquals(-1392.11114434139393839735, JacobiEllipticBuilder.build(0.64).valuesC(1.99650).nc(), 1.5e-10);
+        Assert.assertEquals(-1392.11114434139393839735, JacobiEllipticBuilder.build(0.64).valuesC(1.99650).nc(), 6.0e-10);
     }
 
     @Test
@@ -126,18 +126,18 @@ public class JacobiEllipticTest {
               1.57945467502452678756, 1.46125047743207819361, 0.59951990180590090343
         };
         final JacobiElliptic je = JacobiEllipticBuilder.build(m);
-        Assert.assertEquals(reference[ 0], je.valuesN(u).sn(), 2 * FastMath.ulp(reference[ 0]));
-        Assert.assertEquals(reference[ 1], je.valuesN(u).cn(), 2 * FastMath.ulp(reference[ 1]));
-        Assert.assertEquals(reference[ 2], je.valuesN(u).dn(), 2 * FastMath.ulp(reference[ 2]));
-        Assert.assertEquals(reference[ 3], je.valuesS(u).cs(), 2 * FastMath.ulp(reference[ 3]));
-        Assert.assertEquals(reference[ 4], je.valuesS(u).ds(), 2 * FastMath.ulp(reference[ 4]));
-        Assert.assertEquals(reference[ 5], je.valuesS(u).ns(), 2 * FastMath.ulp(reference[ 5]));
-        Assert.assertEquals(reference[ 6], je.valuesC(u).dc(), 2 * FastMath.ulp(reference[ 6]));
-        Assert.assertEquals(reference[ 7], je.valuesC(u).nc(), 2 * FastMath.ulp(reference[ 7]));
-        Assert.assertEquals(reference[ 8], je.valuesC(u).sc(), 2 * FastMath.ulp(reference[ 8]));
-        Assert.assertEquals(reference[ 9], je.valuesD(u).nd(), 2 * FastMath.ulp(reference[ 9]));
-        Assert.assertEquals(reference[10], je.valuesD(u).sd(), 2 * FastMath.ulp(reference[10]));
-        Assert.assertEquals(reference[11], je.valuesD(u).cd(), 2 * FastMath.ulp(reference[11]));
+        Assert.assertEquals(reference[ 0], je.valuesN(u).sn(), 4 * FastMath.ulp(reference[ 0]));
+        Assert.assertEquals(reference[ 1], je.valuesN(u).cn(), 4 * FastMath.ulp(reference[ 1]));
+        Assert.assertEquals(reference[ 2], je.valuesN(u).dn(), 4 * FastMath.ulp(reference[ 2]));
+        Assert.assertEquals(reference[ 3], je.valuesS(u).cs(), 4 * FastMath.ulp(reference[ 3]));
+        Assert.assertEquals(reference[ 4], je.valuesS(u).ds(), 4 * FastMath.ulp(reference[ 4]));
+        Assert.assertEquals(reference[ 5], je.valuesS(u).ns(), 4 * FastMath.ulp(reference[ 5]));
+        Assert.assertEquals(reference[ 6], je.valuesC(u).dc(), 4 * FastMath.ulp(reference[ 6]));
+        Assert.assertEquals(reference[ 7], je.valuesC(u).nc(), 4 * FastMath.ulp(reference[ 7]));
+        Assert.assertEquals(reference[ 8], je.valuesC(u).sc(), 4 * FastMath.ulp(reference[ 8]));
+        Assert.assertEquals(reference[ 9], je.valuesD(u).nd(), 4 * FastMath.ulp(reference[ 9]));
+        Assert.assertEquals(reference[10], je.valuesD(u).sd(), 4 * FastMath.ulp(reference[10]));
+        Assert.assertEquals(reference[11], je.valuesD(u).cd(), 4 * FastMath.ulp(reference[11]));
     }
 
 }

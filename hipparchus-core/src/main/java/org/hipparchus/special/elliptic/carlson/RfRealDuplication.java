@@ -28,7 +28,7 @@ import org.hipparchus.util.FastMath;
 class RfRealDuplication extends RealDuplication {
 
     /** Max number of iterations in the AGM scale. */
-    static final int AGM_MAX = 16;
+    static final int AGM_MAX = 32;
 
     /** Constant term in R<sub>F</sub> polynomial. */
     static final double CONSTANT = 240240;
@@ -154,7 +154,7 @@ class RfRealDuplication extends RealDuplication {
             yM = FastMath.sqrt(xM1 * yM1);
 
             // convergence (by the inequality of arithmetic and geometric means, this is non-negative)
-            if (FastMath.abs(xM - yM) <= FastMath.ulp(xM)) {
+            if (FastMath.abs(xM - yM) <= 4 * FastMath.ulp(xM)) {
                 // convergence has been reached
                 return FastMath.PI / (xM + yM);
             }

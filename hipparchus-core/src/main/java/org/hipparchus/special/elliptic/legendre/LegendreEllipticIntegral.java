@@ -70,12 +70,17 @@ public class LegendreEllipticIntegral {
      * @return nome q
      */
     public static <T extends CalculusFieldElement<T>> T nome(final T k) {
-        if (k.norm() < 1.0e7 * k.getField().getOne().ulp().getReal()) {
+        final T one = k.getField().getOne();
+        if (k.norm() < 1.0e7 * one.ulp().getReal()) {
             // first terms of infinite series in Abramowitz and Stegun 17.3.21
             final T m16 = k.multiply(k).multiply(0.0625);
             return m16.multiply(m16.multiply(8).add(1));
         } else {
-            return FastMath.exp(bigKPrime(k).divide(bigK(k)).multiply(- FastMath.PI));
+            // recompute π/4 using Machin's formula, to get full accuracy
+            // if the field is an extended precision field like Dfp
+            final T piO4 = FastMath.atan(one.divide(5)).multiply(4).
+                           subtract(FastMath.atan(one.divide(239)));
+            return FastMath.exp(bigKPrime(k).divide(bigK(k)).multiply(piO4.multiply(-4)));
         }
     }
 
@@ -129,8 +134,15 @@ public class LegendreEllipticIntegral {
         final T one  = k.getField().getOne();
         final T m    = k.multiply(k);
         if (m.norm() < 1.0e7 * one.ulp().getReal()) {
+
+            // recompute π/4 using Machin's formula, to get full accuracy
+            // if the field is an extended precision field like Dfp
+            final T piO4 = FastMath.atan(one.divide(5)).multiply(4).
+                           subtract(FastMath.atan(one.divide(239)));
+
             // first terms of infinite series in Abramowitz and Stegun 17.3.11
-            return one.add(m.multiply(0.25)).multiply(MathUtils.SEMI_PI);
+            return one.add(m.multiply(0.25)).multiply(piO4.add(piO4));
+
         } else {
             return CarlsonEllipticIntegral.rF(zero, one.subtract(m), one);
         }
@@ -186,8 +198,15 @@ public class LegendreEllipticIntegral {
         final FieldComplex<T> one  = k.getField().getOne();
         final FieldComplex<T> m    = k.multiply(k);
         if (m.norm() < 1.0e7 * one.ulp().getReal()) {
+
+            // recompute π/4 using Machin's formula, to get full accuracy
+            // if the field is an extended precision field like Dfp
+            final T piO4 = FastMath.atan(one.getRealPart().divide(5)).multiply(4).
+                           subtract(FastMath.atan(one.getRealPart().divide(239)));
+
             // first terms of infinite series in Abramowitz and Stegun 17.3.11
-            return one.add(m.multiply(0.25)).multiply(MathUtils.SEMI_PI);
+            return one.add(m.multiply(0.25)).multiply(piO4.add(piO4));
+
         } else {
             return CarlsonEllipticIntegral.rF(zero, one.subtract(m), one);
         }
