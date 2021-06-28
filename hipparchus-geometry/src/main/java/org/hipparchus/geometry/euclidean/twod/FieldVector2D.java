@@ -555,7 +555,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
             if (dot.getReal() >= 0) {
                 return FastMath.asin(n.divide(normProduct));
             }
-            return FastMath.asin(n.divide(normProduct)).negate().add(FastMath.PI);
+            return FastMath.asin(n.divide(normProduct)).negate().add(dot.getPi());
         }
 
         // the vectors are sufficiently separated to use the cosine
@@ -591,7 +591,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
             if (dot.getReal() >= 0) {
                 return FastMath.asin(n.divide(normProduct));
             }
-            return FastMath.asin(n.divide(normProduct)).negate().add(FastMath.PI);
+            return FastMath.asin(n.divide(normProduct)).negate().add(dot.getPi());
         }
 
         // the vectors are sufficiently separated to use the cosine

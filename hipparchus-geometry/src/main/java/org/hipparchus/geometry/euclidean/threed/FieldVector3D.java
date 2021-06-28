@@ -684,7 +684,7 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements Seriali
             if (dot.getReal() >= 0) {
                 return v3.getNorm().divide(normProduct).asin();
             }
-            return v3.getNorm().divide(normProduct).asin().subtract(FastMath.PI).negate();
+            return v3.getNorm().divide(normProduct).asin().subtract(dot.getPi()).negate();
         }
 
         // the vectors are sufficiently separated to use the cosine
@@ -720,7 +720,7 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements Seriali
             if (dot.getReal() >= 0) {
                 return v3.getNorm().divide(normProduct).asin();
             }
-            return v3.getNorm().divide(normProduct).asin().subtract(FastMath.PI).negate();
+            return v3.getNorm().divide(normProduct).asin().subtract(dot.getPi()).negate();
         }
 
         // the vectors are sufficiently separated to use the cosine
