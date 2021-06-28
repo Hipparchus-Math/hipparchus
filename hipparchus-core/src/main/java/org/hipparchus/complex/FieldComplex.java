@@ -1296,7 +1296,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
             return divide(r.add(x)).atan().multiply(2);
         } else {
             // compute atan2(y, x) = +/- pi - 2 atan(y / (r - x))
-            return divide(r.subtract(x)).atan().multiply(-2).add(FastMath.PI);
+            return divide(r.subtract(x)).atan().multiply(-2).add(x.real.getPi());
         }
     }
 

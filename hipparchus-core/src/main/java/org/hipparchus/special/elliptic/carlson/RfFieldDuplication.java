@@ -131,7 +131,7 @@ class RfFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
             // convergence (by the inequality of arithmetic and geometric means, this is non-negative)
             if (xM.subtract(yM).norm() <= 4 * FastMath.ulp(xM).getReal()) {
                 // convergence has been reached
-                return xM.add(yM).reciprocal().multiply(FastMath.PI);
+                return xM.add(yM).reciprocal().multiply(xM.getPi());
             }
 
         }
