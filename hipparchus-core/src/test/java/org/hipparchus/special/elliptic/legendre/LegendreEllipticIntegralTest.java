@@ -16,8 +16,6 @@
  */
 package org.hipparchus.special.elliptic.legendre;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.junit.Assert;
@@ -27,12 +25,7 @@ public class LegendreEllipticIntegralTest {
 
     @Test
     public void testNoConvergence() {
-        try {
-            LegendreEllipticIntegral.bigK(Double.NaN);
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
-        }
+        Assert.assertTrue(Double.isNaN(LegendreEllipticIntegral.bigK(Double.NaN)));
     }
 
     @Test

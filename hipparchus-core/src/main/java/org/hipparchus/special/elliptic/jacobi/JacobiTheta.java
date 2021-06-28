@@ -17,8 +17,6 @@
 package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.complex.Complex;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.Precision;
@@ -109,14 +107,15 @@ public class JacobiTheta {
 
             if (qNNp1 <= Precision.EPSILON) {
                 // we have reach convergence
-                return new Theta(sum1.multiply(2 * qFourth), sum2.multiply(2 * qFourth),
-                                 sum3.multiply(2).add(1),    sum4.multiply(2).add(1));
+                break;
             }
 
         }
 
-        // we were not able to compute the value
-        throw new MathIllegalStateException(LocalizedCoreFormats.CONVERGENCE_FAILED);
+        return new Theta(sum1.multiply(2 * qFourth),
+                         sum2.multiply(2 * qFourth),
+                         sum3.multiply(2).add(1),
+                         sum4.multiply(2).add(1));
 
     }
 

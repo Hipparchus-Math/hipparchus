@@ -19,8 +19,6 @@ package org.hipparchus.special.elliptic.carlson;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.FieldComplex;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /** Duplication algorithm for Carlson symmetric forms.
@@ -119,7 +117,8 @@ abstract class FieldDuplication<T extends CalculusFieldElement<T>> {
         for (int m = 0; m < M_MAX; ++m) {
 
             if (m > 0 && q < fourM * aM.norm()) {
-                return evaluate(initialV, initialA, aM, fourM);
+                // convergence reached
+                break;
             }
 
             // apply duplication once more
@@ -139,8 +138,7 @@ abstract class FieldDuplication<T extends CalculusFieldElement<T>> {
 
         }
 
-        // we were not able to compute the value
-        throw new MathIllegalStateException(LocalizedCoreFormats.CONVERGENCE_FAILED);
+        return evaluate(initialV, initialA, aM, fourM);
 
     }
 

@@ -17,6 +17,8 @@
 package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.complex.Complex;
+import org.hipparchus.complex.FieldComplex;
 
 /** Builder for algorithms compmuting Jacobi elliptic functions.
  * <p>
@@ -94,6 +96,44 @@ public class JacobiEllipticBuilder {
         } else {
             return new FieldBoundedParameter<>(m);
         }
+    }
+
+    /** Build an algorithm for computing Jacobi elliptic functions.
+     * <p>
+     * Beware that {@link org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral
+     * Legendre elliptic integrals} are defined in terms of elliptic modulus {@code k} whereas
+     * {@link JacobiEllipticBuilder#build(CalculusFieldElement) Jacobi elliptic functions} (which
+     * are their inverses) are defined in terms of parameter {@code m} and {@link
+     * FieldJacobiTheta#FieldJacobiTheta(CalculusFieldElement) Jacobi theta functions} are defined
+     * in terms of the {@link
+     * org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral#nome(CalculusFieldElement)
+     * nome q}. All are related as {@code k² = m} and the nome can be computed from ratios of complete
+     * elliptic integrals.
+     * </p>
+     * @param m parameter of the Jacobi elliptic function
+     * @return selected algorithm
+     */
+    public static FieldJacobiElliptic<Complex> build(final Complex m) {
+        return new ComplexParameter(m);
+    }
+
+    /** Build an algorithm for computing Jacobi elliptic functions.
+     * <p>
+     * Beware that {@link org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral
+     * Legendre elliptic integrals} are defined in terms of elliptic modulus {@code k} whereas
+     * {@link JacobiEllipticBuilder#build(CalculusFieldElement) Jacobi elliptic functions} (which
+     * are their inverses) are defined in terms of parameter {@code m} and {@link
+     * FieldJacobiTheta#FieldJacobiTheta(CalculusFieldElement) Jacobi theta functions} are defined
+     * in terms of the {@link
+     * org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral#nome(CalculusFieldElement)
+     * nome q}. All are related as {@code k² = m} and the nome can be computed from ratios of complete
+     * elliptic integrals.
+     * </p>
+     * @param m parameter of the Jacobi elliptic function
+     * @return selected algorithm
+     */
+    public static <T extends CalculusFieldElement<T>> FieldJacobiElliptic<FieldComplex<T>> build(final FieldComplex<T> m) {
+        return new FieldComplexParameter<>(m);
     }
 
 }

@@ -19,8 +19,6 @@ package org.hipparchus.special.elliptic.carlson;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.FieldComplex;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /** Duplication algorithm for Carlson R<sub>F</sub> elliptic integral.
@@ -129,15 +127,14 @@ class RfFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
             yM = xM1.multiply(yM1).sqrt();
 
             // convergence (by the inequality of arithmetic and geometric means, this is non-negative)
-            if (xM.subtract(yM).norm() <= FastMath.ulp(xM).getReal()) {
+            if (xM.subtract(yM).norm() <= 4 * FastMath.ulp(xM).getReal()) {
                 // convergence has been reached
-                return xM.add(yM).reciprocal().multiply(xM.getPi());
+                break;
             }
 
         }
 
-        // we were not able to compute the value
-        throw new MathIllegalStateException(LocalizedCoreFormats.CONVERGENCE_FAILED);
+        return xM.add(yM).reciprocal().multiply(xM.getPi());
 
     }
 

@@ -17,11 +17,8 @@
 package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.util.FastMath;
-import org.hipparchus.util.FieldSinCos;
-import org.hipparchus.util.MathArrays;
+import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
+import org.hipparchus.util.MathUtils;
 
 /** Algorithm for computing the principal Jacobi functions for parameter m in [0; 1].
  * @param <T> the type of the field elements
@@ -29,83 +26,51 @@ import org.hipparchus.util.MathArrays;
  */
 class FieldBoundedParameter<T extends CalculusFieldElement<T>> extends FieldJacobiElliptic<T> {
 
-    /** Max number of iterations of the AGM scale.
-     * <p>
-     * This value seems sufficient even for Dfp with high accuracy as the number
-     * of digits doubles at each iteration. An experiment with 300 significant
-     * digits showed we reached convergence at iteration 10
-     * </p>
-     */
-    private static final int N_MAX = 16;
+    /** Jacobi θ functions. */
+    private final FieldJacobiTheta<T> jacobiTheta;
 
-    /** Initial value for arithmetic-geometric mean. */
-    private final T b0;
+    /** Value of Jacobi θ functions at origin. */
+    private final FieldTheta<T> t0;
 
-    /** Initial value for arithmetic-geometric mean. */
-    private final T c0;
+    /** Scaling factor. */
+    private final T scaling;
 
     /** Simple constructor.
      * @param m parameter of the Jacobi elliptic function
      */
     FieldBoundedParameter(final T m) {
+
         super(m);
-        this.b0 = FastMath.sqrt(m.getField().getOne().subtract(m));
-        this.c0 = FastMath.sqrt(m);
+
+        // compute nome
+        final T k   = m.sqrt();
+        final T q   = LegendreEllipticIntegral.nome(k);
+
+        // prepare underlying Jacobi θ functions
+        this.jacobiTheta = new FieldJacobiTheta<>(q);
+        this.t0          = jacobiTheta.values(m.getField().getZero());
+        this.scaling     = LegendreEllipticIntegral.bigK(k).reciprocal().multiply(m.getPi().multiply(0.5));
+
     }
 
     /** {@inheritDoc}
      * <p>
-     * The algorithm for evaluating the functions is based on arithmetic-geometric
-     * mean. It is given in Abramowitz and Stegun, sections 16.4 and 17.6.
+     * The algorithm for evaluating the functions is based on {@link FieldJacobiTheta
+     * Jacobi theta functions}.
      * </p>
      */
     @Override
     public FieldCopolarN<T> valuesN(T u) {
 
-        // initialize scale
-        final T one = getM().getField().getOne();
-        final T[] a = MathArrays.buildArray(u.getField(), N_MAX);
-        final T[] c = MathArrays.buildArray(u.getField(), N_MAX);
-        a[0]        = one;
-        T bi        = b0;
-        c[0]        = c0;
+        // evaluate Jacobi θ functions at argument
+        final FieldTheta<T> tZ = jacobiTheta.values(u.multiply(scaling));
 
-        // iterate down
-        T phi = u;
-        for (int i = 1; i < N_MAX; ++i) {
+        // convert to Jacobi elliptic functions
+        final T sn = t0.theta3().multiply(tZ.theta1()).divide(t0.theta2().multiply(tZ.theta4()));
+        final T cn = t0.theta4().multiply(tZ.theta2()).divide(t0.theta2().multiply(tZ.theta4()));
+        final T dn = t0.theta4().multiply(tZ.theta3()).divide(t0.theta3().multiply(tZ.theta4()));
 
-            // 2ⁿ u
-            phi = phi.add(phi);
-            c[i] = a[i - 1].subtract(bi).multiply(0.5);
-
-            // arithmetic mean
-            a[i] = a[i - 1].add(bi).multiply(0.5);
-
-            // geometric mean
-            bi = FastMath.sqrt(a[i - 1].multiply(bi));
-
-            // convergence (by the inequality of arithmetic and geometric means, this is non-negative)
-            if (c[i].getReal() <= FastMath.ulp(a[i]).getReal()) {
-                // convergence has been reached
-
-                // iterate up
-                phi = phi.multiply(a[i]);
-                for (int j = i; j > 0; --j) {
-                    // equation 16.4.3 in Abramowitz and Stegun
-                    phi = phi.add(FastMath.asin(c[j].multiply(FastMath.sin(phi)).divide(a[j]))).multiply(0.5);
-                }
-                // using 16.1.5 rather than 16.4.4 to avoid computing another cosine
-                final FieldSinCos<T> scPhi0 = FastMath.sinCos(phi);
-                return new FieldCopolarN<>(scPhi0.sin(),
-                                           scPhi0.cos(),
-                                           FastMath.sqrt(one.subtract(getM().multiply(scPhi0.sin()).multiply(scPhi0.sin()))));
-
-            }
-
-        }
-
-        // we were not able to compute the value
-        throw new MathIllegalStateException(LocalizedCoreFormats.CONVERGENCE_FAILED);
+        return new FieldCopolarN<>(sn, cn, dn);
 
     }
 

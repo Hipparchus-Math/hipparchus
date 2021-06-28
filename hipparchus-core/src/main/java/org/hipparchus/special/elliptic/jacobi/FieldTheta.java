@@ -17,7 +17,6 @@
 package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.complex.FieldComplex;
 
 /** Values of {@link FieldJacobiTheta Jacobi theta} functions.
  * <p>
@@ -31,16 +30,16 @@ import org.hipparchus.complex.FieldComplex;
 public class FieldTheta<T extends CalculusFieldElement<T>> {
 
     /** Value of the θ₁(z|τ) function. */
-    private final FieldComplex<T> theta1;
+    private final T theta1;
 
     /** Value of the θ₂(z|τ) function. */
-    private final FieldComplex<T> theta2;
+    private final T theta2;
 
     /** Value of the θ₃(z|τ) function. */
-    private final FieldComplex<T> theta3;
+    private final T theta3;
 
     /** Value of the θ₄(z|τ) function. */
-    private final FieldComplex<T> theta4;
+    private final T theta4;
 
     /** Simple constructor.
      * @param theta1 value of the θ₁(z|τ) function
@@ -48,8 +47,8 @@ public class FieldTheta<T extends CalculusFieldElement<T>> {
      * @param theta3 value of the θ₃(z|τ) function
      * @param theta4 value of the θ₄(z|τ) function
      */
-    FieldTheta(final FieldComplex<T> theta1, final FieldComplex<T> theta2,
-               final FieldComplex<T> theta3, final FieldComplex<T> theta4) {
+    FieldTheta(final T theta1, final T theta2,
+               final T theta3, final T theta4) {
         this.theta1 = theta1;
         this.theta2 = theta2;
         this.theta3 = theta3;
@@ -59,28 +58,28 @@ public class FieldTheta<T extends CalculusFieldElement<T>> {
     /** Get the value of the θ₁(z|τ) function.
      * @return θ₁(z|τ)
      */
-    public FieldComplex<T> theta1() {
+    public T theta1() {
         return theta1;
     }
 
     /** Get the value of the θ₂(z|τ) function.
      * @return θ₂(z|τ)
      */
-    public FieldComplex<T> theta2() {
+    public T theta2() {
         return theta2;
     }
 
     /** Get the value of the θ₃(z|τ) function.
      * @return θ₃(z|τ)
      */
-    public FieldComplex<T> theta3() {
+    public T theta3() {
         return theta3;
     }
 
     /** Get the value of the θ₄(z|τ) function.
      * @return θ₄(z|τ)
      */
-    public FieldComplex<T> theta4() {
+    public T theta4() {
         return theta4;
     }
 

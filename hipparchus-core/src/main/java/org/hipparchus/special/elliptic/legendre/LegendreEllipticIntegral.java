@@ -23,6 +23,7 @@ import org.hipparchus.special.elliptic.carlson.CarlsonEllipticIntegral;
 import org.hipparchus.special.elliptic.jacobi.JacobiEllipticBuilder;
 import org.hipparchus.special.elliptic.jacobi.JacobiTheta;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /** Complete and incomplete elliptic integrals in Legendre form.
  * <p>
@@ -54,7 +55,13 @@ public class LegendreEllipticIntegral {
      * @return nome q
      */
     public static double nome(final double k) {
-        return FastMath.exp(-FastMath.PI * bigKPrime(k) / bigK(k));
+        if (k < 1.0e-8) {
+            // first terms of infinite series in Abramowitz and Stegun 17.3.21
+            final double m16 = k * k * 0.0625;
+            return m16 * (1 + 8 * m16);
+        } else {
+            return FastMath.exp(-FastMath.PI * bigKPrime(k) / bigK(k));
+        }
     }
 
     /** Get the nome q.
@@ -63,7 +70,14 @@ public class LegendreEllipticIntegral {
      * @return nome q
      */
     public static <T extends CalculusFieldElement<T>> T nome(final T k) {
-        return FastMath.exp(bigKPrime(k).divide(bigK(k)).multiply(- FastMath.PI));
+        final T one = k.getField().getOne();
+        if (k.norm() < 1.0e7 * one.ulp().getReal()) {
+            // first terms of infinite series in Abramowitz and Stegun 17.3.21
+            final T m16 = k.multiply(k).multiply(0.0625);
+            return m16.multiply(m16.multiply(8).add(1));
+        } else {
+            return FastMath.exp(bigKPrime(k).divide(bigK(k)).multiply(one.getPi().negate()));
+        }
     }
 
     /** Get the complete elliptic integral of the first kind K(k).
@@ -84,7 +98,13 @@ public class LegendreEllipticIntegral {
      * @see #bigF(double, double)
      */
     public static double bigK(final double k) {
-        return CarlsonEllipticIntegral.rF(0, 1.0 - k * k, 1);
+        final double m = k * k;
+        if (m < 1.0e-8) {
+            // first terms of infinite series in Abramowitz and Stegun 17.3.11
+            return (1 + 0.25 * m) * MathUtils.SEMI_PI;
+        } else {
+            return CarlsonEllipticIntegral.rF(0, 1.0 - m, 1);
+        }
     }
 
     /** Get the complete elliptic integral of the first kind K(k).
@@ -96,8 +116,8 @@ public class LegendreEllipticIntegral {
      * it corresponds to the real quarter-period of Jacobi elliptic functions
      * </p>
      * <p>
-     * The algorithm for evaluating the functions is based on arithmetic-geometric
-     * mean. It is given in Abramowitz and Stegun, section 17.6.
+     * The algorithm for evaluating the functions is based on {@link CarlsonEllipticIntegral
+     * Carlson elliptic integrals}.
      * </p>
      * @param k elliptic modulus
      * @param <T> the type of the field elements
@@ -108,7 +128,15 @@ public class LegendreEllipticIntegral {
     public static <T extends CalculusFieldElement<T>> T bigK(final T k) {
         final T zero = k.getField().getZero();
         final T one  = k.getField().getOne();
-        return CarlsonEllipticIntegral.rF(zero, one.subtract(k.multiply(k)), one);
+        final T m    = k.multiply(k);
+        if (m.norm() < 1.0e7 * one.ulp().getReal()) {
+
+            // first terms of infinite series in Abramowitz and Stegun 17.3.11
+            return one.add(m.multiply(0.25)).multiply(zero.getPi().multiply(0.5));
+
+        } else {
+            return CarlsonEllipticIntegral.rF(zero, one.subtract(m), one);
+        }
     }
 
     /** Get the complete elliptic integral of the first kind K(k).
@@ -120,8 +148,8 @@ public class LegendreEllipticIntegral {
      * it corresponds to the real quarter-period of Jacobi elliptic functions
      * </p>
      * <p>
-     * The algorithm for evaluating the functions is based on arithmetic-geometric
-     * mean. It is given in Abramowitz and Stegun, section 17.6.
+     * The algorithm for evaluating the functions is based on {@link CarlsonEllipticIntegral
+     * Carlson elliptic integrals}.
      * </p>
      * @param k elliptic modulus
      * @return complete elliptic integral of the first kind K(k)
@@ -129,7 +157,13 @@ public class LegendreEllipticIntegral {
      * @see #bigF(Complex, Complex)
      */
     public static Complex bigK(final Complex k) {
-        return CarlsonEllipticIntegral.rF(Complex.ZERO, Complex.ONE.subtract(k.multiply(k)), Complex.ONE);
+        final Complex m = k.multiply(k);
+        if (m.norm() < 1.0e-8) {
+            // first terms of infinite series in Abramowitz and Stegun 17.3.11
+            return Complex.ONE.add(m.multiply(0.25)).multiply(MathUtils.SEMI_PI);
+        } else {
+            return CarlsonEllipticIntegral.rF(Complex.ZERO, Complex.ONE.subtract(m), Complex.ONE);
+        }
     }
 
     /** Get the complete elliptic integral of the first kind K(k).
@@ -141,8 +175,8 @@ public class LegendreEllipticIntegral {
      * it corresponds to the real quarter-period of Jacobi elliptic functions
      * </p>
      * <p>
-     * The algorithm for evaluating the functions is based on arithmetic-geometric
-     * mean. It is given in Abramowitz and Stegun, section 17.6.
+     * The algorithm for evaluating the functions is based on {@link CarlsonEllipticIntegral
+     * Carlson elliptic integrals}.
      * </p>
      * @param k elliptic modulus
      * @param <T> the type of the field elements
@@ -153,7 +187,15 @@ public class LegendreEllipticIntegral {
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigK(final FieldComplex<T> k) {
         final FieldComplex<T> zero = k.getField().getZero();
         final FieldComplex<T> one  = k.getField().getOne();
-        return CarlsonEllipticIntegral.rF(zero, one.subtract(k.multiply(k)), one);
+        final FieldComplex<T> m    = k.multiply(k);
+        if (m.norm() < 1.0e7 * one.ulp().getReal()) {
+
+            // first terms of infinite series in Abramowitz and Stegun 17.3.11
+            return one.add(m.multiply(0.25)).multiply(zero.getPi().multiply(0.5));
+
+        } else {
+            return CarlsonEllipticIntegral.rF(zero, one.subtract(m), one);
+        }
     }
 
     /** Get the complete elliptic integral of the first kind K'(k).
@@ -173,7 +215,8 @@ public class LegendreEllipticIntegral {
      * @see #bigK(double)
      */
     public static double bigKPrime(final double k) {
-        return CarlsonEllipticIntegral.rF(0, k * k, 1);
+        final double m = k * k;
+        return CarlsonEllipticIntegral.rF(0, m, 1);
     }
 
     /** Get the complete elliptic integral of the first kind K'(k).
@@ -185,8 +228,8 @@ public class LegendreEllipticIntegral {
      * it corresponds to the imaginary quarter-period of Jacobi elliptic functions
      * </p>
      * <p>
-     * The algorithm for evaluating the functions is based on arithmetic-geometric
-     * mean. It is given in Abramowitz and Stegun, section 17.6.
+     * The algorithm for evaluating the functions is based on {@link CarlsonEllipticIntegral
+     * Carlson elliptic integrals}.
      * </p>
      * @param k elliptic modulus
      * @param <T> the type of the field elements
@@ -196,7 +239,8 @@ public class LegendreEllipticIntegral {
     public static <T extends CalculusFieldElement<T>> T bigKPrime(final T k) {
         final T zero = k.getField().getZero();
         final T one  = k.getField().getOne();
-        return CarlsonEllipticIntegral.rF(zero, k.multiply(k), one);
+        final T m    = k.multiply(k);
+        return CarlsonEllipticIntegral.rF(zero, m, one);
     }
 
     /** Get the complete elliptic integral of the first kind K'(k).
@@ -208,15 +252,16 @@ public class LegendreEllipticIntegral {
      * it corresponds to the imaginary quarter-period of Jacobi elliptic functions
      * </p>
      * <p>
-     * The algorithm for evaluating the functions is based on arithmetic-geometric
-     * mean. It is given in Abramowitz and Stegun, section 17.6.
+     * The algorithm for evaluating the functions is based on {@link CarlsonEllipticIntegral
+     * Carlson elliptic integrals}.
      * </p>
      * @param k elliptic modulus
      * @return complete elliptic integral of the first kind K'(k)
      * @see #bigK(Complex)
      */
     public static Complex bigKPrime(final Complex k) {
-        return CarlsonEllipticIntegral.rF(Complex.ZERO, k.multiply(k), Complex.ONE);
+        final Complex m = k.multiply(k);
+        return CarlsonEllipticIntegral.rF(Complex.ZERO, m, Complex.ONE);
     }
 
     /** Get the complete elliptic integral of the first kind K'(k).
@@ -228,8 +273,8 @@ public class LegendreEllipticIntegral {
      * it corresponds to the imaginary quarter-period of Jacobi elliptic functions
      * </p>
      * <p>
-     * The algorithm for evaluating the functions is based on arithmetic-geometric
-     * mean. It is given in Abramowitz and Stegun, section 17.6.
+     * The algorithm for evaluating the functions is based on {@link CarlsonEllipticIntegral
+     * Carlson elliptic integrals}.
      * </p>
      * @param k elliptic modulus
      * @param <T> the type of the field elements
@@ -239,7 +284,8 @@ public class LegendreEllipticIntegral {
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigKPrime(final FieldComplex<T> k) {
         final FieldComplex<T> zero = k.getField().getZero();
         final FieldComplex<T> one  = k.getField().getOne();
-        return CarlsonEllipticIntegral.rF(zero, k.multiply(k), one);
+        final FieldComplex<T> m    = k.multiply(k);
+        return CarlsonEllipticIntegral.rF(zero, m, one);
     }
 
     /** Get the complete elliptic integral of the second kind E(k).
