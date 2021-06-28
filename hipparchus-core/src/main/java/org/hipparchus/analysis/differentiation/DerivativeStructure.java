@@ -988,6 +988,13 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
 
     }
 
+    /** {@inheritDoc}
+     */
+    @Override
+    public DerivativeStructure getPi() {
+        return factory.getDerivativeField().getPi();
+    }
+
     /**
      * Test for the equality of two derivative structures.
      * <p>

@@ -752,6 +752,14 @@ public class FieldTuple<T extends CalculusFieldElement<T>> implements CalculusFi
         return result;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldTuple<T> getPi() {
+        final FieldTuple<T> result = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
+        Arrays.fill(result.values, values[0].getPi());
+        return result;
+    }
+
     /** Field for {link FieldTuple} instances.
      * @param <T> the type of the field elements
      */

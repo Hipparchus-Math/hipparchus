@@ -53,6 +53,11 @@ import org.hipparchus.util.SinhCosh;
  */
 public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDerivative2> {
 
+    /** The constant value of π as a {@code UnivariateDerivative2}.
+     * @since 2.0
+     */
+    public static final UnivariateDerivative2 PI = new UnivariateDerivative2(FastMath.PI, 0.0, 0.0);
+
     /** Serializable UID. */
     private static final long serialVersionUID = 20200520L;
 
@@ -824,6 +829,12 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
                                                                       a2, b2.f2,
                                                                       a3, b3.f2,
                                                                       a4, b4.f2));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public UnivariateDerivative2 getPi() {
+        return PI;
     }
 
     /** Test for the equality of two univariate derivatives.

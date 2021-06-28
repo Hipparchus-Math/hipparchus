@@ -704,6 +704,11 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     }
 
     @Test
+    public void testGetPi() {
+        checkRelative(FastMath.PI, build(-10).getPi());
+    }
+
+    @Test
     public void testGetField() {
         checkRelative(1.0, build(-10).getField().getOne());
         checkRelative(0.0, build(-10).getField().getZero());

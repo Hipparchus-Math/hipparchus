@@ -752,6 +752,14 @@ public class Tuple implements CalculusFieldElement<Tuple> {
         return result;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Tuple getPi() {
+        final Tuple result = new Tuple(field, new double[values.length]);
+        Arrays.fill(result.values, FastMath.PI);
+        return result;
+    }
+
     /** Field for {link Tuple} instances.
      */
     private static class TupleField implements Field<Tuple> {

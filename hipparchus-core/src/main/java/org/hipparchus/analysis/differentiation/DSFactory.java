@@ -21,6 +21,7 @@ import java.io.Serializable;
 import org.hipparchus.Field;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.FastMath;
 
 /** Factory for {@link DerivativeStructure}.
  * <p>This class is a factory for {@link DerivativeStructure} instances.</p>
@@ -37,7 +38,7 @@ public class DSFactory implements Serializable {
     private final transient DSCompiler compiler;
 
     /** Field the {@link DerivativeStructure} instances belong to. */
-    private final transient Field<DerivativeStructure> derivativeField;
+    private final transient DSField derivativeField;
 
     /** Simple constructor.
      * @param parameters number of free parameters
@@ -45,13 +46,13 @@ public class DSFactory implements Serializable {
      */
     public DSFactory(final int parameters, final int order) {
         this.compiler        = DSCompiler.getCompiler(parameters, order);
-        this.derivativeField = new DSField(constant(0.0), constant(1.0));
+        this.derivativeField = new DSField(constant(0.0), constant(1.0), constant(FastMath.PI));
     }
 
     /** Get the {@link Field} the {@link DerivativeStructure} instances belong to.
      * @return {@link Field} the {@link DerivativeStructure} instances belong to
      */
-    public Field<DerivativeStructure> getDerivativeField() {
+    public DSField getDerivativeField() {
         return derivativeField;
     }
 
@@ -186,7 +187,7 @@ public class DSFactory implements Serializable {
 
     /** Field for {link DerivativeStructure} instances.
      */
-    private static class DSField implements Field<DerivativeStructure> {
+    public static class DSField implements Field<DerivativeStructure> {
 
         /** Constant function evaluating to 0.0. */
         private final DerivativeStructure zero;
@@ -194,13 +195,18 @@ public class DSFactory implements Serializable {
         /** Constant function evaluating to 1.0. */
         private final DerivativeStructure one;
 
+        /** Constant function evaluating to π. */
+        private final DerivativeStructure pi;
+
         /** Simple constructor.
          * @param zero constant function evaluating to 0.0
          * @param one constant function evaluating to 1.0
+         * @param pi constant function evaluating to π
          */
-        DSField(final DerivativeStructure zero, final DerivativeStructure one) {
+        DSField(final DerivativeStructure zero, final DerivativeStructure one, final DerivativeStructure pi) {
             this.zero = zero;
             this.one  = one;
+            this.pi   = pi;
         }
 
         /** {@inheritDoc} */
@@ -213,6 +219,17 @@ public class DSFactory implements Serializable {
         @Override
         public DerivativeStructure getOne() {
             return one;
+        }
+
+        /** Get the Archimedes constant π.
+         * <p>
+         * Archimedes constant is the ratio of a circle's circumference to its diameter.
+         * </p>
+         * @return Archimedes constant π
+         * @since 2.0
+         */
+        public DerivativeStructure getPi() {
+            return pi;
         }
 
         /** {@inheritDoc} */

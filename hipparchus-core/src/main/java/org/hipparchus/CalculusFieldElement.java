@@ -35,11 +35,14 @@ import org.hipparchus.util.FieldSinhCosh;
  */
 public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldElement<T> {
 
-    /** Degrees to radians conversion factor. */
-    double DEG_TO_RAD = FastMath.PI / 180.0;
-
-    /** Radians to degrees conversion factor. */
-    double RAD_TO_DEG = 180.0 / FastMath.PI;
+    /** Get the Archimedes constant π.
+     * <p>
+     * Archimedes constant is the ratio of a circle's circumference to its diameter.
+     * </p>
+     * @return Archimedes constant π
+     * @since 2.0
+     */
+    T getPi();
 
     /** Create an instance corresponding to a constant real value.
      * @param value constant real value
@@ -275,16 +278,12 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
     /** Convert radians to degrees, with error of less than 0.5 ULP
      *  @return instance converted into degrees
      */
-    default T toDegrees() {
-        return multiply(RAD_TO_DEG);
-    }
+    T toDegrees();
 
     /** Convert degrees to radians, with error of less than 0.5 ULP
      *  @return instance converted into radians
      */
-    default T toRadians() {
-        return multiply(DEG_TO_RAD);
-    }
+    T toRadians();
 
     /**
      * Compute a linear combination.

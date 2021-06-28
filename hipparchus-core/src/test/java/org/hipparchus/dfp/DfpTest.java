@@ -1809,6 +1809,12 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
     }
 
     @Test
+    public void testPi() {
+        Assert.assertEquals("3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117",
+                            new DfpField(100).newDfp(1.0).getPi().toString());
+    }
+
+    @Test
     public void testEquals() {
         DfpField f10A = new DfpField(10);
         DfpField f10B = new DfpField(10);

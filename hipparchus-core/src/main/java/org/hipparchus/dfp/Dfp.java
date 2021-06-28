@@ -25,6 +25,7 @@ package org.hipparchus.dfp;
 import java.util.Arrays;
 
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.analysis.differentiation.Gradient;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
@@ -3227,6 +3228,12 @@ public class Dfp implements CalculusFieldElement<Dfp> {
         // back to normal accuracy
         return resultExt.newInstance(b1.field, DfpField.RoundingMode.ROUND_HALF_EVEN);
 
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Dfp getPi() {
+        return field.getPi();
     }
 
 }
