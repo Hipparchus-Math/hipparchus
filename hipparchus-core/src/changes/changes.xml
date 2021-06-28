@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issue/142">
+        Fixed ulp() implementation for Dfp.
+      </action>
       <action dev="luc" type="add" issue="issue/141">
         Added a way to have a more accurate value of π for fields implementations that require it.
       </action>
