@@ -25,7 +25,6 @@ package org.hipparchus.dfp;
 import java.util.Arrays;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.analysis.differentiation.Gradient;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
@@ -2792,8 +2791,8 @@ public class Dfp implements CalculusFieldElement<Dfp> {
     @Override
     public Dfp ulp() {
         final Dfp result = new Dfp(field);
-        result.mant[0] = 1;
-        result.exp     = exp;
+        result.mant[result.mant.length - 1] = 1;
+        result.exp = exp - (result.mant.length - 1);
         return result;
     }
 

@@ -1864,6 +1864,21 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
     }
 
     @Test
+    public void testUlpdDfpA() {
+        Assert.assertEquals(1.0e-36, new DfpField(40).getOne().ulp().getReal(), 1.0e-51);
+        Assert.assertEquals(1.0e-40, new DfpField(41).getOne().ulp().getReal(), 1.0e-55);
+    }
+
+    @Test
+    public void testUlpdDfpB() {
+        DfpField field = new DfpField(41);
+        Dfp one = field.getOne();
+        Dfp ulp = one.ulp();
+        Assert.assertTrue(one.add(ulp).greaterThan(one));
+        Assert.assertFalse(one.add(ulp.divide(2)).greaterThan(one));
+    }
+
+    @Test
     public void testConvertToLowerAccuracy() {
         DfpField field16 = new DfpField(16);
         DfpField field24 = new DfpField(24);
