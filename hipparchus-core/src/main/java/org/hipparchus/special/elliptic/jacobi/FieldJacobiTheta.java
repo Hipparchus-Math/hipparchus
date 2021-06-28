@@ -17,8 +17,6 @@
 package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 
@@ -112,14 +110,15 @@ public class FieldJacobiTheta<T extends CalculusFieldElement<T>> {
 
             if (qNNp1.getReal() <= eps) {
                 // we have reach convergence
-                return new FieldTheta<>(sum1.multiply(qFourth.multiply(2)), sum2.multiply(qFourth.multiply(2)),
-                                        sum3.multiply(2).add(1),            sum4.multiply(2).add(1));
+                break;
             }
 
         }
 
-        // we were not able to compute the value
-        throw new MathIllegalStateException(LocalizedCoreFormats.CONVERGENCE_FAILED);
+        return new FieldTheta<>(sum1.multiply(qFourth.multiply(2)),
+                                sum2.multiply(qFourth.multiply(2)),
+                                sum3.multiply(2).add(1),
+                                sum4.multiply(2).add(1));
 
     }
 

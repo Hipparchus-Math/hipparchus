@@ -18,8 +18,6 @@ package org.hipparchus.special.elliptic.legendre;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -34,12 +32,7 @@ public class FieldLegendreEllipticIntegralTest {
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNoConvergence(final Field<T> field) {
-        try {
-            LegendreEllipticIntegral.bigK(field.getZero().newInstance(Double.NaN));
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
-        }
+        Assert.assertTrue(LegendreEllipticIntegral.bigK(field.getZero().newInstance(Double.NaN)).isNaN());
     }
 
     @Test

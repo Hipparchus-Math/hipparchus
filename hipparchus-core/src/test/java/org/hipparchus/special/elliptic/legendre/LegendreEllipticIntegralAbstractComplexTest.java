@@ -17,8 +17,6 @@
 package org.hipparchus.special.elliptic.legendre;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.junit.Assert;
@@ -44,12 +42,7 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
 
     @Test
     public void testNoConvergence() {
-        try {
-            LegendreEllipticIntegral.bigK(buildComplex(Double.NaN));
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
-        }
+        Assert.assertTrue(LegendreEllipticIntegral.bigK(buildComplex(Double.NaN)).isNaN());
     }
 
     @Test

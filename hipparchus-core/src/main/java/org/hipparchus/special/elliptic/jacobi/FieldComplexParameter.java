@@ -81,7 +81,7 @@ class FieldComplexParameter<T extends CalculusFieldElement<T>> extends FieldJaco
         // prepare underlying Jacobi θ functions
         this.jacobiTheta = new FieldJacobiTheta<>(q);
         this.t0          = jacobiTheta.values(m.getField().getZero());
-        this.scaling     = bigK.reciprocal().multiply(MathUtils.SEMI_PI);
+        this.scaling     = bigK.reciprocal().multiply(m.getPi().multiply(0.5));
 
     }
 

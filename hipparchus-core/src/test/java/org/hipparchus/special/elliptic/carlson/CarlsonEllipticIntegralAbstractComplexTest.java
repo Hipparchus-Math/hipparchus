@@ -17,8 +17,6 @@
 package org.hipparchus.special.elliptic.carlson;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937a;
 import org.hipparchus.random.Well19937c;
@@ -42,12 +40,7 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
 
     @Test
     public void testNoConvergenceRf() {
-        try {
-            rF(buildComplex(1), buildComplex(2), buildComplex(Double.NaN));
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
-        }
+        Assert.assertTrue(rF(buildComplex(1), buildComplex(2), buildComplex(Double.NaN)).isNaN());
     }
 
     @Test
@@ -108,12 +101,7 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
 
     @Test
     public void testNoConvergenceRc() {
-        try {
-            rC(buildComplex(1), buildComplex(Double.NaN));
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
-        }
+      Assert.assertTrue(rC(buildComplex(1), buildComplex(Double.NaN)).isNaN());
     }
 
     @Test
@@ -169,12 +157,7 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
 
     @Test
     public void testNoConvergenceRj() {
-        try {
-            rJ(buildComplex(1), buildComplex(1), buildComplex(1), buildComplex(Double.NaN));
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
-        }
+        Assert.assertTrue(rJ(buildComplex(1), buildComplex(1), buildComplex(1), buildComplex(Double.NaN)).isNaN());
     }
 
     @Test
@@ -233,12 +216,7 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
 
     @Test
     public void testNoConvergenceRd() {
-        try {
-            rD(buildComplex(1), buildComplex(1), buildComplex(Double.NaN));
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
-        }
+       Assert.assertTrue(rD(buildComplex(1), buildComplex(1), buildComplex(Double.NaN)).isNaN());
     }
 
     @Test

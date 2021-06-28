@@ -16,16 +16,11 @@
  */
 package org.hipparchus.special.elliptic.jacobi;
 
-import java.io.IOException;
-
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.analysis.differentiation.UnivariateDerivative1;
-import org.hipparchus.complex.Complex;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -105,7 +100,7 @@ public class FieldJacobiEllipticTest {
         Dfp sn        = je.valuesN(field.newDfp("1.3")).sn();
         // this value was computed using Wolfram Alpha
         Dfp reference = field.newDfp("0.8929235150418389265984488063926925504375953835259703680383");
-        Assert.assertTrue(sn.subtract(reference).abs().getReal() < 3.0e-46);
+        Assert.assertTrue(sn.subtract(reference).abs().getReal() < 5.0e-58);
     }
 
     @Test
@@ -173,12 +168,7 @@ public class FieldJacobiEllipticTest {
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNoConvergence(final Field<T> field) {
-        try {
-            build(field, Double.NaN).valuesS(0.0);
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
-        }
+        Assert.assertTrue(build(field, Double.NaN).valuesS(0.0).cs().isNaN());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNegativeParameter(final Field<T> field) {

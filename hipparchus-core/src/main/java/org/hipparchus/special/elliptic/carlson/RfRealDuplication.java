@@ -18,8 +18,6 @@ package org.hipparchus.special.elliptic.carlson;
 
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.FieldComplex;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /** Duplication algorithm for Carlson R<sub>F</sub> elliptic integral.
@@ -156,13 +154,12 @@ class RfRealDuplication extends RealDuplication {
             // convergence (by the inequality of arithmetic and geometric means, this is non-negative)
             if (FastMath.abs(xM - yM) <= 4 * FastMath.ulp(xM)) {
                 // convergence has been reached
-                return FastMath.PI / (xM + yM);
+                break;
             }
 
         }
 
-        // we were not able to compute the value
-        throw new MathIllegalStateException(LocalizedCoreFormats.CONVERGENCE_FAILED);
+        return FastMath.PI / (xM + yM);
 
     }
 

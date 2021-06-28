@@ -17,8 +17,6 @@
 package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.complex.Complex;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -29,12 +27,7 @@ public class JacobiThetaTest {
 
     @Test
     public void testNoConvergence() {
-        try {
-            new JacobiTheta(Double.NaN).values(Complex.ZERO);
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
-        }
+        Assert.assertTrue(new JacobiTheta(Double.NaN).values(Complex.ZERO).theta1().isNaN());
     }
 
     @Test

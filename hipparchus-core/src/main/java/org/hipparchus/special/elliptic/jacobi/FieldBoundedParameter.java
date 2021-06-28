@@ -48,8 +48,8 @@ class FieldBoundedParameter<T extends CalculusFieldElement<T>> extends FieldJaco
 
         // prepare underlying Jacobi θ functions
         this.jacobiTheta = new FieldJacobiTheta<>(q);
-        this.t0      = jacobiTheta.values(m.getField().getZero());
-        this.scaling     = LegendreEllipticIntegral.bigK(k).reciprocal().multiply(MathUtils.SEMI_PI);
+        this.t0          = jacobiTheta.values(m.getField().getZero());
+        this.scaling     = LegendreEllipticIntegral.bigK(k).reciprocal().multiply(m.getPi().multiply(0.5));
 
     }
 

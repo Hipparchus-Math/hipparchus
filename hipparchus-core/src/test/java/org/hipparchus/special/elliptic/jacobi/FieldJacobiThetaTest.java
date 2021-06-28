@@ -18,8 +18,6 @@ package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
@@ -35,12 +33,7 @@ public class FieldJacobiThetaTest {
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNoConvergence(Field<T> field) {
-        try {
-            new FieldJacobiTheta<>(field.getZero().newInstance(Double.NaN)).values(field.getZero());
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
-        }
+        Assert.assertTrue(new FieldJacobiTheta<>(field.getZero().newInstance(Double.NaN)).values(field.getZero()).theta1().isNaN());
     }
 
     @Test

@@ -16,8 +16,6 @@
  */
 package org.hipparchus.special.elliptic.jacobi;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -54,12 +52,7 @@ public class JacobiEllipticTest {
 
     @Test
     public void testNoConvergence() {
-        try {
-            JacobiEllipticBuilder.build(Double.NaN).valuesS(0.0);
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
-        }
+        Assert.assertTrue(Double.isNaN(JacobiEllipticBuilder.build(Double.NaN).valuesS(0.0).cs()));
     }
 
     @Test

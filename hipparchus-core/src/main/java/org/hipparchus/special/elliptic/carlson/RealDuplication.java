@@ -16,8 +16,6 @@
  */
 package org.hipparchus.special.elliptic.carlson;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /** Duplication algorithm for Carlson symmetric forms.
@@ -114,7 +112,8 @@ abstract class RealDuplication {
         for (int m = 0; m < M_MAX; ++m) {
 
             if (m > 0 && q < fourM * FastMath.abs(aM)) {
-                return evaluate(initialV, initialA, aM, fourM);
+                // convergence reached
+                break;
             }
 
             // apply duplication once more
@@ -134,8 +133,7 @@ abstract class RealDuplication {
 
         }
 
-        // we were not able to compute the value
-        throw new MathIllegalStateException(LocalizedCoreFormats.CONVERGENCE_FAILED);
+        return evaluate(initialV, initialA, aM, fourM);
 
     }
 

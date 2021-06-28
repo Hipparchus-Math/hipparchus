@@ -16,8 +16,6 @@
  */
 package org.hipparchus.special.elliptic.carlson;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937a;
 import org.hipparchus.random.Well19937c;
@@ -34,12 +32,7 @@ public class CarlsonEllipticIntegralFieldTest {
 
     @Test
     public void testNoConvergenceRf() {
-        try {
-            CarlsonEllipticIntegral.rF(build(1), build(2), build(Double.NaN));
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
-        }
+        Assert.assertTrue(CarlsonEllipticIntegral.rF(build(1), build(2), build(Double.NaN)).isNaN());
     }
 
     @Test
@@ -79,12 +72,7 @@ public class CarlsonEllipticIntegralFieldTest {
 
     @Test
     public void testNoConvergenceRc() {
-        try {
-            CarlsonEllipticIntegral.rC(build(1), build(Double.NaN));
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
-        }
+        Assert.assertTrue(CarlsonEllipticIntegral.rC(build(1), build(Double.NaN)).isNaN());
     }
 
     @Test
@@ -129,12 +117,7 @@ public class CarlsonEllipticIntegralFieldTest {
 
     @Test
     public void testNoConvergenceRj() {
-        try {
-            CarlsonEllipticIntegral.rJ(1, 1, 1, Double.NaN);
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
-        }
+        Assert.assertTrue(CarlsonEllipticIntegral.rJ(build(1), build(1), build(1), build(Double.NaN)).isNaN());
     }
 
     @Test
@@ -169,12 +152,7 @@ public class CarlsonEllipticIntegralFieldTest {
 
     @Test
     public void testNoConvergenceRd() {
-        try {
-            CarlsonEllipticIntegral.rD(1, 1, Double.NaN);
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.CONVERGENCE_FAILED, mise.getSpecifier());
-        }
+        Assert.assertTrue(CarlsonEllipticIntegral.rD(build(1), build(1), build(Double.NaN)).isNaN());
     }
 
     @Test
