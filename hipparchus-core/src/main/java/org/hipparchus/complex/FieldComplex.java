@@ -716,6 +716,22 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
         return createComplex(real.multiply(factor), imaginary.multiply(factor));
     }
 
+    /** Compute this * i.
+     * @return this * i
+     * @since 2.0
+     */
+    public FieldComplex<T> multiplyPlusI() {
+        return createComplex(imaginary.negate(), real);
+    }
+
+    /** Compute this *- -i.
+     * @return this * i
+     * @since 2.0
+     */
+    public FieldComplex<T> multiplyMinusI() {
+        return createComplex(imaginary, real.negate());
+    }
+
     /**
      * Returns a {@code Complex} whose value is {@code (-this)}.
      * Returns {@code NaN} if either real or imaginary
@@ -810,7 +826,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
             return getNaN(getPartsField());
         }
 
-        return this.add(this.sqrt1z().multIp()).log().multIm();
+        return this.add(this.sqrt1z().multiplyPlusI()).log().multiplyMinusI();
     }
 
     /**
@@ -832,7 +848,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
             return getNaN(getPartsField());
         }
 
-        return sqrt1z().add(this.multIp()).log().multIm();
+        return sqrt1z().add(this.multiplyPlusI()).log().multiplyMinusI();
     }
 
     /**
@@ -865,14 +881,14 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
             // branch cut on imaginary axis
             final T zero = getPartsField().getZero();
             final FieldComplex<T> tmp = createComplex(one.add(imaginary).divide(one.subtract(imaginary)), zero).
-                                        log().multIp().multiply(0.5);
+                                        log().multiplyPlusI().multiply(0.5);
             return createComplex(FastMath.copySign(tmp.real, real), tmp.imaginary);
 
         } else {
             // regular formula
             final FieldComplex<T> n = createComplex(one.add(imaginary), real.negate());
             final FieldComplex<T> d = createComplex(one.subtract(imaginary),  real);
-            return n.divide(d).log().multIp().multiply(0.5);
+            return n.divide(d).log().multiplyPlusI().multiply(0.5);
         }
 
     }
@@ -1418,20 +1434,6 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
             return createComplex(FastMath.abs(imaginary).divide(t.multiply(2)),
                                  FastMath.copySign(t, imaginary));
         }
-    }
-
-    /** Compute this * i.
-     * @return this * i
-     */
-    private FieldComplex<T> multIp() {
-        return createComplex(imaginary.negate(), real);
-    }
-
-    /** Compute this *- -i.
-     * @return this * i
-     */
-    private FieldComplex<T> multIm() {
-        return createComplex(imaginary, real.negate());
     }
 
     /**

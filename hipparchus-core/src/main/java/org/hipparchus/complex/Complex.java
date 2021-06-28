@@ -631,6 +631,22 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
         return createComplex(real * factor, imaginary * factor);
     }
 
+    /** Compute this * i.
+     * @return this * i
+     * @since 2.0
+     */
+    public Complex multiplyPlusI() {
+        return createComplex(-imaginary, real);
+    }
+
+    /** Compute this *- -i.
+     * @return this * i
+     * @since 2.0
+     */
+    public Complex multiplyMinusI() {
+        return createComplex(imaginary, -real);
+    }
+
     /**
      * Returns a {@code Complex} whose value is {@code (-this)}.
      * Returns {@code NaN} if either real or imaginary
@@ -710,7 +726,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return NaN;
         }
 
-        return this.add(this.sqrt1z().multIp()).log().multIm();
+        return this.add(this.sqrt1z().multiplyPlusI()).log().multiplyMinusI();
     }
 
     /**
@@ -732,7 +748,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return NaN;
         }
 
-        return sqrt1z().add(this.multIp()).log().multIm();
+        return sqrt1z().add(this.multiplyPlusI()).log().multiplyMinusI();
     }
 
     /**
@@ -762,14 +778,14 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             }
 
             // branch cut on imaginary axis
-            final Complex tmp = createComplex((1 + imaginary) / (1 - imaginary), 0.0).log().multIp().multiply(0.5);
+            final Complex tmp = createComplex((1 + imaginary) / (1 - imaginary), 0.0).log().multiplyPlusI().multiply(0.5);
             return createComplex(FastMath.copySign(tmp.real, real), tmp.imaginary);
 
         } else {
             // regular formula
             final Complex n = createComplex(1 + imaginary, -real);
             final Complex d = createComplex(1 - imaginary,  real);
-            return n.divide(d).log().multIp().multiply(0.5);
+            return n.divide(d).log().multiplyPlusI().multiply(0.5);
         }
 
     }
@@ -1295,22 +1311,6 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
             return createComplex(FastMath.abs(imaginary) / (2.0 * t),
                                  FastMath.copySign(t, imaginary));
         }
-    }
-
-    /** Compute this * i.
-     * @return this * i
-     * @since 2.0
-     */
-    private Complex multIp() {
-        return createComplex(-imaginary, real);
-    }
-
-    /** Compute this *- -i.
-     * @return this * i
-     * @since 2.0
-     */
-    private Complex multIm() {
-        return createComplex(imaginary, -real);
     }
 
     /**
