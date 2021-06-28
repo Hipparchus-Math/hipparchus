@@ -827,7 +827,7 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
     public FieldDerivativeStructure<T> toDegrees() {
         final FieldDerivativeStructure<T> ds = factory.build();
         for (int i = 0; i < ds.data.length; ++i) {
-            ds.data[i] = data[i].multiply(CalculusFieldElement.RAD_TO_DEG);
+            ds.data[i] = data[i].toDegrees();
         }
         return ds;
     }
@@ -837,7 +837,7 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
     public FieldDerivativeStructure<T> toRadians() {
         final FieldDerivativeStructure<T> ds = factory.build();
         for (int i = 0; i < ds.data.length; ++i) {
-            ds.data[i] = data[i].multiply(CalculusFieldElement.DEG_TO_RAD);
+            ds.data[i] = data[i].toRadians();
         }
         return ds;
     }
@@ -1197,6 +1197,13 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
 
         return ds;
 
+    }
+
+    /** {@inheritDoc}
+     */
+    @Override
+    public FieldDerivativeStructure<T> getPi() {
+        return factory.getDerivativeField().getPi();
     }
 
 }

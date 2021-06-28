@@ -37,7 +37,7 @@ public class FDSFactory<T extends CalculusFieldElement<T>> {
     private final Field<T> valueField;
 
     /** Field the {@link FieldDerivativeStructure} instances belong to. */
-    private final Field<FieldDerivativeStructure<T>> derivativeField;
+    private final DerivativeField<T> derivativeField;
 
     /** Simple constructor.
      * @param valueField field for the function parameters and value
@@ -48,7 +48,8 @@ public class FDSFactory<T extends CalculusFieldElement<T>> {
         this.compiler        = DSCompiler.getCompiler(parameters, order);
         this.valueField      = valueField;
         this.derivativeField = new DerivativeField<>(constant(valueField.getZero()),
-                                                     constant(valueField.getOne()));
+                                                     constant(valueField.getOne()),
+                                                     constant(valueField.getZero().getPi()));
     }
 
     /** Get the {@link Field} the value and parameters of the function belongs to.
@@ -61,7 +62,7 @@ public class FDSFactory<T extends CalculusFieldElement<T>> {
     /** Get the {@link Field} the {@link FieldDerivativeStructure} instances belong to.
      * @return {@link Field} the {@link FieldDerivativeStructure} instances belong to
      */
-    public Field<FieldDerivativeStructure<T>> getDerivativeField() {
+    public DerivativeField<T> getDerivativeField() {
         return derivativeField;
     }
 
@@ -231,7 +232,7 @@ public class FDSFactory<T extends CalculusFieldElement<T>> {
     /** Field for {link FieldDerivativeStructure} instances.
      * @param <T> the type of the function parameters and value
      */
-    private static class DerivativeField<T extends CalculusFieldElement<T>> implements Field<FieldDerivativeStructure<T>> {
+    public static class DerivativeField<T extends CalculusFieldElement<T>> implements Field<FieldDerivativeStructure<T>> {
 
         /** Constant function evaluating to 0.0. */
         private final FieldDerivativeStructure<T> zero;
@@ -239,14 +240,19 @@ public class FDSFactory<T extends CalculusFieldElement<T>> {
         /** Constant function evaluating to 1.0. */
         private final FieldDerivativeStructure<T> one;
 
+        /** Constant function evaluating to π. */
+        private final FieldDerivativeStructure<T> pi;
+
         /** Simple constructor.
          * @param zero constant function evaluating to 0.0
          * @param one constant function evaluating to 1.0
          */
         DerivativeField(final FieldDerivativeStructure<T> zero,
-                        final FieldDerivativeStructure<T> one) {
+                        final FieldDerivativeStructure<T> one,
+                        final FieldDerivativeStructure<T> pi) {
             this.zero = zero;
             this.one  = one;
+            this.pi   = pi;
         }
 
         /** {@inheritDoc} */
@@ -259,6 +265,17 @@ public class FDSFactory<T extends CalculusFieldElement<T>> {
         @Override
         public FieldDerivativeStructure<T> getOne() {
             return one;
+        }
+
+        /** Get the Archimedes constant π.
+         * <p>
+         * Archimedes constant is the ratio of a circle's circumference to its diameter.
+         * </p>
+         * @return Archimedes constant π
+         * @since 2.0
+         */
+        public FieldDerivativeStructure<T> getPi() {
+            return pi;
         }
 
         /** {@inheritDoc} */

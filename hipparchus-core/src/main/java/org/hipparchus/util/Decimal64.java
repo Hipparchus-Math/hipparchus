@@ -38,6 +38,9 @@ public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>
     /** The constant value of {@code 1d} as a {@code Decimal64}. */
     public static final Decimal64 ONE;
 
+    /** The constant value of π as a {@code Decimal64}. */
+    public static final Decimal64 PI;
+
     /**
      * The constant value of {@link Double#NEGATIVE_INFINITY} as a
      * {@code Decimal64}.
@@ -58,7 +61,8 @@ public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>
 
     static {
         ZERO = new Decimal64(0d);
-        ONE = new Decimal64(1d);
+        ONE  = new Decimal64(1d);
+        PI   = new Decimal64(FastMath.PI);
         NEGATIVE_INFINITY = new Decimal64(Double.NEGATIVE_INFINITY);
         POSITIVE_INFINITY = new Decimal64(Double.POSITIVE_INFINITY);
         NAN = new Decimal64(Double.NaN);
@@ -694,6 +698,12 @@ public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>
                                                           a2, b2.value,
                                                           a3, b3.value,
                                                           a4, b4.value));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Decimal64 getPi() {
+        return PI;
     }
 
 }

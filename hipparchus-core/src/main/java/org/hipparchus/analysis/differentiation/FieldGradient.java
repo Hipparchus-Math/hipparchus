@@ -1083,6 +1083,12 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
         return result;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldGradient<T> getPi() {
+        return new FieldGradient<>(getValueField().getZero().getPi(), getFreeParameters());
+    }
+
     /** Test for the equality of two univariate derivatives.
      * <p>
      * univariate derivatives are considered equal if they have the same derivatives.
