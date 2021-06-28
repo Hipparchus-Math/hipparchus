@@ -20,7 +20,6 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.complex.FieldComplex;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.MathUtils;
 
 /** Algorithm for computing the principal Jacobi functions for complex parameter m.
  * @param <T> the type of the field elements

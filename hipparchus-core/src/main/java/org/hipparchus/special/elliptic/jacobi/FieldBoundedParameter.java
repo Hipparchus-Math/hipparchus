@@ -18,7 +18,6 @@ package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
-import org.hipparchus.util.MathUtils;
 
 /** Algorithm for computing the principal Jacobi functions for parameter m in [0; 1].
  * @param <T> the type of the field elements
