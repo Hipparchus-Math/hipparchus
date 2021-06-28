@@ -76,11 +76,7 @@ public class LegendreEllipticIntegral {
             final T m16 = k.multiply(k).multiply(0.0625);
             return m16.multiply(m16.multiply(8).add(1));
         } else {
-            // recompute π/4 using Machin's formula, to get full accuracy
-            // if the field is an extended precision field like Dfp
-            final T piO4 = FastMath.atan(one.divide(5)).multiply(4).
-                           subtract(FastMath.atan(one.divide(239)));
-            return FastMath.exp(bigKPrime(k).divide(bigK(k)).multiply(piO4.multiply(-4)));
+            return FastMath.exp(bigKPrime(k).divide(bigK(k)).multiply(one.getPi().negate()));
         }
     }
 
@@ -135,13 +131,8 @@ public class LegendreEllipticIntegral {
         final T m    = k.multiply(k);
         if (m.norm() < 1.0e7 * one.ulp().getReal()) {
 
-            // recompute π/4 using Machin's formula, to get full accuracy
-            // if the field is an extended precision field like Dfp
-            final T piO4 = FastMath.atan(one.divide(5)).multiply(4).
-                           subtract(FastMath.atan(one.divide(239)));
-
             // first terms of infinite series in Abramowitz and Stegun 17.3.11
-            return one.add(m.multiply(0.25)).multiply(piO4.add(piO4));
+            return one.add(m.multiply(0.25)).multiply(zero.getPi().multiply(0.5));
 
         } else {
             return CarlsonEllipticIntegral.rF(zero, one.subtract(m), one);
@@ -199,13 +190,8 @@ public class LegendreEllipticIntegral {
         final FieldComplex<T> m    = k.multiply(k);
         if (m.norm() < 1.0e7 * one.ulp().getReal()) {
 
-            // recompute π/4 using Machin's formula, to get full accuracy
-            // if the field is an extended precision field like Dfp
-            final T piO4 = FastMath.atan(one.getRealPart().divide(5)).multiply(4).
-                           subtract(FastMath.atan(one.getRealPart().divide(239)));
-
             // first terms of infinite series in Abramowitz and Stegun 17.3.11
-            return one.add(m.multiply(0.25)).multiply(piO4.add(piO4));
+            return one.add(m.multiply(0.25)).multiply(zero.getPi().multiply(0.5));
 
         } else {
             return CarlsonEllipticIntegral.rF(zero, one.subtract(m), one);
