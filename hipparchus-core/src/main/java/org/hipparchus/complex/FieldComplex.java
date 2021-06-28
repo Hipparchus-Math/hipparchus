@@ -155,6 +155,14 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
         return new FieldComplex<>(field.getZero(), field.getZero());
     }
 
+    /** Get a complex number representing "π + 0.0i".
+     * @return complex number representing "π + 0.0i
+     * @param <T> the type of the field elements
+     */
+    public static <T extends CalculusFieldElement<T>> FieldComplex<T> getPi(final Field<T> field) {
+        return new FieldComplex<>(field.getZero().getPi(), field.getZero());
+    }
+
     /**
      * Return the absolute value of this complex number.
      * Returns {@code NaN} if either real or imaginary part is {@code NaN}
@@ -1948,6 +1956,24 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
     @Override
     public FieldComplex<T> copySign(double r) {
         return createComplex(FastMath.copySign(getRealPart(), r), FastMath.copySign(getImaginaryPart(), r));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FieldComplex<T> toDegrees() {
+        return createComplex(FastMath.toDegrees(getRealPart()), FastMath.toDegrees(getImaginaryPart()));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FieldComplex<T> toRadians() {
+        return createComplex(FastMath.toRadians(getRealPart()), FastMath.toRadians(getImaginaryPart()));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FieldComplex<T> getPi() {
+        return getPi(getPartsField());
     }
 
 }

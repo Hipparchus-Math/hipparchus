@@ -966,6 +966,12 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
 
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public SparseGradient getPi() {
+        return new SparseGradient(FastMath.PI, null);
+    }
+
     /**
      * Test for the equality of two sparse gradients.
      * <p>

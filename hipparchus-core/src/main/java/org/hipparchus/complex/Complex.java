@@ -83,6 +83,8 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
     public static final Complex MINUS_ONE = new Complex(-1.0, 0.0);
     /** A complex number representing "0.0 + 0.0i". */
     public static final Complex ZERO = new Complex(0.0, 0.0);
+    /** A complex number representing "π + 0.0i". */
+    public static final Complex PI   = new Complex(FastMath.PI, 0.0);
 
     /** A real number representing log(10). */
     private static final double LOG10 = 2.302585092994045684;
@@ -1759,6 +1761,12 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
                                  new Complex[] { b1, b2, b3, b4 });
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Complex getPi() {
+        return PI;
+    }
+
     /** {@inheritDoc}
      * @since 1.7
      */
@@ -1841,6 +1849,18 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
     @Override
     public Complex copySign(double r) {
         return createComplex(FastMath.copySign(getRealPart(), r), FastMath.copySign(getImaginaryPart(), r));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Complex toDegrees() {
+        return createComplex(FastMath.toDegrees(getRealPart()), FastMath.toDegrees(getImaginaryPart()));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Complex toRadians() {
+        return createComplex(FastMath.toRadians(getRealPart()), FastMath.toRadians(getImaginaryPart()));
     }
 
 }

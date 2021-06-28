@@ -905,6 +905,12 @@ public class Gradient implements Derivative<Gradient>, CalculusFieldElement<Grad
         return result;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Gradient getPi() {
+        return new Gradient(FastMath.PI, getFreeParameters());
+    }
+
     /** Test for the equality of two univariate derivatives.
      * <p>
      * univariate derivatives are considered equal if they have the same derivatives.

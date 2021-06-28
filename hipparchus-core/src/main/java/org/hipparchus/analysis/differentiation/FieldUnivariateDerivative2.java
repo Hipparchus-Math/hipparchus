@@ -1044,6 +1044,13 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
                                                                         a4, b4.f2));
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldUnivariateDerivative2<T> getPi() {
+        final T zero = getValueField().getZero();
+        return new FieldUnivariateDerivative2<>(zero.getPi(), zero, zero);
+    }
+
     /** Test for the equality of two univariate derivatives.
      * <p>
      * univariate derivatives are considered equal if they have the same derivatives.
