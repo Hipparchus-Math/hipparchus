@@ -44,7 +44,7 @@ public abstract class DomainColoring {
         this.saturation = saturation;
     }
 
-    /** Base (continuous) hue.
+    /** Continuous hue.
      * @param z complex value
      * @return continuous hue
      */

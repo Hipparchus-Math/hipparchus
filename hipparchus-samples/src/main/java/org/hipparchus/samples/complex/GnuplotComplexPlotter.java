@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.hipparchus.complex.Complex;
@@ -35,8 +37,8 @@ public class GnuplotComplexPlotter {
     /** Jacobi functions computer. */
     private FieldJacobiElliptic<Complex> jacobi;
 
-    /** Function to plot. */
-    private Predefined f;
+    /** Functions to plot. */
+    private List<Predefined> functions;
 
     /** Output directory (display to terminal if null). */
     private File output;
@@ -66,16 +68,16 @@ public class GnuplotComplexPlotter {
      */
     private GnuplotComplexPlotter() {
         final Complex k = new Complex(0.8);
-        jacobi   = JacobiEllipticBuilder.build(k.multiply(k));
-        f        = Predefined.sn;
-        output   = null;
-        width    = 800;
-        height   = 800;
-        coloring = new SawToothPhaseModuleValue(1.0, 0.7, 1.0, 15);
-        xMin     = -7;
-        xMax     = +7;
-        yMin     = -7;
-        yMax     = +7;
+        jacobi    = JacobiEllipticBuilder.build(k.multiply(k));
+        functions = new ArrayList<>();
+        output    = null;
+        width     = 800;
+        height    = 800;
+        coloring  = new SawToothPhaseModuleValue(1.0, 0.7, 1.0, 15);
+        xMin      = -7;
+        xMax      = +7;
+        yMin      = -7;
+        yMax      = +7;
     }
 
     /** Main program.
@@ -137,7 +139,7 @@ public class GnuplotComplexPlotter {
                     }
                     case "--function" :
                         try {
-                            plotter.f = Predefined.valueOf(args[++i]);
+                            plotter.functions.add(Predefined.valueOf(args[++i]));
                         } catch (IllegalArgumentException iae) {
                             System.err.format(Locale.US, "unknown function %s, known functions:%n", args[i]);
                             for (final Predefined predefined : Predefined.values()) {
@@ -150,6 +152,9 @@ public class GnuplotComplexPlotter {
                     default :
                         usage(1);
                 }
+            }
+            if (plotter.functions.isEmpty()) {
+                usage(1);
             }
 
             plotter.plot();
@@ -175,7 +180,7 @@ public class GnuplotComplexPlotter {
                            " [--color {classical|enhanced-module|enhanced-phase-module}]" +
                            " [--xmin xmin] [--xmax xmax] [--ymin ymin] [--ymax ymax]" +
                            " [--k kRe kIm]" +
-                           " --function {sn|cn|dn|cs|...|sin|cos|...}");
+                           " --function {id|sn|cn|dn|cs|...|sin|cos|...} [--function ...]");
         System.exit(status);
         
     }
@@ -184,47 +189,49 @@ public class GnuplotComplexPlotter {
      * @throws IOException if gnuplot process cannot be run
      */
     public void plot() throws IOException {
-        final ProcessBuilder pb = new ProcessBuilder("gnuplot").
-                                  redirectOutput(ProcessBuilder.Redirect.INHERIT).
-                                  redirectError(ProcessBuilder.Redirect.INHERIT);
-        pb.environment().remove("XDG_SESSION_TYPE");
-        final Process gnuplot = pb.start();
-        try (PrintStream out = new PrintStream(gnuplot.getOutputStream(), false, StandardCharsets.UTF_8.name())) {
-            if (output == null) {
-                out.format(Locale.US, "set terminal qt size %d, %d title 'complex plotter'%n", width, height);
-            } else {
-                out.format(Locale.US, "set terminal pngcairo size %d, %d%n", width, height);
-                out.format(Locale.US, "set output '%s'%n", new File(output, f.name() + ".png").getAbsolutePath());
-            }
-            out.format(Locale.US, "set view map scale 1%n");
-            out.format(Locale.US, "set xrange [%f : %f]%n", xMin, xMax);
-            out.format(Locale.US, "set yrange [%f : %f]%n", yMin, yMax);
-            out.format(Locale.US, "set xlabel 'Re(z)'%n");
-            out.format(Locale.US, "set ylabel 'Im(z)'%n");
-            out.format(Locale.US, "set key off%n");
-            out.format(Locale.US, "unset colorbox%n");
-            out.format(Locale.US, "set title '%s(z)'%n", f.name());
-            out.format(Locale.US, "$data <<EOD%n");
-
-            for (int i = 0; i < width; ++i) {
-                final double x = xMin + i * (xMax - xMin) / (width - 1);
-                for (int j = 0; j < height; ++j) {
-                    final double y = yMin + j * (yMax - yMin) / (height - 1);
-                    final Complex z  = Complex.valueOf(x, y);
-                    final Complex fz = f.evaluator.value(this, z);
-                    out.format(Locale.US, "%12.9f %12.9f %12.9f %12.9f %12.9f%n",
-                               z.getRealPart(), z.getImaginaryPart(),
-                               coloring.hue(fz), coloring.saturation(fz), coloring.value(fz));
+        for (final Predefined predefined : functions) {
+            final ProcessBuilder pb = new ProcessBuilder("gnuplot").
+                            redirectOutput(ProcessBuilder.Redirect.INHERIT).
+                            redirectError(ProcessBuilder.Redirect.INHERIT);
+            pb.environment().remove("XDG_SESSION_TYPE");
+            final Process gnuplot = pb.start();
+            try (PrintStream out = new PrintStream(gnuplot.getOutputStream(), false, StandardCharsets.UTF_8.name())) {
+                if (output == null) {
+                    out.format(Locale.US, "set terminal qt size %d, %d title 'complex plotter'%n", width, height);
+                } else {
+                    out.format(Locale.US, "set terminal pngcairo size %d, %d%n", width, height);
+                    out.format(Locale.US, "set output '%s'%n", new File(output, predefined.name() + ".png").getAbsolutePath());
                 }
-                out.format(Locale.US, "%n");
-            }
-            out.format(Locale.US, "EOD%n");
-            out.println("splot $data using 1:2:(hsv2rgb($3,$4,$5)) with pm3d lc rgb variable");
-            if (output == null) {
-                out.format(Locale.US, "pause mouse close%n");
-            } else {
-                System.out.format(Locale.US, "output written to %s%n",
-                                  new File(output, f.name() + ".png").getAbsolutePath());
+                out.format(Locale.US, "set view map scale 1%n");
+                out.format(Locale.US, "set xrange [%f : %f]%n", xMin, xMax);
+                out.format(Locale.US, "set yrange [%f : %f]%n", yMin, yMax);
+                out.format(Locale.US, "set xlabel 'Re(z)'%n");
+                out.format(Locale.US, "set ylabel 'Im(z)'%n");
+                out.format(Locale.US, "set key off%n");
+                out.format(Locale.US, "unset colorbox%n");
+                out.format(Locale.US, "set title '%s(z)'%n", predefined.name());
+                out.format(Locale.US, "$data <<EOD%n");
+
+                for (int i = 0; i < width; ++i) {
+                    final double x = xMin + i * (xMax - xMin) / (width - 1);
+                    for (int j = 0; j < height; ++j) {
+                        final double y = yMin + j * (yMax - yMin) / (height - 1);
+                        final Complex z  = Complex.valueOf(x, y);
+                        final Complex fz = predefined.evaluator.value(this, z);
+                        out.format(Locale.US, "%12.9f %12.9f %12.9f %12.9f %12.9f%n",
+                                   z.getRealPart(), z.getImaginaryPart(),
+                                   coloring.hue(fz), coloring.saturation(fz), coloring.value(fz));
+                    }
+                    out.format(Locale.US, "%n");
+                }
+                out.format(Locale.US, "EOD%n");
+                out.println("splot $data using 1:2:(hsv2rgb($3,$4,$5)) with pm3d lc rgb variable");
+                if (output == null) {
+                    out.format(Locale.US, "pause mouse close%n");
+                } else {
+                    System.out.format(Locale.US, "output written to %s%n",
+                                      new File(output, predefined.name() + ".png").getAbsolutePath());
+                }
             }
         }
     }
@@ -243,6 +250,7 @@ public class GnuplotComplexPlotter {
     /** Predefined complex functions for plotting. */
     private static enum Predefined {
 
+        id((plotter, z)    -> z),
         sn((plotter, z)    -> plotter.jacobi.valuesN(z).sn()),
         cn((plotter, z)    -> plotter.jacobi.valuesN(z).cn()),
         dn((plotter, z)    -> plotter.jacobi.valuesN(z).dn()),
