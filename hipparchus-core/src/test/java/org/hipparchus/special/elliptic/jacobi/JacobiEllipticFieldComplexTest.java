@@ -32,8 +32,8 @@ public class JacobiEllipticFieldComplexTest {
         FieldJacobiElliptic<FieldComplex<Dfp>> je = JacobiEllipticBuilder.build(new FieldComplex<>(field.newDfp("0.3"), field.newDfp("1.0")));
         final FieldComplex<Dfp> z = new FieldComplex<>(field.newDfp("5.2"), field.newDfp("-2.5"));
         final FieldCopolarC<FieldComplex<Dfp>> valuesC = je.valuesC(z);
-        Assert.assertEquals(-0.24609405083573348938, valuesC.sc().getRealPart().getReal(),      1.0e-5);
-        Assert.assertEquals( 0.74202229271111558523, valuesC.sc().getImaginaryPart().getReal(), 5.0e-6);
+        Assert.assertEquals(-0.24609405083573348938, valuesC.sc().getRealPart().getReal(),      1.0e-15);
+        Assert.assertEquals( 0.74202229271111558523, valuesC.sc().getImaginaryPart().getReal(), 1.0e-15);
     }
 
 }

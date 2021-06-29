@@ -108,7 +108,7 @@ public class FieldJacobiTheta<T extends CalculusFieldElement<T>> {
             sum1  = sum1.add(sc2n1.sin().multiply(qNNp1.multiply(sgn)));
             sum2  = sum2.add(sc2n1.cos().multiply(qNNp1));
 
-            if (qNNp1.getReal() <= eps) {
+            if (qNNp1.norm() <= eps) {
                 // we have reach convergence
                 break;
             }

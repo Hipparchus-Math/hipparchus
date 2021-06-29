@@ -105,7 +105,7 @@ public class JacobiTheta {
             sum1  = sum1.add(sc2n1.sin().multiply(sgn * qNNp1));
             sum2  = sum2.add(sc2n1.cos().multiply(qNNp1));
 
-            if (qNNp1 <= Precision.EPSILON) {
+            if (FastMath.abs(qNNp1) <= Precision.EPSILON) {
                 // we have reach convergence
                 break;
             }
