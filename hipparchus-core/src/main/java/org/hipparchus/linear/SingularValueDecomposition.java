@@ -744,5 +744,18 @@ public class SingularValueDecomposition {
         public RealMatrix getInverse() {
             return pseudoInverse;
         }
+
+        /** {@inheritDoc} */
+        @Override
+        public int getRowDimension() {
+            return pseudoInverse.getColumnDimension();
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public int getColumnDimension() {
+            return pseudoInverse.getRowDimension();
+        }
+
     }
 }

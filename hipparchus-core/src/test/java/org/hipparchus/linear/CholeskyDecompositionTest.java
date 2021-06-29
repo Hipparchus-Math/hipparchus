@@ -112,6 +112,8 @@ public class CholeskyDecompositionTest {
         RealMatrix lt = llt.getLT();
         double norm = l.multiply(lt).subtract(matrix).getNorm1();
         Assert.assertEquals(0, norm, 1.0e-15);
+        Assert.assertEquals(matrix.getRowDimension(),    llt.getSolver().getRowDimension());
+        Assert.assertEquals(matrix.getColumnDimension(), llt.getSolver().getColumnDimension());
     }
 
     /** test that L is lower triangular */

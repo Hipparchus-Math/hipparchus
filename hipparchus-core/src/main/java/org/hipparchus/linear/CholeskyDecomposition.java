@@ -308,5 +308,19 @@ public class CholeskyDecomposition {
         public RealMatrix getInverse() {
             return solve(MatrixUtils.createRealIdentityMatrix(lTData.length));
         }
+
+        /** {@inheritDoc} */
+        @Override
+        public int getRowDimension() {
+            return lTData.length;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public int getColumnDimension() {
+            return lTData[0].length;
+        }
+
     }
+
 }

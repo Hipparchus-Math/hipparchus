@@ -475,5 +475,18 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
         public FieldMatrix<T> getInverse() {
             return solve(MatrixUtils.createFieldIdentityMatrix(field, pivot.length));
         }
+
+        /** {@inheritDoc} */
+        @Override
+        public int getRowDimension() {
+            return lu.length;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public int getColumnDimension() {
+            return lu[0].length;
+        }
+
     }
 }

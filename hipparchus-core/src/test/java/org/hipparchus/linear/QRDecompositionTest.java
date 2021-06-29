@@ -256,16 +256,22 @@ public class QRDecompositionTest {
     @Test
     public void testInvertTallSkinny() {
         RealMatrix a     = MatrixUtils.createRealMatrix(testData4x3);
-        RealMatrix pinv  = new QRDecomposition(a).getSolver().getInverse();
+        DecompositionSolver solver = new QRDecomposition(a).getSolver();
+        RealMatrix pinv  = solver.getInverse();
         Assert.assertEquals(0, pinv.multiply(a).subtract(MatrixUtils.createRealIdentityMatrix(3)).getNorm1(), 1.0e-6);
+        Assert.assertEquals(testData4x3.length,    solver.getRowDimension());
+        Assert.assertEquals(testData4x3[0].length, solver.getColumnDimension());
     }
 
     @Test
     public void testInvertShortWide() {
         RealMatrix a = MatrixUtils.createRealMatrix(testData3x4);
-        RealMatrix pinv  = new QRDecomposition(a).getSolver().getInverse();
+        DecompositionSolver solver = new QRDecomposition(a).getSolver();
+        RealMatrix pinv  = solver.getInverse();
         Assert.assertEquals(0, a.multiply(pinv).subtract(MatrixUtils.createRealIdentityMatrix(3)).getNorm1(), 1.0e-6);
         Assert.assertEquals(0, pinv.multiply(a).getSubMatrix(0, 2, 0, 2).subtract(MatrixUtils.createRealIdentityMatrix(3)).getNorm1(), 1.0e-6);
+        Assert.assertEquals(testData3x4.length,    solver.getRowDimension());
+        Assert.assertEquals(testData3x4[0].length, solver.getColumnDimension());
     }
 
     private RealMatrix createTestMatrix(final Random r, final int rows, final int columns) {

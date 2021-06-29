@@ -94,6 +94,8 @@ public class EigenDecompositionTest {
         Assert.assertEquals(70.0, ed.getRealEigenvalue(0), 3.0e-11);
         Assert.assertEquals(0.0,  ed.getRealEigenvalue(1), 3.0e-11);
         Assert.assertEquals(0.0,  ed.getRealEigenvalue(2), 3.0e-11);
+        Assert.assertEquals(matrix.getRowDimension(),    ed.getSolver().getRowDimension());
+        Assert.assertEquals(matrix.getColumnDimension(), ed.getSolver().getColumnDimension());
     }
 
     @Test
@@ -111,6 +113,8 @@ public class EigenDecompositionTest {
         Assert.assertEquals(0.4, ed.getRealEigenvalue(1), 1.0e-15);
         Assert.assertEquals(0.2, ed.getRealEigenvalue(2), 1.0e-15);
         Assert.assertEquals(0.1, ed.getRealEigenvalue(3), 1.0e-15);
+        Assert.assertEquals(matrix.getRowDimension(),    ed.getSolver().getRowDimension());
+        Assert.assertEquals(matrix.getColumnDimension(), ed.getSolver().getColumnDimension());
     }
 
     @Test
@@ -128,6 +132,8 @@ public class EigenDecompositionTest {
         Assert.assertEquals(0.4, ed.getRealEigenvalue(1), 1.0e-15);
         Assert.assertEquals(0.2, ed.getRealEigenvalue(2), 1.0e-15);
         Assert.assertEquals(0.1, ed.getRealEigenvalue(3), 1.0e-15);
+        Assert.assertEquals(matrix.getRowDimension(),    ed.getSolver().getRowDimension());
+        Assert.assertEquals(matrix.getColumnDimension(), ed.getSolver().getColumnDimension());
     }
 
     @Test
@@ -162,6 +168,8 @@ public class EigenDecompositionTest {
             Assert.assertEquals(0, refEigenVectors[i].subtract(decomposition.getEigenvector(i)).getNorm(), 2.0e-7);
         }
 
+        Assert.assertEquals(mainTridiagonal.length, decomposition.getSolver().getRowDimension());
+        Assert.assertEquals(mainTridiagonal.length, decomposition.getSolver().getColumnDimension());
     }
 
     @Test

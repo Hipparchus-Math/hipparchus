@@ -76,4 +76,21 @@ public interface FieldDecompositionSolver<T extends FieldElement<T>> {
      * if the decomposed matrix is singular.
      */
     FieldMatrix<T> getInverse();
+
+    /**
+     * Returns the number of rows in the matrix.
+     *
+     * @return rowDimension
+     * @since 2.0
+     */
+    int getRowDimension();
+
+    /**
+     * Returns the number of columns in the matrix.
+     *
+     * @return columnDimension
+     * @since 2.0
+     */
+    int getColumnDimension();
+
 }

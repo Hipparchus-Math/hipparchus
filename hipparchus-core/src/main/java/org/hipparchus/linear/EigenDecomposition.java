@@ -564,6 +564,19 @@ public class EigenDecomposition {
             }
             return MatrixUtils.createRealMatrix(invData);
         }
+
+        /** {@inheritDoc} */
+        @Override
+        public int getRowDimension() {
+            return realEigenvalues.length;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public int getColumnDimension() {
+            return realEigenvalues.length;
+        }
+
     }
 
     /**

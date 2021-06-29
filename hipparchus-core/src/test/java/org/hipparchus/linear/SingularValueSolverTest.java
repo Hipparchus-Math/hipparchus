@@ -97,6 +97,8 @@ public class SingularValueSolverTest {
     public void testSolve() {
         DecompositionSolver solver =
             new SingularValueDecomposition(MatrixUtils.createRealMatrix(testSquare)).getSolver();
+        Assert.assertEquals(testSquare.length, solver.getRowDimension());
+        Assert.assertEquals(testSquare[0].length, solver.getColumnDimension());
         RealMatrix b = MatrixUtils.createRealMatrix(new double[][] {
                 { 1, 2, 3 }, { 0, -5, 1 }
         });

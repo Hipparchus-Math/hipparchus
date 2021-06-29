@@ -100,4 +100,21 @@ public interface DecompositionSolver {
      * can not compute a pseudo-inverse
      */
     RealMatrix getInverse() throws MathIllegalArgumentException;
+
+    /**
+     * Returns the number of rows in the matrix.
+     *
+     * @return rowDimension
+     * @since 2.0
+     */
+    int getRowDimension();
+
+    /**
+     * Returns the number of columns in the matrix.
+     *
+     * @return columnDimension
+     * @since 2.0
+     */
+    int getColumnDimension();
+
 }

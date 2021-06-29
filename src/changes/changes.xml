@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.0" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issue/135">
+        Added getRowDimension and getColumnDimension
+        to DecompositionSolver and FieldDecompositionSolver.
+      </action>
       <action dev="luc" type="fix" issue="issue/142">
         Fixed ulp() implementation for Dfp.
       </action>

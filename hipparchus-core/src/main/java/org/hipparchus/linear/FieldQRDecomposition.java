@@ -487,5 +487,18 @@ public class FieldQRDecomposition<T extends CalculusFieldElement<T>> {
             }
             return false;
         }
+
+        /** {@inheritDoc} */
+        @Override
+        public int getRowDimension() {
+            return qrt[0].length;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public int getColumnDimension() {
+            return qrt.length;
+        }
+
     }
 }
