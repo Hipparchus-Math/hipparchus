@@ -310,7 +310,7 @@ public class LUDecompositionTest {
     }
 
     @Test
-    public void testsolve() {
+    public void testSolve() {
         LUDecomposition lu =
                         new LUDecomposition(new Array2DRowRealMatrix(testData));
         DecompositionSolver solver = lu.getSolver();
@@ -321,6 +321,8 @@ public class LUDecompositionTest {
         Assert.assertEquals(new Fraction(-31, 12).doubleValue(), solution.getEntry(0), 1.0e-14);
         Assert.assertEquals(new Fraction( 11, 12).doubleValue(), solution.getEntry(1), 1.0e-14);
         Assert.assertEquals(new Fraction(  5, 12).doubleValue(), solution.getEntry(2), 1.0e-14);
+        Assert.assertEquals(testData.length,    solver.getRowDimension());
+        Assert.assertEquals(testData[0].length, solver.getColumnDimension());
         try {
             solver.solve(new ArrayRealVector(new double[] { 1, 1 }));
             Assert.fail("an exception should have been thrown");

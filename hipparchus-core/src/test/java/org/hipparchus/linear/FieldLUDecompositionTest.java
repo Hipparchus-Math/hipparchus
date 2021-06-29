@@ -341,7 +341,7 @@ public class FieldLUDecompositionTest {
     }
 
     @Test
-    public void testsolve() {
+    public void testSolve() {
         FieldLUDecomposition<Fraction> lu =
                         new FieldLUDecomposition<Fraction>(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), testData));
         FieldDecompositionSolver<Fraction> solver = lu.getSolver();
@@ -352,6 +352,8 @@ public class FieldLUDecompositionTest {
         Assert.assertEquals(new Fraction(-31, 12), solution.getEntry(0));
         Assert.assertEquals(new Fraction( 11, 12), solution.getEntry(1));
         Assert.assertEquals(new Fraction(  5, 12), solution.getEntry(2));
+        Assert.assertEquals(testData.length,    solver.getRowDimension());
+        Assert.assertEquals(testData[0].length, solver.getColumnDimension());
         try {
             solver.solve(new ArrayFieldVector<>(new Fraction[] { Fraction.ONE, Fraction.ONE }));
             Assert.fail("an exception should have been thrown");

@@ -249,5 +249,17 @@ public class RRQRDecomposition extends QRDecomposition {
         public RealMatrix getInverse() {
             return solve(MatrixUtils.createRealIdentityMatrix(p.getRowDimension()));
         }
+        /** {@inheritDoc} */
+        @Override
+        public int getRowDimension() {
+            return upper.getRowDimension();
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public int getColumnDimension() {
+            return upper.getColumnDimension();
+        }
+
     }
 }

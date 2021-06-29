@@ -340,16 +340,22 @@ public class FieldQRDecompositionTest {
     private  <T extends CalculusFieldElement<T>> void InvertTallSkinny(Field<T> field) {
         T[][] data4x3= convert(field, testData4x3            );
         FieldMatrix<T> a     = MatrixUtils.createFieldMatrix(data4x3);
-        FieldMatrix<T> pinv  = new FieldQRDecomposition<T>(a).getSolver().getInverse();
+        FieldDecompositionSolver<T> solver = new FieldQRDecomposition<T>(a).getSolver();
+        FieldMatrix<T> pinv  = solver.getInverse();
         Assert.assertEquals(0, norm(pinv.multiply(a).subtract(MatrixUtils.createFieldIdentityMatrix(field, 3))).getReal(), 1.0e-6);
+        Assert.assertEquals(testData4x3.length,    solver.getRowDimension());
+        Assert.assertEquals(testData4x3[0].length, solver.getColumnDimension());
     }
 
     private  <T extends CalculusFieldElement<T>> void InvertShortWide(Field<T> field) {
         T[][] data3x4= convert(field, testData3x4            );
         FieldMatrix<T> a = MatrixUtils.createFieldMatrix( data3x4);
-        FieldMatrix<T> pinv  = new FieldQRDecomposition<T>(a).getSolver().getInverse();
+        FieldDecompositionSolver<T> solver = new FieldQRDecomposition<T>(a).getSolver();
+        FieldMatrix<T> pinv  = solver.getInverse();
         Assert.assertEquals(0,norm( a.multiply(pinv).subtract(MatrixUtils.createFieldIdentityMatrix(field, 3))).getReal(), 1.0e-6);
         Assert.assertEquals(0,norm( pinv.multiply(a).getSubMatrix(0, 2, 0, 2).subtract(MatrixUtils.createFieldIdentityMatrix(field, 3))).getReal(), 1.0e-6);
+        Assert.assertEquals(testData3x4.length,    solver.getRowDimension());
+        Assert.assertEquals(testData3x4[0].length, solver.getColumnDimension());
     }
 
     private  <T extends CalculusFieldElement<T>> FieldMatrix<T> createTestMatrix(Field<T> field, final Random r, final int rows, final int columns) {

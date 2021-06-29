@@ -376,5 +376,19 @@ public class LUDecomposition {
         public RealMatrix getInverse() {
             return solve(MatrixUtils.createRealIdentityMatrix(pivot.length));
         }
+
+        /** {@inheritDoc} */
+        @Override
+        public int getRowDimension() {
+            return lu.length;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public int getColumnDimension() {
+            return lu[0].length;
+        }
+
     }
+
 }

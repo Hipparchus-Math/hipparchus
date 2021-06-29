@@ -473,5 +473,18 @@ public class QRDecomposition {
             }
             return false;
         }
+
+        /** {@inheritDoc} */
+        @Override
+        public int getRowDimension() {
+            return qrt[0].length;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public int getColumnDimension() {
+            return qrt.length;
+        }
+
     }
 }
