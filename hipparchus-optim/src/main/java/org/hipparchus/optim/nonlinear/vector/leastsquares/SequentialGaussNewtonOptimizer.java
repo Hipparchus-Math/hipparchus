@@ -39,7 +39,6 @@ import org.hipparchus.util.Pair;
  * the linearized problem at each iteration.
  * </p>
  *
- * @author Julie Bayard
  */
 public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
 
@@ -134,10 +133,10 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
         }
 
         RealVector currentPoint = lsp.getStart();
-        
+
         if (oldEvaluation != null &&
             currentPoint.getDimension() != oldEvaluation.getPoint().getDimension()) {
-            throw new MathIllegalStateException(LocalizedCoreFormats.DIMENSIONS_MISMATCH, 
+            throw new MathIllegalStateException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                       currentPoint.getDimension(), oldEvaluation.getPoint().getDimension());
         }
 
@@ -148,13 +147,13 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
 
             // evaluate the objective function and its jacobian
             final Evaluation previous = current;
-            
+
             // Value of the objective function at "currentPoint".
             evaluationCounter.increment();
             current = lsp.evaluate(currentPoint);
             final RealVector currentResiduals = current.getResiduals();
             final RealMatrix weightedJacobian = current.getJacobian();
-            
+
             currentPoint = current.getPoint();
 
             // Check convergence.
@@ -172,7 +171,7 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
             final Pair<RealMatrix, RealVector> normalEquation =
                 computeNormalMatrix(weightedJacobian, currentResiduals);
             // solve the linearized least squares problem
-            
+
             final RealMatrix lhs = oldLhs == null ?
                                    normalEquation.getFirst() :
                                    normalEquation.getFirst().add(oldLhs); // left hand side
