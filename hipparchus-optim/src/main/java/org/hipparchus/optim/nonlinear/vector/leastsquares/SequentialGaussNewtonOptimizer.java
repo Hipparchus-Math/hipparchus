@@ -245,7 +245,7 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
     /**
      * Container with an old and a new evaluation and combine both of them
      */
-    public static class CombinedEvaluation extends AbstractEvaluation {
+    private static class CombinedEvaluation extends AbstractEvaluation {
 
         /** Point of evaluation. */
         private final RealVector point;
@@ -256,13 +256,6 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
         /** Computed residuals. */
         private final RealVector residuals;
 
-        /** Old evaluation. */
-        private final Evaluation oldEvaluation;
-
-        /** New evaluation. */
-        private final Evaluation newEvaluation;
-
-        
         /**
          * Create an {@link Evaluation} with no weights.
          *
@@ -288,8 +281,6 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
             jacobian.setSubMatrix(newJacobian.getData(), oldRowDimension,
                   oldColumnDimension);
 
-            this.oldEvaluation = oldEvaluation;
-            this.newEvaluation = newEvaluation;
             this.point = newEvaluation.getPoint();
             this.residuals =
                 oldEvaluation.getResiduals()
@@ -314,23 +305,6 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
             return residuals;
         }
 
-        /**
-         * Get the old evaluation, computed during the previous orbit estimation.
-         *
-         * @return the old evaluation.
-         */
-        public Evaluation getOldEvaluation() {
-            return this.oldEvaluation;
-        }
-
-        /**
-         * Get the new evaluation, computed during the orbit estimation.
-         *
-         * @return the new evaluation.
-         */
-        public Evaluation getNewEvaluation() {
-            return this.newEvaluation;
-        }
-
     }
+
 }
