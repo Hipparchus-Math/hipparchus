@@ -19,6 +19,7 @@ package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
 import java.io.IOException;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.euclidean.threed.Plane;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
@@ -47,46 +48,42 @@ public class SequentialGaussNewtonOptimizerWithSVDTest
     }
 
     @Override
-    public void defineOptimizer(int dimPoint, int dimMeasures) {
-        Evaluation evaluation = new CheckEvaluation(dimPoint, dimMeasures);
+    public void defineOptimizer(Evaluation evaluation) {
         this.optimizer = new SequentialGaussNewtonOptimizer(new SingularValueDecomposer(), evaluation);
     }
 
     @Test
     public void testMaxEvaluations() throws Exception {
-        try{
-        CircleVectorial circle = new CircleVectorial();
-        circle.addPoint( 30.0,  68.0);
-        circle.addPoint( 50.0,  -6.0);
-        circle.addPoint(110.0, -20.0);
-        circle.addPoint( 35.0,  15.0);
-        circle.addPoint( 45.0,  97.0);
+        try {
+            CircleVectorial circle = new CircleVectorial();
+            circle.addPoint( 30.0,  68.0);
+            circle.addPoint( 50.0,  -6.0);
+            circle.addPoint(110.0, -20.0);
+            circle.addPoint( 35.0,  15.0);
+            circle.addPoint( 45.0,  97.0);
 
-        LeastSquaresProblem lsp = builder(circle)
-                .checkerPair(new SimpleVectorValueChecker(1e-30, 1e-30))
-                .maxIterations(Integer.MAX_VALUE)
-                .start(new double[]{98.680, 47.345})
-                .build();
+            LeastSquaresProblem lsp = builder(circle)
+                            .checkerPair(new SimpleVectorValueChecker(1e-30, 1e-30))
+                            .maxIterations(Integer.MAX_VALUE)
+                            .start(new double[]{98.680, 47.345})
+                            .build();
 
-        defineOptimizer(2, 5);
-        optimizer.optimize(lsp);
+            defineOptimizer(null);
+            optimizer.optimize(lsp);
 
             fail(optimizer);
-        }catch (MathIllegalStateException e){
-            //expected
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
         }
     }
 
 
     @Override
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testHahn1()
         throws IOException {
-        /*
-         * TODO This test leads to a singular problem with the Gauss-Newton
-         * optimizer. This should be inquired.
-         */
-        super.testHahn1();
+        // computation reaches convergence, but results are really bad
+        doTestStRD(StatisticalReferenceDatasetFactory.createHahn1(), 20.0, 1E-4);
     }
 
     @Test
@@ -103,7 +100,7 @@ public class SequentialGaussNewtonOptimizerWithSVDTest
                 {-3, 0, -9}
         }, new double[]{1, 1, 1});
 
-        defineOptimizer(3, 3);
+        defineOptimizer(null);
         Optimum optimum = optimizer.optimize(problem.getBuilder().build());
 
         Plane span = new Plane(Vector3D.ZERO, new Vector3D(1, 2, -3), new Vector3D(2, 1, 0), TOl);

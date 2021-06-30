@@ -45,8 +45,7 @@ public class SequentialGaussNewtonOptimizerWithQRTest
     }
 
     @Override
-    public void defineOptimizer(int dimPoint, int dimMeasures) {
-        Evaluation evaluation = new CheckEvaluation(dimPoint, dimMeasures);
+    public void defineOptimizer(Evaluation evaluation) {
         this.optimizer = new SequentialGaussNewtonOptimizer(new QRDecomposer(1.0e-11), evaluation);
     }
 
@@ -94,7 +93,7 @@ public class SequentialGaussNewtonOptimizerWithQRTest
                 .start(new double[]{98.680, 47.345})
                 .build();
 
-        defineOptimizer(2, 5);
+        defineOptimizer(null);
         optimizer.optimize(lsp);
 
             fail(optimizer);
@@ -114,7 +113,7 @@ public class SequentialGaussNewtonOptimizerWithQRTest
              */
             super.testHahn1();
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, mise.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, mise.getSpecifier());
         }
     }
 

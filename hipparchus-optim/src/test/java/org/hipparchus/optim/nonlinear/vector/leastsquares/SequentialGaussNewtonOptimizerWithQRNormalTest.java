@@ -46,8 +46,7 @@ public class SequentialGaussNewtonOptimizerWithQRNormalTest
     }
 
     @Override
-    public void defineOptimizer(int dimPoint, int dimMeasures) {
-        Evaluation evaluation = new CheckEvaluation(dimPoint, dimMeasures);
+    public void defineOptimizer(Evaluation evaluation) {
         this.optimizer = new SequentialGaussNewtonOptimizer(new QRDecomposer(1e-11), evaluation);
     }
 
@@ -80,7 +79,7 @@ public class SequentialGaussNewtonOptimizerWithQRNormalTest
                 .start(new double[]{98.680, 47.345})
                 .build();
 
-        defineOptimizer(2, 5);
+        defineOptimizer(null);
         optimizer.optimize(lsp);
 
             fail(optimizer);
