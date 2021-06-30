@@ -118,6 +118,7 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
     @Override
     public Optimum optimize(final LeastSquaresProblem lsp) {
         // create local evaluation and iteration counts
+        final Incrementor evaluationCounter = lsp.getEvaluationCounter();
         final Incrementor iterationCounter = lsp.getIterationCounter();
         final ConvergenceChecker<Evaluation> checker =
             lsp.getConvergenceChecker();
@@ -137,14 +138,13 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
         // iterate until convergence is reached
         Evaluation current = null;
         while (true) {
-            
-            // the number of evaluations is equal to the number of iterations
             iterationCounter.increment();
 
             // evaluate the objective function and its jacobian
             final Evaluation previous = current;
             
             // Value of the objective function at "currentPoint".
+            evaluationCounter.increment();
             current = lsp.evaluate(currentPoint);
             final RealVector currentResiduals = current.getResiduals();
             final RealMatrix weightedJacobian = current.getJacobian();
@@ -157,7 +157,7 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
                                   current)) {
                 // combine old and new evaluations
                 final Evaluation combinedEvaluation = new CombinedEvaluation(this.oldEvaluation, current);
-                return Optimum.of(combinedEvaluation, iterationCounter.getCount(),
+                return Optimum.of(combinedEvaluation, evaluationCounter.getCount(),
                                   iterationCounter.getCount());
             }
 
