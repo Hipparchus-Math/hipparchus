@@ -189,7 +189,7 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
             }
             // update the estimated parameters
             currentPoint = currentPoint.add(dX);
-            //System.out.println(current.getCost());
+
         }
     }
 
