@@ -69,7 +69,7 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
      * J<sup>T</sup>Jx=J<sup>T</sup>r using QR decomposition.
      * </p>
      *
-     * @param evaluation old evaluation previously computed.
+     * @param evaluation old evaluation previously computed, null if there are no previous evaluations.
      */
     public SequentialGaussNewtonOptimizer(final Evaluation evaluation) {
         this(new QRDecomposer(SINGULARITY_THRESHOLD), evaluation);
@@ -83,17 +83,22 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
      * </p>
      *
      * @param decomposer the decomposition algorithm to use.
-     * @param evaluation old evaluation previously computed.
+     * @param evaluation old evaluation previously computed, null if there are no previous evaluations.
      */
     public SequentialGaussNewtonOptimizer(final MatrixDecomposer decomposer,
                                           final Evaluation evaluation) {
         this.decomposer = decomposer;
         this.oldEvaluation = evaluation;
-        final Pair<RealMatrix, RealVector> normalEquation =
-                        computeNormalMatrix(evaluation.getJacobian(), evaluation.getResiduals());
-                    // solve the linearized least squares problem
-        this.oldLhs = normalEquation.getFirst();
-        this.oldRhs = normalEquation.getSecond();
+        if (evaluation == null) {
+            this.oldLhs = null;
+            this.oldRhs = null;
+        } else {
+            final Pair<RealMatrix, RealVector> normalEquation =
+                            computeNormalMatrix(evaluation.getJacobian(), evaluation.getResiduals());
+            // solve the linearized least squares problem
+            this.oldLhs = normalEquation.getFirst();
+            this.oldRhs = normalEquation.getSecond();
+        }
     }
 
     /**
@@ -111,7 +116,7 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
      * @return the previous evaluation.
      */
     public Evaluation getOldEvaluation() {
-        return this.oldEvaluation;
+        return oldEvaluation;
     }
 
     /** {@inheritDoc} */
@@ -130,7 +135,8 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
 
         RealVector currentPoint = lsp.getStart();
         
-        if (currentPoint.getDimension() != oldEvaluation.getPoint().getDimension()) {
+        if (oldEvaluation != null &&
+            currentPoint.getDimension() != oldEvaluation.getPoint().getDimension()) {
             throw new MathIllegalStateException(LocalizedCoreFormats.DIMENSIONS_MISMATCH, 
                       currentPoint.getDimension(), oldEvaluation.getPoint().getDimension());
         }
@@ -156,7 +162,9 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
                 checker.converged(iterationCounter.getCount(), previous,
                                   current)) {
                 // combine old and new evaluations
-                final Evaluation combinedEvaluation = new CombinedEvaluation(this.oldEvaluation, current);
+                final Evaluation combinedEvaluation = oldEvaluation == null ?
+                                                      current :
+                                                      new CombinedEvaluation(oldEvaluation, current);
                 return Optimum.of(combinedEvaluation, evaluationCounter.getCount(),
                                   iterationCounter.getCount());
             }
@@ -165,12 +173,12 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
                 computeNormalMatrix(weightedJacobian, currentResiduals);
             // solve the linearized least squares problem
             
-            final RealMatrix lhs =
-                normalEquation.getFirst().add(this.oldLhs); // left hand
-                                                                 // side
-            final RealVector rhs =
-                normalEquation.getSecond().add(this.oldRhs); // right hand
-                                                                   // side
+            final RealMatrix lhs = oldLhs == null ?
+                                   normalEquation.getFirst() :
+                                   normalEquation.getFirst().add(oldLhs); // left hand side
+            final RealVector rhs = oldRhs == null ?
+                                   normalEquation.getSecond() :
+                                   normalEquation.getSecond().add(oldRhs); // right hand side
 
             final RealVector dX;
             try {
