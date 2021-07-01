@@ -65,8 +65,9 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
     /**
      * Creates a Gauss Newton optimizer.
      * <p/>
-     * The default for the algorithm is to solve the normal equations using QR
-     * decomposition.
+     * The default for the algorithm is to use QR decomposition and not
+     * form normal equations.
+     * </p>
      */
     public GaussNewtonOptimizer() {
         this(new QRDecomposer(SINGULARITY_THRESHOLD), false);

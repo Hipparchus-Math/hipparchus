@@ -1,8 +1,8 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Hipparchus project under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -15,20 +15,15 @@
  * limitations under the License.
  */
 
-/*
- * This is not the original file distributed by the Apache Software Foundation
- * It has been modified by the Hipparchus project
- */
-
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
 import java.io.IOException;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.linear.CholeskyDecomposer;
+import org.hipparchus.linear.QRDecomposer;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.SimpleVectorValueChecker;
+import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Evaluation;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -40,8 +35,10 @@ import org.junit.Test;
  * href="http://www.netlib.org/minpack/disclaimer">here</a>/
  *
  */
-public class GaussNewtonOptimizerWithCholeskyTest
-    extends AbstractLeastSquaresOptimizerAbstractTest {
+public class SequentialGaussNewtonOptimizerWithQRNormalTest
+    extends AbstractSequentialLeastSquaresOptimizerAbstractTest {
+    
+    
 
     @Override
     public int getMaxIterations() {
@@ -49,42 +46,29 @@ public class GaussNewtonOptimizerWithCholeskyTest
     }
 
     @Override
-    public LeastSquaresOptimizer getOptimizer() {
-        return new GaussNewtonOptimizer(new CholeskyDecomposer(1.0e-11, 1.0e-11), true);
-    }
-
-    @Override
-    @Test
-    public void testMoreEstimatedParametersSimple() {
-        try {
-            /*
-             * Exception is expected with this optimizer
-             */
-            super.testMoreEstimatedParametersSimple();
-            fail(optimizer);
-        } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
-                                e.getSpecifier());
-        }
+    public void defineOptimizer(Evaluation evaluation) {
+        this.optimizer = new SequentialGaussNewtonOptimizer().
+                         withDecomposer(new QRDecomposer(1e-11)).
+                         withFormNormalEquations(true).
+                         withEvaluation(evaluation);
     }
 
     @Override
     @Test
     public void testMoreEstimatedParametersUnsorted() {
+        /*
+         * Exception is expected with this optimizer
+         */
         try {
-            /*
-             * Exception is expected with this optimizer
-             */
             super.testMoreEstimatedParametersUnsorted();
-            fail(optimizer);
-        } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
-                                e.getSpecifier());
+        } catch (MathIllegalStateException mise) {
+            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
         }
     }
 
     @Test
     public void testMaxEvaluations() throws Exception {
+        try{
         CircleVectorial circle = new CircleVectorial();
         circle.addPoint( 30.0,  68.0);
         circle.addPoint( 50.0,  -6.0);
@@ -98,45 +82,36 @@ public class GaussNewtonOptimizerWithCholeskyTest
                 .start(new double[]{98.680, 47.345})
                 .build();
 
-        try {
-            optimizer.optimize(lsp);
+        defineOptimizer(null);
+        optimizer.optimize(lsp);
+
             fail(optimizer);
-        } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
+        }catch (MathIllegalStateException e){
+            //expected
         }
     }
 
-    @Override
-    @Test
-    public void testCircleFittingBadInit() {
-        try {
-            /*
-             * This test does not converge with this optimizer.
-             */
-            super.testCircleFittingBadInit();
-            fail(optimizer);
-        } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
-                                e.getSpecifier());
-        }
-
-    }
 
     @Override
     @Test
-    public void testHahn1()
-                    throws IOException {
+    public void testHahn1() throws IOException {
         try {
             /*
              * TODO This test leads to a singular problem with the Gauss-Newton
              * optimizer. This should be inquired.
              */
             super.testHahn1();
-            fail(optimizer);
-        } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
-                                e.getSpecifier());
+            Assert.fail("Expected Exception with: " + this.optimizer);
+        } catch (MathIllegalStateException mise) {
+            // pass. Both singular problem, and max iterations is acceptable.
         }
+    }
+
+    @Override
+    @Test(expected = MathIllegalStateException.class)
+    public void testMoreEstimatedParametersSimple() {
+        // reduced numerical stability when forming the normal equations
+        super.testMoreEstimatedParametersSimple();
     }
 
 }
