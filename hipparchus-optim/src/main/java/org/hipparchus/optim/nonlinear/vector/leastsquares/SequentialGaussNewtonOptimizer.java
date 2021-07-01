@@ -278,20 +278,16 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
             final RealMatrix oldJacobian = oldEvaluation.getJacobian();
             final RealMatrix newJacobian = newEvaluation.getJacobian();
 
-            final int oldRowDimension = oldJacobian.getRowDimension();
+            final int oldRowDimension    = oldJacobian.getRowDimension();
             final int oldColumnDimension = oldJacobian.getColumnDimension();
 
-            this.jacobian = MatrixUtils.createRealMatrix(oldRowDimension +
-                  newJacobian.getRowDimension(),
-                  oldColumnDimension + newJacobian.getColumnDimension());
-            jacobian.setSubMatrix(oldJacobian.getData(), 0, 0);
-            jacobian.setSubMatrix(newJacobian.getData(), oldRowDimension,
-                  oldColumnDimension);
+            this.jacobian = MatrixUtils.createRealMatrix(oldRowDimension + newJacobian.getRowDimension(),
+                                                         oldColumnDimension);
+            jacobian.setSubMatrix(oldJacobian.getData(), 0,               0);
+            jacobian.setSubMatrix(newJacobian.getData(), oldRowDimension, 0);
 
-            this.point = newEvaluation.getPoint();
-            this.residuals =
-                oldEvaluation.getResiduals()
-                    .append(newEvaluation.getResiduals());
+            this.point     = newEvaluation.getPoint();
+            this.residuals = oldEvaluation.getResiduals().append(newEvaluation.getResiduals());
         }
 
         /** {@inheritDoc} */

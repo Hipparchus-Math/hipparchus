@@ -433,6 +433,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
                                             checkerPair(new SimpleVectorValueChecker(1e-3, 1e-3)).
                                             start(new double[] { 98.680, 47.345 }).
                                             build());
+        Assert.assertEquals(2, oneRun.getJacobian().getColumnDimension());
         Vector2D oneShotCenter = new Vector2D(oneRun.getPoint().getEntry(0), oneRun.getPoint().getEntry(1));
         Assert.assertEquals(96.075901, oneShotCenter.getX(),               1.0e-6);
         Assert.assertEquals(48.135169, oneShotCenter.getY(),               1.0e-6);
@@ -445,6 +446,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
                                               checkerPair(new SimpleVectorValueChecker(1e-3, 1e-3)).
                                               start(new double[] { 98.680, 47.345 }).
                                               build());
+        Assert.assertEquals(2, firstRun.getJacobian().getColumnDimension());
         Vector2D firstRunCenter = new Vector2D(firstRun.getPoint().getEntry(0), firstRun.getPoint().getEntry(1));
         Assert.assertEquals(93.650000, firstRunCenter.getX(),               1.0e-6);
         Assert.assertEquals(45.500000, firstRunCenter.getY(),               1.0e-6);
@@ -454,6 +456,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
                                                       checkerPair(new SimpleVectorValueChecker(1e-3, 1e-3)).
                                                       start(new double[] { firstRunCenter.getX(), firstRunCenter.getY() }).
                                                       build());
+        Assert.assertEquals(2, secondRun.getJacobian().getColumnDimension());
         Vector2D secondRunCenter = new Vector2D(secondRun.getPoint().getEntry(0), secondRun.getPoint().getEntry(1));
         Assert.assertEquals(97.070437, secondRunCenter.getX(),               1.0e-6);
         Assert.assertEquals(49.039898, secondRunCenter.getY(),               1.0e-6);
