@@ -52,6 +52,9 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
     /** Decomposer. */
     private final MatrixDecomposer decomposer;
 
+    /** Indicates if normal equations should be formed explicitly. */
+    private final boolean formNormalEquations;
+
     /** Old evaluation previously computed. */
     private final Evaluation oldEvaluation;
 
@@ -63,15 +66,14 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
 
     /**
      * Create a sequential Gauss Newton optimizer.
-     * <p>
-     * The default for the algorithm is to solve the normal equations
-     * J<sup>T</sup>Jx=J<sup>T</sup>r using QR decomposition.
+     * <p/>
+     * The default for the algorithm is to use QR decomposition, not
+     * form normal equations and have no previous evaluation
      * </p>
      *
-     * @param evaluation old evaluation previously computed, null if there are no previous evaluations.
      */
-    public SequentialGaussNewtonOptimizer(final Evaluation evaluation) {
-        this(new QRDecomposer(SINGULARITY_THRESHOLD), evaluation);
+    public SequentialGaussNewtonOptimizer() {
+        this(new QRDecomposer(SINGULARITY_THRESHOLD), false, null);
     }
 
     /**
@@ -82,21 +84,34 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
      * </p>
      *
      * @param decomposer the decomposition algorithm to use.
+     * @param formNormalEquations whether the normal equations should be explicitly
+     *                            formed. If {@code true} then {@code decomposer} is used
+     *                            to solve J<sup>T</sup>Jx=J<sup>T</sup>r, otherwise
+     *                            {@code decomposer} is used to solve Jx=r. If {@code
+     *                            decomposer} can only solve square systems then this
+     *                            parameter should be {@code true}.
      * @param evaluation old evaluation previously computed, null if there are no previous evaluations.
      */
     public SequentialGaussNewtonOptimizer(final MatrixDecomposer decomposer,
+                                          final boolean formNormalEquations,
                                           final Evaluation evaluation) {
-        this.decomposer = decomposer;
-        this.oldEvaluation = evaluation;
+        this.decomposer          = decomposer;
+        this.formNormalEquations = formNormalEquations;
+        this.oldEvaluation       = evaluation;
         if (evaluation == null) {
             this.oldLhs = null;
             this.oldRhs = null;
         } else {
-            final Pair<RealMatrix, RealVector> normalEquation =
-                            computeNormalMatrix(evaluation.getJacobian(), evaluation.getResiduals());
-            // solve the linearized least squares problem
-            this.oldLhs = normalEquation.getFirst();
-            this.oldRhs = normalEquation.getSecond();
+            if (formNormalEquations) {
+                final Pair<RealMatrix, RealVector> normalEquation =
+                                computeNormalMatrix(evaluation.getJacobian(), evaluation.getResiduals());
+                // solve the linearized least squares problem
+                this.oldLhs = normalEquation.getFirst();
+                this.oldRhs = normalEquation.getSecond();
+            } else {
+                this.oldLhs = evaluation.getJacobian();
+                this.oldRhs = evaluation.getResiduals();
+            }
         }
     }
 
@@ -110,12 +125,63 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
     }
 
     /**
+     * Configure the matrix decomposition algorithm.
+     *
+     * @param newDecomposer the decomposition algorithm to use.
+     * @return a new instance.
+     */
+    public SequentialGaussNewtonOptimizer withDecomposer(final MatrixDecomposer newDecomposer) {
+        return new SequentialGaussNewtonOptimizer(newDecomposer,
+                                                  this.isFormNormalEquations(),
+                                                  this.getOldEvaluation());
+    }
+
+    /**
+     * Get if the normal equations are explicitly formed.
+     *
+     * @return if the normal equations should be explicitly formed. If {@code true} then
+     * {@code decomposer} is used to solve J<sup>T</sup>Jx=J<sup>T</sup>r, otherwise
+     * {@code decomposer} is used to solve Jx=r.
+     */
+    public boolean isFormNormalEquations() {
+        return formNormalEquations;
+    }
+
+    /**
+     * Configure if the normal equations should be explicitly formed.
+     *
+     * @param newFormNormalEquations whether the normal equations should be explicitly
+     *                               formed. If {@code true} then {@code decomposer} is used
+     *                               to solve J<sup>T</sup>Jx=J<sup>T</sup>r, otherwise
+     *                               {@code decomposer} is used to solve Jx=r. If {@code
+     *                               decomposer} can only solve square systems then this
+     *                               parameter should be {@code true}.
+     * @return a new instance.
+     */
+    public SequentialGaussNewtonOptimizer withFormNormalEquations(final boolean newFormNormalEquations) {
+        return new SequentialGaussNewtonOptimizer(this.getDecomposer(),
+                                                  newFormNormalEquations,
+                                                  this.getOldEvaluation());
+    }
+
+    /**
      * Get the previous evaluation used by the optimizer.
      *
      * @return the previous evaluation.
      */
     public Evaluation getOldEvaluation() {
         return oldEvaluation;
+    }
+
+    /**
+     * Configure the previous evaluation used by the optimizer.
+     *
+     * @param previousEvaluation the previous evaluation used by the optimizer.
+     */
+    public SequentialGaussNewtonOptimizer withEvaluation(final Evaluation previousEvaluation) {
+        return new SequentialGaussNewtonOptimizer(this.getDecomposer(),
+                                                  this.isFormNormalEquations(),
+                                                  previousEvaluation);
     }
 
     /** {@inheritDoc} */
@@ -168,16 +234,27 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
                                   iterationCounter.getCount());
             }
 
-            final Pair<RealMatrix, RealVector> normalEquation =
-                computeNormalMatrix(weightedJacobian, currentResiduals);
-            // solve the linearized least squares problem
+           // solve the linearized least squares problem
+            final RealMatrix lhs; // left hand side
+            final RealVector rhs; // right hand side
+            if (this.formNormalEquations) {
+                final Pair<RealMatrix, RealVector> normalEquation =
+                                computeNormalMatrix(weightedJacobian, currentResiduals);
 
-            final RealMatrix lhs = oldLhs == null ?
-                                   normalEquation.getFirst() :
-                                   normalEquation.getFirst().add(oldLhs); // left hand side
-            final RealVector rhs = oldRhs == null ?
-                                   normalEquation.getSecond() :
-                                   normalEquation.getSecond().add(oldRhs); // right hand side
+                lhs = oldLhs == null ?
+                      normalEquation.getFirst() :
+                      normalEquation.getFirst().add(oldLhs); // left hand side
+                rhs = oldRhs == null ?
+                      normalEquation.getSecond() :
+                      normalEquation.getSecond().add(oldRhs); // right hand side
+            } else {
+                lhs = oldLhs == null ?
+                      weightedJacobian :
+                      combineJacobians(oldLhs, weightedJacobian);
+                rhs = oldRhs == null ?
+                      currentResiduals :
+                      combineResiduals(oldRhs, currentResiduals);
+            }
 
             final RealVector dX;
             try {
@@ -249,6 +326,33 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
         return new Pair<RealMatrix, RealVector>(normal, jTr);
     }
 
+    /** Combine Jacobian matrices
+     * @param oldJacobian old Jacobian matrix
+     * @param newJacobian new Jacobian matrix
+     * @return combined Jacobian matrix
+     */
+    private static RealMatrix combineJacobians(final RealMatrix oldJacobian,
+                                               final RealMatrix newJacobian) {
+        final int oldRowDimension    = oldJacobian.getRowDimension();
+        final int oldColumnDimension = oldJacobian.getColumnDimension();
+        final RealMatrix jacobian =
+                        MatrixUtils.createRealMatrix(oldRowDimension + newJacobian.getRowDimension(),
+                                                     oldColumnDimension);
+        jacobian.setSubMatrix(oldJacobian.getData(), 0,               0);
+        jacobian.setSubMatrix(newJacobian.getData(), oldRowDimension, 0);
+        return jacobian;
+    }
+
+    /** Combine residuals vectors
+     * @param oldResiduals old residuals vector
+     * @param newResiduals new residuals vector
+     * @return combined residuals vector
+     */
+    private static RealVector combineResiduals(final RealVector oldResiduals,
+                                               final RealVector newResiduals) {
+        return oldResiduals.append(newResiduals);
+    }
+
     /**
      * Container with an old and a new evaluation and combine both of them
      */
@@ -275,19 +379,11 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
             super(oldEvaluation.getResiduals().getDimension() +
                   newEvaluation.getResiduals().getDimension());
 
-            final RealMatrix oldJacobian = oldEvaluation.getJacobian();
-            final RealMatrix newJacobian = newEvaluation.getJacobian();
-
-            final int oldRowDimension    = oldJacobian.getRowDimension();
-            final int oldColumnDimension = oldJacobian.getColumnDimension();
-
-            this.jacobian = MatrixUtils.createRealMatrix(oldRowDimension + newJacobian.getRowDimension(),
-                                                         oldColumnDimension);
-            jacobian.setSubMatrix(oldJacobian.getData(), 0,               0);
-            jacobian.setSubMatrix(newJacobian.getData(), oldRowDimension, 0);
-
-            this.point     = newEvaluation.getPoint();
-            this.residuals = oldEvaluation.getResiduals().append(newEvaluation.getResiduals());
+            this.point    = newEvaluation.getPoint();
+            this.jacobian = combineJacobians(oldEvaluation.getJacobian(),
+                                             newEvaluation.getJacobian());
+            this.residuals = combineResiduals(oldEvaluation.getResiduals(),
+                                              newEvaluation.getResiduals());
         }
 
         /** {@inheritDoc} */

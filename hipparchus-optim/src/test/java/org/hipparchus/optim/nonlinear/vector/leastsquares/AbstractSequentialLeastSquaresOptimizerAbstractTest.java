@@ -63,7 +63,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
     /**
      * The subject under test.
      */
-    public LeastSquaresOptimizer optimizer;
+    protected SequentialGaussNewtonOptimizer optimizer;
 
     public LeastSquaresBuilder base() {
         return new LeastSquaresBuilder()

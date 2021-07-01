@@ -49,7 +49,10 @@ public class SequentialGaussNewtonOptimizerWithSVDTest
 
     @Override
     public void defineOptimizer(Evaluation evaluation) {
-        this.optimizer = new SequentialGaussNewtonOptimizer(new SingularValueDecomposer(), evaluation);
+        this.optimizer = new SequentialGaussNewtonOptimizer().
+                         withDecomposer(new SingularValueDecomposer()).
+                         withFormNormalEquations(false).
+                         withEvaluation(evaluation);
     }
 
     @Test
@@ -80,10 +83,31 @@ public class SequentialGaussNewtonOptimizerWithSVDTest
 
     @Override
     @Test
-    public void testHahn1()
-        throws IOException {
-        // computation reaches convergence, but results are really bad
-        doTestStRD(StatisticalReferenceDatasetFactory.createHahn1(), 20, 1E-4);
+    public void testHahn1() throws IOException {
+        try {
+            /*
+             * When NOT FORMING normal equations, the optimizer diverges and hit max evaluations.
+             * When FORMING normal equations, the optimizer converges,
+             * but the results are very bad
+             */
+            super.testHahn1();
+            fail(optimizer);
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
+        }
+    }
+
+    @Test
+    @Override
+    public void testGetIterations() {
+        /* this diverges with SVD and no normal equations */
+        try {
+            super.testGetIterations();
+            fail(optimizer);
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED,
+                                e.getSpecifier());
+        }
     }
 
     @Test

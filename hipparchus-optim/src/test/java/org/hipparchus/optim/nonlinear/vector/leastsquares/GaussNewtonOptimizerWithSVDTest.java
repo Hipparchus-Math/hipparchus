@@ -115,12 +115,13 @@ public class GaussNewtonOptimizerWithSVDTest
     @Test
     @Override
     public void testGetIterations() {
-        /* this diverges with SVD */
+        /* this diverges with SVD and no normal equations */
         try {
             super.testGetIterations();
             fail(optimizer);
         } catch (MathIllegalStateException e) {
-            //expected
+            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED,
+                                e.getSpecifier());
         }
     }
 

@@ -46,7 +46,10 @@ public class SequentialGaussNewtonOptimizerWithQRTest
 
     @Override
     public void defineOptimizer(Evaluation evaluation) {
-        this.optimizer = new SequentialGaussNewtonOptimizer(new QRDecomposer(1.0e-11), evaluation);
+        this.optimizer = new SequentialGaussNewtonOptimizer().
+                         withDecomposer(new QRDecomposer(1.0e-11)).
+                         withFormNormalEquations(false).
+                         withEvaluation(evaluation);
     }
 
     @Override
@@ -63,42 +66,28 @@ public class SequentialGaussNewtonOptimizerWithQRTest
         }
     }
     
-    @Override
-    @Test
-    public void testMoreEstimatedParametersSimple() {
-        /*
-         * Exception is expected with this optimizer as the normal equation used is not correct
-         */
-        try {
-            super.testMoreEstimatedParametersSimple();
-            fail(optimizer);
-        } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
-        }
-    }
-
     @Test
     public void testMaxEvaluations() throws Exception {
-        try{
-        CircleVectorial circle = new CircleVectorial();
-        circle.addPoint( 30.0,  68.0);
-        circle.addPoint( 50.0,  -6.0);
-        circle.addPoint(110.0, -20.0);
-        circle.addPoint( 35.0,  15.0);
-        circle.addPoint( 45.0,  97.0);
+        try {
+            CircleVectorial circle = new CircleVectorial();
+            circle.addPoint( 30.0,  68.0);
+            circle.addPoint( 50.0,  -6.0);
+            circle.addPoint(110.0, -20.0);
+            circle.addPoint( 35.0,  15.0);
+            circle.addPoint( 45.0,  97.0);
 
-        LeastSquaresProblem lsp = builder(circle)
-                .checkerPair(new SimpleVectorValueChecker(1e-30, 1e-30))
-                .maxIterations(Integer.MAX_VALUE)
-                .start(new double[]{98.680, 47.345})
-                .build();
+            LeastSquaresProblem lsp = builder(circle)
+                            .checkerPair(new SimpleVectorValueChecker(1e-30, 1e-30))
+                            .maxIterations(Integer.MAX_VALUE)
+                            .start(new double[]{98.680, 47.345})
+                            .build();
 
-        defineOptimizer(null);
-        optimizer.optimize(lsp);
-
+            defineOptimizer(null);
+            optimizer.optimize(lsp);
             fail(optimizer);
-        }catch (MathIllegalStateException e){
-            //expected
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED,
+                                e.getSpecifier());
         }
     }
 
@@ -113,7 +102,7 @@ public class SequentialGaussNewtonOptimizerWithQRTest
              */
             super.testHahn1();
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, mise.getSpecifier());
+            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
         }
     }
 

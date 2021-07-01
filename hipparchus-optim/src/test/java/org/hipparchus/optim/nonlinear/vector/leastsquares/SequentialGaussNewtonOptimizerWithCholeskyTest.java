@@ -46,7 +46,10 @@ public class SequentialGaussNewtonOptimizerWithCholeskyTest
 
     @Override
     public void defineOptimizer(Evaluation evaluation) {
-        this.optimizer = new SequentialGaussNewtonOptimizer(new CholeskyDecomposer(1.0e-11, 1.0e-11), evaluation);
+        this.optimizer = new SequentialGaussNewtonOptimizer().
+                         withDecomposer(new CholeskyDecomposer(1.0e-11, 1.0e-11)).
+                         withFormNormalEquations(true).
+                         withEvaluation(evaluation);
     }
 
     @Override

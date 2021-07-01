@@ -47,7 +47,10 @@ public class SequentialGaussNewtonOptimizerWithQRNormalTest
 
     @Override
     public void defineOptimizer(Evaluation evaluation) {
-        this.optimizer = new SequentialGaussNewtonOptimizer(new QRDecomposer(1e-11), evaluation);
+        this.optimizer = new SequentialGaussNewtonOptimizer().
+                         withDecomposer(new QRDecomposer(1e-11)).
+                         withFormNormalEquations(true).
+                         withEvaluation(evaluation);
     }
 
     @Override
