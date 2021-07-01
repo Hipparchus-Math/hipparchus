@@ -21,6 +21,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.ArrayRealVector;
+import org.hipparchus.linear.CholeskyDecomposition;
 import org.hipparchus.linear.MatrixDecomposer;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.QRDecomposer;
@@ -175,13 +176,71 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
 
     /**
      * Configure the previous evaluation used by the optimizer.
-     *
+     * <p>
+     * This building method uses a complete evaluation to retrieve
+     * a priori data. Note that as {@link #withAPrioriData(RealVector, RealMatrix)}
+     * generates a fake evaluation and calls this method, either
+     * {@link #withAPrioriData(RealVector, RealMatrix)} or {@link #withEvaluation(Evaluation)}
+     * should be called, but not both as the last one called will override the previous one.
+     * </p>
      * @param previousEvaluation the previous evaluation used by the optimizer.
      */
     public SequentialGaussNewtonOptimizer withEvaluation(final Evaluation previousEvaluation) {
         return new SequentialGaussNewtonOptimizer(this.getDecomposer(),
                                                   this.isFormNormalEquations(),
                                                   previousEvaluation);
+    }
+
+    /**
+     * Configure from a priori state and covariance.
+     * <p>
+     * This building method generates a fake evaluation and calls
+     * {@link #withEvaluation(Evaluation)}, so either 
+     * {@link #withAPrioriData(RealVector, RealMatrix)} or {@link #withEvaluation(Evaluation)}
+     * should be called, but not both as the last one called will override the previous one.
+     * </p>
+     * @param aPrioriState a priori state to use
+     * @param aPrioriCovariance a priori covariance to use
+     */
+    public SequentialGaussNewtonOptimizer withAPrioriData(final RealVector aPrioriState,
+                                                          final RealMatrix aPrioriCovariance) {
+
+        // we consider the a priori state and covariance come from a
+        // previous estimation with exactly one observation of each state
+        // component, so partials are the identity matrix, weight is the
+        // square root of inverse of covariance, and residuals are zero
+
+        // create a fake weighted Jacobian
+        final RealMatrix jTj              = getDecomposer().decompose(aPrioriCovariance).getInverse();
+        final RealMatrix weightedJacobian = new CholeskyDecomposition(jTj).getLT();
+
+        // create fake zero residuals
+        final RealVector residuals        = MatrixUtils.createRealVector(aPrioriState.getDimension());
+
+        // combine everything as an evaluation
+        final Evaluation fakeEvaluation   = new AbstractEvaluation(aPrioriState.getDimension()) {
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector getResiduals() {
+                return residuals;
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealVector getPoint() {
+                return aPrioriState;
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public RealMatrix getJacobian() {
+                return weightedJacobian;
+            }
+        };
+
+        return withEvaluation(fakeEvaluation);
+
     }
 
     /** {@inheritDoc} */

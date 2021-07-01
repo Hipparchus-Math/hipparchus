@@ -67,7 +67,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
 
     public LeastSquaresBuilder base() {
         return new LeastSquaresBuilder()
-                .checkerPair(new SimpleVectorValueChecker(1e-10, 1e-10))
+                .checkerPair(new SimpleVectorValueChecker(1e-6, 1e-6))
                 .maxEvaluations(100)
                 .maxIterations(getMaxIterations());
     }
@@ -451,7 +451,11 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         Assert.assertEquals(93.650000, firstRunCenter.getX(),               1.0e-6);
         Assert.assertEquals(45.500000, firstRunCenter.getY(),               1.0e-6);
         Assert.assertEquals(67.896265, circleAll.getRadius(firstRunCenter), 1.0e-6);
-        defineOptimizer(firstRun);
+
+        // for the second run, we start from the state and covariance only,
+        // instead of using the evaluation "firstRun" that we have
+        // (we could have used firstRun directly, but this is for testing this feature)
+        optimizer = optimizer.withAPrioriData(firstRun.getPoint(), firstRun.getCovariances(1.0e-8));
         Optimum  secondRun       = optimizer.optimize(builder(circleSecond).
                                                       checkerPair(new SimpleVectorValueChecker(1e-3, 1e-3)).
                                                       start(new double[] { firstRunCenter.getX(), firstRunCenter.getY() }).
