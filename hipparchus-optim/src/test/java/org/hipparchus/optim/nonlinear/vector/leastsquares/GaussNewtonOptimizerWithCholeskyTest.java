@@ -24,9 +24,12 @@ package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
 import java.io.IOException;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.CholeskyDecomposer;
+import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.SimpleVectorValueChecker;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -51,24 +54,36 @@ public class GaussNewtonOptimizerWithCholeskyTest
     }
 
     @Override
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testMoreEstimatedParametersSimple() {
-        /*
-         * Exception is expected with this optimizer
-         */
-        super.testMoreEstimatedParametersSimple();
+        try {
+            /*
+             * Exception is expected with this optimizer
+             */
+            super.testMoreEstimatedParametersSimple();
+            fail(optimizer);
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+                                e.getSpecifier());
+        }
     }
 
     @Override
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testMoreEstimatedParametersUnsorted() {
-        /*
-         * Exception is expected with this optimizer
-         */
-        super.testMoreEstimatedParametersUnsorted();
+        try {
+            /*
+             * Exception is expected with this optimizer
+             */
+            super.testMoreEstimatedParametersUnsorted();
+            fail(optimizer);
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+                                e.getSpecifier());
+        }
     }
 
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testMaxEvaluations() throws Exception {
         CircleVectorial circle = new CircleVectorial();
         circle.addPoint( 30.0,  68.0);
@@ -83,29 +98,45 @@ public class GaussNewtonOptimizerWithCholeskyTest
                 .start(new double[]{98.680, 47.345})
                 .build();
 
-        optimizer.optimize(lsp);
+        try {
+            optimizer.optimize(lsp);
+            fail(optimizer);
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
+        }
     }
 
     @Override
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testCircleFittingBadInit() {
-        /*
-         * This test does not converge with this optimizer.
-         */
-        super.testCircleFittingBadInit();
-        fail(optimizer);
+        try {
+            /*
+             * This test does not converge with this optimizer.
+             */
+            super.testCircleFittingBadInit();
+            fail(optimizer);
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+                                e.getSpecifier());
+        }
+
     }
 
     @Override
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testHahn1()
-        throws IOException {
-        /*
-         * TODO This test leads to a singular problem with the Gauss-Newton
-         * optimizer. This should be inquired.
-         */
-        super.testHahn1();
-        fail(optimizer);
+                    throws IOException {
+        try {
+            /*
+             * TODO This test leads to a singular problem with the Gauss-Newton
+             * optimizer. This should be inquired.
+             */
+            super.testHahn1();
+            fail(optimizer);
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+                                e.getSpecifier());
+        }
     }
 
 }

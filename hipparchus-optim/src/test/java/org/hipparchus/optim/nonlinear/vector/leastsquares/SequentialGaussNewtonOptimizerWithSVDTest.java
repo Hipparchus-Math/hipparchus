@@ -83,7 +83,7 @@ public class SequentialGaussNewtonOptimizerWithSVDTest
     public void testHahn1()
         throws IOException {
         // computation reaches convergence, but results are really bad
-        doTestStRD(StatisticalReferenceDatasetFactory.createHahn1(), 20.0, 1E-4);
+        doTestStRD(StatisticalReferenceDatasetFactory.createHahn1(), 20, 1E-4);
     }
 
     @Test

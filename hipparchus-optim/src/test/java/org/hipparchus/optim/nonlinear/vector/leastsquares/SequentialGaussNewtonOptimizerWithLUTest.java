@@ -52,21 +52,33 @@ public class SequentialGaussNewtonOptimizerWithLUTest
     }
 
     @Override
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testMoreEstimatedParametersSimple() {
-        /*
-         * Exception is expected with this optimizer
-         */
-        super.testMoreEstimatedParametersSimple();
+        try {
+            /*
+             * Exception is expected with this optimizer
+             */
+            super.testMoreEstimatedParametersSimple();
+            fail(optimizer);
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+                                e.getSpecifier());
+        }
     }
 
     @Override
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testMoreEstimatedParametersUnsorted() {
-        /*
-         * Exception is expected with this optimizer
-         */
-        super.testMoreEstimatedParametersUnsorted();
+        try {
+            /*
+             * Exception is expected with this optimizer
+             */
+            super.testMoreEstimatedParametersUnsorted();
+            fail(optimizer);
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+                                e.getSpecifier());
+        }
     }
 
     @Test

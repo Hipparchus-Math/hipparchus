@@ -24,6 +24,7 @@ package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
 import java.io.IOException;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.euclidean.threed.Plane;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
@@ -96,14 +97,19 @@ public class GaussNewtonOptimizerWithSVDTest
     }
 
     @Override
-    @Test(expected=MathIllegalStateException.class)
-    public void testHahn1()
-        throws IOException {
-        /*
-         * TODO This test leads to a singular problem with the Gauss-Newton
-         * optimizer. This should be inquired.
-         */
-        super.testHahn1();
+    @Test
+    public void testHahn1() throws IOException {
+        try {
+            /*
+             * When NOT FORMING normal equations, the optimizer diverges and hit max evaluations.
+             * When FORMING normal equations, the optimizer converges,
+             * but the results are very bad
+             */
+            super.testHahn1();
+            fail(optimizer);
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
+        }
     }
 
     @Test

@@ -19,10 +19,13 @@ package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
 import java.io.IOException;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.CholeskyDecomposer;
+import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.SimpleVectorValueChecker;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Evaluation;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -47,54 +50,76 @@ public class SequentialGaussNewtonOptimizerWithCholeskyTest
     }
 
     @Override
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testMoreEstimatedParametersSimple() {
-        /*
-         * Exception is expected with this optimizer
-         */
-        super.testMoreEstimatedParametersSimple();
+        try {
+            /*
+             * Exception is expected with this optimizer
+             */
+            super.testMoreEstimatedParametersSimple();
+            fail(optimizer);
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+                                e.getSpecifier());
+        }
     }
 
     @Override
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testMoreEstimatedParametersUnsorted() {
-        /*
-         * Exception is expected with this optimizer
-         */
-        super.testMoreEstimatedParametersUnsorted();
+        try {
+            /*
+             * Exception is expected with this optimizer
+             */
+            super.testMoreEstimatedParametersUnsorted();
+            fail(optimizer);
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+                                e.getSpecifier());
+        }
     }
 
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testMaxEvaluations() throws Exception {
-        CircleVectorial circle = new CircleVectorial();
-        circle.addPoint( 30.0,  68.0);
-        circle.addPoint( 50.0,  -6.0);
-        circle.addPoint(110.0, -20.0);
-        circle.addPoint( 35.0,  15.0);
-        circle.addPoint( 45.0,  97.0);
+        try {
+            CircleVectorial circle = new CircleVectorial();
+            circle.addPoint( 30.0,  68.0);
+            circle.addPoint( 50.0,  -6.0);
+            circle.addPoint(110.0, -20.0);
+            circle.addPoint( 35.0,  15.0);
+            circle.addPoint( 45.0,  97.0);
 
-        LeastSquaresProblem lsp = builder(circle)
-                .checkerPair(new SimpleVectorValueChecker(1e-30, 1e-30))
-                .maxIterations(Integer.MAX_VALUE)
-                .start(new double[]{98.680, 47.345})
-                .build();
+            LeastSquaresProblem lsp = builder(circle)
+                            .checkerPair(new SimpleVectorValueChecker(1e-30, 1e-30))
+                            .maxIterations(Integer.MAX_VALUE)
+                            .start(new double[]{98.680, 47.345})
+                            .build();
 
-        defineOptimizer(null);
-        optimizer.optimize(lsp);
+            defineOptimizer(null);
+            optimizer.optimize(lsp);
+            fail(optimizer);
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
+        }
     }
 
 
 
     @Override
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testHahn1()
-        throws IOException {
-        /*
-         * TODO This test leads to a singular problem with the Gauss-Newton
-         * optimizer. This should be inquired.
-         */
-        super.testHahn1();
-        fail(optimizer);
+                    throws IOException {
+        try {
+            /*
+             * TODO This test leads to a singular problem with the Gauss-Newton
+             * optimizer. This should be inquired.
+             */
+            super.testHahn1();
+            fail(optimizer);
+        } catch (MathIllegalStateException e) {
+            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+                                e.getSpecifier());
+        }
     }
 
 }

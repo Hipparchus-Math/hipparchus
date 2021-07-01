@@ -30,6 +30,7 @@ import java.util.List;
 import org.hamcrest.MatcherAssert;
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
@@ -79,7 +80,7 @@ public class LevenbergMarquardtOptimizerTest
     }
 
     @Override
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNonInvertible() {
         /*
          * Overrides the method from parent class, since the default singularity
@@ -97,7 +98,13 @@ public class LevenbergMarquardtOptimizerTest
         //TODO check that it is a bad fit? Why the extra conditions?
         Assert.assertTrue(FastMath.sqrt(problem.getTarget().length) * optimum.getRMS() > 0.6);
 
-        optimum.getCovariances(1.5e-14);
+        try {
+            optimum.getCovariances(1.5e-14);
+            fail(optimizer);
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(LocalizedCoreFormats.SINGULAR_MATRIX, e.getSpecifier());
+        }
+
     }
 
     @Test

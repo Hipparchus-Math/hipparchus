@@ -67,7 +67,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
 
     public LeastSquaresBuilder base() {
         return new LeastSquaresBuilder()
-                .checkerPair(new SimpleVectorValueChecker(1e-6, 1e-6))
+                .checkerPair(new SimpleVectorValueChecker(1e-10, 1e-10))
                 .maxEvaluations(100)
                 .maxIterations(getMaxIterations());
     }
