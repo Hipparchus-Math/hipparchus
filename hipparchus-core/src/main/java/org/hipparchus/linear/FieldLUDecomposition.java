@@ -188,7 +188,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
                         ++nonZero;
                     }
                 }
-                max = nonZero;
+                max = FastMath.max(m - 1, nonZero);
 
             }
 
