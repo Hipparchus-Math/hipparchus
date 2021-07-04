@@ -50,7 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.0" date="TBD" description="TBD">
-      <action dev="luc" type="add" due-to="Axel Kramer" issue="issue/144">
+      <action dev="luc" type="add" issue="issue/143">
+        Added ArrayFieldVector.toString().
+      </action>
+      <action dev="luc" type="fix" due-to="Axel Kramer" issue="issue/144">
         Fixed array index error in field LU decomposition.
       </action>
       <action dev="luc" type="add" due-to="Julie Bayard" >

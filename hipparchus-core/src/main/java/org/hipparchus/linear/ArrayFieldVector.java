@@ -1024,7 +1024,23 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         throws MathIllegalArgumentException {
         return walkInDefaultOrder(visitor, start, end);
     }
-
+    /** {@inheritDoc}
+     * @since 2.0
+     */
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append('{');
+        for (int i = 0; i < data.length; ++i) {
+            if (i > 0) {
+                builder.append("; ");
+            }
+            builder.append(data[i].toString());
+        }
+        builder.append('}');
+        return builder.toString();
+    }
+   
     /**
      * Test for the equality of two vectors.
      *

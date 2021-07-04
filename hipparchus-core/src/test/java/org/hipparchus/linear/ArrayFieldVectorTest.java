@@ -554,7 +554,7 @@ public class ArrayFieldVectorTest {
         Fraction[] result_projection_2 = {new Fraction(128, 77), new Fraction(160, 77), new Fraction(192, 77)};
         checkArray("compare vect", v_projection_2.toArray(), result_projection_2);
 
-    }
+     }
 
     @Test
     public void testMisc() {
@@ -562,8 +562,9 @@ public class ArrayFieldVectorTest {
         ArrayFieldVector<Fraction> v4 = new ArrayFieldVector<Fraction>(vec4);
         FieldVector<Fraction> v4_2 = new ArrayFieldVector<Fraction>(vec4);
 
-        String out1 = v1.toString();
-        Assert.assertTrue("some output ",  out1.length()!=0);
+        Assert.assertEquals("{1; 2; 3}",  v1.toString());
+        Assert.assertEquals("{1; 2; 3; 4; 5; 6; 7; 8; 9}",  v4.toString());
+
         /*
          Fraction[] dout1 = v1.copyOut();
         Assert.assertEquals(3, dout1.length);
