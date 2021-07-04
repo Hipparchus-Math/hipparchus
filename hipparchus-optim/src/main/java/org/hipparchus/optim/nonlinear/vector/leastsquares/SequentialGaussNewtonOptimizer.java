@@ -195,7 +195,7 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
      * Configure from a priori state and covariance.
      * <p>
      * This building method generates a fake evaluation and calls
-     * {@link #withEvaluation(Evaluation)}, so either 
+     * {@link #withEvaluation(Evaluation)}, so either
      * {@link #withAPrioriData(RealVector, RealMatrix)} or {@link #withEvaluation(Evaluation)}
      * should be called, but not both as the last one called will override the previous one.
      * </p>

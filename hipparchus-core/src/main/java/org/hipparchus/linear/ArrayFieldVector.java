@@ -1040,7 +1040,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         builder.append('}');
         return builder.toString();
     }
-   
+
     /**
      * Test for the equality of two vectors.
      *
