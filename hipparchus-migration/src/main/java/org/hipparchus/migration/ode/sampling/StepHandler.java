@@ -58,7 +58,7 @@ public interface StepHandler extends ODEStepHandler {
     @Override
     default void handleStep(final ODEStateInterpolator interpolator)
         throws MathIllegalStateException {
-        handleStep(new MigrationStepInterpolator(interpolator));
+        handleStep(new MigrationStepInterpolator(interpolator), false);
     }
 
     /** Initialize step handler at the start of an ODE integration.

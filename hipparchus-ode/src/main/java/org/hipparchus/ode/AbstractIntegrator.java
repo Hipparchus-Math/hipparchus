@@ -365,7 +365,7 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
                         final ODEStateAndDerivative savedState = eventState;
                         eventState = interpolator.getInterpolatedState(occurrence.getStopTime());
                         restricted = interpolator.restrictStep(savedState, eventState);
- 
+
                         // handle the almost zero size last part of the final step, at event time
                         for (final ODEStepHandler handler : stepHandlers) {
                             handler.handleStep(restricted);

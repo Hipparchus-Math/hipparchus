@@ -219,6 +219,8 @@ public class StepNormalizer implements ODEStepHandler {
         }
     }
 
+    /** {@inheritDoc} */
+    @Override
     public void finish(ODEStateAndDerivative finalState) {
             // There will be no more steps. The stored one should be given to
             // the handler. We may have to output one more step. Only the last
