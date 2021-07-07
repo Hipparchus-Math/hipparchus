@@ -56,20 +56,9 @@ public class DummyStepHandler implements ODEStepHandler {
         return LazyHolder.INSTANCE;
     }
 
-    /**
-     * Handle the last accepted step.
-     * This method does nothing in this class.
-     * @param interpolator interpolator for the last accepted step. For
-     * efficiency purposes, the various integrators reuse the same
-     * object on each call, so if the instance wants to keep it across
-     * all calls (for example to provide at the end of the integration a
-     * continuous model valid throughout the integration range), it
-     * should build a local copy using the clone method and store this
-     * copy.
-     * @param isLast true if the step is the last one
-     */
+    /** {@inheritDoc} */
     @Override
-    public void handleStep(final ODEStateInterpolator interpolator, final boolean isLast) {
+    public void handleStep(final ODEStateInterpolator interpolator) {
     }
 
     // CHECKSTYLE: stop HideUtilityClassConstructor

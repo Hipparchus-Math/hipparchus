@@ -26,7 +26,6 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldExpandableODE;
-import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.FieldODEIntegrator;
 import org.hipparchus.ode.ODEIntegrator;
 import org.hipparchus.ode.TestFieldProblemAbstract;
@@ -43,8 +42,7 @@ public class StepInterpolatorTestUtils {
         throws MathIllegalArgumentException, MathIllegalStateException {
         integrator.addStepHandler(new ODEStepHandler() {
 
-            public void handleStep(ODEStateInterpolator interpolator, boolean isLast)
-                throws MathIllegalStateException {
+            public void handleStep(ODEStateInterpolator interpolator) {
 
                 final double dt = interpolator.getCurrentState().getTime() - interpolator.getPreviousState().getTime();
                 final double h  = finiteDifferencesRatio * dt;
@@ -86,8 +84,7 @@ public class StepInterpolatorTestUtils {
                                                                                        final double threshold) {
         integrator.addStepHandler(new FieldODEStepHandler<T>() {
 
-            public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast)
-                throws MathIllegalStateException {
+            public void handleStep(FieldODEStateInterpolator<T> interpolator) {
 
                 final T h = interpolator.getCurrentState().getTime().subtract(interpolator.getPreviousState().getTime()).multiply(0.001);
                 final T t = interpolator.getCurrentState().getTime().subtract(h.multiply(300));
@@ -116,9 +113,6 @@ public class StepInterpolatorTestUtils {
                     Assert.assertEquals(approYDot.getReal(), yDot[i].getReal(), threshold);
                 }
 
-            }
-
-            public void init(FieldODEStateAndDerivative<T> state0, T t) {
             }
 
         });

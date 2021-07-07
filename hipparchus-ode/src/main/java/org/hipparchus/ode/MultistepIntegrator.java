@@ -373,8 +373,7 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
 
         /** {@inheritDoc} */
         @Override
-        public void handleStep(ODEStateInterpolator interpolator, boolean isLast)
-            throws MathIllegalStateException {
+        public void handleStep(ODEStateInterpolator interpolator) {
 
             if (count == 0) {
                 // first step, we need to store also the point at the beginning of the step

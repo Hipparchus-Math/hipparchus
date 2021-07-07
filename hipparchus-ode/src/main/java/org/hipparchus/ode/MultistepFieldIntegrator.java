@@ -381,8 +381,7 @@ public abstract class MultistepFieldIntegrator<T extends CalculusFieldElement<T>
 
         /** {@inheritDoc} */
         @Override
-        public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast)
-            throws MathIllegalStateException {
+        public void handleStep(FieldODEStateInterpolator<T> interpolator) {
 
 
             if (count == 0) {

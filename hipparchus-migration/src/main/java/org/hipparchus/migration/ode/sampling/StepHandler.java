@@ -56,9 +56,9 @@ public interface StepHandler extends ODEStepHandler {
 
     /** {@inheritDoc}} */
     @Override
-    default void handleStep(final ODEStateInterpolator interpolator, final boolean isLast)
+    default void handleStep(final ODEStateInterpolator interpolator)
         throws MathIllegalStateException {
-        handleStep(new MigrationStepInterpolator(interpolator), isLast);
+        handleStep(new MigrationStepInterpolator(interpolator));
     }
 
     /** Initialize step handler at the start of an ODE integration.

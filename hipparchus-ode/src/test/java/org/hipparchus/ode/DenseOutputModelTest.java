@@ -143,7 +143,7 @@ public class DenseOutputModelTest {
     public void testErrorConditions() throws MathIllegalArgumentException, MathIllegalStateException {
 
         DenseOutputModel cm = new DenseOutputModel();
-        cm.handleStep(buildInterpolator(0, new double[] { 0.0, 1.0, -2.0 }, 1), true);
+        cm.handleStep(buildInterpolator(0, new double[] { 0.0, 1.0, -2.0 }, 1));
 
         // dimension mismatch
         Assert.assertTrue(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0 }, 2.0));
@@ -207,7 +207,7 @@ public class DenseOutputModelTest {
                                                      throws MathIllegalArgumentException, MathIllegalStateException {
         try {
             DenseOutputModel otherCm = new DenseOutputModel();
-            otherCm.handleStep(buildInterpolator(t0, y0, t1), true);
+            otherCm.handleStep(buildInterpolator(t0, y0, t1));
             cm.append(otherCm);
         } catch(MathIllegalArgumentException iae) {
             return true; // there was an allowable error

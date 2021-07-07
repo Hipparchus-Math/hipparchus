@@ -424,8 +424,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         public void init(FieldODEStateAndDerivative<T> state0, T t) {
             maxError = pb.getField().getZero();
         }
-        public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast)
-                        throws MathIllegalStateException {
+        public void handleStep(FieldODEStateInterpolator<T> interpolator) {
 
             FieldODEStateAndDerivative<T> current = interpolator.getCurrentState();
             T[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
@@ -435,9 +434,9 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             if (error.subtract(maxError).getReal() > 0) {
                 maxError = error;
             }
-            if (isLast) {
-                Assert.assertEquals(0.0, maxError.getReal(), epsilon);
-            }
+        }
+        public void finish(FieldODEStateAndDerivative<T> finalState) {
+            Assert.assertEquals(0.0, maxError.getReal(), epsilon);
         }
     }
 
@@ -470,7 +469,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         public void init(FieldODEStateAndDerivative<T> state0, T t) {
             maxError = pb.getField().getZero();
         }
-        public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast) {
+        public void handleStep(FieldODEStateInterpolator<T> interpolator) {
 
             FieldODEStateAndDerivative<T> current = interpolator.getCurrentState();
             T[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
@@ -481,9 +480,9 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             if (error.subtract(maxError).getReal() > 0) {
                 maxError = error;
             }
-            if (isLast) {
-                Assert.assertEquals(0.0, maxError.getReal(), epsilon);
-            }
+        }
+        public void finish(FieldODEStateAndDerivative<T> finalState) {
+            Assert.assertEquals(0.0, maxError.getReal(), epsilon);
         }
     }
 
@@ -533,7 +532,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         final double[] max = new double[2];
         integrator.addStepHandler(new FieldODEStepHandler<T>() {
             @Override
-            public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast) {
+            public void handleStep(FieldODEStateInterpolator<T> interpolator) {
                 for (int i = 0; i <= 10; ++i) {
                     T tPrev = interpolator.getPreviousState().getTime();
                     T tCurr = interpolator.getCurrentState().getTime();
@@ -639,7 +638,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         EmbeddedRungeKuttaFieldIntegrator<DerivativeStructure> integrator =
                         createIntegrator(factory.getDerivativeField(), 1e-3, 1e3, 1e-12, 1e-12);
 
-        integrator.addStepHandler((interpolator, isLast) -> {
+        integrator.addStepHandler((interpolator) -> {
             DerivativeStructure   tK         = interpolator.getCurrentState().getTime();
             DerivativeStructure[] integrated = interpolator.getCurrentState().getPrimaryState();
             DerivativeStructure[] thK        = ellipse.computeTheoreticalState(tK);

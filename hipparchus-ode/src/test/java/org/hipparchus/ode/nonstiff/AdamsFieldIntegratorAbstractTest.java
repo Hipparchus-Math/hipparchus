@@ -322,7 +322,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
         final double[] max = new double[2];
         integrator.addStepHandler(new FieldODEStepHandler<T>() {
             @Override
-            public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast) {
+            public void handleStep(FieldODEStateInterpolator<T> interpolator) {
                 for (int i = 0; i <= 10; ++i) {
                     T tPrev = interpolator.getPreviousState().getTime();
                     T tCurr = interpolator.getCurrentState().getTime();
@@ -401,7 +401,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
         MultistepFieldIntegrator<DerivativeStructure> integrator =
                         createIntegrator(factory.getDerivativeField(), 6, 1e-3, 1e3, 1e-12, 1e-12);
 
-        integrator.addStepHandler((interpolator, isLast) -> {
+        integrator.addStepHandler((interpolator) -> {
             DerivativeStructure   tK         = interpolator.getCurrentState().getTime();
             DerivativeStructure[] integrated = interpolator.getCurrentState().getPrimaryState();
             DerivativeStructure[] thK        = ellipse.computeTheoreticalState(tK);
@@ -442,7 +442,10 @@ public abstract class AdamsFieldIntegratorAbstractTest {
                 interpolator.setPreviousTime(interpolator.getCurrentTime());
                 interpolator.setCurrentTime(tK);
                 for (FieldODEStepHandler<T> handler : getStepHandlers()) {
-                    handler.handleStep(interpolator, i == nbSteps - 1);
+                    handler.handleStep(interpolator);
+                    if (i == nbSteps - 1) {
+                        handler.finish(interpolator.getCurrentState());
+                    }
                 }
             }
             return interpolator.getInterpolatedState(tStart);

@@ -68,7 +68,7 @@ public class EventsScheduling {
         // checker that will be used in both step handler and events handlers
         // to check they are called in consistent order
         final ScheduleChecker checker = new ScheduleChecker(start, stop);
-        integrator.addStepHandler((interpolator, islast) -> {
+        integrator.addStepHandler((interpolator) -> {
             checker.callTime(interpolator.getPreviousState().getTime());
             checker.callTime(interpolator.getCurrentState().getTime());
         });
@@ -103,7 +103,7 @@ public class EventsScheduling {
         // checker that will be used in both step handler and events handlers
         // to check they are called in consistent order
         final ScheduleChecker checker = new ScheduleChecker(start, stop);
-        integrator.addStepHandler((interpolator, islast) -> {
+        integrator.addStepHandler((interpolator) -> {
             checker.callTime(interpolator.getPreviousState().getTime().getReal());
             checker.callTime(interpolator.getCurrentState().getTime().getReal());
         });

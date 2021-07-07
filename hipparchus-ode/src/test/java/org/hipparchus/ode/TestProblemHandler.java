@@ -72,7 +72,7 @@ public class TestProblemHandler implements ODEStepHandler {
         expectedStepStart = Double.NaN;
     }
 
-    public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
+    public void handleStep(ODEStateInterpolator interpolator) {
 
         double start = interpolator.getPreviousState().getTime();
         if (FastMath.abs((start - problem.getInitialTime()) / integrator.getCurrentSignedStepsize()) > 0.001) {
@@ -95,16 +95,6 @@ public class TestProblemHandler implements ODEStepHandler {
         double cT = interpolator.getCurrentState().getTime();
         double[] errorScale = problem.getErrorScale();
 
-        // store the error at the last step
-        if (isLast) {
-            double[] interpolatedY = interpolator.getCurrentState().getPrimaryState();
-            double[] theoreticalY  = problem.computeTheoreticalState(cT);
-            for (int i = 0; i < interpolatedY.length; ++i) {
-                double error = FastMath.abs(interpolatedY[i] - theoreticalY[i]);
-                lastError = FastMath.max(error, lastError);
-            }
-            lastTime = cT;
-        }
         // walk through the step
         for (int k = 0; k <= 20; ++k) {
 
@@ -120,6 +110,15 @@ public class TestProblemHandler implements ODEStepHandler {
             }
         }
 
+    }
+
+    public void finish(ODEStateAndDerivative finalState) {
+        double[] theoreticalY  = problem.computeTheoreticalState(finalState.getTime());
+        for (int i = 0; i < finalState.getCompleteState().length; ++i) {
+            double error = FastMath.abs(finalState.getCompleteState()[i] - theoreticalY[i]);
+            lastError = FastMath.max(error, lastError);
+        }
+        lastTime = finalState.getTime();
     }
 
     /**

@@ -23,9 +23,8 @@
 package org.hipparchus.ode;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
+import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -76,7 +75,7 @@ public class TestFieldProblemHandler<T extends CalculusFieldElement<T>>
         expectedStepStart = null;
     }
 
-    public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast) throws MathIllegalStateException {
+    public void handleStep(FieldODEStateInterpolator<T> interpolator) {
 
         T start = interpolator.getPreviousState().getTime();
         if (start.subtract(problem.getInitialState().getTime()).divide(integrator.getCurrentSignedStepsize()).norm() > 0.001) {
@@ -98,17 +97,6 @@ public class TestFieldProblemHandler<T extends CalculusFieldElement<T>>
         T cT = interpolator.getCurrentState().getTime();
         T[] errorScale = problem.getErrorScale();
 
-        // store the error at the last step
-        if (isLast) {
-            T[] interpolatedY = interpolator.getInterpolatedState(cT).getPrimaryState();
-            T[] theoreticalY  = problem.computeTheoreticalState(cT);
-            for (int i = 0; i < interpolatedY.length; ++i) {
-                T error = interpolatedY[i].subtract(theoreticalY[i]).abs();
-                lastError = MathUtils.max(error, lastError);
-            }
-            lastTime = cT;
-        }
-
         // walk through the step
         for (int k = 0; k <= 20; ++k) {
 
@@ -122,6 +110,15 @@ public class TestFieldProblemHandler<T extends CalculusFieldElement<T>>
                 maxValueError = MathUtils.max(error, maxValueError);
             }
         }
+    }
+
+    public void finish(FieldODEStateAndDerivative<T> finalState) {
+        T[] theoreticalY  = problem.computeTheoreticalState(finalState.getTime());
+        for (int i = 0; i < finalState.getCompleteState().length; ++i) {
+            T error = finalState.getCompleteState()[i].subtract(theoreticalY[i]).abs();
+            lastError = MathUtils.max(error, lastError);
+        }
+        lastTime = finalState.getTime();
     }
 
     /**

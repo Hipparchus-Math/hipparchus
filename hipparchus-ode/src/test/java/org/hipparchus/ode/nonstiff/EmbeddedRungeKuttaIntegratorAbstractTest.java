@@ -379,7 +379,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         public void init(ODEStateAndDerivative state0, double t) {
             maxError = 0;
         }
-        public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
+        public void handleStep(ODEStateInterpolator interpolator) {
 
             ODEStateAndDerivative current = interpolator.getCurrentState();
             double[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
@@ -389,9 +389,9 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             if (error > maxError) {
                 maxError = error;
             }
-            if (isLast) {
-                Assert.assertEquals(0.0, maxError, epsilon);
-            }
+        }
+        public void finish(ODEStateAndDerivative finalState) {
+            Assert.assertEquals(0.0, maxError, epsilon);
         }
     }
 
@@ -423,7 +423,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         public void init(ODEStateAndDerivative state0, double t) {
             maxError = 0;
         }
-        public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
+        public void handleStep(ODEStateInterpolator interpolator) {
 
             ODEStateAndDerivative current = interpolator.getCurrentState();
             double[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
@@ -434,9 +434,9 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             if (error > maxError) {
                 maxError = error;
             }
-            if (isLast) {
-                Assert.assertEquals(0.0, maxError, epsilon);
-            }
+        }
+        public void finish(ODEStateAndDerivative finalState) {
+            Assert.assertEquals(0.0, maxError, epsilon);
         }
     }
 
@@ -598,7 +598,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             tMin = s0.getTime();
         }
 
-        public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
+        public void handleStep(ODEStateInterpolator interpolator) {
             tMin = interpolator.getCurrentState().getTime();
         }
 
@@ -635,8 +635,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             minStep = 0;
             maxStep = 0;
         }
-        public void handleStep(ODEStateInterpolator interpolator,
-                               boolean isLast) {
+        public void handleStep(ODEStateInterpolator interpolator) {
 
             double step = FastMath.abs(interpolator.getCurrentState().getTime() -
                                        interpolator.getPreviousState().getTime());
@@ -652,11 +651,10 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                     maxStep = step;
                 }
             }
-
-            if (isLast) {
-                Assert.assertEquals(min, minStep, 0.01 * min);
-                Assert.assertEquals(max, maxStep, 0.01 * max);
-            }
+        }
+        public void finish(ODEStateAndDerivative finalState) {
+            Assert.assertEquals(min, minStep, 0.01 * min);
+            Assert.assertEquals(max, maxStep, 0.01 * max);
         }
         private boolean firstTime = true;
         private double  minStep = 0;
@@ -783,7 +781,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         final double[] max = new double[2];
         integrator.addStepHandler(new ODEStepHandler() {
             @Override
-            public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
+            public void handleStep(ODEStateInterpolator interpolator) {
                 for (int i = 0; i <= 10; ++i) {
                     double tPrev = interpolator.getPreviousState().getTime();
                     double tCurr = interpolator.getCurrentState().getTime();

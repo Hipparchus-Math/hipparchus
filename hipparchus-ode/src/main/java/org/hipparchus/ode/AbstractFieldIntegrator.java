@@ -367,7 +367,7 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
 
                     // handle the first part of the step, up to the event
                     for (final FieldODEStepHandler<T> handler : stepHandlers) {
-                        handler.handleStep(restricted, false);
+                        handler.handleStep(restricted);
                     }
 
                     // acknowledge event occurrence
@@ -386,7 +386,8 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
 
                         // handle the almost zero size last part of the final step, at event time
                         for (final FieldODEStepHandler<T> handler : stepHandlers) {
-                            handler.handleStep(restricted, true);
+                            handler.handleStep(restricted);
+                            handler.finish(restricted.getCurrentState());
                         }
 
                     }
@@ -443,7 +444,10 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
 
         // handle the remaining part of the step, after all events if any
         for (FieldODEStepHandler<T> handler : stepHandlers) {
-            handler.handleStep(restricted, isLastStep);
+            handler.handleStep(restricted);
+            if (isLastStep) {
+                handler.finish(restricted.getCurrentState());
+            }
         }
 
         return currentState;

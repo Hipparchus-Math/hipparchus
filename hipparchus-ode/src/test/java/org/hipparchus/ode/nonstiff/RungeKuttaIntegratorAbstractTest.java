@@ -307,17 +307,16 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         public void init(ODEStateAndDerivative state0, double t) {
             maxError = 0;
         }
-        public void handleStep(ODEStateInterpolator interpolator, boolean isLast)
-                        throws MathIllegalStateException {
+        public void handleStep(ODEStateInterpolator interpolator) {
 
             ODEStateAndDerivative current = interpolator.getCurrentState();
             double[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
             double dx = current.getPrimaryState()[0] - theoreticalY[0];
             double dy = current.getPrimaryState()[1] - theoreticalY[1];
             maxError = FastMath.max(maxError, dx * dx + dy * dy);
-            if (isLast) {
-                Assert.assertEquals(expectedMaxError, maxError, epsilon);
-            }
+        }
+        public void finish(ODEStateAndDerivative finalState) {
+            Assert.assertEquals(expectedMaxError, maxError, epsilon);
         }
     }
 
@@ -326,11 +325,12 @@ public abstract class RungeKuttaIntegratorAbstractTest {
 
     protected void doTestStepSize(final double epsilon)
         throws MathIllegalArgumentException, MathIllegalStateException {
+        final double finalTime = 5.0;
         final double step = 1.23456;
         RungeKuttaIntegrator integ = createIntegrator(step);
         integ.addStepHandler(new ODEStepHandler() {
-            public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
-                if (! isLast) {
+            public void handleStep(ODEStateInterpolator interpolator) {
+                if (interpolator.getCurrentState().getTime() < finalTime - 0.001) {
                     Assert.assertEquals(step,
                                         interpolator.getCurrentState().getTime() - interpolator.getPreviousState().getTime(),
                                         epsilon);
@@ -344,7 +344,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
             public int getDimension() {
                 return 1;
             }
-        }), new ODEState(0, new double[1]), 5.0);
+        }), new ODEState(0, new double[1]), finalTime);
     }
 
     @Test
@@ -471,7 +471,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         final double[] max = new double[2];
         integrator.addStepHandler(new ODEStepHandler() {
             @Override
-            public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
+            public void handleStep(ODEStateInterpolator interpolator) {
                 for (int i = 0; i <= 10; ++i) {
                     double tPrev = interpolator.getPreviousState().getTime();
                     double tCurr = interpolator.getCurrentState().getTime();

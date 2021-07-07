@@ -383,8 +383,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         public void init(FieldODEStateAndDerivative<T> state0, T t) {
             maxError = pb.getField().getZero();
         }
-        public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast)
-                        throws MathIllegalStateException {
+        public void handleStep(FieldODEStateInterpolator<T> interpolator) {
 
             FieldODEStateAndDerivative<T> current = interpolator.getCurrentState();
             T[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
@@ -394,9 +393,9 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
             if (error.subtract(maxError).getReal() > 0) {
                 maxError = error;
             }
-            if (isLast) {
-                Assert.assertEquals(expectedMaxError, maxError.getReal(), epsilon);
-            }
+        }
+        public void finish(FieldODEStateAndDerivative<T> finalState) {
+            Assert.assertEquals(expectedMaxError, maxError.getReal(), epsilon);
         }
     }
 
@@ -405,11 +404,12 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
     protected <T extends CalculusFieldElement<T>> void doTestStepSize(final Field<T> field, final double epsilon)
         throws MathIllegalArgumentException, MathIllegalStateException {
+        final T finalTime = field.getZero().add(5.0);
         final T step = field.getZero().add(1.23456);
         RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
         integ.addStepHandler(new FieldODEStepHandler<T>() {
-            public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast) {
-                if (! isLast) {
+            public void handleStep(FieldODEStateInterpolator<T> interpolator) {
+                if (interpolator.getCurrentState().getTime().subtract(finalTime).getReal() < -0.001) {
                     Assert.assertEquals(step.getReal(),
                                         interpolator.getCurrentState().getTime().subtract(interpolator.getPreviousState().getTime()).getReal(),
                                         epsilon);
@@ -425,7 +425,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
             public int getDimension() {
                 return 1;
             }
-        }), new FieldODEState<T>(field.getZero(), MathArrays.buildArray(field, 1)), field.getZero().add(5.0));
+        }), new FieldODEState<T>(field.getZero(), MathArrays.buildArray(field, 1)), finalTime);
     }
 
     @Test
@@ -611,7 +611,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         final double[] max = new double[2];
         integrator.addStepHandler(new FieldODEStepHandler<T>() {
             @Override
-            public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast) {
+            public void handleStep(FieldODEStateInterpolator<T> interpolator) {
                 for (int i = 0; i <= 10; ++i) {
                     T tPrev = interpolator.getPreviousState().getTime();
                     T tCurr = interpolator.getCurrentState().getTime();
