@@ -58,7 +58,7 @@ import org.hipparchus.util.FastMath;
  *
  * <p>If problem modeling is done with several separate
  * integration phases for contiguous intervals, the same
- * ContinuousOutputModel can be used as step handler for all
+ * DenseOutputModel can be used as step handler for all
  * integration phases as long as they are performed in order and in
  * the same direction. As an example, one can extrapolate the
  * trajectory of a satellite with one model (i.e. one set of
@@ -79,7 +79,7 @@ import org.hipparchus.util.FastMath;
  * itself.</p>
  *
  * <p>One should be aware that the amount of data stored in a
- * ContinuousOutputModel instance can be important if the state vector
+ * DenseOutputModel instance can be important if the state vector
  * is large, if the integration interval is long or if the steps are
  * small (which can result from small tolerance settings in {@link
  * org.hipparchus.ode.nonstiff.AdaptiveStepsizeIntegrator adaptive
