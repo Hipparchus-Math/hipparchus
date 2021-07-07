@@ -74,7 +74,7 @@ public class TestProblemHandler implements ODEStepHandler {
 
     public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
 
-        double start = integrator.getStepStart().getTime();
+        double start = interpolator.getPreviousState().getTime();
         if (FastMath.abs((start - problem.getInitialTime()) / integrator.getCurrentSignedStepsize()) > 0.001) {
             // multistep integrators do not handle the first steps themselves
             // so we have to make sure the integrator we look at has really started its work
@@ -87,7 +87,7 @@ public class TestProblemHandler implements ODEStepHandler {
                 }
                 maxTimeError = FastMath.max(maxTimeError, stepError);
             }
-            expectedStepStart = start + integrator.getCurrentSignedStepsize();
+            expectedStepStart = interpolator.getCurrentState().getTime();
         }
 
 

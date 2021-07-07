@@ -78,7 +78,7 @@ public class TestFieldProblemHandler<T extends CalculusFieldElement<T>>
 
     public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast) throws MathIllegalStateException {
 
-        T start = integrator.getStepStart().getTime();
+        T start = interpolator.getPreviousState().getTime();
         if (start.subtract(problem.getInitialState().getTime()).divide(integrator.getCurrentSignedStepsize()).norm() > 0.001) {
             // multistep integrators do not handle the first steps themselves
             // so we have to make sure the integrator we look at has really started its work
@@ -91,7 +91,7 @@ public class TestFieldProblemHandler<T extends CalculusFieldElement<T>>
                 }
                 maxTimeError = MathUtils.max(maxTimeError, stepError);
             }
-            expectedStepStart = start.add(integrator.getCurrentSignedStepsize());
+            expectedStepStart = interpolator.getCurrentState().getTime();
         }
 
         T pT = interpolator.getPreviousState().getTime();

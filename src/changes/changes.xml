@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/145">
+        Fixed out-of-order scheduling of calls to step handlers and event handlers.
+      </action>
       <action dev="luc" type="add" issue="issue/143">
         Added ArrayFieldVector.toString().
       </action>
