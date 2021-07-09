@@ -196,30 +196,21 @@ public class DenseOutputModel implements ODEStepHandler, Serializable {
         steps.clear();
     }
 
-    /** Handle the last accepted step.
-     * A copy of the information provided by the last step is stored in
-     * the instance for later use.
-     * @param interpolator interpolator for the last accepted step.
-     * @param isLast true if the step is the last one
-     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
-     * during step finalization
-     */
+    /** {@inheritDoc} */
     @Override
-    public void handleStep(final ODEStateInterpolator interpolator, final boolean isLast)
-        throws MathIllegalStateException {
-
+    public void handleStep(final ODEStateInterpolator interpolator) {
         if (steps.isEmpty()) {
             initialTime = interpolator.getPreviousState().getTime();
             forward     = interpolator.isForward();
         }
-
         steps.add(interpolator);
-
-        if (isLast) {
-            finalTime = interpolator.getCurrentState().getTime();
-            index     = steps.size() - 1;
-        }
-
+    }
+    
+    /** {@inheritDoc} */
+    @Override
+    public void finish(final ODEStateAndDerivative finalState) {
+        finalTime = finalState.getTime();
+        index     = steps.size() - 1;
     }
 
     /**

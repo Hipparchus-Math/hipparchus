@@ -23,7 +23,6 @@
 package org.hipparchus.ode.sampling;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 
 /**
@@ -63,22 +62,18 @@ public interface FieldODEStepHandler<T extends CalculusFieldElement<T>> {
     }
 
     /**
-     * Handle the last accepted step
-     * @param interpolator interpolator for the last accepted step. For
-     * efficiency purposes, the various integrators reuse the same
-     * object on each call, so if the instance wants to keep it across
-     * all calls (for example to provide at the end of the integration a
-     * continuous model valid throughout the integration range, as the
-     * {@link org.hipparchus.ode.DenseOutputModel
-     * DenseOutputModel} class does), it should build a local copy
-     * using the clone method of the interpolator and store this copy.
-     * Keeping only a reference to the interpolator and reusing it will
-     * result in unpredictable behavior (potentially crashing the application).
-     * @param isLast true if the step is the last one
-     * @exception MathIllegalStateException if the interpolator throws one because
-     * the number of functions evaluations is exceeded
+     * Handle the last accepted step.
+     * @param interpolator interpolator for the last accepted step
      */
-    void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast)
-        throws MathIllegalStateException;
+    void handleStep(FieldODEStateInterpolator<T> interpolator);
+
+    /**
+     * Finalize integration.
+     * @param finalState state at integration end
+     * @since 2.0
+     */
+    default void finish(FieldODEStateAndDerivative<T> finalState) {
+        // nothing by default
+    }
 
 }

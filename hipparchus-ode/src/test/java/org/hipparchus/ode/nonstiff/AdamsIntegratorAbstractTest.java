@@ -281,7 +281,7 @@ public abstract class AdamsIntegratorAbstractTest {
         final double[] max = new double[2];
         integrator.addStepHandler(new ODEStepHandler() {
             @Override
-            public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
+            public void handleStep(ODEStateInterpolator interpolator) {
                 for (int i = 0; i <= 10; ++i) {
                     double tPrev = interpolator.getPreviousState().getTime();
                     double tCurr = interpolator.getCurrentState().getTime();
@@ -355,7 +355,10 @@ public abstract class AdamsIntegratorAbstractTest {
                 interpolator.setPreviousTime(interpolator.getCurrentTime());
                 interpolator.setCurrentTime(tK);
                 for (ODEStepHandler handler : getStepHandlers()) {
-                    handler.handleStep(interpolator, i == nbSteps - 1);
+                    handler.handleStep(interpolator);
+                    if (i == nbSteps - 1) {
+                        handler.finish(interpolator.getCurrentState());
+                    }
                 }
             }
             return interpolator.getInterpolatedState(tStart);

@@ -169,7 +169,7 @@ public class FieldDenseOutputModelTest {
 
     private <T extends CalculusFieldElement<T>> void doTestErrorConditions(final Field<T> field) {
         FieldDenseOutputModel<T> cm = new FieldDenseOutputModel<T>();
-        cm.handleStep(buildInterpolator(field, 0, 1, new double[] { 0.0, 1.0, -2.0 }), true);
+        cm.handleStep(buildInterpolator(field, 0, 1, new double[] { 0.0, 1.0, -2.0 }));
 
         // dimension mismatch
         Assert.assertTrue(checkAppendError(field, cm, 1.0, 2.0, new double[] { 0.0, 1.0 }));
@@ -189,7 +189,7 @@ public class FieldDenseOutputModelTest {
                                                                      double t0, double t1, double[] y) {
         try {
             FieldDenseOutputModel<T> otherCm = new FieldDenseOutputModel<T>();
-            otherCm.handleStep(buildInterpolator(field, t0, t1, y), true);
+            otherCm.handleStep(buildInterpolator(field, t0, t1, y));
             cm.append(otherCm);
         } catch(MathIllegalArgumentException dme) {
             return true; // there was an allowable error

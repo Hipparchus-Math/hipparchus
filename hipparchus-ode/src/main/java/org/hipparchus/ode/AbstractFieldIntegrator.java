@@ -365,21 +365,31 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
                     }
                     // all event detectors agree we can advance to the current event time
 
+                    // handle the first part of the step, up to the event
+                    for (final FieldODEStepHandler<T> handler : stepHandlers) {
+                        handler.handleStep(restricted);
+                    }
+
+                    // acknowledge event occurrence
                     final EventOccurrence<T> occurrence = currentEvent.doEvent(eventState);
                     final Action action = occurrence.getAction();
                     isLastStep = action == Action.STOP;
 
                     if (isLastStep) {
+
                         // ensure the event is after the root if it is returned STOP
                         // this lets the user integrate to a STOP event and then restart
                         // integration from the same time.
+                        final FieldODEStateAndDerivative<T> savedState = eventState;
                         eventState = interpolator.getInterpolatedState(occurrence.getStopTime());
-                        restricted = interpolator.restrictStep(previousState, eventState);
-                    }
+                        restricted = interpolator.restrictStep(savedState, eventState);
 
-                    // handle the first part of the step, up to the event
-                    for (final FieldODEStepHandler<T> handler : stepHandlers) {
-                        handler.handleStep(restricted, isLastStep);
+                        // handle the almost zero size last part of the final step, at event time
+                        for (final FieldODEStepHandler<T> handler : stepHandlers) {
+                            handler.handleStep(restricted);
+                            handler.finish(restricted.getCurrentState());
+                        }
+
                     }
 
                     if (isLastStep) {
@@ -434,7 +444,10 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
 
         // handle the remaining part of the step, after all events if any
         for (FieldODEStepHandler<T> handler : stepHandlers) {
-            handler.handleStep(restricted, isLastStep);
+            handler.handleStep(restricted);
+            if (isLastStep) {
+                handler.finish(restricted.getCurrentState());
+            }
         }
 
         return currentState;

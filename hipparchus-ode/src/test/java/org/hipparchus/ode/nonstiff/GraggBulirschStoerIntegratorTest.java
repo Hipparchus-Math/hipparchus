@@ -299,16 +299,12 @@ public class GraggBulirschStoerIntegratorTest {
     @Test
     public void testIssue596() {
         ODEIntegrator integ = new GraggBulirschStoerIntegrator(1e-10, 100.0, 1e-7, 1e-7);
-        integ.addStepHandler(new ODEStepHandler() {
-
-            public void handleStep(ODEStateInterpolator interpolator, boolean isLast)
-                            throws MathIllegalStateException {
-                double t = interpolator.getCurrentState().getTime();
-                double[] y = interpolator.getInterpolatedState(t).getPrimaryState();
-                double[] yDot = interpolator.getInterpolatedState(t).getPrimaryDerivative();
-                Assert.assertEquals(3.0 * t - 5.0, y[0], 1.0e-14);
-                Assert.assertEquals(3.0, yDot[0], 1.0e-14);
-            }
+        integ.addStepHandler(interpolator -> {
+            double t = interpolator.getCurrentState().getTime();
+            double[] y = interpolator.getInterpolatedState(t).getPrimaryState();
+            double[] yDot = interpolator.getInterpolatedState(t).getPrimaryDerivative();
+            Assert.assertEquals(3.0 * t - 5.0, y[0], 1.0e-14);
+            Assert.assertEquals(3.0, yDot[0], 1.0e-14);
         });
         double[] y = {4.0};
         double t0 = 3.0;
@@ -352,8 +348,7 @@ public class GraggBulirschStoerIntegratorTest {
             nbSteps = 0;
             maxError = 0;
         }
-        public void handleStep(ODEStateInterpolator interpolator, boolean isLast)
-                        throws MathIllegalStateException {
+        public void handleStep(ODEStateInterpolator interpolator) {
 
             ++nbSteps;
             for (int a = 1; a < 100; ++a) {
@@ -371,10 +366,10 @@ public class GraggBulirschStoerIntegratorTest {
                     maxError = error;
                 }
             }
-            if (isLast) {
-                Assert.assertTrue(maxError < 2.7e-6);
-                Assert.assertTrue(nbSteps < 80);
-            }
+        }
+        public void finish(ODEStateAndDerivative finalState) {
+            Assert.assertTrue(maxError < 2.7e-6);
+            Assert.assertTrue(nbSteps < 80);
         }
         private int nbSteps;
         private double maxError;
@@ -395,7 +390,7 @@ public class GraggBulirschStoerIntegratorTest {
             minStep = 0;
             maxStep = 0;
         }
-        public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
+        public void handleStep(ODEStateInterpolator interpolator) {
 
             double step = FastMath.abs(interpolator.getCurrentState().getTime() -
                                        interpolator.getPreviousState().getTime());
@@ -411,11 +406,10 @@ public class GraggBulirschStoerIntegratorTest {
                     maxStep = step;
                 }
             }
-
-            if (isLast) {
-                Assert.assertTrue(minStep < 8.2e-3);
-                Assert.assertTrue(maxStep > 1.5);
-            }
+        }
+        public void finish(ODEStateAndDerivative finalState) {
+            Assert.assertTrue(minStep < 8.2e-3);
+            Assert.assertTrue(maxStep > 1.5);
         }
     }
 

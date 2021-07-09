@@ -22,7 +22,6 @@
 
 package org.hipparchus.ode.sampling;
 
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
@@ -180,22 +179,9 @@ public class StepNormalizer implements ODEStepHandler {
 
     }
 
-    /**
-     * Handle the last accepted step
-     * @param interpolator interpolator for the last accepted step. For
-     * efficiency purposes, the various integrators reuse the same
-     * object on each call, so if the instance wants to keep it across
-     * all calls (for example to provide at the end of the integration a
-     * continuous model valid throughout the integration range), it
-     * should build a local copy using the clone method and store this
-     * copy.
-     * @param isLast true if the step is the last one
-     * @exception MathIllegalStateException if the interpolator throws one because
-     * the number of functions evaluations is exceeded
-     */
+    /** {@inheritDoc} */
     @Override
-    public void handleStep(final ODEStateInterpolator interpolator, final boolean isLast)
-        throws MathIllegalStateException {
+    public void handleStep(final ODEStateInterpolator interpolator) {
         // The first time, update the last state with the start information.
         if (last == null) {
 
@@ -231,19 +217,21 @@ public class StepNormalizer implements ODEStepHandler {
             nextTime += h;
             nextInStep = isNextInStep(nextTime, interpolator);
         }
+    }
 
-        if (isLast) {
+    /** {@inheritDoc} */
+    @Override
+    public void finish(ODEStateAndDerivative finalState) {
             // There will be no more steps. The stored one should be given to
             // the handler. We may have to output one more step. Only the last
             // one of those should be flagged as being the last.
             boolean addLast = bounds.lastIncluded() &&
-                              last.getTime() != interpolator.getCurrentState().getTime();
+                              last.getTime() != finalState.getTime();
             doNormalizedStep(!addLast);
             if (addLast) {
-                last = interpolator.getCurrentState();
+                last = finalState;
                 doNormalizedStep(true);
             }
-        }
     }
 
     /**
