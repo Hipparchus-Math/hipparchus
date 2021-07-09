@@ -205,7 +205,7 @@ public class DenseOutputModel implements ODEStepHandler, Serializable {
         }
         steps.add(interpolator);
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public void finish(final ODEStateAndDerivative finalState) {
