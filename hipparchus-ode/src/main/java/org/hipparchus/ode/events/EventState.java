@@ -44,7 +44,7 @@ import org.hipparchus.util.FastMath;
  * proposed step.</p>
  *
  */
-public class EventState {
+public class EventState implements EventHandlerConfiguration {
 
     /** Event handler. */
     private final ODEEventHandler handler;
@@ -131,32 +131,34 @@ public class EventState {
         afterG = Double.NaN;
     }
 
-    /** Get the underlying event handler.
-     * @return underlying event handler
-     */
+    /** {@inheritDoc} */
+    @Override
     public ODEEventHandler getEventHandler() {
         return handler;
     }
 
-    /** Get the maximal time interval between events handler checks.
-     * @return maximal time interval between events handler checks
-     */
+    /** {@inheritDoc} */
+    @Override
     public double getMaxCheckInterval() {
         return maxCheckInterval;
     }
 
-    /** Get the convergence threshold for event localization.
-     * @return convergence threshold for event localization
-     */
+    /** {@inheritDoc} */
+    @Override
     public double getConvergence() {
         return convergence;
     }
 
-    /** Get the upper limit in the iteration count for event localization.
-     * @return upper limit in the iteration count for event localization
-     */
+    /** {@inheritDoc} */
+    @Override
     public int getMaxIterationCount() {
         return maxIterationCount;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+        return solver;
     }
 
     /** Reinitialize the beginning of the step.

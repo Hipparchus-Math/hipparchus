@@ -28,6 +28,7 @@ import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.EventHandlerConfiguration;
 import org.hipparchus.ode.events.EventState;
 import org.hipparchus.ode.events.EventState.EventOccurrence;
 import org.hipparchus.ode.events.ODEEventHandler;
@@ -155,6 +156,12 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
             list.add(state.getEventHandler());
         }
         return Collections.unmodifiableCollection(list);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Collection<EventHandlerConfiguration> getEventHandlersConfigurations() {
+        return Collections.unmodifiableCollection(eventsStates);
     }
 
     /** {@inheritDoc} */

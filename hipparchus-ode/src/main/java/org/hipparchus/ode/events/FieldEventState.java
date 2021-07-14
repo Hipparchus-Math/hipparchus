@@ -46,7 +46,7 @@ import org.hipparchus.util.FastMath;
  *
  * @param <T> the type of the field elements
  */
-public class FieldEventState<T extends CalculusFieldElement<T>> {
+public class FieldEventState<T extends CalculusFieldElement<T>> implements FieldEventHandlerConfiguration<T> {
 
     /** Event handler. */
     private final FieldODEEventHandler<T> handler;
@@ -133,32 +133,34 @@ public class FieldEventState<T extends CalculusFieldElement<T>> {
 
     }
 
-    /** Get the underlying event handler.
-     * @return underlying event handler
-     */
+    /** {@inheritDoc} */
+    @Override
     public FieldODEEventHandler<T> getEventHandler() {
         return handler;
     }
 
-    /** Get the maximal time interval between events handler checks.
-     * @return maximal time interval between events handler checks
-     */
+    /** {@inheritDoc} */
+    @Override
     public double getMaxCheckInterval() {
         return maxCheckInterval;
     }
 
-    /** Get the convergence threshold for event localization.
-     * @return convergence threshold for event localization
-     */
+    /** {@inheritDoc} */
+    @Override
     public T getConvergence() {
         return convergence;
     }
 
-    /** Get the upper limit in the iteration count for event localization.
-     * @return upper limit in the iteration count for event localization
-     */
+    /** {@inheritDoc} */
+    @Override
     public int getMaxIterationCount() {
         return maxIterationCount;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public BracketedRealFieldUnivariateSolver<T> getSolver() {
+        return solver;
     }
 
     /** Reinitialize the beginning of the step.

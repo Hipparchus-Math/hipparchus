@@ -23,6 +23,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.events.EventHandlerConfiguration;
 import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 
@@ -83,6 +84,7 @@ public interface ODEIntegrator  {
      * @param maxIterationCount upper limit of the iteration count in the event time
      *                          search
      * @see #getEventHandlers()
+     * @see #getEventHandlersConfigurations()
      * @see #clearEventHandlers()
      */
     void addEventHandler(ODEEventHandler handler, double maxCheckInterval,
@@ -103,6 +105,7 @@ public interface ODEIntegrator  {
      * @param solver            The root-finding algorithm to use to detect the state
      *                          events.
      * @see #getEventHandlers()
+     * @see #getEventHandlersConfigurations()
      * @see #clearEventHandlers()
      */
     void addEventHandler(ODEEventHandler handler, double maxCheckInterval,
@@ -112,13 +115,27 @@ public interface ODEIntegrator  {
     /** Get all the event handlers that have been added to the integrator.
      * @return an unmodifiable collection of the added events handlers
      * @see #addEventHandler(ODEEventHandler, double, double, int)
+     * @see #addEventHandler(ODEEventHandler, double, double, int, BracketedUnivariateSolver)
+     * @see #getEventHandlersConfigurations()
      * @see #clearEventHandlers()
      */
     Collection<ODEEventHandler> getEventHandlers();
 
+    /** Get all the event handlers configurations that have been added to the integrator.
+     * @return an unmodifiable collection of the added events handlers configurations
+     * @see #addEventHandler(ODEEventHandler, double, double, int)
+     * @see #addEventHandler(ODEEventHandler, double, double, int, BracketedUnivariateSolver)
+     * @see #getEventHandlers()
+     * @see #clearEventHandlers()
+     * @since 2.0
+     */
+    Collection<EventHandlerConfiguration> getEventHandlersConfigurations();
+
     /** Remove all the event handlers that have been added to the integrator.
      * @see #addEventHandler(ODEEventHandler, double, double, int)
+     * @see #addEventHandler(ODEEventHandler, double, double, int, BracketedUnivariateSolver)
      * @see #getEventHandlers()
+     * @see #getEventHandlersConfigurations()
      */
     void clearEventHandlers();
 

@@ -21,9 +21,12 @@ import java.util.Collection;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.events.FieldEventHandlerConfiguration;
 import org.hipparchus.ode.events.FieldODEEventHandler;
+import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
 
 /** This interface represents a first order integrator for
@@ -79,9 +82,9 @@ public interface FieldODEIntegrator<T extends CalculusFieldElement<T>> {
      * @param convergence convergence threshold in the event time search
      * @param maxIterationCount upper limit of the iteration count in
      * the event time search events.
-     * @see #addEventHandler(FieldODEEventHandler, double, double, int,
-     * org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver)
+     * @see #addEventHandler(FieldODEEventHandler, double, double, int, BracketedRealFieldUnivariateSolver)
      * @see #getEventHandlers()
+     * @see #getEventHandlersConfigurations()
      * @see #clearEventHandlers()
      */
     void addEventHandler(FieldODEEventHandler<T>  handler, double maxCheckInterval,
@@ -98,6 +101,7 @@ public interface FieldODEIntegrator<T extends CalculusFieldElement<T>> {
      * @param solver solver to use to locate the event
      * @see #addEventHandler(FieldODEEventHandler, double, double, int)
      * @see #getEventHandlers()
+     * @see #getEventHandlersConfigurations()
      * @see #clearEventHandlers()
      */
     void addEventHandler(FieldODEEventHandler<T>  handler, double maxCheckInterval,
@@ -107,13 +111,27 @@ public interface FieldODEIntegrator<T extends CalculusFieldElement<T>> {
     /** Get all the event handlers that have been added to the integrator.
      * @return an unmodifiable collection of the added events handlers
      * @see #addEventHandler(FieldODEEventHandler, double, double, int)
+     * @see #addEventHandler(FieldODEEventHandler, double, double, int, BracketedRealFieldUnivariateSolver)
+     * @see #getEventHandlersConfigurations()
      * @see #clearEventHandlers()
      */
     Collection<FieldODEEventHandler<T> > getEventHandlers();
 
+    /** Get all the event handlers configurations that have been added to the integrator.
+     * @return an unmodifiable collection of the added events handlers configurations
+     * @see #addEventHandler(ODEEventHandler, double, double, int)
+     * @see #addEventHandler(ODEEventHandler, double, double, int, BracketedUnivariateSolver)
+     * @see #getEventHandlers()
+     * @see #clearEventHandlers()
+     * @since 2.0
+     */
+    Collection<FieldEventHandlerConfiguration<T>> getEventHandlersConfigurations();
+
     /** Remove all the event handlers that have been added to the integrator.
      * @see #addEventHandler(FieldODEEventHandler, double, double, int)
+     * @see #addEventHandler(FieldODEEventHandler, double, double, int, BracketedRealFieldUnivariateSolver)
      * @see #getEventHandlers()
+     * @see #getEventHandlersConfigurations()
      */
     void clearEventHandlers();
 
