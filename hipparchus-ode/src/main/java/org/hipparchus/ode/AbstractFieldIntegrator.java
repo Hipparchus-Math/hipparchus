@@ -37,6 +37,7 @@ import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.FieldEventHandlerConfiguration;
 import org.hipparchus.ode.events.FieldEventState;
 import org.hipparchus.ode.events.FieldEventState.EventOccurrence;
 import org.hipparchus.ode.events.FieldODEEventHandler;
@@ -157,7 +158,7 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
                                 final double convergence,
                                 final int maxIterationCount,
                                 final BracketedRealFieldUnivariateSolver<T> solver) {
-        eventsStates.add(new FieldEventState<T>(handler, maxCheckInterval, field.getZero().add(convergence),
+        eventsStates.add(new FieldEventState<T>(handler, maxCheckInterval, field.getZero().newInstance(convergence),
                                                 maxIterationCount, solver));
     }
 
@@ -169,6 +170,12 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
             list.add(state.getEventHandler());
         }
         return Collections.unmodifiableCollection(list);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Collection<FieldEventHandlerConfiguration<T>> getEventHandlersConfigurations() {
+        return Collections.unmodifiableCollection(eventsStates);
     }
 
     /** {@inheritDoc} */

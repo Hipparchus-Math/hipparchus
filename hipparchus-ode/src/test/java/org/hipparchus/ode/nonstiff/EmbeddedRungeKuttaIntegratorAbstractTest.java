@@ -20,9 +20,11 @@ package org.hipparchus.ode.nonstiff;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ExpandableODE;
@@ -41,6 +43,7 @@ import org.hipparchus.ode.TestProblem7;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.VariationalEquation;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.EventHandlerConfiguration;
 import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
@@ -176,6 +179,17 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
           integ.addEventHandler(functions[l], Double.POSITIVE_INFINITY, convergence, 1000);
       }
       Assert.assertEquals(functions.length, integ.getEventHandlers().size());
+
+      List<EventHandlerConfiguration> configurations = new ArrayList<>(integ.getEventHandlersConfigurations());
+      Assert.assertEquals(2, configurations.size());
+      for (int i = 0; i < configurations.size(); ++i) {
+          Assert.assertSame(functions[i], configurations.get(i).getEventHandler());
+          Assert.assertEquals(Double.POSITIVE_INFINITY, configurations.get(i).getMaxCheckInterval(), 1.0);
+          Assert.assertEquals(convergence, configurations.get(i).getConvergence(), 1.0e-15 * convergence);
+          Assert.assertEquals(1000, configurations.get(i).getMaxIterationCount());
+          Assert.assertTrue(configurations.get(i).getSolver() instanceof BracketingNthOrderBrentSolver);
+      }
+
       integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
 
       Assert.assertEquals(0, handler.getMaximalValueError(), epsilonMaxValue);
