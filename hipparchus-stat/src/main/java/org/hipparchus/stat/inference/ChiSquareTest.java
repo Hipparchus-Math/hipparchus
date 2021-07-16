@@ -252,10 +252,9 @@ public class ChiSquareTest {
 
         // compute expected counts and chi-square
         double sumSq = 0.0d;
-        double expected = 0.0d;
         for (int row = 0; row < nRows; row++) {
             for (int col = 0; col < nCols; col++) {
-                expected = (rowSum[row] * colSum[col]) / total;
+                final double expected = (rowSum[row] * colSum[col]) / total;
                 sumSq += ((counts[row][col] - expected) *
                         (counts[row][col] - expected)) / expected;
             }
@@ -410,8 +409,6 @@ public class ChiSquareTest {
         // Compute and compare count sums
         long countSum1 = 0;
         long countSum2 = 0;
-        boolean unequalCounts = false;
-        double weight = 0.0;
         for (int i = 0; i < observed1.length; i++) {
             countSum1 += observed1[i];
             countSum2 += observed2[i];
@@ -421,21 +418,20 @@ public class ChiSquareTest {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NOT_ALLOWED);
         }
         // Compare and compute weight only if different
-        unequalCounts = countSum1 != countSum2;
+        double weight = 0.0;
+        boolean unequalCounts = countSum1 != countSum2;
         if (unequalCounts) {
             weight = FastMath.sqrt((double) countSum1 / (double) countSum2);
         }
         // Compute ChiSquare statistic
         double sumSq = 0.0d;
-        double dev = 0.0d;
-        double obs1 = 0.0d;
-        double obs2 = 0.0d;
         for (int i = 0; i < observed1.length; i++) {
             if (observed1[i] == 0 && observed2[i] == 0) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.OBSERVED_COUNTS_BOTTH_ZERO_FOR_ENTRY, i);
             } else {
-                obs1 = observed1[i];
-                obs2 = observed2[i];
+                final double obs1 = observed1[i];
+                final double obs2 = observed2[i];
+                final double dev;
                 if (unequalCounts) { // apply weights
                     dev = obs1/weight - obs2 * weight;
                 } else {

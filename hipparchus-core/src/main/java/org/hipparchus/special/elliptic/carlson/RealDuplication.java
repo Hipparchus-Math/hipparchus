@@ -49,7 +49,7 @@ abstract class RealDuplication {
      */
     RealDuplication(final double... v) {
 
-        this.initialV = v;
+        this.initialV = v.clone();
         this.initialA = initialMeanPoint(initialV);
 
         double max = 0;

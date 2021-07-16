@@ -178,17 +178,15 @@ public class FractionFormat extends AbstractFormat {
     public StringBuffer format(final Object obj,
                                final StringBuffer toAppendTo, final FieldPosition pos)
         throws MathIllegalArgumentException, MathIllegalStateException {
-        StringBuffer ret = null;
 
         if (obj instanceof Fraction) {
-            ret = format((Fraction) obj, toAppendTo, pos);
+            return format((Fraction) obj, toAppendTo, pos);
         } else if (obj instanceof Number) {
-            ret = format(new Fraction(((Number) obj).doubleValue()), toAppendTo, pos);
+            return format(new Fraction(((Number) obj).doubleValue()), toAppendTo, pos);
         } else {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.CANNOT_FORMAT_OBJECT_TO_FRACTION);
         }
 
-        return ret;
     }
 
     /**

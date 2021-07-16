@@ -268,10 +268,8 @@ public class Dfp implements CalculusFieldElement<Dfp> {
     protected Dfp(final DfpField field, double x) {
 
         // initialize as if 0
-        mant = new int[field.getRadixDigits()];
         sign = 1;
-        exp = 0;
-        nans = FINITE;
+        mant = new int[field.getRadixDigits()];
         this.field = field;
 
         long bits = Double.doubleToLongBits(x);
@@ -348,7 +346,6 @@ public class Dfp implements CalculusFieldElement<Dfp> {
         // initialize as if 0
         mant = new int[field.getRadixDigits()];
         sign = 1;
-        exp = 0;
         nans = FINITE;
         this.field = field;
 
@@ -533,7 +530,6 @@ public class Dfp implements CalculusFieldElement<Dfp> {
                       (striped[q+3] - '0');
             q += 4;
         }
-
 
         exp = (decimalPos+sciexp) / rsize;
 
@@ -1869,7 +1865,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
         int trial=0;    // trial quotient digit
         int minadj;     // minimum adjustment
         boolean trialgood; // Flag to indicate a good trail digit
-        int md=0;       // most sig digit in result
+        int md;         // most sig digit in result
         int excp;       // exceptions
 
         // make sure we don't mix number with different precision
@@ -2207,13 +2203,12 @@ public class Dfp implements CalculusFieldElement<Dfp> {
                 break;
         }
 
-        Dfp dx = newInstance(x);
-
         /* Now that we have the first pass estimate, compute the rest
        by the formula dx = (y - x*x) / (2x); */
 
+        Dfp dx;
         Dfp px  = getZero();
-        Dfp ppx = getZero();
+        Dfp ppx;
         while (x.unequal(px)) {
             dx = newInstance(x);
             dx.sign = -1;

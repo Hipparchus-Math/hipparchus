@@ -171,6 +171,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      *
      * @return the absolute value.
      */
+    @Override
     public FieldComplex<T> abs() {
         // we check NaN here because FastMath.hypot checks it after infinity
         return isNaN ? getNaN(getPartsField()) : createComplex(FastMath.hypot(real, imaginary), getPartsField().getZero());

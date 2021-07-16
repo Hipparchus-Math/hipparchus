@@ -51,10 +51,10 @@ public class OrderedEigenDecomposition extends EigenDecomposition {
         // ordering
         for (int ij = 0; ij < matrix.getRowDimension() - 1; ij++) {
             final Complex eigValue = eigenValues.pollFirst();
-            int currentIndex = -1;
+            int currentIndex;
             // searching the current index
             for (currentIndex = ij; currentIndex < matrix.getRowDimension(); currentIndex++) {
-                Complex compCurrent = null;
+                Complex compCurrent;
                 if (currentIndex == 0) {
                     compCurrent = new Complex(D.getEntry(currentIndex,
                                                          currentIndex), D.getEntry(currentIndex + 1,
@@ -87,7 +87,7 @@ public class OrderedEigenDecomposition extends EigenDecomposition {
             }
 
             // exchanging D
-            Complex previousValue = null;
+            Complex previousValue;
             if (ij == 0) {
                 previousValue = new Complex(D.getEntry(ij, ij), D.getEntry(ij + 1, ij));
             } else if (ij + 1 == matrix.getRowDimension()) {

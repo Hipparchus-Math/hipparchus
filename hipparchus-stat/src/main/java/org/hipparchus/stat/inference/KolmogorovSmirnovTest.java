@@ -240,8 +240,8 @@ public class KolmogorovSmirnovTest {
      */
     public double kolmogorovSmirnovTest(double[] x, double[] y, boolean strict) {
         final long lengthProduct = (long) x.length * y.length;
-        double[] xa = null;
-        double[] ya = null;
+        final double[] xa;
+        final double[] ya;
         if (lengthProduct < LARGE_SAMPLE_PRODUCT && hasTies(x,y)) {
             xa = x.clone();
             ya = y.clone();
@@ -608,18 +608,13 @@ public class KolmogorovSmirnovTest {
         final double z6 = z4 * z2;
         final double z8 = z4 * z4;
 
-        // Eventual return value
-        double ret = 0;
-
         // Compute K_0(z)
         double sum = 0;
-        double increment = 0;
-        double kTerm = 0;
         double z2Term = MathUtils.PI_SQUARED / (8 * z2);
         int k = 1;
         for (; k < MAXIMUM_PARTIAL_SUM_COUNT; k++) {
-            kTerm = 2 * k - 1;
-            increment = FastMath.exp(-z2Term * kTerm * kTerm);
+            final double kTerm = 2 * k - 1;
+            final double increment = FastMath.exp(-z2Term * kTerm * kTerm);
             sum += increment;
             if (increment <= PG_SUM_RELATIVE_ERROR * sum) {
                 break;
@@ -628,19 +623,17 @@ public class KolmogorovSmirnovTest {
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
             throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
-        ret = sum * FastMath.sqrt(2 * FastMath.PI) / z;
+        double ret = sum * FastMath.sqrt(2 * FastMath.PI) / z;
 
         // K_1(z)
         // Sum is -inf to inf, but k term is always (k + 1/2) ^ 2, so really have
         // twice the sum from k = 0 to inf (k = -1 is same as 0, -2 same as 1, ...)
         final double twoZ2 = 2 * z2;
         sum = 0;
-        kTerm = 0;
-        double kTerm2 = 0;
         for (k = 0; k < MAXIMUM_PARTIAL_SUM_COUNT; k++) {
-            kTerm = k + 0.5;
-            kTerm2 = kTerm * kTerm;
-            increment = (MathUtils.PI_SQUARED * kTerm2 - z2) * FastMath.exp(-MathUtils.PI_SQUARED * kTerm2 / twoZ2);
+            final double kTerm = k + 0.5;
+            final double kTerm2 = kTerm * kTerm;
+            final double increment = (MathUtils.PI_SQUARED * kTerm2 - z2) * FastMath.exp(-MathUtils.PI_SQUARED * kTerm2 / twoZ2);
             sum += increment;
             if (FastMath.abs(increment) < PG_SUM_RELATIVE_ERROR * FastMath.abs(sum)) {
                 break;
@@ -660,12 +653,10 @@ public class KolmogorovSmirnovTest {
         z2Term = 5 * z2;
         final double pi4 = MathUtils.PI_SQUARED * MathUtils.PI_SQUARED;
         sum = 0;
-        kTerm = 0;
-        kTerm2 = 0;
         for (k = 0; k < MAXIMUM_PARTIAL_SUM_COUNT; k++) {
-            kTerm = k + 0.5;
-            kTerm2 = kTerm * kTerm;
-            increment =  (z6Term + z4Term + MathUtils.PI_SQUARED * (z4Term - z2Term) * kTerm2 +
+            final double kTerm = k + 0.5;
+            final double kTerm2 = kTerm * kTerm;
+            final double increment =  (z6Term + z4Term + MathUtils.PI_SQUARED * (z4Term - z2Term) * kTerm2 +
                     pi4 * (1 - twoZ2) * kTerm2 * kTerm2) * FastMath.exp(-MathUtils.PI_SQUARED * kTerm2 / twoZ2);
             sum += increment;
             if (FastMath.abs(increment) < PG_SUM_RELATIVE_ERROR * FastMath.abs(sum)) {
@@ -676,10 +667,9 @@ public class KolmogorovSmirnovTest {
             throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         double sum2 = 0;
-        kTerm2 = 0;
         for (k = 1; k < MAXIMUM_PARTIAL_SUM_COUNT; k++) {
-            kTerm2 = k * k;
-            increment = MathUtils.PI_SQUARED * kTerm2 * FastMath.exp(-MathUtils.PI_SQUARED * kTerm2 / twoZ2);
+            final double kTerm2 = k * k;
+            final double increment = MathUtils.PI_SQUARED * kTerm2 * FastMath.exp(-MathUtils.PI_SQUARED * kTerm2 / twoZ2);
             sum2 += increment;
             if (FastMath.abs(increment) < PG_SUM_RELATIVE_ERROR * FastMath.abs(sum2)) {
                 break;
@@ -695,14 +685,12 @@ public class KolmogorovSmirnovTest {
         // Multiply coefficient denominators by 2, so omit doubling sums.
         final double pi6 = pi4 * MathUtils.PI_SQUARED;
         sum = 0;
-        double kTerm4 = 0;
-        double kTerm6 = 0;
         for (k = 0; k < MAXIMUM_PARTIAL_SUM_COUNT; k++) {
-            kTerm = k + 0.5;
-            kTerm2 = kTerm * kTerm;
-            kTerm4 = kTerm2 * kTerm2;
-            kTerm6 = kTerm4 * kTerm2;
-            increment = (pi6 * kTerm6 * (5 - 30 * z2) + pi4 * kTerm4 * (-60 * z2 + 212 * z4) +
+            final double kTerm = k + 0.5;
+            final double kTerm2 = kTerm * kTerm;
+            final double kTerm4 = kTerm2 * kTerm2;
+            final double kTerm6 = kTerm4 * kTerm2;
+            final double increment = (pi6 * kTerm6 * (5 - 30 * z2) + pi4 * kTerm4 * (-60 * z2 + 212 * z4) +
                             MathUtils.PI_SQUARED * kTerm2 * (135 * z4 - 96 * z6) - 30 * z6 - 90 * z8) *
                     FastMath.exp(-MathUtils.PI_SQUARED * kTerm2 / twoZ2);
             sum += increment;
@@ -715,9 +703,9 @@ public class KolmogorovSmirnovTest {
         }
         sum2 = 0;
         for (k = 1; k < MAXIMUM_PARTIAL_SUM_COUNT; k++) {
-            kTerm2 = k * k;
-            kTerm4 = kTerm2 * kTerm2;
-            increment = (-pi4 * kTerm4 + 3 * MathUtils.PI_SQUARED * kTerm2 * z2) *
+            final double kTerm2 = k * k;
+            final double kTerm4 = kTerm2 * kTerm2;
+            final double increment = (-pi4 * kTerm4 + 3 * MathUtils.PI_SQUARED * kTerm2 * z2) *
                     FastMath.exp(-MathUtils.PI_SQUARED * kTerm2 / twoZ2);
             sum2 += increment;
             if (FastMath.abs(increment) < PG_SUM_RELATIVE_ERROR * FastMath.abs(sum2)) {
@@ -753,7 +741,7 @@ public class KolmogorovSmirnovTest {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
                                                    hDouble, 1.0);
         }
-        BigFraction h = null;
+        BigFraction h;
         try {
             h = new BigFraction(hDouble, 1.0e-20, 10000);
         } catch (final MathIllegalStateException e1) {
@@ -999,7 +987,6 @@ public class KolmogorovSmirnovTest {
     private double normalizeD(double d, int n, int m) {
         final double resolution = 1 / ((double)n * m);
         final double tol = 1e-12;
-        double normalizedD = 0;
 
         // If d is smaller that the first mesh point, return 0
         // If greater than 1, return 1
@@ -1014,11 +1001,11 @@ public class KolmogorovSmirnovTest {
         final double resolutions = d / resolution;
         final double ceil = FastMath.ceil(resolutions);
         if (ceil - resolutions < tol) {
-           normalizedD = ceil * resolution;
+           return ceil * resolution;
         } else {
-           normalizedD = FastMath.floor(resolutions) * resolution;
+           return FastMath.floor(resolutions) * resolution;
         }
-        return normalizedD;
+
     }
 
     /**
@@ -1130,9 +1117,8 @@ public class KolmogorovSmirnovTest {
        // Find the smallest difference between values, or 1 if all values are the same
        double minDelta = 1;
        double prev = values[0];
-       double delta = 1;
        for (int i = 1; i < values.length; i++) {
-          delta = prev - values[i];
+          final double delta = prev - values[i];
           if (delta < minDelta) {
               minDelta = delta;
           }
@@ -1147,7 +1133,7 @@ public class KolmogorovSmirnovTest {
        // It is theoretically possible that jitter does not break ties, so repeat
        // until all ties are gone.  Bound the loop and throw MIE if bound is exceeded.
        int ct = 0;
-       boolean ties = true;
+       boolean ties;
        do {
            jitter(x, minDelta);
            jitter(y, minDelta);

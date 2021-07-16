@@ -250,9 +250,9 @@ public class BesselJ
     public static BesselJResult rjBesl(double x, double alpha, int nb) {
         final double[] b = new double[nb];
 
-        int ncalc = 0;
-        double alpem = 0;
-        double alp2em = 0;
+        int ncalc;
+        double alpem;
+        double alp2em;
 
         // ---------------------------------------------------------------------
         // Check for out of range arguments.
@@ -330,7 +330,7 @@ public class BesselJ
                 final double xc = FastMath.sqrt(PI2 / x);
                 final double mul = 0.125 / x;
                 final double xin = mul * mul;
-                int m = 0;
+                final int m;
                 if (x >= 130.0) {
                     m = 4;
                 } else if (x >= 35.0) {
@@ -403,8 +403,8 @@ public class BesselJ
                 // ---------------------------------------------------------------------
                 final int nbmx = nb - magx;
                 int n = magx + 1;
-                int nstart = 0;
-                int nend = 0;
+                int nstart;
+                int nend;
                 double en = 2 * (n + alpha);
                 double plast = 1;
                 double p = en / x;
@@ -467,8 +467,6 @@ public class BesselJ
                                 psavel = psave;
                                 psave = (en * psavel / x) - pold;
                                 if (psave * psavel > test) {
-                                    ncalc = l - 1;
-                                    readyToInitialize = true;
                                     break;
                                 }
                             }

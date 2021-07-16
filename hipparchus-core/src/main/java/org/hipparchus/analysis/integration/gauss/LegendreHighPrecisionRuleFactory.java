@@ -162,11 +162,8 @@ public class LegendreHighPrecisionRuleFactory extends BaseRuleFactory<BigDecimal
                 if (!done) {
                     if (pa.signum() * pc.signum() <= 0) {
                         b = c;
-                        pmb = pmc;
-                        pb = pc;
                     } else {
                         a = c;
-                        pma = pmc;
                         pa = pc;
                     }
                     c = a.add(b, mContext).multiply(oneHalf, mContext);

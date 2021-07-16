@@ -644,7 +644,7 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
                     pending -= splitEdgeConnections(segments);
                 }
                 if (pending > 0) {
-                    pending -= closeVerticesConnections(segments);
+                    closeVerticesConnections(segments);
                 }
 
                 // create the segment loops

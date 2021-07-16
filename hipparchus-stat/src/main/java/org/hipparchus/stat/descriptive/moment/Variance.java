@@ -365,10 +365,9 @@ public class Variance extends AbstractStorelessUnivariateStatistic
                 var = 0.0;
             } else if (length > 1) {
                 double accum = 0.0;
-                double dev = 0.0;
                 double accum2 = 0.0;
                 for (int i = begin; i < begin + length; i++) {
-                    dev = values[i] - mean;
+                    final double dev = values[i] - mean;
                     accum += dev * dev;
                     accum2 += dev;
                 }
@@ -468,10 +467,9 @@ public class Variance extends AbstractStorelessUnivariateStatistic
                 var = 0.0;
             } else if (length > 1) {
                 double accum = 0.0;
-                double dev = 0.0;
                 double accum2 = 0.0;
                 for (int i = begin; i < begin + length; i++) {
-                    dev = values[i] - mean;
+                    final double dev = values[i] - mean;
                     accum += weights[i] * (dev * dev);
                     accum2 += weights[i] * dev;
                 }

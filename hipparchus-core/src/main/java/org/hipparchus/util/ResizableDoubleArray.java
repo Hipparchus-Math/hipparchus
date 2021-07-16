@@ -524,7 +524,7 @@ public class ResizableDoubleArray implements Serializable {
         // current initial capacity is 1 and the expansion factor
         // is 1.000000000000000001.  The newly calculated size will be
         // rounded up to 2 after the multiplication is performed.
-        int newSize = 0;
+        final int newSize;
         if (expansionMode == ExpansionMode.MULTIPLICATIVE) {
             newSize = (int) FastMath.ceil(internalArray.length * expansionFactor);
         } else {

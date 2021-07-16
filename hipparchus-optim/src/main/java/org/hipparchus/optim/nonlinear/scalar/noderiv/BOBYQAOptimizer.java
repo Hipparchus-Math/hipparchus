@@ -398,7 +398,7 @@ public class BOBYQAOptimizer
         double cauchy = Double.NaN;
         double alpha = Double.NaN;
         double dsq = Double.NaN;
-        double crvmin = Double.NaN;
+        double crvmin;
 
         // Set some constants.
         // Parameter adjustments
@@ -442,8 +442,8 @@ public class BOBYQAOptimizer
         double denom = ZERO;
         double ratio = ZERO;
         double dnorm = ZERO;
-        double scaden = ZERO;
-        double biglsq = ZERO;
+        double scaden;
+        double biglsq;
         double distsq = ZERO;
 
         // Update GOPT if necessary before the first iteration and after each
@@ -544,7 +544,7 @@ public class BOBYQAOptimizer
                         }
                         bdtest += HALF * curv * rho;
                         if (bdtest < bdtol) {
-                            state = 650; break;
+                            break;
                         }
                         // throw new PathIsExploredException(); // XXX
                     }
@@ -1359,7 +1359,7 @@ public class BOBYQAOptimizer
 
             step = slbd;
             int isbd = ilbd;
-            double vlag = Double.NaN;
+            double vlag;
             if (k == knew) {
                 final double diff = dderiv - ONE;
                 vlag = slbd * (dderiv - slbd * diff);
@@ -1809,8 +1809,8 @@ public class BOBYQAOptimizer
         final int n = currentBest.getDimension();
         final int npt = numberOfInterpolationPoints;
 
-        double dsq = Double.NaN;
-        double crvmin = Double.NaN;
+        double dsq;
+        double crvmin;
 
         // Local variables
         double dhd;
@@ -1826,26 +1826,26 @@ public class BOBYQAOptimizer
         double angt = 0;
         double qred;
         int isav;
-        double temp = 0;
+        double temp;
         double xsav = 0;
-        double xsum = 0;
+        double xsum;
         double angbd = 0;
         double dredg = 0;
         double sredg = 0;
-        double resid = 0;
-        double delsq = 0;
+        double resid;
+        double delsq;
         double ggsav = 0;
-        double tempa = 0;
-        double tempb = 0;
-        double redmax = 0;
+        double tempa;
+        double tempb;
+        double redmax;
         double dredsq = 0;
-        double redsav = 0;
+        double redsav;
         double gredsq = 0;
-        double rednew = 0;
+        double rednew;
         int itcsav = 0;
         double rdprev = 0;
         double rdnext = 0;
-        double stplen = 0;
+        double stplen;
         double stepsq = 0;
         int itermax = 0;
 
@@ -2097,11 +2097,11 @@ public class BOBYQAOptimizer
                     if (tempa <= ZERO) {
                         ++nact;
                         xbdi.setEntry(i, MINUS_ONE);
-                        state = 100; break;
+                        break;
                     } else if (tempb <= ZERO) {
                         ++nact;
                         xbdi.setEntry(i, ONE);
-                        state = 100; break;
+                        break;
                     }
                     // Computing 2nd power
                     double d1 = trialStepPoint.getEntry(i);

@@ -235,7 +235,7 @@ public class ComplexFormat {
         pos.setEndIndex(0);
 
         CompositeFormat.formatDouble(absIm, getImaginaryFormat(), toAppendTo, pos);
-        if (toAppendTo.toString().equals("1")) {
+        if ("1".equals(toAppendTo.toString())) {
             // Remove the character "1" if it is the only one.
             toAppendTo.setLength(0);
         }
@@ -260,19 +260,15 @@ public class ComplexFormat {
                                FieldPosition pos)
         throws MathIllegalArgumentException {
 
-        StringBuffer ret = null;
-
         if (obj instanceof Complex) {
-            ret = format( (Complex)obj, toAppendTo, pos);
+            return format( (Complex)obj, toAppendTo, pos);
         } else if (obj instanceof Number) {
-            ret = format(new Complex(((Number)obj).doubleValue(), 0.0),
-                         toAppendTo, pos);
+            return format(new Complex(((Number)obj).doubleValue(), 0.0), toAppendTo, pos);
         } else {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.CANNOT_FORMAT_INSTANCE_AS_COMPLEX,
                                                    obj.getClass().getName());
         }
 
-        return ret;
     }
 
     /**

@@ -726,7 +726,6 @@ public final class StatUtils {
 
         double sum1 = 0d;
         double sum2 = 0d;
-        double diff = 0d;
         int n = sample1.length;
         MathArrays.checkEqualLength(sample1, sample2);
         if (n < 2) {
@@ -734,7 +733,7 @@ public final class StatUtils {
                                                    n, 2);
         }
         for (int i = 0; i < n; i++) {
-            diff = sample1[i] - sample2[i];
+            final double diff = sample1[i] - sample2[i];
             sum1 += (diff - meanDifference) *(diff - meanDifference);
             sum2 += diff - meanDifference;
         }

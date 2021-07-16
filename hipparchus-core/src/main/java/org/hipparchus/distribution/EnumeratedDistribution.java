@@ -174,7 +174,7 @@ public class EnumeratedDistribution<T> implements Serializable {
         if (!posWt) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.WEIGHT_AT_LEAST_ONE_NON_ZERO);
         }
-        double[] normWt = null;
+        double[] normWt;
         if (Precision.equals(sumWt, 1d, 10)) { // allow small error (10 ulps)
             normWt = weights;
         } else {

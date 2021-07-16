@@ -752,12 +752,10 @@ public class RandomPercentile
             this.randomGenerator = original.randomGenerator;
             this.registry = new HashMap<>();
             Iterator<Buffer> iterator = original.iterator();
-            Buffer current = null;
-            Buffer newCopy = null;
             while (iterator.hasNext()) {
-                current = iterator.next();
+                final Buffer current = iterator.next();
                 // Create and register a new buffer at the same level
-                newCopy = create(current.getLevel());
+                final Buffer newCopy = create(current.getLevel());
                 // Consume the data
                 final double[] data = current.getData();
                 for (double value : data) {

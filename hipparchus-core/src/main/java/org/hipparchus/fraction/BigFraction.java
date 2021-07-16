@@ -294,8 +294,8 @@ public class BigFraction
         long p1 = a0;
         long q1 = 1;
 
-        long p2 = 0;
-        long q2 = 1;
+        long p2;
+        long q2;
 
         int n = 0;
         boolean stop = false;
@@ -557,9 +557,8 @@ public class BigFraction
             return fraction;
         }
 
-        BigInteger num = null;
-        BigInteger den = null;
-
+        BigInteger num;
+        BigInteger den;
         if (denominator.equals(fraction.denominator)) {
             num = numerator.add(fraction.numerator);
             den = denominator;
@@ -1206,8 +1205,8 @@ public class BigFraction
             return fraction.negate();
         }
 
-        BigInteger num = null;
-        BigInteger den = null;
+        BigInteger num;
+        BigInteger den;
         if (denominator.equals(fraction.denominator)) {
             num = numerator.subtract(fraction.numerator);
             den = denominator;
@@ -1230,15 +1229,13 @@ public class BigFraction
      */
     @Override
     public String toString() {
-        String str = null;
         if (BigInteger.ONE.equals(denominator)) {
-            str = numerator.toString();
+            return numerator.toString();
         } else if (BigInteger.ZERO.equals(numerator)) {
-            str = "0";
+            return "0";
         } else {
-            str = numerator + " / " + denominator;
+            return numerator + " / " + denominator;
         }
-        return str;
     }
 
     /** {@inheritDoc} */

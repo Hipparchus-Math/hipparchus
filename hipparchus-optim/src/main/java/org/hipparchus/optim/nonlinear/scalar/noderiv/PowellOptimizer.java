@@ -190,19 +190,17 @@ public class PowellOptimizer
             incrementIterationCount();
 
             double fX = fVal;
-            double fX2 = 0;
             double delta = 0;
             int bigInd = 0;
-            double alphaMin = 0;
 
             for (int i = 0; i < n; i++) {
                 final double[] d = direc[i].clone();
 
-                fX2 = fVal;
+                final double fX2 = fVal;
 
                 final UnivariatePointValuePair optimum = line.search(x, d);
                 fVal = optimum.getValue();
-                alphaMin = optimum.getPoint();
+                final double alphaMin = optimum.getPoint();
                 final double[][] result = newPointAndDirection(x, d, alphaMin);
                 x = result[0];
 
@@ -238,7 +236,7 @@ public class PowellOptimizer
             }
 
             x1 = x.clone();
-            fX2 = computeObjectiveValue(x2);
+            final double fX2 = computeObjectiveValue(x2);
 
             if (fX > fX2) {
                 double t = 2 * (fX + fX2 - 2 * fVal);
@@ -250,7 +248,7 @@ public class PowellOptimizer
                 if (t < 0.0) {
                     final UnivariatePointValuePair optimum = line.search(x, d);
                     fVal = optimum.getValue();
-                    alphaMin = optimum.getPoint();
+                    final double alphaMin = optimum.getPoint();
                     final double[][] result = newPointAndDirection(x, d, alphaMin);
                     x = result[0];
 

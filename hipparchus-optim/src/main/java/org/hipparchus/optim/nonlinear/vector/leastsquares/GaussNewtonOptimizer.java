@@ -25,7 +25,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.LUDecomposition;
 import org.hipparchus.linear.MatrixDecomposer;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.QRDecomposer;
@@ -52,7 +51,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
     /**
      * The singularity threshold for matrix decompositions. Determines when a {@link
      * MathIllegalStateException} is thrown. The current value was the default value for {@link
-     * LUDecomposition}.
+     * org.hipparchus.linear.LUDecomposition}.
      */
     private static final double SINGULARITY_THRESHOLD = 1e-11;
 

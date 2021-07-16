@@ -21,7 +21,6 @@ import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.FieldComplex;
 import org.hipparchus.special.elliptic.carlson.CarlsonEllipticIntegral;
 import org.hipparchus.special.elliptic.jacobi.JacobiEllipticBuilder;
-import org.hipparchus.special.elliptic.jacobi.JacobiTheta;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -34,8 +33,8 @@ import org.hipparchus.util.MathUtils;
  * Legendre elliptic integrals} are defined in terms of elliptic modulus {@code k} whereas
  * {@link JacobiEllipticBuilder#build(double) Jacobi elliptic functions} (which
  * are their inverses) are defined in terms of parameter {@code m} and {@link
- * JacobiTheta#JacobiTheta(double) Jacobi theta functions} are defined
- * in terms of the {@link
+ * org.hipparchus.special.elliptic.jacobi.JacobiTheta#JacobiTheta(double) Jacobi theta
+ * functions} are defined in terms of the {@link
  * org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral#nome(double)
  * nome q}. All are related as {@code k² = m} and the nome can be computed from ratios of complete
  * elliptic integrals.

@@ -467,6 +467,7 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
      * @exception MathIllegalArgumentException if the number of derivatives
      * in the array is not equal to {@link #getOrder() order} + 1
      */
+    @Override
     public DerivativeStructure compose(final double ... f)
         throws MathIllegalArgumentException {
 

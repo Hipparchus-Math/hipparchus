@@ -90,7 +90,7 @@ abstract class AbstractConvexHullGenerator2D implements ConvexHullGenerator2D {
         // check for null points
         MathUtils.checkNotNull(points);
 
-        Collection<Vector2D> hullVertices = null;
+        final Collection<Vector2D> hullVertices;
         if (points.size() < 2) {
             hullVertices = points;
         } else {

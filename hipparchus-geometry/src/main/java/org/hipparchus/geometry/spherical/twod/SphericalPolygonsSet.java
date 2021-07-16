@@ -569,7 +569,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
                     pending -= splitEdgeConnections(edges);
                 }
                 if (pending > 0) {
-                    pending -= closeVerticesConnections(edges);
+                    closeVerticesConnections(edges);
                 }
 
                 // extract the edges loops

@@ -305,7 +305,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
 
         int iteration = 0;
         final int max = (maxIterations < 0) ? Integer.MAX_VALUE : maxIterations;
-        double difference = 0.0;
+        double difference;
 
         do {
             saveMembershipMatrix(oldMatrix);

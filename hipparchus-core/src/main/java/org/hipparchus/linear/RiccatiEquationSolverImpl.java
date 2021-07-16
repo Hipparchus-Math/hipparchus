@@ -201,13 +201,12 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
     private RealMatrix approximateP(final RealMatrix A, final RealMatrix B,
                                     final RealMatrix Q, final RealMatrix R, final RealMatrix R_inv,
                                     final RealMatrix initialP, final int maxIterations, final double epsilon) {
-        RealMatrix K_ = null;
         RealMatrix P_ = initialP;
 
         double error = 1;
         int i = 1;
         while (error > epsilon) {
-            K_ = P_.multiply(B).multiply(R_inv).scalarMultiply(-1);
+            final RealMatrix K_ = P_.multiply(B).multiply(R_inv).scalarMultiply(-1);
 
             // X = AA+BB*K1';
             final RealMatrix X = A.add(B.multiplyTransposed(K_));

@@ -245,12 +245,11 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
                  return 0.0;
              } else {
 
-                 double dev = 0.0;
                  double sumsq = 0.0;
                  final int end = start + length;
                  for (int i = start; i < end; i++) {
                      if (direction.considerObservation(values[i], cutoff)) {
-                         dev = values[i] - cutoff;
+                         final double dev = values[i] - cutoff;
                          sumsq += dev * dev;
                      }
                  }

@@ -100,7 +100,7 @@ public class SplineInterpolator implements UnivariateInterpolator, FieldUnivaria
         final double z[] = new double[n + 1];
         mu[0] = 0d;
         z[0] = 0d;
-        double g = 0;
+        double g;
         for (int i = 1; i < n; i++) {
             g = 2d * (x[i+1]  - x[i - 1]) - h[i - 1] * mu[i -1];
             mu[i] = h[i] / g;

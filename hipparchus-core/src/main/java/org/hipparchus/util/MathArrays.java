@@ -2058,10 +2058,9 @@ public class MathArrays {
             combinedLength += a.length;
         }
         int offset = 0;
-        int curLength = 0;
         final double[] combined = new double[combinedLength];
         for (int i = 0; i < x.length; i++) {
-            curLength = x[i].length;
+            final int curLength = x[i].length;
             System.arraycopy(x[i], 0, combined, offset, curLength);
             offset += curLength;
         }

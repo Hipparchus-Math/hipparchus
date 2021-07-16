@@ -200,11 +200,10 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 
             // Pivot if necessary
             if (max != col) {
-                T tmp = field.getZero();
                 final T[] luMax = lu[max];
                 final T[] luCol = lu[col];
                 for (int i = 0; i < m; i++) {
-                    tmp = luMax[i];
+                    final T tmp = luMax[i];
                     luMax[i] = luCol[i];
                     luCol[i] = tmp;
                 }

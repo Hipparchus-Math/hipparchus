@@ -514,13 +514,13 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
         int pos2;
         int pos1;
         int start = 0;
-        double total = 0;
         for (int row = 0; row < nreq; row++) {
             pos2 = start;
             if (!this.lindep[row]) {
                 for (int col = row; col < nreq; col++) {
                     if (!this.lindep[col]) {
                         pos1 = start + col - row;
+                        double total;
                         if (row == col) {
                             total = 1.0 / d[col];
                         } else {
@@ -553,17 +553,14 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
      */
     private void inverse(double[] rinv, int nreq) {
         int pos = nreq * (nreq - 1) / 2 - 1;
-        int pos1 = -1;
-        int pos2 = -1;
-        double total = 0.0;
         Arrays.fill(rinv, Double.NaN);
         for (int row = nreq - 1; row > 0; --row) {
             if (!this.lindep[row]) {
                 final int start = (row - 1) * (nvars + nvars - row) / 2;
                 for (int col = nreq; col > row; --col) {
-                    pos1 = start;
-                    pos2 = pos;
-                    total = 0.0;
+                    int pos1 = start;
+                    int pos2 = pos;
+                    double total = 0.0;
                     for (int k = row; k < col - 1; k++) {
                         pos2 += nreq - k - 1;
                         if (!this.lindep[k]) {
@@ -713,7 +710,7 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
         if (!this.rss_set) {
             ss();
         }
-        int count = 0;
+        final int count;
         if (from < to) {
             first = from;
             inc = 1;

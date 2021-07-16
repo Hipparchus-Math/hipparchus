@@ -1367,12 +1367,11 @@ public class FastMath {
 
             /* Compute x - 1.0 and split it */
             double xa = x - 1.0;
-            double xb = xa - x + 1.0;
             double tmp = xa * HEX_40000000;
             double aa = xa + tmp - tmp;
             double ab = xa - aa;
             xa = aa;
-            xb = ab;
+            double xb = ab;
 
             final double[] lnCoef_last = LN_QUICK_COEF[LN_QUICK_COEF.length - 1];
             double ya = lnCoef_last[0];
@@ -1422,7 +1421,7 @@ public class FastMath {
         //double epsilon = (x - y) / y;
         final double epsilon = (bits & 0x3ffffffffffL) / (TWO_POWER_52 + (bits & 0x000ffc0000000000L));
 
-        double lnza = 0.0;
+        double lnza;
         double lnzb = 0.0;
 
         if (hiPrec != null) {
@@ -2168,7 +2167,8 @@ public class FastMath {
 
         // Compute cosine
 
-        a = b = c = d = 0.0;
+        a = 0.0;
+        b = 0.0;
 
         t = costA*cosEpsA;
         c = a + t;

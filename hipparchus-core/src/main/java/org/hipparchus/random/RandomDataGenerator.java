@@ -445,7 +445,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
             double p = FastMath.exp(-mean);
             long n = 0;
             double r = 1.0d;
-            double rnd = 1.0d;
+            double rnd;
 
             while (n < 1000 * mean) {
                 rnd = randomGenerator.nextDouble();
@@ -473,13 +473,13 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
             final double p2 = a2 / aSum;
             final double c1 = 1 / (8 * lambda);
 
-            double x = 0;
+            double x;
             double y = 0;
-            double v = 0;
-            int a = 0;
-            double t = 0;
-            double qr = 0;
-            double qa = 0;
+            double v;
+            int a;
+            double t;
+            double qr;
+            double qa;
             for (;;) {
                 final double u = randomGenerator.nextDouble();
                 if (u <= p1) {

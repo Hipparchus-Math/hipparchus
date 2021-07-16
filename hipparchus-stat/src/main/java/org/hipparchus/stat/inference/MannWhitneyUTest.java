@@ -408,7 +408,6 @@ public class MannWhitneyUTest {
         }
         work[1] = 0;
         int in = max;
-        long sum = 0;
         for (int i = 2; i <= min; i++) {
             work[i] = 0;
             in = in + max;
@@ -418,7 +417,7 @@ public class MannWhitneyUTest {
             for (int j = 1; j <= l; j++) {
                 k++;
                 n1 = n1 - 1;
-                sum = out[j] + work[j];
+                final long sum = out[j] + work[j];
                 out[j] = sum;
                 work[k] = sum - out[n1];
                 out[n1] = sum;

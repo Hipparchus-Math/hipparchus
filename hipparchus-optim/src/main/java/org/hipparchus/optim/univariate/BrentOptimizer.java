@@ -163,15 +163,12 @@ public class BrentOptimizer extends UnivariateOptimizer {
             // Default stopping criterion.
             final boolean stop = FastMath.abs(x - m) <= tol2 - 0.5 * (b - a);
             if (!stop) {
-                double p = 0;
-                double q = 0;
-                double r = 0;
-                double u = 0;
+                double u;
 
                 if (FastMath.abs(e) > tol1) { // Fit parabola.
-                    r = (x - w) * (fx - fv);
-                    q = (x - v) * (fx - fw);
-                    p = (x - v) * q - (x - w) * r;
+                    double r = (x - w) * (fx - fv);
+                    double q = (x - v) * (fx - fw);
+                    double p = (x - v) * q - (x - w) * r;
                     q = 2 * (q - r);
 
                     if (q > 0) {

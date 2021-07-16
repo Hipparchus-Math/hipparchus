@@ -146,11 +146,10 @@ public class LUDecomposition {
 
             // Pivot if necessary
             if (max != col) {
-                double tmp = 0;
                 final double[] luMax = lu[max];
                 final double[] luCol = lu[col];
                 for (int i = 0; i < m; i++) {
-                    tmp = luMax[i];
+                    final double tmp = luMax[i];
                     luMax[i] = luCol[i];
                     luCol[i] = tmp;
                 }

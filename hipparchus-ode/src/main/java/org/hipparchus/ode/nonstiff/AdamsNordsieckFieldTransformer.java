@@ -197,8 +197,7 @@ public class AdamsNordsieckFieldTransformer<T extends CalculusFieldElement<T>> {
             Map<Field<? extends CalculusFieldElement<?>>,
                       AdamsNordsieckFieldTransformer<? extends CalculusFieldElement<?>>> map = CACHE.get(nSteps);
             if (map == null) {
-                map = new HashMap<Field<? extends CalculusFieldElement<?>>,
-                                        AdamsNordsieckFieldTransformer<? extends CalculusFieldElement<?>>>();
+                map = new HashMap<>();
                 CACHE.put(nSteps, map);
             }
             @SuppressWarnings("unchecked")

@@ -284,7 +284,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
                 root[i] = solve(subarray, initial);
                 // Polynomial deflation using synthetic division.
                 Complex newc = c[n - i];
-                Complex oldc = null;
+                Complex oldc;
                 for (int j = n - i - 1; j >= 0; j--) {
                     oldc = c[j];
                     c[j] = newc;

@@ -119,7 +119,7 @@ public class HermiteRuleFactory extends BaseRuleFactory<Double> {
             // P[j-1](c)
             double hmc = H0;
             // P[j](c)
-            double hc = H1 * c;
+            double hc;
             boolean done = false;
             while (!done) {
                 done = b - a <= Math.ulp(c);
@@ -138,11 +138,8 @@ public class HermiteRuleFactory extends BaseRuleFactory<Double> {
                 if (!done) {
                     if (ha * hc < 0) {
                         b = c;
-                        hmb = hmc;
-                        hb = hc;
                     } else {
                         a = c;
-                        hma = hmc;
                         ha = hc;
                     }
                     c = 0.5 * (a + b);

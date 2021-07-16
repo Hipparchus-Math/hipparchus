@@ -54,7 +54,7 @@ abstract class FieldDuplication<T extends CalculusFieldElement<T>> {
     @SafeVarargs
     FieldDuplication(final T... v) {
 
-        this.initialV = v;
+        this.initialV = v.clone();
         this.initialA = initialMeanPoint(initialV);
 
         T max = initialA.getField().getZero();
