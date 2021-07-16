@@ -21,7 +21,6 @@ import java.util.Collection;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
-import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.events.FieldEventHandlerConfiguration;
@@ -119,7 +118,7 @@ public interface FieldODEIntegrator<T extends CalculusFieldElement<T>> {
     /** Get all the event handlers configurations that have been added to the integrator.
      * @return an unmodifiable collection of the added events handlers configurations
      * @see #addEventHandler(FieldODEEventHandler, double, double, int)
-     * @see #addEventHandler(FieldODEEventHandler, double, double, int, BracketedUnivariateSolver)
+     * @see #addEventHandler(FieldODEEventHandler, double, double, int, BracketedRealFieldUnivariateSolver)
      * @see #getEventHandlers()
      * @see #clearEventHandlers()
      * @since 2.0
