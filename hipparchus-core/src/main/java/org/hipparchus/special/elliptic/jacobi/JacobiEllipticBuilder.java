@@ -82,6 +82,7 @@ public class JacobiEllipticBuilder {
      * elliptic integrals.
      * </p>
      * @param m parameter of the Jacobi elliptic function
+     * @param <T> type of the field elements
      * @return selected algorithm
      */
     public static <T extends CalculusFieldElement<T>> FieldJacobiElliptic<T> build(final T m) {
@@ -130,6 +131,7 @@ public class JacobiEllipticBuilder {
      * elliptic integrals.
      * </p>
      * @param m parameter of the Jacobi elliptic function
+     * @param <T> type of the field elements
      * @return selected algorithm
      */
     public static <T extends CalculusFieldElement<T>> FieldJacobiElliptic<FieldComplex<T>> build(final FieldComplex<T> m) {

@@ -16,8 +16,6 @@
  */
 package org.hipparchus.special.elliptic.carlson;
 
-import org.hipparchus.complex.Complex;
-import org.hipparchus.complex.FieldComplex;
 import org.hipparchus.util.FastMath;
 
 /** Duplication algorithm for Carlson R<sub>F</sub> elliptic integral.
@@ -132,7 +130,7 @@ class RfRealDuplication extends RealDuplication {
     /** Compute Carlson complete elliptic integral R<sub>F</sub>(u, v, 0).
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
-     * @param <T> type of the field elements (really {@link Complex} or {@link FieldComplex})
+     * @return Carlson complete elliptic integral R<sub>F</sub>(u, v, 0)
      */
     private double completeIntegral(final double x, final double y) {
 

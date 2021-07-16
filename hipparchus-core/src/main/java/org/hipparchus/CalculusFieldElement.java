@@ -48,7 +48,7 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @param value constant real value
      * @return instance corresponding to a constant real value
      */
-    T newInstance(final double value);
+    T newInstance(double value);
 
     /** '+' operator.
      * @param a right hand side parameter of the operator

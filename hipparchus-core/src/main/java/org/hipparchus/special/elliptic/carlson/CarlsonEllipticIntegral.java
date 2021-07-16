@@ -69,6 +69,7 @@ public class CarlsonEllipticIntegral {
      * </p>
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
+     * @return Carlson elliptic integral R<sub>C</sub>
      */
     public static double rC(final double x, final double y) {
         if (y < 0) {
@@ -91,6 +92,7 @@ public class CarlsonEllipticIntegral {
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      * @param <T> type of the field elements
+     * @return Carlson elliptic integral R<sub>C</sub>
      */
     public static <T extends CalculusFieldElement<T>> T rC(final T x, final T y) {
         if (y.getReal() < 0) {
@@ -112,6 +114,7 @@ public class CarlsonEllipticIntegral {
      * </p>
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
+     * @return Carlson elliptic integral R<sub>C</sub>
      */
     public static Complex rC(final Complex x, final Complex y) {
         if (y.getImaginaryPart() == 0 && y.getRealPart() < 0) {
@@ -134,6 +137,7 @@ public class CarlsonEllipticIntegral {
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      * @param <T> type of the field elements
+     * @return Carlson elliptic integral R<sub>C</sub>
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> rC(final FieldComplex<T> x, final FieldComplex<T> y) {
         if (y.getImaginaryPart().isZero() && y.getRealPart().getReal() < 0) {
@@ -156,6 +160,7 @@ public class CarlsonEllipticIntegral {
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
+     * @return Carlson elliptic integral R<sub>F</sub>
      */
     public static double rF(final double x, final double y, final double z) {
         return new RfRealDuplication(x, y, z).integral();
@@ -172,6 +177,7 @@ public class CarlsonEllipticIntegral {
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
      * @param <T> type of the field elements
+     * @return Carlson elliptic integral R<sub>F</sub>
      */
     public static <T extends CalculusFieldElement<T>> T rF(final T x, final T y, final T z) {
         return new RfFieldDuplication<>(x, y, z).integral();
@@ -187,6 +193,7 @@ public class CarlsonEllipticIntegral {
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
+     * @return Carlson elliptic integral R<sub>F</sub>
      */
     public static Complex rF(final Complex x, final Complex y, final Complex z) {
         return new RfFieldDuplication<>(x, y, z).integral();
@@ -203,6 +210,7 @@ public class CarlsonEllipticIntegral {
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
      * @param <T> type of the field elements
+     * @return Carlson elliptic integral R<sub>F</sub>
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> rF(final FieldComplex<T> x, final FieldComplex<T> y, final FieldComplex<T> z) {
         return new RfFieldDuplication<>(x, y, z).integral();
@@ -219,6 +227,7 @@ public class CarlsonEllipticIntegral {
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
      * @param p fourth <em>not</em> symmetric variable of the integral
+     * @return Carlson elliptic integral R<sub>J</sub>
      */
     public static double rJ(final double x, final double y, final double z, final double p) {
         return new RjRealDuplication(x, y, z, p).integral();
@@ -236,6 +245,7 @@ public class CarlsonEllipticIntegral {
      * @param z third symmetric variable of the integral
      * @param p fourth <em>not</em> symmetric variable of the integral
      * @param <T> type of the field elements
+     * @return Carlson elliptic integral R<sub>J</sub>
      */
     public static <T extends CalculusFieldElement<T>> T rJ(final T x, final T y, final T z, final T p) {
         return new RjFieldDuplication<>(x, y, z, p).integral();
@@ -252,6 +262,7 @@ public class CarlsonEllipticIntegral {
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
      * @param p fourth <em>not</em> symmetric variable of the integral
+     * @return Carlson elliptic integral R<sub>J</sub>
      */
     public static Complex rJ(final Complex x, final Complex y, final Complex z, final Complex p) {
         return new RjFieldDuplication<>(x, y, z, p).integral();
@@ -269,6 +280,7 @@ public class CarlsonEllipticIntegral {
      * @param z third symmetric variable of the integral
      * @param p fourth <em>not</em> symmetric variable of the integral
      * @param <T> type of the field elements
+     * @return Carlson elliptic integral R<sub>J</sub>
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> rJ(final FieldComplex<T> x, final FieldComplex<T> y,
                                                                          final FieldComplex<T> z, final FieldComplex<T> p) {
@@ -285,6 +297,7 @@ public class CarlsonEllipticIntegral {
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
+     * @return Carlson elliptic integral R<sub>D</sub>
      */
     public static double rD(final double x, final double y, final double z) {
         return new RdRealDuplication(x, y, z).integral();
@@ -301,6 +314,7 @@ public class CarlsonEllipticIntegral {
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
      * @param <T> type of the field elements
+     * @return Carlson elliptic integral R<sub>D</sub>
      */
     public static <T extends CalculusFieldElement<T>> T rD(final T x, final T y, final T z) {
         return new RdFieldDuplication<>(x, y, z).integral();
@@ -316,6 +330,7 @@ public class CarlsonEllipticIntegral {
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
+     * @return Carlson elliptic integral R<sub>D</sub>
      */
     public static Complex rD(final Complex x, final Complex y, final Complex z) {
         return new RdFieldDuplication<>(x, y, z).integral();
@@ -332,6 +347,7 @@ public class CarlsonEllipticIntegral {
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
      * @param <T> type of the field elements
+     * @return Carlson elliptic integral R<sub>D</sub>
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> rD(final FieldComplex<T> x, final FieldComplex<T> y,
                                                                          final FieldComplex<T> z) {
@@ -349,6 +365,7 @@ public class CarlsonEllipticIntegral {
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      * @param z second symmetric variable of the integral
+     * @return Carlson elliptic integral R<sub>G</sub>
      */
     public static double rG(final double x, final double y, final double z) {
         return generalComputeRg(x, y, z);
@@ -366,6 +383,7 @@ public class CarlsonEllipticIntegral {
      * @param y second symmetric variable of the integral
      * @param z second symmetric variable of the integral
      * @param <T> type of the field elements
+     * @return Carlson elliptic integral R<sub>G</sub>
      */
     public static <T extends CalculusFieldElement<T>> T rG(final T x, final T y, final T z) {
         return generalComputeRg(x, y, z);
@@ -382,6 +400,7 @@ public class CarlsonEllipticIntegral {
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      * @param z second symmetric variable of the integral
+     * @return Carlson elliptic integral R<sub>G</sub>
      */
     public static Complex rG(final Complex x, final Complex y, final Complex z) {
         return generalComputeRg(x, y, z);
@@ -399,6 +418,7 @@ public class CarlsonEllipticIntegral {
      * @param y second symmetric variable of the integral
      * @param z second symmetric variable of the integral
      * @param <T> type of the field elements
+     * @return Carlson elliptic integral R<sub>G</sub>
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> rG(final FieldComplex<T> x,
                                                                          final FieldComplex<T> y,
@@ -410,6 +430,7 @@ public class CarlsonEllipticIntegral {
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
+     * @return Carlson elliptic integral R<sub>G</sub>
      */
     private static double generalComputeRg(final double x, final double y, final double z) {
         // permute parameters if needed to avoid cancellations
@@ -441,6 +462,7 @@ public class CarlsonEllipticIntegral {
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
      * @param <T> type of the field elements (really {@link Complex} or {@link FieldComplex})
+     * @return Carlson elliptic integral R<sub>G</sub>
      */
     private static <T extends CalculusFieldElement<T>> T generalComputeRg(final T x, final T y, final T z) {
         // permute parameters if needed to avoid cancellations
@@ -474,6 +496,7 @@ public class CarlsonEllipticIntegral {
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
+     * @return Carlson elliptic integral R<sub>G</sub>
      */
     private static double permutedComputeRg(final double x, final double y, final double z) {
         // permute parameters if needed to avoid divisions by zero
@@ -489,6 +512,7 @@ public class CarlsonEllipticIntegral {
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
      * @param <T> type of the field elements (really {@link Complex} or {@link FieldComplex})
+     * @return Carlson elliptic integral R<sub>G</sub>
      */
     private static <T extends CalculusFieldElement<T>> T permutedComputeRg(final T x, final T y, final T z) {
         // permute parameters if needed to avoid divisions by zero
@@ -504,6 +528,7 @@ public class CarlsonEllipticIntegral {
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
      * @see <a href="https://dlmf.nist.gov/19.21#E10">Digital Library of Mathematical Functions, equation 19.21.10</a>
+     * @return Carlson elliptic integral R<sub>G</sub>
      */
     private static double safeComputeRg(final double x, final double y, final double z) {
 
@@ -527,6 +552,7 @@ public class CarlsonEllipticIntegral {
      * @param z third symmetric variable of the integral
      * @param <T> type of the field elements (really {@link Complex} or {@link FieldComplex})
      * @see <a href="https://dlmf.nist.gov/19.21#E10">Digital Library of Mathematical Functions, equation 19.21.10</a>
+     * @return Carlson elliptic integral R<sub>G</sub>
      */
     private static <T extends CalculusFieldElement<T>> T safeComputeRg(final T x, final T y, final T z) {
 

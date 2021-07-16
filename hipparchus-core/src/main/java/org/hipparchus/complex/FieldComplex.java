@@ -116,6 +116,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
     }
 
     /** Get a complex number representing "NaN + NaNi".
+     * @param field field the complex components belong to
      * @return complex number representing "NaN + NaNi"
      * @param <T> the type of the field elements
      */
@@ -124,6 +125,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
     }
 
     /** Get a complex number representing "+INF + INFi".
+     * @param field field the complex components belong to
      * @return complex number representing "+INF + INFi"
      * @param <T> the type of the field elements
      */
@@ -132,6 +134,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
     }
 
     /** Get a complex number representing "1.0 + 0.0i".
+     * @param field field the complex components belong to
      * @return complex number representing "1.0 + 0.0i"
      * @param <T> the type of the field elements
      */
@@ -140,6 +143,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
     }
 
     /** Get a complex number representing "-1.0 + 0.0i".
+     * @param field field the complex components belong to
      * @return complex number representing "-1.0 + 0.0i"
      * @param <T> the type of the field elements
      */
@@ -148,6 +152,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
     }
 
     /** Get a complex number representing "0.0 + 0.0i".
+     * @param field field the complex components belong to
      * @return complex number representing "0.0 + 0.0i
      * @param <T> the type of the field elements
      */
@@ -156,6 +161,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
     }
 
     /** Get a complex number representing "π + 0.0i".
+     * @param field field the complex components belong to
      * @return complex number representing "π + 0.0i
      * @param <T> the type of the field elements
      */

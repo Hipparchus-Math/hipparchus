@@ -107,7 +107,7 @@ class RfFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
     /** Compute Carlson complete elliptic integral R<sub>F</sub>(u, v, 0).
      * @param x first symmetric variable of the integral
      * @param y second symmetric variable of the integral
-     * @param <T> type of the field elements (really {@link Complex} or {@link FieldComplex})
+     * @return Carlson complete elliptic integral R<sub>F</sub>(u, v, 0)
      */
     private T completeIntegral(final T x, final T y) {
 

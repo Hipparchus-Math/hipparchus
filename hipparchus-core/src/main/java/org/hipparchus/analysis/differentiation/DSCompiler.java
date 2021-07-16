@@ -353,7 +353,7 @@ public class DSCompiler {
                                                               final DSCompiler derivativeCompiler,
                                                               final int[] lowerIndirection) {
 
-        if ((parameters == 0) || (order == 0)) {
+        if (parameters == 0 || order == 0) {
             return new int[][][] { { { 1, 0, 0 } } };
         }
 
@@ -420,7 +420,7 @@ public class DSCompiler {
                                                            final int[][] derivativesIndirection)
        throws MathIllegalArgumentException {
 
-        if ((parameters == 0) || (order == 0)) {
+        if (parameters == 0 || order == 0) {
             return new int[][][] { { { 1, 0 } } };
         }
 

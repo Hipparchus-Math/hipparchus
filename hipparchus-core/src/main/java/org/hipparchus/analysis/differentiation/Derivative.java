@@ -61,7 +61,7 @@ public interface Derivative<T extends CalculusFieldElement<T>> extends CalculusF
      * @exception MathIllegalArgumentException if the number of derivatives
      * in the array is not equal to {@link #getOrder() order} + 1
      */
-    T compose(final double... f)
+    T compose(double... f)
         throws MathIllegalArgumentException;
 
 }

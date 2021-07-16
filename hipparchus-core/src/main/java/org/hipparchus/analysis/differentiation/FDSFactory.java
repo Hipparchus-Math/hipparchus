@@ -246,6 +246,7 @@ public class FDSFactory<T extends CalculusFieldElement<T>> {
         /** Simple constructor.
          * @param zero constant function evaluating to 0.0
          * @param one constant function evaluating to 1.0
+         * @param pi constant function evaluating to π
          */
         DerivativeField(final FieldDerivativeStructure<T> zero,
                         final FieldDerivativeStructure<T> one,

@@ -118,7 +118,14 @@
     <module name="DeclarationOrder" />
 
     <!-- Don't add up parentheses when they are not required -->
-    <module name="UnnecessaryParentheses" />
+    <module name="UnnecessaryParentheses">
+      <property name="tokens"
+                value="IDENT, NUM_DOUBLE, NUM_FLOAT, NUM_INT, NUM_LONG,
+                       STRING_LITERAL, LITERAL_NULL, LITERAL_FALSE, LITERAL_TRUE,
+                       ASSIGN,BAND_ASSIGN, BOR_ASSIGN, BSR_ASSIGN, BXOR_ASSIGN,
+                       DIV_ASSIGN, MINUS_ASSIGN, MOD_ASSIGN, PLUS_ASSIGN,
+                       SL_ASSIGN, SR_ASSIGN, STAR_ASSIGN, LAMBDA, TEXT_BLOCK_LITERAL_BEGIN"/>
+    </module>
 
     <!--  Don't use too widespread catch (Exception, Throwable, RuntimeException)  -->
     <module name="IllegalCatch" />

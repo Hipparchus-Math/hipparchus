@@ -184,6 +184,7 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
      * should be called, but not both as the last one called will override the previous one.
      * </p>
      * @param previousEvaluation the previous evaluation used by the optimizer.
+     * @return a new instance.
      */
     public SequentialGaussNewtonOptimizer withEvaluation(final Evaluation previousEvaluation) {
         return new SequentialGaussNewtonOptimizer(this.getDecomposer(),
@@ -201,6 +202,7 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
      * </p>
      * @param aPrioriState a priori state to use
      * @param aPrioriCovariance a priori covariance to use
+     * @return a new instance.
      */
     public SequentialGaussNewtonOptimizer withAPrioriData(final RealVector aPrioriState,
                                                           final RealMatrix aPrioriCovariance) {
