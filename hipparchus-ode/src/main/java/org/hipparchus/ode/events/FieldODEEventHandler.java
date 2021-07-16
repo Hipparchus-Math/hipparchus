@@ -116,7 +116,7 @@ public interface FieldODEEventHandler<T extends CalculusFieldElement<T>>  {
     /** Handle an event and choose what to do next.
 
      * <p>This method is called when the integrator has accepted a step
-     * ending exactly on a sign change of the function, just <em>before</em>
+     * ending exactly on a sign change of the function, just <em>after</em>
      * the step handler itself is called (see below for scheduling). It
      * allows the user to update his internal data to acknowledge the fact
      * the event has been handled (for example setting a flag in the {@link
@@ -126,10 +126,7 @@ public interface FieldODEEventHandler<T extends CalculusFieldElement<T>>  {
      * or continue integration, possibly with a reset state or derivatives.</p>
      *
      * <ul>
-     *   <li>if {@link Action#STOP} is returned, the step handler will be called
-     *   with the <code>isLast</code> flag of the {@link
-     *   org.hipparchus.ode.sampling.FieldODEStepHandler#handleStep handleStep}
-     *   method set to true and the integration will be stopped,</li>
+     *   <li>if {@link Action#STOP} is returned, the integration will be stopped,</li>
      *   <li>if {@link Action#RESET_STATE} is returned, the {@link #resetState
      *   resetState} method will be called once the step handler has
      *   finished its task, and the integrator will also recompute the
@@ -146,21 +143,10 @@ public interface FieldODEEventHandler<T extends CalculusFieldElement<T>>  {
      * <p>The scheduling between this method and the {@link
      * org.hipparchus.ode.sampling.FieldODEStepHandler FieldODEStepHandler} method {@link
      * org.hipparchus.ode.sampling.FieldODEStepHandler#handleStep
-     * handleStep(interpolator, isLast)} is to call this method first and
-     * <code>handleStep</code> afterwards. This scheduling allows the integrator to
-     * pass <code>true</code> as the <code>isLast</code> parameter to the step
-     * handler to make it aware the step will be the last one if this method
-     * returns {@link Action#STOP}. As the interpolator may be used to navigate back
-     * throughout the last step, user code called by this method and user
-     * code called by step handlers may experience apparently out of order values
-     * of the independent time variable. As an example, if the same user object
-     * implements both this {@link FieldODEEventHandler FieldODEEventHandler} interface and the
-     * {@link org.hipparchus.ode.sampling.FieldODEStepHandler FieldODEStepHandler}
-     * interface, a <em>forward</em> integration may call its
-     * {@code eventOccurred} method with t = 10 first and call its
-     * {@code handleStep} method with t = 9 afterwards. Such out of order
-     * calls are limited to the size of the integration step for {@link
-     * org.hipparchus.ode.sampling.FieldODEStepHandler variable step handlers}.</p>
+     * handleStep(interpolator, isLast)} is to call {@code handleStep} first and this method afterwards
+     * (this scheduling changed as of Hipparchus 2.0). This scheduling allows user code
+     * called by this method and user code called by step handlers to get values
+     * of the independent time variable consistent with integration direction.</p>
      *
      * @param state current value of the independent <i>time</i> variable, state vector
      * and derivative

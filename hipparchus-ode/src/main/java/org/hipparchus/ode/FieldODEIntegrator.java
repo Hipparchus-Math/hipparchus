@@ -26,7 +26,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.events.FieldEventHandlerConfiguration;
 import org.hipparchus.ode.events.FieldODEEventHandler;
-import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
 
 /** This interface represents a first order integrator for
@@ -119,8 +118,8 @@ public interface FieldODEIntegrator<T extends CalculusFieldElement<T>> {
 
     /** Get all the event handlers configurations that have been added to the integrator.
      * @return an unmodifiable collection of the added events handlers configurations
-     * @see #addEventHandler(ODEEventHandler, double, double, int)
-     * @see #addEventHandler(ODEEventHandler, double, double, int, BracketedUnivariateSolver)
+     * @see #addEventHandler(FieldODEEventHandler, double, double, int)
+     * @see #addEventHandler(FieldODEEventHandler, double, double, int, BracketedUnivariateSolver)
      * @see #getEventHandlers()
      * @see #clearEventHandlers()
      * @since 2.0

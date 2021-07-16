@@ -180,7 +180,7 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
      * This building method uses a complete evaluation to retrieve
      * a priori data. Note that as {@link #withAPrioriData(RealVector, RealMatrix)}
      * generates a fake evaluation and calls this method, either
-     * {@link #withAPrioriData(RealVector, RealMatrix)} or {@link #withEvaluation(Evaluation)}
+     * {@link #withAPrioriData(RealVector, RealMatrix)} or {@link #withEvaluation(LeastSquaresProblem.Evaluation)}
      * should be called, but not both as the last one called will override the previous one.
      * </p>
      * @param previousEvaluation the previous evaluation used by the optimizer.
@@ -195,8 +195,8 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
      * Configure from a priori state and covariance.
      * <p>
      * This building method generates a fake evaluation and calls
-     * {@link #withEvaluation(Evaluation)}, so either
-     * {@link #withAPrioriData(RealVector, RealMatrix)} or {@link #withEvaluation(Evaluation)}
+     * {@link #withEvaluation(LeastSquaresProblem#Evaluation)}, so either
+     * {@link #withAPrioriData(RealVector, RealMatrix)} or {@link #withEvaluation(LeastSquaresProblem.Evaluation)}
      * should be called, but not both as the last one called will override the previous one.
      * </p>
      * @param aPrioriState a priori state to use
