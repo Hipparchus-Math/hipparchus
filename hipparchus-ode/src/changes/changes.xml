@@ -49,7 +49,9 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
-    <release version="2.0" date="TBD" description="TBD">
+    <release version="2.0" date="2021-07-23" description="This is a major release. The mains changes
+    are improved relatived scheduling of step handlers and events handlers in ODE, addition of a
+    finish callback in step handlers and bug fixes.">
       <action dev="luc" type="add" issue="issues/147">
         Allow retrieving event handler configuration from ODE integrators.
       </action>
@@ -69,7 +71,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         Use primitive double for initial step and error factors in Field adaptive step size integrators.
       </action>
       <action dev="andrewsgoetz" type="fix" issue="issues/112" due-to="andrewsgoetz">
-        Fix interpolation of a pair of ODE states times are the same. Such a pair can
+        Fix interpolation of a pair of ODE states whose times are the same. Such a pair can
         appear when a RESET_STATE or RESET_DERIVATIVES event occurs at the integration
         stop time.
       </action>

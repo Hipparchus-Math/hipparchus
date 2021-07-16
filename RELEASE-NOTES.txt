@@ -1,24 +1,67 @@
 
-              Hipparchus 1.8 RELEASE NOTES
+              Hipparchus 2.0 RELEASE NOTES
 
-The Hipparchus team is pleased to announce the release of hipparchus-1.8
+The Hipparchus team is pleased to announce the release of hipparchus-2.0
 
 The Hipparchus library is a library of mathematical components. It started as a fork of Apache Commons Math.
 
-This is a maintenance release.
-
- It fixes a few bugs, mainly a serious one for complex eigendecomposition when several eigenvalues
- are equal. It also add sum and angle differences in SinCosand FieldSinCos.
+This is a major release. The main changes is the addition of a sequential Gauss-Newton optimizer,
+improved relative scheduling of step handlers and events handlers in ODE,
+addition of a finish callback in step handlers, replacement of RealFieldElement by CalculusFieldElement interface,
+many improvements in Complex to fully implement CalculusFieldElement with correct branch cuts so complex numbers
+can be used in many Hipparchus algorithms, addition of FieldComplex, implementation of elliptic functions and
+integrals (for real, complex and general fields), and faster simultaneous computation of sinhcos.
+Methods deprecated during the 1.X series have been removed. Numerous bugs were also fixed.
 
 Changes in this version include:
 
 New features:
-o issues/104:  Fixed LU-decomposition issue with signed zero complex numbers on diagonal. 
-o issues/99:   Fixed complex eigendecomposition when several eigenvalues are equals. 
+o issues/147: Allow retrieving event handler configuration from ODE integrators. 
+o issues/146: Added a separate finish method in ODE step handlers to be called after last step. 
+o issues/143: Added ArrayFieldVector.toString(). 
+o             Added sequential Gauss-Newton optimizer. Thanks to Julie Bayard. 
+o issues/135: Added getRowDimension and getColumnDimension to DecompositionSolver and FieldDecompositionSolver. 
+o issues/141: Added a way to have a more accurate value of π for fields implementations that require it. 
+o             Added Carlson elliptic integrals (R_F, R_J, R_G, R_D, and R_C)
+              both for real, CalculusFieldElement, Complex, and FieldComplex. 
+o issues/124: Changed return types for field elements methods (including Complex):
+              norm() → double, abs() → field element. 
+o             Added the four Jacobi theta functions θ₁(z|τ), θ₂(z|τ), θ₃(z|τ), and θ₄(z|τ),
+              both for complex and field complex. 
+o issues/126: Added field-based complex numbers. 
+o             Added Legendre elliptic integrals (K, K', E, D, F, Π), both complete and incomplete,
+              both for real, CalculusFieldElement, Complex, and FieldComplex. 
+o issues/119: Added the twelve Jacobi elliptic functions sn, cn, dn,
+              cs, ds, ns, dc, nc, sc, nd, sd, and cd, both for primitive double
+              and fields. 
+o             Added the Ryū algorithm to generate very fast the shortest decimal
+              representation of a floating point number that maintains round-trip safety. 
 
 Fixed Bugs:
-o issues/106:  Added sum and difference of angles in SinCos and FieldSinCos. 
-o issues/105:  Removed spurious reduction of BigFraction in equality test. 
+o issues/145: Fixed out-of-order scheduling of calls to step handlers and event handlers. 
+o issues/144: Fixed array index error in field LU decomposition. Thanks to Axel Kramer. 
+o issues/142: Fixed ulp() implementation for Dfp. 
+o issues/140: Clarified arguments in the one-argument version of the two-arguments atan2
+              function in CalculusFieldElement. 
+o issues/138: Renamed signum into sign in field classes, and improved implementation for complex numbers. 
+o issues/131: Fixed consistent implementations between {Field}LUDecomposition classes. 
+o issues/129: Fixed branch cut on imaginary axis for complex atan. 
+o issues/123: Added field implementations of ulp function. 
+o issues/122: Added a way to compute both sinh and cosh at once faster than performing two calls.
+              This also speeds up all derivatives implementations as well as complex computations. 
+o issues/121: Removed methods and constants deprecated during the 1.x series. 
+o issues/67:  Replaced RealFieldElement by CalculusFieldElement interface and have Complex
+              implement it so it can be used in many Hipparchus algorithms (like ODE).
+              Also replaced RealField{Univariate|Bivariate|Vector|Matrix}Function by
+              CalculusField{Univariate|Bivariate|Vector|Matrix}Function. 
+o issues/120: Added event filtering for field ODE. 
+o issues/118: Use primitive double for initial step and error factors in Field adaptive step size integrators. 
+o issues/112: Fix interpolation of a pair of ODE states whose times are the same. Such a pair can
+              appear when a RESET_STATE or RESET_DERIVATIVES event occurs at the integration
+              stop time. Thanks to andrewsgoetz. 
+o issues/111: Allow selecting customized threshold for tests in OrderedComplexEigenDecomposition. 
+o issues/110: Added zero checker predicate for some linear algebra algorithms. 
+o issues/109: Fixed exception in OrderedComplexEigenDecomposition when eigenvalues are equal. 
 
 
 
@@ -26,3 +69,5 @@ For complete information on Hipparchus, including instructions on how to submit 
 patches, or suggestions for improvement, see the Hipparchus website:
 
 https://www.hipparchus.org/
+
+
