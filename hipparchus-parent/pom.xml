@@ -479,7 +479,7 @@
 
     <!-- Project specific plugin versions -->
 
-    <hipparchus.spotbugs-maven-plugin.version>4.3.0</hipparchus.spotbugs-maven-plugin.version>
+    <hipparchus.spotbugs-maven-plugin.version>4.2.3</hipparchus.spotbugs-maven-plugin.version>
     <hipparchus.jacoco-maven-plugin.version>0.8.7</hipparchus.jacoco-maven-plugin.version>
     <hipparchus.maven-assembly-plugin.version>3.3.0</hipparchus.maven-assembly-plugin.version>
     <hipparchus.maven-bundle-plugin.version>5.1.2</hipparchus.maven-bundle-plugin.version>
