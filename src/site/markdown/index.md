@@ -66,12 +66,16 @@ at fork time.
 
  ---
 
-## 1.8 Release is out!
+## 2.0 Release is out!
 
-Hipparchus 1.8 is now available for download from the [Hipparchus download page](downloads.html) or on
-Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.8 release are:
+Hipparchus 2.0 is now available for download from the [Hipparchus download page](downloads.html) or on
+Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 2.0 release are:
 
-  * fixed LU-decomposition issue with signed zero complex numbers on diagonal
-  * fixed complex eigendecomposition when several eigenvalues are equals
-  * added sum and difference of angles in SinCos and FieldSinCos
-  * removed spurious reduction of BigFraction in equality test
+  * addition of a sequential Gauss-Newton optimizer
+  * improved relative scheduling of step handlers and events handlers in ODE
+  * addition of a finish callback in step handlers
+  * replacement of RealFieldElement by CalculusFieldElement interface
+  * many improvements in Complex to fully implement CalculusFieldElement with correct branch cuts
+  * addition of FieldComplex
+  * implementation of elliptic functions and integrals (for real, complex and general fields)
+  * faster simultaneous computation of sinh/cosh
