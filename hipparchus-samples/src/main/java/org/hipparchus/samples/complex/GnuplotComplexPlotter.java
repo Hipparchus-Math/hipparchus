@@ -30,6 +30,7 @@ import java.util.Locale;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.special.elliptic.jacobi.FieldJacobiElliptic;
 import org.hipparchus.special.elliptic.jacobi.JacobiEllipticBuilder;
+import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.hipparchus.util.FastMath;
 
 public class GnuplotComplexPlotter {
@@ -250,31 +251,34 @@ public class GnuplotComplexPlotter {
     /** Predefined complex functions for plotting. */
     private static enum Predefined {
 
-        id((plotter, z)    -> z),
-        sn((plotter, z)    -> plotter.jacobi.valuesN(z).sn()),
-        cn((plotter, z)    -> plotter.jacobi.valuesN(z).cn()),
-        dn((plotter, z)    -> plotter.jacobi.valuesN(z).dn()),
-        cs((plotter, z)    -> plotter.jacobi.valuesS(z).cs()),
-        ds((plotter, z)    -> plotter.jacobi.valuesS(z).ds()),
-        ns((plotter, z)    -> plotter.jacobi.valuesS(z).ns()),
-        dc((plotter, z)    -> plotter.jacobi.valuesC(z).dc()),
-        nc((plotter, z)    -> plotter.jacobi.valuesC(z).nc()),
-        sc((plotter, z)    -> plotter.jacobi.valuesC(z).sc()),
-        nd((plotter, z)    -> plotter.jacobi.valuesD(z).nd()),
-        sd((plotter, z)    -> plotter.jacobi.valuesD(z).sd()),
-        cd((plotter, z)    -> plotter.jacobi.valuesD(z).cd()),
-        sin((plotter, z)   -> FastMath.sin(z)),
-        cos((plotter, z)   -> FastMath.cos(z)),
-        tan((plotter, z)   -> FastMath.tan(z)),
-        asin((plotter, z)  -> FastMath.asin(z)),
-        acos((plotter, z)  -> FastMath.acos(z)),
-        atan((plotter, z)  -> FastMath.atan(z)),
-        sinh((plotter, z)  -> FastMath.sinh(z)),
-        cosh((plotter, z)  -> FastMath.cosh(z)),
-        tanh((plotter, z)  -> FastMath.tanh(z)),
-        asinh((plotter, z) -> FastMath.asinh(z)),
-        acosh((plotter, z) -> FastMath.acosh(z)),
-        atanh((plotter, z) -> FastMath.atanh(z));
+        id((plotter, z)     -> z),
+        sn((plotter, z)     -> plotter.jacobi.valuesN(z).sn()),
+        cn((plotter, z)     -> plotter.jacobi.valuesN(z).cn()),
+        dn((plotter, z)     -> plotter.jacobi.valuesN(z).dn()),
+        cs((plotter, z)     -> plotter.jacobi.valuesS(z).cs()),
+        ds((plotter, z)     -> plotter.jacobi.valuesS(z).ds()),
+        ns((plotter, z)     -> plotter.jacobi.valuesS(z).ns()),
+        dc((plotter, z)     -> plotter.jacobi.valuesC(z).dc()),
+        nc((plotter, z)     -> plotter.jacobi.valuesC(z).nc()),
+        sc((plotter, z)     -> plotter.jacobi.valuesC(z).sc()),
+        nd((plotter, z)     -> plotter.jacobi.valuesD(z).nd()),
+        sd((plotter, z)     -> plotter.jacobi.valuesD(z).sd()),
+        cd((plotter, z)     -> plotter.jacobi.valuesD(z).cd()),
+        K((plotter, z)      -> LegendreEllipticIntegral.bigK(z)),
+        KPrime((plotter, z) -> LegendreEllipticIntegral.bigKPrime(z)),
+        E((plotter, z)      -> LegendreEllipticIntegral.bigE(z)),
+        sin((plotter, z)    -> FastMath.sin(z)),
+        cos((plotter, z)    -> FastMath.cos(z)),
+        tan((plotter, z)    -> FastMath.tan(z)),
+        asin((plotter, z)   -> FastMath.asin(z)),
+        acos((plotter, z)   -> FastMath.acos(z)),
+        atan((plotter, z)   -> FastMath.atan(z)),
+        sinh((plotter, z)   -> FastMath.sinh(z)),
+        cosh((plotter, z)   -> FastMath.cosh(z)),
+        tanh((plotter, z)   -> FastMath.tanh(z)),
+        asinh((plotter, z)  -> FastMath.asinh(z)),
+        acosh((plotter, z)  -> FastMath.acosh(z)),
+        atanh((plotter, z)  -> FastMath.atanh(z));
         
         /** Function evaluator. */
         private final Evaluator evaluator;
