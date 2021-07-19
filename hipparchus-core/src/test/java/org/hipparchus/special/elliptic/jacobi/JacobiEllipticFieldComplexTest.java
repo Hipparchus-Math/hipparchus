@@ -29,7 +29,8 @@ public class JacobiEllipticFieldComplexTest {
     @Test
     public void testComplex() throws IOException {
         final DfpField field = new DfpField(30);
-        FieldJacobiElliptic<FieldComplex<Dfp>> je = JacobiEllipticBuilder.build(new FieldComplex<>(field.newDfp("0.3"), field.newDfp("1.0")));
+        final FieldComplex<Dfp> k = new FieldComplex<>(field.newDfp("0.3"), field.newDfp("1.0"));
+        FieldJacobiElliptic<FieldComplex<Dfp>> je = JacobiEllipticBuilder.build(k.multiply(k));
         final FieldComplex<Dfp> z = new FieldComplex<>(field.newDfp("5.2"), field.newDfp("-2.5"));
         final FieldCopolarC<FieldComplex<Dfp>> valuesC = je.valuesC(z);
         Assert.assertEquals(-0.24609405083573348938, valuesC.sc().getRealPart().getReal(),      1.0e-15);

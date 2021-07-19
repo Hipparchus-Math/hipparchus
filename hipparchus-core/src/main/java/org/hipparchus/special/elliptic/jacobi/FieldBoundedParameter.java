@@ -42,13 +42,12 @@ class FieldBoundedParameter<T extends CalculusFieldElement<T>> extends FieldJaco
         super(m);
 
         // compute nome
-        final T k   = m.sqrt();
-        final T q   = LegendreEllipticIntegral.nome(k);
+        final T q   = LegendreEllipticIntegral.nome(m);
 
         // prepare underlying Jacobi θ functions
         this.jacobiTheta = new FieldJacobiTheta<>(q);
         this.t0          = jacobiTheta.values(m.getField().getZero());
-        this.scaling     = LegendreEllipticIntegral.bigK(k).reciprocal().multiply(m.getPi().multiply(0.5));
+        this.scaling     = LegendreEllipticIntegral.bigK(m).reciprocal().multiply(m.getPi().multiply(0.5));
 
     }
 
