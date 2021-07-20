@@ -16,6 +16,9 @@
  */
 package org.hipparchus.special.elliptic.legendre;
 
+import java.util.function.DoubleFunction;
+import java.util.function.Function;
+
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.FieldComplex;
@@ -712,12 +715,21 @@ public class LegendreEllipticIntegral {
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
     public static double bigE(final double phi, final double m) {
-        final double csc = 1.0 / FastMath.sin(phi);
-        final double c   = csc * csc;
-        final double cM1 = c - 1.0;
-        final double cMm = c - m;
-        return CarlsonEllipticIntegral.rF(cM1, cMm, c) -
-               CarlsonEllipticIntegral.rD(cM1, cMm, c) * (m / 3);
+
+        // argument reduction
+        final DoubleArgumentReduction ar = new DoubleArgumentReduction(phi, m, n -> bigE(n));
+
+        // integrate part between 0 and π/2
+        final double  csc        = 1.0 / ar.sin;
+        final double  c          = csc * csc;
+        final double  cM1        = c - 1.0;
+        final double  cMm        = c - m;
+        final double  incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c) -
+                                   CarlsonEllipticIntegral.rD(cM1, cMm, c) * (m / 3);
+
+        // combine complete and incomplete parts
+        return ar.negate ? ar.complete - incomplete : ar.complete + incomplete;
+
     }
 
     /** Get the incomplete elliptic integral of the second kind E(Φ, m).
@@ -740,13 +752,21 @@ public class LegendreEllipticIntegral {
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
     public static <T extends CalculusFieldElement<T>> T bigE(final T phi, final T m) {
-        final T one = m.getField().getOne();
-        final T csc = FastMath.sin(phi).reciprocal();
-        final T c   = csc.multiply(csc);
-        final T cM1 = c.subtract(one);
-        final T cMm = c.subtract(m);
-        return CarlsonEllipticIntegral.rF(cM1, cMm, c).
-               subtract(CarlsonEllipticIntegral.rD(cM1, cMm, c).multiply(m.divide(3)));
+
+        // argument reduction
+        final FieldArgumentReduction<T> ar = new FieldArgumentReduction<>(phi, m, n -> bigE(n));
+
+        // integrate part between 0 and π/2
+        final T       csc        = ar.sin.reciprocal();
+        final T       c          = csc.multiply(csc);
+        final T       cM1        = c.subtract(1);
+        final T       cMm        = c.subtract(m);
+        final T       incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c).
+                                   subtract(CarlsonEllipticIntegral.rD(cM1, cMm, c).multiply(m.divide(3)));
+
+        // combine complete and incomplete parts
+        return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
+
     }
 
     /** Get the incomplete elliptic integral of the second kind E(Φ, m).
@@ -768,12 +788,21 @@ public class LegendreEllipticIntegral {
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
     public static Complex bigE(final Complex phi, final Complex m) {
-        final Complex csc = FastMath.sin(phi).reciprocal();
-        final Complex c   = csc.multiply(csc);
-        final Complex cM1 = c.subtract(Complex.ONE);
-        final Complex cMm = c.subtract(m);
-        return CarlsonEllipticIntegral.rF(cM1, cMm, c).
-               subtract(CarlsonEllipticIntegral.rD(cM1, cMm, c).multiply(m.divide(3)));
+
+        // argument reduction
+        final FieldArgumentReduction<Complex> ar = new FieldArgumentReduction<>(phi, m, n -> bigE(n));
+
+        // integrate part between 0 and π/2
+        final Complex csc        = ar.sin.reciprocal();
+        final Complex c          = csc.multiply(csc);
+        final Complex cM1        = c.subtract(1);
+        final Complex cMm        = c.subtract(m);
+        final Complex incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c).
+                                   subtract(CarlsonEllipticIntegral.rD(cM1, cMm, c).multiply(m.divide(3)));
+
+        // combine complete and incomplete parts
+        return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
+
     }
 
     /** Get the incomplete elliptic integral of the second kind E(Φ, m).
@@ -796,13 +825,21 @@ public class LegendreEllipticIntegral {
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigE(final FieldComplex<T> phi, final FieldComplex<T> m) {
-        final FieldComplex<T> one = m.getField().getOne();
-        final FieldComplex<T> csc = FastMath.sin(phi).reciprocal();
-        final FieldComplex<T> c   = csc.multiply(csc);
-        final FieldComplex<T> cM1 = c.subtract(one);
-        final FieldComplex<T> cMm = c.subtract(m);
-        return CarlsonEllipticIntegral.rF(cM1, cMm, c).
-               subtract(CarlsonEllipticIntegral.rD(cM1, cMm, c).multiply(m.divide(3)));
+
+        // argument reduction
+        final FieldArgumentReduction<FieldComplex<T>> ar = new FieldArgumentReduction<>(phi, m, n -> bigE(n));
+
+        // integrate part between 0 and π/2
+        final FieldComplex<T> csc        = ar.sin.reciprocal();
+        final FieldComplex<T> c          = csc.multiply(csc);
+        final FieldComplex<T> cM1        = c.subtract(1);
+        final FieldComplex<T> cMm        = c.subtract(m);
+        final FieldComplex<T> incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c).
+                                           subtract(CarlsonEllipticIntegral.rD(cM1, cMm, c).multiply(m.divide(3)));
+
+        // combine complete and incomplete parts
+        return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
+
     }
 
     /** Get the incomplete elliptic integral D(Φ, m) = [F(Φ, m) - E(Φ, m)]/m.
@@ -1026,6 +1063,62 @@ public class LegendreEllipticIntegral {
         final FieldComplex<T> cMa2 = c.subtract(alpha2);
         return bigF(phi, m).
                add(CarlsonEllipticIntegral.rJ(cM1, cMm, c, cMa2).multiply(alpha2).divide(3));
+    }
+
+    /** Argument reduction for an incomplete integral. */
+    private static class DoubleArgumentReduction {
+
+        /** Complete part. */
+        private final double complete;
+
+        /** Sine of the Jacobi amplitude. */
+        private final double sin;
+
+        /** Indicator for negated Jacobi amplitude. */
+        private boolean negate;
+
+        /** Simple constructor.
+         * @param phi amplitude (i.e. upper bound of the integral)
+         * @param m parameter (m=k² where k is the elliptic modulus)
+         * @param integral provider for complete integral
+         */
+        DoubleArgumentReduction(final double phi, final double m, final DoubleFunction<Double> integral) {
+            final int p = (int) FastMath.rint(phi / FastMath.PI);
+            complete = p == 0 ? 0 : integral.apply(m) * 2 * p;
+            final double  s = FastMath.sin(phi);
+            negate = s < 0 ^ (p & 0x1) == 1;
+            sin    = negate ? -s : s;
+        }
+
+    }
+
+    /** Argument reduction for an incomplete integral.
+     * @param <T> type fo the field elements
+     */
+    private static class FieldArgumentReduction<T extends CalculusFieldElement<T>> {
+
+        /** Complete part. */
+        private final T complete;
+
+        /** Sine of the Jacobi amplitude. */
+        private final T sin;
+
+        /** Indicator for negated Jacobi amplitude. */
+        private boolean negate;
+
+        /** Simple constructor.
+         * @param phi amplitude (i.e. upper bound of the integral)
+         * @param m parameter (m=k² where k is the elliptic modulus)
+         * @param integral provider for complete integral
+         */
+        FieldArgumentReduction(final T phi, final T m, final Function<T, T> integral) {
+            final int p = (int) FastMath.rint(phi.getReal() / FastMath.PI);
+            complete = p == 0 ? phi.getField().getZero() : integral.apply(m).multiply(2 * p);
+            final T  s = FastMath.sin(phi);
+            negate = s.getReal() < 0 ^ (p & 0x1) == 1;
+            sin = negate ? s.negate() : s;
+        }
+
     }
 
 }
