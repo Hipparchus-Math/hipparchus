@@ -612,7 +612,7 @@ class FastMathCalc {
             }
             out.println("}, // " + i++);
         }
-        out.println(TABLE_END_DECL);
+        out.printf("%s%n", TABLE_END_DECL);
     }
 
     /**
@@ -629,7 +629,7 @@ class FastMathCalc {
         for(double d : array){
             out.printf("        %s%n", format(d)); // one entry per line
         }
-        out.println(TABLE_END_DECL);
+        out.printf("%s%n", TABLE_END_DECL);
     }
 
     /** Format a double.
