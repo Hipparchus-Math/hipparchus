@@ -1006,13 +1006,20 @@ public class LegendreEllipticIntegral {
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
     public static double bigPi(final double phi, final double alpha2, final double m) {
-        final double csc  = 1.0 / FastMath.sin(phi);
-        final double c    = csc * csc;
-        final double cM1  = c - 1.0;
-        final double cMm  = c - m;
-        final double cMa2 = c - alpha2;
-        return bigF(phi, m) +
-               CarlsonEllipticIntegral.rJ(cM1, cMm, c, cMa2) * alpha2 / 3;
+
+        // argument reduction
+        final DoubleArgumentReduction ar = new DoubleArgumentReduction(phi, m, n -> bigPi(alpha2, n));
+
+        // integrate part between 0 and π/2
+        final double cM1        = ar.csc2 - 1.0;
+        final double cMm        = ar.csc2 - m;
+        final double cMa2       = ar.csc2 - alpha2;
+        final double incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2) +
+                                  CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMa2) * alpha2 / 3;
+
+        // combine complete and incomplete parts
+        return ar.negate ? ar.complete - incomplete : ar.complete + incomplete;
+
     }
 
     /** Get the incomplete elliptic integral of the third kind Π(Φ, α², m).
@@ -1036,14 +1043,20 @@ public class LegendreEllipticIntegral {
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
     public static <T extends CalculusFieldElement<T>> T bigPi(final T phi, final T alpha2, final T m) {
-        final T one  = m.getField().getOne();
-        final T csc  = FastMath.sin(phi).reciprocal();
-        final T c    = csc.multiply(csc);
-        final T cM1  = c.subtract(one);
-        final T cMm  = c.subtract(m);
-        final T cMa2 = c.subtract(alpha2);
-        return bigF(phi, m).
-               add(CarlsonEllipticIntegral.rJ(cM1, cMm, c, cMa2).multiply(alpha2).divide(3));
+
+        // argument reduction
+        final FieldArgumentReduction<T> ar = new FieldArgumentReduction<>(phi, m, n -> bigPi(alpha2, n));
+
+        // integrate part between 0 and π/2
+        final T cM1        = ar.csc2.subtract(1);
+        final T cMm        = ar.csc2.subtract(m);
+        final T cMa2       = ar.csc2.subtract(alpha2);
+        final T incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2).
+                             add(CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMa2).multiply(alpha2).divide(3));
+
+        // combine complete and incomplete parts
+        return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
+
     }
 
     /** Get the incomplete elliptic integral of the third kind Π(Φ, α², m).
@@ -1066,14 +1079,20 @@ public class LegendreEllipticIntegral {
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
     public static Complex bigPi(final Complex phi, final Complex alpha2, final Complex m) {
-        final Complex one  = m.getField().getOne();
-        final Complex csc  = FastMath.sin(phi).reciprocal();
-        final Complex c    = csc.multiply(csc);
-        final Complex cM1  = c.subtract(one);
-        final Complex cMm  = c.subtract(m);
-        final Complex cMa2 = c.subtract(alpha2);
-        return bigF(phi, m).
-               add(CarlsonEllipticIntegral.rJ(cM1, cMm, c, cMa2).multiply(alpha2).divide(3));
+
+        // argument reduction
+        final FieldArgumentReduction<Complex> ar = new FieldArgumentReduction<>(phi, m, n -> bigPi(alpha2, n));
+
+        // integrate part between 0 and π/2
+        final Complex cM1        = ar.csc2.subtract(1);
+        final Complex cMm        = ar.csc2.subtract(m);
+        final Complex cMa2       = ar.csc2.subtract(alpha2);
+        final Complex incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2).
+                                   add(CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMa2).multiply(alpha2).divide(3));
+
+        // combine complete and incomplete parts
+        return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
+
     }
 
     /** Get the incomplete elliptic integral of the third kind Π(Φ, α², m).
@@ -1099,14 +1118,20 @@ public class LegendreEllipticIntegral {
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigPi(final FieldComplex<T> phi,
                                                                             final FieldComplex<T> alpha2,
                                                                             final FieldComplex<T> m) {
-        final FieldComplex<T> one  = m.getField().getOne();
-        final FieldComplex<T> csc  = FastMath.sin(phi).reciprocal();
-        final FieldComplex<T> c    = csc.multiply(csc);
-        final FieldComplex<T> cM1  = c.subtract(one);
-        final FieldComplex<T> cMm  = c.subtract(m);
-        final FieldComplex<T> cMa2 = c.subtract(alpha2);
-        return bigF(phi, m).
-               add(CarlsonEllipticIntegral.rJ(cM1, cMm, c, cMa2).multiply(alpha2).divide(3));
+
+        // argument reduction
+        final FieldArgumentReduction<FieldComplex<T>> ar = new FieldArgumentReduction<>(phi, m, n -> bigPi(alpha2, n));
+
+        // integrate part between 0 and π/2
+        final FieldComplex<T> cM1        = ar.csc2.subtract(1);
+        final FieldComplex<T> cMm        = ar.csc2.subtract(m);
+        final FieldComplex<T> cMa2       = ar.csc2.subtract(alpha2);
+        final FieldComplex<T> incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2).
+                                           add(CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMa2).multiply(alpha2).divide(3));
+
+        // combine complete and incomplete parts
+        return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
+
     }
 
     /** Argument reduction for an incomplete integral. */
