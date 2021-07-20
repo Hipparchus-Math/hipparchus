@@ -32,8 +32,12 @@ import org.hipparchus.special.elliptic.jacobi.FieldJacobiElliptic;
 import org.hipparchus.special.elliptic.jacobi.JacobiEllipticBuilder;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.RyuDouble;
 
 public class GnuplotComplexPlotter {
+
+    /** Elliptic integrals parameter. */
+    private Complex m;
 
     /** Jacobi functions computer. */
     private FieldJacobiElliptic<Complex> jacobi;
@@ -68,8 +72,8 @@ public class GnuplotComplexPlotter {
     /** Default constructor.
      */
     private GnuplotComplexPlotter() {
-        final Complex k = new Complex(0.8);
-        jacobi    = JacobiEllipticBuilder.build(k.multiply(k));
+        m         = new Complex(0.64);
+        jacobi    = JacobiEllipticBuilder.build(m);
         functions = new ArrayList<>();
         output    = null;
         width     = 800;
@@ -133,9 +137,9 @@ public class GnuplotComplexPlotter {
                     case "--ymax" :
                         plotter.yMax = Double.parseDouble(args[++i]);
                         break;
-                    case "--k" : {
-                        final Complex k = new Complex(Double.parseDouble(args[++i]), Double.parseDouble(args[++i]));
-                        plotter.jacobi = JacobiEllipticBuilder.build(k.multiply(k));
+                    case "--m" : {
+                        plotter.m      = new Complex(Double.parseDouble(args[++i]), Double.parseDouble(args[++i]));
+                        plotter.jacobi = JacobiEllipticBuilder.build(plotter.m);
                         break;
                     }
                     case "--function" :
@@ -210,7 +214,7 @@ public class GnuplotComplexPlotter {
                 out.format(Locale.US, "set ylabel 'Im(z)'%n");
                 out.format(Locale.US, "set key off%n");
                 out.format(Locale.US, "unset colorbox%n");
-                out.format(Locale.US, "set title '%s(z)'%n", predefined.name());
+                out.format(Locale.US, "set title '%s'%n", predefined.title(m));
                 out.format(Locale.US, "$data <<EOD%n");
 
                 for (int i = 0; i < width; ++i) {
@@ -266,7 +270,9 @@ public class GnuplotComplexPlotter {
         cd((plotter, z)     -> plotter.jacobi.valuesD(z).cd()),
         K((plotter, z)      -> LegendreEllipticIntegral.bigK(z)),
         KPrime((plotter, z) -> LegendreEllipticIntegral.bigKPrime(z)),
+        Fzm((plotter, z)    -> LegendreEllipticIntegral.bigF(z, plotter.m)),
         E((plotter, z)      -> LegendreEllipticIntegral.bigE(z)),
+        Ezm((plotter, z)    -> LegendreEllipticIntegral.bigE(z, plotter.m)),
         sin((plotter, z)    -> FastMath.sin(z)),
         cos((plotter, z)    -> FastMath.cos(z)),
         tan((plotter, z)    -> FastMath.tan(z)),
@@ -290,6 +296,22 @@ public class GnuplotComplexPlotter {
             this.evaluator = evaluator;
         }
 
+        /** Get plot title.
+         * @param m elliptic parameter
+         * @return plot title
+         */
+        public String title(final Complex m) {
+            if (name().endsWith("zm")) {
+                return name().substring(0, name().length() - 2) +
+                       "(z, m = " +
+                       RyuDouble.doubleToString(m.getRealPart()) +
+                       (m.getImaginary() >= 0 ? " + " : " - ") +
+                       RyuDouble.doubleToString(FastMath.abs(m.getImaginaryPart())) +
+                       "i)";
+            } else {
+                return name() + "(z)";
+            }
+        }
 
     }
 
