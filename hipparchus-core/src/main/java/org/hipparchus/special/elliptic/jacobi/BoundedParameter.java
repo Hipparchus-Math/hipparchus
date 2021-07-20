@@ -18,7 +18,6 @@ package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.complex.Complex;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
-import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
 /** Algorithm for computing the principal Jacobi functions for parameter m in [0; 1].
@@ -43,13 +42,12 @@ class BoundedParameter extends JacobiElliptic {
         super(m);
 
         // compute nome
-        final double k = FastMath.sqrt(m);
-        final double q = LegendreEllipticIntegral.nome(k);
+        final double q = LegendreEllipticIntegral.nome(m);
 
         // prepare underlying Jacobi θ functions
         this.jacobiTheta = new JacobiTheta(q);
         this.t0          = jacobiTheta.values(Complex.ZERO);
-        this.scaling     = MathUtils.SEMI_PI / LegendreEllipticIntegral.bigK(k);
+        this.scaling     = MathUtils.SEMI_PI / LegendreEllipticIntegral.bigK(m);
 
     }
 

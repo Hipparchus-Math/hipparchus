@@ -43,7 +43,8 @@ public class FieldJacobiThetaTest {
 
     private <T extends CalculusFieldElement<T>> void doTestRealZero(Field<T> field) {
         final T k      = field.getZero().newInstance(0.675);
-        final T q      = LegendreEllipticIntegral.nome(k);
+        final T m      = k.multiply(k);
+        final T q      = LegendreEllipticIntegral.nome(m);
         final T t3Ref  = field.getOne().add(q.
                                             add(FastMath.pow(q, 4)).
                                             add(FastMath.pow(q, 9)).
@@ -59,9 +60,10 @@ public class FieldJacobiThetaTest {
 
     private <T extends CalculusFieldElement<T>> void doTestQuarterPeriod(Field<T> field) {
         final T k      = field.getZero().newInstance(0.675);
-        final T q      = LegendreEllipticIntegral.nome(k);
+        final T m      = k.multiply(k);
+        final T q      = LegendreEllipticIntegral.nome(m);
         final T theta3 = new FieldJacobiTheta<>(q).values(field.getZero()).theta3();
-        Assert.assertEquals(LegendreEllipticIntegral.bigK(k).getReal(),
+        Assert.assertEquals(LegendreEllipticIntegral.bigK(m).getReal(),
                             theta3.multiply(theta3).multiply(MathUtils.SEMI_PI).getReal(),
                             1.0e-12);
     }
@@ -75,8 +77,9 @@ public class FieldJacobiThetaTest {
 
         final T                   z      = field.getZero().newInstance(1.3);
         final T                   k      = field.getZero().newInstance(0.675);
-        final T                   q      =  LegendreEllipticIntegral.nome(k);
-        final T                   bigK   = LegendreEllipticIntegral.bigK(k);
+        final T                   m      = k.multiply(k);
+        final T                   q      =  LegendreEllipticIntegral.nome(m);
+        final T                   bigK   = LegendreEllipticIntegral.bigK(m);
         final T                   zeta   = z.divide(bigK).multiply(MathUtils.SEMI_PI);
         final FieldJacobiTheta<T> jt     = new FieldJacobiTheta<>(q);
         final FieldTheta<T>       theta0 = jt.values(field.getZero());

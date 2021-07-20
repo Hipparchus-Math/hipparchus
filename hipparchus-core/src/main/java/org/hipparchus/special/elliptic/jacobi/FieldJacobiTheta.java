@@ -40,15 +40,10 @@ public class FieldJacobiTheta<T extends CalculusFieldElement<T>> {
 
     /** Simple constructor.
      * <p>
-     * Beware that {@link org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral
-     * Legendre elliptic integrals} are defined in terms of elliptic modulus {@code k} whereas
-     * {@link JacobiEllipticBuilder#build(CalculusFieldElement) Jacobi elliptic functions} (which
-     * are their inverses) are defined in terms of parameter {@code m} and {@link
-     * FieldJacobiTheta#FieldJacobiTheta(CalculusFieldElement) Jacobi theta functions} are defined
-     * in terms of the {@link
-     * org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral#nome(CalculusFieldElement)
-     * nome q}. All are related as {@code k² = m} and the nome can be computed from ratios of complete
-     * elliptic integrals.
+     * The nome {@code q} can be computed using ratios of complete elliptic integrals
+     * ({@link org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral#nome(CalculusFieldElement)
+     * LegendreEllipticIntegral.nome(m)} which are themselves defined in term of parameter m,
+     * where m=k² and k is the elliptic modulus.
      * </p>
      * @param q nome
      */
