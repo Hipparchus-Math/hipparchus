@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.0" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issue/149">
+        Added complex univariate integrals (including contour integrals).
+      </action>
       <action dev="luc" type="add" issue="issues/147">
         Allow retrieving event handler configuration from ODE integrators.
       </action>
