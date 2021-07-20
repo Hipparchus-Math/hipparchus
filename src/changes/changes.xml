@@ -50,13 +50,17 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.0" date="2021-07-23" description="This is a major release. The main changes
-    is the addition of a sequential Gauss-Newton optimizer, improved relative scheduling of step handlers
+    are the addition of a sequential Gauss-Newton optimizer, improved relative scheduling of step handlers
     and events handlers in ODE, addition of a finish callback in step handlers, replacement of
     RealFieldElement by CalculusFieldElement interface, many improvements in Complex to fully
     implement CalculusFieldElement with correct branch cuts so complex numbers can be used in many
-    Hipparchus algorithms, addition of FieldComplex, implementation of elliptic functions and integrals
-    (for real, complex and general fields), and faster simultaneous computation of sinhcos. Methods
-    deprecated during the 1.X series have been removed. Numerous bugs were also fixed.">
+    Hipparchus algorithms, addition of FieldComplex, addition of complex univariate integrals,
+    implementation of elliptic functions and integrals (for real, complex and general fields), and
+    faster simultaneous computation of sinhcos. Methods deprecated during the 1.X series have been
+    removed. Numerous bugs were also fixed.">
+      <action dev="luc" type="add" issue="issue/149">
+        Added complex univariate integrals (including contour integrals).
+      </action>
       <action dev="luc" type="add" issue="issues/147">
         Allow retrieving event handler configuration from ODE integrators.
       </action>
