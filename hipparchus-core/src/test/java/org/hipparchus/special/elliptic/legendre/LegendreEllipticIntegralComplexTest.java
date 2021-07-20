@@ -70,6 +70,76 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
     }
 
     @Test
+    public void testIssueIncompleteDifferenceA() {
+        final Complex phi = new Complex(1.2, 0.75);
+        final Complex m   = new Complex(0.2, 0.6);
+        final Complex ref = LegendreEllipticIntegral.bigF(phi, m).
+                            subtract(LegendreEllipticIntegral.bigE(phi, m)).
+                            divide(m);
+        final ComplexUnivariateIntegrator integrator =
+                        new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
+                                                                                             1.0e-4,
+                                                                                             1.0e-4));
+        final Complex integrated = integrator.integrate(100000, new Difference(m),
+                                                        new Complex(1.0e-10, 1.0e-10), phi);
+        UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
+        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigD(phi, m), 1.0e-10);
+    }
+
+    @Test
+    public void testIssueIncompleteDifferenceB() {
+        final Complex phi = new Complex(1.2, 0.0);
+        final Complex m   = new Complex(2.3, -1.5);
+        final Complex ref = LegendreEllipticIntegral.bigF(phi, m).
+                            subtract(LegendreEllipticIntegral.bigE(phi, m)).
+                            divide(m);
+        final ComplexUnivariateIntegrator integrator =
+                        new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
+                                                                                             1.0e-4,
+                                                                                             1.0e-4));
+        final Complex integrated = integrator.integrate(100000, new Difference(m),
+                                                        new Complex(1.0e-10, 1.0e-10), phi);
+        UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
+        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigD(phi, m), 1.0e-10);
+    }
+
+    @Test
+    public void testIssueIncompleteDifferenceC() {
+        final Complex phi = new Complex(3, 2.5);
+        final Complex m   = new Complex(2.3, -1.5);
+        final Complex ref = LegendreEllipticIntegral.bigF(phi, m).
+                            subtract(LegendreEllipticIntegral.bigE(phi, m)).
+                            divide(m);
+        final ComplexUnivariateIntegrator integrator =
+                        new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
+                                                                                             1.0e-4,
+                                                                                             1.0e-4));
+        // we have to use a specific path to get the correct result
+        // integrating over a single straight line gives a completely wrong result
+        final Complex integrated = integrator.integrate(100000, new Difference(m),
+                                                        new Complex(1.0e-12, 1.0e-12), new Complex(0, -1.5), phi);
+        UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
+        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigD(phi, m), 1.0e-10);
+    }
+
+    @Test
+    public void testIssueIncompleteDifferenceD() {
+        final Complex phi = new Complex(-0.4, 2.5);
+        final Complex m   = new Complex(2.3, -1.5);
+        final Complex ref = LegendreEllipticIntegral.bigF(phi, m).
+                            subtract(LegendreEllipticIntegral.bigE(phi, m)).
+                            divide(m);
+        final ComplexUnivariateIntegrator integrator =
+                        new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
+                                                                                             1.0e-4,
+                                                                                             1.0e-4));
+        final Complex integrated = integrator.integrate(100000, new Difference(m),
+                                                        new Complex(1.0e-10, 1.0e-10), phi);
+        UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
+        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigD(phi, m), 1.0e-10);
+    }
+
+    @Test
     public void testIssueIncompleteFirstKindA() {
         final Complex phi = new Complex(1.2, 0.75);
         final Complex m   = new Complex(0.2, 0.6);
@@ -78,9 +148,8 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
                                                                                              1.0e-4,
                                                                                              1.0e-4));
-        final CalculusFieldUnivariateFunction<Complex> f =
-                        theta -> theta.sin().multiply(theta.sin()).multiply(m).negate().add(1).sqrt().reciprocal();
-        final Complex integrated = integrator.integrate(100000, f, new Complex(1.0e-10, 1.0e-10), phi);
+        final Complex integrated = integrator.integrate(100000, new First(m),
+                                                        new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
         UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigF(phi, m), 1.0e-10);
     }
@@ -94,9 +163,8 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
                                                                                              1.0e-4,
                                                                                              1.0e-4));
-        final CalculusFieldUnivariateFunction<Complex> f =
-                        theta -> theta.sin().multiply(theta.sin()).multiply(m).negate().add(1).sqrt().reciprocal();
-        final Complex integrated = integrator.integrate(100000, f, new Complex(1.0e-10, 1.0e-10), phi);
+        final Complex integrated = integrator.integrate(100000, new First(m),
+                                                        new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
         UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigF(phi, m), 1.0e-10);
     }
@@ -110,10 +178,10 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
                                                                                              1.0e-4,
                                                                                              1.0e-4));
-        final CalculusFieldUnivariateFunction<Complex> f =
-                        theta -> theta.sin().multiply(theta.sin()).multiply(m).negate().add(1).sqrt().reciprocal();
-        final Complex integrated = integrator.integrate(100000, f, new Complex(1.0e-12, 1.0e-12),
-                                                        new Complex(0, -1.5), phi);
+        // we have to use a specific path to get the correct result
+        // integrating over a single straight line gives a completely wrong result
+        final Complex integrated = integrator.integrate(100000, new First(m),
+                                                        new Complex(1.0e-12, 1.0e-12), new Complex(0, -1.5), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
         UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigF(phi, m), 1.0e-10);
     }
@@ -127,11 +195,8 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
                                                                                              1.0e-4,
                                                                                              1.0e-4));
-        final CalculusFieldUnivariateFunction<Complex> f =
-                        theta -> theta.sin().multiply(theta.sin()).multiply(m).negate().add(1).sqrt().reciprocal();
-        // we have to use a specific path to get the correct result
-        // integrating over a single straight line gives a completely wrong result
-        final Complex integrated = integrator.integrate(100000, f, new Complex(1.0e-10, 1.0e-10), phi);
+        final Complex integrated = integrator.integrate(100000, new First(m),
+                                                        new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
         UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigF(phi, m), 1.0e-10);
     }
@@ -145,9 +210,8 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
                                                                                              1.0e-4,
                                                                                              1.0e-4));
-        final CalculusFieldUnivariateFunction<Complex> f =
-                        theta -> theta.sin().multiply(theta.sin()).multiply(m).negate().add(1).sqrt();
-        final Complex integrated = integrator.integrate(100000, f, new Complex(1.0e-10, 1.0e-10), phi);
+        final Complex integrated = integrator.integrate(100000, new Second(m),
+                                                        new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
         UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigE(phi, m), 1.0e-10);
     }
@@ -161,9 +225,8 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
                                                                                              1.0e-4,
                                                                                              1.0e-4));
-        final CalculusFieldUnivariateFunction<Complex> f =
-                        theta -> theta.sin().multiply(theta.sin()).multiply(m).negate().add(1).sqrt();
-        final Complex integrated = integrator.integrate(100000, f, new Complex(1.0e-10, 1.0e-10), phi);
+        final Complex integrated = integrator.integrate(100000, new Second(m),
+                                                        new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
         UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigE(phi, m), 1.0e-10);
     }
@@ -177,12 +240,10 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
                                                                                              1.0e-4,
                                                                                              1.0e-4));
-        final CalculusFieldUnivariateFunction<Complex> f =
-                        theta -> theta.sin().multiply(theta.sin()).multiply(m).negate().add(1).sqrt();
         // we have to use a specific path to get the correct result
         // integrating over a single straight line gives a completely wrong result
-        final Complex integrated = integrator.integrate(100000, f, new Complex(1.0e-12, 1.0e-12),
-                                                        new Complex(0, -1.5), phi);
+        final Complex integrated = integrator.integrate(100000, new Second(m),
+                                                        new Complex(1.0e-12, 1.0e-12), new Complex(0, -1.5), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
         UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigE(phi, m), 1.0e-10);
     }
@@ -196,11 +257,58 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
                                                                                              1.0e-4,
                                                                                              1.0e-4));
-        final CalculusFieldUnivariateFunction<Complex> f =
-                        theta -> theta.sin().multiply(theta.sin()).multiply(m).negate().add(1).sqrt();
-        final Complex integrated = integrator.integrate(100000, f, new Complex(1.0e-10, 1.0e-10), phi);
+        final Complex integrated = integrator.integrate(100000, new Second(m),
+                                                        new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
         UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigE(phi, m), 1.0e-10);
+    }
+
+    private static class Difference implements CalculusFieldUnivariateFunction<Complex> {
+
+        final Complex m;
+
+        Difference(final Complex m) {
+            this.m = m;
+        }
+
+        public Complex value(final Complex theta) {
+            final Complex sin  = theta.sin();
+            final Complex sin2 = sin.multiply(sin);
+            return sin2.divide(sin2.multiply(m).negate().add(1).sqrt());
+        }
+
+    }
+
+    private static class First implements CalculusFieldUnivariateFunction<Complex> {
+
+        final Complex m;
+
+        First(final Complex m) {
+            this.m = m;
+        }
+
+        public Complex value(final Complex theta) {
+            final Complex sin  = theta.sin();
+            final Complex sin2 = sin.multiply(sin);
+            return sin2.multiply(m).negate().add(1).sqrt().reciprocal();
+        }
+
+    }
+
+    private static class Second implements CalculusFieldUnivariateFunction<Complex> {
+
+        final Complex m;
+
+        Second(final Complex m) {
+            this.m = m;
+        }
+
+        public Complex value(final Complex theta) {
+            final Complex sin = theta.sin();
+            final Complex sin2 = sin.multiply(sin);
+            return sin2.multiply(m).negate().add(1).sqrt();
+        }
+
     }
 
 }
