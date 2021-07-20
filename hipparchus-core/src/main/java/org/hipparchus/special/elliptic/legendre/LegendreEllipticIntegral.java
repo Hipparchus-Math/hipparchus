@@ -612,11 +612,9 @@ public class LegendreEllipticIntegral {
         final DoubleArgumentReduction ar = new DoubleArgumentReduction(phi, m, n -> bigK(n));
 
         // integrate part between 0 and π/2
-        final double csc = 1.0 / ar.sin;
-        final double c   = csc * csc;
-        final double cM1 = c - 1.0;
-        final double cMm = c - m;
-        final double incomplete =  CarlsonEllipticIntegral.rF(cM1, cMm, c);
+        final double cM1 = ar.csc2 - 1.0;
+        final double cMm = ar.csc2 - m;
+        final double incomplete =  CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2);
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete - incomplete : ar.complete + incomplete;
@@ -648,11 +646,9 @@ public class LegendreEllipticIntegral {
         final FieldArgumentReduction<T> ar = new FieldArgumentReduction<>(phi, m, n -> bigK(n));
 
         // integrate part between 0 and π/2
-        final T csc        = ar.sin.reciprocal();
-        final T c          = csc.multiply(csc);
-        final T cM1        = c.subtract(1);
-        final T cMm        = c.subtract(m);
-        final T incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c);
+        final T cM1        = ar.csc2.subtract(1);
+        final T cMm        = ar.csc2.subtract(m);
+        final T incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2);
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
@@ -683,11 +679,9 @@ public class LegendreEllipticIntegral {
         final FieldArgumentReduction<Complex> ar = new FieldArgumentReduction<>(phi, m, n -> bigK(n));
 
         // integrate part between 0 and π/2
-        final Complex csc        = ar.sin.reciprocal();
-        final Complex c          = csc.multiply(csc);
-        final Complex cM1        = c.subtract(1);
-        final Complex cMm        = c.subtract(m);
-        final Complex incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c);
+        final Complex cM1        = ar.csc2.subtract(1);
+        final Complex cMm        = ar.csc2.subtract(m);
+        final Complex incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2);
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
@@ -719,11 +713,9 @@ public class LegendreEllipticIntegral {
         final FieldArgumentReduction<FieldComplex<T>> ar = new FieldArgumentReduction<>(phi, m, n -> bigK(n));
 
         // integrate part between 0 and π/2
-        final FieldComplex<T> csc        = ar.sin.reciprocal();
-        final FieldComplex<T> c          = csc.multiply(csc);
-        final FieldComplex<T> cM1        = c.subtract(1);
-        final FieldComplex<T> cMm        = c.subtract(m);
-        final FieldComplex<T> incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c);
+        final FieldComplex<T> cM1        = ar.csc2.subtract(1);
+        final FieldComplex<T> cMm        = ar.csc2.subtract(m);
+        final FieldComplex<T> incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2);
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
@@ -754,12 +746,10 @@ public class LegendreEllipticIntegral {
         final DoubleArgumentReduction ar = new DoubleArgumentReduction(phi, m, n -> bigE(n));
 
         // integrate part between 0 and π/2
-        final double csc        = 1.0 / ar.sin;
-        final double c          = csc * csc;
-        final double cM1        = c - 1.0;
-        final double cMm        = c - m;
-        final double incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c) -
-                                  CarlsonEllipticIntegral.rD(cM1, cMm, c) * (m / 3);
+        final double cM1        = ar.csc2 - 1.0;
+        final double cMm        = ar.csc2 - m;
+        final double incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2) -
+                                  CarlsonEllipticIntegral.rD(cM1, cMm, ar.csc2) * (m / 3);
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete - incomplete : ar.complete + incomplete;
@@ -791,12 +781,10 @@ public class LegendreEllipticIntegral {
         final FieldArgumentReduction<T> ar = new FieldArgumentReduction<>(phi, m, n -> bigE(n));
 
         // integrate part between 0 and π/2
-        final T csc        = ar.sin.reciprocal();
-        final T c          = csc.multiply(csc);
-        final T cM1        = c.subtract(1);
-        final T cMm        = c.subtract(m);
-        final T incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c).
-                             subtract(CarlsonEllipticIntegral.rD(cM1, cMm, c).multiply(m.divide(3)));
+        final T cM1        = ar.csc2.subtract(1);
+        final T cMm        = ar.csc2.subtract(m);
+        final T incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2).
+                             subtract(CarlsonEllipticIntegral.rD(cM1, cMm, ar.csc2).multiply(m.divide(3)));
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
@@ -827,12 +815,10 @@ public class LegendreEllipticIntegral {
         final FieldArgumentReduction<Complex> ar = new FieldArgumentReduction<>(phi, m, n -> bigE(n));
 
         // integrate part between 0 and π/2
-        final Complex csc        = ar.sin.reciprocal();
-        final Complex c          = csc.multiply(csc);
-        final Complex cM1        = c.subtract(1);
-        final Complex cMm        = c.subtract(m);
-        final Complex incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c).
-                                   subtract(CarlsonEllipticIntegral.rD(cM1, cMm, c).multiply(m.divide(3)));
+        final Complex cM1        = ar.csc2.subtract(1);
+        final Complex cMm        = ar.csc2.subtract(m);
+        final Complex incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2).
+                                   subtract(CarlsonEllipticIntegral.rD(cM1, cMm, ar.csc2).multiply(m.divide(3)));
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
@@ -864,12 +850,10 @@ public class LegendreEllipticIntegral {
         final FieldArgumentReduction<FieldComplex<T>> ar = new FieldArgumentReduction<>(phi, m, n -> bigE(n));
 
         // integrate part between 0 and π/2
-        final FieldComplex<T> csc        = ar.sin.reciprocal();
-        final FieldComplex<T> c          = csc.multiply(csc);
-        final FieldComplex<T> cM1        = c.subtract(1);
-        final FieldComplex<T> cMm        = c.subtract(m);
-        final FieldComplex<T> incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c).
-                                           subtract(CarlsonEllipticIntegral.rD(cM1, cMm, c).multiply(m.divide(3)));
+        final FieldComplex<T> cM1        = ar.csc2.subtract(1);
+        final FieldComplex<T> cMm        = ar.csc2.subtract(m);
+        final FieldComplex<T> incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2).
+                                           subtract(CarlsonEllipticIntegral.rD(cM1, cMm, ar.csc2).multiply(m.divide(3)));
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
@@ -898,11 +882,9 @@ public class LegendreEllipticIntegral {
         final DoubleArgumentReduction ar = new DoubleArgumentReduction(phi, m, n -> bigD(n));
 
         // integrate part between 0 and π/2
-        final double csc        = 1.0 / ar.sin;
-        final double c          = csc * csc;
-        final double cM1        = c - 1.0;
-        final double cMm        = c - m;
-        final double incomplete = CarlsonEllipticIntegral.rD(cM1, cMm, c) / 3;
+        final double cM1        = ar.csc2 - 1.0;
+        final double cMm        = ar.csc2 - m;
+        final double incomplete = CarlsonEllipticIntegral.rD(cM1, cMm, ar.csc2) / 3;
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete - incomplete : ar.complete + incomplete;
@@ -932,11 +914,9 @@ public class LegendreEllipticIntegral {
         final FieldArgumentReduction<T> ar = new FieldArgumentReduction<>(phi, m, n -> bigD(n));
 
         // integrate part between 0 and π/2
-        final T csc        = ar.sin.reciprocal();
-        final T c          = csc.multiply(csc);
-        final T cM1        = c.subtract(1);
-        final T cMm        = c.subtract(m);
-        final T incomplete = CarlsonEllipticIntegral.rD(cM1, cMm, c).divide(3);
+        final T cM1        = ar.csc2.subtract(1);
+        final T cMm        = ar.csc2.subtract(m);
+        final T incomplete = CarlsonEllipticIntegral.rD(cM1, cMm, ar.csc2).divide(3);
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
@@ -965,11 +945,9 @@ public class LegendreEllipticIntegral {
         final FieldArgumentReduction<Complex> ar = new FieldArgumentReduction<>(phi, m, n -> bigD(n));
 
         // integrate part between 0 and π/2
-        final Complex csc        = ar.sin.reciprocal();
-        final Complex c          = csc.multiply(csc);
-        final Complex cM1        = c.subtract(1);
-        final Complex cMm        = c.subtract(m);
-        final Complex incomplete = CarlsonEllipticIntegral.rD(cM1, cMm, c).divide(3);
+        final Complex cM1        = ar.csc2.subtract(1);
+        final Complex cMm        = ar.csc2.subtract(m);
+        final Complex incomplete = CarlsonEllipticIntegral.rD(cM1, cMm, ar.csc2).divide(3);
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
@@ -999,11 +977,9 @@ public class LegendreEllipticIntegral {
         final FieldArgumentReduction<FieldComplex<T>> ar = new FieldArgumentReduction<>(phi, m, n -> bigD(n));
 
         // integrate part between 0 and π/2
-        final FieldComplex<T> csc        = ar.sin.reciprocal();
-        final FieldComplex<T> c          = csc.multiply(csc);
-        final FieldComplex<T> cM1        = c.subtract(1);
-        final FieldComplex<T> cMm        = c.subtract(m);
-        final FieldComplex<T> incomplete = CarlsonEllipticIntegral.rD(cM1, cMm, c).divide(3);
+        final FieldComplex<T> cM1        = ar.csc2.subtract(1);
+        final FieldComplex<T> cMm        = ar.csc2.subtract(m);
+        final FieldComplex<T> incomplete = CarlsonEllipticIntegral.rD(cM1, cMm, ar.csc2).divide(3);
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
@@ -1139,8 +1115,8 @@ public class LegendreEllipticIntegral {
         /** Complete part. */
         private final double complete;
 
-        /** Sine of the Jacobi amplitude. */
-        private final double sin;
+        /** Squared cosecant of the Jacobi amplitude. */
+        private final double csc2;
 
         /** Indicator for negated Jacobi amplitude. */
         private boolean negate;
@@ -1151,11 +1127,11 @@ public class LegendreEllipticIntegral {
          * @param integral provider for complete integral
          */
         DoubleArgumentReduction(final double phi, final double m, final DoubleFunction<Double> integral) {
-            final int p = (int) FastMath.rint(phi / FastMath.PI);
-            complete = p == 0 ? 0 : integral.apply(m) * 2 * p;
-            final double  s = FastMath.sin(phi);
-            negate = s < 0 ^ (p & 0x1) == 1;
-            sin    = negate ? -s : s;
+            final double sin = FastMath.sin(phi);
+            final int    p   = (int) FastMath.rint(phi / FastMath.PI);
+            complete         = p == 0 ? 0 : integral.apply(m) * 2 * p;
+            negate           = sin < 0 ^ (p & 0x1) == 1;
+            csc2             = 1.0 / (sin * sin);
         }
 
     }
@@ -1168,8 +1144,8 @@ public class LegendreEllipticIntegral {
         /** Complete part. */
         private final T complete;
 
-        /** Sine of the Jacobi amplitude. */
-        private final T sin;
+        /** Squared cosecant of the Jacobi amplitude. */
+        private final T csc2;
 
         /** Indicator for negated Jacobi amplitude. */
         private boolean negate;
@@ -1180,11 +1156,11 @@ public class LegendreEllipticIntegral {
          * @param integral provider for complete integral
          */
         FieldArgumentReduction(final T phi, final T m, final Function<T, T> integral) {
-            final int p = (int) FastMath.rint(phi.getReal() / FastMath.PI);
-            complete = p == 0 ? phi.getField().getZero() : integral.apply(m).multiply(2 * p);
-            final T  s = FastMath.sin(phi);
-            negate = s.getReal() < 0 ^ (p & 0x1) == 1;
-            sin = negate ? s.negate() : s;
+            final T   sin = FastMath.sin(phi);
+            final int p   = (int) FastMath.rint(phi.getReal() / FastMath.PI);
+            complete      = p == 0 ? phi.getField().getZero() : integral.apply(m).multiply(2 * p);
+            negate        = sin.getReal() < 0 ^ (p & 0x1) == 1;
+            csc2          = sin.multiply(sin).reciprocal();
         }
 
     }
