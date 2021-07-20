@@ -607,11 +607,20 @@ public class LegendreEllipticIntegral {
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
     public static double bigF(final double phi, final double m) {
-        final double csc = 1.0 / FastMath.sin(phi);
+
+        // argument reduction
+        final DoubleArgumentReduction ar = new DoubleArgumentReduction(phi, m, n -> bigK(n));
+
+        // integrate part between 0 and π/2
+        final double csc = 1.0 / ar.sin;
         final double c   = csc * csc;
         final double cM1 = c - 1.0;
         final double cMm = c - m;
-        return CarlsonEllipticIntegral.rF(cM1, cMm, c);
+        final double incomplete =  CarlsonEllipticIntegral.rF(cM1, cMm, c);
+
+        // combine complete and incomplete parts
+        return ar.negate ? ar.complete - incomplete : ar.complete + incomplete;
+
     }
 
     /** Get the incomplete elliptic integral of the first kind F(Φ, m).
@@ -634,12 +643,20 @@ public class LegendreEllipticIntegral {
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
     public static <T extends CalculusFieldElement<T>> T bigF(final T phi, final T m) {
-        final T one = m.getField().getOne();
-        final T csc = FastMath.sin(phi).reciprocal();
-        final T c   = csc.multiply(csc);
-        final T cM1 = c.subtract(one);
-        final T cMm = c.subtract(m);
-        return CarlsonEllipticIntegral.rF(cM1, cMm, c);
+
+        // argument reduction
+        final FieldArgumentReduction<T> ar = new FieldArgumentReduction<>(phi, m, n -> bigK(n));
+
+        // integrate part between 0 and π/2
+        final T csc        = ar.sin.reciprocal();
+        final T c          = csc.multiply(csc);
+        final T cM1        = c.subtract(1);
+        final T cMm        = c.subtract(m);
+        final T incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c);
+
+        // combine complete and incomplete parts
+        return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
+
     }
 
     /** Get the incomplete elliptic integral of the first kind F(Φ, m).
@@ -661,11 +678,20 @@ public class LegendreEllipticIntegral {
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
     public static Complex bigF(final Complex phi, final Complex m) {
-        final Complex csc = FastMath.sin(phi).reciprocal();
-        final Complex c   = csc.multiply(csc);
-        final Complex cM1 = c.subtract(Complex.ONE);
-        final Complex cMm = c.subtract(m);
-        return CarlsonEllipticIntegral.rF(cM1, cMm, c);
+
+        // argument reduction
+        final FieldArgumentReduction<Complex> ar = new FieldArgumentReduction<>(phi, m, n -> bigK(n));
+
+        // integrate part between 0 and π/2
+        final Complex csc        = ar.sin.reciprocal();
+        final Complex c          = csc.multiply(csc);
+        final Complex cM1        = c.subtract(1);
+        final Complex cMm        = c.subtract(m);
+        final Complex incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c);
+
+        // combine complete and incomplete parts
+        return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
+
     }
 
     /** Get the incomplete elliptic integral of the first kind F(Φ, m).
@@ -688,12 +714,20 @@ public class LegendreEllipticIntegral {
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigF(final FieldComplex<T> phi, final FieldComplex<T> m) {
-        final FieldComplex<T> one = m.getField().getOne();
-        final FieldComplex<T> csc = FastMath.sin(phi).reciprocal();
-        final FieldComplex<T> c   = csc.multiply(csc);
-        final FieldComplex<T> cM1 = c.subtract(one);
-        final FieldComplex<T> cMm = c.subtract(m);
-        return CarlsonEllipticIntegral.rF(cM1, cMm, c);
+
+        // argument reduction
+        final FieldArgumentReduction<FieldComplex<T>> ar = new FieldArgumentReduction<>(phi, m, n -> bigK(n));
+
+        // integrate part between 0 and π/2
+        final FieldComplex<T> csc        = ar.sin.reciprocal();
+        final FieldComplex<T> c          = csc.multiply(csc);
+        final FieldComplex<T> cM1        = c.subtract(1);
+        final FieldComplex<T> cMm        = c.subtract(m);
+        final FieldComplex<T> incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c);
+
+        // combine complete and incomplete parts
+        return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
+
     }
 
     /** Get the incomplete elliptic integral of the second kind E(Φ, m).
@@ -720,12 +754,12 @@ public class LegendreEllipticIntegral {
         final DoubleArgumentReduction ar = new DoubleArgumentReduction(phi, m, n -> bigE(n));
 
         // integrate part between 0 and π/2
-        final double  csc        = 1.0 / ar.sin;
-        final double  c          = csc * csc;
-        final double  cM1        = c - 1.0;
-        final double  cMm        = c - m;
-        final double  incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c) -
-                                   CarlsonEllipticIntegral.rD(cM1, cMm, c) * (m / 3);
+        final double csc        = 1.0 / ar.sin;
+        final double c          = csc * csc;
+        final double cM1        = c - 1.0;
+        final double cMm        = c - m;
+        final double incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c) -
+                                  CarlsonEllipticIntegral.rD(cM1, cMm, c) * (m / 3);
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete - incomplete : ar.complete + incomplete;
@@ -757,12 +791,12 @@ public class LegendreEllipticIntegral {
         final FieldArgumentReduction<T> ar = new FieldArgumentReduction<>(phi, m, n -> bigE(n));
 
         // integrate part between 0 and π/2
-        final T       csc        = ar.sin.reciprocal();
-        final T       c          = csc.multiply(csc);
-        final T       cM1        = c.subtract(1);
-        final T       cMm        = c.subtract(m);
-        final T       incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c).
-                                   subtract(CarlsonEllipticIntegral.rD(cM1, cMm, c).multiply(m.divide(3)));
+        final T csc        = ar.sin.reciprocal();
+        final T c          = csc.multiply(csc);
+        final T cM1        = c.subtract(1);
+        final T cMm        = c.subtract(m);
+        final T incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, c).
+                             subtract(CarlsonEllipticIntegral.rD(cM1, cMm, c).multiply(m.divide(3)));
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
