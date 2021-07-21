@@ -84,6 +84,9 @@ class FastMathCalc {
     /** Table end declaration. */
     private static final String TABLE_END_DECL   = "    };";
 
+    /** Format for table end (separated from TABLE_END_DECL to work around end of line problems between Linux and Windows). */
+    private static final String TABLE_END_FORMAT = "%s%n";
+
     /**
      * Private Constructor.
      */
@@ -612,7 +615,7 @@ class FastMathCalc {
             }
             out.println("}, // " + i++);
         }
-        out.printf("%s%n", TABLE_END_DECL);
+        out.printf(TABLE_END_FORMAT, TABLE_END_DECL);
     }
 
     /**
@@ -629,7 +632,7 @@ class FastMathCalc {
         for(double d : array){
             out.printf("        %s%n", format(d)); // one entry per line
         }
-        out.printf("%s%n", TABLE_END_DECL);
+        out.printf(TABLE_END_FORMAT, TABLE_END_DECL);
     }
 
     /** Format a double.
