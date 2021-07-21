@@ -180,11 +180,11 @@ public class FastMathCalcTest {
                                                                      String.class, Integer.TYPE, double[].class);
             printArray.setAccessible(true);
             printArray.invoke(null, ps, "name", 2, new double[] { 1.25, -0.5 });
-            Assert.assertEquals("name=\n" + 
-                                "    {\n" + 
-                                "        +1.25d,\n" + 
-                                "        -0.5d,\n" + 
-                                "    };\n",
+            Assert.assertEquals(String.format("name=%n" +
+                                              "    {%n" +
+                                              "        +1.25d,%n" +
+                                              "        -0.5d,%n" +
+                                              "    };%n"),
                                 bos.toString(StandardCharsets.UTF_8.name()));
         } catch (IOException | NoSuchMethodException | IllegalAccessException |
                  IllegalArgumentException | InvocationTargetException e) {
@@ -201,11 +201,11 @@ public class FastMathCalcTest {
                                                                      String.class, Integer.TYPE, double[][].class);
             printArray.setAccessible(true);
             printArray.invoke(null, ps, "name", 2, new double[][] { { 1.25, -0.5 }, { 0.0, 3.0 } });
-            Assert.assertEquals("name\n" + 
-                                "    { \n" + 
-                                "        {+1.25d,                  -0.5d,                   }, // 0\n" +
-                                "        {+0.0d,                   +3.0d,                   }, // 1\n" +
-                                "    };\n",
+            Assert.assertEquals(String.format("name%n" + 
+                                              "    { %n" + 
+                                              "        {+1.25d,                  -0.5d,                   }, // 0%n" +
+                                              "        {+0.0d,                   +3.0d,                   }, // 1%n" +
+                                              "    };%n"),
                                 bos.toString(StandardCharsets.UTF_8.name()));
         } catch (IOException | NoSuchMethodException | IllegalAccessException |
                  IllegalArgumentException | InvocationTargetException e) {
