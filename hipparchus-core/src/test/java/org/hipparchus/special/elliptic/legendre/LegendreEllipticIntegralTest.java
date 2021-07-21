@@ -163,4 +163,21 @@ public class LegendreEllipticIntegralTest {
         }
     }
 
+    @Test
+    public void testNomeMediumParameter() {
+        Assert.assertEquals(0.0857957337021947665168, LegendreEllipticIntegral.nome(0.75), 1.0e-15);
+    }
+
+    @Test
+    public void testNomeSmallParameter() {
+        Assert.assertEquals(5.9375e-18, LegendreEllipticIntegral.nome(0.95e-16), 1.0e-22);
+    }
+
+    @Test
+    public void testIntegralsSmallParameter() {
+        Assert.assertEquals(7.8539816428e-10,
+                            LegendreEllipticIntegral.bigK(2.0e-9) - MathUtils.SEMI_PI,
+                            1.0e-15);
+    }
+
 }

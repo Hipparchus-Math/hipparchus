@@ -135,6 +135,21 @@ public class FieldLegendreEllipticIntegralTest {
         doTestCompleteVsIncompletePi(Decimal64Field.getInstance());
     }
 
+    @Test
+    public void testNomeMediumParameter() {
+        doTestNomeMediumParameter(Decimal64Field.getInstance());
+    }
+
+    @Test
+    public void testNomeSmallParameter() {
+        doTestNomeSmallParameter(Decimal64Field.getInstance());
+    }
+
+    @Test
+    public void testIntegralsSmallParameter() {
+        doTestIntegralsSmallParameter(Decimal64Field.getInstance());
+    }
+
     private <T extends CalculusFieldElement<T>> void doTestBigE(final Field<T> field, final double m,
                                                                 final double expected, final double tol) {
         Assert.assertEquals(expected,
@@ -208,6 +223,20 @@ public class FieldLegendreEllipticIntegralTest {
                 Assert.assertEquals(complete, incomplete, FastMath.ulp(complete));
             }
         }
+    }
+
+    private <T extends CalculusFieldElement<T>> void doTestNomeMediumParameter(final Field<T> field) {
+        Assert.assertEquals(0.0857957337021947665168, LegendreEllipticIntegral.nome(field.getZero().newInstance(0.75)).getReal(), 1.0e-15);
+    }
+
+    private <T extends CalculusFieldElement<T>> void doTestNomeSmallParameter(final Field<T> field) {
+        Assert.assertEquals(5.9375e-18, LegendreEllipticIntegral.nome(field.getZero().newInstance(0.95e-16)).getReal(), 1.0e-22);
+    }
+
+    private <T extends CalculusFieldElement<T>> void doTestIntegralsSmallParameter(final Field<T> field) {
+        Assert.assertEquals(7.8539816428e-10,
+                            LegendreEllipticIntegral.bigK(field.getZero().newInstance(2.0e-9)).getReal() - MathUtils.SEMI_PI,
+                            1.0e-15);
     }
 
 }
