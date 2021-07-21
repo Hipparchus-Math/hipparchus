@@ -179,8 +179,8 @@ public class FieldLegendreEllipticIntegralTest {
                                                                  final double phi, final double alpha2, final double m,
                                                                  final double expected, final double tol) {
         Assert.assertEquals(expected,
-                            LegendreEllipticIntegral.bigPi(field.getZero().newInstance(phi),
-                                                           field.getZero().newInstance(alpha2),
+                            LegendreEllipticIntegral.bigPi(field.getZero().newInstance(alpha2),
+                                                           field.getZero().newInstance(phi),
                                                            field.getZero().newInstance(m)).getReal(),
                             tol);
     }
@@ -217,8 +217,8 @@ public class FieldLegendreEllipticIntegralTest {
             for (double m = 0.01; m < 1; m += 0.01) {
                 double complete   = LegendreEllipticIntegral.bigPi(field.getZero().newInstance(alpha2),
                                                                    field.getZero().newInstance(m)).getReal();
-                double incomplete = LegendreEllipticIntegral.bigPi(field.getZero().newInstance(MathUtils.SEMI_PI),
-                                                                   field.getZero().newInstance(alpha2),
+                double incomplete = LegendreEllipticIntegral.bigPi(field.getZero().newInstance(alpha2),
+                                                                   field.getZero().newInstance(MathUtils.SEMI_PI),
                                                                    field.getZero().newInstance(m)).getReal();
                 Assert.assertEquals(complete, incomplete, FastMath.ulp(complete));
             }

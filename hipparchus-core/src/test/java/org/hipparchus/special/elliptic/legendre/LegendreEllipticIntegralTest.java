@@ -113,15 +113,15 @@ public class LegendreEllipticIntegralTest {
     public void testAbramowitzStegunTable179() {
         final double sinAlpha1 = FastMath.sin(FastMath.toRadians(15));
         Assert.assertEquals(1.62298,
-                            LegendreEllipticIntegral.bigPi(FastMath.toRadians(75), 0.4, sinAlpha1 * sinAlpha1),
+                            LegendreEllipticIntegral.bigPi(0.4, FastMath.toRadians(75), sinAlpha1 * sinAlpha1),
                             1.0e-5);
         final double sinAlpha2 = FastMath.sin(FastMath.toRadians(60));
         Assert.assertEquals(1.03076,
-                            LegendreEllipticIntegral.bigPi(FastMath.toRadians(45), 0.8, sinAlpha2 * sinAlpha2),
+                            LegendreEllipticIntegral.bigPi(0.8, FastMath.toRadians(45), sinAlpha2 * sinAlpha2),
                             1.0e-5);
         final double sinAlpha3 = FastMath.sin(FastMath.toRadians(15));
         Assert.assertEquals(2.79990,
-                            LegendreEllipticIntegral.bigPi(FastMath.toRadians(75), 0.9, sinAlpha3 * sinAlpha3),
+                            LegendreEllipticIntegral.bigPi(0.9, FastMath.toRadians(75), sinAlpha3 * sinAlpha3),
                             1.0e-5);
     }
 
@@ -157,7 +157,7 @@ public class LegendreEllipticIntegralTest {
         for (double alpha2 = 0.01; alpha2 < 1; alpha2 += 0.01) {
             for (double m = 0.01; m < 1; m += 0.01) {
                 double complete   = LegendreEllipticIntegral.bigPi(alpha2, m);
-                double incomplete = LegendreEllipticIntegral.bigPi(MathUtils.SEMI_PI, alpha2, m);
+                double incomplete = LegendreEllipticIntegral.bigPi(alpha2, MathUtils.SEMI_PI, m);
                 Assert.assertEquals(complete, incomplete, FastMath.ulp(complete));
             }
         }

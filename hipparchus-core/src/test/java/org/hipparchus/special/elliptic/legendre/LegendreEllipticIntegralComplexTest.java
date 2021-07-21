@@ -34,48 +34,48 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
         return new Complex(realPart, imaginaryPart);
     }
 
-    protected Complex K(Complex k) {
-        return LegendreEllipticIntegral.bigK(k);
+    protected Complex K(Complex m) {
+        return LegendreEllipticIntegral.bigK(m);
     }
 
-    protected Complex Kprime(Complex k) {
-        return LegendreEllipticIntegral.bigKPrime(k);
+    protected Complex Kprime(Complex m) {
+        return LegendreEllipticIntegral.bigKPrime(m);
     }
 
-    protected Complex F(Complex phi, Complex k) {
-        return LegendreEllipticIntegral.bigF(phi, k);
+    protected Complex F(Complex phi, Complex m) {
+        return LegendreEllipticIntegral.bigF(phi, m);
     }
 
-    protected Complex E(Complex k) {
-        return LegendreEllipticIntegral.bigE(k);
+    protected Complex E(Complex m) {
+        return LegendreEllipticIntegral.bigE(m);
     }
 
-    protected Complex E(Complex phi, Complex k) {
-        return LegendreEllipticIntegral.bigE(phi, k);
+    protected Complex E(Complex phi, Complex m) {
+        return LegendreEllipticIntegral.bigE(phi, m);
     }
 
-    protected Complex D(Complex k) {
-        return LegendreEllipticIntegral.bigD(k);
+    protected Complex D(Complex m) {
+        return LegendreEllipticIntegral.bigD(m);
     }
 
-    protected Complex D(Complex phi, Complex k) {
-        return LegendreEllipticIntegral.bigD(phi, k);
+    protected Complex D(Complex phi, Complex m) {
+        return LegendreEllipticIntegral.bigD(phi, m);
     }
 
-    protected Complex Pi(Complex alpha2, Complex k) {
-        return LegendreEllipticIntegral.bigPi(alpha2, k);
+    protected Complex Pi(Complex n, Complex m) {
+        return LegendreEllipticIntegral.bigPi(n, m);
     }
 
-    protected Complex Pi(Complex phi, Complex alpha2, Complex k) {
-        return LegendreEllipticIntegral.bigPi(phi, alpha2, k);
+    protected Complex Pi(Complex n, Complex phi, Complex m) {
+        return LegendreEllipticIntegral.bigPi(n, phi, m);
     }
 
     @Test
     public void testIssueIncompleteDifferenceA() {
         final Complex phi = new Complex(1.2, 0.75);
         final Complex m   = new Complex(0.2, 0.6);
-        final Complex ref = LegendreEllipticIntegral.bigF(phi, m).
-                            subtract(LegendreEllipticIntegral.bigE(phi, m)).
+        final Complex ref = F(phi, m).
+                            subtract(E(phi, m)).
                             divide(m);
         final ComplexUnivariateIntegrator integrator =
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
@@ -84,15 +84,15 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
         final Complex integrated = integrator.integrate(100000, new Difference(m),
                                                         new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigD(phi, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, D(phi, m), 1.0e-10);
     }
 
     @Test
     public void testIssueIncompleteDifferenceB() {
         final Complex phi = new Complex(1.2, 0.0);
         final Complex m   = new Complex(2.3, -1.5);
-        final Complex ref = LegendreEllipticIntegral.bigF(phi, m).
-                            subtract(LegendreEllipticIntegral.bigE(phi, m)).
+        final Complex ref = F(phi, m).
+                            subtract(E(phi, m)).
                             divide(m);
         final ComplexUnivariateIntegrator integrator =
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
@@ -101,15 +101,15 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
         final Complex integrated = integrator.integrate(100000, new Difference(m),
                                                         new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigD(phi, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, D(phi, m), 1.0e-10);
     }
 
     @Test
     public void testIssueIncompleteDifferenceC() {
         final Complex phi = new Complex(3, 2.5);
         final Complex m   = new Complex(2.3, -1.5);
-        final Complex ref = LegendreEllipticIntegral.bigF(phi, m).
-                            subtract(LegendreEllipticIntegral.bigE(phi, m)).
+        final Complex ref = F(phi, m).
+                            subtract(E(phi, m)).
                             divide(m);
         final ComplexUnivariateIntegrator integrator =
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
@@ -120,15 +120,15 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
         final Complex integrated = integrator.integrate(100000, new Difference(m),
                                                         new Complex(1.0e-12, 1.0e-12), new Complex(0, -1.5), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigD(phi, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, D(phi, m), 1.0e-10);
     }
 
     @Test
     public void testIssueIncompleteDifferenceD() {
         final Complex phi = new Complex(-0.4, 2.5);
         final Complex m   = new Complex(2.3, -1.5);
-        final Complex ref = LegendreEllipticIntegral.bigF(phi, m).
-                            subtract(LegendreEllipticIntegral.bigE(phi, m)).
+        final Complex ref = F(phi, m).
+                            subtract(E(phi, m)).
                             divide(m);
         final ComplexUnivariateIntegrator integrator =
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
@@ -137,7 +137,7 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
         final Complex integrated = integrator.integrate(100000, new Difference(m),
                                                         new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigD(phi, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, D(phi, m), 1.0e-10);
     }
 
     @Test
@@ -152,7 +152,7 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
         final Complex integrated = integrator.integrate(100000, new First(m),
                                                         new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigF(phi, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, F(phi, m), 1.0e-10);
     }
 
     @Test
@@ -167,7 +167,7 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
         final Complex integrated = integrator.integrate(100000, new First(m),
                                                         new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigF(phi, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, F(phi, m), 1.0e-10);
     }
 
     @Test
@@ -184,7 +184,7 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
         final Complex integrated = integrator.integrate(100000, new First(m),
                                                         new Complex(1.0e-12, 1.0e-12), new Complex(0, -1.5), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigF(phi, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, F(phi, m), 1.0e-10);
     }
 
     @Test
@@ -199,7 +199,7 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
         final Complex integrated = integrator.integrate(100000, new First(m),
                                                         new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigF(phi, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, F(phi, m), 1.0e-10);
     }
 
     @Test
@@ -214,7 +214,7 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
         final Complex integrated = integrator.integrate(100000, new Second(m),
                                                         new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigE(phi, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, E(phi, m), 1.0e-10);
     }
 
     @Test
@@ -229,7 +229,7 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
         final Complex integrated = integrator.integrate(100000, new Second(m),
                                                         new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigE(phi, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, E(phi, m), 1.0e-10);
     }
 
     @Test
@@ -246,7 +246,7 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
         final Complex integrated = integrator.integrate(100000, new Second(m),
                                                         new Complex(1.0e-12, 1.0e-12), new Complex(0, -1.5), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigE(phi, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, E(phi, m), 1.0e-10);
     }
 
     @Test
@@ -261,7 +261,7 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
         final Complex integrated = integrator.integrate(100000, new Second(m),
                                                         new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigE(phi, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, E(phi, m), 1.0e-10);
     }
 
     // TODO: this test fails and the Wolfram reference is consistent with numerical integral
@@ -269,7 +269,7 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
     @Ignore
     @Test
     public void testIssueIncompleteThirdKindA() {
-        final Complex alpha2 = new Complex(3.4, -1.3);
+        final Complex n      = new Complex(3.4, -1.3);
         final Complex phi    = new Complex(1.2, 0.75);
         final Complex m      = new Complex(0.2, 0.6);
         final Complex ref    = new Complex(-0.0377623234559622331654504518, 0.653477244699729422566224);
@@ -277,22 +277,22 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
                                                                                              1.0e-4,
                                                                                              1.0e-4));
-        final Complex integrated = integrator.integrate(100000, new Third(alpha2, m),
+        final Complex integrated = integrator.integrate(100000, new Third(n, m),
                                                         new Complex(1.0e-10, 1.0e-10), phi);
         System.out.println();
-        System.out.println("α²:                           " + alpha2);
+        System.out.println("n:                            " + n);
         System.out.println("φ:                            " + phi);
         System.out.println("m = k²:                       " + m);
         System.out.println("Wolfram ref:                  " + ref);
         System.out.println("numerical integration:        " + integrated);
-        System.out.println("Carlson-based implementation: " + LegendreEllipticIntegral.bigPi(phi, alpha2, m));
+        System.out.println("Carlson-based implementation: " + Pi(n, phi, m));
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigPi(phi, alpha2, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, Pi(n, phi, m), 1.0e-10);
     }
 
     @Test
     public void testIssueIncompleteThirdKindB() {
-        final Complex alpha2 = new Complex(3.4, -1.3);
+        final Complex n      = new Complex(3.4, -1.3);
         final Complex phi    = new Complex(1.2, 0.0);
         final Complex m      = new Complex(2.3, -1.5);
         final Complex ref    = new Complex(0.0549975664205737508390233052870987, -0.678563304934528449620935);
@@ -300,10 +300,10 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
                                                                                              1.0e-4,
                                                                                              1.0e-4));
-        final Complex integrated = integrator.integrate(100000, new Third(alpha2, m),
+        final Complex integrated = integrator.integrate(100000, new Third(n, m),
                                                         new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigPi(phi, alpha2, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, Pi(n, phi, m), 1.0e-10);
     }
 
     // TODO: this test fails and the numerical integral is consistent with Carlson-based implementation
@@ -311,7 +311,7 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
     @Ignore
     @Test
     public void testIssueIncompleteThirdKindC() {
-        final Complex alpha2 = new Complex(3.4, -1.3);
+        final Complex n      = new Complex(3.4, -1.3);
         final Complex phi    = new Complex(3, 2.5);
         final Complex m      = new Complex(2.3, -1.5);
         final Complex ref    = new Complex(-0.08860226061236101143265025848085778, 0.47853763883046652697121849);
@@ -321,22 +321,22 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
                                                                                              1.0e-4));
         // we have to use a specific path to get the correct result
         // integrating over a single straight line gives a completely wrong result
-        final Complex integrated = integrator.integrate(100000, new Third(alpha2, m),
-                                                        new Complex(0, 0), new Complex(0, -1.5), phi);
+        final Complex integrated = integrator.integrate(100000, new Third(n, m),
+                                                        new Complex(0, 0), new Complex(2.3, 0.0), phi);
         System.out.println();
-        System.out.println("α²:                           " + alpha2);
+        System.out.println("n:                            " + n);
         System.out.println("φ:                            " + phi);
         System.out.println("m = k²:                       " + m);
         System.out.println("Wolfram ref:                  " + ref);
         System.out.println("numerical integration:        " + integrated);
-        System.out.println("Carlson-based implementation: " + LegendreEllipticIntegral.bigPi(phi, alpha2, m));
+        System.out.println("Carlson-based implementation: " + Pi(n, phi, m));
         UnitTestUtils.assertEquals(ref, integrated, 5.0e-4);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigPi(phi, alpha2, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, Pi(n, phi, m), 1.0e-10);
     }
 
     @Test
     public void testIssueIncompleteThirdKindD() {
-        final Complex alpha2 = new Complex(3.4, -1.3);
+        final Complex n      = new Complex(3.4, -1.3);
         final Complex phi    = new Complex(-0.4, 2.5);
         final Complex m      = new Complex(2.3, -1.5);
         final Complex ref    = new Complex(-0.088785417225639387479764237202463094, 0.47856853147720156106978019898);
@@ -344,10 +344,10 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
                                                                                              1.0e-4,
                                                                                              1.0e-4));
-        final Complex integrated = integrator.integrate(100000, new Third(alpha2, m),
+        final Complex integrated = integrator.integrate(100000, new Third(n, m),
                                                         new Complex(1.0e-10, 1.0e-10), phi);
         UnitTestUtils.assertEquals(ref, integrated, 2.0e-10);
-        UnitTestUtils.assertEquals(ref, LegendreEllipticIntegral.bigPi(phi, alpha2, m), 1.0e-10);
+        UnitTestUtils.assertEquals(ref, Pi(n, phi, m), 1.0e-10);
     }
 
     private static class Difference implements CalculusFieldUnivariateFunction<Complex> {
@@ -400,19 +400,19 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
 
     private static class Third implements CalculusFieldUnivariateFunction<Complex> {
 
-        final Complex alpha2;
+        final Complex n;
         final Complex m;
 
-        Third(final Complex alpha2, final Complex m) {
-            this.alpha2 = alpha2;
-            this.m      = m;
+        Third(final Complex n, final Complex m) {
+            this.n = n;
+            this.m = m;
         }
 
         public Complex value(final Complex theta) {
             final Complex sin  = theta.sin();
             final Complex sin2 = sin.multiply(sin);
             final Complex d1   = sin2.multiply(m).negate().add(1).sqrt();
-            final Complex da   = sin2.multiply(alpha2).negate().add(1);
+            final Complex da   = sin2.multiply(n).negate().add(1);
             return d1.multiply(da).reciprocal();
         }
 

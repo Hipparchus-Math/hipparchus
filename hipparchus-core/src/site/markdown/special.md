@@ -144,16 +144,16 @@ where `\(s(t) = \sqrt{t+x}\sqrt{t+y}\sqrt{t+z}\)`.
 for both primitive double, `CalculusFieldElement`, `Complex` and `FieldComplex`.
 (the implementation uses `CarlsonEllipticIntegrals` internally):
 
-| Name                         | Type       |  Definition                                                                                   |
-|------------------------------|------------|-----------------------------------------------------------------------------------------------|
-| `\(K(m)\)`                   |  complete  | `\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}\)`                          |
-| `\(K'(m)\)`                  |  complete  | `\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-(1-m) \sin^2\theta}}\)`                      |
-| `\(E(m) \)`                  |  complete  | `\(\int_0^{\frac{\pi}{2}} \sqrt{1-m \sin^2\theta} d\theta\)`                                  |
-| `\(D(m) \)`                  |  complete  | `\(\frac{K(m) - E(m)}{m}\)`                                                                   |
-| `\(\Pi(\alpha^2, m)\)`       |  complete  | `\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-\alpha^2 \sin^2\theta)}\)` |
-| `\(F(\phi, m)\)`             | incomplete | `\(\int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}\)`                                   |
-| `\(E(\phi, m)\)`             | incomplete | `\(\int_0^{\phi} \sqrt{1-m \sin^2\theta} d\theta\)`                                           |
-| `\(D(\phi, m)\)`             | incomplete | `\(\frac{K(\phi, m) - E(\phi, m)}{m}\)`                                                       |
-| `\(\Pi(\phi, \alpha^2, m)\)` | incomplete | `\(\int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-\alpha^2 \sin^2\theta)}\)`          |
+| Name                  | Type       |  Definition                                                                            |
+|-----------------------|------------|----------------------------------------------------------------------------------------|
+| `\(K(m)\)`            |  complete  | `\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}\)`                   |
+| `\(K'(m)\)`           |  complete  | `\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-(1-m) \sin^2\theta}}\)`               |
+| `\(E(m) \)`           |  complete  | `\(\int_0^{\frac{\pi}{2}} \sqrt{1-m \sin^2\theta} d\theta\)`                           |
+| `\(D(m) \)`           |  complete  | `\(\frac{K(m) - E(m)}{m}\)`                                                            |
+| `\(\Pi(n, m)\)`       |  complete  | `\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}\)` |
+| `\(F(\phi, m)\)`      | incomplete | `\(\int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}\)`                            |
+| `\(E(\phi, m)\)`      | incomplete | `\(\int_0^{\phi} \sqrt{1-m \sin^2\theta} d\theta\)`                                    |
+| `\(D(\phi, m)\)`      | incomplete | `\(\frac{K(\phi, m) - E(\phi, m)}{m}\)`                                                |
+| `\(\Pi(n, \phi, m)\)` | incomplete | `\(\int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}\)`          |
 
 
