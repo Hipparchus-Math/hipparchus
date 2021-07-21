@@ -70,4 +70,11 @@
     <Bug pattern="ICAST_IDIV_CAST_TO_DOUBLE" />
   </Match>
 
+  <!-- False positive warning from SpotBugs, the variable pi6 is used in the loop following the declaration -->
+  <Match>
+    <Class name="org.hipparchus.stat.inference.KolmogorovSmirnovTest" />
+    <Method name="pelzGood"/>
+    <Bug pattern="DLS_DEAD_LOCAL_STORE" />
+  </Match>
+
 </FindBugsFilter>

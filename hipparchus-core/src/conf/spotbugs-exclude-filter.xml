@@ -222,4 +222,10 @@
     <Bug pattern="SE_TRANSIENT_FIELD_NOT_RESTORED" />
   </Match>
 
+  <!-- SpotBugs false positive, the random generator is saved and reused, it is not used only once -->
+  <Match>
+    <Class name="org.hipparchus.random.JDKRandomGenerator"/>
+    <Bug pattern="DMI_RANDOM_USED_ONLY_ONCE" />
+  </Match>
+
 </FindBugsFilter>

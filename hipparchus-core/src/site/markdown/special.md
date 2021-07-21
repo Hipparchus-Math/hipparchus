@@ -100,15 +100,21 @@ with the [Maxima](http://maxima.sourceforge.net/) Computer Algebra System.
 
 ### Regularized Beta
 
-(see [MathWorld](http://mathworld.wolfram.com/RegularizedBetaFunction.html)\)
+(see [MathWorld](http://mathworld.wolfram.com/RegularizedBetaFunction.html))
 
 ### Elliptic functions and integrals
 
-Notations in the domain of elliptic functions and integrals is often confusing. Hipparchus implementation
-follows mathematical tradition and defines Jacobi elliptic functions using the `parameter m`, Jacobi
-theta functions using the `nome q` and Legendre elliptic integrals using elliptic modulus `k`. All these
-parameters are linked together. The elliptic modulus `k` is the square of the parameter `m`and the nome `q`
-can be computed by a ratio of elliptic integrals.
+Notations in the domain of elliptic functions and integrals is often confusing and inconsistent
+across text books. Hipparchus implementation uses the `parameter m` to define both Jacobi elliptic
+functions and Legendre elliptic integrals and uses the `nome q` to define Jacobi theta functions.
+The elliptic modulus `k` (which is the square of parameter m) is not used at all in Hipparchus. All these
+parameters are linked together.
+
+See in MathWorld [elliptic integrals of the first kind](https://mathworld.wolfram.com/EllipticIntegraloftheFirstKind.html),
+[elliptic integrals of the second kind](https://mathworld.wolfram.com/EllipticIntegraloftheSecondKind.html),
+[elliptic integrals of the third kind](https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html),
+[Jacobi elliptic functions](https://mathworld.wolfram.com/JacobiEllipticFunctions.html) and
+[Jacobi theta functions](https://mathworld.wolfram.com/JacobiThetaFunctions.html).
 
 `JacobiEllipticBuilder.build(m)` builds a `JacobiElliptic` (or `FieldJacobiElliptic`) implementation for the parameter
 `m` that computes the twelve elliptic functions `\(sn(u|m)\)`, `\(cn(u|m)\)`, `\(dn(u|m)\)`,
@@ -117,9 +123,9 @@ can be computed by a ratio of elliptic integrals.
 in an expression, the two other are often also needed and the (very fast) arithmetic-geometric mean algorithm gives
 all three values at once.
 
-`JacobiTheta` (and `FieldJacobiTheta`) computes the four Jacobi theta functions`\(\theta_1(z|τ)\)`, `\(\theta_2(z|τ)\)`,
-`\(\theta_3(z|τ)\)`, and `\(\theta_4(z|τ)\)`. Here again, the four functions are computed at once and a quadruplet
-is returned.
+`JacobiTheta` (and `FieldJacobiTheta`) computes the four Jacobi theta functions `\(\theta_1(z|\tau)\)`, `\(\theta_2(z|\tau)\)`,
+`\(\theta_3(z|\tau)\)`, and `\(\theta_4(z|\tau)\)`. The half-period ratio `\(\tau\)` is linked to the nome `q`:
+`\(q = e^{i\pi\tau}\)`. Here again, the four functions are computed at once and a quadruplet is returned.
 
 `CarlsonEllipticIntegrals` is a utility class that computes the following integrals in Carlson symmetric form,
 for both primitive double, `CalculusFieldElement`, `Complex` and `FieldComplex`:
@@ -138,16 +144,16 @@ where `\(s(t) = \sqrt{t+x}\sqrt{t+y}\sqrt{t+z}\)`.
 for both primitive double, `CalculusFieldElement`, `Complex` and `FieldComplex`.
 (the implementation uses `CarlsonEllipticIntegrals` internally):
 
-| Name                         | Type       |  Definition                                                                                     |
-|------------------------------|------------|-------------------------------------------------------------------------------------------------|
-| `\(K(k)\)`                   |  complete  | `\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-k^2 \sin^2\theta}}\)`                          |
-| `\(K'(k)\)`                  |  complete  | `\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-(1-k^2) \sin^2\theta}}\)`                      |
-| `\(E(k) \)`                  |  complete  | `\(\int_0^{\frac{\pi}{2}} \sqrt{1-k^2 \sin^2\theta} d\theta\)`                                  |
-| `\(D(k) \)`                  |  complete  | `\(\frac{K(k) - E(k)}{k^2}\)`                                                                   |
-| `\(\Pi(\alpha^2, k)\)`       |  complete  | `\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-k^2 \sin^2\theta}(1-\alpha^2 \sin^2\theta)}\)` |
-| `\(F(\phi, k)\)`             | incomplete | `\(\int_0^{\phi} \frac{d\theta}{\sqrt{1-k^2 \sin^2\theta}}\)`                                   |
-| `\(E(\phi, k)\)`             | incomplete | `\(\int_0^{\phi} \sqrt{1-k^2 \sin^2\theta} d\theta\)`                                           |
-| `\(D(\phi, k)\)`             | incomplete | `\(\frac{K(\phi, k) - E(\phi, k)}{k^2}\)`                                                       |
-| `\(\Pi(\phi, \alpha^2, k)\)` | incomplete | `\(\int_0^{\phi} \frac{d\theta}{\sqrt{1-k^2 \sin^2\theta}(1-\alpha^2 \sin^2\theta)}\)`          |
+| Name                         | Type       |  Definition                                                                                   |
+|------------------------------|------------|-----------------------------------------------------------------------------------------------|
+| `\(K(m)\)`                   |  complete  | `\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}\)`                          |
+| `\(K'(m)\)`                  |  complete  | `\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-(1-m) \sin^2\theta}}\)`                      |
+| `\(E(m) \)`                  |  complete  | `\(\int_0^{\frac{\pi}{2}} \sqrt{1-m \sin^2\theta} d\theta\)`                                  |
+| `\(D(m) \)`                  |  complete  | `\(\frac{K(m) - E(m)}{m}\)`                                                                   |
+| `\(\Pi(\alpha^2, m)\)`       |  complete  | `\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-\alpha^2 \sin^2\theta)}\)` |
+| `\(F(\phi, m)\)`             | incomplete | `\(\int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}\)`                                   |
+| `\(E(\phi, m)\)`             | incomplete | `\(\int_0^{\phi} \sqrt{1-m \sin^2\theta} d\theta\)`                                           |
+| `\(D(\phi, m)\)`             | incomplete | `\(\frac{K(\phi, m) - E(\phi, m)}{m}\)`                                                       |
+| `\(\Pi(\phi, \alpha^2, m)\)` | incomplete | `\(\int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-\alpha^2 \sin^2\theta)}\)`          |
 
 

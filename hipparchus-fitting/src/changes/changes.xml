@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Fitting Release Notes</title>
   </properties>
   <body>
-    <release version="2.0" date="TBD" description="TBD">
+    <release version="2.0" date="2021-07-23" description="This is a major release">
       <action dev="luc" type="update">
         No changes directly in this module. However, lower level Hipparchus modules did change,
         hence a new release was needed.

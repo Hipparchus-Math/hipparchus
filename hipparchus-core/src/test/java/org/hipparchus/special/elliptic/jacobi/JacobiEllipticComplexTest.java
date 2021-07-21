@@ -27,7 +27,8 @@ public class JacobiEllipticComplexTest {
     @Test
     public void testComplex() throws IOException {
         final Complex z = Complex.valueOf(5.2, -2.5);
-        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.3, 1.0));
+        final Complex k = Complex.valueOf(0.3, 1.0);
+        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(k.multiply(k));
         final FieldCopolarC<Complex> valuesC = je.valuesC(z);
         Assert.assertEquals(-0.24609405083573348938, valuesC.sc().getRealPart(),      1.0e-15);
         Assert.assertEquals( 0.74202229271111558523, valuesC.sc().getImaginaryPart(), 1.0e-15);
