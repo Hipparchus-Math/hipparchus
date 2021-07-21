@@ -29,40 +29,40 @@ public class LegendreEllipticIntegralFieldComplexTest extends LegendreEllipticIn
         return new FieldComplex<>(new Decimal64(realPart), new Decimal64(imaginaryPart));
     }
 
-    protected FieldComplex<Decimal64> K(FieldComplex<Decimal64> k) {
-        return LegendreEllipticIntegral.bigK(k);
+    protected FieldComplex<Decimal64> K(FieldComplex<Decimal64> m) {
+        return LegendreEllipticIntegral.bigK(m);
     }
 
-    protected FieldComplex<Decimal64> Kprime(FieldComplex<Decimal64> k) {
-        return LegendreEllipticIntegral.bigKPrime(k);
+    protected FieldComplex<Decimal64> Kprime(FieldComplex<Decimal64> m) {
+        return LegendreEllipticIntegral.bigKPrime(m);
     }
 
-    protected FieldComplex<Decimal64> F(FieldComplex<Decimal64> phi, FieldComplex<Decimal64> k) {
-        return LegendreEllipticIntegral.bigF(phi, k);
+    protected FieldComplex<Decimal64> F(FieldComplex<Decimal64> phi, FieldComplex<Decimal64> m) {
+        return LegendreEllipticIntegral.bigF(phi, m);
     }
 
-    protected FieldComplex<Decimal64> E(FieldComplex<Decimal64> k) {
-        return LegendreEllipticIntegral.bigE(k);
+    protected FieldComplex<Decimal64> E(FieldComplex<Decimal64> m) {
+        return LegendreEllipticIntegral.bigE(m);
     }
 
-    protected FieldComplex<Decimal64> E(FieldComplex<Decimal64> phi, FieldComplex<Decimal64> k) {
-        return LegendreEllipticIntegral.bigE(phi, k);
+    protected FieldComplex<Decimal64> E(FieldComplex<Decimal64> phi, FieldComplex<Decimal64> m) {
+        return LegendreEllipticIntegral.bigE(phi, m);
     }
 
-    protected FieldComplex<Decimal64> D(FieldComplex<Decimal64> k) {
-        return LegendreEllipticIntegral.bigD(k);
+    protected FieldComplex<Decimal64> D(FieldComplex<Decimal64> m) {
+        return LegendreEllipticIntegral.bigD(m);
     }
 
-    protected FieldComplex<Decimal64> D(FieldComplex<Decimal64> phi, FieldComplex<Decimal64> k) {
-        return LegendreEllipticIntegral.bigD(phi, k);
+    protected FieldComplex<Decimal64> D(FieldComplex<Decimal64> phi, FieldComplex<Decimal64> m) {
+        return LegendreEllipticIntegral.bigD(phi, m);
     }
 
-    protected FieldComplex<Decimal64> Pi(FieldComplex<Decimal64> alpha2, FieldComplex<Decimal64> k) {
-        return LegendreEllipticIntegral.bigPi(alpha2, k);
+    protected FieldComplex<Decimal64> Pi(FieldComplex<Decimal64> n, FieldComplex<Decimal64> m) {
+        return LegendreEllipticIntegral.bigPi(n, m);
     }
 
-    protected FieldComplex<Decimal64> Pi(FieldComplex<Decimal64> phi, FieldComplex<Decimal64> alpha2, FieldComplex<Decimal64> k) {
-        return LegendreEllipticIntegral.bigPi(phi, alpha2, k);
+    protected FieldComplex<Decimal64> Pi(FieldComplex<Decimal64> n, FieldComplex<Decimal64> phi, FieldComplex<Decimal64> m) {
+        return LegendreEllipticIntegral.bigPi(n, phi, m);
     }
 
 }

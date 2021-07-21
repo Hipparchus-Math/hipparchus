@@ -486,106 +486,106 @@ public class LegendreEllipticIntegral {
         return CarlsonEllipticIntegral.rD(zero, one.subtract(m), one).divide(3);
     }
 
-    /** Get the complete elliptic integral of the third kind Π(α², m).
+    /** Get the complete elliptic integral of the third kind Π(n, m).
      * <p>
-     * The complete elliptic integral of the third kind Π(α², m) is
+     * The complete elliptic integral of the third kind Π(n, m) is
      * \[
-     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-\alpha^2 \sin^2\theta)}
+     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
      * \]
      * </p>
      * <p>
      * The algorithm for evaluating the functions is based on {@link CarlsonEllipticIntegral
      * Carlson elliptic integrals}.
      * </p>
-     * @param alpha2 α² parameter (already squared)
+     * @param n elliptic characteristic
      * @param m parameter (m=k² where k is the elliptic modulus)
-     * @return complete elliptic integral of the third kind Π(α², m)
+     * @return complete elliptic integral of the third kind Π(n, m)
      * @see #bigPi(double, double, double)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html">Elliptic Integrals of the Third Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
-    public static double bigPi(final double alpha2, final double m) {
+    public static double bigPi(final double n, final double m) {
         final double kPrime2 = 1 - m;
         return CarlsonEllipticIntegral.rF(0, kPrime2, 1) +
-               CarlsonEllipticIntegral.rJ(0, kPrime2, 1, 1 - alpha2) * alpha2 / 3;
+               CarlsonEllipticIntegral.rJ(0, kPrime2, 1, 1 - n) * n / 3;
     }
 
-    /** Get the complete elliptic integral of the third kind Π(α², m).
+    /** Get the complete elliptic integral of the third kind Π(n, m).
      * <p>
-     * The complete elliptic integral of the third kind Π(α², m) is
+     * The complete elliptic integral of the third kind Π(n, m) is
      * \[
-     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-\alpha^2 \sin^2\theta)}
+     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
      * \]
      * </p>
      * <p>
      * The algorithm for evaluating the functions is based on {@link CarlsonEllipticIntegral
      * Carlson elliptic integrals}.
      * </p>
-     * @param alpha2 α² parameter (already squared)
+     * @param n elliptic characteristic
      * @param m parameter (m=k² where k is the elliptic modulus)
      * @param <T> the type of the field elements
-     * @return complete elliptic integral of the third kind Π(α², m)
+     * @return complete elliptic integral of the third kind Π(n, m)
      * @see #bigPi(CalculusFieldElement, CalculusFieldElement, CalculusFieldElement)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html">Elliptic Integrals of the Third Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
-    public static <T extends CalculusFieldElement<T>> T bigPi(final T alpha2, final T m) {
+    public static <T extends CalculusFieldElement<T>> T bigPi(final T n, final T m) {
         final T zero    = m.getField().getZero();
         final T one     = m.getField().getOne();
         final T kPrime2 = one.subtract(m);
         return CarlsonEllipticIntegral.rF(zero, kPrime2, one).
-               add(CarlsonEllipticIntegral.rJ(zero, kPrime2, one, one.subtract(alpha2)).multiply(alpha2).divide(3));
+               add(CarlsonEllipticIntegral.rJ(zero, kPrime2, one, one.subtract(n)).multiply(n).divide(3));
     }
 
-    /** Get the complete elliptic integral of the third kind Π(α², m).
+    /** Get the complete elliptic integral of the third kind Π(n, m).
      * <p>
-     * The complete elliptic integral of the third kind Π(α², m) is
+     * The complete elliptic integral of the third kind Π(n, m) is
      * \[
-     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-\alpha^2 \sin^2\theta)}
+     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
      * \]
      * </p>
      * <p>
      * The algorithm for evaluating the functions is based on {@link CarlsonEllipticIntegral
      * Carlson elliptic integrals}.
      * </p>
-     * @param alpha2 α² parameter (already squared)
+     * @param n elliptic characteristic
      * @param m parameter (m=k² where k is the elliptic modulus)
-     * @return complete elliptic integral of the third kind Π(α², m)
+     * @return complete elliptic integral of the third kind Π(n, m)
      * @see #bigPi(Complex, Complex, Complex)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html">Elliptic Integrals of the Third Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
-    public static Complex bigPi(final Complex alpha2, final Complex m) {
+    public static Complex bigPi(final Complex n, final Complex m) {
         final Complex kPrime2 = Complex.ONE.subtract(m);
         return CarlsonEllipticIntegral.rF(Complex.ZERO, kPrime2, Complex.ONE).
-               add(CarlsonEllipticIntegral.rJ(Complex.ZERO, kPrime2, Complex.ONE, Complex.ONE.subtract(alpha2)).multiply(alpha2).divide(3));
+               add(CarlsonEllipticIntegral.rJ(Complex.ZERO, kPrime2, Complex.ONE, Complex.ONE.subtract(n)).multiply(n).divide(3));
     }
 
-    /** Get the complete elliptic integral of the third kind Π(α², m).
+    /** Get the complete elliptic integral of the third kind Π(n, m).
      * <p>
-     * The complete elliptic integral of the third kind Π(α², m) is
+     * The complete elliptic integral of the third kind Π(n, m) is
      * \[
-     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-\alpha^2 \sin^2\theta)}
+     *    \int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
      * \]
      * </p>
      * <p>
      * The algorithm for evaluating the functions is based on {@link CarlsonEllipticIntegral
      * Carlson elliptic integrals}.
      * </p>
-     * @param alpha2 α² parameter (already squared)
+     * @param n elliptic characteristic
      * @param m parameter (m=k² where k is the elliptic modulus)
      * @param <T> the type of the field elements
-     * @return complete elliptic integral of the third kind Π(α², m)
+     * @return complete elliptic integral of the third kind Π(n, m)
      * @see #bigPi(FieldComplex, FieldComplex, FieldComplex)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html">Elliptic Integrals of the Third Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
-    public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigPi(final FieldComplex<T> alpha2, final FieldComplex<T> m) {
+    public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigPi(final FieldComplex<T> n, final FieldComplex<T> m) {
         final FieldComplex<T> zero = m.getField().getZero();
         final FieldComplex<T> one  = m.getField().getOne();
         final FieldComplex<T> kPrime2 = one.subtract(m);
         return CarlsonEllipticIntegral.rF(zero, kPrime2, one).
-               add(CarlsonEllipticIntegral.rJ(zero, kPrime2, one, one.subtract(alpha2)).multiply(alpha2).divide(3));
+               add(CarlsonEllipticIntegral.rJ(zero, kPrime2, one, one.subtract(n)).multiply(n).divide(3));
     }
 
     /** Get the incomplete elliptic integral of the first kind F(Φ, m).
@@ -986,148 +986,148 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral of the third kind Π(Φ, α², m).
+    /** Get the incomplete elliptic integral of the third kind Π(n, Φ, m).
      * <p>
-     * The incomplete elliptic integral of the third kind Π(Φ, α², m) is
+     * The incomplete elliptic integral of the third kind Π(n, Φ, m) is
      * \[
-     *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-\alpha^2 \sin^2\theta)}
+     *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
      * \]
      * </p>
      * <p>
      * The algorithm for evaluating the functions is based on {@link CarlsonEllipticIntegral
      * Carlson elliptic integrals}.
      * </p>
+     * @param n elliptic characteristic
      * @param phi amplitude (i.e. upper bound of the integral)
-     * @param alpha2 α² parameter (already squared)
      * @param m parameter (m=k² where k is the elliptic modulus)
-     * @return incomplete elliptic integral of the third kind Π(Φ, α², m)
+     * @return incomplete elliptic integral of the third kind Π(n, Φ, m)
      * @see #bigPi(double, double)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html">Elliptic Integrals of the Third Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
-    public static double bigPi(final double phi, final double alpha2, final double m) {
+    public static double bigPi(final double n, final double phi, final double m) {
 
         // argument reduction
-        final DoubleArgumentReduction ar = new DoubleArgumentReduction(phi, m, n -> bigPi(alpha2, n));
+        final DoubleArgumentReduction ar = new DoubleArgumentReduction(phi, m, parameter -> bigPi(n, parameter));
 
         // integrate part between 0 and π/2
         final double cM1        = ar.csc2 - 1.0;
         final double cMm        = ar.csc2 - m;
-        final double cMa2       = ar.csc2 - alpha2;
+        final double cMn        = ar.csc2 - n;
         final double incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2) +
-                                  CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMa2) * alpha2 / 3;
+                                  CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMn) * n / 3;
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete - incomplete : ar.complete + incomplete;
 
     }
 
-    /** Get the incomplete elliptic integral of the third kind Π(Φ, α², m).
+    /** Get the incomplete elliptic integral of the third kind Π(n, Φ, m).
      * <p>
-     * The incomplete elliptic integral of the third kind Π(Φ, α², m) is
+     * The incomplete elliptic integral of the third kind Π(n, Φ, m) is
      * \[
-     *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-\alpha^2 \sin^2\theta)}
+     *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
      * \]
      * </p>
      * <p>
      * The algorithm for evaluating the functions is based on {@link CarlsonEllipticIntegral
      * Carlson elliptic integrals}.
      * </p>
+     * @param n elliptic characteristic
      * @param phi amplitude (i.e. upper bound of the integral)
-     * @param alpha2 α² parameter (already squared)
      * @param m parameter (m=k² where k is the elliptic modulus)
      * @param <T> the type of the field elements
-     * @return incomplete elliptic integral of the third kind Π(Φ, α², m)
+     * @return incomplete elliptic integral of the third kind Π(n, Φ, m)
      * @see #bigPi(CalculusFieldElement, CalculusFieldElement)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html">Elliptic Integrals of the Third Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
-    public static <T extends CalculusFieldElement<T>> T bigPi(final T phi, final T alpha2, final T m) {
+    public static <T extends CalculusFieldElement<T>> T bigPi(final T n, final T phi, final T m) {
 
         // argument reduction
-        final FieldArgumentReduction<T> ar = new FieldArgumentReduction<>(phi, m, n -> bigPi(alpha2, n));
+        final FieldArgumentReduction<T> ar = new FieldArgumentReduction<>(phi, m, parameter -> bigPi(n, parameter));
 
         // integrate part between 0 and π/2
         final T cM1        = ar.csc2.subtract(1);
         final T cMm        = ar.csc2.subtract(m);
-        final T cMa2       = ar.csc2.subtract(alpha2);
+        final T cMn        = ar.csc2.subtract(n);
         final T incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2).
-                             add(CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMa2).multiply(alpha2).divide(3));
+                             add(CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMn).multiply(n).divide(3));
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
 
     }
 
-    /** Get the incomplete elliptic integral of the third kind Π(Φ, α², m).
+    /** Get the incomplete elliptic integral of the third kind Π(n, Φ, m).
      * <p>
-     * The incomplete elliptic integral of the third kind Π(Φ, α², m) is
+     * The incomplete elliptic integral of the third kind Π(n, Φ, m) is
      * \[
-     *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-\alpha^2 \sin^2\theta)}
+     *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
      * \]
      * </p>
      * <p>
      * The algorithm for evaluating the functions is based on {@link CarlsonEllipticIntegral
      * Carlson elliptic integrals}.
      * </p>
+     * @param n elliptic characteristic
      * @param phi amplitude (i.e. upper bound of the integral)
-     * @param alpha2 α² parameter (already squared)
      * @param m parameter (m=k² where k is the elliptic modulus)
-     * @return incomplete elliptic integral of the third kind Π(Φ, α², m)
+     * @return incomplete elliptic integral of the third kind Π(n, Φ, m)
      * @see #bigPi(Complex, Complex)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html">Elliptic Integrals of the Third Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
-    public static Complex bigPi(final Complex phi, final Complex alpha2, final Complex m) {
+    public static Complex bigPi(final Complex n, final Complex phi, final Complex m) {
 
         // argument reduction
-        final FieldArgumentReduction<Complex> ar = new FieldArgumentReduction<>(phi, m, n -> bigPi(alpha2, n));
+        final FieldArgumentReduction<Complex> ar = new FieldArgumentReduction<>(phi, m, parameter -> bigPi(n, parameter));
 
         // integrate part between 0 and π/2
         final Complex cM1        = ar.csc2.subtract(1);
         final Complex cMm        = ar.csc2.subtract(m);
-        final Complex cMa2       = ar.csc2.subtract(alpha2);
+        final Complex cMn        = ar.csc2.subtract(n);
         final Complex incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2).
-                                   add(CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMa2).multiply(alpha2).divide(3));
+                                   add(CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMn).multiply(n).divide(3));
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
 
     }
 
-    /** Get the incomplete elliptic integral of the third kind Π(Φ, α², m).
+    /** Get the incomplete elliptic integral of the third kind Π(n, Φ, m).
      * <p>
-     * The incomplete elliptic integral of the third kind Π(Φ, α², m) is
+     * The incomplete elliptic integral of the third kind Π(n, Φ, m) is
      * \[
-     *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-\alpha^2 \sin^2\theta)}
+     *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
      * \]
      * </p>
      * <p>
      * The algorithm for evaluating the functions is based on {@link CarlsonEllipticIntegral
      * Carlson elliptic integrals}.
      * </p>
+     * @param n elliptic characteristic
      * @param phi amplitude (i.e. upper bound of the integral)
-     * @param alpha2 α² parameter (already squared)
      * @param m parameter (m=k² where k is the elliptic modulus)
      * @param <T> the type of the field elements
-     * @return incomplete elliptic integral of the third kind Π(Φ, α², m)
+     * @return incomplete elliptic integral of the third kind Π(n, Φ, m)
      * @see #bigPi(FieldComplex, FieldComplex)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html">Elliptic Integrals of the Third Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
-    public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigPi(final FieldComplex<T> phi,
-                                                                            final FieldComplex<T> alpha2,
+    public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigPi(final FieldComplex<T> n,
+                                                                            final FieldComplex<T> phi,
                                                                             final FieldComplex<T> m) {
 
         // argument reduction
-        final FieldArgumentReduction<FieldComplex<T>> ar = new FieldArgumentReduction<>(phi, m, n -> bigPi(alpha2, n));
+        final FieldArgumentReduction<FieldComplex<T>> ar = new FieldArgumentReduction<>(phi, m, parameter -> bigPi(n, parameter));
 
         // integrate part between 0 and π/2
         final FieldComplex<T> cM1        = ar.csc2.subtract(1);
         final FieldComplex<T> cMm        = ar.csc2.subtract(m);
-        final FieldComplex<T> cMa2       = ar.csc2.subtract(alpha2);
+        final FieldComplex<T> cMn        = ar.csc2.subtract(n);
         final FieldComplex<T> incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2).
-                                           add(CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMa2).multiply(alpha2).divide(3));
+                                           add(CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMn).multiply(n).divide(3));
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);

@@ -26,15 +26,15 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
 
     protected abstract T buildComplex(double realPart);
     protected abstract T buildComplex(double realPart, double imaginaryPart);
-    protected abstract T K(T k);
-    protected abstract T Kprime(T k);
-    protected abstract T F(T phi, T k);
-    protected abstract T E(T k);
-    protected abstract T E(T phi, T k);
-    protected abstract T D(T k);
-    protected abstract T D(T phi, T k);
-    protected abstract T Pi(T alpha2, T k);
-    protected abstract T Pi(T phi, T alpha2, T k);
+    protected abstract T K(T m);
+    protected abstract T Kprime(T m);
+    protected abstract T F(T phi, T m);
+    protected abstract T E(T m);
+    protected abstract T E(T phi, T m);
+    protected abstract T D(T m);
+    protected abstract T D(T phi, T m);
+    protected abstract T Pi(T n, T m);
+    protected abstract T Pi(T n, T phi, T m);
 
     private void check(double expectedReal, double expectedImaginary, T result, double tol) {
         Assert.assertEquals(0, buildComplex(expectedReal, expectedImaginary).subtract(result).norm(), tol);
@@ -110,11 +110,11 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
     @Test
     public void testAbramowitzStegunTable179() {
         final double sinAlpha1 = FastMath.sin(FastMath.toRadians(15));
-        check(1.62298, 0.0, Pi(buildComplex(FastMath.toRadians(75)), buildComplex(0.4), buildComplex(sinAlpha1 * sinAlpha1)), 1.0e-5);
+        check(1.62298, 0.0, Pi(buildComplex(0.4), buildComplex(FastMath.toRadians(75)), buildComplex(sinAlpha1 * sinAlpha1)), 1.0e-5);
         final double sinAlpha2 = FastMath.sin(FastMath.toRadians(60));
-        check(1.03076, 0.0, Pi(buildComplex(FastMath.toRadians(45)), buildComplex(0.8), buildComplex(sinAlpha2 * sinAlpha2)), 1.0e-5);
+        check(1.03076, 0.0, Pi(buildComplex(0.8), buildComplex(FastMath.toRadians(45)), buildComplex(sinAlpha2 * sinAlpha2)), 1.0e-5);
         final double sinAlpha3 = FastMath.sin(FastMath.toRadians(15));
-        check(2.79990, 0.0, Pi(buildComplex(FastMath.toRadians(75)), buildComplex(0.9), buildComplex(sinAlpha3 * sinAlpha3)), 1.0e-5);
+        check(2.79990, 0.0, Pi(buildComplex(0.9), buildComplex(FastMath.toRadians(75)), buildComplex(sinAlpha3 * sinAlpha3)), 1.0e-5);
     }
 
     @Test
@@ -149,7 +149,7 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
         for (double alpha2 = 0.01; alpha2 < 1; alpha2 += 0.01) {
             for (double m = 0.01; m < 1; m += 0.01) {
                 double complete   = Pi(buildComplex(alpha2), buildComplex(m)).getReal();
-                double incomplete = Pi(buildComplex(MathUtils.SEMI_PI), buildComplex(alpha2), buildComplex(m)).getReal();
+                double incomplete = Pi(buildComplex(alpha2), buildComplex(MathUtils.SEMI_PI), buildComplex(m)).getReal();
                 Assert.assertEquals(complete, incomplete, FastMath.ulp(complete));
             }
         }
