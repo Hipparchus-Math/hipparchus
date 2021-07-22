@@ -61,13 +61,12 @@ class ComplexParameter extends FieldJacobiElliptic<Complex> {
         super(m);
 
         // compute nome
-        final Complex k   = m.sqrt();
-        final Complex q   = LegendreEllipticIntegral.nome(k);
+        final Complex q = LegendreEllipticIntegral.nome(m);
 
         // compute periodic factors such that
         // z = 4 K [rK Re(z) + iK Im(z)] + 4i K' [rK' Re(z) + iK' Im(z)]
-        bigK                 = LegendreEllipticIntegral.bigK(k);
-        iBigKPrime           = LegendreEllipticIntegral.bigKPrime(k).multiplyPlusI();
+        bigK                 = LegendreEllipticIntegral.bigK(m);
+        iBigKPrime           = LegendreEllipticIntegral.bigKPrime(m).multiplyPlusI();
         final double inverse = 0.25 /
                                (bigK.getRealPart()      * iBigKPrime.getImaginaryPart() -
                                 bigK.getImaginaryPart() * iBigKPrime.getRealPart());

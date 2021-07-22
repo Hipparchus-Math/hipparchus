@@ -62,13 +62,12 @@ class FieldComplexParameter<T extends CalculusFieldElement<T>> extends FieldJaco
         super(m);
 
         // compute nome
-        final FieldComplex<T> k   = m.sqrt();
-        final FieldComplex<T> q   = LegendreEllipticIntegral.nome(k);
+         final FieldComplex<T> q = LegendreEllipticIntegral.nome(m);
 
         // compute periodic factors such that
         // z = 4K [rK Re(z) + iK Im(z)] + 4K' [rK' Re(z) + iK' Im(z)]
-        bigK            = LegendreEllipticIntegral.bigK(k);
-        iBigKPrime      = LegendreEllipticIntegral.bigKPrime(k).multiplyPlusI();
+        bigK            = LegendreEllipticIntegral.bigK(m);
+        iBigKPrime      = LegendreEllipticIntegral.bigKPrime(m).multiplyPlusI();
         final T inverse = bigK.getRealPart().multiply(iBigKPrime.getImaginaryPart()).
                           subtract(bigK.getImaginaryPart().multiply(iBigKPrime.getRealPart())).
                           multiply(4).reciprocal();
