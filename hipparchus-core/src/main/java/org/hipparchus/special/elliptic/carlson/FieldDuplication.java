@@ -17,9 +17,11 @@
 package org.hipparchus.special.elliptic.carlson;
 
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.FieldComplex;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathArrays;
 
 /** Duplication algorithm for Carlson symmetric forms.
  * <p>
@@ -39,11 +41,8 @@ abstract class FieldDuplication<T extends CalculusFieldElement<T>> {
     /** Max number of iterations. */
     private static final int M_MAX = 16;
 
-    /** Symmetric variables of the integral. */
-    private final T[] initialV;
-
-    /** Mean point. */
-    private final T initialA;
+    /** Symmetric variables of the integral, plus mean point. */
+    private final T[] initialVA;
 
     /** Convergence criterion. */
     private final double q;
@@ -54,14 +53,18 @@ abstract class FieldDuplication<T extends CalculusFieldElement<T>> {
     @SafeVarargs
     FieldDuplication(final T... v) {
 
-        this.initialV = v.clone();
-        this.initialA = initialMeanPoint(initialV);
+        final Field<T> field = v[0].getField();
+        final int n = v.length;
+        initialVA = MathArrays.buildArray(field, n + 1);
+        System.arraycopy(v, 0, initialVA, 0, n);
+        initialMeanPoint(initialVA);
 
-        T max = initialA.getField().getZero();
+        T max = field.getZero();
+        final T a0 = initialVA[n];
         for (final T vi : v) {
-            max = FastMath.max(max, initialA.subtract(vi).abs());
+            max = FastMath.max(max, a0.subtract(vi).abs());
         }
-        this.q = convergenceCriterion(FastMath.ulp(initialA.getField().getOne()), max).getReal();
+        this.q = convergenceCriterion(FastMath.ulp(field.getOne()), max).getReal();
 
     }
 
@@ -70,14 +73,16 @@ abstract class FieldDuplication<T extends CalculusFieldElement<T>> {
      * @return i<sup>th</sup> symmetric variable
      */
     protected T getVi(final int i) {
-        return initialV[i];
+        return initialVA[i];
     }
 
     /** Compute initial mean point.
-     * @param v symmetric variables of the integral
-     * @return initial mean point
+     * <p>
+     * The initial mean point is put as the last array element
+     * </>
+     * @param va symmetric variables of the integral (plus placeholder for initial mean point)
      */
-    protected abstract T initialMeanPoint(T[] v);
+    protected abstract void initialMeanPoint(T[] va);
 
     /** Compute convergence criterion.
      * @param r relative tolerance
@@ -86,23 +91,25 @@ abstract class FieldDuplication<T extends CalculusFieldElement<T>> {
      */
     protected abstract T convergenceCriterion(T r, T max);
 
-    /** Compute λₘ.
+    /** Update reduced variables in place.
+     * <ul>
+     *  <li>vₘ₊₁|i] ← (vₘ[i] + λₘ) / 4</li>
+     *  <li>aₘ₊₁ ← (aₘ + λₘ) / 4</li>
+     * </ul>
      * @param m iteration index
-     * @param vM reduced variables
+     * @param vaM reduced variables and mean point (updated in place)
      * @param sqrtM square roots of reduced variables
      * @param fourM 4<sup>m</sup>
-     * @return λₘ
      */
-    protected abstract T lambda(int m, T[] vM, T[] sqrtM, double fourM);
+    protected abstract void update(int m, T[] vaM, T[] sqrtM, double fourM);
 
     /** Evaluate integral.
-     * @param v0 symmetric variables of the integral
-     * @param a0 initial mean point
+     * @param va0 initial symmetric variables and mean point of the integral
      * @param aM reduced mean point
      * @param fourM 4<sup>m</sup>
      * @return convergence criterion
      */
-    protected abstract T evaluate(T[] v0, T a0, T aM, double fourM);
+    protected abstract T evaluate(T[] va0, T aM, double fourM);
 
     /** Compute Carlson elliptic integral.
      * @return Carlson elliptic integral
@@ -110,35 +117,29 @@ abstract class FieldDuplication<T extends CalculusFieldElement<T>> {
     public T integral() {
 
         // duplication iterations
-        final T[] vM    = initialV.clone();
-        final T[] sqrtM = initialV.clone();
-        T         aM    = initialA;
-        double fourM = 1.0;
+        final int n     = initialVA.length - 1;
+        final T[] vaM   = initialVA.clone();
+        final T[] sqrtM = MathArrays.buildArray(initialVA[0].getField(), n);
+        double    fourM = 1.0;
         for (int m = 0; m < M_MAX; ++m) {
 
-            if (m > 0 && q < fourM * aM.norm()) {
+            if (m > 0 && q < fourM * vaM[n].norm()) {
                 // convergence reached
                 break;
             }
 
             // apply duplication once more
             // (we know that {Field}Complex.sqrt() returns the root with nonnegative real part)
-            for (int i = 0; i < vM.length; ++i) {
-                sqrtM[i] = vM[i].sqrt();
+            for (int i = 0; i < n; ++i) {
+                sqrtM[i] = vaM[i].sqrt();
             }
-            final T lambdaN = lambda(m, vM, sqrtM, fourM);
-
-            // update symmetric integral variables and their mean
-            for (int i = 0; i < vM.length; ++i) {
-                vM[i] = vM[i].add(lambdaN).multiply(0.25);
-            }
-            aM = aM.add(lambdaN).multiply(0.25);
+            update(m, vaM, sqrtM, fourM);
 
             fourM *= 4;
 
         }
 
-        return evaluate(initialV, initialA, aM, fourM);
+        return evaluate(initialVA, vaM[n], fourM);
 
     }
 

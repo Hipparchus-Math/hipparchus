@@ -38,8 +38,8 @@ class RfFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
 
     /** {@inheritDoc} */
     @Override
-    protected T initialMeanPoint(final T[] v) {
-        return v[0].add(v[1]).add(v[2]).divide(3.0);
+    protected void initialMeanPoint(final T[] va) {
+        va[3] = va[0].add(va[1]).add(va[2]).divide(3.0);
     }
 
     /** {@inheritDoc} */
@@ -50,18 +50,29 @@ class RfFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
 
     /** {@inheritDoc} */
     @Override
-    protected T lambda(final int m, final T[] vM, final T[] sqrtM, final  double fourM) {
-        return sqrtM[0].multiply(sqrtM[1].add(sqrtM[2])).add(sqrtM[1].multiply(sqrtM[2]));
+    protected void update(final int m, final T[] vaM, final T[] sqrtM, final  double fourM) {
+
+        // equation 2.3 in Carlson[1995]
+        final T lambdaA = sqrtM[0].multiply(sqrtM[1]);
+        final T lambdaB = sqrtM[0].multiply(sqrtM[2]);
+        final T lambdaC = sqrtM[1].multiply(sqrtM[2]);
+
+        // equations 2.3 and 2.4 in Carlson[1995]
+        vaM[0] = vaM[0].linearCombination(0.25, vaM[0], 0.25, lambdaA, 0.25, lambdaB, 0.25, lambdaC); // xₘ
+        vaM[1] = vaM[1].linearCombination(0.25, vaM[1], 0.25, lambdaA, 0.25, lambdaB, 0.25, lambdaC); // yₘ
+        vaM[2] = vaM[2].linearCombination(0.25, vaM[2], 0.25, lambdaA, 0.25, lambdaB, 0.25, lambdaC); // zₘ
+        vaM[3] = vaM[3].linearCombination(0.25, vaM[3], 0.25, lambdaA, 0.25, lambdaB, 0.25, lambdaC); // aₘ
+
     }
 
     /** {@inheritDoc} */
     @Override
-    protected T evaluate(final T[] v0, final T a0, final T aM, final  double fourM) {
+    protected T evaluate(final T[] va0, final T aM, final  double fourM) {
 
         // compute symmetric differences
         final T inv  = aM.multiply(fourM).reciprocal();
-        final T bigX = a0.subtract(v0[0]).multiply(inv);
-        final T bigY = a0.subtract(v0[1]).multiply(inv);
+        final T bigX = va0[3].subtract(va0[0]).multiply(inv);
+        final T bigY = va0[3].subtract(va0[1]).multiply(inv);
         final T bigZ = bigX.add(bigY).negate();
 
         // compute elementary symmetric functions (we already know e1 = 0 by construction)

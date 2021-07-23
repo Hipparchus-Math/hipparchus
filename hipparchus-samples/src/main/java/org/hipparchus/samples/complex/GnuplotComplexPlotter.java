@@ -27,7 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
+import org.hipparchus.analysis.integration.IterativeLegendreGaussIntegrator;
 import org.hipparchus.complex.Complex;
+import org.hipparchus.complex.ComplexUnivariateIntegrator;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.special.elliptic.jacobi.FieldJacobiElliptic;
 import org.hipparchus.special.elliptic.jacobi.JacobiEllipticBuilder;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
@@ -35,6 +39,9 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.RyuDouble;
 
 public class GnuplotComplexPlotter {
+
+    /** Elliptic integrals characteristic. */
+    private Complex n;
 
     /** Elliptic integrals parameter. */
     private Complex m;
@@ -69,9 +76,13 @@ public class GnuplotComplexPlotter {
     /** Max y. */
     private double yMax;
 
+    final ComplexUnivariateIntegrator integrator;
+    Third third;
+
     /** Default constructor.
      */
     private GnuplotComplexPlotter() {
+        n         = new Complex(3.4, 1.3);
         m         = new Complex(0.64);
         jacobi    = JacobiEllipticBuilder.build(m);
         functions = new ArrayList<>();
@@ -83,6 +94,10 @@ public class GnuplotComplexPlotter {
         xMax      = +7;
         yMin      = -7;
         yMax      = +7;
+        integrator = new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
+                                                                                             1.0e-4,
+                                                                                             1.0e-4));
+        third = new Third(n, m);
     }
 
     /** Main program.
@@ -140,6 +155,12 @@ public class GnuplotComplexPlotter {
                     case "--m" : {
                         plotter.m      = new Complex(Double.parseDouble(args[++i]), Double.parseDouble(args[++i]));
                         plotter.jacobi = JacobiEllipticBuilder.build(plotter.m);
+                        plotter.third = new Third(plotter.n, plotter.m);
+                        break;
+                    }
+                    case "--n" : {
+                        plotter.n      = new Complex(Double.parseDouble(args[++i]), Double.parseDouble(args[++i]));
+                        plotter.third = new Third(plotter.n, plotter.m);
                         break;
                     }
                     case "--function" :
@@ -184,7 +205,7 @@ public class GnuplotComplexPlotter {
                            " [--output-dir directory]" +
                            " [--color {classical|enhanced-module|enhanced-phase-module}]" +
                            " [--xmin xmin] [--xmax xmax] [--ymin ymin] [--ymax ymax]" +
-                           " [--k kRe kIm]" +
+                           " [--m mRe mIm] [--n nRe nIm]" +
                            " --function {id|sn|cn|dn|cs|...|sin|cos|...} [--function ...]");
         System.exit(status);
         
@@ -221,8 +242,13 @@ public class GnuplotComplexPlotter {
                     final double x = xMin + i * (xMax - xMin) / (width - 1);
                     for (int j = 0; j < height; ++j) {
                         final double y = yMin + j * (yMax - yMin) / (height - 1);
-                        final Complex z  = Complex.valueOf(x, y);
-                        final Complex fz = predefined.evaluator.value(this, z);
+                        Complex z  = Complex.valueOf(x, y);
+                        Complex fz;
+                        try {
+                            fz = predefined.evaluator.value(this, z);
+                        } catch (MathIllegalStateException e) {
+                            fz = Complex.NaN;
+                        }
                         out.format(Locale.US, "%12.9f %12.9f %12.9f %12.9f %12.9f%n",
                                    z.getRealPart(), z.getImaginaryPart(),
                                    coloring.hue(fz), coloring.saturation(fz), coloring.value(fz));
@@ -273,6 +299,9 @@ public class GnuplotComplexPlotter {
         Fzm((plotter, z)    -> LegendreEllipticIntegral.bigF(z, plotter.m)),
         E((plotter, z)      -> LegendreEllipticIntegral.bigE(z)),
         Ezm((plotter, z)    -> LegendreEllipticIntegral.bigE(z, plotter.m)),
+        Pi((plotter, z)     -> LegendreEllipticIntegral.bigPi(plotter.n, z)),
+        Pizm((plotter, z)   -> LegendreEllipticIntegral.bigPi(plotter.n, z, plotter.m)),
+        integ((plotter, z)  -> plotter.integrator.integrate(1000000, plotter.third, Complex.ZERO, z)),
         sin((plotter, z)    -> FastMath.sin(z)),
         cos((plotter, z)    -> FastMath.cos(z)),
         tan((plotter, z)    -> FastMath.tan(z)),
@@ -315,4 +344,23 @@ public class GnuplotComplexPlotter {
 
     }
 
+    private static class Third implements CalculusFieldUnivariateFunction<Complex> {
+
+        final Complex n;
+        final Complex m;
+
+        Third(final Complex n, final Complex m) {
+            this.n = n;
+            this.m = m;
+        }
+
+        public Complex value(final Complex theta) {
+            final Complex sin  = theta.sin();
+            final Complex sin2 = sin.multiply(sin);
+            final Complex d1   = sin2.multiply(m).negate().add(1).sqrt();
+            final Complex da   = sin2.multiply(n).negate().add(1);
+            return d1.multiply(da).reciprocal();
+        }
+
+    }
 }

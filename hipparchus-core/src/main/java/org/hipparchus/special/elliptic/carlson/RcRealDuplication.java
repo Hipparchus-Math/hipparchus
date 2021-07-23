@@ -17,6 +17,7 @@
 package org.hipparchus.special.elliptic.carlson;
 
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathArrays;
 
 /** Duplication algorithm for Carlson R<sub>C</sub> elliptic integral.
  * @since 2.0
@@ -57,8 +58,8 @@ class RcRealDuplication extends RealDuplication {
 
     /** {@inheritDoc} */
     @Override
-    protected double initialMeanPoint(final double[] v) {
-        return (v[0] + v[1] * 2) / 3.0;
+    protected void initialMeanPoint(final double[] va) {
+        va[2] =  (va[0] + va[1] * 2) / 3.0;
     }
 
     /** {@inheritDoc} */
@@ -69,16 +70,20 @@ class RcRealDuplication extends RealDuplication {
 
     /** {@inheritDoc} */
     @Override
-    protected double lambda(final int m, final double[] vM, final double[] sqrtM, final  double fourM) {
-        return (sqrtM[0] * sqrtM[1] * 2) + vM[1];
+    protected void update(final int m, final double[] vaM, final double[] sqrtM, final  double fourM) {
+        final double lambdaA = sqrtM[0] * sqrtM[1] * 2;
+        final double lambdaB = vaM[1];
+        vaM[0] = MathArrays.linearCombination(0.25, vaM[0], 0.25, lambdaA, 0.25, lambdaB); // xₘ
+        vaM[1] = MathArrays.linearCombination(0.25, vaM[1], 0.25, lambdaA, 0.25, lambdaB); // yₘ
+        vaM[2] = MathArrays.linearCombination(0.25, vaM[2], 0.25, lambdaA, 0.25, lambdaB); // aₘ
     }
 
     /** {@inheritDoc} */
     @Override
-    protected double evaluate(final double[] v0, final double a0, final double aM, final  double fourM) {
+    protected double evaluate(final double[] va0, final double aM, final  double fourM) {
 
         // compute the single polynomial independent variable
-        final double s = (v0[1] - a0) / (aM * fourM);
+        final double s = (va0[1] - va0[2]) / (aM * fourM);
 
         // evaluate integral using equation 2.13 in Carlson[1995]
         final double poly = ((((((S7 * s + S6) * s + S5) * s + S4) * s + S3) * s + S2) * s * s + S0) / DENOMINATOR;

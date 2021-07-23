@@ -35,11 +35,8 @@ abstract class RealDuplication {
     /** Max number of iterations. */
     private static final int M_MAX = 16;
 
-    /** Symmetric variables of the integral. */
-    private final double[] initialV;
-
-    /** Mean point. */
-    private final double initialA;
+    /** Symmetric variables of the integral, plus mean point. */
+    private final double[] initialVA;
 
     /** Convergence criterion. */
     private final double q;
@@ -49,12 +46,15 @@ abstract class RealDuplication {
      */
     RealDuplication(final double... v) {
 
-        this.initialV = v.clone();
-        this.initialA = initialMeanPoint(initialV);
+        final int n = v.length;
+        initialVA = new double[n + 1];
+        System.arraycopy(v, 0, initialVA, 0, n);
+        initialMeanPoint(initialVA);
 
         double max = 0;
+        final double a0 = initialVA[n];
         for (final double vi : v) {
-            max = FastMath.max(max, FastMath.abs(initialA - vi));
+            max = FastMath.max(max, FastMath.abs(a0 - vi));
         }
         this.q = convergenceCriterion(FastMath.ulp(1.0), max);
 
@@ -65,14 +65,16 @@ abstract class RealDuplication {
      * @return i<sup>th</sup> symmetric variable
      */
     protected double getVi(final int i) {
-        return initialV[i];
+        return initialVA[i];
     }
 
     /** Compute initial mean point.
-     * @param v0 symmetric variables of the integral
-     * @return initial mean point
+     * <p>
+     * The initial mean point is put as the last array element
+     * </>
+     * @param v symmetric variables of the integral (plus placeholder for initial mean point)
      */
-    protected abstract double initialMeanPoint(double[] v0);
+    protected abstract void initialMeanPoint(double[] va);
 
     /** Compute convergence criterion.
      * @param r relative tolerance
@@ -81,23 +83,25 @@ abstract class RealDuplication {
      */
     protected abstract double convergenceCriterion(double r, double max);
 
-    /** Compute λₘ.
+    /** Update reduced variables in place.
+     * <ul>
+     *  <li>vₘ₊₁|i] ← (vₘ[i] + λₘ) / 4</li>
+     *  <li>aₘ₊₁ ← (aₘ + λₘ) / 4</li>
+     * </ul>
      * @param m iteration index
-     * @param vM reduced variables
+     * @param vaM reduced variables and mean point (updated in place)
      * @param sqrtM square roots of reduced variables
      * @param fourM 4<sup>m</sup>
-     * @return λₘ
      */
-    protected abstract double lambda(int m, double[] vM, double[] sqrtM, double fourM);
+    protected abstract void update(int m, double[] vaM, double[] sqrtM, double fourM);
 
     /** Evaluate integral.
-     * @param v0 symmetric variables of the integral
-     * @param a0 initial mean point
+     * @param va0 initial symmetric variables and mean point of the integral
      * @param aM reduced mean point
      * @param fourM 4<sup>m</sup>
      * @return convergence criterion
      */
-    protected abstract double evaluate(double[] v0, double a0, double aM, double fourM);
+    protected abstract double evaluate(double[] va0, double aM, double fourM);
 
     /** Compute Carlson elliptic integral.
      * @return Carlson elliptic integral
@@ -105,35 +109,29 @@ abstract class RealDuplication {
     public double integral() {
 
         // duplication iterations
-        final double[] vM    = initialV.clone();
-        final double[] sqrtM = initialV.clone();
-        double         aM    = initialA;
-        double fourM = 1.0;
+        final int       n    = initialVA.length - 1;
+        final double[] vaM   = initialVA.clone();
+        final double[] sqrtM = new double[n];
+        double         fourM = 1.0;
         for (int m = 0; m < M_MAX; ++m) {
 
-            if (m > 0 && q < fourM * FastMath.abs(aM)) {
+            if (m > 0 && q < fourM * FastMath.abs(vaM[n])) {
                 // convergence reached
                 break;
             }
 
             // apply duplication once more
             // (we know that {Field}Complex.sqrt() returns the root with nonnegative real part)
-            for (int i = 0; i < vM.length; ++i) {
-                sqrtM[i] = FastMath.sqrt(vM[i]);
+            for (int i = 0; i < n; ++i) {
+                sqrtM[i] = FastMath.sqrt(vaM[i]);
             }
-            final double lambdaN = lambda(m, vM, sqrtM, fourM);
-
-            // update symmetric integral variables and their mean
-            for (int i = 0; i < vM.length; ++i) {
-                vM[i] = (vM[i] + lambdaN) * 0.25;
-            }
-            aM = (aM + lambdaN) * 0.25;
+            update(m, vaM, sqrtM, fourM);
 
             fourM *= 4;
 
         }
 
-        return evaluate(initialV, initialA, aM, fourM);
+        return evaluate(initialVA, vaM[n], fourM);
 
     }
 
