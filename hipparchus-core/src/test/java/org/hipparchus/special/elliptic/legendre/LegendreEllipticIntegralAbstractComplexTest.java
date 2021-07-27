@@ -17,6 +17,7 @@
 package org.hipparchus.special.elliptic.legendre;
 
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.special.elliptic.carlson.CarlsonEllipticIntegral;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.junit.Assert;
@@ -163,6 +164,27 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
     @Test
     public void testIntegralsSmallParameter() {
         Assert.assertEquals(7.8539816428e-10, K(buildComplex(2.0e-9)).getReal() - MathUtils.SEMI_PI, 1.0e-15);
+    }
+
+    @Test
+    public void testPrecomputedDelta() {
+
+        T n   = buildComplex(3.4,  -1.3);
+        T m   = buildComplex(0.2,   0.6);
+        T phi = buildComplex(1.2, 0.08);
+        T ref = buildComplex(0.48657872913710487, -0.9325310177613093);
+        Assert.assertEquals(0.0, Pi(n, phi, m).subtract(ref).getReal(), 1.0e-15);
+
+        // no argument reduction and no precomputed delta
+        final T csc     = phi.sin().reciprocal();
+        final T csc2    = csc.multiply(csc);
+        final T cM1     = csc2.subtract(1);
+        final T cMm     = csc2.subtract(m);
+        final T cMn     = csc2.subtract(n);
+        final T pinphim = CarlsonEllipticIntegral.rF(cM1, cMm, csc2).
+                          add(CarlsonEllipticIntegral.rJ(cM1, cMm, csc2, cMn).multiply(n).divide(3));
+        Assert.assertEquals(0.0, pinphim.subtract(ref).getReal(), 1.0e-15);
+
     }
 
 }

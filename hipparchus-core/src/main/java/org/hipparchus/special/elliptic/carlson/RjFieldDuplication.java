@@ -38,10 +38,11 @@ class RjFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
      * @param p fourth <em>not</em> symmetric variable of the integral
+     * @param delta precomputed value of (p-x)(p-y)(p-z)
      */
-    RjFieldDuplication(final T x, final T y, final T z, final T p) {
+    RjFieldDuplication(final T x, final T y, final T z, final T p, final T delta) {
         super(x, y, z, p);
-        delta = p.subtract(x).multiply(p.subtract(y)).multiply(p.subtract(z));
+        this.delta = delta;
     }
 
     /** {@inheritDoc} */

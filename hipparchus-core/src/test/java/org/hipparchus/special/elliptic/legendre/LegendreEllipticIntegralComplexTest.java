@@ -309,8 +309,12 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
             { new Complex(1.2, 0.25),          new Complex(-0.08727979375768656571,  0.78623380867526956107) },
             { new Complex(1.2, 0.45),          new Complex(-0.05716147875408999398,  0.72239458160027437391) },
             { new Complex(1.2, 0.75),          new Complex(-0.03776232345596223316,  0.65347724469972942256) },
-                    };
+        };
         final Complex m      = new Complex(0.2, 0.6);
+//        System.out.println("φ = 0.8 + 0.598141295214836 i → Π(n, φ, m) = " + LegendreEllipticIntegral.bigPi(n, new Complex(0.8, 0.598141295214836), m));
+//        System.out.println("φ = 0.8 + 0.598141295214837 i → Π(n, φ, m) = " + LegendreEllipticIntegral.bigPi(n, new Complex(0.8, 0.598141295214837), m));
+//      System.out.println("0.2051631601 --->" + LegendreEllipticIntegral.bigPi(n, new Complex(1.2, 0.2051631601), m));
+//      System.out.println("0.2051631602 --->" + LegendreEllipticIntegral.bigPi(n, new Complex(1.2, 0.2051631602), m));
         final ComplexUnivariateIntegrator integrator =
                         new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
                                                                                              1.0e-4,
@@ -323,19 +327,23 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
         System.out.format(java.util.Locale.US, "1 - n sin²θₙ = 0 ⇒ θₙ = %.10f + %.10f i  (pole)%n",                 poleN.getRealPart(), poleN.getImaginaryPart());
         System.out.format(java.util.Locale.US, "1 - m sin²θₘ = 0 ⇒ θₘ = %.10f + %.10f i  (pole)%n%n",               poleM.getRealPart(), poleM.getImaginaryPart());
         System.out.format(java.util.Locale.US,
-                          "        φ                 straight integration                integration ⇗⇘" +
-                          "                 integration ⇘⇒                  integration ⇘⇗                  Carlson-based" +
-                          "                   WolframAlpha%n");
+                          "|         φ          |  straight integration  |     integration ⇗⇘" +
+                          "     |    integration ⇘⇒     |     integration ⇘⇗     |     Carlson-based" +
+                          "       |     WolframAlpha     |%n");
+        System.out.format(java.util.Locale.US,
+                          "|--------------------|------------------------|---------------" +
+                          "---------|-----------------------|------------------------|-------------" +
+                          "------------|----------------------|%n");
         for (final Complex[] ref : references) {
             Complex integratedStraight;
             String straightDisplay;
             try {
                 integratedStraight = integrator.integrate(100000, integrand, Complex.ZERO, ref[0]);
-                straightDisplay = String.format(java.util.Locale.US, "% .10f % .10f",
+                straightDisplay = String.format(java.util.Locale.US, "% .6f % .6f",
                                                 integratedStraight.getRealPart(), integratedStraight.getImaginaryPart());
             } catch (MathIllegalStateException mise) {
                 integratedStraight = Complex.NaN;
-                straightDisplay = "      -             -      ";
+                straightDisplay = "    -         -    ";
             }
             final Complex integratedAbove =
                             integrator.integrate(100000, integrand,
@@ -349,7 +357,7 @@ public class LegendreEllipticIntegralComplexTest extends LegendreEllipticIntegra
                                                  poleM.add(new Complex(0, -1)), ref[0]);
             final Complex carlson = Pi(n, ref[0], m);
             System.out.format(java.util.Locale.US,
-                              "%.1f % .10f     %s     % .10f % .10f     % .10f % .10f     % .10f % .10f     % .10f % .10f     % .10f % .10f%n",
+                              "|%.1f % .10f   |  %s   |  % .6f % .6f   |  % .6f % .6f  |   % .6f % .6f  |   % .6f % .6f   |  % .6f % .6f |%n",
                               ref[0].getRealPart(), ref[0].getImaginaryPart(),
                               straightDisplay,
                               integratedAbove.getRealPart(), integratedAbove.getImaginaryPart(),

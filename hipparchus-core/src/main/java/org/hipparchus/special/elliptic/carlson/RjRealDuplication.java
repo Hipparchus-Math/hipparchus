@@ -35,10 +35,11 @@ class RjRealDuplication extends RealDuplication {
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
      * @param p fourth <em>not</em> symmetric variable of the integral
+     * @param delta precomputed value of (p-x)(p-y)(p-z)
      */
-    RjRealDuplication(final double x, final double y, final double z, final double p) {
+    RjRealDuplication(final double x, final double y, final double z, final double p, final double delta) {
         super(x, y, z, p);
-        delta = (p - x) * (p - y) * (p - z);
+        this.delta = delta;
     }
 
     /** {@inheritDoc} */

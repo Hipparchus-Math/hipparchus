@@ -506,8 +506,9 @@ public class LegendreEllipticIntegral {
      */
     public static double bigPi(final double n, final double m) {
         final double kPrime2 = 1 - m;
+        final double delta   = n * (m - n) * (n - 1);
         return CarlsonEllipticIntegral.rF(0, kPrime2, 1) +
-               CarlsonEllipticIntegral.rJ(0, kPrime2, 1, 1 - n) * n / 3;
+               CarlsonEllipticIntegral.rJ(0, kPrime2, 1, 1 - n, delta) * n / 3;
     }
 
     /** Get the complete elliptic integral of the third kind Π(n, m).
@@ -533,8 +534,9 @@ public class LegendreEllipticIntegral {
         final T zero    = m.getField().getZero();
         final T one     = m.getField().getOne();
         final T kPrime2 = one.subtract(m);
+        final T delta   = n.multiply(m.subtract(n)).multiply(n.subtract(1));
         return CarlsonEllipticIntegral.rF(zero, kPrime2, one).
-               add(CarlsonEllipticIntegral.rJ(zero, kPrime2, one, one.subtract(n)).multiply(n).divide(3));
+               add(CarlsonEllipticIntegral.rJ(zero, kPrime2, one, one.subtract(n), delta).multiply(n).divide(3));
     }
 
     /** Get the complete elliptic integral of the third kind Π(n, m).
@@ -557,8 +559,9 @@ public class LegendreEllipticIntegral {
      */
     public static Complex bigPi(final Complex n, final Complex m) {
         final Complex kPrime2 = Complex.ONE.subtract(m);
+        final Complex delta   = n.multiply(m.subtract(n)).multiply(n.subtract(1));
         return CarlsonEllipticIntegral.rF(Complex.ZERO, kPrime2, Complex.ONE).
-               add(CarlsonEllipticIntegral.rJ(Complex.ZERO, kPrime2, Complex.ONE, Complex.ONE.subtract(n)).multiply(n).divide(3));
+               add(CarlsonEllipticIntegral.rJ(Complex.ZERO, kPrime2, Complex.ONE, Complex.ONE.subtract(n), delta).multiply(n).divide(3));
     }
 
     /** Get the complete elliptic integral of the third kind Π(n, m).
@@ -581,11 +584,12 @@ public class LegendreEllipticIntegral {
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigPi(final FieldComplex<T> n, final FieldComplex<T> m) {
-        final FieldComplex<T> zero = m.getField().getZero();
-        final FieldComplex<T> one  = m.getField().getOne();
+        final FieldComplex<T> zero    = m.getField().getZero();
+        final FieldComplex<T> one     = m.getField().getOne();
         final FieldComplex<T> kPrime2 = one.subtract(m);
+        final FieldComplex<T> delta   = n.multiply(m.subtract(n)).multiply(n.subtract(1));
         return CarlsonEllipticIntegral.rF(zero, kPrime2, one).
-               add(CarlsonEllipticIntegral.rJ(zero, kPrime2, one, one.subtract(n)).multiply(n).divide(3));
+               add(CarlsonEllipticIntegral.rJ(zero, kPrime2, one, one.subtract(n), delta).multiply(n).divide(3));
     }
 
     /** Get the incomplete elliptic integral of the first kind F(Φ, m).
@@ -1014,8 +1018,9 @@ public class LegendreEllipticIntegral {
         final double cM1        = ar.csc2 - 1.0;
         final double cMm        = ar.csc2 - m;
         final double cMn        = ar.csc2 - n;
+        final double delta      = n * (m - n) * (n - 1);
         final double incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2) +
-                                  CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMn) * n / 3;
+                                  CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMn, delta) * n / 3;
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete - incomplete : ar.complete + incomplete;
@@ -1051,8 +1056,9 @@ public class LegendreEllipticIntegral {
         final T cM1        = ar.csc2.subtract(1);
         final T cMm        = ar.csc2.subtract(m);
         final T cMn        = ar.csc2.subtract(n);
+        final T delta      = n.multiply(m.subtract(n)).multiply(n.subtract(1));
         final T incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2).
-                             add(CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMn).multiply(n).divide(3));
+                             add(CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMn, delta).multiply(n).divide(3));
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
@@ -1087,9 +1093,9 @@ public class LegendreEllipticIntegral {
         final Complex cM1        = ar.csc2.subtract(1);
         final Complex cMm        = ar.csc2.subtract(m);
         final Complex cMn        = ar.csc2.subtract(n);
+        final Complex delta      = n.multiply(m.subtract(n)).multiply(n.subtract(1));
         final Complex incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2).
-                                   add(CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMn).multiply(n).divide(3));
-
+                                   add(CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMn, delta).multiply(n).divide(3));
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
 
@@ -1126,8 +1132,9 @@ public class LegendreEllipticIntegral {
         final FieldComplex<T> cM1        = ar.csc2.subtract(1);
         final FieldComplex<T> cMm        = ar.csc2.subtract(m);
         final FieldComplex<T> cMn        = ar.csc2.subtract(n);
+        final FieldComplex<T> delta      = n.multiply(m.subtract(n)).multiply(n.subtract(1));
         final FieldComplex<T> incomplete = CarlsonEllipticIntegral.rF(cM1, cMm, ar.csc2).
-                                           add(CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMn).multiply(n).divide(3));
+                                           add(CarlsonEllipticIntegral.rJ(cM1, cMm, ar.csc2, cMn, delta).multiply(n).divide(3));
 
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);

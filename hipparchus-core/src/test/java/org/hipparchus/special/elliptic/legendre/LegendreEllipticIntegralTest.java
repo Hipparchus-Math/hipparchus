@@ -16,6 +16,7 @@
  */
 package org.hipparchus.special.elliptic.legendre;
 
+import org.hipparchus.special.elliptic.carlson.CarlsonEllipticIntegral;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.junit.Assert;
@@ -178,6 +179,27 @@ public class LegendreEllipticIntegralTest {
         Assert.assertEquals(7.8539816428e-10,
                             LegendreEllipticIntegral.bigK(2.0e-9) - MathUtils.SEMI_PI,
                             1.0e-15);
+    }
+
+    @Test
+    public void testPrecomputedDelta() {
+
+        double n   = 0.7;
+        double m   = 0.2;
+        double phi = 1.2;
+        double ref = 1.8264362537906997;
+        Assert.assertEquals(ref, LegendreEllipticIntegral.bigPi(n, phi, m), 1.0e-15);
+
+        // no argument reduction and no precomputed delta
+        final double csc     = 1.0 / FastMath.sin(phi);
+        final double csc2    = csc * csc;
+        final double cM1     = csc2 - 1;
+        final double cMm     = csc2 - m;
+        final double cMn     = csc2 - n;
+        final double pinphim = CarlsonEllipticIntegral.rF(cM1, cMm, csc2) +
+                               CarlsonEllipticIntegral.rJ(cM1, cMm, csc2, cMn) * n / 3;
+        Assert.assertEquals(ref, pinphim, 1.0e-15);
+
     }
 
 }

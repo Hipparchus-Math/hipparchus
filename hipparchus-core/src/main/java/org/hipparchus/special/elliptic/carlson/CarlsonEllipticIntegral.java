@@ -230,7 +230,26 @@ public class CarlsonEllipticIntegral {
      * @return Carlson elliptic integral R<sub>J</sub>
      */
     public static double rJ(final double x, final double y, final double z, final double p) {
-        return new RjRealDuplication(x, y, z, p).integral();
+        final double delta = (p - x) * (p - y) * (p - z);
+        return rJ(x, y, z, p, delta);
+    }
+
+    /** Compute Carlson elliptic integral R<sub>J</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>J</sub> is defined as
+     * \[
+     *   R_J(x,y,z,p)=\frac{3}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{\sqrt{t+x}\sqrt{t+y}\sqrt{t+z}(t+p)}
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z third symmetric variable of the integral
+     * @param p fourth <em>not</em> symmetric variable of the integral
+     * @param delta precomputed value of (p-x)(p-y)(p-z)
+     * @return Carlson elliptic integral R<sub>J</sub>
+     */
+    public static double rJ(final double x, final double y, final double z, final double p, final double delta) {
+        return new RjRealDuplication(x, y, z, p, delta).integral();
     }
 
     /** Compute Carlson elliptic integral R<sub>J</sub>.
@@ -248,7 +267,27 @@ public class CarlsonEllipticIntegral {
      * @return Carlson elliptic integral R<sub>J</sub>
      */
     public static <T extends CalculusFieldElement<T>> T rJ(final T x, final T y, final T z, final T p) {
-        return new RjFieldDuplication<>(x, y, z, p).integral();
+        final T delta = p.subtract(x).multiply(p.subtract(y)).multiply(p.subtract(z));
+        return new RjFieldDuplication<>(x, y, z, p, delta). integral();
+    }
+
+    /** Compute Carlson elliptic integral R<sub>J</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>J</sub> is defined as
+     * \[
+     *   R_J(x,y,z,p)=\frac{3}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{\sqrt{t+x}\sqrt{t+y}\sqrt{t+z}(t+p)}
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z third symmetric variable of the integral
+     * @param p fourth <em>not</em> symmetric variable of the integral
+     * @param delta precomputed value of (p-x)(p-y)(p-z)
+     * @param <T> type of the field elements
+     * @return Carlson elliptic integral R<sub>J</sub>
+     */
+    public static <T extends CalculusFieldElement<T>> T rJ(final T x, final T y, final T z, final T p, final T delta) {
+        return new RjFieldDuplication<>(x, y, z, p, delta).integral();
     }
 
     /** Compute Carlson elliptic integral R<sub>J</sub>.
@@ -265,7 +304,26 @@ public class CarlsonEllipticIntegral {
      * @return Carlson elliptic integral R<sub>J</sub>
      */
     public static Complex rJ(final Complex x, final Complex y, final Complex z, final Complex p) {
-        return new RjFieldDuplication<>(x, y, z, p).integral();
+        final Complex delta = p.subtract(x).multiply(p.subtract(y)).multiply(p.subtract(z));
+        return new RjFieldDuplication<>(x, y, z, p, delta).integral();
+    }
+
+    /** Compute Carlson elliptic integral R<sub>J</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>J</sub> is defined as
+     * \[
+     *   R_J(x,y,z,p)=\frac{3}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{\sqrt{t+x}\sqrt{t+y}\sqrt{t+z}(t+p)}
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z third symmetric variable of the integral
+     * @param p fourth <em>not</em> symmetric variable of the integral
+     * @param delta precomputed value of (p-x)(p-y)(p-z)
+     * @return Carlson elliptic integral R<sub>J</sub>
+     */
+    public static Complex rJ(final Complex x, final Complex y, final Complex z, final Complex p, final Complex delta) {
+        return new RjFieldDuplication<>(x, y, z, p, delta).integral();
     }
 
     /** Compute Carlson elliptic integral R<sub>J</sub>.
@@ -284,7 +342,29 @@ public class CarlsonEllipticIntegral {
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> rJ(final FieldComplex<T> x, final FieldComplex<T> y,
                                                                          final FieldComplex<T> z, final FieldComplex<T> p) {
-        return new RjFieldDuplication<>(x, y, z, p).integral();
+        final FieldComplex<T> delta = p.subtract(x).multiply(p.subtract(y)).multiply(p.subtract(z));
+        return new RjFieldDuplication<>(x, y, z, p, delta).integral();
+    }
+
+    /** Compute Carlson elliptic integral R<sub>J</sub>.
+     * <p>
+     * The Carlson elliptic integral R<sub>J</sub> is defined as
+     * \[
+     *   R_J(x,y,z,p)=\frac{3}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{\sqrt{t+x}\sqrt{t+y}\sqrt{t+z}(t+p)}
+     * \]
+     * </p>
+     * @param x first symmetric variable of the integral
+     * @param y second symmetric variable of the integral
+     * @param z third symmetric variable of the integral
+     * @param p fourth <em>not</em> symmetric variable of the integral
+     * @param delta precomputed value of (p-x)(p-y)(p-z)
+     * @param <T> type of the field elements
+     * @return Carlson elliptic integral R<sub>J</sub>
+     */
+    public static <T extends CalculusFieldElement<T>> FieldComplex<T> rJ(final FieldComplex<T> x, final FieldComplex<T> y,
+                                                                         final FieldComplex<T> z, final FieldComplex<T> p,
+                                                                         final FieldComplex<T> delta) {
+        return new RjFieldDuplication<>(x, y, z, p, delta).integral();
     }
 
     /** Compute Carlson elliptic integral R<sub>D</sub>.
