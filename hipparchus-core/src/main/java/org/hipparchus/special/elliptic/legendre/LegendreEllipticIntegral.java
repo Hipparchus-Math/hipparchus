@@ -1362,12 +1362,18 @@ public class LegendreEllipticIntegral {
      */
     private static class First<T extends CalculusFieldElement<T>> implements CalculusFieldUnivariateFunction<T> {
 
-        final T m;
+        /** Parameter. */
+        private final T m;
 
+        /** Simple constructor.
+         * @param m parameter (m=k² where k is the elliptic modulus)
+         */
         First(final T m) {
             this.m = m;
         }
 
+        /** {@inheritDoc} */
+        @Override
         public T value(final T theta) {
             final T sin  = theta.sin();
             final T sin2 = sin.multiply(sin);
@@ -1381,12 +1387,18 @@ public class LegendreEllipticIntegral {
      */
     private static class Second<T extends CalculusFieldElement<T>> implements CalculusFieldUnivariateFunction<T> {
 
-        final T m;
+        /** Parameter. */
+        private final T m;
 
+        /** Simple constructor.
+         * @param m parameter (m=k² where k is the elliptic modulus)
+         */
         Second(final T m) {
             this.m = m;
         }
 
+        /** {@inheritDoc} */
+        @Override
         public T value(final T theta) {
             final T sin = theta.sin();
             final T sin2 = sin.multiply(sin);
@@ -1400,14 +1412,23 @@ public class LegendreEllipticIntegral {
      */
     private static class Third<T extends CalculusFieldElement<T>> implements CalculusFieldUnivariateFunction<T> {
 
-        final T n;
-        final T m;
+        /** Elliptic characteristic. */
+        private final T n;
 
+        /** Parameter. */
+        private final T m;
+
+        /** Simple constructor.
+         * @param n elliptic characteristic
+         * @param m parameter (m=k² where k is the elliptic modulus)
+         */
         Third(final T n, final T m) {
             this.n = n;
             this.m = m;
         }
 
+        /** {@inheritDoc} */
+        @Override
         public T value(final T theta) {
             final T sin  = theta.sin();
             final T sin2 = sin.multiply(sin);
