@@ -592,9 +592,9 @@ public class LegendreEllipticIntegral {
                add(CarlsonEllipticIntegral.rJ(zero, kPrime2, one, one.subtract(n), delta).multiply(n).divide(3));
     }
 
-    /** Get the incomplete elliptic integral of the first kind F(Φ, m).
+    /** Get the incomplete elliptic integral of the first kind F(φ, m).
      * <p>
-     * The incomplete elliptic integral of the first kind F(Φ, m) is
+     * The incomplete elliptic integral of the first kind F(φ, m) is
      * \[
      *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}
      * \]
@@ -605,7 +605,7 @@ public class LegendreEllipticIntegral {
      * </p>
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
-     * @return incomplete elliptic integral of the first kind F(Φ, m)
+     * @return incomplete elliptic integral of the first kind F(φ, m)
      * @see #bigK(double)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheFirstKind.html">Elliptic Integrals of the First Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
@@ -625,9 +625,9 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral of the first kind F(Φ, m).
+    /** Get the incomplete elliptic integral of the first kind F(φ, m).
      * <p>
-     * The incomplete elliptic integral of the first kind F(Φ, m) is
+     * The incomplete elliptic integral of the first kind F(φ, m) is
      * \[
      *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}
      * \]
@@ -639,7 +639,7 @@ public class LegendreEllipticIntegral {
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
      * @param <T> the type of the field elements
-     * @return incomplete elliptic integral of the first kind F(Φ, m)
+     * @return incomplete elliptic integral of the first kind F(φ, m)
      * @see #bigK(CalculusFieldElement)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheFirstKind.html">Elliptic Integrals of the First Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
@@ -659,9 +659,9 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral of the first kind F(Φ, m).
+    /** Get the incomplete elliptic integral of the first kind F(φ, m).
      * <p>
-     * The incomplete elliptic integral of the first kind F(Φ, m) is
+     * The incomplete elliptic integral of the first kind F(φ, m) is
      * \[
      *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}
      * \]
@@ -672,7 +672,7 @@ public class LegendreEllipticIntegral {
      * </p>
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
-     * @return incomplete elliptic integral of the first kind F(Φ, m)
+     * @return incomplete elliptic integral of the first kind F(φ, m)
      * @see #bigK(Complex)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheFirstKind.html">Elliptic Integrals of the First Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
@@ -692,9 +692,9 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral of the first kind F(Φ, m).
+    /** Get the incomplete elliptic integral of the first kind F(φ, m).
      * <p>
-     * The incomplete elliptic integral of the first kind F(Φ, m) is
+     * The incomplete elliptic integral of the first kind F(φ, m) is
      * \[
      *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}
      * \]
@@ -706,7 +706,7 @@ public class LegendreEllipticIntegral {
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
      * @param <T> the type of the field elements
-     * @return incomplete elliptic integral of the first kind F(Φ, m)
+     * @return incomplete elliptic integral of the first kind F(φ, m)
      * @see #bigK(CalculusFieldElement)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheFirstKind.html">Elliptic Integrals of the First Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
@@ -726,9 +726,9 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral of the second kind E(Φ, m).
+    /** Get the incomplete elliptic integral of the second kind E(φ, m).
      * <p>
-     * The incomplete elliptic integral of the second kind E(Φ, m) is
+     * The incomplete elliptic integral of the second kind E(φ, m) is
      * \[
      *    \int_0^{\phi} \sqrt{1-m \sin^2\theta} d\theta
      * \]
@@ -739,7 +739,7 @@ public class LegendreEllipticIntegral {
      * </p>
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
-     * @return incomplete elliptic integral of the second kind E(Φ, m)
+     * @return incomplete elliptic integral of the second kind E(φ, m)
      * @see #bigE(double)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheSecondKind.html">Elliptic Integrals of the Second Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
@@ -760,9 +760,9 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral of the second kind E(Φ, m).
+    /** Get the incomplete elliptic integral of the second kind E(φ, m).
      * <p>
-     * The incomplete elliptic integral of the second kind E(Φ, m) is
+     * The incomplete elliptic integral of the second kind E(φ, m) is
      * \[
      *    \int_0^{\phi} \sqrt{1-m \sin^2\theta} d\theta
      * \]
@@ -774,7 +774,7 @@ public class LegendreEllipticIntegral {
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
      * @param <T> the type of the field elements
-     * @return incomplete elliptic integral of the second kind E(Φ, m)
+     * @return incomplete elliptic integral of the second kind E(φ, m)
      * @see #bigE(CalculusFieldElement)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheSecondKind.html">Elliptic Integrals of the Second Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
@@ -795,9 +795,9 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral of the second kind E(Φ, m).
+    /** Get the incomplete elliptic integral of the second kind E(φ, m).
      * <p>
-     * The incomplete elliptic integral of the second kind E(Φ, m) is
+     * The incomplete elliptic integral of the second kind E(φ, m) is
      * \[
      *    \int_0^{\phi} \sqrt{1-m \sin^2\theta} d\theta
      * \]
@@ -808,7 +808,7 @@ public class LegendreEllipticIntegral {
      * </p>
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
-     * @return incomplete elliptic integral of the second kind E(Φ, m)
+     * @return incomplete elliptic integral of the second kind E(φ, m)
      * @see #bigE(Complex)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheSecondKind.html">Elliptic Integrals of the Second Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
@@ -829,9 +829,9 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral of the second kind E(Φ, m).
+    /** Get the incomplete elliptic integral of the second kind E(φ, m).
      * <p>
-     * The incomplete elliptic integral of the second kind E(Φ, m) is
+     * The incomplete elliptic integral of the second kind E(φ, m) is
      * \[
      *    \int_0^{\phi} \sqrt{1-m \sin^2\theta} d\theta
      * \]
@@ -843,7 +843,7 @@ public class LegendreEllipticIntegral {
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
      * @param <T> the type of the field elements
-     * @return incomplete elliptic integral of the second kind E(Φ, m)
+     * @return incomplete elliptic integral of the second kind E(φ, m)
      * @see #bigE(FieldComplex)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheSecondKind.html">Elliptic Integrals of the Second Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
@@ -864,9 +864,9 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral D(Φ, m) = [F(Φ, m) - E(Φ, m)]/m.
+    /** Get the incomplete elliptic integral D(φ, m) = [F(φ, m) - E(φ, m)]/m.
      * <p>
-     * The incomplete elliptic integral D(Φ, m) is
+     * The incomplete elliptic integral D(φ, m) is
      * \[
      *    \int_0^{\phi} \frac{\sin^2\theta}{\sqrt{1-m \sin^2\theta}} d\theta
      * \]
@@ -877,7 +877,7 @@ public class LegendreEllipticIntegral {
      * </p>
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
-     * @return incomplete elliptic integral D(Φ, m)
+     * @return incomplete elliptic integral D(φ, m)
      * @see #bigD(double)
      */
     public static double bigD(final double phi, final double m) {
@@ -895,9 +895,9 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral D(Φ, m) = [F(Φ, m) - E(Φ, m)]/m.
+    /** Get the incomplete elliptic integral D(φ, m) = [F(φ, m) - E(φ, m)]/m.
      * <p>
-     * The incomplete elliptic integral D(Φ, m) is
+     * The incomplete elliptic integral D(φ, m) is
      * \[
      *    \int_0^{\phi} \frac{\sin^2\theta}{\sqrt{1-m \sin^2\theta}} d\theta
      * \]
@@ -909,7 +909,7 @@ public class LegendreEllipticIntegral {
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
      * @param <T> the type of the field elements
-     * @return incomplete elliptic integral D(Φ, m)
+     * @return incomplete elliptic integral D(φ, m)
      * @see #bigD(CalculusFieldElement)
      */
     public static <T extends CalculusFieldElement<T>> T bigD(final T phi, final T m) {
@@ -927,9 +927,9 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral D(Φ, m) = [F(Φ, m) - E(Φ, m)]/m.
+    /** Get the incomplete elliptic integral D(φ, m) = [F(φ, m) - E(φ, m)]/m.
      * <p>
-     * The incomplete elliptic integral D(Φ, m) is
+     * The incomplete elliptic integral D(φ, m) is
      * \[
      *    \int_0^{\phi} \frac{\sin^2\theta}{\sqrt{1-m \sin^2\theta}} d\theta
      * \]
@@ -940,7 +940,7 @@ public class LegendreEllipticIntegral {
      * </p>
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
-     * @return incomplete elliptic integral D(Φ, m)
+     * @return incomplete elliptic integral D(φ, m)
      * @see #bigD(Complex)
      */
     public static Complex bigD(final Complex phi, final Complex m) {
@@ -958,9 +958,9 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral D(Φ, m) = [F(Φ, m) - E(Φ, m)]/m.
+    /** Get the incomplete elliptic integral D(φ, m) = [F(φ, m) - E(φ, m)]/m.
      * <p>
-     * The incomplete elliptic integral D(Φ, m) is
+     * The incomplete elliptic integral D(φ, m) is
      * \[
      *    \int_0^{\phi} \frac{\sin^2\theta}{\sqrt{1-m \sin^2\theta}} d\theta
      * \]
@@ -972,7 +972,7 @@ public class LegendreEllipticIntegral {
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
      * @param <T> the type of the field elements
-     * @return incomplete elliptic integral D(Φ, m)
+     * @return incomplete elliptic integral D(φ, m)
      * @see #bigD(CalculusFieldElement)
      */
     public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigD(final FieldComplex<T> phi, final FieldComplex<T> m) {
@@ -990,9 +990,9 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral of the third kind Π(n, Φ, m).
+    /** Get the incomplete elliptic integral of the third kind Π(n, φ, m).
      * <p>
-     * The incomplete elliptic integral of the third kind Π(n, Φ, m) is
+     * The incomplete elliptic integral of the third kind Π(n, φ, m) is
      * \[
      *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
      * \]
@@ -1004,7 +1004,7 @@ public class LegendreEllipticIntegral {
      * @param n elliptic characteristic
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
-     * @return incomplete elliptic integral of the third kind Π(n, Φ, m)
+     * @return incomplete elliptic integral of the third kind Π(n, φ, m)
      * @see #bigPi(double, double)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html">Elliptic Integrals of the Third Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
@@ -1027,9 +1027,9 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral of the third kind Π(n, Φ, m).
+    /** Get the incomplete elliptic integral of the third kind Π(n, φ, m).
      * <p>
-     * The incomplete elliptic integral of the third kind Π(n, Φ, m) is
+     * The incomplete elliptic integral of the third kind Π(n, φ, m) is
      * \[
      *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
      * \]
@@ -1042,7 +1042,7 @@ public class LegendreEllipticIntegral {
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
      * @param <T> the type of the field elements
-     * @return incomplete elliptic integral of the third kind Π(n, Φ, m)
+     * @return incomplete elliptic integral of the third kind Π(n, φ, m)
      * @see #bigPi(CalculusFieldElement, CalculusFieldElement)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html">Elliptic Integrals of the Third Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
@@ -1065,9 +1065,9 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral of the third kind Π(n, Φ, m).
+    /** Get the incomplete elliptic integral of the third kind Π(n, φ, m).
      * <p>
-     * The incomplete elliptic integral of the third kind Π(n, Φ, m) is
+     * The incomplete elliptic integral of the third kind Π(n, φ, m) is
      * \[
      *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
      * \]
@@ -1079,7 +1079,7 @@ public class LegendreEllipticIntegral {
      * @param n elliptic characteristic
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
-     * @return incomplete elliptic integral of the third kind Π(n, Φ, m)
+     * @return incomplete elliptic integral of the third kind Π(n, φ, m)
      * @see #bigPi(Complex, Complex)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html">Elliptic Integrals of the Third Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
@@ -1101,9 +1101,9 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Get the incomplete elliptic integral of the third kind Π(n, Φ, m).
+    /** Get the incomplete elliptic integral of the third kind Π(n, φ, m).
      * <p>
-     * The incomplete elliptic integral of the third kind Π(n, Φ, m) is
+     * The incomplete elliptic integral of the third kind Π(n, φ, m) is
      * \[
      *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
      * \]
@@ -1116,7 +1116,7 @@ public class LegendreEllipticIntegral {
      * @param phi amplitude (i.e. upper bound of the integral)
      * @param m parameter (m=k² where k is the elliptic modulus)
      * @param <T> the type of the field elements
-     * @return incomplete elliptic integral of the third kind Π(n, Φ, m)
+     * @return incomplete elliptic integral of the third kind Π(n, φ, m)
      * @see #bigPi(FieldComplex, FieldComplex)
      * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html">Elliptic Integrals of the Third Kind (MathWorld)</a>
      * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
