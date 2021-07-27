@@ -9,14 +9,17 @@ This is a major release. The main changes is the addition of a sequential Gauss-
 improved relative scheduling of step handlers and events handlers in ODE,
 addition of a finish callback in step handlers, replacement of RealFieldElement by CalculusFieldElement interface,
 many improvements in Complex to fully implement CalculusFieldElement with correct branch cuts so complex numbers
-can be used in many Hipparchus algorithms, addition of FieldComplex, implementation of elliptic functions and
-integrals (for real, complex and general fields), and faster simultaneous computation of sinh/cosh.
+can be used in many Hipparchus algorithms, addition of FieldComplex, faster simultaneous computation of sinh/cosh.
+
+Experimental implementation of elliptic functions and integrals for real, complex and general fields have been added.
+Beware the elliptic integrals for complex numbers in the incomplete case are considered experimental for now, they have known issues.
+
 Methods deprecated during the 1.X series have been removed. Numerous bugs were also fixed.
 
 Changes in this version include:
 
 New features:
-o issues/148: Added complex univariate integrals (including contour integrals). 
+o issues/149: Added complex univariate integrals (including contour integrals). 
 o issues/147: Allow retrieving event handler configuration from ODE integrators. 
 o issues/146: Added a separate finish method in ODE step handlers to be called after last step. 
 o issues/143: Added ArrayFieldVector.toString(). 

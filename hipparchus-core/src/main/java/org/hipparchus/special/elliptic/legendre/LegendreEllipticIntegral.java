@@ -20,7 +20,9 @@ import java.util.function.DoubleFunction;
 import java.util.function.Function;
 
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.complex.Complex;
+import org.hipparchus.complex.ComplexUnivariateIntegrator;
 import org.hipparchus.complex.FieldComplex;
 import org.hipparchus.special.elliptic.carlson.CarlsonEllipticIntegral;
 import org.hipparchus.util.FastMath;
@@ -29,6 +31,12 @@ import org.hipparchus.util.MathUtils;
 /** Complete and incomplete elliptic integrals in Legendre form.
  * <p>
  * The elliptic integrals are related to Jacobi elliptic functions.
+ * </p>
+ * <p>
+ * <emph>
+ * BEWARE! Elliptic integrals for complex numbers in the incomplete case
+ * are considered experimental for now, they have known issues.
+ * </emph>
  * </p>
  * <p>
  * There are different conventions to interpret the arguments of
@@ -661,6 +669,12 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral of the first kind F(φ, m).
      * <p>
+     * <emph>
+     * BEWARE! Elliptic integrals for complex numbers in the incomplete case
+     * are considered experimental for now, they have known issues.
+     * </emph>
+     * </p>
+     * <p>
      * The incomplete elliptic integral of the first kind F(φ, m) is
      * \[
      *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}
@@ -692,7 +706,47 @@ public class LegendreEllipticIntegral {
 
     }
 
+    /** Get the incomplete elliptic integral of the first kind F(φ, m) using numerical integration.
+     * <p>
+     * <emph>
+     * BEWARE! Elliptic integrals for complex numbers in the incomplete case
+     * are considered experimental for now, they have known issues.
+     * </emph>
+     * </p>
+     * <p>
+     * The incomplete elliptic integral of the first kind F(φ, m) is
+     * \[
+     *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}
+     * \]
+     * </p>
+     * <p>
+     * The algorithm for evaluating the functions is based on numerical integration.
+     * If integration path comes too close to a pole of the integrand, then integration will fail
+     * with a {@link org.hipparchus.exception.MathIllegalStateException MathIllegalStateException}
+     * even for very large {@code maxEval}. This is normal behavior.
+     * </p>
+     * @param phi amplitude (i.e. upper bound of the integral)
+     * @param m parameter (m=k² where k is the elliptic modulus)
+     * @param integrator integrator to use
+     * @param maxEval maximum number of evaluations (real and imaginary
+     * parts are evaluated separately, so up to twice this number may be used)
+     * @return incomplete elliptic integral of the first kind F(φ, m)
+     * @see #bigK(Complex)
+     * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheFirstKind.html">Elliptic Integrals of the First Kind (MathWorld)</a>
+     * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
+     */
+    public static Complex bigF(final Complex phi, final Complex m,
+                               final ComplexUnivariateIntegrator integrator, final int maxEval) {
+        return integrator.integrate(maxEval, new First<>(m), phi.getField().getZero(), phi);
+    }
+
     /** Get the incomplete elliptic integral of the first kind F(φ, m).
+     * <p>
+     * <emph>
+     * BEWARE! Elliptic integrals for complex numbers in the incomplete case
+     * are considered experimental for now, they have known issues.
+     * </emph>
+     * </p>
      * <p>
      * The incomplete elliptic integral of the first kind F(φ, m) is
      * \[
@@ -797,6 +851,12 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral of the second kind E(φ, m).
      * <p>
+     * <emph>
+     * BEWARE! Elliptic integrals for complex numbers in the incomplete case
+     * are considered experimental for now, they have known issues.
+     * </emph>
+     * </p>
+     * <p>
      * The incomplete elliptic integral of the second kind E(φ, m) is
      * \[
      *    \int_0^{\phi} \sqrt{1-m \sin^2\theta} d\theta
@@ -829,7 +889,47 @@ public class LegendreEllipticIntegral {
 
     }
 
+    /** Get the incomplete elliptic integral of the second kind E(φ, m) using numerical integration.
+     * <p>
+     * <emph>
+     * BEWARE! Elliptic integrals for complex numbers in the incomplete case
+     * are considered experimental for now, they have known issues.
+     * </emph>
+     * </p>
+     * <p>
+     * The incomplete elliptic integral of the second kind E(φ, m) is
+     * \[
+     *    \int_0^{\phi} \sqrt{1-m \sin^2\theta} d\theta
+     * \]
+     * </p>
+     * <p>
+     * The algorithm for evaluating the functions is based on numerical integration.
+     * If integration path comes too close to a pole of the integrand, then integration will fail
+     * with a {@link org.hipparchus.exception.MathIllegalStateException MathIllegalStateException}
+     * even for very large {@code maxEval}. This is normal behavior.
+     * </p>
+     * @param phi amplitude (i.e. upper bound of the integral)
+     * @param m parameter (m=k² where k is the elliptic modulus)
+     * @param integrator integrator to use
+     * @param maxEval maximum number of evaluations (real and imaginary
+     * parts are evaluated separately, so up to twice this number may be used)
+     * @return incomplete elliptic integral of the second kind E(φ, m)
+     * @see #bigE(Complex)
+     * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheSecondKind.html">Elliptic Integrals of the Second Kind (MathWorld)</a>
+     * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
+     */
+    public static Complex bigE(final Complex phi, final Complex m,
+                               final ComplexUnivariateIntegrator integrator, final int maxEval) {
+        return integrator.integrate(maxEval, new Second<>(m), phi.getField().getZero(), phi);
+    }
+
     /** Get the incomplete elliptic integral of the second kind E(φ, m).
+     * <p>
+     * <emph>
+     * BEWARE! Elliptic integrals for complex numbers in the incomplete case
+     * are considered experimental for now, they have known issues.
+     * </emph>
+     * </p>
      * <p>
      * The incomplete elliptic integral of the second kind E(φ, m) is
      * \[
@@ -929,6 +1029,12 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral D(φ, m) = [F(φ, m) - E(φ, m)]/m.
      * <p>
+     * <emph>
+     * BEWARE! Elliptic integrals for complex numbers in the incomplete case
+     * are considered experimental for now, they have known issues.
+     * </emph>
+     * </p>
+     * <p>
      * The incomplete elliptic integral D(φ, m) is
      * \[
      *    \int_0^{\phi} \frac{\sin^2\theta}{\sqrt{1-m \sin^2\theta}} d\theta
@@ -959,6 +1065,12 @@ public class LegendreEllipticIntegral {
     }
 
     /** Get the incomplete elliptic integral D(φ, m) = [F(φ, m) - E(φ, m)]/m.
+     * <p>
+     * <emph>
+     * BEWARE! Elliptic integrals for complex numbers in the incomplete case
+     * are considered experimental for now, they have known issues.
+     * </emph>
+     * </p>
      * <p>
      * The incomplete elliptic integral D(φ, m) is
      * \[
@@ -1067,6 +1179,12 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral of the third kind Π(n, φ, m).
      * <p>
+     * <emph>
+     * BEWARE! Elliptic integrals for complex numbers in the incomplete case
+     * are considered experimental for now, they have known issues.
+     * </emph>
+     * </p>
+     * <p>
      * The incomplete elliptic integral of the third kind Π(n, φ, m) is
      * \[
      *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
@@ -1101,7 +1219,47 @@ public class LegendreEllipticIntegral {
 
     }
 
+    /** Get the incomplete elliptic integral of the third kind Π(n, φ, m) using numerical integration.
+     * <p>
+     * <emph>
+     * BEWARE! Elliptic integrals for complex numbers in the incomplete case
+     * are considered experimental for now, they have known issues.
+     * </emph>
+     * </p>
+     * <p>
+     * The incomplete elliptic integral of the third kind Π(n, φ, m) is
+     * \[
+     *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
+     * \]
+     * </p>
+     * <p>
+     * The algorithm for evaluating the functions is based on numerical integration.
+     * If integration path comes too close to a pole of the integrand, then integration will fail
+     * with a {@link org.hipparchus.exception.MathIllegalStateException MathIllegalStateException}
+     * even for very large {@code maxEval}. This is normal behavior.
+     * </p>
+     * @param n elliptic characteristic
+     * @param phi amplitude (i.e. upper bound of the integral)
+     * @param m parameter (m=k² where k is the elliptic modulus)
+     * @param integrator integrator to use
+     * @param maxEval maximum number of evaluations (real and imaginary
+     * @return incomplete elliptic integral of the third kind Π(n, φ, m)
+     * @see #bigPi(Complex, Complex)
+     * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html">Elliptic Integrals of the Third Kind (MathWorld)</a>
+     * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
+     */
+    public static Complex bigPi(final Complex n, final Complex phi, final Complex m,
+                                final ComplexUnivariateIntegrator integrator, final int maxEval) {
+         return integrator.integrate(maxEval, new Third<>(n, m), phi.getField().getZero(), phi);
+    }
+
     /** Get the incomplete elliptic integral of the third kind Π(n, φ, m).
+     * <p>
+     * <emph>
+     * BEWARE! Elliptic integrals for complex numbers in the incomplete case
+     * are considered experimental for now, they have known issues.
+     * </emph>
+     * </p>
      * <p>
      * The incomplete elliptic integral of the third kind Π(n, φ, m) is
      * \[
@@ -1197,4 +1355,64 @@ public class LegendreEllipticIntegral {
 
     }
 
+    /** Integrand for elliptic integrals of the first kind.
+     * @param <T> type of the field elements
+     */
+    private static class First<T extends CalculusFieldElement<T>> implements CalculusFieldUnivariateFunction<T> {
+
+        final T m;
+
+        First(final T m) {
+            this.m = m;
+        }
+
+        public T value(final T theta) {
+            final T sin  = theta.sin();
+            final T sin2 = sin.multiply(sin);
+            return sin2.multiply(m).negate().add(1).sqrt().reciprocal();
+        }
+
+    }
+
+    /** Integrand for elliptic integrals of the second kind.
+     * @param <T> type of the field elements
+     */
+    private static class Second<T extends CalculusFieldElement<T>> implements CalculusFieldUnivariateFunction<T> {
+
+        final T m;
+
+        Second(final T m) {
+            this.m = m;
+        }
+
+        public T value(final T theta) {
+            final T sin = theta.sin();
+            final T sin2 = sin.multiply(sin);
+            return sin2.multiply(m).negate().add(1).sqrt();
+        }
+
+    }
+
+    /** Integrand for elliptic integrals of the second kind.
+     * @param <T> type of the field elements
+     */
+    private static class Third<T extends CalculusFieldElement<T>> implements CalculusFieldUnivariateFunction<T> {
+
+        final T n;
+        final T m;
+
+        Third(final T n, final T m) {
+            this.n = n;
+            this.m = m;
+        }
+
+        public T value(final T theta) {
+            final T sin  = theta.sin();
+            final T sin2 = sin.multiply(sin);
+            final T d1   = sin2.multiply(m).negate().add(1).sqrt();
+            final T da   = sin2.multiply(n).negate().add(1);
+            return d1.multiply(da).reciprocal();
+        }
+
+    }
 }
