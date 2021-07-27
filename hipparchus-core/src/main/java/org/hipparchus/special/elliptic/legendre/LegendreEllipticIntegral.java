@@ -35,7 +35,9 @@ import org.hipparchus.util.MathUtils;
  * <p>
  * <emph>
  * BEWARE! Elliptic integrals for complex numbers in the incomplete case
- * are considered experimental for now, they have known issues.
+ * are considered experimental for now, they have known issues:
+ * <a href="https://github.com/Hipparchus-Math/hipparchus/issues/151">issue 151</a>
+ * and <a href="https://github.com/Hipparchus-Math/hipparchus/issues/152">issue 152</a>.
  * </emph>
  * </p>
  * <p>
