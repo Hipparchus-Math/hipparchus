@@ -18,6 +18,7 @@ package org.hipparchus.special.elliptic.legendre;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
+import org.hipparchus.special.elliptic.carlson.CarlsonEllipticIntegral;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -146,6 +147,11 @@ public class FieldLegendreEllipticIntegralTest {
     }
 
     @Test
+    public void testPrecomputedDelta() {
+        doTestPrecomputedDelta(Decimal64Field.getInstance());
+    }
+
+    @Test
     public void testIntegralsSmallParameter() {
         doTestIntegralsSmallParameter(Decimal64Field.getInstance());
     }
@@ -237,6 +243,26 @@ public class FieldLegendreEllipticIntegralTest {
         Assert.assertEquals(7.8539816428e-10,
                             LegendreEllipticIntegral.bigK(field.getZero().newInstance(2.0e-9)).getReal() - MathUtils.SEMI_PI,
                             1.0e-15);
+    }
+
+    private <T extends CalculusFieldElement<T>> void doTestPrecomputedDelta(final Field<T> field) {
+
+        T n   = field.getZero().newInstance(0.7);
+        T m   = field.getZero().newInstance(0.2);
+        T phi = field.getZero().newInstance(1.2);
+        T ref = field.getZero().newInstance(1.8264362537906997);
+        Assert.assertEquals(0.0, LegendreEllipticIntegral.bigPi(n, phi, m).subtract(ref).getReal(), 1.0e-15);
+
+        // no argument reduction and no precomputed delta
+        final T csc     = phi.sin().reciprocal();
+        final T csc2    = csc.multiply(csc);
+        final T cM1     = csc2.subtract(1);
+        final T cMm     = csc2.subtract(m);
+        final T cMn     = csc2.subtract(n);
+        final T pinphim = CarlsonEllipticIntegral.rF(cM1, cMm, csc2).
+                          add(CarlsonEllipticIntegral.rJ(cM1, cMm, csc2, cMn).multiply(n).divide(3));
+        Assert.assertEquals(0.0, pinphim.subtract(ref).getReal(), 1.0e-15);
+
     }
 
 }

@@ -17,6 +17,7 @@
 package org.hipparchus.special.elliptic.carlson;
 
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathArrays;
 
 /** Duplication algorithm for Carlson R<sub>D</sub> elliptic integral.
  * @since 2.0
@@ -77,8 +78,8 @@ class RdRealDuplication extends RealDuplication {
 
     /** {@inheritDoc} */
     @Override
-    protected double initialMeanPoint(final double[] v) {
-        return (v[0] + v[1] + v[2] * 3.0) / 5.0;
+    protected void initialMeanPoint(final double[] va) {
+        va[3] = (va[0] + va[1] + va[2] * 3.0) / 5.0;
     }
 
     /** {@inheritDoc} */
@@ -89,26 +90,33 @@ class RdRealDuplication extends RealDuplication {
 
     /** {@inheritDoc} */
     @Override
-    protected double lambda(final int m, final double[] vM, final double[] sqrtM, final  double fourM) {
+    protected void update(final int m, final double[] vaM, final double[] sqrtM, final  double fourM) {
 
         // equation 2.29 in Carlson[1995]
-        final double lambda = sqrtM[0] * (sqrtM[1] + sqrtM[2]) + sqrtM[1] * sqrtM[2];
+        final double lambdaA = sqrtM[0] * sqrtM[1];
+        final double lambdaB = sqrtM[0] * sqrtM[2];
+        final double lambdaC = sqrtM[1] * sqrtM[2];
 
         // running sum in equation 2.34 in Carlson[1995]
-        sum += 1.0 / ((vM[2] + lambda) * sqrtM[2] * fourM);
+        final double lambda = lambdaA + lambdaB + lambdaC;
+        sum += 1.0 / ((vaM[2] + lambda) * sqrtM[2] * fourM);
 
-        return lambda;
+        // equations 2.29 and 2.30 in Carlson[1995]
+        vaM[0] = MathArrays.linearCombination(0.25, vaM[0], 0.25, lambdaA, 0.25, lambdaB, 0.25, lambdaC); // xₘ
+        vaM[1] = MathArrays.linearCombination(0.25, vaM[1], 0.25, lambdaA, 0.25, lambdaB, 0.25, lambdaC); // yₘ
+        vaM[2] = MathArrays.linearCombination(0.25, vaM[2], 0.25, lambdaA, 0.25, lambdaB, 0.25, lambdaC); // zₘ
+        vaM[3] = MathArrays.linearCombination(0.25, vaM[3], 0.25, lambdaA, 0.25, lambdaB, 0.25, lambdaC); // aₘ
 
     }
 
     /** {@inheritDoc} */
     @Override
-    protected double evaluate(final double[] v0, final double a0, final double aM, final  double fourM) {
+    protected double evaluate(final double[] va0, final double aM, final  double fourM) {
 
         // compute symmetric differences
         final double inv   = 1.0 / (aM * fourM);
-        final double bigX  = (a0 - v0[0]) * inv;
-        final double bigY  = (a0 - v0[1]) * inv;
+        final double bigX  = (va0[3] - va0[0]) * inv;
+        final double bigY  = (va0[3] - va0[1]) * inv;
         final double bigZ  = (bigX + bigY) / -3;
         final double bigXY = bigX * bigY;
         final double bigZ2 = bigZ * bigZ;

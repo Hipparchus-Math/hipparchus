@@ -1242,7 +1242,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * Implements the formula:
      * <pre>
      *  <code>
-     *   sin(a + bi) = sin(a)cosh(b) - cos(a)sinh(b)i
+     *   sin(a + bi) = sin(a)cosh(b) + cos(a)sinh(b)i
      *  </code>
      * </pre>
      * where the (real) functions on the right-hand side are

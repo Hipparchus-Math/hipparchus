@@ -27,7 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.hipparchus.analysis.integration.IterativeLegendreGaussIntegrator;
 import org.hipparchus.complex.Complex;
+import org.hipparchus.complex.ComplexUnivariateIntegrator;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.special.elliptic.jacobi.FieldJacobiElliptic;
 import org.hipparchus.special.elliptic.jacobi.JacobiEllipticBuilder;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
@@ -35,6 +38,9 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.RyuDouble;
 
 public class GnuplotComplexPlotter {
+
+    /** Elliptic integrals characteristic. */
+    private Complex n;
 
     /** Elliptic integrals parameter. */
     private Complex m;
@@ -69,20 +75,31 @@ public class GnuplotComplexPlotter {
     /** Max y. */
     private double yMax;
 
+    /** Maximum number of integrands evaluations for each integral evaluation. */
+    private int maxEval;
+
+    /** Integrator for numerically integrated elliptical integrals. */
+    final ComplexUnivariateIntegrator integrator;
+
     /** Default constructor.
      */
     private GnuplotComplexPlotter() {
-        m         = new Complex(0.64);
-        jacobi    = JacobiEllipticBuilder.build(m);
-        functions = new ArrayList<>();
-        output    = null;
-        width     = 800;
-        height    = 800;
-        coloring  = new SawToothPhaseModuleValue(1.0, 0.7, 1.0, 15);
-        xMin      = -7;
-        xMax      = +7;
-        yMin      = -7;
-        yMax      = +7;
+        n          = new Complex(3.4, 1.3);
+        m          = new Complex(0.64);
+        jacobi     = JacobiEllipticBuilder.build(m);
+        functions  = new ArrayList<>();
+        output     = null;
+        width      = 800;
+        height     = 800;
+        coloring   = new SawToothPhaseModuleValue(1.0, 0.7, 1.0, 15);
+        xMin       = -7;
+        xMax       = +7;
+        yMin       = -7;
+        yMax       = +7;
+        maxEval    = 100000;
+        integrator = new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
+                                                                                          1.0e-6,
+                                                                                          1.0e-6));
     }
 
     /** Main program.
@@ -142,6 +159,14 @@ public class GnuplotComplexPlotter {
                         plotter.jacobi = JacobiEllipticBuilder.build(plotter.m);
                         break;
                     }
+                    case "--n" : {
+                        plotter.n      = new Complex(Double.parseDouble(args[++i]), Double.parseDouble(args[++i]));
+                        break;
+                    }
+                    case "--maxeval" : {
+                        plotter.maxEval = Integer.parseInt(args[++i]);
+                        break;
+                    }
                     case "--function" :
                         try {
                             plotter.functions.add(Predefined.valueOf(args[++i]));
@@ -183,8 +208,8 @@ public class GnuplotComplexPlotter {
                            " [--help]" +
                            " [--output-dir directory]" +
                            " [--color {classical|enhanced-module|enhanced-phase-module}]" +
-                           " [--xmin xmin] [--xmax xmax] [--ymin ymin] [--ymax ymax]" +
-                           " [--k kRe kIm]" +
+                           " [--xmin xMin] [--xmax xMax] [--ymin yMin] [--ymax yMax]" +
+                           " [--m mRe mIm] [--n nRe nIm] [--maxeval maxEval]" +
                            " --function {id|sn|cn|dn|cs|...|sin|cos|...} [--function ...]");
         System.exit(status);
         
@@ -221,8 +246,13 @@ public class GnuplotComplexPlotter {
                     final double x = xMin + i * (xMax - xMin) / (width - 1);
                     for (int j = 0; j < height; ++j) {
                         final double y = yMin + j * (yMax - yMin) / (height - 1);
-                        final Complex z  = Complex.valueOf(x, y);
-                        final Complex fz = predefined.evaluator.value(this, z);
+                        Complex z  = Complex.valueOf(x, y);
+                        Complex fz;
+                        try {
+                            fz = predefined.evaluator.value(this, z);
+                        } catch (MathIllegalStateException e) {
+                            fz = Complex.NaN;
+                        }
                         out.format(Locale.US, "%12.9f %12.9f %12.9f %12.9f %12.9f%n",
                                    z.getRealPart(), z.getImaginaryPart(),
                                    coloring.hue(fz), coloring.saturation(fz), coloring.value(fz));
@@ -255,36 +285,41 @@ public class GnuplotComplexPlotter {
     /** Predefined complex functions for plotting. */
     private static enum Predefined {
 
-        id((plotter, z)     -> z),
-        sn((plotter, z)     -> plotter.jacobi.valuesN(z).sn()),
-        cn((plotter, z)     -> plotter.jacobi.valuesN(z).cn()),
-        dn((plotter, z)     -> plotter.jacobi.valuesN(z).dn()),
-        cs((plotter, z)     -> plotter.jacobi.valuesS(z).cs()),
-        ds((plotter, z)     -> plotter.jacobi.valuesS(z).ds()),
-        ns((plotter, z)     -> plotter.jacobi.valuesS(z).ns()),
-        dc((plotter, z)     -> plotter.jacobi.valuesC(z).dc()),
-        nc((plotter, z)     -> plotter.jacobi.valuesC(z).nc()),
-        sc((plotter, z)     -> plotter.jacobi.valuesC(z).sc()),
-        nd((plotter, z)     -> plotter.jacobi.valuesD(z).nd()),
-        sd((plotter, z)     -> plotter.jacobi.valuesD(z).sd()),
-        cd((plotter, z)     -> plotter.jacobi.valuesD(z).cd()),
-        K((plotter, z)      -> LegendreEllipticIntegral.bigK(z)),
-        KPrime((plotter, z) -> LegendreEllipticIntegral.bigKPrime(z)),
-        Fzm((plotter, z)    -> LegendreEllipticIntegral.bigF(z, plotter.m)),
-        E((plotter, z)      -> LegendreEllipticIntegral.bigE(z)),
-        Ezm((plotter, z)    -> LegendreEllipticIntegral.bigE(z, plotter.m)),
-        sin((plotter, z)    -> FastMath.sin(z)),
-        cos((plotter, z)    -> FastMath.cos(z)),
-        tan((plotter, z)    -> FastMath.tan(z)),
-        asin((plotter, z)   -> FastMath.asin(z)),
-        acos((plotter, z)   -> FastMath.acos(z)),
-        atan((plotter, z)   -> FastMath.atan(z)),
-        sinh((plotter, z)   -> FastMath.sinh(z)),
-        cosh((plotter, z)   -> FastMath.cosh(z)),
-        tanh((plotter, z)   -> FastMath.tanh(z)),
-        asinh((plotter, z)  -> FastMath.asinh(z)),
-        acosh((plotter, z)  -> FastMath.acosh(z)),
-        atanh((plotter, z)  -> FastMath.atanh(z));
+        id((plotter, z)             -> z),
+        sn((plotter, z)             -> plotter.jacobi.valuesN(z).sn()),
+        cn((plotter, z)             -> plotter.jacobi.valuesN(z).cn()),
+        dn((plotter, z)             -> plotter.jacobi.valuesN(z).dn()),
+        cs((plotter, z)             -> plotter.jacobi.valuesS(z).cs()),
+        ds((plotter, z)             -> plotter.jacobi.valuesS(z).ds()),
+        ns((plotter, z)             -> plotter.jacobi.valuesS(z).ns()),
+        dc((plotter, z)             -> plotter.jacobi.valuesC(z).dc()),
+        nc((plotter, z)             -> plotter.jacobi.valuesC(z).nc()),
+        sc((plotter, z)             -> plotter.jacobi.valuesC(z).sc()),
+        nd((plotter, z)             -> plotter.jacobi.valuesD(z).nd()),
+        sd((plotter, z)             -> plotter.jacobi.valuesD(z).sd()),
+        cd((plotter, z)             -> plotter.jacobi.valuesD(z).cd()),
+        K((plotter, z)              -> LegendreEllipticIntegral.bigK(z)),
+        KPrime((plotter, z)         -> LegendreEllipticIntegral.bigKPrime(z)),
+        Fzm((plotter, z)            -> LegendreEllipticIntegral.bigF(z, plotter.m)),
+        integratedFzm((plotter, z)  -> LegendreEllipticIntegral.bigF(z, plotter.m, plotter.integrator, plotter.maxEval)),
+        E((plotter, z)              -> LegendreEllipticIntegral.bigE(z)),
+        Ezm((plotter, z)            -> LegendreEllipticIntegral.bigE(z, plotter.m)),
+        integratedEzm((plotter, z)  -> LegendreEllipticIntegral.bigE(z, plotter.m, plotter.integrator, plotter.maxEval)),
+        Pi((plotter, z)             -> LegendreEllipticIntegral.bigPi(plotter.n, z)),
+        Pizm((plotter, z)           -> LegendreEllipticIntegral.bigPi(plotter.n, z, plotter.m)),
+        integratedPizm((plotter, z) -> LegendreEllipticIntegral.bigPi(plotter.n, z, plotter.m, plotter.integrator, plotter.maxEval)),
+        sin((plotter, z)            -> FastMath.sin(z)),
+        cos((plotter, z)            -> FastMath.cos(z)),
+        tan((plotter, z)            -> FastMath.tan(z)),
+        asin((plotter, z)           -> FastMath.asin(z)),
+        acos((plotter, z)           -> FastMath.acos(z)),
+        atan((plotter, z)           -> FastMath.atan(z)),
+        sinh((plotter, z)           -> FastMath.sinh(z)),
+        cosh((plotter, z)           -> FastMath.cosh(z)),
+        tanh((plotter, z)           -> FastMath.tanh(z)),
+        asinh((plotter, z)          -> FastMath.asinh(z)),
+        acosh((plotter, z)          -> FastMath.acosh(z)),
+        atanh((plotter, z)          -> FastMath.atanh(z));
         
         /** Function evaluator. */
         private final Evaluator evaluator;

@@ -210,7 +210,7 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
             T rjM    = rJ(x.add(mu),     y.add(mu),     mu,              p.add(mu));
             T rj0    = rJ(x,             y,             buildComplex(0), p);
             T rc     = rC(a, b);
-            Assert.assertEquals(0.0, rjL.add(rjM).subtract(rj0.subtract(rc.multiply(3))).norm(), 2.0e-13);
+            Assert.assertEquals(0.0, rjL.add(rjM).subtract(rj0.subtract(rc.multiply(3))).norm(), 3.0e-13);
         }
     }
 
@@ -361,14 +361,14 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
         T z = buildComplex( 0.9375,  0.25);
 
         // on this side, all implementations match
-        Assert.assertEquals(0.0,     rG(x, y, z).     subtract(rgAlternateImplementation(x, y, z)).norm(), 2.0e-16);
+        Assert.assertEquals(0.0,     rG(x, y, z).     subtract(rgAlternateImplementation(x, y, z)).norm(), 2.1e-16);
         Assert.assertEquals(0.0, buggyRG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(),     2.0e-16);
 
         // slightly shift x, so xy/z imaginary part changes sign
         // the selected square root also changes dramatically sign so implementation becomes wrong
         // xy/z ≈ -0.566379 + 2.807 10⁻⁸ i ⇒ √(xy/z) ≈ 1.865 10⁻⁸ + 0.752582 i
         x = buildComplex(FastMath.scalb(7744999, -24), -0.5625);
-        Assert.assertEquals(0.0,     rG(x, y, z).     subtract(rgAlternateImplementation(x, y, z)).norm(), 2.0e-16);
+        Assert.assertEquals(0.0,     rG(x, y, z).     subtract(rgAlternateImplementation(x, y, z)).norm(), 2.5e-16);
         Assert.assertEquals(0.75258, buggyRG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(), 1.0e-5);
 
     }

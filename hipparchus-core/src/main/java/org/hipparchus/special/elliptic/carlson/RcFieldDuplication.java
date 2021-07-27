@@ -37,8 +37,8 @@ class RcFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
 
     /** {@inheritDoc} */
     @Override
-    protected T initialMeanPoint(final T[] v) {
-        return v[0].add(v[1].multiply(2)).divide(3.0);
+    protected void initialMeanPoint(final T[] va) {
+        va[2] = va[0].add(va[1].multiply(2)).divide(3.0);
     }
 
     /** {@inheritDoc} */
@@ -49,16 +49,20 @@ class RcFieldDuplication<T extends CalculusFieldElement<T>> extends FieldDuplica
 
     /** {@inheritDoc} */
     @Override
-    protected T lambda(final int m, final T[] vM, final T[] sqrtM, final  double fourM) {
-        return sqrtM[0].multiply(sqrtM[1]).multiply(2).add(vM[1]);
+    protected void update(final int m, final T[] vaM, final T[] sqrtM, final  double fourM) {
+        final T lambdaA = sqrtM[0].multiply(sqrtM[1]).multiply(2);
+        final T lambdaB = vaM[1];
+        vaM[0] = vaM[0].linearCombination(0.25, vaM[0], 0.25, lambdaA, 0.25, lambdaB); // xₘ
+        vaM[1] = vaM[1].linearCombination(0.25, vaM[1], 0.25, lambdaA, 0.25, lambdaB); // yₘ
+        vaM[2] = vaM[2].linearCombination(0.25, vaM[2], 0.25, lambdaA, 0.25, lambdaB); // aₘ
     }
 
     /** {@inheritDoc} */
     @Override
-    protected T evaluate(final T[] v0, final T a0, final T aM, final  double fourM) {
+    protected T evaluate(final T[] va0, final T aM, final  double fourM) {
 
         // compute the single polynomial independent variable
-        final T s = v0[1].subtract(a0).divide(aM.multiply(fourM));
+        final T s = va0[1].subtract(va0[2]).divide(aM.multiply(fourM));
 
         // evaluate integral using equation 2.13 in Carlson[1995]
         final T poly = s.multiply(RcRealDuplication.S7).

@@ -17,6 +17,7 @@
 package org.hipparchus.special.elliptic.carlson;
 
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathArrays;
 
 /** Duplication algorithm for Carlson R<sub>J</sub> elliptic integral.
  * @since 2.0
@@ -34,16 +35,17 @@ class RjRealDuplication extends RealDuplication {
      * @param y second symmetric variable of the integral
      * @param z third symmetric variable of the integral
      * @param p fourth <em>not</em> symmetric variable of the integral
+     * @param delta precomputed value of (p-x)(p-y)(p-z)
      */
-    RjRealDuplication(final double x, final double y, final double z, final double p) {
+    RjRealDuplication(final double x, final double y, final double z, final double p, final double delta) {
         super(x, y, z, p);
-        delta = (p - x) * (p - y) * (p - z);
+        this.delta = delta;
     }
 
     /** {@inheritDoc} */
     @Override
-    protected double initialMeanPoint(final double[] v) {
-        return (v[0] + v[1] + v[2] + v[3] * 2) / 5.0;
+    protected void initialMeanPoint(final double[] va) {
+        va[4] = (va[0] + va[1] + va[2] + va[3] * 2) / 5.0;
     }
 
     /** {@inheritDoc} */
@@ -54,7 +56,7 @@ class RjRealDuplication extends RealDuplication {
 
     /** {@inheritDoc} */
     @Override
-    protected double lambda(final int m, final double[] vM, final double[] sqrtM, final  double fourM) {
+    protected void update(final int m, final double[] vaM, final double[] sqrtM, final  double fourM) {
         final double dM = (sqrtM[3] + sqrtM[0]) * (sqrtM[3] + sqrtM[1]) * (sqrtM[3] + sqrtM[2]);
         if (m == 0) {
             sM = dM * 0.5;
@@ -64,19 +66,29 @@ class RjRealDuplication extends RealDuplication {
             sM = (dM * rM - delta / (fourM * fourM)) / ((dM + rM / fourM) * 2);
         }
 
-        return sqrtM[0] * (sqrtM[1] + sqrtM[2]) + sqrtM[1] * sqrtM[2];
+        // equation 2.19 in Carlson[1995]
+        final double lambdaA = sqrtM[0] * sqrtM[1];
+        final double lambdaB = sqrtM[0] * sqrtM[2];
+        final double lambdaC = sqrtM[1] * sqrtM[2];
+
+        // equations 2.19 and 2.20 in Carlson[1995]
+        vaM[0] = MathArrays.linearCombination(0.25, vaM[0], 0.25, lambdaA, 0.25, lambdaB, 0.25, lambdaC); // xₘ
+        vaM[1] = MathArrays.linearCombination(0.25, vaM[1], 0.25, lambdaA, 0.25, lambdaB, 0.25, lambdaC); // yₘ
+        vaM[2] = MathArrays.linearCombination(0.25, vaM[2], 0.25, lambdaA, 0.25, lambdaB, 0.25, lambdaC); // zₘ
+        vaM[3] = MathArrays.linearCombination(0.25, vaM[3], 0.25, lambdaA, 0.25, lambdaB, 0.25, lambdaC); // pₘ
+        vaM[4] = MathArrays.linearCombination(0.25, vaM[4], 0.25, lambdaA, 0.25, lambdaB, 0.25, lambdaC); // aₘ
 
     }
 
     /** {@inheritDoc} */
     @Override
-    protected double evaluate(final double[] v0, final double a0, final double aM, final  double fourM) {
+    protected double evaluate(final double[] va0, final double aM, final  double fourM) {
 
         // compute symmetric differences
         final double inv    = 1.0 / (aM * fourM);
-        final double bigX   = (a0 - v0[0]) * inv;
-        final double bigY   = (a0 - v0[1]) * inv;
-        final double bigZ   = (a0 - v0[2]) * inv;
+        final double bigX   = (va0[4] - va0[0]) * inv;
+        final double bigY   = (va0[4] - va0[1]) * inv;
+        final double bigZ   = (va0[4] - va0[2]) * inv;
         final double bigP   = (bigX + bigY + bigZ) * -0.5;
         final double bigP2  = bigP * bigP;
 
