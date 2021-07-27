@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
-    <release version="2.0" date="2021-07-23" description="This is a major release. The main changes
+    <release version="2.0" date="2021-08-04" description="This is a major release. The main changes
     are replacement of RealFieldElement by CalculusFieldElement interface, many improvements in Complex
     to fully implement CalculusFieldElement with correct branch cuts so complex numbers can be used in
     many Hipparchus algorithms, addition of FieldComplex, addition of complex univariate integrals, and
