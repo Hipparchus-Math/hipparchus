@@ -31,15 +31,16 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.hipparchus.util.Decimal64;
 import org.hipparchus.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test for {@link BaseRuleFactory}.
+ * Test for {@link FieldAbstractRuleFactory}.
  *
  */
-public class BaseRuleFactoryTest {
+public class FieldRuleFactoryTest {
     /**
      * Tests that a given rule rule will be computed and added once to the cache
      * whatever the number of times this rule is called concurrently.
@@ -54,14 +55,14 @@ public class BaseRuleFactoryTest {
             = new ThreadPoolExecutor(3, numTasks, 1, TimeUnit.SECONDS,
                                      new ArrayBlockingQueue<Runnable>(2));
 
-        final List<Future<Pair<double[], double[]>>> results
-            = new ArrayList<Future<Pair<double[], double[]>>>();
+        final List<Future<Pair<Decimal64[], Decimal64[]>>> results
+            = new ArrayList<Future<Pair<Decimal64[], Decimal64[]>>>();
         for (int i = 0; i < numTasks; i++) {
             results.add(exec.submit(new RuleBuilder()));
         }
 
         // Ensure that all computations have completed.
-        for (Future<Pair<double[], double[]>> f : results) {
+        for (Future<Pair<Decimal64[], Decimal64[]>> f : results) {
             f.get();
         }
 
@@ -69,48 +70,50 @@ public class BaseRuleFactoryTest {
         final int n = RuleBuilder.getNumberOfCalls();
         Assert.assertEquals("Rule computation was called " + n + " times", 1, n);
     }
-}
 
-class RuleBuilder implements Callable<Pair<double[], double[]>> {
-    private static final DummyRuleFactory factory = new DummyRuleFactory();
+    private static class RuleBuilder implements Callable<Pair<Decimal64[], Decimal64[]>> {
+        private static final DummyRuleFactory factory = new DummyRuleFactory();
 
-    public Pair<double[], double[]> call() {
-        final int dummy = 2; // Always request the same rule.
-        return factory.getRule(dummy);
-    }
-
-    public static int getNumberOfCalls() {
-        return factory.getNumberOfCalls();
-    }
-}
-
-class DummyRuleFactory extends BaseRuleFactory<Double> {
-    /** Rule computations counter. */
-    private static AtomicInteger nCalls = new AtomicInteger();
-
-    @Override
-    protected Pair<Double[], Double[]> computeRule(int order) {
-        // Tracks whether this computation has been called more than once.
-        nCalls.getAndIncrement();
-
-        try {
-            // Sleep to simulate computation time.
-            Thread.sleep(20);
-        } catch (InterruptedException e) {
-            Assert.fail("Unexpected interruption");
+        public Pair<Decimal64[], Decimal64[]> call() {
+            final int dummy = 2; // Always request the same rule.
+            return factory.getRule(dummy);
         }
 
-         // Dummy rule (but contents must exist).
-        final Double[] p = new Double[order];
-        final Double[] w = new Double[order];
-        for (int i = 0; i < order; i++) {
-            p[i] = new Double(i);
-            w[i] = new Double(i);
+        public static int getNumberOfCalls() {
+            return factory.getNumberOfCalls();
         }
-        return new Pair<Double[], Double[]>(p, w);
     }
 
-    public int getNumberOfCalls() {
-        return nCalls.get();
+    private static class DummyRuleFactory extends FieldAbstractRuleFactory<Decimal64> {
+        /** Rule computations counter. */
+        private static AtomicInteger nCalls = new AtomicInteger();
+
+        @Override
+        protected Pair<Decimal64[], Decimal64[]> computeRule(int order) {
+            // Tracks whether this computation has been called more than once.
+            nCalls.getAndIncrement();
+
+            try {
+                // Sleep to simulate computation time.
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                Assert.fail("Unexpected interruption");
+            }
+
+            // Dummy rule (but contents must exist).
+            final Decimal64[] p = new Decimal64[order];
+            final Decimal64[] w = new Decimal64[order];
+            for (int i = 0; i < order; i++) {
+                p[i] = new Decimal64(i);
+                w[i] = new Decimal64(i);
+            }
+            return new Pair<>(p, w);
+        }
+
+        public int getNumberOfCalls() {
+            return nCalls.get();
+        }
+
     }
+
 }

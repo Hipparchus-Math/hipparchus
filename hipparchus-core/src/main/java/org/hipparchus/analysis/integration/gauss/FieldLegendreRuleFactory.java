@@ -21,13 +21,15 @@
  */
 package org.hipparchus.analysis.integration.gauss;
 
-import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.analysis.solvers.AllowedSolution;
-import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
-import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
+import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Pair;
-import org.hipparchus.util.Precision;
 
 /**
  * Factory that creates Gauss-type quadrature rule using Legendre polynomials.
@@ -37,50 +39,63 @@ import org.hipparchus.util.Precision;
  * presented in <a href="http://en.wikipedia.org/wiki/Abramowitz_and_Stegun">
  * Abramowitz and Stegun, 1964</a>.
  *
+ * @param <T> Type of the number used to represent the points and weights of
+ * the quadrature rules.
+ * @since 2.0
  */
-public class LegendreRuleFactory extends AbstractRuleFactory {
+public class FieldLegendreRuleFactory<T extends CalculusFieldElement<T>> extends FieldAbstractRuleFactory<T> {
+
+    /** Field to which rule coefficients belong. */
+    private final Field<T> field;
+
+    /** Simple constructor
+     * @param field field to which rule coefficients belong
+     */
+    public FieldLegendreRuleFactory(final Field<T> field) {
+        this.field = field;
+    }
 
     /** {@inheritDoc} */
     @Override
-    protected Pair<double[], double[]> computeRule(int numberOfPoints)
+    public Pair<T[], T[]> computeRule(int numberOfPoints)
         throws MathIllegalArgumentException {
 
-        final double[] points  = new double[numberOfPoints];
-        final double[] weights = new double[numberOfPoints];
+        final T[]      points  = MathArrays.buildArray(field, numberOfPoints);
+        final T[]      weights = MathArrays.buildArray(field, numberOfPoints);
 
         if (numberOfPoints == 1) {
             // Break recursion.
-            points[0]  = 0;
-            weights[0] = 2;
+            points[0]  = field.getZero();
+            weights[0] = field.getZero().newInstance(2);
             return new Pair<>(points, weights);
         }
 
         // Get previous rule.
         // If it has not been computed yet it will trigger a recursive call
         // to this method.
-        final double[] previousPoints = getRule(numberOfPoints - 1).getFirst();
+        final T[] previousPoints = getRule(numberOfPoints - 1).getFirst();
         final Legendre pm = new Legendre(numberOfPoints - 1);
         final Legendre p  = new Legendre(numberOfPoints);
-        final double tol = 10 * Precision.EPSILON;
-        final BracketedUnivariateSolver<UnivariateFunction> solver = new BracketingNthOrderBrentSolver(tol, tol, tol, 5);
+        final T tol = field.getOne().ulp().multiply(10);
+        final BracketedRealFieldUnivariateSolver<T> solver = new FieldBracketingNthOrderBrentSolver<>(tol, tol, tol, 5);
 
         // Find i-th root of P[n+1]
         final int iMax = numberOfPoints / 2;
         for (int i = 0; i < iMax; i++) {
             // Lower-bound of the interval.
-            double a = (i == 0) ? -1 : previousPoints[i - 1];
+            final T a = (i == 0) ? field.getOne().negate() : previousPoints[i - 1];
             // Upper-bound of the interval.
-            double b = previousPoints[i];
+            final T b = previousPoints[i];
             // find root
-            final double c = solver.solve(1000, p, a, b, AllowedSolution.ANY_SIDE);
+            final T c = solver.solve(1000, p, a, b, AllowedSolution.ANY_SIDE);
             points[i] = c;
 
-            final double d = numberOfPoints * (pm.value(c) - c * p.value(c));
-            weights[i] = 2 * (1 - c * c) / (d * d);
+            final T d = pm.value(c).subtract(c.multiply(p.value(c))).multiply(numberOfPoints);
+            weights[i] = field.getOne().subtract(c.multiply(c)).multiply(2).divide(d.multiply(d));
 
             // symmetrical point
             final int idx = numberOfPoints - i - 1;
-            points[idx]   = -c;
+            points[idx]   = c.negate();
             weights[idx]  = weights[i];
 
         }
@@ -90,13 +105,15 @@ public class LegendreRuleFactory extends AbstractRuleFactory {
         // integers too (although it is not necessary here), preventing
         // a FindBugs warning.
         if (numberOfPoints % 2 != 0) {
-            double pmz = 1;
+            T pmz = field.getOne();
             for (int j = 1; j < numberOfPoints; j += 2) {
-                pmz = -j * pmz / (j + 1);
+                // pmc = -j * pmc / (j + 1);
+                pmz = pmz.multiply(-j).divide(j + 1);
             }
-            final double d = numberOfPoints * pmz;
-            points[iMax] = 0d;
-            weights[iMax] = 2 / (d * d);
+
+            final T d   = pmz.multiply(numberOfPoints);
+            points[iMax]  = field.getZero();
+            weights[iMax] = d.multiply(d).reciprocal().multiply(2);
         }
 
         return new Pair<>(points, weights);
@@ -104,7 +121,7 @@ public class LegendreRuleFactory extends AbstractRuleFactory {
     }
 
     /** Legendre polynomial. */
-    private class Legendre implements UnivariateFunction {
+    private class Legendre implements CalculusFieldUnivariateFunction<T> {
 
         /** Degree. */
         private int degree;
@@ -118,12 +135,12 @@ public class LegendreRuleFactory extends AbstractRuleFactory {
 
         /** {@inheritDoc} */
         @Override
-        public double value(double x) {
-            double pm = 1;
-            double p  = x;
+        public T value(T x) {
+            T pm = x.getField().getOne();
+            T p  = x;
             for (int k = 1; k < degree; k++) {
                 // apply recurrence relation (k+1) P_{k+1}(x) = (2k+1) x P_k(x) - k P_{k-1}(x)
-                final double pp = (p * (x * (2 * k + 1)) - pm * k) / (k + 1);
+                final T pp = p.multiply(x.multiply(2 * k + 1)).subtract(pm.multiply(k)).divide(k + 1);
                 pm = p;
                 p  = pp;
             }

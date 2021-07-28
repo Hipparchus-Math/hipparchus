@@ -35,19 +35,19 @@ import org.hipparchus.util.Pair;
  *
  * @see <a href="http://en.wikipedia.org/wiki/Gauss%E2%80%93Laguerre_quadrature">Gauss-Laguerre quadrature (Wikipedia)</a>
  */
-public class LaguerreRuleFactory extends BaseRuleFactory<Double> {
+public class LaguerreRuleFactory extends AbstractRuleFactory {
 
     /** {@inheritDoc} */
     @Override
-    protected Pair<Double[], Double[]> computeRule(int numberOfPoints) {
+    protected Pair<double[], double[]> computeRule(int numberOfPoints) {
 
         final RealMatrix companionMatrix = companionMatrix(numberOfPoints);
         final EigenDecomposition eigen = new EigenDecomposition(companionMatrix);
         final double[] roots = eigen.getRealEigenvalues();
         Arrays.sort(roots);
 
-        final Double[] points = new Double[numberOfPoints];
-        final Double[] weights = new Double[numberOfPoints];
+        final double[] points  = new double[numberOfPoints];
+        final double[] weights = new double[numberOfPoints];
 
         final int n1 = numberOfPoints + 1;
         final long n1Squared = n1 * (long) n1;
@@ -60,7 +60,7 @@ public class LaguerreRuleFactory extends BaseRuleFactory<Double> {
             weights[i] = xi / n1Squared / (val * val);
         }
 
-        return new Pair<Double[], Double[]>(points, weights);
+        return new Pair<>(points, weights);
     }
 
     /**

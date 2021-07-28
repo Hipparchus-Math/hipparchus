@@ -21,14 +21,16 @@
  */
 package org.hipparchus.analysis.integration.gauss;
 
-import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.analysis.solvers.AllowedSolution;
-import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
-import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
+import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Pair;
-import org.hipparchus.util.Precision;
 
 /**
  * Factory that creates a
@@ -55,28 +57,41 @@ import org.hipparchus.util.Precision;
  *  <em>Nonnegative quadratic forms and bounds on orthogonal polynomials</em>,
  *  Journal of Approximation theory <b>111</b>, 31-49
  * </blockquote>
- *
+ * @param <T> Type of the number used to represent the points and weights of
+ * the quadrature rules.
+ * @since 2.0
  */
-public class HermiteRuleFactory extends AbstractRuleFactory {
+public class FieldHermiteRuleFactory<T extends CalculusFieldElement<T>> extends FieldAbstractRuleFactory<T> {
     /** &pi;<sup>1/2</sup> */
-    private static final double SQRT_PI = 1.77245385090551602729;
+    private final T sqrtPi;
     /** &pi;<sup>-1/4</sup> */
-    private static final double H0 = 7.5112554446494248286e-1;
+    private final T h0;
     /** &pi;<sup>-1/4</sup> &radic;2 */
-    private static final double H1 = 1.0622519320271969145;
+    private final T h1;
+
+    /** Simple constructor
+     * @param field field to which rule coefficients belong
+     */
+    public FieldHermiteRuleFactory(final Field<T> field) {
+        sqrtPi = field.getZero().getPi().sqrt();
+        h0     = sqrtPi.sqrt().reciprocal();
+        h1     = h0.multiply(field.getOne().newInstance(2).sqrt());
+    }
 
     /** {@inheritDoc} */
     @Override
-    protected Pair<double[], double[]> computeRule(int numberOfPoints)
+    protected Pair<T[], T[]> computeRule(int numberOfPoints)
         throws MathIllegalArgumentException {
 
-        final double[] points = new double[numberOfPoints];
-        final double[] weights = new double[numberOfPoints];
+        final Field<T> field   = sqrtPi.getField();
+        final T        zero    = field.getZero();
+        final T[]      points  = MathArrays.buildArray(field, numberOfPoints);
+        final T[]      weights = MathArrays.buildArray(field, numberOfPoints);
 
         if (numberOfPoints == 1) {
             // Break recursion.
-            points[0]  = 0;
-            weights[0] = SQRT_PI;
+            points[0]  = zero;
+            weights[0] = sqrtPi;
             return new Pair<>(points, weights);
         }
 
@@ -84,35 +99,34 @@ public class HermiteRuleFactory extends AbstractRuleFactory {
         // If it has not been computed yet it will trigger a recursive call
         // to this method.
         final int lastNumPoints = numberOfPoints - 1;
-        final double[] previousPoints = getRule(lastNumPoints).getFirst();
+        final T[] previousPoints = getRule(lastNumPoints).getFirst();
         final NormalizedHermite hm = new NormalizedHermite(numberOfPoints - 1);
         final NormalizedHermite h  = new NormalizedHermite(numberOfPoints);
-        final double tol = 10 * Precision.EPSILON;
-        final BracketedUnivariateSolver<UnivariateFunction> solver = new BracketingNthOrderBrentSolver(tol, tol, tol, 5);
+        final T tol = field.getOne().ulp().multiply(10);
+        final BracketedRealFieldUnivariateSolver<T> solver = new FieldBracketingNthOrderBrentSolver<>(tol, tol, tol, 5);
 
-        final double sqrtTwoTimesLastNumPoints = FastMath.sqrt(2 * lastNumPoints);
-        final double sqrtTwoTimesNumPoints = FastMath.sqrt(2 * numberOfPoints);
+        final T sqrtTwoTimesLastNumPoints = FastMath.sqrt(zero.newInstance(2 * lastNumPoints));
+        final T sqrtTwoTimesNumPoints = FastMath.sqrt(zero.newInstance(2 * numberOfPoints));
 
-        // Find i-th root of H[n+1]
+        // Find i-th root of H[n+1] by bracketing.
         final int iMax = numberOfPoints / 2;
         for (int i = 0; i < iMax; i++) {
             // Lower-bound of the interval.
-            double a = (i == 0) ? -sqrtTwoTimesLastNumPoints : previousPoints[i - 1];
+            T a = (i == 0) ? sqrtTwoTimesLastNumPoints.negate() : previousPoints[i - 1];
             // Upper-bound of the interval.
-            double b = (iMax == 1) ? -0.5 : previousPoints[i];
+            T b = (iMax == 1) ? zero.newInstance(-0.5) : previousPoints[i];
             // find root
-            final double c = solver.solve(1000, h, a, b, AllowedSolution.ANY_SIDE);
+            final T c = solver.solve(1000, h, a, b, AllowedSolution.ANY_SIDE);
             points[i] = c;
 
-            final double d = sqrtTwoTimesNumPoints * hm.value(c);
-            final double w = 2 / (d * d);
+            final T d = sqrtTwoTimesNumPoints.multiply(hm.value(c));
+            weights[i] = d.multiply(d).reciprocal().multiply(2);
 
-            points[i] = c;
-            weights[i] = w;
-
+            // symmetrical point
             final int idx = lastNumPoints - i;
-            points[idx] = -c;
-            weights[idx] = w;
+            points[idx]   = c.negate();
+            weights[idx]  = weights[i];
+
         }
 
         // If "numberOfPoints" is odd, 0 is a root.
@@ -120,14 +134,14 @@ public class HermiteRuleFactory extends AbstractRuleFactory {
         // integers too (although it is not necessary here), preventing
         // a FindBugs warning.
         if (numberOfPoints % 2 != 0) {
-            double hmz = H0;
+            T hmz = h0;
             for (int j = 1; j < numberOfPoints; j += 2) {
                 final double jp1 = j + 1;
-                hmz = -FastMath.sqrt(j / jp1) * hmz;
+                hmz = hmz.multiply(zero.newInstance(j).divide(jp1).sqrt()).negate();
             }
-            final double d = sqrtTwoTimesNumPoints * hmz;
-            points[iMax] = 0d;
-            weights[iMax]= 2 / (d * d);
+            final T d = sqrtTwoTimesNumPoints.multiply(hmz);
+            points[iMax] = zero;
+            weights[iMax] = d.multiply(d).divide(2).reciprocal();
 
         }
 
@@ -136,7 +150,7 @@ public class HermiteRuleFactory extends AbstractRuleFactory {
     }
 
     /** Hermite polynomial, normalized to avoid overflow. */
-    private class NormalizedHermite implements UnivariateFunction {
+    private class NormalizedHermite implements CalculusFieldUnivariateFunction<T> {
 
         /** Degree. */
         private int degree;
@@ -150,14 +164,14 @@ public class HermiteRuleFactory extends AbstractRuleFactory {
 
         /** {@inheritDoc} */
         @Override
-        public double value(double x) {
-            double hm = H0;
-            double h  = H1 * x;
+        public T value(T x) {
+            T hm = h0;
+            T h  = h1.multiply(x);
             for (int j = 1; j < degree; j++) {
-                // Compute H[j+1](c)
+                // Compute H[j](x)
                 final double jp1 = j + 1;
-                final double hp = x * h * FastMath.sqrt(2 / jp1) -
-                                  hm * FastMath.sqrt(j / jp1);
+                final T hp = x.multiply(h).multiply(x.newInstance(2).divide(jp1).sqrt()).
+                             subtract(hm.multiply(x.newInstance(j).divide(jp1).sqrt()));
                 hm = h;
                 h  = hp;
             }
