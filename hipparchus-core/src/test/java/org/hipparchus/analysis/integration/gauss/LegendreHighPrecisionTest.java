@@ -29,7 +29,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test of the {@link LegendreHighPrecisionRuleFactory}.
+ * Test of the {@link FieldLegendreRuleFactory}.
  *
  */
 public class LegendreHighPrecisionTest {

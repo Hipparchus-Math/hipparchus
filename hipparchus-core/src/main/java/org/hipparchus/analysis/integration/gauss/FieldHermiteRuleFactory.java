@@ -1,8 +1,8 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Hipparchus project under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -14,15 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This is not the original file distributed by the Apache Software Foundation
- * It has been modified by the Hipparchus project
- */
 package org.hipparchus.analysis.integration.gauss;
 
+import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Pair;
 
 /**
@@ -34,39 +31,62 @@ import org.hipparchus.util.Pair;
  * of a function
  * <p>
  *  \(f(x) e^{-x^2}\)
- * </p>
- * <p>
+ * </p><p>
  * Recurrence relation and weights computation follow
  * <a href="http://en.wikipedia.org/wiki/Abramowitz_and_Stegun">
  * Abramowitz and Stegun, 1964</a>.
- * </p>
- *
+ * </p><p>
+ * The coefficients of the standard Hermite polynomials grow very rapidly.
+ * In order to avoid overflows, each Hermite polynomial is normalized with
+ * respect to the underlying scalar product.
+ * The initial interval for the application of the bisection method is
+ * based on the roots of the previous Hermite polynomial (interlacing).
+ * Upper and lower bounds of these roots are provided by </p>
+ * <blockquote>
+ *  I. Krasikov,
+ *  <em>Nonnegative quadratic forms and bounds on orthogonal polynomials</em>,
+ *  Journal of Approximation theory <b>111</b>, 31-49
+ * </blockquote>
+ * @param <T> Type of the number used to represent the points and weights of
+ * the quadrature rules.
+ * @since 2.0
  */
-public class HermiteRuleFactory extends AbstractRuleFactory {
+public class FieldHermiteRuleFactory<T extends CalculusFieldElement<T>> extends FieldAbstractRuleFactory<T> {
 
-    /** √π. */
-    private static final double SQRT_PI = 1.77245385090551602729;
+    /** Simple constructor
+     * @param field field to which rule coefficients belong
+     */
+    public FieldHermiteRuleFactory(final Field<T> field) {
+        super(field);
+    }
 
     /** {@inheritDoc} */
     @Override
-    protected Pair<double[], double[]> computeRule(int numberOfPoints)
+    protected Pair<T[], T[]> computeRule(int numberOfPoints)
         throws MathIllegalArgumentException {
+
+        final Field<T> field  = getField();
+        final T        sqrtPi = field.getZero().getPi().sqrt();
 
         if (numberOfPoints == 1) {
             // Break recursion.
-            return new Pair<>(new double[] { 0 } , new double[] { SQRT_PI });
+            final T[] points  = MathArrays.buildArray(field, numberOfPoints);
+            final T[] weights = MathArrays.buildArray(field, numberOfPoints);
+            points[0]  = field.getZero();
+            weights[0] = sqrtPi;
+            return new Pair<>(points, weights);
         }
 
         // find nodes as roots of Hermite polynomial
-        final double[] points = findRoots(numberOfPoints, new Hermite(numberOfPoints)::ratio);
+        final T[] points = findRoots(numberOfPoints, new Hermite<>(field, numberOfPoints)::ratio);
         enforceSymmetry(points);
 
         // compute weights
-        final double[] weights = new double[numberOfPoints];
-        final Hermite hm1 = new Hermite(numberOfPoints - 1);
+        final T[] weights = MathArrays.buildArray(field, numberOfPoints);
+        final Hermite<T> hm1 = new Hermite<>(field, numberOfPoints - 1);
         for (int i = 0; i < numberOfPoints; i++) {
-            final double y = hm1.hNhNm1(points[i])[0];
-            weights[i] = SQRT_PI / (numberOfPoints * y * y);
+            final T y = hm1.hNhNm1(points[i])[0];
+            weights[i] = sqrtPi.divide(y.multiply(y).multiply(numberOfPoints));
         }
 
         return new Pair<>(points, weights);
@@ -94,40 +114,44 @@ public class HermiteRuleFactory extends AbstractRuleFactory {
      *   </pre>
      * </p>
      */
-    private static class Hermite {
+    private static class Hermite<T extends CalculusFieldElement<T>> {
 
         /** √2. */
-        private static final double SQRT2 = FastMath.sqrt(2);
+        private final T sqrt2;
 
         /** Degree. */
         private final int degree;
 
         /** Simple constructor.
+         * @param field field to which rule coefficients belong
          * @param degree polynomial degree
          */
-        Hermite(int degree) {
+        Hermite(Field<T> field, int degree) {
+            this.sqrt2  = field.getZero().newInstance(2).sqrt();
             this.degree = degree;
         }
 
         /** Compute ratio H(x)/H'(x).
          * @param x point at which ratio must be computed
          */
-        public double ratio(double x) {
-            double[] h = hNhNm1(x);
-            return h[0] / (h[1] * 2 * degree);
+        public T ratio(T x) {
+            T[] h = hNhNm1(x);
+            return h[0].divide(h[1].multiply(2 * degree));
         }
 
         /** Compute Nₙ(x) and Nₙ₋₁(x).
          * @param x point at which polynomials are evaluated
          * @return array containing Nₙ(x) at index 0 and Nₙ₋₁(x) at index 1
          */
-        private double[] hNhNm1(final double x) {
-            double[] h = { SQRT2 * x, 1 };
-            double sqrtN = 1;
+        private T[] hNhNm1(final T x) {
+            T[] h = MathArrays.buildArray(x.getField(), 2);
+            h[0] = sqrt2.multiply(x);
+            h[1] = x.getField().getOne();
+            T sqrtN = x.getField().getOne();
             for (int n = 1; n < degree; n++) {
                 // apply recurrence relation hₙ₊₁(x) = [√2 x hₙ(x) - √n hₙ₋₁(x)]/√(n+1)
-                final double sqrtNp = FastMath.sqrt(n + 1);
-                final double hp = (h[0] * x * SQRT2 - h[1] * sqrtN) / sqrtNp; 
+                final T sqrtNp = x.getField().getZero().newInstance(n + 1).sqrt();
+                final T hp = (h[0].multiply(x).multiply(sqrt2).subtract(h[1].multiply(sqrtN))).divide(sqrtNp); 
                 h[1]  = h[0];
                 h[0]  = hp;
                 sqrtN = sqrtNp;

@@ -22,6 +22,7 @@ Methods deprecated during the 1.X series have been removed. Numerous bugs were a
 Changes in this version include:
 
 New features:
+o issues/153: Added field versions of univariate integrators. 
 o issues/149: Added complex univariate integrals (including contour integrals). 
 o issues/147: Allow retrieving event handler configuration from ODE integrators. 
 o issues/146: Added a separate finish method in ODE step handlers to be called after last step. 

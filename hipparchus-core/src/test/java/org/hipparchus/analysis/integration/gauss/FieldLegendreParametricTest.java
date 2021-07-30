@@ -24,6 +24,8 @@ package org.hipparchus.analysis.integration.gauss;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Decimal64Field;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -37,8 +39,8 @@ import org.junit.runners.Parameterized.Parameters;
  *
  */
 @RunWith(value=Parameterized.class)
-public class LegendreHighPrecisionParametricTest extends GaussianQuadratureAbstractTest {
-    private static GaussIntegratorFactory factory = new GaussIntegratorFactory();
+public class FieldLegendreParametricTest extends FieldGaussianQuadratureAbstractTest {
+    private static final FieldGaussIntegratorFactory<Decimal64> factory = new FieldGaussIntegratorFactory<>(Decimal64Field.getInstance());
 
     /**
      * The highest order quadrature rule to be tested.
@@ -54,11 +56,11 @@ public class LegendreHighPrecisionParametricTest extends GaussianQuadratureAbstr
      * @param eps Value of &epsilon;.
      * @param numUlps Value of the maximum relative error (in ulps).
      */
-    public LegendreHighPrecisionParametricTest(int numberOfPoints,
-                                               int maxDegree,
-                                               double eps,
-                                               double numUlps) {
-        super(factory.legendreHighPrecision(numberOfPoints),
+    public FieldLegendreParametricTest(int numberOfPoints,
+                                  int maxDegree,
+                                  double eps,
+                                  double numUlps) {
+        super(factory.legendre(numberOfPoints),
               maxDegree, eps, numUlps);
     }
 
@@ -74,7 +76,7 @@ public class LegendreHighPrecisionParametricTest extends GaussianQuadratureAbstr
     public static Collection<Object[]> getParameters() {
         final ArrayList<Object[]> parameters = new ArrayList<Object[]>();
         for (int k = 1; k <= MAX_NUM_POINTS; k++) {
-            parameters.add(new Object[] { k, 2 * k - 1, Math.ulp(1d), 13d });
+            parameters.add(new Object[] { k, 2 * k - 1, Math.ulp(1d), 91d });
         }
         return parameters;
     }

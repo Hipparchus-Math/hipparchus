@@ -21,42 +21,33 @@
  */
 package org.hipparchus.analysis.integration.gauss;
 
-import org.hipparchus.dfp.DfpField;
+import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Pair;
 
 /**
  * Class that provides different ways to compute the nodes and weights to be
  * used by the {@link GaussIntegrator Gaussian integration rule}.
+ * @param <T> Type of the field elements.
+ * @since 2.0
  */
-public class GaussIntegratorFactory {
-
-    /** Number of digits for Legendre high precision. */
-    public static final int DEFAULT_DECIMAL_DIGITS = 40;
+public class FieldGaussIntegratorFactory<T extends CalculusFieldElement<T>> {
 
     /** Generator of Gauss-Legendre integrators. */
-    private final RuleFactory legendre;
-    /** Generator of Gauss-Legendre integrators. */
-    private final RuleFactory legendreHighPrecision;
+    private final FieldRuleFactory<T> legendre;
     /** Generator of Gauss-Hermite integrators. */
-    private final RuleFactory hermite;
+    private final FieldRuleFactory<T> hermite;
     /** Generator of Gauss-Laguerre integrators. */
-    private final RuleFactory laguerre;
+    private final FieldRuleFactory<T> laguerre;
 
     /** Simple constructor.
+     * @param field field to which function argument and value belong
      */
-    public GaussIntegratorFactory() {
-        this(DEFAULT_DECIMAL_DIGITS);
-    }
-
-    /** Simple constructor.
-     * @param decimalDigits minimum number of decimal digits for {@link #legendreHighPrecision(int)}
-     */
-    public GaussIntegratorFactory(final int decimalDigits) {
-        legendre              = new LegendreRuleFactory();
-        legendreHighPrecision = new ConvertingRuleFactory<>(new FieldLegendreRuleFactory<>(new DfpField(decimalDigits)));
-        hermite               = new HermiteRuleFactory();
-        laguerre              = new LaguerreRuleFactory();
+    public FieldGaussIntegratorFactory(final Field<T> field) {
+        legendre = new FieldLegendreRuleFactory<>(field);
+        hermite  = new FieldHermiteRuleFactory<>(field);
+        laguerre = new FieldLaguerreRuleFactory<>(field);
     }
 
     /**
@@ -73,28 +64,28 @@ public class GaussIntegratorFactory {
      * @param numberOfPoints Order of the integration rule.
      * @return a Gauss-Legendre integrator.
      */
-    public GaussIntegrator laguerre(int numberOfPoints) {
-        return new GaussIntegrator(laguerre.getRule(numberOfPoints));
+    public FieldGaussIntegrator<T> laguerre(int numberOfPoints) {
+        return new FieldGaussIntegrator<>(laguerre.getRule(numberOfPoints));
     }
 
     /**
      * Creates a Gauss-Legendre integrator of the given order.
      * The call to the
-     * {@link GaussIntegrator#integrate(org.hipparchus.analysis.UnivariateFunction)
+     * {@link FieldGaussIntegrator#integrate(org.hipparchus.analysis.CalculusFieldUnivariateFunction)
      * integrate} method will perform an integration on the natural interval
      * {@code [-1 , 1]}.
      *
      * @param numberOfPoints Order of the integration rule.
      * @return a Gauss-Legendre integrator.
      */
-    public GaussIntegrator legendre(int numberOfPoints) {
-        return new GaussIntegrator(legendre.getRule(numberOfPoints));
+    public FieldGaussIntegrator<T> legendre(int numberOfPoints) {
+        return new FieldGaussIntegrator<>(legendre.getRule(numberOfPoints));
     }
 
     /**
      * Creates a Gauss-Legendre integrator of the given order.
      * The call to the
-     * {@link GaussIntegrator#integrate(org.hipparchus.analysis.UnivariateFunction)
+     * {@link FieldGaussIntegrator#integrate(org.hipparchus.analysis.CalculusFieldUnivariateFunction)
      * integrate} method will perform an integration on the given interval.
      *
      * @param numberOfPoints Order of the integration rule.
@@ -103,47 +94,12 @@ public class GaussIntegratorFactory {
      * @return a Gauss-Legendre integrator.
      * @throws MathIllegalArgumentException if number of points is not positive
      */
-    public GaussIntegrator legendre(int numberOfPoints,
-                                    double lowerBound,
-                                    double upperBound)
+    public FieldGaussIntegrator<T> legendre(int numberOfPoints,
+                                            T lowerBound,
+                                            T upperBound)
         throws MathIllegalArgumentException {
-        return new GaussIntegrator(transform(legendre.getRule(numberOfPoints),
-                                             lowerBound, upperBound));
-    }
-
-    /**
-     * Creates a Gauss-Legendre integrator of the given order.
-     * The call to the
-     * {@link GaussIntegrator#integrate(org.hipparchus.analysis.UnivariateFunction)
-     * integrate} method will perform an integration on the natural interval
-     * {@code [-1 , 1]}.
-     *
-     * @param numberOfPoints Order of the integration rule.
-     * @return a Gauss-Legendre integrator.
-     * @throws MathIllegalArgumentException if number of points is not positive
-     */
-    public GaussIntegrator legendreHighPrecision(int numberOfPoints)
-        throws MathIllegalArgumentException {
-        return new GaussIntegrator(legendreHighPrecision.getRule(numberOfPoints));
-    }
-
-    /**
-     * Creates an integrator of the given order, and whose call to the
-     * {@link GaussIntegrator#integrate(org.hipparchus.analysis.UnivariateFunction)
-     * integrate} method will perform an integration on the given interval.
-     *
-     * @param numberOfPoints Order of the integration rule.
-     * @param lowerBound Lower bound of the integration interval.
-     * @param upperBound Upper bound of the integration interval.
-     * @return a Gauss-Legendre integrator.
-     * @throws MathIllegalArgumentException if number of points is not positive
-     */
-    public GaussIntegrator legendreHighPrecision(int numberOfPoints,
-                                                 double lowerBound,
-                                                 double upperBound)
-        throws MathIllegalArgumentException {
-        return new GaussIntegrator(transform(legendreHighPrecision.getRule(numberOfPoints),
-                                             lowerBound, upperBound));
+        return new FieldGaussIntegrator<>(transform(legendre.getRule(numberOfPoints),
+                                                    lowerBound, upperBound));
     }
 
     /**
@@ -160,8 +116,8 @@ public class GaussIntegratorFactory {
      * @param numberOfPoints Order of the integration rule.
      * @return a Gauss-Hermite integrator.
      */
-    public SymmetricGaussIntegrator hermite(int numberOfPoints) {
-        return new SymmetricGaussIntegrator(hermite.getRule(numberOfPoints));
+    public SymmetricFieldGaussIntegrator<T> hermite(int numberOfPoints) {
+        return new SymmetricFieldGaussIntegrator<>(hermite.getRule(numberOfPoints));
     }
 
     /**
@@ -174,17 +130,17 @@ public class GaussIntegratorFactory {
      * @param b Lower bound of the integration interval.
      * @return the points and weights adapted to the new interval.
      */
-    private Pair<double[], double[]> transform(Pair<double[], double[]> rule, double a, double b) {
-        final double[] points = rule.getFirst();
-        final double[] weights = rule.getSecond();
+    private Pair<T[], T[]> transform(Pair<T[], T[]> rule, T a, T b) {
+        final T[] points = rule.getFirst();
+        final T[] weights = rule.getSecond();
 
         // Scaling
-        final double scale = (b - a) / 2;
-        final double shift = a + scale;
+        final T scale = b.subtract(a).multiply(0.5);
+        final T shift = a.add(scale);
 
         for (int i = 0; i < points.length; i++) {
-            points[i] = points[i] * scale + shift;
-            weights[i] *= scale;
+            points[i]  = points[i].multiply(scale).add(shift);
+            weights[i] = weights[i].multiply(scale);
         }
 
         return new Pair<>(points, weights);

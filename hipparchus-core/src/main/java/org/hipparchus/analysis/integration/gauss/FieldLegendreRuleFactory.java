@@ -1,8 +1,8 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Hipparchus project under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -14,14 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This is not the original file distributed by the Apache Software Foundation
- * It has been modified by the Hipparchus project
- */
 package org.hipparchus.analysis.integration.gauss;
 
+import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Pair;
 
 /**
@@ -32,31 +30,47 @@ import org.hipparchus.util.Pair;
  * presented in <a href="http://en.wikipedia.org/wiki/Abramowitz_and_Stegun">
  * Abramowitz and Stegun, 1964</a>.
  *
+ * @param <T> Type of the number used to represent the points and weights of
+ * the quadrature rules.
+ * @since 2.0
  */
-public class LegendreRuleFactory extends AbstractRuleFactory {
+public class FieldLegendreRuleFactory<T extends CalculusFieldElement<T>> extends FieldAbstractRuleFactory<T> {
+
+    /** Simple constructor
+     * @param field field to which rule coefficients belong
+     */
+    public FieldLegendreRuleFactory(final Field<T> field) {
+        super(field);
+    }
 
     /** {@inheritDoc} */
     @Override
-    protected Pair<double[], double[]> computeRule(int numberOfPoints)
+    public Pair<T[], T[]> computeRule(int numberOfPoints)
         throws MathIllegalArgumentException {
+
+        final Field<T> field = getField();
 
         if (numberOfPoints == 1) {
             // Break recursion.
-           return new Pair<>(new double[] { 0 } , new double[] { 2 });
+            final T[] points  = MathArrays.buildArray(field, numberOfPoints);
+            final T[] weights = MathArrays.buildArray(field, numberOfPoints);
+            points[0]  = field.getZero();
+            weights[0] = field.getZero().newInstance(2);
+            return new Pair<>(points, weights);
         }
 
         // find nodes as roots of Legendre polynomial
-        final Legendre p      =  new Legendre(numberOfPoints);
-        final double[] points = findRoots(numberOfPoints, p::ratio);
+        final Legendre<T> p      =  new Legendre<>(numberOfPoints);
+        final T[]         points = findRoots(numberOfPoints, p::ratio);
         enforceSymmetry(points);
 
         // compute weights
-        final double[] weights = new double[numberOfPoints];
+        final T[] weights = MathArrays.buildArray(field, numberOfPoints);
         for (int i = 0; i <= numberOfPoints / 2; i++) {
-            final double c = points[i];
-            final double[] pKpKm1 = p.pNpNm1(c);
-            final double d = numberOfPoints * (pKpKm1[1] - c * pKpKm1[0]);
-            weights[i] = 2 * (1 - c * c) / (d * d);
+            final T c = points[i];
+            final T[] pKpKm1 = p.pNpNm1(c);
+            final T d = pKpKm1[1].subtract(c.multiply(pKpKm1[0])).multiply(numberOfPoints);
+            weights[i] = c.multiply(c).subtract(1).multiply(-2).divide(d.multiply(d));
 
             // symmetrical point
             final int idx = numberOfPoints - i - 1;
@@ -68,8 +82,10 @@ public class LegendreRuleFactory extends AbstractRuleFactory {
 
     }
 
-    /** Legendre polynomial. */
-    private static class Legendre {
+    /** Legendre polynomial.
+     * @param <T> Type of the field elements.
+     */
+    private static class Legendre<T extends CalculusFieldElement<T>> {
 
         /** Degree. */
         private int degree;
@@ -84,30 +100,32 @@ public class LegendreRuleFactory extends AbstractRuleFactory {
         /** Compute ratio P(x)/P'(x).
          * @param x point at which ratio must be computed
          */
-        public double ratio(double x) {
-            double pm = 1;
-            double p  = x;
-            double d  = 1;
+        public T ratio(T x) {
+            T pm = x.getField().getOne();
+            T p  = x;
+            T d  = x.getField().getOne();
             for (int n = 1; n < degree; n++) {
                 // apply recurrence relations (n+1) Pₙ₊₁(x)  = (2n+1) x Pₙ(x) - n Pₙ₋₁(x)
                 // and                              P'ₙ₊₁(x) = (n+1) Pₙ(x) + x P'ₙ(x)
-                final double pp = (p * (x * (2 * n + 1)) - pm * n) / (n + 1);
-                d  = p * (n + 1) + d * x;
+                final T pp = p.multiply(x.multiply(2 * n + 1)).subtract(pm.multiply(n)).divide(n + 1);
+                d  = p.multiply(n + 1).add(d.multiply(x));
                 pm = p;
                 p  = pp;
             }
-            return p / d;
+            return p.divide(d);
         }
 
         /** Compute Pₙ(x) and Pₙ₋₁(x).
          * @param x point at which polynomials are evaluated
          * @return array containing Pₙ(x) at index 0 and Pₙ₋₁(x) at index 1
          */
-        private double[] pNpNm1(final double x) {
-            double[] p = { x, 1 };
+        private T[] pNpNm1(final T x) {
+            T[] p = MathArrays.buildArray(x.getField(), 2);
+            p[0] = x;
+            p[1] = x.getField().getOne();
             for (int n = 1; n < degree; n++) {
                 // apply recurrence relation (n+1) Pₙ₊₁(x) = (2n+1) x Pₙ(x) - n Pₙ₋₁(x)
-                final double pp = (p[0] * (x * (2 * n + 1)) - p[1] * n) / (n + 1);
+                final T pp = p[0].multiply(x.multiply(2 * n + 1)).subtract(p[1].multiply(n)).divide(n + 1);
                 p[1] = p[0];
                 p[0] = pp;
             }
