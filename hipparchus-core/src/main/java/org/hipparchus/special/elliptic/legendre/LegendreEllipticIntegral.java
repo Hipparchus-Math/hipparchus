@@ -24,6 +24,7 @@ import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexUnivariateIntegrator;
 import org.hipparchus.complex.FieldComplex;
+import org.hipparchus.complex.FieldComplexUnivariateIntegrator;
 import org.hipparchus.special.elliptic.carlson.CarlsonEllipticIntegral;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -782,6 +783,42 @@ public class LegendreEllipticIntegral {
 
     }
 
+    /** Get the incomplete elliptic integral of the first kind F(φ, m).
+     * <p>
+     * <emph>
+     * BEWARE! Elliptic integrals for complex numbers in the incomplete case
+     * are considered experimental for now, they have known issues.
+     * </emph>
+     * </p>
+     * <p>
+     * The incomplete elliptic integral of the first kind F(φ, m) is
+     * \[
+     *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}
+     * \]
+     * </p>
+     * <p>
+     * The algorithm for evaluating the functions is based on numerical integration.
+     * If integration path comes too close to a pole of the integrand, then integration will fail
+     * with a {@link org.hipparchus.exception.MathIllegalStateException MathIllegalStateException}
+     * even for very large {@code maxEval}. This is normal behavior.
+     * </p>
+     * @param phi amplitude (i.e. upper bound of the integral)
+     * @param m parameter (m=k² where k is the elliptic modulus)
+     * @param integrator integrator to use
+     * @param maxEval maximum number of evaluations (real and imaginary
+     * parts are evaluated separately, so up to twice this number may be used)
+     * @param <T> the type of the field elements
+     * @return incomplete elliptic integral of the first kind F(φ, m)
+     * @see #bigK(CalculusFieldElement)
+     * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheFirstKind.html">Elliptic Integrals of the First Kind (MathWorld)</a>
+     * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
+     */
+    public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigF(final FieldComplex<T> phi, final FieldComplex<T> m,
+                                                                           final FieldComplexUnivariateIntegrator<T> integrator,
+                                                                           final int maxEval) {
+        return integrator.integrate(maxEval, new First<>(m), phi.getField().getZero(), phi);
+    }
+
     /** Get the incomplete elliptic integral of the second kind E(φ, m).
      * <p>
      * The incomplete elliptic integral of the second kind E(φ, m) is
@@ -964,6 +1001,42 @@ public class LegendreEllipticIntegral {
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
 
+    }
+
+    /** Get the incomplete elliptic integral of the second kind E(φ, m).
+     * <p>
+     * <emph>
+     * BEWARE! Elliptic integrals for complex numbers in the incomplete case
+     * are considered experimental for now, they have known issues.
+     * </emph>
+     * </p>
+     * <p>
+     * The incomplete elliptic integral of the second kind E(φ, m) is
+     * \[
+     *    \int_0^{\phi} \sqrt{1-m \sin^2\theta} d\theta
+     * \]
+     * </p>
+     * <p>
+     * The algorithm for evaluating the functions is based on numerical integration.
+     * If integration path comes too close to a pole of the integrand, then integration will fail
+     * with a {@link org.hipparchus.exception.MathIllegalStateException MathIllegalStateException}
+     * even for very large {@code maxEval}. This is normal behavior.
+     * </p>
+     * @param phi amplitude (i.e. upper bound of the integral)
+     * @param m parameter (m=k² where k is the elliptic modulus)
+     * @param integrator integrator to use
+     * @param maxEval maximum number of evaluations (real and imaginary
+     * parts are evaluated separately, so up to twice this number may be used)
+     * @param <T> the type of the field elements
+     * @return incomplete elliptic integral of the second kind E(φ, m)
+     * @see #bigE(FieldComplex)
+     * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheSecondKind.html">Elliptic Integrals of the Second Kind (MathWorld)</a>
+     * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
+     */
+    public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigE(final FieldComplex<T> phi, final FieldComplex<T> m,
+                                                                           final FieldComplexUnivariateIntegrator<T> integrator,
+                                                                           final int maxEval) {
+        return integrator.integrate(maxEval, new Second<>(m), phi.getField().getZero(), phi);
     }
 
     /** Get the incomplete elliptic integral D(φ, m) = [F(φ, m) - E(φ, m)]/m.
@@ -1299,6 +1372,45 @@ public class LegendreEllipticIntegral {
         // combine complete and incomplete parts
         return ar.negate ? ar.complete.subtract(incomplete) : ar.complete.add(incomplete);
 
+    }
+
+    /** Get the incomplete elliptic integral of the third kind Π(n, φ, m).
+     * <p>
+     * <emph>
+     * BEWARE! Elliptic integrals for complex numbers in the incomplete case
+     * are considered experimental for now, they have known issues.
+     * </emph>
+     * </p>
+     * <p>
+     * The incomplete elliptic integral of the third kind Π(n, φ, m) is
+     * \[
+     *    \int_0^{\phi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
+     * \]
+     * </p>
+     * <p>
+     * The algorithm for evaluating the functions is based on numerical integration.
+     * If integration path comes too close to a pole of the integrand, then integration will fail
+     * with a {@link org.hipparchus.exception.MathIllegalStateException MathIllegalStateException}
+     * even for very large {@code maxEval}. This is normal behavior.
+     * </p>
+     * @param n elliptic characteristic
+     * @param phi amplitude (i.e. upper bound of the integral)
+     * @param m parameter (m=k² where k is the elliptic modulus)
+     * @param integrator integrator to use
+     * @param maxEval maximum number of evaluations (real and imaginary
+     * parts are evaluated separately, so up to twice this number may be used)
+     * @param <T> the type of the field elements
+     * @return incomplete elliptic integral of the third kind Π(n, φ, m)
+     * @see #bigPi(FieldComplex, FieldComplex)
+     * @see <a href="https://mathworld.wolfram.com/EllipticIntegraloftheThirdKind.html">Elliptic Integrals of the Third Kind (MathWorld)</a>
+     * @see <a href="https://en.wikipedia.org/wiki/Elliptic_integral">Elliptic Integrals (Wikipedia)</a>
+     */
+    public static <T extends CalculusFieldElement<T>> FieldComplex<T> bigPi(final FieldComplex<T> n,
+                                                                            final FieldComplex<T> phi,
+                                                                            final FieldComplex<T> m,
+                                                                            final FieldComplexUnivariateIntegrator<T> integrator,
+                                                                            final int maxEval) {
+        return integrator.integrate(maxEval, new Third<>(n, m), phi.getField().getZero(), phi);
     }
 
     /** Argument reduction for an incomplete integral. */

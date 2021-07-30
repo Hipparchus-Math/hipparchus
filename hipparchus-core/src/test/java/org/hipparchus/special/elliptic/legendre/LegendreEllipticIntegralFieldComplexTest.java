@@ -16,10 +16,21 @@
  */
 package org.hipparchus.special.elliptic.legendre;
 
+import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
+import org.hipparchus.analysis.integration.IterativeLegendreFieldGaussIntegrator;
 import org.hipparchus.complex.FieldComplex;
+import org.hipparchus.complex.FieldComplexUnivariateIntegrator;
 import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Decimal64Field;
 
 public class LegendreEllipticIntegralFieldComplexTest extends LegendreEllipticIntegralAbstractComplexTest<FieldComplex<Decimal64>> {
+
+    private FieldComplexUnivariateIntegrator<Decimal64> integrator() {
+        return new FieldComplexUnivariateIntegrator<>(new IterativeLegendreFieldGaussIntegrator<>(Decimal64Field.getInstance(),
+                                                                                                  24,
+                                                                                                  1.0e-6,
+                                                                                                  1.0e-6));
+    }
 
     protected FieldComplex<Decimal64> buildComplex(double realPart) {
         return new FieldComplex<>(new Decimal64(realPart));
@@ -41,12 +52,20 @@ public class LegendreEllipticIntegralFieldComplexTest extends LegendreEllipticIn
         return LegendreEllipticIntegral.bigF(phi, m);
     }
 
+    protected FieldComplex<Decimal64> integratedF(FieldComplex<Decimal64> phi, FieldComplex<Decimal64> m) {
+        return LegendreEllipticIntegral.bigF(phi, m, integrator(), 100000);
+    }
+
     protected FieldComplex<Decimal64> E(FieldComplex<Decimal64> m) {
         return LegendreEllipticIntegral.bigE(m);
     }
 
     protected FieldComplex<Decimal64> E(FieldComplex<Decimal64> phi, FieldComplex<Decimal64> m) {
         return LegendreEllipticIntegral.bigE(phi, m);
+    }
+
+    protected FieldComplex<Decimal64> integratedE(FieldComplex<Decimal64> phi, FieldComplex<Decimal64> m) {
+        return LegendreEllipticIntegral.bigE(phi, m, integrator(), 100000);
     }
 
     protected FieldComplex<Decimal64> D(FieldComplex<Decimal64> m) {
@@ -63,6 +82,21 @@ public class LegendreEllipticIntegralFieldComplexTest extends LegendreEllipticIn
 
     protected FieldComplex<Decimal64> Pi(FieldComplex<Decimal64> n, FieldComplex<Decimal64> phi, FieldComplex<Decimal64> m) {
         return LegendreEllipticIntegral.bigPi(n, phi, m);
+    }
+
+    protected FieldComplex<Decimal64> integratedPi(FieldComplex<Decimal64> n, FieldComplex<Decimal64> phi, FieldComplex<Decimal64> m) {
+        return LegendreEllipticIntegral.bigPi(n, phi, m, integrator(), 100000);
+    }
+
+    protected FieldComplex<Decimal64> integrate(int maxEval, CalculusFieldUnivariateFunction<FieldComplex<Decimal64>> f,
+                                                FieldComplex<Decimal64> start, FieldComplex<Decimal64> end) {
+        return integrator().integrate(maxEval, f, start, end);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected FieldComplex<Decimal64> integrate(int maxEval, CalculusFieldUnivariateFunction<FieldComplex<Decimal64>> f,
+                                                FieldComplex<Decimal64> start, FieldComplex<Decimal64> middle, FieldComplex<Decimal64> end) {
+        return integrator().integrate(maxEval, f, start, middle, end);
     }
 
 }
