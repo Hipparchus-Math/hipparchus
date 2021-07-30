@@ -38,6 +38,8 @@ public class FieldGaussIntegratorFactory<T extends CalculusFieldElement<T>> {
     private final FieldRuleFactory<T> legendre;
     /** Generator of Gauss-Hermite integrators. */
     private final FieldRuleFactory<T> hermite;
+    /** Generator of Gauss-Laguerre integrators. */
+    private final FieldRuleFactory<T> laguerre;
 
     /** Simple constructor.
      * @param field field to which function argument and value belong
@@ -45,6 +47,25 @@ public class FieldGaussIntegratorFactory<T extends CalculusFieldElement<T>> {
     public FieldGaussIntegratorFactory(final Field<T> field) {
         legendre = new FieldLegendreRuleFactory<>(field);
         hermite  = new FieldHermiteRuleFactory<>(field);
+        laguerre = new FieldLaguerreRuleFactory<>(field);
+    }
+
+    /**
+     * Creates a Gauss-Laguerre integrator of the given order.
+     * The call to the
+     * {@link GaussIntegrator#integrate(org.hipparchus.analysis.UnivariateFunction)
+     * integrate} method will perform an integration on the interval
+     * \([0, +\infty)\): the computed value is the improper integral of
+     * \(e^{-x} f(x)\)
+     * where \(f(x)\) is the function passed to the
+     * {@link SymmetricGaussIntegrator#integrate(org.hipparchus.analysis.UnivariateFunction)
+     * integrate} method.
+     *
+     * @param numberOfPoints Order of the integration rule.
+     * @return a Gauss-Legendre integrator.
+     */
+    public FieldGaussIntegrator<T> laguerre(int numberOfPoints) {
+        return new FieldGaussIntegrator<>(laguerre.getRule(numberOfPoints));
     }
 
     /**
