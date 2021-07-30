@@ -153,8 +153,8 @@ public abstract class FieldAbstractRuleFactory<T extends CalculusFieldElement<T>
         // use Aberth method to find all roots simultaneously
         final T[]         ratio       = MathArrays.buildArray(field, n);
         final Incrementor incrementor = new Incrementor(1000);
-        double            tol         = Double.NaN;
-        double            maxOffset   = Double.NaN;
+        double            tol;
+        double            maxOffset;
         do {
 
             // safety check that triggers an exception if too much iterations are made
