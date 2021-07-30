@@ -99,6 +99,7 @@ public class FieldLegendreRuleFactory<T extends CalculusFieldElement<T>> extends
 
         /** Compute ratio P(x)/P'(x).
          * @param x point at which ratio must be computed
+         * @return ratio P(x)/P'(x)
          */
         public T ratio(T x) {
             T pm = x.getField().getOne();

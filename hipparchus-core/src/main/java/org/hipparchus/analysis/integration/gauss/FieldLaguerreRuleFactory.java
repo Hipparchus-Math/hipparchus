@@ -81,6 +81,7 @@ public class FieldLaguerreRuleFactory<T extends CalculusFieldElement<T>> extends
 
         /** Evaluate polynomial.
          * @param x point at which polynomial must be evaluated
+         * @return value of the polynomial
          */
         public T value(final T x) {
             return lNlNm1(x)[0];
@@ -88,6 +89,7 @@ public class FieldLaguerreRuleFactory<T extends CalculusFieldElement<T>> extends
 
         /** Compute ratio L(x)/L'(x).
          * @param x point at which ratio must be computed
+         * @return ratio L(x)/L'(x)
          */
         public T ratio(T x) {
             T[] l = lNlNm1(x);
@@ -104,7 +106,7 @@ public class FieldLaguerreRuleFactory<T extends CalculusFieldElement<T>> extends
             l[1] = x.getField().getOne();
             for (int n = 1; n < degree; n++) {
                 // apply recurrence relation (n+1) Lₙ₊₁(x) = (2n + 1 - x) Lₙ(x) - n Lₙ₋₁(x)
-                final T lp = l[0].multiply(x.negate().add(2 * n + 1)).subtract(l[1].multiply(n)).divide(n + 1); 
+                final T lp = l[0].multiply(x.negate().add(2 * n + 1)).subtract(l[1].multiply(n)).divide(n + 1);
                 l[1] = l[0];
                 l[0] = lp;
             }

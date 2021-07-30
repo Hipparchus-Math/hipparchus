@@ -111,6 +111,7 @@ public class HermiteRuleFactory extends AbstractRuleFactory {
 
         /** Compute ratio H(x)/H'(x).
          * @param x point at which ratio must be computed
+         * @return ratio H(x)/H'(x)
          */
         public double ratio(double x) {
             double[] h = hNhNm1(x);
@@ -127,7 +128,7 @@ public class HermiteRuleFactory extends AbstractRuleFactory {
             for (int n = 1; n < degree; n++) {
                 // apply recurrence relation hₙ₊₁(x) = [√2 x hₙ(x) - √n hₙ₋₁(x)]/√(n+1)
                 final double sqrtNp = FastMath.sqrt(n + 1);
-                final double hp = (h[0] * x * SQRT2 - h[1] * sqrtN) / sqrtNp; 
+                final double hp = (h[0] * x * SQRT2 - h[1] * sqrtN) / sqrtNp;
                 h[1]  = h[0];
                 h[0]  = hp;
                 sqrtN = sqrtNp;

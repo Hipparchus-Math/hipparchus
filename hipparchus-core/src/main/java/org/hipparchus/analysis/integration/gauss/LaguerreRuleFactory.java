@@ -66,6 +66,7 @@ public class LaguerreRuleFactory extends AbstractRuleFactory {
 
         /** Evaluate polynomial.
          * @param x point at which polynomial must be evaluated
+         * @return value of the polynomial
          */
         public double value(final double x) {
             return lNlNm1(x)[0];
@@ -73,6 +74,7 @@ public class LaguerreRuleFactory extends AbstractRuleFactory {
 
         /** Compute ratio L(x)/L'(x).
          * @param x point at which ratio must be computed
+         * @return ratio L(x)/L'(x)
          */
         public double ratio(double x) {
             double[] l = lNlNm1(x);
@@ -87,7 +89,7 @@ public class LaguerreRuleFactory extends AbstractRuleFactory {
             double[] l = { 1 - x, 1 };
             for (int n = 1; n < degree; n++) {
                 // apply recurrence relation (n+1) Lₙ₊₁(x) = (2n + 1 - x) Lₙ(x) - n Lₙ₋₁(x)
-                final double lp = (l[0] * (2 * n + 1 - x) - l[1] * n) / (n + 1); 
+                final double lp = (l[0] * (2 * n + 1 - x) - l[1] * n) / (n + 1);
                 l[1] = l[0];
                 l[0] = lp;
             }

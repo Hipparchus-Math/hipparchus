@@ -31,7 +31,7 @@ public class ComplexUnivariateIntegrator  {
     private UnivariateIntegrator integrator;
 
     /** Crate a complex integrator from a real integrator.
-     * @param underlying real integrator to use
+     * @param integrator underlying real integrator to use
      */
     public ComplexUnivariateIntegrator(final UnivariateIntegrator integrator) {
         this.integrator = integrator;

@@ -18,14 +18,13 @@ package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
-import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Pair;
 
 /**
  * Class that implements the Gaussian rule for
- * {@link #integrate(UnivariateFunction) integrating} a weighted
+ * {@link #integrate(CalculusFieldUnivariateFunction) integrating} a weighted
  * function.
  *
  * @param <T> Type of the field elements.
@@ -66,7 +65,7 @@ public class FieldGaussIntegrator<T extends CalculusFieldElement<T>> {
      * @throws MathIllegalArgumentException if the {@code points} are not
      * sorted in increasing order.
      *
-     * @see #GaussIntegrator(double[], double[])
+     * @see #FieldGaussIntegrator(CalculusFieldElement[], CalculusFieldElement[])
      */
     public FieldGaussIntegrator(Pair<T[], T[]> pointsAndWeights)
         throws MathIllegalArgumentException {
@@ -78,7 +77,7 @@ public class FieldGaussIntegrator<T extends CalculusFieldElement<T>> {
      * where {@code w} is a weight function that depends on the actual
      * flavor of the Gauss integration scheme.
      * The algorithm uses the points and associated weights, as passed
-     * to the {@link #GaussIntegrator(double[],double[]) constructor}.
+     * to the {@link #FieldGaussIntegrator(CalculusFieldElement[], CalculusFieldElement[]) constructor}.
      *
      * @param f Function to integrate.
      * @return the integral of the weighted function.

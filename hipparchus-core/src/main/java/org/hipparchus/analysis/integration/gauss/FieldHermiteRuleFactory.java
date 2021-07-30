@@ -39,14 +39,6 @@ import org.hipparchus.util.Pair;
  * The coefficients of the standard Hermite polynomials grow very rapidly.
  * In order to avoid overflows, each Hermite polynomial is normalized with
  * respect to the underlying scalar product.
- * The initial interval for the application of the bisection method is
- * based on the roots of the previous Hermite polynomial (interlacing).
- * Upper and lower bounds of these roots are provided by </p>
- * <blockquote>
- *  I. Krasikov,
- *  <em>Nonnegative quadratic forms and bounds on orthogonal polynomials</em>,
- *  Journal of Approximation theory <b>111</b>, 31-49
- * </blockquote>
  * @param <T> Type of the number used to represent the points and weights of
  * the quadrature rules.
  * @since 2.0
@@ -113,6 +105,7 @@ public class FieldHermiteRuleFactory<T extends CalculusFieldElement<T>> extends 
      *     uₙ(xᵢ) = √π/[n Nₙ₋₁(xᵢ)²]
      *   </pre>
      * </p>
+     * @param <T> Type of the field elements.
      */
     private static class Hermite<T extends CalculusFieldElement<T>> {
 
@@ -133,6 +126,7 @@ public class FieldHermiteRuleFactory<T extends CalculusFieldElement<T>> extends 
 
         /** Compute ratio H(x)/H'(x).
          * @param x point at which ratio must be computed
+         * @return ratio H(x)/H'(x)
          */
         public T ratio(T x) {
             T[] h = hNhNm1(x);
@@ -151,7 +145,7 @@ public class FieldHermiteRuleFactory<T extends CalculusFieldElement<T>> extends 
             for (int n = 1; n < degree; n++) {
                 // apply recurrence relation hₙ₊₁(x) = [√2 x hₙ(x) - √n hₙ₋₁(x)]/√(n+1)
                 final T sqrtNp = x.getField().getZero().newInstance(n + 1).sqrt();
-                final T hp = (h[0].multiply(x).multiply(sqrt2).subtract(h[1].multiply(sqrtN))).divide(sqrtNp); 
+                final T hp = (h[0].multiply(x).multiply(sqrt2).subtract(h[1].multiply(sqrtN))).divide(sqrtNp);
                 h[1]  = h[0];
                 h[0]  = hp;
                 sqrtN = sqrtNp;

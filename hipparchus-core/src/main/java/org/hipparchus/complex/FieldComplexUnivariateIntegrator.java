@@ -33,7 +33,7 @@ public class FieldComplexUnivariateIntegrator<T extends CalculusFieldElement<T>>
     private FieldUnivariateIntegrator<T> integrator;
 
     /** Crate a complex integrator from a real integrator.
-     * @param underlying real integrator to use
+     * @param integrator underlying real integrator to use
      */
     public FieldComplexUnivariateIntegrator(final FieldUnivariateIntegrator<T> integrator) {
         this.integrator = integrator;

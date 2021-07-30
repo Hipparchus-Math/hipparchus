@@ -83,6 +83,7 @@ public class LegendreRuleFactory extends AbstractRuleFactory {
 
         /** Compute ratio P(x)/P'(x).
          * @param x point at which ratio must be computed
+         * @return ratio P(x)/P'(x)
          */
         public double ratio(double x) {
             double pm = 1;

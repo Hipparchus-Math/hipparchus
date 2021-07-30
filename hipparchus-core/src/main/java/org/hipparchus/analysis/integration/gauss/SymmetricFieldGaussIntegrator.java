@@ -59,7 +59,7 @@ public class SymmetricFieldGaussIntegrator<T extends CalculusFieldElement<T>> ex
      * @throws MathIllegalArgumentException if the {@code points} are not
      * sorted in increasing order.
      *
-     * @see #SymmetricGaussIntegrator(double[], double[])
+     * @see #SymmetricFieldGaussIntegrator(CalculusFieldElement[], CalculusFieldElement[])
      */
     public SymmetricFieldGaussIntegrator(Pair<T[], T[]> pointsAndWeights)
         throws MathIllegalArgumentException {
