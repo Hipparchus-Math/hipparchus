@@ -21,14 +21,9 @@
  */
 package org.hipparchus.analysis.integration.gauss;
 
-import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.analysis.solvers.AllowedSolution;
-import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
-import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Pair;
-import org.hipparchus.util.Precision;
 
 /**
  * Factory that creates a
@@ -39,127 +34,103 @@ import org.hipparchus.util.Precision;
  * of a function
  * <p>
  *  \(f(x) e^{-x^2}\)
- * </p><p>
+ * </p>
+ * <p>
  * Recurrence relation and weights computation follow
  * <a href="http://en.wikipedia.org/wiki/Abramowitz_and_Stegun">
  * Abramowitz and Stegun, 1964</a>.
- * </p><p>
- * The coefficients of the standard Hermite polynomials grow very rapidly.
- * In order to avoid overflows, each Hermite polynomial is normalized with
- * respect to the underlying scalar product.
- * The initial interval for the application of the bisection method is
- * based on the roots of the previous Hermite polynomial (interlacing).
- * Upper and lower bounds of these roots are provided by </p>
- * <blockquote>
- *  I. Krasikov,
- *  <em>Nonnegative quadratic forms and bounds on orthogonal polynomials</em>,
- *  Journal of Approximation theory <b>111</b>, 31-49
- * </blockquote>
+ * </p>
  *
  */
 public class HermiteRuleFactory extends AbstractRuleFactory {
-    /** &pi;<sup>1/2</sup> */
+
+    /** √π. */
     private static final double SQRT_PI = 1.77245385090551602729;
-    /** &pi;<sup>-1/4</sup> */
-    private static final double H0 = 7.5112554446494248286e-1;
-    /** &pi;<sup>-1/4</sup> &radic;2 */
-    private static final double H1 = 1.0622519320271969145;
 
     /** {@inheritDoc} */
     @Override
     protected Pair<double[], double[]> computeRule(int numberOfPoints)
         throws MathIllegalArgumentException {
 
-        final double[] points = new double[numberOfPoints];
-        final double[] weights = new double[numberOfPoints];
-
         if (numberOfPoints == 1) {
             // Break recursion.
-            points[0]  = 0;
-            weights[0] = SQRT_PI;
-            return new Pair<>(points, weights);
+            return new Pair<>(new double[] { 0 } , new double[] { SQRT_PI });
         }
 
-        // Get previous rule.
-        // If it has not been computed yet it will trigger a recursive call
-        // to this method.
-        final int lastNumPoints = numberOfPoints - 1;
-        final double[] previousPoints = getRule(lastNumPoints).getFirst();
-        final NormalizedHermite hm = new NormalizedHermite(numberOfPoints - 1);
-        final NormalizedHermite h  = new NormalizedHermite(numberOfPoints);
-        final double tol = 10 * Precision.EPSILON;
-        final BracketedUnivariateSolver<UnivariateFunction> solver = new BracketingNthOrderBrentSolver(tol, tol, tol, 5);
+        // find nodes as roots of Hermite polynomial
+        final double[] points = findRoots(numberOfPoints, new Hermite(numberOfPoints)::ratio);
+        enforceSymmetry(points);
 
-        final double sqrtTwoTimesLastNumPoints = FastMath.sqrt(2 * lastNumPoints);
-        final double sqrtTwoTimesNumPoints = FastMath.sqrt(2 * numberOfPoints);
-
-        // Find i-th root of H[n+1]
-        final int iMax = numberOfPoints / 2;
-        for (int i = 0; i < iMax; i++) {
-            // Lower-bound of the interval.
-            double a = (i == 0) ? -sqrtTwoTimesLastNumPoints : previousPoints[i - 1];
-            // Upper-bound of the interval.
-            double b = (iMax == 1) ? -0.5 : previousPoints[i];
-            // find root
-            final double c = solver.solve(1000, h, a, b, AllowedSolution.ANY_SIDE);
-            points[i] = c;
-
-            final double d = sqrtTwoTimesNumPoints * hm.value(c);
-            final double w = 2 / (d * d);
-
-            points[i] = c;
-            weights[i] = w;
-
-            final int idx = lastNumPoints - i;
-            points[idx] = -c;
-            weights[idx] = w;
-        }
-
-        // If "numberOfPoints" is odd, 0 is a root.
-        // Note: as written, the test for oddness will work for negative
-        // integers too (although it is not necessary here), preventing
-        // a FindBugs warning.
-        if (numberOfPoints % 2 != 0) {
-            double hmz = H0;
-            for (int j = 1; j < numberOfPoints; j += 2) {
-                final double jp1 = j + 1;
-                hmz = -FastMath.sqrt(j / jp1) * hmz;
-            }
-            final double d = sqrtTwoTimesNumPoints * hmz;
-            points[iMax] = 0d;
-            weights[iMax]= 2 / (d * d);
-
+        // compute weights
+        final double[] weights = new double[numberOfPoints];
+        final Hermite hm1 = new Hermite(numberOfPoints - 1);
+        for (int i = 0; i < numberOfPoints; i++) {
+            final double y = hm1.hNhNm1(points[i])[0];
+            weights[i] = SQRT_PI / (numberOfPoints * y * y);
         }
 
         return new Pair<>(points, weights);
 
     }
 
-    /** Hermite polynomial, normalized to avoid overflow. */
-    private class NormalizedHermite implements UnivariateFunction {
+    /** Hermite polynomial, normalized to avoid overflow.
+     * <p>
+     * The regular Hermite polynomials and associated weights are given by:
+     *   <pre>
+     *     H₀(x)   = 1
+     *     H₁(x)   = 2 x
+     *     Hₙ₊₁(x) = 2x Hₙ(x) - 2n Hₙ₋₁(x), and H'ₙ(x) = 2n Hₙ₋₁(x)
+     *     wₙ(xᵢ) = [2ⁿ⁻¹ n! √π]/[n Hₙ₋₁(xᵢ)]²
+     *   </pre>
+     * </p>
+     * <p>
+     * In order to avoid overflow with normalize the polynomials hₙ(x) = Hₙ(x) / √[2ⁿ n!]
+     * so the recurrence relations and weights become:
+     *   <pre>
+     *     h₀(x)   = 1
+     *     h₁(x)   = √2 x
+     *     hₙ₊₁(x) = [√2 x hₙ(x) - √n hₙ₋₁(x)]/√(n+1), and h'ₙ(x) = 2n hₙ₋₁(x)
+     *     uₙ(xᵢ) = √π/[n Nₙ₋₁(xᵢ)²]
+     *   </pre>
+     * </p>
+     */
+    private static class Hermite {
+
+        /** √2. */
+        private static final double SQRT2 = FastMath.sqrt(2);
 
         /** Degree. */
-        private int degree;
+        private final int degree;
 
         /** Simple constructor.
          * @param degree polynomial degree
          */
-        NormalizedHermite(int degree) {
+        Hermite(int degree) {
             this.degree = degree;
         }
 
-        /** {@inheritDoc} */
-        @Override
-        public double value(double x) {
-            double hm = H0;
-            double h  = H1 * x;
-            for (int j = 1; j < degree; j++) {
-                // Compute H[j+1](c)
-                final double jp1 = j + 1;
-                final double hp = x * h * FastMath.sqrt(2 / jp1) -
-                                  hm * FastMath.sqrt(j / jp1);
-                hm = h;
-                h  = hp;
+        /** Compute ratio H(x)/H'(x).
+         * @param x point at which ratio must be computed
+         */
+        public double ratio(double x) {
+            double[] h = hNhNm1(x);
+            return h[0] / (h[1] * 2 * degree);
+        }
+
+        /** Compute Nₙ(x) and Nₙ₋₁(x).
+         * @param x point at which polynomials are evaluated
+         * @return array containing Nₙ(x) at index 0 and Nₙ₋₁(x) at index 1
+         */
+        private double[] hNhNm1(final double x) {
+            double[] h = { SQRT2 * x, 1 };
+            double sqrtN = 1;
+            for (int n = 1; n < degree; n++) {
+                // apply recurrence relation hₙ₊₁(x) = [√2 x hₙ(x) - √n hₙ₋₁(x)]/√(n+1)
+                final double sqrtNp = FastMath.sqrt(n + 1);
+                final double hp = (h[0] * x * SQRT2 - h[1] * sqrtN) / sqrtNp; 
+                h[1]  = h[0];
+                h[0]  = hp;
+                sqrtN = sqrtNp;
             }
             return h;
         }

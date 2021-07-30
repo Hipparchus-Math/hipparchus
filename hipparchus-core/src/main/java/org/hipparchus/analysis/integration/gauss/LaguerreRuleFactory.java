@@ -21,13 +21,6 @@
  */
 package org.hipparchus.analysis.integration.gauss;
 
-import java.util.Arrays;
-
-import org.hipparchus.analysis.polynomials.PolynomialFunction;
-import org.hipparchus.analysis.polynomials.PolynomialsUtils;
-import org.hipparchus.linear.EigenDecomposition;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.util.Pair;
 
 /**
@@ -41,47 +34,66 @@ public class LaguerreRuleFactory extends AbstractRuleFactory {
     @Override
     protected Pair<double[], double[]> computeRule(int numberOfPoints) {
 
-        final RealMatrix companionMatrix = companionMatrix(numberOfPoints);
-        final EigenDecomposition eigen = new EigenDecomposition(companionMatrix);
-        final double[] roots = eigen.getRealEigenvalues();
-        Arrays.sort(roots);
+        // find nodes as roots of Laguerre polynomial
+        final double[] points  = findRoots(numberOfPoints, new Laguerre(numberOfPoints)::ratio);
 
-        final double[] points  = new double[numberOfPoints];
-        final double[] weights = new double[numberOfPoints];
-
-        final int n1 = numberOfPoints + 1;
-        final long n1Squared = n1 * (long) n1;
-        final PolynomialFunction laguerreN1 = PolynomialsUtils.createLaguerrePolynomial(n1);
+        // compute weights
+        final double[] weights    = new double[numberOfPoints];
+        final int      n1         = numberOfPoints + 1;
+        final long     n1Squared  = n1 * (long) n1;
+        final Laguerre laguerreN1 = new Laguerre(n1);
         for (int i = 0; i < numberOfPoints; i++) {
-            final double xi = roots[i];
-            points[i] = xi;
-
-            final double val = laguerreN1.value(xi);
-            weights[i] = xi / n1Squared / (val * val);
+            final double val = laguerreN1.value(points[i]);
+            weights[i] = points[i] / (n1Squared * val * val);
         }
 
         return new Pair<>(points, weights);
+
     }
 
-    /**
-     * @param degree Matrix dimension.
-     * @return a square matrix.
-     */
-    private RealMatrix companionMatrix(final int degree) {
-        final RealMatrix c = MatrixUtils.createRealMatrix(degree, degree);
+    /** Laguerre polynomial. */
+    private static class Laguerre {
 
-        for (int i = 0; i < degree; i++) {
-            c.setEntry(i, i, 2 * i + 1);
-            if (i + 1 < degree) {
-                // subdiagonal
-                c.setEntry(i+1, i, -(i + 1));
-            }
-            if (i - 1 >= 0) {
-                // superdiagonal
-                c.setEntry(i-1, i, -i);
-            }
+        /** Degree. */
+        private int degree;
+
+        /** Simple constructor.
+         * @param degree polynomial degree
+         */
+        Laguerre(int degree) {
+            this.degree = degree;
         }
 
-        return c;
+        /** Evaluate polynomial.
+         * @param x point at which polynomial must be evaluated
+         */
+        public double value(final double x) {
+            return lNlNm1(x)[0];
+        }
+
+        /** Compute ratio L(x)/L'(x).
+         * @param x point at which ratio must be computed
+         */
+        public double ratio(double x) {
+            double[] l = lNlNm1(x);
+            return x * l[0] / (degree * (l[0] - l[1]));
+        }
+
+        /** Compute Lₙ(x) and Lₙ₋₁(x).
+         * @param x point at which polynomials are evaluated
+         * @return array containing Lₙ(x) at index 0 and Lₙ₋₁(x) at index 1
+         */
+        private double[] lNlNm1(final double x) {
+            double[] l = { 1 - x, 1 };
+            for (int n = 1; n < degree; n++) {
+                // apply recurrence relation (n+1) Lₙ₊₁(x) = (2n + 1 - x) Lₙ(x) - n Lₙ₋₁(x)
+                final double lp = (l[0] * (2 * n + 1 - x) - l[1] * n) / (n + 1); 
+                l[1] = l[0];
+                l[0] = lp;
+            }
+            return l;
+        }
+
     }
+
 }

@@ -1,8 +1,8 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Hipparchus project under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -14,21 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This is not the original file distributed by the Apache Software Foundation
- * It has been modified by the Hipparchus project
- */
 package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
-import org.hipparchus.analysis.solvers.AllowedSolution;
-import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
-import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Pair;
 
@@ -62,20 +52,12 @@ import org.hipparchus.util.Pair;
  * @since 2.0
  */
 public class FieldHermiteRuleFactory<T extends CalculusFieldElement<T>> extends FieldAbstractRuleFactory<T> {
-    /** &pi;<sup>1/2</sup> */
-    private final T sqrtPi;
-    /** &pi;<sup>-1/4</sup> */
-    private final T h0;
-    /** &pi;<sup>-1/4</sup> &radic;2 */
-    private final T h1;
 
     /** Simple constructor
      * @param field field to which rule coefficients belong
      */
     public FieldHermiteRuleFactory(final Field<T> field) {
-        sqrtPi = field.getZero().getPi().sqrt();
-        h0     = sqrtPi.sqrt().reciprocal();
-        h1     = h0.multiply(field.getOne().newInstance(2).sqrt());
+        super(field);
     }
 
     /** {@inheritDoc} */
@@ -83,97 +65,96 @@ public class FieldHermiteRuleFactory<T extends CalculusFieldElement<T>> extends 
     protected Pair<T[], T[]> computeRule(int numberOfPoints)
         throws MathIllegalArgumentException {
 
-        final Field<T> field   = sqrtPi.getField();
-        final T        zero    = field.getZero();
-        final T[]      points  = MathArrays.buildArray(field, numberOfPoints);
-        final T[]      weights = MathArrays.buildArray(field, numberOfPoints);
+        final Field<T> field  = getField();
+        final T        sqrtPi = field.getZero().getPi().sqrt();
 
         if (numberOfPoints == 1) {
             // Break recursion.
-            points[0]  = zero;
+            final T[] points  = MathArrays.buildArray(field, numberOfPoints);
+            final T[] weights = MathArrays.buildArray(field, numberOfPoints);
+            points[0]  = field.getZero();
             weights[0] = sqrtPi;
             return new Pair<>(points, weights);
         }
 
-        // Get previous rule.
-        // If it has not been computed yet it will trigger a recursive call
-        // to this method.
-        final int lastNumPoints = numberOfPoints - 1;
-        final T[] previousPoints = getRule(lastNumPoints).getFirst();
-        final NormalizedHermite hm = new NormalizedHermite(numberOfPoints - 1);
-        final NormalizedHermite h  = new NormalizedHermite(numberOfPoints);
-        final T tol = field.getOne().ulp().multiply(10);
-        final BracketedRealFieldUnivariateSolver<T> solver = new FieldBracketingNthOrderBrentSolver<>(tol, tol, tol, 5);
+        // find nodes as roots of Hermite polynomial
+        final T[] points = findRoots(numberOfPoints, new Hermite<>(field, numberOfPoints)::ratio);
+        enforceSymmetry(points);
 
-        final T sqrtTwoTimesLastNumPoints = FastMath.sqrt(zero.newInstance(2 * lastNumPoints));
-        final T sqrtTwoTimesNumPoints = FastMath.sqrt(zero.newInstance(2 * numberOfPoints));
-
-        // Find i-th root of H[n+1] by bracketing.
-        final int iMax = numberOfPoints / 2;
-        for (int i = 0; i < iMax; i++) {
-            // Lower-bound of the interval.
-            T a = (i == 0) ? sqrtTwoTimesLastNumPoints.negate() : previousPoints[i - 1];
-            // Upper-bound of the interval.
-            T b = (iMax == 1) ? zero.newInstance(-0.5) : previousPoints[i];
-            // find root
-            final T c = solver.solve(1000, h, a, b, AllowedSolution.ANY_SIDE);
-            points[i] = c;
-
-            final T d = sqrtTwoTimesNumPoints.multiply(hm.value(c));
-            weights[i] = d.multiply(d).reciprocal().multiply(2);
-
-            // symmetrical point
-            final int idx = lastNumPoints - i;
-            points[idx]   = c.negate();
-            weights[idx]  = weights[i];
-
-        }
-
-        // If "numberOfPoints" is odd, 0 is a root.
-        // Note: as written, the test for oddness will work for negative
-        // integers too (although it is not necessary here), preventing
-        // a FindBugs warning.
-        if (numberOfPoints % 2 != 0) {
-            T hmz = h0;
-            for (int j = 1; j < numberOfPoints; j += 2) {
-                final double jp1 = j + 1;
-                hmz = hmz.multiply(zero.newInstance(j).divide(jp1).sqrt()).negate();
-            }
-            final T d = sqrtTwoTimesNumPoints.multiply(hmz);
-            points[iMax] = zero;
-            weights[iMax] = d.multiply(d).divide(2).reciprocal();
-
+        // compute weights
+        final T[] weights = MathArrays.buildArray(field, numberOfPoints);
+        final Hermite<T> hm1 = new Hermite<>(field, numberOfPoints - 1);
+        for (int i = 0; i < numberOfPoints; i++) {
+            final T y = hm1.hNhNm1(points[i])[0];
+            weights[i] = sqrtPi.divide(y.multiply(y).multiply(numberOfPoints));
         }
 
         return new Pair<>(points, weights);
 
     }
 
-    /** Hermite polynomial, normalized to avoid overflow. */
-    private class NormalizedHermite implements CalculusFieldUnivariateFunction<T> {
+    /** Hermite polynomial, normalized to avoid overflow.
+     * <p>
+     * The regular Hermite polynomials and associated weights are given by:
+     *   <pre>
+     *     H₀(x)   = 1
+     *     H₁(x)   = 2 x
+     *     Hₙ₊₁(x) = 2x Hₙ(x) - 2n Hₙ₋₁(x), and H'ₙ(x) = 2n Hₙ₋₁(x)
+     *     wₙ(xᵢ) = [2ⁿ⁻¹ n! √π]/[n Hₙ₋₁(xᵢ)]²
+     *   </pre>
+     * </p>
+     * <p>
+     * In order to avoid overflow with normalize the polynomials hₙ(x) = Hₙ(x) / √[2ⁿ n!]
+     * so the recurrence relations and weights become:
+     *   <pre>
+     *     h₀(x)   = 1
+     *     h₁(x)   = √2 x
+     *     hₙ₊₁(x) = [√2 x hₙ(x) - √n hₙ₋₁(x)]/√(n+1), and h'ₙ(x) = 2n hₙ₋₁(x)
+     *     uₙ(xᵢ) = √π/[n Nₙ₋₁(xᵢ)²]
+     *   </pre>
+     * </p>
+     */
+    private static class Hermite<T extends CalculusFieldElement<T>> {
+
+        /** √2. */
+        private final T sqrt2;
 
         /** Degree. */
-        private int degree;
+        private final int degree;
 
         /** Simple constructor.
+         * @param field field to which rule coefficients belong
          * @param degree polynomial degree
          */
-        NormalizedHermite(int degree) {
+        Hermite(Field<T> field, int degree) {
+            this.sqrt2  = field.getZero().newInstance(2).sqrt();
             this.degree = degree;
         }
 
-        /** {@inheritDoc} */
-        @Override
-        public T value(T x) {
-            T hm = h0;
-            T h  = h1.multiply(x);
-            for (int j = 1; j < degree; j++) {
-                // Compute H[j](x)
-                final double jp1 = j + 1;
-                final T hp = x.multiply(h).multiply(x.newInstance(2).divide(jp1).sqrt()).
-                             subtract(hm.multiply(x.newInstance(j).divide(jp1).sqrt()));
-                hm = h;
-                h  = hp;
+        /** Compute ratio H(x)/H'(x).
+         * @param x point at which ratio must be computed
+         */
+        public T ratio(T x) {
+            T[] h = hNhNm1(x);
+            return h[0].divide(h[1].multiply(2 * degree));
+        }
+
+        /** Compute Nₙ(x) and Nₙ₋₁(x).
+         * @param x point at which polynomials are evaluated
+         * @return array containing Nₙ(x) at index 0 and Nₙ₋₁(x) at index 1
+         */
+        private T[] hNhNm1(final T x) {
+            T[] h = MathArrays.buildArray(x.getField(), 2);
+            h[0] = sqrt2.multiply(x);
+            h[1] = x.getField().getOne();
+            T sqrtN = x.getField().getOne();
+            for (int n = 1; n < degree; n++) {
+                // apply recurrence relation hₙ₊₁(x) = [√2 x hₙ(x) - √n hₙ₋₁(x)]/√(n+1)
+                final T sqrtNp = x.getField().getZero().newInstance(n + 1).sqrt();
+                final T hp = (h[0].multiply(x).multiply(sqrt2).subtract(h[1].multiply(sqrtN))).divide(sqrtNp); 
+                h[1]  = h[0];
+                h[0]  = hp;
+                sqrtN = sqrtNp;
             }
             return h;
         }

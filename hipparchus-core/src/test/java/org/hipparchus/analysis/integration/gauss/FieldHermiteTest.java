@@ -54,7 +54,7 @@ public class FieldHermiteTest {
         final FieldGaussIntegrator<Decimal64> integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f).getReal();
         final double expected = 1;
-        Assert.assertEquals(expected, result, Math.ulp(expected));
+        Assert.assertEquals(expected, result, FastMath.ulp(expected));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class FieldHermiteTest {
 
         final Decimal64 mu = new Decimal64(12345.6789);
         final Decimal64 sigma = new Decimal64(987.654321);
-        final int numPoints = 5;
+        final int numPoints = 6;
 
         // Change of variable:
         //   y = (x - mu) / (sqrt(2) *  sigma)
@@ -78,7 +78,7 @@ public class FieldHermiteTest {
         final FieldGaussIntegrator<Decimal64> integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f).getReal();
         final double expected = mu.getReal();
-        Assert.assertEquals(expected, result, 3 * Math.ulp(expected));
+        Assert.assertEquals(expected, result, 5 * FastMath.ulp(expected));
     }
 
     @Test
@@ -101,6 +101,6 @@ public class FieldHermiteTest {
         final FieldGaussIntegrator<Decimal64> integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f).getReal();
         final double expected = sigma2.getReal();
-        Assert.assertEquals(expected, result, 10 * Math.ulp(expected));
+        Assert.assertEquals(expected, result, 10 * FastMath.ulp(expected));
     }
 }

@@ -56,7 +56,7 @@ public class HermiteTest {
         final GaussIntegrator integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f);
         final double expected = 1;
-        Assert.assertEquals(expected, result, Math.ulp(expected));
+        Assert.assertEquals(expected, result, FastMath.ulp(expected));
     }
 
     @Test
@@ -66,7 +66,7 @@ public class HermiteTest {
 
         final double mu = 12345.6789;
         final double sigma = 987.654321;
-        final int numPoints = 5;
+        final int numPoints = 6;
 
         // Change of variable:
         //   y = (x - mu) / (sqrt(2) *  sigma)
@@ -83,7 +83,7 @@ public class HermiteTest {
         final GaussIntegrator integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f);
         final double expected = mu;
-        Assert.assertEquals(expected, result, Math.ulp(expected));
+        Assert.assertEquals(expected, result, 5 * FastMath.ulp(expected));
     }
 
     @Test
@@ -109,6 +109,6 @@ public class HermiteTest {
         final GaussIntegrator integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f);
         final double expected = sigma2;
-        Assert.assertEquals(expected, result, 10 * Math.ulp(expected));
+        Assert.assertEquals(expected, result, 10 * FastMath.ulp(expected));
     }
 }

@@ -21,13 +21,8 @@
  */
 package org.hipparchus.analysis.integration.gauss;
 
-import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.analysis.solvers.AllowedSolution;
-import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
-import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Pair;
-import org.hipparchus.util.Precision;
 
 /**
  * Factory that creates Gauss-type quadrature rule using Legendre polynomials.
@@ -45,58 +40,28 @@ public class LegendreRuleFactory extends AbstractRuleFactory {
     protected Pair<double[], double[]> computeRule(int numberOfPoints)
         throws MathIllegalArgumentException {
 
-        final double[] points  = new double[numberOfPoints];
-        final double[] weights = new double[numberOfPoints];
-
         if (numberOfPoints == 1) {
             // Break recursion.
-            points[0]  = 0;
-            weights[0] = 2;
-            return new Pair<>(points, weights);
+           return new Pair<>(new double[] { 0 } , new double[] { 2 });
         }
 
-        // Get previous rule.
-        // If it has not been computed yet it will trigger a recursive call
-        // to this method.
-        final double[] previousPoints = getRule(numberOfPoints - 1).getFirst();
-        final Legendre pm = new Legendre(numberOfPoints - 1);
-        final Legendre p  = new Legendre(numberOfPoints);
-        final double tol = 10 * Precision.EPSILON;
-        final BracketedUnivariateSolver<UnivariateFunction> solver = new BracketingNthOrderBrentSolver(tol, tol, tol, 5);
+        // find nodes as roots of Legendre polynomial
+        final Legendre p      =  new Legendre(numberOfPoints);
+        final double[] points = findRoots(numberOfPoints, p::ratio);
+        enforceSymmetry(points);
 
-        // Find i-th root of P[n+1]
-        final int iMax = numberOfPoints / 2;
-        for (int i = 0; i < iMax; i++) {
-            // Lower-bound of the interval.
-            double a = (i == 0) ? -1 : previousPoints[i - 1];
-            // Upper-bound of the interval.
-            double b = previousPoints[i];
-            // find root
-            final double c = solver.solve(1000, p, a, b, AllowedSolution.ANY_SIDE);
-            points[i] = c;
-
-            final double d = numberOfPoints * (pm.value(c) - c * p.value(c));
+        // compute weights
+        final double[] weights = new double[numberOfPoints];
+        for (int i = 0; i <= numberOfPoints / 2; i++) {
+            final double c = points[i];
+            final double[] pKpKm1 = p.pNpNm1(c);
+            final double d = numberOfPoints * (pKpKm1[1] - c * pKpKm1[0]);
             weights[i] = 2 * (1 - c * c) / (d * d);
 
             // symmetrical point
             final int idx = numberOfPoints - i - 1;
-            points[idx]   = -c;
             weights[idx]  = weights[i];
 
-        }
-
-        // If "numberOfPoints" is odd, 0 is a root.
-        // Note: as written, the test for oddness will work for negative
-        // integers too (although it is not necessary here), preventing
-        // a FindBugs warning.
-        if (numberOfPoints % 2 != 0) {
-            double pmz = 1;
-            for (int j = 1; j < numberOfPoints; j += 2) {
-                pmz = -j * pmz / (j + 1);
-            }
-            final double d = numberOfPoints * pmz;
-            points[iMax] = 0d;
-            weights[iMax] = 2 / (d * d);
         }
 
         return new Pair<>(points, weights);
@@ -104,7 +69,7 @@ public class LegendreRuleFactory extends AbstractRuleFactory {
     }
 
     /** Legendre polynomial. */
-    private class Legendre implements UnivariateFunction {
+    private static class Legendre {
 
         /** Degree. */
         private int degree;
@@ -116,16 +81,35 @@ public class LegendreRuleFactory extends AbstractRuleFactory {
             this.degree = degree;
         }
 
-        /** {@inheritDoc} */
-        @Override
-        public double value(double x) {
+        /** Compute ratio P(x)/P'(x).
+         * @param x point at which ratio must be computed
+         */
+        public double ratio(double x) {
             double pm = 1;
             double p  = x;
-            for (int k = 1; k < degree; k++) {
-                // apply recurrence relation (k+1) P_{k+1}(x) = (2k+1) x P_k(x) - k P_{k-1}(x)
-                final double pp = (p * (x * (2 * k + 1)) - pm * k) / (k + 1);
+            double d  = 1;
+            for (int n = 1; n < degree; n++) {
+                // apply recurrence relations (n+1) Pₙ₊₁(x)  = (2n+1) x Pₙ(x) - n Pₙ₋₁(x)
+                // and                              P'ₙ₊₁(x) = (n+1) Pₙ(x) + x P'ₙ(x)
+                final double pp = (p * (x * (2 * n + 1)) - pm * n) / (n + 1);
+                d  = p * (n + 1) + d * x;
                 pm = p;
                 p  = pp;
+            }
+            return p / d;
+        }
+
+        /** Compute Pₙ(x) and Pₙ₋₁(x).
+         * @param x point at which polynomials are evaluated
+         * @return array containing Pₙ(x) at index 0 and Pₙ₋₁(x) at index 1
+         */
+        private double[] pNpNm1(final double x) {
+            double[] p = { x, 1 };
+            for (int n = 1; n < degree; n++) {
+                // apply recurrence relation (n+1) Pₙ₊₁(x) = (2n+1) x Pₙ(x) - n Pₙ₋₁(x)
+                final double pp = (p[0] * (x * (2 * n + 1)) - p[1] * n) / (n + 1);
+                p[1] = p[0];
+                p[0] = pp;
             }
             return p;
         }

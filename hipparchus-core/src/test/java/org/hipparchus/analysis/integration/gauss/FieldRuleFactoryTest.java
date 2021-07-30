@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
@@ -87,6 +88,11 @@ public class FieldRuleFactoryTest {
     private static class DummyRuleFactory extends FieldAbstractRuleFactory<Decimal64> {
         /** Rule computations counter. */
         private static AtomicInteger nCalls = new AtomicInteger();
+
+        
+        DummyRuleFactory() {
+            super(Decimal64Field.getInstance());
+        }
 
         @Override
         protected Pair<Decimal64[], Decimal64[]> computeRule(int order) {
