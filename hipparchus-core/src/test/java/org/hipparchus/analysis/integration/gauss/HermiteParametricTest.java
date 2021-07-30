@@ -75,8 +75,16 @@ public class HermiteParametricTest extends GaussianQuadratureAbstractTest {
     @Parameters
     public static Collection<Object[]> getParameters() {
         final ArrayList<Object[]> parameters = new ArrayList<Object[]>();
+        final int [] numUlps = {
+             10,  10,  10,  10,  20,
+             20,  20,  20,  30,  40,
+             40,  50, 150, 150, 150,
+            150, 150, 150, 150, 200,
+            250, 250, 300, 300, 300,
+            300, 300, 300, 350, 350
+        };
         for (int k = 1; k <= MAX_NUM_POINTS; k++) {
-            parameters.add(new Object[] { k, 2 * k - 1, Math.ulp(1d), 195 });
+            parameters.add(new Object[] { k, 2 * k - 1, FastMath.ulp(1d), numUlps[k - 1] });
         }
         return parameters;
     }

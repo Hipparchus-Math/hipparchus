@@ -268,7 +268,6 @@ public class Dfp implements CalculusFieldElement<Dfp> {
     protected Dfp(final DfpField field, double x) {
 
         // initialize as if 0
-        sign = 1;
         mant = new int[field.getRadixDigits()];
         this.field = field;
 
@@ -282,6 +281,8 @@ public class Dfp implements CalculusFieldElement<Dfp> {
                 // make sure 0 has the right sign
                 if ((bits & 0x8000000000000000L) != 0) {
                     sign = -1;
+                } else {
+                    sign = 1;
                 }
                 return;
             }

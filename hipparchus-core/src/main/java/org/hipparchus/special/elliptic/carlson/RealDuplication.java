@@ -72,7 +72,7 @@ abstract class RealDuplication {
      * <p>
      * The initial mean point is put as the last array element
      * </>
-     * @param v symmetric variables of the integral (plus placeholder for initial mean point)
+     * @param va symmetric variables of the integral (plus placeholder for initial mean point)
      */
     protected abstract void initialMeanPoint(double[] va);
 

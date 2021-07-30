@@ -36,10 +36,10 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test for {@link BaseRuleFactory}.
+ * Test for {@link AbstractRuleFactory}.
  *
  */
-public class BaseRuleFactoryTest {
+public class RuleFactoryTest {
     /**
      * Tests that a given rule rule will be computed and added once to the cache
      * whatever the number of times this rule is called concurrently.
@@ -69,48 +69,51 @@ public class BaseRuleFactoryTest {
         final int n = RuleBuilder.getNumberOfCalls();
         Assert.assertEquals("Rule computation was called " + n + " times", 1, n);
     }
-}
 
-class RuleBuilder implements Callable<Pair<double[], double[]>> {
-    private static final DummyRuleFactory factory = new DummyRuleFactory();
+    private static class RuleBuilder implements Callable<Pair<double[], double[]>> {
+        private static final DummyRuleFactory factory = new DummyRuleFactory();
 
-    public Pair<double[], double[]> call() {
-        final int dummy = 2; // Always request the same rule.
-        return factory.getRule(dummy);
-    }
-
-    public static int getNumberOfCalls() {
-        return factory.getNumberOfCalls();
-    }
-}
-
-class DummyRuleFactory extends BaseRuleFactory<Double> {
-    /** Rule computations counter. */
-    private static AtomicInteger nCalls = new AtomicInteger();
-
-    @Override
-    protected Pair<Double[], Double[]> computeRule(int order) {
-        // Tracks whether this computation has been called more than once.
-        nCalls.getAndIncrement();
-
-        try {
-            // Sleep to simulate computation time.
-            Thread.sleep(20);
-        } catch (InterruptedException e) {
-            Assert.fail("Unexpected interruption");
+        public Pair<double[], double[]> call() {
+            final int dummy = 2; // Always request the same rule.
+            return factory.getRule(dummy);
         }
 
-         // Dummy rule (but contents must exist).
-        final Double[] p = new Double[order];
-        final Double[] w = new Double[order];
-        for (int i = 0; i < order; i++) {
-            p[i] = new Double(i);
-            w[i] = new Double(i);
+        public static int getNumberOfCalls() {
+            return factory.getNumberOfCalls();
         }
-        return new Pair<Double[], Double[]>(p, w);
     }
 
-    public int getNumberOfCalls() {
-        return nCalls.get();
+    private static class DummyRuleFactory extends AbstractRuleFactory {
+        /** Rule computations counter. */
+        private static AtomicInteger nCalls = new AtomicInteger();
+
+        @Override
+        protected Pair<double[], double[]> computeRule(int order) {
+            // Tracks whether this computation has been called more than once.
+            nCalls.getAndIncrement();
+
+            try {
+                // Sleep to simulate computation time.
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                Assert.fail("Unexpected interruption");
+            }
+
+            // Dummy rule (but contents must exist).
+            final double[] p = new double[order];
+            final double[] w = new double[order];
+            for (int i = 0; i < order; i++) {
+                p[i] = new Double(i);
+                w[i] = new Double(i);
+            }
+            return new Pair<>(p, w);
+        }
+
+        public int getNumberOfCalls() {
+            return nCalls.get();
+        }
+
     }
+
 }
+

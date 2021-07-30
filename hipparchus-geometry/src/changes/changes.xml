@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Geometry Release Notes</title>
   </properties>
   <body>
-    <release version="2.0" date="2021-07-23" description="This is a major release. The only changes are
+    <release version="2.0" date="2021-08-07" description="This is a major release. The only changes are
     removal of deprecated methods.">
       <action dev="luc" type="fix" issue="issues/121">
         Removed methods and constants deprecated during the 1.x series.
