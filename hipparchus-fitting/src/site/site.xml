@@ -59,8 +59,8 @@
 
   <body>
     <head>
-      <link rel="stylesheet" href="https://yandex.st/highlightjs/7.5/styles/default.min.css"/>
-      <script src="https://yandex.st/highlightjs/7.5/highlight.min.js"></script>
+      <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.2.0/styles/default.min.css"/>
+      <script src="https://unpkg.com/@highlightjs/cdn-assets@11.2.0/highlight.min.js"></script>
     </head>
 
     <menu name="Hipparchus">
