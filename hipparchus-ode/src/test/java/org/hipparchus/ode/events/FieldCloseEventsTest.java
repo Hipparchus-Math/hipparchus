@@ -28,6 +28,8 @@ import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
+import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
+import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.util.Decimal64;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
@@ -973,6 +975,64 @@ public class FieldCloseEventsTest {
         Assert.assertSame(detectorA, events.get(2).getHandler());
     }
 
+    /** Check that steps are restricted correctly with a continue event. */
+    @Test
+    public void testEventStepHandler() {
+        // setup
+        double tolerance = 1e-18;
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(new TimeDetector(5), 100, tolerance, 100);
+        StepHandler stepHandler = new StepHandler();
+        integrator.addStepHandler(stepHandler);
+
+        // action
+        FieldODEStateAndDerivative<Decimal64> finalState = integrator
+                .integrate(new Equation(), initialState, zero.add(10));
+
+        // verify
+        Assert.assertEquals(10.0, finalState.getTime().getReal(), tolerance);
+        Assert.assertEquals(0.0,
+                stepHandler.initialState.getTime().getReal(), tolerance);
+        Assert.assertEquals(10.0, stepHandler.finalTime.getReal(), tolerance);
+        Assert.assertEquals(10.0,
+                stepHandler.finalState.getTime().getReal(), tolerance);
+        FieldODEStateInterpolator<Decimal64> interpolator = stepHandler.interpolators.get(0);
+        Assert.assertEquals(0.0,
+                interpolator.getPreviousState().getTime().getReal(), tolerance);
+        Assert.assertEquals(5.0,
+                interpolator.getCurrentState().getTime().getReal(), tolerance);
+        interpolator = stepHandler.interpolators.get(1);
+        Assert.assertEquals(5.0,
+                interpolator.getPreviousState().getTime().getReal(), tolerance);
+        Assert.assertEquals(10.0,
+                interpolator.getCurrentState().getTime().getReal(), tolerance);
+        Assert.assertEquals(2, stepHandler.interpolators.size());
+    }
+
+    /** Test resetState(...) returns {@code null}. */
+    @Test
+    public void testEventCausedByDerivativesReset() {
+        // setup
+        TimeDetector detectorA = new TimeDetector(Action.RESET_STATE, 15.0) {
+            @Override
+            public FieldODEState<Decimal64> resetState(
+                    FieldODEStateAndDerivative<Decimal64> state) {
+                return null;
+            }
+        };
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, 10, 1e-6, 100);
+
+        try {
+            // action
+            integrator.integrate(new Equation(), initialState, zero.add(20.0));
+            Assert.fail("Expected Exception");
+        } catch (NullPointerException e) {
+            // expected
+        }
+    }
 
 
     /* The following tests are copies of the above tests, except that they propagate in
@@ -1907,6 +1967,65 @@ public class FieldCloseEventsTest {
         Assert.assertSame(detectorA, events.get(2).getHandler());
     }
 
+    /** Check that steps are restricted correctly with a continue event. */
+    @Test
+    public void testEventStepHandlerReverse() {
+        // setup
+        double tolerance = 1e-18;
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(new TimeDetector(-5), 100, tolerance, 100);
+        StepHandler stepHandler = new StepHandler();
+        integrator.addStepHandler(stepHandler);
+
+        // action
+        FieldODEStateAndDerivative<Decimal64> finalState = integrator
+                .integrate(new Equation(), initialState, zero.add(-10));
+
+        // verify
+        Assert.assertEquals(-10.0, finalState.getTime().getReal(), tolerance);
+        Assert.assertEquals(0.0,
+                stepHandler.initialState.getTime().getReal(), tolerance);
+        Assert.assertEquals(-10.0, stepHandler.finalTime.getReal(), tolerance);
+        Assert.assertEquals(-10.0,
+                stepHandler.finalState.getTime().getReal(), tolerance);
+        FieldODEStateInterpolator<Decimal64> interpolator = stepHandler.interpolators.get(0);
+        Assert.assertEquals(0.0,
+                interpolator.getPreviousState().getTime().getReal(), tolerance);
+        Assert.assertEquals(-5.0,
+                interpolator.getCurrentState().getTime().getReal(), tolerance);
+        interpolator = stepHandler.interpolators.get(1);
+        Assert.assertEquals(-5.0,
+                interpolator.getPreviousState().getTime().getReal(), tolerance);
+        Assert.assertEquals(-10.0,
+                interpolator.getCurrentState().getTime().getReal(), tolerance);
+        Assert.assertEquals(2, stepHandler.interpolators.size());
+    }
+
+    /** Test resetState(...) returns {@code null}. */
+    @Test
+    public void testEventCausedByDerivativesResetReverse() {
+        // setup
+        TimeDetector detectorA = new TimeDetector(Action.RESET_STATE, -15.0) {
+            @Override
+            public FieldODEState<Decimal64> resetState(
+                    FieldODEStateAndDerivative<Decimal64> state) {
+                return null;
+            }
+        };
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, 10, 1e-6, 100);
+
+        try {
+            // action
+            integrator.integrate(new Equation(), initialState, zero.add(-20.0));
+            Assert.fail("Expected Exception");
+        } catch (NullPointerException e) {
+            // expected
+        }
+    }
+
 
 
     /* utility classes and methods */
@@ -2142,6 +2261,31 @@ public class FieldCloseEventsTest {
             return new Decimal64[]{one, one.multiply(2)};
         }
 
+    }
+
+    private static class StepHandler implements FieldODEStepHandler<Decimal64> {
+
+        private FieldODEStateAndDerivative<Decimal64> initialState;
+        private Decimal64 finalTime;
+        private List<FieldODEStateInterpolator<Decimal64>> interpolators = new ArrayList<>();
+        private FieldODEStateAndDerivative<Decimal64> finalState;
+
+        @Override
+        public void init(FieldODEStateAndDerivative<Decimal64> initialState,
+                         Decimal64 finalTime) {
+            this.initialState = initialState;
+            this.finalTime = finalTime;
+        }
+
+        @Override
+        public void handleStep(FieldODEStateInterpolator<Decimal64> interpolator) {
+            this.interpolators.add(interpolator);
+        }
+
+        @Override
+        public void finish(FieldODEStateAndDerivative<Decimal64> finalState) {
+            this.finalState = finalState;
+        }
     }
 
 }

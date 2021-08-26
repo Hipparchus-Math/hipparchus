@@ -26,6 +26,8 @@ import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
+import org.hipparchus.ode.sampling.ODEStateInterpolator;
+import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -960,6 +962,64 @@ public class CloseEventsTest {
         Assert.assertSame(detectorA, events.get(2).getHandler());
     }
 
+    /** Check that steps are restricted correctly with a continue event. */
+    @Test
+    public void testEventStepHandler() {
+        // setup
+        double tolerance = 1e-18;
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(new TimeDetector(5), 100, tolerance, 100);
+        StepHandler stepHandler = new StepHandler();
+        integrator.addStepHandler(stepHandler);
+
+        // action
+        ODEStateAndDerivative finalState = integrator
+                .integrate(new Equation(), new ODEState(0, new double[2]), 10);
+
+        // verify
+        Assert.assertEquals(10.0, finalState.getTime(), tolerance);
+        Assert.assertEquals(0.0,
+                stepHandler.initialState.getTime(), tolerance);
+        Assert.assertEquals(10.0, stepHandler.finalTime, tolerance);
+        Assert.assertEquals(10.0,
+                stepHandler.finalState.getTime(), tolerance);
+        ODEStateInterpolator interpolator = stepHandler.interpolators.get(0);
+        Assert.assertEquals(0.0,
+                interpolator.getPreviousState().getTime(), tolerance);
+        Assert.assertEquals(5.0,
+                interpolator.getCurrentState().getTime(), tolerance);
+        interpolator = stepHandler.interpolators.get(1);
+        Assert.assertEquals(5.0,
+                interpolator.getPreviousState().getTime(), tolerance);
+        Assert.assertEquals(10.0,
+                interpolator.getCurrentState().getTime(), tolerance);
+        Assert.assertEquals(2, stepHandler.interpolators.size());
+    }
+
+    /** Test resetState(...) returns {@code null}. */
+    @Test
+    public void testEventCausedByDerivativesReset() {
+        // setup
+        TimeDetector detectorA = new TimeDetector(Action.RESET_STATE, 15.0) {
+            @Override
+            public ODEState resetState(ODEStateAndDerivative state) {
+                return null;
+            }
+        };
+        ODEIntegrator integrator = new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, 10, 1e-6, 100);
+
+        try {
+            // action
+            integrator.integrate(new Equation(), new ODEState(0, new double[2]), 20.0);
+            Assert.fail("Expected Exception");
+        } catch (NullPointerException e) {
+            // expected
+        }
+    }
+
+
     /* The following tests are copies of the above tests, except that they propagate in
      * the reverse direction and all the signs on the time values are negated.
      */
@@ -1889,6 +1949,63 @@ public class CloseEventsTest {
         Assert.assertSame(detectorA, events.get(2).getHandler());
     }
 
+    /** Check that steps are restricted correctly with a continue event. */
+    @Test
+    public void testEventStepHandlerReverse() {
+        // setup
+        double tolerance = 1e-18;
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(new TimeDetector(-5), 100, tolerance, 100);
+        StepHandler stepHandler = new StepHandler();
+        integrator.addStepHandler(stepHandler);
+
+        // action
+        ODEStateAndDerivative finalState = integrator
+                .integrate(new Equation(), new ODEState(0, new double[2]), -10);
+
+        // verify
+        Assert.assertEquals(-10.0, finalState.getTime(), tolerance);
+        Assert.assertEquals(0.0,
+                stepHandler.initialState.getTime(), tolerance);
+        Assert.assertEquals(-10.0, stepHandler.finalTime, tolerance);
+        Assert.assertEquals(-10.0,
+                stepHandler.finalState.getTime(), tolerance);
+        ODEStateInterpolator interpolator = stepHandler.interpolators.get(0);
+        Assert.assertEquals(0.0,
+                interpolator.getPreviousState().getTime(), tolerance);
+        Assert.assertEquals(-5.0,
+                interpolator.getCurrentState().getTime(), tolerance);
+        interpolator = stepHandler.interpolators.get(1);
+        Assert.assertEquals(-5.0,
+                interpolator.getPreviousState().getTime(), tolerance);
+        Assert.assertEquals(-10.0,
+                interpolator.getCurrentState().getTime(), tolerance);
+        Assert.assertEquals(2, stepHandler.interpolators.size());
+    }
+
+    /** Test resetState(...) returns {@code null}. */
+    @Test
+    public void testEventCausedByDerivativesResetReverse() {
+        // setup
+        TimeDetector detectorA = new TimeDetector(Action.RESET_STATE, -15.0) {
+            @Override
+            public ODEState resetState(ODEStateAndDerivative state) {
+                return null;
+            }
+        };
+        ODEIntegrator integrator = new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, 10, 1e-6, 100);
+
+        try {
+            // action
+            integrator.integrate(new Equation(), new ODEState(0, new double[2]), -20.0);
+            Assert.fail("Expected Exception");
+        } catch (NullPointerException e) {
+            // expected
+        }
+    }
+
 
 
     /* utility classes and methods */
@@ -2118,6 +2235,30 @@ public class CloseEventsTest {
             return new double[]{1.0, 2.0};
         }
 
+    }
+
+    private static class StepHandler implements ODEStepHandler {
+
+        private ODEStateAndDerivative initialState;
+        private double finalTime;
+        private List<ODEStateInterpolator> interpolators = new ArrayList<>();
+        private ODEStateAndDerivative finalState;
+
+        @Override
+        public void init(ODEStateAndDerivative initialState, double finalTime) {
+            this.initialState = initialState;
+            this.finalTime = finalTime;
+        }
+
+        @Override
+        public void handleStep(ODEStateInterpolator interpolator) {
+            this.interpolators.add(interpolator);
+        }
+
+        @Override
+        public void finish(ODEStateAndDerivative finalState) {
+            this.finalState = finalState;
+        }
     }
 
 }
