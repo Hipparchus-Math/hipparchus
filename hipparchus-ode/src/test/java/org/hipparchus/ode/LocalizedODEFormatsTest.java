@@ -32,7 +32,7 @@ public class LocalizedODEFormatsTest extends LocalizedFormatsAbstractTest {
 
     @Override
     protected int getExpectedNumber() {
-        return 9;
+        return 10;
     }
 
 }

@@ -28,6 +28,7 @@ import org.hipparchus.analysis.solvers.BracketedUnivariateSolver.Interval;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
@@ -334,19 +335,33 @@ public class EventState implements EventHandlerConfiguration {
             } else {
                 // both non-zero, the usual case, use a root finder.
                 if (forward) {
-                    final Interval interval =
-                            solver.solveInterval(maxIterationCount, f, loopT, tb);
-                    beforeRootT = interval.getLeftAbscissa();
-                    beforeRootG = interval.getLeftValue();
-                    afterRootT = interval.getRightAbscissa();
-                    afterRootG = interval.getRightValue();
-                } else {
-                    final Interval interval =
-                            solver.solveInterval(maxIterationCount, f, tb, loopT);
-                    beforeRootT = interval.getRightAbscissa();
-                    beforeRootG = interval.getRightValue();
-                    afterRootT = interval.getLeftAbscissa();
-                    afterRootG = interval.getLeftValue();
+                    try {
+                        final Interval interval =
+                                solver.solveInterval(maxIterationCount, f, loopT, tb);
+                        beforeRootT = interval.getLeftAbscissa();
+                        beforeRootG = interval.getLeftValue();
+                        afterRootT = interval.getRightAbscissa();
+                        afterRootG = interval.getRightValue();
+                        // CHECKSTYLE: stop IllegalCatch check
+                    } catch (RuntimeException e) {
+                        // CHECKSTYLE: resume IllegalCatch check
+                        throw new MathRuntimeException(e, LocalizedODEFormats.FIND_ROOT,
+                                handler, loopT, loopG, tb, gb);
+                    }
+            } else {
+                    try {
+                        final Interval interval =
+                                solver.solveInterval(maxIterationCount, f, tb, loopT);
+                        beforeRootT = interval.getRightAbscissa();
+                        beforeRootG = interval.getRightValue();
+                        afterRootT = interval.getLeftAbscissa();
+                        afterRootG = interval.getLeftValue();
+                        // CHECKSTYLE: stop IllegalCatch check
+                    } catch (RuntimeException e) {
+                        // CHECKSTYLE: resume IllegalCatch check
+                        throw new MathRuntimeException(e, LocalizedODEFormats.FIND_ROOT,
+                                handler, loopT, loopG, tb, gb);
+                    }
                 }
             }
             // tolerance is set to less than 1 ulp

@@ -55,7 +55,8 @@ public enum LocalizedODEFormats implements Localizable {
     TOO_SMALL_INTEGRATION_INTERVAL("too small integration interval: length = {0}"),
     UNKNOWN_PARAMETER("unknown parameter {0}"),
     UNMATCHED_ODE_IN_EXPANDED_SET("ode does not match the main ode set in the extended set"),
-    NAN_APPEARING_DURING_INTEGRATION("NaN appears during integration near time {0}");
+    NAN_APPEARING_DURING_INTEGRATION("NaN appears during integration near time {0}"),
+    FIND_ROOT("{0} failed to find root between {1,number,0.0##############E0} (g={2,number,0.0##############E0}) and {3,number,0.0##############E0} (g={4,number,0.0##############E0})");
 
     // CHECKSTYLE: resume JavadocVariable
     // CHECKSTYLE: resume MultipleVariableDeclarations

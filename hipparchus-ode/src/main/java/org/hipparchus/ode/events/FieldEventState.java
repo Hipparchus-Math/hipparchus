@@ -31,6 +31,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 
@@ -355,19 +356,33 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
             } else {
                 // both non-zero, the usual case, use a root finder.
                 if (forward) {
-                    final Interval<T> interval =
-                            solver.solveInterval(maxIterationCount, f, loopT, tb);
-                    beforeRootT = interval.getLeftAbscissa();
-                    beforeRootG = interval.getLeftValue();
-                    afterRootT = interval.getRightAbscissa();
-                    afterRootG = interval.getRightValue();
+                    try {
+                        final Interval<T> interval =
+                                solver.solveInterval(maxIterationCount, f, loopT, tb);
+                        beforeRootT = interval.getLeftAbscissa();
+                        beforeRootG = interval.getLeftValue();
+                        afterRootT = interval.getRightAbscissa();
+                        afterRootG = interval.getRightValue();
+                        // CHECKSTYLE: stop IllegalCatch check
+                    } catch (RuntimeException e) {
+                        // CHECKSTYLE: resume IllegalCatch check
+                        throw new MathRuntimeException(e, LocalizedODEFormats.FIND_ROOT,
+                                handler, loopT, loopG, tb, gb);
+                    }
                 } else {
-                    final Interval<T> interval =
-                            solver.solveInterval(maxIterationCount, f, tb, loopT);
-                    beforeRootT = interval.getRightAbscissa();
-                    beforeRootG = interval.getRightValue();
-                    afterRootT = interval.getLeftAbscissa();
-                    afterRootG = interval.getLeftValue();
+                    try {
+                        final Interval<T> interval =
+                                solver.solveInterval(maxIterationCount, f, tb, loopT);
+                        beforeRootT = interval.getRightAbscissa();
+                        beforeRootG = interval.getRightValue();
+                        afterRootT = interval.getLeftAbscissa();
+                        afterRootG = interval.getLeftValue();
+                        // CHECKSTYLE: stop IllegalCatch check
+                    } catch (RuntimeException e) {
+                        // CHECKSTYLE: resume IllegalCatch check
+                        throw new MathRuntimeException(e, LocalizedODEFormats.FIND_ROOT,
+                                handler, loopT, loopG, tb, gb);
+                    }
                 }
             }
             // tolerance is set to less than 1 ulp

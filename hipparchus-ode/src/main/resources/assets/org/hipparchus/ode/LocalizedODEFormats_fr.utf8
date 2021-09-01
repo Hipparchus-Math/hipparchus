@@ -25,3 +25,5 @@ TOO_SMALL_INTEGRATION_INTERVAL = intervalle d''intégration trop petit : {0}
 UNKNOWN_PARAMETER = paramètre {0} inconnu
 UNMATCHED_ODE_IN_EXPANDED_SET = l''équation différentielle ne correspond pas à l''équation principale du jeu étendu
 NAN_APPEARING_DURING_INTEGRATION = apparition de NaN pendant l''intégration aux environs du temps {0}
+#  {0} failed to find root between {1,number,0.0##############E0} (g={2,number,0.0##############E0}) and {3,number,0.0##############E0} (g={4,number,0.0##############E0})
+FIND_ROOT = <MISSING TRANSLATION>

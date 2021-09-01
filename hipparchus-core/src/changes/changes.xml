@@ -49,6 +49,13 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
+    <release version="2.1" date="TBD" description="TBD">
+      <action dev="evan" type="update" due-to="Anne-Laure Lugan">
+        Add more information to exception when event detection root finding fails.
+        Backward incompatible in that it changes the type of exception to
+        MathRuntimeException.
+      </action>
+    </release>
     <release version="2.0" date="2021-08-07" description="This is a major release. The main changes
     are replacement of RealFieldElement by CalculusFieldElement interface, many improvements in Complex
     to fully implement CalculusFieldElement with correct branch cuts so complex numbers can be used in

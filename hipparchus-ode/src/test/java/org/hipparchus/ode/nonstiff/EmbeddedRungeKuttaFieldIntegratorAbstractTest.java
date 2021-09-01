@@ -22,7 +22,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.analysis.differentiation.DSFactory;
@@ -30,6 +33,7 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEIntegrator;
 import org.hipparchus.ode.FieldODEState;
@@ -338,8 +342,13 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         try {
             integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
             Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mcee) {
+        } catch (MathRuntimeException e) {
             // Expected.
+            MatcherAssert.assertThat(e.getMessage(Locale.US),
+                    CoreMatchers.containsString("failed to find root between"));
+            MathIllegalStateException cause = (MathIllegalStateException) e.getCause();
+            MatcherAssert.assertThat(cause.getMessage(Locale.US),
+                    CoreMatchers.containsString("maximal count"));
         }
 
     }

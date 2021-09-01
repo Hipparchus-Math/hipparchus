@@ -23,10 +23,14 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEIntegrator;
@@ -270,8 +274,13 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         try {
             integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
             Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mcee) {
+        } catch (MathRuntimeException e) {
             // Expected.
+            MatcherAssert.assertThat(e.getMessage(Locale.US),
+                    CoreMatchers.containsString("failed to find root between"));
+            MathIllegalStateException cause = (MathIllegalStateException) e.getCause();
+            MatcherAssert.assertThat(cause.getMessage(Locale.US),
+                    CoreMatchers.containsString("maximal count"));
         }
 
     }
