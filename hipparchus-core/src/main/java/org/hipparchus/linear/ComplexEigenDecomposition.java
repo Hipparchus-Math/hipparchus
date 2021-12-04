@@ -152,7 +152,7 @@ public class ComplexEigenDecomposition {
     /**
      * Getter of the eigen values.
      *
-     * @return igen values.
+     * @return eigen values.
      */
     public Complex[] getEigenvalues() {
         return eigenvalues.clone();
@@ -167,6 +167,25 @@ public class ComplexEigenDecomposition {
      */
     public FieldVector<Complex> getEigenvector(final int i) {
         return eigenvectors[i].copy();
+    }
+
+    /** Reset eigenvalues and eigen vectors from matrices.
+     * <p>
+     * This method is intended to be called by sub-classes (mainly {@link OrderedComplexEigenDecomposition})
+     * that reorder the matrices elements. It rebuild the eigenvalues and eigen vectors arrays
+     * from the D and V matrices.
+     * </p>
+     * @since 2.1
+     */
+    protected void matricesToEigenArrays() {
+        for (int i = 0; i < eigenvalues.length; ++i) {
+            eigenvalues[i] = D.getEntry(i, i);
+        }
+        for (int i = 0; i < eigenvectors.length; ++i) {
+            for (int j = 0; j < eigenvectors[i].getDimension(); ++j) {
+                eigenvectors[i].setEntry(j, V.getEntry(j, i));
+            }
+        }
     }
 
     /**

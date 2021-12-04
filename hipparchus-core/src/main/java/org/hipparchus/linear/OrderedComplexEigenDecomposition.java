@@ -98,7 +98,11 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
             }
         }
 
+        // reorder the eigenvalues and eigenvector s array in base class
+        matricesToEigenArrays();
+
         checkDefinition(matrix);
+
     }
 
     /** {@inheritDoc} */
