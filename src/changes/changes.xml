@@ -49,6 +49,12 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
+    <release version="2.1" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issue/173">
+        Fixed inconsistency of eigenvalues and eigenvectors between OrderedComplexEigenDecomposition
+        and base class ComplexEigenDecomposition.
+      </action>
+    </release>
     <release version="2.0" date="2021-08-07" description="This is a major release. The main changes
     are the addition of a sequential Gauss-Newton optimizer, improved relative scheduling of step handlers
     and events handlers in ODE, addition of a finish callback in step handlers, replacement of

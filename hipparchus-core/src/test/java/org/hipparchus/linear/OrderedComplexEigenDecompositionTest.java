@@ -17,7 +17,7 @@
 package org.hipparchus.linear;
 
 import org.junit.Assert;
-
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.complex.Complex;
 import org.junit.Test;
 
@@ -50,6 +50,21 @@ public class OrderedComplexEigenDecompositionTest {
         compareMatrices(A.multiply(eigenDecomp.getV()),
                         eigenDecomp.getV().multiply(eigenDecomp.getD()),
                         threshold);
+
+    }
+
+    @Test
+    public void testIssue173() {
+
+        OrderedComplexEigenDecomposition eigenDecomp = new OrderedComplexEigenDecomposition(A);
+
+        UnitTestUtils.assertEquals(eigenDecomp.getEigenvalues()[0], eigenDecomp.getD().getEntry(0, 0), 1.0e-10);
+        UnitTestUtils.assertEquals(eigenDecomp.getEigenvalues()[1], eigenDecomp.getD().getEntry(1, 1), 1.0e-10);
+
+        UnitTestUtils.assertEquals(eigenDecomp.getEigenvector(0).getEntry(0), eigenDecomp.getV().getEntry(0, 0), 1.0e-10);
+        UnitTestUtils.assertEquals(eigenDecomp.getEigenvector(0).getEntry(1), eigenDecomp.getV().getEntry(1, 0), 1.0e-10);
+        UnitTestUtils.assertEquals(eigenDecomp.getEigenvector(1).getEntry(0), eigenDecomp.getV().getEntry(0, 1), 1.0e-10);
+        UnitTestUtils.assertEquals(eigenDecomp.getEigenvector(1).getEntry(1), eigenDecomp.getV().getEntry(1, 0), 1.0e-10);
 
     }
 
