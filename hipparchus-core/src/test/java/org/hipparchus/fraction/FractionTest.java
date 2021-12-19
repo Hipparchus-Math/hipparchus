@@ -21,6 +21,9 @@
  */
 package org.hipparchus.fraction;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -651,6 +654,52 @@ public class FractionTest {
         for (Fraction fraction : fractions) {
             Assert.assertEquals(fraction, UnitTestUtils.serializeAndRecover(fraction));
         }
+    }
+
+    @Test
+    public void testConvergents() {
+        // OEIS A002485, Numerators of convergents to Pi (https://oeis.org/A002485)
+        // 0, 1, 3, 22, 333, 355, 103993, 104348, 208341, 312689, 833719, 1146408, 4272943, 5419351, 80143857, 165707065, 245850922
+        // OEIS A002486, Apart from two leading terms (which are present by convention), denominators of convergents to Pi (https://oeis.org/A002486)
+        // 1, 0, 1,  7, 106, 113,  33102,  33215,  66317,  99532, 265381,  364913, 1360120, 1725033, 25510582,  52746197, 78256779
+        List<Fraction> convergents = Fraction.convergents(FastMath.PI, 20).collect(Collectors.toList());
+        Assert.assertEquals(13, convergents.size());
+        Assert.assertEquals(new Fraction(       3,        1), convergents.get( 0));
+        Assert.assertEquals(new Fraction(      22,        7), convergents.get( 1));
+        Assert.assertEquals(new Fraction(     333,      106), convergents.get( 2));
+        Assert.assertEquals(new Fraction(     355,      113), convergents.get( 3));
+        Assert.assertEquals(new Fraction(  103993,    33102), convergents.get( 4));
+        Assert.assertEquals(new Fraction(  104348,    33215), convergents.get( 5));
+        Assert.assertEquals(new Fraction(  208341,    66317), convergents.get( 6));
+        Assert.assertEquals(new Fraction(  312689,    99532), convergents.get( 7));
+        Assert.assertEquals(new Fraction(  833719,   265381), convergents.get( 8));
+        Assert.assertEquals(new Fraction( 1146408,   364913), convergents.get( 9));
+        Assert.assertEquals(new Fraction( 4272943,  1360120), convergents.get(10));
+        Assert.assertEquals(new Fraction( 5419351,  1725033), convergents.get(11));
+        Assert.assertEquals(new Fraction(80143857, 25510582), convergents.get(12));
+    }
+
+    @Test
+    public void testLimitedConvergents() {
+        Assert.assertEquals(new Fraction(  208341,    66317),
+                            Fraction.convergents(FastMath.PI, 7).
+                                     reduce((previous, current) -> current).
+                                     get());
+    }
+
+    @Test
+    public void testTruncatedConvergents() {
+        final double value = FastMath.PI;
+        Assert.assertEquals(new Fraction(   355,   113),
+                            Fraction.convergents(value, 20).
+                                     filter(f -> FastMath.abs(f.doubleValue() - value) < 1.0e-6).
+                                     findFirst().
+                                     get());
+        Assert.assertEquals(new Fraction(312689, 99532),
+                            Fraction.convergents(value, 20).
+                                     filter(f -> FastMath.abs(f.doubleValue() - value) < 1.0e-10).
+                                     findFirst().
+                                     get());
     }
 
 }
