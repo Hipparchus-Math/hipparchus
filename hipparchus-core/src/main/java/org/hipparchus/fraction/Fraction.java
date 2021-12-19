@@ -23,6 +23,12 @@ package org.hipparchus.fraction;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.Iterator;
+import java.util.Optional;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -31,6 +37,7 @@ import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.Precision;
 
 /**
  * Representation of a rational number.
@@ -121,7 +128,17 @@ public class Fraction
      */
     public Fraction(double value, double epsilon, int maxIterations)
         throws MathIllegalStateException {
-        this(value, epsilon, Integer.MAX_VALUE, maxIterations);
+        final Optional<Fraction> optional =
+                        convergents(value, maxIterations).
+                        filter(f -> FastMath.abs(f.doubleValue() - value) < epsilon).
+                        findFirst();
+        if (optional.isPresent()) {
+            this.numerator   = optional.get().numerator;
+            this.denominator = optional.get().denominator;
+        } else {
+            throw new MathIllegalStateException(LocalizedCoreFormats.FAILED_FRACTION_CONVERSION,
+                                                value, maxIterations);
+        }
     }
 
     /**
@@ -140,106 +157,17 @@ public class Fraction
      */
     public Fraction(double value, int maxDenominator)
         throws MathIllegalStateException {
-       this(value, 0, maxDenominator, 100);
-    }
-
-    /**
-     * Create a fraction given the double value and either the maximum error
-     * allowed or the maximum number of denominator digits.
-     * <p>
-     * NOTE: This constructor is called with EITHER
-     *   - a valid epsilon value and the maxDenominator set to Integer.MAX_VALUE
-     *     (that way the maxDenominator has no effect).
-     * OR
-     *   - a valid maxDenominator value and the epsilon value set to zero
-     *     (that way epsilon only has effect if there is an exact match before
-     *     the maxDenominator value is reached).
-     * <p>
-     * It has been done this way so that the same code can be (re)used for both
-     * scenarios. However this could be confusing to users if it were part of
-     * the public API and this constructor should therefore remain PRIVATE.
-     * <p>
-     * See JIRA issue ticket MATH-181 for more details:
-     *
-     *     https://issues.apache.org/jira/browse/MATH-181
-     *
-     * @param value the double value to convert to a fraction.
-     * @param epsilon maximum error allowed.  The resulting fraction is within
-     *        {@code epsilon} of {@code value}, in absolute terms.
-     * @param maxDenominator maximum denominator value allowed.
-     * @param maxIterations maximum number of convergents
-     * @throws MathIllegalStateException if the continued fraction failed to
-     *         converge.
-     */
-    private Fraction(double value, double epsilon, int maxDenominator, int maxIterations)
-        throws MathIllegalStateException {
-
-        long overflow = Integer.MAX_VALUE;
-        double r0 = value;
-        long a0 = (long)FastMath.floor(r0);
-        if (FastMath.abs(a0) > overflow) {
-            throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW,
-                                                value, a0, 1l);
-        }
-
-        // check for (almost) integer arguments, which should not go to iterations.
-        if (FastMath.abs(a0 - value) < epsilon) {
-            this.numerator = (int) a0;
-            this.denominator = 1;
-            return;
-        }
-
-        long p0 = 1;
-        long q0 = 0;
-        long p1 = a0;
-        long q1 = 1;
-
-        long p2;
-        long q2;
-
-        int n = 0;
-        boolean stop = false;
-        do {
-            ++n;
-            double r1 = 1.0 / (r0 - a0);
-            long a1 = (long)FastMath.floor(r1);
-            p2 = (a1 * p1) + p0;
-            q2 = (a1 * q1) + q0;
-
-            if ((FastMath.abs(p2) > overflow) || (FastMath.abs(q2) > overflow)) {
-                // in maxDenominator mode, if the last fraction was very close to the actual value
-                // q2 may overflow in the next iteration; in this case return the last one.
-                if (epsilon == 0.0 && FastMath.abs(q1) < maxDenominator) {
-                    break;
-                }
-                throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW,
-                                                    value, p2, q2);
-            }
-
-            double convergent = (double)p2 / (double)q2;
-            if (n < maxIterations && FastMath.abs(convergent - value) > epsilon && q2 < maxDenominator) {
-                p0 = p1;
-                p1 = p2;
-                q0 = q1;
-                q1 = q2;
-                a0 = a1;
-                r0 = r1;
-            } else {
-                stop = true;
-            }
-        } while (!stop);
-
-        if (n >= maxIterations) {
+        final int maxIterations = 100;
+        final Optional<Fraction> optional =
+                        convergents(value, maxIterations).
+                        filter(f -> f.getDenominator() <= maxDenominator).
+                        reduce((previous, current) -> current);
+        if (optional.isPresent()) {
+            this.numerator   = optional.get().numerator;
+            this.denominator = optional.get().denominator;
+        } else {
             throw new MathIllegalStateException(LocalizedCoreFormats.FAILED_FRACTION_CONVERSION,
                                                 value, maxIterations);
-        }
-
-        if (q2 < maxDenominator) {
-            this.numerator = (int) p2;
-            this.denominator = (int) q2;
-        } else {
-            this.numerator = (int) p1;
-            this.denominator = (int) q1;
         }
     }
 
@@ -287,6 +215,71 @@ public class Fraction
         }
         this.numerator   = num;
         this.denominator = den;
+    }
+
+    /** Generate a {@link Stream stream} of convergents from a real number.
+     * @param value value to approximate
+     * @param maxConbvergents maximum number of convergents.
+     * @return stream of {@link Fraction} convergents approximating  {@code value}
+     * @since 2.1
+     */
+    public static Stream<Fraction> convergents(final double value, final int maxConvergents) {
+        if (FastMath.abs(value) > Integer.MAX_VALUE) {
+            throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW,
+                                                value, value, 1l);
+        }
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(generatingIterator(value, maxConvergents),
+                                                                        Spliterator.DISTINCT),
+                                    false);
+    }
+
+    /** Iterator for generating continuous fractions.
+     * @param value value to approximate
+     * @param maxConbvergents maximum number of convergents.
+     * @return iterator iterating over continuous fractions aproximating {@code value}
+     * @since 2.1
+     */
+    private static Iterator<Fraction> generatingIterator(final double value, final int maxConvergents) {
+        return new Iterator<Fraction>() {
+
+            private static final long OVERFLOW = Integer.MAX_VALUE;
+            private long    p0   = 0;
+            private long    q0   = 1;
+            private long    p1   = 1;
+            private long    q1   = 0;
+            private double  r1   = value;
+            private boolean stop = false;
+            private int     n    = 0;
+
+            /** {@inheritDoc} */
+            @Override
+            public boolean hasNext() {
+                return n < maxConvergents && !stop;
+            }
+
+            /** {@inheritDoc} */
+            @Override
+            public Fraction next() {
+                ++n;
+
+                final long a1 = (long) FastMath.floor(r1);
+                long p2 = (a1 * p1) + p0;
+                long q2 = (a1 * q1) + q0;
+
+                final double convergent = (double) p2 / (double) q2;
+                stop = Precision.equals(convergent, value, 1);
+                if ((p2 > OVERFLOW || q2 > OVERFLOW) && !stop) {
+                    throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, value, p2, q2);
+                }
+                p0 = p1;
+                p1 = p2;
+                q0 = q1;
+                q1 = q2;
+                r1 = 1.0 / (r1 - a1);
+                return new Fraction((int) p2, (int) q2);
+            }
+
+        };
     }
 
     /** {@inheritDoc} */

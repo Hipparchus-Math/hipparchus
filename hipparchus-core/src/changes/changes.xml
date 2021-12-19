@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.1" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issue/176">
+        Allow generation of continued fractions convergents as streams of BigFraction/Fraction
+        to allow user to apply their own convergence criterion to select one convergent.
+      </action>
       <action dev="luc" type="add" issue="issue/173">
         Fixed inconsistency of eigenvalues and eigenvectors between OrderedComplexEigenDecomposition
         and base class ComplexEigenDecomposition.
