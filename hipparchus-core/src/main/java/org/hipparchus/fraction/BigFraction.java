@@ -24,7 +24,6 @@ package org.hipparchus.fraction;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Iterator;
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -40,7 +39,6 @@ import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
-import org.hipparchus.util.Precision;
 
 /**
  * Representation of a rational number without any overflow. This class is
@@ -351,58 +349,10 @@ public class BigFraction
             throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW,
                                                 value, value, 1l);
         }
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(generatingIterator(value, maxConvergents),
-                                                                        Spliterator.DISTINCT),
+        final ConvergentsIterator<BigFraction> iterator =
+                        new ConvergentsIterator<>(value, maxConvergents, (p, q) -> new BigFraction(p, q));
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.DISTINCT),
                                     false);
-    }
-
-    /** Iterator for generating continuous fractions.
-     * @param value value to approximate
-     * @param maxConbvergents maximum number of convergents.
-     * @return iterator iterating over continuous fractions aproximating {@code value}
-     * @since 2.1
-     */
-    private static Iterator<BigFraction> generatingIterator(final double value, final int maxConvergents) {
-        return new Iterator<BigFraction>() {
-
-            private static final long OVERFLOW = Integer.MAX_VALUE;
-            private long    p0   = 0;
-            private long    q0   = 1;
-            private long    p1   = 1;
-            private long    q1   = 0;
-            private double  r1   = value;
-            private boolean stop = false;
-            private int     n    = 0;
-
-            /** {@inheritDoc} */
-            @Override
-            public boolean hasNext() {
-                return n < maxConvergents && !stop;
-            }
-
-            /** {@inheritDoc} */
-            @Override
-            public BigFraction next() {
-                ++n;
-
-                final long a1 = (long) FastMath.floor(r1);
-                long p2 = (a1 * p1) + p0;
-                long q2 = (a1 * q1) + q0;
-
-                final double convergent = (double) p2 / (double) q2;
-                stop = Precision.equals(convergent, value, 1);
-                if ((p2 > OVERFLOW || q2 > OVERFLOW) && !stop) {
-                    throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, value, p2, q2);
-                }
-                p0 = p1;
-                p1 = p2;
-                q0 = q1;
-                q1 = q2;
-                r1 = 1.0 / (r1 - a1);
-                return new BigFraction(p2, q2);
-            }
-
-        };
     }
 
     /** {@inheritDoc} */
