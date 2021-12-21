@@ -29,9 +29,11 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
 /** Iterator for generating convergents.
+ * @param <T> type for the convergents
  */
 class ConvergentsIterator<T> implements Iterator<T> {
 
+    /** Threshold for detecting overflows during iterations. */
     private static final long OVERFLOW = Integer.MAX_VALUE;
 
     /** Value towards which convergents should converge. */
