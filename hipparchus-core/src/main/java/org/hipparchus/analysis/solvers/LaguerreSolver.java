@@ -365,7 +365,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
                 final Complex denominator = dplus.norm() > dminus.norm() ? dplus : dminus;
                 // Perturb z if denominator is zero, for instance,
                 // p(x) = x^3 + 1, z = 0.
-                if (denominator.equals(new Complex(0.0, 0.0))) {
+                if (denominator.isZero()) {
                     z = z.add(new Complex(absoluteAccuracy, absoluteAccuracy));
                     oldz = new Complex(Double.POSITIVE_INFINITY,
                                        Double.POSITIVE_INFINITY);
