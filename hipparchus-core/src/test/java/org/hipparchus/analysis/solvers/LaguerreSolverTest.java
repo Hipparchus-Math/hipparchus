@@ -26,6 +26,7 @@ import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -160,4 +161,21 @@ public final class LaguerreSolverTest {
             // expected
         }
     }
+
+    @Test
+    public void testIssue177() {
+        doTestIssue177(new double[] {-100.0,    0.0, 0.0, 0.0, 1.0}, FastMath.sqrt(10.0));
+        doTestIssue177(new double[] {        -100.0, 0.0, 0.0, 1.0}, FastMath.cbrt(100.0));
+        doTestIssue177(new double[] { -16.0,    0.0, 0.0, 0.0, 1.0}, 2.0);
+    }
+
+    private void doTestIssue177(final double[] coefficients, final double expected) {
+        Complex[] roots = new LaguerreSolver(1.0e-5).solveAllComplex(coefficients, 0);
+        Assert.assertEquals(coefficients.length - 1, roots.length);
+        for (final Complex root : roots) {
+            Assert.assertEquals(expected, root.norm(), 1.0e-15);
+            Assert.assertEquals(0.0, MathUtils.normalizeAngle(roots.length * root.getArgument(), 0.0), 1.0e-15);
+        }
+    }
+
 }

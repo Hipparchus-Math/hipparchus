@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.1" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issue/177">
+        Fixed issue in Laguerre solver related to different representations of signed zeros.
+      </action>
       <action dev="luc" type="add" issue="issue/176">
         Allow generation of continued fractions convergents as streams of BigFraction/Fraction
         to allow user to apply their own convergence criterion to select one convergent.
