@@ -228,7 +228,9 @@ public class Fraction
         }
         final ConvergentsIterator<Fraction> iterator =
                         new ConvergentsIterator<>(value, maxConvergents, (p, q) -> new Fraction((int) p, (int) q));
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.DISTINCT),
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator,
+                                                                        Spliterator.DISTINCT  | Spliterator.NONNULL |
+                                                                        Spliterator.IMMUTABLE | Spliterator.ORDERED),
                                     false);
     }
 

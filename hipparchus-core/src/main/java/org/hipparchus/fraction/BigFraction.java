@@ -351,7 +351,9 @@ public class BigFraction
         }
         final ConvergentsIterator<BigFraction> iterator =
                         new ConvergentsIterator<>(value, maxConvergents, (p, q) -> new BigFraction(p, q));
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.DISTINCT),
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator,
+                                                                        Spliterator.DISTINCT  | Spliterator.NONNULL |
+                                                                        Spliterator.IMMUTABLE | Spliterator.ORDERED),
                                     false);
     }
 
