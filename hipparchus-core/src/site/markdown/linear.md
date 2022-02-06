@@ -91,7 +91,7 @@ to be solved with the same coefficient matrix.
 For example, to solve the linear system
 <pre>
 2x + 3y - 2z = 1
--x + 7y + 6x = -2
+-x + 7y + 6z = -2
 4x - 3y - 5z = 1
 </pre>
 Start by decomposing the coefficient matrix A (in this case using LU decomposition)
