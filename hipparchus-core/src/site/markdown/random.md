@@ -22,7 +22,6 @@ The Hipparchus random package includes utilities for
 * generating random numbers
 * generating random vectors
 * generating random strings
-* generating cryptographically secure sequences of random numbers or strings
 * generating random samples and permutations
 * analyzing distributions of values in an input file and generating values "like" the values in the file
 * generating data for grouped frequency distributions or histograms
@@ -71,26 +70,11 @@ Here the default Well generator is used the source of randomness and 1000 is pas
 
 For user-defined distributions, or Hipparchus distributions not included among the `nextXxx` methods of `RandomDataGenerator`, one can use the `nextDeviate` methods, which take real or integer distribution instances as arguments, implementing a generic inversion-based sampling method for arbitrary distributions.  There are also `nextDeviates` methods that take a distribution and an integer as arguments.  These are handy when you want to generate an array of random values.  Any distribution, including thos covered by the `nextXxx` methods, can be passed to these methods and `RandomDataGenerator` will use the best implementation that it has.
 
-### Cryptographically secure random sequences
-
-It is possible for a sequence of numbers to appear random, but
-nonetheless to be predictable based on the algorithm used to generate the
-sequence. If in addition to randomness, strong unpredictability is
-required, it is best to use a
-[secure random number generator](http://www.wikipedia.org/wiki/Cryptographically_secure_pseudo-random_number_generator) to generate values (or strings). The
-nextSecureXxx methods implemented by `RandomDataGenerator`
-use the JDK `SecureRandom` PRNG to generate cryptographically
-secure sequences. The `setSecureAlgorithm` method allows you to
-change the underlying PRNG. These methods are __much slower__ than
-the corresponding "non-secure" versions, so they should only be used when
-cryptographic security is required.  The `ISAACRandom` class implements a
-fast cryptographically secure pseudorandom number generator.
-
 ### Seeding pseudo-random number generators
 
 By default, the implementation provided in `RandomDataGenerator`
-uses a Well19937c generator seeded with the system time and its system identity hashcode. For the non-secure methods, starting with the same seed always produces the
-same sequence of values.  Secure sequences started with the same seeds will diverge. To generate sequences of random data values, you should always
+uses a Well19937c generator seeded with the system time and its system identity hashcode. Starting with the same seed always produces the
+same sequence of values. To generate sequences of random data values, you should always
 instantiate __one__ ` RandomDataGenerator` and use it
 repeatedly instead of creating new instances for subsequent values in the
 sequence.  For example, the following will generate a random sequence of 50
@@ -115,15 +99,6 @@ The following will produce the same random sequence each time it is executed:
     for (int i = 0; i = 1000; i++) {
         value = randomData.nextLong(1, 1000000);
     }
-
-The following will produce a different random sequence each time it is executed.
-
-    RandomDataGenerator randomData = new RandomDataGenerator(); 
-    randomData.reSeedSecure(1000);
-    for (int i = 0; i &lt; 1000; i++) {
-        value = randomData.nextSecureLong(1, 1000000);
-    }
-
 
 ## Random Vectors
 
@@ -200,7 +175,6 @@ Currently, the following low-discrepancy sequences are supported:
 * generating random numbers
 * generating random vectors
 * generating random strings
-* generating cryptographically secure sequences of random numbers or strings
 * generating random samples and permutations
 * analyzing distributions of values in an input file and generating values "like" the values in the file
 * generating data for grouped frequency distributions or histograms
@@ -220,37 +194,14 @@ in the interval [0, 1]. Roughly speaking, such sequences "fill" the respective s
 
 ## Random Strings
 
-The methods `nextHexString` and `nextSecureHexString`
-can be used to generate random strings of hexadecimal characters.  Both
-of these methods produce sequences of strings with good dispersion
-properties.  The difference between the two methods is that the second can be
-cryptographically secure (depending on the quality of the secure algorithm provider).  The implementation of
+The method `nextHexString` can be used to generate random strings of hexadecimal characters.
+It produces sequences of strings with good dispersion properties.  The implementation of
 `nextHexString(n)` in `RandomDataGenerator` uses the
 following simple algorithm to generate a string of `n` hex digits:
 
 * `n/2+1` binary bytes are generated using the underlying RandomGenerator
 * Each binary byte is translated into 2 hex digits
     
-The `RandomDataGenerator` implementation of the "secure" version,
-`nextSecureHexString` generates hex characters in 40-byte
-"chunks" using a 3-step process:
-
-* generating random numbers
-* generating random vectors
-* generating random strings
-* generating cryptographically secure sequences of random numbers or strings
-* generating random samples and permutations
-* analyzing distributions of values in an input file and generating values "like" the values in the file
-* generating data for grouped frequency distributions or histograms
-
-Similarly to the secure random number generation methods,
-`nextSecureHexString` is __much slower__ than
-the non-secure version.  It should be used only for applications such as
-generating unique session or transaction ids where predictability of
-subsequent ids based on observation of previous values is a security
-concern.  If all that is needed is an even distribution of hex characters
-in the generated strings, the non-secure method should be used.
-
 ## Random permutations, combinations, sampling
 
 To select a random sample of objects in a collection, you can use the
@@ -348,7 +299,6 @@ Hipparchus provides by itself several implementations of the
 * generating random numbers
 * generating random vectors
 * generating random strings
-* generating cryptographically secure sequences of random numbers or strings
 * generating random samples and permutations
 * analyzing distributions of values in an input file and generating values "like" the values in the file
 * generating data for grouped frequency distributions or histograms
