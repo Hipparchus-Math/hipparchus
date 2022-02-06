@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.1" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issue/178">
+        Added Modified Gram-Schmidt basis orthonormalization process in MatrixUtils
+        for double-based and CalculusFieldElement-based list of vectors.
+      </action>
       <action dev="luc" type="fix" issue="issue/177">
         Fixed issue in Laguerre solver related to different representations of signed zeros.
       </action>

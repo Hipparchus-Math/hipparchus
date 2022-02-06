@@ -660,7 +660,7 @@ public abstract class RealVector {
         if (norm2 == 0.0) {
             throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NORM);
         }
-        return v.mapMultiply(dotProduct(v) / v.dotProduct(v));
+        return v.mapMultiply(dotProduct(v) / norm2);
     }
 
     /**

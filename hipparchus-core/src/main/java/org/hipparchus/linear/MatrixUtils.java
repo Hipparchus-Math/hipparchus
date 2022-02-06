@@ -25,8 +25,11 @@ package org.hipparchus.linear;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -1312,5 +1315,82 @@ public class MatrixUtils {
         return result;
     }
 
+    /** Orthonormalize a list of vectors.
+     * <p>
+     * Orthonormalization is performed by using the Modified Gram-Schmidt process.
+     * </p>
+     * @param independent list of independent vectors
+     * @return orthonormal basis having the same span as {@code independent}
+     * @since 2.1
+     */
+    public static List<RealVector> orthonormalize(final List<RealVector> independent) {
+
+        // create separate list
+        final List<RealVector> basis = new ArrayList<>(independent);
+
+        // loop over basis vectors
+        for (int i = 0; i < basis.size(); ++i) {
+
+            // normalize basis vector in place
+            final RealVector vi = basis.get(i);
+            final double norm = vi.getNorm();
+            if (norm == 0.0) {
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NORM);
+            }
+            vi.mapDivideToSelf(vi.getNorm());
+
+            // project remaining vectors in place
+            for (int j = i + 1; j < basis.size(); ++j) {
+                final RealVector vj  = basis.get(j);
+                final double     dot = vi.dotProduct(vj);
+                for (int k = 0; k < vj.getDimension(); ++k) {
+                    vj.setEntry(k, vj.getEntry(k) - dot * vi.getEntry(k));
+                }
+            }
+
+        }
+
+        return basis;
+
+    }
+
+    /** Orthonormalize a list of vectors.
+     * <p>
+     * Orthonormalization is performed by using the Modified Gram-Schmidt process.
+     * </p>
+     * @param <T> type of the field elements
+     * @param independent list of independent vectors
+     * @return orthonormal basis having the same span as {@code independent}
+     * @since 2.1
+     */
+    public static <T extends CalculusFieldElement<T>> List<FieldVector<T>> orthonormalize(final Field<T> field, final List<FieldVector<T>> independent) {
+
+        // create separate list
+        final List<FieldVector<T>> basis = new ArrayList<>(independent);
+
+        // loop over basis vectors
+        for (int i = 0; i < basis.size(); ++i) {
+
+            // normalize basis vector in place
+            final FieldVector<T> vi = basis.get(i);
+            final T norm = vi.dotProduct(vi).sqrt();
+            if (norm.isZero()) {
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NORM);
+            }
+            vi.mapDivideToSelf(norm);
+
+            // project remaining vectors in place
+            for (int j = i + 1; j < basis.size(); ++j) {
+                final FieldVector<T> vj  = basis.get(j);
+                final T              dot = vi.dotProduct(vj);
+                for (int k = 0; k < vj.getDimension(); ++k) {
+                    vj.setEntry(k, vj.getEntry(k).subtract(dot.multiply(vi.getEntry(k))));
+                }
+            }
+        }
+
+        return basis;
+
+    }
 
 }
