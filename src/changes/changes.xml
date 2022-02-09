@@ -49,6 +49,13 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
+    <release version="3.0" date="TBD" description="TBD">
+      <action dev="luc" type="update">
+        Make equals consistent with IEEE754 concerning NaN coordinates
+        for S1Point, S2Point, Vector1D, Vector2D and Vector3D (i.e. when
+        there is a NaN anywhere, equals returns false).
+      </action>
+    </release>
     <release version="2.1" date="TBD" description="TBD">
       <action dev="luc" type="fix" issue="issue/178">
         Added Modified Gram-Schmidt basis orthonormalization process in MatrixUtils

@@ -42,8 +42,21 @@ public class S1PointTest {
     @Test
     public void testNaN() {
         Assert.assertTrue(S1Point.NaN.isNaN());
-        Assert.assertTrue(S1Point.NaN.equals(new S1Point(Double.NaN)));
+        Assert.assertTrue(S1Point.NaN.equalsIncludingNaN(new S1Point(Double.NaN)));
         Assert.assertFalse(new S1Point(1.0).equals(S1Point.NaN));
+    }
+
+    @Test
+    public void testEqualsIncludingNaN() {
+        S1Point a = new S1Point(1.0);
+        S1Point b = new S1Point(1.0);
+        Assert.assertEquals(a.hashCode(), b.hashCode());
+        Assert.assertFalse(a == b);
+        Assert.assertTrue(a.equalsIncludingNaN(b));
+        Assert.assertTrue(a.equalsIncludingNaN(a));
+        Assert.assertFalse(a.equalsIncludingNaN('a'));
+        Assert.assertTrue(S1Point.NaN.equalsIncludingNaN(S1Point.NaN));
+        Assert.assertTrue(S1Point.NaN.equalsIncludingNaN(new S1Point(Double.NaN)));
     }
 
     @SuppressWarnings("unlikely-arg-type")
@@ -56,6 +69,8 @@ public class S1PointTest {
         Assert.assertTrue(a.equals(b));
         Assert.assertTrue(a.equals(a));
         Assert.assertFalse(a.equals('a'));
+        Assert.assertFalse(S1Point.NaN.equals(S1Point.NaN));
+        Assert.assertFalse(S1Point.NaN.equals(new S1Point(Double.NaN)));
     }
 
     @Test

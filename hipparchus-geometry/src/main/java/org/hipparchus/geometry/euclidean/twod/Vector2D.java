@@ -466,13 +466,47 @@ public class Vector2D implements Vector<Euclidean2D> {
      * Test for the equality of two 2D vectors.
      * <p>
      * If all coordinates of two 2D vectors are exactly the same, and none are
-     * <code>Double.NaN</code>, the two 2D vectors are considered to be equal.
+     * {@code Double.NaN}, the two 2D vectors are considered to be equal.
      * </p>
      * <p>
-     * <code>NaN</code> coordinates are considered to affect globally the vector
+     * {@code NaN} coordinates are considered to affect globally the vector
      * and be equals to each other - i.e, if either (or all) coordinates of the
-     * 2D vector are equal to <code>Double.NaN</code>, the 2D vector is equal to
+     * 2D vector are equal to {@code Double.NaN}, the 2D vector is equal to
      * {@link #NaN}.
+     * </p>
+     *
+     * @param other Object to test for equality to this
+     * @return true if two 2D vector objects are equal, false if
+     *         object is null, not an instance of Vector2D, or
+     *         not equal to this Vector2D instance
+     * @since 3.0
+     */
+    public boolean equalsIncludingNaN(Object other) {
+
+        if (this == other) {
+            return true;
+        }
+
+        if (other instanceof Vector2D) {
+            final Vector2D rhs = (Vector2D)other;
+            return x == rhs.x && y == rhs.y || isNaN() && rhs.isNaN();
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Test for the equality of two 2D vectors.
+     * <p>
+     * If all coordinates of two 2D vectors are exactly the same, and none are
+     * {@code NaN}, the two 2D vectors are considered to be equal.
+     * </p>
+     * <p>
+     * In compliance with IEEE754 handling, if any coordinates of any of the
+     * two vectors are {@code NaN}, then the vectors are considered different.
+     * This implies that {@link #NaN Vector2D.NaN}.equals({@link #NaN Vector2D.NaN})
+     * returns {@code false} despite the instance is checked against itself.
      * </p>
      *
      * @param other Object to test for equality to this
@@ -484,17 +518,13 @@ public class Vector2D implements Vector<Euclidean2D> {
     @Override
     public boolean equals(Object other) {
 
-        if (this == other) {
+        if (this == other && !isNaN()) {
             return true;
         }
 
         if (other instanceof Vector2D) {
-            final Vector2D rhs = (Vector2D)other;
-            if (rhs.isNaN()) {
-                return this.isNaN();
-            }
-
-            return (x == rhs.x) && (y == rhs.y);
+            final Vector2D rhs = (Vector2D) other;
+            return x == rhs.x && y == rhs.y;
         }
         return false;
     }

@@ -190,12 +190,12 @@ public class S2Point implements Point<Sphere2D> {
      * Test for the equality of two points on the 2-sphere.
      * <p>
      * If all coordinates of two points are exactly the same, and none are
-     * <code>Double.NaN</code>, the two points are considered to be equal.
+     * {@code Double.NaN}, the two points are considered to be equal.
      * </p>
      * <p>
-     * <code>NaN</code> coordinates are considered to affect globally the vector
+     * {@code NaN} coordinates are considered to affect globally the point
      * and be equals to each other - i.e, if either (or all) coordinates of the
-     * 2D vector are equal to <code>Double.NaN</code>, the 2D vector is equal to
+     * point are equal to {@code Double.NaN}, the point is equal to
      * {@link #NaN}.
      * </p>
      *
@@ -204,9 +204,9 @@ public class S2Point implements Point<Sphere2D> {
      *         object is null, not an instance of S2Point, or
      *         not equal to this S2Point instance
      *
+     * @since 3.0
      */
-    @Override
-    public boolean equals(Object other) {
+    public boolean equalsIncludingNaN(Object other) {
 
         if (this == other) {
             return true;
@@ -214,17 +214,49 @@ public class S2Point implements Point<Sphere2D> {
 
         if (other instanceof S2Point) {
             final S2Point rhs = (S2Point) other;
-            if (rhs.isNaN()) {
-                return this.isNaN();
-            }
-
-            return (theta == rhs.theta) && (phi == rhs.phi);
+            return theta == rhs.theta && phi == rhs.phi || isNaN() && rhs.isNaN();
         }
+
         return false;
+
     }
 
     /**
-     * Get a hashCode for the 2D vector.
+     * Test for the equality of two points on the 2-sphere.
+     * <p>
+     * If all coordinates of two points are exactly the same, and none are
+     * {@code Double.NaN}, the two points are considered to be equal.
+     * </p>
+     * <p>
+     * In compliance with IEEE754 handling, if any coordinates of any of the
+     * two points are {@code NaN}, then the points are considered different.
+     * This implies that {@link #NaN S2Point.NaN}.equals({@link #NaN S2Point.NaN})
+     * returns {@code false} despite the instance is checked against itself.
+     * </p>
+     *
+     * @param other Object to test for equality to this
+     * @return true if two points objects are equal, false if
+     *         object is null, not an instance of S2Point, or
+     *         not equal to this S2Point instance
+     */
+    @Override
+    public boolean equals(Object other) {
+
+        if (this == other && !isNaN()) {
+            return true;
+        }
+
+        if (other instanceof S2Point) {
+            final S2Point rhs = (S2Point) other;
+            return phi == rhs.phi && theta == rhs.theta;
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Get a hashCode for the point.
      * <p>
      * All NaN values have the same hash code.</p>
      *
