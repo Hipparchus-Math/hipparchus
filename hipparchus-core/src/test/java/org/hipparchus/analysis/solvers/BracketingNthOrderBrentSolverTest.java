@@ -22,6 +22,9 @@
 
 package org.hipparchus.analysis.solvers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.differentiation.DSFactory;
@@ -29,6 +32,7 @@ import org.hipparchus.analysis.differentiation.Derivative;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -159,6 +163,30 @@ public final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbs
         });
 
     }
+
+    @Test
+    public void testSolverStopIteratingOnceSolutionIsFound() {
+        final double absoluteAccuracy = 0.1;
+        final double valueAccuracy = 1.;
+        BracketingNthOrderBrentSolver solver = new BracketingNthOrderBrentSolver(1e-14, absoluteAccuracy, valueAccuracy, 5);
+        FunctionHipparcus function = new FunctionHipparcus();
+        solver.solve(100, function, -100, 100);
+        Assert.assertEquals(1, function.values.stream().filter(value -> FastMath.abs(value) < valueAccuracy).count());
+        Assert.assertEquals(7, function.values.size());
+    }
+
+    private static class FunctionHipparcus implements UnivariateFunction {
+
+        List<Double> values = new ArrayList<>();
+
+        @Override
+        public double value(double x) {
+            double value = -0.01 * x * x + 20;
+            values.add(value);
+            return value;
+        }
+    }
+
 
     private void compare(TestFunction f) {
         compare(f, f.getRoot(), f.getMin(), f.getMax());

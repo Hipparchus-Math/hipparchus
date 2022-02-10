@@ -295,9 +295,10 @@ public class BracketingNthOrderBrentSolver
 
             // evaluate the function at the guessed root
             final double nextY = computeObjectiveValue(nextX);
-            if (nextY == 0.0) {
-                // we have found an exact root, since it is not an approximation
-                // we don't need to bother about the allowed solutions setting
+            if (nextY == 0.0 || FastMath.abs(nextY) < getFunctionValueAccuracy() && allowed == AllowedSolution.ANY_SIDE) {
+                // we have either:
+                // - an exact root, so we don't we don't need to bother about the allowed solutions setting
+                // - or an approximate root and we know allowed solutions setting if to retrieve the value closest to zero
                 return new Interval(nextX, nextY, nextX, nextY);
             }
 
