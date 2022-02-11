@@ -206,19 +206,36 @@ public class Vector2DTest {
         Assert.assertFalse(Vector2D.MINUS_I.isInfinite());
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test public void testEquals() {
         final Vector2D u1 = Vector2D.PLUS_I;
         final Vector2D u2 = Vector2D.MINUS_I.negate();
         final Vector2D v1 = new Vector2D(1.0, 0.001);
         final Vector2D v2 = new Vector2D(0.001, 1.0);
-        Assert.assertEquals(u1, u1);
-        Assert.assertEquals(u1, u2);
-        Assert.assertNotEquals(u1, v1);
-        Assert.assertNotEquals(u1, v2);
-        Assert.assertNotEquals(u1, FieldVector2D.getPlusI(Decimal64Field.getInstance()));
-        Assert.assertEquals(new Vector2D(Double.NaN, u1), Vector2D.NaN);
-        Assert.assertNotEquals(u1, Vector2D.NaN);
-        Assert.assertNotEquals(Vector2D.NaN, v2);
+        Assert.assertTrue(u1.equals(u1));
+        Assert.assertTrue(u1.equals(u2));
+        Assert.assertFalse(u1.equals(v1));
+        Assert.assertFalse(u1.equals(v2));
+        Assert.assertFalse(u1.equals(FieldVector2D.getPlusI(Decimal64Field.getInstance())));
+        Assert.assertTrue(new Vector2D(Double.NaN, u1).equals(Vector2D.NaN));
+        Assert.assertFalse(u1.equals(Vector2D.NaN));
+        Assert.assertFalse(Vector2D.NaN.equals(v2));
+    }
+
+    @Test public void testEqualsIeee754() {
+        final Vector2D u1 = Vector2D.PLUS_I;
+        final Vector2D u2 = Vector2D.MINUS_I.negate();
+        final Vector2D v1 = new Vector2D(1.0, 0.001);
+        final Vector2D v2 = new Vector2D(0.001, 1.0);
+        Assert.assertTrue(u1.equalsIeee754(u1));
+        Assert.assertTrue(u1.equalsIeee754(u2));
+        Assert.assertFalse(u1.equalsIeee754(v1));
+        Assert.assertFalse(u1.equalsIeee754(v2));
+        Assert.assertFalse(u1.equalsIeee754(FieldVector2D.getPlusI(Decimal64Field.getInstance())));
+        Assert.assertFalse(new Vector2D(Double.NaN, u1).equalsIeee754(Vector2D.NaN));
+        Assert.assertFalse(u1.equalsIeee754(Vector2D.NaN));
+        Assert.assertFalse(Vector2D.NaN.equalsIeee754(v2));
+        Assert.assertFalse(Vector2D.NaN.equalsIeee754(Vector2D.NaN));
     }
 
     @Test public void testHashCode() {

@@ -88,6 +88,20 @@ public class Vector3DTest {
     }
 
     @Test
+    public void testEqualsIeee754() {
+        Vector3D u1 = new Vector3D(1, 2, 3);
+        Vector3D u2 = new Vector3D(1, 2, 3);
+        Assert.assertTrue(u1.equalsIeee754(u1));
+        Assert.assertTrue(u1.equalsIeee754(u2));
+        Assert.assertFalse(u1.equalsIeee754(new Rotation(1, 0, 0, 0, false)));
+        Assert.assertFalse(u1.equalsIeee754(new Vector3D(1, 2, 3 + 10 * Precision.EPSILON)));
+        Assert.assertFalse(u1.equalsIeee754(new Vector3D(1, 2 + 10 * Precision.EPSILON, 3)));
+        Assert.assertFalse(u1.equalsIeee754(new Vector3D(1 + 10 * Precision.EPSILON, 2, 3)));
+        Assert.assertFalse(new Vector3D(0, Double.NaN, 0).equalsIeee754(new Vector3D(0, 0, Double.NaN)));
+        Assert.assertFalse(Vector3D.NaN.equalsIeee754(Vector3D.NaN));
+    }
+
+    @Test
     public void testHash() {
         Assert.assertEquals(new Vector3D(0, Double.NaN, 0).hashCode(), new Vector3D(0, 0, Double.NaN).hashCode());
         Vector3D u = new Vector3D(1, 2, 3);

@@ -56,6 +56,21 @@ public class S1PointTest {
         Assert.assertTrue(a.equals(b));
         Assert.assertTrue(a.equals(a));
         Assert.assertFalse(a.equals('a'));
+        Assert.assertTrue(S1Point.NaN.equals(S1Point.NaN));
+        Assert.assertTrue(S1Point.NaN.equals(new S1Point(Double.NaN)));
+    }
+
+    @Test
+    public void testEqualsIeee754() {
+        S1Point a = new S1Point(1.0);
+        S1Point b = new S1Point(1.0);
+        Assert.assertEquals(a.hashCode(), b.hashCode());
+        Assert.assertFalse(a == b);
+        Assert.assertTrue(a.equalsIeee754(b));
+        Assert.assertTrue(a.equalsIeee754(a));
+        Assert.assertFalse(a.equalsIeee754('a'));
+        Assert.assertFalse(S1Point.NaN.equalsIeee754(S1Point.NaN));
+        Assert.assertFalse(S1Point.NaN.equalsIeee754(new S1Point(Double.NaN)));
     }
 
     @Test

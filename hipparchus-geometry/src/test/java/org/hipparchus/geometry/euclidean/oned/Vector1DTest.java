@@ -30,6 +30,8 @@ import java.util.Locale;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Space;
+import org.hipparchus.geometry.euclidean.twod.FieldVector2D;
+import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -64,14 +66,30 @@ public class Vector1DTest {
         Assert.assertEquals(0, new Vector1D(1).getZero().getNorm(), 1.0e-15);
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEquals() {
         Vector1D u1 = new Vector1D(1);
         Vector1D u2 = new Vector1D(1);
         Assert.assertTrue(u1.equals(u1));
         Assert.assertTrue(u1.equals(u2));
+        Assert.assertFalse(u1.equals(FieldVector2D.getPlusI(Decimal64Field.getInstance())));
         Assert.assertFalse(u1.equals(new Vector1D(1 + 10 * Precision.EPSILON)));
         Assert.assertTrue(new Vector1D(Double.NaN).equals(new Vector1D(Double.NaN)));
+        Assert.assertTrue(Vector1D.NaN.equals(Vector1D.NaN));
+    }
+
+    @Test
+    public void testEqualsIeee754() {
+        Vector1D u1 = new Vector1D(1);
+        Vector1D u2 = new Vector1D(1);
+        Assert.assertTrue(u1.equalsIeee754(u1));
+        Assert.assertTrue(u1.equalsIeee754(u2));
+        Assert.assertFalse(u1.equalsIeee754(FieldVector2D.getPlusI(Decimal64Field.getInstance())));
+        Assert.assertFalse(u1.equalsIeee754(new Vector1D(1 + 10 * Precision.EPSILON)));
+        Assert.assertFalse(new Vector1D(Double.NaN).equalsIeee754(new Vector1D(Double.NaN)));
+        Assert.assertFalse(Vector1D.NaN.equalsIeee754(Vector1D.NaN));
+        Assert.assertFalse(Vector1D.NaN.equalsIeee754(Vector1D.NaN));
     }
 
     @Test

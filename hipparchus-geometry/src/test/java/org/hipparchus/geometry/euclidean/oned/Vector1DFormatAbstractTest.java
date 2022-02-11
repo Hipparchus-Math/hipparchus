@@ -299,7 +299,7 @@ public abstract class Vector1DFormatAbstractTest {
     public void testParseNan() throws MathIllegalStateException {
         String source = "{(NaN)}";
         Vector1D actual = vector1DFormat.parse(source);
-        Assert.assertEquals(Vector1D.NaN, actual);
+        Assert.assertTrue(Vector1D.NaN.equals(actual));
     }
 
     @Test

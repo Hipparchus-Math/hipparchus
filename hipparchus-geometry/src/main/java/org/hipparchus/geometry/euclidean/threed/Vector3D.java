@@ -416,12 +416,12 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
      * Test for the equality of two 3D vectors.
      * <p>
      * If all coordinates of two 3D vectors are exactly the same, and none are
-     * <code>Double.NaN</code>, the two 3D vectors are considered to be equal.
+     * {@code Double.NaN}, the two 3D vectors are considered to be equal.
      * </p>
      * <p>
-     * <code>NaN</code> coordinates are considered to affect globally the vector
+     * {@code NaN} coordinates are considered to affect globally the vector
      * and be equals to each other - i.e, if either (or all) coordinates of the
-     * 3D vector are equal to <code>Double.NaN</code>, the 3D vector is equal to
+     * 3D vector are equal to {@code Double.NaN}, the 3D vector is equal to
      * {@link #NaN}.
      * </p>
      *
@@ -440,13 +440,45 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
 
         if (other instanceof Vector3D) {
             final Vector3D rhs = (Vector3D)other;
-            if (rhs.isNaN()) {
-                return this.isNaN();
-            }
-
-            return (x == rhs.x) && (y == rhs.y) && (z == rhs.z);
+            return x == rhs.x && y == rhs.y && z == rhs.z || isNaN() && rhs.isNaN();
         }
+
         return false;
+
+    }
+
+    /**
+     * Test for the equality of two 3D vectors.
+     * <p>
+     * If all coordinates of two 3D vectors are exactly the same, and none are
+     * {@code NaN}, the two 3D vectors are considered to be equal.
+     * </p>
+     * <p>
+     * In compliance with IEEE754 handling, if any coordinates of any of the
+     * two vectors are {@code NaN}, then the vectors are considered different.
+     * This implies that {@link #NaN Vector3D.NaN}.equals({@link #NaN Vector3D.NaN})
+     * returns {@code false} despite the instance is checked against itself.
+     * </p>
+     *
+     * @param other Object to test for equality to this
+     * @return true if two 3D vector objects are equal, false if
+     *         object is null, not an instance of Vector3D, or
+     *         not equal to this Vector3D instance
+     * @since 2.1
+     */
+    public boolean equalsIeee754(Object other) {
+
+        if (this == other && !isNaN()) {
+            return true;
+        }
+
+        if (other instanceof Vector3D) {
+            final Vector3D rhs = (Vector3D) other;
+            return x == rhs.x && y == rhs.y && z == rhs.z;
+        }
+
+        return false;
+
     }
 
     /**
