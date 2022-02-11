@@ -347,7 +347,7 @@ public abstract class Vector3DFormatAbstractTest {
     public void testParseNan() throws MathIllegalStateException {
         String source = "{(NaN); (NaN); (NaN)}";
         Vector3D actual = vector3DFormat.parse(source);
-        Assert.assertTrue(Vector3D.NaN.equalsIncludingNaN(actual));
+        Assert.assertTrue(Vector3D.NaN.equals(actual));
     }
 
     @Test

@@ -333,7 +333,7 @@ public abstract class Vector2DFormatAbstractTest {
     public void testParseNan() throws MathIllegalStateException {
         String source = "{(NaN); (NaN)}";
         Vector2D actual = vector2DFormat.parse(source);
-        Assert.assertTrue(Vector2D.NaN.equalsIncludingNaN(actual));
+        Assert.assertTrue(Vector2D.NaN.equals(actual));
     }
 
     @Test

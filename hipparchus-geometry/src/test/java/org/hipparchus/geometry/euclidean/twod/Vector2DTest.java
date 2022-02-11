@@ -206,21 +206,6 @@ public class Vector2DTest {
         Assert.assertFalse(Vector2D.MINUS_I.isInfinite());
     }
 
-    @Test public void testEqualsIncludingNaN() {
-        final Vector2D u1 = Vector2D.PLUS_I;
-        final Vector2D u2 = Vector2D.MINUS_I.negate();
-        final Vector2D v1 = new Vector2D(1.0, 0.001);
-        final Vector2D v2 = new Vector2D(0.001, 1.0);
-        Assert.assertTrue(u1.equalsIncludingNaN(u1));
-        Assert.assertTrue(u1.equalsIncludingNaN(u2));
-        Assert.assertFalse(u1.equalsIncludingNaN(v1));
-        Assert.assertFalse(u1.equalsIncludingNaN(v2));
-        Assert.assertFalse(u1.equalsIncludingNaN(FieldVector2D.getPlusI(Decimal64Field.getInstance())));
-        Assert.assertTrue(new Vector2D(Double.NaN, u1).equalsIncludingNaN(Vector2D.NaN));
-        Assert.assertFalse(u1.equalsIncludingNaN(Vector2D.NaN));
-        Assert.assertFalse(Vector2D.NaN.equalsIncludingNaN(v2));
-    }
-
     @SuppressWarnings("unlikely-arg-type")
     @Test public void testEquals() {
         final Vector2D u1 = Vector2D.PLUS_I;
@@ -232,10 +217,25 @@ public class Vector2DTest {
         Assert.assertFalse(u1.equals(v1));
         Assert.assertFalse(u1.equals(v2));
         Assert.assertFalse(u1.equals(FieldVector2D.getPlusI(Decimal64Field.getInstance())));
-        Assert.assertFalse(new Vector2D(Double.NaN, u1).equals(Vector2D.NaN));
+        Assert.assertTrue(new Vector2D(Double.NaN, u1).equals(Vector2D.NaN));
         Assert.assertFalse(u1.equals(Vector2D.NaN));
         Assert.assertFalse(Vector2D.NaN.equals(v2));
-        Assert.assertFalse(Vector2D.NaN.equals(Vector2D.NaN));
+    }
+
+    @Test public void testEqualsIeee754() {
+        final Vector2D u1 = Vector2D.PLUS_I;
+        final Vector2D u2 = Vector2D.MINUS_I.negate();
+        final Vector2D v1 = new Vector2D(1.0, 0.001);
+        final Vector2D v2 = new Vector2D(0.001, 1.0);
+        Assert.assertTrue(u1.equalsIeee754(u1));
+        Assert.assertTrue(u1.equalsIeee754(u2));
+        Assert.assertFalse(u1.equalsIeee754(v1));
+        Assert.assertFalse(u1.equalsIeee754(v2));
+        Assert.assertFalse(u1.equalsIeee754(FieldVector2D.getPlusI(Decimal64Field.getInstance())));
+        Assert.assertFalse(new Vector2D(Double.NaN, u1).equalsIeee754(Vector2D.NaN));
+        Assert.assertFalse(u1.equalsIeee754(Vector2D.NaN));
+        Assert.assertFalse(Vector2D.NaN.equalsIeee754(v2));
+        Assert.assertFalse(Vector2D.NaN.equalsIeee754(Vector2D.NaN));
     }
 
     @Test public void testHashCode() {

@@ -57,22 +57,8 @@ public class S2PointTest {
     @Test
     public void testNaN() {
         Assert.assertTrue(S2Point.NaN.isNaN());
-        Assert.assertTrue(S2Point.NaN.equalsIncludingNaN(new S2Point(Double.NaN, 1.0)));
+        Assert.assertTrue(S2Point.NaN.equals(new S2Point(Double.NaN, 1.0)));
         Assert.assertFalse(new S2Point(1.0, 1.3).equals(S2Point.NaN));
-    }
-
-    @Test
-    public void testEqualsIncludingNaN() {
-        S2Point a = new S2Point(1.0, 1.0);
-        S2Point b = new S2Point(1.0, 1.0);
-        Assert.assertEquals(a.hashCode(), b.hashCode());
-        Assert.assertFalse(a == b);
-        Assert.assertTrue(a.equalsIncludingNaN(b));
-        Assert.assertTrue(a.equalsIncludingNaN(a));
-        Assert.assertFalse(a.equalsIncludingNaN('a'));
-        Assert.assertTrue(S2Point.NaN.equalsIncludingNaN(S2Point.NaN));
-        Assert.assertTrue(S2Point.NaN.equalsIncludingNaN(new S2Point(Double.NaN, 0.0)));
-        Assert.assertTrue(S2Point.NaN.equalsIncludingNaN(new S2Point(0.0, Double.NaN)));
     }
 
     @SuppressWarnings("unlikely-arg-type")
@@ -85,9 +71,23 @@ public class S2PointTest {
         Assert.assertTrue(a.equals(b));
         Assert.assertTrue(a.equals(a));
         Assert.assertFalse(a.equals('a'));
-        Assert.assertFalse(S2Point.NaN.equals(S2Point.NaN));
-        Assert.assertFalse(S2Point.NaN.equals(new S2Point(Double.NaN, 0.0)));
-        Assert.assertFalse(S2Point.NaN.equals(new S2Point(0.0, Double.NaN)));
+        Assert.assertTrue(S2Point.NaN.equals(S2Point.NaN));
+        Assert.assertTrue(S2Point.NaN.equals(new S2Point(Double.NaN, 0.0)));
+        Assert.assertTrue(S2Point.NaN.equals(new S2Point(0.0, Double.NaN)));
+    }
+
+    @Test
+    public void testEqualsIeee754() {
+        S2Point a = new S2Point(1.0, 1.0);
+        S2Point b = new S2Point(1.0, 1.0);
+        Assert.assertEquals(a.hashCode(), b.hashCode());
+        Assert.assertFalse(a == b);
+        Assert.assertTrue(a.equalsIeee754(b));
+        Assert.assertTrue(a.equalsIeee754(a));
+        Assert.assertFalse(a.equalsIeee754('a'));
+        Assert.assertFalse(S2Point.NaN.equalsIeee754(S2Point.NaN));
+        Assert.assertFalse(S2Point.NaN.equalsIeee754(new S2Point(Double.NaN, 0.0)));
+        Assert.assertFalse(S2Point.NaN.equalsIeee754(new S2Point(0.0, Double.NaN)));
     }
 
     @Test

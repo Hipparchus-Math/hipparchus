@@ -479,9 +479,9 @@ public class Vector2D implements Vector<Euclidean2D> {
      * @return true if two 2D vector objects are equal, false if
      *         object is null, not an instance of Vector2D, or
      *         not equal to this Vector2D instance
-     * @since 3.0
      */
-    public boolean equalsIncludingNaN(Object other) {
+    @Override
+    public boolean equals(Object other) {
 
         if (this == other) {
             return true;
@@ -513,10 +513,9 @@ public class Vector2D implements Vector<Euclidean2D> {
      * @return true if two 2D vector objects are equal, false if
      *         object is null, not an instance of Vector2D, or
      *         not equal to this Vector2D instance
-     *
+     * @since 2.1
      */
-    @Override
-    public boolean equals(Object other) {
+    public boolean equalsIeee754(Object other) {
 
         if (this == other && !isNaN()) {
             return true;
