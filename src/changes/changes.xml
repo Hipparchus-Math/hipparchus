@@ -56,6 +56,10 @@ If the output is not quite correct, check for invisible trailing spaces!
         in addition to the regular equals method compliant with Java language design
         choices, including Double.equals (which is different from the double == operator).
       </action>
+      <action dev="luc" type="fix" issue="issue/183">
+        Avoid too many calls to function in BracketingNthOrderBrentSolver when using
+        AllowedSolution.ANY_SIDE.
+      </action>
       <action dev="luc" type="fix" issue="issue/178">
         Added Modified Gram-Schmidt basis orthonormalization process in MatrixUtils
         for double-based and CalculusFieldElement-based list of vectors.
