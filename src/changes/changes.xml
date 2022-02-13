@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.1" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/184">
+        Fixed non-bracketing issue when RESET_STATE slightly moves an event at the start
+        of a step and another regular event happens in the first half of the same step
+      </action>
       <action dev="luc" type="add">
         Added equalsIee754 to S1Point, S2Point, Vector1D, Vector2D and Vector3D
         to have an equality method consistent with IEEE754 concerning NaN coordinates,
