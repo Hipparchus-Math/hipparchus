@@ -49,6 +49,12 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
+    <release version="2.1" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/184">
+        Fixed non-bracketing issue when RESET_STATE slightly moves an event at the start
+        of a step and another regular event happens in the first half of the same step
+      </action>
+    </release>
     <release version="2.0" date="2021-08-07" description="This is a major release. The mains changes
     are improved relatived scheduling of step handlers and events handlers in ODE, addition of a
     finish callback in step handlers and bug fixes.">

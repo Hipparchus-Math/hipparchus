@@ -28,6 +28,7 @@ import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
+import org.hipparchus.ode.nonstiff.LutherFieldIntegrator;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.util.Decimal64;
@@ -2026,7 +2027,25 @@ public class FieldCloseEventsTest {
         }
     }
 
+    @Test
+    public void testResetChangesSign() {
+        FieldOrdinaryDifferentialEquation<Decimal64> equation = new FieldOrdinaryDifferentialEquation<Decimal64>() {
+            public int getDimension() { return 1; }
+            public Decimal64[] computeDerivatives(Decimal64 t, Decimal64[] y) { return new Decimal64[] { new Decimal64(1.0) }; }
+        };
 
+        LutherFieldIntegrator<Decimal64> integrator = new LutherFieldIntegrator<>(Decimal64Field.getInstance(), new Decimal64(20.0));
+        final double small = 1.0e-10;
+        ResetChangesSignGenerator eventsGenerator = new ResetChangesSignGenerator(6.0, 9.0, -0.5 * small);
+        integrator.addEventHandler(eventsGenerator, 8.0, small, 1000);
+        final FieldODEStateAndDerivative<Decimal64> end = integrator.integrate(new FieldExpandableODE<>(equation),
+                                                                               new FieldODEState<>(new Decimal64(0.0),
+                                                                                                   new Decimal64[] { new Decimal64(0.0) }),
+                                                                               new Decimal64(100.0));
+        Assert.assertEquals(2,                 eventsGenerator.getCount());
+        Assert.assertEquals(9.0,               end.getCompleteState()[0].getReal(), 1.0e-12);
+        Assert.assertEquals(9.0 + 0.5 * small, end.getTime().getReal(),             1.0e-12);
+    }
 
     /* utility classes and methods */
 
@@ -2286,6 +2305,38 @@ public class FieldCloseEventsTest {
         public void finish(FieldODEStateAndDerivative<Decimal64> finalState) {
             this.finalState = finalState;
         }
+    }
+
+    private class ResetChangesSignGenerator implements FieldODEEventHandler<Decimal64> {
+
+        final double y1;
+        final double y2;
+        final double change;
+        int count;
+
+        public ResetChangesSignGenerator(final double y1, final double y2, final double change) {
+            this.y1     = y1;
+            this.y2     = y2;
+            this.change = change;
+            this.count  = 0;
+        }
+
+        public Decimal64 g(FieldODEStateAndDerivative<Decimal64> s) {
+            return s.getCompleteState()[0].subtract(y1).multiply(s.getCompleteState()[0].subtract(y2));
+        }
+
+        public Action eventOccurred(FieldODEStateAndDerivative<Decimal64> s, boolean increasing) {
+            return ++count < 2 ? Action.RESET_STATE : Action.STOP;
+        }
+
+        public FieldODEState<Decimal64> resetState(FieldODEStateAndDerivative<Decimal64> s) {
+            return new FieldODEState<>(s.getTime(), new Decimal64[] { s.getCompleteState()[0].add(change) });
+        }
+
+        public int getCount() {
+            return count;
+        }
+
     }
 
 }

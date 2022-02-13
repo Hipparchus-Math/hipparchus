@@ -26,6 +26,7 @@ import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
+import org.hipparchus.ode.nonstiff.LutherIntegrator;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.FastMath;
@@ -2006,7 +2007,22 @@ public class CloseEventsTest {
         }
     }
 
+    @Test
+    public void testResetChangesSign() {
+        OrdinaryDifferentialEquation equation = new OrdinaryDifferentialEquation() {
+            public int getDimension() { return 1; }
+            public double[] computeDerivatives(double t, double[] y) { return new double[] { 1.0 }; }
+        };
 
+        LutherIntegrator integrator = new LutherIntegrator(20.0);
+        final double small = 1.0e-10;
+        ResetChangesSignGenerator eventsGenerator = new ResetChangesSignGenerator(6.0, 9.0, -0.5 * small);
+        integrator.addEventHandler(eventsGenerator, 8.0, small, 1000);
+        final ODEStateAndDerivative end = integrator.integrate(equation, new ODEState(0.0, new double[1]), 100.0);
+        Assert.assertEquals(2,                 eventsGenerator.getCount());
+        Assert.assertEquals(9.0,               end.getCompleteState()[0], 1.0e-12);
+        Assert.assertEquals(9.0 + 0.5 * small, end.getTime(),             1.0e-12);
+    }
 
     /* utility classes and methods */
 
@@ -2259,6 +2275,38 @@ public class CloseEventsTest {
         public void finish(ODEStateAndDerivative finalState) {
             this.finalState = finalState;
         }
+    }
+
+    private class ResetChangesSignGenerator implements ODEEventHandler {
+
+        final double y1;
+        final double y2;
+        final double change;
+        int count;
+
+        public ResetChangesSignGenerator(final double y1, final double y2, final double change) {
+            this.y1     = y1;
+            this.y2     = y2;
+            this.change = change;
+            this.count  = 0;
+        }
+
+        public double g(ODEStateAndDerivative s) {
+            return (s.getCompleteState()[0] - y1) * (s.getCompleteState()[0] - y2);
+        }
+
+        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
+            return ++count < 2 ? Action.RESET_STATE : Action.STOP;
+        }
+
+        public ODEState resetState(ODEStateAndDerivative s) {
+            return new ODEState(s.getTime(), new double[] { s.getCompleteState()[0] + change });
+        }
+
+        public int getCount() {
+            return count;
+        }
+
     }
 
 }

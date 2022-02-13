@@ -282,6 +282,10 @@ public class EventState implements EventHandlerConfiguration {
 
         final UnivariateFunction f = t -> handler.g(interpolator.getInterpolatedState(t));
 
+        // prepare loop below
+        double loopT = ta;
+        double loopG = ga;
+
         // event time, just at or before the actual root.
         double beforeRootT = Double.NaN;
         double beforeRootG = Double.NaN;
@@ -311,17 +315,27 @@ public class EventState implements EventHandlerConfiguration {
             final double newGa = f.value(ta);
             if (ga > 0 != newGa > 0) {
                 // both non-zero, step sign change at ta, possibly due to reset state
-                beforeRootT = ta;
-                beforeRootG = newGa;
-                afterRootT = minTime(shiftedBy(beforeRootT, convergence), tb);
-                afterRootG = f.value(afterRootT);
+                final double nextT = minTime(shiftedBy(ta, convergence), tb);
+                final double nextG = f.value(nextT);
+                if (nextG > 0.0 == g0Positive) {
+                    // the sign change between ga and new Ga just moved the root less than one convergence
+                    // threshold later, we are still in a regular search for another root before tb,
+                    // we just need to fix the bracketing interval
+                    // (see issue https://github.com/Hipparchus-Math/hipparchus/issues/184)
+                    loopT = nextT;
+                    loopG = nextG;
+                } else {
+                    beforeRootT = ta;
+                    beforeRootG = newGa;
+                    afterRootT = nextT;
+                    afterRootG = nextG;
+                }
+
             }
         }
 
         // loop to skip through "fake" roots, i.e. where g(t) = g'(t) = 0.0
         // executed once if we didn't hit a special case above
-        double loopT = ta;
-        double loopG = ga;
         while ((afterRootG == 0.0 || afterRootG > 0.0 == g0Positive) &&
                strictlyAfter(afterRootT, tb)) {
             if (loopG == 0.0) {
