@@ -1020,6 +1020,23 @@ public class CloseEventsTest {
         }
     }
 
+    @Test
+    public void testResetChangesSign() {
+        OrdinaryDifferentialEquation equation = new OrdinaryDifferentialEquation() {
+            public int getDimension() { return 1; }
+            public double[] computeDerivatives(double t, double[] y) { return new double[] { 1.0 }; }
+        };
+
+        LutherIntegrator integrator = new LutherIntegrator(20.0);
+        final double small = 1.0e-10;
+        ResetChangesSignGenerator eventsGenerator = new ResetChangesSignGenerator(6.0, 9.0, -0.5 * small);
+        integrator.addEventHandler(eventsGenerator, 8.0, small, 1000);
+        final ODEStateAndDerivative end = integrator.integrate(equation, new ODEState(0.0, new double[1]), 100.0);
+        Assert.assertEquals(2,                 eventsGenerator.getCount());
+        Assert.assertEquals(9.0,               end.getCompleteState()[0], 1.0e-12);
+        Assert.assertEquals(9.0 + 0.5 * small, end.getTime(),             1.0e-12);
+    }
+
 
     /* The following tests are copies of the above tests, except that they propagate in
      * the reverse direction and all the signs on the time values are negated.
@@ -2008,7 +2025,7 @@ public class CloseEventsTest {
     }
 
     @Test
-    public void testResetChangesSign() {
+    public void testResetChangesSignReverse() {
         OrdinaryDifferentialEquation equation = new OrdinaryDifferentialEquation() {
             public int getDimension() { return 1; }
             public double[] computeDerivatives(double t, double[] y) { return new double[] { 1.0 }; }
@@ -2016,12 +2033,12 @@ public class CloseEventsTest {
 
         LutherIntegrator integrator = new LutherIntegrator(20.0);
         final double small = 1.0e-10;
-        ResetChangesSignGenerator eventsGenerator = new ResetChangesSignGenerator(6.0, 9.0, -0.5 * small);
+        ResetChangesSignGenerator eventsGenerator = new ResetChangesSignGenerator(-6.0, -9.0, +0.5 * small);
         integrator.addEventHandler(eventsGenerator, 8.0, small, 1000);
-        final ODEStateAndDerivative end = integrator.integrate(equation, new ODEState(0.0, new double[1]), 100.0);
-        Assert.assertEquals(2,                 eventsGenerator.getCount());
-        Assert.assertEquals(9.0,               end.getCompleteState()[0], 1.0e-12);
-        Assert.assertEquals(9.0 + 0.5 * small, end.getTime(),             1.0e-12);
+        final ODEStateAndDerivative end = integrator.integrate(equation, new ODEState(0.0, new double[1]), -100.0);
+        Assert.assertEquals(2,                  eventsGenerator.getCount());
+        Assert.assertEquals(-9.0,               end.getCompleteState()[0], 1.0e-12);
+        Assert.assertEquals(-9.0 - 0.5 * small, end.getTime(),             1.0e-12);
     }
 
     /* utility classes and methods */

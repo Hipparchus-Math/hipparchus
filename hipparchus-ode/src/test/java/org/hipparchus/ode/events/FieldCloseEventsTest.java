@@ -1035,6 +1035,26 @@ public class FieldCloseEventsTest {
         }
     }
 
+    @Test
+    public void testResetChangesSign() {
+        FieldOrdinaryDifferentialEquation<Decimal64> equation = new FieldOrdinaryDifferentialEquation<Decimal64>() {
+            public int getDimension() { return 1; }
+            public Decimal64[] computeDerivatives(Decimal64 t, Decimal64[] y) { return new Decimal64[] { new Decimal64(1.0) }; }
+        };
+
+        LutherFieldIntegrator<Decimal64> integrator = new LutherFieldIntegrator<>(Decimal64Field.getInstance(), new Decimal64(20.0));
+        final double small = 1.0e-10;
+        ResetChangesSignGenerator eventsGenerator = new ResetChangesSignGenerator(6.0, 9.0, -0.5 * small);
+        integrator.addEventHandler(eventsGenerator, 8.0, small, 1000);
+        final FieldODEStateAndDerivative<Decimal64> end = integrator.integrate(new FieldExpandableODE<>(equation),
+                new FieldODEState<>(new Decimal64(0.0),
+                        new Decimal64[] { new Decimal64(0.0) }),
+                new Decimal64(100.0));
+        Assert.assertEquals(2,                 eventsGenerator.getCount());
+        Assert.assertEquals(9.0,               end.getCompleteState()[0].getReal(), 1.0e-12);
+        Assert.assertEquals(9.0 + 0.5 * small, end.getTime().getReal(),             1.0e-12);
+    }
+
 
     /* The following tests are copies of the above tests, except that they propagate in
      * the reverse direction and all the signs on the time values are negated.
@@ -2028,7 +2048,7 @@ public class FieldCloseEventsTest {
     }
 
     @Test
-    public void testResetChangesSign() {
+    public void testResetChangesSignReverse() {
         FieldOrdinaryDifferentialEquation<Decimal64> equation = new FieldOrdinaryDifferentialEquation<Decimal64>() {
             public int getDimension() { return 1; }
             public Decimal64[] computeDerivatives(Decimal64 t, Decimal64[] y) { return new Decimal64[] { new Decimal64(1.0) }; }
@@ -2036,15 +2056,15 @@ public class FieldCloseEventsTest {
 
         LutherFieldIntegrator<Decimal64> integrator = new LutherFieldIntegrator<>(Decimal64Field.getInstance(), new Decimal64(20.0));
         final double small = 1.0e-10;
-        ResetChangesSignGenerator eventsGenerator = new ResetChangesSignGenerator(6.0, 9.0, -0.5 * small);
+        ResetChangesSignGenerator eventsGenerator = new ResetChangesSignGenerator(-6.0, -9.0, +0.5 * small);
         integrator.addEventHandler(eventsGenerator, 8.0, small, 1000);
         final FieldODEStateAndDerivative<Decimal64> end = integrator.integrate(new FieldExpandableODE<>(equation),
                                                                                new FieldODEState<>(new Decimal64(0.0),
                                                                                                    new Decimal64[] { new Decimal64(0.0) }),
-                                                                               new Decimal64(100.0));
-        Assert.assertEquals(2,                 eventsGenerator.getCount());
-        Assert.assertEquals(9.0,               end.getCompleteState()[0].getReal(), 1.0e-12);
-        Assert.assertEquals(9.0 + 0.5 * small, end.getTime().getReal(),             1.0e-12);
+                                                                               new Decimal64(-100.0));
+        Assert.assertEquals(2,                  eventsGenerator.getCount());
+        Assert.assertEquals(-9.0,               end.getCompleteState()[0].getReal(), 1.0e-12);
+        Assert.assertEquals(-9.0 - 0.5 * small, end.getTime().getReal(),             1.0e-12);
     }
 
     /* utility classes and methods */
