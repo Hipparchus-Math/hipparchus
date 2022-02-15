@@ -1320,10 +1320,13 @@ public class MatrixUtils {
      * Orthonormalization is performed by using the Modified Gram-Schmidt process.
      * </p>
      * @param independent list of independent vectors
+     * @param threshold projected vectors with a norm less than or equal to this threshold
+     * are considered to have zero norm, hence the vectors they come from are not independent from
+     * previous vectors and a {@link MathIllegalArgumentException} is thrown
      * @return orthonormal basis having the same span as {@code independent}
      * @since 2.1
      */
-    public static List<RealVector> orthonormalize(final List<RealVector> independent) {
+    public static List<RealVector> orthonormalize(final List<RealVector> independent, final double threshold) {
 
         // create separate list
         final List<RealVector> basis = new ArrayList<>(independent);
@@ -1334,7 +1337,7 @@ public class MatrixUtils {
             // normalize basis vector in place
             final RealVector vi = basis.get(i);
             final double norm = vi.getNorm();
-            if (norm == 0.0) {
+            if (norm <= threshold) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NORM);
             }
             vi.mapDivideToSelf(vi.getNorm());
@@ -1360,10 +1363,15 @@ public class MatrixUtils {
      * </p>
      * @param <T> type of the field elements
      * @param independent list of independent vectors
+     * @param threshold projected vectors with a norm less than or equal to this threshold
+     * are considered to have zero norm, hence the vectors they come from are not independent from
+     * previous vectors and a {@link MathIllegalArgumentException} is thrown
      * @return orthonormal basis having the same span as {@code independent}
      * @since 2.1
      */
-    public static <T extends CalculusFieldElement<T>> List<FieldVector<T>> orthonormalize(final Field<T> field, final List<FieldVector<T>> independent) {
+    public static <T extends CalculusFieldElement<T>> List<FieldVector<T>> orthonormalize(final Field<T> field,
+                                                                                          final List<FieldVector<T>> independent,
+                                                                                          final T threshold) {
 
         // create separate list
         final List<FieldVector<T>> basis = new ArrayList<>(independent);
@@ -1374,7 +1382,7 @@ public class MatrixUtils {
             // normalize basis vector in place
             final FieldVector<T> vi = basis.get(i);
             final T norm = vi.dotProduct(vi).sqrt();
-            if (norm.isZero()) {
+            if (norm.subtract(threshold).getReal() <= 0) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NORM);
             }
             vi.mapDivideToSelf(norm);
