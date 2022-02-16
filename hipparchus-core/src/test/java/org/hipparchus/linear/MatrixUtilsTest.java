@@ -655,7 +655,7 @@ public final class MatrixUtilsTest {
                         MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] {  1, 2, 2 }),
                                                                  new ArrayRealVector(new double[] { -1, 0, 2 }),
                                                                  new ArrayRealVector(new double[] {  0, 0, 1 })),
-                                                   Precision.EPSILON);
+                                                   Precision.EPSILON, DependentVectorsHandler.GENERATE_EXCEPTION);
         Assert.assertEquals(3, basis.size());
         checkBasis(basis);
         checkVector(basis.get(0),  1.0 / 3.0,  2.0 / 3.0, 2.0 / 3.0);
@@ -670,7 +670,7 @@ public final class MatrixUtilsTest {
         final List<RealVector> basis =
                         MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] { 3, 1 }),
                                                                  new ArrayRealVector(new double[] { 2, 2 })),
-                                                   Precision.EPSILON);
+                                                   Precision.EPSILON, DependentVectorsHandler.GENERATE_EXCEPTION);
         final double s10 = FastMath.sqrt(10);
         Assert.assertEquals(2, basis.size());
         checkBasis(basis);
@@ -687,7 +687,7 @@ public final class MatrixUtilsTest {
                         MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] { 1, small, small }),
                                                                  new ArrayRealVector(new double[] { 1, small, 0     }),
                                                                  new ArrayRealVector(new double[] { 1, 0,     small })),
-                                                   Precision.EPSILON);
+                                                   Precision.EPSILON, DependentVectorsHandler.GENERATE_EXCEPTION);
         Assert.assertEquals(3, basis.size());
         checkBasis(basis);
         checkVector(basis.get(0), 1,  small, small);
@@ -703,7 +703,7 @@ public final class MatrixUtilsTest {
         final List<RealVector> basis =
                         MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] { 1, small, small }),
                                                                  new ArrayRealVector(new double[] { 1, small, 0     })),
-                                                   Precision.EPSILON);
+                                                   Precision.EPSILON, DependentVectorsHandler.GENERATE_EXCEPTION);
         Assert.assertEquals(2, basis.size());
         checkBasis(basis);
         checkVector(basis.get(0), 1,  small, small);
@@ -712,12 +712,12 @@ public final class MatrixUtilsTest {
     }
 
     @Test
-    public void testOrthonormalizeDependent1() {
+    public void testOrthonormalizeDependent() {
         final double small = 1.0e-12;
         try {
             MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] { 1, small, small }),
                                                      new ArrayRealVector(new double[] { 1, small, small })),
-                                       Precision.EPSILON);
+                                       Precision.EPSILON, DependentVectorsHandler.GENERATE_EXCEPTION);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
             Assert.assertEquals(LocalizedCoreFormats.ZERO_NORM, miae.getSpecifier());
@@ -725,17 +725,44 @@ public final class MatrixUtilsTest {
     }
 
     @Test
-    public void testOrthonormalizeDependent2() {
+    public void testOrthonormalizeDependentGenerateException() {
         try {
-            MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] { 2, 3 }),
-                                                     new ArrayRealVector(new double[] { 2, 7 }),
-                                                     new ArrayRealVector(new double[] { 4, 5 })),
-                                       7 * Precision.EPSILON);
+            MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] { 2, 3, 0 }),
+                                                     new ArrayRealVector(new double[] { 2, 7, 0 }),
+                                                     new ArrayRealVector(new double[] { 4, 5, 0 }),
+                                                     new ArrayRealVector(new double[] { 0, 0, 1 })),
+                                       7 * Precision.EPSILON, DependentVectorsHandler.GENERATE_EXCEPTION);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
             Assert.assertEquals(LocalizedCoreFormats.ZERO_NORM, miae.getSpecifier());
         }
 
+    }
+
+    @Test
+    public void testOrthonormalizeDependentAddZeroNorm() {
+        List<RealVector> basis = MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] { 2, 3, 0 }),
+                                                                          new ArrayRealVector(new double[] { 2, 7, 0 }),
+                                                                          new ArrayRealVector(new double[] { 4, 5, 0 }),
+                                                                          new ArrayRealVector(new double[] { 0, 0, 1 })),
+                                                            7 * Precision.EPSILON, DependentVectorsHandler.ADD_ZERO_VECTOR);
+        Assert.assertEquals(4, basis.size());
+        Assert.assertEquals(0, basis.get(2).getEntry(0), 1.0e-15);
+        Assert.assertEquals(0, basis.get(2).getEntry(1), 1.0e-15);
+        Assert.assertEquals(0, basis.get(2).getEntry(2), 1.0e-15);
+    }
+
+    @Test
+    public void testOrthonormalizeDependentReduceToSpan() {
+        List<RealVector> basis = MatrixUtils.orthonormalize(Arrays.asList(new ArrayRealVector(new double[] { 2, 3, 0 }),
+                                                                          new ArrayRealVector(new double[] { 2, 7, 0 }),
+                                                                          new ArrayRealVector(new double[] { 4, 5, 0 }),
+                                                                          new ArrayRealVector(new double[] { 0, 0, 1 })),
+                                                            7 * Precision.EPSILON, DependentVectorsHandler.REDUCE_BASE_TO_SPAN);
+        Assert.assertEquals(3, basis.size());
+        Assert.assertEquals(0, basis.get(2).getEntry(0), 1.0e-15);
+        Assert.assertEquals(0, basis.get(2).getEntry(1), 1.0e-15);
+        Assert.assertEquals(1, basis.get(2).getEntry(2), 1.0e-15);
     }
 
     @Test
@@ -759,13 +786,23 @@ public final class MatrixUtilsTest {
     }
 
     @Test
-    public void testFieldOrthonormalizeDependent1() {
-        doTestOrthonormalizeDependent1(Decimal64Field.getInstance());
+    public void testFieldOrthonormalizeDependent() {
+        doTestOrthonormalizeDependent(Decimal64Field.getInstance());
     }
 
     @Test
-    public void testFieldOrthonormalizeDependent2() {
-        doTestOrthonormalizeDependent2(Decimal64Field.getInstance());
+    public void testFieldOrthonormalizeDependentGenerateException() {
+        doTestOrthonormalizeDependentGenerateException(Decimal64Field.getInstance());
+    }
+
+    @Test
+    public void testFieldOrthonormalizeDependentAddZeroNorm() {
+        doTestOrthonormalizeDependentAddZeroNorm(Decimal64Field.getInstance());
+    }
+
+    @Test
+    public void testFieldOrthonormalizeDependentReduceToSpan() {
+        doTestOrthonormalizeDependentReduceToSpan(Decimal64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestOrthonormalize1(final Field<T> field) {
@@ -775,7 +812,8 @@ public final class MatrixUtilsTest {
                                                    Arrays.asList(convert(field, new ArrayRealVector(new double[] {  1, 2, 2 })),
                                                                  convert(field, new ArrayRealVector(new double[] { -1, 0, 2 })),
                                                                  convert(field, new ArrayRealVector(new double[] {  0, 0, 1 }))),
-                                                   field.getZero().newInstance(Precision.EPSILON));
+                                                   field.getZero().newInstance(Precision.EPSILON),
+                                                   DependentVectorsHandler.GENERATE_EXCEPTION);
         Assert.assertEquals(3, basis.size());
         checkBasis(field, basis);
         checkVector(basis.get(0),  1.0 / 3.0,  2.0 / 3.0, 2.0 / 3.0);
@@ -790,7 +828,8 @@ public final class MatrixUtilsTest {
                         MatrixUtils.orthonormalize(field,
                                                    Arrays.asList(convert(field, new ArrayRealVector(new double[] { 3, 1 })),
                                                                  convert(field, new ArrayRealVector(new double[] { 2, 2 }))),
-                                                   field.getZero().newInstance(Precision.EPSILON));
+                                                   field.getZero().newInstance(Precision.EPSILON),
+                                                   DependentVectorsHandler.GENERATE_EXCEPTION);
         final double s10 = FastMath.sqrt(10);
         Assert.assertEquals(2, basis.size());
         checkBasis(field, basis);
@@ -807,7 +846,8 @@ public final class MatrixUtilsTest {
                                                    Arrays.asList(convert(field, new ArrayRealVector(new double[] { 1, small, small })),
                                                                  convert(field, new ArrayRealVector(new double[] { 1, small, 0     })),
                                                                  convert(field, new ArrayRealVector(new double[] { 1, 0,     small }))),
-                                                   field.getZero().newInstance(Precision.EPSILON));
+                                                   field.getZero().newInstance(Precision.EPSILON),
+                                                   DependentVectorsHandler.GENERATE_EXCEPTION);
         Assert.assertEquals(3, basis.size());
         checkBasis(field, basis);
         checkVector(basis.get(0), 1,  small, small);
@@ -823,7 +863,8 @@ public final class MatrixUtilsTest {
                         MatrixUtils.orthonormalize(field,
                                                    Arrays.asList(convert(field, new ArrayRealVector(new double[] { 1, small, small })),
                                                                  convert(field, new ArrayRealVector(new double[] { 1, small, 0     }))),
-                                                   field.getZero().newInstance(Precision.EPSILON));
+                                                   field.getZero().newInstance(Precision.EPSILON),
+                                                   DependentVectorsHandler.GENERATE_EXCEPTION);
         Assert.assertEquals(2, basis.size());
         checkBasis(field, basis);
         checkVector(basis.get(0), 1,  small, small);
@@ -831,30 +872,61 @@ public final class MatrixUtilsTest {
 
     }
 
-    private <T extends CalculusFieldElement<T>> void doTestOrthonormalizeDependent1(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestOrthonormalizeDependent(final Field<T> field) {
         final double small = 1.0e-12;
         try {
             MatrixUtils.orthonormalize(field,
                                        Arrays.asList(convert(field, new ArrayRealVector(new double[] { 1, small, small })),
                                                      convert(field, new ArrayRealVector(new double[] { 1, small, small }))),
-                                       field.getZero().newInstance(Precision.EPSILON));
+                                       field.getZero().newInstance(Precision.EPSILON),
+                                       DependentVectorsHandler.GENERATE_EXCEPTION);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
             Assert.assertEquals(LocalizedCoreFormats.ZERO_NORM, miae.getSpecifier());
         }
     }
 
-    private <T extends CalculusFieldElement<T>> void doTestOrthonormalizeDependent2(final Field<T> field) {
+    private <T extends CalculusFieldElement<T>> void doTestOrthonormalizeDependentGenerateException(final Field<T> field) {
         try {
             MatrixUtils.orthonormalize(field,
-                                       Arrays.asList(convert(field, new ArrayRealVector(new double[] { 2, 3 })),
-                                                     convert(field, new ArrayRealVector(new double[] { 2, 7 })),
-                                                     convert(field, new ArrayRealVector(new double[] { 4, 5 }))),
-                                       field.getZero().newInstance(7 * Precision.EPSILON));
+                                       Arrays.asList(convert(field, new ArrayRealVector(new double[] { 2, 3, 0 })),
+                                                     convert(field, new ArrayRealVector(new double[] { 2, 7, 0 })),
+                                                     convert(field, new ArrayRealVector(new double[] { 4, 5, 0 })),
+                                                     convert(field, new ArrayRealVector(new double[] { 0, 0, 1 }))),
+                                       field.getZero().newInstance(7 * Precision.EPSILON),
+                                       DependentVectorsHandler.GENERATE_EXCEPTION);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
             Assert.assertEquals(LocalizedCoreFormats.ZERO_NORM, miae.getSpecifier());
         }
+    }
+
+    private <T extends CalculusFieldElement<T>> void doTestOrthonormalizeDependentAddZeroNorm(final Field<T> field) {
+        List<FieldVector<T>> basis = MatrixUtils.orthonormalize(field,
+                                                                Arrays.asList(convert(field, new ArrayRealVector(new double[] { 2, 3, 0 })),
+                                                                              convert(field, new ArrayRealVector(new double[] { 2, 7, 0 })),
+                                                                              convert(field, new ArrayRealVector(new double[] { 4, 5, 0 })),
+                                                                              convert(field, new ArrayRealVector(new double[] { 0, 0, 1 }))),
+                                                                field.getZero().newInstance(7 * Precision.EPSILON),
+                                                                DependentVectorsHandler.ADD_ZERO_VECTOR);
+       Assert.assertEquals(4, basis.size());
+       Assert.assertEquals(0, basis.get(2).getEntry(0).getReal(), 1.0e-15);
+       Assert.assertEquals(0, basis.get(2).getEntry(1).getReal(), 1.0e-15);
+       Assert.assertEquals(0, basis.get(2).getEntry(2).getReal(), 1.0e-15);
+    }
+
+    private <T extends CalculusFieldElement<T>> void doTestOrthonormalizeDependentReduceToSpan(final Field<T> field) {
+        List<FieldVector<T>> basis = MatrixUtils.orthonormalize(field,
+                                                                Arrays.asList(convert(field, new ArrayRealVector(new double[] { 2, 3, 0 })),
+                                                                              convert(field, new ArrayRealVector(new double[] { 2, 7, 0 })),
+                                                                              convert(field, new ArrayRealVector(new double[] { 4, 5, 0 })),
+                                                                              convert(field, new ArrayRealVector(new double[] { 0, 0, 1 }))),
+                                                                field.getZero().newInstance(7 * Precision.EPSILON),
+                                                                DependentVectorsHandler.REDUCE_BASE_TO_SPAN);
+        Assert.assertEquals(3, basis.size());
+        Assert.assertEquals(0, basis.get(2).getEntry(0).getReal(), 1.0e-15);
+        Assert.assertEquals(0, basis.get(2).getEntry(1).getReal(), 1.0e-15);
+        Assert.assertEquals(1, basis.get(2).getEntry(2).getReal(), 1.0e-15);
     }
 
     private void checkVector(final RealVector v, double... p) {

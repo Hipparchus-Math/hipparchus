@@ -1322,33 +1322,43 @@ public class MatrixUtils {
      * @param independent list of independent vectors
      * @param threshold projected vectors with a norm less than or equal to this threshold
      * are considered to have zero norm, hence the vectors they come from are not independent from
-     * previous vectors and a {@link MathIllegalArgumentException} is thrown
+     * previous vectors
+     * @param dependentVectorsHandler handler for dependent vectors
      * @return orthonormal basis having the same span as {@code independent}
      * @since 2.1
      */
-    public static List<RealVector> orthonormalize(final List<RealVector> independent, final double threshold) {
+    public static List<RealVector> orthonormalize(final List<RealVector> independent,
+                                                  final double threshold, final DependentVectorsHandler handler) {
 
         // create separate list
         final List<RealVector> basis = new ArrayList<>(independent);
 
         // loop over basis vectors
-        for (int i = 0; i < basis.size(); ++i) {
+        int index = 0;
+        while (index < basis.size()) {
 
-            // normalize basis vector in place
-            final RealVector vi = basis.get(i);
+            // check dependency
+            final RealVector vi = basis.get(index);
             final double norm = vi.getNorm();
             if (norm <= threshold) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NORM);
-            }
-            vi.mapDivideToSelf(vi.getNorm());
+                // the current vector is dependent from the previous ones
+                index = handler.manageDependent(index, basis);
+            } else {
 
-            // project remaining vectors in place
-            for (int j = i + 1; j < basis.size(); ++j) {
-                final RealVector vj  = basis.get(j);
-                final double     dot = vi.dotProduct(vj);
-                for (int k = 0; k < vj.getDimension(); ++k) {
-                    vj.setEntry(k, vj.getEntry(k) - dot * vi.getEntry(k));
+                // normalize basis vector in place
+                vi.mapDivideToSelf(vi.getNorm());
+
+                // project remaining vectors in place
+                for (int j = index + 1; j < basis.size(); ++j) {
+                    final RealVector vj  = basis.get(j);
+                    final double     dot = vi.dotProduct(vj);
+                    for (int k = 0; k < vj.getDimension(); ++k) {
+                        vj.setEntry(k, vj.getEntry(k) - dot * vi.getEntry(k));
+                    }
                 }
+
+                ++index;
+
             }
 
         }
@@ -1365,35 +1375,45 @@ public class MatrixUtils {
      * @param independent list of independent vectors
      * @param threshold projected vectors with a norm less than or equal to this threshold
      * are considered to have zero norm, hence the vectors they come from are not independent from
-     * previous vectors and a {@link MathIllegalArgumentException} is thrown
+     * previous vectors
+     * @param dependentVectorsHandler handler for dependent vectors
      * @return orthonormal basis having the same span as {@code independent}
      * @since 2.1
      */
     public static <T extends CalculusFieldElement<T>> List<FieldVector<T>> orthonormalize(final Field<T> field,
                                                                                           final List<FieldVector<T>> independent,
-                                                                                          final T threshold) {
+                                                                                          final T threshold,
+                                                                                          final DependentVectorsHandler handler) {
 
         // create separate list
         final List<FieldVector<T>> basis = new ArrayList<>(independent);
 
         // loop over basis vectors
-        for (int i = 0; i < basis.size(); ++i) {
+        int index = 0;
+        while (index < basis.size()) {
 
-            // normalize basis vector in place
-            final FieldVector<T> vi = basis.get(i);
+            // check dependency
+            final FieldVector<T> vi = basis.get(index);
             final T norm = vi.dotProduct(vi).sqrt();
             if (norm.subtract(threshold).getReal() <= 0) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NORM);
-            }
-            vi.mapDivideToSelf(norm);
+                // the current vector is dependent from the previous ones
+                index = handler.manageDependent(field, index, basis);
+            } else {
 
-            // project remaining vectors in place
-            for (int j = i + 1; j < basis.size(); ++j) {
-                final FieldVector<T> vj  = basis.get(j);
-                final T              dot = vi.dotProduct(vj);
-                for (int k = 0; k < vj.getDimension(); ++k) {
-                    vj.setEntry(k, vj.getEntry(k).subtract(dot.multiply(vi.getEntry(k))));
+                // normalize basis vector in place
+                vi.mapDivideToSelf(norm);
+
+                // project remaining vectors in place
+                for (int j = index + 1; j < basis.size(); ++j) {
+                    final FieldVector<T> vj  = basis.get(j);
+                    final T              dot = vi.dotProduct(vj);
+                    for (int k = 0; k < vj.getDimension(); ++k) {
+                        vj.setEntry(k, vj.getEntry(k).subtract(dot.multiply(vi.getEntry(k))));
+                    }
                 }
+
+                ++index;
+
             }
         }
 
