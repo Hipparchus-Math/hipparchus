@@ -24,11 +24,8 @@ package org.hipparchus.fraction;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Optional;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.function.Function;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -36,9 +33,12 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.fraction.ConvergentsIterator.ConvergenceStep;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.Pair;
+import org.hipparchus.util.Precision;
 
 /**
  * Representation of a rational number without any overflow. This class is
@@ -237,13 +237,13 @@ public class BigFraction
     public BigFraction(final double value, final double epsilon,
                        final int maxIterations)
         throws MathIllegalStateException {
-        final Optional<BigFraction> optional =
-                        convergents(value, maxIterations).
-                        filter(f -> FastMath.abs(f.doubleValue() - value) < epsilon).
-                        findFirst();
-        if (optional.isPresent()) {
-            this.numerator   = optional.get().numerator;
-            this.denominator = optional.get().denominator;
+        ConvergenceStep converged = ConvergentsIterator.convergent(value, maxIterations, s -> {
+            final double quotient = s.getFractionValue();
+            return Precision.equals(quotient, value, 1) || FastMath.abs(quotient - value) < epsilon;
+        }).getKey();
+        if (FastMath.abs(converged.getFractionValue() - value) < epsilon) {
+            this.numerator = BigInteger.valueOf(converged.getNumerator());
+            this.denominator = BigInteger.valueOf(converged.getDenominator());
         } else {
             throw new MathIllegalStateException(LocalizedCoreFormats.FAILED_FRACTION_CONVERSION,
                                                 value, maxIterations);
@@ -267,16 +267,19 @@ public class BigFraction
      * @throws MathIllegalStateException
      *             if the continued fraction failed to converge.
      */
-    public BigFraction(final double value, final int maxDenominator)
+    public BigFraction(final double value, final long maxDenominator)
         throws MathIllegalStateException {
         final int maxIterations = 100;
-        final Optional<BigFraction> optional =
-                        convergents(value, maxIterations).
-                        filter(f -> f.getDenominator().longValue() <= maxDenominator).
-                        reduce((previous, current) -> current);
-        if (optional.isPresent()) {
-            this.numerator   = optional.get().numerator;
-            this.denominator = optional.get().denominator;
+        ConvergenceStep[] lastValid = new ConvergenceStep[1];
+        ConvergentsIterator.convergent(value, maxIterations, s -> {
+            if (s.getDenominator() < maxDenominator) {
+                lastValid[0] = s;
+            }
+            return Precision.equals(s.getFractionValue(), value, 1);
+        });
+        if (lastValid[0] != null) {
+            this.numerator   = BigInteger.valueOf(lastValid[0].getNumerator());
+            this.denominator = BigInteger.valueOf(lastValid[0].getDenominator());
         } else {
             throw new MathIllegalStateException(LocalizedCoreFormats.FAILED_FRACTION_CONVERSION,
                                                 value, maxIterations);
@@ -338,6 +341,22 @@ public class BigFraction
         this(BigInteger.valueOf(num), BigInteger.valueOf(den));
     }
 
+    /**
+     * A test to determine if a series of fractions has converged.
+     */
+    @FunctionalInterface
+    public interface ConvergenceTest {
+        /**
+         * Evaluates if the fraction formed by {@code numerator/denominator} satisfies
+         * this convergence test.
+         * 
+         * @param numerator   the numerator
+         * @param denominator the denominator
+         * @return if this convergence test is satisfied
+         */
+        boolean test(long numerator, long denominator);
+    }
+
     /** Generate a {@link Stream stream} of convergents from a real number.
      * @param value value to approximate
      * @param maxConbvergents maximum number of convergents.
@@ -345,17 +364,39 @@ public class BigFraction
      * @since 2.1
      */
     public static Stream<BigFraction> convergents(final double value, final int maxConvergents) {
-        if (FastMath.abs(value) > Integer.MAX_VALUE) {
-            throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW,
-                                                value, value, 1l);
-        }
-        final ConvergentsIterator<BigFraction> iterator =
-                        new ConvergentsIterator<>(value, maxConvergents, (p, q) -> new BigFraction(p, q));
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator,
-                                                                        Spliterator.DISTINCT  | Spliterator.NONNULL |
-                                                                        Spliterator.IMMUTABLE | Spliterator.ORDERED),
-                                    false);
+        return ConvergentsIterator.convergents(value, maxConvergents).map(STEP_TO_FRACTION);
     }
+
+    /**
+     * Returns the last element of the series of convergent-steps to approximate the
+     * given value.
+     * <p>
+     * The series terminates either at the first step that satisfies the given
+     * {@code convergenceTest} or after at most {@code maxConvergents} elements. The
+     * returned Pair consists of that terminal {@link BigFraction} and a
+     * {@link Boolean} that indicates if it satisfies the given convergence tests.
+     * If the returned pair's value is {@code false} the element at position
+     * {@code maxConvergents} was examined but failed to satisfy the
+     * {@code convergenceTest}. A caller can then decide to accept the result
+     * nevertheless or to discard it. This method is usually faster than
+     * {@link #convergents(double, int)} if only the terminal element is of
+     * interest.
+     * 
+     * @param value           value to approximate
+     * @param maxConvergents  maximum number of convergents to examine
+     * @param convergenceTest the test if the series has converged at a step
+     * @return the pair of last element of the series of convergents and a boolean
+     *         indicating if that element satisfies the specified convergent test
+     */
+    public static Pair<BigFraction, Boolean> convergent(double value, int maxConvergents,
+            ConvergenceTest convergenceTest) {
+        Pair<ConvergenceStep, Boolean> converged = ConvergentsIterator.convergent(value, maxConvergents,
+                s -> convergenceTest.test(s.getNumerator(), s.getDenominator()));
+        return Pair.create(STEP_TO_FRACTION.apply(converged.getKey()), converged.getValue());
+    }
+
+    private static final Function<ConvergenceStep, BigFraction> STEP_TO_FRACTION = //
+            s -> new BigFraction(s.getNumerator(), s.getDenominator());
 
     /** {@inheritDoc} */
     @Override

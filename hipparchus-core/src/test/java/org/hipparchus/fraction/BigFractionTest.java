@@ -32,6 +32,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -88,12 +89,6 @@ public class BigFractionTest {
             new BigFraction(BigInteger.ONE, BigInteger.ZERO);
             Assert.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException npe) {
-            // expected
-        }
-        try {
-            new BigFraction(2.0 * Integer.MAX_VALUE, 1.0e-5, 100000);
-            Assert.fail("Expecting FractionConversionException");
-        } catch (MathIllegalStateException mise) {
             // expected
         }
     }
@@ -174,13 +169,13 @@ public class BigFractionTest {
     }
 
     // MATH-1029
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testPositiveValueOverflow() {
         assertFraction((long) 1e10, 1, new BigFraction(1e10, 1000));
     }
 
     // MATH-1029
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testNegativeValueOverflow() {
         assertFraction((long) -1e10, 1, new BigFraction(-1e10, 1000));
     }
@@ -673,7 +668,6 @@ public class BigFractionTest {
         // OEIS A002486, Apart from two leading terms (which are present by convention), denominators of convergents to Pi (https://oeis.org/A002486)
         // 1, 0, 1,  7, 106, 113,  33102,  33215,  66317,  99532, 265381,  364913, 1360120, 1725033, 25510582,  52746197, 78256779
         List<BigFraction> convergents = BigFraction.convergents(FastMath.PI, 20).collect(Collectors.toList());
-        Assert.assertEquals(13, convergents.size());
         Assert.assertEquals(new BigFraction(       3,        1), convergents.get( 0));
         Assert.assertEquals(new BigFraction(      22,        7), convergents.get( 1));
         Assert.assertEquals(new BigFraction(     333,      106), convergents.get( 2));
@@ -687,29 +681,23 @@ public class BigFractionTest {
         Assert.assertEquals(new BigFraction( 4272943,  1360120), convergents.get(10));
         Assert.assertEquals(new BigFraction( 5419351,  1725033), convergents.get(11));
         Assert.assertEquals(new BigFraction(80143857, 25510582), convergents.get(12));
+        Assert.assertEquals(13, convergents.size());
     }
 
     @Test
     public void testLimitedConvergents() {
+        double value = FastMath.PI;
         Assert.assertEquals(new BigFraction(  208341,    66317),
-                            BigFraction.convergents(FastMath.PI, 7).
-                                        reduce((previous, current) -> current).
-                                        get());
+                BigFraction.convergent(value, 7, (p, q) -> Precision.equals(p / (double) q, value, 1)).getKey());
     }
 
     @Test
     public void testTruncatedConvergents() {
         final double value = FastMath.PI;
         Assert.assertEquals(new BigFraction(   355,   113),
-                            BigFraction.convergents(value, 20).
-                                        filter(f -> FastMath.abs(f.doubleValue() - value) < 1.0e-6).
-                                        findFirst().
-                                        get());
+                BigFraction.convergent(value, 20, (p, q) -> FastMath.abs(p / (double) q - value) < 1.0e-6).getKey());
         Assert.assertEquals(new BigFraction(312689, 99532),
-                            BigFraction.convergents(value, 20).
-                                        filter(f -> FastMath.abs(f.doubleValue() - value) < 1.0e-10).
-                                        findFirst().
-                                        get());
+                BigFraction.convergent(value, 20, (p, q) -> FastMath.abs(p / (double) q - value) < 1.0e-10).getKey());
     }
 
 }

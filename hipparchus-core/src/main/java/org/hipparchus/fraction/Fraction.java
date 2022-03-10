@@ -23,19 +23,20 @@ package org.hipparchus.fraction;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Optional;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.fraction.ConvergentsIterator.ConvergenceStep;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.Pair;
+import org.hipparchus.util.Precision;
 
 /**
  * Representation of a rational number.
@@ -126,13 +127,13 @@ public class Fraction
      */
     public Fraction(double value, double epsilon, int maxIterations)
         throws MathIllegalStateException {
-        final Optional<Fraction> optional =
-                        convergents(value, maxIterations).
-                        filter(f -> FastMath.abs(f.doubleValue() - value) < epsilon).
-                        findFirst();
-        if (optional.isPresent()) {
-            this.numerator   = optional.get().numerator;
-            this.denominator = optional.get().denominator;
+        ConvergenceStep converged = convergent(value, maxIterations, s -> {
+            double quotient = s.getFractionValue();
+            return Precision.equals(quotient, value, 1) || FastMath.abs(quotient - value) < epsilon;
+        }).getKey();
+        if (FastMath.abs(converged.getFractionValue() - value) < epsilon) {
+            this.numerator   = (int) converged.getNumerator();
+            this.denominator = (int) converged.getDenominator();
         } else {
             throw new MathIllegalStateException(LocalizedCoreFormats.FAILED_FRACTION_CONVERSION,
                                                 value, maxIterations);
@@ -156,13 +157,19 @@ public class Fraction
     public Fraction(double value, int maxDenominator)
         throws MathIllegalStateException {
         final int maxIterations = 100;
-        final Optional<Fraction> optional =
-                        convergents(value, maxIterations).
-                        filter(f -> f.getDenominator() <= maxDenominator).
-                        reduce((previous, current) -> current);
-        if (optional.isPresent()) {
-            this.numerator   = optional.get().numerator;
-            this.denominator = optional.get().denominator;
+        ConvergenceStep[] lastValid = new ConvergenceStep[1];
+        try {
+            convergent(value, maxIterations, s -> {
+                if (s.getDenominator() < maxDenominator) {
+                    lastValid[0] = s;
+                }
+                return Precision.equals(s.getFractionValue(), value, 1);
+            });
+        } catch (MathIllegalStateException e) { // ignore overflows and just take the last valid result
+        }
+        if (lastValid[0] != null) {
+            this.numerator   = (int) lastValid[0].getNumerator();
+            this.denominator = (int) lastValid[0].getDenominator();
         } else {
             throw new MathIllegalStateException(LocalizedCoreFormats.FAILED_FRACTION_CONVERSION,
                                                 value, maxIterations);
@@ -215,6 +222,22 @@ public class Fraction
         this.denominator = den;
     }
 
+    /**
+     * A test to determine if a series of fractions has converged.
+     */
+    @FunctionalInterface
+    public interface ConvergenceTest {
+        /**
+         * Evaluates if the fraction formed by {@code numerator/denominator} satisfies
+         * this convergence test.
+         * 
+         * @param numerator   the numerator
+         * @param denominator the denominator
+         * @return if this convergence test is satisfied
+         */
+        boolean test(int numerator, int denominator);
+    }
+
     /** Generate a {@link Stream stream} of convergents from a real number.
      * @param value value to approximate
      * @param maxConbvergents maximum number of convergents.
@@ -223,15 +246,59 @@ public class Fraction
      */
     public static Stream<Fraction> convergents(final double value, final int maxConvergents) {
         if (FastMath.abs(value) > Integer.MAX_VALUE) {
-            throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW,
-                                                value, value, 1l);
+            throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, value, value, 1l);
         }
-        final ConvergentsIterator<Fraction> iterator =
-                        new ConvergentsIterator<>(value, maxConvergents, (p, q) -> new Fraction((int) p, (int) q));
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator,
-                                                                        Spliterator.DISTINCT  | Spliterator.NONNULL |
-                                                                        Spliterator.IMMUTABLE | Spliterator.ORDERED),
-                                    false);
+        return ConvergentsIterator.convergents(value, maxConvergents).map(STEP_TO_FRACTION);
+    }
+
+    /**
+     * Returns the last element of the series of convergent-steps to approximate the
+     * given value.
+     * <p>
+     * The series terminates either at the first step that satisfies the given
+     * {@code convergenceTest} or after at most {@code maxConvergents} elements. The
+     * returned Pair consists of that terminal {@link Fraction} and a
+     * {@link Boolean} that indicates if it satisfies the given convergence tests.
+     * If the returned pair's value is {@code false} the element at position
+     * {@code maxConvergents} was examined but failed to satisfy the
+     * {@code convergenceTest}. A caller can then decide to accept the result
+     * nevertheless or to discard it. This method is usually faster than
+     * {@link #convergents(double, int)} if only the terminal element is of
+     * interest.
+     * 
+     * @param value           value to approximate
+     * @param maxConvergents  maximum number of convergents to examine
+     * @param convergenceTest the test if the series has converged at a step
+     * @return the pair of last element of the series of convergents and a boolean
+     *         indicating if that element satisfies the specified convergent test
+     */
+    public static Pair<Fraction, Boolean> convergent(double value, int maxConvergents, ConvergenceTest test) {
+        Pair<ConvergenceStep, Boolean> converged = convergent(value, maxConvergents, s -> {
+            assertNoIntegerOverflow(s, value);
+            return test.test((int) s.getNumerator(), (int) s.getDenominator());
+        });
+        return Pair.create(STEP_TO_FRACTION.apply(converged.getKey()), converged.getValue());
+    }
+
+    private static final Function<ConvergenceStep, Fraction> STEP_TO_FRACTION = //
+            s -> new Fraction((int) s.getNumerator(), (int) s.getDenominator());
+
+    private static Pair<ConvergenceStep, Boolean> convergent(double value, int maxConvergents,
+            Predicate<ConvergenceStep> convergenceTests) {
+        if (FastMath.abs(value) > Integer.MAX_VALUE) {
+            throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, value, value, 1l);
+        }
+        return ConvergentsIterator.convergent(value, maxConvergents, s -> {
+            assertNoIntegerOverflow(s, value);
+            return convergenceTests.test(s);
+        });
+    }
+
+    private static void assertNoIntegerOverflow(ConvergenceStep s, double value) {
+        if (s.getNumerator() > Integer.MAX_VALUE || s.getDenominator() > Integer.MAX_VALUE) {
+            throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, value,
+                    s.getNumerator(), s.getDenominator());
+        }
     }
 
     /** {@inheritDoc} */
@@ -283,7 +350,7 @@ public class Fraction
     public int compareTo(Fraction object) {
         long nOd = ((long) numerator) * object.denominator;
         long dOn = ((long) denominator) * object.numerator;
-        return (nOd < dOn) ? -1 : ((nOd > dOn) ? +1 : 0);
+        return Long.compare(nOd, dOn);
     }
 
     /**

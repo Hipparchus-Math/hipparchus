@@ -21,14 +21,17 @@
  */
 package org.hipparchus.fraction;
 
+import static org.junit.Assert.assertThrows;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -153,7 +156,6 @@ public class FractionTest {
         checkIntegerOverflow(0.75000000001455192);
         checkIntegerOverflow(1.0e10);
         checkIntegerOverflow(-1.0e10);
-        checkIntegerOverflow(-43979.60679604749);
     }
 
     @Test
@@ -166,14 +168,7 @@ public class FractionTest {
     }
 
     private void checkIntegerOverflow(double a) {
-        try {
-            @SuppressWarnings("unused")
-            Fraction f = new Fraction(a, 1.0e-12, 1000);
-            //System.out.println(f.getNumerator() + "/" + f.getDenominator());
-            Assert.fail("an exception should have been thrown");
-        } catch (MathIllegalStateException mise) {
-            // expected behavior
-        }
+        assertThrows(MathIllegalStateException.class, () -> new Fraction(a, 1.0e-12, 1000));
     }
 
     @Test
@@ -681,25 +676,18 @@ public class FractionTest {
 
     @Test
     public void testLimitedConvergents() {
+        double value = FastMath.PI;
         Assert.assertEquals(new Fraction(  208341,    66317),
-                            Fraction.convergents(FastMath.PI, 7).
-                                     reduce((previous, current) -> current).
-                                     get());
+                Fraction.convergent(value, 7, (p, q) -> Precision.equals(p / (double) q, value, 1)).getKey());
     }
 
     @Test
     public void testTruncatedConvergents() {
         final double value = FastMath.PI;
         Assert.assertEquals(new Fraction(   355,   113),
-                            Fraction.convergents(value, 20).
-                                     filter(f -> FastMath.abs(f.doubleValue() - value) < 1.0e-6).
-                                     findFirst().
-                                     get());
+                Fraction.convergent(value, 20, (p, q) -> FastMath.abs(p / (double) q - value) < 1.0e-6).getKey());
         Assert.assertEquals(new Fraction(312689, 99532),
-                            Fraction.convergents(value, 20).
-                                     filter(f -> FastMath.abs(f.doubleValue() - value) < 1.0e-10).
-                                     findFirst().
-                                     get());
+                Fraction.convergent(value, 20, (p, q) -> FastMath.abs(p / (double) q - value) < 1.0e-10).getKey());
     }
 
 }

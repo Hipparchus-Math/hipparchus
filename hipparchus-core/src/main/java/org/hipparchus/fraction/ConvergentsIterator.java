@@ -21,112 +21,122 @@
  */
 package org.hipparchus.fraction;
 
-import java.util.Iterator;
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.Pair;
 import org.hipparchus.util.Precision;
 
-/** Iterator for generating convergents.
- * @param <T> type for the convergents
+/**
+ * Generator for convergents.
  */
-class ConvergentsIterator<T> implements Iterator<T> {
+class ConvergentsIterator {
+    private ConvergentsIterator() {
+    } // static use only
 
-    /** Threshold for detecting overflows during iterations. */
-    private static final long OVERFLOW = Integer.MAX_VALUE;
+    static class ConvergenceStep {
+        /** Numerator of previous convergent. */
+        private final long   p0;
 
-    /** Value towards which convergents should converge. */
-    private final double value;
+        /** Denominator of previous convergent. */
+        private final long   q0;
 
-    /** Maximum number of convergents to generate. */
-    private final int maxConvergents;
+        /** Numerator of current convergent. */
+        private final long   p1;
 
-    /** Builder for the convergents. */
-    private final Builder<T> builder;
+        /** Denominator of current convergent. */
+        private final long   q1;
 
-    /** Numerator of previous convergent. */
-    private long    p0;
+        /** Remainder of current convergent. */
+        private final double r1;
 
-    /** Denominator of previous convergent. */
-    private long    q0;
-
-    /** Numerator of current convergent. */
-    private long    p1;
-
-    /** Denominator of current convergent. */
-    private long    q1;
-
-    /** Remainder of current convergent. */
-    private double  r1;
-
-    /** Stop indicator. */
-    private boolean stop;
-
-    /** Count of already generated convergents. */
-    private int     n;
-
-    /** Simple constructor.
-     * @param value value towards which convergents should converge
-     * @param maxConvergents maximum number of convergents to generate
-     * @param builder builder for the convergents
-     */
-    ConvergentsIterator(final double value, final int maxConvergents, final Builder<T> builder) {
-
-        this.value          = value;
-        this.maxConvergents = maxConvergents;
-        this.builder        = builder;
-
-        // initialize iterations
-        p0   = 0;
-        q0   = 1;
-        p1   = 1;
-        q1   = 0;
-        r1   = value;
-        stop = false;
-        n    = 0;
-
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean hasNext() {
-        return n < maxConvergents && !stop;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public T next() {
-        ++n;
-
-        final long a1 = (long) FastMath.floor(r1);
-        long p2 = (a1 * p1) + p0;
-        long q2 = (a1 * q1) + q0;
-
-        final double convergent = (double) p2 / (double) q2;
-        stop = Precision.equals(convergent, value, 1);
-        if ((p2 > OVERFLOW || q2 > OVERFLOW) && !stop) {
-            throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, value, p2, q2);
+        private ConvergenceStep(final long p0, final long q0, final long p1, final long q1, final double r1) {
+            this.p0 = p1;
+            this.q0 = q1;
+            final long a1 = (long) FastMath.floor(r1);
+            try {
+                this.p1 = FastMath.addExact(Math.multiplyExact(a1, p1), p0);
+                this.q1 = FastMath.addExact(Math.multiplyExact(a1, q1), q0);
+                this.r1 = 1.0 / (r1 - a1);
+            } catch (ArithmeticException e) { // unlike the name implies FastMath's multiplyExact() is slower
+                throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, r1, p1, q1);
+            }
         }
-        p0 = p1;
-        p1 = p2;
-        q0 = q1;
-        q1 = q2;
-        r1 = 1.0 / (r1 - a1);
-        return builder.build(p2, q2);
 
+        public static ConvergenceStep start(double value) {
+            return new ConvergenceStep(0, 1, 1, 0, value);
+        }
+
+        public ConvergenceStep next() {
+            return new ConvergenceStep(p0, q0, p1, q1, r1);
+        }
+
+        public long getNumerator() {
+            return p1;
+        }
+
+        public long getDenominator() {
+            return q1;
+        }
+
+        public double getFractionValue() {
+            return getNumerator() / (double) getDenominator();
+        }
+
+        @Override
+        public String toString() {
+            return getNumerator() + "/" + getDenominator();
+        }
     }
 
-    /** Interface for building convergents.
-     * @param <T> type of the convergent
+    /**
+     * Returns the last element of the series of convergent-steps to approximate the
+     * given value.
+     * <p>
+     * The series terminates either at the first step that satisfies the given
+     * {@code convergenceTest} or after at most {@code maxConvergents} elements. The
+     * returned Pair consists of that terminal step and a {@link Boolean} that
+     * indicates if it satisfies the given convergence tests. If the returned pair's
+     * value is {@code false} the element at position {@code maxConvergents} was
+     * examined but failed to satisfy the {@code convergenceTest}.
+     * 
+     * @param value           value to approximate
+     * @param maxConvergents  maximum number of convergents to examine
+     * @param convergenceTest the test if the series has converged at a step
+     * @return the pair of last element of the series of convergents and a boolean
+     *         indicating if that element satisfies the specified convergent test
      */
-    public interface Builder<T> {
-        /** Build a convergent.
-         * @param numerator numerator of the convergent
-         * @param denominator denominator of the convergent
-         * @return convergent
-         */
-        T build(long numerator, long denominator);
+    static Pair<ConvergenceStep, Boolean> convergent(double value, int maxIterations,
+            Predicate<ConvergenceStep> convergenceTests) {
+        ConvergenceStep step = ConvergenceStep.start(value);
+        for (int i = 1; i < maxIterations; i++) { // start performs first iteration
+            if (convergenceTests.test(step)) {
+                return Pair.create(step, Boolean.TRUE);
+            }
+            step = step.next();
+        }
+        return Pair.create(step, convergenceTests.test(step));
     }
 
+    /**
+     * Generate a {@link Stream stream} of {@code ConvergenceStep convergent-steps}
+     * from a real number.
+     * 
+     * @param value           value to approximate
+     * @param maxConbvergents maximum number of convergent steps.
+     * @return stream of {@link ConvergenceStep convergent-steps} approximating
+     *         {@code value}
+     */
+    static Stream<ConvergenceStep> convergents(final double value, final int maxConvergents) {
+        return Stream.iterate(ConvergenceStep.start(value), Objects::nonNull, s -> {
+            if (Precision.equals(s.getFractionValue(), value, 1)) {
+                return null; // stop if precision has been reached
+            }
+            return s.next();
+        }).limit(maxConvergents);
+    }
 }
