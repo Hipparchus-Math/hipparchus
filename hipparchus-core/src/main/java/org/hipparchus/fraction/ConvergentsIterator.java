@@ -21,9 +21,12 @@
  */
 package org.hipparchus.fraction;
 
-import java.util.Objects;
+import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -127,16 +130,27 @@ class ConvergentsIterator {
      * from a real number.
      * 
      * @param value           value to approximate
-     * @param maxConbvergents maximum number of convergent steps.
+     * @param maxConvergents maximum number of convergent steps.
      * @return stream of {@link ConvergenceStep convergent-steps} approximating
      *         {@code value}
      */
     static Stream<ConvergenceStep> convergents(final double value, final int maxConvergents) {
-        return Stream.iterate(ConvergenceStep.start(value), Objects::nonNull, s -> {
-            if (Precision.equals(s.getFractionValue(), value, 1)) {
-                return null; // stop if precision has been reached
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new Iterator<ConvergenceStep>() {
+            ConvergenceStep next = ConvergenceStep.start(value);
+            public boolean hasNext() {
+                return next != null;
             }
-            return s.next();
-        }).limit(maxConvergents);
+            public ConvergenceStep next() {
+                final ConvergenceStep ret = next;
+                if (Precision.equals(ret.getFractionValue(), value, 1)) {
+                    next = null; // stop if precision has been reached
+                } else {
+                    next = next.next();
+                }
+                return ret;
+            }
+        }, Spliterator.DISTINCT  | Spliterator.NONNULL | Spliterator.IMMUTABLE | Spliterator.ORDERED),
+        false).
+        limit(maxConvergents);
     }
 }
