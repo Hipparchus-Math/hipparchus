@@ -45,10 +45,6 @@ public class Fraction
     extends Number
     implements FieldElement<Fraction>, Comparable<Fraction>, Serializable {
 
-    /** Convert a convergence step to the corresponding double fraction. */
-    private static final Function<ConvergenceStep, Fraction> STEP_TO_FRACTION = //
-                    s -> new Fraction((int) s.getNumerator(), (int) s.getDenominator());
-
     /** A fraction representing "2 / 1". */
     public static final Fraction TWO = new Fraction(2, 1);
 
@@ -96,6 +92,10 @@ public class Fraction
 
     /** The default epsilon used for convergence. */
     private static final double DEFAULT_EPSILON = 1e-5;
+
+    /** Convert a convergence step to the corresponding double fraction. */
+    private static final Function<ConvergenceStep, Fraction> STEP_TO_FRACTION = //
+                    s -> new Fraction((int) s.getNumerator(), (int) s.getDenominator());
 
     /** The denominator. */
     private final int denominator;

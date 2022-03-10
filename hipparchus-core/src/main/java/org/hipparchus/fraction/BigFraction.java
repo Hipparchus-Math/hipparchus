@@ -49,10 +49,6 @@ public class BigFraction
     extends Number
     implements FieldElement<BigFraction>, Comparable<BigFraction>, Serializable {
 
-    /** Convert a convergence step to the corresponding double fraction. */
-    private static final Function<ConvergenceStep, BigFraction> STEP_TO_FRACTION = //
-            s -> new BigFraction(s.getNumerator(), s.getDenominator());
-
     /** A fraction representing "2 / 1". */
     public static final BigFraction TWO = new BigFraction(2);
 
@@ -100,6 +96,10 @@ public class BigFraction
 
     /** <code>BigInteger</code> representation of 100. */
     private static final BigInteger ONE_HUNDRED = BigInteger.valueOf(100);
+
+    /** Convert a convergence step to the corresponding double fraction. */
+    private static final Function<ConvergenceStep, BigFraction> STEP_TO_FRACTION = //
+            s -> new BigFraction(s.getNumerator(), s.getDenominator());
 
     /** The numerator. */
     private final BigInteger numerator;
