@@ -130,7 +130,7 @@ class ConvergentsIterator {
      * indicates if it satisfies the given convergence tests. If the returned pair's
      * value is {@code false} the element at position {@code maxConvergents} was
      * examined but failed to satisfy the {@code convergenceTest}.
-     * 
+     *
      * @param value           value to approximate
      * @param maxConvergents  maximum number of convergents to examine
      * @param convergenceTest the test if the series has converged at a step
@@ -152,7 +152,7 @@ class ConvergentsIterator {
     /**
      * Generate a {@link Stream stream} of {@code ConvergenceStep convergent-steps}
      * from a real number.
-     * 
+     *
      * @param value           value to approximate
      * @param maxConvergents maximum number of convergent steps.
      * @return stream of {@link ConvergenceStep convergent-steps} approximating
@@ -162,7 +162,7 @@ class ConvergentsIterator {
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new Iterator<ConvergenceStep>() {
 
             /** Next convergent. */
-            ConvergenceStep next = ConvergenceStep.start(value);
+            private ConvergenceStep next = ConvergenceStep.start(value);
 
             /** {@inheritDoc} */
             @Override

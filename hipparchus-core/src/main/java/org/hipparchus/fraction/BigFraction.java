@@ -49,6 +49,10 @@ public class BigFraction
     extends Number
     implements FieldElement<BigFraction>, Comparable<BigFraction>, Serializable {
 
+    /** Convert a convergence step to the corresponding double fraction. */
+    private static final Function<ConvergenceStep, BigFraction> STEP_TO_FRACTION = //
+            s -> new BigFraction(s.getNumerator(), s.getDenominator());
+
     /** A fraction representing "2 / 1". */
     public static final BigFraction TWO = new BigFraction(2);
 
@@ -349,7 +353,7 @@ public class BigFraction
         /**
          * Evaluates if the fraction formed by {@code numerator/denominator} satisfies
          * this convergence test.
-         * 
+         *
          * @param numerator   the numerator
          * @param denominator the denominator
          * @return if this convergence test is satisfied
@@ -381,7 +385,7 @@ public class BigFraction
      * nevertheless or to discard it. This method is usually faster than
      * {@link #convergents(double, int)} if only the terminal element is of
      * interest.
-     * 
+     *
      * @param value           value to approximate
      * @param maxConvergents  maximum number of convergents to examine
      * @param convergenceTest the test if the series has converged at a step
@@ -394,9 +398,6 @@ public class BigFraction
                 s -> convergenceTest.test(s.getNumerator(), s.getDenominator()));
         return Pair.create(STEP_TO_FRACTION.apply(converged.getKey()), converged.getValue());
     }
-
-    private static final Function<ConvergenceStep, BigFraction> STEP_TO_FRACTION = //
-            s -> new BigFraction(s.getNumerator(), s.getDenominator());
 
     /** {@inheritDoc} */
     @Override

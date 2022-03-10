@@ -45,6 +45,10 @@ public class Fraction
     extends Number
     implements FieldElement<Fraction>, Comparable<Fraction>, Serializable {
 
+    /** Convert a convergence step to the corresponding double fraction. */
+    private static final Function<ConvergenceStep, Fraction> STEP_TO_FRACTION = //
+                    s -> new Fraction((int) s.getNumerator(), (int) s.getDenominator());
+
     /** A fraction representing "2 / 1". */
     public static final Fraction TWO = new Fraction(2, 1);
 
@@ -230,7 +234,7 @@ public class Fraction
         /**
          * Evaluates if the fraction formed by {@code numerator/denominator} satisfies
          * this convergence test.
-         * 
+         *
          * @param numerator   the numerator
          * @param denominator the denominator
          * @return if this convergence test is satisfied
@@ -265,7 +269,7 @@ public class Fraction
      * nevertheless or to discard it. This method is usually faster than
      * {@link #convergents(double, int)} if only the terminal element is of
      * interest.
-     * 
+     *
      * @param value           value to approximate
      * @param maxConvergents  maximum number of convergents to examine
      * @param convergenceTest the test if the series has converged at a step
@@ -280,11 +284,15 @@ public class Fraction
         return Pair.create(STEP_TO_FRACTION.apply(converged.getKey()), converged.getValue());
     }
 
-    private static final Function<ConvergenceStep, Fraction> STEP_TO_FRACTION = //
-            s -> new Fraction((int) s.getNumerator(), (int) s.getDenominator());
-
+    /** Create a convergent-steps to approximate the given value.
+     * @param value           value to approximate
+     * @param maxConvergents  maximum number of convergents to examine
+     * @param convergenceTest the test if the series has converged at a step
+     * @return the pair of last element of the series of convergents and a boolean
+     *         indicating if that element satisfies the specified convergent test
+     */
     private static Pair<ConvergenceStep, Boolean> convergent(double value, int maxConvergents,
-            Predicate<ConvergenceStep> convergenceTests) {
+                                                             Predicate<ConvergenceStep> convergenceTests) {
         if (FastMath.abs(value) > Integer.MAX_VALUE) {
             throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, value, value, 1l);
         }
@@ -294,6 +302,10 @@ public class Fraction
         });
     }
 
+    /** Check no overflow occurred.
+     * @param s convergent
+     * @param value corresponding value
+     */
     private static void assertNoIntegerOverflow(ConvergenceStep s, double value) {
         if (s.getNumerator() > Integer.MAX_VALUE || s.getDenominator() > Integer.MAX_VALUE) {
             throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, value,
