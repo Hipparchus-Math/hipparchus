@@ -38,9 +38,13 @@ import org.hipparchus.util.Precision;
  * Generator for convergents.
  */
 class ConvergentsIterator {
+
+    /** Unused constructor.
+     */
     private ConvergentsIterator() {
     } // static use only
 
+    /** Container for one convergent step. */
     static class ConvergenceStep {
         /** Numerator of previous convergent. */
         private final long   p0;
@@ -70,30 +74,50 @@ class ConvergentsIterator {
             }
         }
 
+        /** Builder from a double value.
+         * @param value value to approximate
+         * @return first step in approximation
+         */
         public static ConvergenceStep start(double value) {
             return new ConvergenceStep(0, 1, 1, 0, value);
         }
 
+        /** Compute next step in convergence.
+         * @return next convergence step
+         */
         public ConvergenceStep next() {
             return new ConvergenceStep(p0, q0, p1, q1, r1);
         }
 
+        /** Get the numerator of current convergent.
+         * @return numerator of current convergent
+         */
         public long getNumerator() {
             return p1;
         }
 
+        /** Get the denominator of current convergent.
+         * @return denominator of current convergent
+         */
         public long getDenominator() {
             return q1;
         }
 
+        /** Compute double value of current convergent.
+         * @return double value of current convergent
+         */
         public double getFractionValue() {
             return getNumerator() / (double) getDenominator();
         }
 
+        /** Convert convergent to string representation.
+         * @return string representation of convergent
+         */
         @Override
         public String toString() {
             return getNumerator() + "/" + getDenominator();
         }
+
     }
 
     /**
@@ -136,10 +160,18 @@ class ConvergentsIterator {
      */
     static Stream<ConvergenceStep> convergents(final double value, final int maxConvergents) {
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new Iterator<ConvergenceStep>() {
+
+            /** Next convergent. */
             ConvergenceStep next = ConvergenceStep.start(value);
+
+            /** {@inheritDoc} */
+            @Override
             public boolean hasNext() {
                 return next != null;
             }
+
+            /** {@inheritDoc} */
+            @Override
             public ConvergenceStep next() {
                 final ConvergenceStep ret = next;
                 if (Precision.equals(ret.getFractionValue(), value, 1)) {
@@ -149,7 +181,8 @@ class ConvergentsIterator {
                 }
                 return ret;
             }
-        }, Spliterator.DISTINCT  | Spliterator.NONNULL | Spliterator.IMMUTABLE | Spliterator.ORDERED),
+
+        }, Spliterator.DISTINCT | Spliterator.NONNULL | Spliterator.IMMUTABLE | Spliterator.ORDERED),
         false).
         limit(maxConvergents);
     }
