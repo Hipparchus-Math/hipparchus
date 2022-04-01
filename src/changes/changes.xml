@@ -49,6 +49,12 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
+    <release version="2.2" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/187">
+        Fixed wrong set operation with ArcsSet when two BSP trees share
+        the same angle as a cut hyperplane.
+      </action>
+    </release>
     <release version="2.1" date="TBD" description="TBD">
       <action dev="luc" type="fix" issue="issues/184">
         Fixed non-bracketing issue when RESET_STATE slightly moves an event at the start

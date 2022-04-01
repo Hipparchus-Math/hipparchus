@@ -599,4 +599,79 @@ public class ArcsSetTest {
         Assert.assertEquals(Side.MINUS, set.split(arc).getSide());
     }
 
+    @Test
+    public void testShuffledTreeNonRepresentable() {
+        doTestShuffledTree(FastMath.toRadians( 85.0), FastMath.toRadians( 95.0),
+                           FastMath.toRadians(265.0), FastMath.toRadians(275.0),
+                           1.0e-10);
+    }
+
+    @Test
+    public void testShuffledTreeRepresentable() {
+        doTestShuffledTree(1.0, 2.0,
+                           4.0, 5.0,
+                           1.0e-10);
+    }
+
+    private void doTestShuffledTree(final double a0, final double a1,
+                                    final double a2, final double a3,
+                                    final double tol) {
+
+
+        // intervals set [ a0 ; a1 ] U [ a2 ; a3 ]
+        final ArcsSet setA =
+                        new ArcsSet(new BSPTree<>(new LimitAngle(new S1Point(a0), false, tol).wholeHyperplane(),
+                                                       new BSPTree<>(Boolean.FALSE),
+                                                       new BSPTree<>(new LimitAngle(new S1Point(a1), true, tol).wholeHyperplane(),
+                                                                     new BSPTree<>(new LimitAngle(new S1Point(a2), false, tol).wholeHyperplane(),
+                                                                                   new BSPTree<>(Boolean.FALSE),
+                                                                                   new BSPTree<>(new LimitAngle(new S1Point(a3), true, tol).wholeHyperplane(),
+                                                                                                 new BSPTree<>(Boolean.FALSE),
+                                                                                                 new BSPTree<>(Boolean.TRUE),
+                                                                                                 null),
+                                                                                   null),
+                                                                     new BSPTree<>(Boolean.TRUE),
+                                                                     null),
+                                                       null),
+                                         1.0e-10);
+        Assert.assertEquals((a1 - a0) + (a3 - a2), setA.getSize(), 1.0e-10);
+        Assert.assertEquals(2, setA.asList().size());
+        Assert.assertEquals(a0, setA.asList().get(0).getInf(), 1.0e-15);
+        Assert.assertEquals(a1, setA.asList().get(0).getSup(), 1.0e-15);
+        Assert.assertEquals(a2, setA.asList().get(1).getInf(), 1.0e-15);
+        Assert.assertEquals(a3, setA.asList().get(1).getSup(), 1.0e-15);
+
+        // same intervals set [ a0 ; a1 ] U [ a2 ; a3 ], but with a different tree organization
+        final ArcsSet setB =
+                        new ArcsSet(new BSPTree<>(new LimitAngle(new S1Point(a2), false, tol).wholeHyperplane(),
+                                                       new BSPTree<>(new LimitAngle(new S1Point(a0), false, tol).wholeHyperplane(),
+                                                                     new BSPTree<>(Boolean.FALSE),
+                                                                     new BSPTree<>(new LimitAngle(new S1Point(a1), true, tol).wholeHyperplane(),
+                                                                                   new BSPTree<>(Boolean.FALSE),
+                                                                                   new BSPTree<>(Boolean.TRUE),
+                                                                                   null),
+                                                                     null),
+                                                       new BSPTree<>(new LimitAngle(new S1Point(a3), true, tol).wholeHyperplane(),
+                                                                     new BSPTree<>(Boolean.FALSE),
+                                                                     new BSPTree<>(Boolean.TRUE),
+                                                                     null),
+                                                       null),
+                                         1.0e-10);
+        Assert.assertEquals((a1 - a0) + (a3 - a2), setB.getSize(), 1.0e-10);
+        Assert.assertEquals(2, setB.asList().size());
+        Assert.assertEquals(a0, setB.asList().get(0).getInf(), 1.0e-15);
+        Assert.assertEquals(a1, setB.asList().get(0).getSup(), 1.0e-15);
+        Assert.assertEquals(a2, setB.asList().get(1).getInf(), 1.0e-15);
+        Assert.assertEquals(a3, setB.asList().get(1).getSup(), 1.0e-15);
+
+        final ArcsSet intersection = (ArcsSet) new RegionFactory<Sphere1D>().intersection(setA, setB);
+        Assert.assertEquals((a1 - a0) + (a3 - a2), intersection.getSize(), 1.0e-10);
+        Assert.assertEquals(2, intersection.asList().size());
+        Assert.assertEquals(a0, intersection.asList().get(0).getInf(), 1.0e-15);
+        Assert.assertEquals(a1, intersection.asList().get(0).getSup(), 1.0e-15);
+        Assert.assertEquals(a2, intersection.asList().get(1).getInf(), 1.0e-15);
+        Assert.assertEquals(a3, intersection.asList().get(1).getSup(), 1.0e-15);
+
+    }
+
 }
