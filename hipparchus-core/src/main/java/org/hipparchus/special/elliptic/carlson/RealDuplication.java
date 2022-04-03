@@ -99,7 +99,7 @@ abstract class RealDuplication {
      * @param va0 initial symmetric variables and mean point of the integral
      * @param aM reduced mean point
      * @param fourM 4<sup>m</sup>
-     * @return convergence criterion
+     * @return integral value
      */
     protected abstract double evaluate(double[] va0, double aM, double fourM);
 
