@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.2" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issue/188">
+        Added inverse Jacobi elliptic functions, for both double and field values.
+      </action>
       <action dev="luc" type="fix" issue="issues/187">
         Fixed wrong set operation with ArcsSet when two BSP trees share
         the same angle as a cut hyperplane.

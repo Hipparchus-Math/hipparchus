@@ -16,6 +16,7 @@
  */
 package org.hipparchus.special.elliptic.jacobi;
 
+import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -131,6 +132,56 @@ public class JacobiEllipticTest {
         Assert.assertEquals(reference[ 9], je.valuesD(u).nd(), 4 * FastMath.ulp(reference[ 9]));
         Assert.assertEquals(reference[10], je.valuesD(u).sd(), 4 * FastMath.ulp(reference[10]));
         Assert.assertEquals(reference[11], je.valuesD(u).cd(), 4 * FastMath.ulp(reference[11]));
+    }
+
+    @Test
+    public void testInverseCopolarN() {
+        final double m = 0.7;
+        final JacobiElliptic je = JacobiEllipticBuilder.build(m);
+        doTestInverse(-0.80,  0.80, 100, u -> je.valuesN(u).sn(), x -> je.arcsn(x), 1.0e-14);
+        doTestInverse(-1.00,  1.00, 100, u -> je.valuesN(u).cn(), x -> je.arccn(x), 1.0e-14);
+        doTestInverse( 0.55,  1.00, 100, u -> je.valuesN(u).dn(), x -> je.arcdn(x), 1.0e-14);
+    }
+
+    @Test
+    public void testInverseCopolarS() {
+        final double m = 0.7;
+        final JacobiElliptic je = JacobiEllipticBuilder.build(m);
+        doTestInverse(-2.00,  2.00, 100, u -> je.valuesS(u).cs(), x -> je.arccs(x), 1.0e-14);
+        doTestInverse( 0.55,  2.00, 100, u -> je.valuesS(u).ds(), x -> je.arcds(x), 1.0e-14);
+        doTestInverse(-2.00, -0.55, 100, u -> je.valuesS(u).ds(), x -> je.arcds(x), 1.0e-14);
+        doTestInverse( 1.00,  2.00, 100, u -> je.valuesS(u).ns(), x -> je.arcns(x), 1.0e-11);
+        doTestInverse(-2.00, -1.00, 100, u -> je.valuesS(u).ns(), x -> je.arcns(x), 1.0e-11);
+    }
+
+    @Test
+    public void testInverseCopolarC() {
+        final double m = 0.7;
+        final JacobiElliptic je = JacobiEllipticBuilder.build(m);
+        doTestInverse( 1.00,  2.00, 100, u -> je.valuesC(u).dc(), x -> je.arcdc(x), 1.0e-14);
+        doTestInverse(-2.00, -1.00, 100, u -> je.valuesC(u).dc(), x -> je.arcdc(x), 1.0e-14);
+        doTestInverse( 1.00,  2.00, 100, u -> je.valuesC(u).nc(), x -> je.arcnc(x), 1.0e-14);
+        doTestInverse(-2.00, -1.00, 100, u -> je.valuesC(u).nc(), x -> je.arcnc(x), 1.0e-14);
+        doTestInverse(-2.00,  2.00, 100, u -> je.valuesC(u).sc(), x -> je.arcsc(x), 1.0e-14);
+    }
+
+    @Test
+    public void testInverseCopolarD() {
+        final double m = 0.7;
+        final JacobiElliptic je = JacobiEllipticBuilder.build(m);
+        doTestInverse( 1.00,  1.80, 100, u -> je.valuesD(u).nd(), x -> je.arcnd(x), 1.0e-14);
+        doTestInverse(-1.80,  1.80, 100, u -> je.valuesD(u).sd(), x -> je.arcsd(x), 1.0e-14);
+        doTestInverse(-1.00,  1.00, 100, u -> je.valuesD(u).cd(), x -> je.arccd(x), 1.0e-14);
+    }
+
+    private void doTestInverse(final double xMin, final double xMax, final int n,
+                               final UnivariateFunction direct, final UnivariateFunction inverse,
+                               final double tolerance) {
+        for (int i = 0; i < n; ++i) {
+            final double x        = xMin + i * (xMax - xMin) / (n - 1);
+            final double xRebuilt = direct.value(inverse.value(x));
+            Assert.assertEquals(x, xRebuilt, tolerance);
+        }
     }
 
 }

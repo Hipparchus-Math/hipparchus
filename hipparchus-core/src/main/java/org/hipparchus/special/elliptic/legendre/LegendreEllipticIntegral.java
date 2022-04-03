@@ -1520,7 +1520,7 @@ public class LegendreEllipticIntegral {
 
     }
 
-    /** Integrand for elliptic integrals of the second kind.
+    /** Integrand for elliptic integrals of the third kind.
      * @param <T> type of the field elements
      */
     private static class Third<T extends CalculusFieldElement<T>> implements CalculusFieldUnivariateFunction<T> {
