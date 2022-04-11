@@ -140,6 +140,13 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
         return isNaN ? NaN : createComplex(FastMath.hypot(real, imaginary), 0.0);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public double norm() {
+        // we check NaN here because FastMath.hypot checks it after infinity
+        return isNaN ? Double.NaN : FastMath.hypot(real, imaginary);
+    }
+
     /**
      * Returns a {@code Complex} whose value is
      * {@code (this + addend)}.

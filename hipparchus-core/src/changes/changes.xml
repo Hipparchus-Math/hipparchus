@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.1" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issue/186">
+        Avoid building an intermediate complex for computing double norm.
+      </action>
       <action dev="luc" type="fix" issue="issue/175">
         Fixed overflows for incrementors that are allowed to reach Integer.MAX_VALUE.
       </action>
