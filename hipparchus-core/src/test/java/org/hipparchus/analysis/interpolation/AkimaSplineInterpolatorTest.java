@@ -24,8 +24,8 @@ package org.hipparchus.analysis.interpolation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -41,21 +41,57 @@ import org.junit.Test;
 public class AkimaSplineInterpolatorTest {
 
     @Test
-    public void testIllegalArguments()
-    {
-        // Data set arrays of different size.
-        UnivariateInterpolator i = new AkimaSplineInterpolator();
+    public void testIssueModifiedWeights() {
+        double[] x = {1, 2, 3, 4, 5, 6, 7, 8};
+        double[] y = {-1, -1, -1, 0, 1, 1, 1, 1};
+        UnivariateFunction original = new AkimaSplineInterpolator().interpolate(x, y);
+        UnivariateFunction modified = new AkimaSplineInterpolator(true).interpolate(x, y);
+        for (double d = 1.01; d <=8; d += 0.02) {
+            if (d < 2) {
+                // both method return constant
+                Assert.assertEquals(-1.0, original.value(d), 1.0e-15);
+                Assert.assertEquals(-1.0, modified.value(d), 1.0e-15);
+            } else if (d < 3) {
+                // original Akima overshoots here
+                Assert.assertTrue(original.value(d) < -1);
+                Assert.assertEquals(-1.0, modified.value(d), 1.0e-15);
+            } else if (d < 4) {
+                // intermediate values for both, original being above modified
+                Assert.assertTrue(original.value(d) > -1 && original.value(d) < 0);
+                Assert.assertTrue(modified.value(d) > -1 && modified.value(d) < 0);
+                Assert.assertTrue(original.value(d) > modified.value(d));
+            } else if (d < 5) {
+                // intermediate values for both, original being below modified
+                Assert.assertTrue(original.value(d) < +1 && original.value(d) > 0);
+                Assert.assertTrue(modified.value(d) < +1 && modified.value(d) > 0);
+                Assert.assertTrue(original.value(d) < modified.value(d));
+            } else if (d < 6) {
+                // original Akima overshoots here
+                Assert.assertTrue(original.value(d) > +1);
+                Assert.assertEquals(+1.0, modified.value(d), 1.0e-15);
+            } else {
+                // both method return constant
+                Assert.assertEquals(+1.0, original.value(d), 1.0e-15);
+                Assert.assertEquals(+1.0, modified.value(d), 1.0e-15);
+            }
+        }
+    }
 
-        try
-        {
-            double yval[] = { 0.0, 1.0, 2.0, 3.0, 4.0 };
-            i.interpolate( null, yval );
-            Assert.fail( "Failed to detect x null pointer" );
-        }
-        catch ( NullArgumentException iae )
-        {
-            // Expected.
-        }
+    @Test
+    public void testIllegalArguments() {
+            // Data set arrays of different size.
+            UnivariateInterpolator i = new AkimaSplineInterpolator();
+
+            try
+            {
+                double yval[] = { 0.0, 1.0, 2.0, 3.0, 4.0 };
+                i.interpolate( null, yval );
+                Assert.fail( "Failed to detect x null pointer" );
+            }
+            catch ( NullArgumentException iae )
+            {
+                // Expected.
+            }
 
         try
         {

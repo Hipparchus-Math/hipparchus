@@ -56,8 +56,37 @@ import org.hipparchus.util.Precision;
  */
 public class AkimaSplineInterpolator
     implements UnivariateInterpolator, FieldUnivariateInterpolator {
+
     /** The minimum number of points that are needed to compute the function. */
     private static final int MINIMUM_NUMBER_POINTS = 5;
+
+    /** Weight modifier to avoid overshoots. */
+    private final boolean useModifiedWeights;
+
+    /** Simple constructor.
+     * <p>
+     * This constructor is equivalent to call {@link #AkimaSplineInterpolator(boolean)
+     * AkimaSplineInterpolator(false)}, i.e. to use original Akima weights
+     * </p>
+     * @since 2.1
+     */
+    public AkimaSplineInterpolator() {
+        this(false);
+    }
+
+    /** Simple constructor.
+     * <p>
+     * The weight modification is described in <a
+     * href="https://blogs.mathworks.com/cleve/2019/04/29/makima-piecewise-cubic-interpolation/">
+     * Makima Piecewise Cubic Interpolation</a>. It attempts to avoid overshoots
+     * near near constant slopes sub-samples.
+     * </p>
+     * @param useModifiedWeights if true, use modified weights to avoid overshoots
+     * @since 2.1
+     */
+    public AkimaSplineInterpolator(final boolean useModifiedWeights) {
+        this.useModifiedWeights = useModifiedWeights;
+    }
 
     /**
      * Computes an interpolating function for the data set.
@@ -102,6 +131,10 @@ public class AkimaSplineInterpolator
 
         for (int i = 1; i < weights.length; i++) {
             weights[i] = FastMath.abs(differences[i] - differences[i - 1]);
+            if (useModifiedWeights) {
+                // modify weights to avoid overshoots near constant slopes sub-samples
+                weights[i] += FastMath.abs(differences[i] + differences[i - 1]);
+            }
         }
 
         // Prepare Hermite interpolation scheme.

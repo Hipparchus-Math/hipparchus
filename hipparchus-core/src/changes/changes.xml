@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.1" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issue/172">
+        Added optional modified weights to avoid overshoots in Akima interpolation
+        near constant slopes sub-samples.
+      </action>
       <action dev="luc" type="fix" issue="issue/186">
         Avoid building an intermediate complex for computing double norm.
       </action>
