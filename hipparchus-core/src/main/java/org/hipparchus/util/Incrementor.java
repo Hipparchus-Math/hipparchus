@@ -201,7 +201,7 @@ public class Incrementor {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    nTimes, 0);
         }
-        return count + nTimes <= maximalCount;
+        return count <= maximalCount - nTimes;
     }
 
     /**
@@ -233,10 +233,10 @@ public class Incrementor {
      * @see #increment(int)
      */
     public void increment() {
-        ++count;
-        if (count > maximalCount) {
+        if (count > maximalCount - 1) {
             maxCountCallback.trigger(maximalCount);
         }
+        ++count;
     }
 
     /**

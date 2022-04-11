@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.1" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issue/175">
+        Fixed overflows for incrementors that are allowed to reach Integer.MAX_VALUE.
+      </action>
       <action dev="luc" type="fix" issue="issue/188">
         Added inverse Jacobi elliptic functions, for both double and field values.
       </action>

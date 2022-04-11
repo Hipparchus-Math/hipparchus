@@ -13,6 +13,7 @@
  */
 package org.hipparchus.util;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -158,4 +159,21 @@ public class IncrementorTest {
         Assert.assertEquals(3, i.getMaximalCount());
         Assert.assertEquals(10, i2.getMaximalCount());
     }
+
+    @Test
+    public void testMaxInt() {
+       final Incrementor i = new Incrementor().withCount(Integer.MAX_VALUE - 2);
+        i.increment();
+        Assert.assertEquals(Integer.MAX_VALUE - 1, i.getCount());
+        i.increment();
+        Assert.assertEquals(Integer.MAX_VALUE, i.getCount());
+        Assert.assertFalse(i.canIncrement());
+        try {
+            i.increment();
+            Assert.fail("an exception should have been throwns");
+        } catch (MathIllegalStateException mise) {
+            Assert.assertEquals(mise.getSpecifier(), LocalizedCoreFormats.MAX_COUNT_EXCEEDED);
+        }
+    }
+
 }
