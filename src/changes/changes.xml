@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.1" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issue/136">
+        Added ConvergenceCheckerOrMultiplexer and ConvergenceCheckerAndMultiplexer.
+      </action>
       <action dev="luc" type="fix" issue="issue/186">
         Avoid building an intermediate complex for computing double norm.
       </action>

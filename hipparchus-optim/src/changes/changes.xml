@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Optim Release Notes</title>
   </properties>
   <body>
+    <release version="2.1" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issue/136">
+        Added ConvergenceCheckerOrMultiplexer and ConvergenceCheckerAndMultiplexer.
+      </action>
+    </release>
     <release version="2.0" date="2021-08-07" description="This is a major release. The main change
     is the addition of a sequential Gauss-Newton optimizer.">
       <action dev="luc" type="add" due-to="Julie Bayard" >
