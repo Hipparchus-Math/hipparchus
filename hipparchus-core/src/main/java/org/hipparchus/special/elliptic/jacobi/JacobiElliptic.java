@@ -79,7 +79,7 @@ public abstract class JacobiElliptic {
     /** Evaluate inverse of Jacobi elliptic function sn.
      * @param x value of Jacobi elliptic function {@code sn(u|m)}
      * @return u such that {@code x=sn(u|m)}
-     * @since 2.2
+     * @since 2.1
      */
     public double arcsn(final double x) {
         // p = n, q = c, r = d, see DLMF 19.25.29 for evaluating Δ⁡(q, p) and Δ⁡(r, p)
@@ -89,7 +89,7 @@ public abstract class JacobiElliptic {
     /** Evaluate inverse of Jacobi elliptic function cn.
      * @param x value of Jacobi elliptic function {@code cn(u|m)}
      * @return u such that {@code x=cn(u|m)}
-     * @since 2.2
+     * @since 2.1
      */
     public double arccn(final double x) {
         // p = c, q = n, r = d, see DLMF 19.25.29 for evaluating Δ⁡(q, p) and Δ⁡(r, q)
@@ -99,7 +99,7 @@ public abstract class JacobiElliptic {
     /** Evaluate inverse of Jacobi elliptic function dn.
      * @param x value of Jacobi elliptic function {@code dn(u|m)}
      * @return u such that {@code x=dn(u|m)}
-     * @since 2.2
+     * @since 2.1
      */
     public double arcdn(final double x) {
         // p = d, q = n, r = c, see DLMF 19.25.29 for evaluating Δ⁡(q, p) and Δ⁡(r, q)
@@ -109,7 +109,7 @@ public abstract class JacobiElliptic {
     /** Evaluate inverse of Jacobi elliptic function cs.
      * @param x value of Jacobi elliptic function {@code cs(u|m)}
      * @return u such that {@code x=cs(u|m)}
-     * @since 2.2
+     * @since 2.1
      */
     public double arccs(final double x) {
         // p = c, q = n, r = d, see DLMF 19.25.29 for evaluating Δ⁡(q, p) and Δ⁡(r, p)
@@ -119,7 +119,7 @@ public abstract class JacobiElliptic {
     /** Evaluate inverse of Jacobi elliptic function ds.
      * @param x value of Jacobi elliptic function {@code ds(u|m)}
      * @return u such that {@code x=ds(u|m)}
-     * @since 2.2
+     * @since 2.1
      */
     public double arcds(final double x) {
         // p = d, q = c, r = n, see DLMF 19.25.29 for evaluating Δ⁡(q, p) and Δ⁡(r, p)
@@ -129,7 +129,7 @@ public abstract class JacobiElliptic {
     /** Evaluate inverse of Jacobi elliptic function ns.
      * @param x value of Jacobi elliptic function {@code ns(u|m)}
      * @return u such that {@code x=ns(u|m)}
-     * @since 2.2
+     * @since 2.1
      */
     public double arcns(final double x) {
         // p = n, q = c, r = d, see DLMF 19.25.29 for evaluating Δ⁡(q, p) and Δ⁡(r, p)
@@ -139,7 +139,7 @@ public abstract class JacobiElliptic {
     /** Evaluate inverse of Jacobi elliptic function dc.
      * @param x value of Jacobi elliptic function {@code dc(u|m)}
      * @return u such that {@code x=dc(u|m)}
-     * @since 2.2
+     * @since 2.1
      */
     public double arcdc(final double x) {
         // p = d, q = c, r = n, see DLMF 19.25.29 for evaluating Δ⁡(q, p) and Δ⁡(r, q)
@@ -149,7 +149,7 @@ public abstract class JacobiElliptic {
     /** Evaluate inverse of Jacobi elliptic function nc.
      * @param x value of Jacobi elliptic function {@code nc(u|m)}
      * @return u such that {@code x=nc(u|m)}
-     * @since 2.2
+     * @since 2.1
      */
     public double arcnc(final double x) {
         // p = n, q = c, r = d, see DLMF 19.25.29 for evaluating Δ⁡(q, p) and Δ⁡(r, q)
@@ -159,7 +159,7 @@ public abstract class JacobiElliptic {
     /** Evaluate inverse of Jacobi elliptic function sc.
      * @param x value of Jacobi elliptic function {@code sc(u|m)}
      * @return u such that {@code x=sc(u|m)}
-     * @since 2.2
+     * @since 2.1
      */
     public double arcsc(final double x) {
         // p = c, q = n, r = d, see DLMF 19.25.29 for evaluating Δ⁡(q, p) and Δ⁡(r, p)
@@ -169,7 +169,7 @@ public abstract class JacobiElliptic {
     /** Evaluate inverse of Jacobi elliptic function nd.
      * @param x value of Jacobi elliptic function {@code nd(u|m)}
      * @return u such that {@code x=nd(u|m)}
-     * @since 2.2
+     * @since 2.1
      */
     public double arcnd(final double x) {
         // p = n, q = d, r = c, see DLMF 19.25.29 for evaluating Δ⁡(q, p) and Δ⁡(r, q)
@@ -179,7 +179,7 @@ public abstract class JacobiElliptic {
     /** Evaluate inverse of Jacobi elliptic function sd.
      * @param x value of Jacobi elliptic function {@code sd(u|m)}
      * @return u such that {@code x=sd(u|m)}
-     * @since 2.2
+     * @since 2.1
      */
     public double arcsd(final double x) {
         // p = d, q = n, r = c, see DLMF 19.25.29 for evaluating Δ⁡(q, p) and Δ⁡(r, p)
@@ -189,7 +189,7 @@ public abstract class JacobiElliptic {
     /** Evaluate inverse of Jacobi elliptic function cd.
      * @param x value of Jacobi elliptic function {@code cd(u|m)}
      * @return u such that {@code x=cd(u|m)}
-     * @since 2.2
+     * @since 2.1
      */
     public double arccd(final double x) {
         // p = c, q = d, r = n, see DLMF 19.25.29 for evaluating Δ⁡(q, p) and Δ⁡(r, q)
@@ -204,7 +204,7 @@ public abstract class JacobiElliptic {
      * @param deltaQP Δ⁡(q, p) = q⁣s²⁡(u|m) - p⁣s²(u|m) (equation 19.5.28 of DLMF)
      * @param deltaRP Δ⁡(r, p) = r⁣s²⁡(u|m) - p⁣s²⁡(u|m) (equation 19.5.28 of DLMF)
      * @return u such that {@code x=ps(u|m)}
-     * @since 2.2
+     * @since 2.1
      */
     private double arcps(final double x, final double deltaQP, final double deltaRP) {
         // see equation 19.25.32 in Digital Library of Mathematical Functions
@@ -221,7 +221,7 @@ public abstract class JacobiElliptic {
      * @param deltaQP Δ⁡(q, p) = q⁣s²⁡(u|m) - p⁣s²(u|m) (equation 19.5.28 of DLMF)
      * @param deltaRP Δ⁡(r, p) = r⁣s²⁡(u|m) - p⁣s²⁡(u|m) (equation 19.5.28 of DLMF)
      * @return u such that {@code x=sp(u|m)}
-     * @since 2.2
+     * @since 2.1
      */
     private double arcsp(final double x, final double deltaQP, final double deltaRP) {
         // see equation 19.25.33 in Digital Library of Mathematical Functions
@@ -238,7 +238,7 @@ public abstract class JacobiElliptic {
      * @param deltaQP Δ⁡(q, p) = q⁣s²⁡(u|m) - p⁣s²(u|m) (equation 19.5.28 of DLMF)
      * @param deltaRQ Δ⁡(r, q) = r⁣s²⁡(u|m) - q⁣s²⁡(u|m) (equation 19.5.28 of DLMF)
      * @return u such that {@code x=pq(u|m)}
-     * @since 2.2
+     * @since 2.1
      */
     private double arcpq(final double x, final double deltaQP, final double deltaRQ) {
         // see equation 19.25.34 in Digital Library of Mathematical Functions

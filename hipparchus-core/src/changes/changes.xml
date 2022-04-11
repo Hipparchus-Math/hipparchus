@@ -53,8 +53,6 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="fix" issue="issue/188">
         Added inverse Jacobi elliptic functions, for both double and field values.
       </action>
-    </release>
-    <release version="2.1" date="TBD" description="TBD">
       <action dev="luc" type="fix" issue="issue/183">
         Avoid too many calls to function in BracketingNthOrderBrentSolver when using
         AllowedSolution.ANY_SIDE.
