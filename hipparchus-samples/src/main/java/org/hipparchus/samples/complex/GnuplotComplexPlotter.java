@@ -75,6 +75,18 @@ public class GnuplotComplexPlotter {
     /** Max y. */
     private double yMax;
 
+    /** Max z. */
+    private double zMax;
+
+    /** View X rotation. */
+    private double viewXRot;
+
+    /** View Z rotation. */
+    private double viewZRot;
+
+    /** Indicator for 3D surfaces. */
+    private boolean use3D;
+
     /** Maximum number of integrands evaluations for each integral evaluation. */
     private int maxEval;
 
@@ -96,6 +108,10 @@ public class GnuplotComplexPlotter {
         xMax       = +7;
         yMin       = -7;
         yMax       = +7;
+        zMax       = +7;
+        viewXRot   = 60;
+        viewZRot   = 30;
+        use3D      = false;
         maxEval    = 100000;
         integrator = new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
                                                                                           1.0e-6,
@@ -142,6 +158,13 @@ public class GnuplotComplexPlotter {
                                 usage(1);
                         }
                         break;
+                    case "--3d" :
+                        plotter.use3D = true;
+                        break;
+                    case "--view" :
+                        plotter.viewXRot = Double.parseDouble(args[++i]);
+                        plotter.viewZRot = Double.parseDouble(args[++i]);
+                        break;
                     case "--xmin" :
                         plotter.xMin = Double.parseDouble(args[++i]);
                         break;
@@ -153,6 +176,9 @@ public class GnuplotComplexPlotter {
                         break;
                     case "--ymax" :
                         plotter.yMax = Double.parseDouble(args[++i]);
+                        break;
+                    case "--zmax" :
+                        plotter.zMax = Double.parseDouble(args[++i]);
                         break;
                     case "--m" : {
                         plotter.m      = new Complex(Double.parseDouble(args[++i]), Double.parseDouble(args[++i]));
@@ -207,8 +233,10 @@ public class GnuplotComplexPlotter {
         System.err.println("usage: java org.hipparchus.samples.complex.GnuplotComplexPlotter" +
                            " [--help]" +
                            " [--output-dir directory]" +
+                           " [--3d]" +
+                           " [--view xRot zRot]" +
                            " [--color {classical|enhanced-module|enhanced-phase-module}]" +
-                           " [--xmin xMin] [--xmax xMax] [--ymin yMin] [--ymax yMax]" +
+                           " [--xmin xMin] [--xmax xMax] [--ymin yMin] [--ymax yMax] [--zmax zMax]" +
                            " [--m mRe mIm] [--n nRe nIm] [--maxeval maxEval]" +
                            " --function {id|sn|cn|dn|cs|...|sin|cos|...} [--function ...]");
         System.exit(status);
@@ -232,9 +260,11 @@ public class GnuplotComplexPlotter {
                     out.format(Locale.US, "set terminal pngcairo size %d, %d%n", width, height);
                     out.format(Locale.US, "set output '%s'%n", new File(output, predefined.name() + ".png").getAbsolutePath());
                 }
-                out.format(Locale.US, "set view map scale 1%n");
                 out.format(Locale.US, "set xrange [%f : %f]%n", xMin, xMax);
                 out.format(Locale.US, "set yrange [%f : %f]%n", yMin, yMax);
+                if (use3D) {
+                    out.format(Locale.US, "set zrange [%f : %f]%n", 0.0, zMax);
+                }
                 out.format(Locale.US, "set xlabel 'Re(z)'%n");
                 out.format(Locale.US, "set ylabel 'Im(z)'%n");
                 out.format(Locale.US, "set key off%n");
@@ -253,14 +283,20 @@ public class GnuplotComplexPlotter {
                         } catch (MathIllegalStateException e) {
                             fz = Complex.NaN;
                         }
-                        out.format(Locale.US, "%12.9f %12.9f %12.9f %12.9f %12.9f%n",
-                                   z.getRealPart(), z.getImaginaryPart(),
+                        out.format(Locale.US, "%12.9f %12.9f %12.9f %12.9f %12.9f %12.9f%n",
+                                   z.getRealPart(), z.getImaginaryPart(), fz.norm(),
                                    coloring.hue(fz), coloring.saturation(fz), coloring.value(fz));
                     }
                     out.format(Locale.US, "%n");
                 }
                 out.format(Locale.US, "EOD%n");
-                out.println("splot $data using 1:2:(hsv2rgb($3,$4,$5)) with pm3d lc rgb variable");
+                if (use3D) {
+                    out.format(Locale.US, "set view %f, %f%n", viewXRot, viewZRot);
+                    out.format(Locale.US, "splot $data using 1:2:3:(hsv2rgb($4,$5,$6)) with pm3d lc rgb variable%n");
+                } else {
+                    out.format(Locale.US, "set view map scale 1%n");
+                    out.format(Locale.US, "splot $data using 1:2:(hsv2rgb($4,$5,$6)) with pm3d lc rgb variable%n");
+                }
                 if (output == null) {
                     out.format(Locale.US, "pause mouse close%n");
                 } else {
