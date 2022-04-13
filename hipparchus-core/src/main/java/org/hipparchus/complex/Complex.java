@@ -1166,7 +1166,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
         // compute r = sqrt(x^2+y^2)
         final Complex r = x.multiply(x).add(multiply(this)).sqrt();
 
-        if (x.real >= 0) {
+        if (FastMath.copySign(1.0, x.real) >= 0) {
             // compute atan2(y, x) = 2 atan(y / (r + x))
             return divide(r.add(x)).atan().multiply(2);
         } else {
@@ -1314,7 +1314,7 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
         }
 
         double t = FastMath.sqrt((FastMath.abs(real) + FastMath.hypot(real, imaginary)) * 0.5);
-        if (real >= 0.0) {
+        if (FastMath.copySign(1, real) >= 0.0) {
             return createComplex(t, imaginary / (2.0 * t));
         } else {
             return createComplex(FastMath.abs(imaginary) / (2.0 * t),
