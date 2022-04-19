@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.1" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issue/189">
+        Fixed some wrong branch cuts in inverse Jacobi elliptic functions in the complex case.
+      </action>
       <action dev="luc" type="update" >
         Added a 3D version of complex plots.
       </action>

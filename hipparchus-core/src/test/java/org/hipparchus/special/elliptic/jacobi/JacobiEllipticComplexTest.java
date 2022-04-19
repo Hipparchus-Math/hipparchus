@@ -20,6 +20,7 @@ import java.io.IOException;
 
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.complex.Complex;
+import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.junit.Test;
 
 public class JacobiEllipticComplexTest {
@@ -114,6 +115,150 @@ public class JacobiEllipticComplexTest {
         UnitTestUtils.assertEquals(Complex.valueOf(-0.22306244463316206117,  0.67283023813989968132),
                                    je.valuesN(Complex.valueOf(2.5, -1)).dn(),
                                    tol);
+    }
+
+    @Test
+    public void testWolframArcsn() {
+        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.3, 0.1));
+        // the reference value wolframZ comes from https://www.wolframalpha.com/input?i=InverseJacobiSN%282.5-0.1+i+%2C0.3%2B0.1i%29
+        // note that as shown in table https://dlmf.nist.gov/22.4.T3, sn(z + 2K) = -sn(z)
+        // and since sn is odd in z (because θ₁ is odd and θ₂, θ₃, θ₄ are all even), then sn(-z) = -sn(z)
+        // this implies that sn(2K - z) = sn(z)
+        // so despite we don't provide the same result as Wolfram, we provide a correct result
+        Complex wolframZ = new Complex(0.94236298773531348838, 1.92822841948038407820);
+        Complex k = LegendreEllipticIntegral.bigK(je.getM());
+        UnitTestUtils.assertEquals(k.multiply(2).subtract(wolframZ), je.arcsn(new Complex(2.5, -0.1)), 1.0e-15);
+    }
+
+    @Test
+    public void testWolframArccn() {
+        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.3, 0.1));
+        // the reference value wolframZ comes from https://www.wolframalpha.com/input?i=InverseJacobiCN%282.5-0.1+i+%2C0.3%2B0.1i%29
+        final Complex wolframZ = new Complex(0.07230884246063775670, 1.35935692611563542744);
+        UnitTestUtils.assertEquals(wolframZ, je.arccn(new Complex(2.5, -0.1)), 1.0e-15);
+    }
+
+    @Test
+    public void testWolframArcdn() {
+        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.3, 0.1));
+        // the reference value comes from https://www.wolframalpha.com/input?i=InverseJacobiDN%282.5-0.1+i+%2C0.3%2B0.1i%29
+        final Complex wolframZ = new Complex(0.15903444834380499952, 1.6312723209949430373);
+        UnitTestUtils.assertEquals(wolframZ, je.arcdn(new Complex(2.5, -0.1)), 1.0e-15);
+    }
+
+    @Test
+    public void testWolframArccs() {
+        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.3, 0.1));
+        // the reference value comes from https://www.wolframalpha.com/input?i=InverseJacobiCS%282.5-0.1+i+%2C0.3%2B0.1i%29
+        // note that as shown in table https://dlmf.nist.gov/22.4.T2, one of the two cs periods is 2K
+        // so despite we don't provide the same result as Wolfram, we provide a correct result
+        final Complex wolframZ = new Complex(-3.0359823836145783448, -0.1010810531387431972);
+        final Complex k        = LegendreEllipticIntegral.bigK(je.getM());
+        final Complex period   = k.multiply(2);
+        UnitTestUtils.assertEquals(wolframZ.add(period), je.arccs(new Complex(2.5, -0.1)), 1.0e-15);
+    }
+
+    @Test
+    public void testWolframArcds() {
+        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.3, 0.1));
+        // the reference value comes from https://www.wolframalpha.com/input?i=InverseJacobiDS%282.5-0.1+i+%2C0.3%2B0.1i%29
+        // note that as shown in table https://dlmf.nist.gov/22.4.T2, one of the two cs periods is 2K+2iK'
+        // so despite we don't provide the same result as Wolfram, we provide a correct result
+        final Complex wolframZ = new Complex(-3.29799820949072209724, -4.202477914142034207);
+        final Complex k      = LegendreEllipticIntegral.bigK(je.getM());
+        final Complex kPrime = LegendreEllipticIntegral.bigKPrime(je.getM());
+        final Complex period = k.add(kPrime.multiplyPlusI()).multiply(2);
+        UnitTestUtils.assertEquals(wolframZ.add(period), je.arcds(new Complex(2.5, -0.1)), 1.0e-15);
+    }
+
+    @Test
+    public void testWolframArcns() {
+        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.3, 0.1));
+        // the reference value comes from https://www.wolframalpha.com/input?i=InverseJacobiNS%282.5-0.1+i+%2C0.3%2B0.1i%29
+        // note that as shown in table https://dlmf.nist.gov/22.4.T2, one of the two ns periods is 2iK'
+        // so despite we don't provide the same result as Wolfram, we provide a correct result
+        final Complex wolframZ = new Complex(0.130428467771173061681, -4.08174077348072795334);
+        final Complex kPrime   = LegendreEllipticIntegral.bigKPrime(je.getM());
+        final Complex period   = kPrime.multiply(new Complex(0, 2));
+        UnitTestUtils.assertEquals(wolframZ.add(period), je.arcns(new Complex(2.5, -0.1)), 1.0e-15);
+    }
+
+    @Test
+    public void testWolframArcdc() {
+        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.3, 0.1));
+        // the reference value comes from https://www.wolframalpha.com/input?i=InverseJacobiDC%282.5-0.1+i+%2C0.3%2B0.1i%29
+        // note that as shown in table https://dlmf.nist.gov/22.4.T2, one of the two dc periods is 2iK'
+        // so despite we don't provide the same result as Wolfram, we provide a correct result
+        final Complex wolframZ = new Complex(1.578878353498834641592, 4.13977600222252116268406);
+        final Complex kPrime   = LegendreEllipticIntegral.bigKPrime(je.getM());
+        final Complex period   = kPrime.multiply(new Complex(0, 2));
+        UnitTestUtils.assertEquals(wolframZ.subtract(period), je.arcdc(new Complex(2.5, -0.1)), 1.0e-15);
+    }
+
+    @Test
+    public void testWolframArcnc() {
+        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.3, 0.1));
+        // the reference value comes from https://www.wolframalpha.com/input?i=InverseJacobiNC%282.5-0.1+i+%2C0.3%2B0.1i%29
+        final Complex wolframZ = new Complex(1.228171217697117722621, 0.006214187083238678388730749);
+        UnitTestUtils.assertEquals(wolframZ, je.arcnc(new Complex(2.5, -0.1)), 1.0e-15);
+    }
+
+    @Test
+    public void testWolframArcsc() {
+        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.3, 0.1));
+        // the reference value comes from https://www.wolframalpha.com/input?i=InverseJacobiSC%282.5-0.1+i+%2C0.3%2B0.1i%29
+        final Complex wolframZ = new Complex(1.26341293208997584885855, 0.012370090803027899483388605);
+        UnitTestUtils.assertEquals(wolframZ, je.arcsc(new Complex(2.5, -0.1)), 1.0e-15);
+    }
+
+    @Test
+    public void testWolframArcnd() {
+        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.3, 0.1));
+        // the reference value comes from https://www.wolframalpha.com/input?i=InverseJacobiND%282.5-0.1+i+%2C0.3%2B0.1i%29
+        final Complex wolframZ = new Complex(1.504742584755344845407901, -1.4869490086301163397113928);
+        UnitTestUtils.assertEquals(wolframZ, je.arcnd(new Complex(2.5, -0.1)), 1.0e-15);
+    }
+
+    @Test
+    public void testWolframArcsd() {
+        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.3, 0.1));
+        // the reference value comes from https://www.wolframalpha.com/input?i=InverseJacobiSD%282.5-0.1+i+%2C0.3%2B0.1i%29
+        final Complex wolframZ = new Complex(1.5881213420484595584158128, -1.1747797577661992518362122);
+        UnitTestUtils.assertEquals(wolframZ, je.arcsd(new Complex(2.5, -0.1)), 1.0e-15);
+    }
+
+    @Test
+    public void testWolframArccd() {
+        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.3, 0.1));
+        // the reference value comes from https://www.wolframalpha.com/input?i=InverseJacobiCD%282.5-0.1+i+%2C0.3%2B0.1i%29
+        final Complex wolframZ = new Complex(0.7669438335346942148909019, -1.87019319073859086886105089);
+        UnitTestUtils.assertEquals(wolframZ, je.arccd(new Complex(2.5, -0.1)), 1.0e-15);
+    }
+
+    @Test
+    public void testBranchCutArccn() {
+        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.3, 0.0));
+        UnitTestUtils.assertEquals(new Complex(0.0, -1.3652045107), je.arccn(new Complex(2.5, +0.0)), 1.0e-10);
+        UnitTestUtils.assertEquals(new Complex(0.0, +1.3652045107), je.arccn(new Complex(2.5, -0.0)), 1.0e-10);
+    }
+
+    @Test
+    public void testBranchCutArcdn() {
+        final FieldJacobiElliptic<Complex> je = JacobiEllipticBuilder.build(Complex.valueOf(0.7, 0.0));
+        UnitTestUtils.assertEquals(new Complex(0.0, -1.1513008795), je.arcdn(new Complex(1.9, +0.0)), 1.0e-10);
+        UnitTestUtils.assertEquals(new Complex(0.0, +1.1513008795), je.arcdn(new Complex(1.9, -0.0)), 1.0e-10);
+
+        UnitTestUtils.assertEquals(new Complex(2.0753631353, -1.1247480245), je.arcdn(new Complex(0.3, +1.0e-11)), 1.0e-10);
+        UnitTestUtils.assertEquals(new Complex(2.0753631353, +1.1247480245), je.arcdn(new Complex(0.3, -1.0e-11)), 1.0e-10);
+        UnitTestUtils.assertEquals(new Complex(2.0753631353, -1.1247480245), je.arcdn(new Complex(0.3, +0.0)), 1.0e-10);
+
+        // the following commented out test fails! We get the wrong Riemann sheet for negative zero on imaginary part
+//        UnitTestUtils.assertEquals(new Complex(2.0753631353, +1.1247480245), je.arcdn(new Complex(0.3, -0.0)), 1.0e-10);
+
+        UnitTestUtils.assertEquals(new Complex(4.150726270582776, -1.2596062674998643), je.arcdn(new Complex(-2.3, +1.0e-11)), 1.0e-10);
+        UnitTestUtils.assertEquals(new Complex(4.150726270582776, +1.2596062674998643), je.arcdn(new Complex(-2.3, -1.0e-11)), 1.0e-10);
+        UnitTestUtils.assertEquals(new Complex(4.150726270582776, -1.2596062674998643), je.arcdn(new Complex(-2.3, +0.0)), 1.0e-10);
+        UnitTestUtils.assertEquals(new Complex(4.150726270582776, +1.2596062674998643), je.arcdn(new Complex(-2.3, -0.0)), 1.0e-10);
     }
 
 }
