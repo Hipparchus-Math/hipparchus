@@ -49,7 +49,8 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Geometry Release Notes</title>
   </properties>
   <body>
-    <release version="2.1" date="TBD" description="TBD">
+    <release version="2.1" date="2022-04-24" description="This is a maintenance release. The main
+      change is addition of equalsIee754 to points in all topologies to handle NaN coordinates.">
       <action dev="luc" type="fix" issue="issues/187">
         Fixed wrong set operation with ArcsSet when two BSP trees share
         the same angle as a cut hyperplane.
