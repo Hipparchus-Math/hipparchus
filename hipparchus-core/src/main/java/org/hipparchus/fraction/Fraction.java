@@ -287,7 +287,7 @@ public class Fraction
     /** Create a convergent-steps to approximate the given value.
      * @param value           value to approximate
      * @param maxConvergents  maximum number of convergents to examine
-     * @param convergenceTest the test if the series has converged at a step
+     * @param convergenceTests the test if the series has converged at a step
      * @return the pair of last element of the series of convergents and a boolean
      *         indicating if that element satisfies the specified convergent test
      */

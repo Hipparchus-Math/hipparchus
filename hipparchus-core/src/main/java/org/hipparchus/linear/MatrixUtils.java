@@ -1376,6 +1376,7 @@ public class MatrixUtils {
      * @param threshold projected vectors with a norm less than or equal to this threshold
      * are considered to have zero norm, hence the vectors they come from are not independent from
      * previous vectors
+     * @param field type of the files elements
      * @param handler handler for dependent vectors
      * @return orthonormal basis having the same span as {@code independent}
      * @since 2.1
