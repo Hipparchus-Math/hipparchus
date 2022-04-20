@@ -23,8 +23,9 @@ import org.hipparchus.Field;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
-/** Enumerate to spcify how dependent vectors should be handled in
- * {@link MatrixUtils#orthonormalize(List, double)} and {@link MatrixUtils#orthonormalize(Field, List, CalculusFieldElement)}.
+/** Enumerate to specify how dependent vectors should be handled in
+ * {@link MatrixUtils#orthonormalize(List, double, DependentVectorsHandler)} and
+ * {@link MatrixUtils#orthonormalize(Field, List, CalculusFieldElement, DependentVectorsHandler)}.
  * @since 2.1
  */
 public enum DependentVectorsHandler {
