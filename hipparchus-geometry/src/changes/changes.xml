@@ -49,13 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Geometry Release Notes</title>
   </properties>
   <body>
-    <release version="2.2" date="TBD" description="TBD">
+    <release version="2.1" date="TBD" description="TBD">
       <action dev="luc" type="fix" issue="issues/187">
         Fixed wrong set operation with ArcsSet when two BSP trees share
         the same angle as a cut hyperplane.
       </action>
-    </release>
-    <release version="2.1" date="TBD" description="TBD">
       <action dev="luc" type="add">
         Added equalsIee754 to S1Point, S2Point, Vector1D, Vector2D and Vector3D
         to have an equality method consistent with IEEE754 concerning NaN coordinates,
