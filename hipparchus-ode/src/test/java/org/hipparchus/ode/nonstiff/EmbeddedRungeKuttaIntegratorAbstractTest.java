@@ -18,15 +18,24 @@
 package org.hipparchus.ode.nonstiff;
 
 
+import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.geometry.euclidean.threed.Rotation;
+import org.hipparchus.geometry.euclidean.threed.RotationConvention;
+import org.hipparchus.geometry.euclidean.threed.RotationOrder;
 import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEIntegrator;
@@ -40,6 +49,7 @@ import org.hipparchus.ode.TestProblem3;
 import org.hipparchus.ode.TestProblem4;
 import org.hipparchus.ode.TestProblem5;
 import org.hipparchus.ode.TestProblem7;
+import org.hipparchus.ode.TestProblem8;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.VariationalEquation;
 import org.hipparchus.ode.events.Action;
@@ -48,8 +58,10 @@ import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 import org.junit.Assert;
 import org.junit.Test;
+
 
 public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
@@ -410,9 +422,9 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
     }
 
     @Test
-    public abstract void testTorqueFreeMotion();
+    public abstract void testTorqueFreeMotionOmegaOnly();
 
-    protected void doTestTorqueFreeMotion(double epsilon) {
+    protected void doTestTorqueFreeMotionOmegaOnly(double epsilon) {
 
         final TestProblem7 pb  = new TestProblem7();
         double minStep = 1.0e-10;
@@ -421,15 +433,15 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         double[] vecRelativeTolerance = { 1.0e-10, 1.0e-10, 1.0e-10 };
 
         EmbeddedRungeKuttaIntegrator integ = createIntegrator(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
-        integ.addStepHandler(new TorqueFreeHandler(pb, epsilon));
+        integ.addStepHandler(new TorqueFreeOmegaOnlyHandler(pb, epsilon));
         integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
     }
 
-    private static class TorqueFreeHandler implements ODEStepHandler {
+    private static class TorqueFreeOmegaOnlyHandler implements ODEStepHandler {
         private double maxError;
         private final TestProblem7 pb;
         private final double epsilon;
-        public TorqueFreeHandler(TestProblem7 pb, double epsilon) {
+        public TorqueFreeOmegaOnlyHandler(TestProblem7 pb, double epsilon) {
             this.pb      = pb;
             this.epsilon = epsilon;
             maxError     = 0;
@@ -451,6 +463,183 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         }
         public void finish(ODEStateAndDerivative finalState) {
             Assert.assertEquals(0.0, maxError, epsilon);
+        }
+    }
+    
+    @Test
+	/** Compare that the analytical model and the numerical model that compute the  the quaternion in a torquefree configuration give same results.
+	 * This test is used to validate the results of the analitycal model as defined by Landau & Lifchitz.
+	 */
+    public abstract void testTorqueFreeMotion();
+
+    protected void doTestTorqueFreeMotion(double epsilon) {
+
+        final TestProblem8 pb  = new TestProblem8();
+        double minStep = 1.0e-10;
+        double maxStep = pb.getFinalTime() - pb.getInitialState().getTime();
+        double[] vecAbsoluteTolerance = { 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8, 1.0e-8 };
+        double[] vecRelativeTolerance = { 1.0e-10, 1.0e-10, 1.0e-10, 1.0e-10, 1.0e-10, 1.0e-10, 1.0e-10 };
+        
+        EmbeddedRungeKuttaIntegrator integ = createIntegrator(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);   
+        integ.addStepHandler(new TorqueFreeHandler(pb, epsilon));
+        integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
+
+    }
+
+    private static class TorqueFreeHandler implements ODEStepHandler {
+        private double maxError;
+        private final TestProblem8 pb;
+        private final double epsilon;
+        private int width;
+        private int height;
+        private String title;
+        private double outputStep;
+        private double current;
+        private PrintStream out;
+
+        private double psiN; //conversion du quaternion numérique en psi
+        private double psiT; //psi calculé par Landau & Lifchitz
+        private double thetaN;
+        private double thetaT;
+        private double phiN;
+        private double phiT; //Le phi est normalisé entre -pi et pi
+
+        private double lastPsiN;
+        private double lastPhiN;
+        private double lastThetaN;
+        private double lastPsiT;
+        private double lastPhiT;
+        private double lastThetaT;
+
+        public TorqueFreeHandler(TestProblem8 pb, double epsilon) {
+        	this.pb      = pb;
+        	this.epsilon = epsilon;
+        	maxError     = 0;
+        	width = 1000;
+        	height = 1000;
+        	title = "title";
+        	outputStep = 0.01;
+        }
+
+        public void init(ODEStateAndDerivative state0, double t) {
+
+        	maxError = 0;     	
+        	final ProcessBuilder pbg = new ProcessBuilder("gnuplot").
+        			redirectOutput(ProcessBuilder.Redirect.INHERIT).
+        			redirectError(ProcessBuilder.Redirect.INHERIT);
+        	pbg.environment().remove("XDG_SESSION_TYPE");
+        	current = state0.getTime() - outputStep;
+
+        	try {
+        		Process gnuplot = pbg.start();
+        		out = new PrintStream(gnuplot.getOutputStream(), false, StandardCharsets.UTF_8.name());
+        		out.format(Locale.US, "set terminal qt size %d, %d title 'complex plotter'%n", width, height);
+
+        		out.format(Locale.US, "set title '%s'%n", title);
+        		out.format(Locale.US, "$data <<EOD%n");
+        	} catch (IOException ioe) {
+        		out = null;
+        		throw new MathRuntimeException(ioe,
+        				LocalizedCoreFormats.SIMPLE_MESSAGE,
+        				ioe.getLocalizedMessage());
+        	}
+        	lastPsiN = 0.0;
+        	lastPhiN = 0.0;
+        	lastThetaN = 0.0;
+        	lastPsiT = 0.0;
+        	lastPhiT = 0.0;
+        	lastThetaT = 0.0;
+        }
+
+        public void handleStep(ODEStateInterpolator interpolator) {
+
+        	current += outputStep;
+        	while (interpolator.getPreviousState().getTime() <= current &&
+        			interpolator.getCurrentState().getTime() > current) {
+        		ODEStateAndDerivative state = interpolator.getInterpolatedState(current);
+        		double[] theoreticalY  = pb.computeTheoreticalState(state.getTime());
+        		double dp1   = state.getPrimaryState()[0] - theoreticalY[0];
+        		double dp2   = state.getPrimaryState()[1] - theoreticalY[1];
+        		double dp3   = state.getPrimaryState()[2] - theoreticalY[2];
+        		double dp4   = state.getPrimaryState()[3] - theoreticalY[3];
+        		double dp5   = state.getPrimaryState()[4] - theoreticalY[4];
+        		double dp6   = state.getPrimaryState()[5] - theoreticalY[5];
+        		double dp7   = state.getPrimaryState()[6] - theoreticalY[6];
+        		double error = dp1 * dp1 + dp2 * dp2 + dp3 * dp3 + dp4 * dp4 + dp5 * dp5 + dp6 * dp6 + dp7 * dp7;
+        		if (error > maxError) {
+        			maxError = error;
+        		}
+
+        		//        		out.format(Locale.US, "%f %f %f %f %f %f %f %f %f%n",
+        		//        				state.getTime(),
+        		//	      				state.getPrimaryState()[3],
+        		//	      				state.getPrimaryState()[4],
+        		//	      			    state.getPrimaryState()[5],
+        		//	      			    state.getPrimaryState()[6],
+        		//	      			    theoreticalY[3],
+        		//	      			    theoreticalY[4],
+        		//	      			    theoreticalY[5],
+        		//	      			    theoreticalY[6]);
+
+
+        		Rotation r = new Rotation(state.getPrimaryState()[3],state.getPrimaryState()[4],state.getPrimaryState()[5],state.getPrimaryState()[6], true);
+        		if (state.getTime() > 0.001) {
+        			double[] angles = r.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
+
+
+        			double[] theoretical  = pb.computeTheoreticalState(state.getTime());
+        			phiT = theoretical[7];
+        			thetaT = theoretical[8];
+        			psiT = theoretical[9];
+
+
+        			lastPsiN = MathUtils.normalizeAngle(angles[2], lastPsiN);
+        			lastThetaN = MathUtils.normalizeAngle(angles[1], lastThetaN);
+        			lastPhiN = MathUtils.normalizeAngle(angles[0], lastPhiN);
+        			lastPsiT = MathUtils.normalizeAngle(theoretical[9], lastPsiT);
+        			lastThetaT = MathUtils.normalizeAngle(theoretical[8], lastThetaT);
+        			lastPhiT = MathUtils.normalizeAngle(theoretical[7], lastPhiT);
+
+
+        			out.format(Locale.US, "%f %f %f%n",
+        					state.getTime(),
+        					lastPsiN, 
+        					lastPsiT);
+
+        		}
+        		current += outputStep;
+
+        	}
+        }
+
+
+        public void finish(ODEStateAndDerivative finalState) {
+
+        	out.format(Locale.US, "EOD%n");
+
+
+
+        	//    		out.format(Locale.US, " plot $data using 1:2 with lines title 'q₀ numerical',\\%n ");
+        	//    		out.format(Locale.US, "$data using 1:3 with lines title 'q₁ numerical',\\%n ");
+        	//    		out.format(Locale.US, "$data using 1:4 with lines title 'q₂ numerical',\\%n ");
+        	//    		out.format(Locale.US, "$data using 1:5 with lines title 'q₃ numerical',\\%n ");
+        	//    		out.format(Locale.US, "$data using 1:6 with lines dt 2 title 'q₀ Theoretical',\\%n ");
+        	//    		out.format(Locale.US, "$data using 1:7 with lines dt 2 title 'q₁ Theoretical',\\%n ");
+        	//    		out.format(Locale.US, "$data using 1:8 with lines dt 2 title 'q₂ Theoretical',\\%n ");
+        	//    		out.format(Locale.US, "$data using 1:9 with lines dt 2 title 'q₃ Theoretical'%n ");
+
+        	//    		out.format(Locale.US, " plot $data using 1:2 with lines title 'q₀ numerical',\\%n ");
+        	//  		out.format(Locale.US, "$data using 1:6 with lines dt 2 title 'q₀ Theoretical',\\%n ");
+        	//		out.format(Locale.US, "$data using 1:($2-$6) with lines dt 2 title 'q₀ difference'%n ");
+
+
+        	out.format(Locale.US, " plot $data using 1:2 with linespoints title 'phi numerical',\\%n ");
+        	out.format(Locale.US, "$data using 1:3 with lines dt 2 title 'phi theoretical'%n ");
+
+
+        	out.format(Locale.US, "pause mouse close%n");
+        	out.close();
+        	Assert.assertEquals(0.0, maxError, epsilon);
         }
     }
 
