@@ -282,8 +282,7 @@ public abstract class EmbeddedRungeKuttaIntegrator
             final ODEStateAndDerivative stateTmp = equations.getMapper().mapStateAndDerivative(stepEnd, yTmp, yDotTmp);
 
             // local error is small enough: accept the step, trigger events and step handlers
-            setStepStart(acceptStep(createInterpolator(forward, yDotK, getStepStart(), stateTmp, equations.getMapper()),
-                                    finalTime));
+            setStepStart(acceptStep(createInterpolator(forward, yDotK, getStepStart(), stateTmp, equations.getMapper()), finalTime));
 
             if (!isLastStep()) {
 
