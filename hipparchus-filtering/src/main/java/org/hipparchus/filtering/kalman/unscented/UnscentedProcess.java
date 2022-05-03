@@ -18,6 +18,7 @@
 package org.hipparchus.filtering.kalman.unscented;
 
 import org.hipparchus.filtering.kalman.Measurement;
+import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 
 /**
@@ -40,6 +41,14 @@ public interface UnscentedProcess<T extends Measurement>  {
      * @return states evolution
      */
     UnscentedEvolution getEvolution(double previousTime, RealVector[] sigmaPoints, T measurement);
+    
+    /** Get the innovation brought by a measurement.
+     * @param measurement measurement to process
+     * @param predictedMeasurement predicted measurement
+     * @param innovationCovarianceMatrix innovation covariance matrix
+     * @return innovation brought by a measurement, may be null if measurement should be rejected
+     */
+    RealVector getInnovation(T measurement, RealVector predictedMeasurement, RealMatrix innovationCovarianceMatrix);
 
 
 }

@@ -146,9 +146,12 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
                                                                   sigmaPoints,
                                                                   measurement);
         predict(evolution.getCurrentTime(), evolution.getCurrentStates(), evolution.getProcessNoiseMatrix());
-
+        final RealVector predictedMeasurement = computeMean(evolution.getCurrentMeasurements());
+        final RealMatrix innovationCovarianceMatrix = computeInnovationCovarianceMatrix(evolution.getCurrentMeasurements(), predictedMeasurement, measurement.getCovariance());
+        final RealMatrix crossCovarianceMatrix = computeCrossCovarianceMatrix(evolution.getCurrentMeasurements(), predictedMeasurement, evolution.getCurrentStates(), predicted.getState());
+        final RealVector innovation = (innovationCovarianceMatrix == null) ? null : process.getInnovation(measurement, predictedMeasurement, innovationCovarianceMatrix);
         // Correction phase
-        correct(measurement, evolution.getCurrentMeasurements(), evolution.getCurrentStates(), measurement.getCovariance());
+        correct(measurement, innovationCovarianceMatrix, crossCovarianceMatrix, innovation);
         return getCorrected();
     }
 
@@ -196,9 +199,7 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         final RealMatrix statesDiffSquared = MatrixUtils.createRealMatrix(n, n);
 
         // Computation of Eq. 23, weighted mean
-        for (int i = 0; i <= 2 * n; i++) {
-            predictedState = predictedState.add(predictedStates[i].mapMultiply(wm.getEntry(i)));
-        }
+        predictedState = computeMean(predictedStates);
 
         // Computation of Eq. 24
         for (int i = 0; i <= 2 * n; i++) {
@@ -226,52 +227,13 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
      * @exception MathIllegalArgumentException if matrix cannot be decomposed
      */
 
-    protected void correct(final T measurement, final RealVector[] currentMeasurements,
-                           final RealVector[] predictedStates, final RealMatrix r) throws MathIllegalArgumentException {
+    protected void correct(final T measurement, final RealMatrix innovationCovarianceMatrix,
+                           final RealMatrix crossCovarianceMatrix, final RealVector innovation) throws MathIllegalArgumentException {
 
-        if (currentMeasurements == null) {
+        if (innovation == null) {
             // measurement should be ignored
             corrected = predicted;
             return;
-        }
-
-        // Initialize the predicted measurement
-        final int measDim = currentMeasurements[0].getDimension();
-        RealVector predictedMeasurement = new ArrayRealVector(measDim);
-
-        // Computation of Eq. 28, weighted mean
-        for (int i = 0; i <= 2 * n; i++) {
-            predictedMeasurement = predictedMeasurement.add(currentMeasurements[i].mapMultiply(wm.getEntry(i)));
-        }
-
-        // y*y^T matrix where y stands for the difference between current measurements and the predicted measurement
-        final RealMatrix measurementDiffSquared = MatrixUtils.createRealMatrix(measDim, measDim);
-        // x*y^T matrix where x stands for the difference between predicted states and the predicted state
-        //                    y is defined above
-        final RealMatrix crossDiffSquared = MatrixUtils.createRealMatrix(n, measDim);
-        RealMatrix innovationCovarianceMatrix = MatrixUtils.createRealMatrix(measDim, measDim);
-        RealMatrix crossCovarianceMatrix = MatrixUtils.createRealMatrix(n, measDim);
-
-
-
-        // Computation of Eq. 29 and Eq. 30
-        final RealVector innovation = measurement.getValue().subtract(predictedMeasurement);
-
-        for (int i = 0; i <= 2 * n; i++) {
-            final RealVector measurementDiff = currentMeasurements[i].subtract(predictedMeasurement);
-            final RealVector stateDiff = predictedStates[i].subtract(predicted.getState());
-
-            for (int c = 0; c < measDim; c++) {
-                for (int l = 0; l < measDim; l++) {
-                    measurementDiffSquared.setEntry(l, c, measurementDiff.getEntry(l) * measurementDiff.getEntry(c));
-                }
-                for (int l = 0; l < n; l++) {
-                    crossDiffSquared.setEntry(l, c, stateDiff.getEntry(l) * measurementDiff.getEntry(c));
-                }
-            }
-
-            innovationCovarianceMatrix = innovationCovarianceMatrix.add(measurementDiffSquared.scalarMultiply(wc.getEntry(i)));
-            crossCovarianceMatrix = crossCovarianceMatrix.add(crossDiffSquared.scalarMultiply(wc.getEntry(i)));
         }
         // compute Kalman gain k
         // the following is equivalent to k = P_cross * (R_pred)^-1 (Eq. 31)
@@ -281,10 +243,9 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         // then we transpose, knowing that R_pred is a symmetric matrice
         // (R_pred).k^T = P_cross^T
         // then we can use linear system solving instead of matrix inversion
-        final RealMatrix innovationCovarianceMatrixPredicted = innovationCovarianceMatrix.add(r);
-        final RealMatrix k = decomposer.decompose(innovationCovarianceMatrixPredicted).solve(crossCovarianceMatrix.transpose()).transpose();
+        final RealMatrix k = decomposer.decompose(innovationCovarianceMatrix).solve(crossCovarianceMatrix.transpose()).transpose();
         final RealVector correctedState = predicted.getState().add(k.operate(innovation));
-        final RealMatrix correctedCovariance = predicted.getCovariance().subtract(k.multiply(innovationCovarianceMatrixPredicted).multiply(k.transpose()));
+        final RealMatrix correctedCovariance = predicted.getCovariance().subtract(k.multiply(innovationCovarianceMatrix).multiply(k.transpose()));
 
         corrected = new ProcessEstimate(measurement.getTime(), correctedState, correctedCovariance);
 
@@ -296,6 +257,7 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
     public ProcessEstimate getPredicted() {
         return predicted;
     }
+    
 
     /** Get the corrected state.
      * @return corrected state
@@ -304,5 +266,83 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
     public ProcessEstimate getCorrected() {
         return corrected;
     }
+    
+    /** Computes innovation covariance matrix. See Eq. 29.
+     * @param currentMeasurements current measurements
+     * @param predictedMeasurement predicted measurements
+     * (may be null if measurement should be ignored)
+     * @return innovation covariance matrix (null if predictedMeasurement is null)
+     */
+    protected RealMatrix computeInnovationCovarianceMatrix(final RealVector[] currentMeasurements, final RealVector predictedMeasurement, final RealMatrix r) {
+        if (predictedMeasurement == null) {
+            return null;
+        }
+        // Measurement dimension
+        final int measDim = predictedMeasurement.getDimension();
+        // y*y^T matrix where y stands for the difference between current measurements and the predicted measurement
+        final RealMatrix measurementDiffSquared = MatrixUtils.createRealMatrix(measDim, measDim);
+        
+        RealMatrix innovationCovarianceMatrix = MatrixUtils.createRealMatrix(measDim, measDim);
+        
+        // Computation of Eq. 29
+        for (int i = 0; i <= 2 * n; i++) {
+            final RealVector measurementDiff = currentMeasurements[i].subtract(predictedMeasurement);
+            for (int c = 0; c < measDim; c++) {
+                for (int l = 0; l < measDim; l++) {
+                    measurementDiffSquared.setEntry(l, c, measurementDiff.getEntry(l) * measurementDiff.getEntry(c));
+                }
+            }
+            innovationCovarianceMatrix = innovationCovarianceMatrix.add(measurementDiffSquared.scalarMultiply(wc.getEntry(i)));
+        }
 
+        return innovationCovarianceMatrix.add(r);
+    }
+    
+    /**
+     * Computes cross covariance matrix. See Eq. 30.
+     * @param currentMeasurements current measurements
+     * @param predictedMeasurement predicted measurement
+     * @param predictedStates predicted states 
+     * @param predictedState predicted state
+     * @return cross covariance matrix
+     */
+    protected RealMatrix computeCrossCovarianceMatrix(final RealVector[] currentMeasurements, final RealVector predictedMeasurement, final RealVector[] predictedStates, final RealVector predictedState) {
+        // Measurement dimension
+        final int measDim = currentMeasurements[0].getDimension();
+        // x*y^T matrix where x stands for the difference between predicted states and the predicted state
+        //                    y is defined above
+        final RealMatrix crossDiffSquared = MatrixUtils.createRealMatrix(n, measDim);
+        RealMatrix crossCovarianceMatrix = MatrixUtils.createRealMatrix(n, measDim);
+        for (int i = 0; i <= 2 * n; i++) {
+            final RealVector measurementDiff = currentMeasurements[i].subtract(predictedMeasurement);
+            final RealVector stateDiff = predictedStates[i].subtract(predictedState);
+
+            for (int c = 0; c < measDim; c++) {
+                for (int l = 0; l < n; l++) {
+                    crossDiffSquared.setEntry(l, c, stateDiff.getEntry(l) * measurementDiff.getEntry(c));
+                }
+            }
+
+            crossCovarianceMatrix = crossCovarianceMatrix.add(crossDiffSquared.scalarMultiply(wc.getEntry(i)));
+        }
+        return crossCovarianceMatrix;
+    }
+    
+    /**
+     * Computes weighted mean from samples. See Eq. 23 and Eq. 28.
+     * @param samples 
+     * @return weighted mean
+     */
+    protected RealVector computeMean(final RealVector[] samples) {
+        // it can be either state dimension or measurement dimension
+        final int dim = samples[0].getDimension();
+
+        RealVector mean = new ArrayRealVector(dim);
+
+        for (int i = 0; i <= 2 * n; i++) {
+            mean = mean.add(samples[i].mapMultiply(wm.getEntry(i)));
+        }
+
+        return mean;      
+    }
 }

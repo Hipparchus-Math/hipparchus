@@ -86,6 +86,11 @@ public class UnscentedKalmanFilterTest {
                                           previousStateSamples,
                                           q);
         }
+        @Override
+        public RealVector getInnovation(SimpleMeasurement measurement, RealVector predictedMeasurement,
+                RealMatrix innovationCovarianceMatrix) {
+            return measurement.getValue().subtract(predictedMeasurement);
+        }
 
 
 
@@ -194,6 +199,12 @@ public class UnscentedKalmanFilterTest {
             return new UnscentedEvolution(measurement.getTime(), states, measurementSamples, q);
         }
 
+        @Override
+        public RealVector getInnovation(SimpleMeasurement measurement, RealVector predictedMeasurement,
+                RealMatrix innovationCovarianceMatrix) {
+            return measurement.getValue().subtract(predictedMeasurement);
+        }
+
 
     }
 
@@ -272,6 +283,11 @@ public class UnscentedKalmanFilterTest {
             return new UnscentedEvolution(measurement.getTime(),
                                           previousStates, previousStates
                                           ,q);
+        }
+        @Override
+        public RealVector getInnovation(SimpleMeasurement measurement, RealVector predictedMeasurement,
+                RealMatrix innovationCovarianceMatrix) {
+            return measurement.getValue().subtract(predictedMeasurement);
         }
 
 
@@ -359,6 +375,13 @@ public class UnscentedKalmanFilterTest {
             });
 
             return new UnscentedEvolution(measurement.getTime(), states, measurementSamples,  processNoiseMatrix);
+        }
+
+
+        @Override
+        public RealVector getInnovation(SimpleMeasurement measurement, RealVector predictedMeasurement,
+                RealMatrix innovationCovarianceMatrix) {
+            return measurement.getValue().subtract(predictedMeasurement);
         }
         }   
 
