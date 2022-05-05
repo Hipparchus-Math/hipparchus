@@ -31,6 +31,7 @@ import org.hipparchus.linear.RealVector;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MerweUnscentedTransform;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -307,8 +308,9 @@ public class UnscentedKalmanFilterTest {
                                                                  { 0.00, 100., 0.00},
                                                                  { 0.00, 0.00, 100.}}));
         final UnscentedProcess<SimpleMeasurement> process = new RadarProcess();
+        MerweUnscentedTransform utProvider = new MerweUnscentedTransform(initial.getState().getDimension(), 0.001, 2, 0 );
         final UnscentedKalmanFilter<SimpleMeasurement> filter =
-                new UnscentedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial, 0.001, 2, 0);
+                new UnscentedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial, utProvider);
         
         // Reference values generated from test_radar
         // available from https://github.com/rlabbe/filterpy/blob/master/filterpy/kalman/tests/test_ukf.py
