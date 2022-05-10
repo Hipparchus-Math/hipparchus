@@ -14,32 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.util;
 
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
+package org.hipparchus.linear;
 
-/**
- * Provider for unscented transform.
- */
-public interface UnscentedTransformProvider {
+import org.hipparchus.exception.MathIllegalArgumentException;
 
-    /**
-     * Perform the unscented transform from a state and its covariance.
-     * @param state state
-     * @param covariance covariance associated with the state
-     * @return an array of realvector containing the sigma points
-     */
-    RealVector[] unscentedTransform(RealVector state, RealMatrix covariance);
+public class CholeskySDPDecomposer implements MatrixDecomposer {
 
-    /** Get the covariance weights.
-     * @return wc covariance weights
-     */
-    RealVector getWc();
-
-    /** Get the mean weights.
-     * @return wm mean weights
-     */
-    RealVector getWm();
+    @Override
+    public DecompositionSolver decompose(RealMatrix a) throws MathIllegalArgumentException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 }

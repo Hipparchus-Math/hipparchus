@@ -124,6 +124,7 @@ public enum LocalizedCoreFormats implements Localizable {
     MAX_COUNT_EXCEEDED("maximal count ({0}) exceeded"), /* keep */
     NAN_ELEMENT_AT_INDEX("element {0} is NaN"),
     NAN_VALUE_CONVERSION("cannot convert NaN value"),
+    NEGATIVE_DEFINITE_MATRIX("negative definite matrix"),
     NEGATIVE_COMPLEX_MODULE("negative complex module {0}"),
     NEGATIVE_ELEMENT_AT_INDEX("element {0} is negative: {1}"),
     NUMBER_OF_SUCCESSES("number of successes ({0})"), /* keep */

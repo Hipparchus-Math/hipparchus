@@ -112,8 +112,8 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         predict(evolution.getCurrentTime(), evolution.getCurrentStates(), evolution.getProcessNoiseMatrix());
         final RealVector predictedMeasurement = getMean(evolution.getCurrentMeasurements());
         final RealMatrix innovationCovarianceMatrix = getInnovationCovarianceMatrix(evolution.getCurrentMeasurements(), predictedMeasurement, measurement.getCovariance());
-        final RealMatrix crossCovarianceMatrix = getCrossCovarianceMatrix(evolution.getCurrentMeasurements(), predictedMeasurement, evolution.getCurrentStates(), predicted.getState());
-        final RealVector innovation = (innovationCovarianceMatrix == null) ? null : process.getInnovation(measurement, predictedMeasurement, innovationCovarianceMatrix);
+        final RealMatrix crossCovarianceMatrix = getCrossCovarianceMatrix(evolution.getCurrentStates(), predicted.getState(), evolution.getCurrentMeasurements(), predictedMeasurement);
+        final RealVector innovation = (innovationCovarianceMatrix == null) ? null : process.getInnovation(measurement, predictedMeasurement, predicted.getState(), innovationCovarianceMatrix);
         // Correction phase
         correct(measurement, innovationCovarianceMatrix, crossCovarianceMatrix, innovation);
         return getCorrected();
@@ -223,23 +223,84 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
 
     /**
      * Computes cross covariance matrix. See Eq. 30.
-     * @param currentMeasurements current measurements
-     * @param predictedMeasurement predicted measurement
      * @param predictedStates predicted states
      * @param predictedState predicted state
+     * @param predictedMeasurements current measurements
+     * @param predictedMeasurement predicted measurement
      * @return cross covariance matrix
      */
-    protected RealMatrix getCrossCovarianceMatrix(final RealVector[] currentMeasurements, final RealVector predictedMeasurement, final RealVector[] predictedStates, final RealVector predictedState) {
+    protected RealMatrix getCrossCovarianceMatrix(final RealVector[] predictedStates, final RealVector predictedState, final RealVector[] predictedMeasurements, final RealVector predictedMeasurement) {
 
-        return utProvider.getCrossCovariance(predictedStates, predictedState, currentMeasurements, predictedMeasurement);
+        final int stateDim = predictedState.getDimension();
+        final int measDim = predictedMeasurement.getDimension();
+        final int dim = predictedStates.length;
+        final RealVector wc = utProvider.getWc();
+        // x*y^T matrix where x stands for the difference between predictedStates and the predictedState
+        //                    y stands for the difference between predictedMeasurements and the predictedMeasurement
+        final RealMatrix crossDiffSquared = MatrixUtils.createRealMatrix(stateDim, measDim);
+        RealMatrix crossCovarianceMatrix = MatrixUtils.createRealMatrix(stateDim, measDim);
+
+        for (int i = 0; i < dim; i++) {
+            final RealVector stateDiff = predictedStates[i].subtract(predictedState);
+            final RealVector measDiff = predictedMeasurements[i].subtract(predictedMeasurement);
+
+            for (int c = 0; c < measDim; c++) {
+                for (int l = 0; l < stateDim; l++) {
+                    crossDiffSquared.setEntry(l, c, stateDiff.getEntry(l) * measDiff.getEntry(c));
+                }
+            }
+
+            crossCovarianceMatrix = crossCovarianceMatrix.add(crossDiffSquared.scalarMultiply(wc.getEntry(i)));
+        }
+        return crossCovarianceMatrix;
     }
 
-    private RealVector getMean(final RealVector[] predictedStates) {
-        return utProvider.getMean(predictedStates);
-    }
+    /**
+     * Computes weighted mean from samples. See Eq. 23 and 28.
+     * @param samples
+     * @return weighted mean
+     */
 
-    private RealMatrix getCovariance(final RealVector[] samples, final RealVector state) {
-        return utProvider.getCovariance(samples, state);
+    protected RealVector getMean(final RealVector[] samples) {
+        
+        final int dim = samples[0].getDimension();
+        final int p = samples.length;
+        final RealVector wm = utProvider.getWm();
+        
+        RealVector mean = new ArrayRealVector(dim);
+        for (int i = 0; i < p; i++) {
+            mean = mean.add(samples[i].mapMultiply(wm.getEntry(i)));
+        }
+
+        return mean;
+    }
+    
+    /** Computes covariance from state and samples. See Eq. 24 and 29.
+     * @param samples samples
+     * @param state state
+     * @return covariance matrix
+     */
+    protected RealMatrix getCovariance(final RealVector[] samples, final RealVector state) {
+        // dim can be either state dimension or measurement dimension. It depends on the covariance one wants to compute.
+        final int dim = state.getDimension();
+        final int p = samples.length;
+        final RealVector wc = utProvider.getWc();
+        // y*y^T matrix where y stands for the difference between samples and state
+        final RealMatrix diffSquared = MatrixUtils.createRealMatrix(dim, dim);
+
+        RealMatrix covarianceMatrix = MatrixUtils.createRealMatrix(dim, dim);
+
+        // Computation of Eq. 18
+        for (int i = 0; i < p; i++) {
+            final RealVector diff = samples[i].subtract(state);
+            for (int c = 0; c < dim; c++) {
+                for (int l = 0; l < dim; l++) {
+                    diffSquared.setEntry(l, c, diff.getEntry(l) * diff.getEntry(c));
+                }
+            }
+            covarianceMatrix = covarianceMatrix.add(diffSquared.scalarMultiply(wc.getEntry(i)));
+        }
+        return covarianceMatrix;
     }
 
 

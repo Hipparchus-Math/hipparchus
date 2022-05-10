@@ -21,7 +21,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.CholeskyDecomposition;
-import org.hipparchus.linear.MatrixUtils;
+import org.hipparchus.linear.CholeskySDPDecomposition;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 
@@ -79,11 +79,11 @@ public class MerweUnscentedTransform implements UnscentedTransformProvider {
         // Computation of unscented kalman filter weights (See Eq. 15)
         wm.setEntry(0, lambda / (stateDim + lambda));
         wc.setEntry(0, lambda / (stateDim + lambda) + 1 - alpha * alpha + beta);
+        final double w = 1 / (2 * (stateDim + lambda));
         for (int i = 1; i <= 2 * stateDim; i++) {
-            wm.setEntry(i, 1 / (2 * (stateDim + lambda)));
-            wc.setEntry(i, 1 / (2 * (stateDim + lambda)));
+            wm.setEntry(i, w);
+            wc.setEntry(i, w);
         }
-
     }
 
     /**
@@ -113,8 +113,18 @@ public class MerweUnscentedTransform implements UnscentedTransformProvider {
         final RealMatrix temp = covariance.scalarMultiply(factor);
 
         // Compute lower triangular matrix of Cholesky decomposition
-        final CholeskyDecomposition chdecomposition = new CholeskyDecomposition(temp, 10e-14, 10e-14);
-        final RealMatrix L = chdecomposition.getL();
+        RealMatrix L;
+        try {
+            final CholeskyDecomposition chdecomposition = new CholeskyDecomposition(temp, 10e-14, 10e-14);
+            L = chdecomposition.getL();
+        }
+        catch (MathIllegalArgumentException miae) {
+
+            final CholeskySDPDecomposition csdpDecomposition = new CholeskySDPDecomposition(temp);
+            L = csdpDecomposition.getL();
+
+        }
+
 
         // Compute sigma points
         for (int i = 1; i <= n; i++) {
@@ -131,83 +141,16 @@ public class MerweUnscentedTransform implements UnscentedTransformProvider {
         return sigmaPoints;
     }
 
-    /**
-     * Computes weighted mean from samples. See Eq. 17.
-     * @param samples
-     * @return weighted mean
-     */
-    @Override
-    public RealVector getMean(final RealVector[] samples) {
-        final int dim = samples[0].getDimension();
-        final int p = samples.length;
-        RealVector mean = new ArrayRealVector(dim);
 
-        for (int i = 0; i < p; i++) {
-            mean = mean.add(samples[i].mapMultiply(wm.getEntry(i)));
-        }
-
-        return mean;
-    }
-    /**
-     * Computes covariance from state and samples. See Eq. 18.
-     * @param samples samples
-     * @param state state
-     * @return covariance matrix
-     */
-    @Override
-    public RealMatrix getCovariance(final RealVector[] samples, final RealVector state) {
-        final int dim = state.getDimension();
-        final int p = samples.length;
-        // y*y^T matrix where y stands for the difference between samples and state
-        final RealMatrix diffSquared = MatrixUtils.createRealMatrix(dim, dim);
-
-        RealMatrix covarianceMatrix = MatrixUtils.createRealMatrix(dim, dim);
-
-        // Computation of Eq. 18
-        for (int i = 0; i < p; i++) {
-            final RealVector diff = samples[i].subtract(state);
-            for (int c = 0; c < dim; c++) {
-                for (int l = 0; l < dim; l++) {
-                    diffSquared.setEntry(l, c, diff.getEntry(l) * diff.getEntry(c));
-                }
-            }
-            covarianceMatrix = covarianceMatrix.add(diffSquared.scalarMultiply(wc.getEntry(i)));
-        }
-        return covarianceMatrix;
-
-    }
     /** {@inheritDoc} */
     @Override
-    public RealMatrix getCrossCovariance(final RealVector[] firstSamplesSet, final RealVector firstState,
-            final RealVector[] secondSamplesSet, final RealVector secondState) {
-        // Compute different dimensions
-        final int firstDim = firstState.getDimension();
-        final int secondDim = secondState.getDimension();
-        final int dim = firstSamplesSet.length;
-
-        // x*y^T matrix where x stands for the difference between firstSamplesSet and the firstState
-        //                    y stands for the difference between secondSamplesSet and the secondState
-        final RealMatrix crossDiffSquared = MatrixUtils.createRealMatrix(firstDim, secondDim);
-        RealMatrix crossCovarianceMatrix = MatrixUtils.createRealMatrix(firstDim, secondDim);
-
-        for (int i = 0; i < dim; i++) {
-            final RealVector firstDiff = firstSamplesSet[i].subtract(firstState);
-            final RealVector secondDiff = secondSamplesSet[i].subtract(secondState);
-
-            for (int c = 0; c < secondDim; c++) {
-                for (int l = 0; l < firstDim; l++) {
-                    crossDiffSquared.setEntry(l, c, firstDiff.getEntry(l) * secondDiff.getEntry(c));
-                }
-            }
-
-            crossCovarianceMatrix = crossCovarianceMatrix.add(crossDiffSquared.scalarMultiply(wc.getEntry(i)));
-        }
-        return crossCovarianceMatrix;
-
+    public RealVector getWc() {
+        return wc;
     }
 
-
-
-
-
+    /** {@inheritDoc} */
+    @Override
+    public RealVector getWm() {
+        return wm;
+    }
 }
