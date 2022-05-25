@@ -3307,7 +3307,7 @@ public class DSCompiler {
        throws MathRuntimeException {
         double value = 0;
         for (int i = getSize() - 1; i >= 0; --i) {
-            final int[] orders = getPartialDerivativeOrders(i);
+            final int[] orders = derivativesIndirection[i];
             double term = ds[dsOffset + i];
             for (int k = 0; k < orders.length; ++k) {
                 if (orders[k] > 0) {
@@ -3340,7 +3340,7 @@ public class DSCompiler {
         final Field<T> field = ds[dsOffset].getField();
         T value = field.getZero();
         for (int i = getSize() - 1; i >= 0; --i) {
-            final int[] orders = getPartialDerivativeOrders(i);
+            final int[] orders = derivativesIndirection[i];
             T term = ds[dsOffset + i];
             for (int k = 0; k < orders.length; ++k) {
                 if (orders[k] > 0) {
@@ -3372,7 +3372,7 @@ public class DSCompiler {
         final Field<T> field = ds[dsOffset].getField();
         T value = field.getZero();
         for (int i = getSize() - 1; i >= 0; --i) {
-            final int[] orders = getPartialDerivativeOrders(i);
+            final int[] orders = derivativesIndirection[i];
             T term = ds[dsOffset + i];
             for (int k = 0; k < orders.length; ++k) {
                 if (orders[k] > 0) {
