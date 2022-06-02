@@ -33,8 +33,8 @@ import org.hipparchus.linear.RealVector;
 
 public class MerweUnscentedTransform implements UnscentedTransformProvider {
 
-    /** Default value for alpha (1.0E-4), see reference. */
-    public static final double DEFAULT_ALPHA = 0.0001;
+    /** Default value for alpha (0.5), see reference. */
+    public static final double DEFAULT_ALPHA = 0.5;
 
     /** Default value for beta (2.), see reference. */
     public static final double DEFAULT_BETA = 2;
@@ -135,6 +135,7 @@ public class MerweUnscentedTransform implements UnscentedTransformProvider {
             // Compute Eq. 13
             sigmaPoints[i + n] = sigmaPoints[0].subtract(L.getColumnVector(i - 1));
 
+            
         }
 
         // Return sigma points

@@ -102,9 +102,9 @@ public class CholeskySDPDecomposition {
                 
             }
         }
-        if (def < 0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NEGATIVE_DEFINITE_MATRIX);
-        }
+//        if (def < 0) {
+//            throw new MathIllegalArgumentException(LocalizedCoreFormats.NEGATIVE_DEFINITE_MATRIX);
+//        }
         
     }
     

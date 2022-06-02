@@ -75,8 +75,8 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
 
     /** Simple constructor.
      * @param decomposer decomposer to use for the correction phase
-     * @param initialState initial state
      * @param process unscented process to estimate
+     * @param initialState initial state
      * @param utProvider unscented transform provider
      */
 
@@ -98,13 +98,17 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
 
 
     }
-
     /** {@inheritDoc} */
     @Override
     public ProcessEstimate estimationStep(final T measurement) throws MathRuntimeException {
         // Unscented transform
         final RealVector[] sigmaPoints = unscentedTransform();
+        
+        return predictionAndCorrectionStep(measurement, sigmaPoints);
+    }
 
+    
+    public ProcessEstimate predictionAndCorrectionStep(final T measurement, final RealVector[] sigmaPoints) throws MathRuntimeException {
         // Prediction phase
         final UnscentedEvolution evolution = process.getEvolution(getCorrected().getTime(),
                                                                   sigmaPoints,
@@ -122,7 +126,7 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
     /** Compute sigma points through unscented transform from previous state.
      * @return sigma points.
      */
-    protected RealVector[] unscentedTransform() {
+    public RealVector[] unscentedTransform() {
 
         return utProvider.unscentedTransform(corrected.getState(), corrected.getCovariance());
 
@@ -180,7 +184,7 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         final RealVector correctedState = predicted.getState().add(k.operate(innovation));
         final RealMatrix correctedCovariance = predicted.getCovariance().subtract(k.multiply(innovationCovarianceMatrix).multiply(k.transpose()));
 
-        corrected = new ProcessEstimate(measurement.getTime(), correctedState, correctedCovariance);
+        corrected = new ProcessEstimate(measurement.getTime(), correctedState, correctedCovariance, null, null, innovationCovarianceMatrix, k);
 
     }
     /** Get the predicted state.
@@ -197,6 +201,13 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
     @Override
     public ProcessEstimate getCorrected() {
         return corrected;
+    }
+
+    /** Get the unscented transform provider.
+     * @return unscented transform provider
+     */
+    public UnscentedTransformProvider getUnscentedTransformProvider() {
+        return utProvider;
     }
 
     /** Computes innovation covariance matrix. See Eq. 29.
@@ -265,12 +276,19 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         
         final int dim = samples[0].getDimension();
         final int p = samples.length;
-        final RealVector wm = utProvider.getWm();
-        
         RealVector mean = new ArrayRealVector(dim);
+        final RealVector wm = utProvider.getWm();
+        // Compute mean
         for (int i = 0; i < p; i++) {
-            mean = mean.add(samples[i].mapMultiply(wm.getEntry(i)));
+            RealVector temp = new ArrayRealVector(dim);
+            for (int k = 0; k < dim; k++) {
+                temp.setEntry(k, samples[i].getEntry(k) * wm.getEntry(i));
+            }
+            mean = mean.add(temp);
+            //mean = mean.add(samples[i].mapMultiply(wm.getEntry(i)));
         }
+       
+
 
         return mean;
     }
