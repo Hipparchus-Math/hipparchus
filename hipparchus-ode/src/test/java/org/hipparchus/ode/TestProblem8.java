@@ -90,10 +90,15 @@ public class TestProblem8 extends TestProblemAbstract {
 		final DenseOutputModel phiQuadratureModel;
 		final double integOnePeriod;
 
-
+		double[] Y0 = {y0[0],y0[1],y0[2], y0[3],y0[4],y0[5],y0[6]};
+		double[] I = {i1P, i2P, i3P};
+		
 		Vector3D[] axes = {Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K};
 
 		double[] i = {i1P, i2P, i3P};
+
+
+
 		System.out.println("omega avant : "+y0[0]+" "+ y0[1]+" "+ y0[2]);
 		System.out.println("Initial : iA1 = "+i1P+" "+axes[0]);
 		System.out.println("iA2 = "+i2P + " "+axes[1]);
@@ -221,6 +226,12 @@ public class TestProblem8 extends TestProblemAbstract {
 		final Vector3D omega0Body = new Vector3D(y0[0], y0[1], y0[2]);
 		final Rotation r0         = new Rotation(y0[3], y0[4], y0[5], y0[6], true);
 		final Vector3D m0Body     = new Vector3D(i1 * omega0Body.getX(), i2 * omega0Body.getY(), i3 * omega0Body.getZ());
+
+		
+//		final Vector3D omega0Body = new Vector3D(Y0[0], Y0[1], Y0[2]);
+//		final Rotation r0         = new Rotation(Y0[3], Y0[4], Y0[5], Y0[6], true);
+//		final Vector3D m0Body     = new Vector3D(I[0] * omega0Body.getX(), I[1] * omega0Body.getY(), I[2] * omega0Body.getZ());
+
 		final double   phi0       = 0; // this angle can be set arbitrarily, so 0 is a fair value
 		final double   theta0;
 		if( y0[0] == 0 && y0[1] == 0 && y0[2] == 0) {
@@ -250,6 +261,7 @@ public class TestProblem8 extends TestProblemAbstract {
 		Rotation r0ConvertedAxis = convertAxes.applyTo(r0);
 		System.out.println("Quaternion converti : "+r0ConvertedAxis.getQ0()+" "+r0ConvertedAxis.getQ1()+" "+r0ConvertedAxis.getQ2()+" "+r0ConvertedAxis.getQ3());
 
+		System.out.println("Axe : "+r0ConvertedAxis.getAxis(RotationConvention.FRAME_TRANSFORM));
 		mAlignedToInert = r0ConvertedAxis.applyInverseTo(mAlignedToBody);
 
 		// coefficients for φ model
@@ -352,7 +364,11 @@ public class TestProblem8 extends TestProblemAbstract {
 		Vector3D axe3cr = convertAxes.applyInverseTo(axes[2]);
 		System.out.println("BBBBBB : "+axe3cr.getX()+" "+axe3cr.getY()+" "+axe3cr.getZ());
 
-		Rotation originalFrame = convertAxesReverse.applyTo(inertToBody);
+		Vector3D axe = inertToBody.getAxis(RotationConvention.FRAME_TRANSFORM).negate();
+		double angle = inertToBody.getAngle();
+		Rotation bodyToInert = new Rotation(axe, angle, RotationConvention.FRAME_TRANSFORM);
+		
+		Rotation originalFrame = convertAxes.applyTo(inertToBody);
 
 		double[] angles = originalFrame.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
 		double[][] data = {{omega.getX(), omega.getY(), omega.getZ()}, {angles[0], angles[1], angles[2]}, {originalFrame.getQ0(), originalFrame.getQ1(), originalFrame.getQ2(), originalFrame.getQ3()}, {axes[0].getX(), axes[0].getY(), axes[0].getZ()}, {axes[1].getX(), axes[1].getY(), axes[1].getZ()},{i1, i2, i3}};
@@ -364,23 +380,23 @@ public class TestProblem8 extends TestProblemAbstract {
 		final  double[] yDot = new double[getDimension()];
 		double[] y0 = getInitialState().getPrimaryState();
 		double t0 = getInitialState().getTime();
-		
-//		System.out.println("Numerique omega : "+y[0]+" "+y[1]+" "+y[2]);
-//		final double[][] tfm = computeTorqueFreeMotion(i1, i2, i3, t0, y0, t);
-//		final double[] omega = tfm[0];
-//		final double[] I = tfm[5];
-//		final double[] q = tfm[2];
-//
-//		// compute the derivatives using Euler equations
-//		yDot[0] = omega[1] * omega[2] * (I[1] - I[2]) / I[0];
-//		yDot[1] = omega[2] * omega[0] * (I[2] - I[0]) / I[1];
-//		yDot[2] = omega[0] * omega[1] * (I[0] - I[1]) / I[2];
-//
-//		// compute the derivatives using Qpoint = 0.5 * Omega_inertialframe * Q
-//		yDot[3] = 0.5 * (-omega[0] * q[1] -omega[1] * q[2] -omega[2] * q[3]);
-//		yDot[4] = 0.5 * (omega[0] * q[0] +omega[2] * q[2] -omega[1] * q[3]);
-//		yDot[5] = 0.5 * (omega[1] * q[0] -omega[2] * q[1] +omega[0] * q[3]);
-//		yDot[6] = 0.5 * (omega[2] * q[0] +omega[1] * q[1] -omega[0] * q[2]);
+
+		//		System.out.println("Numerique omega : "+y[0]+" "+y[1]+" "+y[2]);
+		//		final double[][] tfm = computeTorqueFreeMotion(i1, i2, i3, t0, y0, t);
+		//		final double[] omega = tfm[0];
+		//		final double[] I = tfm[5];
+		//		final double[] q = tfm[2];
+		//
+		//		// compute the derivatives using Euler equations
+		//		yDot[0] = omega[1] * omega[2] * (I[1] - I[2]) / I[0];
+		//		yDot[1] = omega[2] * omega[0] * (I[2] - I[0]) / I[1];
+		//		yDot[2] = omega[0] * omega[1] * (I[0] - I[1]) / I[2];
+		//
+		//		// compute the derivatives using Qpoint = 0.5 * Omega_inertialframe * Q
+		//		yDot[3] = 0.5 * (-omega[0] * q[1] -omega[1] * q[2] -omega[2] * q[3]);
+		//		yDot[4] = 0.5 * (omega[0] * q[0] +omega[2] * q[2] -omega[1] * q[3]);
+		//		yDot[5] = 0.5 * (omega[1] * q[0] -omega[2] * q[1] +omega[0] * q[3]);
+		//		yDot[6] = 0.5 * (omega[2] * q[0] +omega[1] * q[1] -omega[0] * q[2]);
 
 		// compute the derivatives using Euler equations
 		yDot[0] = y[1] * y[2] * (i2 - i3) / i1;
