@@ -31,10 +31,10 @@ public class TestProblem8 extends TestProblemAbstract {
 	public TestProblem8() {
 		//Arguments in the super constructor :
 		//Intital time, Primary state (o1, o2, o3, q0, q1, q2, q3), Final time, Error scale
-		super(0.0, new double[] {1.0, 3.0, 1.5, 0.9, 0.437, 0.0, 0.0}, 20.0, new double[] { 1.0, 1.0, 1.0 });
-		i3 = 3.0 / 8.0;
-		i2 = 1.0 / 2.0;
-		i1 = 5.0 / 8.0;
+		super(0.0, new double[] {5.0, 0.0, 4.0, 0.9, 0.437, 0.0, 0.0}, 20.0, new double[] { 1.0, 1.0, 1.0 });
+		i2 = 3.0 / 8.0;
+		i1 = 1.0 / 2.0;
+		i3 = 5.0 / 8.0;
 
 
 		final double[] y0 = getInitialState().getPrimaryState();
@@ -241,29 +241,7 @@ public class TestProblem8 extends TestProblemAbstract {
 		}
 		final double   psi0       = FastMath.atan2(m0Body.getX(), m0Body.getY()); // it is really atan2(x, y), not atan2(y, x) as usual!
 
-		// compute offset rotation between inertial frame aligned with momentum and regular inertial frame
-		final Rotation mAlignedToBody = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
-				phi0, theta0, psi0);
-
-		Rotation convertAxes = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axes[0], axes[1] );
-
-		Vector3D axe1 = new Vector3D(1.0, 0.0, 0.0);
-		Vector3D axe1c = convertAxes.applyTo(axe1);
-		System.out.println("AAAAAA : "+axe1c.getX()+" "+axe1c.getY()+" "+axe1c.getZ());
-		Vector3D axe2 = new Vector3D(0.0, 1.0, 0.0);
-		Vector3D axe2c = convertAxes.applyTo(axe2);
-		System.out.println("AAAAAA : "+axe2c.getX()+" "+axe2c.getY()+" "+axe2c.getZ());
-		Vector3D axe3 = new Vector3D(0.0, 0.0,1.0);
-		Vector3D axe3c = convertAxes.applyTo(axe3);
-		System.out.println("AAAAAA : "+axe3c.getX()+" "+axe3c.getY()+" "+axe3c.getZ());
-
-		System.out.println("Quaternion avant : "+r0.getQ0()+" "+r0.getQ1()+" "+r0.getQ2()+" "+r0.getQ3());
-		Rotation r0ConvertedAxis = convertAxes.applyTo(r0);
-		System.out.println("Quaternion converti : "+r0ConvertedAxis.getQ0()+" "+r0ConvertedAxis.getQ1()+" "+r0ConvertedAxis.getQ2()+" "+r0ConvertedAxis.getQ3());
-
-		System.out.println("Axe : "+r0ConvertedAxis.getAxis(RotationConvention.FRAME_TRANSFORM));
-		mAlignedToInert = r0ConvertedAxis.applyInverseTo(mAlignedToBody);
-
+		
 		// coefficients for φ model
 		period = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
 		phiSlope = FastMath.sqrt(m2) / i3;// =a, pente de la partie linéaire
@@ -304,6 +282,33 @@ public class TestProblem8 extends TestProblemAbstract {
 		integOnePeriod = phiQuadratureModel.getInterpolatedState(phiQuadratureModel.getFinalTime()).getPrimaryState()[0];
 
 
+		//Compute offset rotation between inertial frame aligned with momentum and regular inertial frame
+		final Rotation mAlignedToBody = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
+				phi0, theta0, psi0);
+
+		Rotation convertAxes = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axes[0], axes[1] );
+
+		Vector3D axe1 = new Vector3D(1.0, 0.0, 0.0);
+		Vector3D axe1c = convertAxes.applyTo(axe1);
+		System.out.println("AAAAAA : "+axe1c.getX()+" "+axe1c.getY()+" "+axe1c.getZ());
+		Vector3D axe2 = new Vector3D(0.0, 1.0, 0.0);
+		Vector3D axe2c = convertAxes.applyTo(axe2);
+		System.out.println("AAAAAA : "+axe2c.getX()+" "+axe2c.getY()+" "+axe2c.getZ());
+		Vector3D axe3 = new Vector3D(0.0, 0.0,1.0);
+		Vector3D axe3c = convertAxes.applyTo(axe3);
+		System.out.println("AAAAAA : "+axe3c.getX()+" "+axe3c.getY()+" "+axe3c.getZ());
+
+		System.out.println("Quaternion avant : "+r0.getQ0()+" "+r0.getQ1()+" "+r0.getQ2()+" "+r0.getQ3());
+		
+		Rotation r0ConvertedAxis = convertAxes.applyTo(r0);
+		
+		System.out.println("Quaternion converti : "+r0ConvertedAxis.getQ0()+" "+r0ConvertedAxis.getQ1()+" "+r0ConvertedAxis.getQ2()+" "+r0ConvertedAxis.getQ3());
+
+		System.out.println("Axe : "+r0ConvertedAxis.getAxis(RotationConvention.FRAME_TRANSFORM));
+		
+		mAlignedToInert = r0ConvertedAxis.applyInverseTo(mAlignedToBody);
+
+		
 		//Computation of omega
 		final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
 
@@ -314,9 +319,6 @@ public class TestProblem8 extends TestProblemAbstract {
 
 		final Vector3D omega = convertAxes.applyTo(omegaP);
 
-
-		//Vector3D q = omega;
-		//omega = new Vector3D(q.getY(), q.getX(), q.getZ());
 		System.out.println("omega fonction : "+o1Scale * valuesN.cn()+" "+o2Scale * valuesN.sn()+" "+o3Scale * valuesN.dn());
 		System.out.println("omega fonction conversion : "+omega.getX()+" "+omega.getY()+" "+omega.getZ());
 
@@ -346,6 +348,7 @@ public class TestProblem8 extends TestProblemAbstract {
 
 
 		//Computation of the quaternion
+				
 		// Rotation between computation frame (aligned with momentum) and body
 		//(It is simply the angles equations provided by L&L)
 		final Rotation alignedToBody = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
@@ -368,7 +371,7 @@ public class TestProblem8 extends TestProblemAbstract {
 		double angle = inertToBody.getAngle();
 		Rotation bodyToInert = new Rotation(axe, angle, RotationConvention.FRAME_TRANSFORM);
 		
-		Rotation originalFrame = convertAxes.applyTo(inertToBody);
+		Rotation originalFrame = convertAxes.applyInverseTo(inertToBody);
 
 		double[] angles = originalFrame.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
 		double[][] data = {{omega.getX(), omega.getY(), omega.getZ()}, {angles[0], angles[1], angles[2]}, {originalFrame.getQ0(), originalFrame.getQ1(), originalFrame.getQ2(), originalFrame.getQ3()}, {axes[0].getX(), axes[0].getY(), axes[0].getZ()}, {axes[1].getX(), axes[1].getY(), axes[1].getZ()},{i1, i2, i3}};
