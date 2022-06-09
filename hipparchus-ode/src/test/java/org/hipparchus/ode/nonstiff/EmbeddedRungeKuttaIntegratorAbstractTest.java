@@ -485,8 +485,6 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         EmbeddedRungeKuttaIntegrator integ = createIntegrator(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);   
         integ.addStepHandler(new TorqueFreeHandler(pb, epsilon));
         integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
-double[] k= pb.getInitialState().getPrimaryState();
-System.out.println("KKK : "+k);
 }
 
     private static class TorqueFreeHandler implements ODEStepHandler {
@@ -607,7 +605,6 @@ System.out.println("KKK : "+k);
         			phiT = theoretical[7];
         			thetaT = theoretical[8];
         			psiT = theoretical[9];
-        			
 
         			Rotation r = new Rotation(state.getPrimaryState()[3],state.getPrimaryState()[4],state.getPrimaryState()[5],state.getPrimaryState()[6], true);
         		if (state.getTime() > 0.001) {
@@ -678,7 +675,9 @@ System.out.println("KKK : "+k);
 //        	out.format(Locale.US, " plot $data using 1:2 with linespoints title 'phi numerical',\\%n ");
 //        	out.format(Locale.US, "$data using 1:3 with lines dt 2 title 'phi theoretical'%n ");
 
-
+//        	out.format(Locale.US, "plot $data using 1:4 with points title 'thetaN',\\%n ");
+//        	out.format(Locale.US, "$data using 1:5 with points title 'thetaT',%n ");
+        	
         	out.format(Locale.US, "pause mouse close%n");
         	out.close();
         	Assert.assertEquals(0.0, maxError, epsilon);
