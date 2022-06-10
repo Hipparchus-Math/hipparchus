@@ -25,6 +25,11 @@ public class TestProblem8 extends TestProblemAbstract {
 	final double i2C;
 	final double i3C;
 	
+	/**Substraction of inertias. */
+	final double i32;
+	final double i31;
+	final double i21;
+
 	/** Converted initial state. */
 	final double[] y0;
 	
@@ -36,6 +41,27 @@ public class TestProblem8 extends TestProblemAbstract {
 
 	/** Square of kinetic momentum. */
 	final double m2;
+	
+	/** State scaling factor. */
+	final double o1Scale;
+
+	/** State scaling factor. */
+	final double o2Scale;
+
+	/** State scaling factor. */
+	final double o3Scale;
+
+	/** Jacobi elliptic function. */
+	final JacobiElliptic jacobi;
+
+	/** Elliptic modulus k2 (k2 = m). */
+	final double k2;
+	
+	/** Time scaling factor. */
+	final double tScale;
+
+	/** Time reference for rotation rate. */
+	final double tRef;
 	
 	/**Offset rotation  between initial inertial frame and the frame with moment vector and Z axis aligned. */
 	Rotation mAlignedToInert;
@@ -59,7 +85,8 @@ public class TestProblem8 extends TestProblemAbstract {
 
 
 		final double[] y0P = getInitialState().getPrimaryState();
-
+		final double t0 = getInitialState().getTime();
+		
 		final double o12 = y0P[0] * y0P[0];
 		final double o22 = y0P[1] * y0P[1];
 		final double o32 = y0P[2] * y0P[2];
@@ -171,10 +198,39 @@ public class TestProblem8 extends TestProblemAbstract {
 		
 		y0 = y0P;
 		
+		i32  = i3C - i2C;
+		i31  = i3C - i1C;
+		i21  = i2C - i1C;
+
+		tScale  = FastMath.sqrt(i32 * (m2 - twoE * i1C) / (i1C * i2C * i3C));
+		o1Scale = FastMath.sqrt((twoE * i3C - m2) / (i1C * i31));
+		o2Scale = FastMath.sqrt((twoE * i3C - m2) / (i2C * i32));
+		o3Scale = FastMath.sqrt((m2 - twoE * i1C) / (i3C * i31));
+
+		if( y0[0] == 0 && y0[1] == 0 && y0[2] == 0) {
+			k2 = 0.0;
+		} else {
+			k2     = i21 * (twoE * i3C - m2) / (i32 * (m2 - twoE * i1C));
+		}
+
+		jacobi = JacobiEllipticBuilder.build(k2);
+
+		if( y0[0] == 0 && y0[1] == 0 && y0[2] == 0) {
+			tRef = t0;
+		}
+		else if (y0[1] == 0){
+			tRef = t0 - jacobi.arcsn(0) / tScale;
+			System.out.println("Tref0 : "+tRef);
+		} else {
+			tRef   = t0 - jacobi.arcsn(y0[1] / o2Scale) / tScale;
+			System.out.println("Tref : "+tRef);
+		}
+		System.out.println((y0[1] / o2Scale));
+		
 		// convert initial conditions to Euler angles such the M is aligned with Z in computation frame
 		final Vector3D omega0Body = new Vector3D(y0[0], y0[1], y0[2]);
 		r0         = new Rotation(y0[3], y0[4], y0[5], y0[6], true);
-		final Vector3D m0Body     = new Vector3D(i1 * omega0Body.getX(), i2 * omega0Body.getY(), i3 * omega0Body.getZ());
+		final Vector3D m0Body     = new Vector3D(i1C * omega0Body.getX(), i2C * omega0Body.getY(), i3C * omega0Body.getZ());
 
 		final double   phi0       = 0; // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
 		final double   theta0 =  FastMath.acos(m0Body.getZ() / m0Body.getNorm());
@@ -190,20 +246,14 @@ public class TestProblem8 extends TestProblemAbstract {
 		
 		//Est-il nécéssaire de garder le r0COnvertedAxis qui n'est peut être pas adapté et ne règle peut être pas le problème
 		mAlignedToInert = r0ConvertedAxis.applyInverseTo(mAlignedToBody);
-		//mAlignedToInert = r0.applyInverseTo(mAlignedToBody);
-		
-		//Avec la conversion dans le constructeur les résultats du cas n°5 ne correspondent plus exactement pour 2 des angles comme avant
+		//mAlignedToInert = r0.applyInverseTo(mAlignedToBody);		
 	}
 
 	public double[][] computeTorqueFreeMotion(double i1, double i2, double i3, double t0, double[] y0, double t) {
 
 
 
-		/** Time scaling factor. */
-		final double tScale;
 
-		/** Time reference for rotation rate. */
-		final double tRef;
 
 		/** Coefficients for φ model. */
 		final double phiSlope;
@@ -214,54 +264,9 @@ public class TestProblem8 extends TestProblemAbstract {
 		/**Period with respect to time. */
 		final double period;
 
-		/** State scaling factor. */
-		final double o1Scale;
-
-		/** State scaling factor. */
-		final double o2Scale;
-
-		/** State scaling factor. */
-		final double o3Scale;
-
-		/** Jacobi elliptic function. */
-		final JacobiElliptic jacobi;
-
-		/** Elliptic modulus k2 (k2 = m). */
-		final double k2;
-
-
 		/**DenseOutputModel of phi. */
 		final DenseOutputModel phiQuadratureModel;
-		final double integOnePeriod;		
-
-		final double i32  = i3 - i2;
-		final double i31  = i3 - i1;
-		final double i21  = i2 - i1;
-
-		tScale  = FastMath.sqrt(i32 * (m2 - twoE * i1) / (i1 * i2 * i3));
-		o1Scale = FastMath.sqrt((twoE * i3 - m2) / (i1 * i31));
-		o2Scale = FastMath.sqrt((twoE * i3 - m2) / (i2 * i32));
-		o3Scale = FastMath.sqrt((m2 - twoE * i1) / (i3 * i31));
-
-		if( y0[0] == 0 && y0[1] == 0 && y0[2] == 0) {
-			k2 = 0.0;
-		} else {
-			k2     = i21 * (twoE * i3 - m2) / (i32 * (m2 - twoE * i1));
-		}
-
-		jacobi = JacobiEllipticBuilder.build(k2);
-
-		if( y0[0] == 0 && y0[1] == 0 && y0[2] == 0) {
-			tRef = t0;
-		}
-		else if (y0[1] == 0){
-			tRef = t0 - jacobi.arcsn(0) / tScale;
-			System.out.println("Tref0 : "+tRef);
-		} else {
-			tRef   = t0 - jacobi.arcsn(y0[1] / o2Scale) / tScale;
-			System.out.println("Tref : "+tRef);
-		}
-
+		final double integOnePeriod;
 
 		// coefficients for φ model
 		period = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
@@ -269,7 +274,6 @@ public class TestProblem8 extends TestProblemAbstract {
 		b = phiSlope * i32 * i31;
 		c = i1 * i32;
 		d = i3 * i21;
-
 
 		//Integrate the quadrature phi term on one period
 		final DormandPrince853Integrator integ = new DormandPrince853Integrator(1.0e-6 * period, 1.0e-2 * period,
