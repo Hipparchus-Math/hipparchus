@@ -773,7 +773,7 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
         return ds;
     }
 
-    /** Evaluate Taylor expansion a derivative structure.
+    /** Evaluate Taylor expansion of a derivative structure.
      * @param delta parameters offsets (&Delta;x, &Delta;y, ...)
      * @return value of the Taylor expansion at x + &Delta;x, y + &Delta;y, ...
      * @throws MathRuntimeException if factorials becomes too large
@@ -781,7 +781,7 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
     public double taylor(final double ... delta) throws MathRuntimeException {
         return factory.getCompiler().taylor(data, 0, delta);
     }
-
+ 
     /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match

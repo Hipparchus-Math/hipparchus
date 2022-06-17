@@ -31,6 +31,8 @@ import org.hipparchus.Field;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.linear.MatrixUtils;
+import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
@@ -3388,6 +3390,63 @@ public class DSCompiler {
             value = value.add(term);
         }
         return value;
+    }
+
+    /** Invert a Taylor map.
+     * @param ds arrays holding the map derivative structures
+     * @return array with the inverted map derivative structures
+     * @see <a href="https://doi.org/10.1016/S1076-5670(08)70228-3">chapter
+     * 2 of Advances in Imaging and Electron Physics, vol 108
+     * by Martin Berz</a>
+     * @since 2.2
+     */
+    public double[][] invertMap(final double[][] ds) {
+
+        final int n = ds.length;
+
+        // separate linear and non linear terms (constant terms are ignored)
+        final RealMatrix linear    = MatrixUtils.createRealMatrix(n, n);
+        final double[][] nonLinear = new double[n][getSize()];
+        for (int i = 0; i < n; ++i) {
+            for (int k = 1; k < getSize(); ++k) {
+                final int j = firstOrderParameter(k);
+                if (j >= 0) {
+                    // this is a linear term
+                    linear.setEntry(i, j, ds[i][k]);
+                } else {
+                    // this is a non-linear term
+                    nonLinear[i][k] = ds[i][k];
+                }
+            }
+        }
+
+        // TODO
+        return null;
+
+    }
+
+    /** Check if a derivative is a first order derivative.
+     * @param index index in the derivative structure
+     * @return index n of the parameter if derivative is df/dpn, or -1
+     * if derivative is not a first order derivative
+     * @since 2.2
+     */
+    private int firstOrderParameter(final int index) {
+        int indexOne  = -1;
+        final int[] indirections = derivativesIndirection[index];
+        for (int i = 0; i < indirections.length; ++i) {
+            if (indirections[i] > 1) {
+                // at least order 2 derivative, not interesting
+                return -1;
+            } else if (indirections[i] == 1) {
+                if (indexOne >= 0) {
+                    // mixed derivatives with respect to at least two parameters, not interesting
+                    return -1;
+                }
+                indexOne = i;
+            }
+        }
+        return indexOne;
     }
 
     /** Check rules set compatibility.
