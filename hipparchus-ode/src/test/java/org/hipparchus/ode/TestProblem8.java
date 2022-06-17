@@ -24,24 +24,27 @@ public class TestProblem8 extends TestProblemAbstract {
 	final double i1C;
 	final double i2C;
 	final double i3C;
-	
+
 	/**Substraction of inertias. */
 	final double i32;
 	final double i31;
 	final double i21;
 
-	/** Converted initial state. */
+	/** Initial state. */
 	final double[] y0;
 	
+	/** Converted initial state. */
+	final double[] y0C;
+
 	/** Converted axes. */
 	final Vector3D[] axes;
-	
+
 	/** Twice the angular kinetic energy. */
 	final double twoE;
 
 	/** Square of kinetic momentum. */
 	final double m2;
-	
+
 	/** State scaling factor. */
 	final double o1Scale;
 
@@ -56,22 +59,22 @@ public class TestProblem8 extends TestProblemAbstract {
 
 	/** Elliptic modulus k2 (k2 = m). */
 	final double k2;
-	
+
 	/** Time scaling factor. */
 	final double tScale;
 
 	/** Time reference for rotation rate. */
 	final double tRef;
-	
+
 	/**Offset rotation  between initial inertial frame and the frame with moment vector and Z axis aligned. */
 	Rotation mAlignedToInert;
-	
+
 	/** Initial converted rotation. */
 	final Rotation r0;
-	
+
 	/** Rotation to switch to the converted axes frame. */
 	final Rotation convertAxes;
-	
+
 	/**
 	 * Simple constructor.
 	 */
@@ -79,17 +82,17 @@ public class TestProblem8 extends TestProblemAbstract {
 		//Arguments in the super constructor :
 		//Intital time, Primary state (o1, o2, o3, q0, q1, q2, q3), Final time, Error scale
 		super(0.0, new double[] {5.0, 0.0, 4.0, 0.9, 0.437, 0.0, 0.0}, 20.0, new double[] { 1.0, 1.0, 1.0 });
-		i2 = 3.0 / 8.0;
-		i1 = 1.0 / 2.0;
+		i1 = 3.0 / 8.0;
+		i2 = 1.0 / 2.0;
 		i3 = 5.0 / 8.0;
 
 
-		final double[] y0P = getInitialState().getPrimaryState();
+		y0 = getInitialState().getPrimaryState();
 		final double t0 = getInitialState().getTime();
-		
-		final double o12 = y0P[0] * y0P[0];
-		final double o22 = y0P[1] * y0P[1];
-		final double o32 = y0P[2] * y0P[2];
+
+		final double o12 = y0[0] * y0[0];
+		final double o22 = y0[1] * y0[1];
+		final double o32 = y0[2] * y0[2];
 
 		twoE    =  i1 * o12 + i2 * o22 + i3 * o32;
 		m2      =  i1 * i1 * o12 + i2 * i2 * o22 + i3 * i3 * o32;
@@ -97,9 +100,9 @@ public class TestProblem8 extends TestProblemAbstract {
 		Vector3D[] axesP = {Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K};
 
 		double[] i = {i1, i2, i3};
+		double[] y0P = y0;
 
-
-		System.out.println("omega avant : "+y0P[0]+" "+ y0P[1]+" "+ y0P[2]);
+		System.out.println("omega avant : "+y0[0]+" "+ y0[1]+" "+ y0[2]);
 		System.out.println("Initial : iA1 = "+i1+" "+axesP[0]);
 		System.out.println("iA2 = "+i2 + " "+axesP[1]);
 		System.out.println("iA3 = "+i3 + " "+axesP[2]);
@@ -189,15 +192,38 @@ public class TestProblem8 extends TestProblemAbstract {
 		System.out.println("omega après : "+y0P[0]+" "+ y0P[1]+" "+ y0P[2]);
 		System.out.println("axes après : "+axesP[0]+" "+ axesP[1]+" "+ axesP[2]);
 		System.out.println("inerties après : "+i[0]+" "+ i[1]+" "+ i[2]);
-		
+
 		i1C = i[0];
 		i2C = i[1];
 		i3C = i[2];
 
 		axes = axesP;
-		
-		y0 = y0P;
-		
+
+		y0C = y0P;
+
+		// convert initial conditions to Euler angles such the M is aligned with Z in computation frame
+		final Vector3D omega0Body = new Vector3D(y0C[0], y0C[1], y0C[2]);
+		r0         = new Rotation(y0C[3], y0C[4], y0C[5], y0C[6], true);
+		final Vector3D m0Body     = new Vector3D(i1C * omega0Body.getX(), i2C * omega0Body.getY(), i3C * omega0Body.getZ());
+
+		final double   phi0       = 0; // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
+		final double   theta0 =  FastMath.acos(m0Body.getZ() / m0Body.getNorm());
+		final double   psi0       = FastMath.atan2(m0Body.getX(), m0Body.getY()); // it is really atan2(x, y), not atan2(y, x) as usual!
+
+		//Compute offset rotation between inertial frame aligned with momentum and regular inertial frame
+		final Rotation mAlignedToBody = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
+				phi0, theta0, psi0);
+
+		convertAxes = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axesP[0], axesP[1] );
+
+		Rotation r0ConvertedAxis = convertAxes.applyTo(r0);
+
+		//Est-il nécéssaire de garder le r0COnvertedAxis qui n'est peut être pas adapté et ne règle peut être pas le problème
+		mAlignedToInert = r0ConvertedAxis.applyInverseTo(mAlignedToBody);
+		//mAlignedToInert = r0.applyInverseTo(mAlignedToBody);		
+
+
+
 		i32  = i3C - i2C;
 		i31  = i3C - i1C;
 		i21  = i2C - i1C;
@@ -226,27 +252,8 @@ public class TestProblem8 extends TestProblemAbstract {
 			System.out.println("Tref : "+tRef);
 		}
 		System.out.println((y0[1] / o2Scale));
-		
-		// convert initial conditions to Euler angles such the M is aligned with Z in computation frame
-		final Vector3D omega0Body = new Vector3D(y0[0], y0[1], y0[2]);
-		r0         = new Rotation(y0[3], y0[4], y0[5], y0[6], true);
-		final Vector3D m0Body     = new Vector3D(i1C * omega0Body.getX(), i2C * omega0Body.getY(), i3C * omega0Body.getZ());
 
-		final double   phi0       = 0; // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
-		final double   theta0 =  FastMath.acos(m0Body.getZ() / m0Body.getNorm());
-		final double   psi0       = FastMath.atan2(m0Body.getX(), m0Body.getY()); // it is really atan2(x, y), not atan2(y, x) as usual!
 
-		//Compute offset rotation between inertial frame aligned with momentum and regular inertial frame
-		final Rotation mAlignedToBody = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
-				phi0, theta0, psi0);
-		
-		convertAxes = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axes[0], axes[1] );
-
-		Rotation r0ConvertedAxis = convertAxes.applyTo(r0);
-		
-		//Est-il nécéssaire de garder le r0COnvertedAxis qui n'est peut être pas adapté et ne règle peut être pas le problème
-		mAlignedToInert = r0ConvertedAxis.applyInverseTo(mAlignedToBody);
-		//mAlignedToInert = r0.applyInverseTo(mAlignedToBody);		
 	}
 
 	public double[][] computeTorqueFreeMotion(double i1, double i2, double i3, double t0, double[] y0, double t) {
@@ -300,29 +307,29 @@ public class TestProblem8 extends TestProblemAbstract {
 		integOnePeriod = phiQuadratureModel.getInterpolatedState(phiQuadratureModel.getFinalTime()).getPrimaryState()[0];
 
 
-//		Rotation convertAxes = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axes[0], axes[1] );
-//
-//		Vector3D axe1 = new Vector3D(1.0, 0.0, 0.0);
-//		Vector3D axe1c = convertAxes.applyTo(axe1);
-//		System.out.println("AAAAAA : "+axe1c.getX()+" "+axe1c.getY()+" "+axe1c.getZ());
-//		Vector3D axe2 = new Vector3D(0.0, 1.0, 0.0);
-//		Vector3D axe2c = convertAxes.applyTo(axe2);
-//		System.out.println("AAAAAA : "+axe2c.getX()+" "+axe2c.getY()+" "+axe2c.getZ());
-//		Vector3D axe3 = new Vector3D(0.0, 0.0,1.0);
-//		Vector3D axe3c = convertAxes.applyTo(axe3);
-//		System.out.println("AAAAAA : "+axe3c.getX()+" "+axe3c.getY()+" "+axe3c.getZ());
-//
-//		System.out.println("Quaternion avant : "+r0.getQ0()+" "+r0.getQ1()+" "+r0.getQ2()+" "+r0.getQ3());
-//
-//		Rotation r0ConvertedAxis = convertAxes.applyTo(r0);
-//
-//		System.out.println("Quaternion converti : "+r0ConvertedAxis.getQ0()+" "+r0ConvertedAxis.getQ1()+" "+r0ConvertedAxis.getQ2()+" "+r0ConvertedAxis.getQ3());
-//
-//		System.out.println("Axe : "+r0ConvertedAxis.getAxis(RotationConvention.FRAME_TRANSFORM));
-//
-//		//Rotation r0Aligned = mAlignedToBody.applyInverseTo(r0ConvertedAxis);
-//		
-//		mAlignedToInert = r0ConvertedAxis.applyInverseTo(mAlignedToBody);
+		//		Rotation convertAxes = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axes[0], axes[1] );
+		//
+		//		Vector3D axe1 = new Vector3D(1.0, 0.0, 0.0);
+		//		Vector3D axe1c = convertAxes.applyTo(axe1);
+		//		System.out.println("AAAAAA : "+axe1c.getX()+" "+axe1c.getY()+" "+axe1c.getZ());
+		//		Vector3D axe2 = new Vector3D(0.0, 1.0, 0.0);
+		//		Vector3D axe2c = convertAxes.applyTo(axe2);
+		//		System.out.println("AAAAAA : "+axe2c.getX()+" "+axe2c.getY()+" "+axe2c.getZ());
+		//		Vector3D axe3 = new Vector3D(0.0, 0.0,1.0);
+		//		Vector3D axe3c = convertAxes.applyTo(axe3);
+		//		System.out.println("AAAAAA : "+axe3c.getX()+" "+axe3c.getY()+" "+axe3c.getZ());
+		//
+		//		System.out.println("Quaternion avant : "+r0.getQ0()+" "+r0.getQ1()+" "+r0.getQ2()+" "+r0.getQ3());
+		//
+		//		Rotation r0ConvertedAxis = convertAxes.applyTo(r0);
+		//
+		//		System.out.println("Quaternion converti : "+r0ConvertedAxis.getQ0()+" "+r0ConvertedAxis.getQ1()+" "+r0ConvertedAxis.getQ2()+" "+r0ConvertedAxis.getQ3());
+		//
+		//		System.out.println("Axe : "+r0ConvertedAxis.getAxis(RotationConvention.FRAME_TRANSFORM));
+		//
+		//		//Rotation r0Aligned = mAlignedToBody.applyInverseTo(r0ConvertedAxis);
+		//		
+		//		mAlignedToInert = r0ConvertedAxis.applyInverseTo(mAlignedToBody);
 
 
 		//Computation of omega
@@ -378,15 +385,15 @@ public class TestProblem8 extends TestProblemAbstract {
 
 		Rotation convertAxesReverse = new Rotation(axes[0], axes[1], Vector3D.PLUS_I, Vector3D.PLUS_J);
 
-		Vector3D axe1cr = convertAxes.applyInverseTo(axes[0]);
+		Vector3D axe1cr = convertAxesReverse.applyTo(axes[0]);
 		System.out.println("BBBBBB : "+axe1cr.getX()+" "+axe1cr.getY()+" "+axe1cr.getZ());
-		Vector3D axe2cr = convertAxes.applyInverseTo(axes[1]);
+		Vector3D axe2cr = convertAxesReverse.applyTo(axes[1]);
 		System.out.println("BBBBBB : "+axe2cr.getX()+" "+axe2cr.getY()+" "+axe2cr.getZ());
-		Vector3D axe3cr = convertAxes.applyInverseTo(axes[2]);
+		Vector3D axe3cr = convertAxesReverse.applyTo(axes[2]);
 		System.out.println("BBBBBB : "+axe3cr.getX()+" "+axe3cr.getY()+" "+axe3cr.getZ());
 
-		Rotation bodyToOriginalFrame = convertAxes.applyInverseTo(inertToBody);
-		
+		Rotation bodyToOriginalFrame = convertAxes.applyInverseTo(inertToBody);//(inertToBody.applyInverseTo(convertAxes)).revert();
+
 		double[] angles = bodyToOriginalFrame.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
 		double[][] data = {{omega.getX(), omega.getY(), omega.getZ()}, {angles[0], angles[1], angles[2]}, {bodyToOriginalFrame.getQ0(), bodyToOriginalFrame.getQ1(), bodyToOriginalFrame.getQ2(), bodyToOriginalFrame.getQ3()}, {axes[0].getX(), axes[0].getY(), axes[0].getZ()}, {axes[1].getX(), axes[1].getY(), axes[1].getZ()},{i1, i2, i3}};
 		return data;
@@ -433,7 +440,7 @@ public class TestProblem8 extends TestProblemAbstract {
 
 		double t0 = getInitialState().getTime();
 
-		final double[][] tfm = computeTorqueFreeMotion(i1C, i2C, i3C, t0, y0, t);
+		final double[][] tfm = computeTorqueFreeMotion(i1C, i2C, i3C, t0, y0C, t);
 		final double[] omega = tfm[0];
 		final double[] quaternion = tfm[2];
 		final double[] angles = tfm[1];
