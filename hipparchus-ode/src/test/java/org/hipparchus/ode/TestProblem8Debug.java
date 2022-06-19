@@ -1,7 +1,5 @@
 package org.hipparchus.ode;
 
-import java.util.ArrayList;
-
 import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.geometry.euclidean.threed.RotationConvention;
 import org.hipparchus.geometry.euclidean.threed.RotationOrder;
@@ -12,7 +10,6 @@ import org.hipparchus.special.elliptic.jacobi.JacobiElliptic;
 import org.hipparchus.special.elliptic.jacobi.JacobiEllipticBuilder;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
 
 
 public class TestProblem8Debug extends TestProblemAbstract {

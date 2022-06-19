@@ -10,7 +10,6 @@ import org.hipparchus.special.elliptic.jacobi.JacobiElliptic;
 import org.hipparchus.special.elliptic.jacobi.JacobiEllipticBuilder;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
 
 
 public class TestProblem8 extends TestProblemAbstract {
