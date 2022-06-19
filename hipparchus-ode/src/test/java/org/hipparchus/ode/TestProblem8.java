@@ -283,7 +283,7 @@ public class TestProblem8 extends TestProblemAbstract {
 
     }
 
-	public double[][] computeTorqueFreeMotion(double t) {
+	public TfmState computeTorqueFreeMotion(double t) {
 
 		// Computation of omega
 		final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
@@ -317,8 +317,8 @@ public class TestProblem8 extends TestProblemAbstract {
 		Rotation bodyToOriginalFrame = convertAxes.applyInverseTo(inertToBody);
 
 		double[] angles = bodyToOriginalFrame.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
-		double[][] data = {{omega.getX(), omega.getY(), omega.getZ()}, {angles[0], angles[1], angles[2]}, {bodyToOriginalFrame.getQ0(), bodyToOriginalFrame.getQ1(), bodyToOriginalFrame.getQ2(), bodyToOriginalFrame.getQ3()}, {axes[0].getX(), axes[0].getY(), axes[0].getZ()}, {axes[1].getX(), axes[1].getY(), axes[1].getZ()},{i1C, i2C, i3C}};
-		return data;
+
+		return new TfmState(t, omega, bodyToOriginalFrame, angles);
 
 	}
 
@@ -342,32 +342,41 @@ public class TestProblem8 extends TestProblemAbstract {
 	}
 
 	public double[] computeTheoreticalState(double t) {
-
-		final double[][] tfm = computeTorqueFreeMotion(t);
-		final double[] omega = tfm[0];
-		final double[] quaternion = tfm[2];
-		final double[] angles = tfm[1];
-		final double[] X = tfm[3];
-		final double[] Y = tfm[4];
-
+		final TfmState tfm = computeTorqueFreeMotion(t);
 		return new double[] {
-				omega[0],
-				omega[1],
-				omega[2],
-				quaternion[0],
-				quaternion[1],
-				quaternion[2],
-				quaternion[3],
-				angles[0],
-				angles[1],
-				angles[2],
-				X[0],
-				X[1],
-				X[2],
-				Y[0],
-				Y[1],
-				Y[2]
+				tfm.getOmega().getX(),
+				tfm.getOmega().getY(),
+				tfm.getOmega().getZ(),
+                tfm.getRotation().getQ0(),
+                tfm.getRotation().getQ1(),
+                tfm.getRotation().getQ2(),
+                tfm.getRotation().getQ3()
 		};
 	}
+
+    public static class TfmState {
+        private final double   t;
+        private final Vector3D omega;
+        private final Rotation rotation;
+        private double[]       euler;
+        private TfmState(final double t, final Vector3D omega, final Rotation rotation, final double[] euler) {
+            this.t        = t;
+            this.omega    = omega;
+            this.rotation = rotation;
+            this.euler    = euler.clone();
+        }
+        public double getT() {
+            return t;
+        }
+        public Vector3D getOmega() {
+            return omega;
+        }
+        public Rotation getRotation() {
+            return rotation;
+        }
+        public double[] getEuler() {
+            return euler.clone();
+        }
+    }
 
 }//Fin du programme

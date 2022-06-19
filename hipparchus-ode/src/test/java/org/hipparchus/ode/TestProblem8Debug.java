@@ -510,7 +510,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
     }
 
-	public double[][][] computeTorqueFreeMotion(double i1, double i2, double i3, double t, double i1DEUX, double i2DEUX, double i3DEUX) {
+	public TfmState[] computeTorqueFreeMotion(double t) {
 
 		// Computation of omega
 		final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
@@ -522,7 +522,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
 		// Computation of the Euler angles
 		// Compute rotation rate
-		final double   psi       = FastMath.atan2(i1 * omega.getX(), i2 * omega.getY());
+		final double   psi       = FastMath.atan2(i1C * omega.getX(), i2C * omega.getY());
 		final double   theta     = FastMath.acos(omega.getZ() / phiSlope);
 		final double   phiLinear = phiSlope * t;
 
@@ -536,7 +536,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
 		final double phi = phiLinear + phiQuadrature;
 
 		// Computation of the Euler angles
-		final double   psiDEUX           = FastMath.atan2(i1DEUX * omegaDEUX.getX(), i2DEUX * omegaDEUX.getY());
+		final double   psiDEUX           = FastMath.atan2(i1CDEUX * omegaDEUX.getX(), i2CDEUX * omegaDEUX.getY());
 		final double   thetaDEUX         = FastMath.acos(omegaDEUX.getZ() / phiSlopeDEUX);
 		final double   phiLinearDEUX     = phiSlopeDEUX * t;
 
@@ -558,31 +558,26 @@ public class TestProblem8Debug extends TestProblemAbstract {
 		// combine with offset rotation to get back to regular inertial frame
 		//Inert -> aligned + aligned -> body = inert -> body (What the user wants)
 		Rotation inertToBody = alignedToBody.applyTo(mAlignedToInert.revert());//alignedToBody.applyTo(mAlignedToInert.revert());
-
 		Rotation bodyToOriginalFrame = convertAxes.applyInverseTo(inertToBody);//(inertToBody.applyInverseTo(convertAxes)).revert();
+        double[] angles = bodyToOriginalFrame.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
 
 		//Computation of the quaternion
 
 		// Rotation between computation frame (aligned with momentum) and body
 		//(It is simply the angles equations provided by L&L)
 		final Rotation alignedToBodyDEUX = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
-				phiDEUX, thetaDEUX, psiDEUX);
+		                                                phiDEUX, thetaDEUX, psiDEUX);
 
 		// combine with offset rotation to get back to regular inertial frame
 		//Inert -> aligned + aligned -> body = inert -> body (What the user wants)
 		Rotation inertToBodyDEUX = alignedToBodyDEUX.applyTo(mAlignedToInertDEUX.revert());//alignedToBody.applyTo(mAlignedToInert.revert());
-
 		Rotation bodyToOriginalFrameDEUX = convertAxesDEUX.applyInverseTo(inertToBodyDEUX);//(inertToBody.applyInverseTo(convertAxes)).revert();
-
-
-
-		double[] angles = bodyToOriginalFrame.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
 		double[] anglesDEUX = bodyToOriginalFrameDEUX.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
 
-		double[][] data = {{omega.getX(), omega.getY(), omega.getZ()}, {angles[0], angles[1], angles[2]}, {bodyToOriginalFrame.getQ0(), bodyToOriginalFrame.getQ1(), bodyToOriginalFrame.getQ2(), bodyToOriginalFrame.getQ3()}, {axes[0].getX(), axes[0].getY(), axes[0].getZ()}, {axes[1].getX(), axes[1].getY(), axes[1].getZ()},{i1, i2, i3}};
-		double[][] dataDEUX = {{omegaDEUX.getX(), omegaDEUX.getY(), omegaDEUX.getZ()}, {anglesDEUX[0], anglesDEUX[1], anglesDEUX[2]}, {bodyToOriginalFrameDEUX.getQ0(), bodyToOriginalFrameDEUX.getQ1(), bodyToOriginalFrameDEUX.getQ2(), bodyToOriginalFrameDEUX.getQ3()}, {axesDEUX[0].getX(), axesDEUX[0].getY(), axesDEUX[0].getZ()}, {axesDEUX[1].getX(), axesDEUX[1].getY(), axesDEUX[1].getZ()},{i1DEUX, i2DEUX, i3DEUX}};
-		double[][][] allData = {data, dataDEUX};
-		return allData;
+		return new TfmState[] {
+		    new TfmState(t, omega,     bodyToOriginalFrame,     angles),
+		    new TfmState(t, omegaDEUX, bodyToOriginalFrameDEUX, anglesDEUX)
+		};
 
 	}
 
@@ -617,56 +612,50 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
 	public double[] computeTheoreticalState(double t) {
 
-		final double[][][] tfm = computeTorqueFreeMotion(i1C, i2C, i3C, t, i1CDEUX, i2CDEUX, i3CDEUX);
-		final double[] omega = tfm[0][0];
-		final double[] quaternion = tfm[0][2];
-		final double[] angles = tfm[0][1];
-		final double[] X = tfm[0][3];
-		final double[] Y = tfm[0][4];
-
-
-		final double[] omegaDEUX = tfm[1][0];
-		final double[] quaternionDEUX = tfm[1][2];
-		final double[] anglesDEUX = tfm[1][1];
-		final double[] XDEUX = tfm[1][3];
-		final double[] YDEUX = tfm[1][4];
+		final TfmState[] tfm = computeTorqueFreeMotion(t);
 
 		return new double[] {
-				omega[0],
-				omega[1],
-				omega[2],
-				quaternion[0],
-				quaternion[1],
-				quaternion[2],
-				quaternion[3],
-				angles[0],
-				angles[1],
-				angles[2],
-				X[0],
-				X[1],
-				X[2],
-				Y[0],
-				Y[1],
-				Y[2],
+            tfm[0].getOmega().getX(),
+            tfm[0].getOmega().getY(),
+            tfm[0].getOmega().getZ(),
+            tfm[0].getRotation().getQ0(),
+            tfm[0].getRotation().getQ1(),
+            tfm[0].getRotation().getQ2(),
+            tfm[0].getRotation().getQ3(),
 
-
-				omegaDEUX[0],
-				omegaDEUX[1],
-				omegaDEUX[2],
-				quaternionDEUX[0],
-				quaternionDEUX[1],
-				quaternionDEUX[2],
-				quaternionDEUX[3],
-				anglesDEUX[0],
-				anglesDEUX[1],
-				anglesDEUX[2],
-				XDEUX[0],
-				XDEUX[1],
-				XDEUX[2],
-				YDEUX[0],
-				YDEUX[1],
-				YDEUX[2]
+            tfm[1].getOmega().getX(),
+            tfm[1].getOmega().getY(),
+            tfm[1].getOmega().getZ(),
+            tfm[1].getRotation().getQ0(),
+            tfm[1].getRotation().getQ1(),
+            tfm[1].getRotation().getQ2(),
+            tfm[1].getRotation().getQ3()
 		};
+	}
+
+	public static class TfmState {
+	    private final double   t;
+	    private final Vector3D omega;
+	    private final Rotation rotation;
+	    private double[]       euler;
+	    private TfmState(final double t, final Vector3D omega, final Rotation rotation, final double[] euler) {
+	        this.t        = t;
+	        this.omega    = omega;
+	        this.rotation = rotation;
+	        this.euler    = euler.clone();
+	    }
+	    public double getT() {
+	        return t;
+	    }
+	    public Vector3D getOmega() {
+	        return omega;
+	    }
+	    public Rotation getRotation() {
+	        return rotation;
+	    }
+	    public double[] getEuler() {
+	        return euler.clone();
+	    }
 	}
 
 }//Fin du programme
