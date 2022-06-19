@@ -48,7 +48,7 @@ public class DormandPrince853IntegratorTest extends EmbeddedRungeKuttaIntegrator
     public void testTorqueFreeMotionOmegaOnly() {
         doTestTorqueFreeMotionOmegaOnly(4.0e-16);
     }
-    
+
     @Override
     public void testTorqueFreeMotion() {
         doTestTorqueFreeMotion(2.0e-13, 9.0e-12);

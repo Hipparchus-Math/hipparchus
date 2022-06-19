@@ -287,11 +287,12 @@ public class TestProblem8 extends TestProblemAbstract {
 
         // Computation of omega
         final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
-        final Vector3D omega   = new Vector3D(o1Scale * valuesN.cn(), o2Scale * valuesN.sn(), o3Scale * valuesN.dn());
+        final Vector3D omegaP   = new Vector3D(o1Scale * valuesN.cn(), o2Scale * valuesN.sn(), o3Scale * valuesN.dn());
+        final Vector3D omega    = convertAxes.applyInverseTo(omegaP);
 
         // Computation of the Euler angles
-        final double   psi       = FastMath.atan2(i1C * omega.getX(), i2C * omega.getY());
-        final double   theta     = FastMath.acos(omega.getZ() / phiSlope);
+        final double   psi       = FastMath.atan2(i1C * omegaP.getX(), i2C * omegaP.getY());
+        final double   theta     = FastMath.acos(omegaP.getZ() / phiSlope);
         final double   phiLinear = phiSlope * t;
 
         // Integration for the computation of phi

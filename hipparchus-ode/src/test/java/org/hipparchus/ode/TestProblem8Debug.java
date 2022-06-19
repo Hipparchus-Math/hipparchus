@@ -514,16 +514,13 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
         // Computation of omega
         final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
-        final Vector3D omega   = new Vector3D(o1Scale * valuesN.cn(), o2Scale * valuesN.sn(), o3Scale * valuesN.dn());
-
-        // Computation of omega
-        final CopolarN valuesNDEUX = jacobiDEUX.valuesN((t - tRefDEUX) * tScaleDEUX);
-        final Vector3D omegaDEUX = new Vector3D(o1ScaleDEUX * valuesNDEUX.cn(), o2ScaleDEUX * valuesNDEUX.sn(), o3ScaleDEUX * valuesNDEUX.dn());
+        final Vector3D omegaP  = new Vector3D(o1Scale * valuesN.cn(), o2Scale * valuesN.sn(), o3Scale * valuesN.dn());
+        final Vector3D omega   = convertAxes.applyInverseTo(omegaP);
 
         // Computation of the Euler angles
         // Compute rotation rate
-        final double   psi       = FastMath.atan2(i1C * omega.getX(), i2C * omega.getY());
-        final double   theta     = FastMath.acos(omega.getZ() / phiSlope);
+        final double   psi       = FastMath.atan2(i1C * omegaP.getX(), i2C * omegaP.getY());
+        final double   theta     = FastMath.acos(omegaP.getZ() / phiSlope);
         final double   phiLinear = phiSlope * t;
 
         // Integration for the computation of phi
@@ -535,9 +532,14 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
         final double phi = phiLinear + phiQuadrature;
 
+        // Computation of omega
+        final CopolarN valuesNDEUX = jacobiDEUX.valuesN((t - tRefDEUX) * tScaleDEUX);
+        final Vector3D omegaPDEUX = new Vector3D(o1ScaleDEUX * valuesNDEUX.cn(), o2ScaleDEUX * valuesNDEUX.sn(), o3ScaleDEUX * valuesNDEUX.dn());
+        final Vector3D omegaDEUX  = convertAxesDEUX.applyInverseTo(omegaPDEUX);
+
         // Computation of the Euler angles
-        final double   psiDEUX           = FastMath.atan2(i1CDEUX * omegaDEUX.getX(), i2CDEUX * omegaDEUX.getY());
-        final double   thetaDEUX         = FastMath.acos(omegaDEUX.getZ() / phiSlopeDEUX);
+        final double   psiDEUX           = FastMath.atan2(i1CDEUX * omegaPDEUX.getX(), i2CDEUX * omegaPDEUX.getY());
+        final double   thetaDEUX         = FastMath.acos(omegaPDEUX.getZ() / phiSlopeDEUX);
         final double   phiLinearDEUX     = phiSlopeDEUX * t;
 
         //Integration for the computation of phi
