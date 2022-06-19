@@ -356,7 +356,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
 		final double condition = m2/twoE;
 
-		if(condition < i[1]) {
+		if (condition < i[1]) {
 			Vector3D z = axesP[0];
 			axesP[0] = axesP[2];
 			axesP[2] = z;
@@ -440,7 +440,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
 		final double condition = m2DEUX/twoEDEUX;
 
-		if(condition < i[1]) {
+		if (condition < i[1]) {
 			Vector3D z = axesP[0];
 			axesP[0] = axesP[2];
 			axesP[2] = z;
@@ -512,34 +512,21 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
 	public double[][][] computeTorqueFreeMotion(double i1, double i2, double i3, double t, double i1DEUX, double i2DEUX, double i3DEUX) {
 
-		//Computation of omega
+		// Computation of omega
 		final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
+		final Vector3D omega   = new Vector3D(o1Scale * valuesN.cn(), o2Scale * valuesN.sn(), o3Scale * valuesN.dn());
 
-		final Vector3D omega = new Vector3D(
-				o1Scale * valuesN.cn(),
-				o2Scale * valuesN.sn(),
-				o3Scale * valuesN.dn());
-
-		//Computation of omega
+		// Computation of omega
 		final CopolarN valuesNDEUX = jacobiDEUX.valuesN((t - tRefDEUX) * tScaleDEUX);
+		final Vector3D omegaDEUX = new Vector3D(o1ScaleDEUX * valuesNDEUX.cn(), o2ScaleDEUX * valuesNDEUX.sn(), o3ScaleDEUX * valuesNDEUX.dn());
 
-		final Vector3D omegaDEUX = new Vector3D(
-				o1ScaleDEUX * valuesNDEUX.cn(),
-				o2ScaleDEUX * valuesNDEUX.sn(),
-				o3ScaleDEUX * valuesNDEUX.dn());
+		// Computation of the Euler angles
+		// Compute rotation rate
+		final double   psi       = FastMath.atan2(i1 * omega.getX(), i2 * omega.getY());
+		final double   theta     = FastMath.acos(omega.getZ() / phiSlope);
+		final double   phiLinear = phiSlope * t;
 
-		//Computation of the euler angles
-		//Compute rotation rate
-		final double   o1            = omega.getX();//o1Scale * valuesN.cn();
-		final double   o2            = omega.getY();//o2Scale * valuesN.sn();
-		final double   o3            = omega.getZ();//o3Scale * valuesN.dn();
-
-		//Compute angles
-		final double   psi           = FastMath.atan2(i1 * o1, i2 * o2);
-		final double   theta         = FastMath.acos(o3 / phiSlope);
-		final double   phiLinear     = phiSlope * t;
-
-		//Integration for the computation of phi
+		// Integration for the computation of phi
 		final double t0 = getInitialTime();
 		final int nbPeriods = (int) FastMath.floor((t - t0) / period);//floor = entier inférieur = nb période entière
 		final double tStartInteg = t0 + nbPeriods * period;//partie de période à la fin entre tau Integ et tau end
@@ -548,16 +535,9 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
 		final double phi = phiLinear + phiQuadrature;
 
-
-		//Computation of the euler angles
-		//Compute rotation rate
-		final double   o1DEUX            = omegaDEUX.getX();//o1Scale * valuesN.cn();
-		final double   o2DEUX            = omegaDEUX.getY();//o2Scale * valuesN.sn();
-		final double   o3DEUX            = omegaDEUX.getZ();//o3Scale * valuesN.dn();
-
-		//Compute angles
-		final double   psiDEUX           = FastMath.atan2(i1DEUX * o1DEUX, i2DEUX * o2DEUX);
-		final double   thetaDEUX         = FastMath.acos(o3DEUX / phiSlopeDEUX);
+		// Computation of the Euler angles
+		final double   psiDEUX           = FastMath.atan2(i1DEUX * omegaDEUX.getX(), i2DEUX * omegaDEUX.getY());
+		final double   thetaDEUX         = FastMath.acos(omegaDEUX.getZ() / phiSlopeDEUX);
 		final double   phiLinearDEUX     = phiSlopeDEUX * t;
 
 		//Integration for the computation of phi
@@ -573,14 +553,13 @@ public class TestProblem8Debug extends TestProblemAbstract {
 		// Rotation between computation frame (aligned with momentum) and body
 		//(It is simply the angles equations provided by L&L)
 		final Rotation alignedToBody = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
-				phi, theta, psi);
+				                                    phi, theta, psi);
 
 		// combine with offset rotation to get back to regular inertial frame
 		//Inert -> aligned + aligned -> body = inert -> body (What the user wants)
 		Rotation inertToBody = alignedToBody.applyTo(mAlignedToInert.revert());//alignedToBody.applyTo(mAlignedToInert.revert());
 
 		Rotation bodyToOriginalFrame = convertAxes.applyInverseTo(inertToBody);//(inertToBody.applyInverseTo(convertAxes)).revert();
-
 
 		//Computation of the quaternion
 
@@ -598,15 +577,13 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
 
 		double[] angles = bodyToOriginalFrame.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
-
-
 		double[] anglesDEUX = bodyToOriginalFrameDEUX.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
-
 
 		double[][] data = {{omega.getX(), omega.getY(), omega.getZ()}, {angles[0], angles[1], angles[2]}, {bodyToOriginalFrame.getQ0(), bodyToOriginalFrame.getQ1(), bodyToOriginalFrame.getQ2(), bodyToOriginalFrame.getQ3()}, {axes[0].getX(), axes[0].getY(), axes[0].getZ()}, {axes[1].getX(), axes[1].getY(), axes[1].getZ()},{i1, i2, i3}};
 		double[][] dataDEUX = {{omegaDEUX.getX(), omegaDEUX.getY(), omegaDEUX.getZ()}, {anglesDEUX[0], anglesDEUX[1], anglesDEUX[2]}, {bodyToOriginalFrameDEUX.getQ0(), bodyToOriginalFrameDEUX.getQ1(), bodyToOriginalFrameDEUX.getQ2(), bodyToOriginalFrameDEUX.getQ3()}, {axesDEUX[0].getX(), axesDEUX[0].getY(), axesDEUX[0].getZ()}, {axesDEUX[1].getX(), axesDEUX[1].getY(), axesDEUX[1].getZ()},{i1DEUX, i2DEUX, i3DEUX}};
 		double[][][] allData = {data, dataDEUX};
 		return allData;
+
 	}
 
 	public double[] doComputeDerivatives(double t, double[] y) {

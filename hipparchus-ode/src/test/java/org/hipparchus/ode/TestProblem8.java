@@ -213,8 +213,6 @@ public class TestProblem8 extends TestProblemAbstract {
 		mAlignedToInert = r0ConvertedAxis.applyInverseTo(mAlignedToBody);
 		//mAlignedToInert = r0.applyInverseTo(mAlignedToBody);		
 
-
-
 		i32  = i3C - i2C;
 		i31  = i3C - i1C;
 		i21  = i2C - i1C;
@@ -224,18 +222,18 @@ public class TestProblem8 extends TestProblemAbstract {
 		o2Scale = FastMath.sqrt((twoE * i3C - m2) / (i2C * i32));
 		o3Scale = FastMath.sqrt((m2 - twoE * i1C) / (i3C * i31));
 
-		if( y0C[0] == 0 && y0C[1] == 0 && y0C[2] == 0) {
+		if (y0C[0] == 0 && y0C[1] == 0 && y0C[2] == 0) {
 			k2 = 0.0;
 		} else {
-			k2     = i21 * (twoE * i3C - m2) / (i32 * (m2 - twoE * i1C));
+			k2 = i21 * (twoE * i3C - m2) / (i32 * (m2 - twoE * i1C));
 		}
 
 		jacobi = JacobiEllipticBuilder.build(k2);
 
-		if (y0C[1] == 0){
+		if (y0C[1] == 0) {
 			tRef = t0;
 		} else {
-			tRef   = t0 - jacobi.arcsn(y0C[1] / o2Scale) / tScale;
+			tRef = t0 - jacobi.arcsn(y0C[1] / o2Scale) / tScale;
 		}
 
         period             = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
@@ -247,9 +245,9 @@ public class TestProblem8 extends TestProblemAbstract {
 
     private DenseOutputModel computePhiQuadratureModel(final double t0) {
 
-        final double i32  = i3C - i2C;
-        final double i31  = i3C - i1C;
-        final double i21  = i2C - i1C;
+        final double i32 = i3C - i2C;
+        final double i31 = i3C - i1C;
+        final double i21 = i2C - i1C;
 
         // coefficients for φ model
         final double b = phiSlope * i32 * i31;
@@ -258,7 +256,7 @@ public class TestProblem8 extends TestProblemAbstract {
 
         //Integrate the quadrature phi term on one period
         final DormandPrince853Integrator integ = new DormandPrince853Integrator(1.0e-6 * period, 1.0e-2 * period,
-                phiSlope * period * 1.0e-13, 1.0e-13);
+                                                                                phiSlope * period * 1.0e-13, 1.0e-13);
         final DenseOutputModel model = new DenseOutputModel();
         integ.addStepHandler(model);
 
@@ -269,13 +267,16 @@ public class TestProblem8 extends TestProblemAbstract {
             public int getDimension() {
                 return 1;
             }
-            @Override
+
+            /** {@inheritDoc} */
+           @Override
             public double[] computeDerivatives(final double t, final double[] y) {
                 final double sn = jacobi.valuesN((t - tRef) * tScale).sn();
                 return new double[] {
                         b / (c + d * sn * sn)
                 };
             }
+
         }, new ODEState(t0, new double[1]), t0 + period);
 
         return model;
@@ -284,31 +285,16 @@ public class TestProblem8 extends TestProblemAbstract {
 
 	public double[][] computeTorqueFreeMotion(double t) {
 
-		//Computation of omega
+		// Computation of omega
 		final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
+		final Vector3D omega   = new Vector3D(o1Scale * valuesN.cn(), o2Scale * valuesN.sn(), o3Scale * valuesN.dn());
 
-		final Vector3D omega = new Vector3D(
-				o1Scale * valuesN.cn(),
-				o2Scale * valuesN.sn(),
-				o3Scale * valuesN.dn());
+		// Computation of the Euler angles
+		final double   psi       = FastMath.atan2(i1C * omega.getX(), i2C * omega.getY());
+		final double   theta     = FastMath.acos(omega.getZ() / phiSlope);
+		final double   phiLinear = phiSlope * t;
 
-		//Computation of the euler angles
-		//Compute rotation rate
-		final double   o1            = omega.getX();//o1Scale * valuesN.cn();
-		final double   o2            = omega.getY();//o2Scale * valuesN.sn();
-		final double   o3            = omega.getZ();//o3Scale * valuesN.dn();
-
-		//		double thetaroot = FastMath.sqrt((i3*(m2-twoE*i1)) / (m2*i31));
-		//		double psiroot = FastMath.sqrt((i1*i32) / (i2*i31));
-		//		psiroot * (valuesN.cn()/valuesN.sn());
-		//		thetaroot * valuesN.dn();
-
-		//Compute angles
-		final double   psi           = FastMath.atan2(i1C * o1, i2C * o2);
-		final double   theta         = FastMath.acos(o3 / phiSlope);
-		final double   phiLinear     = phiSlope * t;
-
-		//Integration for the computation of phi
+		// Integration for the computation of phi
 		final double t0 = getInitialTime();
 		final int nbPeriods = (int) FastMath.floor((t - t0) / period);//floor = entier inférieur = nb période entière
 		final double tStartInteg = t0 + nbPeriods * period;//partie de période à la fin entre tau Integ et tau end
@@ -317,45 +303,28 @@ public class TestProblem8 extends TestProblemAbstract {
 
 		final double phi = phiLinear + phiQuadrature;
 
-
-		//Computation of the quaternion
+		// Computation of the quaternion
 
 		// Rotation between computation frame (aligned with momentum) and body
 		//(It is simply the angles equations provided by L&L)
 		final Rotation alignedToBody = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
-				phi, theta, psi);
+				                                    phi, theta, psi);
 
 		// combine with offset rotation to get back to regular inertial frame
-		//Inert -> aligned + aligned -> body = inert -> body (What the user wants)
-		Rotation inertToBody = alignedToBody.applyTo(mAlignedToInert.revert());//alignedToBody.applyTo(mAlignedToInert.revert());
+		// Inert -> aligned + aligned -> body = inert -> body (What the user wants)
+		Rotation inertToBody = alignedToBody.applyTo(mAlignedToInert.revert());
 
-		Rotation bodyToOriginalFrame = convertAxes.applyInverseTo(inertToBody);//(inertToBody.applyInverseTo(convertAxes)).revert();
+		Rotation bodyToOriginalFrame = convertAxes.applyInverseTo(inertToBody);
 
 		double[] angles = bodyToOriginalFrame.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
 		double[][] data = {{omega.getX(), omega.getY(), omega.getZ()}, {angles[0], angles[1], angles[2]}, {bodyToOriginalFrame.getQ0(), bodyToOriginalFrame.getQ1(), bodyToOriginalFrame.getQ2(), bodyToOriginalFrame.getQ3()}, {axes[0].getX(), axes[0].getY(), axes[0].getZ()}, {axes[1].getX(), axes[1].getY(), axes[1].getZ()},{i1C, i2C, i3C}};
 		return data;
+
 	}
 
 	public double[] doComputeDerivatives(double t, double[] y) {
 
 		final  double[] yDot = new double[getDimension()];
-
-		//		System.out.println("Numerique omega : "+y[0]+" "+y[1]+" "+y[2]);
-		//		final double[][] tfm = computeTorqueFreeMotion(i1, i2, i3, t0, y0, t);
-		//		final double[] omega = tfm[0];
-		//		final double[] I = tfm[5];
-		//		final double[] q = tfm[2];
-		//
-		//		// compute the derivatives using Euler equations
-		//		yDot[0] = omega[1] * omega[2] * (I[1] - I[2]) / I[0];
-		//		yDot[1] = omega[2] * omega[0] * (I[2] - I[0]) / I[1];
-		//		yDot[2] = omega[0] * omega[1] * (I[0] - I[1]) / I[2];
-		//
-		//		// compute the derivatives using Qpoint = 0.5 * Omega_inertialframe * Q
-		//		yDot[3] = 0.5 * (-omega[0] * q[1] -omega[1] * q[2] -omega[2] * q[3]);
-		//		yDot[4] = 0.5 * (omega[0] * q[0] +omega[2] * q[2] -omega[1] * q[3]);
-		//		yDot[5] = 0.5 * (omega[1] * q[0] -omega[2] * q[1] +omega[0] * q[3]);
-		//		yDot[6] = 0.5 * (omega[2] * q[0] +omega[1] * q[1] -omega[0] * q[2]);
 
 		// compute the derivatives using Euler equations
 		yDot[0] = y[1] * y[2] * (i2 - i3) / i1;
@@ -367,6 +336,7 @@ public class TestProblem8 extends TestProblemAbstract {
 		yDot[4] = 0.5 * (y[0] * y[3] +y[2] * y[5] -y[1] * y[6]);
 		yDot[5] = 0.5 * (y[1] * y[3] -y[2] * y[4] +y[0] * y[6]);
 		yDot[6] = 0.5 * (y[2] * y[3] +y[1] * y[4] -y[0] * y[5]);
+
 		return yDot;
 
 	}
