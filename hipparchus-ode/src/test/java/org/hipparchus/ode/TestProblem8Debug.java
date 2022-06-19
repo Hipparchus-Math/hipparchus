@@ -374,7 +374,15 @@ public class TestProblem8Debug extends TestProblemAbstract {
 		System.out.println("axes après : "+axesP[0]+" "+ axesP[1]+" "+ axesP[2]);
 		System.out.println("inerties après : "+i[0]+" "+ i[1]+" "+ i[2]);
 
-		return new double[][] { y0C, i, {axesP[0].getX(), axesP[0].getY(), axesP[0].getZ()}, {axesP[1].getX(), axesP[1].getY(), axesP[1].getZ()} };
+        final Rotation r0DEUX              = new Rotation(y0C[3], y0C[4], y0C[5], y0C[6], true);
+        final Rotation convertAxesDEUX     = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axesP[0], axesP[1] );
+        final Rotation r0ConvertedAxisDEUX = convertAxesDEUX.applyTo(r0DEUX);
+        y0C[3] = r0ConvertedAxisDEUX.getQ0();
+        y0C[4] = r0ConvertedAxisDEUX.getQ1();
+        y0C[5] = r0ConvertedAxisDEUX.getQ2();
+        y0C[6] = r0ConvertedAxisDEUX.getQ3();
+
+        return new double[][] { y0C, i, {axesP[0].getX(), axesP[0].getY(), axesP[0].getZ()}, {axesP[1].getX(), axesP[1].getY(), axesP[1].getZ()} };
 	}
 
 	public double[][] sortInertiaAxisDEUX() {
@@ -476,6 +484,10 @@ public class TestProblem8Debug extends TestProblemAbstract {
 		final Rotation convertAxesDEUX = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axesP[0], axesP[1] );
 
 		final Rotation r0ConvertedAxisDEUX = convertAxesDEUX.applyTo(r0DEUX);
+        y0C[10] = r0ConvertedAxisDEUX.getQ0();
+        y0C[11] = r0ConvertedAxisDEUX.getQ1();
+        y0C[12] = r0ConvertedAxisDEUX.getQ2();
+        y0C[13] = r0ConvertedAxisDEUX.getQ3();
 		
 		return new double[][] { y0C, i, {axesP[0].getX(), axesP[0].getY(), axesP[0].getZ()}, {axesP[1].getX(), axesP[1].getY(), axesP[1].getZ()}, {r0ConvertedAxisDEUX.getQ0(), r0ConvertedAxisDEUX.getQ1(), r0ConvertedAxisDEUX.getQ2(), r0ConvertedAxisDEUX.getQ3()}
 		, {convertAxesDEUX.getQ0(), convertAxesDEUX.getQ1(), convertAxesDEUX.getQ2(), convertAxesDEUX.getQ3()}};
