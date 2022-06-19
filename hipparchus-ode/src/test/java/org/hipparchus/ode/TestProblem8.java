@@ -241,11 +241,8 @@ public class TestProblem8 extends TestProblemAbstract {
 
 		jacobi = JacobiEllipticBuilder.build(k2);
 
-		if( y0C[0] == 0 && y0C[1] == 0 && y0C[2] == 0) {
+		if (y0C[1] == 0){
 			tRef = t0;
-		}
-		else if (y0C[1] == 0){
-			tRef = t0 - jacobi.arcsn(0) / tScale;
 			System.out.println("Tref0 : "+tRef);
 		} else {
 			tRef   = t0 - jacobi.arcsn(y0C[1] / o2Scale) / tScale;

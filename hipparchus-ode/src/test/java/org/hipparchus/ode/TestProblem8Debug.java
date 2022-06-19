@@ -212,11 +212,8 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
 		jacobi = JacobiEllipticBuilder.build(k2);
 
-		if( y0C[0] == 0 && y0C[1] == 0 && y0C[2] == 0) {
+		if (y0C[1] == 0){
 			tRef = t0;
-		}
-		else if (y0C[1] == 0){
-			tRef = t0 - jacobi.arcsn(0) / tScale;
 			System.out.println("Tref0 : "+tRef);
 		} else {
 			tRef   = t0 - jacobi.arcsn(y0C[1] / o2Scale) / tScale;
@@ -279,11 +276,8 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
 		jacobiDEUX = JacobiEllipticBuilder.build(k2DEUX);
 
-		if( y0CDEUX[7] == 0 && y0CDEUX[8] == 0 && y0CDEUX[9] == 0) {
+		if (y0CDEUX[8] == 0){
 			tRefDEUX = t0;
-		}
-		else if (y0CDEUX[8] == 0){
-			tRefDEUX = t0 - jacobiDEUX.arcsn(0) / tScaleDEUX;
 		} else {
 			tRefDEUX   = t0 - jacobiDEUX.arcsn(y0CDEUX[8] / o2ScaleDEUX) / tScaleDEUX;
 		}
