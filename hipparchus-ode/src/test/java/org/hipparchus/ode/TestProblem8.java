@@ -233,7 +233,7 @@ public class TestProblem8 extends TestProblemAbstract {
 		o2Scale = FastMath.sqrt((twoE * i3C - m2) / (i2C * i32));
 		o3Scale = FastMath.sqrt((m2 - twoE * i1C) / (i3C * i31));
 
-		if( y0[0] == 0 && y0[1] == 0 && y0[2] == 0) {
+		if( y0C[0] == 0 && y0C[1] == 0 && y0C[2] == 0) {
 			k2 = 0.0;
 		} else {
 			k2     = i21 * (twoE * i3C - m2) / (i32 * (m2 - twoE * i1C));
@@ -241,17 +241,17 @@ public class TestProblem8 extends TestProblemAbstract {
 
 		jacobi = JacobiEllipticBuilder.build(k2);
 
-		if( y0[0] == 0 && y0[1] == 0 && y0[2] == 0) {
+		if( y0C[0] == 0 && y0C[1] == 0 && y0C[2] == 0) {
 			tRef = t0;
 		}
-		else if (y0[1] == 0){
+		else if (y0C[1] == 0){
 			tRef = t0 - jacobi.arcsn(0) / tScale;
 			System.out.println("Tref0 : "+tRef);
 		} else {
-			tRef   = t0 - jacobi.arcsn(y0[1] / o2Scale) / tScale;
+			tRef   = t0 - jacobi.arcsn(y0C[1] / o2Scale) / tScale;
 			System.out.println("Tref : "+tRef);
 		}
-		System.out.println((y0[1] / o2Scale));
+		System.out.println((y0C[1] / o2Scale));
 
 
 	}
