@@ -262,7 +262,7 @@ public class TestProblem8 extends TestProblemAbstract {
 		System.out.println((y0C[1] / o2Scale));
 
         period             = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
-        phiSlope           = FastMath.sqrt(m2) / i3;
+        phiSlope           = FastMath.sqrt(m2) / i3C;
         phiQuadratureModel = computePhiQuadratureModel(t0);
         integOnePeriod     = phiQuadratureModel.getInterpolatedState(phiQuadratureModel.getFinalTime()).getPrimaryState()[0];
 
@@ -270,14 +270,14 @@ public class TestProblem8 extends TestProblemAbstract {
 
     private DenseOutputModel computePhiQuadratureModel(final double t0) {
 
-        final double i32  = i3 - i2;
-        final double i31  = i3 - i1;
-        final double i21  = i2 - i1;
+        final double i32  = i3C - i2C;
+        final double i31  = i3C - i1C;
+        final double i21  = i2C - i1C;
 
         // coefficients for φ model
         final double b = phiSlope * i32 * i31;
-        final double c = i1 * i32;
-        final double d = i3 * i21;
+        final double c = i1C * i32;
+        final double d = i3C * i21;
 
         //Integrate the quadrature phi term on one period
         final DormandPrince853Integrator integ = new DormandPrince853Integrator(1.0e-6 * period, 1.0e-2 * period,
