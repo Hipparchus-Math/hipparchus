@@ -470,8 +470,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 	}
 
 	@Test
-	/** Compare that the analytical model and the numerical model that compute the  the quaternion in a torquefree configuration give same results.
-	 * This test is used to validate the results of the analitycal model as defined by Landau & Lifchitz.
+	/** Compare that the analytical model and the numerical model that compute the  the quaternion in a torque-free configuration give same results.
+	 * This test is used to validate the results of the analytical model as defined by Landau & Lifchitz.
 	 */
 	public abstract void testTorqueFreeMotion();
 
@@ -706,8 +706,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
 
 	@Test
-	/** Compare that the analytical model and the numerical model that compute the  the quaternion in a torquefree configuration give same results.
-	 * This test is used to validate the results of the analitycal model as defined by Landau & Lifchitz.
+	/** Compare that the analytical model and the numerical model that compute the  the quaternion in a torque-free configuration give same results.
+	 * This test is used to validate the results of the analytical model as defined by Landau & Lifchitz.
 	 */
 	public abstract void testTorqueFreeMotionDebug();
 
