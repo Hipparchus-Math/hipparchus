@@ -475,7 +475,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 	 */
 	public abstract void testTorqueFreeMotion();
 
-	protected void doTestTorqueFreeMotion(double epsilon) {
+	protected void doTestTorqueFreeMotion(double epsilonOmega, double epsilonQ) {
 
 		final TestProblem8 pb  = new TestProblem8();
 		double minStep = 1.0e-10;
@@ -484,14 +484,16 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 		double[] vecRelativeTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
 
 		EmbeddedRungeKuttaIntegrator integ = createIntegrator(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);   
-		integ.addStepHandler(new TorqueFreeHandler(pb, epsilon));
+		integ.addStepHandler(new TorqueFreeHandler(pb, epsilonOmega, epsilonQ));
 		integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
 	}
 
 	private static class TorqueFreeHandler implements ODEStepHandler {
-		private double maxError;
-		private final TestProblem8 pb;
-		private final double epsilon;
+	    private double maxErrorOmega;
+	    private double maxErrorQ;
+        private final TestProblem8 pb;
+		private final double epsilonOmega;
+		private final double epsilonQ;
 		private int width;
 		private int height;
 		private String title;
@@ -514,11 +516,13 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 		private double lastThetaT;
 
 		private double d;
-		public TorqueFreeHandler(TestProblem8 pb, double epsilon) {
+		public TorqueFreeHandler(TestProblem8 pb, double epsilonOmega, double epsilonQ) {
 			this.pb      = pb;
-			this.epsilon = epsilon;
-			maxError     = 0;
-			width = 1000;
+			this.epsilonOmega = epsilonOmega;
+			this.epsilonQ     = epsilonQ;
+			maxErrorOmega     = 0;
+			maxErrorQ         = 0;
+            width = 1000;
 			height = 1000;
 			title = "title";
 			outputStep = 0.01;
@@ -526,7 +530,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
 		public void init(ODEStateAndDerivative state0, double t) {
 
-			maxError = 0;     	
+			maxErrorOmega = 0;
+			maxErrorQ     = 0;
 			final ProcessBuilder pbg = new ProcessBuilder("gnuplot").
 					redirectOutput(ProcessBuilder.Redirect.INHERIT).
 					redirectError(ProcessBuilder.Redirect.INHERIT);
@@ -562,19 +567,24 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 					interpolator.getCurrentState().getTime() > current) {
 				ODEStateAndDerivative state = interpolator.getInterpolatedState(current);
 				double[] theoreticalY  = pb.computeTheoreticalState(state.getTime());
-				double dp1   = state.getPrimaryState()[0] - theoreticalY[0];
-				double dp2   = state.getPrimaryState()[1] - theoreticalY[1];
-				double dp3   = state.getPrimaryState()[2] - theoreticalY[2];
-				double dp4   = state.getPrimaryState()[3] - theoreticalY[3];
-				double dp5   = state.getPrimaryState()[4] - theoreticalY[4];
-				double dp6   = state.getPrimaryState()[5] - theoreticalY[5];
-				double dp7   = state.getPrimaryState()[6] - theoreticalY[6];
-				double error = dp1 * dp1 + dp2 * dp2 + dp3 * dp3 + dp4 * dp4 + dp5 * dp5 + dp6 * dp6 + dp7 * dp7;
-
-				if (error > maxError) {
-					maxError = error;
-
-				}
+				maxErrorOmega = FastMath.max(maxErrorOmega,
+				                             Vector3D.distance(new Vector3D(state.getPrimaryState()[0],
+				                                                            state.getPrimaryState()[1],
+				                                                            state.getPrimaryState()[2]),
+				                                               new Vector3D(theoreticalY[0],
+				                                                            theoreticalY[1],
+				                                                            theoreticalY[2])));
+				maxErrorQ = FastMath.max(maxErrorQ,
+				                         Rotation.distance(new Rotation(state.getPrimaryState()[3],
+				                                                        state.getPrimaryState()[4],
+				                                                        state.getPrimaryState()[5],
+				                                                        state.getPrimaryState()[6],
+				                                                        true),
+				                                           new Rotation(theoreticalY[3],
+				                                                        theoreticalY[4],
+				                                                        theoreticalY[5],
+				                                                        theoreticalY[6],
+				                                                        true)));
 
 				double d = Rotation.distance(new Rotation(state.getPrimaryState()[3], state.getPrimaryState()[4], state.getPrimaryState()[5], state.getPrimaryState()[6], true),
 						new Rotation(theoreticalY[3], theoreticalY[4], theoreticalY[5], theoreticalY[6], true));
@@ -689,7 +699,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
 			out.format(Locale.US, "pause mouse close%n");
 			out.close();
-			Assert.assertEquals(0.0, maxError, epsilon);
+			Assert.assertEquals(0.0, maxErrorOmega, epsilonOmega);
+			Assert.assertEquals(0.0,  maxErrorQ, epsilonQ);
 		}
 	}
 
@@ -700,7 +711,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 	 */
 	public abstract void testTorqueFreeMotionDebug();
 
-	protected void doTestTorqueFreeMotionDebug(double epsilon) {
+	protected void doTestTorqueFreeMotionDebug(double epsilonOmega, double epsilonQ) {
 
 		final TestProblem8Debug pb  = new TestProblem8Debug();
 		double minStep = 1.0e-10;
@@ -709,14 +720,16 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 		double[] vecRelativeTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
 
 		EmbeddedRungeKuttaIntegrator integ = createIntegrator(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);   
-		integ.addStepHandler(new TorqueFreeHandlerDebug(pb, epsilon));
+		integ.addStepHandler(new TorqueFreeHandlerDebug(pb, epsilonOmega, epsilonQ));
 		integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
 	}
 
 	private static class TorqueFreeHandlerDebug implements ODEStepHandler {
-		private double maxError;
+		private double maxErrorOmega;
+		private double maxErrorQ;
 		private final TestProblem8Debug pb;
-		private final double epsilon;
+		private final double epsilonOmega;
+		private final double epsilonQ;
 		private int width;
 		private int height;
 		private String title;
@@ -760,10 +773,12 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 		private double dDEUX;
 
 
-		public TorqueFreeHandlerDebug(TestProblem8Debug pb, double epsilon) {
+		public TorqueFreeHandlerDebug(TestProblem8Debug pb, double epsilonOmega, double epsilonQ) {
 			this.pb      = pb;
-			this.epsilon = epsilon;
-			maxError     = 0;
+			this.epsilonOmega = epsilonOmega;
+			this.epsilonQ     = epsilonQ;
+			maxErrorOmega = 0;
+			maxErrorQ     = 0;
 			width = 1000;
 			height = 1000;
 			title = "title";
@@ -772,7 +787,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
 		public void init(ODEStateAndDerivative state0, double t) {
 
-			maxError = 0;     	
+            maxErrorOmega = 0;
+            maxErrorQ     = 0;
 			final ProcessBuilder pbg = new ProcessBuilder("gnuplot").
 					redirectOutput(ProcessBuilder.Redirect.INHERIT).
 					redirectError(ProcessBuilder.Redirect.INHERIT);
@@ -815,19 +831,24 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 					interpolator.getCurrentState().getTime() > current) {
 				ODEStateAndDerivative state = interpolator.getInterpolatedState(current);
 				double[] theoreticalY  = pb.computeTheoreticalState(state.getTime());
-				double dp1   = state.getPrimaryState()[0] - theoreticalY[0];
-				double dp2   = state.getPrimaryState()[1] - theoreticalY[1];
-				double dp3   = state.getPrimaryState()[2] - theoreticalY[2];
-				double dp4   = state.getPrimaryState()[3] - theoreticalY[3];
-				double dp5   = state.getPrimaryState()[4] - theoreticalY[4];
-				double dp6   = state.getPrimaryState()[5] - theoreticalY[5];
-				double dp7   = state.getPrimaryState()[6] - theoreticalY[6];
-				double error = dp1 * dp1 + dp2 * dp2 + dp3 * dp3 + dp4 * dp4 + dp5 * dp5 + dp6 * dp6 + dp7 * dp7;
-
-				if (error > maxError) {
-					maxError = error;
-
-				}
+                maxErrorOmega = FastMath.max(maxErrorOmega,
+                                             Vector3D.distance(new Vector3D(state.getPrimaryState()[0],
+                                                                            state.getPrimaryState()[1],
+                                                                            state.getPrimaryState()[2]),
+                                                               new Vector3D(theoreticalY[0],
+                                                                            theoreticalY[1],
+                                                                            theoreticalY[2])));
+                maxErrorQ = FastMath.max(maxErrorQ,
+                                         Rotation.distance(new Rotation(state.getPrimaryState()[3],
+                                                                        state.getPrimaryState()[4],
+                                                                        state.getPrimaryState()[5],
+                                                                        state.getPrimaryState()[6],
+                                                                        true),
+                                                           new Rotation(theoreticalY[3],
+                                                                        theoreticalY[4],
+                                                                        theoreticalY[5],
+                                                                        theoreticalY[6],
+                                                                        true)));
 
 				double d = Rotation.distance(new Rotation(state.getPrimaryState()[3], state.getPrimaryState()[4], state.getPrimaryState()[5], state.getPrimaryState()[6], true),
 						new Rotation(theoreticalY[3], theoreticalY[4], theoreticalY[5], theoreticalY[6], true));
@@ -994,7 +1015,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
 			out.format(Locale.US, "pause mouse close%n");
 			out.close();
-			Assert.assertEquals(0.0, maxError, epsilon);
+			Assert.assertEquals(0.0, maxErrorOmega, epsilonOmega);
+			Assert.assertEquals(0.0, maxErrorQ,     epsilonQ);
 		}
 	}
 
