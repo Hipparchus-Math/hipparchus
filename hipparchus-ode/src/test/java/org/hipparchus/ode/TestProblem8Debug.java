@@ -414,9 +414,9 @@ public class TestProblem8Debug extends TestProblemAbstract {
 		double[] y0C = y0.clone();
 
 		System.out.println("omega avant : "+y0C[7]+" "+ y0C[8]+" "+ y0C[9]);
-		System.out.println("Initial : iA1 = "+i1+" "+axesP[0]);
-		System.out.println("iA2 = "+i2 + " "+axesP[1]);
-		System.out.println("iA3 = "+i3 + " "+axesP[2]);
+		System.out.println("Initial : iA1 = "+i1DEUX+" "+axesP[0]);
+		System.out.println("iA2 = "+i2DEUX + " "+axesP[1]);
+		System.out.println("iA3 = "+i3DEUX + " "+axesP[2]);
 		if (i[0] > i[1]) {
 			Vector3D z = axesP[0];
 			axesP[0] = axesP[1];
