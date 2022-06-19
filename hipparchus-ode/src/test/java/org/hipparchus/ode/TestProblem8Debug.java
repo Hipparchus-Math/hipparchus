@@ -74,7 +74,13 @@ public class TestProblem8Debug extends TestProblemAbstract {
 	/** Rotation to switch to the converted axes frame. */
 	final Rotation convertAxes;
 
-	//2ème état
+    /**DenseOutputModel of phi. */
+	final double period;
+	final double phiSlope;
+    final DenseOutputModel phiQuadratureModel;
+    final double integOnePeriod;
+
+    //2ème état
 	
 	/** Moments of inertia. */
 	final double i1DEUX;
@@ -129,7 +135,11 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
 	final Rotation convertAxesDEUX;
 
-
+    /**DenseOutputModel of phi. */
+	final double periodDEUX;
+	final double phiSlopeDEUX;
+    final DenseOutputModel phiQuadratureModelDEUX;
+    final double integOnePeriodDEUX;
 
 	/**
 	 * Simple constructor.
@@ -218,6 +228,10 @@ public class TestProblem8Debug extends TestProblemAbstract {
 		}
 		System.out.println((y0C[1] / o2Scale));
 
+        period             = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
+        phiSlope           = FastMath.sqrt(m2) / i3;
+		phiQuadratureModel = computePhiQuadratureModel(i1C, i2C, i3C, k2, m2, jacobi, period, phiSlope, t0, tRef, tScale);
+        integOnePeriod     = phiQuadratureModel.getInterpolatedState(phiQuadratureModel.getFinalTime()).getPrimaryState()[0];
 
 		//2ème état
 
@@ -278,6 +292,13 @@ public class TestProblem8Debug extends TestProblemAbstract {
 		} else {
 			tRefDEUX   = t0 - jacobiDEUX.arcsn(y0CDEUX[8] / o2ScaleDEUX) / tScaleDEUX;
 		}
+
+        periodDEUX             = 4 * LegendreEllipticIntegral.bigK(k2DEUX) / tScaleDEUX;
+        phiSlopeDEUX           = FastMath.sqrt(m2DEUX) / i3DEUX;
+        phiQuadratureModelDEUX = computePhiQuadratureModel(i1CDEUX, i2CDEUX, i3CDEUX,
+                                                           k2DEUX, m2DEUX, jacobiDEUX, periodDEUX, phiSlopeDEUX,
+                                                           t0, tRefDEUX, tScaleDEUX);
+        integOnePeriodDEUX     = phiQuadratureModelDEUX.getInterpolatedState(phiQuadratureModelDEUX.getFinalTime()).getPrimaryState()[0];
 
 	}//Fin du constructeur
 
@@ -493,101 +514,47 @@ public class TestProblem8Debug extends TestProblemAbstract {
 		, {convertAxesDEUX.getQ0(), convertAxesDEUX.getQ1(), convertAxesDEUX.getQ2(), convertAxesDEUX.getQ3()}};
 	}
 
+    private static DenseOutputModel computePhiQuadratureModel(final double i1, final double i2, final double i3,
+                                                              final double k2, final double m2, final JacobiElliptic jacobi,
+                                                              final double period, final double phiSlope,
+                                                              final double t0, final double tRef, final double tScale) {
+
+        final double i32  = i3 - i2;
+        final double i31  = i3 - i1;
+        final double i21  = i2 - i1;
+
+        // coefficients for φ model
+        final double b = phiSlope * i32 * i31;
+        final double c = i1 * i32;
+        final double d = i3 * i21;
+
+        //Integrate the quadrature phi term on one period
+        final DormandPrince853Integrator integ = new DormandPrince853Integrator(1.0e-6 * period, 1.0e-2 * period,
+                phiSlope * period * 1.0e-13, 1.0e-13);
+        final DenseOutputModel model = new DenseOutputModel();
+        integ.addStepHandler(model);
+
+        integ.integrate(new OrdinaryDifferentialEquation() {
+
+            /** {@inheritDoc} */
+            @Override
+            public int getDimension() {
+                return 1;
+            }
+            @Override
+            public double[] computeDerivatives(final double t, final double[] y) {
+                final double sn = jacobi.valuesN((t - tRef) * tScale).sn();
+                return new double[] {
+                        b / (c + d * sn * sn)
+                };
+            }
+        }, new ODEState(t0, new double[1]), t0 + period);
+
+        return model;
+
+    }
+
 	public double[][][] computeTorqueFreeMotion(double i1, double i2, double i3, double t0, double[] y0, double t, double i1DEUX, double i2DEUX, double i3DEUX) {
-
-		/** Coefficients for φ model. */
-		final double phiSlope;
-		final double b;
-		final double c;
-		final double d;
-
-		/**Period with respect to time. */
-		final double period;
-
-		/**DenseOutputModel of phi. */
-		final DenseOutputModel phiQuadratureModel;
-		final double integOnePeriod;
-
-
-		/** Coefficients for φ model. */
-		final double phiSlopeDEUX;
-		final double bDEUX;
-		final double cDEUX;
-		final double dDEUX;
-
-		/**Period with respect to time. */
-		final double periodDEUX;
-
-		/**DenseOutputModel of phi. */
-		final DenseOutputModel phiQuadratureModelDEUX;
-		final double integOnePeriodDEUX;
-
-
-		// coefficients for φ model
-		period = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
-		phiSlope = FastMath.sqrt(m2) / i3;// =a, pente de la partie linéaire
-		b = phiSlope * i32 * i31;
-		c = i1 * i32;
-		d = i3 * i21;
-
-
-		// coefficients for φ model
-		periodDEUX = 4 * LegendreEllipticIntegral.bigK(k2DEUX) / tScaleDEUX;
-		phiSlopeDEUX = FastMath.sqrt(m2DEUX) / i3DEUX;// =a, pente de la partie linéaire
-		bDEUX = phiSlopeDEUX * i32DEUX * i31DEUX;
-		cDEUX = i1DEUX * i32DEUX;
-		dDEUX = i3DEUX * i21DEUX;
-
-
-		//Integrate the quadrature phi term on one period
-		final DormandPrince853Integrator integ = new DormandPrince853Integrator(1.0e-6 * period, 1.0e-2 * period,
-				phiSlope * period * 1.0e-13, 1.0e-13);
-		phiQuadratureModel = new DenseOutputModel();
-		integ.addStepHandler(phiQuadratureModel);
-
-		integ.integrate(new OrdinaryDifferentialEquation() {
-
-			/** {@inheritDoc} */
-			@Override
-			public int getDimension() {
-				return 1;
-			}
-			@Override
-			public double[] computeDerivatives(final double t, final double[] y) {
-				final double sn = jacobi.valuesN((t - tRef) * tScale).sn();
-				return new double[] {
-						b / (c + d * sn * sn)
-				};
-			}
-		},new ODEState(t0, new double[1]), t0 + period);
-
-		integOnePeriod = phiQuadratureModel.getInterpolatedState(phiQuadratureModel.getFinalTime()).getPrimaryState()[0];
-
-
-		//Integrate the quadrature phi term on one period
-		final DormandPrince853Integrator integDEUX = new DormandPrince853Integrator(1.0e-6 * periodDEUX, 1.0e-2 * periodDEUX,
-				phiSlopeDEUX * periodDEUX * 1.0e-13, 1.0e-13);
-		phiQuadratureModelDEUX = new DenseOutputModel();
-		integDEUX.addStepHandler(phiQuadratureModelDEUX);
-
-		integDEUX.integrate(new OrdinaryDifferentialEquation() {
-
-			/** {@inheritDoc} */
-			@Override
-			public int getDimension() {
-				return 1;
-			}
-			@Override
-			public double[] computeDerivatives(final double t, final double[] y) {//Not the same y as the state
-				final double snDEUX = jacobiDEUX.valuesN((t - tRefDEUX) * tScaleDEUX).sn();
-				return new double[] {
-						bDEUX / (cDEUX + dDEUX * snDEUX * snDEUX)
-				};
-			}
-		},new ODEState(t0, new double[1]), t0 + periodDEUX);
-
-		integOnePeriodDEUX = phiQuadratureModelDEUX.getInterpolatedState(phiQuadratureModelDEUX.getFinalTime()).getPrimaryState()[0];
-
 
 		//Computation of omega
 		final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);

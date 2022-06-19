@@ -74,7 +74,19 @@ public class TestProblem8 extends TestProblemAbstract {
 	/** Rotation to switch to the converted axes frame. */
 	final Rotation convertAxes;
 
-	/**
+	/** Period of rotation rate. */
+    final double period;
+
+    /** Slope of the linear part of the phi model. */
+    final double phiSlope;
+
+    /** DenseOutputModel of phi. */
+    final DenseOutputModel phiQuadratureModel;
+
+    /** Integral part of quadrature model over one period. */
+    final double integOnePeriod;
+
+    /**
 	 * Simple constructor.
 	 */
 	public TestProblem8() {
@@ -249,84 +261,51 @@ public class TestProblem8 extends TestProblemAbstract {
 		}
 		System.out.println((y0C[1] / o2Scale));
 
+        period             = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
+        phiSlope           = FastMath.sqrt(m2) / i3;
+        phiQuadratureModel = computePhiQuadratureModel(t0);
+        integOnePeriod     = phiQuadratureModel.getInterpolatedState(phiQuadratureModel.getFinalTime()).getPrimaryState()[0];
 
 	}
 
+    private DenseOutputModel computePhiQuadratureModel(final double t0) {
+
+        final double i32  = i3 - i2;
+        final double i31  = i3 - i1;
+        final double i21  = i2 - i1;
+
+        // coefficients for φ model
+        final double b = phiSlope * i32 * i31;
+        final double c = i1 * i32;
+        final double d = i3 * i21;
+
+        //Integrate the quadrature phi term on one period
+        final DormandPrince853Integrator integ = new DormandPrince853Integrator(1.0e-6 * period, 1.0e-2 * period,
+                phiSlope * period * 1.0e-13, 1.0e-13);
+        final DenseOutputModel model = new DenseOutputModel();
+        integ.addStepHandler(model);
+
+        integ.integrate(new OrdinaryDifferentialEquation() {
+
+            /** {@inheritDoc} */
+            @Override
+            public int getDimension() {
+                return 1;
+            }
+            @Override
+            public double[] computeDerivatives(final double t, final double[] y) {
+                final double sn = jacobi.valuesN((t - tRef) * tScale).sn();
+                return new double[] {
+                        b / (c + d * sn * sn)
+                };
+            }
+        }, new ODEState(t0, new double[1]), t0 + period);
+
+        return model;
+
+    }
+
 	public double[][] computeTorqueFreeMotion(double i1, double i2, double i3, double t0, double[] y0, double t) {
-
-
-
-
-
-		/** Coefficients for φ model. */
-		final double phiSlope;
-		final double b;
-		final double c;
-		final double d;
-
-		/**Period with respect to time. */
-		final double period;
-
-		/**DenseOutputModel of phi. */
-		final DenseOutputModel phiQuadratureModel;
-		final double integOnePeriod;
-
-		// coefficients for φ model
-		period = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
-		phiSlope = FastMath.sqrt(m2) / i3;// =a, pente de la partie linéaire
-		b = phiSlope * i32 * i31;
-		c = i1 * i32;
-		d = i3 * i21;
-
-		//Integrate the quadrature phi term on one period
-		final DormandPrince853Integrator integ = new DormandPrince853Integrator(1.0e-6 * period, 1.0e-2 * period,
-				phiSlope * period * 1.0e-13, 1.0e-13);
-		phiQuadratureModel = new DenseOutputModel();
-		integ.addStepHandler(phiQuadratureModel);
-
-		integ.integrate(new OrdinaryDifferentialEquation() {
-
-			/** {@inheritDoc} */
-			@Override
-			public int getDimension() {
-				return 1;
-			}
-			@Override
-			public double[] computeDerivatives(final double t, final double[] y) {
-				final double sn = jacobi.valuesN((t - tRef) * tScale).sn();
-				return new double[] {
-						b / (c + d * sn * sn)
-				};
-			}
-		},new ODEState(t0, new double[1]), t0 + period);
-
-		integOnePeriod = phiQuadratureModel.getInterpolatedState(phiQuadratureModel.getFinalTime()).getPrimaryState()[0];
-
-
-		//		Rotation convertAxes = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axes[0], axes[1] );
-		//
-		//		Vector3D axe1 = new Vector3D(1.0, 0.0, 0.0);
-		//		Vector3D axe1c = convertAxes.applyTo(axe1);
-		//		System.out.println("AAAAAA : "+axe1c.getX()+" "+axe1c.getY()+" "+axe1c.getZ());
-		//		Vector3D axe2 = new Vector3D(0.0, 1.0, 0.0);
-		//		Vector3D axe2c = convertAxes.applyTo(axe2);
-		//		System.out.println("AAAAAA : "+axe2c.getX()+" "+axe2c.getY()+" "+axe2c.getZ());
-		//		Vector3D axe3 = new Vector3D(0.0, 0.0,1.0);
-		//		Vector3D axe3c = convertAxes.applyTo(axe3);
-		//		System.out.println("AAAAAA : "+axe3c.getX()+" "+axe3c.getY()+" "+axe3c.getZ());
-		//
-		//		System.out.println("Quaternion avant : "+r0.getQ0()+" "+r0.getQ1()+" "+r0.getQ2()+" "+r0.getQ3());
-		//
-		//		Rotation r0ConvertedAxis = convertAxes.applyTo(r0);
-		//
-		//		System.out.println("Quaternion converti : "+r0ConvertedAxis.getQ0()+" "+r0ConvertedAxis.getQ1()+" "+r0ConvertedAxis.getQ2()+" "+r0ConvertedAxis.getQ3());
-		//
-		//		System.out.println("Axe : "+r0ConvertedAxis.getAxis(RotationConvention.FRAME_TRANSFORM));
-		//
-		//		//Rotation r0Aligned = mAlignedToBody.applyInverseTo(r0ConvertedAxis);
-		//		
-		//		mAlignedToInert = r0ConvertedAxis.applyInverseTo(mAlignedToBody);
-
 
 		//Computation of omega
 		final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
