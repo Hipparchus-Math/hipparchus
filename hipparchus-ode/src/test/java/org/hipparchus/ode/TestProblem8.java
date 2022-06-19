@@ -398,8 +398,6 @@ public class TestProblem8 extends TestProblemAbstract {
 	public double[] doComputeDerivatives(double t, double[] y) {
 
 		final  double[] yDot = new double[getDimension()];
-		double[] y0 = getInitialState().getPrimaryState(); //Initial state before conversion
-		double t0 = getInitialState().getTime();
 
 		//		System.out.println("Numerique omega : "+y[0]+" "+y[1]+" "+y[2]);
 		//		final double[][] tfm = computeTorqueFreeMotion(i1, i2, i3, t0, y0, t);
