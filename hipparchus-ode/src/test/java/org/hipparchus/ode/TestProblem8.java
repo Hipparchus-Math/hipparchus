@@ -305,7 +305,7 @@ public class TestProblem8 extends TestProblemAbstract {
 
     }
 
-	public double[][] computeTorqueFreeMotion(double i1, double i2, double i3, double t0, double[] y0, double t) {
+	public double[][] computeTorqueFreeMotion(double i1, double i2, double i3, double t0, double t) {
 
 		//Computation of omega
 		final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
@@ -410,7 +410,7 @@ public class TestProblem8 extends TestProblemAbstract {
 
 		double t0 = getInitialState().getTime();
 
-		final double[][] tfm = computeTorqueFreeMotion(i1C, i2C, i3C, t0, y0C, t);
+		final double[][] tfm = computeTorqueFreeMotion(i1C, i2C, i3C, t0, t);
 		final double[] omega = tfm[0];
 		final double[] quaternion = tfm[2];
 		final double[] angles = tfm[1];
