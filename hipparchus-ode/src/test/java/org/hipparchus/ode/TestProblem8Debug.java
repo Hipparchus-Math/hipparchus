@@ -548,7 +548,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
 		final double phiDEUX = phiLinearDEUX + phiQuadratureDEUX;
 
-		//Computation of the quaternion
+		// Computation of the quaternion
 
 		// Rotation between computation frame (aligned with momentum) and body
 		//(It is simply the angles equations provided by L&L)
@@ -559,7 +559,6 @@ public class TestProblem8Debug extends TestProblemAbstract {
 		//Inert -> aligned + aligned -> body = inert -> body (What the user wants)
 		Rotation inertToBody = alignedToBody.applyTo(mAlignedToInert.revert());//alignedToBody.applyTo(mAlignedToInert.revert());
 		Rotation bodyToOriginalFrame = convertAxes.applyInverseTo(inertToBody);//(inertToBody.applyInverseTo(convertAxes)).revert();
-        double[] angles = bodyToOriginalFrame.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
 
 		//Computation of the quaternion
 
@@ -572,11 +571,10 @@ public class TestProblem8Debug extends TestProblemAbstract {
 		//Inert -> aligned + aligned -> body = inert -> body (What the user wants)
 		Rotation inertToBodyDEUX = alignedToBodyDEUX.applyTo(mAlignedToInertDEUX.revert());//alignedToBody.applyTo(mAlignedToInert.revert());
 		Rotation bodyToOriginalFrameDEUX = convertAxesDEUX.applyInverseTo(inertToBodyDEUX);//(inertToBody.applyInverseTo(convertAxes)).revert();
-		double[] anglesDEUX = bodyToOriginalFrameDEUX.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
 
 		return new TfmState[] {
-		    new TfmState(t, omega,     bodyToOriginalFrame,     angles),
-		    new TfmState(t, omegaDEUX, bodyToOriginalFrameDEUX, anglesDEUX)
+		    new TfmState(t, omega,     bodyToOriginalFrame,     phi,     theta,     psi,    convertAxes,      mAlignedToInert),
+		    new TfmState(t, omegaDEUX, bodyToOriginalFrameDEUX, phiDEUX, thetaDEUX, psiDEUX, convertAxesDEUX, mAlignedToInertDEUX)
 		};
 
 	}
@@ -633,29 +631,51 @@ public class TestProblem8Debug extends TestProblemAbstract {
 		};
 	}
 
-	public static class TfmState {
-	    private final double   t;
-	    private final Vector3D omega;
-	    private final Rotation rotation;
-	    private double[]       euler;
-	    private TfmState(final double t, final Vector3D omega, final Rotation rotation, final double[] euler) {
-	        this.t        = t;
-	        this.omega    = omega;
-	        this.rotation = rotation;
-	        this.euler    = euler.clone();
-	    }
-	    public double getT() {
-	        return t;
-	    }
-	    public Vector3D getOmega() {
-	        return omega;
-	    }
-	    public Rotation getRotation() {
-	        return rotation;
-	    }
-	    public double[] getEuler() {
-	        return euler.clone();
-	    }
-	}
+    public static class TfmState {
+        private final double   t;
+        private final Vector3D omega;
+        private final Rotation rotation;
+        private final double phi;
+        private final double theta;
+        private final double psi;
+        private final Rotation convertAxes;
+        private final Rotation mAlignedToInert;
+        private TfmState(final double t, final Vector3D omega, final Rotation rotation,
+                         final double phi, final double theta, final double psi,
+                         final Rotation convertAxes, final Rotation mAlignedToInert) {
+            this.t               = t;
+            this.omega           = omega;
+            this.rotation        = rotation;
+            this.phi             = phi;
+            this.theta           = theta;
+            this.psi             = psi;
+            this.convertAxes     = convertAxes;
+            this.mAlignedToInert = mAlignedToInert;
+        }
+        public double getT() {
+            return t;
+        }
+        public Vector3D getOmega() {
+            return omega;
+        }
+        public Rotation getRotation() {
+            return rotation;
+        }
+        public double getPhi() {
+            return phi;
+        }
+        public double getTheta() {
+            return theta;
+        }
+        public double getPsi() {
+            return psi;
+        }
+        public Rotation getConvertAxes() {
+            return convertAxes;
+        }
+        public Rotation getMAlignedToInert() {
+            return mAlignedToInert;
+        }
+    }
 
 }//Fin du programme

@@ -316,9 +316,7 @@ public class TestProblem8 extends TestProblemAbstract {
 
 		Rotation bodyToOriginalFrame = convertAxes.applyInverseTo(inertToBody);
 
-		double[] angles = bodyToOriginalFrame.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
-
-		return new TfmState(t, omega, bodyToOriginalFrame, angles);
+		return new TfmState(t, omega, bodyToOriginalFrame, phi, theta, psi, convertAxes, mAlignedToInert);
 
 	}
 
@@ -358,12 +356,22 @@ public class TestProblem8 extends TestProblemAbstract {
         private final double   t;
         private final Vector3D omega;
         private final Rotation rotation;
-        private double[]       euler;
-        private TfmState(final double t, final Vector3D omega, final Rotation rotation, final double[] euler) {
-            this.t        = t;
-            this.omega    = omega;
-            this.rotation = rotation;
-            this.euler    = euler.clone();
+        private final double phi;
+        private final double theta;
+        private final double psi;
+        private final Rotation convertAxes;
+        private final Rotation mAlignedToInert;
+        private TfmState(final double t, final Vector3D omega, final Rotation rotation,
+                         final double phi, final double theta, final double psi,
+                         final Rotation convertAxes, final Rotation mAlignedToInert) {
+            this.t               = t;
+            this.omega           = omega;
+            this.rotation        = rotation;
+            this.phi             = phi;
+            this.theta           = theta;
+            this.psi             = psi;
+            this.convertAxes     = convertAxes;
+            this.mAlignedToInert = mAlignedToInert;
         }
         public double getT() {
             return t;
@@ -374,8 +382,20 @@ public class TestProblem8 extends TestProblemAbstract {
         public Rotation getRotation() {
             return rotation;
         }
-        public double[] getEuler() {
-            return euler.clone();
+        public double getPhi() {
+            return phi;
+        }
+        public double getTheta() {
+            return theta;
+        }
+        public double getPsi() {
+            return psi;
+        }
+        public Rotation getConvertAxes() {
+            return convertAxes;
+        }
+        public Rotation getMAlignedToInert() {
+            return mAlignedToInert;
         }
     }
 
