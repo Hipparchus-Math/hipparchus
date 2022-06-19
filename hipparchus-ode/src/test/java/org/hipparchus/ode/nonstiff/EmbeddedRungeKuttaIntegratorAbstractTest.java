@@ -680,12 +680,12 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 			//        	out.format(Locale.US, "$data using 1:($4-$5) with lines title 'theta difference',\\%n ");
 			//        	out.format(Locale.US, "$data using 1:($6-$7) with lines title 'psi difference'%n ");
 
-			out.format(Locale.US, " plot $data using 1:2 with lines title 'phiN',\\%n ");
-			out.format(Locale.US, "$data using 1:3 with lines dt 2 title 'phiT',\\%n ");
-			out.format(Locale.US, "$data using 1:4 with lines title 'thetaN',\\%n ");
-			out.format(Locale.US, "$data using 1:5 with lines dt 2 title 'thetaT',\\%n ");
-			out.format(Locale.US, "$data using 1:6 with lines title 'psiN',\\%n ");
-			out.format(Locale.US, "$data using 1:7 with lines dt 2 title 'psiT'%n ");
+			out.format(Locale.US, " plot $data using 1:2 with lines lc 1 title 'phiN',\\%n ");
+			out.format(Locale.US, "$data using 1:3 with points pt 4 lc 1 title 'phiT',\\%n ");
+			out.format(Locale.US, "$data using 1:4 with lines lc 2 title 'thetaN',\\%n ");
+			out.format(Locale.US, "$data using 1:5 with points pt 4 lc 2 title 'thetaT',\\%n ");
+			out.format(Locale.US, "$data using 1:6 with lines lc 3 title 'psiN',\\%n ");
+			out.format(Locale.US, "$data using 1:7 with points lc 3 pt 4 title 'psiT'%n ");
 
 			//        	out.format(Locale.US, "plot $data using 1:2 with lines title 'Omega1', \\%n");
 			//        	out.format(Locale.US, "$data using 1:3 with lines title 'Omega2', \\%n");
@@ -987,20 +987,20 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 			//         	out.format(Locale.US,  "plot $data using 1:2 with lines, \\%n");
 			//         	out.format(Locale.US,  " $data using 1:3 with lines%n");
 
-			out.format(Locale.US, " plot $data using 1:2 with lines title 'phiN',\\%n ");
-			out.format(Locale.US, "$data using 1:3 with points pt 4 title 'phiT',\\%n ");
-			out.format(Locale.US, "$data using 1:4 with lines title 'thetaN',\\%n ");
-			out.format(Locale.US, "$data using 1:5 with points pt 4  title 'thetaT',\\%n ");
-			out.format(Locale.US, "$data using 1:6 with lines title 'psiN',\\%n ");
-			out.format(Locale.US, "$data using 1:7 with points pt 4  title 'psiT',\\%n ");
+			out.format(Locale.US, " plot $data using 1:2 with lines lc 1 title 'phiN',\\%n ");
+			out.format(Locale.US, "$data using 1:3 with points pt 4 lc 1 title 'phiT',\\%n ");
+			out.format(Locale.US, "$data using 1:4 with lines lc 2 title 'thetaN',\\%n ");
+			out.format(Locale.US, "$data using 1:5 with points lc 2 pt 4  title 'thetaT',\\%n ");
+			out.format(Locale.US, "$data using 1:6 with lines lc 3 title 'psiN',\\%n ");
+			out.format(Locale.US, "$data using 1:7 with points pt 4  lc 3 title 'psiT',\\%n ");
 
 
-			out.format(Locale.US, "$data using 1:8 with points pt 2 title 'phiN',\\%n ");
-			out.format(Locale.US, "$data using 1:9 with lines dt 2 title 'phiT',\\%n ");
-			out.format(Locale.US, "$data using 1:10 with points pt 2 title 'thetaN',\\%n ");
-			out.format(Locale.US, "$data using 1:11 with lines dt 2 title 'thetaT',\\%n ");
-			out.format(Locale.US, "$data using 1:12 with points pt 2 title 'psiN',\\%n ");
-			out.format(Locale.US, "$data using 1:13 with lines dt 2 title 'psiT'%n ");
+			out.format(Locale.US, "$data using 1:8 with lines dt 2 lc 4  title 'phiN',\\%n ");
+			out.format(Locale.US, "$data using 1:9 with points pt 6 lc 4 title 'phiT',\\%n ");
+			out.format(Locale.US, "$data using 1:10 with lines dt 2 lc 5 title 'thetaN',\\%n ");
+			out.format(Locale.US, "$data using 1:11 with points pt 6 lc 5 title 'thetaT',\\%n ");
+			out.format(Locale.US, "$data using 1:12 with lines dt 2 lc 6 title 'psiN',\\%n ");
+			out.format(Locale.US, "$data using 1:13 with points pt 6 lc 6 title 'psiT'%n ");
 
 
 			//         	out.format(Locale.US, "plot $data using 1:2 with lines title 'Omega1', \\%n");
