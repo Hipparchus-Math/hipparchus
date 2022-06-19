@@ -927,12 +927,12 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 					lastPsiT = MathUtils.normalizeAngle(theoretical[9], lastPsiT);
 
 
-					lastPhiNDEUX = MathUtils.normalizeAngle(anglesDEUX[0], lastPhiN);
-					lastThetaNDEUX = MathUtils.normalizeAngle(anglesDEUX[1], lastThetaN);
-					lastPsiNDEUX = MathUtils.normalizeAngle(anglesDEUX[2], lastPsiN);
-					lastPhiTDEUX = MathUtils.normalizeAngle(theoretical[23], lastPhiT);
-					lastThetaTDEUX = MathUtils.normalizeAngle(theoretical[24], lastThetaT);
-					lastPsiTDEUX = MathUtils.normalizeAngle(theoretical[25], lastPsiT);
+					lastPhiNDEUX = MathUtils.normalizeAngle(anglesDEUX[0], lastPhiNDEUX);
+					lastThetaNDEUX = MathUtils.normalizeAngle(anglesDEUX[1], lastThetaNDEUX);
+					lastPsiNDEUX = MathUtils.normalizeAngle(anglesDEUX[2], lastPsiNDEUX);
+					lastPhiTDEUX = MathUtils.normalizeAngle(theoretical[23], lastPhiTDEUX);
+					lastThetaTDEUX = MathUtils.normalizeAngle(theoretical[24], lastThetaTDEUX);
+					lastPsiTDEUX = MathUtils.normalizeAngle(theoretical[25], lastPsiTDEUX);
 
 
 					out.format(Locale.US, "%s %s %s %s %s %s %s %s %s %s %s %s %s%n",
