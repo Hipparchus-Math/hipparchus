@@ -586,11 +586,6 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 				                                                        theoreticalY[6],
 				                                                        true)));
 
-				double d = Rotation.distance(new Rotation(state.getPrimaryState()[3], state.getPrimaryState()[4], state.getPrimaryState()[5], state.getPrimaryState()[6], true),
-						new Rotation(theoreticalY[3], theoreticalY[4], theoreticalY[5], theoreticalY[6], true));
-
-				System.out.println("La distance entre les 2 rotation est de : "+d);   		
-
 				//        		     out.format(Locale.US, "%s %s%n",
 				//        		    		 RyuDouble.doubleToString(state.getTime()),
 				//        		    		 RyuDouble.doubleToString(d));
@@ -849,20 +844,6 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                                                                         theoreticalY[5],
                                                                         theoreticalY[6],
                                                                         true)));
-
-				double d = Rotation.distance(new Rotation(state.getPrimaryState()[3], state.getPrimaryState()[4], state.getPrimaryState()[5], state.getPrimaryState()[6], true),
-						new Rotation(theoreticalY[3], theoreticalY[4], theoreticalY[5], theoreticalY[6], true));
-
-				System.out.println("La distance entre les 2 rotation est de : "+d);   		
-
-				double dDEUX = Rotation.distance(new Rotation(state.getPrimaryState()[10], state.getPrimaryState()[11], state.getPrimaryState()[12], state.getPrimaryState()[13], true),
-						new Rotation(theoreticalY[19], theoreticalY[20], theoreticalY[21], theoreticalY[22], true));
-
-				System.out.println("La distance entre les 2 rotation DEUX est de : "+dDEUX);   	
-
-				Rotation rrrr = new Rotation(state.getPrimaryState()[3], state.getPrimaryState()[4], state.getPrimaryState()[5],state.getPrimaryState()[6], true);
-				Rotation rrrrDEUX = new Rotation(state.getPrimaryState()[10],state.getPrimaryState()[11],state.getPrimaryState()[12],state.getPrimaryState()[13], true);
-
 
 				//         out.format(Locale.US, "%s  %s %s%n",
 				//         		    		 state.getTime(),

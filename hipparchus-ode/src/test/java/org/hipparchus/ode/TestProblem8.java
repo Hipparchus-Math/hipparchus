@@ -113,10 +113,6 @@ public class TestProblem8 extends TestProblemAbstract {
 		double[] i = {i1, i2, i3};
 		double[] y0P = y0.clone();
 
-		System.out.println("omega avant : "+y0[0]+" "+ y0[1]+" "+ y0[2]);
-		System.out.println("Initial : iA1 = "+i1+" "+axesP[0]);
-		System.out.println("iA2 = "+i2 + " "+axesP[1]);
-		System.out.println("iA3 = "+i3 + " "+axesP[2]);
 		if (i[0] > i[1]) {
 			Vector3D z = axesP[0];
 			axesP[0] = axesP[1];
@@ -131,9 +127,6 @@ public class TestProblem8 extends TestProblemAbstract {
 			y0P[0] = y0P[1];
 			y0P[1] = v;
 			y0P[2] = -y0P[2];
-			System.out.println("1ere boucle : iA1 = "+i[0]+" "+axesP[0]);
-			System.out.println("iA2 = "+i[1] + " "+axesP[1]);
-			System.out.println("iA3 = "+i[2] + " "+axesP[2]);
 		}
 
 		if (i[1] > i[2]) {
@@ -150,9 +143,6 @@ public class TestProblem8 extends TestProblemAbstract {
 			y0P[1] = y0P[2];
 			y0P[2] = v;
 			y0P[0] = -y0P[0];
-			System.out.println("2ere boucle : iA1 = "+i[0]+" "+axesP[0]);
-			System.out.println("iA2 = "+i[1] + " "+axesP[1]);
-			System.out.println("iA3 = "+i[2] + " "+axesP[2]);
 		}
 
 		if (i[0] > i[1]) {
@@ -169,9 +159,6 @@ public class TestProblem8 extends TestProblemAbstract {
 			y0P[0] = y0P[1];
 			y0P[1] = v;
 			y0P[2] = -y0P[2];
-			System.out.println("3ere boucle : iA1 = "+i[0]+" "+axesP[0]);
-			System.out.println("iA2 = "+i[1] + " "+axesP[1]);
-			System.out.println("iA3 = "+i[2] + " "+axesP[2]);
 		}
 
 		final double condition;
@@ -181,7 +168,6 @@ public class TestProblem8 extends TestProblemAbstract {
 			condition = m2/twoE;
 		}
 
-		System.out.println("Condition : "+condition);
 		if(condition < i[1]) {
 			Vector3D z = axesP[0];
 			axesP[0] = axesP[2];
@@ -196,13 +182,7 @@ public class TestProblem8 extends TestProblemAbstract {
 			y0P[0] = y0P[2];
 			y0P[2] = v;
 			y0P[1] = - y0P[1];
-			System.out.println("repère final  : iA1 = "+i[0]+" "+axesP[0]);
-			System.out.println("iA2 = "+i[1] + " "+axesP[1]);
-			System.out.println("iA3 = "+i[2] + " "+axesP[2]);
 		}
-		System.out.println("omega après : "+y0P[0]+" "+ y0P[1]+" "+ y0P[2]);
-		System.out.println("axes après : "+axesP[0]+" "+ axesP[1]+" "+ axesP[2]);
-		System.out.println("inerties après : "+i[0]+" "+ i[1]+" "+ i[2]);
 
 		i1C = i[0];
 		i2C = i[1];
@@ -254,12 +234,9 @@ public class TestProblem8 extends TestProblemAbstract {
 
 		if (y0C[1] == 0){
 			tRef = t0;
-			System.out.println("Tref0 : "+tRef);
 		} else {
 			tRef   = t0 - jacobi.arcsn(y0C[1] / o2Scale) / tScale;
-			System.out.println("Tref : "+tRef);
 		}
-		System.out.println((y0C[1] / o2Scale));
 
         period             = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
         phiSlope           = FastMath.sqrt(m2) / i3C;
@@ -315,9 +292,6 @@ public class TestProblem8 extends TestProblemAbstract {
 				o2Scale * valuesN.sn(),
 				o3Scale * valuesN.dn());
 
-		System.out.println("omega fonction : "+o1Scale * valuesN.cn()+" "+o2Scale * valuesN.sn()+" "+o3Scale * valuesN.dn());
-		System.out.println("omega fonction conversion : "+omega.getX()+" "+omega.getY()+" "+omega.getZ());
-
 		//Computation of the euler angles
 		//Compute rotation rate
 		final double   o1            = omega.getX();//o1Scale * valuesN.cn();
@@ -334,7 +308,6 @@ public class TestProblem8 extends TestProblemAbstract {
 		final double   theta         = FastMath.acos(o3 / phiSlope);
 		final double   phiLinear     = phiSlope * t;
 
-		System.out.println("PSI = "+ psi+"\n"+"THETA = "+theta+"\n"+"PHI LIN = "+phiLinear);
 		//Integration for the computation of phi
 		final double t0 = getInitialTime();
 		final int nbPeriods = (int) FastMath.floor((t - t0) / period);//floor = entier inférieur = nb période entière
@@ -355,15 +328,6 @@ public class TestProblem8 extends TestProblemAbstract {
 		// combine with offset rotation to get back to regular inertial frame
 		//Inert -> aligned + aligned -> body = inert -> body (What the user wants)
 		Rotation inertToBody = alignedToBody.applyTo(mAlignedToInert.revert());//alignedToBody.applyTo(mAlignedToInert.revert());
-
-		Rotation convertAxesReverse = new Rotation(axes[0], axes[1], Vector3D.PLUS_I, Vector3D.PLUS_J);
-
-		Vector3D axe1cr = convertAxesReverse.applyTo(axes[0]);
-		System.out.println("BBBBBB : "+axe1cr.getX()+" "+axe1cr.getY()+" "+axe1cr.getZ());
-		Vector3D axe2cr = convertAxesReverse.applyTo(axes[1]);
-		System.out.println("BBBBBB : "+axe2cr.getX()+" "+axe2cr.getY()+" "+axe2cr.getZ());
-		Vector3D axe3cr = convertAxesReverse.applyTo(axes[2]);
-		System.out.println("BBBBBB : "+axe3cr.getX()+" "+axe3cr.getY()+" "+axe3cr.getZ());
 
 		Rotation bodyToOriginalFrame = convertAxes.applyInverseTo(inertToBody);//(inertToBody.applyInverseTo(convertAxes)).revert();
 
