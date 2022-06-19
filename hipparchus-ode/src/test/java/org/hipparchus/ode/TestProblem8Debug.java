@@ -554,7 +554,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
     }
 
-	public double[][][] computeTorqueFreeMotion(double i1, double i2, double i3, double t0, double t, double i1DEUX, double i2DEUX, double i3DEUX) {
+	public double[][][] computeTorqueFreeMotion(double i1, double i2, double i3, double t, double i1DEUX, double i2DEUX, double i3DEUX) {
 
 		//Computation of omega
 		final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
@@ -588,6 +588,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
 		System.out.println("PSI = "+ psi+"\n"+"THETA = "+theta+"\n"+"PHI LIN = "+phiLinear);
 		//Integration for the computation of phi
+		final double t0 = getInitialTime();
 		final int nbPeriods = (int) FastMath.floor((t - t0) / period);//floor = entier inférieur = nb période entière
 		final double tStartInteg = t0 + nbPeriods * period;//partie de période à la fin entre tau Integ et tau end
 		final double integPartial = phiQuadratureModel.getInterpolatedState(t - tStartInteg).getPrimaryState()[0];// a vérifier, partie de l'intégrale apres le nb entier de période
@@ -705,9 +706,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
 	public double[] computeTheoreticalState(double t) {
 
-		double t0 = getInitialState().getTime();
-
-		final double[][][] tfm = computeTorqueFreeMotion(i1C, i2C, i3C, t0, t, i1CDEUX, i2CDEUX, i3CDEUX);
+		final double[][][] tfm = computeTorqueFreeMotion(i1C, i2C, i3C, t, i1CDEUX, i2CDEUX, i3CDEUX);
 		final double[] omega = tfm[0][0];
 		final double[] quaternion = tfm[0][2];
 		final double[] angles = tfm[0][1];

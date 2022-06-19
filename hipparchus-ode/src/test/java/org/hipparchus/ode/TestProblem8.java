@@ -305,7 +305,7 @@ public class TestProblem8 extends TestProblemAbstract {
 
     }
 
-	public double[][] computeTorqueFreeMotion(double i1, double i2, double i3, double t0, double t) {
+	public double[][] computeTorqueFreeMotion(double t) {
 
 		//Computation of omega
 		final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
@@ -330,12 +330,13 @@ public class TestProblem8 extends TestProblemAbstract {
 		//		thetaroot * valuesN.dn();
 
 		//Compute angles
-		final double   psi           = FastMath.atan2(i1 * o1, i2 * o2);
+		final double   psi           = FastMath.atan2(i1C * o1, i2C * o2);
 		final double   theta         = FastMath.acos(o3 / phiSlope);
 		final double   phiLinear     = phiSlope * t;
 
 		System.out.println("PSI = "+ psi+"\n"+"THETA = "+theta+"\n"+"PHI LIN = "+phiLinear);
 		//Integration for the computation of phi
+		final double t0 = getInitialTime();
 		final int nbPeriods = (int) FastMath.floor((t - t0) / period);//floor = entier inférieur = nb période entière
 		final double tStartInteg = t0 + nbPeriods * period;//partie de période à la fin entre tau Integ et tau end
 		final double integPartial = phiQuadratureModel.getInterpolatedState(t - tStartInteg).getPrimaryState()[0];// a vérifier, partie de l'intégrale apres le nb entier de période
@@ -367,7 +368,7 @@ public class TestProblem8 extends TestProblemAbstract {
 		Rotation bodyToOriginalFrame = convertAxes.applyInverseTo(inertToBody);//(inertToBody.applyInverseTo(convertAxes)).revert();
 
 		double[] angles = bodyToOriginalFrame.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
-		double[][] data = {{omega.getX(), omega.getY(), omega.getZ()}, {angles[0], angles[1], angles[2]}, {bodyToOriginalFrame.getQ0(), bodyToOriginalFrame.getQ1(), bodyToOriginalFrame.getQ2(), bodyToOriginalFrame.getQ3()}, {axes[0].getX(), axes[0].getY(), axes[0].getZ()}, {axes[1].getX(), axes[1].getY(), axes[1].getZ()},{i1, i2, i3}};
+		double[][] data = {{omega.getX(), omega.getY(), omega.getZ()}, {angles[0], angles[1], angles[2]}, {bodyToOriginalFrame.getQ0(), bodyToOriginalFrame.getQ1(), bodyToOriginalFrame.getQ2(), bodyToOriginalFrame.getQ3()}, {axes[0].getX(), axes[0].getY(), axes[0].getZ()}, {axes[1].getX(), axes[1].getY(), axes[1].getZ()},{i1C, i2C, i3C}};
 		return data;
 	}
 
@@ -408,9 +409,7 @@ public class TestProblem8 extends TestProblemAbstract {
 
 	public double[] computeTheoreticalState(double t) {
 
-		double t0 = getInitialState().getTime();
-
-		final double[][] tfm = computeTorqueFreeMotion(i1C, i2C, i3C, t0, t);
+		final double[][] tfm = computeTorqueFreeMotion(t);
 		final double[] omega = tfm[0];
 		final double[] quaternion = tfm[2];
 		final double[] angles = tfm[1];
