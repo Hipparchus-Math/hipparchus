@@ -143,8 +143,6 @@ public class TestProblem8Debug extends TestProblemAbstract {
 //		super(0.0, new double[] {5.0, 0.0, 4.0, 0.9, 0.437, 0.0, 0.0,   4.0, 0.0, 5.0, -0.3088560588509295, 0.6360879930568342, -0.3088560588509294, 0.6360879930568341 }, 20.0, new double[] { 1.0, 1.0, 1.0 });
 		super(0.0, new double[] {5.0, 0.0, 4.0, 0.9, 0.437, 0.0, 0.0,   5.0, 0.0, 4.0, 0.9, 0.437, 0.0, 0.0}, 20.0, new double[] { 1.0, 1.0, 1.0 });
 
-		Rotation rrr = new Rotation(Vector3D.PLUS_K, Vector3D.PLUS_I, Vector3D.PLUS_I, Vector3D.PLUS_K);
-		Rotation aaa = rrr.applyInverseTo(new Rotation(0.9, 0.437, 0.0, 0.0, true));
 		i1 = 3.0 / 8.0;
 		i2 = 1.0 / 2.0;
 		i3 = 5.0 / 8.0;
