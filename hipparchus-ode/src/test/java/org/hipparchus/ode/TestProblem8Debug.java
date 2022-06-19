@@ -14,281 +14,281 @@ import org.hipparchus.util.FastMath;
 
 public class TestProblem8Debug extends TestProblemAbstract {
 
-	/** Moments of inertia. */
-	final double i1;
-	final double i2;
-	final double i3;
+    /** Moments of inertia. */
+    final double i1;
+    final double i2;
+    final double i3;
 
-	/** Moments of inertia converted. */
-	final double i1C;
-	final double i2C;
-	final double i3C;
+    /** Moments of inertia converted. */
+    final double i1C;
+    final double i2C;
+    final double i3C;
 
-	/**Substraction of inertias. */
-	final double i32;
-	final double i31;
-	final double i21;
+    /**Substraction of inertias. */
+    final double i32;
+    final double i31;
+    final double i21;
 
-	/**Initial state. */
-	final double y0[];
+    /**Initial state. */
+    final double y0[];
 
-	/** Converted initial state. */
-	final double[] y0C;
+    /** Converted initial state. */
+    final double[] y0C;
 
-	/** Converted axes. */
-	final Vector3D[] axes;
+    /** Converted axes. */
+    final Vector3D[] axes;
 
-	/** Twice the angular kinetic energy. */
-	final double twoE;
+    /** Twice the angular kinetic energy. */
+    final double twoE;
 
-	/** Square of kinetic momentum. */
-	final double m2;
+    /** Square of kinetic momentum. */
+    final double m2;
 
-	/** State scaling factor. */
-	final double o1Scale;
+    /** State scaling factor. */
+    final double o1Scale;
 
-	/** State scaling factor. */
-	final double o2Scale;
+    /** State scaling factor. */
+    final double o2Scale;
 
-	/** State scaling factor. */
-	final double o3Scale;
+    /** State scaling factor. */
+    final double o3Scale;
 
-	/** Jacobi elliptic function. */
-	final JacobiElliptic jacobi;
+    /** Jacobi elliptic function. */
+    final JacobiElliptic jacobi;
 
-	/** Elliptic modulus k2 (k2 = m). */
-	final double k2;
+    /** Elliptic modulus k2 (k2 = m). */
+    final double k2;
 
-	/** Time scaling factor. */
-	final double tScale;
+    /** Time scaling factor. */
+    final double tScale;
 
-	/** Time reference for rotation rate. */
-	final double tRef;
+    /** Time reference for rotation rate. */
+    final double tRef;
 
-	/**Offset rotation  between initial inertial frame and the frame with moment vector and Z axis aligned. */
-	Rotation mAlignedToInert;
+    /**Offset rotation  between initial inertial frame and the frame with moment vector and Z axis aligned. */
+    Rotation mAlignedToInert;
 
-	/** Initial converted rotation. */
-	final Rotation r0;
+    /** Initial converted rotation. */
+    final Rotation r0;
 
-	/** Rotation to switch to the converted axes frame. */
-	final Rotation convertAxes;
+    /** Rotation to switch to the converted axes frame. */
+    final Rotation convertAxes;
 
     /**DenseOutputModel of phi. */
-	final double period;
-	final double phiSlope;
+    final double period;
+    final double phiSlope;
     final DenseOutputModel phiQuadratureModel;
     final double integOnePeriod;
 
     //2ème état
-	
-	/** Moments of inertia. */
-	final double i1DEUX;
-	final double i2DEUX;
-	final double i3DEUX;
-	
-	/** Moments of inertia converted. */
-	final double i1CDEUX;
-	final double i2CDEUX;
-	final double i3CDEUX;
+    
+    /** Moments of inertia. */
+    final double i1DEUX;
+    final double i2DEUX;
+    final double i3DEUX;
+    
+    /** Moments of inertia converted. */
+    final double i1CDEUX;
+    final double i2CDEUX;
+    final double i3CDEUX;
 
-	/**Substraction of inertias. */
-	final double i32DEUX;
-	final double i31DEUX;
-	final double i21DEUX;
+    /**Substraction of inertias. */
+    final double i32DEUX;
+    final double i31DEUX;
+    final double i21DEUX;
 
-	/** Converted initial state. */
-	final double[] y0CDEUX;
+    /** Converted initial state. */
+    final double[] y0CDEUX;
 
-	/** Converted axes. */
-	final Vector3D[] axesDEUX;
+    /** Converted axes. */
+    final Vector3D[] axesDEUX;
 
-	/** Twice the angular kinetic energy. */
-	final double twoEDEUX;
+    /** Twice the angular kinetic energy. */
+    final double twoEDEUX;
 
-	/** Square of kinetic momentum. */
-	final double m2DEUX;
+    /** Square of kinetic momentum. */
+    final double m2DEUX;
 
-	/** State scaling factor. */
-	final double o1ScaleDEUX;
+    /** State scaling factor. */
+    final double o1ScaleDEUX;
 
-	/** State scaling factor. */
-	final double o2ScaleDEUX;
+    /** State scaling factor. */
+    final double o2ScaleDEUX;
 
-	/** State scaling factor. */
-	final double o3ScaleDEUX;
+    /** State scaling factor. */
+    final double o3ScaleDEUX;
 
-	/** Jacobi elliptic function. */
-	final JacobiElliptic jacobiDEUX;
+    /** Jacobi elliptic function. */
+    final JacobiElliptic jacobiDEUX;
 
-	/** Elliptic modulus k2 (k2 = m). */
-	final double k2DEUX;
+    /** Elliptic modulus k2 (k2 = m). */
+    final double k2DEUX;
 
-	/** Time scaling factor. */
-	final double tScaleDEUX;
+    /** Time scaling factor. */
+    final double tScaleDEUX;
 
-	/** Time reference for rotation rate. */
-	final double tRefDEUX;
+    /** Time reference for rotation rate. */
+    final double tRefDEUX;
 
-	/**Offset rotation  between initial inertial frame and the frame with moment vector and Z axis aligned. */
-	Rotation mAlignedToInertDEUX;
+    /**Offset rotation  between initial inertial frame and the frame with moment vector and Z axis aligned. */
+    Rotation mAlignedToInertDEUX;
 
-	final Rotation convertAxesDEUX;
+    final Rotation convertAxesDEUX;
 
     /**DenseOutputModel of phi. */
-	final double periodDEUX;
-	final double phiSlopeDEUX;
+    final double periodDEUX;
+    final double phiSlopeDEUX;
     final DenseOutputModel phiQuadratureModelDEUX;
     final double integOnePeriodDEUX;
 
-	/**
-	 * Simple constructor.
-	 */
-	public TestProblem8Debug() {
-		//Arguments in the super constructor :
-		//Initial time, Primary state (o1, o2, o3, q0, q1, q2, q3), Final time, Error scale
-		super(0.0, new double[] {5.0, 0.0, 4.0, 0.9 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.437 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.0, 0.0,   0.0, 5.0, -4.0, -0.3088560588509295, 0.6360879930568342, 0.6360879930568341, 0.3088560588509294 }, 20.0, new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
-//		super(0.0, new double[] {5.0, 0.0, 4.0, 0.9 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.437 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.0, 0.0,   5.0, 0.0, 4.0, 0.9 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.437 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.0, 0.0}, 20.0, new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
+    /**
+     * Simple constructor.
+     */
+    public TestProblem8Debug() {
+        //Arguments in the super constructor :
+        //Initial time, Primary state (o1, o2, o3, q0, q1, q2, q3), Final time, Error scale
+        super(0.0, new double[] {5.0, 0.0, 4.0, 0.9 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.437 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.0, 0.0,   0.0, 5.0, -4.0, -0.3088560588509295, 0.6360879930568342, 0.6360879930568341, 0.3088560588509294 }, 20.0, new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
+//        super(0.0, new double[] {5.0, 0.0, 4.0, 0.9 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.437 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.0, 0.0,   5.0, 0.0, 4.0, 0.9 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.437 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.0, 0.0}, 20.0, new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
 
-		i1 = 3.0 / 8.0;
-		i2 = 1.0 / 2.0;
-		i3 = 5.0 / 8.0;
-		
-		
-		i2DEUX = 3.0 / 8.0;
-		i1DEUX = 1.0 / 2.0;
-		i3DEUX = 5.0 / 8.0;
-		
-		
-		y0 = getInitialState().getPrimaryState();
-		final double t0 = getInitialState().getTime();
+        i1 = 3.0 / 8.0;
+        i2 = 1.0 / 2.0;
+        i3 = 5.0 / 8.0;
+        
+        
+        i2DEUX = 3.0 / 8.0;
+        i1DEUX = 1.0 / 2.0;
+        i3DEUX = 5.0 / 8.0;
+        
+        
+        y0 = getInitialState().getPrimaryState();
+        final double t0 = getInitialState().getTime();
 
-		//1er état
+        //1er état
 
 
-		final double o12 = y0[0] * y0[0];
-		final double o22 = y0[1] * y0[1];
-		final double o32 = y0[2] * y0[2];
+        final double o12 = y0[0] * y0[0];
+        final double o22 = y0[1] * y0[1];
+        final double o32 = y0[2] * y0[2];
 
-		twoE    =  i1 * o12 + i2 * o22 + i3 * o32;
-		m2      =  i1 * i1 * o12 + i2 * i2 * o22 + i3 * i3 * o32;
+        twoE    =  i1 * o12 + i2 * o22 + i3 * o32;
+        m2      =  i1 * i1 * o12 + i2 * i2 * o22 + i3 * i3 * o32;
 
-		final double[][] converted = sortInertiaAxis();
-		final double[] i = converted[1];
-		final Vector3D axeX = new Vector3D(converted[2][0], converted[2][1], converted[2][2]);
-		final Vector3D axeY = new Vector3D(converted[3][0], converted[3][1], converted[3][2]);
+        final double[][] converted = sortInertiaAxis();
+        final double[] i = converted[1];
+        final Vector3D axeX = new Vector3D(converted[2][0], converted[2][1], converted[2][2]);
+        final Vector3D axeY = new Vector3D(converted[3][0], converted[3][1], converted[3][2]);
 
-		i1C = i[0];
-		i2C = i[1];
-		i3C = i[2];
+        i1C = i[0];
+        i2C = i[1];
+        i3C = i[2];
 
-		axes = new Vector3D[] {axeX, axeY, axeX.crossProduct(axeY)};
+        axes = new Vector3D[] {axeX, axeY, axeX.crossProduct(axeY)};
 
-		y0C = converted[0].clone();
+        y0C = converted[0].clone();
 
-		// convert initial conditions to Euler angles such the M is aligned with Z in computation frame
-		final Vector3D omega0Body = new Vector3D(y0C[0], y0C[1], y0C[2]);
-		r0         = new Rotation(y0C[3], y0C[4], y0C[5], y0C[6], true);
-		final Vector3D m0Body     = new Vector3D(i1C * omega0Body.getX(), i2C * omega0Body.getY(), i3C * omega0Body.getZ());
+        // convert initial conditions to Euler angles such the M is aligned with Z in computation frame
+        final Vector3D omega0Body = new Vector3D(y0C[0], y0C[1], y0C[2]);
+        r0         = new Rotation(y0C[3], y0C[4], y0C[5], y0C[6], true);
+        final Vector3D m0Body     = new Vector3D(i1C * omega0Body.getX(), i2C * omega0Body.getY(), i3C * omega0Body.getZ());
 
-		final double   phi0       = 0; // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
-		final double   theta0 =  FastMath.acos(m0Body.getZ() / m0Body.getNorm());
-		final double   psi0       = FastMath.atan2(m0Body.getX(), m0Body.getY()); // it is really atan2(x, y), not atan2(y, x) as usual!
+        final double   phi0       = 0; // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
+        final double   theta0 =  FastMath.acos(m0Body.getZ() / m0Body.getNorm());
+        final double   psi0       = FastMath.atan2(m0Body.getX(), m0Body.getY()); // it is really atan2(x, y), not atan2(y, x) as usual!
 
-		//Compute offset rotation between inertial frame aligned with momentum and regular inertial frame
-		final Rotation mAlignedToBody = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
-				phi0, theta0, psi0);
+        //Compute offset rotation between inertial frame aligned with momentum and regular inertial frame
+        final Rotation mAlignedToBody = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
+                                                     phi0, theta0, psi0);
 
-		convertAxes = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axes[0], axes[1] );
+        convertAxes = new Rotation(Vector3D.PLUS_I, Vector3D.PLUS_J, axes[0], axes[1]);
 
-		Rotation r0ConvertedAxis = convertAxes.applyTo(r0);
+        Rotation r0ConvertedAxis = convertAxes.applyTo(r0);
 
-		mAlignedToInert = r0ConvertedAxis.applyInverseTo(mAlignedToBody);
-		//mAlignedToInert = r0.applyInverseTo(mAlignedToBody);		
+        mAlignedToInert = r0ConvertedAxis.applyInverseTo(mAlignedToBody);
+        //mAlignedToInert = r0.applyInverseTo(mAlignedToBody);        
 
-		i32  = i3C - i2C;
-		i31  = i3C - i1C;
-		i21  = i2C - i1C;
+        i32  = i3C - i2C;
+        i31  = i3C - i1C;
+        i21  = i2C - i1C;
 
-		tScale  = FastMath.sqrt(i32 * (m2 - twoE * i1C) / (i1C * i2C * i3C));
-		o1Scale = FastMath.sqrt((twoE * i3C - m2) / (i1C * i31));
-		o2Scale = FastMath.sqrt((twoE * i3C - m2) / (i2C * i32));
-		o3Scale = FastMath.sqrt((m2 - twoE * i1C) / (i3C * i31));
+        tScale  = FastMath.sqrt(i32 * (m2 - twoE * i1C) / (i1C * i2C * i3C));
+        o1Scale = FastMath.sqrt((twoE * i3C - m2) / (i1C * i31));
+        o2Scale = FastMath.sqrt((twoE * i3C - m2) / (i2C * i32));
+        o3Scale = FastMath.sqrt((m2 - twoE * i1C) / (i3C * i31));
 
-		k2     = i21 * (twoE * i3C - m2) / (i32 * (m2 - twoE * i1C));
+        k2     = i21 * (twoE * i3C - m2) / (i32 * (m2 - twoE * i1C));
 
-		jacobi = JacobiEllipticBuilder.build(k2);
+        jacobi = JacobiEllipticBuilder.build(k2);
 
-		if (y0C[1] == 0){
-			tRef = t0;
-		} else {
-			tRef   = t0 - jacobi.arcsn(y0C[1] / o2Scale) / tScale;
-		}
+        if (y0C[1] == 0){
+            tRef = t0;
+        } else {
+            tRef   = t0 - jacobi.arcsn(y0C[1] / o2Scale) / tScale;
+        }
 
         period             = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
         phiSlope           = FastMath.sqrt(m2) / i3;
-		phiQuadratureModel = computePhiQuadratureModel(i1C, i2C, i3C, k2, m2, jacobi, period, phiSlope, t0, tRef, tScale);
+        phiQuadratureModel = computePhiQuadratureModel(i1C, i2C, i3C, k2, m2, jacobi, period, phiSlope, t0, tRef, tScale);
         integOnePeriod     = phiQuadratureModel.getInterpolatedState(phiQuadratureModel.getFinalTime()).getPrimaryState()[0];
 
-		//2ème état
+        //2ème état
 
-		final double o12DEUX = y0[7] * y0[7];
-		final double o22DEUX = y0[8] * y0[8];
-		final double o32DEUX = y0[9] * y0[9];
+        final double o12DEUX = y0[7] * y0[7];
+        final double o22DEUX = y0[8] * y0[8];
+        final double o32DEUX = y0[9] * y0[9];
 
-		twoEDEUX    =  i1DEUX * o12DEUX + i2DEUX * o22DEUX + i3DEUX * o32DEUX;
-		m2DEUX      =  i1DEUX * i1DEUX * o12DEUX + i2DEUX * i2DEUX * o22DEUX + i3DEUX * i3DEUX * o32DEUX;
+        twoEDEUX    =  i1DEUX * o12DEUX + i2DEUX * o22DEUX + i3DEUX * o32DEUX;
+        m2DEUX      =  i1DEUX * i1DEUX * o12DEUX + i2DEUX * i2DEUX * o22DEUX + i3DEUX * i3DEUX * o32DEUX;
 
-		final double[][] convertedDEUX = sortInertiaAxisDEUX();
-		final double[] iDEUX = convertedDEUX[1];
-		final Vector3D axeXDEUX = new Vector3D(convertedDEUX[2][0], convertedDEUX[2][1], convertedDEUX[2][2]);
-		final Vector3D axeYDEUX = new Vector3D(convertedDEUX[3][0], convertedDEUX[3][1], convertedDEUX[3][2]);
+        final double[][] convertedDEUX = sortInertiaAxisDEUX();
+        final double[] iDEUX = convertedDEUX[1];
+        final Vector3D axeXDEUX = new Vector3D(convertedDEUX[2][0], convertedDEUX[2][1], convertedDEUX[2][2]);
+        final Vector3D axeYDEUX = new Vector3D(convertedDEUX[3][0], convertedDEUX[3][1], convertedDEUX[3][2]);
 
-		i1CDEUX = iDEUX[0];
-		i2CDEUX = iDEUX[1];
-		i3CDEUX = iDEUX[2];
+        i1CDEUX = iDEUX[0];
+        i2CDEUX = iDEUX[1];
+        i3CDEUX = iDEUX[2];
 
-		axesDEUX = new Vector3D[] {axeXDEUX, axeYDEUX, axeXDEUX.crossProduct(axeYDEUX)};
+        axesDEUX = new Vector3D[] {axeXDEUX, axeYDEUX, axeXDEUX.crossProduct(axeYDEUX)};
 
-		y0CDEUX = convertedDEUX[0].clone();
+        y0CDEUX = convertedDEUX[0].clone();
 
-		// convert initial conditions to Euler angles such the M is aligned with Z in computation frame
-		final Vector3D omega0BodyDEUX = new Vector3D(y0CDEUX[7], y0CDEUX[8], y0CDEUX[9]);
-		final Vector3D m0BodyDEUX     = new Vector3D(i1CDEUX * omega0BodyDEUX.getX(), i2CDEUX * omega0BodyDEUX.getY(), i3CDEUX * omega0BodyDEUX.getZ());
+        // convert initial conditions to Euler angles such the M is aligned with Z in computation frame
+        final Vector3D omega0BodyDEUX = new Vector3D(y0CDEUX[7], y0CDEUX[8], y0CDEUX[9]);
+        final Vector3D m0BodyDEUX     = new Vector3D(i1CDEUX * omega0BodyDEUX.getX(), i2CDEUX * omega0BodyDEUX.getY(), i3CDEUX * omega0BodyDEUX.getZ());
 
-		final double   phi0DEUX       = 0; // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
-		final double   theta0DEUX =  FastMath.acos(m0BodyDEUX.getZ() / m0BodyDEUX.getNorm());
-		final double   psi0DEUX       = FastMath.atan2(m0BodyDEUX.getX(), m0BodyDEUX.getY()); // it is really atan2(x, y), not atan2(y, x) as usual!
+        final double   phi0DEUX       = 0; // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
+        final double   theta0DEUX =  FastMath.acos(m0BodyDEUX.getZ() / m0BodyDEUX.getNorm());
+        final double   psi0DEUX       = FastMath.atan2(m0BodyDEUX.getX(), m0BodyDEUX.getY()); // it is really atan2(x, y), not atan2(y, x) as usual!
 
-		//Compute offset rotation between inertial frame aligned with momentum and regular inertial frame
-		final Rotation mAlignedToBodyDEUX = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
-				phi0DEUX, theta0DEUX, psi0DEUX);
+        //Compute offset rotation between inertial frame aligned with momentum and regular inertial frame
+        final Rotation mAlignedToBodyDEUX = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
+                                         phi0DEUX, theta0DEUX, psi0DEUX);
 
-		convertAxesDEUX = new Rotation(convertedDEUX[5][0], convertedDEUX[5][1], convertedDEUX[5][2], convertedDEUX[5][3], false);
-		
-		
-		final Rotation r0ConvertedAxisDEUX = new Rotation(convertedDEUX[4][0], convertedDEUX[4][1], convertedDEUX[4][2], convertedDEUX[4][3], false);
-		mAlignedToInertDEUX = r0ConvertedAxisDEUX.applyInverseTo(mAlignedToBodyDEUX);
-		//mAlignedToInert = r0.applyInverseTo(mAlignedToBody);		
+        convertAxesDEUX = new Rotation(convertedDEUX[5][0], convertedDEUX[5][1], convertedDEUX[5][2], convertedDEUX[5][3], false);
+        
+        
+        final Rotation r0ConvertedAxisDEUX = new Rotation(convertedDEUX[4][0], convertedDEUX[4][1], convertedDEUX[4][2], convertedDEUX[4][3], false);
+        mAlignedToInertDEUX = r0ConvertedAxisDEUX.applyInverseTo(mAlignedToBodyDEUX);
+        //mAlignedToInert = r0.applyInverseTo(mAlignedToBody);        
 
-		i32DEUX  = i3CDEUX - i2CDEUX;
-		i31DEUX  = i3CDEUX - i1CDEUX;
-		i21DEUX  = i2CDEUX - i1CDEUX;
+        i32DEUX  = i3CDEUX - i2CDEUX;
+        i31DEUX  = i3CDEUX - i1CDEUX;
+        i21DEUX  = i2CDEUX - i1CDEUX;
 
-		tScaleDEUX  = FastMath.sqrt(i32DEUX * (m2DEUX - twoEDEUX * i1CDEUX) / (i1CDEUX * i2CDEUX * i3CDEUX));
-		o1ScaleDEUX = FastMath.sqrt((twoEDEUX * i3CDEUX - m2DEUX) / (i1CDEUX * i31DEUX));
-		o2ScaleDEUX = FastMath.sqrt((twoEDEUX * i3CDEUX - m2DEUX) / (i2CDEUX * i32DEUX));
-		o3ScaleDEUX = FastMath.sqrt((m2DEUX - twoEDEUX * i1CDEUX) / (i3CDEUX * i31DEUX));
+        tScaleDEUX  = FastMath.sqrt(i32DEUX * (m2DEUX - twoEDEUX * i1CDEUX) / (i1CDEUX * i2CDEUX * i3CDEUX));
+        o1ScaleDEUX = FastMath.sqrt((twoEDEUX * i3CDEUX - m2DEUX) / (i1CDEUX * i31DEUX));
+        o2ScaleDEUX = FastMath.sqrt((twoEDEUX * i3CDEUX - m2DEUX) / (i2CDEUX * i32DEUX));
+        o3ScaleDEUX = FastMath.sqrt((m2DEUX - twoEDEUX * i1CDEUX) / (i3CDEUX * i31DEUX));
 
-		k2DEUX     = i21DEUX * (twoEDEUX * i3CDEUX - m2DEUX) / (i32DEUX * (m2DEUX - twoEDEUX * i1CDEUX));
+        k2DEUX     = i21DEUX * (twoEDEUX * i3CDEUX - m2DEUX) / (i32DEUX * (m2DEUX - twoEDEUX * i1CDEUX));
 
-		jacobiDEUX = JacobiEllipticBuilder.build(k2DEUX);
+        jacobiDEUX = JacobiEllipticBuilder.build(k2DEUX);
 
-		if (y0CDEUX[8] == 0){
-			tRefDEUX = t0;
-		} else {
-			tRefDEUX   = t0 - jacobiDEUX.arcsn(y0CDEUX[8] / o2ScaleDEUX) / tScaleDEUX;
-		}
+        if (y0CDEUX[8] == 0){
+            tRefDEUX = t0;
+        } else {
+            tRefDEUX   = t0 - jacobiDEUX.arcsn(y0CDEUX[8] / o2ScaleDEUX) / tScaleDEUX;
+        }
 
         periodDEUX             = 4 * LegendreEllipticIntegral.bigK(k2DEUX) / tScaleDEUX;
         phiSlopeDEUX           = FastMath.sqrt(m2DEUX) / i3DEUX;
@@ -297,80 +297,80 @@ public class TestProblem8Debug extends TestProblemAbstract {
                                                            t0, tRefDEUX, tScaleDEUX);
         integOnePeriodDEUX     = phiQuadratureModelDEUX.getInterpolatedState(phiQuadratureModelDEUX.getFinalTime()).getPrimaryState()[0];
 
-	}//Fin du constructeur
+    }//Fin du constructeur
 
-	public double[][] sortInertiaAxis() {
+    public double[][] sortInertiaAxis() {
 
-		Vector3D[] axesP = {Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K};
+        Vector3D[] axesP = {Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K};
 
-		double[] i = {i1, i2, i3};
-		double[] y0C = y0.clone();
+        double[] i = {i1, i2, i3};
+        double[] y0C = y0.clone();
 
-		if (i[0] > i[1]) {
-			Vector3D z = axesP[0];
-			axesP[0] = axesP[1];
-			axesP[1] = z;
-			axesP[2] = axesP[2].negate();
+        if (i[0] > i[1]) {
+            Vector3D z = axesP[0];
+            axesP[0] = axesP[1];
+            axesP[1] = z;
+            axesP[2] = axesP[2].negate();
 
-			double y = i[0];
-			i[0] = i[1];
-			i[1] = y;
+            double y = i[0];
+            i[0] = i[1];
+            i[1] = y;
 
-			double v = y0C[0];
-			y0C[0] = y0C[1];
-			y0C[1] = v;
-			y0C[2] = -y0C[2];
-		}
+            double v = y0C[0];
+            y0C[0] = y0C[1];
+            y0C[1] = v;
+            y0C[2] = -y0C[2];
+        }
 
-		if (i[1] > i[2]) {
-			Vector3D z = axesP[1];
-			axesP[1] = axesP[2];
-			axesP[2] = z;
-			axesP[0] = axesP[0].negate();
+        if (i[1] > i[2]) {
+            Vector3D z = axesP[1];
+            axesP[1] = axesP[2];
+            axesP[2] = z;
+            axesP[0] = axesP[0].negate();
 
-			double y = i[1];
-			i[1] = i[2];
-			i[2] = y;
+            double y = i[1];
+            i[1] = i[2];
+            i[2] = y;
 
-			double v = y0C[1];
-			y0C[1] = y0C[2];
-			y0C[2] = v;
-			y0C[0] = -y0C[0];
-		}
+            double v = y0C[1];
+            y0C[1] = y0C[2];
+            y0C[2] = v;
+            y0C[0] = -y0C[0];
+        }
 
-		if (i[0] > i[1]) {
-			Vector3D z = axesP[0];
-			axesP[0] = axesP[1];
-			axesP[1] = z;
-			axesP[2] = axesP[2].negate();
+        if (i[0] > i[1]) {
+            Vector3D z = axesP[0];
+            axesP[0] = axesP[1];
+            axesP[1] = z;
+            axesP[2] = axesP[2].negate();
 
-			double y = i[0];
-			i[0] = i[1];
-			i[1] = y;
+            double y = i[0];
+            i[0] = i[1];
+            i[1] = y;
 
-			double v = y0C[0];
-			y0C[0] = y0C[1];
-			y0C[1] = v;
-			y0C[2] = -y0C[2];
-		}
+            double v = y0C[0];
+            y0C[0] = y0C[1];
+            y0C[1] = v;
+            y0C[2] = -y0C[2];
+        }
 
-		final double condition = m2/twoE;
+        final double condition = m2/twoE;
 
-		if (condition < i[1]) {
-			Vector3D z = axesP[0];
-			axesP[0] = axesP[2];
-			axesP[2] = z;
-			axesP[1] = axesP[1].negate();
+        if (condition < i[1]) {
+            Vector3D z = axesP[0];
+            axesP[0] = axesP[2];
+            axesP[2] = z;
+            axesP[1] = axesP[1].negate();
 
-			double y = i[0];
-			i[0] = i[2];
-			i[2] = y;
+            double y = i[0];
+            i[0] = i[2];
+            i[2] = y;
 
-			double v = y0C[0];
-			y0C[0] = y0C[2];
-			y0C[2] = v;
-			y0C[1] = - y0C[1];
-		}
+            double v = y0C[0];
+            y0C[0] = y0C[2];
+            y0C[2] = v;
+            y0C[1] = - y0C[1];
+        }
 
         final Rotation r0DEUX              = new Rotation(y0C[3], y0C[4], y0C[5], y0C[6], true);
         final Rotation convertAxesDEUX     = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axesP[0], axesP[1] );
@@ -381,94 +381,94 @@ public class TestProblem8Debug extends TestProblemAbstract {
         y0C[6] = r0ConvertedAxisDEUX.getQ3();
 
         return new double[][] { y0C, i, {axesP[0].getX(), axesP[0].getY(), axesP[0].getZ()}, {axesP[1].getX(), axesP[1].getY(), axesP[1].getZ()} };
-	}
+    }
 
-	public double[][] sortInertiaAxisDEUX() {
+    public double[][] sortInertiaAxisDEUX() {
 
-		Vector3D[] axesP = {Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K};
-		double[] i = {i1DEUX, i2DEUX, i3DEUX};
+        Vector3D[] axesP = {Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K};
+        double[] i = {i1DEUX, i2DEUX, i3DEUX};
 
-		double[] y0C = y0.clone();
+        double[] y0C = y0.clone();
 
-		if (i[0] > i[1]) {
-			Vector3D z = axesP[0];
-			axesP[0] = axesP[1];
-			axesP[1] = z;
-			axesP[2] = axesP[2].negate();
+        if (i[0] > i[1]) {
+            Vector3D z = axesP[0];
+            axesP[0] = axesP[1];
+            axesP[1] = z;
+            axesP[2] = axesP[2].negate();
 
-			double y = i[0];
-			i[0] = i[1];
-			i[1] = y;
+            double y = i[0];
+            i[0] = i[1];
+            i[1] = y;
 
-			double v = y0C[7];
-			y0C[7] = y0C[8];
-			y0C[8] = v;
-			y0C[9] = -y0C[9];
-		}
+            double v = y0C[7];
+            y0C[7] = y0C[8];
+            y0C[8] = v;
+            y0C[9] = -y0C[9];
+        }
 
-		if (i[1] > i[2]) {
-			Vector3D z = axesP[1];
-			axesP[1] = axesP[2];
-			axesP[2] = z;
-			axesP[0] = axesP[0].negate();
+        if (i[1] > i[2]) {
+            Vector3D z = axesP[1];
+            axesP[1] = axesP[2];
+            axesP[2] = z;
+            axesP[0] = axesP[0].negate();
 
-			double y = i[1];
-			i[1] = i[2];
-			i[2] = y;
+            double y = i[1];
+            i[1] = i[2];
+            i[2] = y;
 
-			double v = y0C[8];
-			y0C[8] = y0C[9];
-			y0C[9] = v;
-			y0C[7] = -y0C[7];
-		}
+            double v = y0C[8];
+            y0C[8] = y0C[9];
+            y0C[9] = v;
+            y0C[7] = -y0C[7];
+        }
 
-		if (i[0] > i[1]) {
-			Vector3D z = axesP[0];
-			axesP[0] = axesP[1];
-			axesP[1] = z;
-			axesP[2] = axesP[2].negate();
+        if (i[0] > i[1]) {
+            Vector3D z = axesP[0];
+            axesP[0] = axesP[1];
+            axesP[1] = z;
+            axesP[2] = axesP[2].negate();
 
-			double y = i[0];
-			i[0] = i[1];
-			i[1] = y;
+            double y = i[0];
+            i[0] = i[1];
+            i[1] = y;
 
-			double v = y0C[7];
-			y0C[7] = y0C[8];
-			y0C[8] = v;
-			y0C[9] = -y0C[9];
-		}
+            double v = y0C[7];
+            y0C[7] = y0C[8];
+            y0C[8] = v;
+            y0C[9] = -y0C[9];
+        }
 
-		final double condition = m2DEUX/twoEDEUX;
+        final double condition = m2DEUX/twoEDEUX;
 
-		if (condition < i[1]) {
-			Vector3D z = axesP[0];
-			axesP[0] = axesP[2];
-			axesP[2] = z;
-			axesP[1] = axesP[1].negate();
+        if (condition < i[1]) {
+            Vector3D z = axesP[0];
+            axesP[0] = axesP[2];
+            axesP[2] = z;
+            axesP[1] = axesP[1].negate();
 
-			double y = i[0];
-			i[0] = i[2];
-			i[2] = y;
+            double y = i[0];
+            i[0] = i[2];
+            i[2] = y;
 
-			double v = y0C[7];
-			y0C[7] = y0C[9];
-			y0C[9] = v;
-			y0C[8] = - y0C[8];
-		}
-		
-		final Rotation r0DEUX         = new Rotation(y0C[10], y0C[11], y0C[12], y0C[13], true);
-		
-		final Rotation convertAxesDEUX = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axesP[0], axesP[1] );
+            double v = y0C[7];
+            y0C[7] = y0C[9];
+            y0C[9] = v;
+            y0C[8] = - y0C[8];
+        }
+        
+        final Rotation r0DEUX         = new Rotation(y0C[10], y0C[11], y0C[12], y0C[13], true);
+        
+        final Rotation convertAxesDEUX = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axesP[0], axesP[1] );
 
-		final Rotation r0ConvertedAxisDEUX = convertAxesDEUX.applyTo(r0DEUX);
+        final Rotation r0ConvertedAxisDEUX = convertAxesDEUX.applyTo(r0DEUX);
         y0C[10] = r0ConvertedAxisDEUX.getQ0();
         y0C[11] = r0ConvertedAxisDEUX.getQ1();
         y0C[12] = r0ConvertedAxisDEUX.getQ2();
         y0C[13] = r0ConvertedAxisDEUX.getQ3();
-		
-		return new double[][] { y0C, i, {axesP[0].getX(), axesP[0].getY(), axesP[0].getZ()}, {axesP[1].getX(), axesP[1].getY(), axesP[1].getZ()}, {r0ConvertedAxisDEUX.getQ0(), r0ConvertedAxisDEUX.getQ1(), r0ConvertedAxisDEUX.getQ2(), r0ConvertedAxisDEUX.getQ3()}
-		, {convertAxesDEUX.getQ0(), convertAxesDEUX.getQ1(), convertAxesDEUX.getQ2(), convertAxesDEUX.getQ3()}};
-	}
+        
+        return new double[][] { y0C, i, {axesP[0].getX(), axesP[0].getY(), axesP[0].getZ()}, {axesP[1].getX(), axesP[1].getY(), axesP[1].getZ()}, {r0ConvertedAxisDEUX.getQ0(), r0ConvertedAxisDEUX.getQ1(), r0ConvertedAxisDEUX.getQ2(), r0ConvertedAxisDEUX.getQ3()}
+        , {convertAxesDEUX.getQ0(), convertAxesDEUX.getQ1(), convertAxesDEUX.getQ2(), convertAxesDEUX.getQ3()}};
+    }
 
     private static DenseOutputModel computePhiQuadratureModel(final double i1, final double i2, final double i3,
                                                               final double k2, final double m2, final JacobiElliptic jacobi,
@@ -510,109 +510,109 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
     }
 
-	public TfmState[] computeTorqueFreeMotion(double t) {
+    public TfmState[] computeTorqueFreeMotion(double t) {
 
-		// Computation of omega
-		final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
-		final Vector3D omega   = new Vector3D(o1Scale * valuesN.cn(), o2Scale * valuesN.sn(), o3Scale * valuesN.dn());
+        // Computation of omega
+        final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
+        final Vector3D omega   = new Vector3D(o1Scale * valuesN.cn(), o2Scale * valuesN.sn(), o3Scale * valuesN.dn());
 
-		// Computation of omega
-		final CopolarN valuesNDEUX = jacobiDEUX.valuesN((t - tRefDEUX) * tScaleDEUX);
-		final Vector3D omegaDEUX = new Vector3D(o1ScaleDEUX * valuesNDEUX.cn(), o2ScaleDEUX * valuesNDEUX.sn(), o3ScaleDEUX * valuesNDEUX.dn());
+        // Computation of omega
+        final CopolarN valuesNDEUX = jacobiDEUX.valuesN((t - tRefDEUX) * tScaleDEUX);
+        final Vector3D omegaDEUX = new Vector3D(o1ScaleDEUX * valuesNDEUX.cn(), o2ScaleDEUX * valuesNDEUX.sn(), o3ScaleDEUX * valuesNDEUX.dn());
 
-		// Computation of the Euler angles
-		// Compute rotation rate
-		final double   psi       = FastMath.atan2(i1C * omega.getX(), i2C * omega.getY());
-		final double   theta     = FastMath.acos(omega.getZ() / phiSlope);
-		final double   phiLinear = phiSlope * t;
+        // Computation of the Euler angles
+        // Compute rotation rate
+        final double   psi       = FastMath.atan2(i1C * omega.getX(), i2C * omega.getY());
+        final double   theta     = FastMath.acos(omega.getZ() / phiSlope);
+        final double   phiLinear = phiSlope * t;
 
-		// Integration for the computation of phi
-		final double t0 = getInitialTime();
-		final int nbPeriods = (int) FastMath.floor((t - t0) / period);//floor = entier inférieur = nb période entière
-		final double tStartInteg = t0 + nbPeriods * period;//partie de période à la fin entre tau Integ et tau end
-		final double integPartial = phiQuadratureModel.getInterpolatedState(t - tStartInteg).getPrimaryState()[0];// a vérifier, partie de l'intégrale apres le nb entier de période
-		final double phiQuadrature = nbPeriods * integOnePeriod + integPartial;
+        // Integration for the computation of phi
+        final double t0 = getInitialTime();
+        final int nbPeriods = (int) FastMath.floor((t - t0) / period);//floor = entier inférieur = nb période entière
+        final double tStartInteg = t0 + nbPeriods * period;//partie de période à la fin entre tau Integ et tau end
+        final double integPartial = phiQuadratureModel.getInterpolatedState(t - tStartInteg).getPrimaryState()[0];// a vérifier, partie de l'intégrale apres le nb entier de période
+        final double phiQuadrature = nbPeriods * integOnePeriod + integPartial;
 
-		final double phi = phiLinear + phiQuadrature;
+        final double phi = phiLinear + phiQuadrature;
 
-		// Computation of the Euler angles
-		final double   psiDEUX           = FastMath.atan2(i1CDEUX * omegaDEUX.getX(), i2CDEUX * omegaDEUX.getY());
-		final double   thetaDEUX         = FastMath.acos(omegaDEUX.getZ() / phiSlopeDEUX);
-		final double   phiLinearDEUX     = phiSlopeDEUX * t;
+        // Computation of the Euler angles
+        final double   psiDEUX           = FastMath.atan2(i1CDEUX * omegaDEUX.getX(), i2CDEUX * omegaDEUX.getY());
+        final double   thetaDEUX         = FastMath.acos(omegaDEUX.getZ() / phiSlopeDEUX);
+        final double   phiLinearDEUX     = phiSlopeDEUX * t;
 
-		//Integration for the computation of phi
-		final int nbPeriodsDEUX = (int) FastMath.floor((t - t0) / periodDEUX);//floor = entier inférieur = nb période entière
-		final double tStartIntegDEUX = t0 + nbPeriodsDEUX * periodDEUX;//partie de période à la fin entre tau Integ et tau end
-		final double integPartialDEUX = phiQuadratureModelDEUX.getInterpolatedState(t - tStartIntegDEUX).getPrimaryState()[0];// a vérifier, partie de l'intégrale apres le nb entier de période
-		final double phiQuadratureDEUX = nbPeriodsDEUX * integOnePeriodDEUX + integPartialDEUX;
+        //Integration for the computation of phi
+        final int nbPeriodsDEUX = (int) FastMath.floor((t - t0) / periodDEUX);//floor = entier inférieur = nb période entière
+        final double tStartIntegDEUX = t0 + nbPeriodsDEUX * periodDEUX;//partie de période à la fin entre tau Integ et tau end
+        final double integPartialDEUX = phiQuadratureModelDEUX.getInterpolatedState(t - tStartIntegDEUX).getPrimaryState()[0];// a vérifier, partie de l'intégrale apres le nb entier de période
+        final double phiQuadratureDEUX = nbPeriodsDEUX * integOnePeriodDEUX + integPartialDEUX;
 
-		final double phiDEUX = phiLinearDEUX + phiQuadratureDEUX;
+        final double phiDEUX = phiLinearDEUX + phiQuadratureDEUX;
 
-		// Computation of the quaternion
+        // Computation of the quaternion
 
-		// Rotation between computation frame (aligned with momentum) and body
-		//(It is simply the angles equations provided by L&L)
-		final Rotation alignedToBody = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
-				                                    phi, theta, psi);
+        // Rotation between computation frame (aligned with momentum) and body
+        //(It is simply the angles equations provided by L&L)
+        final Rotation alignedToBody = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
+                                                    phi, theta, psi);
 
-		// combine with offset rotation to get back to regular inertial frame
-		//Inert -> aligned + aligned -> body = inert -> body (What the user wants)
-		Rotation inertToBody = alignedToBody.applyTo(mAlignedToInert.revert());//alignedToBody.applyTo(mAlignedToInert.revert());
-		Rotation bodyToOriginalFrame = convertAxes.applyInverseTo(inertToBody);//(inertToBody.applyInverseTo(convertAxes)).revert();
+        // combine with offset rotation to get back to regular inertial frame
+        //Inert -> aligned + aligned -> body = inert -> body (What the user wants)
+        Rotation inertToBody = alignedToBody.applyTo(mAlignedToInert.revert());//alignedToBody.applyTo(mAlignedToInert.revert());
+        Rotation bodyToOriginalFrame = convertAxes.applyInverseTo(inertToBody);//(inertToBody.applyInverseTo(convertAxes)).revert();
 
-		//Computation of the quaternion
+        //Computation of the quaternion
 
-		// Rotation between computation frame (aligned with momentum) and body
-		//(It is simply the angles equations provided by L&L)
-		final Rotation alignedToBodyDEUX = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
-		                                                phiDEUX, thetaDEUX, psiDEUX);
+        // Rotation between computation frame (aligned with momentum) and body
+        //(It is simply the angles equations provided by L&L)
+        final Rotation alignedToBodyDEUX = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
+                                                        phiDEUX, thetaDEUX, psiDEUX);
 
-		// combine with offset rotation to get back to regular inertial frame
-		//Inert -> aligned + aligned -> body = inert -> body (What the user wants)
-		Rotation inertToBodyDEUX = alignedToBodyDEUX.applyTo(mAlignedToInertDEUX.revert());//alignedToBody.applyTo(mAlignedToInert.revert());
-		Rotation bodyToOriginalFrameDEUX = convertAxesDEUX.applyInverseTo(inertToBodyDEUX);//(inertToBody.applyInverseTo(convertAxes)).revert();
+        // combine with offset rotation to get back to regular inertial frame
+        //Inert -> aligned + aligned -> body = inert -> body (What the user wants)
+        Rotation inertToBodyDEUX = alignedToBodyDEUX.applyTo(mAlignedToInertDEUX.revert());//alignedToBody.applyTo(mAlignedToInert.revert());
+        Rotation bodyToOriginalFrameDEUX = convertAxesDEUX.applyInverseTo(inertToBodyDEUX);//(inertToBody.applyInverseTo(convertAxes)).revert();
 
-		return new TfmState[] {
-		    new TfmState(t, omega,     bodyToOriginalFrame,     phi,     theta,     psi,    convertAxes,      mAlignedToInert),
-		    new TfmState(t, omegaDEUX, bodyToOriginalFrameDEUX, phiDEUX, thetaDEUX, psiDEUX, convertAxesDEUX, mAlignedToInertDEUX)
-		};
+        return new TfmState[] {
+            new TfmState(t, omega,     bodyToOriginalFrame,     phi,     theta,     psi,     convertAxes,     mAlignedToInert),
+            new TfmState(t, omegaDEUX, bodyToOriginalFrameDEUX, phiDEUX, thetaDEUX, psiDEUX, convertAxesDEUX, mAlignedToInertDEUX)
+        };
 
-	}
+    }
 
-	public double[] doComputeDerivatives(double t, double[] y) {
+    public double[] doComputeDerivatives(double t, double[] y) {
 
-		final  double[] yDot = new double[getDimension()];
+        final  double[] yDot = new double[getDimension()];
 
-		// compute the derivatives using Euler equations
-		yDot[0] = y[1] * y[2] * (i2 - i3) / i1;
-		yDot[1] = y[2] * y[0] * (i3 - i1) / i2;
-		yDot[2] = y[0] * y[1] * (i1 - i2) / i3;
+        // compute the derivatives using Euler equations
+        yDot[0] = y[1] * y[2] * (i2 - i3) / i1;
+        yDot[1] = y[2] * y[0] * (i3 - i1) / i2;
+        yDot[2] = y[0] * y[1] * (i1 - i2) / i3;
 
-		// compute the derivatives using Qpoint = 0.5 * Omega_inertialframe * Q
-		yDot[3] = 0.5 * (-y[0] * y[4] -y[1] * y[5] -y[2] * y[6]);
-		yDot[4] = 0.5 * (y[0] * y[3] +y[2] * y[5] -y[1] * y[6]);
-		yDot[5] = 0.5 * (y[1] * y[3] -y[2] * y[4] +y[0] * y[6]);
-		yDot[6] = 0.5 * (y[2] * y[3] +y[1] * y[4] -y[0] * y[5]);
-		
-		// compute the derivatives using Euler equations
-		yDot[7] = y[8] * y[9] * (i2DEUX - i3DEUX) / i1DEUX;
-		yDot[8] = y[9] * y[7] * (i3DEUX - i1DEUX) / i2DEUX;
-		yDot[9] = y[7] * y[8] * (i1DEUX - i2DEUX) / i3DEUX;
+        // compute the derivatives using Qpoint = 0.5 * Omega_inertialframe * Q
+        yDot[3] = 0.5 * (-y[0] * y[4] -y[1] * y[5] -y[2] * y[6]);
+        yDot[4] = 0.5 * (y[0] * y[3] +y[2] * y[5] -y[1] * y[6]);
+        yDot[5] = 0.5 * (y[1] * y[3] -y[2] * y[4] +y[0] * y[6]);
+        yDot[6] = 0.5 * (y[2] * y[3] +y[1] * y[4] -y[0] * y[5]);
+        
+        // compute the derivatives using Euler equations
+        yDot[7] = y[8] * y[9] * (i2DEUX - i3DEUX) / i1DEUX;
+        yDot[8] = y[9] * y[7] * (i3DEUX - i1DEUX) / i2DEUX;
+        yDot[9] = y[7] * y[8] * (i1DEUX - i2DEUX) / i3DEUX;
 
-		// compute the derivatives using Qpoint = 0.5 * Omega_inertialframe * Q
-		yDot[10] = 0.5 * (-y[7] * y[11] -y[8] * y[12] -y[9] * y[13]);
-		yDot[11] = 0.5 * (y[7] * y[10] +y[9] * y[12] -y[8] * y[13]);
-		yDot[12] = 0.5 * (y[8] * y[10] -y[9] * y[11] +y[7] * y[13]);
-		yDot[13] = 0.5 * (y[9] * y[10] +y[8] * y[11] -y[7] * y[12]);
-		return yDot;
+        // compute the derivatives using Qpoint = 0.5 * Omega_inertialframe * Q
+        yDot[10] = 0.5 * (-y[7] * y[11] -y[8] * y[12] -y[9] * y[13]);
+        yDot[11] = 0.5 * (y[7] * y[10] +y[9] * y[12] -y[8] * y[13]);
+        yDot[12] = 0.5 * (y[8] * y[10] -y[9] * y[11] +y[7] * y[13]);
+        yDot[13] = 0.5 * (y[9] * y[10] +y[8] * y[11] -y[7] * y[12]);
+        return yDot;
 
-	}
+    }
 
-	public double[] computeTheoreticalState(double t) {
+    public double[] computeTheoreticalState(double t) {
 
-		final TfmState[] tfm = computeTorqueFreeMotion(t);
+        final TfmState[] tfm = computeTorqueFreeMotion(t);
 
-		return new double[] {
+        return new double[] {
             tfm[0].getOmega().getX(),
             tfm[0].getOmega().getY(),
             tfm[0].getOmega().getZ(),
@@ -628,8 +628,8 @@ public class TestProblem8Debug extends TestProblemAbstract {
             tfm[1].getRotation().getQ1(),
             tfm[1].getRotation().getQ2(),
             tfm[1].getRotation().getQ3()
-		};
-	}
+        };
+    }
 
     public static class TfmState {
         private final double   t;
