@@ -559,29 +559,21 @@ public class TestProblem8Debug extends TestProblemAbstract {
 		//Computation of omega
 		final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
 
-		final Vector3D omegaP = new Vector3D(
+		final Vector3D omega = new Vector3D(
 				o1Scale * valuesN.cn(),
 				o2Scale * valuesN.sn(),
 				o3Scale * valuesN.dn());
 
-		//We need to convert again omega because the formula used isn't converted with the transformations before
-		final Vector3D omega = convertAxes.applyTo(omegaP);
-
 		System.out.println("omega fonction : "+o1Scale * valuesN.cn()+" "+o2Scale * valuesN.sn()+" "+o3Scale * valuesN.dn());
 		System.out.println("omega fonction conversion : "+omega.getX()+" "+omega.getY()+" "+omega.getZ());
-
 
 		//Computation of omega
 		final CopolarN valuesNDEUX = jacobiDEUX.valuesN((t - tRefDEUX) * tScaleDEUX);
 
-		final Vector3D omegaPDEUX = new Vector3D(
+		final Vector3D omegaDEUX = new Vector3D(
 				o1ScaleDEUX * valuesNDEUX.cn(),
 				o2ScaleDEUX * valuesNDEUX.sn(),
 				o3ScaleDEUX * valuesNDEUX.dn());
-
-		//We need to convert again omega because the formula used isn't converted with the transformations before
-		final Vector3D omegaDEUX = convertAxesDEUX.applyTo(omegaPDEUX);
-
 
 		//Computation of the euler angles
 		//Compute rotation rate
