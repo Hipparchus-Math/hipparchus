@@ -100,7 +100,7 @@ public class TestProblem8 extends TestProblemAbstract {
 		Vector3D[] axesP = {Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K};
 
 		double[] i = {i1, i2, i3};
-		double[] y0P = y0;
+		double[] y0P = y0.clone();
 
 		System.out.println("omega avant : "+y0[0]+" "+ y0[1]+" "+ y0[2]);
 		System.out.println("Initial : iA1 = "+i1+" "+axesP[0]);
@@ -199,7 +199,7 @@ public class TestProblem8 extends TestProblemAbstract {
 
 		axes = axesP;
 
-		y0C = y0P;
+		y0C = y0P.clone();
 
 		// convert initial conditions to Euler angles such the M is aligned with Z in computation frame
 		final Vector3D omega0Body = new Vector3D(y0C[0], y0C[1], y0C[2]);

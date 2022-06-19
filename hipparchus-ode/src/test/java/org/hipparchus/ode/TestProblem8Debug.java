@@ -177,7 +177,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
 		axes = new Vector3D[] {axeX, axeY, axeX.crossProduct(axeY)};
 
-		y0C = converted[0];
+		y0C = converted[0].clone();
 
 		// convert initial conditions to Euler angles such the M is aligned with Z in computation frame
 		final Vector3D omega0Body = new Vector3D(y0C[0], y0C[1], y0C[2]);
@@ -245,7 +245,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
 		axesDEUX = new Vector3D[] {axeXDEUX, axeYDEUX, axeXDEUX.crossProduct(axeYDEUX)};
 
-		y0CDEUX = convertedDEUX[0];
+		y0CDEUX = convertedDEUX[0].clone();
 
 		// convert initial conditions to Euler angles such the M is aligned with Z in computation frame
 		final Vector3D omega0BodyDEUX = new Vector3D(y0CDEUX[7], y0CDEUX[8], y0CDEUX[9]);
@@ -295,7 +295,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
 		Vector3D[] axesP = {Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K};
 
 		double[] i = {i1, i2, i3};
-		double[] y0C = y0;
+		double[] y0C = y0.clone();
 
 		System.out.println("omega avant : "+y0C[0]+" "+ y0C[1]+" "+ y0C[2]);
 		System.out.println("Initial : iA1 = "+i1+" "+axesP[0]);
@@ -391,7 +391,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
 		Vector3D[] axesP = {Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K};
 		double[] i = {i1DEUX, i2DEUX, i3DEUX};
 
-		double[] y0C = y0;
+		double[] y0C = y0.clone();
 
 		System.out.println("omega avant : "+y0C[7]+" "+ y0C[8]+" "+ y0C[9]);
 		System.out.println("Initial : iA1 = "+i1+" "+axesP[0]);
