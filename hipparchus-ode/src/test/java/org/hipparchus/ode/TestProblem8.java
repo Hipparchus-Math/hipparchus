@@ -91,7 +91,7 @@ public class TestProblem8 extends TestProblemAbstract {
 	 */
 	public TestProblem8() {
 		//Arguments in the super constructor :
-		//Intital time, Primary state (o1, o2, o3, q0, q1, q2, q3), Final time, Error scale
+		//Initial time, Primary state (o1, o2, o3, q0, q1, q2, q3), Final time, Error scale
 		super(0.0, new double[] {5.0, 0.0, 4.0, 0.9 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.437 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.0, 0.0}, 20.0, new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
 		i1 = 3.0 / 8.0;
 		i2 = 1.0 / 2.0;
