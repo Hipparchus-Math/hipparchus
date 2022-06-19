@@ -24,19 +24,13 @@ public class TestProblem8Debug extends TestProblemAbstract {
     final double i2C;
     final double i3C;
 
-    /**Substraction of inertias. */
+    /** Subtraction of inertias. */
     final double i32;
     final double i31;
     final double i21;
 
     /**Initial state. */
     final double y0[];
-
-    /** Converted initial state. */
-    final double[] y0C;
-
-    /** Converted axes. */
-    final Vector3D[] axes;
 
     /** Twice the angular kinetic energy. */
     final double twoE;
@@ -81,12 +75,12 @@ public class TestProblem8Debug extends TestProblemAbstract {
     final double integOnePeriod;
 
     //2ème état
-    
+
     /** Moments of inertia. */
     final double i1DEUX;
     final double i2DEUX;
     final double i3DEUX;
-    
+
     /** Moments of inertia converted. */
     final double i1CDEUX;
     final double i2CDEUX;
@@ -96,12 +90,6 @@ public class TestProblem8Debug extends TestProblemAbstract {
     final double i32DEUX;
     final double i31DEUX;
     final double i21DEUX;
-
-    /** Converted initial state. */
-    final double[] y0CDEUX;
-
-    /** Converted axes. */
-    final Vector3D[] axesDEUX;
 
     /** Twice the angular kinetic energy. */
     final double twoEDEUX;
@@ -153,13 +141,11 @@ public class TestProblem8Debug extends TestProblemAbstract {
         i1 = 3.0 / 8.0;
         i2 = 1.0 / 2.0;
         i3 = 5.0 / 8.0;
-        
-        
+
         i2DEUX = 3.0 / 8.0;
         i1DEUX = 1.0 / 2.0;
         i3DEUX = 5.0 / 8.0;
-        
-        
+
         y0 = getInitialState().getPrimaryState();
         final double t0 = getInitialState().getTime();
 
@@ -173,38 +159,33 @@ public class TestProblem8Debug extends TestProblemAbstract {
         twoE    =  i1 * o12 + i2 * o22 + i3 * o32;
         m2      =  i1 * i1 * o12 + i2 * i2 * o22 + i3 * i3 * o32;
 
-        final double[][] converted = sortInertiaAxis();
-        final double[] i = converted[1];
-        final Vector3D axeX = new Vector3D(converted[2][0], converted[2][1], converted[2][2]);
-        final Vector3D axeY = new Vector3D(converted[3][0], converted[3][1], converted[3][2]);
+        final Sorted sorted = sortInertiaAxis(i1, i2, i3, m2, twoE,
+                                              new Vector3D(y0[0], y0[1], y0[2]),
+                                              new Rotation(y0[3], y0[4], y0[5], y0[6], true));
 
-        i1C = i[0];
-        i2C = i[1];
-        i3C = i[2];
-
-        axes = new Vector3D[] {axeX, axeY, axeX.crossProduct(axeY)};
-
-        y0C = converted[0].clone();
+        i1C = sorted.i1;
+        i2C = sorted.i2;
+        i3C = sorted.i3;
 
         // convert initial conditions to Euler angles such the M is aligned with Z in computation frame
-        final Vector3D omega0Body = new Vector3D(y0C[0], y0C[1], y0C[2]);
-        r0         = new Rotation(y0C[3], y0C[4], y0C[5], y0C[6], true);
+        final Vector3D omega0Body = sorted.omega;
+        r0         = sorted.rotation;
         final Vector3D m0Body     = new Vector3D(i1C * omega0Body.getX(), i2C * omega0Body.getY(), i3C * omega0Body.getZ());
 
         final double   phi0       = 0; // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
-        final double   theta0 =  FastMath.acos(m0Body.getZ() / m0Body.getNorm());
+        final double   theta0     = FastMath.acos(m0Body.getZ() / m0Body.getNorm());
         final double   psi0       = FastMath.atan2(m0Body.getX(), m0Body.getY()); // it is really atan2(x, y), not atan2(y, x) as usual!
 
         //Compute offset rotation between inertial frame aligned with momentum and regular inertial frame
         final Rotation mAlignedToBody = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
                                                      phi0, theta0, psi0);
 
-        convertAxes = new Rotation(Vector3D.PLUS_I, Vector3D.PLUS_J, axes[0], axes[1]);
+        convertAxes = sorted.convertAxes;
 
         Rotation r0ConvertedAxis = convertAxes.applyTo(r0);
 
         mAlignedToInert = r0ConvertedAxis.applyInverseTo(mAlignedToBody);
-        //mAlignedToInert = r0.applyInverseTo(mAlignedToBody);        
+        //mAlignedToInert = r0.applyInverseTo(mAlignedToBody);
 
         i32  = i3C - i2C;
         i31  = i3C - i1C;
@@ -219,10 +200,10 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
         jacobi = JacobiEllipticBuilder.build(k2);
 
-        if (y0C[1] == 0){
+        if (omega0Body.getY() == 0) {
             tRef = t0;
         } else {
-            tRef   = t0 - jacobi.arcsn(y0C[1] / o2Scale) / tScale;
+            tRef = t0 - jacobi.arcsn(omega0Body.getY() / o2Scale) / tScale;
         }
 
         period             = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
@@ -239,37 +220,30 @@ public class TestProblem8Debug extends TestProblemAbstract {
         twoEDEUX    =  i1DEUX * o12DEUX + i2DEUX * o22DEUX + i3DEUX * o32DEUX;
         m2DEUX      =  i1DEUX * i1DEUX * o12DEUX + i2DEUX * i2DEUX * o22DEUX + i3DEUX * i3DEUX * o32DEUX;
 
-        final double[][] convertedDEUX = sortInertiaAxisDEUX();
-        final double[] iDEUX = convertedDEUX[1];
-        final Vector3D axeXDEUX = new Vector3D(convertedDEUX[2][0], convertedDEUX[2][1], convertedDEUX[2][2]);
-        final Vector3D axeYDEUX = new Vector3D(convertedDEUX[3][0], convertedDEUX[3][1], convertedDEUX[3][2]);
-
-        i1CDEUX = iDEUX[0];
-        i2CDEUX = iDEUX[1];
-        i3CDEUX = iDEUX[2];
-
-        axesDEUX = new Vector3D[] {axeXDEUX, axeYDEUX, axeXDEUX.crossProduct(axeYDEUX)};
-
-        y0CDEUX = convertedDEUX[0].clone();
+        final Sorted sortedDEUX = sortInertiaAxis(i1DEUX, i2DEUX, i3DEUX, m2DEUX, twoEDEUX,
+                                                  new Vector3D(y0[7], y0[8], y0[9]),
+                                                  new Rotation(y0[10], y0[11], y0[12], y0[13], true));
+        i1CDEUX = sortedDEUX.i1;
+        i2CDEUX = sortedDEUX.i2;
+        i3CDEUX = sortedDEUX.i3;
 
         // convert initial conditions to Euler angles such the M is aligned with Z in computation frame
-        final Vector3D omega0BodyDEUX = new Vector3D(y0CDEUX[7], y0CDEUX[8], y0CDEUX[9]);
+        final Vector3D omega0BodyDEUX = sortedDEUX.omega;
         final Vector3D m0BodyDEUX     = new Vector3D(i1CDEUX * omega0BodyDEUX.getX(), i2CDEUX * omega0BodyDEUX.getY(), i3CDEUX * omega0BodyDEUX.getZ());
 
         final double   phi0DEUX       = 0; // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
-        final double   theta0DEUX =  FastMath.acos(m0BodyDEUX.getZ() / m0BodyDEUX.getNorm());
+        final double   theta0DEUX     = FastMath.acos(m0BodyDEUX.getZ() / m0BodyDEUX.getNorm());
         final double   psi0DEUX       = FastMath.atan2(m0BodyDEUX.getX(), m0BodyDEUX.getY()); // it is really atan2(x, y), not atan2(y, x) as usual!
 
         //Compute offset rotation between inertial frame aligned with momentum and regular inertial frame
         final Rotation mAlignedToBodyDEUX = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
                                          phi0DEUX, theta0DEUX, psi0DEUX);
 
-        convertAxesDEUX = new Rotation(convertedDEUX[5][0], convertedDEUX[5][1], convertedDEUX[5][2], convertedDEUX[5][3], false);
-        
-        
-        final Rotation r0ConvertedAxisDEUX = new Rotation(convertedDEUX[4][0], convertedDEUX[4][1], convertedDEUX[4][2], convertedDEUX[4][3], false);
+        convertAxesDEUX = sortedDEUX.convertAxes;;
+
+        final Rotation r0ConvertedAxisDEUX = sortedDEUX.rotation;
         mAlignedToInertDEUX = r0ConvertedAxisDEUX.applyInverseTo(mAlignedToBodyDEUX);
-        //mAlignedToInert = r0.applyInverseTo(mAlignedToBody);        
+        //mAlignedToInert = r0.applyInverseTo(mAlignedToBody);
 
         i32DEUX  = i3CDEUX - i2CDEUX;
         i31DEUX  = i3CDEUX - i1CDEUX;
@@ -284,10 +258,10 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
         jacobiDEUX = JacobiEllipticBuilder.build(k2DEUX);
 
-        if (y0CDEUX[8] == 0){
+        if (omega0BodyDEUX.getY() == 0){
             tRefDEUX = t0;
         } else {
-            tRefDEUX   = t0 - jacobiDEUX.arcsn(y0CDEUX[8] / o2ScaleDEUX) / tScaleDEUX;
+            tRefDEUX   = t0 - jacobiDEUX.arcsn(omega0BodyDEUX.getY() / o2ScaleDEUX) / tScaleDEUX;
         }
 
         periodDEUX             = 4 * LegendreEllipticIntegral.bigK(k2DEUX) / tScaleDEUX;
@@ -299,175 +273,38 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
     }//Fin du constructeur
 
-    public double[][] sortInertiaAxis() {
+    public static Sorted sortInertiaAxis(final double i1Init, final double i2Init, final double i3Init,
+                                         final double m2Init, final double twoEInit,
+                                         final Vector3D omegaInit, final Rotation rInit) {
 
-        Vector3D[] axesP = {Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K};
+        Sorted sorted = new Sorted(i1Init, i2Init, i3Init, omegaInit, rInit, Rotation.IDENTITY);
 
-        double[] i = {i1, i2, i3};
-        double[] y0C = y0.clone();
-
-        if (i[0] > i[1]) {
-            Vector3D z = axesP[0];
-            axesP[0] = axesP[1];
-            axesP[1] = z;
-            axesP[2] = axesP[2].negate();
-
-            double y = i[0];
-            i[0] = i[1];
-            i[1] = y;
-
-            double v = y0C[0];
-            y0C[0] = y0C[1];
-            y0C[1] = v;
-            y0C[2] = -y0C[2];
+        if (sorted.i1 > sorted.i2) {
+            final Rotation ij = new Rotation(Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_J, Vector3D.PLUS_I);
+            sorted = new Sorted(sorted.i2, sorted.i1, sorted.i3, ij.applyTo(sorted.omega),
+                                ij.applyTo(sorted.rotation), ij.applyTo(sorted.convertAxes));
         }
 
-        if (i[1] > i[2]) {
-            Vector3D z = axesP[1];
-            axesP[1] = axesP[2];
-            axesP[2] = z;
-            axesP[0] = axesP[0].negate();
-
-            double y = i[1];
-            i[1] = i[2];
-            i[2] = y;
-
-            double v = y0C[1];
-            y0C[1] = y0C[2];
-            y0C[2] = v;
-            y0C[0] = -y0C[0];
+        if (sorted.i2 > sorted.i3) {
+            final Rotation jk = new Rotation(Vector3D.PLUS_J, Vector3D.PLUS_K, Vector3D.PLUS_K, Vector3D.PLUS_J);
+            sorted = new Sorted(sorted.i2, sorted.i1, sorted.i3, jk.applyTo(sorted.omega),
+                                jk.applyTo(sorted.rotation), jk.applyTo(sorted.convertAxes));
         }
 
-        if (i[0] > i[1]) {
-            Vector3D z = axesP[0];
-            axesP[0] = axesP[1];
-            axesP[1] = z;
-            axesP[2] = axesP[2].negate();
-
-            double y = i[0];
-            i[0] = i[1];
-            i[1] = y;
-
-            double v = y0C[0];
-            y0C[0] = y0C[1];
-            y0C[1] = v;
-            y0C[2] = -y0C[2];
+        if (sorted.i1 > sorted.i2) {
+            final Rotation ij = new Rotation(Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_J, Vector3D.PLUS_I);
+            sorted = new Sorted(sorted.i2, sorted.i1, sorted.i3, ij.applyTo(sorted.omega),
+                                ij.applyTo(sorted.rotation), ij.applyTo(sorted.convertAxes));
         }
 
-        final double condition = m2/twoE;
-
-        if (condition < i[1]) {
-            Vector3D z = axesP[0];
-            axesP[0] = axesP[2];
-            axesP[2] = z;
-            axesP[1] = axesP[1].negate();
-
-            double y = i[0];
-            i[0] = i[2];
-            i[2] = y;
-
-            double v = y0C[0];
-            y0C[0] = y0C[2];
-            y0C[2] = v;
-            y0C[1] = - y0C[1];
+        if (m2Init / twoEInit < sorted.i2) {
+            final Rotation ik = new Rotation(Vector3D.PLUS_I, Vector3D.PLUS_K, Vector3D.PLUS_K, Vector3D.PLUS_I);
+            sorted = new Sorted(sorted.i2, sorted.i1, sorted.i3, ik.applyTo(sorted.omega),
+                                ik.applyTo(sorted.rotation), ik.applyTo(sorted.convertAxes));
         }
 
-        final Rotation r0DEUX              = new Rotation(y0C[3], y0C[4], y0C[5], y0C[6], true);
-        final Rotation convertAxesDEUX     = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axesP[0], axesP[1] );
-        final Rotation r0ConvertedAxisDEUX = convertAxesDEUX.applyTo(r0DEUX);
-        y0C[3] = r0ConvertedAxisDEUX.getQ0();
-        y0C[4] = r0ConvertedAxisDEUX.getQ1();
-        y0C[5] = r0ConvertedAxisDEUX.getQ2();
-        y0C[6] = r0ConvertedAxisDEUX.getQ3();
+        return sorted;
 
-        return new double[][] { y0C, i, {axesP[0].getX(), axesP[0].getY(), axesP[0].getZ()}, {axesP[1].getX(), axesP[1].getY(), axesP[1].getZ()} };
-    }
-
-    public double[][] sortInertiaAxisDEUX() {
-
-        Vector3D[] axesP = {Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K};
-        double[] i = {i1DEUX, i2DEUX, i3DEUX};
-
-        double[] y0C = y0.clone();
-
-        if (i[0] > i[1]) {
-            Vector3D z = axesP[0];
-            axesP[0] = axesP[1];
-            axesP[1] = z;
-            axesP[2] = axesP[2].negate();
-
-            double y = i[0];
-            i[0] = i[1];
-            i[1] = y;
-
-            double v = y0C[7];
-            y0C[7] = y0C[8];
-            y0C[8] = v;
-            y0C[9] = -y0C[9];
-        }
-
-        if (i[1] > i[2]) {
-            Vector3D z = axesP[1];
-            axesP[1] = axesP[2];
-            axesP[2] = z;
-            axesP[0] = axesP[0].negate();
-
-            double y = i[1];
-            i[1] = i[2];
-            i[2] = y;
-
-            double v = y0C[8];
-            y0C[8] = y0C[9];
-            y0C[9] = v;
-            y0C[7] = -y0C[7];
-        }
-
-        if (i[0] > i[1]) {
-            Vector3D z = axesP[0];
-            axesP[0] = axesP[1];
-            axesP[1] = z;
-            axesP[2] = axesP[2].negate();
-
-            double y = i[0];
-            i[0] = i[1];
-            i[1] = y;
-
-            double v = y0C[7];
-            y0C[7] = y0C[8];
-            y0C[8] = v;
-            y0C[9] = -y0C[9];
-        }
-
-        final double condition = m2DEUX/twoEDEUX;
-
-        if (condition < i[1]) {
-            Vector3D z = axesP[0];
-            axesP[0] = axesP[2];
-            axesP[2] = z;
-            axesP[1] = axesP[1].negate();
-
-            double y = i[0];
-            i[0] = i[2];
-            i[2] = y;
-
-            double v = y0C[7];
-            y0C[7] = y0C[9];
-            y0C[9] = v;
-            y0C[8] = - y0C[8];
-        }
-        
-        final Rotation r0DEUX         = new Rotation(y0C[10], y0C[11], y0C[12], y0C[13], true);
-        
-        final Rotation convertAxesDEUX = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axesP[0], axesP[1] );
-
-        final Rotation r0ConvertedAxisDEUX = convertAxesDEUX.applyTo(r0DEUX);
-        y0C[10] = r0ConvertedAxisDEUX.getQ0();
-        y0C[11] = r0ConvertedAxisDEUX.getQ1();
-        y0C[12] = r0ConvertedAxisDEUX.getQ2();
-        y0C[13] = r0ConvertedAxisDEUX.getQ3();
-        
-        return new double[][] { y0C, i, {axesP[0].getX(), axesP[0].getY(), axesP[0].getZ()}, {axesP[1].getX(), axesP[1].getY(), axesP[1].getZ()}, {r0ConvertedAxisDEUX.getQ0(), r0ConvertedAxisDEUX.getQ1(), r0ConvertedAxisDEUX.getQ2(), r0ConvertedAxisDEUX.getQ3()}
-        , {convertAxesDEUX.getQ0(), convertAxesDEUX.getQ1(), convertAxesDEUX.getQ2(), convertAxesDEUX.getQ3()}};
     }
 
     private static DenseOutputModel computePhiQuadratureModel(final double i1, final double i2, final double i3,
@@ -497,6 +334,8 @@ public class TestProblem8Debug extends TestProblemAbstract {
             public int getDimension() {
                 return 1;
             }
+
+            /** {@inheritDoc} */
             @Override
             public double[] computeDerivatives(final double t, final double[] y) {
                 final double sn = jacobi.valuesN((t - tRef) * tScale).sn();
@@ -595,7 +434,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
         yDot[4] = 0.5 * (y[0] * y[3] +y[2] * y[5] -y[1] * y[6]);
         yDot[5] = 0.5 * (y[1] * y[3] -y[2] * y[4] +y[0] * y[6]);
         yDot[6] = 0.5 * (y[2] * y[3] +y[1] * y[4] -y[0] * y[5]);
-        
+
         // compute the derivatives using Euler equations
         yDot[7] = y[8] * y[9] * (i2DEUX - i3DEUX) / i1DEUX;
         yDot[8] = y[9] * y[7] * (i3DEUX - i1DEUX) / i2DEUX;
@@ -631,6 +470,24 @@ public class TestProblem8Debug extends TestProblemAbstract {
             tfm[1].getRotation().getQ2(),
             tfm[1].getRotation().getQ3()
         };
+    }
+
+    private static class Sorted {
+        private final double   i1;
+        private final double   i2;
+        private final double   i3;
+        private final Vector3D omega;
+        private final Rotation rotation;
+        private final Rotation convertAxes;
+        private Sorted(final double i1, final double i2, final double i3,
+                      final Vector3D omega, final Rotation rotation, final Rotation convertAxes) {
+            this.i1              = i1;
+            this.i2              = i2;
+            this.i3              = i3;
+            this.omega           = omega;
+            this.rotation        = rotation;
+            this.convertAxes     = convertAxes;
+        }
     }
 
     public static class TfmState {

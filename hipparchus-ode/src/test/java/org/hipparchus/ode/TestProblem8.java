@@ -162,13 +162,13 @@ public class TestProblem8 extends TestProblemAbstract {
         }
 
         final double condition;
-        if( y0P[0] == 0 && y0P[1] == 0 && y0P[2] == 0) {
+        if ( y0P[0] == 0 && y0P[1] == 0 && y0P[2] == 0) {
             condition = 0.0;
-        }else {
+        } else {
             condition = m2/twoE;
         }
 
-        if(condition < i[1]) {
+        if (condition < i[1]) {
             Vector3D z = axesP[0];
             axesP[0] = axesP[2];
             axesP[2] = z;

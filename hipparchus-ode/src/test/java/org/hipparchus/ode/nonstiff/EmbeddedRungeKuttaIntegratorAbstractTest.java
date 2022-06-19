@@ -830,6 +830,18 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                                                                         state.getPrimaryState()[6],
                                                                         true),
                                                            tfm[0].getRotation()));
+                maxErrorOmega = FastMath.max(maxErrorOmega,
+                                             Vector3D.distance(new Vector3D(state.getPrimaryState()[7],
+                                                                            state.getPrimaryState()[8],
+                                                                            state.getPrimaryState()[9]),
+                                                               tfm[1].getOmega()));
+                maxErrorQ = FastMath.max(maxErrorQ,
+                                         Rotation.distance(new Rotation(state.getPrimaryState()[10],
+                                                                        state.getPrimaryState()[11],
+                                                                        state.getPrimaryState()[12],
+                                                                        state.getPrimaryState()[13],
+                                                                        true),
+                                                           tfm[1].getRotation()));
 
                 out.format(Locale.US, "%f %f %f %f %f %f %f %f %f %f %f %f %f%n",
                            state.getTime(),
