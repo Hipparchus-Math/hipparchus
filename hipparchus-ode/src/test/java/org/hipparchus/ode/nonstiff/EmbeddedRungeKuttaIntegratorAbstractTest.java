@@ -470,12 +470,12 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 	}
 
 	@Test
-	/** Compare that the analytical model and the numerical model that compute the  the quaternion in a torquefree configuration give same results.
-	 * This test is used to validate the results of the analitycal model as defined by Landau & Lifchitz.
+	/** Compare that the analytical model and the numerical model that compute the  the quaternion in a torque-free configuration give same results.
+	 * This test is used to validate the results of the analytical model as defined by Landau & Lifchitz.
 	 */
 	public abstract void testTorqueFreeMotion();
 
-	protected void doTestTorqueFreeMotion(double epsilon) {
+	protected void doTestTorqueFreeMotion(double epsilonOmega, double epsilonQ) {
 
 		final TestProblem8 pb  = new TestProblem8();
 		double minStep = 1.0e-10;
@@ -484,14 +484,16 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 		double[] vecRelativeTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
 
 		EmbeddedRungeKuttaIntegrator integ = createIntegrator(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);   
-		integ.addStepHandler(new TorqueFreeHandler(pb, epsilon));
+		integ.addStepHandler(new TorqueFreeHandler(pb, epsilonOmega, epsilonQ));
 		integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
 	}
 
 	private static class TorqueFreeHandler implements ODEStepHandler {
-		private double maxError;
-		private final TestProblem8 pb;
-		private final double epsilon;
+	    private double maxErrorOmega;
+	    private double maxErrorQ;
+        private final TestProblem8 pb;
+		private final double epsilonOmega;
+		private final double epsilonQ;
 		private int width;
 		private int height;
 		private String title;
@@ -514,11 +516,13 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 		private double lastThetaT;
 
 		private double d;
-		public TorqueFreeHandler(TestProblem8 pb, double epsilon) {
+		public TorqueFreeHandler(TestProblem8 pb, double epsilonOmega, double epsilonQ) {
 			this.pb      = pb;
-			this.epsilon = epsilon;
-			maxError     = 0;
-			width = 1000;
+			this.epsilonOmega = epsilonOmega;
+			this.epsilonQ     = epsilonQ;
+			maxErrorOmega     = 0;
+			maxErrorQ         = 0;
+            width = 1000;
 			height = 1000;
 			title = "title";
 			outputStep = 0.01;
@@ -526,7 +530,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
 		public void init(ODEStateAndDerivative state0, double t) {
 
-			maxError = 0;     	
+			maxErrorOmega = 0;
+			maxErrorQ     = 0;
 			final ProcessBuilder pbg = new ProcessBuilder("gnuplot").
 					redirectOutput(ProcessBuilder.Redirect.INHERIT).
 					redirectError(ProcessBuilder.Redirect.INHERIT);
@@ -562,34 +567,37 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 					interpolator.getCurrentState().getTime() > current) {
 				ODEStateAndDerivative state = interpolator.getInterpolatedState(current);
 				double[] theoreticalY  = pb.computeTheoreticalState(state.getTime());
-				double dp1   = state.getPrimaryState()[0] - theoreticalY[0];
-				double dp2   = state.getPrimaryState()[1] - theoreticalY[1];
-				double dp3   = state.getPrimaryState()[2] - theoreticalY[2];
-				double dp4   = state.getPrimaryState()[3] - theoreticalY[3];
-				double dp5   = state.getPrimaryState()[4] - theoreticalY[4];
-				double dp6   = state.getPrimaryState()[5] - theoreticalY[5];
-				double dp7   = state.getPrimaryState()[6] - theoreticalY[6];
-				double error = dp1 * dp1 + dp2 * dp2 + dp3 * dp3 + dp4 * dp4 + dp5 * dp5 + dp6 * dp6 + dp7 * dp7;
-
-				if (error > maxError) {
-					maxError = error;
-
-				}
-
-				double d = Rotation.distance(new Rotation(state.getPrimaryState()[3], state.getPrimaryState()[4], state.getPrimaryState()[5], state.getPrimaryState()[6], true),
-						new Rotation(theoreticalY[3], theoreticalY[4], theoreticalY[5], theoreticalY[6], true));
-
-				System.out.println("La distance entre les 2 rotation est de : "+d);   		
+				maxErrorOmega = FastMath.max(maxErrorOmega,
+				                             Vector3D.distance(new Vector3D(state.getPrimaryState()[0],
+				                                                            state.getPrimaryState()[1],
+				                                                            state.getPrimaryState()[2]),
+				                                               new Vector3D(theoreticalY[0],
+				                                                            theoreticalY[1],
+				                                                            theoreticalY[2])));
+				maxErrorQ = FastMath.max(maxErrorQ,
+				                         Rotation.distance(new Rotation(state.getPrimaryState()[3],
+				                                                        state.getPrimaryState()[4],
+				                                                        state.getPrimaryState()[5],
+				                                                        state.getPrimaryState()[6],
+				                                                        true),
+				                                           new Rotation(theoreticalY[3],
+				                                                        theoreticalY[4],
+				                                                        theoreticalY[5],
+				                                                        theoreticalY[6],
+				                                                        true)));
 
 				//        		     out.format(Locale.US, "%s %s%n",
 				//        		    		 RyuDouble.doubleToString(state.getTime()),
 				//        		    		 RyuDouble.doubleToString(d));
 
-				//        		     out.format(Locale.US, "%f %f %f %f%n",
-				//        		    		 state.getTime(),
-				//        		    		 state.getPrimaryState()[0],
-				//        		    		 state.getPrimaryState()[1],
-				//        		    		 state.getPrimaryState()[2]);
+				        		     out.format(Locale.US, "%f %f %f %f %f %f %f%n",
+				        		    		 state.getTime(),
+                                             state.getPrimaryState()[0],
+                                             state.getPrimaryState()[1],
+                                             state.getPrimaryState()[2],
+                                             theoreticalY[0],
+                                             theoreticalY[1],
+                                             theoreticalY[2]);
 
 				//        		        		out.format(Locale.US, "%s %s %s %s %s %s %s %s %s%n",
 				//        		        				RyuDouble.doubleToString(state.getTime()),
@@ -602,45 +610,31 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 				//        		        				RyuDouble.doubleToString(theoreticalY[5]),
 				//        		        				RyuDouble.doubleToString(theoreticalY[6]));
 
-				double[] theoretical  = pb.computeTheoreticalState(state.getTime());
-				phiT = theoretical[7];
-				thetaT = theoretical[8];
-				psiT = theoretical[9];
-
-				//                    phiT = theoretical[0];
-				//        			thetaT = theoretical[1];
-				//        			psiT = theoretical[2];
+		        final TestProblem8.TfmState tfm = pb.computeTorqueFreeMotion(state.getTime());
+                phiT   = tfm.getPhi();
+                thetaT = tfm.getTheta();
+                psiT   = tfm.getPsi();
 
 				Rotation r = new Rotation(state.getPrimaryState()[3],state.getPrimaryState()[4],state.getPrimaryState()[5],state.getPrimaryState()[6], true);
 				if (state.getTime() > 0.001) {
 
-					/**Rotation convertAxis = new Rotation(Vector3D.PLUS_I, Vector3D.PLUS_J, new Vector3D(theoretical[10], theoretical[11], theoretical[12]),  new Vector3D(theoretical[13], theoretical[14], theoretical[15]));
-        			r = convertAxis.applyTo(r);
-					 */
-					double[] angles = r.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
-
-
+                    double[] angles = tfm.getConvertAxes().applyTo(r.applyTo(tfm.getMAlignedToInert())).
+                                    getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
 
 					lastPhiN = MathUtils.normalizeAngle(angles[0], lastPhiN);
 					lastThetaN = MathUtils.normalizeAngle(angles[1], lastThetaN);
 					lastPsiN = MathUtils.normalizeAngle(angles[2], lastPsiN);
-					lastPhiT = MathUtils.normalizeAngle(theoretical[7], lastPhiT);
-					lastThetaT = MathUtils.normalizeAngle(theoretical[8], lastThetaT);
-					lastPsiT = MathUtils.normalizeAngle(theoretical[9], lastPsiT);
-
-					//        			lastPhiT = MathUtils.normalizeAngle(theoretical[0], lastPhiT);
-					//        			lastThetaT = MathUtils.normalizeAngle(theoretical[1], lastThetaT);
-					//        			lastPsiT = MathUtils.normalizeAngle(theoretical[2], lastPsiT);
-
-
-					out.format(Locale.US, "%s %s %s %s %s %s %s%n",
-							RyuDouble.doubleToString(state.getTime()),
-							RyuDouble.doubleToString(lastPhiN), 
-							RyuDouble.doubleToString(lastPhiT),
-							RyuDouble.doubleToString(lastThetaN), 
-							RyuDouble.doubleToString(lastThetaT),
-							RyuDouble.doubleToString(lastPsiN), 
-							RyuDouble.doubleToString(lastPsiT));
+					lastPhiT = MathUtils.normalizeAngle(phiT, lastPhiT);
+					lastThetaT = MathUtils.normalizeAngle(thetaT, lastThetaT);
+					lastPsiT = MathUtils.normalizeAngle(psiT, lastPsiT);
+//					out.format(Locale.US, "%s %s %s %s %s %s %s%n",
+//							RyuDouble.doubleToString(state.getTime()),
+//							RyuDouble.doubleToString(lastPhiN), 
+//							RyuDouble.doubleToString(lastPhiT),
+//							RyuDouble.doubleToString(lastThetaN), 
+//							RyuDouble.doubleToString(lastThetaT),
+//							RyuDouble.doubleToString(lastPsiN), 
+//							RyuDouble.doubleToString(lastPsiT));
 
 				}
 				current += outputStep;
@@ -666,41 +660,45 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
 			//        	out.format(Locale.US, " plot $data using 1:2 with lines title 'quaternions difference'%n ");
 
-			//        	out.format(Locale.US, " plot $data using 1:($2-$3) with lines title 'phi difference',\\%n ");
-			//        	out.format(Locale.US, "$data using 1:($4-$5) with lines title 'theta difference',\\%n ");
-			//        	out.format(Locale.US, "$data using 1:($6-$7) with lines title 'psi difference'%n ");
+			//        	out.format(Locale.US, " plot $data using 1:($2-$3) with lines title 'φ difference',\\%n ");
+			//        	out.format(Locale.US, "$data using 1:($4-$5) with lines title 'θ difference',\\%n ");
+			//        	out.format(Locale.US, "$data using 1:($6-$7) with lines title 'ψ difference'%n ");
 
-			out.format(Locale.US, " plot $data using 1:2 with lines title 'phiN',\\%n ");
-			out.format(Locale.US, "$data using 1:3 with lines dt 2 title 'phiT',\\%n ");
-			out.format(Locale.US, "$data using 1:4 with lines title 'thetaN',\\%n ");
-			out.format(Locale.US, "$data using 1:5 with lines dt 2 title 'thetaT',\\%n ");
-			out.format(Locale.US, "$data using 1:6 with lines title 'psiN',\\%n ");
-			out.format(Locale.US, "$data using 1:7 with lines dt 2 title 'psiT'%n ");
+//			out.format(Locale.US, " plot $data using 1:2 with lines lc 1 title 'φN',\\%n ");
+//			out.format(Locale.US, "$data using 1:3 with points pt 4 lc 1 title 'φT',\\%n ");
+//			out.format(Locale.US, "$data using 1:4 with lines lc 2 title 'θN',\\%n ");
+//			out.format(Locale.US, "$data using 1:5 with points pt 4 lc 2 title 'θT',\\%n ");
+//			out.format(Locale.US, "$data using 1:6 with lines lc 3 title 'ψN',\\%n ");
+//			out.format(Locale.US, "$data using 1:7 with points lc 3 pt 4 title 'ψT'%n ");
 
-			//        	out.format(Locale.US, "plot $data using 1:2 with lines title 'Omega1', \\%n");
-			//        	out.format(Locale.US, "$data using 1:3 with lines title 'Omega2', \\%n");
-			//        	out.format(Locale.US, "$data using 1:4 with lines title 'Omega 3' %n");
+            out.format(Locale.US, "plot $data using 1:2 with lines lc 1 title 'Ω₁ numerical', \\%n");
+            out.format(Locale.US, "     $data using 1:5 with points pt 4 lc 1 title 'Ω₁ theoretical', \\%n");
+            out.format(Locale.US, "     $data using 1:3 with lines lc 2 title 'Ω₂ numerical', \\%n");
+            out.format(Locale.US, "     $data using 1:6 with points pt 4 lc 2 title 'Ω₂ theoretical', \\%n");
+            out.format(Locale.US, "     $data using 1:4 with lines lc 3 title 'Ω₃ numerical', \\%n");
+            out.format(Locale.US, "     $data using 1:7 with points pt 4 lc 3 title 'Ω₃ theoretical'%n");
 
-			//        	out.format(Locale.US, " plot $data using 1:2 with linespoints title 'phi numerical',\\%n ");
-			//        	out.format(Locale.US, "$data using 1:3 with lines dt 2 title 'phi theoretical'%n ");
+			//        	out.format(Locale.US, " plot $data using 1:2 with linespoints title 'φ numerical',\\%n ");
+			//        	out.format(Locale.US, "$data using 1:3 with lines dt 2 title 'φ theoretical'%n ");
 
-			//        	out.format(Locale.US, "plot $data using 1:4 with points title 'thetaN',\\%n ");
-			//        	out.format(Locale.US, "$data using 1:5 with points title 'thetaT',%n ");
+			//        	out.format(Locale.US, "plot $data using 1:4 with points title 'θN',\\%n ");
+			//        	out.format(Locale.US, "$data using 1:5 with points title 'θT',%n ");
 
 			out.format(Locale.US, "pause mouse close%n");
 			out.close();
-			Assert.assertEquals(0.0, maxError, epsilon);
+			Assert.assertEquals(0.0, maxErrorOmega, epsilonOmega);
+			Assert.assertEquals(0.0,  maxErrorQ, epsilonQ);
 		}
 	}
 
 
 	@Test
-	/** Compare that the analytical model and the numerical model that compute the  the quaternion in a torquefree configuration give same results.
-	 * This test is used to validate the results of the analitycal model as defined by Landau & Lifchitz.
+	/** Compare that the analytical model and the numerical model that compute the  the quaternion in a torque-free configuration give same results.
+	 * This test is used to validate the results of the analytical model as defined by Landau & Lifchitz.
 	 */
 	public abstract void testTorqueFreeMotionDebug();
 
-	protected void doTestTorqueFreeMotionDebug(double epsilon) {
+	protected void doTestTorqueFreeMotionDebug(double epsilonOmega, double epsilonQ) {
 
 		final TestProblem8Debug pb  = new TestProblem8Debug();
 		double minStep = 1.0e-10;
@@ -709,14 +707,16 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 		double[] vecRelativeTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
 
 		EmbeddedRungeKuttaIntegrator integ = createIntegrator(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);   
-		integ.addStepHandler(new TorqueFreeHandlerDebug(pb, epsilon));
+		integ.addStepHandler(new TorqueFreeHandlerDebug(pb, epsilonOmega, epsilonQ));
 		integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
 	}
 
 	private static class TorqueFreeHandlerDebug implements ODEStepHandler {
-		private double maxError;
+		private double maxErrorOmega;
+		private double maxErrorQ;
 		private final TestProblem8Debug pb;
-		private final double epsilon;
+		private final double epsilonOmega;
+		private final double epsilonQ;
 		private int width;
 		private int height;
 		private String title;
@@ -760,10 +760,12 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 		private double dDEUX;
 
 
-		public TorqueFreeHandlerDebug(TestProblem8Debug pb, double epsilon) {
+		public TorqueFreeHandlerDebug(TestProblem8Debug pb, double epsilonOmega, double epsilonQ) {
 			this.pb      = pb;
-			this.epsilon = epsilon;
-			maxError     = 0;
+			this.epsilonOmega = epsilonOmega;
+			this.epsilonQ     = epsilonQ;
+			maxErrorOmega = 0;
+			maxErrorQ     = 0;
 			width = 1000;
 			height = 1000;
 			title = "title";
@@ -772,7 +774,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
 		public void init(ODEStateAndDerivative state0, double t) {
 
-			maxError = 0;     	
+            maxErrorOmega = 0;
+            maxErrorQ     = 0;
 			final ProcessBuilder pbg = new ProcessBuilder("gnuplot").
 					redirectOutput(ProcessBuilder.Redirect.INHERIT).
 					redirectError(ProcessBuilder.Redirect.INHERIT);
@@ -814,36 +817,48 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 			while (interpolator.getPreviousState().getTime() <= current &&
 					interpolator.getCurrentState().getTime() > current) {
 				ODEStateAndDerivative state = interpolator.getInterpolatedState(current);
-				double[] theoreticalY  = pb.computeTheoreticalState(state.getTime());
-				double dp1   = state.getPrimaryState()[0] - theoreticalY[0];
-				double dp2   = state.getPrimaryState()[1] - theoreticalY[1];
-				double dp3   = state.getPrimaryState()[2] - theoreticalY[2];
-				double dp4   = state.getPrimaryState()[3] - theoreticalY[3];
-				double dp5   = state.getPrimaryState()[4] - theoreticalY[4];
-				double dp6   = state.getPrimaryState()[5] - theoreticalY[5];
-				double dp7   = state.getPrimaryState()[6] - theoreticalY[6];
-				double error = dp1 * dp1 + dp2 * dp2 + dp3 * dp3 + dp4 * dp4 + dp5 * dp5 + dp6 * dp6 + dp7 * dp7;
+				final TestProblem8Debug.TfmState[] tfm  = pb.computeTorqueFreeMotion(state.getTime());
+                maxErrorOmega = FastMath.max(maxErrorOmega,
+                                             Vector3D.distance(new Vector3D(state.getPrimaryState()[0],
+                                                                            state.getPrimaryState()[1],
+                                                                            state.getPrimaryState()[2]),
+                                                               tfm[0].getOmega()));
+                maxErrorQ = FastMath.max(maxErrorQ,
+                                         Rotation.distance(new Rotation(state.getPrimaryState()[3],
+                                                                        state.getPrimaryState()[4],
+                                                                        state.getPrimaryState()[5],
+                                                                        state.getPrimaryState()[6],
+                                                                        true),
+                                                           tfm[0].getRotation()));
+                maxErrorOmega = FastMath.max(maxErrorOmega,
+                                             Vector3D.distance(new Vector3D(state.getPrimaryState()[7],
+                                                                            state.getPrimaryState()[8],
+                                                                            state.getPrimaryState()[9]),
+                                                               tfm[1].getOmega()));
+                maxErrorQ = FastMath.max(maxErrorQ,
+                                         Rotation.distance(new Rotation(state.getPrimaryState()[10],
+                                                                        state.getPrimaryState()[11],
+                                                                        state.getPrimaryState()[12],
+                                                                        state.getPrimaryState()[13],
+                                                                        true),
+                                                           tfm[1].getRotation()));
 
-				if (error > maxError) {
-					maxError = error;
+                out.format(Locale.US, "%f %f %f %f %f %f %f %f %f %f %f %f %f%n",
+                           state.getTime(),
+                           state.getPrimaryState()[0],
+                           state.getPrimaryState()[1],
+                           state.getPrimaryState()[2],
+                           tfm[0].getOmega().getX(),
+                           tfm[0].getOmega().getY(),
+                           tfm[0].getOmega().getZ(),
+                           state.getPrimaryState()[7],
+                           state.getPrimaryState()[8],
+                           state.getPrimaryState()[9],
+                           tfm[1].getOmega().getX(),
+                           tfm[1].getOmega().getY(),
+                           tfm[1].getOmega().getZ());
 
-				}
-
-				double d = Rotation.distance(new Rotation(state.getPrimaryState()[3], state.getPrimaryState()[4], state.getPrimaryState()[5], state.getPrimaryState()[6], true),
-						new Rotation(theoreticalY[3], theoreticalY[4], theoreticalY[5], theoreticalY[6], true));
-
-				System.out.println("La distance entre les 2 rotation est de : "+d);   		
-
-				double dDEUX = Rotation.distance(new Rotation(state.getPrimaryState()[10], state.getPrimaryState()[11], state.getPrimaryState()[12], state.getPrimaryState()[13], true),
-						new Rotation(theoreticalY[19], theoreticalY[20], theoreticalY[21], theoreticalY[22], true));
-
-				System.out.println("La distance entre les 2 rotation DEUX est de : "+dDEUX);   	
-
-				Rotation rrrr = new Rotation(state.getPrimaryState()[3], state.getPrimaryState()[4], state.getPrimaryState()[5],state.getPrimaryState()[6], true);
-				Rotation rrrrDEUX = new Rotation(state.getPrimaryState()[10],state.getPrimaryState()[11],state.getPrimaryState()[12],state.getPrimaryState()[13], true);
-
-
-				//         out.format(Locale.US, "%s  %s %s%n",
+                //         out.format(Locale.US, "%s  %s %s%n",
 				//         		    		 state.getTime(),
 				//         		    		rrrr.applyInverseTo( new Vector3D(state.getPrimaryState()[0], state.getPrimaryState()[1], state.getPrimaryState()[2])).getX(),
 				//  		    		rrrrDEUX.applyInverseTo(new Vector3D(state.getPrimaryState()[7], state.getPrimaryState()[8],state.getPrimaryState()[9])).getX());
@@ -863,25 +878,29 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 				//         		    		 state.getPrimaryState()[1],
 				//         		    		 state.getPrimaryState()[2]);
 
-				//         		        		out.format(Locale.US, "%s %s %s %s %s %s %s %s %s%n",
-				//         		        				RyuDouble.doubleToString(state.getTime()),
-				//         		        				RyuDouble.doubleToString(state.getPrimaryState()[3]),
-				//         		        				RyuDouble.doubleToString(state.getPrimaryState()[4]),
-				//         		        				RyuDouble.doubleToString(state.getPrimaryState()[5]),
-				//         		        				RyuDouble.doubleToString(state.getPrimaryState()[6]),
-				//         		        				RyuDouble.doubleToString(theoreticalY[3]),
-				//         		        				RyuDouble.doubleToString(theoreticalY[4]),
-				//         		        				RyuDouble.doubleToString(theoreticalY[5]),
-				//         		        				RyuDouble.doubleToString(theoreticalY[6]));
+//                final double sign = FastMath.copySign(1.0,
+//                                                      state.getPrimaryState()[10] * tfm[1].getRotation().getQ0() +
+//                                                      state.getPrimaryState()[11] * tfm[1].getRotation().getQ1() +
+//                                                      state.getPrimaryState()[12] * tfm[1].getRotation().getQ2() +
+//                                                      state.getPrimaryState()[13] * tfm[1].getRotation().getQ3());
+//                out.format(Locale.US, "%s %s %s %s %s %s %s %s %s%n",
+//                           RyuDouble.doubleToString(state.getTime()),
+//                           RyuDouble.doubleToString(state.getPrimaryState()[10]),
+//                           RyuDouble.doubleToString(state.getPrimaryState()[11]),
+//                           RyuDouble.doubleToString(state.getPrimaryState()[12]),
+//                           RyuDouble.doubleToString(state.getPrimaryState()[13]),
+//                           RyuDouble.doubleToString(sign * tfm[1].getRotation().getQ0()),
+//                           RyuDouble.doubleToString(sign * tfm[1].getRotation().getQ1()),
+//                           RyuDouble.doubleToString(sign * tfm[1].getRotation().getQ2()),
+//                           RyuDouble.doubleToString(sign * tfm[1].getRotation().getQ3()));
 
-				double[] theoretical  = pb.computeTheoreticalState(state.getTime());
-				phiT = theoretical[7];
-				thetaT = theoretical[8];
-				psiT = theoretical[9];
+				phiT   = tfm[0].getPhi();
+				thetaT = tfm[0].getTheta();
+				psiT   = tfm[0].getPsi();
 
-				phiTDEUX = theoretical[23];
-				thetaTDEUX = theoretical[24];
-				psiTDEUX = theoretical[25];
+				phiTDEUX   = tfm[1].getPhi();
+				thetaTDEUX = tfm[1].getTheta();
+				psiTDEUX   = tfm[1].getPsi();
 
 				Rotation r = new Rotation(state.getPrimaryState()[3],state.getPrimaryState()[4],state.getPrimaryState()[5],state.getPrimaryState()[6], true);
 				Rotation rDEUX = new Rotation(state.getPrimaryState()[10],state.getPrimaryState()[11],state.getPrimaryState()[12],state.getPrimaryState()[13], true);
@@ -889,47 +908,45 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
 				if (state.getTime() > 0.001) {
 
-					/**Rotation convertAxis = new Rotation(Vector3D.PLUS_I, Vector3D.PLUS_J, new Vector3D(theoretical[10], theoretical[11], theoretical[12]),  new Vector3D(theoretical[13], theoretical[14], theoretical[15]));
-         			r = convertAxis.applyTo(r);
-					 */
-					double[] angles = r.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
+					double[] angles = tfm[0].getConvertAxes().applyTo(r.applyTo(tfm[0].getMAlignedToInert())).
+					                  getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
 
 
-					double[] anglesDEUX = rDEUX.getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
+					double[] anglesDEUX = tfm[1].getConvertAxes().applyTo(rDEUX.applyTo(tfm[1].getMAlignedToInert())).
+                                          getAngles(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM);
 
 
 					lastPhiN = MathUtils.normalizeAngle(angles[0], lastPhiN);
 					lastThetaN = MathUtils.normalizeAngle(angles[1], lastThetaN);
 					lastPsiN = MathUtils.normalizeAngle(angles[2], lastPsiN);
-					lastPhiT = MathUtils.normalizeAngle(theoretical[7], lastPhiT);
-					lastThetaT = MathUtils.normalizeAngle(theoretical[8], lastThetaT);
-					lastPsiT = MathUtils.normalizeAngle(theoretical[9], lastPsiT);
+					lastPhiT = MathUtils.normalizeAngle(phiT, lastPhiT);
+					lastThetaT = MathUtils.normalizeAngle(thetaT, lastThetaT);
+					lastPsiT = MathUtils.normalizeAngle(psiT, lastPsiT);
 
 
-					lastPhiNDEUX = MathUtils.normalizeAngle(anglesDEUX[0], lastPhiN);
-					lastThetaNDEUX = MathUtils.normalizeAngle(anglesDEUX[1], lastThetaN);
-					lastPsiNDEUX = MathUtils.normalizeAngle(anglesDEUX[2], lastPsiN);
-					lastPhiTDEUX = MathUtils.normalizeAngle(theoretical[23], lastPhiT);
-					lastThetaTDEUX = MathUtils.normalizeAngle(theoretical[24], lastThetaT);
-					lastPsiTDEUX = MathUtils.normalizeAngle(theoretical[25], lastPsiT);
+					lastPhiNDEUX = MathUtils.normalizeAngle(anglesDEUX[0], lastPhiNDEUX);
+					lastThetaNDEUX = MathUtils.normalizeAngle(anglesDEUX[1], lastThetaNDEUX);
+					lastPsiNDEUX = MathUtils.normalizeAngle(anglesDEUX[2], lastPsiNDEUX);
+					lastPhiTDEUX = MathUtils.normalizeAngle(phiTDEUX, lastPhiTDEUX);
+					lastThetaTDEUX = MathUtils.normalizeAngle(thetaTDEUX, lastThetaTDEUX);
+					lastPsiTDEUX = MathUtils.normalizeAngle(psiTDEUX, lastPsiTDEUX);
 
-
-					out.format(Locale.US, "%s %s %s %s %s %s %s %s %s %s %s %s %s%n",
-							RyuDouble.doubleToString(state.getTime()),
-							RyuDouble.doubleToString(lastPhiN), 
-							RyuDouble.doubleToString(lastPhiT),
-							RyuDouble.doubleToString(lastThetaN), 
-							RyuDouble.doubleToString(lastThetaT),
-							RyuDouble.doubleToString(lastPsiN), 
-							RyuDouble.doubleToString(lastPsiT),
-
-
-							RyuDouble.doubleToString(lastPhiNDEUX), 
-							RyuDouble.doubleToString(lastPhiTDEUX),
-							RyuDouble.doubleToString(lastThetaNDEUX), 
-							RyuDouble.doubleToString(lastThetaTDEUX),
-							RyuDouble.doubleToString(lastPsiNDEUX), 
-							RyuDouble.doubleToString(lastPsiTDEUX));
+//					out.format(Locale.US, "%s %s %s %s %s %s %s %s %s %s %s %s %s%n",
+//							RyuDouble.doubleToString(state.getTime()),
+//							RyuDouble.doubleToString(lastPhiN), 
+//							RyuDouble.doubleToString(lastPhiT),
+//							RyuDouble.doubleToString(lastThetaN), 
+//							RyuDouble.doubleToString(lastThetaT),
+//							RyuDouble.doubleToString(lastPsiN), 
+//							RyuDouble.doubleToString(lastPsiT),
+//
+//
+//							RyuDouble.doubleToString(lastPhiNDEUX), 
+//							RyuDouble.doubleToString(lastPhiTDEUX),
+//							RyuDouble.doubleToString(lastThetaNDEUX), 
+//							RyuDouble.doubleToString(lastThetaTDEUX),
+//							RyuDouble.doubleToString(lastPsiNDEUX), 
+//							RyuDouble.doubleToString(lastPsiTDEUX));
 
 				}
 				current += outputStep;
@@ -937,27 +954,26 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 			}
 		}
 
-
 		public void finish(ODEStateAndDerivative finalState) {
 
 			out.format(Locale.US, "EOD%n");
 
 
 
-			//        	    		out.format(Locale.US, " plot $data using 1:2 with lines title 'q₀ numerical',\\%n ");
-			//         	    		out.format(Locale.US, "$data using 1:3 with lines title 'q₁ numerical',\\%n ");
-			//         	    		out.format(Locale.US, "$data using 1:4 with lines title 'q₂ numerical',\\%n ");
-			//         	    		out.format(Locale.US, "$data using 1:5 with lines title 'q₃ numerical',\\%n ");
-			//        	    		out.format(Locale.US, "$data using 1:6 with lines dt 2 title 'q₀ Theoretical',\\%n ");
-			//         	    		out.format(Locale.US, "$data using 1:7 with lines dt 2 title 'q₁ Theoretical',\\%n ");
-			//         	    		out.format(Locale.US, "$data using 1:8 with lines dt 2 title 'q₂ Theoretical',\\%n ");
-			//         	    		out.format(Locale.US, "$data using 1:9 with lines dt 2 title 'q₃ Theoretical'%n ");
+//			out.format(Locale.US, " plot $data using 1:2 with lines lc 1 title 'q₀ numerical',\\%n ");
+//			out.format(Locale.US, "$data using 1:3 with lines lc 2 title 'q₁ numerical',\\%n ");
+//			out.format(Locale.US, "$data using 1:4 with lines lc 3 title 'q₂ numerical',\\%n ");
+//			out.format(Locale.US, "$data using 1:5 with lines lc 4 title 'q₃ numerical',\\%n ");
+//			out.format(Locale.US, "$data using 1:6 with points pt 4 lc 1 title 'q₀ Theoretical',\\%n ");
+//			out.format(Locale.US, "$data using 1:7 with points pt 4 lc 2 title 'q₁ Theoretical',\\%n ");
+//			out.format(Locale.US, "$data using 1:8 with points pt 4 lc 3 title 'q₂ Theoretical',\\%n ");
+//			out.format(Locale.US, "$data using 1:9 with points pt 4 lc 4 title 'q₃ Theoretical'%n ");
 
 			//         	out.format(Locale.US, " plot $data using 1:2 with lines title 'quaternions difference'%n ");
 
-			//         	out.format(Locale.US, " plot $data using 1:($2-$3) with lines title 'phi difference',\\%n ");
-			//         	out.format(Locale.US, "$data using 1:($4-$5) with lines title 'theta difference',\\%n ");
-			//         	out.format(Locale.US, "$data using 1:($6-$7) with lines title 'psi difference'%n ");
+			//         	out.format(Locale.US, " plot $data using 1:($2-$3) with lines title 'φ difference',\\%n ");
+			//         	out.format(Locale.US, "$data using 1:($4-$5) with lines title 'θ difference',\\%n ");
+			//         	out.format(Locale.US, "$data using 1:($6-$7) with lines title 'ψ difference'%n ");
 
 
 			//         	out.format(Locale.US,  "plot $data using 1:2 with lines, \\%n");
@@ -966,35 +982,45 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 			//         	out.format(Locale.US,  "plot $data using 1:2 with lines, \\%n");
 			//         	out.format(Locale.US,  " $data using 1:3 with lines%n");
 
-			out.format(Locale.US, " plot $data using 1:2 with lines title 'phiN',\\%n ");
-			out.format(Locale.US, "$data using 1:3 with points pt 4 title 'phiT',\\%n ");
-			out.format(Locale.US, "$data using 1:4 with lines title 'thetaN',\\%n ");
-			out.format(Locale.US, "$data using 1:5 with points pt 4  title 'thetaT',\\%n ");
-			out.format(Locale.US, "$data using 1:6 with lines title 'psiN',\\%n ");
-			out.format(Locale.US, "$data using 1:7 with points pt 4  title 'psiT',\\%n ");
+//			out.format(Locale.US, " plot $data using 1:2 with lines lc 1 title 'φN',\\%n ");
+//			out.format(Locale.US, "$data using 1:3 with points pt 4 lc 1 title 'φT',\\%n ");
+//			out.format(Locale.US, "$data using 1:4 with lines lc 2 title 'θN',\\%n ");
+//			out.format(Locale.US, "$data using 1:5 with points lc 2 pt 4  title 'θT',\\%n ");
+//			out.format(Locale.US, "$data using 1:6 with lines lc 3 title 'ψN',\\%n ");
+//			out.format(Locale.US, "$data using 1:7 with points pt 4  lc 3 title 'ψT',\\%n ");
+//
+//
+//			out.format(Locale.US, "$data using 1:8 with lines dt 2 lc 4  title 'φN',\\%n ");
+//			out.format(Locale.US, "$data using 1:9 with points pt 6 lc 4 title 'φT',\\%n ");
+//			out.format(Locale.US, "$data using 1:10 with lines dt 2 lc 5 title 'θN',\\%n ");
+//			out.format(Locale.US, "$data using 1:11 with points pt 6 lc 5 title 'θT',\\%n ");
+//			out.format(Locale.US, "$data using 1:12 with lines dt 2 lc 6 title 'ψN',\\%n ");
+//			out.format(Locale.US, "$data using 1:13 with points pt 6 lc 6 title 'ψT'%n ");
 
 
-			out.format(Locale.US, "$data using 1:8 with points pt 2 title 'phiN',\\%n ");
-			out.format(Locale.US, "$data using 1:9 with lines dt 2 title 'phiT',\\%n ");
-			out.format(Locale.US, "$data using 1:10 with points pt 2 title 'thetaN',\\%n ");
-			out.format(Locale.US, "$data using 1:11 with lines dt 2 title 'thetaT',\\%n ");
-			out.format(Locale.US, "$data using 1:12 with points pt 2 title 'psiN',\\%n ");
-			out.format(Locale.US, "$data using 1:13 with lines dt 2 title 'psiT'%n ");
+            out.format(Locale.US, "plot $data using 1:2  with lines lc 1 title 'Ω₁ numerical', \\%n");
+            out.format(Locale.US, "     $data using 1:5  with points pt 4 lc 1 title 'Ω₁ theoretical', \\%n");
+            out.format(Locale.US, "     $data using 1:3  with lines lc 2 title 'Ω₂ numerical', \\%n");
+            out.format(Locale.US, "     $data using 1:6  with points pt 4 lc 2 title 'Ω₂ theoretical', \\%n");
+            out.format(Locale.US, "     $data using 1:4  with lines lc 3 title 'Ω₃ numerical', \\%n");
+            out.format(Locale.US, "     $data using 1:7  with points pt 4 lc 3 title 'Ω₃ theoretical', \\%n");
+            out.format(Locale.US, "     $data using 1:8  with lines dt 2 lc 4 title 'Ω₁ numerical', \\%n");
+            out.format(Locale.US, "     $data using 1:11 with points pt 6 lc 4 title 'Ω₁ theoretical', \\%n");
+            out.format(Locale.US, "     $data using 1:9  with lines dt 2 lc 5 title 'Ω₂ numerical', \\%n");
+            out.format(Locale.US, "     $data using 1:12 with points pt 6 lc 5 title 'Ω₂ theoretical', \\%n");
+            out.format(Locale.US, "     $data using 1:10 with lines dt 2 lc 6 title 'Ω₃ numerical', \\%n");
+            out.format(Locale.US, "     $data using 1:13 with points pt 6 lc 6 title 'Ω₃ theoretical'%n");
 
+            //         	out.format(Locale.US, " plot $data using 1:2 with linespoints title 'φ numerical',\\%n ");
+			//         	out.format(Locale.US, "$data using 1:3 with lines dt 2 title 'φ theoretical'%n ");
 
-			//         	out.format(Locale.US, "plot $data using 1:2 with lines title 'Omega1', \\%n");
-			//         	out.format(Locale.US, "$data using 1:3 with lines title 'Omega2', \\%n");
-			//         	out.format(Locale.US, "$data using 1:4 with lines title 'Omega 3' %n");
-
-			//         	out.format(Locale.US, " plot $data using 1:2 with linespoints title 'phi numerical',\\%n ");
-			//         	out.format(Locale.US, "$data using 1:3 with lines dt 2 title 'phi theoretical'%n ");
-
-			//         	out.format(Locale.US, "plot $data using 1:4 with points title 'thetaN',\\%n ");
-			//         	out.format(Locale.US, "$data using 1:5 with points title 'thetaT',%n ");
+			//         	out.format(Locale.US, "plot $data using 1:4 with points title 'θN',\\%n ");
+			//         	out.format(Locale.US, "$data using 1:5 with points title 'θT',%n ");
 
 			out.format(Locale.US, "pause mouse close%n");
 			out.close();
-			Assert.assertEquals(0.0, maxError, epsilon);
+			Assert.assertEquals(0.0, maxErrorOmega, epsilonOmega);
+			Assert.assertEquals(0.0, maxErrorQ,     epsilonQ);
 		}
 	}
 
