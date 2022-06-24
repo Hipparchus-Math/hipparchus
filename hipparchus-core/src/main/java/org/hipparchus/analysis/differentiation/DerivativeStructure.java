@@ -22,8 +22,10 @@
 package org.hipparchus.analysis.differentiation;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 
 import org.hipparchus.Field;
+import org.hipparchus.exception.Localizable;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
@@ -771,6 +773,93 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
             ds.data[i] = FastMath.toRadians(data[i]);
         }
         return ds;
+    }
+
+
+    /** Integrate w.r.t. one independent variable. Rigorously, if the derivatives of a function are known up to
+     * order N, the ones of its M-th integral w.r.t. a given variable (seen as a function itself) are actually known up
+     * to order N+M. However, this method still casts the output as a DerivativeStructure of order N. The integration
+     * constants are systematically set to zero.
+     * @param varIndex Index of independent variable w.r.t. which integration is done.
+     * @param integrationOrder Number of times the integration operator must be applied. If non-positive, call the
+     *                         differentiation operator.
+     * @return DerivativeStructure on which integration operator has been applied a certain number of times.
+     * @throws ArrayIndexOutOfBoundsException in case variable index does not make sense
+     */
+    public DerivativeStructure integrate(final int varIndex, final int integrationOrder)
+            throws ArrayIndexOutOfBoundsException{
+
+        // Deal first with trivial case
+        if (integrationOrder > this.getOrder())
+            return this.factory.constant(0.);
+        else if (integrationOrder == 0) {
+            return this.factory.build(this.data);
+        }
+
+        // Call 'inverse' (not rigorously) operation if necessary
+        if (integrationOrder < 0)
+            return differentiate(varIndex, -integrationOrder);
+
+        final double[] newData = new double[this.data.length];
+        final DSCompiler dsCompiler = this.factory.getCompiler();
+        for (int i = 0; i < newData.length; i++) {
+            if (this.data[i] != 0.) {
+                final int[] orders = dsCompiler.getPartialDerivativeOrders(i);
+                int sum = 0;
+                for (int order : orders) sum += order;
+                if (sum + integrationOrder <= this.getOrder()) {
+                    final int[] newOrders = new int[orders.length];
+                    System.arraycopy(orders, 0, newOrders, 0, orders.length);
+                    newOrders[varIndex] += integrationOrder;
+                    final int index = dsCompiler.getPartialDerivativeIndex(newOrders);
+                    newData[index] = this.data[i];
+                }
+            }
+        }
+
+        return this.factory.build(newData);
+    }
+
+    /** Differentiate w.r.t. one independent variable. Rigorously, if the derivatives of a function are known up to
+     * order N, the ones of its M-th derivative w.r.t. a given variable (seen as a function itself) are only known up
+     * to order N-M. However, this method still casts the output as a DerivativeStructure of order N with zeroes for the
+     * higher order terms.
+     * @param varIndex Index of independent variable w.r.t. which differentiation is done.
+     * @param differentiationOrder Number of times the differentiation operator must be applied. If non-positive, call
+     *                             the integration operator instead.
+     * @return DerivativeStructure on which differentiation operator has been applied a certain number of times.
+     * @throws ArrayIndexOutOfBoundsException in case variable index does not make sense
+     */
+    public DerivativeStructure differentiate(final int varIndex, final int differentiationOrder)
+            throws ArrayIndexOutOfBoundsException{
+
+        // Deal first with trivial case
+        if (differentiationOrder > this.getOrder())
+            return this.factory.constant(0.);
+        else if (differentiationOrder == 0) {
+            return this.factory.build(this.data);
+        }
+
+        // Call 'inverse' (not rigorously) operation if necessary
+        if (differentiationOrder < 0)
+            return integrate(varIndex, -differentiationOrder);
+
+        final double[] newData = new double[this.data.length];
+        final DSCompiler dsCompiler = this.factory.getCompiler();
+        for (int i = 0; i < newData.length; i++) {
+            if (this.data[i] != 0.) {
+                final int[] orders = dsCompiler.getPartialDerivativeOrders(i);
+                if (orders[varIndex] - differentiationOrder >= 0) {
+                    final int[] newOrders = new int[orders.length];
+                    System.arraycopy(orders, 0, newOrders, 0, orders.length);
+                    newOrders[varIndex] -= differentiationOrder;
+                    final int index = dsCompiler.getPartialDerivativeIndex(newOrders);
+                    newData[index] = this.data[i];
+                }
+            }
+        }
+
+        return this.factory.build(newData);
     }
 
     /** Evaluate Taylor expansion a derivative structure.
