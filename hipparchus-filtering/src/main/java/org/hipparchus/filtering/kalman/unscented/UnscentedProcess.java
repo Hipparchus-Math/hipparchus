@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.hipparchus.filtering.kalman.unscented;
 
 import org.hipparchus.filtering.kalman.Measurement;
@@ -31,17 +30,16 @@ import org.hipparchus.linear.RealVector;
  * @see UnscentedKalmanFilter
  * @see org.hipparchus.filtering.kalman.unscented.UnscentedProcess
  */
-
 public interface UnscentedProcess<T extends Measurement>  {
 
     /** Get the state evolution between two times.
      * @param previousTime time of the previous state
-     * @param sigmaPoints sigma points at {@code previousTime}
+     * @param sigmaPoints sigma points
      * @param measurement measurement to process
      * @return states evolution
      */
     UnscentedEvolution getEvolution(double previousTime, RealVector[] sigmaPoints, T measurement);
-    
+
     /** Get the innovation brought by a measurement.
      * @param measurement measurement to process
      * @param predictedMeasurement predicted measurement
@@ -50,6 +48,5 @@ public interface UnscentedProcess<T extends Measurement>  {
      * @return innovation brought by a measurement, may be null if measurement should be rejected
      */
     RealVector getInnovation(T measurement, RealVector predictedMeasurement, RealVector predictedState, RealMatrix innovationCovarianceMatrix);
-
 
 }

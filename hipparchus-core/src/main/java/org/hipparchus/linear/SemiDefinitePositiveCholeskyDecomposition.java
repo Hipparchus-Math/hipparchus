@@ -21,59 +21,69 @@ import java.util.Arrays;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.FastMath;
 
 /**
  * Calculates the Cholesky decomposition of a positive semidefinite matrix.
- * <p>The classic Cholesky decomposition ({@link CholeskyDecomposition}) applies to real symmetric positive-definite
- * matrix. This class extends cholesky decomposition to positive semidefinite matrix. 
- * <p>This class is based on the {@code schol} Matlab function from
- * <a href="https://github.com/EEA-sensors/ekfukf">EKF-UKF Toolbox</a>
- * @see J. Hartikainen, A. Solin, and S. Särkkä “Optimal ﬁltering with Kalman ﬁlters and smoothers,” 
- * Dept. of Biomedica Engineering and Computational Sciences, Aalto University School of Science, Aug. 2011.
- * Online copy: <a href="https://www.researchgate.net/profile/Simo-Saerkkae/publication/228683456_Optimal_filtering_with_Kalman_filters_and_smoothers-a_Manual_for_Matlab_toolbox_EKFUKF/links/0deec52b885bd0d890000000/Optimal-filtering-with-Kalman-filters-and-smoothers-a-Manual-for-Matlab-toolbox-EKF-UKF.pdf?origin=publication_detail">Optimal Filtering</a>
- * @see {@code schol} function: <a href="https://github.com/EEA-sensors/ekfukf/blob/develop/schol.m">schol</a>
+ * <p>
+ * The classic Cholesky decomposition ({@link CholeskyDecomposition}) applies to real
+ * symmetric positive-definite matrix. This class extends the Cholesky decomposition to
+ * positive semidefinite matrix. The main application is for estimation based on the
+ * Unscented Kalman Filter.
+ *
+ * @see "J. Hartikainen, A. Solin, and S. Särkkä. Optimal ﬁltering with Kalman ﬁlters and smoothers,
+ *       Dept. of Biomedica Engineering and Computational Sciences, Aalto University School of Science, Aug. 2011."
+ *
  */
-public class CholeskySDPDecomposition {
-    
+public class SemiDefinitePositiveCholeskyDecomposition {
+
+    /** Default threshold below which elements are not considered positive. */
+    public static final double POSITIVITY_THRESHOLD = 1.0e-15;
     /** Row-oriented storage for L<sup>T</sup> matrix data. */
     private final double[][] lTData;
     /** Cached value of L. */
     private RealMatrix cachedL;
     /** Cached value of LT. */
     private RealMatrix cachedLT;
-    /** Value 1,0,-1 denoting that A was positive definite,
-        positive semidefinite or negative definite, respectively. */
-    private int def;
-    
+
     /**
      * Calculates the Cholesky decomposition of the given matrix.
      * @param matrix the matrix to decompose
-     * @param matrix
+     * @throws MathIllegalArgumentException if the matrix is not square.
+     * @see #SemiDefinitePositiveCholeskyDecomposition(RealMatrix, double)
+     * @see #POSITIVITY_THRESHOLD
+     */
+    public SemiDefinitePositiveCholeskyDecomposition(final RealMatrix matrix) {
+        this(matrix, POSITIVITY_THRESHOLD);
+    }
+
+    /**
+     * Calculates the Cholesky decomposition of the given matrix.
+     * @param matrix the matrix to decompose
+     * @param positivityThreshold threshold below which elements are not considered positive
      * @throws MathIllegalArgumentException if the matrix is not square.
      */
-    public CholeskySDPDecomposition(final RealMatrix matrix) {
+    public SemiDefinitePositiveCholeskyDecomposition(final RealMatrix matrix,
+                                                     final double positivityThreshold) {
         if (!matrix.isSquare()) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());
         }
-        
+
         final int order = matrix.getRowDimension();
         lTData   = matrix.getData();
         cachedL  = MatrixUtils.createRealMatrix(lTData);
-        
-        
-        double zeroArray[] = new double[order];
+        int def  = 1;
+
+        final double[] zeroArray = new double[order];
         Arrays.fill(zeroArray, 0.);
-        
+
         for (int i = 0; i < order; ++i) {
             cachedL.setColumn(i, zeroArray);
         }
-        
+
         cachedLT = cachedL.transpose();
-        
-        final double e = 1.0;
-        final double eps = Math.ulp(e);
-        
+
         for (int i = 0; i < order; ++i) {
             for (int j = 0; j < i + 1; j++) {
                 double s = lTData[i][j];
@@ -81,43 +91,38 @@ public class CholeskySDPDecomposition {
                     s = s - cachedL.getEntry(i, k) * cachedL.getEntry(j, k);
                 }
                 if (j < i) {
-                    if (cachedL.getEntry(j, j) > eps) {
+                    if (cachedL.getEntry(j, j) > FastMath.ulp(1.0)) {
                         cachedL.setEntry(i, j, s / cachedL.getEntry(j, j));
-                    }
-                    else {
+                    } else {
                         cachedL.setEntry(i, j, 0.);
                     }
-                }
-                else {
-                    if (s < -eps) {
+                } else {
+                    if (s < -positivityThreshold) {
                         s = 0;
                         def = -1;
-                    }
-                    else if (s < eps) {
+                    } else if (s < positivityThreshold) {
                         s = 0;
-                        def = Math.min(0, def);
+                        def = FastMath.min(0, def);
                     }
-                    cachedL.setEntry(j,j,Math.sqrt(s));
+                    cachedL.setEntry(j, j, FastMath.sqrt(s));
                 }
-                
+
             }
         }
-//        if (def < 0) {
-//            throw new MathIllegalArgumentException(LocalizedCoreFormats.NEGATIVE_DEFINITE_MATRIX);
-//        }
-        
+
+        if (def < 0) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NEGATIVE_DEFINITE_MATRIX);
+        }
+
     }
-    
+
     /**
      * Returns the matrix L of the decomposition.
      * <p>L is an lower-triangular matrix</p>
      * @return the L matrix
      */
     public RealMatrix getL() {
-        
-        if (cachedL == null) {
-            cachedL = MatrixUtils.createRealMatrix(lTData);
-        }
+        // return the cached matrix
         return cachedL;
     }
 
@@ -127,22 +132,9 @@ public class CholeskySDPDecomposition {
      * @return the transpose of the matrix L of the decomposition
      */
     public RealMatrix getLT() {
-        cachedLT = cachedL.transpose();
+        cachedLT = getL().transpose();
         // return the cached matrix
         return cachedLT;
-    }
-
-    /**
-     * Return the determinant of the matrix
-     * @return determinant of the matrix
-     */
-    public double getDeterminant() {
-        double determinant = 1.0;
-        for (int i = 0; i < lTData.length; ++i) {
-            double lTii = lTData[i][i];
-            determinant *= lTii * lTii;
-        }
-        return determinant;
     }
 
 }

@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.hipparchus.filtering.kalman.unscented;
 
 import org.hipparchus.linear.RealMatrix;
@@ -24,7 +23,6 @@ import org.hipparchus.linear.RealVector;
  * Container for {@link UnscentedProcess unscented process} evolution data.
  * @see UnscentedProcess
  */
-
 public class UnscentedEvolution {
 
     /** Current time. */
@@ -33,7 +31,7 @@ public class UnscentedEvolution {
     /** State vectors at current time. */
     private final RealVector[] currentStates;
 
-    /** Measurement samples at current time. */
+    /** Estimated measurements at current time. */
     private final RealVector[] currentMeasurements;
 
     /** Process noise matrix. */
@@ -42,8 +40,8 @@ public class UnscentedEvolution {
     /**
      * Constructor.
      * @param currentTime current time
-     * @param currentStates states at current time
-     * @param currentMeasurements measurements at current time
+     * @param currentStates state vectors at current time
+     * @param currentMeasurements estimated measurements at current time
      * @param processNoiseMatrix process noise matrix
      */
     public UnscentedEvolution(final double currentTime, final RealVector[] currentStates,
@@ -81,6 +79,5 @@ public class UnscentedEvolution {
     public RealMatrix getProcessNoiseMatrix() {
         return processNoiseMatrix;
     }
-
 
 }

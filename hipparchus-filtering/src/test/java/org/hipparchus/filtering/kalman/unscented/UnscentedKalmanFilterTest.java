@@ -21,9 +21,11 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.filtering.kalman.ProcessEstimate;
 import org.hipparchus.filtering.kalman.Reference;
 import org.hipparchus.filtering.kalman.SimpleMeasurement;
+import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.CholeskyDecomposer;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
@@ -32,11 +34,41 @@ import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MerweUnscentedTransform;
+import org.hipparchus.util.UnscentedTransformProvider;
 import org.junit.Assert;
 import org.junit.Test;
 
 
 public class UnscentedKalmanFilterTest {
+
+    /** test state dimension equal to 0 */
+    @Test(expected = MathIllegalArgumentException.class)
+    public void testWrongStateDimension() {
+        final ConstantProcess process = new ConstantProcess();
+        final ProcessEstimate initial = new ProcessEstimate(0,
+                                                            MatrixUtils.createRealVector(new double[0]),
+                                                            process.q);
+        final UnscentedTransformProvider provider = new UnscentedTransformProvider() {
+            
+            @Override
+            public RealVector[] unscentedTransform(RealVector state,
+                                                   RealMatrix covariance) {
+                return new RealVector[0];
+            }
+            
+            @Override
+            public RealVector getWm() {
+                return new ArrayRealVector();
+            }
+            
+            @Override
+            public RealVector getWc() {
+                return new ArrayRealVector();
+            }
+        };
+
+        new UnscentedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial, provider);
+    }
 
     @Test
     public void testConstant() {
@@ -59,7 +91,7 @@ public class UnscentedKalmanFilterTest {
 
         // set up Kalman filter
         final UnscentedKalmanFilter<SimpleMeasurement> filter = new UnscentedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15),
-                process, initial);
+                process, initial, new MerweUnscentedTransform(initial.getState().getDimension()));
 
         // sequentially process all measurements and check against the reference estimated state and covariance
         measurements.
@@ -106,7 +138,7 @@ public class UnscentedKalmanFilterTest {
                             { 0.00, 0.00, 0.00, 0.00 },
                             { 0.00, 0.00, 0.00, 0.00 },
                          }, "cannonball-zero-process-noise.txt",
-                         5.0e-4, 6.0e-4);
+                         2.0e-12, 2.0e-12);
     }
 
     @Test
@@ -117,7 +149,7 @@ public class UnscentedKalmanFilterTest {
                             { 0.00, 0.00, 0.01, 0.00 },
                             { 0.00, 0.00, 0.00, 0.10 },
                          }, "cannonball-non-zero-process-noise.txt",
-                         4.0e-4, 2.0e-2);
+                         2.0e-4, 2.0e-2);
     }
 
     private void doTestCannonball(final double[][] q, final String name,
@@ -150,7 +182,8 @@ public class UnscentedKalmanFilterTest {
 
         // set up Kalman filter
         final UnscentedKalmanFilter<SimpleMeasurement> filter =
-        new UnscentedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial);
+        new UnscentedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15),
+                        process, initial,new MerweUnscentedTransform(initial.getState().getDimension()));
 
         // sequentially process all measurements and check against the reference estimate
         measurements.
@@ -259,7 +292,7 @@ public class UnscentedKalmanFilterTest {
         // set up Kalman filter
         final UnscentedKalmanFilter<SimpleMeasurement> filter =
                         new UnscentedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15),
-                                                   process, initial);
+                                                   process, initial, new MerweUnscentedTransform(initial.getState().getDimension()));
 
         // sequentially process all measurements and get only the last one
         ProcessEstimate finalEstimate = measurements.
@@ -295,15 +328,14 @@ public class UnscentedKalmanFilterTest {
 
 
     }
-    
+
     @Test
     public void testRadar() {
         doTestRadar();
     }
     
     private void doTestRadar() {
-        
-        
+
         final ProcessEstimate initial = new ProcessEstimate(0.0, MatrixUtils.createRealVector(new double[] {0., 90., 1100.}),
                                                                  MatrixUtils.createRealMatrix(new double[][] {
                                                                  { 100., 0.00, 0.00},
@@ -387,9 +419,7 @@ public class UnscentedKalmanFilterTest {
                 RealMatrix innovationCovarianceMatrix) {
             return measurement.getValue().subtract(predictedMeasurement);
         }
-        }
 
-
-
+    }
 
 }
