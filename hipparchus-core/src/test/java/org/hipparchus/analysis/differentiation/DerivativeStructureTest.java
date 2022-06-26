@@ -1532,14 +1532,15 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testIntegration() throws ArrayIndexOutOfBoundsException {
+    public void testIntegration() {
         // check that first-order integration on two variables does not depend on sequence of operations
         final RandomGenerator random = new Well19937a(0x85d201920b5be954l);
         final DSFactory factory = new DSFactory(3, 7);
         final int size = factory.getCompiler().getSize();
         final double[] data = new double[size];
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; i++) {
             data[i] = random.nextDouble();
+        }
         final DerivativeStructure f = factory.build(data);
         f.integrate(0, -1);
         final DerivativeStructure i2fIxIy = f.integrate(0, 1).integrate(1, 1);
@@ -1548,15 +1549,16 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testIntegrationDifferentiation() throws ArrayIndexOutOfBoundsException {
+    public void testIntegrationDifferentiation() {
         // check that integration and differentiation for univariate functions are each other inverse except for constant
         // term and highest order one
         final RandomGenerator random = new Well19937a(0x85d201920b5be954l);
         final DSFactory factory = new DSFactory(1, 25);
         final int size = factory.getCompiler().getSize();
         final double[] data = new double[size];
-        for (int i = 1; i < size - 1; i++)
+        for (int i = 1; i < size - 1; i++) {
             data[i] = random.nextDouble();
+        }
         final int indexVar = 0;
         final DerivativeStructure f = factory.build(data);
         final DerivativeStructure f2 = f.integrate(indexVar, 1).differentiate(indexVar, 1);
@@ -1570,7 +1572,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testDifferentiation1() throws ArrayIndexOutOfBoundsException {
+    public void testDifferentiation1() {
         // check differentiation operator with result obtained manually
         final int freeParam = 3;
         final int order = 5;
@@ -1591,14 +1593,15 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testDifferentiation2() throws ArrayIndexOutOfBoundsException {
+    public void testDifferentiation2() {
         // check that first-order differentiation twice is same as second-order differentiation
         final RandomGenerator random = new Well19937a(0x85d201920b5be954l);
         final DSFactory factory = new DSFactory(5, 4);
         final int size = factory.getCompiler().getSize();
         final double[] data = new double[size];
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; i++) {
             data[i] = random.nextDouble();
+        }
         final DerivativeStructure f = factory.build(data);
         final DerivativeStructure d2fDx2 = f.differentiate(0, 1).differentiate(0, 1);
         final DerivativeStructure d2fDx2Bis = f.differentiate(0, 2);
@@ -1606,14 +1609,15 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testDifferentiation3() throws ArrayIndexOutOfBoundsException {
+    public void testDifferentiation3() {
         // check that first-order differentiation on two variables does not depend on sequence of operations
         final RandomGenerator random = new Well19937a(0x85d201920b5be954l);
         final DSFactory factory = new DSFactory(3, 7);
         final int size = factory.getCompiler().getSize();
         final double[] data = new double[size];
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; i++) {
             data[i] = random.nextDouble();
+        }
         final DerivativeStructure f = factory.build(data);
         final DerivativeStructure d2fDxDy = f.differentiate(0, 1).differentiate(1, 1);
         final DerivativeStructure d2fDyDx = f.differentiate(1, 1).differentiate(0, 1);
