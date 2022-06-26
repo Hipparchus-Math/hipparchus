@@ -3376,6 +3376,22 @@ public class DSCompiler {
         return value;
     }
 
+    /** Rebase derivative structure with respect to low level parameter functions.
+     * @param ds array holding the derivative structure
+     * @param baseCompiler compiler associated with the low level parameter functions
+     * @param p array holding the low level parameter functions
+     * @param result array where result must be stored (for
+     * composition the result array <em>cannot</em> be the input
+     * array)
+     * @since 2.2
+     */
+    public void rebase(final double[] ds,
+                       final DSCompiler baseCompiler, double[][] p,
+                       final double[] result) {
+        // TODO
+        throw MathRuntimeException.createInternalError();
+    }
+
     /** Check rules set compatibility.
      * @param compiler other compiler to check against instance
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
