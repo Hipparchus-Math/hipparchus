@@ -32,6 +32,7 @@ import org.hipparchus.CalculusFieldElementAbstractTest;
 import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
@@ -1946,6 +1947,67 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
         Field<DerivativeStructure> first = (Field<DerivativeStructure>) map.entrySet().iterator().next().getKey();
         Assert.assertTrue(first.equals(first));
         Assert.assertFalse(first.equals(Decimal64Field.getInstance()));
+
+    }
+
+    @Test
+    public void testRebaseConditions() {
+        final DSFactory f32 = new DSFactory(3, 2);
+        final DSFactory f22 = new DSFactory(2, 2);
+        final DSFactory f31 = new DSFactory(3, 1);
+        try {
+            f32.variable(0, 0).rebase(f22.variable(0, 0), f22.variable(1, 1.0));
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+        }
+        try {
+            f32.variable(0, 0).rebase(f31.variable(0, 0), f31.variable(1, 1.0), f31.variable(2, 2.0));
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(1, ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
+
+    @Test
+    public void testRebaseValue() {
+
+        final DSFactory f34 = new DSFactory(3, 4);
+        final DSFactory f24 = new DSFactory(2, 4);
+
+        // base variables
+        final DerivativeStructure q0 = f24.variable(0,  1.5);
+        final DerivativeStructure q1 = f24.variable(1, -2.0);
+
+        // intermediate variables as functions of base variables
+        final DerivativeStructure p0 = q0.add(q1.multiply(3));
+        final DerivativeStructure p1 = q0.log();
+        final DerivativeStructure p2 = q1.divide(q0.sin());
+        
+        // reference function
+        final DerivativeStructure ref = p0.add(p1.divide(p2));
+
+        // intermediate variables as independent variables
+        final DerivativeStructure p0I = f34.variable(0, p0.getReal());
+        final DerivativeStructure p1I = f34.variable(0, p1.getReal());
+        final DerivativeStructure p2I = f34.variable(0, p2.getReal());
+
+        // function of the intermediate variables
+        final DerivativeStructure fI = p0I.add(p1I.divide(p2I));
+
+        // function rebased to base variables
+        final DerivativeStructure rebased = fI.rebase(p0, p1, p2);
+
+        Assert.assertEquals(2, ref.getFreeParameters());
+        Assert.assertEquals(4, ref.getOrder());
+        Assert.assertEquals(3, fI.getFreeParameters());
+        Assert.assertEquals(4, fI.getOrder());
+        Assert.assertEquals(2, rebased.getFreeParameters());
+        Assert.assertEquals(4, rebased.getOrder());
+
+        checkEquals(ref, rebased, 1.0e-15);
 
     }
 
