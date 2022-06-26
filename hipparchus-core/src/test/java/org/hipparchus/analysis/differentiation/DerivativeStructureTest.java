@@ -1534,41 +1534,45 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     @Test
     public void testIntegration() {
         // check that first-order integration on two variables does not depend on sequence of operations
-        final RandomGenerator random = new Well19937a(0x85d201920b5be954l);
+        final RandomGenerator random = new Well19937a(0x87bb96d6e11557bdl);
         final DSFactory factory = new DSFactory(3, 7);
         final int size = factory.getCompiler().getSize();
-        final double[] data = new double[size];
-        for (int i = 0; i < size; i++) {
-            data[i] = random.nextDouble();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final DerivativeStructure f = factory.build(data);
+            f.integrate(0, -1);
+            final DerivativeStructure i2fIxIy = f.integrate(0, 1).integrate(1, 1);
+            final DerivativeStructure i2fIyIx = f.integrate(1, 1).integrate(0, 1);
+            Assert.assertArrayEquals(i2fIxIy.getAllDerivatives(), i2fIyIx.getAllDerivatives(), 0.);
         }
-        final DerivativeStructure f = factory.build(data);
-        f.integrate(0, -1);
-        final DerivativeStructure i2fIxIy = f.integrate(0, 1).integrate(1, 1);
-        final DerivativeStructure i2fIyIx = f.integrate(1, 1).integrate(0, 1);
-        Assert.assertArrayEquals(i2fIxIy.getAllDerivatives(), i2fIyIx.getAllDerivatives(), 0.);
     }
 
     @Test
     public void testIntegrationDifferentiation() {
         // check that integration and differentiation for univariate functions are each other inverse except for constant
         // term and highest order one
-        final RandomGenerator random = new Well19937a(0x85d201920b5be954l);
+        final RandomGenerator random = new Well19937a(0x67fe66c05e5ee222l);
         final DSFactory factory = new DSFactory(1, 25);
         final int size = factory.getCompiler().getSize();
-        final double[] data = new double[size];
-        for (int i = 1; i < size - 1; i++) {
-            data[i] = random.nextDouble();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 1; i < size - 1; i++) {
+                data[i] = random.nextDouble();
+            }
+            final int indexVar = 0;
+            final DerivativeStructure f = factory.build(data);
+            final DerivativeStructure f2 = f.integrate(indexVar, 1).differentiate(indexVar, 1);
+            final DerivativeStructure f3 = f.differentiate(indexVar, 1).integrate(indexVar, 1);
+            Assert.assertArrayEquals(f2.getAllDerivatives(), f.getAllDerivatives(), 0.);
+            Assert.assertArrayEquals(f2.getAllDerivatives(), f3.getAllDerivatives(), 0.);
+            // check special case when non-positive integration order actually returns differentiation
+            final DerivativeStructure df = f.integrate(indexVar, -1);
+            final DerivativeStructure df2 = f.differentiate(indexVar, 1);
+            Assert.assertArrayEquals(df.getAllDerivatives(), df2.getAllDerivatives(), 0.);
         }
-        final int indexVar = 0;
-        final DerivativeStructure f = factory.build(data);
-        final DerivativeStructure f2 = f.integrate(indexVar, 1).differentiate(indexVar, 1);
-        final DerivativeStructure f3 = f.differentiate(indexVar, 1).integrate(indexVar, 1);
-        Assert.assertArrayEquals(f2.getAllDerivatives(), f.getAllDerivatives(), 0.);
-        Assert.assertArrayEquals(f2.getAllDerivatives(), f3.getAllDerivatives(), 0.);
-        // check special case when non-positive integration order actually returns differentiation
-        final DerivativeStructure df = f.integrate(indexVar, -1);
-        final DerivativeStructure df2 = f.differentiate(indexVar, 1);
-        Assert.assertArrayEquals(df.getAllDerivatives(), df2.getAllDerivatives(), 0.);
     }
 
     @Test
@@ -1595,33 +1599,37 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     @Test
     public void testDifferentiation2() {
         // check that first-order differentiation twice is same as second-order differentiation
-        final RandomGenerator random = new Well19937a(0x85d201920b5be954l);
+        final RandomGenerator random = new Well19937a(0xec293aaee352de94l);
         final DSFactory factory = new DSFactory(5, 4);
         final int size = factory.getCompiler().getSize();
-        final double[] data = new double[size];
-        for (int i = 0; i < size; i++) {
-            data[i] = random.nextDouble();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final DerivativeStructure f = factory.build(data);
+            final DerivativeStructure d2fDx2 = f.differentiate(0, 1).differentiate(0, 1);
+            final DerivativeStructure d2fDx2Bis = f.differentiate(0, 2);
+            Assert.assertArrayEquals(d2fDx2.getAllDerivatives(), d2fDx2Bis.getAllDerivatives(), 0.);
         }
-        final DerivativeStructure f = factory.build(data);
-        final DerivativeStructure d2fDx2 = f.differentiate(0, 1).differentiate(0, 1);
-        final DerivativeStructure d2fDx2Bis = f.differentiate(0, 2);
-        Assert.assertArrayEquals(d2fDx2.getAllDerivatives(), d2fDx2Bis.getAllDerivatives(), 0.);
     }
 
     @Test
     public void testDifferentiation3() {
         // check that first-order differentiation on two variables does not depend on sequence of operations
-        final RandomGenerator random = new Well19937a(0x85d201920b5be954l);
+        final RandomGenerator random = new Well19937a(0x35409ecc1348e46cl);
         final DSFactory factory = new DSFactory(3, 7);
         final int size = factory.getCompiler().getSize();
-        final double[] data = new double[size];
-        for (int i = 0; i < size; i++) {
-            data[i] = random.nextDouble();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final DerivativeStructure f = factory.build(data);
+            final DerivativeStructure d2fDxDy = f.differentiate(0, 1).differentiate(1, 1);
+            final DerivativeStructure d2fDyDx = f.differentiate(1, 1).differentiate(0, 1);
+            Assert.assertArrayEquals(d2fDxDy.getAllDerivatives(), d2fDyDx.getAllDerivatives(), 0.);
         }
-        final DerivativeStructure f = factory.build(data);
-        final DerivativeStructure d2fDxDy = f.differentiate(0, 1).differentiate(1, 1);
-        final DerivativeStructure d2fDyDx = f.differentiate(1, 1).differentiate(0, 1);
-        Assert.assertArrayEquals(d2fDxDy.getAllDerivatives(), d2fDyDx.getAllDerivatives(), 0.);
     }
 
     @Test
