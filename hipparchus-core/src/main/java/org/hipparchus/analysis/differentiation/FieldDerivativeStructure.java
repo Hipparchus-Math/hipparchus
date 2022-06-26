@@ -842,6 +842,98 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
         return ds;
     }
 
+    /** Integrate w.r.t. one independent variable.
+     * <p>
+     * Rigorously, if the derivatives of a function are known up to
+     * order N, the ones of its M-th integral w.r.t. a given variable
+     * (seen as a function itself) are actually known up to order N+M.
+     * However, this method still casts the output as a DerivativeStructure
+     * of order N. The integration constants are systematically set to zero.
+     * </p>
+     * @param varIndex Index of independent variable w.r.t. which integration is done.
+     * @param integrationOrder Number of times the integration operator must be applied. If non-positive, call the
+     *                         differentiation operator.
+     * @return DerivativeStructure on which integration operator has been applied a certain number of times.
+     * @since 2.2
+     */
+    public FieldDerivativeStructure<T> integrate(final int varIndex, final int integrationOrder) {
+
+        // Deal first with trivial case
+        if (integrationOrder > getOrder()) {
+            return factory.constant(0.);
+        } else if (integrationOrder == 0) {
+            return factory.build(data);
+        }
+
+        // Call 'inverse' (not rigorously) operation if necessary
+        if (integrationOrder < 0) {
+            return differentiate(varIndex, -integrationOrder);
+        }
+
+        final T[] newData = MathArrays.buildArray(factory.getValueField(), data.length);
+        final DSCompiler dsCompiler = factory.getCompiler();
+        for (int i = 0; i < newData.length; i++) {
+            if (!data[i].isZero()) {
+                final int[] orders = dsCompiler.getPartialDerivativeOrders(i);
+                int sum = 0;
+                for (int order : orders) {
+                    sum += order;
+                }
+                if (sum + integrationOrder <= getOrder()) {
+                    final int[] newOrders = new int[orders.length];
+                    System.arraycopy(orders, 0, newOrders, 0, orders.length);
+                    newOrders[varIndex] += integrationOrder;
+                    final int index = dsCompiler.getPartialDerivativeIndex(newOrders);
+                    newData[index] = data[i];
+                }
+            }
+        }
+
+        return factory.build(newData);
+    }
+
+    /** Differentiate w.r.t. one independent variable. Rigorously, if the derivatives of a function are known up to
+     * order N, the ones of its M-th derivative w.r.t. a given variable (seen as a function itself) are only known up
+     * to order N-M. However, this method still casts the output as a DerivativeStructure of order N with zeroes for the
+     * higher order terms.
+     * @param varIndex Index of independent variable w.r.t. which differentiation is done.
+     * @param differentiationOrder Number of times the differentiation operator must be applied. If non-positive, call
+     *                             the integration operator instead.
+     * @return DerivativeStructure on which differentiation operator has been applied a certain number of times
+     * @since 2.2
+     */
+    public FieldDerivativeStructure<T> differentiate(final int varIndex, final int differentiationOrder) {
+
+        // Deal first with trivial case
+        if (differentiationOrder > getOrder()) {
+            return factory.constant(0.);
+        } else if (differentiationOrder == 0) {
+            return factory.build(data);
+        }
+
+        // Call 'inverse' (not rigorously) operation if necessary
+        if (differentiationOrder < 0) {
+            return integrate(varIndex, -differentiationOrder);
+        }
+
+        final T[] newData = MathArrays.buildArray(factory.getValueField(), data.length);
+        final DSCompiler dsCompiler = factory.getCompiler();
+        for (int i = 0; i < newData.length; i++) {
+            if (!data[i].isZero()) {
+                final int[] orders = dsCompiler.getPartialDerivativeOrders(i);
+                if (orders[varIndex] - differentiationOrder >= 0) {
+                    final int[] newOrders = new int[orders.length];
+                    System.arraycopy(orders, 0, newOrders, 0, orders.length);
+                    newOrders[varIndex] -= differentiationOrder;
+                    final int index = dsCompiler.getPartialDerivativeIndex(newOrders);
+                    newData[index] = data[i];
+                }
+            }
+        }
+
+        return factory.build(newData);
+    }
+
     /** Evaluate Taylor expansion of a derivative structure.
      * @param delta parameters offsets (&Delta;x, &Delta;y, ...)
      * @return value of the Taylor expansion at x + &Delta;x, y + &Delta;y, ...
