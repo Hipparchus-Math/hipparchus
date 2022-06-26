@@ -880,8 +880,7 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
                     sum += order;
                 }
                 if (sum + integrationOrder <= getOrder()) {
-                    final int[] newOrders = new int[orders.length];
-                    System.arraycopy(orders, 0, newOrders, 0, orders.length);
+                    final int[] newOrders = orders.clone();
                     newOrders[varIndex] += integrationOrder;
                     final int index = dsCompiler.getPartialDerivativeIndex(newOrders);
                     newData[index] = data[i];
@@ -892,10 +891,14 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
         return factory.build(newData);
     }
 
-    /** Differentiate w.r.t. one independent variable. Rigorously, if the derivatives of a function are known up to
-     * order N, the ones of its M-th derivative w.r.t. a given variable (seen as a function itself) are only known up
-     * to order N-M. However, this method still casts the output as a DerivativeStructure of order N with zeroes for the
-     * higher order terms.
+    /** Differentiate w.r.t. one independent variable.
+     * <p>
+     * Rigorously, if the derivatives of a function are known up to
+     * order N, the ones of its M-th derivative w.r.t. a given variable
+     * (seen as a function itself) are only known up to order N-M.
+     * However, this method still casts the output as a DerivativeStructure
+     * of order N with zeroes for the higher order terms.
+     * </p>
      * @param varIndex Index of independent variable w.r.t. which differentiation is done.
      * @param differentiationOrder Number of times the differentiation operator must be applied. If non-positive, call
      *                             the integration operator instead.
@@ -922,8 +925,7 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
             if (!data[i].isZero()) {
                 final int[] orders = dsCompiler.getPartialDerivativeOrders(i);
                 if (orders[varIndex] - differentiationOrder >= 0) {
-                    final int[] newOrders = new int[orders.length];
-                    System.arraycopy(orders, 0, newOrders, 0, orders.length);
+                    final int[] newOrders = orders.clone();
                     newOrders[varIndex] -= differentiationOrder;
                     final int index = dsCompiler.getPartialDerivativeIndex(newOrders);
                     newData[index] = data[i];
