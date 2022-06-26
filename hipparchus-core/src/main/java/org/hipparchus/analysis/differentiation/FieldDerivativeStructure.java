@@ -880,9 +880,10 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
                     sum += order;
                 }
                 if (sum + integrationOrder <= getOrder()) {
-                    final int[] newOrders = orders.clone();
-                    newOrders[varIndex] += integrationOrder;
-                    final int index = dsCompiler.getPartialDerivativeIndex(newOrders);
+                    final int saved = orders[varIndex];
+                    orders[varIndex] += integrationOrder;
+                    final int index = dsCompiler.getPartialDerivativeIndex(orders);
+                    orders[varIndex] = saved;
                     newData[index] = data[i];
                 }
             }
@@ -925,9 +926,10 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
             if (!data[i].isZero()) {
                 final int[] orders = dsCompiler.getPartialDerivativeOrders(i);
                 if (orders[varIndex] - differentiationOrder >= 0) {
-                    final int[] newOrders = orders.clone();
-                    newOrders[varIndex] -= differentiationOrder;
-                    final int index = dsCompiler.getPartialDerivativeIndex(newOrders);
+                    final int saved = orders[varIndex];
+                    orders[varIndex] -= differentiationOrder;
+                    final int index = dsCompiler.getPartialDerivativeIndex(orders);
+                    orders[varIndex] = saved;
                     newData[index] = data[i];
                 }
             }
