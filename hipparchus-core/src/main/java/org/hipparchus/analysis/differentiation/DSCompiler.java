@@ -3312,13 +3312,8 @@ public class DSCompiler {
             double term = ds[dsOffset + i];
             for (int k = 0; k < orders.length; ++k) {
                 if (orders[k] > 0) {
-                    try {
-                        term *= FastMath.pow(delta[k], orders[k]) /
-                        CombinatoricsUtils.factorial(orders[k]);
-                    } catch (MathIllegalArgumentException e) {
-                        // this cannot happen
-                        throw MathRuntimeException.createInternalError(e);
-                    }
+                    term *= FastMath.pow(delta[k], orders[k]) /
+                            CombinatoricsUtils.factorial(orders[k]);
                 }
             }
             value += term;
@@ -3345,13 +3340,8 @@ public class DSCompiler {
             T term = ds[dsOffset + i];
             for (int k = 0; k < orders.length; ++k) {
                 if (orders[k] > 0) {
-                    try {
-                        term = term.multiply(delta[k].pow(orders[k]).
-                                             divide(CombinatoricsUtils.factorial(orders[k])));
-                    } catch (MathIllegalArgumentException e) {
-                        // this cannot happen
-                        throw MathRuntimeException.createInternalError(e);
-                    }
+                    term = term.multiply(delta[k].pow(orders[k]).
+                                         divide(CombinatoricsUtils.factorial(orders[k])));
                 }
             }
             value = value.add(term);
@@ -3377,13 +3367,8 @@ public class DSCompiler {
             T term = ds[dsOffset + i];
             for (int k = 0; k < orders.length; ++k) {
                 if (orders[k] > 0) {
-                    try {
-                        term = term.multiply(field.getZero().newInstance(delta[k]).pow(orders[k]).
-                                             divide(CombinatoricsUtils.factorial(orders[k])));
-                    } catch (MathIllegalArgumentException e) {
-                        // this cannot happen
-                        throw MathRuntimeException.createInternalError(e);
-                    }
+                    term = term.multiply(field.getZero().newInstance(delta[k]).pow(orders[k]).
+                                         divide(CombinatoricsUtils.factorial(orders[k])));
                 }
             }
             value = value.add(term);
