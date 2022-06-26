@@ -22,10 +22,8 @@
 package org.hipparchus.analysis.differentiation;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 
 import org.hipparchus.Field;
-import org.hipparchus.exception.Localizable;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
