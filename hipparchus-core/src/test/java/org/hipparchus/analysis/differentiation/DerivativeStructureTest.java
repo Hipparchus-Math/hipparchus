@@ -1542,11 +1542,68 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             for (int i = 0; i < size; i++) {
                 data[i] = random.nextDouble();
             }
-            final DerivativeStructure f = factory.build(data);
-            f.integrate(0, -1);
+            final DerivativeStructure f       = factory.build(data);
             final DerivativeStructure i2fIxIy = f.integrate(0, 1).integrate(1, 1);
             final DerivativeStructure i2fIyIx = f.integrate(1, 1).integrate(0, 1);
             Assert.assertArrayEquals(i2fIxIy.getAllDerivatives(), i2fIyIx.getAllDerivatives(), 0.);
+        }
+    }
+
+    @Test
+    public void testIntegrationGreaterThanOrder() {
+        // check that integration to a too high order generates zero
+        // as integration constants are set to zero
+        final RandomGenerator random = new Well19937a(0x4744a847b11e4c6fl);
+        final DSFactory factory = new DSFactory(3, 7);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final DerivativeStructure f = factory.build(data);
+            for (int index = 0; index < factory.getCompiler().getFreeParameters(); ++index) {
+                final DerivativeStructure integ = f.integrate(index, factory.getCompiler().getOrder() + 1);
+                Assert.assertArrayEquals(new double[size], integ.getAllDerivatives(), 0.);
+            }
+        }
+    }
+
+    @Test
+    public void testIntegrationNoOp() {
+        // check that integration of order 0 is no-op
+        final RandomGenerator random = new Well19937a(0x75a35152f30f644bl);
+        final DSFactory factory = new DSFactory(3, 7);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final DerivativeStructure f = factory.build(data);
+            for (int index = 0; index < factory.getCompiler().getFreeParameters(); ++index) {
+                final DerivativeStructure integ = f.integrate(index, 0);
+                Assert.assertArrayEquals(data, integ.getAllDerivatives(), 0.);
+            }
+        }
+    }
+
+    @Test
+    public void testDifferentiationNoOp() {
+        // check that differentiation of order 0 is no-op
+        final RandomGenerator random = new Well19937a(0x3b6ae4c2f1282949l);
+        final DSFactory factory = new DSFactory(3, 7);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final DerivativeStructure f = factory.build(data);
+            for (int index = 0; index < factory.getCompiler().getFreeParameters(); ++index) {
+                final DerivativeStructure integ = f.differentiate(index, 0);
+                Assert.assertArrayEquals(data, integ.getAllDerivatives(), 0.);
+            }
         }
     }
 
@@ -1572,6 +1629,10 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             final DerivativeStructure df = f.integrate(indexVar, -1);
             final DerivativeStructure df2 = f.differentiate(indexVar, 1);
             Assert.assertArrayEquals(df.getAllDerivatives(), df2.getAllDerivatives(), 0.);
+            // check special case when non-positive differentiation order actually returns integration
+            final DerivativeStructure fi  = f.differentiate(indexVar, -1);
+            final DerivativeStructure fi2 = f.integrate(indexVar, 1);
+            Assert.assertArrayEquals(fi.getAllDerivatives(), fi2.getAllDerivatives(), 0.);
         }
     }
 
