@@ -70,7 +70,7 @@ import org.hipparchus.util.SinhCosh;
  * given 2 parameters x and y, df/dy is stored at index 2 when derivation order is set to 1 (in
  * this case the array has three elements: f, df/dx and df/dy). If derivation order is set to
  * 2, then df/dy will be stored at index 3 (in this case the array has six elements: f, df/dx,
- * df/dxdx, df/dy, df/dxdy and df/dydy).
+ * d²f/dxdx, df/dy, d²f/dxdy and d²f/dydy).
  * </p>
  * <p>
  * Given this structure, users can perform some simple operations like adding, subtracting
@@ -130,6 +130,7 @@ import org.hipparchus.util.SinhCosh;
  *   double dPdZdZ = product[compiler.getPartialDerivativeIndex(0, 0, 2)];
  * </pre>
  * @see DerivativeStructure
+ * @see FieldDerivativeStructure
  */
 public class DSCompiler {
 
