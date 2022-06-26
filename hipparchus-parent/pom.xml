@@ -94,49 +94,7 @@
   </developers>
   <contributors>
     <contributor>
-      <name>Mikkel Meyer Andersen</name>
-    </contributor>
-    <contributor>
-      <name>Bill Barker</name>
-    </contributor>
-    <contributor>
-      <name>Julie Bayard</name>
-    </contributor>
-    <contributor>
-      <name>Emmanuel Bourg</name>
-    </contributor>
-    <contributor>
-      <name>S&#233;bastien Brisard</name>
-    </contributor>
-    <contributor>
-      <name>Albert Davidson Chou</name>
-    </contributor>
-    <contributor>
-      <name>Mark Diggory</name>
-    </contributor>
-    <contributor>
-      <name>Robert Burrell Donkin</name>
-    </contributor>
-    <contributor>
-      <name>Tim O'Brien</name>
-    </contributor>
-    <contributor>
-      <name>J. Pietschmann</name>
-    </contributor>
-    <contributor>
-      <name>Dimitri Pourbaix</name>
-    </contributor>
-    <contributor>
-      <name>Alessandro Romero</name>
-    </contributor>
-    <contributor>
-      <name>Gilles Sadowski</name>
-    </contributor>
-    <contributor>
-      <name>Greg Sterijevski</name>
-    </contributor>
-    <contributor>
-      <name>Brent Worden</name>
+      <name>Matt Adereth</name>
     </contributor>
     <contributor>
       <name>Eldar Agalarov</name>
@@ -148,6 +106,9 @@
       <name>C. Scott Ananian</name>
     </contributor>
     <contributor>
+      <name>Mikkel Meyer Andersen</name>
+    </contributor>
+    <contributor>
       <name>Mark Anderson</name>
     </contributor>
     <contributor>
@@ -157,7 +118,10 @@
       <name>R&#233;mi Arntzen</name>
     </contributor>
     <contributor>
-      <name>Matt Adereth</name>
+      <name>Bill Barker</name>
+    </contributor>
+    <contributor>
+      <name>Julie Bayard</name>
     </contributor>
     <contributor>
       <name>Jared Becksfort</name>
@@ -172,13 +136,22 @@
       <name>John Bollinger</name>
     </contributor>
     <contributor>
+      <name>Emmanuel Bourg</name>
+    </contributor>
+    <contributor>
       <name>Cyril Briquet</name>
+    </contributor>
+    <contributor>
+      <name>S&#233;bastien Brisard</name>
     </contributor>
     <contributor>
       <name>Dave Brosius</name>
     </contributor>
     <contributor>
       <name>Dan Checkoway</name>
+    </contributor>
+    <contributor>
+      <name>Albert Davidson Chou</name>
     </contributor>
     <contributor>
       <name>Anders Conbere</name>
@@ -199,10 +172,16 @@
       <name>Aleksei Dievskii</name>
     </contributor>
     <contributor>
+      <name>Mark Diggory</name>
+    </contributor>
+    <contributor>
       <name>Rodrigo di Lorenzo Lopes</name>
     </contributor>
     <contributor>
       <name>Hasan Diwan</name>
+    </contributor>
+    <contributor>
+      <name>Robert Burrell Donkin</name>
     </contributor>
     <contributor>
       <name>Ted Dunning</name>
@@ -256,10 +235,10 @@
       <name>Eugene Kirpichov</name>
     </contributor>
     <contributor>
-      <name>Oleksandr Kornieiev</name>
+      <name>Piotr Kochanski</name>
     </contributor>
     <contributor>
-      <name>Piotr Kochanski</name>
+      <name>Oleksandr Kornieiev</name>
     </contributor>
     <contributor>
       <name>Sergei Lebedev</name>
@@ -289,6 +268,9 @@
       <name>Fredrik Norin</name>
     </contributor>
     <contributor>
+      <name>Tim O'Brien</name>
+    </contributor>
+    <contributor>
       <name>Sean Owen</name>
     </contributor>
     <contributor>
@@ -296,6 +278,15 @@
     </contributor>
     <contributor>
       <name>Todd C. Parnell</name>
+    </contributor>
+    <contributor>
+      <name>J. Pietschmann</name>
+    </contributor>
+    <contributor>
+      <name>Chris Popp</name>
+    </contributor>
+    <contributor>
+      <name>Dimitri Pourbaix</name>
     </contributor>
     <contributor>
       <name>Qualtagh</name>
@@ -310,6 +301,9 @@
       <name>Benedikt Ritter</name>
     </contributor>
     <contributor>
+      <name>Alessandro Romero</name>
+    </contributor>
+    <contributor>
       <name>Bill Rossi</name>
     </contributor>
     <contributor>
@@ -317,6 +311,9 @@
     </contributor>
     <contributor>
       <name>Pavel Ryzhov</name>
+    </contributor>
+    <contributor>
+      <name>Gilles Sadowski</name>
     </contributor>
     <contributor>
       <name>Joni Salonen</name>
@@ -334,7 +331,13 @@
       <name>Christian Semrau</name>
     </contributor>
     <contributor>
+      <name>Romain Serra</name>
+    </contributor>
+    <contributor>
       <name>David Stefka</name>
+    </contributor>
+    <contributor>
+      <name>Greg Sterijevski</name>
     </contributor>
     <contributor>
       <name>Mauro Talevi</name>
@@ -358,13 +361,13 @@
       <name>Christian Winter</name>
     </contributor>
     <contributor>
+      <name>Brent Worden</name>
+    </contributor>
+    <contributor>
       <name>Piotr Wydrych</name>
     </contributor>
     <contributor>
       <name>Xiaogang Zhang</name>
-    </contributor>
-    <contributor>
-      <name>Chris Popp</name>
     </contributor>
   </contributors>
 

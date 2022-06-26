@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
+    <release version="2.2" date="TBD" description="TBD">
+      <action dev="luc" type="add" due-to="Romain Serra" issue="issue/192">
+        Added integration/differentiation of {Field}DerivativeStructure.
+      </action>
+    </release>
     <release version="2.1" date="2022-04-24" description="This is a maintenande release. The main
       changes are: addition of 3D version of complex function plotter, addition of
       ConvergenceCheckerOrMultiplexer and ConvergenceCheckerAndMultiplexer, addition of inverse

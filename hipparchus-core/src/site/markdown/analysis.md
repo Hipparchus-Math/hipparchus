@@ -359,6 +359,8 @@ A [UnivariateIntegrator](../apidocs/org/hipparchus/analysis/integration/Univaria
 provides the means to numerically integrate
 [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html).
 
+Integration is also available as part of [DerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html).
+
 Hipparchus includes implementations of the following integration algorithms:
 
 * [Romberg's method](../apidocs/org/hipparchus/analysis/integration/RombergIntegrator.html)
@@ -512,6 +514,12 @@ parameter 1):
     System.out.println("d2g/dx2  = " + g.getPartialDerivative(2, 0);
     System.out.println("d2g/dxdy = " + g.getPartialDerivative(1, 1);
     System.out.println("d2g/dy2  = " + g.getPartialDerivative(0, 2);
+
+It is possible to integrate or differentiate a `DerivativeStructure`. When integrating,
+the integration constants are systematically set to zero. When differentiating, the
+resulting derivative structure is truncated to the initial order (i.e. a derivative
+structure up to order 3 differentiated twice will still be of order 3, and the two
+highest order terms (4 and 5) will be dropped.
 
 There is a field version of `DerivativeStructure`:
 [FieldDerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/FieldDerivativeStructure.html).
