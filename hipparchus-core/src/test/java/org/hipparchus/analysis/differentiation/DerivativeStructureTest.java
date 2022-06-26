@@ -1545,7 +1545,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             final DerivativeStructure f       = factory.build(data);
             final DerivativeStructure i2fIxIy = f.integrate(0, 1).integrate(1, 1);
             final DerivativeStructure i2fIyIx = f.integrate(1, 1).integrate(0, 1);
-            Assert.assertArrayEquals(i2fIxIy.getAllDerivatives(), i2fIyIx.getAllDerivatives(), 0.);
+            checkEquals(i2fIxIy, i2fIyIx, 0.);
         }
     }
 
@@ -1564,7 +1564,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             final DerivativeStructure f = factory.build(data);
             for (int index = 0; index < factory.getCompiler().getFreeParameters(); ++index) {
                 final DerivativeStructure integ = f.integrate(index, factory.getCompiler().getOrder() + 1);
-                Assert.assertArrayEquals(new double[size], integ.getAllDerivatives(), 0.);
+                checkEquals(factory.constant(0), integ, 0.);
             }
         }
     }
@@ -1583,7 +1583,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             final DerivativeStructure f = factory.build(data);
             for (int index = 0; index < factory.getCompiler().getFreeParameters(); ++index) {
                 final DerivativeStructure integ = f.integrate(index, 0);
-                Assert.assertArrayEquals(data, integ.getAllDerivatives(), 0.);
+                checkEquals(f, integ, 0.);
             }
         }
     }
@@ -1602,7 +1602,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             final DerivativeStructure f = factory.build(data);
             for (int index = 0; index < factory.getCompiler().getFreeParameters(); ++index) {
                 final DerivativeStructure integ = f.differentiate(index, 0);
-                Assert.assertArrayEquals(data, integ.getAllDerivatives(), 0.);
+                checkEquals(f, integ, 0.);
             }
         }
     }
@@ -1623,16 +1623,16 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             final DerivativeStructure f = factory.build(data);
             final DerivativeStructure f2 = f.integrate(indexVar, 1).differentiate(indexVar, 1);
             final DerivativeStructure f3 = f.differentiate(indexVar, 1).integrate(indexVar, 1);
-            Assert.assertArrayEquals(f2.getAllDerivatives(), f.getAllDerivatives(), 0.);
-            Assert.assertArrayEquals(f2.getAllDerivatives(), f3.getAllDerivatives(), 0.);
+            checkEquals(f2, f, 0.);
+            checkEquals(f2, f3, 0.);
             // check special case when non-positive integration order actually returns differentiation
             final DerivativeStructure df = f.integrate(indexVar, -1);
             final DerivativeStructure df2 = f.differentiate(indexVar, 1);
-            Assert.assertArrayEquals(df.getAllDerivatives(), df2.getAllDerivatives(), 0.);
+            checkEquals(df, df2, 0.);
             // check special case when non-positive differentiation order actually returns integration
             final DerivativeStructure fi  = f.differentiate(indexVar, -1);
             final DerivativeStructure fi2 = f.integrate(indexVar, 1);
-            Assert.assertArrayEquals(fi.getAllDerivatives(), fi2.getAllDerivatives(), 0.);
+            checkEquals(fi, fi2, 0.);
         }
     }
 
@@ -1653,8 +1653,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
         orders[0] -= 1;
         Assert.assertEquals(1., dfDx.getPartialDerivative(new int[freeParam]), 0.);
         Assert.assertEquals(value, dfDx.getPartialDerivative(orders), 0.);
-        Assert.assertArrayEquals(new double[factory.getCompiler().getSize()],
-                f.differentiate(0, order + 1).getAllDerivatives(), 0.);
+        checkEquals(factory.constant(0), f.differentiate(0, order + 1), 0.);
     }
 
     @Test
@@ -1671,7 +1670,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             final DerivativeStructure f = factory.build(data);
             final DerivativeStructure d2fDx2 = f.differentiate(0, 1).differentiate(0, 1);
             final DerivativeStructure d2fDx2Bis = f.differentiate(0, 2);
-            Assert.assertArrayEquals(d2fDx2.getAllDerivatives(), d2fDx2Bis.getAllDerivatives(), 0.);
+            checkEquals(d2fDx2, d2fDx2Bis, 0.);
         }
     }
 
@@ -1689,7 +1688,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             final DerivativeStructure f = factory.build(data);
             final DerivativeStructure d2fDxDy = f.differentiate(0, 1).differentiate(1, 1);
             final DerivativeStructure d2fDyDx = f.differentiate(1, 1).differentiate(0, 1);
-            Assert.assertArrayEquals(d2fDxDy.getAllDerivatives(), d2fDyDx.getAllDerivatives(), 0.);
+            checkEquals(d2fDxDy, d2fDyDx, 0.);
         }
     }
 
