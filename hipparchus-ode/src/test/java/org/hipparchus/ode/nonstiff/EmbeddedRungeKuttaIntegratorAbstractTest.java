@@ -477,7 +477,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
     protected void doTestTorqueFreeMotion(double epsilonOmega, double epsilonQ) {
 
-        final TestProblem8 pb  = new TestProblem8();
+        final TestProblem8 pb  = new TestProblem8(0.0, 20.0, new Vector3D(5.0, 0.0, 4.0), new Rotation(0.9, 0.437, 0.0, 0.0, true),
+                                                  3.0 / 8.0, 1.0 / 2.0, 5.0 / 8.0);
         double minStep = 1.0e-10;
         double maxStep = pb.getFinalTime() - pb.getInitialState().getTime();
         double[] vecAbsoluteTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
@@ -586,29 +587,34 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                                                                         theoreticalY[6],
                                                                         true)));
 
-                //                     out.format(Locale.US, "%s %s%n",
-                //                             RyuDouble.doubleToString(state.getTime()),
-                //                             RyuDouble.doubleToString(d));
+//                out.format(Locale.US, "%s %s%n",
+//                           RyuDouble.doubleToString(state.getTime()),
+//                           RyuDouble.doubleToString(d));
 
-                                     out.format(Locale.US, "%f %f %f %f %f %f %f%n",
-                                             state.getTime(),
-                                             state.getPrimaryState()[0],
-                                             state.getPrimaryState()[1],
-                                             state.getPrimaryState()[2],
-                                             theoreticalY[0],
-                                             theoreticalY[1],
-                                             theoreticalY[2]);
+//                out.format(Locale.US, "%f %f %f %f %f %f %f%n",
+//                           state.getTime(),
+//                           state.getPrimaryState()[0],
+//                           state.getPrimaryState()[1],
+//                           state.getPrimaryState()[2],
+//                           theoreticalY[0],
+//                           theoreticalY[1],
+//                           theoreticalY[2]);
 
-                //                                out.format(Locale.US, "%s %s %s %s %s %s %s %s %s%n",
-                //                                        RyuDouble.doubleToString(state.getTime()),
-                //                                        RyuDouble.doubleToString(state.getPrimaryState()[3]),
-                //                                        RyuDouble.doubleToString(state.getPrimaryState()[4]),
-                //                                        RyuDouble.doubleToString(state.getPrimaryState()[5]),
-                //                                        RyuDouble.doubleToString(state.getPrimaryState()[6]),
-                //                                        RyuDouble.doubleToString(theoreticalY[3]),
-                //                                        RyuDouble.doubleToString(theoreticalY[4]),
-                //                                        RyuDouble.doubleToString(theoreticalY[5]),
-                //                                        RyuDouble.doubleToString(theoreticalY[6]));
+                final double sign = FastMath.copySign(1.0,
+                                                      state.getPrimaryState()[3] * theoreticalY[3] +
+                                                      state.getPrimaryState()[4] * theoreticalY[4] +
+                                                      state.getPrimaryState()[5] * theoreticalY[5] +
+                                                      state.getPrimaryState()[6] * theoreticalY[6]);
+                out.format(Locale.US, "%s %s %s %s %s %s %s %s %s%n",
+                           RyuDouble.doubleToString(state.getTime()),
+                           RyuDouble.doubleToString(state.getPrimaryState()[3]),
+                           RyuDouble.doubleToString(state.getPrimaryState()[4]),
+                           RyuDouble.doubleToString(state.getPrimaryState()[5]),
+                           RyuDouble.doubleToString(state.getPrimaryState()[6]),
+                           RyuDouble.doubleToString(sign * theoreticalY[3]),
+                           RyuDouble.doubleToString(sign * theoreticalY[4]),
+                           RyuDouble.doubleToString(sign * theoreticalY[5]),
+                           RyuDouble.doubleToString(sign * theoreticalY[6]));
 
                 final TestProblem8.TfmState tfm = pb.computeTorqueFreeMotion(state.getTime());
                 phiT   = tfm.getPhi();
@@ -649,14 +655,14 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
 
 
-            //                       out.format(Locale.US, " plot $data using 1:2 with lines title 'q₀ numerical',\\%n ");
-            //                        out.format(Locale.US, "$data using 1:3 with lines title 'q₁ numerical',\\%n ");
-            //                        out.format(Locale.US, "$data using 1:4 with lines title 'q₂ numerical',\\%n ");
-            //                        out.format(Locale.US, "$data using 1:5 with lines title 'q₃ numerical',\\%n ");
-            //                       out.format(Locale.US, "$data using 1:6 with lines dt 2 title 'q₀ Theoretical',\\%n ");
-            //                        out.format(Locale.US, "$data using 1:7 with lines dt 2 title 'q₁ Theoretical',\\%n ");
-            //                        out.format(Locale.US, "$data using 1:8 with lines dt 2 title 'q₂ Theoretical',\\%n ");
-            //                        out.format(Locale.US, "$data using 1:9 with lines dt 2 title 'q₃ Theoretical'%n ");
+            out.format(Locale.US, " plot $data using 1:2 with lines lc 1title 'q₀ numerical',\\%n ");
+            out.format(Locale.US, "$data using 1:3 with lines lc 2 title 'q₁ numerical',\\%n ");
+            out.format(Locale.US, "$data using 1:4 with lines lc 3 title 'q₂ numerical',\\%n ");
+            out.format(Locale.US, "$data using 1:5 with lines lc 4 title 'q₃ numerical',\\%n ");
+            out.format(Locale.US, "$data using 1:6 with points pt 4 lc 1 title 'q₀ Theoretical',\\%n ");
+            out.format(Locale.US, "$data using 1:7 with points pt 4 lc 2 title 'q₁ Theoretical',\\%n ");
+            out.format(Locale.US, "$data using 1:8 with points pt 4 lc 3 title 'q₂ Theoretical',\\%n ");
+            out.format(Locale.US, "$data using 1:9 with points pt 4 lc 4 title 'q₃ Theoretical'%n ");
 
             //            out.format(Locale.US, " plot $data using 1:2 with lines title 'quaternions difference'%n ");
 
@@ -671,12 +677,12 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 //            out.format(Locale.US, "$data using 1:6 with lines lc 3 title 'ψN',\\%n ");
 //            out.format(Locale.US, "$data using 1:7 with points lc 3 pt 4 title 'ψT'%n ");
 
-            out.format(Locale.US, "plot $data using 1:2 with lines lc 1 title 'Ω₁ numerical', \\%n");
-            out.format(Locale.US, "     $data using 1:5 with points pt 4 lc 1 title 'Ω₁ theoretical', \\%n");
-            out.format(Locale.US, "     $data using 1:3 with lines lc 2 title 'Ω₂ numerical', \\%n");
-            out.format(Locale.US, "     $data using 1:6 with points pt 4 lc 2 title 'Ω₂ theoretical', \\%n");
-            out.format(Locale.US, "     $data using 1:4 with lines lc 3 title 'Ω₃ numerical', \\%n");
-            out.format(Locale.US, "     $data using 1:7 with points pt 4 lc 3 title 'Ω₃ theoretical'%n");
+//            out.format(Locale.US, "plot $data using 1:2 with lines lc 1 title 'Ω₁ numerical', \\%n");
+//            out.format(Locale.US, "     $data using 1:5 with points pt 4 lc 1 title 'Ω₁ theoretical', \\%n");
+//            out.format(Locale.US, "     $data using 1:3 with lines lc 2 title 'Ω₂ numerical', \\%n");
+//            out.format(Locale.US, "     $data using 1:6 with points pt 4 lc 2 title 'Ω₂ theoretical', \\%n");
+//            out.format(Locale.US, "     $data using 1:4 with lines lc 3 title 'Ω₃ numerical', \\%n");
+//            out.format(Locale.US, "     $data using 1:7 with points pt 4 lc 3 title 'Ω₃ theoretical'%n");
 
             //            out.format(Locale.US, " plot $data using 1:2 with linespoints title 'φ numerical',\\%n ");
             //            out.format(Locale.US, "$data using 1:3 with lines dt 2 title 'φ theoretical'%n ");
@@ -700,7 +706,12 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
     protected void doTestTorqueFreeMotionDebug(double epsilonOmega, double epsilonQ) {
 
-        final TestProblem8Debug pb  = new TestProblem8Debug();
+        final TestProblem8Debug pb  = new TestProblem8Debug(0.0, 20.0,
+                                                            new Vector3D(5.0, 0.0, 4.0), new Rotation(0.9, 0.437, 0.0, 0.0, true),
+                                                            3.0 / 8.0, 1.0 / 2.0, 5.0 / 8.0,
+                                                            new Vector3D(0.0, 5.0, -4.0), new Rotation(-0.3088560588509295, 0.6360879930568342, 0.6360879930568341, 0.3088560588509294, true),
+                                                            //new Vector3D(5.0, 0.0, 4.0), new Rotation(0.9, 0.437, 0.0, 0.0, true),
+                                                            1.0 / 2.0, 3.0 / 8.0, 5.0 / 8.0);
         double minStep = 1.0e-10;
         double maxStep = pb.getFinalTime() - pb.getInitialState().getTime();
         double[] vecAbsoluteTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
@@ -939,8 +950,6 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 //                            RyuDouble.doubleToString(lastThetaT),
 //                            RyuDouble.doubleToString(lastPsiN), 
 //                            RyuDouble.doubleToString(lastPsiT),
-//
-//
 //                            RyuDouble.doubleToString(lastPhiNDEUX), 
 //                            RyuDouble.doubleToString(lastPhiTDEUX),
 //                            RyuDouble.doubleToString(lastThetaNDEUX), 
@@ -982,20 +991,18 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             //             out.format(Locale.US,  "plot $data using 1:2 with lines, \\%n");
             //             out.format(Locale.US,  " $data using 1:3 with lines%n");
 
-//            out.format(Locale.US, " plot $data using 1:2 with lines lc 1 title 'φN',\\%n ");
-//            out.format(Locale.US, "$data using 1:3 with points pt 4 lc 1 title 'φT',\\%n ");
-//            out.format(Locale.US, "$data using 1:4 with lines lc 2 title 'θN',\\%n ");
-//            out.format(Locale.US, "$data using 1:5 with points lc 2 pt 4  title 'θT',\\%n ");
-//            out.format(Locale.US, "$data using 1:6 with lines lc 3 title 'ψN',\\%n ");
-//            out.format(Locale.US, "$data using 1:7 with points pt 4  lc 3 title 'ψT',\\%n ");
-//
-//
-//            out.format(Locale.US, "$data using 1:8 with lines dt 2 lc 4  title 'φN',\\%n ");
-//            out.format(Locale.US, "$data using 1:9 with points pt 6 lc 4 title 'φT',\\%n ");
-//            out.format(Locale.US, "$data using 1:10 with lines dt 2 lc 5 title 'θN',\\%n ");
-//            out.format(Locale.US, "$data using 1:11 with points pt 6 lc 5 title 'θT',\\%n ");
-//            out.format(Locale.US, "$data using 1:12 with lines dt 2 lc 6 title 'ψN',\\%n ");
-//            out.format(Locale.US, "$data using 1:13 with points pt 6 lc 6 title 'ψT'%n ");
+//            out.format(Locale.US, "plot $data using 1:2 with lines lc 1 title 'φN',\\%n ");
+//            out.format(Locale.US, "     $data using 1:3 with points pt 4 lc 1 title 'φT',\\%n ");
+//            out.format(Locale.US, "     $data using 1:4 with lines lc 2 title 'θN',\\%n ");
+//            out.format(Locale.US, "     $data using 1:5 with points lc 2 pt 4  title 'θT',\\%n ");
+//            out.format(Locale.US, "     $data using 1:6 with lines lc 3 title 'ψN',\\%n ");
+//            out.format(Locale.US, "     $data using 1:7 with points pt 4  lc 3 title 'ψT',\\%n ");
+//            out.format(Locale.US, "     $data using 1:8 with lines dt 2 lc 4  title 'φN',\\%n ");
+//            out.format(Locale.US, "     $data using 1:9 with points pt 6 lc 4 title 'φT',\\%n ");
+//            out.format(Locale.US, "     $data using 1:10 with lines dt 2 lc 5 title 'θN',\\%n ");
+//            out.format(Locale.US, "     $data using 1:11 with points pt 6 lc 5 title 'θT',\\%n ");
+//            out.format(Locale.US, "     $data using 1:12 with lines dt 2 lc 6 title 'ψN',\\%n ");
+//            out.format(Locale.US, "     $data using 1:13 with points pt 6 lc 6 title 'ψT'%n ");
 
 
             out.format(Locale.US, "plot $data using 1:2  with lines lc 1 title 'Ω₁ numerical', \\%n");

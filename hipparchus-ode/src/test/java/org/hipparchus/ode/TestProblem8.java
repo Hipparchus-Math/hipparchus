@@ -69,7 +69,7 @@ public class TestProblem8 extends TestProblemAbstract {
     Rotation mAlignedToInert;
 
     /** Initial converted rotation. */
-    final Rotation r0;
+    final Rotation r0Conv;
 
     /** Rotation to switch to the converted axes frame. */
     final Rotation convertAxes;
@@ -88,18 +88,30 @@ public class TestProblem8 extends TestProblemAbstract {
 
     /**
      * Simple constructor.
+     * @param t0 initial time
+     * @param t1 final time
+     * @param omega0 initial rotation rate
+     * @param r0 initial rotation
+     * @param i1 inertia along first axis
+     * @param i2 inertia along second axis
+     * @param i3 inertia along third axis
      */
-    public TestProblem8() {
+    public TestProblem8(final double t0, final double t1, final Vector3D omega0, final Rotation r0,
+                        final double i1, final double i2, final double i3) {
         //Arguments in the super constructor :
         //Initial time, Primary state (o1, o2, o3, q0, q1, q2, q3), Final time, Error scale
-        super(0.0, new double[] {5.0, 0.0, 4.0, 0.9 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.437 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.0, 0.0}, 20.0, new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
-        i1 = 3.0 / 8.0;
-        i2 = 1.0 / 2.0;
-        i3 = 5.0 / 8.0;
-
+        super(t0,
+              new double[] {
+                  omega0.getX(), omega0.getY(), omega0.getZ(),
+                  r0.getQ0(), r0.getQ1(), r0.getQ2(), r0.getQ3()
+              },
+              t1,
+              new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
+        this.i1 = i1;
+        this.i2 = i2;
+        this.i3 = i3;
 
         y0 = getInitialState().getPrimaryState();
-        final double t0 = getInitialState().getTime();
 
         final double o12 = y0[0] * y0[0];
         final double o22 = y0[1] * y0[1];
@@ -194,7 +206,7 @@ public class TestProblem8 extends TestProblemAbstract {
 
         // convert initial conditions to Euler angles such the M is aligned with Z in computation frame
         final Vector3D omega0Body = new Vector3D(y0C[0], y0C[1], y0C[2]);
-        r0         = new Rotation(y0C[3], y0C[4], y0C[5], y0C[6], true);
+        r0Conv         = new Rotation(y0C[3], y0C[4], y0C[5], y0C[6], true);
         final Vector3D m0Body     = new Vector3D(i1C * omega0Body.getX(), i2C * omega0Body.getY(), i3C * omega0Body.getZ());
 
         final double   phi0       = 0; // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
@@ -207,7 +219,7 @@ public class TestProblem8 extends TestProblemAbstract {
 
         convertAxes = new Rotation( Vector3D.PLUS_I, Vector3D.PLUS_J, axesP[0], axesP[1] );
 
-        Rotation r0ConvertedAxis = convertAxes.applyTo(r0);
+        Rotation r0ConvertedAxis = convertAxes.applyTo(r0Conv);
 
         //Est-il nécéssaire de garder le r0COnvertedAxis qui n'est peut être pas adapté et ne règle peut être pas le problème
         mAlignedToInert = r0ConvertedAxis.applyInverseTo(mAlignedToBody);

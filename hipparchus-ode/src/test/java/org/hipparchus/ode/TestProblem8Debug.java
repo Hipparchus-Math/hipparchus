@@ -63,7 +63,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
     Rotation mAlignedToInert;
 
     /** Initial converted rotation. */
-    final Rotation r0;
+    final Rotation r0Conv;
 
     /** Rotation to switch to the converted axes frame. */
     final Rotation convertAxes;
@@ -131,23 +131,42 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
     /**
      * Simple constructor.
+     * @param t0 initial time
+     * @param t1 final time
+     * @param omega0A initial rotation rate
+     * @param r0A initial rotation
+     * @param i1A inertia along first axis
+     * @param i2A inertia along second axis
+     * @param i3A inertia along third axis
+     * @param omega0B initial rotation rate
+     * @param r0B initial rotation
+     * @param i1B inertia along first axis
+     * @param i2B inertia along second axis
+     * @param i3B inertia along third axis
      */
-    public TestProblem8Debug() {
-        //Arguments in the super constructor :
-        //Initial time, Primary state (o1, o2, o3, q0, q1, q2, q3), Final time, Error scale
-        super(0.0, new double[] {5.0, 0.0, 4.0, 0.9 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.437 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.0, 0.0,   0.0, 5.0, -4.0, -0.3088560588509295, 0.6360879930568342, 0.6360879930568341, 0.3088560588509294 }, 20.0, new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
-//        super(0.0, new double[] {5.0, 0.0, 4.0, 0.9 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.437 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.0, 0.0,   5.0, 0.0, 4.0, 0.9 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.437 / FastMath.sqrt(0.9 * 0.9 + 0.437 * 0.437), 0.0, 0.0}, 20.0, new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
+    public TestProblem8Debug(final double t0, final double t1,
+                             final Vector3D omega0A, final Rotation r0A,
+                             final double i1A, final double i2A, final double i3A,
+                             final Vector3D omega0B, final Rotation r0B,
+                             final double i1B, final double i2B, final double i3B) {
+        super(t0,
+              new double[] {
+                  omega0A.getX(), omega0A.getY(), omega0A.getZ(),
+                  r0A.getQ0(), r0A.getQ1(), r0A.getQ2(), r0A.getQ3(),
+                  omega0B.getX(), omega0B.getY(), omega0B.getZ(),
+                  r0B.getQ0(), r0B.getQ1(), r0B.getQ2(), r0B.getQ3()
+              },
+              t1,
+              new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
+        this.i1 = i1A;
+        this.i2 = i2A;
+        this.i3 = i3A;
 
-        i1 = 3.0 / 8.0;
-        i2 = 1.0 / 2.0;
-        i3 = 5.0 / 8.0;
-
-        i2DEUX = 3.0 / 8.0;
-        i1DEUX = 1.0 / 2.0;
-        i3DEUX = 5.0 / 8.0;
+        this.i1DEUX = i1B;
+        this.i2DEUX = i2B;
+        this.i3DEUX = i3B;
 
         y0 = getInitialState().getPrimaryState();
-        final double t0 = getInitialState().getTime();
 
         //1er état
 
@@ -169,7 +188,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
         // convert initial conditions to Euler angles such the M is aligned with Z in computation frame
         final Vector3D omega0Body = sorted.omega;
-        r0         = sorted.rotation;
+        r0Conv         = sorted.rotation;
         final Vector3D m0Body     = new Vector3D(i1C * omega0Body.getX(), i2C * omega0Body.getY(), i3C * omega0Body.getZ());
 
         final double   phi0       = 0; // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
@@ -182,7 +201,7 @@ public class TestProblem8Debug extends TestProblemAbstract {
 
         convertAxes = sorted.convertAxes;
 
-        Rotation r0ConvertedAxis = convertAxes.applyTo(r0);
+        Rotation r0ConvertedAxis = convertAxes.applyTo(r0Conv);
 
         mAlignedToInert = r0ConvertedAxis.applyInverseTo(mAlignedToBody);
         //mAlignedToInert = r0.applyInverseTo(mAlignedToBody);
