@@ -14,7 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.hipparchus.filtering.kalman.unscented;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -28,26 +27,25 @@ import org.hipparchus.linear.MatrixDecomposer;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.util.MerweUnscentedTransform;
 import org.hipparchus.util.UnscentedTransformProvider;
-
 
 /**
  * Unscented Kalman filter for {@link UscentedProcess unscented process}.
  * @param <T> the type of the measurements
- * @see "Woodburn J., and Coppola V., Analysis of Relative Merits of Unscented and Extended Kalman Filter in Orbit
- *       Determination, Reprinted from Astrodynamics 1999, Advances in the Astronautical Sciences, Vol. 171, 2019."
+ *
+ * @see "Wan, E. A., & Van Der Merwe, R. (2000, October). The unscented Kalman filter for nonlinear estimation.
+ *       In Proceedings of the IEEE 2000 Adaptive Systems for Signal Processing, Communications, and Control Symposium
+ *       (Cat. No. 00EX373) (pp. 153-158)"
  */
-
 public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilter<T> {
 
-    /** Unscented process. */
+    /** Process to be estimated. */
     private UnscentedProcess<T> process;
 
-    /** Predicted states. */
+    /** Predicted state. */
     private ProcessEstimate predicted;
 
-    /** Corrected states. */
+    /** Corrected state. */
     private ProcessEstimate corrected;
 
     /** Decompose to use for the correction phase. */
@@ -56,22 +54,8 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
     /** Number of estimated parameters. */
     private final int n;
 
-    /** Unscend transform provider. */
+    /** Unscented transform provider. */
     private final UnscentedTransformProvider utProvider;
-
-
-    /**
-     * Default constructor.
-     * <p>
-     * This constructor uses MerweUnscentedTransform as default transform for <code>utProvider</code>,
-     * @param decomposer decomposer to use for the correction phase
-     * @param process unscented process to estimate
-     * @param initialState initial state
-     */
-    public UnscentedKalmanFilter(final MatrixDecomposer decomposer, final UnscentedProcess<T> process,
-                                 final ProcessEstimate initialState) {
-        this(decomposer, process, initialState, new MerweUnscentedTransform(initialState.getState().getDimension()));
-    }
 
     /** Simple constructor.
      * @param decomposer decomposer to use for the correction phase
@@ -79,11 +63,10 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
      * @param initialState initial state
      * @param utProvider unscented transform provider
      */
-
-    public UnscentedKalmanFilter(final MatrixDecomposer decomposer, final UnscentedProcess<T> process,
-                                 final  ProcessEstimate initialState,
+    public UnscentedKalmanFilter(final MatrixDecomposer decomposer,
+                                 final UnscentedProcess<T> process,
+                                 final ProcessEstimate initialState,
                                  final UnscentedTransformProvider utProvider) {
-
         this.decomposer = decomposer;
         this.process    = process;
         this.corrected  = initialState;
@@ -94,65 +77,68 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
             // State dimension must be different from 0
             throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_STATE_SIZE);
         }
-
-
-
     }
+
     /** {@inheritDoc} */
     @Override
     public ProcessEstimate estimationStep(final T measurement) throws MathRuntimeException {
-        // Unscented transform
-        final RealVector[] sigmaPoints = unscentedTransform();
-        
-        return predictionAndCorrectionStep(measurement, sigmaPoints);
+
+        // Calculate sigma points
+        final RealVector[] sigmaPoints = utProvider.unscentedTransform(corrected.getState(), corrected.getCovariance());
+
+        // Perform the prediction and correction steps
+        return predictionAndCorrectionSteps(measurement, sigmaPoints);
+
     }
 
-    
-    public ProcessEstimate predictionAndCorrectionStep(final T measurement, final RealVector[] sigmaPoints) throws MathRuntimeException {
+    /** This method perform the prediction and correction steps of the Unscented Kalman Filter.
+     * @param measurement single measurement to handle
+     * @param sigmaPoints computed sigma points
+     * @return estimated state after measurement has been considered
+     * @throws MathRuntimeException if matrix cannot be decomposed
+     */
+    public ProcessEstimate predictionAndCorrectionSteps(final T measurement, final RealVector[] sigmaPoints) throws MathRuntimeException {
+
         // Prediction phase
         final UnscentedEvolution evolution = process.getEvolution(getCorrected().getTime(),
-                                                                  sigmaPoints,
-                                                                  measurement);
-        predict(evolution.getCurrentTime(), evolution.getCurrentStates(), evolution.getProcessNoiseMatrix());
-        final RealVector predictedMeasurement = getMean(evolution.getCurrentMeasurements());
-        final RealMatrix innovationCovarianceMatrix = getInnovationCovarianceMatrix(evolution.getCurrentMeasurements(), predictedMeasurement, measurement.getCovariance());
-        final RealMatrix crossCovarianceMatrix = getCrossCovarianceMatrix(evolution.getCurrentStates(), predicted.getState(), evolution.getCurrentMeasurements(), predictedMeasurement);
-        final RealVector innovation = (innovationCovarianceMatrix == null) ? null : process.getInnovation(measurement, predictedMeasurement, predicted.getState(), innovationCovarianceMatrix);
+                                                                  sigmaPoints, measurement);
+
+        predict(evolution.getCurrentTime(), evolution.getCurrentStates(),
+                evolution.getProcessNoiseMatrix());
+
         // Correction phase
-        correct(measurement, innovationCovarianceMatrix, crossCovarianceMatrix, innovation);
+        final RealVector[] predictedMeasurements = evolution.getCurrentMeasurements();
+        final RealVector   predictedMeasurement  = sum(predictedMeasurements, measurement.getValue().getDimension());
+        final RealMatrix   r                     = computeInnovationCovarianceMatrix(predictedMeasurements, predictedMeasurement, measurement.getCovariance());
+        final RealMatrix   crossCovarianceMatrix = computeCrossCovarianceMatrix(evolution.getCurrentStates(), predicted.getState(),
+                                                                                evolution.getCurrentMeasurements(), predictedMeasurement);
+        final RealVector   innovation            = (r == null) ? null : process.getInnovation(measurement, predictedMeasurement, predicted.getState(), r);
+        correct(measurement, r, crossCovarianceMatrix, innovation);
         return getCorrected();
-    }
-
-    /** Compute sigma points through unscented transform from previous state.
-     * @return sigma points.
-     */
-    public RealVector[] unscentedTransform() {
-
-        return utProvider.unscentedTransform(corrected.getState(), corrected.getCovariance());
 
     }
 
     /** Perform prediction step.
      * @param time process time
-     * @param predictedStates predicted states vector
+     * @param predictedStates predicted state vectors
      * @param noise process noise covariance matrix
      */
-    protected void predict(final double time, final RealVector[] predictedStates,  final RealMatrix noise) {
+    private void predict(final double time, final RealVector[] predictedStates,  final RealMatrix noise) {
 
         // Initialize predicted state and covariance
         RealVector predictedState      = new ArrayRealVector(n);
         RealMatrix predictedCovariance = MatrixUtils.createRealMatrix(n, n);
 
-        // Computation of Eq. 23, weighted mean
-        predictedState = getMean(predictedStates);
+        // Computation of Eq. 17, weighted mean state
+        predictedState = sum(predictedStates, n);
 
-        // Computation of Eq. 24, covariance matrix
-        predictedCovariance = getCovariance(predictedStates, predictedState);
+        // Computation of Eq. 18, predicted covariance matrix
+        predictedCovariance = computeCovariance(predictedStates, predictedState).add(noise);
 
-        predicted = new ProcessEstimate(time, predictedState, predictedCovariance.add(noise));
+        predicted = new ProcessEstimate(time, predictedState, predictedCovariance);
         corrected = null;
-    }
 
+    }
 
     /** Perform correction step.
      * @param measurement single measurement to handle
@@ -163,28 +149,37 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
      * (may be null if measurement should be ignored)
      * @exception MathIllegalArgumentException if matrix cannot be decomposed
      */
-
-    protected void correct(final T measurement, final RealMatrix innovationCovarianceMatrix,
-                           final RealMatrix crossCovarianceMatrix, final RealVector innovation) throws MathIllegalArgumentException {
+    private void correct(final T measurement, final RealMatrix innovationCovarianceMatrix,
+                           final RealMatrix crossCovarianceMatrix, final RealVector innovation)
+        throws MathIllegalArgumentException {
 
         if (innovation == null) {
             // measurement should be ignored
             corrected = predicted;
             return;
         }
+
         // compute Kalman gain k
-        // the following is equivalent to k = P_cross * (R_pred)^-1 (Eq. 31)
+        // the following is equivalent to k = P_cross * (R_pred)^-1
         // we don't want to compute the inverse of a matrix,
         // we start by post-multiplying by R_pred and get
         // k.(R_pred) = P_cross
-        // then we transpose, knowing that R_pred is a symmetric matrice
+        // then we transpose, knowing that R_pred is a symmetric matrix
         // (R_pred).k^T = P_cross^T
         // then we can use linear system solving instead of matrix inversion
-        final RealMatrix k = decomposer.decompose(innovationCovarianceMatrix).solve(crossCovarianceMatrix.transpose()).transpose();
-        final RealVector correctedState = predicted.getState().add(k.operate(innovation));
-        final RealMatrix correctedCovariance = predicted.getCovariance().subtract(k.multiply(innovationCovarianceMatrix).multiply(k.transpose()));
+        final RealMatrix k = decomposer.
+                             decompose(innovationCovarianceMatrix).
+                             solve(crossCovarianceMatrix.transpose()).transpose();
 
-        corrected = new ProcessEstimate(measurement.getTime(), correctedState, correctedCovariance, null, null, innovationCovarianceMatrix, k);
+        // correct state vector
+        final RealVector correctedState = predicted.getState().add(k.operate(innovation));
+
+        // correct covariance matrix
+        final RealMatrix correctedCovariance = predicted.getCovariance().
+                                               subtract(k.multiply(innovationCovarianceMatrix).multiplyTransposed(k));
+
+        corrected = new ProcessEstimate(measurement.getTime(), correctedState, correctedCovariance,
+                                        null, null, innovationCovarianceMatrix, k);
 
     }
     /** Get the predicted state.
@@ -210,116 +205,137 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         return utProvider;
     }
 
-    /** Computes innovation covariance matrix. See Eq. 29.
-     * @param currentMeasurements current measurements
+    /** Computes innovation covariance matrix.
+     * @param predictedMeasurements predicted measurements (one per sigma point)
      * @param predictedMeasurement predicted measurements
-     * (may be null if measurement should be ignored)
+     *        (may be null if measurement should be ignored)
      * @param r measurement covariance
      * @return innovation covariance matrix (null if predictedMeasurement is null)
      */
-    protected RealMatrix getInnovationCovarianceMatrix(final RealVector[] currentMeasurements, final RealVector predictedMeasurement, final RealMatrix r) {
+    private RealMatrix computeInnovationCovarianceMatrix(final RealVector[] predictedMeasurements,
+                                                         final RealVector predictedMeasurement,
+                                                         final RealMatrix r) {
         if (predictedMeasurement == null) {
             return null;
         }
-        // Measurement dimension
-        final int measDim = predictedMeasurement.getDimension();
-
-        RealMatrix innovationCovarianceMatrix = MatrixUtils.createRealMatrix(measDim, measDim);
-
-        // Computation of Eq. 29
-        innovationCovarianceMatrix = getCovariance(currentMeasurements, predictedMeasurement);
-
+        // Computation of the innovation covariance matrix
+        final RealMatrix innovationCovarianceMatrix = computeCovariance(predictedMeasurements, predictedMeasurement);
+        // Add the measurement covariance
         return innovationCovarianceMatrix.add(r);
     }
 
     /**
-     * Computes cross covariance matrix. See Eq. 30.
+     * Computes cross covariance matrix.
      * @param predictedStates predicted states
      * @param predictedState predicted state
      * @param predictedMeasurements current measurements
-     * @param predictedMeasurement predicted measurement
+     * @param predictedMeasurement predicted measurements
      * @return cross covariance matrix
      */
-    protected RealMatrix getCrossCovarianceMatrix(final RealVector[] predictedStates, final RealVector predictedState, final RealVector[] predictedMeasurements, final RealVector predictedMeasurement) {
+    private RealMatrix computeCrossCovarianceMatrix(final RealVector[] predictedStates, final RealVector predictedState,
+                                                    final RealVector[] predictedMeasurements, final RealVector predictedMeasurement) {
 
-        final int stateDim = predictedState.getDimension();
-        final int measDim = predictedMeasurement.getDimension();
-        final int dim = predictedStates.length;
+        // Initialize the cross covariance matrix
+        RealMatrix crossCovarianceMatrix = MatrixUtils.createRealMatrix(predictedState.getDimension(),
+                                                                        predictedMeasurement.getDimension());
+
+        // Covariance weights
         final RealVector wc = utProvider.getWc();
-        // x*y^T matrix where x stands for the difference between predictedStates and the predictedState
-        //                    y stands for the difference between predictedMeasurements and the predictedMeasurement
-        final RealMatrix crossDiffSquared = MatrixUtils.createRealMatrix(stateDim, measDim);
-        RealMatrix crossCovarianceMatrix = MatrixUtils.createRealMatrix(stateDim, measDim);
 
-        for (int i = 0; i < dim; i++) {
+        // Compute the cross covariance matrix
+        for (int i = 0; i <= 2 * n; i++) {
             final RealVector stateDiff = predictedStates[i].subtract(predictedState);
-            final RealVector measDiff = predictedMeasurements[i].subtract(predictedMeasurement);
-
-            for (int c = 0; c < measDim; c++) {
-                for (int l = 0; l < stateDim; l++) {
-                    crossDiffSquared.setEntry(l, c, stateDiff.getEntry(l) * measDiff.getEntry(c));
-                }
-            }
-
-            crossCovarianceMatrix = crossCovarianceMatrix.add(crossDiffSquared.scalarMultiply(wc.getEntry(i)));
+            final RealVector measDiff  = predictedMeasurements[i].subtract(predictedMeasurement);
+            crossCovarianceMatrix = crossCovarianceMatrix.add(outer(stateDiff, measDiff).scalarMultiply(wc.getEntry(i)));
         }
+
+        // Return the cross covariance
         return crossCovarianceMatrix;
     }
 
     /**
-     * Computes weighted mean from samples. See Eq. 23 and 28.
-     * @param samples
-     * @return weighted mean
+     * Computes a weighted mean parameter from a given samples.
+     * <p>
+     * This method can be used for computing both the mean state and the mean measurement.
+     * <p>
+     * It corresponds to the Equation 17 of "Wan, E. A., & Van Der Merwe, R.
+     * The unscented Kalman filter for nonlinear estimation"
+     * </p>
+     * @param samples input samples
+     * @param size size of the weighted mean parameter
+     * @return weighted mean parameter
      */
+    private RealVector sum(final RealVector[] samples, final int size) {
 
-    protected RealVector getMean(final RealVector[] samples) {
-        
-        final int dim = samples[0].getDimension();
-        final int p = samples.length;
-        RealVector mean = new ArrayRealVector(dim);
+        // Initialize the weighted mean parameter
+        RealVector mean = new ArrayRealVector(size);
+
+        // Mean weights
         final RealVector wm = utProvider.getWm();
-        // Compute mean
-        for (int i = 0; i < p; i++) {
-            RealVector temp = new ArrayRealVector(dim);
-            for (int k = 0; k < dim; k++) {
-                temp.setEntry(k, samples[i].getEntry(k) * wm.getEntry(i));
-            }
-            mean = mean.add(temp);
-            //mean = mean.add(samples[i].mapMultiply(wm.getEntry(i)));
+
+        // Compute weighted mean parameter
+        for (int i = 0; i <= 2 * n; i++) {
+            mean = mean.add(samples[i].mapMultiply(wm.getEntry(i)));
         }
-       
 
-
+        // Return the weighted mean value
         return mean;
-    }
-    
-    /** Computes covariance from state and samples. See Eq. 24 and 29.
-     * @param samples samples
-     * @param state state
-     * @return covariance matrix
-     */
-    protected RealMatrix getCovariance(final RealVector[] samples, final RealVector state) {
-        // dim can be either state dimension or measurement dimension. It depends on the covariance one wants to compute.
-        final int dim = state.getDimension();
-        final int p = samples.length;
-        final RealVector wc = utProvider.getWc();
-        // y*y^T matrix where y stands for the difference between samples and state
-        final RealMatrix diffSquared = MatrixUtils.createRealMatrix(dim, dim);
 
+    }
+
+    /** Computes the covariance matrix.
+     * <p>
+     * This method can be used for computing both the predicted state
+     * covariance matrix and the innovation covariance matrix.
+     * <p>
+     * It corresponds to the Equation 18 of "Wan, E. A., & Van Der Merwe, R.
+     * The unscented Kalman filter for nonlinear estimation"
+     * </p>
+     * @param samples input samples
+     * @param state weighted mean parameter
+     * @return the covariance matrix
+     */
+    private RealMatrix computeCovariance(final RealVector[] samples,
+                                         final RealVector state) {
+
+        // Initialize the covariance matrix, by using the size of the weighted mean parameter
+        final int dim = state.getDimension();
         RealMatrix covarianceMatrix = MatrixUtils.createRealMatrix(dim, dim);
 
-        // Computation of Eq. 18
-        for (int i = 0; i < p; i++) {
+        // Covariance weights
+        final RealVector wc = utProvider.getWc();
+
+        // Compute the covariance matrix
+        for (int i = 0; i <= 2 * n; i++) {
             final RealVector diff = samples[i].subtract(state);
-            for (int c = 0; c < dim; c++) {
-                for (int l = 0; l < dim; l++) {
-                    diffSquared.setEntry(l, c, diff.getEntry(l) * diff.getEntry(c));
-                }
-            }
-            covarianceMatrix = covarianceMatrix.add(diffSquared.scalarMultiply(wc.getEntry(i)));
+            covarianceMatrix = covarianceMatrix.add(outer(diff, diff).scalarMultiply(wc.getEntry(i)));
         }
+
+        // Return the covariance
         return covarianceMatrix;
+
     }
 
+    /** Conputes the outer product of two vectors.
+     * @param a first vector
+     * @param b second vector
+     * @return the outer product of a and b
+     */
+    private RealMatrix outer(final RealVector a, final RealVector b) {
+
+        // Initialize matrix
+        final RealMatrix outMatrix = MatrixUtils.createRealMatrix(a.getDimension(), b.getDimension());
+
+        // Fill matrix
+        for (int row = 0; row < outMatrix.getRowDimension(); row++) {
+            for (int col = 0; col < outMatrix.getColumnDimension(); col++) {
+                outMatrix.setEntry(row, col, a.getEntry(row) * b.getEntry(col));
+            }
+        }
+
+        // Return
+        return outMatrix;
+
+    }
 
 }

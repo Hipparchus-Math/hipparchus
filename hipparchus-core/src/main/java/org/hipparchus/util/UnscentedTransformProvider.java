@@ -26,19 +26,21 @@ public interface UnscentedTransformProvider {
 
     /**
      * Perform the unscented transform from a state and its covariance.
-     * @param state state
-     * @param covariance covariance associated with the state
-     * @return an array of realvector containing the sigma points
+     * @param state process state
+     * @param covariance covariance associated with the process state
+     * @return an array containing the sigma points of the unscented transform
      */
     RealVector[] unscentedTransform(RealVector state, RealMatrix covariance);
 
-    /** Get the covariance weights.
-     * @return wc covariance weights
+    /**
+     * Get the covariance weights.
+     * @return the covariance weights
      */
     RealVector getWc();
 
-    /** Get the mean weights.
-     * @return wm mean weights
+    /**
+     * Get the mean weights.
+     * @return the mean weights
      */
     RealVector getWm();
 
