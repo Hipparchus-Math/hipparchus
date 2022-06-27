@@ -66,16 +66,15 @@ at fork time.
 
  ---
 
-## 2.0 Release is out!
+## 2.1 Release is out!
 
-Hipparchus 2.0 is now available for download from the [Hipparchus download page](downloads.html) or on
-Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 2.0 release are:
+Hipparchus 2.1 is now available for download from the [Hipparchus download page](downloads.html) or on
+Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 2.1 release are:
 
-  * addition of a sequential Gauss-Newton optimizer
-  * improved relative scheduling of step handlers and events handlers in ODE
-  * addition of a finish callback in step handlers
-  * replacement of RealFieldElement by CalculusFieldElement interface
-  * many improvements in Complex to fully implement CalculusFieldElement with correct branch cuts
-  * addition of FieldComplex
-  * implementation of elliptic functions and integrals (for real, complex and general fields)
-  * faster simultaneous computation of sinh/cosh
+  * addition of 3D version of complex function plotter,
+  * addition of ConvergenceCheckerOrMultiplexer and ConvergenceCheckerAndMultiplexer,
+  * addition of inverse Jacobi elliptic functions,
+  * optional modified weights to Akima interpolation,
+  * modified Gram-Schmidt basis orthonormalization process,
+  * generation of convergents streams in continued fractions,
+  * addition of equalsIee754 to points in all topologies to handle NaN coordinates.

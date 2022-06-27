@@ -363,7 +363,7 @@ public class BigFraction
 
     /** Generate a {@link Stream stream} of convergents from a real number.
      * @param value value to approximate
-     * @param maxConbvergents maximum number of convergents.
+     * @param maxConvergents maximum number of convergents.
      * @return stream of {@link BigFraction} convergents approximating  {@code value}
      * @since 2.1
      */

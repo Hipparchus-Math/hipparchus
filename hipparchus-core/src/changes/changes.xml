@@ -49,7 +49,18 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
-    <release version="2.1" date="TBD" description="TBD">
+    <release version="2.2" date="TBD" description="TBD">
+      <action dev="luc" type="add" due-to="Romain Serra" issue="issue/192">
+        Added integration/differentiation of {Field}DerivativeStructure.
+      </action>
+    </release>
+    <release version="2.1" date="2022-04-24" description="Thist is a maintenance release. The main
+      changes are addition of inverse Jacobi elliptic functions, optional modified weights to
+      Akima interpolation, modified Gram-Schmidt basis orthonormalization process, generation
+      of convergents streams in continued fractions. Various bugs were fixed.">
+      <action dev="luc" type="fix" issue="issue/189">
+        Fixed some wrong branch cuts in inverse Jacobi elliptic functions in the complex case.
+      </action>
       <action dev="luc" type="add" issue="issue/172">
         Added optional modified weights to avoid overshoots in Akima interpolation
         near constant slopes sub-samples.

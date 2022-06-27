@@ -1044,7 +1044,6 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
                                      final BSPTree<Euclidean2D> node,
                                      final Iterable<BSPTree<Euclidean2D>> splitters,
                                      final boolean reversed) {
-            @SuppressWarnings("unchecked")
             final AbstractSubHyperplane<Euclidean2D, Euclidean1D> absSub =
                 (AbstractSubHyperplane<Euclidean2D, Euclidean1D>) sub;
             final Line line      = (Line) sub.getHyperplane();

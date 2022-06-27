@@ -120,8 +120,9 @@ See in MathWorld [elliptic integrals of the first kind](https://mathworld.wolfra
 `m` that computes the twelve elliptic functions `\(sn(u|m)\)`, `\(cn(u|m)\)`, `\(dn(u|m)\)`,
 `\(cs(u|m)\)`, `\(ds(u|m)\)`, `\(ns(u|m)\)`, `\(dc(u|m)\)`, `\(nc(u|m)\)`, `\(sc(u|m)\)`, `\(nd(u|m)\)`,
 `\(sd(u|m)\)`, and `\(cd(u|m)\)`. The functions are computed as copolar triplets as when one function is needed
-in an expression, the two other are often also needed and the (very fast) arithmetic-geometric mean algorithm gives
-all three values at once.
+in an expression, the two other are often also needed. The inverse functions `\(arcsn(u|m)\)`, `\(arccn(u|m)\)`, `\(arcdn(u|m)\)`,
+`\(arccs(u|m)\)`, `\(arcds(u|m)\)`, `\(arcns(u|m)\)`, `\(arcdc(u|m)\)`, `\(arcnc(u|m)\)`, `\(arcsc(u|m)\)`, `\(arcnd(u|m)\)`,
+`\(arcsd(u|m)\)`, and `\(arccd(u|m)\)` are also available.
 
 `JacobiTheta` (and `FieldJacobiTheta`) computes the four Jacobi theta functions `\(\theta_1(z|\tau)\)`, `\(\theta_2(z|\tau)\)`,
 `\(\theta_3(z|\tau)\)`, and `\(\theta_4(z|\tau)\)`. The half-period ratio `\(\tau\)` is linked to the nome `q`:
