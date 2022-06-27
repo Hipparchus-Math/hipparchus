@@ -709,8 +709,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         final TestProblem8Debug pb  = new TestProblem8Debug(0.0, 20.0,
                                                             new Vector3D(5.0, 0.0, 4.0), new Rotation(0.9, 0.437, 0.0, 0.0, true),
                                                             3.0 / 8.0, 1.0 / 2.0, 5.0 / 8.0,
-                                                            new Vector3D(0.0, 5.0, -4.0), new Rotation(-0.3088560588509295, 0.6360879930568342, 0.6360879930568341, 0.3088560588509294, true),
-                                                            //new Vector3D(5.0, 0.0, 4.0), new Rotation(0.9, 0.437, 0.0, 0.0, true),
+                                                            // new Vector3D(0.0, 5.0, -4.0), new Rotation(-0.3088560588509295, 0.6360879930568342, 0.6360879930568341, 0.3088560588509294, true),
+                                                            new Vector3D(5.0, 0.0, 4.0), new Rotation(0.9, 0.437, 0.0, 0.0, true),
                                                             1.0 / 2.0, 3.0 / 8.0, 5.0 / 8.0);
         double minStep = 1.0e-10;
         double maxStep = pb.getFinalTime() - pb.getInitialState().getTime();
