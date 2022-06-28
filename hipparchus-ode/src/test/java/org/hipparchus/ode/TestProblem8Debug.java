@@ -210,22 +210,35 @@ public class TestProblem8Debug extends TestProblemAbstract {
         i31  = i3C - i1C;
         i21  = i2C - i1C;
 
-        tScale  = FastMath.sqrt(i32 * (m2 - twoE * i1C) / (i1C * i2C * i3C));
+        // Ω is always o1Scale * cn((t-tref) * tScale), o2Scale * sn((t-tref) * tScale), o3Scale * dn((t-tref) * tScale)
+        tScale  = FastMath.copySign(FastMath.sqrt(i32 * (m2 - twoE * i1C) / (i1C * i2C * i3C)), omega0Body.getZ());
         o1Scale = FastMath.sqrt((twoE * i3C - m2) / (i1C * i31));
         o2Scale = FastMath.sqrt((twoE * i3C - m2) / (i2C * i32));
-        o3Scale = FastMath.sqrt((m2 - twoE * i1C) / (i3C * i31));
+        o3Scale = FastMath.copySign(FastMath.sqrt((m2 - twoE * i1C) / (i3C * i31)), omega0Body.getZ());
 
         k2     = i21 * (twoE * i3C - m2) / (i32 * (m2 - twoE * i1C));
 
         jacobi = JacobiEllipticBuilder.build(k2);
+        period = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
 
-        if (omega0Body.getY() == 0) {
-            tRef = t0;
+        if (FastMath.abs(omega0Body.getX()) >= FastMath.abs(omega0Body.getY())) {
+            if (omega0Body.getX() >= 0) {
+                // omega is near +I
+                tRef = t0 - jacobi.arcsn(+omega0Body.getY() / o2Scale) / tScale;
+            } else {
+                // omega is near -I
+                tRef = t0 - jacobi.arcsn(-omega0Body.getY() / o2Scale) / tScale - 0.5 * period;
+            }
         } else {
-            tRef = t0 - jacobi.arcsn(omega0Body.getY() / o2Scale) / tScale;
+            if (omega0Body.getY() >= 0) {
+                // omega is near +J
+                tRef = t0 - jacobi.arccn(omega0Body.getX() / o1Scale) / tScale;
+            } else {
+                // omega is near -J
+                tRef = t0 + jacobi.arccn(omega0Body.getX() / o1Scale) / tScale;
+            }
         }
 
-        period             = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
         phiSlope           = FastMath.sqrt(m2) / i3;
         phiQuadratureModel = computePhiQuadratureModel(i1C, i2C, i3C, k2, m2, jacobi, period, phiSlope, t0, tRef, tScale);
         integOnePeriod     = phiQuadratureModel.getInterpolatedState(phiQuadratureModel.getFinalTime()).getPrimaryState()[0];
@@ -268,22 +281,35 @@ public class TestProblem8Debug extends TestProblemAbstract {
         i31DEUX  = i3CDEUX - i1CDEUX;
         i21DEUX  = i2CDEUX - i1CDEUX;
 
-        tScaleDEUX  = FastMath.sqrt(i32DEUX * (m2DEUX - twoEDEUX * i1CDEUX) / (i1CDEUX * i2CDEUX * i3CDEUX));
+        // Ω is always o1Scale * cn((t-tref) * tScale), o2Scale * sn((t-tref) * tScale), o3Scale * dn((t-tref) * tScale)
+        tScaleDEUX  = FastMath.copySign(FastMath.sqrt(i32DEUX * (m2DEUX - twoEDEUX * i1CDEUX) / (i1CDEUX * i2CDEUX * i3CDEUX)), omega0BodyDEUX.getZ());
         o1ScaleDEUX = FastMath.sqrt((twoEDEUX * i3CDEUX - m2DEUX) / (i1CDEUX * i31DEUX));
         o2ScaleDEUX = FastMath.sqrt((twoEDEUX * i3CDEUX - m2DEUX) / (i2CDEUX * i32DEUX));
-        o3ScaleDEUX = FastMath.sqrt((m2DEUX - twoEDEUX * i1CDEUX) / (i3CDEUX * i31DEUX));
+        o3ScaleDEUX = FastMath.copySign(FastMath.sqrt((m2DEUX - twoEDEUX * i1CDEUX) / (i3CDEUX * i31DEUX)), omega0BodyDEUX.getZ());
 
         k2DEUX     = i21DEUX * (twoEDEUX * i3CDEUX - m2DEUX) / (i32DEUX * (m2DEUX - twoEDEUX * i1CDEUX));
 
         jacobiDEUX = JacobiEllipticBuilder.build(k2DEUX);
+        periodDEUX = 4 * LegendreEllipticIntegral.bigK(k2DEUX) / tScaleDEUX;
 
-        if (omega0BodyDEUX.getY() == 0){
-            tRefDEUX = t0;
+        if (FastMath.abs(omega0BodyDEUX.getX()) >= FastMath.abs(omega0BodyDEUX.getY())) {
+            if (omega0BodyDEUX.getX() >= 0) {
+                // omega is near +I
+                tRefDEUX = t0 - jacobiDEUX.arcsn(+omega0BodyDEUX.getY() / o2ScaleDEUX) / tScaleDEUX;
+            } else {
+                // omega is near -I
+                tRefDEUX = t0 - jacobiDEUX.arcsn(-omega0BodyDEUX.getY() / o2ScaleDEUX) / tScaleDEUX - 0.5 * periodDEUX;
+            }
         } else {
-            tRefDEUX   = t0 - jacobiDEUX.arcsn(omega0BodyDEUX.getY() / o2ScaleDEUX) / tScaleDEUX;
+            if (omega0BodyDEUX.getY() >= 0) {
+                // omega is near +J
+                tRefDEUX = t0 - jacobiDEUX.arccn(omega0BodyDEUX.getX() / o1ScaleDEUX) / tScaleDEUX;
+            } else {
+                // omega is near -J
+                tRefDEUX = t0 + jacobiDEUX.arccn(omega0BodyDEUX.getX() / o1ScaleDEUX) / tScaleDEUX;
+            }
         }
 
-        periodDEUX             = 4 * LegendreEllipticIntegral.bigK(k2DEUX) / tScaleDEUX;
         phiSlopeDEUX           = FastMath.sqrt(m2DEUX) / i3DEUX;
         phiQuadratureModelDEUX = computePhiQuadratureModel(i1CDEUX, i2CDEUX, i3CDEUX,
                                                            k2DEUX, m2DEUX, jacobiDEUX, periodDEUX, phiSlopeDEUX,

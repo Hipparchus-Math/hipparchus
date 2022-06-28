@@ -229,10 +229,11 @@ public class TestProblem8 extends TestProblemAbstract {
         i31  = i3C - i1C;
         i21  = i2C - i1C;
 
-        tScale  = FastMath.sqrt(i32 * (m2 - twoE * i1C) / (i1C * i2C * i3C));
+        // Ω is always o1Scale * cn((t-tref) * tScale), o2Scale * sn((t-tref) * tScale), o3Scale * dn((t-tref) * tScale)
+        tScale  = FastMath.copySign(FastMath.sqrt(i32 * (m2 - twoE * i1C) / (i1C * i2C * i3C)), omega0Body.getZ());
         o1Scale = FastMath.sqrt((twoE * i3C - m2) / (i1C * i31));
         o2Scale = FastMath.sqrt((twoE * i3C - m2) / (i2C * i32));
-        o3Scale = FastMath.sqrt((m2 - twoE * i1C) / (i3C * i31));
+        o3Scale = FastMath.copySign(FastMath.sqrt((m2 - twoE * i1C) / (i3C * i31)), omega0Body.getZ());
 
         if (y0C[0] == 0 && y0C[1] == 0 && y0C[2] == 0) {
             k2 = 0.0;
@@ -241,14 +242,26 @@ public class TestProblem8 extends TestProblemAbstract {
         }
 
         jacobi = JacobiEllipticBuilder.build(k2);
+        period = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
 
-        if (y0C[1] == 0) {
-            tRef = t0;
+        if (FastMath.abs(omega0Body.getX()) >= FastMath.abs(omega0Body.getY())) {
+            if (omega0Body.getX() >= 0) {
+                // omega is near +I
+                tRef = t0 - jacobi.arcsn(+omega0Body.getY() / o2Scale) / tScale;
+            } else {
+                // omega is near -I
+                tRef = t0 - jacobi.arcsn(-omega0Body.getY() / o2Scale) / tScale - 0.5 * period;
+            }
         } else {
-            tRef = t0 - jacobi.arcsn(y0C[1] / o2Scale) / tScale;
+            if (omega0Body.getY() >= 0) {
+                // omega is near +J
+                tRef = t0 - jacobi.arccn(omega0Body.getX() / o1Scale) / tScale;
+            } else {
+                // omega is near -J
+                tRef = t0 + jacobi.arccn(omega0Body.getX() / o1Scale) / tScale;
+            }
         }
 
-        period             = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
         phiSlope           = FastMath.sqrt(m2) / i3C;
         phiQuadratureModel = computePhiQuadratureModel(t0);
         integOnePeriod     = phiQuadratureModel.getInterpolatedState(phiQuadratureModel.getFinalTime()).getPrimaryState()[0];
