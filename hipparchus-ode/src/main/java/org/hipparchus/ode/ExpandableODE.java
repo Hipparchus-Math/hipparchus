@@ -65,7 +65,7 @@ public class ExpandableODE {
         this.mapper     = new EquationsMapper(null, primary.getDimension());
     }
 
-    /** Get the primaryset of differential equations to be integrated.
+    /** Get the primary set of differential equations to be integrated.
      * @return primary set of differential equations to be integrated
      */
     public OrdinaryDifferentialEquation getPrimary() {
