@@ -366,7 +366,9 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
         RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
         integ.addStepHandler(new KeplerHandler<T>(pb, expectedMaxError, epsilon));
-        integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
+        final FieldExpandableODE<T> expandable = new FieldExpandableODE<T>(pb);
+        Assert.assertSame(pb, expandable.getPrimary());
+        integ.integrate(expandable, pb.getInitialState(), pb.getFinalTime());
     }
 
     private static class KeplerHandler<T extends CalculusFieldElement<T>> implements FieldODEStepHandler<T> {
