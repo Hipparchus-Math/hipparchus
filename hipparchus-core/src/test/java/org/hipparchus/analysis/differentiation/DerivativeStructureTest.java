@@ -31,6 +31,8 @@ import java.util.Map;
 import org.hipparchus.CalculusFieldElementAbstractTest;
 import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
+import org.hipparchus.analysis.CalculusFieldMultivariateFunction;
+import org.hipparchus.analysis.CalculusFieldMultivariateVectorFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -1972,43 +1974,88 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
-    public void testRebaseValue() {
+    public void testRebaseValueMoreIntermediateThanBase() {
+        doTestRebaseValue(createBaseVariables(new DSFactory(2, 4), 1.5, -2.0),
+                          q -> new DerivativeStructure[] {
+                              q[0].add(q[1].multiply(3)),
+                              q[0].log(),
+                              q[1].divide(q[0].sin())
+                          },
+                          new DSFactory(3, 4),
+                          p -> p[0].add(p[1].divide(p[2])),
+                          1.0e-15);
+    }
 
-        final DSFactory f34 = new DSFactory(3, 4);
-        final DSFactory f24 = new DSFactory(2, 4);
+    @Test
+    public void testRebaseValueLessIntermediateThanBase() {
+        doTestRebaseValue(createBaseVariables(new DSFactory(3, 4), 1.5, -2.0, 0.5),
+                          q -> new DerivativeStructure[] {
+                              q[0].add(q[1].multiply(3)),
+                              q[0].add(q[1]).subtract(q[2])
+                          },
+                          new DSFactory(2, 4),
+                          p -> p[0].multiply(p[1]),
+                          1.0e-15);
+    }
 
-        // base variables
-        final DerivativeStructure q0 = f24.variable(0,  1.5);
-        final DerivativeStructure q1 = f24.variable(1, -2.0);
+    @Test
+    public void testRebaseValueEqualIntermediateAndBase() {
+        doTestRebaseValue(createBaseVariables(new DSFactory(2, 4), 1.5, -2.0),
+                          q -> new DerivativeStructure[] {
+                              q[0].add(q[1].multiply(3)),
+                              q[0].add(q[1])
+                          },
+                          new DSFactory(2, 4),
+                          p -> p[0].multiply(p[1]),
+                          1.0e-15);
+    }
+
+    private void doTestRebaseValue(final DerivativeStructure[] q,
+                                   final CalculusFieldMultivariateVectorFunction<DerivativeStructure> qToP,
+                                   final DSFactory factoryP,
+                                   final CalculusFieldMultivariateFunction<DerivativeStructure> f,
+                                   final double tol) {
 
         // intermediate variables as functions of base variables
-        final DerivativeStructure p0 = q0.add(q1.multiply(3));
-        final DerivativeStructure p1 = q0.log();
-        final DerivativeStructure p2 = q1.divide(q0.sin());
+        final DerivativeStructure[] pBase = qToP.value(q);
         
         // reference function
-        final DerivativeStructure ref = p0.add(p1.divide(p2));
+        final DerivativeStructure ref = f.value(pBase);
 
         // intermediate variables as independent variables
-        final DerivativeStructure p0I = f34.variable(0, p0.getReal());
-        final DerivativeStructure p1I = f34.variable(0, p1.getReal());
-        final DerivativeStructure p2I = f34.variable(0, p2.getReal());
+        final DerivativeStructure[] pIntermediate = creatIntermediateVariables(factoryP, pBase);
 
         // function of the intermediate variables
-        final DerivativeStructure fI = p0I.add(p1I.divide(p2I));
+        final DerivativeStructure fI = f.value(pIntermediate);
 
         // function rebased to base variables
-        final DerivativeStructure rebased = fI.rebase(p0, p1, p2);
+        final DerivativeStructure rebased = fI.rebase(pBase);
 
-        Assert.assertEquals(2, ref.getFreeParameters());
-        Assert.assertEquals(4, ref.getOrder());
-        Assert.assertEquals(3, fI.getFreeParameters());
-        Assert.assertEquals(4, fI.getOrder());
-        Assert.assertEquals(2, rebased.getFreeParameters());
-        Assert.assertEquals(4, rebased.getOrder());
+        Assert.assertEquals(q[0].getFreeParameters(),                   ref.getFreeParameters());
+        Assert.assertEquals(q[0].getOrder(),                            ref.getOrder());
+        Assert.assertEquals(factoryP.getCompiler().getFreeParameters(), fI.getFreeParameters());
+        Assert.assertEquals(factoryP.getCompiler().getOrder(),          fI.getOrder());
+        Assert.assertEquals(ref.getFreeParameters(),                    rebased.getFreeParameters());
+        Assert.assertEquals(ref.getOrder(),                             rebased.getOrder());
 
-        checkEquals(ref, rebased, 1.0e-15);
+        checkEquals(ref, rebased, tol);
 
+    }
+
+    final DerivativeStructure[] createBaseVariables(final DSFactory factory, double... q) {
+        final DerivativeStructure[] qDS = new DerivativeStructure[q.length];
+        for (int i = 0; i < q.length; ++i) {
+            qDS[i] = factory.variable(i, q[i]);
+        }
+        return qDS;
+    }
+
+    final DerivativeStructure[] creatIntermediateVariables(final DSFactory factory, DerivativeStructure... pBase) {
+        final DerivativeStructure[] pIntermediate = new DerivativeStructure[pBase.length];
+        for (int i = 0; i < pBase.length; ++i) {
+            pIntermediate[i] = factory.variable(i, pBase[i].getReal());
+        }
+        return pIntermediate;
     }
 
     @Test
