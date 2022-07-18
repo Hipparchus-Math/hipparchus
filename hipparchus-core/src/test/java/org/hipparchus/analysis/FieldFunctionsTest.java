@@ -26,7 +26,7 @@ import org.junit.Test;
 public class FieldFunctionsTest {
 
     @Test
-    public void testScalarFunctionConversion() {
+    public void testScalarUnivariateFunctionConversion() {
         FieldUnivariateFunction f1 = new FieldUnivariateFunction() {
             public <T extends CalculusFieldElement<T>> T value(T x) {
                 return x.multiply(2);
@@ -39,6 +39,25 @@ public class FieldFunctionsTest {
             Assert.assertEquals(f2.value(new Decimal64(x)).getReal(),
                                 f1Converted.value(new Decimal64(x)).getReal(),
                                 1.0e-15);
+        }
+    }
+
+    @Test
+    public void testScalarMultivariateFunctionConversion() {
+        FieldMultivariateFunction f1 = new FieldMultivariateFunction() {
+            public <T extends CalculusFieldElement<T>> T value(@SuppressWarnings("unchecked") T... x) {
+                return x[0].multiply(2).add(x[1]);
+            }
+        };
+        CalculusFieldMultivariateFunction<Decimal64> f1Converted = f1.toCalculusFieldMultivariateFunction(Decimal64Field.getInstance());
+        CalculusFieldMultivariateFunction<Decimal64> f2 = x -> x[0].multiply(2).add(x[1]);
+
+        for (double x0 = 0; x0 < 1; x0 += 0.01) {
+            for (double x1 = 0; x1 < 1; x1 += 0.01) {
+                Assert.assertEquals(f2.value(new Decimal64(x0), new Decimal64(x1)).getReal(),
+                                    f1Converted.value(new Decimal64(x0), new Decimal64(x1)).getReal(),
+                                    1.0e-15);
+            }
         }
     }
 
