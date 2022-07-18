@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.2" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issue/195">
+        Added FieldMultivariateFunction and CalculusFieldMultivariateFunction.
+      </action>
       <action dev="luc" type="fix" issue="issues/194">
         Added a getPrimary method to FieldExpandableODE.
       </action>
