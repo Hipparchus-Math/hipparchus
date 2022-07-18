@@ -25,6 +25,7 @@ package org.hipparchus.analysis.differentiation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.CombinatoricsUtils;
@@ -156,7 +157,8 @@ public class DSCompilerTest {
         }
     }
 
-    @Test public void testMultiplicationRules()
+    @Test
+    public void testMultiplicationRules()
         throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 
         Map<String,String> referenceRules = new HashMap<String, String>();
@@ -218,25 +220,36 @@ public class DSCompilerTest {
 
         Field multFieldArrayField = DSCompiler.class.getDeclaredField("multIndirection");
         multFieldArrayField.setAccessible(true);
+        Class<?> multiplicationMapperClass = Stream.
+                                             of(DSCompiler.class.getDeclaredClasses()).
+                                             filter(c -> c.getName().endsWith("MultiplicationMapper")).
+                                             findAny().
+                                             get();
+        Field coeffField = multiplicationMapperClass.getDeclaredField("coeff");
+        coeffField.setAccessible(true);
+        Field lhsField = multiplicationMapperClass.getDeclaredField("lhsIndex");
+        lhsField.setAccessible(true);
+        Field rhsField = multiplicationMapperClass.getDeclaredField("rhsIndex");
+        rhsField.setAccessible(true);
         for (int i = 0; i < 5; ++i) {
             for (int j = 0; j < 4; ++j) {
                 DSCompiler compiler = DSCompiler.getCompiler(i, j);
-                int[][][] multIndirection = (int[][][]) multFieldArrayField.get(compiler);
+                Object[][] multIndirection = (Object[][]) multFieldArrayField.get(compiler);
                 for (int k = 0; k < multIndirection.length; ++k) {
                     String product = ordersToString(compiler.getPartialDerivativeOrders(k),
                                                     "(f*g)", "x", "y", "z", "t");
                     StringBuilder rule = new StringBuilder();
-                    for (int[] term : multIndirection[k]) {
+                    for (Object term : multIndirection[k]) {
                         if (rule.length() > 0) {
                             rule.append(" + ");
                         }
-                        if (term[0] > 1) {
-                            rule.append(term[0]).append(" * ");
+                        if (((Integer) coeffField.get(term)).intValue() > 1) {
+                            rule.append(((Integer) coeffField.get(term)).intValue()).append(" * ");
                         }
-                        rule.append(ordersToString(compiler.getPartialDerivativeOrders(term[1]),
+                        rule.append(ordersToString(compiler.getPartialDerivativeOrders(((Integer) lhsField.get(term)).intValue()),
                                                    "f", "x", "y", "z", "t"));
                         rule.append(" * ");
-                        rule.append(ordersToString(compiler.getPartialDerivativeOrders(term[2]),
+                        rule.append(ordersToString(compiler.getPartialDerivativeOrders(((Integer) rhsField.get(term)).intValue()),
                                                    "g", "x", "y", "z", "t"));
                     }
                     Assert.assertEquals(product, referenceRules.get(product), rule.toString());

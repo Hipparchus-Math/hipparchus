@@ -153,7 +153,7 @@ public class DSCompiler {
     private final int[] lowerIndirection;
 
     /** Indirection arrays for multiplication. */
-    private final int[][][] multIndirection;
+    private final MultiplicationMapper[][] multIndirection;
 
     /** Indirection arrays for function composition. */
     private final int[][][] compIndirection;
@@ -349,49 +349,43 @@ public class DSCompiler {
      * @param lowerIndirection lower derivatives indirection array
      * @return multiplication indirection array
      */
-    private static int[][][] compileMultiplicationIndirection(final int parameters, final int order,
-                                                              final DSCompiler valueCompiler,
-                                                              final DSCompiler derivativeCompiler,
-                                                              final int[] lowerIndirection) {
+    private static MultiplicationMapper[][] compileMultiplicationIndirection(final int parameters, final int order,
+                                                                             final DSCompiler valueCompiler,
+                                                                             final DSCompiler derivativeCompiler,
+                                                                             final int[] lowerIndirection) {
 
         if (parameters == 0 || order == 0) {
-            return new int[][][] { { { 1, 0, 0 } } };
+            return new MultiplicationMapper[][] { { new MultiplicationMapper(1, 0, 0) } };
         }
 
         // this is an implementation of definition 3 in Dan Kalman's paper.
         final int vSize = valueCompiler.multIndirection.length;
         final int dSize = derivativeCompiler.multIndirection.length;
-        final int[][][] multIndirection = new int[vSize + dSize][][];
+        final MultiplicationMapper[][] multIndirection = new MultiplicationMapper[vSize + dSize][];
 
         System.arraycopy(valueCompiler.multIndirection, 0, multIndirection, 0, vSize);
 
         for (int i = 0; i < dSize; ++i) {
-            final int[][] dRow = derivativeCompiler.multIndirection[i];
-            List<int[]> row = new ArrayList<>(dRow.length * 2);
+            final MultiplicationMapper[] dRow = derivativeCompiler.multIndirection[i];
+            List<MultiplicationMapper> row = new ArrayList<>(dRow.length * 2);
             for (int j = 0; j < dRow.length; ++j) {
-                row.add(new int[] { dRow[j][0], lowerIndirection[dRow[j][1]], vSize + dRow[j][2] });
-                row.add(new int[] { dRow[j][0], vSize + dRow[j][1], lowerIndirection[dRow[j][2]] });
+                row.add(new MultiplicationMapper(dRow[j].coeff, lowerIndirection[dRow[j].lhsIndex], vSize + dRow[j].rhsIndex));
+                row.add(new MultiplicationMapper(dRow[j].coeff, vSize + dRow[j].lhsIndex, lowerIndirection[dRow[j].rhsIndex]));
             }
 
             // combine terms with similar derivation orders
-            final List<int[]> combined = new ArrayList<>(row.size());
+            final List<MultiplicationMapper> combined = new ArrayList<>(row.size());
             for (int j = 0; j < row.size(); ++j) {
-                final int[] termJ = row.get(j);
-                if (termJ[0] > 0) {
+                final MultiplicationMapper termJ = row.get(j);
+                if (termJ.coeff > 0) {
                     for (int k = j + 1; k < row.size(); ++k) {
-                        final int[] termK = row.get(k);
-                        if (termJ[1] == termK[1] && termJ[2] == termK[2]) {
-                            // combine termJ and termK
-                            termJ[0] += termK[0];
-                            // make sure we will skip termK later on in the outer loop
-                            termK[0] = 0;
-                        }
+                        termJ.absorbIfSimilar(row.get(k));
                     }
                     combined.add(termJ);
                 }
             }
 
-            multIndirection[vSize + i] = combined.toArray(new int[0][]);
+            multIndirection[vSize + i] = combined.toArray(new MultiplicationMapper[0]);
 
         }
 
@@ -987,12 +981,11 @@ public class DSCompiler {
                          final double[] rhs, final int rhsOffset,
                          final double[] result, final int resultOffset) {
         for (int i = 0; i < multIndirection.length; ++i) {
-            final int[][] mappingI = multIndirection[i];
             double r = 0;
-            for (int j = 0; j < mappingI.length; ++j) {
-                r += mappingI[j][0] *
-                     lhs[lhsOffset + mappingI[j][1]] *
-                     rhs[rhsOffset + mappingI[j][2]];
+            for (final MultiplicationMapper mapping : multIndirection[i]) {
+                r += mapping.coeff *
+                     lhs[lhsOffset + mapping.lhsIndex] *
+                     rhs[rhsOffset + mapping.rhsIndex];
             }
             result[resultOffset + i] = r;
         }
@@ -1014,12 +1007,11 @@ public class DSCompiler {
                                                              final T[] result, final int resultOffset) {
         T zero = lhs[lhsOffset].getField().getZero();
         for (int i = 0; i < multIndirection.length; ++i) {
-            final int[][] mappingI = multIndirection[i];
             T r = zero;
-            for (int j = 0; j < mappingI.length; ++j) {
-                r = r.add(lhs[lhsOffset + mappingI[j][1]].
-                          multiply(rhs[rhsOffset + mappingI[j][2]]).
-                          multiply(mappingI[j][0]));
+            for (final MultiplicationMapper mapping : multIndirection[i]) {
+                r = r.add(lhs[lhsOffset + mapping.lhsIndex].
+                          multiply(rhs[rhsOffset + mapping.rhsIndex]).
+                          multiply(mapping.coeff));
             }
             result[resultOffset + i] = r;
         }
@@ -3400,6 +3392,44 @@ public class DSCompiler {
         throws MathIllegalArgumentException {
         MathUtils.checkDimension(parameters, compiler.parameters);
         MathUtils.checkDimension(order, compiler.order);
+    }
+
+    /** Multiplication mapper.
+     * @since 2.2
+     */
+    private static class MultiplicationMapper {
+
+        /** Multiplication coefficient. */
+        private int coeff;
+
+        /** Left hand side index. */
+        private final int lhsIndex;
+
+        /** Right hand side index. */
+        private final int rhsIndex;
+
+        /** Simple constructor.
+         * @param coeff multiplication coefficient
+         * @param lhsIndex left hand side index
+         * @param rhsIndex right hand side index
+         */
+        MultiplicationMapper(final int coeff, final int lhsIndex, final int rhsIndex) {
+            this.coeff    = coeff;
+            this.lhsIndex = lhsIndex;
+            this.rhsIndex = rhsIndex;
+        }
+
+        /** Absorb another instance if they correspond to similar terms.
+         * @param other other instance to check
+         */
+        public void absorbIfSimilar(final MultiplicationMapper other) {
+            if (lhsIndex == other.lhsIndex && rhsIndex == other.rhsIndex) {
+                // combine terms
+                coeff += other.coeff;
+                // make sure we will skip other term later on in the outer loop
+                other.coeff = 0;
+            }
+        }
     }
 
 }
