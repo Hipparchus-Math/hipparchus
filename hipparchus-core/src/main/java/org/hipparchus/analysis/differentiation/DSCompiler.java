@@ -146,8 +146,8 @@ public class DSCompiler {
     /** Number of partial derivatives (including the single 0 order derivative element). */
     private final int[][] sizes;
 
-    /** Indirection array for partial derivatives. */
-    private final int[][] derivativesIndirection;
+    /** Orders array for partial derivatives. */
+    private final int[][] derivativesOrders;
 
     /** Indirection array of the lower derivative elements. */
     private final int[] lowerIndirection;
@@ -172,9 +172,9 @@ public class DSCompiler {
         this.parameters = parameters;
         this.order      = order;
         this.sizes      = compileSizes(parameters, order, valueCompiler);
-        this.derivativesIndirection =
-                compileDerivativesIndirection(parameters, order,
-                                              valueCompiler, derivativeCompiler);
+        this.derivativesOrders =
+                compileDerivativesOrders(parameters, order,
+                                         valueCompiler, derivativeCompiler);
         this.lowerIndirection =
                 compileLowerIndirection(parameters, order,
                                         valueCompiler, derivativeCompiler);
@@ -184,7 +184,7 @@ public class DSCompiler {
         this.compIndirection =
                 compileCompositionIndirection(parameters, order,
                                               valueCompiler, derivativeCompiler,
-                                              sizes, derivativesIndirection);
+                                              sizes, derivativesOrders);
 
     }
 
@@ -260,29 +260,29 @@ public class DSCompiler {
 
     }
 
-    /** Compile the derivatives indirection array.
+    /** Compile the derivatives orders array.
      * @param parameters number of free parameters
      * @param order derivation order
      * @param valueCompiler compiler for the value part
      * @param derivativeCompiler compiler for the derivative part
-     * @return derivatives indirection array
+     * @return derivatives orders array
      */
-    private static int[][] compileDerivativesIndirection(final int parameters, final int order,
-                                                         final DSCompiler valueCompiler,
-                                                         final DSCompiler derivativeCompiler) {
+    private static int[][] compileDerivativesOrders(final int parameters, final int order,
+                                                    final DSCompiler valueCompiler,
+                                                    final DSCompiler derivativeCompiler) {
 
         if (parameters == 0 || order == 0) {
             return new int[1][parameters];
         }
 
-        final int vSize = valueCompiler.derivativesIndirection.length;
-        final int dSize = derivativeCompiler.derivativesIndirection.length;
+        final int vSize = valueCompiler.derivativesOrders.length;
+        final int dSize = derivativeCompiler.derivativesOrders.length;
         final int[][] derivativesIndirection = new int[vSize + dSize][parameters];
 
         // set up the indices for the value part
         for (int i = 0; i < vSize; ++i) {
             // copy the first indices, the last one remaining set to 0
-            System.arraycopy(valueCompiler.derivativesIndirection[i], 0,
+            System.arraycopy(valueCompiler.derivativesOrders[i], 0,
                              derivativesIndirection[i], 0,
                              parameters - 1);
         }
@@ -291,7 +291,7 @@ public class DSCompiler {
         for (int i = 0; i < dSize; ++i) {
 
             // copy the indices
-            System.arraycopy(derivativeCompiler.derivativesIndirection[i], 0,
+            System.arraycopy(derivativeCompiler.derivativesOrders[i], 0,
                              derivativesIndirection[vSize + i], 0,
                              parameters);
 
@@ -453,7 +453,7 @@ public class DSCompiler {
                     // convert the indices as the mapping for the current order
                     // is different from the mapping with one less order
                     derivedTermF[j] = convertIndex(term[j], parameters,
-                                                   derivativeCompiler.derivativesIndirection,
+                                                   derivativeCompiler.derivativesOrders,
                                                    parameters, order, sizes);
                 }
                 Arrays.sort(derivedTermF, 2, derivedTermF.length);
@@ -468,7 +468,7 @@ public class DSCompiler {
                         // convert the indices as the mapping for the current order
                         // is different from the mapping with one less order
                         derivedTermG[j] = convertIndex(term[j], parameters,
-                                                       derivativeCompiler.derivativesIndirection,
+                                                       derivativeCompiler.derivativesOrders,
                                                        parameters, order, sizes);
                         if (j == l) {
                             // derive this term
@@ -602,7 +602,7 @@ public class DSCompiler {
     /** Convert an index from one (parameters, order) structure to another.
      * @param index index of a partial derivative in source derivative structure
      * @param srcP number of free parameters in source derivative structure
-     * @param srcDerivativesIndirection derivatives indirection array for the source
+     * @param srcDerivativesOrders derivatives orders array for the source
      * derivative structure
      * @param destP number of free parameters in destination derivative structure
      * @param destO derivation order in destination derivative structure
@@ -612,11 +612,11 @@ public class DSCompiler {
      * @throws MathIllegalArgumentException if order is too large
      */
     private static int convertIndex(final int index,
-                                    final int srcP, final int[][] srcDerivativesIndirection,
+                                    final int srcP, final int[][] srcDerivativesOrders,
                                     final int destP, final int destO, final int[][] destSizes)
         throws MathIllegalArgumentException {
         int[] orders = new int[destP];
-        System.arraycopy(srcDerivativesIndirection[index], 0, orders, 0, FastMath.min(srcP, destP));
+        System.arraycopy(srcDerivativesOrders[index], 0, orders, 0, FastMath.min(srcP, destP));
         return getPartialDerivativeIndex(destP, destO, destSizes, orders);
     }
 
@@ -629,7 +629,7 @@ public class DSCompiler {
      * @see #getPartialDerivativeIndex(int...)
      */
     public int[] getPartialDerivativeOrders(final int index) {
-        return derivativesIndirection[index].clone();
+        return derivativesOrders[index].clone();
     }
 
     /** Get the number of free parameters.
@@ -3308,7 +3308,7 @@ public class DSCompiler {
        throws MathRuntimeException {
         double value = 0;
         for (int i = getSize() - 1; i >= 0; --i) {
-            final int[] orders = derivativesIndirection[i];
+            final int[] orders = derivativesOrders[i];
             double term = ds[dsOffset + i];
             for (int k = 0; k < orders.length; ++k) {
                 if (orders[k] > 0) {
@@ -3336,7 +3336,7 @@ public class DSCompiler {
         final Field<T> field = ds[dsOffset].getField();
         T value = field.getZero();
         for (int i = getSize() - 1; i >= 0; --i) {
-            final int[] orders = derivativesIndirection[i];
+            final int[] orders = derivativesOrders[i];
             T term = ds[dsOffset + i];
             for (int k = 0; k < orders.length; ++k) {
                 if (orders[k] > 0) {
@@ -3363,7 +3363,7 @@ public class DSCompiler {
         final Field<T> field = ds[dsOffset].getField();
         T value = field.getZero();
         for (int i = getSize() - 1; i >= 0; --i) {
-            final int[] orders = derivativesIndirection[i];
+            final int[] orders = derivativesOrders[i];
             T term = ds[dsOffset + i];
             for (int k = 0; k < orders.length; ++k) {
                 if (orders[k] > 0) {
