@@ -51,7 +51,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   <body>
     <release version="2.2" date="TBD" description="TBD">
       <action dev="luc" type="add" issue="issue/195">
-        Added FieldMultivariateFunction and CalculusFieldMultivariateFunction.
+        Added FieldMultivariateFunction, CalculusFieldMultivariateFunction,
+        FieldMultivariateVectorFunction, CalculusFieldMultivariateVectorFunction,
+        FieldMultivariateMatrixFunction and CalculusFieldMultivariateMatrixFunction
       </action>
       <action dev="luc" type="add" due-to="Romain Serra" issue="issue/192">
         Added integration/differentiation of {Field}DerivativeStructure.
