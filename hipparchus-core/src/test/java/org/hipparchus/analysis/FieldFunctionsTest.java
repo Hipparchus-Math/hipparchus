@@ -26,7 +26,7 @@ import org.junit.Test;
 public class FieldFunctionsTest {
 
     @Test
-    public void testScalarFunctionConversion() {
+    public void testScalarUnivariateFunctionConversion() {
         FieldUnivariateFunction f1 = new FieldUnivariateFunction() {
             public <T extends CalculusFieldElement<T>> T value(T x) {
                 return x.multiply(2);
@@ -43,7 +43,26 @@ public class FieldFunctionsTest {
     }
 
     @Test
-    public void testVectorFunctionConversion() {
+    public void testScalarMultivariateFunctionConversion() {
+        FieldMultivariateFunction f1 = new FieldMultivariateFunction() {
+            public <T extends CalculusFieldElement<T>> T value(@SuppressWarnings("unchecked") T... x) {
+                return x[0].multiply(2).add(x[1]);
+            }
+        };
+        CalculusFieldMultivariateFunction<Decimal64> f1Converted = f1.toCalculusFieldMultivariateFunction(Decimal64Field.getInstance());
+        CalculusFieldMultivariateFunction<Decimal64> f2 = x -> x[0].multiply(2).add(x[1]);
+
+        for (double x0 = 0; x0 < 1; x0 += 0.01) {
+            for (double x1 = 0; x1 < 1; x1 += 0.01) {
+                Assert.assertEquals(f2.value(new Decimal64(x0), new Decimal64(x1)).getReal(),
+                                    f1Converted.value(new Decimal64(x0), new Decimal64(x1)).getReal(),
+                                    1.0e-15);
+            }
+        }
+    }
+
+    @Test
+    public void testVectorUnivariateFunctionConversion() {
         FieldUnivariateVectorFunction f1 = new FieldUnivariateVectorFunction() {
             public <T extends CalculusFieldElement<T>> T[] value(T x) {
                 T[] y = MathArrays.buildArray(x.getField(), 3);
@@ -68,7 +87,34 @@ public class FieldFunctionsTest {
     }
 
     @Test
-    public void testMatrixFunctionConversion() {
+    public void testVectorMultivariateFunctionConversion() {
+        FieldMultivariateVectorFunction f1 = new FieldMultivariateVectorFunction() {
+            public <T extends CalculusFieldElement<T>> T[] value(@SuppressWarnings("unchecked") T... x) {
+                T[] y = MathArrays.buildArray(x[0].getField(), 3);
+                y[0] = x[0].add(1);
+                y[1] = x[1].multiply(2);
+                y[2] = x[0].multiply(x[1]);
+                return y;
+            }
+        };
+        CalculusFieldMultivariateVectorFunction<Decimal64> f1Converted = f1.toCalculusFieldMultivariateVectorFunction(Decimal64Field.getInstance());
+        CalculusFieldMultivariateVectorFunction<Decimal64> f2 = x -> new Decimal64[] {
+            x[0].add(1), x[1].multiply(2), x[0].multiply(x[1])
+        };
+
+        for (double x0 = 0; x0 < 1; x0 += 0.01) {
+            for (double x1 = 0; x1 < 1; x1 += 0.01) {
+                for (int i = 0; i < 3; ++i) {
+                    Assert.assertEquals(f2.value(new Decimal64(x0), new Decimal64(x1))[i].getReal(),
+                                        f1Converted.value(new Decimal64(x0), new Decimal64(x1))[i].getReal(),
+                                        1.0e-15);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testMatrixUnivariateFunctionConversion() {
         FieldUnivariateMatrixFunction f1 = new FieldUnivariateMatrixFunction() {
             public <T extends CalculusFieldElement<T>> T[][] value(T x) {
                 T[][] y = MathArrays.buildArray(x.getField(), 2, 2);
@@ -91,6 +137,37 @@ public class FieldFunctionsTest {
                     Assert.assertEquals(f2.value(new Decimal64(x))[i][j].getReal(),
                                         f1Converted.value(new Decimal64(x))[i][j].getReal(),
                                         1.0e-15);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testMatrixMultivariateFunctionConversion() {
+        FieldMultivariateMatrixFunction f1 = new FieldMultivariateMatrixFunction() {
+            public <T extends CalculusFieldElement<T>> T[][] value(@SuppressWarnings("unchecked") T... x) {
+                T[][] y = MathArrays.buildArray(x[0].getField(), 2, 2);
+                y[0][0] = x[0].add(1);
+                y[0][1] = x[1].multiply(2);
+                y[1][0] = x[0].multiply(x[1]);
+                y[1][1] = x[1].sin();
+                return y;
+            }
+        };
+        CalculusFieldMultivariateMatrixFunction<Decimal64> f1Converted = f1.toCalculusFieldMultivariateMatrixFunction(Decimal64Field.getInstance());
+        CalculusFieldMultivariateMatrixFunction<Decimal64> f2 = x -> new Decimal64[][] {
+            { x[0].add(1), x[1].multiply(2) },
+            { x[0].multiply(x[1]), x[1].sin() }
+        };
+
+        for (double x0 = 0; x0 < 1; x0 += 0.01) {
+            for (double x1 = 0; x1 < 1; x1 += 0.01) {
+                for (int i = 0; i < 2; ++i) {
+                    for (int j = 0; j < 2; ++j) {
+                        Assert.assertEquals(f2.value(new Decimal64(x0), new Decimal64(x1))[i][j].getReal(),
+                                            f1Converted.value(new Decimal64(x0), new Decimal64(x1))[i][j].getReal(),
+                                            1.0e-15);
+                    }
                 }
             }
         }
