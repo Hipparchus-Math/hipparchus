@@ -2040,6 +2040,9 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
         checkEquals(ref, rebased, tol);
 
+        // compare with Taylor map based implementation
+        checkEquals(composeWithTaylorMap(fI, pBase), rebased, tol);
+
     }
 
     final DerivativeStructure[] createBaseVariables(final DSFactory factory, double... q) {
@@ -2115,6 +2118,115 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
                 return;
             }
 
+        }
+
+    }
+
+    /** Compose the present derivatives on the right with a compatible so-called Taylor map i.e. an array of other
+     * partial derivatives. The output has the same number of independent variables than the right-hand side. */
+    private DerivativeStructure composeWithTaylorMap(final DerivativeStructure lhs, final DerivativeStructure[] rhs) {
+
+        // turn right-hand side of composition into Taylor expansions without constant term
+        final DSFactory rhsFactory = rhs[0].getFactory();
+        final TaylorExpansion[] rhsAsExpansions = new TaylorExpansion[rhs.length];
+        for (int k = 0; k < rhs.length; k++) {
+            final DerivativeStructure copied = new DerivativeStructure(rhsFactory, rhs[k].getAllDerivatives());
+            copied.setDerivativeComponent(0, 0.);
+            rhsAsExpansions[k] = new TaylorExpansion(copied);
+        }
+        // turn left-hand side of composition into Taylor expansion
+        final TaylorExpansion lhsAsExpansion = new TaylorExpansion(lhs);
+
+        // initialize quantities
+        TaylorExpansion te = new TaylorExpansion(rhsFactory.constant(lhs.getValue()));
+        TaylorExpansion[][] powers = new TaylorExpansion[rhs.length][lhs.getOrder()];  // for lazy storage of powers
+
+        // compose the Taylor expansions
+        final double[] coefficients = lhsAsExpansion.coefficients;
+        for (int j = 1; j < coefficients.length; j++) {
+            if (coefficients[j] != 0.) {  // filter out null terms
+                TaylorExpansion inter = new TaylorExpansion(rhsFactory.constant(coefficients[j]));
+                final int[] orders = lhs.getFactory().getCompiler().getPartialDerivativeOrders(j);
+                for (int i = 0; i < orders.length; i++) {
+                    if (orders[i] != 0) {  // only consider non-trivial powers
+                        if (powers[i][orders[i] - 1] == null) {
+                            // this power has not been computed yet
+                            final DerivativeStructure ds = new DerivativeStructure(rhsFactory, rhs[i].getAllDerivatives());
+                            ds.setDerivativeComponent(0, 0.);
+                            TaylorExpansion inter2 = new TaylorExpansion(ds);
+                            for (int k = 1; k < orders[i]; k++) {
+                                inter2 = inter2.multiply(rhsAsExpansions[i]);
+                            }
+                            powers[i][orders[i] - 1] = inter2;
+                        }
+                        inter = inter.multiply(powers[i][orders[i] - 1]);
+                    }
+                }
+                te = te.add(inter);
+            }
+        }
+
+        // convert into derivatives object
+        return te.buildDsEquivalent();
+    }
+
+    /** Class to map partial derivatives to corresponding Taylor expansion. */
+    private static class TaylorExpansion {
+
+        /** Polynomial coefficients of the Taylor expansion in the local canonical basis. */
+        final double[] coefficients;
+
+        final double[] factorials;
+        final DSFactory dsFactory;
+
+       /** Constructor. */
+        TaylorExpansion(final DerivativeStructure ds) {
+            final double[] data = ds.getAllDerivatives();
+            this.dsFactory = ds.getFactory();
+            this.coefficients = new double[data.length];
+
+            // compute relevant factorials (would be more efficient to compute products of factorials to map Taylor
+            // expansions and partial derivatives)
+            this.factorials = new double[ds.getOrder() + 1];
+            Arrays.fill(this.factorials, 1.);
+            for (int i = 2; i < this.factorials.length; i++) {
+                this.factorials[i] = this.factorials[i - 1] * (double) (i);  // avoid limit of 20! in ArithmeticUtils
+            }
+
+            // transform partial derivatives into coefficients of Taylor expansion
+            for (int j = 0; j < data.length; j++) {
+                this.coefficients[j] = data[j];
+                if (this.coefficients[j] != 0.) {
+                    int[] orders = ds.getFactory().getCompiler().getPartialDerivativeOrders(j);
+                    for (int order : orders) {
+                        this.coefficients[j] /= this.factorials[order];
+                    }
+                }
+            }
+        }
+
+        /** Builder for the corresponding {@link DerivativeStructure}. */
+        public DerivativeStructure buildDsEquivalent() throws MathIllegalArgumentException {
+            final DSCompiler dsc = this.dsFactory.getCompiler();
+            final double[] data = new double[this.coefficients.length];
+            for (int j = 0; j < data.length; j++) {
+                data[j] = this.coefficients[j];
+                if (data[j] != 0.) {
+                    int[] orders = dsc.getPartialDerivativeOrders(j);
+                    for (int order : orders) {
+                        data[j] *= this.factorials[order];
+                    }
+                }
+            }
+            return new DerivativeStructure(this.dsFactory, data);
+        }
+
+        TaylorExpansion add(final TaylorExpansion te) {
+            return new TaylorExpansion(this.buildDsEquivalent().add(te.buildDsEquivalent()));
+        }
+
+        TaylorExpansion multiply(final TaylorExpansion te) {
+            return new TaylorExpansion(this.buildDsEquivalent().multiply(te.buildDsEquivalent()));
         }
 
     }
