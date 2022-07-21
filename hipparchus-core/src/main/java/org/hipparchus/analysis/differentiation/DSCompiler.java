@@ -156,7 +156,7 @@ public class DSCompiler {
     private final MultiplicationMapper[][] multIndirection;
 
     /** Indirection arrays for function composition. */
-    private final int[][][] compIndirection;
+    private final UnivariateCompositionMapper[][] compIndirection;
 
     /** Private constructor, reserved for the factory method {@link #getCompiler(int, int)}.
      * @param parameters number of free parameters
@@ -367,10 +367,10 @@ public class DSCompiler {
 
         for (int i = 0; i < dSize; ++i) {
             final MultiplicationMapper[] dRow = derivativeCompiler.multIndirection[i];
-            List<MultiplicationMapper> row = new ArrayList<>(dRow.length * 2);
-            for (int j = 0; j < dRow.length; ++j) {
-                row.add(new MultiplicationMapper(dRow[j].coeff, lowerIndirection[dRow[j].lhsIndex], vSize + dRow[j].rhsIndex));
-                row.add(new MultiplicationMapper(dRow[j].coeff, vSize + dRow[j].lhsIndex, lowerIndirection[dRow[j].rhsIndex]));
+            final List<MultiplicationMapper> row = new ArrayList<>(dRow.length * 2);
+            for (MultiplicationMapper dj : dRow) {
+                row.add(new MultiplicationMapper(dj.coeff, lowerIndirection[dj.lhsIndex], vSize + dj.rhsIndex));
+                row.add(new MultiplicationMapper(dj.coeff, vSize + dj.lhsIndex, lowerIndirection[dj.rhsIndex]));
             }
 
             // combine terms with similar derivation orders
@@ -408,98 +408,88 @@ public class DSCompiler {
      * @return multiplication indirection array
      * @throws MathIllegalArgumentException if order is too large
      */
-    private static int[][][] compileCompositionIndirection(final int parameters, final int order,
-                                                           final DSCompiler valueCompiler,
-                                                           final DSCompiler derivativeCompiler,
-                                                           final int[][] sizes,
-                                                           final int[][] derivativesIndirection)
+    private static UnivariateCompositionMapper[][] compileCompositionIndirection(final int parameters, final int order,
+                                                                                 final DSCompiler valueCompiler,
+                                                                                 final DSCompiler derivativeCompiler,
+                                                                                 final int[][] sizes,
+                                                                                 final int[][] derivativesIndirection)
        throws MathIllegalArgumentException {
 
         if (parameters == 0 || order == 0) {
-            return new int[][][] { { { 1, 0 } } };
+            return new UnivariateCompositionMapper[][] { { new UnivariateCompositionMapper(1, 0, new int[0]) } };
         }
 
         final int vSize = valueCompiler.compIndirection.length;
         final int dSize = derivativeCompiler.compIndirection.length;
-        final int[][][] compIndirection = new int[vSize + dSize][][];
+        final UnivariateCompositionMapper[][] compIndirection = new UnivariateCompositionMapper[vSize + dSize][];
 
         // the composition rules from the value part can be reused as is
         System.arraycopy(valueCompiler.compIndirection, 0, compIndirection, 0, vSize);
 
         // the composition rules for the derivative part are deduced by
-        // differentiation the rules from the underlying compiler once
+        // differentiating the rules from the underlying compiler once
         // with respect to the parameter this compiler handles and the
         // underlying one did not handle
         for (int i = 0; i < dSize; ++i) {
-            List<int[]> row = new ArrayList<>();
-            for (int[] term : derivativeCompiler.compIndirection[i]) {
+            List<UnivariateCompositionMapper> row = new ArrayList<>();
+            for (UnivariateCompositionMapper term : derivativeCompiler.compIndirection[i]) {
 
                 // handle term p * f_k(g(x)) * g_l1(x) * g_l2(x) * ... * g_lp(x)
 
                 // derive the first factor in the term: f_k with respect to new parameter
-                int[] derivedTermF = new int[term.length + 1];
-                derivedTermF[0] = term[0];     // p
-                derivedTermF[1] = term[1] + 1; // f_(k+1)
+                UnivariateCompositionMapper derivedTermF = new UnivariateCompositionMapper(term.coeff,       // p
+                                                                                           term.fIndex + 1,  // f_(k+1)
+                                                                                           new int[term.dsIndex.length + 1]);
                 int[] orders = new int[parameters];
                 orders[parameters - 1] = 1;
-                derivedTermF[term.length] = getPartialDerivativeIndex(parameters, order, sizes, orders);  // g_1
-                for (int j = 2; j < term.length; ++j) {
+                derivedTermF.dsIndex[term.dsIndex.length] = getPartialDerivativeIndex(parameters, order, sizes, orders);  // g_1
+                for (int j = 0; j < term.dsIndex.length; ++j) {
                     // convert the indices as the mapping for the current order
                     // is different from the mapping with one less order
-                    derivedTermF[j] = convertIndex(term[j], parameters,
-                                                   derivativeCompiler.derivativesOrders,
-                                                   parameters, order, sizes);
+                    derivedTermF.dsIndex[j] = convertIndex(term.dsIndex[j], parameters,
+                                                           derivativeCompiler.derivativesOrders,
+                                                           parameters, order, sizes);
                 }
-                Arrays.sort(derivedTermF, 2, derivedTermF.length);
+                derivedTermF.sort();
                 row.add(derivedTermF);
 
                 // derive the various g_l
-                for (int l = 2; l < term.length; ++l) {
-                    int[] derivedTermG = new int[term.length];
-                    derivedTermG[0] = term[0];
-                    derivedTermG[1] = term[1];
-                    for (int j = 2; j < term.length; ++j) {
+                for (int l = 0; l < term.dsIndex.length; ++l) {
+                    UnivariateCompositionMapper derivedTermG = new UnivariateCompositionMapper(term.coeff,
+                                                                                               term.fIndex,
+                                                                                               new int[term.dsIndex.length]);
+                    for (int j = 0; j < term.dsIndex.length; ++j) {
                         // convert the indices as the mapping for the current order
                         // is different from the mapping with one less order
-                        derivedTermG[j] = convertIndex(term[j], parameters,
-                                                       derivativeCompiler.derivativesOrders,
-                                                       parameters, order, sizes);
+                        derivedTermG.dsIndex[j] = convertIndex(term.dsIndex[j], parameters,
+                                                               derivativeCompiler.derivativesOrders,
+                                                               parameters, order, sizes);
                         if (j == l) {
                             // derive this term
-                            System.arraycopy(derivativesIndirection[derivedTermG[j]], 0, orders, 0, parameters);
+                            System.arraycopy(derivativesIndirection[derivedTermG.dsIndex[j]], 0, orders, 0, parameters);
                             orders[parameters - 1]++;
-                            derivedTermG[j] = getPartialDerivativeIndex(parameters, order, sizes, orders);
+                            derivedTermG.dsIndex[j] = getPartialDerivativeIndex(parameters, order, sizes, orders);
                         }
                     }
-                    Arrays.sort(derivedTermG, 2, derivedTermG.length);
+                    derivedTermG.sort();
                     row.add(derivedTermG);
                 }
 
             }
 
             // combine terms with similar derivation orders
-            final List<int[]> combined = new ArrayList<>(row.size());
+            final List<UnivariateCompositionMapper> combined = new ArrayList<>(row.size());
             for (int j = 0; j < row.size(); ++j) {
-                final int[] termJ = row.get(j);
-                if (termJ[0] > 0) {
+                final UnivariateCompositionMapper termJ = row.get(j);
+                if (termJ.coeff > 0) {
                     for (int k = j + 1; k < row.size(); ++k) {
-                        final int[] termK = row.get(k);
-                        boolean equals = termJ.length == termK.length;
-                        for (int l = 1; equals && l < termJ.length; ++l) {
-                            equals &= termJ[l] == termK[l];
-                        }
-                        if (equals) {
-                            // combine termJ and termK
-                            termJ[0] += termK[0];
-                            // make sure we will skip termK later on in the outer loop
-                            termK[0] = 0;
-                        }
+                        termJ.absorbIfSimilar(row.get(k));
                     }
                     combined.add(termJ);
                 }
             }
 
-            compIndirection[vSize + i] = combined.toArray(new int[0][]);
+            compIndirection[vSize + i] = combined.toArray(new UnivariateCompositionMapper[0]);
 
         }
 
@@ -3217,13 +3207,12 @@ public class DSCompiler {
     public void compose(final double[] operand, final int operandOffset, final double[] f,
                         final double[] result, final int resultOffset) {
         for (int i = 0; i < compIndirection.length; ++i) {
-            final int[][] mappingI = compIndirection[i];
+            final UnivariateCompositionMapper[] mappingI = compIndirection[i];
             double r = 0;
-            for (int j = 0; j < mappingI.length; ++j) {
-                final int[] mappingIJ = mappingI[j];
-                double product = mappingIJ[0] * f[mappingIJ[1]];
-                for (int k = 2; k < mappingIJ.length; ++k) {
-                    product *= operand[operandOffset + mappingIJ[k]];
+            for (UnivariateCompositionMapper mapping : mappingI) {
+                double product = mapping.coeff * f[mapping.fIndex];
+                for (int k = 0; k < mapping.dsIndex.length; ++k) {
+                    product *= operand[operandOffset + mapping.dsIndex[k]];
                 }
                 r += product;
             }
@@ -3246,13 +3235,12 @@ public class DSCompiler {
                                                             final T[] result, final int resultOffset) {
         final T zero = f[0].getField().getZero();
         for (int i = 0; i < compIndirection.length; ++i) {
-            final int[][] mappingI = compIndirection[i];
+            final UnivariateCompositionMapper[] mappingI = compIndirection[i];
             T r = zero;
-            for (int j = 0; j < mappingI.length; ++j) {
-                final int[] mappingIJ = mappingI[j];
-                T product = f[mappingIJ[1]].multiply(mappingIJ[0]);
-                for (int k = 2; k < mappingIJ.length; ++k) {
-                    product = product.multiply(operand[operandOffset + mappingIJ[k]]);
+            for (UnivariateCompositionMapper mapping : mappingI) {
+                T product = f[mapping.fIndex].multiply(mapping.coeff);
+                for (int k = 0; k < mapping.dsIndex.length; ++k) {
+                    product = product.multiply(operand[operandOffset + mapping.dsIndex[k]]);
                 }
                 r = r.add(product);
             }
@@ -3275,13 +3263,12 @@ public class DSCompiler {
                                                             final T[] result, final int resultOffset) {
         final T zero = operand[operandOffset].getField().getZero();
         for (int i = 0; i < compIndirection.length; ++i) {
-            final int[][] mappingI = compIndirection[i];
+            final UnivariateCompositionMapper[] mappingI = compIndirection[i];
             T r = zero;
-            for (int j = 0; j < mappingI.length; ++j) {
-                final int[] mappingIJ = mappingI[j];
-                T product = zero.add(f[mappingIJ[1]] * mappingIJ[0]);
-                for (int k = 2; k < mappingIJ.length; ++k) {
-                    product = product.multiply(operand[operandOffset + mappingIJ[k]]);
+            for (UnivariateCompositionMapper mapping : mappingI) {
+                T product = zero.add(f[mapping.fIndex] * mapping.coeff);
+                for (int k = 0; k < mapping.dsIndex.length; ++k) {
+                    product = product.multiply(operand[operandOffset + mapping.dsIndex[k]]);
                 }
                 r = r.add(product);
             }
@@ -3428,6 +3415,58 @@ public class DSCompiler {
                 coeff += other.coeff;
                 // make sure we will skip other term later on in the outer loop
                 other.coeff = 0;
+            }
+        }
+    }
+
+    /** Univariate composition mapper.
+     * @since 2.2
+     */
+    private static class UnivariateCompositionMapper {
+
+        /** Multiplication coefficient. */
+        private int coeff;
+
+        /** Univariate derivative index. */
+        private final int fIndex;
+
+        /** Derivative structure index. */
+        private final int[] dsIndex;
+
+        /** Simple constructor.
+         * @param coeff multiplication coefficient
+         * @param fIndex univariate derivative index
+         * @param dsIndex derivative structure index
+         */
+        UnivariateCompositionMapper(final int coeff, final int fIndex, final int[] dsIndex) {
+            this.coeff   = coeff;
+            this.fIndex  = fIndex;
+            this.dsIndex = dsIndex.clone();
+        }
+
+        /** Sort the derivatives structures indices.
+         */
+        public void sort() {
+            Arrays.sort(dsIndex);
+        }
+
+        /** Absorb another instance if they correspond to similar terms.
+         * @param other other instance to check
+         */
+        public void absorbIfSimilar(final UnivariateCompositionMapper other) {
+            if (fIndex == other.fIndex && dsIndex.length == other.dsIndex.length) {
+
+                for (int j = 0; j < dsIndex.length; ++j) {
+                    if (dsIndex[j] != other.dsIndex[j]) {
+                        return;
+                    }
+                }
+
+                // combine terms
+                coeff += other.coeff;
+                // make sure we will skip other term later on in the outer loop
+                other.coeff = 0;
+
             }
         }
     }
