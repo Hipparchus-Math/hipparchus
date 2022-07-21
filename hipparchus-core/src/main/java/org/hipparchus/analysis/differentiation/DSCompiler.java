@@ -277,13 +277,13 @@ public class DSCompiler {
 
         final int vSize = valueCompiler.derivativesOrders.length;
         final int dSize = derivativeCompiler.derivativesOrders.length;
-        final int[][] derivativesIndirection = new int[vSize + dSize][parameters];
+        final int[][] derivativesOrders = new int[vSize + dSize][parameters];
 
         // set up the indices for the value part
         for (int i = 0; i < vSize; ++i) {
             // copy the first indices, the last one remaining set to 0
             System.arraycopy(valueCompiler.derivativesOrders[i], 0,
-                             derivativesIndirection[i], 0,
+                             derivativesOrders[i], 0,
                              parameters - 1);
         }
 
@@ -292,15 +292,15 @@ public class DSCompiler {
 
             // copy the indices
             System.arraycopy(derivativeCompiler.derivativesOrders[i], 0,
-                             derivativesIndirection[vSize + i], 0,
+                             derivativesOrders[vSize + i], 0,
                              parameters);
 
             // increment the derivation order for the last parameter
-            derivativesIndirection[vSize + i][parameters - 1]++;
+            derivativesOrders[vSize + i][parameters - 1]++;
 
         }
 
-        return derivativesIndirection;
+        return derivativesOrders;
 
     }
 
