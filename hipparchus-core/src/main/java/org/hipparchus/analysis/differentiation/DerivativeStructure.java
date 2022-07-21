@@ -919,6 +919,7 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
         final double[][] pData = new double[p.length][];
         for (int i = 0; i < pData.length; ++i) {
             MathUtils.checkDimension(getOrder(), p[i].getOrder());
+            MathUtils.checkDimension(p[0].getFreeParameters(), p[i].getFreeParameters());
             pData[i] = p[i].data;
         }
 
