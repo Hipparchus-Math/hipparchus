@@ -444,8 +444,8 @@ public class DSCompilerTest {
         coeffField.setAccessible(true);
         Field fIndexField = univariateCompositionMapperClass.getDeclaredField("fIndex");
         fIndexField.setAccessible(true);
-        Field dsIndexField = univariateCompositionMapperClass.getDeclaredField("dsIndex");
-        dsIndexField.setAccessible(true);
+        Field dsIndicesField = univariateCompositionMapperClass.getDeclaredField("dsIndices");
+        dsIndicesField.setAccessible(true);
         for (int i = 0; i < 5; ++i) {
             for (int j = 0; j < 5; ++j) {
                 DSCompiler compiler = DSCompiler.getCompiler(i, j);
@@ -462,7 +462,7 @@ public class DSCompilerTest {
                             rule.append(((Integer) coeffField.get(term)).intValue()).append(" * ");
                         }
                         rule.append(orderToString(((Integer) fIndexField.get(term)).intValue(), "(f(g))", "g"));
-                        int[] dsIndex = (int[]) dsIndexField.get(term);
+                        int[] dsIndex = (int[]) dsIndicesField.get(term);
                         for (int l = 0; l < dsIndex.length; ++l) {
                             rule.append(" * ");
                             rule.append(ordersToString(compiler.getPartialDerivativeOrders(dsIndex[l]),

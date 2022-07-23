@@ -439,14 +439,14 @@ public class DSCompiler {
                 // derive the first factor in the term: f_k with respect to new parameter
                 UnivariateCompositionMapper derivedTermF = new UnivariateCompositionMapper(term.coeff,       // p
                                                                                            term.fIndex + 1,  // f_(k+1)
-                                                                                           new int[term.dsIndex.length + 1]);
+                                                                                           new int[term.dsIndices.length + 1]);
                 int[] orders = new int[parameters];
                 orders[parameters - 1] = 1;
-                derivedTermF.dsIndex[term.dsIndex.length] = getPartialDerivativeIndex(parameters, order, sizes, orders);  // g_1
-                for (int j = 0; j < term.dsIndex.length; ++j) {
+                derivedTermF.dsIndices[term.dsIndices.length] = getPartialDerivativeIndex(parameters, order, sizes, orders);  // g_1
+                for (int j = 0; j < term.dsIndices.length; ++j) {
                     // convert the indices as the mapping for the current order
                     // is different from the mapping with one less order
-                    derivedTermF.dsIndex[j] = convertIndex(term.dsIndex[j], parameters,
+                    derivedTermF.dsIndices[j] = convertIndex(term.dsIndices[j], parameters,
                                                            derivativeCompiler.derivativesOrders,
                                                            parameters, order, sizes);
                 }
@@ -454,21 +454,21 @@ public class DSCompiler {
                 row.add(derivedTermF);
 
                 // derive the various g_l
-                for (int l = 0; l < term.dsIndex.length; ++l) {
+                for (int l = 0; l < term.dsIndices.length; ++l) {
                     UnivariateCompositionMapper derivedTermG = new UnivariateCompositionMapper(term.coeff,
                                                                                                term.fIndex,
-                                                                                               new int[term.dsIndex.length]);
-                    for (int j = 0; j < term.dsIndex.length; ++j) {
+                                                                                               new int[term.dsIndices.length]);
+                    for (int j = 0; j < term.dsIndices.length; ++j) {
                         // convert the indices as the mapping for the current order
                         // is different from the mapping with one less order
-                        derivedTermG.dsIndex[j] = convertIndex(term.dsIndex[j], parameters,
+                        derivedTermG.dsIndices[j] = convertIndex(term.dsIndices[j], parameters,
                                                                derivativeCompiler.derivativesOrders,
                                                                parameters, order, sizes);
                         if (j == l) {
                             // derive this term
-                            System.arraycopy(derivativesIndirection[derivedTermG.dsIndex[j]], 0, orders, 0, parameters);
+                            System.arraycopy(derivativesIndirection[derivedTermG.dsIndices[j]], 0, orders, 0, parameters);
                             orders[parameters - 1]++;
-                            derivedTermG.dsIndex[j] = getPartialDerivativeIndex(parameters, order, sizes, orders);
+                            derivedTermG.dsIndices[j] = getPartialDerivativeIndex(parameters, order, sizes, orders);
                         }
                     }
                     derivedTermG.sort();
@@ -3224,8 +3224,8 @@ public class DSCompiler {
             double r = 0;
             for (UnivariateCompositionMapper mapping : mappingI) {
                 double product = mapping.coeff * f[mapping.fIndex];
-                for (int k = 0; k < mapping.dsIndex.length; ++k) {
-                    product *= operand[operandOffset + mapping.dsIndex[k]];
+                for (int k = 0; k < mapping.dsIndices.length; ++k) {
+                    product *= operand[operandOffset + mapping.dsIndices[k]];
                 }
                 r += product;
             }
@@ -3252,8 +3252,8 @@ public class DSCompiler {
             T r = zero;
             for (UnivariateCompositionMapper mapping : mappingI) {
                 T product = f[mapping.fIndex].multiply(mapping.coeff);
-                for (int k = 0; k < mapping.dsIndex.length; ++k) {
-                    product = product.multiply(operand[operandOffset + mapping.dsIndex[k]]);
+                for (int k = 0; k < mapping.dsIndices.length; ++k) {
+                    product = product.multiply(operand[operandOffset + mapping.dsIndices[k]]);
                 }
                 r = r.add(product);
             }
@@ -3280,8 +3280,8 @@ public class DSCompiler {
             T r = zero;
             for (UnivariateCompositionMapper mapping : mappingI) {
                 T product = zero.add(f[mapping.fIndex] * mapping.coeff);
-                for (int k = 0; k < mapping.dsIndex.length; ++k) {
-                    product = product.multiply(operand[operandOffset + mapping.dsIndex[k]]);
+                for (int k = 0; k < mapping.dsIndices.length; ++k) {
+                    product = product.multiply(operand[operandOffset + mapping.dsIndices[k]]);
                 }
                 r = r.add(product);
             }
@@ -3443,40 +3443,41 @@ public class DSCompiler {
         /** Univariate derivative index. */
         private final int fIndex;
 
-        /** Derivative structure index. */
-        private final int[] dsIndex;
+        /** Derivative structure indices. */
+        private final int[] dsIndices;
 
         /** Simple constructor.
          * @param coeff multiplication coefficient
          * @param fIndex univariate derivative index
-         * @param dsIndex derivative structure index
+         * @param dsIndices derivative structure indices
          */
-        UnivariateCompositionMapper(final int coeff, final int fIndex, final int[] dsIndex) {
-            this.coeff   = coeff;
-            this.fIndex  = fIndex;
-            this.dsIndex = dsIndex.clone();
+        UnivariateCompositionMapper(final int coeff, final int fIndex, final int[] dsIndices) {
+            this.coeff     = coeff;
+            this.fIndex    = fIndex;
+            this.dsIndices = dsIndices.clone();
         }
 
         /** Sort the derivatives structures indices.
          */
         public void sort() {
-            Arrays.sort(dsIndex);
+            Arrays.sort(dsIndices);
         }
 
         /** Absorb another instance if they correspond to similar terms.
          * @param other other instance to check
          */
         public void absorbIfSimilar(final UnivariateCompositionMapper other) {
-            if (fIndex == other.fIndex && dsIndex.length == other.dsIndex.length) {
+            if (fIndex == other.fIndex && dsIndices.length == other.dsIndices.length) {
 
-                for (int j = 0; j < dsIndex.length; ++j) {
-                    if (dsIndex[j] != other.dsIndex[j]) {
+                for (int j = 0; j < dsIndices.length; ++j) {
+                    if (dsIndices[j] != other.dsIndices[j]) {
                         return;
                     }
                 }
 
                 // combine terms
                 coeff += other.coeff;
+
                 // make sure we will skip other term later on in the outer loop
                 other.coeff = 0;
 
