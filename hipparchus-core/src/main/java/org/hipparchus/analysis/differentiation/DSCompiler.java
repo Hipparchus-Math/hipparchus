@@ -616,6 +616,19 @@ public class DSCompiler {
         return derivativesOrders[index].clone();
     }
 
+    /** Get the total derivation order for a specific index in the array.
+     * @param index of the partial derivative
+     * @return total derivation order (sum of the partial orders wrt each parameter)
+     * @since 2.2
+     */
+    public int getOrder(final int index) {
+        int sum = 0;
+        for (int order : derivativesOrders[index]) {
+            sum += order;
+        }
+        return sum;
+    }
+
     /** Get the number of free parameters.
      * @return number of free parameters
      */
