@@ -477,29 +477,28 @@ public final class CombinatoricsUtils {
 
         final List<List<List<T>>> parts = new ArrayList<>();
 
-        int[] partIndex = new int[list.size() + 1];
+        int[] partIndex = new int[list.size()];
         int[] backTrack = new int[list.size() - 1];
-        int   r  = 1;
+        int   r  = 0;
         int   j  = 0;
         int   n  = list.size();
-        partIndex[1] = 1;
         do {
 
             // put elements in the first partition
-            while (r < n - 1) {
-                partIndex[++r] = 1;
+            while (r < n - 2) {
+                partIndex[++r] = 0;
                 backTrack[++j] = r;
             }
 
             // generate partitions
-            for (int i = 1; i <= n - j; ++i) {
+            for (int i = 0; i < n - j; ++i) {
                 final List<List<T>> part = new ArrayList<>();
-                partIndex[n] = i;
-                for (int k = 1; k < partIndex.length; ++k) {
-                    while (part.size() <= partIndex[k] - 1) {
+                partIndex[n - 1] = i;
+                for (int k = 0; k < partIndex.length; ++k) {
+                    while (part.size() <= partIndex[k]) {
                         part.add(new ArrayList<>());
                     }
-                    part.get(partIndex[k] - 1).add(list.get(k - 1));
+                    part.get(partIndex[k]).add(list.get(k));
                 }
                 parts.add(part);
             }
