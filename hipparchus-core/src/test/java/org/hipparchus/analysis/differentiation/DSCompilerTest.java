@@ -136,20 +136,20 @@ public class DSCompilerTest {
     }
 
     @Test
-    public void testOrders() {
-        checkOrders(DSCompiler.getCompiler(0, 0), 0);
-        checkOrders(DSCompiler.getCompiler(0, 1), 0);
-        checkOrders(DSCompiler.getCompiler(1, 0), 0);
-        checkOrders(DSCompiler.getCompiler(1, 1), 0, 1);
-        checkOrders(DSCompiler.getCompiler(1, 2), 0, 1, 2);
-        checkOrders(DSCompiler.getCompiler(2, 1), 0, 1, 1);
-        checkOrders(DSCompiler.getCompiler(1, 3), 0, 1, 2, 3);
-        checkOrders(DSCompiler.getCompiler(2, 2), 0, 1, 2, 1, 2, 2);
-        checkOrders(DSCompiler.getCompiler(3, 1), 0, 1, 1, 1);
-        checkOrders(DSCompiler.getCompiler(1, 4), 0, 1, 2, 3, 4);
-        checkOrders(DSCompiler.getCompiler(2, 3), 0, 1, 2, 3, 1, 2, 3, 2, 3, 3);
-        checkOrders(DSCompiler.getCompiler(3, 2), 0, 1, 2, 1, 2, 2, 1, 2, 2, 2);
-        checkOrders(DSCompiler.getCompiler(4, 1), 0, 1, 1, 1, 1);
+    public void testOrdersSum() {
+        checkOrdersSum(DSCompiler.getCompiler(0, 0), 0);
+        checkOrdersSum(DSCompiler.getCompiler(0, 1), 0);
+        checkOrdersSum(DSCompiler.getCompiler(1, 0), 0);
+        checkOrdersSum(DSCompiler.getCompiler(1, 1), 0, 1);
+        checkOrdersSum(DSCompiler.getCompiler(1, 2), 0, 1, 2);
+        checkOrdersSum(DSCompiler.getCompiler(2, 1), 0, 1, 1);
+        checkOrdersSum(DSCompiler.getCompiler(1, 3), 0, 1, 2, 3);
+        checkOrdersSum(DSCompiler.getCompiler(2, 2), 0, 1, 2, 1, 2, 2);
+        checkOrdersSum(DSCompiler.getCompiler(3, 1), 0, 1, 1, 1);
+        checkOrdersSum(DSCompiler.getCompiler(1, 4), 0, 1, 2, 3, 4);
+        checkOrdersSum(DSCompiler.getCompiler(2, 3), 0, 1, 2, 3, 1, 2, 3, 2, 3, 3);
+        checkOrdersSum(DSCompiler.getCompiler(3, 2), 0, 1, 2, 1, 2, 2, 1, 2, 2, 2);
+        checkOrdersSum(DSCompiler.getCompiler(4, 1), 0, 1, 1, 1, 1);
     }
 
     @Test(expected=MathIllegalArgumentException.class)
@@ -482,10 +482,10 @@ public class DSCompilerTest {
         }
     }
 
-    private void checkOrders(DSCompiler compiler, int ... expected) {
+    private void checkOrdersSum(DSCompiler compiler, int ... expected) {
         Assert.assertEquals(expected.length, compiler.getSize());
         for (int i = 0; i < expected.length; ++i) {
-            Assert.assertEquals(expected[i], compiler.getOrder(i));
+            Assert.assertEquals(expected[i], compiler.getOrdersSum(i));
         }
     }
 

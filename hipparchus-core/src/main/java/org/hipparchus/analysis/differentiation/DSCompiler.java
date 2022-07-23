@@ -628,12 +628,12 @@ public class DSCompiler {
         return derivativesOrders[index].clone();
     }
 
-    /** Get the total derivation order for a specific index in the array.
+    /** Get the sum of derivation orders for a specific index in the array.
      * @param index of the partial derivative
-     * @return total derivation order (sum of the partial orders wrt each parameter)
+     * @return sum of derivation orders
      * @since 2.2
      */
-    public int getOrder(final int index) {
+    public int getOrdersSum(final int index) {
         return ordersSum[index];
     }
 
