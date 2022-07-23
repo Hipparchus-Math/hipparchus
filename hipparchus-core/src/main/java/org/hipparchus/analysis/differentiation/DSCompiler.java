@@ -147,6 +147,9 @@ public class DSCompiler {
     private final int[][] sizes;
 
     /** Orders array for partial derivatives. */
+    private final int[] ordersSum;
+
+    /** Orders array for partial derivatives. */
     private final int[][] derivativesOrders;
 
     /** Indirection array of the lower derivative elements. */
@@ -175,6 +178,15 @@ public class DSCompiler {
         this.derivativesOrders =
                 compileDerivativesOrders(parameters, order,
                                          valueCompiler, derivativeCompiler);
+
+        this.ordersSum = new int[getSize()];
+        for (int i = 0; i < ordersSum.length; ++i) {
+            ordersSum[i] = 0;
+            for (final int o : derivativesOrders[i]) {
+                ordersSum[i] += o;
+            }
+        }
+
         this.lowerIndirection =
                 compileLowerIndirection(parameters, order,
                                         valueCompiler, derivativeCompiler);
@@ -622,11 +634,7 @@ public class DSCompiler {
      * @since 2.2
      */
     public int getOrder(final int index) {
-        int sum = 0;
-        for (int order : derivativesOrders[index]) {
-            sum += order;
-        }
-        return sum;
+        return ordersSum[index];
     }
 
     /** Get the number of free parameters.
