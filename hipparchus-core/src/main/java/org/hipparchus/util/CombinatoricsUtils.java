@@ -471,7 +471,7 @@ public final class CombinatoricsUtils {
      * <a href="https://doi.org/10.1093/comjnl/32.3.281">https://doi.org/10.1093/comjnl/32.3.281</a>
      * </p>
      * @param list list to partition
-     * @return stream of all partitions of the list
+     * @return partition of the list, each part being a list of list
      */
     public static <T> List<List<List<T>>> partitions(final List<T> list) {
 
