@@ -22,6 +22,7 @@
 package org.hipparchus.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -476,6 +477,15 @@ public final class CombinatoricsUtils {
     public static <T> List<List<List<T>>> partitions(final List<T> list) {
 
         final List<List<List<T>>> parts = new ArrayList<>();
+
+        // handle special cases
+        if (list.isEmpty()) {
+            return parts;
+        }
+        if (list.size() == 1) {
+            parts.add(Collections.singletonList(list));
+            return parts;
+        }
 
         int[] partIndex = new int[list.size()];
         int[] backTrack = new int[list.size() - 1];

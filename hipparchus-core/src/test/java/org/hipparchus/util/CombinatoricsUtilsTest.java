@@ -23,6 +23,7 @@ package org.hipparchus.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -332,7 +333,22 @@ public class CombinatoricsUtilsTest {
     }
 
     @Test
-    public void testPartitions() {
+    public void testPartitions0() {
+        List<Integer> empty = Collections.emptyList();
+        final List<List<List<Integer>>> partitions = CombinatoricsUtils.partitions(empty);
+        Assert.assertEquals(0, partitions.size());
+    }
+
+    @Test
+    public void testPartitions1() {
+        final List<List<List<Integer>>> partitions = CombinatoricsUtils.partitions(Arrays.asList(1));
+        Assert.assertEquals(1, partitions.size());
+        Assert.assertEquals(1, partitions.get(0).size());
+        Assert.assertEquals(1, partitions.get(0).get(0).size());
+    }
+
+    @Test
+    public void testPartitions4() {
         final List<List<List<Integer>>> partitions = CombinatoricsUtils.partitions(Arrays.asList(1, 2, 3, 4));
         Assert.assertEquals(15, partitions.size());
 
