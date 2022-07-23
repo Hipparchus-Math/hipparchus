@@ -26,6 +26,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -135,23 +136,6 @@ public class DSCompilerTest {
         checkIndices(c.getPartialDerivativeOrders(3), 0, 0, 1, 0);
         checkIndices(c.getPartialDerivativeOrders(4), 0, 0, 0, 1);
 
-    }
-
-    @Test
-    public void testOrdersSum() {
-        checkOrdersSum(DSCompiler.getCompiler(0, 0), 0);
-        checkOrdersSum(DSCompiler.getCompiler(0, 1), 0);
-        checkOrdersSum(DSCompiler.getCompiler(1, 0), 0);
-        checkOrdersSum(DSCompiler.getCompiler(1, 1), 0, 1);
-        checkOrdersSum(DSCompiler.getCompiler(1, 2), 0, 1, 2);
-        checkOrdersSum(DSCompiler.getCompiler(2, 1), 0, 1, 1);
-        checkOrdersSum(DSCompiler.getCompiler(1, 3), 0, 1, 2, 3);
-        checkOrdersSum(DSCompiler.getCompiler(2, 2), 0, 1, 2, 1, 2, 2);
-        checkOrdersSum(DSCompiler.getCompiler(3, 1), 0, 1, 1, 1);
-        checkOrdersSum(DSCompiler.getCompiler(1, 4), 0, 1, 2, 3, 4);
-        checkOrdersSum(DSCompiler.getCompiler(2, 3), 0, 1, 2, 3, 1, 2, 3, 2, 3, 3);
-        checkOrdersSum(DSCompiler.getCompiler(3, 2), 0, 1, 2, 1, 2, 2, 1, 2, 2, 2);
-        checkOrdersSum(DSCompiler.getCompiler(4, 1), 0, 1, 1, 1, 1);
     }
 
     @Test(expected=MathIllegalArgumentException.class)
@@ -488,17 +472,35 @@ public class DSCompilerTest {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testGenerateDerivationOrders()
+        throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+               NoSuchMethodException, SecurityException {
+
+        Method generateMethod = DSCompiler.class.getDeclaredMethod("generateDerivationOrders", Integer.TYPE, Integer.TYPE);
+        generateMethod.setAccessible(true);
+
+        List<int[]> orders;
+
+        orders = (List<int[]>) generateMethod.invoke(null, 3, 2);
+        Assert.assertEquals(3, orders.size());
+        Assert.assertEquals(2, orders.get(0).length);
+        Assert.assertEquals(0, orders.get(0)[0]);
+        Assert.assertEquals(2, orders.get(0)[1]);
+        Assert.assertEquals(2, orders.get(1).length);
+        Assert.assertEquals(1, orders.get(1)[0]);
+        Assert.assertEquals(1, orders.get(1)[1]);
+        Assert.assertEquals(2, orders.get(2).length);
+        Assert.assertEquals(2, orders.get(2)[0]);
+        Assert.assertEquals(0, orders.get(2)[1]);
+
+    }
+
     private void checkIndices(int[] indices, int ... expected) {
         Assert.assertEquals(expected.length, indices.length);
         for (int i = 0; i < expected.length; ++i) {
             Assert.assertEquals(expected[i], indices[i]);
-        }
-    }
-
-    private void checkOrdersSum(DSCompiler compiler, int ... expected) {
-        Assert.assertEquals(expected.length, compiler.getSize());
-        for (int i = 0; i < expected.length; ++i) {
-            Assert.assertEquals(expected[i], compiler.getOrdersSum(i));
         }
     }
 

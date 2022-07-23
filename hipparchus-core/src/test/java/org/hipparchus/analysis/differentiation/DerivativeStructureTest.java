@@ -1974,6 +1974,12 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
+    public void testRebaseNoVariables() {
+        final DerivativeStructure x = new DSFactory(0, 2).constant(1.0);
+        Assert.assertSame(x, x.rebase());
+    }
+
+    @Test
     public void testRebaseValueMoreIntermediateThanBase() {
         doTestRebaseValue(createBaseVariables(new DSFactory(2, 4), 1.5, -2.0),
                           q -> new DerivativeStructure[] {

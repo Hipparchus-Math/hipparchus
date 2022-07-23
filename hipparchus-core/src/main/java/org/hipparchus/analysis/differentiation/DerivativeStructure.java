@@ -916,15 +916,22 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
     public DerivativeStructure rebase(final DerivativeStructure... p) {
 
         MathUtils.checkDimension(getFreeParameters(), p.length);
-        final double[][] pData = new double[p.length][];
-        for (int i = 0; i < pData.length; ++i) {
+
+        // handle special case of no variables at all
+        if (p.length == 0) {
+            return this;
+        }
+
+        final int pSize = p[0].getFactory().getCompiler().getSize();
+        final double[] pData = new double[p.length * pSize];
+        for (int i = 0; i < p.length; ++i) {
             MathUtils.checkDimension(getOrder(), p[i].getOrder());
             MathUtils.checkDimension(p[0].getFreeParameters(), p[i].getFreeParameters());
-            pData[i] = p[i].data;
+            System.arraycopy(p[i].data, 0, pData, i * pSize, pSize);
         }
 
         final DerivativeStructure result = p[0].factory.build();
-        factory.getCompiler().rebase(data, p[0].factory.getCompiler(), pData, result.data);
+        factory.getCompiler().rebase(data, 0, p[0].factory.getCompiler(), pData, result.data, 0);
         return result;
 
     }

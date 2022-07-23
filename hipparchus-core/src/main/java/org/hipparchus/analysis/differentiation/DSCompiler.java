@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.IntStream;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
@@ -148,9 +149,6 @@ public class DSCompiler {
     private final int[][] sizes;
 
     /** Orders array for partial derivatives. */
-    private final int[] ordersSum;
-
-    /** Orders array for partial derivatives. */
     private final int[][] derivativesOrders;
 
     /** Indirection array of the lower derivative elements. */
@@ -159,8 +157,11 @@ public class DSCompiler {
     /** Indirection arrays for multiplication. */
     private final MultiplicationMapper[][] multIndirection;
 
-    /** Indirection arrays for function composition. */
+    /** Indirection arrays for univariate function composition. */
     private final UnivariateCompositionMapper[][] compIndirection;
+
+    /** Indirection arrays for multivariate function rebasing. */
+    private final List<MultivariateCompositionMapper[][]> rebaseIndirection;
 
     /** Private constructor, reserved for the factory method {@link #getCompiler(int, int)}.
      * @param parameters number of free parameters
@@ -180,14 +181,6 @@ public class DSCompiler {
                 compileDerivativesOrders(parameters, order,
                                          valueCompiler, derivativeCompiler);
 
-        this.ordersSum = new int[getSize()];
-        for (int i = 0; i < ordersSum.length; ++i) {
-            ordersSum[i] = 0;
-            for (final int o : derivativesOrders[i]) {
-                ordersSum[i] += o;
-            }
-        }
-
         this.lowerIndirection =
                 compileLowerIndirection(parameters, order,
                                         valueCompiler, derivativeCompiler);
@@ -199,6 +192,7 @@ public class DSCompiler {
                                               valueCompiler, derivativeCompiler,
                                               sizes, derivativesOrders);
 
+        this.rebaseIndirection = new ArrayList<>();
     }
 
     /** Get the compiler for number of free parameters and order.
@@ -485,6 +479,84 @@ public class DSCompiler {
 
     }
 
+    /** Get rebaser, creating it if needed.
+     * @param baseCompiler compiler associated with the low level parameter functions
+     * @return rebaser for the number of base variables specified
+     * @since 2.2
+     */
+    private MultivariateCompositionMapper[][] getRebaser(final DSCompiler baseCompiler) {
+        synchronized (rebaseIndirection) {
+
+            final int m = baseCompiler.getFreeParameters();
+            while (rebaseIndirection.size() <= m) {
+                rebaseIndirection.add(null);
+            }
+
+            if (rebaseIndirection.get(m) == null) {
+                // we need to create the rebaser
+                final int baseSize = baseCompiler.getSize();
+                final MultivariateCompositionMapper[][] rebaser = new MultivariateCompositionMapper[baseSize][];
+
+                // value of the function (order 0 derivative)
+                rebaser[0] = new MultivariateCompositionMapper[] {
+                    new MultivariateCompositionMapper(1, 0, new int[0])
+                };
+
+                // derivatives at order 1 and more
+                for (int i = 1; i < baseSize; ++i) {
+
+                    final int rebasedOrder = IntStream.of(baseCompiler.derivativesOrders[i]).sum();
+                    final List<MultivariateCompositionMapper> row = new ArrayList<>();
+
+                    // rebased derivatives ∂f/∂q at order o depend on original derivatives ∂f/∂p at orders 1 to o
+                    // for example, third order derivatives are:
+                    // ∂³f/∂qₗ∂qₘ∂qₙ = Σᵢⱼₖ ∂³f/∂pᵢ∂pⱼ∂pₖ ∂pᵢ/∂qₗ ∂pⱼ/∂qₘ ∂pₖ/∂qₙ
+                    //               + Σᵢⱼ  ∂²f/∂pᵢ∂pⱼ (∂²pᵢ/∂qₗ∂qₘ ∂pj/∂qₙ + ∂²pᵢ/∂qₘ∂qₙ ∂pj/∂qₗ + ∂²pᵢ/∂qₘ∂qₗ ∂pj/∂qₘ)
+                    //               + Σᵢ   ∂f/∂pᵢ ∂³pᵢ/∂qₗ∂qₘ∂qₙ
+                    for (int originalOrder = 1; originalOrder <= rebasedOrder; ++originalOrder) {
+                        for (final int dsIndex : selectOrder(originalOrder)) {
+                            // dsIndex corresponds to ∂f/∂pᵢ⋯∂pⱼ with the order we were looking for
+                            // we have to combine it with a product of various ∂pₖ/∂qₘ⋯∂qₙ
+
+                            // find the indices of the pⱼ intermediate variables corresponding to ∂f/∂pᵢ⋯∂pⱼ
+                            final int[] pIndices = new int[originalOrder];
+                            int j = 0;
+                            while (j < originalOrder) {
+                                for (int l = 0; l < derivativesOrders[dsIndex].length; ++l) {
+                                    int o = derivativesOrders[dsIndex][l];
+                                    while (o-- > 0) {
+                                        pIndices[j++] = l;
+                                    }
+                                }
+                            }
+
+                            // find the products ∂pᵢ/∂qₘ⋯∂qₙ ⋯ ∂pⱼ/∂qₘ⋯∂qₙ to be combined with ∂f/∂pᵢ⋯∂pⱼ
+                            // as this mapper will be cached, we can use brute-force loops
+                            for (final int[] orders : generateDerivationOrders(originalOrder, rebasedOrder)) {
+                                final int[] ivIndices = new int[orders.length];
+
+                                final MultivariateCompositionMapper term =
+                                                new MultivariateCompositionMapper(1, dsIndex, ivIndices);
+                                term.sort();
+                                row.add(term);
+                            }
+
+                        }
+                    }
+
+                    rebaser[i] = combineSimilarTerms(row);
+
+                }
+
+                rebaseIndirection.set(m, rebaser);
+
+            }
+
+            return rebaseIndirection.get(m);
+
+        }
+    }
+
     /** Get the index of a partial derivative in the array.
      * <p>
      * If all orders are set to 0, then the 0<sup>th</sup> order derivative
@@ -604,13 +676,67 @@ public class DSCompiler {
         return derivativesOrders[index].clone();
     }
 
-    /** Get the sum of derivation orders for a specific index in the array.
-     * @param index of the partial derivative
-     * @return sum of derivation orders
+    /** Select derivatives with a specified sum of derivation orders.
+     * @param sum desirecd sum of derivation orders
+     * @return stream of indices in the derivatives array
      * @since 2.2
      */
-    public int getOrdersSum(final int index) {
-        return ordersSum[index];
+    private List<Integer> selectOrder(final int sum) {
+        return IntStream.
+               range(0, getSize()).
+               filter(i ->  IntStream.of(derivativesOrders[i]).sum() == sum).
+               collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+    }
+
+    /** Generate all possible derivation orders up to a specified order.
+     * <p>
+     * If for example we have two intermediate variables p₀, and p₁ and we want derivation
+     * with respect to 3 base variable (hence derivation to order 3), we need to generate:
+     * [∂²p/∂q₀², ∂p/∂q₁], [∂³p/∂q₀∂q₁² and ∂³p/∂q₁³,
+     * which translates to arrays [3, 0], [2, 1], [1, 2] and [0, 3].
+     * </p>
+     * @param nbIntermediate number of intermediate variables pᵢ
+     * @param orderSum sum of orders
+     * @since 2.2
+     */
+    private static List<int[]> generateDerivationOrders(final int nbVar, final int orderSum) {
+        // as this method is called only when building the indirection caches,
+        // we can just use brute force loops and filters
+        final List<int[]> generated = new ArrayList<>();
+        final int[] orders = new int[nbVar];
+        recurseGenerateOrders(orders, orderSum, 0, generated);
+        return generated;
+    }
+
+    /** Recursive method to generate all possible derivation orders with given sum.
+     * @param orders orders array to fill up
+     * @param orderSum desired sum
+     * @param index index of the next element to set
+     * @param generated list to populate with derivation orders
+     */
+    private static void recurseGenerateOrders(final int[] orders, final int orderSum,
+                                              final int index, final List<int[]> generated) {
+
+        // sum of orders already set
+        int startSum = 0;
+        for (int i = 0; i < index; ++i) {
+            startSum += orders[i];
+        }
+
+        // number of remaining elements in the array
+        final int remaining = orders.length - index;
+
+        if (remaining == 1) {
+            // we have filled up the orders array
+            // the last element is imposed by the desired sum
+            orders[index] = orderSum - startSum;
+            generated.add(orders.clone());
+        } else {
+            for (orders[index] = 1; orders[index] + startSum < orderSum - remaining; ++orders[index]) {
+                recurseGenerateOrders(orders, orderSum, index + 1, generated);
+            }
+        }
+
     }
 
     /** Get the number of free parameters.
@@ -3354,18 +3480,30 @@ public class DSCompiler {
 
     /** Rebase derivative structure with respect to low level parameter functions.
      * @param ds array holding the derivative structure
+     * @param dsOffset offset of the derivative structure in its array
      * @param baseCompiler compiler associated with the low level parameter functions
-     * @param p array holding the low level parameter functions
+     * @param p array holding the low level parameter functions (one flat array)
      * @param result array where result must be stored (for
      * composition the result array <em>cannot</em> be the input
-     * array)
+     * @param resultOffset offset of the result in its array
      * @since 2.2
      */
-    public void rebase(final double[] ds,
-                       final DSCompiler baseCompiler, double[][] p,
-                       final double[] result) {
-        // TODO
-        throw MathRuntimeException.createInternalError();
+    public void rebase(final double[] ds, final int dsOffset,
+                       final DSCompiler baseCompiler, double[] p,
+                       final double[] result, final int resultOffset) {
+        final MultivariateCompositionMapper[][] rebaser = getRebaser(baseCompiler);
+        for (int i = 0; i < rebaser.length; ++i) {
+            final MultivariateCompositionMapper[] mappingI = rebaser[i];
+            double r = 0;
+            for (MultivariateCompositionMapper mapping : mappingI) {
+                double product = mapping.getCoeff() * ds[dsOffset + mapping.dsIndex];
+                for (int k = 0; k < mapping.ivIndices.length; ++k) {
+                    product *= p[mapping.ivIndices[k]];
+                }
+                r += product;
+            }
+            result[resultOffset + i] = r;
+        }
     }
 
     /** Check rules set compatibility.
@@ -3510,6 +3648,56 @@ public class DSCompiler {
 
                 for (int j = 0; j < dsIndices.length; ++j) {
                     if (dsIndices[j] != other.dsIndices[j]) {
+                        return false;
+                    }
+                }
+
+                return true;
+
+            }
+
+            return false;
+
+        }
+
+    }
+
+    /** Multivariate composition mapper.
+     * @since 2.2
+     */
+    private static class MultivariateCompositionMapper extends AbstractMapper<MultivariateCompositionMapper> {
+
+        /** Multivariate derivative index. */
+        private final int dsIndex;
+
+        /** Intermediate variables indices. */
+        private final int[] ivIndices;
+
+        /** Simple constructor.
+         * @param coeff multiplication coefficient
+         * @param dsIndex multivariate derivative index
+         * @param ivIndices intermediate variables indices
+         */
+        MultivariateCompositionMapper(final int coeff, final int dsIndex, final int[] ivIndices) {
+            super(coeff);
+            this.dsIndex   = dsIndex;
+            this.ivIndices = ivIndices.clone();
+        }
+
+        /** Sort the intermediate variables indices.
+         */
+        public void sort() {
+            Arrays.sort(ivIndices);
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public boolean isSimilar(final MultivariateCompositionMapper other) {
+
+            if (dsIndex == other.dsIndex && ivIndices.length == other.ivIndices.length) {
+
+                for (int j = 0; j < ivIndices.length; ++j) {
+                    if (ivIndices[j] != other.ivIndices[j]) {
                         return false;
                     }
                 }
