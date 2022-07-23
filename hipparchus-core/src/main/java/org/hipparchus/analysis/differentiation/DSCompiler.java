@@ -21,6 +21,7 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -381,24 +382,10 @@ public class DSCompiler {
             final MultiplicationMapper[] dRow = derivativeCompiler.multIndirection[i];
             final List<MultiplicationMapper> row = new ArrayList<>(dRow.length * 2);
             for (MultiplicationMapper dj : dRow) {
-                row.add(new MultiplicationMapper(dj.coeff, lowerIndirection[dj.lhsIndex], vSize + dj.rhsIndex));
-                row.add(new MultiplicationMapper(dj.coeff, vSize + dj.lhsIndex, lowerIndirection[dj.rhsIndex]));
+                row.add(new MultiplicationMapper(dj.getCoeff(), lowerIndirection[dj.lhsIndex], vSize + dj.rhsIndex));
+                row.add(new MultiplicationMapper(dj.getCoeff(), vSize + dj.lhsIndex, lowerIndirection[dj.rhsIndex]));
             }
-
-            // combine terms with similar derivation orders
-            final List<MultiplicationMapper> combined = new ArrayList<>(row.size());
-            for (int j = 0; j < row.size(); ++j) {
-                final MultiplicationMapper termJ = row.get(j);
-                if (termJ.coeff > 0) {
-                    for (int k = j + 1; k < row.size(); ++k) {
-                        termJ.absorbIfSimilar(row.get(k));
-                    }
-                    combined.add(termJ);
-                }
-            }
-
-            multIndirection[vSize + i] = combined.toArray(new MultiplicationMapper[0]);
-
+            multIndirection[vSize + i] = combineSimilarTerms(row);
         }
 
         return multIndirection;
@@ -449,7 +436,7 @@ public class DSCompiler {
                 // handle term p * f_k(g(x)) * g_l1(x) * g_l2(x) * ... * g_lp(x)
 
                 // derive the first factor in the term: f_k with respect to new parameter
-                UnivariateCompositionMapper derivedTermF = new UnivariateCompositionMapper(term.coeff,       // p
+                UnivariateCompositionMapper derivedTermF = new UnivariateCompositionMapper(term.getCoeff(),  // p
                                                                                            term.fIndex + 1,  // f_(k+1)
                                                                                            new int[term.dsIndices.length + 1]);
                 int[] orders = new int[parameters];
@@ -467,7 +454,7 @@ public class DSCompiler {
 
                 // derive the various g_l
                 for (int l = 0; l < term.dsIndices.length; ++l) {
-                    UnivariateCompositionMapper derivedTermG = new UnivariateCompositionMapper(term.coeff,
+                    UnivariateCompositionMapper derivedTermG = new UnivariateCompositionMapper(term.getCoeff(),
                                                                                                term.fIndex,
                                                                                                new int[term.dsIndices.length]);
                     for (int j = 0; j < term.dsIndices.length; ++j) {
@@ -490,18 +477,7 @@ public class DSCompiler {
             }
 
             // combine terms with similar derivation orders
-            final List<UnivariateCompositionMapper> combined = new ArrayList<>(row.size());
-            for (int j = 0; j < row.size(); ++j) {
-                final UnivariateCompositionMapper termJ = row.get(j);
-                if (termJ.coeff > 0) {
-                    for (int k = j + 1; k < row.size(); ++k) {
-                        termJ.absorbIfSimilar(row.get(k));
-                    }
-                    combined.add(termJ);
-                }
-            }
-
-            compIndirection[vSize + i] = combined.toArray(new UnivariateCompositionMapper[0]);
+            compIndirection[vSize + i] = combineSimilarTerms(row);
 
         }
 
@@ -994,7 +970,7 @@ public class DSCompiler {
         for (int i = 0; i < multIndirection.length; ++i) {
             double r = 0;
             for (final MultiplicationMapper mapping : multIndirection[i]) {
-                r += mapping.coeff *
+                r += mapping.getCoeff() *
                      lhs[lhsOffset + mapping.lhsIndex] *
                      rhs[rhsOffset + mapping.rhsIndex];
             }
@@ -1022,7 +998,7 @@ public class DSCompiler {
             for (final MultiplicationMapper mapping : multIndirection[i]) {
                 r = r.add(lhs[lhsOffset + mapping.lhsIndex].
                           multiply(rhs[rhsOffset + mapping.rhsIndex]).
-                          multiply(mapping.coeff));
+                          multiply(mapping.getCoeff()));
             }
             result[resultOffset + i] = r;
         }
@@ -3231,7 +3207,7 @@ public class DSCompiler {
             final UnivariateCompositionMapper[] mappingI = compIndirection[i];
             double r = 0;
             for (UnivariateCompositionMapper mapping : mappingI) {
-                double product = mapping.coeff * f[mapping.fIndex];
+                double product = mapping.getCoeff() * f[mapping.fIndex];
                 for (int k = 0; k < mapping.dsIndices.length; ++k) {
                     product *= operand[operandOffset + mapping.dsIndices[k]];
                 }
@@ -3259,7 +3235,7 @@ public class DSCompiler {
             final UnivariateCompositionMapper[] mappingI = compIndirection[i];
             T r = zero;
             for (UnivariateCompositionMapper mapping : mappingI) {
-                T product = f[mapping.fIndex].multiply(mapping.coeff);
+                T product = f[mapping.fIndex].multiply(mapping.getCoeff());
                 for (int k = 0; k < mapping.dsIndices.length; ++k) {
                     product = product.multiply(operand[operandOffset + mapping.dsIndices[k]]);
                 }
@@ -3287,7 +3263,7 @@ public class DSCompiler {
             final UnivariateCompositionMapper[] mappingI = compIndirection[i];
             T r = zero;
             for (UnivariateCompositionMapper mapping : mappingI) {
-                T product = zero.add(f[mapping.fIndex] * mapping.coeff);
+                T product = zero.add(f[mapping.fIndex] * mapping.getCoeff());
                 for (int k = 0; k < mapping.dsIndices.length; ++k) {
                     product = product.multiply(operand[operandOffset + mapping.dsIndices[k]]);
                 }
@@ -3402,13 +3378,76 @@ public class DSCompiler {
         MathUtils.checkDimension(order, compiler.order);
     }
 
-    /** Multiplication mapper.
+    /** Combine terms with similar derivation orders.
+     * @param terms list of terms
+     * @return combined array
+     */
+    @SuppressWarnings("unchecked")
+    private static <T extends AbstractMapper<T>> T[] combineSimilarTerms(final List<T> terms) {
+        
+        final List<T> combined = new ArrayList<>(terms.size());
+
+        for (int j = 0; j < terms.size(); ++j) {
+            final T termJ = terms.get(j);
+            if (termJ.getCoeff() > 0) {
+                for (int k = j + 1; k < terms.size(); ++k) {
+                    final T termK = terms.get(k);
+                    if (termJ.isSimilar(termK)) {
+                        // combine terms
+                        termJ.setCoeff(termJ.getCoeff() + termK.getCoeff());
+                        // make sure we will skip other term later on in the outer loop
+                        termK.setCoeff(0);
+                    }
+                }
+                combined.add(termJ);
+            }
+        }
+
+        return combined.toArray((T[]) Array.newInstance(terms.get(0).getClass(), combined.size()));
+
+    }
+
+    /** Base mapper.
      * @since 2.2
      */
-    private static class MultiplicationMapper {
+    private static abstract class AbstractMapper<T extends AbstractMapper<T>> {
 
         /** Multiplication coefficient. */
         private int coeff;
+
+        /** Simple constructor.
+         * @param coeff multiplication coefficient
+         */
+        AbstractMapper(final int coeff) {
+            this.coeff    = coeff;
+        }
+
+        /** Set the multiplication coefficient.
+         * @param coeff new coefficient
+         */
+        public void setCoeff(final int coeff) {
+            this.coeff = coeff;
+        }
+
+        /** Get the multiplication coefficient.
+         * @return multiplication coefficient
+         */
+        public int getCoeff() {
+            return coeff;
+        }
+
+        /** Check if another instance if correspond to term with similar derivation orders.
+         * @param other other instance to check
+         * @return true if instances are similar
+         */
+        protected abstract boolean isSimilar(T other);
+
+    }
+
+    /** Multiplication mapper.
+     * @since 2.2
+     */
+    private static class MultiplicationMapper extends AbstractMapper<MultiplicationMapper> {
 
         /** Left hand side index. */
         private final int lhsIndex;
@@ -3422,31 +3461,23 @@ public class DSCompiler {
          * @param rhsIndex right hand side index
          */
         MultiplicationMapper(final int coeff, final int lhsIndex, final int rhsIndex) {
-            this.coeff    = coeff;
+            super(coeff);
             this.lhsIndex = lhsIndex;
             this.rhsIndex = rhsIndex;
         }
 
-        /** Absorb another instance if they correspond to similar terms.
-         * @param other other instance to check
-         */
-        public void absorbIfSimilar(final MultiplicationMapper other) {
-            if (lhsIndex == other.lhsIndex && rhsIndex == other.rhsIndex) {
-                // combine terms
-                coeff += other.coeff;
-                // make sure we will skip other term later on in the outer loop
-                other.coeff = 0;
-            }
+        /** {@inheritDoc} */
+        @Override
+        public boolean isSimilar(final MultiplicationMapper other) {
+            return lhsIndex == other.lhsIndex && rhsIndex == other.rhsIndex;
         }
+
     }
 
     /** Univariate composition mapper.
      * @since 2.2
      */
-    private static class UnivariateCompositionMapper {
-
-        /** Multiplication coefficient. */
-        private int coeff;
+    private static class UnivariateCompositionMapper extends AbstractMapper<UnivariateCompositionMapper> {
 
         /** Univariate derivative index. */
         private final int fIndex;
@@ -3460,7 +3491,7 @@ public class DSCompiler {
          * @param dsIndices derivative structure indices
          */
         UnivariateCompositionMapper(final int coeff, final int fIndex, final int[] dsIndices) {
-            this.coeff     = coeff;
+            super(coeff);
             this.fIndex    = fIndex;
             this.dsIndices = dsIndices.clone();
         }
@@ -3471,26 +3502,26 @@ public class DSCompiler {
             Arrays.sort(dsIndices);
         }
 
-        /** Absorb another instance if they correspond to similar terms.
-         * @param other other instance to check
-         */
-        public void absorbIfSimilar(final UnivariateCompositionMapper other) {
+        /** {@inheritDoc} */
+        @Override
+        public boolean isSimilar(final UnivariateCompositionMapper other) {
+
             if (fIndex == other.fIndex && dsIndices.length == other.dsIndices.length) {
 
                 for (int j = 0; j < dsIndices.length; ++j) {
                     if (dsIndices[j] != other.dsIndices[j]) {
-                        return;
+                        return false;
                     }
                 }
 
-                // combine terms
-                coeff += other.coeff;
-
-                // make sure we will skip other term later on in the outer loop
-                other.coeff = 0;
+                return true;
 
             }
+
+            return false;
+
         }
+
     }
 
 }

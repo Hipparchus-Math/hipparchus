@@ -23,6 +23,8 @@
 package org.hipparchus.analysis.differentiation;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -176,7 +178,8 @@ public class DSCompilerTest {
 
     @Test
     public void testMultiplicationRules()
-        throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+        throws SecurityException, NoSuchFieldException, IllegalArgumentException,
+               IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
         Map<String,String> referenceRules = new HashMap<String, String>();
         referenceRules.put("(f*g)",          "f * g");
@@ -237,13 +240,17 @@ public class DSCompilerTest {
 
         Field multFieldArrayField = DSCompiler.class.getDeclaredField("multIndirection");
         multFieldArrayField.setAccessible(true);
+        Class<?> abstractMapperClass = Stream.
+                        of(DSCompiler.class.getDeclaredClasses()).
+                        filter(c -> c.getName().endsWith("AbstractMapper")).
+                        findAny().
+                        get();
         Class<?> multiplicationMapperClass = Stream.
-                                             of(DSCompiler.class.getDeclaredClasses()).
-                                             filter(c -> c.getName().endsWith("MultiplicationMapper")).
-                                             findAny().
-                                             get();
-        Field coeffField = multiplicationMapperClass.getDeclaredField("coeff");
-        coeffField.setAccessible(true);
+                        of(DSCompiler.class.getDeclaredClasses()).
+                        filter(c -> c.getName().endsWith("MultiplicationMapper")).
+                        findAny().
+                        get();
+        Method coeffMethod = abstractMapperClass.getDeclaredMethod("getCoeff");
         Field lhsField = multiplicationMapperClass.getDeclaredField("lhsIndex");
         lhsField.setAccessible(true);
         Field rhsField = multiplicationMapperClass.getDeclaredField("rhsIndex");
@@ -260,8 +267,8 @@ public class DSCompilerTest {
                         if (rule.length() > 0) {
                             rule.append(" + ");
                         }
-                        if (((Integer) coeffField.get(term)).intValue() > 1) {
-                            rule.append(((Integer) coeffField.get(term)).intValue()).append(" * ");
+                        if (((Integer) coeffMethod.invoke(term)).intValue() > 1) {
+                            rule.append(((Integer) coeffMethod.invoke(term)).intValue()).append(" * ");
                         }
                         rule.append(ordersToString(compiler.getPartialDerivativeOrders(((Integer) lhsField.get(term)).intValue()),
                                                    "f", "x", "y", "z", "t"));
@@ -275,8 +282,10 @@ public class DSCompilerTest {
         }
     }
 
-    @Test public void testCompositionRules()
-        throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+    @Test
+    public void testCompositionRules()
+        throws SecurityException, NoSuchFieldException, IllegalArgumentException,
+               IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 
         // the following reference rules have all been computed independently from the library,
         // using only pencil and paper and some search and replace to handle symmetries
@@ -435,13 +444,17 @@ public class DSCompilerTest {
 
         Field compFieldArrayField = DSCompiler.class.getDeclaredField("compIndirection");
         compFieldArrayField.setAccessible(true);
+        Class<?> abstractMapperClass = Stream.
+                        of(DSCompiler.class.getDeclaredClasses()).
+                        filter(c -> c.getName().endsWith("AbstractMapper")).
+                        findAny().
+                        get();
         Class<?> univariateCompositionMapperClass = Stream.
                         of(DSCompiler.class.getDeclaredClasses()).
                         filter(c -> c.getName().endsWith("UnivariateCompositionMapper")).
                         findAny().
                         get();
-        Field coeffField = univariateCompositionMapperClass.getDeclaredField("coeff");
-        coeffField.setAccessible(true);
+        Method coeffMethod = abstractMapperClass.getDeclaredMethod("getCoeff");
         Field fIndexField = univariateCompositionMapperClass.getDeclaredField("fIndex");
         fIndexField.setAccessible(true);
         Field dsIndicesField = univariateCompositionMapperClass.getDeclaredField("dsIndices");
@@ -458,8 +471,8 @@ public class DSCompilerTest {
                         if (rule.length() > 0) {
                             rule.append(" + ");
                         }
-                        if (((Integer) coeffField.get(term)).intValue() > 1) {
-                            rule.append(((Integer) coeffField.get(term)).intValue()).append(" * ");
+                        if (((Integer) coeffMethod.invoke(term)).intValue() > 1) {
+                            rule.append(((Integer) coeffMethod.invoke(term)).intValue()).append(" * ");
                         }
                         rule.append(orderToString(((Integer) fIndexField.get(term)).intValue(), "(f(g))", "g"));
                         int[] dsIndex = (int[]) dsIndicesField.get(term);
