@@ -21,7 +21,9 @@
  */
 package org.hipparchus.util;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -457,6 +459,61 @@ public final class CombinatoricsUtils {
         if (n < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.BINOMIAL_NEGATIVE_PARAMETER, n);
         }
+    }
+
+    /** Generate a stream of partitions of a list.
+     * <p>
+     * This method implements the iterative algorithm described in
+     * <a href="https://academic.oup.com/comjnl/article/32/3/281/331557">Short Note:
+     * A Fast Iterative Algorithm for Generating Set Partitions</a>
+     * by B. Djokić, M. Miyakawa, S. Sekiguchi, I. Semba, and I. Stojmenović
+     * (The Computer Journal, Volume 32, Issue 3, 1989, Pages 281–282,
+     * <a href="https://doi.org/10.1093/comjnl/32.3.281">https://doi.org/10.1093/comjnl/32.3.281</a>
+     * </p>
+     * @param list list to partition
+     * @return partition of the list, each part being a list of list
+     */
+    public static <T> List<List<List<T>>> partitions(final List<T> list) {
+
+        final List<List<List<T>>> parts = new ArrayList<>();
+
+        int[] partIndex = new int[list.size()];
+        int[] backTrack = new int[list.size() - 1];
+        int   r  = 0;
+        int   j  = 0;
+        int   n  = list.size();
+        do {
+
+            // put elements in the first partition
+            while (r < n - 2) {
+                partIndex[++r] = 0;
+                backTrack[++j] = r;
+            }
+
+            // generate partitions
+            for (int i = 0; i < n - j; ++i) {
+                final List<List<T>> part = new ArrayList<>();
+                partIndex[n - 1] = i;
+                for (int k = 0; k < partIndex.length; ++k) {
+                    while (part.size() <= partIndex[k]) {
+                        part.add(new ArrayList<>());
+                    }
+                    part.get(partIndex[k]).add(list.get(k));
+                }
+                parts.add(part);
+            }
+
+            // backtrack to generate next partition
+            r = backTrack[j];
+            partIndex[r]++;
+            if (partIndex[r] > r - j) {
+                --j;
+            }
+
+        } while (r != 0);
+
+        return parts;
+
     }
 
     /**
