@@ -17,6 +17,7 @@
 package org.hipparchus.util;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -84,6 +85,11 @@ public class RosenNumberPartitionIterator implements Iterator<int[]> {
      */
     @Override
     public final int[] next() {
+
+        if (count == 0) {
+            throw new NoSuchElementException();
+        }
+
         // rosenNext start
         if (a == null) {
             this.a = new int[k];

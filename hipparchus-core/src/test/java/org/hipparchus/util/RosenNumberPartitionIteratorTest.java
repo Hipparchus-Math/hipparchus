@@ -16,6 +16,8 @@
  */
 package org.hipparchus.util;
 
+import java.util.NoSuchElementException;
+
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
@@ -62,6 +64,12 @@ public class RosenNumberPartitionIteratorTest {
         Assert.assertTrue(i.hasNext());
         Assert.assertArrayEquals(new int[] { 3, 1 }, i.next());
         Assert.assertFalse(i.hasNext());
+        try {
+            i.next();
+            Assert.fail("an exception should have been thrown");
+        } catch (NoSuchElementException e) {
+            // expected
+        }
     }
 
     @Test
