@@ -469,6 +469,39 @@ public final class CombinatoricsUtils {
         }
     }
 
+    /** Compute the Bell number (number of partitions of a set).
+     * @param n number of elements of the set
+     * @return Bell number Bₙ
+     * @since 2.2
+     */
+    public static long BellNumber(final int n) {
+
+        // special case
+        if (n == 0) {
+            return 1l;
+        }
+
+        // storage for one line of the Bell triangle
+        final long[] row = new long[n];
+
+        // first row, with one element
+        row[0] = 1l;
+
+        // iterative computation of rows
+        for (int i = 1; i < n; ++i) {
+            long previous = row[0];
+            row[0] = row[i - 1];
+            for (int j = 1; j <= i; ++j) {
+                long rj = row[j - 1] + previous;
+                previous = row[j];
+                row[j] = rj;
+            }
+        }
+
+        return row[n - 1];
+
+    }
+
     /** Generate a stream of partitions of a list.
      * <p>
      * This method implements the iterative algorithm described in

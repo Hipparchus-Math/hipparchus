@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.2" date="TBD" description="TBD">
+      <action dev="luc" type="add">
+        Added computation of Bell numbers.
+      </action>
       <action dev="luc" type="add" due-to="Axel Kramer" issue="issue/197">
         Added RosenNumberPartitionIterator.
       </action>
