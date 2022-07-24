@@ -337,27 +337,27 @@ public class CombinatoricsUtilsTest {
     @Test
     public void testBellNumber() {
         // OEIS A000110: http://oeis.org/A000110
-        Assert.assertEquals(             1l, CombinatoricsUtils.BellNumber( 0));
-        Assert.assertEquals(             1l, CombinatoricsUtils.BellNumber( 1));
-        Assert.assertEquals(             2l, CombinatoricsUtils.BellNumber( 2));
-        Assert.assertEquals(             5l, CombinatoricsUtils.BellNumber( 3));
-        Assert.assertEquals(            15l, CombinatoricsUtils.BellNumber( 4));
-        Assert.assertEquals(            52l, CombinatoricsUtils.BellNumber( 5));
-        Assert.assertEquals(           203l, CombinatoricsUtils.BellNumber( 6));
-        Assert.assertEquals(           877l, CombinatoricsUtils.BellNumber( 7));
-        Assert.assertEquals(          4140l, CombinatoricsUtils.BellNumber( 8));
-        Assert.assertEquals(         21147l, CombinatoricsUtils.BellNumber( 9));
-        Assert.assertEquals(        115975l, CombinatoricsUtils.BellNumber(10));
-        Assert.assertEquals(        678570l, CombinatoricsUtils.BellNumber(11));
-        Assert.assertEquals(       4213597l, CombinatoricsUtils.BellNumber(12));
-        Assert.assertEquals(      27644437l, CombinatoricsUtils.BellNumber(13));
-        Assert.assertEquals(     190899322l, CombinatoricsUtils.BellNumber(14));
-        Assert.assertEquals(    1382958545l, CombinatoricsUtils.BellNumber(15));
-        Assert.assertEquals(   10480142147l, CombinatoricsUtils.BellNumber(16));
-        Assert.assertEquals(   82864869804l, CombinatoricsUtils.BellNumber(17));
-        Assert.assertEquals(  682076806159l, CombinatoricsUtils.BellNumber(18));
-        Assert.assertEquals( 5832742205057l, CombinatoricsUtils.BellNumber(19));
-        Assert.assertEquals(51724158235372l, CombinatoricsUtils.BellNumber(20));
+        Assert.assertEquals(             1l, CombinatoricsUtils.bellNumber( 0));
+        Assert.assertEquals(             1l, CombinatoricsUtils.bellNumber( 1));
+        Assert.assertEquals(             2l, CombinatoricsUtils.bellNumber( 2));
+        Assert.assertEquals(             5l, CombinatoricsUtils.bellNumber( 3));
+        Assert.assertEquals(            15l, CombinatoricsUtils.bellNumber( 4));
+        Assert.assertEquals(            52l, CombinatoricsUtils.bellNumber( 5));
+        Assert.assertEquals(           203l, CombinatoricsUtils.bellNumber( 6));
+        Assert.assertEquals(           877l, CombinatoricsUtils.bellNumber( 7));
+        Assert.assertEquals(          4140l, CombinatoricsUtils.bellNumber( 8));
+        Assert.assertEquals(         21147l, CombinatoricsUtils.bellNumber( 9));
+        Assert.assertEquals(        115975l, CombinatoricsUtils.bellNumber(10));
+        Assert.assertEquals(        678570l, CombinatoricsUtils.bellNumber(11));
+        Assert.assertEquals(       4213597l, CombinatoricsUtils.bellNumber(12));
+        Assert.assertEquals(      27644437l, CombinatoricsUtils.bellNumber(13));
+        Assert.assertEquals(     190899322l, CombinatoricsUtils.bellNumber(14));
+        Assert.assertEquals(    1382958545l, CombinatoricsUtils.bellNumber(15));
+        Assert.assertEquals(   10480142147l, CombinatoricsUtils.bellNumber(16));
+        Assert.assertEquals(   82864869804l, CombinatoricsUtils.bellNumber(17));
+        Assert.assertEquals(  682076806159l, CombinatoricsUtils.bellNumber(18));
+        Assert.assertEquals( 5832742205057l, CombinatoricsUtils.bellNumber(19));
+        Assert.assertEquals(51724158235372l, CombinatoricsUtils.bellNumber(20));
     }
 
     @Test
@@ -496,7 +496,7 @@ public class CombinatoricsUtilsTest {
         for (int i = 0; i < 12; ++i) {
             List<Integer> list = IntStream.range(0, i).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
             long partitionsCount = CombinatoricsUtils.partitions(list).count();
-            Assert.assertEquals(CombinatoricsUtils.BellNumber(i), partitionsCount);
+            Assert.assertEquals(CombinatoricsUtils.bellNumber(i), partitionsCount);
         }
     }
 

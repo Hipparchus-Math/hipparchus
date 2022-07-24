@@ -474,7 +474,7 @@ public final class CombinatoricsUtils {
      * @return Bell number Bₙ
      * @since 2.2
      */
-    public static long BellNumber(final int n) {
+    public static long bellNumber(final int n) {
 
         // special case
         if (n == 0) {
@@ -552,10 +552,10 @@ public final class CombinatoricsUtils {
         private final int[] backTrack;
 
         /** Current part index. */
-        int   r;
+        private int   r;
 
         /** Current backtrack index. */
-        int   j;
+        private int   j;
 
         /** Pending parts already generated. */
         private final Queue<List<T>[]> pending;
@@ -614,8 +614,8 @@ public final class CombinatoricsUtils {
                 // prepare storage
                 @SuppressWarnings("unchecked")
                 final List<T>[] partition = (List<T>[]) Array.newInstance(List.class, max + 1);
-                for (int j = 0; j < partition.length; ++j) {
-                    partition[j] = new ArrayList<>(n);
+                for (int k = 0; k < partition.length; ++k) {
+                    partition[k] = new ArrayList<>(n);
                 }
 
                 // distribute elements in the parts
