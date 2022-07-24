@@ -21,8 +21,18 @@
  */
 package org.hipparchus.util;
 
+import java.lang.reflect.Array;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Queue;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -457,6 +467,201 @@ public final class CombinatoricsUtils {
         if (n < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.BINOMIAL_NEGATIVE_PARAMETER, n);
         }
+    }
+
+    /** Compute the Bell number (number of partitions of a set).
+     * @param n number of elements of the set
+     * @return Bell number Bₙ
+     * @since 2.2
+     */
+    public static long bellNumber(final int n) {
+
+        // special case
+        if (n == 0) {
+            return 1l;
+        }
+
+        // storage for one line of the Bell triangle
+        final long[] row = new long[n];
+
+        // first row, with one element
+        row[0] = 1l;
+
+        // iterative computation of rows
+        for (int i = 1; i < n; ++i) {
+            long previous = row[0];
+            row[0] = row[i - 1];
+            for (int j = 1; j <= i; ++j) {
+                long rj = row[j - 1] + previous;
+                previous = row[j];
+                row[j] = rj;
+            }
+        }
+
+        return row[n - 1];
+
+    }
+
+    /** Generate a stream of partitions of a list.
+     * <p>
+     * This method implements the iterative algorithm described in
+     * <a href="https://academic.oup.com/comjnl/article/32/3/281/331557">Short Note:
+     * A Fast Iterative Algorithm for Generating Set Partitions</a>
+     * by B. Djokić, M. Miyakawa, S. Sekiguchi, I. Semba, and I. Stojmenović
+     * (The Computer Journal, Volume 32, Issue 3, 1989, Pages 281–282,
+     * <a href="https://doi.org/10.1093/comjnl/32.3.281">https://doi.org/10.1093/comjnl/32.3.281</a>
+     * </p>
+     * @param list list to partition
+     * @return stream of partitions of the list, each partition is an array or parts
+     * and each part is a list of elements
+     */
+    public static <T> Stream<List<T>[]> partitions(final List<T> list) {
+
+        // handle special cases of empty and singleton lists
+        if (list.size() < 2) {
+            @SuppressWarnings("unchecked")
+            final List<T>[] partition = (List<T>[]) Array.newInstance(List.class, 1);
+            partition[0] = list;
+            final Stream.Builder<List<T>[]> builder = Stream.builder();
+            return builder.add(partition).build();
+        }
+
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PartitionsIterator<T>(list),
+                                                                        Spliterator.DISTINCT | Spliterator.NONNULL |
+                                                                        Spliterator.IMMUTABLE | Spliterator.ORDERED),
+                                    false);
+
+    }
+
+    /** Iterator for generating partitions.
+     * @param <T> type of the elements
+     * @since 2.2
+     */
+    private static class PartitionsIterator<T> implements Iterator<List<T>[]> {
+
+        /** List to partition. */
+        private final List<T> list;
+
+        /** Number of elements to partition. */
+        private final int   n;
+
+        /** Mapping from elements indices to parts indices. */
+        private final int[] partIndex;
+
+        /** Backtracking array. */
+        private final int[] backTrack;
+
+        /** Current part index. */
+        private int   r;
+
+        /** Current backtrack index. */
+        private int   j;
+
+        /** Pending parts already generated. */
+        private final Queue<List<T>[]> pending;
+
+        /** Indicator for exhausted partitions. */
+        private boolean exhausted;
+
+        /** Simple constructor.
+         * @param list list to partition
+         */
+        PartitionsIterator(final List<T> list) {
+
+            this.list      = list;
+            this.n         = list.size();
+            this.partIndex = new int[list.size()];
+            this.backTrack = new int[list.size() - 1];
+            this.r         = 0;
+            this.j         = 0;
+            this.pending   = new ArrayDeque<>(n);
+
+            // generate a first set of partitions
+            generate();
+
+        }
+
+        /** Generate one set of partitions.
+         * <p>
+         * This method implements the iterative algorithm described in
+         * <a href="https://academic.oup.com/comjnl/article/32/3/281/331557">Short Note:
+         * A Fast Iterative Algorithm for Generating Set Partitions</a>
+         * by B. Djokić, M. Miyakawa, S. Sekiguchi, I. Semba, and I. Stojmenović
+         * (The Computer Journal, Volume 32, Issue 3, 1989, Pages 281–282,
+         * <a href="https://doi.org/10.1093/comjnl/32.3.281">https://doi.org/10.1093/comjnl/32.3.281</a>
+         * </p>
+         */
+        private void generate() {
+
+            // put elements in the first part
+            while (r < n - 2) {
+                partIndex[++r] = 0;
+                backTrack[++j] = r;
+            }
+
+            // generate partitions
+            for (int i = 0; i < n - j; ++i) {
+
+                // fill-up final element
+                partIndex[n - 1] = i;
+
+                // count the number of parts in this partition
+                int max = 0;
+                for (final int index : partIndex) {
+                    max = FastMath.max(max, index);
+                }
+
+                // prepare storage
+                @SuppressWarnings("unchecked")
+                final List<T>[] partition = (List<T>[]) Array.newInstance(List.class, max + 1);
+                for (int k = 0; k < partition.length; ++k) {
+                    partition[k] = new ArrayList<>(n);
+                }
+
+                // distribute elements in the parts
+                for (int k = 0; k < partIndex.length; ++k) {
+                    partition[partIndex[k]].add(list.get(k));
+                }
+
+                // add the generated partition to the pending queue
+                pending.add(partition);
+
+            }
+
+            // backtrack to generate next partition
+            r = backTrack[j];
+            partIndex[r]++;
+            if (partIndex[r] > r - j) {
+                --j;
+            }
+
+            // keep track of end of generation
+            exhausted = r == 0;
+
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public boolean hasNext() {
+            return !(exhausted && pending.isEmpty());
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public List<T>[] next() {
+
+            if (pending.isEmpty()) {
+                // we need to generate more partitions
+                if (exhausted) {
+                    throw new NoSuchElementException();
+                }
+                generate();
+            }
+
+            return pending.remove();
+
+        }
+
     }
 
     /**
