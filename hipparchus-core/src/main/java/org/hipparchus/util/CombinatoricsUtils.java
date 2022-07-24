@@ -510,6 +510,7 @@ public final class CombinatoricsUtils {
      * @param list list to partition
      * @return stream of partitions of the list, each partition is an array or parts
      * and each part is a list of elements
+     * @since 2.2
      */
     public static <T> Stream<List<T>[]> partitions(final List<T> list) {
 
@@ -523,6 +524,29 @@ public final class CombinatoricsUtils {
         }
 
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PartitionsIterator<T>(list),
+                                                                        Spliterator.DISTINCT | Spliterator.NONNULL |
+                                                                        Spliterator.IMMUTABLE | Spliterator.ORDERED),
+                                    false);
+
+    }
+
+    /** Generate a stream of permutations of a list.
+     * <p>
+     * This method implements the Steinhaus–Johnson–Trotter algorithm
+     * with Even's speedup
+     * <a href="https://en.wikipedia.org/wiki/Steinhaus%E2%80%93Johnson%E2%80%93Trotter_algorithm">Steinhaus–Johnson–Trotter algorithm</a>
+     * @param list list to permute
+     * @return stream of permutations of the list
+     * @since 2.2
+     */
+    public static <T> Stream<List<T>> permutations(final List<T> list) {
+
+        // handle special cases of empty and singleton lists
+        if (list.size() < 2) {
+            return Stream.of(list);
+        }
+
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PermutationsIterator<T>(list),
                                                                         Spliterator.DISTINCT | Spliterator.NONNULL |
                                                                         Spliterator.IMMUTABLE | Spliterator.ORDERED),
                                     false);
