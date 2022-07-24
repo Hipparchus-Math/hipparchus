@@ -70,7 +70,7 @@ public final class CombinatoricsUtils {
     /** Bell numbers.
      * @since 2.2
      */
-    static final AtomicReference<long[]> BELL = new AtomicReference<> (null);
+    private static final AtomicReference<long[]> BELL = new AtomicReference<> (null);
 
     /** Private constructor (class contains only static methods). */
     private CombinatoricsUtils() {}

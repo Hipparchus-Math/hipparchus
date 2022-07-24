@@ -73,7 +73,7 @@ class PermutationsIterator<T> implements Iterator<List<T>> {
     public List<T> next() {
 
         if (exhausted) {
-            throw new NoSuchElementException();            
+            throw new NoSuchElementException();
         }
 
         // the value that will be returned at the end
@@ -105,7 +105,7 @@ class PermutationsIterator<T> implements Iterator<List<T>> {
             value[selectedPeer]      = selectedValue;
             direction[selectedIndex] = direction[selectedPeer];
             if (selectedPeer == 0 || selectedPeer == permuted.size() - 1 ||
-                            value[selectedPeer + selectedDirection] > selectedValue) {
+                value[selectedPeer + selectedDirection] > selectedValue) {
                 // we cannot move anymore
                 direction[selectedPeer] = 0;
             } else {

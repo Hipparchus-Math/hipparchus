@@ -568,7 +568,7 @@ public class CombinatoricsUtilsTest {
     }
 
     @Test
-    public void testPermutations4() {
+    public void testPermutations3() {
         final List<List<Integer>> permutations = CombinatoricsUtils.permutations(Arrays.asList(1, 2, 3)).
                                                  collect(Collectors.toList());
         Assert.assertEquals(6, permutations.size());
