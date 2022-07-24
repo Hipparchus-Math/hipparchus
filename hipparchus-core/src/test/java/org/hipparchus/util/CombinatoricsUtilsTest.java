@@ -21,19 +21,16 @@
  */
 package org.hipparchus.util;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -510,16 +507,7 @@ public class CombinatoricsUtilsTest {
         throws NoSuchMethodException, SecurityException, InstantiationException,
                IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
-        Class<?> partitionIteratorClass = Stream.
-                                          of(CombinatoricsUtils.class.getDeclaredClasses()).
-                                          filter(c -> c.getName().endsWith("PartitionsIterator")).
-                                          findAny().
-                                          get();
-        Constructor<?> cstr = partitionIteratorClass.getDeclaredConstructor(List.class);
-        cstr.setAccessible(true);
-
-        @SuppressWarnings("unchecked")
-        Iterator<List<Integer>[]> iterator = (Iterator<List<Integer>[]>) cstr.newInstance(Arrays.asList(1, 2, 3));
+        PartitionsIterator<Integer> iterator = new PartitionsIterator<>(Arrays.asList(1, 2, 3));
 
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals(1, iterator.next().length);
