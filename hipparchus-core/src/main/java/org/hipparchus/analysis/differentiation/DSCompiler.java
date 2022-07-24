@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.hipparchus.CalculusFieldElement;
@@ -690,53 +691,21 @@ public class DSCompiler {
 
     /** Generate all possible derivation orders up to a specified order.
      * <p>
-     * If for example we have two intermediate variables p₀, and p₁ and we want derivation
-     * with respect to 3 base variable (hence derivation to order 3), we need to generate:
-     * [∂²p/∂q₀², ∂p/∂q₁], [∂³p/∂q₀∂q₁² and ∂³p/∂q₁³,
-     * which translates to arrays [3, 0], [2, 1], [1, 2] and [0, 3].
+     * If for example we have two intermediate variables pᵤ, and pᵥ and we want derivation
+     * with respect to 3 base variable qₖ, qₗ, qₘ, we need to generate:
+     * [∂pᵤ/∂qₘ, ∂²pᵥ/∂qₖ∂qₗ], [∂pᵤ/∂qₖ, ∂²pᵥ/∂qₗ∂qₘ], [∂pᵤ/∂qₗ, ∂²pᵥ/∂qₖ∂qₘ],
+     * [∂²pᵤ/∂qₖ∂qₗ, ∂pᵥ/∂qₘ], [∂²pᵤ/∂qₗ∂qₘ, ∂pᵥ/∂qₖ], and [∂²pᵤ/∂qₖ∂qₘ, ∂pᵥ/∂qₗ].
      * </p>
-     * @param nbIntermediate number of intermediate variables pᵢ
-     * @param orderSum sum of orders
+     * @param intermediate indices of the intermediate variables pᵢ
+     * @param base indices of the base variables qⱼ
      * @since 2.2
      */
-    private static List<int[]> generateDerivationOrders(final int nbVar, final int orderSum) {
-        // as this method is called only when building the indirection caches,
-        // we can just use brute force loops and filters
-        final List<int[]> generated = new ArrayList<>();
-        final int[] orders = new int[nbVar];
-        recurseGenerateOrders(orders, orderSum, 0, generated);
-        return generated;
-    }
-
-    /** Recursive method to generate all possible derivation orders with given sum.
-     * @param orders orders array to fill up
-     * @param orderSum desired sum
-     * @param index index of the next element to set
-     * @param generated list to populate with derivation orders
-     */
-    private static void recurseGenerateOrders(final int[] orders, final int orderSum,
-                                              final int index, final List<int[]> generated) {
-
-        // sum of orders already set
-        int startSum = 0;
-        for (int i = 0; i < index; ++i) {
-            startSum += orders[i];
-        }
-
-        // number of remaining elements in the array
-        final int remaining = orders.length - index;
-
-        if (remaining == 1) {
-            // we have filled up the orders array
-            // the last element is imposed by the desired sum
-            orders[index] = orderSum - startSum;
-            generated.add(orders.clone());
-        } else {
-            for (orders[index] = 1; orders[index] + startSum < orderSum - remaining; ++orders[index]) {
-                recurseGenerateOrders(orders, orderSum, index + 1, generated);
-            }
-        }
-
+    private static List<int[]> generateDerivationOrders(final List<Integer> intermediate, final List<Integer> base) {
+        final List<List<Integer>[]> partitions =
+                        CombinatoricsUtils.
+                        partitions(base).
+                        filter(partition -> partition.length == intermediate.size()).
+                        collect(Collectors.toList());
     }
 
     /** Get the number of free parameters.
