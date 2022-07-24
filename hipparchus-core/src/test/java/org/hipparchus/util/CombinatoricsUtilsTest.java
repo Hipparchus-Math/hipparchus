@@ -335,8 +335,12 @@ public class CombinatoricsUtilsTest {
 
     @Test
     public void testPartitions0() {
-        List<Integer> empty = Collections.emptyList();
-        Assert.assertEquals(0, CombinatoricsUtils.partitions(empty).count());
+        List<Integer> emptyList = Collections.emptyList();
+        final List<List<Integer>[]> partitions = CombinatoricsUtils.partitions(emptyList).
+                                                 collect(Collectors.toList());
+        Assert.assertEquals(1, partitions.size());
+        Assert.assertEquals(1, partitions.get(0).length);
+        Assert.assertEquals(0, partitions.get(0)[0].size());
     }
 
     @Test

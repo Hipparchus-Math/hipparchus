@@ -484,11 +484,8 @@ public final class CombinatoricsUtils {
      */
     public static <T> Stream<List<T>[]> partitions(final List<T> list) {
 
-        // handle special cases
-        if (list.isEmpty()) {
-            return Stream.empty();
-        }
-        if (list.size() == 1) {
+        // handle special cases of empty and singleton lists
+        if (list.size() < 2) {
             @SuppressWarnings("unchecked")
             final List<T>[] partition = (List<T>[]) Array.newInstance(List.class, 1);
             partition[0] = list;
