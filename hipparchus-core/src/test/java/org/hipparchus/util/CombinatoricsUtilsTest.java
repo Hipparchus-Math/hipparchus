@@ -21,19 +21,15 @@
  */
 package org.hipparchus.util;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -366,6 +362,30 @@ public class CombinatoricsUtilsTest {
     }
 
     @Test
+    public void testBellNegative() {
+        try {
+            CombinatoricsUtils.bellNumber(-1);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_SMALL, miae.getSpecifier());
+            Assert.assertEquals(-1, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals( 0, ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
+
+    @Test
+    public void testBellLarge() {
+        try {
+            CombinatoricsUtils.bellNumber(26);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, miae.getSpecifier());
+            Assert.assertEquals(26, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(25, ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
+
+    @Test
     public void testPartitions0() {
         List<Integer> emptyList = Collections.emptyList();
         final List<List<Integer>[]> partitions = CombinatoricsUtils.partitions(emptyList).
@@ -506,20 +526,9 @@ public class CombinatoricsUtilsTest {
     }
 
     @Test
-    public void testExhaustedPartitionsCount()
-        throws NoSuchMethodException, SecurityException, InstantiationException,
-               IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public void testExhaustedPartitionsCount() {
 
-        Class<?> partitionIteratorClass = Stream.
-                                          of(CombinatoricsUtils.class.getDeclaredClasses()).
-                                          filter(c -> c.getName().endsWith("PartitionsIterator")).
-                                          findAny().
-                                          get();
-        Constructor<?> cstr = partitionIteratorClass.getDeclaredConstructor(List.class);
-        cstr.setAccessible(true);
-
-        @SuppressWarnings("unchecked")
-        Iterator<List<Integer>[]> iterator = (Iterator<List<Integer>[]>) cstr.newInstance(Arrays.asList(1, 2, 3));
+        PartitionsIterator<Integer> iterator = new PartitionsIterator<>(Arrays.asList(1, 2, 3));
 
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals(1, iterator.next().length);
@@ -531,6 +540,72 @@ public class CombinatoricsUtilsTest {
         Assert.assertEquals(2, iterator.next().length);
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals(3, iterator.next().length);
+
+        Assert.assertFalse(iterator.hasNext());
+        try {
+            iterator.next();
+            Assert.fail("an exception should have been thrown");
+        } catch (NoSuchElementException e) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testPermutations0() {
+        List<Integer> emptyList = Collections.emptyList();
+        final List<List<Integer>> permutations = CombinatoricsUtils.permutations(emptyList).
+                                                 collect(Collectors.toList());
+        Assert.assertEquals(1, permutations.size());
+        Assert.assertEquals(0, permutations.get(0).size());
+    }
+
+    @Test
+    public void testPermutations1() {
+        final List<List<Integer>> permutations = CombinatoricsUtils.permutations(Arrays.asList(1)).
+                                                 collect(Collectors.toList());
+        Assert.assertEquals(1, permutations.size());
+        Assert.assertEquals(1, permutations.get(0).size());
+    }
+
+    @Test
+    public void testPermutations3() {
+        final List<List<Integer>> permutations = CombinatoricsUtils.permutations(Arrays.asList(1, 2, 3)).
+                                                 collect(Collectors.toList());
+        Assert.assertEquals(6, permutations.size());
+        Assert.assertArrayEquals(new Integer[] { 1, 2, 3 }, permutations.get(0).toArray(new Integer[0]));
+        Assert.assertArrayEquals(new Integer[] { 1, 3, 2 }, permutations.get(1).toArray(new Integer[0]));
+        Assert.assertArrayEquals(new Integer[] { 3, 1, 2 }, permutations.get(2).toArray(new Integer[0]));
+        Assert.assertArrayEquals(new Integer[] { 3, 2, 1 }, permutations.get(3).toArray(new Integer[0]));
+        Assert.assertArrayEquals(new Integer[] { 2, 3, 1 }, permutations.get(4).toArray(new Integer[0]));
+        Assert.assertArrayEquals(new Integer[] { 2, 1, 3 }, permutations.get(5).toArray(new Integer[0]));
+    }
+
+    @Test
+    public void testPermutationsCount() {
+        for (int i = 0; i < 10; ++i) {
+            List<Integer> list = IntStream.range(0, i).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+            long permutationsCount = CombinatoricsUtils.permutations(list).count();
+            Assert.assertEquals(CombinatoricsUtils.factorial(i), permutationsCount);
+        }
+    }
+
+    @Test
+    public void testExhaustedPermutationsCount() {
+
+        PermutationsIterator<Integer> iterator = new PermutationsIterator<>(Arrays.asList(1, 2, 3));
+
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(3, iterator.next().size());
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(3, iterator.next().size());
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(3, iterator.next().size());
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(3, iterator.next().size());
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(3, iterator.next().size());
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(3, iterator.next().size());
 
         Assert.assertFalse(iterator.hasNext());
         try {
