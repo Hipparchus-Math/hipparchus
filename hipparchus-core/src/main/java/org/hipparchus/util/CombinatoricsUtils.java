@@ -40,6 +40,11 @@ import org.hipparchus.special.Gamma;
  */
 public final class CombinatoricsUtils {
 
+    /** Maximum index of Bell number that fits into a long.
+     * @since 2.2
+     */
+    public static final int MAX_BELL = 25;
+
     /** All long-representable factorials */
     static final long[] FACTORIALS = {
                        1l,                  1l,                   2l,
@@ -61,6 +66,11 @@ public final class CombinatoricsUtils {
      * </ul>
      */
     private static final FactorialLog FACTORIAL_LOG_NO_CACHE = FactorialLog.create();
+
+    /** Bell numbers.
+     * @since 2.2
+     */
+    static final AtomicReference<long[]> BELL = new AtomicReference<> (null);
 
     /** Private constructor (class contains only static methods). */
     private CombinatoricsUtils() {}
@@ -472,29 +482,48 @@ public final class CombinatoricsUtils {
      */
     public static long bellNumber(final int n) {
 
-        // special case
-        if (n == 0) {
-            return 1l;
+        if (n < 0) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, n, 0);
+        }
+        if (n > MAX_BELL) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE, n, MAX_BELL);
         }
 
-        // storage for one line of the Bell triangle
-        final long[] row = new long[n];
+        long[] bell = BELL.get();
 
-        // first row, with one element
-        row[0] = 1l;
+        if (bell == null) {
 
-        // iterative computation of rows
-        for (int i = 1; i < n; ++i) {
-            long previous = row[0];
-            row[0] = row[i - 1];
-            for (int j = 1; j <= i; ++j) {
-                long rj = row[j - 1] + previous;
-                previous = row[j];
-                row[j] = rj;
+            // the cache has never been initialized, compute the numbers using the Bell triangle
+            // storage for one line of the Bell triangle
+            bell = new long[MAX_BELL];
+            bell[0] = 1l;
+
+            final long[] row = new long[bell.length];
+            for (int k = 1; k < row.length; ++k) {
+
+                // first row, with one element
+                row[0] = 1l;
+
+                // iterative computation of rows
+                for (int i = 1; i < k; ++i) {
+                    long previous = row[0];
+                    row[0] = row[i - 1];
+                    for (int j = 1; j <= i; ++j) {
+                        long rj = row[j - 1] + previous;
+                        previous = row[j];
+                        row[j] = rj;
+                    }
+                }
+
+                bell[k] = row[k - 1];
+
             }
+
+            BELL.compareAndSet(null, bell);
+
         }
 
-        return row[n - 1];
+        return bell[n];
 
     }
 

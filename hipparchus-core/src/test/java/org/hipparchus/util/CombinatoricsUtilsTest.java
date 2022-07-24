@@ -362,6 +362,30 @@ public class CombinatoricsUtilsTest {
     }
 
     @Test
+    public void testBellNegative() {
+        try {
+            CombinatoricsUtils.bellNumber(-1);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_SMALL, miae.getSpecifier());
+            Assert.assertEquals(-1, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals( 0, ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
+
+    @Test
+    public void testBellLarge() {
+        try {
+            CombinatoricsUtils.bellNumber(26);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, miae.getSpecifier());
+            Assert.assertEquals(26, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(25, ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
+
+    @Test
     public void testPartitions0() {
         List<Integer> emptyList = Collections.emptyList();
         final List<List<Integer>[]> partitions = CombinatoricsUtils.partitions(emptyList).
