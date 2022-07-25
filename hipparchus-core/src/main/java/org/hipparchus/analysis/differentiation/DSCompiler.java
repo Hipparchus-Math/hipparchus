@@ -26,8 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
@@ -495,55 +493,112 @@ public class DSCompiler {
 
             if (rebaseIndirection.get(m) == null) {
                 // we need to create the rebaser from instance to m base variables
+
+                if (order == 0) {
+                    // at order 0, the rebaser just copies the function value
+                    final MultivariateCompositionMapper[][] rebaser  = new MultivariateCompositionMapper[][] {
+                        { new MultivariateCompositionMapper(1, 0, new int[0]) }
+                    };
+                    rebaseIndirection.set(m, rebaser);
+                    return rebaser;
+                }
+
+                // at order n > 0, the rebaser starts from the rebaser at order n-1
+                // so the first rows of the rebaser (corresponding to orders 0 to n-1)
+                // are just copies of the lower rebaser rows with indices adjusted,
+                // the last row corresponding to order n corresponds to a term ∂ⁿf/∂qⱼ⋯∂qₖ∂qₗ
+                // which can be written ∂(∂fⁿ⁻¹/∂qⱼ⋯∂qₖ)/∂qₗ, selecting any arbitrary
+                // qₗ with non-zero derivation order.
+                // the lower level rebaser already provides ∂fⁿ⁻¹/∂qⱼ⋯∂qₖ as a
+                // sum of products: Σᵢ ∂fⁿ⁻¹/∂pᵤ⋯∂pᵥ ∂pᵤ/∂qⱼ⋯∂qₖ ⋯ ∂pᵥ/∂qⱼ⋯∂qₖ
+                // so we have to differentiate this sum of products
+                //   - the term ∂fⁿ⁻¹/∂pᵤ⋯∂pᵥ depends on the p intermediate
+                //     variables and not on the q base variables, we use the composition formula
+                //     ∂g/∂qₗ = Σᵢ ∂g/∂pᵢ ∂pᵢ/∂qₗ
+                //   - the terms ∂pᵤ/∂qⱼ⋯∂qₖ are directly the intermediate variables p and we
+                //     know their derivatives with respect to the base variables q
                 final int baseSize = baseCompiler.getSize();
-                final MultivariateCompositionMapper[][] rebaser = new MultivariateCompositionMapper[baseSize][];
+                final MultivariateCompositionMapper[][] rebaser = initializeFromLowerRebaser(baseCompiler);
 
-                // value of the function (order 0 derivative)
-                rebaser[0] = new MultivariateCompositionMapper[] {
-                    new MultivariateCompositionMapper(1, 0, new int[0])
-                };
-
-                // derivatives at orders 1 and more
-                for (int i = 1; i < baseSize; ++i) {
+                // derivatives for last order
+                for (int k = 1; k < baseSize; ++k) {
                     // outer loop on rebased derivatives
                     // at each iteration of the loop we are dealing with one derivative
-                    // like for example ∂³f/∂qₗ∂qₘ∂qₙ, i.e. the components the rebaser produces
+                    // like for example ∂³f/∂qⱼ∂qₖ∂qₗ, i.e. the components the rebaser produces
+                    if (rebaser[k] == null) {
+                        // the entry has not been set earlier
+                        // it is an entry of the form ∂ⁿf/∂qⱼ⋯∂qₖ∂qₗ when n is max order
+                        final List<MultivariateCompositionMapper> row = new ArrayList<>();
 
-                    // total order of derivation for this component
-                    // if for example component i is ∂³f/∂qₗ∂qₘ∂qₙ, then rebaseOrder is 3
-                    final int rebasedOrder = IntStream.of(baseCompiler.derivativesOrders[i]).sum();
+                        // find a variable with respect to which we have a derivative
+                        final int[] orders = baseCompiler.derivativesOrders[k].clone();
+                        int qIndex = -1;
+                        for (int j = 0; j < orders.length; ++j) {
+                            if (orders[j] > 0) {
+                                qIndex = j;
+                                break;
+                            }
+                        }
 
-                    // find the indices of the qₖ base variables corresponding to ∂f/∂qₗ⋯∂qₙ
-                    final List<Integer> qIndices = baseCompiler.selectIndices(rebasedOrder, i);
+                        // find the entry corresponding to derivating one order less with respect to this variable
+                        // ∂fⁿ⁻¹/∂qⱼ⋯∂qₖ
+                        orders[qIndex]--;
+                        final MultivariateCompositionMapper[] lowerRow =
+                                        rebaser[baseCompiler.getPartialDerivativeIndex(orders)];
 
-                    final List<MultivariateCompositionMapper> row = new ArrayList<>();
+                        // apply recursion formula
+                        for (int i = 0; i < parameters; ++i) {
 
-                    // rebased derivatives ∂f/∂q at order o depend on original derivatives ∂f/∂p at orders 1 to o
-                    // for example, third order derivatives are:
-                    // ∂³f/∂qₗ∂qₘ∂qₙ = Σᵢⱼₖ ∂³f/∂pᵢ∂pⱼ∂pₖ ∂pᵢ/∂qₗ ∂pⱼ/∂qₘ ∂pₖ/∂qₙ
-                    //               + Σᵢⱼ  ∂²f/∂pᵢ∂pⱼ (∂²pᵢ/∂qₗ∂qₘ ∂pj/∂qₙ + ∂²pᵢ/∂qₘ∂qₙ ∂pj/∂qₗ + ∂²pᵢ/∂qₘ∂qₗ ∂pj/∂qₘ)
-                    //               + Σᵢ   ∂f/∂pᵢ ∂³pᵢ/∂qₗ∂qₘ∂qₙ
-                    for (int originalOrder = 1; originalOrder <= rebasedOrder; ++originalOrder) {
-                        for (final int dsIndex : selectOrder(originalOrder)) {
-                            // inner loop on original derivatives
-                            // at each iteration of the loop we are dealing with one derivative
-                            // like for example ∂²f/∂pᵢ∂pⱼ, i.e. the components the rebaser consumes
+                            for (final MultivariateCompositionMapper lowerTerm : lowerRow) {
 
-                            // find the indices of the pⱼ intermediate variables corresponding to ∂f/∂pᵢ⋯∂pⱼ
-                            final List<Integer> pIndices = selectIndices(originalOrder, dsIndex);
+                                // differentiate the term ∂fⁿ⁻¹/∂pᵤ⋯∂pᵥ with respect to pi
+                                final int[] termOrders = derivativesOrders[lowerTerm.dsIndex].clone();
+                                termOrders[i]++;
+                                final int coeff   = lowerTerm.getCoeff();
 
-                            // find the products ∂pᵢ/∂qₘ⋯∂qₙ ⋯ ∂pⱼ/∂qₘ⋯∂qₙ to be combined with ∂f/∂pᵢ⋯∂pⱼ
-                            for (final int[] productIndices : generateDerivativesCombinations(baseCompiler, pIndices, qIndices)) {
-                                final MultivariateCompositionMapper term =
-                                                new MultivariateCompositionMapper(1, dsIndex, productIndices);
-                                term.sort();
-                                row.add(term);
+                                // multiply by ∂pᵢ/∂qₗ
+                                final int fDSIndex = getPartialDerivativeIndex(termOrders);
+                                final int[] productIndicesF = new int[lowerTerm.productIndices.length + 1];
+                                System.arraycopy(lowerTerm.productIndices, 0, productIndicesF, 0, lowerTerm.productIndices.length);
+                                final int[] qOrders = new int[parameters];
+                                qOrders[qIndex] = 1;
+                                productIndicesF[productIndicesF.length - 1] = i * baseSize + getPartialDerivativeIndex(qOrders);
+
+                                final MultivariateCompositionMapper termF =
+                                                new MultivariateCompositionMapper(coeff, fDSIndex, productIndicesF);
+                                termF.sort();
+                                row.add(termF);
+
+                                // differentiate the products ∂p/∂q
+                                for (int j = 0; j < lowerTerm.productIndices.length; ++j) {
+
+                                    // get derivation orders of ∂p/∂q
+                                    final int[] productIndicesP     = lowerTerm.productIndices.clone();
+                                    final int   pIndex              = productIndicesP[j] / baseSize;
+                                    final int   pDSIndex            = productIndicesP[j] % baseSize;
+                                    final int[] pOrders             = baseCompiler.getPartialDerivativeOrders(pDSIndex);
+
+                                    // derive once more with respect to the selected q
+                                    pOrders[qIndex]++;
+                                    final int   pDSIndexHigherOrder = baseCompiler.getPartialDerivativeIndex(pOrders);
+                                    productIndicesP[j]              = pIndex * baseSize + pDSIndexHigherOrder;
+
+                                    // create new term
+                                    final MultivariateCompositionMapper termP =
+                                                    new MultivariateCompositionMapper(coeff, lowerTerm.dsIndex, productIndicesP);
+                                    termP.sort();
+                                    row.add(termP);
+
+                                }
+
                             }
 
                         }
-                    }
 
-                    rebaser[i] = combineSimilarTerms(row);
+                        // simplifies and store the completed entry
+                        rebaser[k] = combineSimilarTerms(row);
+
+                    }
 
                 }
 
@@ -554,6 +609,50 @@ public class DSCompiler {
             return rebaseIndirection.get(m);
 
         }
+    }
+
+    /** Initialize a rebaser by copying the rules from a lower rebaser.
+     * @param baseCompiler compiler associated with the low level parameter functions
+     * @return rebaser with rules up to order - 1 copied (with indices adjusted)
+     * @since 2.2
+     */
+    private MultivariateCompositionMapper[][] initializeFromLowerRebaser(final DSCompiler baseCompiler) {
+
+        // get the rebaser at order - 1
+        final DSCompiler lowerCompiler     = getCompiler(parameters, order - 1);
+        final DSCompiler lowerBaseCompiler = getCompiler(baseCompiler.parameters, order - 1);
+        final int        lowerBaseSize     = lowerBaseCompiler.getSize();
+        final MultivariateCompositionMapper[][] lowerRebaser = lowerCompiler.getRebaser(lowerBaseCompiler);
+
+        // allocate array for rebaser at current order
+        final int baseSize = baseCompiler.getSize();
+        final MultivariateCompositionMapper[][] rebaser = new MultivariateCompositionMapper[baseSize][];
+
+        // copy the rebasing rules for orders 0 to order - 1, adjusting indices
+        for (int i = 0; i < lowerRebaser.length; ++i) {
+            final int index = convertIndex(i, lowerCompiler.parameters, lowerCompiler.derivativesOrders,
+                                           parameters, order, sizes);
+            rebaser[index] = new MultivariateCompositionMapper[lowerRebaser[i].length];
+            for (int j = 0; j < rebaser[index].length; ++j) {
+                final int coeff  = lowerRebaser[i][j].getCoeff();
+                final int dsIndex = convertIndex(lowerRebaser[i][j].dsIndex,
+                                                 lowerCompiler.parameters, lowerCompiler.derivativesOrders,
+                                                 parameters, order, sizes);
+                final int[] productIndices = new int[lowerRebaser[i][j].productIndices.length];
+                for (int k = 0; k < productIndices.length; ++k) {
+                    final int pIndex      = lowerRebaser[i][j].productIndices[k] / lowerBaseSize;
+                    final int baseDSIndex = lowerRebaser[i][j].productIndices[k] % lowerBaseSize;
+                    productIndices[k] = pIndex * baseSize +
+                                        convertIndex(baseDSIndex,
+                                                     lowerBaseCompiler.parameters, lowerBaseCompiler.derivativesOrders,
+                                                     baseCompiler.parameters, baseCompiler.order, baseCompiler.sizes);
+                }
+                rebaser[index][j] = new MultivariateCompositionMapper(coeff, dsIndex, productIndices);
+            }
+        }
+
+        return rebaser;
+
     }
 
     /** Get the index of a partial derivative in the array.
@@ -673,84 +772,6 @@ public class DSCompiler {
      */
     public int[] getPartialDerivativeOrders(final int index) {
         return derivativesOrders[index].clone();
-    }
-
-    /** Select derivatives with a specified sum of derivation orders.
-     * @param sum desired sum of derivation orders
-     * @return indices in the partial derivatives array
-     * @since 2.2
-     */
-    private List<Integer> selectOrder(final int sum) {
-        return IntStream.
-               range(0, getSize()).
-               filter(i ->  IntStream.of(derivativesOrders[i]).sum() == sum).
-               collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-    }
-
-    /** Select indices of derivation variables for a given partial derivative.
-     * @param partialOrder order of the partial derivative
-     * @param index index of the derivative in the partial derivatives array
-     * @return indices of variables with respect to which the derivative is computed
-     * @since 2.2
-     */
-    private List<Integer> selectIndices(final int partialOrder, final int index) {
-        final List<Integer> indices = new ArrayList<>(partialOrder);
-        for (int i = 0; i < derivativesOrders[index].length; ++i) {
-            int o = derivativesOrders[index][i];
-            while (o-- > 0) {
-                indices.add(i);
-            }
-        }
-        return indices;
-    }
-
-    /** Generate all possible derivatives combinations between two sets of variables.
-     * <p>
-     * If for example we have two intermediate variables pᵤ, and pᵥ and we want derivation
-     * with respect to 3 base variable qₖ, qₗ, qₘ, we need to generate:
-     * ((∂pᵤ/∂qₘ, ∂²pᵥ/∂qₖ∂qₗ), (∂pᵤ/∂qₖ, ∂²pᵥ/∂qₗ∂qₘ), (∂pᵤ/∂qₗ, ∂²pᵥ/∂qₖ∂qₘ),
-     *  (∂²pᵤ/∂qₖ∂qₗ, ∂pᵥ/∂qₘ), (∂²pᵤ/∂qₗ∂qₘ, ∂pᵥ/∂qₖ), (∂²pᵤ/∂qₖ∂qₘ, ∂pᵥ/∂qₗ)).
-     * </p>
-     * @param baseCompiler compiler associated with the low level parameter functions
-     * @param pIndices indices of the intermediate variables pᵢ
-     * @param qIndices indices of the base variables qₖ
-     * @return indices of the products ∂pᵢ/∂qₘ⋯∂qₙ ⋯ ∂pⱼ/∂qₘ⋯∂qₙ
-     * @since 2.2
-     */
-    private static List<int[]> generateDerivativesCombinations(final DSCompiler baseCompiler,
-                                                               final List<Integer> pIndices,
-                                                               final List<Integer> qIndices) {
-
-        final int baseSize = baseCompiler.getSize();
-        final List<int[]> productsList = new ArrayList<>();
-
-        // partitions of the base variables qₖ among the intermediate variables pᵢ
-        final List<List<Integer>[]> qPartitions =
-                        CombinatoricsUtils.
-                        partitions(qIndices).
-                        filter(partition -> partition.length == pIndices.size()).
-                        collect(Collectors.toList());
-
-        // perform Cartesian product of permutations and partitions
-        CombinatoricsUtils.
-        permutations(pIndices).
-        forEach(permutation -> {
-            for (int i = 0; i < qPartitions.size(); ++i) {
-                final int pIndex = pIndices.get(i);
-                final List<Integer>[] partition = qPartitions.get(i);
-                final int[] indices = new int[partition.length];
-                for (int j = 0; j < indices.length; ++j) {
-                    // find the index of ∂²pᵤ/∂qₖ⋯∂qₘ
-                    final int[] orders = new int[baseCompiler.parameters];
-                    partition[j].forEach(qIndex -> orders[qIndex]++);
-                    indices[j] = pIndex * baseSize + baseCompiler.getPartialDerivativeIndex(orders);
-                }
-                productsList.add(indices);
-            }
-        });
-
-        return productsList;
-
     }
 
     /** Get the number of free parameters.
