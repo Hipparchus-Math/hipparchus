@@ -30,6 +30,7 @@ import org.hipparchus.linear.RealVector;
  * </p>
  * @see "E. A. Wan and R. Van der Merwe, The unscented Kalman filter for nonlinear estimation,
  *       in Proc. Symp. Adaptive Syst. Signal Process., Commun. Contr., Lake Louise, AB, Canada, Oct. 2000."
+ * @since 2.2
  */
 public class MerweUnscentedTransform extends AbstractUnscentedTransform {
 

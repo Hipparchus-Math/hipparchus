@@ -29,6 +29,7 @@ import org.hipparchus.linear.RealVector;
  * @param <T> the type of the measurements
  * @see UnscentedKalmanFilter
  * @see org.hipparchus.filtering.kalman.unscented.UnscentedProcess
+ * @since 2.2
  */
 public interface UnscentedProcess<T extends Measurement>  {
 

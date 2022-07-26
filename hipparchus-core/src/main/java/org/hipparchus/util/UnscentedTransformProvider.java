@@ -21,6 +21,7 @@ import org.hipparchus.linear.RealVector;
 
 /**
  * Provider for unscented transform.
+ * @since 2.2
  */
 public interface UnscentedTransformProvider {
 

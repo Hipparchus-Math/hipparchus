@@ -30,6 +30,7 @@ import org.hipparchus.linear.RealVector;
  * </p>
  * @see "S. J. Julier and J. K. Uhlmann. A New Extension of the Kalman Filter to Nonlinear Systems.
  *       Proc. SPIE 3068, Signal Processing, Sensor Fusion, and Target Recognition VI, 182 (July 28, 1997)"
+ * @since 2.2
  */
 public class JulierUnscentedTransform extends AbstractUnscentedTransform {
 

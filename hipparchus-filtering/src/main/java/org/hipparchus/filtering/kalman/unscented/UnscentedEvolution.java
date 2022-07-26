@@ -22,6 +22,7 @@ import org.hipparchus.linear.RealVector;
 /**
  * Container for {@link UnscentedProcess unscented process} evolution data.
  * @see UnscentedProcess
+ * @since 2.2
  */
 public class UnscentedEvolution {
 

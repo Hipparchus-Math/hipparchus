@@ -25,6 +25,7 @@ import org.hipparchus.linear.SemiDefinitePositiveCholeskyDecomposition;
 
 /**
  * Base class for unscented transform providers.
+ * @since 2.2
  */
 public abstract class AbstractUnscentedTransform implements UnscentedTransformProvider {
 

@@ -36,6 +36,7 @@ import org.hipparchus.util.UnscentedTransformProvider;
  * @see "Wan, E. A., & Van Der Merwe, R. (2000, October). The unscented Kalman filter for nonlinear estimation.
  *       In Proceedings of the IEEE 2000 Adaptive Systems for Signal Processing, Communications, and Control Symposium
  *       (Cat. No. 00EX373) (pp. 153-158)"
+ * @since 2.2
  */
 public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilter<T> {
 

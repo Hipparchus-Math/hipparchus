@@ -34,6 +34,7 @@ import org.hipparchus.util.FastMath;
  * @see "J. Hartikainen, A. Solin, and S. Särkkä. Optimal ﬁltering with Kalman ﬁlters and smoothers,
  *       Dept. of Biomedica Engineering and Computational Sciences, Aalto University School of Science, Aug. 2011."
  *
+ * @since 2.2 
  */
 public class SemiDefinitePositiveCholeskyDecomposition {
 
