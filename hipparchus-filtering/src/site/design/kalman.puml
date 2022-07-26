@@ -23,6 +23,7 @@
   skinparam NoteBorderColor       #691616
   skinparam NoteFontColor         #691616
   skinparam ClassFontSize         11
+  skinparam linetype              ortho
 
   package org.hipparchus.filtering.kalman #ECEBD8 {
 
@@ -91,6 +92,27 @@
 
       }
 
+      package unscented #DDEBD8 {
+          class UnscentedEvolution {
+            +getCurrentMeasurements()
+            +getCurrentTime()
+            +getCurrentStates()
+            +getProcessNoiseMatrix()
+          }
+
+          interface "UnscentedProcess<T extends Measurement>" as UnscentedProcess_T {
+            +getEvolution(previousTime, sigmaPoints, measurement)
+            +getInnovation(measurement, predictedMeasurement, predictedState, innovationCovarianceMatrix)
+          }
+
+          class "UnscentedKalmanFilter<T extends Measurement>" as UnscentedKalmanFilter_T
+
+          UnscentedProcess_T    "1" <--o UnscentedKalmanFilter_T : estimate
+          UnscentedProcess_T --> UnscentedEvolution : generate
+          UnscentedKalmanFilter_T ..|> KalmanFilter_T
+          UnscentedEvolution <-left- UnscentedKalmanFilter_T
+
+      }
 
   }
 
@@ -106,6 +128,13 @@
     class MyNonLinearMeasurement #EAE6F7/B9B3D2
     MyNonLinearMeasurement <-left- MyNonLinearProcess
     MyNonLinearProcess ..|> NonLinearProcess_T
+  }
+
+  package user.application.unscented #F3EDF7 {
+    class MyUnscentedProcess #EAE6F7/B9B3D2
+    class MyUnscentedMeasurement #EAE6F7/B9B3D2
+    MyUnscentedMeasurement <-left- MyUnscentedProcess
+    MyUnscentedProcess ..|> UnscentedProcess_T
   }
 
 @enduml
