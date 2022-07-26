@@ -141,7 +141,7 @@ public abstract class FieldJacobiElliptic<T extends CalculusFieldElement<T>> {
      */
     public T arccn(final T x) {
         // p = c, q = n, r = d, see DLMF 19.25.29 for evaluating Δ⁡(q, p) and Δ⁡(r, q)
-        return arcpq(x, x.getField().getOne(), getM().negate());
+        return arcpqNoDivision(x, x.getField().getOne(), getM().negate());
     }
 
     /** Evaluate inverse of Jacobi elliptic function cn.
@@ -160,7 +160,7 @@ public abstract class FieldJacobiElliptic<T extends CalculusFieldElement<T>> {
      */
     public T arcdn(final T x) {
         // p = d, q = n, r = c, see DLMF 19.25.29 for evaluating Δ⁡(q, p) and Δ⁡(r, q)
-        return arcpq(x, getM(), x.getField().getOne().negate());
+        return arcpqNoDivision(x, getM(), x.getField().getOne().negate());
     }
 
     /** Evaluate inverse of Jacobi elliptic function dn.
@@ -357,7 +357,9 @@ public abstract class FieldJacobiElliptic<T extends CalculusFieldElement<T>> {
         // see equation 19.25.32 in Digital Library of Mathematical Functions
         // https://dlmf.nist.gov/19.25.E32
         final T x2       = x.multiply(x);
-        return FastMath.copySign(CarlsonEllipticIntegral.rF(x2, x2.add(deltaQP), x2.add(deltaRP)), x);
+        final T rf       = CarlsonEllipticIntegral.rF(x2, x2.add(deltaQP), x2.add(deltaRP));
+        return FastMath.copySign(1.0, rf.getReal()) * FastMath.copySign(1.0, x.getReal()) < 0 ?
+               rf.negate() : rf;
     }
 
     /** Evaluate inverse of Jacobi elliptic function sp.
@@ -394,11 +396,37 @@ public abstract class FieldJacobiElliptic<T extends CalculusFieldElement<T>> {
         // https://dlmf.nist.gov/19.25.E34
         final T x2       = x.multiply(x);
         final T w        = x2.subtract(1).negate().divide(deltaQP);
-        final T positive = FastMath.sqrt(w).
-                           multiply(CarlsonEllipticIntegral.rF(x2,
-                                                               x.getField().getOne(),
-                                                               deltaRQ.multiply(w).add(1)));
+        final T rf       = CarlsonEllipticIntegral.rF(x2, x.getField().getOne(), deltaRQ.multiply(w).add(1));
+        final T positive = w.sqrt().multiply(rf);
         return x.getReal() < 0 ? LegendreEllipticIntegral.bigK(getM()).multiply(2).subtract(positive) : positive;
     }
+
+    /** Evaluate inverse of Jacobi elliptic function pq.
+     * <p>
+     * Here p, q, r are any permutation of the letters c, d, n.
+     * </p>
+     * <p>
+     * This computed the same thing as {@link #arcpq(CalculusFieldElement, CalculusFieldElement, CalculusFieldElement)}
+     * but uses the homogeneity property Rf(x, y, z) = Rf(ax, ay, az) / √a to get rid of the division
+     * by deltaRQ. This division induces problems in the complex case as it may lose the sign
+     * of zero for values exactly along the real or imaginary axis, hence perturbing branch cuts.
+     * </p>
+     * @param x value of Jacobi elliptic function {@code pq(u|m)}
+     * @param deltaQP Δ⁡(q, p) = q⁣s²⁡(u|m) - p⁣s²(u|m) (equation 19.5.28 of DLMF)
+     * @param deltaRQ Δ⁡(r, q) = r⁣s²⁡(u|m) - q⁣s²⁡(u|m) (equation 19.5.28 of DLMF)
+     * @return u such that {@code x=pq(u|m)}
+     * @since 2.1
+     */
+    private T arcpqNoDivision(final T x, final T deltaQP, final T deltaRQ) {
+        // see equation 19.25.34 in Digital Library of Mathematical Functions
+        // https://dlmf.nist.gov/19.25.E34
+        final T x2       = x.multiply(x);
+        final T wDeltaQP = x2.subtract(1).negate();
+        final T rf       = CarlsonEllipticIntegral.rF(x2.multiply(deltaQP), deltaQP, deltaRQ.multiply(wDeltaQP).add(deltaQP));
+        final T positive = wDeltaQP.sqrt().multiply(rf);
+        return FastMath.copySign(1.0, x.getReal()) < 0 ?
+               LegendreEllipticIntegral.bigK(getM()).multiply(2).subtract(positive) :
+               positive;
+     }
 
 }

@@ -22,9 +22,14 @@
 package org.hipparchus.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -328,6 +333,287 @@ public class CombinatoricsUtilsTest {
     public void testCheckBinomial3() {
         // OK (no exception thrown)
         CombinatoricsUtils.checkBinomial(5, 4);
+    }
+
+    @Test
+    public void testBellNumber() {
+        // OEIS A000110: http://oeis.org/A000110
+        Assert.assertEquals(             1l, CombinatoricsUtils.bellNumber( 0));
+        Assert.assertEquals(             1l, CombinatoricsUtils.bellNumber( 1));
+        Assert.assertEquals(             2l, CombinatoricsUtils.bellNumber( 2));
+        Assert.assertEquals(             5l, CombinatoricsUtils.bellNumber( 3));
+        Assert.assertEquals(            15l, CombinatoricsUtils.bellNumber( 4));
+        Assert.assertEquals(            52l, CombinatoricsUtils.bellNumber( 5));
+        Assert.assertEquals(           203l, CombinatoricsUtils.bellNumber( 6));
+        Assert.assertEquals(           877l, CombinatoricsUtils.bellNumber( 7));
+        Assert.assertEquals(          4140l, CombinatoricsUtils.bellNumber( 8));
+        Assert.assertEquals(         21147l, CombinatoricsUtils.bellNumber( 9));
+        Assert.assertEquals(        115975l, CombinatoricsUtils.bellNumber(10));
+        Assert.assertEquals(        678570l, CombinatoricsUtils.bellNumber(11));
+        Assert.assertEquals(       4213597l, CombinatoricsUtils.bellNumber(12));
+        Assert.assertEquals(      27644437l, CombinatoricsUtils.bellNumber(13));
+        Assert.assertEquals(     190899322l, CombinatoricsUtils.bellNumber(14));
+        Assert.assertEquals(    1382958545l, CombinatoricsUtils.bellNumber(15));
+        Assert.assertEquals(   10480142147l, CombinatoricsUtils.bellNumber(16));
+        Assert.assertEquals(   82864869804l, CombinatoricsUtils.bellNumber(17));
+        Assert.assertEquals(  682076806159l, CombinatoricsUtils.bellNumber(18));
+        Assert.assertEquals( 5832742205057l, CombinatoricsUtils.bellNumber(19));
+        Assert.assertEquals(51724158235372l, CombinatoricsUtils.bellNumber(20));
+    }
+
+    @Test
+    public void testBellNegative() {
+        try {
+            CombinatoricsUtils.bellNumber(-1);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_SMALL, miae.getSpecifier());
+            Assert.assertEquals(-1, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals( 0, ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
+
+    @Test
+    public void testBellLarge() {
+        try {
+            CombinatoricsUtils.bellNumber(26);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, miae.getSpecifier());
+            Assert.assertEquals(26, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(25, ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
+
+    @Test
+    public void testPartitions0() {
+        List<Integer> emptyList = Collections.emptyList();
+        final List<List<Integer>[]> partitions = CombinatoricsUtils.partitions(emptyList).
+                                                 collect(Collectors.toList());
+        Assert.assertEquals(1, partitions.size());
+        Assert.assertEquals(1, partitions.get(0).length);
+        Assert.assertEquals(0, partitions.get(0)[0].size());
+    }
+
+    @Test
+    public void testPartitions1() {
+        final List<List<Integer>[]> partitions = CombinatoricsUtils.partitions(Arrays.asList(1)).
+                                                 collect(Collectors.toList());
+        Assert.assertEquals(1, partitions.size());
+        Assert.assertEquals(1, partitions.get(0).length);
+        Assert.assertEquals(1, partitions.get(0)[0].size());
+    }
+
+    @Test
+    public void testPartitions4() {
+        final List<List<Integer>[]> partitions = CombinatoricsUtils.partitions(Arrays.asList(1, 2, 3, 4)).
+                                                 collect(Collectors.toList());
+        Assert.assertEquals(15, partitions.size());
+
+        Assert.assertEquals(1, partitions.get(0).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 2, 3, 4}, partitions.get(0)[0].toArray());
+
+        Assert.assertEquals(2, partitions.get(1).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 2, 3 }, partitions.get(1)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 4 },       partitions.get(1)[1].toArray());
+
+        Assert.assertEquals(2, partitions.get(2).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 2, 4 }, partitions.get(2)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 3 },       partitions.get(2)[1].toArray());
+
+        Assert.assertEquals(2, partitions.get(3).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 2 },    partitions.get(3)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 3, 4 },    partitions.get(3)[1].toArray());
+
+        Assert.assertEquals(3, partitions.get(4).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 2 },    partitions.get(4)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 3 },       partitions.get(4)[1].toArray());
+        Assert.assertArrayEquals(new Integer[] { 4 },       partitions.get(4)[2].toArray());
+
+        Assert.assertEquals(2, partitions.get(5).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 3, 4 }, partitions.get(5)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 2 },       partitions.get(5)[1].toArray());
+
+        Assert.assertEquals(2, partitions.get(6).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 3 },    partitions.get(6)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 2, 4 },    partitions.get(6)[1].toArray());
+
+        Assert.assertEquals(3, partitions.get(7).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 3 },    partitions.get(7)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 2 },       partitions.get(7)[1].toArray());
+        Assert.assertArrayEquals(new Integer[] { 4 },       partitions.get(7)[2].toArray());
+
+        Assert.assertEquals(2, partitions.get(8).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 4 },    partitions.get(8)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 2, 3 },    partitions.get(8)[1].toArray());
+
+        Assert.assertEquals(2, partitions.get(9).length);
+        Assert.assertArrayEquals(new Integer[] { 1 },       partitions.get(9)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 2, 3, 4 }, partitions.get(9)[1].toArray());
+
+        Assert.assertEquals(3, partitions.get(10).length);
+        Assert.assertArrayEquals(new Integer[] { 1 },       partitions.get(10)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 2, 3 },    partitions.get(10)[1].toArray());
+        Assert.assertArrayEquals(new Integer[] { 4 },       partitions.get(10)[2].toArray());
+
+        Assert.assertEquals(3, partitions.get(11).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 4 },    partitions.get(11)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 2 },       partitions.get(11)[1].toArray());
+        Assert.assertArrayEquals(new Integer[] { 3 },       partitions.get(11)[2].toArray());
+
+        Assert.assertEquals(3, partitions.get(12).length);
+        Assert.assertArrayEquals(new Integer[] { 1 },       partitions.get(12)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 2, 4 },    partitions.get(12)[1].toArray());
+        Assert.assertArrayEquals(new Integer[] { 3 },       partitions.get(12)[2].toArray());
+
+        Assert.assertEquals(3, partitions.get(13).length);
+        Assert.assertArrayEquals(new Integer[] { 1 },       partitions.get(13)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 2 },       partitions.get(13)[1].toArray());
+        Assert.assertArrayEquals(new Integer[] { 3, 4},     partitions.get(13)[2].toArray());
+
+        Assert.assertEquals(4, partitions.get(14).length);
+        Assert.assertArrayEquals(new Integer[] { 1 },       partitions.get(14)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 2 },       partitions.get(14)[1].toArray());
+        Assert.assertArrayEquals(new Integer[] { 3 },       partitions.get(14)[2].toArray());
+        Assert.assertArrayEquals(new Integer[] { 4 },       partitions.get(14)[3].toArray());
+
+    }
+
+    @Test
+    public void testPartitions42() {
+        final List<List<Integer>[]> partitions = CombinatoricsUtils.partitions(Arrays.asList(1, 2, 3, 4)).
+                                                 filter(a -> a.length == 2).
+                                                 collect(Collectors.toList());
+        Assert.assertEquals(7, partitions.size());
+
+        Assert.assertEquals(2, partitions.get(0).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 2, 3 }, partitions.get(0)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 4 },       partitions.get(0)[1].toArray());
+
+        Assert.assertEquals(2, partitions.get(1).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 2, 4 }, partitions.get(1)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 3 },       partitions.get(1)[1].toArray());
+
+        Assert.assertEquals(2, partitions.get(2).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 2 },    partitions.get(2)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 3, 4 },    partitions.get(2)[1].toArray());
+
+        Assert.assertEquals(2, partitions.get(3).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 3, 4 }, partitions.get(3)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 2 },       partitions.get(3)[1].toArray());
+
+        Assert.assertEquals(2, partitions.get(4).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 3 },    partitions.get(4)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 2, 4 },    partitions.get(4)[1].toArray());
+
+        Assert.assertEquals(2, partitions.get(5).length);
+        Assert.assertArrayEquals(new Integer[] { 1, 4 },    partitions.get(5)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 2, 3 },    partitions.get(5)[1].toArray());
+
+        Assert.assertEquals(2, partitions.get(6).length);
+        Assert.assertArrayEquals(new Integer[] { 1 },       partitions.get(6)[0].toArray());
+        Assert.assertArrayEquals(new Integer[] { 2, 3, 4 }, partitions.get(6)[1].toArray());
+
+    }
+
+    @Test
+    public void testPartitionsCount() {
+        for (int i = 0; i < 12; ++i) {
+            List<Integer> list = IntStream.range(0, i).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+            long partitionsCount = CombinatoricsUtils.partitions(list).count();
+            Assert.assertEquals(CombinatoricsUtils.bellNumber(i), partitionsCount);
+        }
+    }
+
+    @Test
+    public void testExhaustedPartitionsCount() {
+
+        PartitionsIterator<Integer> iterator = new PartitionsIterator<>(Arrays.asList(1, 2, 3));
+
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(1, iterator.next().length);
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(2, iterator.next().length);
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(2, iterator.next().length);
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(2, iterator.next().length);
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(3, iterator.next().length);
+
+        Assert.assertFalse(iterator.hasNext());
+        try {
+            iterator.next();
+            Assert.fail("an exception should have been thrown");
+        } catch (NoSuchElementException e) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testPermutations0() {
+        List<Integer> emptyList = Collections.emptyList();
+        final List<List<Integer>> permutations = CombinatoricsUtils.permutations(emptyList).
+                                                 collect(Collectors.toList());
+        Assert.assertEquals(1, permutations.size());
+        Assert.assertEquals(0, permutations.get(0).size());
+    }
+
+    @Test
+    public void testPermutations1() {
+        final List<List<Integer>> permutations = CombinatoricsUtils.permutations(Arrays.asList(1)).
+                                                 collect(Collectors.toList());
+        Assert.assertEquals(1, permutations.size());
+        Assert.assertEquals(1, permutations.get(0).size());
+    }
+
+    @Test
+    public void testPermutations3() {
+        final List<List<Integer>> permutations = CombinatoricsUtils.permutations(Arrays.asList(1, 2, 3)).
+                                                 collect(Collectors.toList());
+        Assert.assertEquals(6, permutations.size());
+        Assert.assertArrayEquals(new Integer[] { 1, 2, 3 }, permutations.get(0).toArray(new Integer[0]));
+        Assert.assertArrayEquals(new Integer[] { 1, 3, 2 }, permutations.get(1).toArray(new Integer[0]));
+        Assert.assertArrayEquals(new Integer[] { 3, 1, 2 }, permutations.get(2).toArray(new Integer[0]));
+        Assert.assertArrayEquals(new Integer[] { 3, 2, 1 }, permutations.get(3).toArray(new Integer[0]));
+        Assert.assertArrayEquals(new Integer[] { 2, 3, 1 }, permutations.get(4).toArray(new Integer[0]));
+        Assert.assertArrayEquals(new Integer[] { 2, 1, 3 }, permutations.get(5).toArray(new Integer[0]));
+    }
+
+    @Test
+    public void testPermutationsCount() {
+        for (int i = 0; i < 10; ++i) {
+            List<Integer> list = IntStream.range(0, i).collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+            long permutationsCount = CombinatoricsUtils.permutations(list).count();
+            Assert.assertEquals(CombinatoricsUtils.factorial(i), permutationsCount);
+        }
+    }
+
+    @Test
+    public void testExhaustedPermutationsCount() {
+
+        PermutationsIterator<Integer> iterator = new PermutationsIterator<>(Arrays.asList(1, 2, 3));
+
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(3, iterator.next().size());
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(3, iterator.next().size());
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(3, iterator.next().size());
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(3, iterator.next().size());
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(3, iterator.next().size());
+        Assert.assertTrue(iterator.hasNext());
+        Assert.assertEquals(3, iterator.next().size());
+
+        Assert.assertFalse(iterator.hasNext());
+        try {
+            iterator.next();
+            Assert.fail("an exception should have been thrown");
+        } catch (NoSuchElementException e) {
+            // expected
+        }
     }
 
     /**

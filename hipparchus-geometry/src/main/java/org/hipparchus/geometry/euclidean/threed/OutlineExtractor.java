@@ -170,7 +170,6 @@ public class OutlineExtractor {
         private void addContribution(final SubHyperplane<Euclidean3D> facet) {
 
             // extract the vertices of the facet
-            @SuppressWarnings("unchecked")
             final AbstractSubHyperplane<Euclidean3D, Euclidean2D> absFacet =
                 (AbstractSubHyperplane<Euclidean3D, Euclidean2D>) facet;
             final Plane plane    = (Plane) facet.getHyperplane();

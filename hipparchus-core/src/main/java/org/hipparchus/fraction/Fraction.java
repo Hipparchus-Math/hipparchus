@@ -244,7 +244,7 @@ public class Fraction
 
     /** Generate a {@link Stream stream} of convergents from a real number.
      * @param value value to approximate
-     * @param maxConbvergents maximum number of convergents.
+     * @param maxConvergents maximum number of convergents.
      * @return stream of {@link Fraction} convergents approximating  {@code value}
      * @since 2.1
      */
@@ -276,10 +276,10 @@ public class Fraction
      * @return the pair of last element of the series of convergents and a boolean
      *         indicating if that element satisfies the specified convergent test
      */
-    public static Pair<Fraction, Boolean> convergent(double value, int maxConvergents, ConvergenceTest test) {
+    public static Pair<Fraction, Boolean> convergent(double value, int maxConvergents, ConvergenceTest convergenceTest) {
         Pair<ConvergenceStep, Boolean> converged = convergent(value, maxConvergents, s -> {
             assertNoIntegerOverflow(s, value);
-            return test.test((int) s.getNumerator(), (int) s.getDenominator());
+            return convergenceTest.test((int) s.getNumerator(), (int) s.getDenominator());
         });
         return Pair.create(STEP_TO_FRACTION.apply(converged.getKey()), converged.getValue());
     }
@@ -287,7 +287,7 @@ public class Fraction
     /** Create a convergent-steps to approximate the given value.
      * @param value           value to approximate
      * @param maxConvergents  maximum number of convergents to examine
-     * @param convergenceTest the test if the series has converged at a step
+     * @param convergenceTests the test if the series has converged at a step
      * @return the pair of last element of the series of convergents and a boolean
      *         indicating if that element satisfies the specified convergent test
      */

@@ -83,7 +83,6 @@ class EdgesWithNodeInfoBuilder implements BSPTreeVisitor<Sphere2D> {
     private void addContribution(final SubHyperplane<Sphere2D> sub, final BSPTree<Sphere2D> node,
                                  final Iterable<BSPTree<Sphere2D>> splitters,
                                  final boolean reversed) {
-        @SuppressWarnings("unchecked")
         final AbstractSubHyperplane<Sphere2D, Sphere1D> absSub =
                         (AbstractSubHyperplane<Sphere2D, Sphere1D>) sub;
         final Circle circle  = (Circle) sub.getHyperplane();

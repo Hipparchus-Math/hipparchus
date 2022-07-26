@@ -133,14 +133,14 @@ class ConvergentsIterator {
      *
      * @param value           value to approximate
      * @param maxConvergents  maximum number of convergents to examine
-     * @param convergenceTest the test if the series has converged at a step
+     * @param convergenceTests the test if the series has converged at a step
      * @return the pair of last element of the series of convergents and a boolean
      *         indicating if that element satisfies the specified convergent test
      */
-    static Pair<ConvergenceStep, Boolean> convergent(double value, int maxIterations,
+    static Pair<ConvergenceStep, Boolean> convergent(double value, int maxConvergents,
             Predicate<ConvergenceStep> convergenceTests) {
         ConvergenceStep step = ConvergenceStep.start(value);
-        for (int i = 1; i < maxIterations; i++) { // start performs first iteration
+        for (int i = 1; i < maxConvergents; i++) { // start performs first iteration
             if (convergenceTests.test(step)) {
                 return Pair.create(step, Boolean.TRUE);
             }
