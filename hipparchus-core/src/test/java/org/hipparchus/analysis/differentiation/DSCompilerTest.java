@@ -498,97 +498,141 @@ public class DSCompilerTest {
         // assuming f = f(p₀, p₁)
         //          p₀ = p₀(q₀, q₁, q₂)
         //          p₁ = p₁(q₀, q₁, q₂)
-        DSCompiler c22 = DSCompiler.getCompiler(2, 2);
-        DSCompiler c32 = DSCompiler.getCompiler(3, 2);
-        Object[][] rebaser = (Object[][]) getterMethod.invoke(c22, c32);
 
-        Assert.assertEquals(c32.getSize(), rebaser.length);
+        for (int order = 0; order < 4; ++order) {
 
-        // composition rule for function value
-        Object[] fRule = rebaser[c32.getPartialDerivativeIndex(0, 0)];
-        Assert.assertEquals(1, fRule.length);
-        Assert.assertEquals(1, ((Integer) coeffMethod.invoke(fRule[0])).intValue());
-        Assert.assertEquals(0, ((Integer) dsIndexField.get(fRule[0])).intValue());
-        Assert.assertEquals(0, ((int[]) productIndicesField.get(fRule[0])).length);
+            DSCompiler c2 = DSCompiler.getCompiler(2, order);
+            DSCompiler c3 = DSCompiler.getCompiler(3, order);
+            int baseSize = c3.getSize();
+            Object[][] rebaser = (Object[][]) getterMethod.invoke(c2, c3);
 
-        // composition rules for first derivatives
-        // ∂f/∂q₀        = ∂f/∂p₀ ∂p₀/∂q₀ + ∂f/∂p₁ ∂p₁/∂q₀
-        Object[] dFdQ0Rule = rebaser[c32.getPartialDerivativeIndex(1, 0, 0)];
-        Assert.assertEquals(2, dFdQ0Rule.length);
-        Assert.assertEquals(1, ((Integer) coeffMethod.invoke(dFdQ0Rule[0])).intValue());
-        Assert.assertEquals(c22.getPartialDerivativeIndex(1, 0), ((Integer) dsIndexField.get(dFdQ0Rule[0])).intValue());
-        Assert.assertEquals(1, ((int[]) productIndicesField.get(dFdQ0Rule[0])).length);
-        Assert.assertEquals(c32.getPartialDerivativeIndex(1, 0, 0), ((int[]) productIndicesField.get(dFdQ0Rule[0]))[0]);
-        Assert.assertEquals(1, ((Integer) coeffMethod.invoke(dFdQ0Rule[1])).intValue());
-        Assert.assertEquals(c22.getPartialDerivativeIndex(0, 1), ((Integer) dsIndexField.get(dFdQ0Rule[1])).intValue());
-        Assert.assertEquals(1, ((int[]) productIndicesField.get(dFdQ0Rule[1])).length);
-        Assert.assertEquals(c32.getPartialDerivativeIndex(1, 0, 0), ((int[]) productIndicesField.get(dFdQ0Rule[1]))[0]);
+            Assert.assertEquals(c3.getSize(), rebaser.length);
 
-        // ∂f/∂q₁        = ∂f/∂p₀ ∂p₀/∂q₁ + ∂f/∂p₁ ∂p₁/∂q₁
-        Object[] dFdQ1Rule = rebaser[c32.getPartialDerivativeIndex(0, 1, 0)];
-        Assert.assertEquals(2, dFdQ1Rule.length);
-        Assert.assertEquals(1, ((Integer) coeffMethod.invoke(dFdQ1Rule[0])).intValue());
-        Assert.assertEquals(c22.getPartialDerivativeIndex(1, 0), ((Integer) dsIndexField.get(dFdQ1Rule[0])).intValue());
-        Assert.assertEquals(1, ((int[]) productIndicesField.get(dFdQ1Rule[0])).length);
-        Assert.assertEquals(c32.getPartialDerivativeIndex(0, 1, 0), ((int[]) productIndicesField.get(dFdQ1Rule[0]))[0]);
-        Assert.assertEquals(1, ((Integer) coeffMethod.invoke(dFdQ1Rule[1])).intValue());
-        Assert.assertEquals(c22.getPartialDerivativeIndex(0, 1), ((Integer) dsIndexField.get(dFdQ1Rule[1])).intValue());
-        Assert.assertEquals(1, ((int[]) productIndicesField.get(dFdQ1Rule[1])).length);
-        Assert.assertEquals(c32.getPartialDerivativeIndex(0, 1, 0), ((int[]) productIndicesField.get(dFdQ1Rule[1]))[0]);
+            // composition rule for function value
+            Object[] fRule = rebaser[c3.getPartialDerivativeIndex(0, 0, 0)];
+            Assert.assertEquals(1, fRule.length);
+            Assert.assertEquals(1, ((Integer) coeffMethod.invoke(fRule[0])).intValue());
+            Assert.assertEquals(0, ((Integer) dsIndexField.get(fRule[0])).intValue());
+            Assert.assertEquals(0, ((int[]) productIndicesField.get(fRule[0])).length);
 
-        // ∂f/∂q₂        = ∂f/∂p₀ ∂p₀/∂q₂ + ∂f/∂p₁ ∂p₁/∂q₂
-        Object[] dFdQ2Rule = rebaser[c32.getPartialDerivativeIndex(0, 0, 1)];
-        Assert.assertEquals(2, dFdQ2Rule.length);
-        Assert.assertEquals(1, ((Integer) coeffMethod.invoke(dFdQ2Rule[0])).intValue());
-        Assert.assertEquals(c22.getPartialDerivativeIndex(1, 0), ((Integer) dsIndexField.get(dFdQ2Rule[0])).intValue());
-        Assert.assertEquals(1, ((int[]) productIndicesField.get(dFdQ2Rule[0])).length);
-        Assert.assertEquals(c32.getPartialDerivativeIndex(0, 0, 1), ((int[]) productIndicesField.get(dFdQ2Rule[0]))[0]);
-        Assert.assertEquals(1, ((Integer) coeffMethod.invoke(dFdQ2Rule[1])).intValue());
-        Assert.assertEquals(c22.getPartialDerivativeIndex(0, 1), ((Integer) dsIndexField.get(dFdQ2Rule[1])).intValue());
-        Assert.assertEquals(1, ((int[]) productIndicesField.get(dFdQ2Rule[1])).length);
-        Assert.assertEquals(c32.getPartialDerivativeIndex(0, 0, 1), ((int[]) productIndicesField.get(dFdQ2Rule[1]))[0]);
+            if (order > 0) {
+                // composition rules for first derivatives
 
-        
+                // ∂f/∂q₀        = ∂f/∂p₀ ∂p₀/∂q₀ + ∂f/∂p₁ ∂p₁/∂q₀
+                Object[] dFdQ0Rule = rebaser[c3.getPartialDerivativeIndex(1, 0, 0)];
+                Assert.assertEquals(2, dFdQ0Rule.length);
+                Assert.assertEquals(1, ((Integer) coeffMethod.invoke(dFdQ0Rule[0])).intValue());
+                Assert.assertEquals(c2.getPartialDerivativeIndex(1, 0), ((Integer) dsIndexField.get(dFdQ0Rule[0])).intValue());
+                Assert.assertEquals(1, ((int[]) productIndicesField.get(dFdQ0Rule[0])).length);
+                Assert.assertEquals(c3.getPartialDerivativeIndex(1, 0, 0), ((int[]) productIndicesField.get(dFdQ0Rule[0]))[0]);
+                Assert.assertEquals(1, ((Integer) coeffMethod.invoke(dFdQ0Rule[1])).intValue());
+                Assert.assertEquals(c2.getPartialDerivativeIndex(0, 1), ((Integer) dsIndexField.get(dFdQ0Rule[1])).intValue());
+                Assert.assertEquals(1, ((int[]) productIndicesField.get(dFdQ0Rule[1])).length);
+                Assert.assertEquals(baseSize + c3.getPartialDerivativeIndex(1, 0, 0), ((int[]) productIndicesField.get(dFdQ0Rule[1]))[0]);
 
-        // ∂²f/∂q₀²      = ∂²f/∂p₀² (∂p₀/∂q₀)² + 2 ∂²f/∂p₀∂p₁ ∂p₀/∂q₀ ∂p₁/∂q₀ + ∂²f/∂p₁² (∂p₁/∂q₀)²
-        //               + ∂f/∂p₀ ∂²p₀/∂q₀² + ∂f/∂p₁ ∂²p₁/∂q₀²
-        // ∂²f/∂q₁²      = ∂²f/∂p₀² (∂p₀/∂q₁)² + 2 ∂²f/∂p₀∂p₁ ∂p₀/∂q₁ ∂p₁/∂q₁ + ∂²f/∂p₁² (∂p₁/∂q₁)²
-        //               + ∂f/∂p₀ ∂²p₀/∂q₁² + ∂f/∂p₁ ∂²p₁/∂q₁²
-        // ∂²f/∂q₂²      = ∂²f/∂p₀² (∂p₀/∂q₂)² + 2 ∂²f/∂p₀∂p₁ ∂p₀/∂q₂ ∂p₁/∂q₂ + ∂²f/∂p₁² (∂p₁/∂q₂)²
-        //               + ∂f/∂p₀ ∂²p₀/∂q₂² + ∂f/∂p₁ ∂²p₁/∂q₂²
-        // ∂²f/∂q₀∂q₁    = ∂²f/∂p₀² ∂p₀/∂q₀ ∂p₀/∂q₁ + ∂²f/∂p₀∂p₁ (∂p₁/∂q₀ ∂p₀/∂q₁ + ∂p₀/∂q₀ ∂p₁/∂q₁) + ∂²f/∂p₁² ∂p₁/∂q₀ ∂p₁/∂q₁
-        //               + ∂f/∂p₀ ∂²p₀/∂q₀∂q₁ + ∂f/∂p₁ ∂²p₁/∂q₀∂q₁
-        // ∂²f/∂q₀∂q₂    = ∂²f/∂p₀² ∂p₀/∂q₀ ∂p₀/∂q₂ + ∂²f/∂p₀∂p₁ (∂p₁/∂q₀ ∂p₀/∂q₂ + ∂p₀/∂q₀ ∂p₁/∂q₂) + ∂²f/∂p₁² ∂p₁/∂q₀ ∂p₁/∂q₂
-        //               + ∂f/∂p₀ ∂²p₀/∂q₀∂q₂ + ∂f/∂p₁ ∂²p₁/∂q₀∂q₂
-        // ∂²f/∂q₁∂q₂    = ∂²f/∂p₀² ∂p₀/∂q₁ ∂p₀/∂q₂ + ∂²f/∂p₀∂p₁ (∂p₁/∂q₁ ∂p₀/∂q₂ + ∂p₀/∂q₁ ∂p₁/∂q₂) + ∂²f/∂p₁² ∂p₁/∂q₁ ∂p₁/∂q₂
-        //               + ∂f/∂p₀ ∂²p₀/∂q₁∂q₂ + ∂f/∂p₁ ∂²p₁/∂q₁∂q₂
+                // ∂f/∂q₁        = ∂f/∂p₀ ∂p₀/∂q₁ + ∂f/∂p₁ ∂p₁/∂q₁
+                Object[] dFdQ1Rule = rebaser[c3.getPartialDerivativeIndex(0, 1, 0)];
+                Assert.assertEquals(2, dFdQ1Rule.length);
+                Assert.assertEquals(1, ((Integer) coeffMethod.invoke(dFdQ1Rule[0])).intValue());
+                Assert.assertEquals(c2.getPartialDerivativeIndex(1, 0), ((Integer) dsIndexField.get(dFdQ1Rule[0])).intValue());
+                Assert.assertEquals(1, ((int[]) productIndicesField.get(dFdQ1Rule[0])).length);
+                Assert.assertEquals(c3.getPartialDerivativeIndex(0, 1, 0), ((int[]) productIndicesField.get(dFdQ1Rule[0]))[0]);
+                Assert.assertEquals(1, ((Integer) coeffMethod.invoke(dFdQ1Rule[1])).intValue());
+                Assert.assertEquals(c2.getPartialDerivativeIndex(0, 1), ((Integer) dsIndexField.get(dFdQ1Rule[1])).intValue());
+                Assert.assertEquals(1, ((int[]) productIndicesField.get(dFdQ1Rule[1])).length);
+                Assert.assertEquals(baseSize + c3.getPartialDerivativeIndex(0, 1, 0), ((int[]) productIndicesField.get(dFdQ1Rule[1]))[0]);
 
-        // ∂³f/∂q₀³      = ∂³f/∂p₀³    (∂p₀/∂q₀)³ + 3 ∂³f/∂p₀²∂p₁ (∂p₀/∂q₀)² ∂p₁/∂q₀ + 3 ∂³f/∂p₀∂p₁² ∂p₀/∂q₀ (∂p₁/∂q₀)² + ∂³f/∂p₁³ (∂p₁/∂q₀)³
-        //               + …
-        // ∂³f/∂q₁³      = ∂³f/∂p₀³    (∂p₀/∂q₁)³ + 3 ∂³f/∂p₀²∂p₁ (∂p₀/∂q₁)² ∂p₁/∂q₁ + 3 ∂³f/∂p₀∂p₁² ∂p₀/∂q₁ (∂p₁/∂q₁)² + ∂³f/∂p₁³ (∂p₁/∂q₁)³
-        //               + …
-        // ∂³f/∂q₂³      = ∂³f/∂p₀³    (∂p₀/∂q₂)³ + 3 ∂³f/∂p₀²∂p₁ (∂p₀/∂q₂)² ∂p₁/∂q₂ + 3 ∂³f/∂p₀∂p₁² ∂p₀/∂q₂ (∂p₁/∂q₂)² + ∂³f/∂p₁³ (∂p₁/∂q₂)³
-        //               + …
-        // ∂³f/∂q₀²∂q₁   = ∂³f/∂p₀³    (∂p₀/∂q₀)² ∂p₀/∂q₁ +
-        //                 ∂³f/∂p₀²∂p₁ ((∂p₀/∂q₀)² ∂p₁/∂q₁ + ∂p₀/∂q₀ ∂p₀/∂q₁ ∂p₁/∂q₀ + ∂p₀/∂q₀ ∂p₀/∂q₁ ∂p₁/∂q₀) +
-        //                 ∂³f/∂p₀∂p₁² (∂p₀/∂q₀ ∂p₁/∂q₀ ∂p₁/∂q₁ + ∂p₀/∂q₁ (∂p₁/∂q₀)² + ∂p₀/∂q₀ ∂p₁/∂q₀ ∂p₁/∂q₁) +
-        //                 ∂³f/∂p₁³    (∂p₁/∂q₀)² ∂p₁/∂q₁
-        //               + …
-        // ∂³f/∂q₀²∂q₂   = ∂³f/∂p₀³    (∂p₀/∂q₀)² ∂p₀/∂q₂ +
-        //                 ∂³f/∂p₀²∂p₁ ((∂p₀/∂q₀)² ∂p₁/∂q₂ + ∂p₀/∂q₀ ∂p₀/∂q₂ ∂p₁/∂q₀ + ∂p₀/∂q₀ ∂p₀/∂q₂ ∂p₁/∂q₀) +
-        //                 ∂³f/∂p₀∂p₁² (∂p₀/∂q₀ ∂p₁/∂q₀ ∂p₁/∂q₂ + ∂p₀/∂q₂ (∂p₁/∂q₀)² + ∂p₀/∂q₀ ∂p₁/∂q₀ ∂p₁/∂q₂) +
-        //                 ∂³f/∂p₁³    (∂p₁/∂q₀)² ∂p₁/∂q₂
-        //               + …
-        // ∂³f/∂q₁²∂q₂   = ∂³f/∂p₀³    (∂p₀/∂q₁)² ∂p₀/∂q₂ +
-        //                 ∂³f/∂p₀²∂p₁ ((∂p₀/∂q₁)² ∂p₁/∂q₂ + ∂p₀/∂q₁ ∂p₀/∂q₂ ∂p₁/∂q₁ + ∂p₀/∂q₁ ∂p₀/∂q₂ ∂p₁/∂q₁) +
-        //                 ∂³f/∂p₀∂p₁² (∂p₀/∂q₁ ∂p₁/∂q₁ ∂p₁/∂q₂ + ∂p₀/∂q₂ (∂p₁/∂q₁)² + ∂p₀/∂q₁ ∂p₁/∂q₁ ∂p₁/∂q₂) +
-        //                 ∂³f/∂p₁³    (∂p₁/∂q₁)² ∂p₁/∂q₂
-        //               + …
-        // ∂³f/∂q₀∂q₁∂q₂ = ∂³f/∂p₀³    ∂p₀/∂q₀ ∂p₀/∂q₁ ∂p₀/∂q₂ +
-        //                 ∂³f/∂p₀²∂p₁ (∂p₀/∂q₂ ∂p₀/∂q₀ ∂p₁/∂q₁ + ∂p₀/∂q₀ ∂p₀/∂q₁ ∂p₁/∂q₂ + ∂p₀/∂q₁ ∂p₀/∂q₂ ∂p₁/∂q₀) +
-        //                 ∂³f/∂p₀∂p₁² (∂p₀/∂q₂ ∂p₁/∂q₀ ∂p₁/∂q₁ + ∂p₀/∂q₁ ∂p₁/∂q₀ ∂p₁/∂q₂ + ∂p₀/∂q₀ ∂p₁/∂q₁ ∂p₁/∂q₂) +
-        //                 ∂³f/∂p₁³    ∂p₁/∂q₀ ∂p₁/∂q₁ ∂p₁/∂q₂
-        //               + …
+                // ∂f/∂q₂        = ∂f/∂p₀ ∂p₀/∂q₂ + ∂f/∂p₁ ∂p₁/∂q₂
+                Object[] dFdQ2Rule = rebaser[c3.getPartialDerivativeIndex(0, 0, 1)];
+                Assert.assertEquals(2, dFdQ2Rule.length);
+                Assert.assertEquals(1, ((Integer) coeffMethod.invoke(dFdQ2Rule[0])).intValue());
+                Assert.assertEquals(c2.getPartialDerivativeIndex(1, 0), ((Integer) dsIndexField.get(dFdQ2Rule[0])).intValue());
+                Assert.assertEquals(1, ((int[]) productIndicesField.get(dFdQ2Rule[0])).length);
+                Assert.assertEquals(c3.getPartialDerivativeIndex(0, 0, 1), ((int[]) productIndicesField.get(dFdQ2Rule[0]))[0]);
+                Assert.assertEquals(1, ((Integer) coeffMethod.invoke(dFdQ2Rule[1])).intValue());
+                Assert.assertEquals(c2.getPartialDerivativeIndex(0, 1), ((Integer) dsIndexField.get(dFdQ2Rule[1])).intValue());
+                Assert.assertEquals(1, ((int[]) productIndicesField.get(dFdQ2Rule[1])).length);
+                Assert.assertEquals(baseSize + c3.getPartialDerivativeIndex(0, 0, 1), ((int[]) productIndicesField.get(dFdQ2Rule[1]))[0]);
+
+            }
+
+            if (order > 1) {
+                // composition rules for second derivatives
+
+                // ∂²f/∂q₀²      = ∂²f/∂p₀² (∂p₀/∂q₀)² + 2 ∂²f/∂p₀∂p₁ ∂p₀/∂q₀ ∂p₁/∂q₀ + ∂²f/∂p₁² (∂p₁/∂q₀)²
+                //               + ∂f/∂p₀ ∂²p₀/∂q₀² + ∂f/∂p₁ ∂²p₁/∂q₀²
+                Object[] d2FdQ02Rule = rebaser[c3.getPartialDerivativeIndex(2, 0, 0)];
+                Assert.assertEquals(5, d2FdQ02Rule.length);
+                Assert.assertEquals(1, ((Integer) coeffMethod.invoke(d2FdQ02Rule[0])).intValue());
+                Assert.assertEquals(c2.getPartialDerivativeIndex(2, 0), ((Integer) dsIndexField.get(d2FdQ02Rule[0])).intValue());
+                Assert.assertEquals(2, ((int[]) productIndicesField.get(d2FdQ02Rule[0])).length);
+                Assert.assertEquals(c3.getPartialDerivativeIndex(1, 0, 0), ((int[]) productIndicesField.get(d2FdQ02Rule[0]))[0]);
+                Assert.assertEquals(c3.getPartialDerivativeIndex(1, 0, 0), ((int[]) productIndicesField.get(d2FdQ02Rule[0]))[1]);
+                Assert.assertEquals(2, ((Integer) coeffMethod.invoke(d2FdQ02Rule[1])).intValue());
+                Assert.assertEquals(c2.getPartialDerivativeIndex(1, 1), ((Integer) dsIndexField.get(d2FdQ02Rule[1])).intValue());
+                Assert.assertEquals(2, ((int[]) productIndicesField.get(d2FdQ02Rule[1])).length);
+                Assert.assertEquals(c3.getPartialDerivativeIndex(1, 0, 0), ((int[]) productIndicesField.get(d2FdQ02Rule[1]))[0]);
+                Assert.assertEquals(baseSize + c3.getPartialDerivativeIndex(1, 0, 0), ((int[]) productIndicesField.get(d2FdQ02Rule[1]))[1]);
+                Assert.assertEquals(1, ((Integer) coeffMethod.invoke(d2FdQ02Rule[2])).intValue());
+                Assert.assertEquals(c2.getPartialDerivativeIndex(0, 2), ((Integer) dsIndexField.get(d2FdQ02Rule[2])).intValue());
+                Assert.assertEquals(2, ((int[]) productIndicesField.get(d2FdQ02Rule[2])).length);
+                Assert.assertEquals(baseSize + c3.getPartialDerivativeIndex(1, 0, 0), ((int[]) productIndicesField.get(d2FdQ02Rule[2]))[0]);
+                Assert.assertEquals(baseSize + c3.getPartialDerivativeIndex(1, 0, 0), ((int[]) productIndicesField.get(d2FdQ02Rule[2]))[1]);
+                Assert.assertEquals(1, ((Integer) coeffMethod.invoke(d2FdQ02Rule[3])).intValue());
+                Assert.assertEquals(c2.getPartialDerivativeIndex(1, 0), ((Integer) dsIndexField.get(d2FdQ02Rule[3])).intValue());
+                Assert.assertEquals(1, ((int[]) productIndicesField.get(d2FdQ02Rule[3])).length);
+                Assert.assertEquals(c3.getPartialDerivativeIndex(2, 0, 0), ((int[]) productIndicesField.get(d2FdQ02Rule[3]))[0]);
+                Assert.assertEquals(1, ((Integer) coeffMethod.invoke(d2FdQ02Rule[4])).intValue());
+                Assert.assertEquals(c2.getPartialDerivativeIndex(0, 1), ((Integer) dsIndexField.get(d2FdQ02Rule[4])).intValue());
+                Assert.assertEquals(1, ((int[]) productIndicesField.get(d2FdQ02Rule[4])).length);
+                Assert.assertEquals(baseSize + c3.getPartialDerivativeIndex(2, 0, 0), ((int[]) productIndicesField.get(d2FdQ02Rule[4]))[0]);
+
+                // ∂²f/∂q₁²      = ∂²f/∂p₀² (∂p₀/∂q₁)² + 2 ∂²f/∂p₀∂p₁ ∂p₀/∂q₁ ∂p₁/∂q₁ + ∂²f/∂p₁² (∂p₁/∂q₁)²
+                //               + ∂f/∂p₀ ∂²p₀/∂q₁² + ∂f/∂p₁ ∂²p₁/∂q₁²
+                // ∂²f/∂q₂²      = ∂²f/∂p₀² (∂p₀/∂q₂)² + 2 ∂²f/∂p₀∂p₁ ∂p₀/∂q₂ ∂p₁/∂q₂ + ∂²f/∂p₁² (∂p₁/∂q₂)²
+                //               + ∂f/∂p₀ ∂²p₀/∂q₂² + ∂f/∂p₁ ∂²p₁/∂q₂²
+                // ∂²f/∂q₀∂q₁    = ∂²f/∂p₀² ∂p₀/∂q₀ ∂p₀/∂q₁ + ∂²f/∂p₀∂p₁ (∂p₁/∂q₀ ∂p₀/∂q₁ + ∂p₀/∂q₀ ∂p₁/∂q₁) + ∂²f/∂p₁² ∂p₁/∂q₀ ∂p₁/∂q₁
+                //               + ∂f/∂p₀ ∂²p₀/∂q₀∂q₁ + ∂f/∂p₁ ∂²p₁/∂q₀∂q₁
+                // ∂²f/∂q₀∂q₂    = ∂²f/∂p₀² ∂p₀/∂q₀ ∂p₀/∂q₂ + ∂²f/∂p₀∂p₁ (∂p₁/∂q₀ ∂p₀/∂q₂ + ∂p₀/∂q₀ ∂p₁/∂q₂) + ∂²f/∂p₁² ∂p₁/∂q₀ ∂p₁/∂q₂
+                //               + ∂f/∂p₀ ∂²p₀/∂q₀∂q₂ + ∂f/∂p₁ ∂²p₁/∂q₀∂q₂
+                // ∂²f/∂q₁∂q₂    = ∂²f/∂p₀² ∂p₀/∂q₁ ∂p₀/∂q₂ + ∂²f/∂p₀∂p₁ (∂p₁/∂q₁ ∂p₀/∂q₂ + ∂p₀/∂q₁ ∂p₁/∂q₂) + ∂²f/∂p₁² ∂p₁/∂q₁ ∂p₁/∂q₂
+                //               + ∂f/∂p₀ ∂²p₀/∂q₁∂q₂ + ∂f/∂p₁ ∂²p₁/∂q₁∂q₂
+
+            }
+
+            if (order > 2) {
+                // composition rules for third derivatives
+
+                // ∂³f/∂q₀³      = ∂³f/∂p₀³    (∂p₀/∂q₀)³ + 3 ∂³f/∂p₀²∂p₁ (∂p₀/∂q₀)² ∂p₁/∂q₀ + 3 ∂³f/∂p₀∂p₁² ∂p₀/∂q₀ (∂p₁/∂q₀)² + ∂³f/∂p₁³ (∂p₁/∂q₀)³
+                //               + …
+                // ∂³f/∂q₁³      = ∂³f/∂p₀³    (∂p₀/∂q₁)³ + 3 ∂³f/∂p₀²∂p₁ (∂p₀/∂q₁)² ∂p₁/∂q₁ + 3 ∂³f/∂p₀∂p₁² ∂p₀/∂q₁ (∂p₁/∂q₁)² + ∂³f/∂p₁³ (∂p₁/∂q₁)³
+                //               + …
+                // ∂³f/∂q₂³      = ∂³f/∂p₀³    (∂p₀/∂q₂)³ + 3 ∂³f/∂p₀²∂p₁ (∂p₀/∂q₂)² ∂p₁/∂q₂ + 3 ∂³f/∂p₀∂p₁² ∂p₀/∂q₂ (∂p₁/∂q₂)² + ∂³f/∂p₁³ (∂p₁/∂q₂)³
+                //               + …
+                // ∂³f/∂q₀²∂q₁   = ∂³f/∂p₀³    (∂p₀/∂q₀)² ∂p₀/∂q₁ +
+                //                 ∂³f/∂p₀²∂p₁ ((∂p₀/∂q₀)² ∂p₁/∂q₁ + ∂p₀/∂q₀ ∂p₀/∂q₁ ∂p₁/∂q₀ + ∂p₀/∂q₀ ∂p₀/∂q₁ ∂p₁/∂q₀) +
+                //                 ∂³f/∂p₀∂p₁² (∂p₀/∂q₀ ∂p₁/∂q₀ ∂p₁/∂q₁ + ∂p₀/∂q₁ (∂p₁/∂q₀)² + ∂p₀/∂q₀ ∂p₁/∂q₀ ∂p₁/∂q₁) +
+                //                 ∂³f/∂p₁³    (∂p₁/∂q₀)² ∂p₁/∂q₁
+                //               + …
+                // ∂³f/∂q₀²∂q₂   = ∂³f/∂p₀³    (∂p₀/∂q₀)² ∂p₀/∂q₂ +
+                //                 ∂³f/∂p₀²∂p₁ ((∂p₀/∂q₀)² ∂p₁/∂q₂ + ∂p₀/∂q₀ ∂p₀/∂q₂ ∂p₁/∂q₀ + ∂p₀/∂q₀ ∂p₀/∂q₂ ∂p₁/∂q₀) +
+                //                 ∂³f/∂p₀∂p₁² (∂p₀/∂q₀ ∂p₁/∂q₀ ∂p₁/∂q₂ + ∂p₀/∂q₂ (∂p₁/∂q₀)² + ∂p₀/∂q₀ ∂p₁/∂q₀ ∂p₁/∂q₂) +
+                //                 ∂³f/∂p₁³    (∂p₁/∂q₀)² ∂p₁/∂q₂
+                //               + …
+                // ∂³f/∂q₁²∂q₂   = ∂³f/∂p₀³    (∂p₀/∂q₁)² ∂p₀/∂q₂ +
+                //                 ∂³f/∂p₀²∂p₁ ((∂p₀/∂q₁)² ∂p₁/∂q₂ + ∂p₀/∂q₁ ∂p₀/∂q₂ ∂p₁/∂q₁ + ∂p₀/∂q₁ ∂p₀/∂q₂ ∂p₁/∂q₁) +
+                //                 ∂³f/∂p₀∂p₁² (∂p₀/∂q₁ ∂p₁/∂q₁ ∂p₁/∂q₂ + ∂p₀/∂q₂ (∂p₁/∂q₁)² + ∂p₀/∂q₁ ∂p₁/∂q₁ ∂p₁/∂q₂) +
+                //                 ∂³f/∂p₁³    (∂p₁/∂q₁)² ∂p₁/∂q₂
+                //               + …
+                // ∂³f/∂q₀∂q₁∂q₂ = ∂³f/∂p₀³    ∂p₀/∂q₀ ∂p₀/∂q₁ ∂p₀/∂q₂ +
+                //                 ∂³f/∂p₀²∂p₁ (∂p₀/∂q₂ ∂p₀/∂q₀ ∂p₁/∂q₁ + ∂p₀/∂q₀ ∂p₀/∂q₁ ∂p₁/∂q₂ + ∂p₀/∂q₁ ∂p₀/∂q₂ ∂p₁/∂q₀) +
+                //                 ∂³f/∂p₀∂p₁² (∂p₀/∂q₂ ∂p₁/∂q₀ ∂p₁/∂q₁ + ∂p₀/∂q₁ ∂p₁/∂q₀ ∂p₁/∂q₂ + ∂p₀/∂q₀ ∂p₁/∂q₁ ∂p₁/∂q₂) +
+                //                 ∂³f/∂p₁³    ∂p₁/∂q₀ ∂p₁/∂q₁ ∂p₁/∂q₂
+                //               + …
+
+            }
+
+        }
 
     }
 

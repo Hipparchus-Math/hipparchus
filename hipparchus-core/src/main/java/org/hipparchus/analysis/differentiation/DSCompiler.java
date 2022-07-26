@@ -506,14 +506,14 @@ public class DSCompiler {
                 // at order n > 0, the rebaser starts from the rebaser at order n-1
                 // so the first rows of the rebaser (corresponding to orders 0 to n-1)
                 // are just copies of the lower rebaser rows with indices adjusted,
-                // the last row corresponding to order n corresponds to a term ∂ⁿf/∂qⱼ⋯∂qₖ∂qₗ
+                // the last row corresponding to order n is a term ∂ⁿf/∂qⱼ⋯∂qₖ∂qₗ
                 // which can be written ∂(∂fⁿ⁻¹/∂qⱼ⋯∂qₖ)/∂qₗ, selecting any arbitrary
-                // qₗ with non-zero derivation order.
-                // the lower level rebaser already provides ∂fⁿ⁻¹/∂qⱼ⋯∂qₖ as a
+                // qₗ with non-zero derivation order as the base for recursion
+                // the lower level rebaser provides ∂fⁿ⁻¹/∂qⱼ⋯∂qₖ as a
                 // sum of products: Σᵢ ∂fⁿ⁻¹/∂pᵤ⋯∂pᵥ ∂pᵤ/∂qⱼ⋯∂qₖ ⋯ ∂pᵥ/∂qⱼ⋯∂qₖ
                 // so we have to differentiate this sum of products
-                //   - the term ∂fⁿ⁻¹/∂pᵤ⋯∂pᵥ depends on the p intermediate
-                //     variables and not on the q base variables, we use the composition formula
+                //   - the term ∂fⁿ⁻¹/∂pᵤ⋯∂pᵥ depends on the p intermediate variables,
+                //     not on the q base variables, so we use the composition formula
                 //     ∂g/∂qₗ = Σᵢ ∂g/∂pᵢ ∂pᵢ/∂qₗ
                 //   - the terms ∂pᵤ/∂qⱼ⋯∂qₖ are directly the intermediate variables p and we
                 //     know their derivatives with respect to the base variables q
@@ -527,7 +527,7 @@ public class DSCompiler {
                     // like for example ∂³f/∂qⱼ∂qₖ∂qₗ, i.e. the components the rebaser produces
                     if (rebaser[k] == null) {
                         // the entry has not been set earlier
-                        // it is an entry of the form ∂ⁿf/∂qⱼ⋯∂qₖ∂qₗ when n is max order
+                        // it is an entry of the form ∂ⁿf/∂qⱼ⋯∂qₖ∂qₗ where n is max order
                         final List<MultivariateCompositionMapper> row = new ArrayList<>();
 
                         // find a variable with respect to which we have a derivative
@@ -540,7 +540,7 @@ public class DSCompiler {
                             }
                         }
 
-                        // find the entry corresponding to derivating one order less with respect to this variable
+                        // find the entry corresponding to differentiating one order less with respect to this variable
                         // ∂fⁿ⁻¹/∂qⱼ⋯∂qₖ
                         orders[qIndex]--;
                         final MultivariateCompositionMapper[] lowerRow =
@@ -551,44 +551,12 @@ public class DSCompiler {
 
                             for (final MultivariateCompositionMapper lowerTerm : lowerRow) {
 
-                                // differentiate the term ∂fⁿ⁻¹/∂pᵤ⋯∂pᵥ with respect to pi
-                                final int[] termOrders = derivativesOrders[lowerTerm.dsIndex].clone();
-                                termOrders[i]++;
-                                final int coeff   = lowerTerm.getCoeff();
+                                // differentiate the term ∂fⁿ⁻¹/∂pᵤ⋯∂pᵥ part
+                                row.add(differentiateFPart(lowerTerm, i, qIndex, baseCompiler));
 
-                                // multiply by ∂pᵢ/∂qₗ
-                                final int fDSIndex = getPartialDerivativeIndex(termOrders);
-                                final int[] productIndicesF = new int[lowerTerm.productIndices.length + 1];
-                                System.arraycopy(lowerTerm.productIndices, 0, productIndicesF, 0, lowerTerm.productIndices.length);
-                                final int[] qOrders = new int[parameters];
-                                qOrders[qIndex] = 1;
-                                productIndicesF[productIndicesF.length - 1] = i * baseSize + getPartialDerivativeIndex(qOrders);
-
-                                final MultivariateCompositionMapper termF =
-                                                new MultivariateCompositionMapper(coeff, fDSIndex, productIndicesF);
-                                termF.sort();
-                                row.add(termF);
-
-                                // differentiate the products ∂p/∂q
+                                // differentiate the products ∂pᵤ/∂qⱼ⋯∂qₖ ⋯ ∂pᵥ/∂qⱼ⋯∂qₖ
                                 for (int j = 0; j < lowerTerm.productIndices.length; ++j) {
-
-                                    // get derivation orders of ∂p/∂q
-                                    final int[] productIndicesP     = lowerTerm.productIndices.clone();
-                                    final int   pIndex              = productIndicesP[j] / baseSize;
-                                    final int   pDSIndex            = productIndicesP[j] % baseSize;
-                                    final int[] pOrders             = baseCompiler.getPartialDerivativeOrders(pDSIndex);
-
-                                    // derive once more with respect to the selected q
-                                    pOrders[qIndex]++;
-                                    final int   pDSIndexHigherOrder = baseCompiler.getPartialDerivativeIndex(pOrders);
-                                    productIndicesP[j]              = pIndex * baseSize + pDSIndexHigherOrder;
-
-                                    // create new term
-                                    final MultivariateCompositionMapper termP =
-                                                    new MultivariateCompositionMapper(coeff, lowerTerm.dsIndex, productIndicesP);
-                                    termP.sort();
-                                    row.add(termP);
-
+                                    row.add(differentiateProductPart(lowerTerm, j, qIndex, baseCompiler));
                                 }
 
                             }
@@ -630,8 +598,11 @@ public class DSCompiler {
 
         // copy the rebasing rules for orders 0 to order - 1, adjusting indices
         for (int i = 0; i < lowerRebaser.length; ++i) {
-            final int index = convertIndex(i, lowerCompiler.parameters, lowerCompiler.derivativesOrders,
-                                           parameters, order, sizes);
+            if (i >= lowerBaseCompiler.derivativesOrders.length) {
+                System.out.println("gotcha!");
+            }
+            final int index = convertIndex(i, lowerBaseCompiler.parameters, lowerBaseCompiler.derivativesOrders,
+                                           baseCompiler.parameters, baseCompiler.order, baseCompiler.sizes);
             rebaser[index] = new MultivariateCompositionMapper[lowerRebaser[i].length];
             for (int j = 0; j < rebaser[index].length; ++j) {
                 final int coeff  = lowerRebaser[i][j].getCoeff();
@@ -652,6 +623,69 @@ public class DSCompiler {
         }
 
         return rebaser;
+
+    }
+
+    /** Differentiate the ∂fⁿ⁻¹/∂pᵤ⋯∂pᵥ part of a {@link MultivariateCompositionMapper}.
+     * @param lowerTerm term to differentiate
+     * @param i index of the intermediate variable pᵢ
+     * @param qIndex index of the qₗ variable
+     * @param baseCompiler compiler associated with the low level parameter functions
+     * @return ∂fⁿ⁻¹/∂pᵤ⋯∂pᵥ
+     */
+    private MultivariateCompositionMapper differentiateFPart(final MultivariateCompositionMapper lowerTerm,
+                                                             final int i, final int qIndex,
+                                                             final DSCompiler baseCompiler) {
+
+        // differentiate the term ∂fⁿ⁻¹/∂pᵤ⋯∂pᵥ with respect to pi
+        final int[] termOrders = derivativesOrders[lowerTerm.dsIndex].clone();
+        termOrders[i]++;
+
+        // multiply by ∂pᵢ/∂qₗ
+        final int fDSIndex = getPartialDerivativeIndex(termOrders);
+        final int[] productIndicesF = new int[lowerTerm.productIndices.length + 1];
+        System.arraycopy(lowerTerm.productIndices, 0, productIndicesF, 0, lowerTerm.productIndices.length);
+        final int[] qOrders = new int[baseCompiler.parameters];
+        qOrders[qIndex] = 1;
+        productIndicesF[productIndicesF.length - 1] = i * baseCompiler.getSize() +
+                                                      baseCompiler.getPartialDerivativeIndex(qOrders);
+
+        // generate the differentiated term
+        final MultivariateCompositionMapper termF =
+                        new MultivariateCompositionMapper(lowerTerm.getCoeff(), fDSIndex, productIndicesF);
+        termF.sort();
+        return termF;
+
+    }
+
+    /** Differentiate a product part of a {@link MultivariateCompositionMapper}.
+     * @param lowerTerm term to differentiate
+     * @param j index of the product to differentiate
+     * @param qIndex index of the qₗ variable
+     * @param baseSize size of the intermediate variables
+     * @return ∂fⁿ⁻¹/∂pᵤ⋯∂pᵥ
+     */
+    private MultivariateCompositionMapper differentiateProductPart(final MultivariateCompositionMapper lowerTerm,
+                                                                   final int j, final int qIndex,
+                                                                   final DSCompiler baseCompiler) {
+
+        // get derivation orders of ∂p/∂q
+        final int baseSize              = baseCompiler.getSize();
+        final int[] productIndicesP     = lowerTerm.productIndices.clone();
+        final int   pIndex              = productIndicesP[j] / baseSize;
+        final int   pDSIndex            = productIndicesP[j] % baseSize;
+        final int[] pOrders             = baseCompiler.getPartialDerivativeOrders(pDSIndex);
+
+        // derive once more with respect to the selected q
+        pOrders[qIndex]++;
+        final int   pDSIndexHigherOrder = baseCompiler.getPartialDerivativeIndex(pOrders);
+        productIndicesP[j]              = pIndex * baseSize + pDSIndexHigherOrder;
+
+        // create new term
+        final MultivariateCompositionMapper termP =
+                        new MultivariateCompositionMapper(lowerTerm.getCoeff(), lowerTerm.dsIndex, productIndicesP);
+        termP.sort();
+        return termP;
 
     }
 
