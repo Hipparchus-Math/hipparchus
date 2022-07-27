@@ -536,6 +536,7 @@ public final class CombinatoricsUtils {
      * (The Computer Journal, Volume 32, Issue 3, 1989, Pages 281–282,
      * <a href="https://doi.org/10.1093/comjnl/32.3.281">https://doi.org/10.1093/comjnl/32.3.281</a>
      * </p>
+     * @param <T> type of the list elements
      * @param list list to partition
      * @return stream of partitions of the list, each partition is an array or parts
      * and each part is a list of elements
@@ -564,6 +565,7 @@ public final class CombinatoricsUtils {
      * This method implements the Steinhaus–Johnson–Trotter algorithm
      * with Even's speedup
      * <a href="https://en.wikipedia.org/wiki/Steinhaus%E2%80%93Johnson%E2%80%93Trotter_algorithm">Steinhaus–Johnson–Trotter algorithm</a>
+     * @param <T> type of the list elements
      * @param list list to permute
      * @return stream of permutations of the list
      * @since 2.2

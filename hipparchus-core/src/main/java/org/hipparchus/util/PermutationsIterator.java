@@ -47,7 +47,7 @@ class PermutationsIterator<T> implements Iterator<List<T>> {
     /** Simple constructor.
      * @param list list to permute (will not be touched)
      */
-    public PermutationsIterator(final List<T> list) {
+    PermutationsIterator(final List<T> list) {
 
         this.permuted  = new ArrayList<>(list);
 

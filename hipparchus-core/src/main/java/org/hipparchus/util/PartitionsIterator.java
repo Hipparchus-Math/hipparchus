@@ -65,7 +65,7 @@ class PartitionsIterator<T> implements Iterator<List<T>[]> {
     /** Simple constructor.
      * @param list list to partition
      */
-    public PartitionsIterator(final List<T> list) {
+    PartitionsIterator(final List<T> list) {
 
         this.list      = list;
         this.n         = list.size();

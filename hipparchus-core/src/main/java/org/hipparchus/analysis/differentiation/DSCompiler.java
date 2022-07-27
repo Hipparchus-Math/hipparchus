@@ -596,9 +596,6 @@ public class DSCompiler {
 
         // copy the rebasing rules for orders 0 to order - 1, adjusting indices
         for (int i = 0; i < lowerRebaser.length; ++i) {
-            if (i >= lowerBaseCompiler.derivativesOrders.length) {
-                System.out.println("gotcha!");
-            }
             final int index = convertIndex(i, lowerBaseCompiler.parameters, lowerBaseCompiler.derivativesOrders,
                                            baseCompiler.parameters, baseCompiler.order, baseCompiler.sizes);
             rebaser[index] = new MultivariateCompositionMapper[lowerRebaser[i].length];
@@ -660,7 +657,7 @@ public class DSCompiler {
      * @param lowerTerm term to differentiate
      * @param j index of the product to differentiate
      * @param qIndex index of the qₗ variable
-     * @param baseSize size of the intermediate variables
+     * @param baseCompiler compiler associated with the low level parameter functions
      * @return ∂fⁿ⁻¹/∂pᵤ⋯∂pᵥ
      */
     private MultivariateCompositionMapper differentiateProductPart(final MultivariateCompositionMapper lowerTerm,
@@ -3574,6 +3571,7 @@ public class DSCompiler {
     }
 
     /** Rebase derivative structure with respect to low level parameter functions.
+     * @param <T> type of the field elements
      * @param ds array holding the derivative structure
      * @param dsOffset offset of the derivative structure in its array
      * @param baseCompiler compiler associated with the low level parameter functions
@@ -3612,12 +3610,13 @@ public class DSCompiler {
     }
 
     /** Combine terms with similar derivation orders.
+     * @param <T> type of the field elements
      * @param terms list of terms
      * @return combined array
      */
     @SuppressWarnings("unchecked")
     private static <T extends AbstractMapper<T>> T[] combineSimilarTerms(final List<T> terms) {
-        
+
         final List<T> combined = new ArrayList<>(terms.size());
 
         for (int j = 0; j < terms.size(); ++j) {
@@ -3641,9 +3640,10 @@ public class DSCompiler {
     }
 
     /** Base mapper.
+     * @param <T> type of the field elements
      * @since 2.2
      */
-    private static abstract class AbstractMapper<T extends AbstractMapper<T>> {
+    private abstract static class AbstractMapper<T extends AbstractMapper<T>> {
 
         /** Multiplication coefficient. */
         private int coeff;
