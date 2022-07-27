@@ -526,14 +526,12 @@ then it can be computed as a `DerivativeStructure` with `\(n\)` parameters.
 If however, in another part of the computation the parameters are themselves
 considered to be functions of `\(m\)` more base variables `\(p_0 = p_0(q_0, q_1, \ldots q_{m-1})\)`,
 `\(p_1 = p_1(q_0, q_1, \ldots q_{m-1})\)`, … `\(p_{n-1} = p_{n-1}(q_0, q_1, \ldots q_{m-1})\)`,
-then it is possible to `rebase` the `DerivativeStructure` by providing the intermediate
+then it is possible to `rebase` the initial `DerivativeStructure` by providing the intermediate
 variables `\(p_i\)` as `DerivativeStructure` with `\(m\)` parameters. The result will be
 a `DerivativeStructure` with `\(m\)` parameters representing `\(f(q_0, q_1, \ldots q_{m-1})\)`.
 When rebasing, the number of intermediate variables `\(p_i\)` provided must match the
-number `\(n\)` of parameters of the initial `\(n\)` `DerivativeStructure`, and the
+number `\(n\)` of parameters of the initial `DerivativeStructure`, and the
 derivation orders must all match.
-
-This does make sense since we combined the two functions, and it does make 
 
 There is a field version of `DerivativeStructure`:
 [FieldDerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/FieldDerivativeStructure.html).
