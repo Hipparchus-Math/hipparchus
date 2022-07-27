@@ -547,18 +547,16 @@ public class DSCompiler {
                                         rebaser[baseCompiler.getPartialDerivativeIndex(orders)];
 
                         // apply recursion formula
-                        for (int i = 0; i < parameters; ++i) {
+                        for (final MultivariateCompositionMapper lowerTerm : lowerRow) {
 
-                            for (final MultivariateCompositionMapper lowerTerm : lowerRow) {
-
+                            for (int i = 0; i < parameters; ++i) {
                                 // differentiate the term ∂fⁿ⁻¹/∂pᵤ⋯∂pᵥ part
                                 row.add(differentiateFPart(lowerTerm, i, qIndex, baseCompiler));
+                            }
 
-                                // differentiate the products ∂pᵤ/∂qⱼ⋯∂qₖ ⋯ ∂pᵥ/∂qⱼ⋯∂qₖ
-                                for (int j = 0; j < lowerTerm.productIndices.length; ++j) {
-                                    row.add(differentiateProductPart(lowerTerm, j, qIndex, baseCompiler));
-                                }
-
+                            // differentiate the products ∂pᵤ/∂qⱼ⋯∂qₖ ⋯ ∂pᵥ/∂qⱼ⋯∂qₖ
+                            for (int j = 0; j < lowerTerm.productIndices.length; ++j) {
+                                row.add(differentiateProductPart(lowerTerm, j, qIndex, baseCompiler));
                             }
 
                         }
