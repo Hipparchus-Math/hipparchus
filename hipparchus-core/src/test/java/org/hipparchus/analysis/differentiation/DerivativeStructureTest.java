@@ -2051,22 +2051,6 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
     }
 
-    final DerivativeStructure[] createBaseVariables(final DSFactory factory, double... q) {
-        final DerivativeStructure[] qDS = new DerivativeStructure[q.length];
-        for (int i = 0; i < q.length; ++i) {
-            qDS[i] = factory.variable(i, q[i]);
-        }
-        return qDS;
-    }
-
-    final DerivativeStructure[] creatIntermediateVariables(final DSFactory factory, DerivativeStructure... pBase) {
-        final DerivativeStructure[] pIntermediate = new DerivativeStructure[pBase.length];
-        for (int i = 0; i < pBase.length; ++i) {
-            pIntermediate[i] = factory.variable(i, pBase[i].getReal());
-        }
-        return pIntermediate;
-    }
-
     @Test
     public void testRunTimeClass() {
         Field<DerivativeStructure> field = new DSFactory(3, 2).constant(0.0).getField();
@@ -2235,6 +2219,22 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             return new TaylorExpansion(this.buildDsEquivalent().multiply(te.buildDsEquivalent()));
         }
 
+    }
+
+    private DerivativeStructure[] createBaseVariables(final DSFactory factory, double... q) {
+        final DerivativeStructure[] qDS = new DerivativeStructure[q.length];
+        for (int i = 0; i < q.length; ++i) {
+            qDS[i] = factory.variable(i, q[i]);
+        }
+        return qDS;
+    }
+
+    private DerivativeStructure[] creatIntermediateVariables(final DSFactory factory, DerivativeStructure... pBase) {
+        final DerivativeStructure[] pIntermediate = new DerivativeStructure[pBase.length];
+        for (int i = 0; i < pBase.length; ++i) {
+            pIntermediate[i] = factory.variable(i, pBase[i].getValue());
+        }
+        return pIntermediate;
     }
 
 }

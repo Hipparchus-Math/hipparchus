@@ -27,10 +27,13 @@ import java.util.Map;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.CalculusFieldElementAbstractTest;
 import org.hipparchus.Field;
+import org.hipparchus.analysis.CalculusFieldMultivariateFunction;
+import org.hipparchus.analysis.CalculusFieldMultivariateVectorFunction;
 import org.hipparchus.analysis.polynomials.FieldPolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
@@ -2209,6 +2212,127 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
         Assert.assertEquals(zero64.getFreeParameters(), zeroDFP.getFreeParameters());
         Assert.assertEquals(zero64.getOrder(), zeroDFP.getOrder());
         Assert.assertFalse(zero64.getField().equals(zeroDFP.getField()));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testRebaseConditions() {
+        final FDSFactory<T> f32 = buildFactory(3, 2);
+        final FDSFactory<T> f22 = buildFactory(2, 2);
+        final FDSFactory<T> f31 = buildFactory(3, 1);
+        try {
+            f32.variable(0, 0).rebase(f22.variable(0, 0), f22.variable(1, 1.0));
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+        }
+        try {
+            f32.variable(0, 0).rebase(f31.variable(0, 0), f31.variable(1, 1.0), f31.variable(2, 2.0));
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(1, ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testRebaseNoVariables() {
+        final FieldDerivativeStructure<T> x = buildFactory(0, 2).constant(1.0);
+        Assert.assertSame(x, x.rebase());
+    }
+
+    @Test
+    public void testRebaseValueMoreIntermediateThanBase() {
+        doTestRebaseValue(createBaseVariables(buildFactory(2, 4), 1.5, -2.0),
+                          q -> {
+                              final FieldDerivativeStructure<T>[] a = MathArrays.buildArray(q[0].getFactory().getDerivativeField(), 3);
+                              a[0] = q[0].add(q[1].multiply(3));
+                              a[1] = q[0].log();
+                              a[2] = q[1].divide(q[0].sin());
+                              return a;
+                          },
+                          buildFactory(3, 4),
+                          p -> p[0].add(p[1].divide(p[2])),
+                          1.0e-15);
+    }
+
+    @Test
+    public void testRebaseValueLessIntermediateThanBase() {
+        doTestRebaseValue(createBaseVariables(buildFactory(3, 4), 1.5, -2.0, 0.5),
+                          q -> {
+                              final FieldDerivativeStructure<T>[] a = MathArrays.buildArray(q[0].getFactory().getDerivativeField(), 2);
+                              a[0] = q[0].add(q[1].multiply(3));
+                              a[1] = q[0].add(q[1]).subtract(q[2]);
+                              return a;
+                          },
+                          buildFactory(2, 4),
+                          p -> p[0].multiply(p[1]),
+                          1.0e-15);
+    }
+
+    @Test
+    public void testRebaseValueEqualIntermediateAndBase() {
+        doTestRebaseValue(createBaseVariables(buildFactory(2, 4), 1.5, -2.0),
+                          q -> {
+                              final FieldDerivativeStructure<T>[] a = MathArrays.buildArray(q[0].getFactory().getDerivativeField(), 2);
+                              a[0] = q[0].add(q[1].multiply(3));
+                              a[1] = q[0].add(q[1]);
+                              return a;
+                          },
+                          buildFactory(2, 4),
+                          p -> p[0].multiply(p[1]),
+                          1.0e-15);
+    }
+
+    private void doTestRebaseValue(final FieldDerivativeStructure<T>[] q,
+                                   final CalculusFieldMultivariateVectorFunction<FieldDerivativeStructure<T>> qToP,
+                                   final FDSFactory<T> factoryP,
+                                   final CalculusFieldMultivariateFunction<FieldDerivativeStructure<T>> f,
+                                   final double tol) {
+
+        // intermediate variables as functions of base variables
+        final FieldDerivativeStructure<T>[] pBase = qToP.value(q);
+        
+        // reference function
+        final FieldDerivativeStructure<T> ref = f.value(pBase);
+
+        // intermediate variables as independent variables
+        final FieldDerivativeStructure<T>[] pIntermediate = creatIntermediateVariables(factoryP, pBase);
+
+        // function of the intermediate variables
+        final FieldDerivativeStructure<T> fI = f.value(pIntermediate);
+
+        // function rebased to base variables
+        final FieldDerivativeStructure<T> rebased = fI.rebase(pBase);
+
+        Assert.assertEquals(q[0].getFreeParameters(),                   ref.getFreeParameters());
+        Assert.assertEquals(q[0].getOrder(),                            ref.getOrder());
+        Assert.assertEquals(factoryP.getCompiler().getFreeParameters(), fI.getFreeParameters());
+        Assert.assertEquals(factoryP.getCompiler().getOrder(),          fI.getOrder());
+        Assert.assertEquals(ref.getFreeParameters(),                    rebased.getFreeParameters());
+        Assert.assertEquals(ref.getOrder(),                             rebased.getOrder());
+
+        checkEquals(ref, rebased, tol);
+
+    }
+
+    final FieldDerivativeStructure<T>[] createBaseVariables(final FDSFactory<T> factory, double... q) {
+        final FieldDerivativeStructure<T>[] qDS = MathArrays.buildArray(factory.getDerivativeField(), q.length);
+        for (int i = 0; i < q.length; ++i) {
+            qDS[i] = factory.variable(i, q[i]);
+        }
+        return qDS;
+    }
+
+    final FieldDerivativeStructure<T>[] creatIntermediateVariables(final FDSFactory<T> factory,
+                                                                   @SuppressWarnings("unchecked") FieldDerivativeStructure<T>... pBase) {
+        final FieldDerivativeStructure<T>[] pIntermediate = MathArrays.buildArray(factory.getDerivativeField(), pBase.length);
+        for (int i = 0; i < pBase.length; ++i) {
+            pIntermediate[i] = factory.variable(i, pBase[i].getValue());
+        }
+        return pIntermediate;
     }
 
     @Test

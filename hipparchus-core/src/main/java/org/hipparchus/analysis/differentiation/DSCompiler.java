@@ -3573,6 +3573,34 @@ public class DSCompiler {
         }
     }
 
+    /** Rebase derivative structure with respect to low level parameter functions.
+     * @param ds array holding the derivative structure
+     * @param dsOffset offset of the derivative structure in its array
+     * @param baseCompiler compiler associated with the low level parameter functions
+     * @param p array holding the low level parameter functions (one flat array)
+     * @param result array where result must be stored (for
+     * composition the result array <em>cannot</em> be the input
+     * @param resultOffset offset of the result in its array
+     * @since 2.2
+     */
+    public <T extends CalculusFieldElement<T>> void rebase(final T[] ds, final int dsOffset,
+                                                           final DSCompiler baseCompiler, T[] p,
+                                                           final T[] result, final int resultOffset) {
+        final MultivariateCompositionMapper[][] rebaser = getRebaser(baseCompiler);
+        for (int i = 0; i < rebaser.length; ++i) {
+            final MultivariateCompositionMapper[] mappingI = rebaser[i];
+            T r = ds[0].getField().getZero();
+            for (MultivariateCompositionMapper mapping : mappingI) {
+                T product =  ds[dsOffset + mapping.dsIndex].multiply(mapping.getCoeff());
+                for (int k = 0; k < mapping.productIndices.length; ++k) {
+                    product = product.multiply(p[mapping.productIndices[k]]);
+                }
+                r = r.add(product);
+            }
+            result[resultOffset + i] = r;
+        }
+    }
+
     /** Check rules set compatibility.
      * @param compiler other compiler to check against instance
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
