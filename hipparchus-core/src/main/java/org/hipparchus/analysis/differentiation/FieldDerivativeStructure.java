@@ -957,6 +957,64 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
         return factory.getCompiler().taylor(data, 0, delta);
     }
 
+    /** Rebase instance with respect to low level parameter functions.
+     * <p>
+     * The instance is considered to be a function of {@link #getFreeParameters()
+     * n free parameters} up to order {@link #getOrder() o} \(f(p_0, p_1, \ldots p_{n-1})\).
+     * Its {@link #getPartialDerivative(int...) partial derivatives} are therefore
+     * \(f, \frac{\partial f}{\partial p_0}, \frac{\partial f}{\partial p_1}, \ldots
+     * \frac{\partial^2 f}{\partial p_0^2}, \frac{\partial^2 f}{\partial p_0 p_1},
+     * \ldots \frac{\partial^o f}{\partial p_{n-1}^o\). The free parameters
+     * \(p_0, p_1, \ldots p_{n-1}\) are considered to be functions of \(m\) lower
+     * level other parameters \(q_0, q_1, \ldots q_{m-1}\).
+     * </p>
+     * \( \begin{align}
+     * p_0 &amp; = p_0(q_0, q_1, \ldots q_{m-1})\\
+     * p_1 &amp; = p_1(q_0, q_1, \ldots q_{m-1})\\
+     * p_{n-1} &amp; = p_{n-1}(q_0, q_1, \ldots q_{m-1})
+     * \end{align}\)
+     * <p>
+     * This method compute the composition of the partial derivatives of \(f\)
+     * and the partial derivatives of \(p_0, p_1, \ldots p_{n-1}, i.e. the
+     * {@link #getPartialDerivative(int...) partial derivatives} of the value
+     * returned will be
+     * \(f, \frac{\partial f}{\partial q_0}, \frac{\partial f}{\partial q_1}, \ldots
+     * \frac{\partial^2 f}{\partial q_0^2}, \frac{\partial^2 f}{\partial q_0 q_1},
+     * \ldots \frac{\partial^o f}{\partial q_{m-1}^o\).
+     * </p>
+     * <p>
+     * The number of parameters must match {@link #getFreeParameters()} and the
+     * derivation orders of the instance and parameters must also match.
+     * </p>
+     * @param p base parameters with respect to which partial derivatives
+     * were computed in the instance
+     * @return derivative structure with partial derivatives computed
+     * with respect to the lower level parameters used in the \(p_i\)
+     * @since 2.2
+     */
+    public FieldDerivativeStructure<T> rebase(@SuppressWarnings("unchecked") final FieldDerivativeStructure<T>... p) {
+
+        MathUtils.checkDimension(getFreeParameters(), p.length);
+
+        // handle special case of no variables at all
+        if (p.length == 0) {
+            return this;
+        }
+
+        final int pSize = p[0].getFactory().getCompiler().getSize();
+        final T[] pData = MathArrays.buildArray(p[0].getFactory().getValueField(), p.length * pSize);
+        for (int i = 0; i < p.length; ++i) {
+            MathUtils.checkDimension(getOrder(), p[i].getOrder());
+            MathUtils.checkDimension(p[0].getFreeParameters(), p[i].getFreeParameters());
+            System.arraycopy(p[i].data, 0, pData, i * pSize, pSize);
+        }
+
+        final FieldDerivativeStructure<T> result = p[0].factory.build();
+        factory.getCompiler().rebase(data, 0, p[0].factory.getCompiler(), pData, result.data, 0);
+        return result;
+
+    }
+
     /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
