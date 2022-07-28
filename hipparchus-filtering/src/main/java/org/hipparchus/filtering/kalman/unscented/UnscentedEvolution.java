@@ -48,8 +48,8 @@ public class UnscentedEvolution {
     public UnscentedEvolution(final double currentTime, final RealVector[] currentStates,
                               final RealVector[] currentMeasurements, final RealMatrix processNoiseMatrix) {
         this.currentTime         = currentTime;
-        this.currentStates       = currentStates;
-        this.currentMeasurements = currentMeasurements;
+        this.currentStates       = currentStates.clone();
+        this.currentMeasurements = currentMeasurements.clone();
         this.processNoiseMatrix  = processNoiseMatrix;
     }
 
@@ -57,7 +57,7 @@ public class UnscentedEvolution {
      * @return current measurements
      */
     public RealVector[] getCurrentMeasurements() {
-        return currentMeasurements;
+        return currentMeasurements.clone();
     }
 
     /** Get current time.
@@ -71,7 +71,7 @@ public class UnscentedEvolution {
      * @return current states
      */
     public RealVector[] getCurrentStates() {
-        return currentStates;
+        return currentStates.clone();
     }
 
     /** Get process noise.

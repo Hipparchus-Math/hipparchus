@@ -126,15 +126,11 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
      */
     private void predict(final double time, final RealVector[] predictedStates,  final RealMatrix noise) {
 
-        // Initialize predicted state and covariance
-        RealVector predictedState      = new ArrayRealVector(n);
-        RealMatrix predictedCovariance = MatrixUtils.createRealMatrix(n, n);
-
         // Computation of Eq. 17, weighted mean state
-        predictedState = sum(predictedStates, n);
+        final RealVector predictedState = sum(predictedStates, n);
 
         // Computation of Eq. 18, predicted covariance matrix
-        predictedCovariance = computeCovariance(predictedStates, predictedState).add(noise);
+        final RealMatrix predictedCovariance = computeCovariance(predictedStates, predictedState).add(noise);
 
         predicted = new ProcessEstimate(time, predictedState, predictedCovariance);
         corrected = null;
