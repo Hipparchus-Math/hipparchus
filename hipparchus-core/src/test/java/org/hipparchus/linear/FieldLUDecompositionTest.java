@@ -342,9 +342,10 @@ public class FieldLUDecompositionTest {
 
     @Test
     public void testSolve() {
-        FieldLUDecomposition<Fraction> lu =
-                        new FieldLUDecomposition<Fraction>(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), testData));
-        FieldDecompositionSolver<Fraction> solver = lu.getSolver();
+        FieldDecompositionSolver<Fraction> solver =
+                        new FieldLUDecomposer<Fraction>(e -> e.isZero()).
+                        decompose(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(),
+                                                                      testData));
         FieldVector<Fraction> solution = solver.solve(new ArrayFieldVector<>(new Fraction[] {
             new Fraction(1, 2), new Fraction(2, 3), new Fraction(3,4)
         }));
