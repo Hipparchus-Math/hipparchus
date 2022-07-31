@@ -27,12 +27,17 @@ import java.util.Map;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.CalculusFieldElementAbstractTest;
 import org.hipparchus.Field;
+import org.hipparchus.analysis.CalculusFieldMultivariateFunction;
+import org.hipparchus.analysis.CalculusFieldMultivariateVectorFunction;
 import org.hipparchus.analysis.polynomials.FieldPolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
+import org.hipparchus.random.Well19937a;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
@@ -1703,6 +1708,167 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
     }
 
     @Test
+    public void testIntegration() {
+        // check that first-order integration on two variables does not depend on sequence of operations
+        final RandomGenerator random = new Well19937a(0x87bb96d6e11557bdl);
+        final FDSFactory<T> factory = buildFactory(3, 7);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final FieldDerivativeStructure<T> f       = factory.build(data);
+            final FieldDerivativeStructure<T> i2fIxIy = f.integrate(0, 1).integrate(1, 1);
+            final FieldDerivativeStructure<T> i2fIyIx = f.integrate(1, 1).integrate(0, 1);
+            checkEquals(i2fIxIy, i2fIyIx, 0.);
+        }
+    }
+
+    @Test
+    public void testIntegrationGreaterThanOrder() {
+        // check that integration to a too high order generates zero
+        // as integration constants are set to zero
+        final RandomGenerator random = new Well19937a(0x4744a847b11e4c6fl);
+        final FDSFactory<T> factory = buildFactory(3, 7);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final FieldDerivativeStructure<T> f = factory.build(data);
+            for (int index = 0; index < factory.getCompiler().getFreeParameters(); ++index) {
+                final FieldDerivativeStructure<T> integ = f.integrate(index, factory.getCompiler().getOrder() + 1);
+                checkEquals(factory.constant(0), integ, 0.);
+            }
+        }
+    }
+
+    @Test
+    public void testIntegrationNoOp() {
+        // check that integration of order 0 is no-op
+        final RandomGenerator random = new Well19937a(0x75a35152f30f644bl);
+        final FDSFactory<T> factory = buildFactory(3, 7);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final FieldDerivativeStructure<T> f = factory.build(data);
+            for (int index = 0; index < factory.getCompiler().getFreeParameters(); ++index) {
+                final FieldDerivativeStructure<T> integ = f.integrate(index, 0);
+                checkEquals(f, integ, 0.);
+            }
+        }
+    }
+
+    @Test
+    public void testDifferentiationNoOp() {
+        // check that differentiation of order 0 is no-op
+        final RandomGenerator random = new Well19937a(0x3b6ae4c2f1282949l);
+        final FDSFactory<T> factory = buildFactory(3, 7);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final FieldDerivativeStructure<T> f = factory.build(data);
+            for (int index = 0; index < factory.getCompiler().getFreeParameters(); ++index) {
+                final FieldDerivativeStructure<T> integ = f.differentiate(index, 0);
+                checkEquals(f, integ, 0.);
+            }
+        }
+    }
+
+    @Test
+    public void testIntegrationDifferentiation() {
+        // check that integration and differentiation for univariate functions are each other inverse except for constant
+        // term and highest order one
+        final RandomGenerator random = new Well19937a(0x67fe66c05e5ee222l);
+        final FDSFactory<T> factory = buildFactory(1, 25);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 1; i < size - 1; i++) {
+                data[i] = random.nextDouble();
+            }
+            final int indexVar = 0;
+            final FieldDerivativeStructure<T> f = factory.build(data);
+            final FieldDerivativeStructure<T> f2 = f.integrate(indexVar, 1).differentiate(indexVar, 1);
+            final FieldDerivativeStructure<T> f3 = f.differentiate(indexVar, 1).integrate(indexVar, 1);
+            checkEquals(f2, f, 0.);
+            checkEquals(f2, f3, 0.);
+            // check special case when non-positive integration order actually returns differentiation
+            final FieldDerivativeStructure<T> df = f.integrate(indexVar, -1);
+            final FieldDerivativeStructure<T> df2 = f.differentiate(indexVar, 1);
+            checkEquals(df, df2, 0.);
+            // check special case when non-positive differentiation order actually returns integration
+            final FieldDerivativeStructure<T> fi  = f.differentiate(indexVar, -1);
+            final FieldDerivativeStructure<T> fi2 = f.integrate(indexVar, 1);
+            checkEquals(fi, fi2, 0.);
+        }
+    }
+
+    @Test
+    public void testDifferentiation1() {
+        // check differentiation operator with result obtained manually
+        final int freeParam = 3;
+        final int order = 5;
+        final FDSFactory<T> factory = buildFactory(freeParam, order);
+        final FieldDerivativeStructure<T> f = factory.variable(0, 1.0);
+        final int[] orders = new int[freeParam];
+        orders[0] = 2;
+        orders[1] = 1;
+        orders[2] = 1;
+        final T value = factory.getValueField().getZero().newInstance(10.);
+        f.setDerivativeComponent(factory.getCompiler().getPartialDerivativeIndex(orders), value);
+        final FieldDerivativeStructure<T> dfDx = f.differentiate(0, 1);
+        orders[0] -= 1;
+        Assert.assertEquals(1., dfDx.getPartialDerivative(new int[freeParam]).getReal(), 0.);
+        Assert.assertEquals(value.getReal(), dfDx.getPartialDerivative(orders).getReal(), 0.);
+        checkEquals(factory.constant(0.0), f.differentiate(0, order + 1), 0.);
+    }
+
+    @Test
+    public void testDifferentiation2() {
+        // check that first-order differentiation twice is same as second-order differentiation
+        final RandomGenerator random = new Well19937a(0xec293aaee352de94l);
+        final FDSFactory<T> factory = buildFactory(5, 4);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final FieldDerivativeStructure<T> f = factory.build(data);
+            final FieldDerivativeStructure<T> d2fDx2 = f.differentiate(0, 1).differentiate(0, 1);
+            final FieldDerivativeStructure<T> d2fDx2Bis = f.differentiate(0, 2);
+            checkEquals(d2fDx2, d2fDx2Bis, 0.);
+        }
+    }
+
+    @Test
+    public void testDifferentiation3() {
+        // check that first-order differentiation on two variables does not depend on sequence of operations
+        final RandomGenerator random = new Well19937a(0x35409ecc1348e46cl);
+        final FDSFactory<T> factory = buildFactory(3, 7);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final FieldDerivativeStructure<T> f = factory.build(data);
+            final FieldDerivativeStructure<T> d2fDxDy = f.differentiate(0, 1).differentiate(1, 1);
+            final FieldDerivativeStructure<T> d2fDyDx = f.differentiate(1, 1).differentiate(0, 1);
+            checkEquals(d2fDxDy, d2fDyDx, 0.);
+        }
+    }
+
+    @Test
     public void testField() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<T> factory = buildFactory(3, maxOrder);
@@ -2046,6 +2212,127 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
         Assert.assertEquals(zero64.getFreeParameters(), zeroDFP.getFreeParameters());
         Assert.assertEquals(zero64.getOrder(), zeroDFP.getOrder());
         Assert.assertFalse(zero64.getField().equals(zeroDFP.getField()));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testRebaseConditions() {
+        final FDSFactory<T> f32 = buildFactory(3, 2);
+        final FDSFactory<T> f22 = buildFactory(2, 2);
+        final FDSFactory<T> f31 = buildFactory(3, 1);
+        try {
+            f32.variable(0, 0).rebase(f22.variable(0, 0), f22.variable(1, 1.0));
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+        }
+        try {
+            f32.variable(0, 0).rebase(f31.variable(0, 0), f31.variable(1, 1.0), f31.variable(2, 2.0));
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(1, ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testRebaseNoVariables() {
+        final FieldDerivativeStructure<T> x = buildFactory(0, 2).constant(1.0);
+        Assert.assertSame(x, x.rebase());
+    }
+
+    @Test
+    public void testRebaseValueMoreIntermediateThanBase() {
+        doTestRebaseValue(createBaseVariables(buildFactory(2, 4), 1.5, -2.0),
+                          q -> {
+                              final FieldDerivativeStructure<T>[] a = MathArrays.buildArray(q[0].getFactory().getDerivativeField(), 3);
+                              a[0] = q[0].add(q[1].multiply(3));
+                              a[1] = q[0].log();
+                              a[2] = q[1].divide(q[0].sin());
+                              return a;
+                          },
+                          buildFactory(3, 4),
+                          p -> p[0].add(p[1].divide(p[2])),
+                          1.0e-15);
+    }
+
+    @Test
+    public void testRebaseValueLessIntermediateThanBase() {
+        doTestRebaseValue(createBaseVariables(buildFactory(3, 4), 1.5, -2.0, 0.5),
+                          q -> {
+                              final FieldDerivativeStructure<T>[] a = MathArrays.buildArray(q[0].getFactory().getDerivativeField(), 2);
+                              a[0] = q[0].add(q[1].multiply(3));
+                              a[1] = q[0].add(q[1]).subtract(q[2]);
+                              return a;
+                          },
+                          buildFactory(2, 4),
+                          p -> p[0].multiply(p[1]),
+                          1.0e-15);
+    }
+
+    @Test
+    public void testRebaseValueEqualIntermediateAndBase() {
+        doTestRebaseValue(createBaseVariables(buildFactory(2, 4), 1.5, -2.0),
+                          q -> {
+                              final FieldDerivativeStructure<T>[] a = MathArrays.buildArray(q[0].getFactory().getDerivativeField(), 2);
+                              a[0] = q[0].add(q[1].multiply(3));
+                              a[1] = q[0].add(q[1]);
+                              return a;
+                          },
+                          buildFactory(2, 4),
+                          p -> p[0].multiply(p[1]),
+                          1.0e-15);
+    }
+
+    private void doTestRebaseValue(final FieldDerivativeStructure<T>[] q,
+                                   final CalculusFieldMultivariateVectorFunction<FieldDerivativeStructure<T>> qToP,
+                                   final FDSFactory<T> factoryP,
+                                   final CalculusFieldMultivariateFunction<FieldDerivativeStructure<T>> f,
+                                   final double tol) {
+
+        // intermediate variables as functions of base variables
+        final FieldDerivativeStructure<T>[] pBase = qToP.value(q);
+        
+        // reference function
+        final FieldDerivativeStructure<T> ref = f.value(pBase);
+
+        // intermediate variables as independent variables
+        final FieldDerivativeStructure<T>[] pIntermediate = creatIntermediateVariables(factoryP, pBase);
+
+        // function of the intermediate variables
+        final FieldDerivativeStructure<T> fI = f.value(pIntermediate);
+
+        // function rebased to base variables
+        final FieldDerivativeStructure<T> rebased = fI.rebase(pBase);
+
+        Assert.assertEquals(q[0].getFreeParameters(),                   ref.getFreeParameters());
+        Assert.assertEquals(q[0].getOrder(),                            ref.getOrder());
+        Assert.assertEquals(factoryP.getCompiler().getFreeParameters(), fI.getFreeParameters());
+        Assert.assertEquals(factoryP.getCompiler().getOrder(),          fI.getOrder());
+        Assert.assertEquals(ref.getFreeParameters(),                    rebased.getFreeParameters());
+        Assert.assertEquals(ref.getOrder(),                             rebased.getOrder());
+
+        checkEquals(ref, rebased, tol);
+
+    }
+
+    final FieldDerivativeStructure<T>[] createBaseVariables(final FDSFactory<T> factory, double... q) {
+        final FieldDerivativeStructure<T>[] qDS = MathArrays.buildArray(factory.getDerivativeField(), q.length);
+        for (int i = 0; i < q.length; ++i) {
+            qDS[i] = factory.variable(i, q[i]);
+        }
+        return qDS;
+    }
+
+    final FieldDerivativeStructure<T>[] creatIntermediateVariables(final FDSFactory<T> factory,
+                                                                   @SuppressWarnings("unchecked") FieldDerivativeStructure<T>... pBase) {
+        final FieldDerivativeStructure<T>[] pIntermediate = MathArrays.buildArray(factory.getDerivativeField(), pBase.length);
+        for (int i = 0; i < pBase.length; ++i) {
+            pIntermediate[i] = factory.variable(i, pBase[i].getValue());
+        }
+        return pIntermediate;
     }
 
     @Test

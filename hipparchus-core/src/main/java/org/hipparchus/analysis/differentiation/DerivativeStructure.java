@@ -773,7 +773,103 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
         return ds;
     }
 
-    /** Evaluate Taylor expansion of a derivative structure.
+    /** Integrate w.r.t. one independent variable.
+     * <p>
+     * Rigorously, if the derivatives of a function are known up to
+     * order N, the ones of its M-th integral w.r.t. a given variable
+     * (seen as a function itself) are actually known up to order N+M.
+     * However, this method still casts the output as a DerivativeStructure
+     * of order N. The integration constants are systematically set to zero.
+     * </p>
+     * @param varIndex Index of independent variable w.r.t. which integration is done.
+     * @param integrationOrder Number of times the integration operator must be applied. If non-positive, call the
+     *                         differentiation operator.
+     * @return DerivativeStructure on which integration operator has been applied a certain number of times.
+     * @since 2.2
+     */
+    public DerivativeStructure integrate(final int varIndex, final int integrationOrder) {
+
+        // Deal first with trivial case
+        if (integrationOrder > getOrder()) {
+            return factory.constant(0.);
+        } else if (integrationOrder == 0) {
+            return factory.build(data);
+        }
+
+        // Call 'inverse' (not rigorously) operation if necessary
+        if (integrationOrder < 0) {
+            return differentiate(varIndex, -integrationOrder);
+        }
+
+        final double[] newData = new double[data.length];
+        final DSCompiler dsCompiler = factory.getCompiler();
+        for (int i = 0; i < newData.length; i++) {
+            if (data[i] != 0.) {
+                final int[] orders = dsCompiler.getPartialDerivativeOrders(i);
+                int sum = 0;
+                for (int order : orders) {
+                    sum += order;
+                }
+                if (sum + integrationOrder <= getOrder()) {
+                    final int saved = orders[varIndex];
+                    orders[varIndex] += integrationOrder;
+                    final int index = dsCompiler.getPartialDerivativeIndex(orders);
+                    orders[varIndex] = saved;
+                    newData[index] = data[i];
+                }
+            }
+        }
+
+        return factory.build(newData);
+    }
+
+    /** Differentiate w.r.t. one independent variable.
+     * <p>
+     * Rigorously, if the derivatives of a function are known up to
+     * order N, the ones of its M-th derivative w.r.t. a given variable
+     * (seen as a function itself) are only known up to order N-M.
+     * However, this method still casts the output as a DerivativeStructure
+     * of order N with zeroes for the higher order terms.
+     * </p>
+     * @param varIndex Index of independent variable w.r.t. which differentiation is done.
+     * @param differentiationOrder Number of times the differentiation operator must be applied. If non-positive, call
+     *                             the integration operator instead.
+     * @return DerivativeStructure on which differentiation operator has been applied a certain number of times
+     * @since 2.2
+     */
+    public DerivativeStructure differentiate(final int varIndex, final int differentiationOrder) {
+
+        // Deal first with trivial case
+        if (differentiationOrder > getOrder()) {
+            return factory.constant(0.);
+        } else if (differentiationOrder == 0) {
+            return factory.build(data);
+        }
+
+        // Call 'inverse' (not rigorously) operation if necessary
+        if (differentiationOrder < 0) {
+            return integrate(varIndex, -differentiationOrder);
+        }
+
+        final double[] newData = new double[data.length];
+        final DSCompiler dsCompiler = factory.getCompiler();
+        for (int i = 0; i < newData.length; i++) {
+            if (data[i] != 0.) {
+                final int[] orders = dsCompiler.getPartialDerivativeOrders(i);
+                if (orders[varIndex] - differentiationOrder >= 0) {
+                    final int saved = orders[varIndex];
+                    orders[varIndex] -= differentiationOrder;
+                    final int index = dsCompiler.getPartialDerivativeIndex(orders);
+                    orders[varIndex] = saved;
+                    newData[index] = data[i];
+                }
+            }
+        }
+
+        return factory.build(newData);
+    }
+
+    /** Evaluate Taylor expansion a derivative structure.
      * @param delta parameters offsets (&Delta;x, &Delta;y, ...)
      * @return value of the Taylor expansion at x + &Delta;x, y + &Delta;y, ...
      * @throws MathRuntimeException if factorials becomes too large
@@ -781,7 +877,65 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
     public double taylor(final double ... delta) throws MathRuntimeException {
         return factory.getCompiler().taylor(data, 0, delta);
     }
- 
+
+    /** Rebase instance with respect to low level parameter functions.
+     * <p>
+     * The instance is considered to be a function of {@link #getFreeParameters()
+     * n free parameters} up to order {@link #getOrder() o} \(f(p_0, p_1, \ldots p_{n-1})\).
+     * Its {@link #getPartialDerivative(int...) partial derivatives} are therefore
+     * \(f, \frac{\partial f}{\partial p_0}, \frac{\partial f}{\partial p_1}, \ldots
+     * \frac{\partial^2 f}{\partial p_0^2}, \frac{\partial^2 f}{\partial p_0 p_1},
+     * \ldots \frac{\partial^o f}{\partial p_{n-1}^o\). The free parameters
+     * \(p_0, p_1, \ldots p_{n-1}\) are considered to be functions of \(m\) lower
+     * level other parameters \(q_0, q_1, \ldots q_{m-1}\).
+     * </p>
+     * \( \begin{align}
+     * p_0 &amp; = p_0(q_0, q_1, \ldots q_{m-1})\\
+     * p_1 &amp; = p_1(q_0, q_1, \ldots q_{m-1})\\
+     * p_{n-1} &amp; = p_{n-1}(q_0, q_1, \ldots q_{m-1})
+     * \end{align}\)
+     * <p>
+     * This method compute the composition of the partial derivatives of \(f\)
+     * and the partial derivatives of \(p_0, p_1, \ldots p_{n-1}, i.e. the
+     * {@link #getPartialDerivative(int...) partial derivatives} of the value
+     * returned will be
+     * \(f, \frac{\partial f}{\partial q_0}, \frac{\partial f}{\partial q_1}, \ldots
+     * \frac{\partial^2 f}{\partial q_0^2}, \frac{\partial^2 f}{\partial q_0 q_1},
+     * \ldots \frac{\partial^o f}{\partial q_{m-1}^o\).
+     * </p>
+     * <p>
+     * The number of parameters must match {@link #getFreeParameters()} and the
+     * derivation orders of the instance and parameters must also match.
+     * </p>
+     * @param p base parameters with respect to which partial derivatives
+     * were computed in the instance
+     * @return derivative structure with partial derivatives computed
+     * with respect to the lower level parameters used in the \(p_i\)
+     * @since 2.2
+     */
+    public DerivativeStructure rebase(final DerivativeStructure... p) {
+
+        MathUtils.checkDimension(getFreeParameters(), p.length);
+
+        // handle special case of no variables at all
+        if (p.length == 0) {
+            return this;
+        }
+
+        final int pSize = p[0].getFactory().getCompiler().getSize();
+        final double[] pData = new double[p.length * pSize];
+        for (int i = 0; i < p.length; ++i) {
+            MathUtils.checkDimension(getOrder(), p[i].getOrder());
+            MathUtils.checkDimension(p[0].getFreeParameters(), p[i].getFreeParameters());
+            System.arraycopy(p[i].data, 0, pData, i * pSize, pSize);
+        }
+
+        final DerivativeStructure result = p[0].factory.build();
+        factory.getCompiler().rebase(data, 0, p[0].factory.getCompiler(), pData, result.data, 0);
+        return result;
+
+    }
+
     /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match

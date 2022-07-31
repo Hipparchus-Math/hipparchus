@@ -21,8 +21,14 @@
  */
 package org.hipparchus.util;
 
+import java.lang.reflect.Array;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -33,6 +39,11 @@ import org.hipparchus.special.Gamma;
  * Combinatorial utilities.
  */
 public final class CombinatoricsUtils {
+
+    /** Maximum index of Bell number that fits into a long.
+     * @since 2.2
+     */
+    public static final int MAX_BELL = 25;
 
     /** All long-representable factorials */
     static final long[] FACTORIALS = {
@@ -55,6 +66,11 @@ public final class CombinatoricsUtils {
      * </ul>
      */
     private static final FactorialLog FACTORIAL_LOG_NO_CACHE = FactorialLog.create();
+
+    /** Bell numbers.
+     * @since 2.2
+     */
+    private static final AtomicReference<long[]> BELL = new AtomicReference<> (null);
 
     /** Private constructor (class contains only static methods). */
     private CombinatoricsUtils() {}
@@ -457,6 +473,115 @@ public final class CombinatoricsUtils {
         if (n < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.BINOMIAL_NEGATIVE_PARAMETER, n);
         }
+    }
+
+    /** Compute the Bell number (number of partitions of a set).
+     * @param n number of elements of the set
+     * @return Bell number Bₙ
+     * @since 2.2
+     */
+    public static long bellNumber(final int n) {
+
+        if (n < 0) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, n, 0);
+        }
+        if (n > MAX_BELL) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE, n, MAX_BELL);
+        }
+
+        long[] bell = BELL.get();
+
+        if (bell == null) {
+
+            // the cache has never been initialized, compute the numbers using the Bell triangle
+            // storage for one line of the Bell triangle
+            bell = new long[MAX_BELL];
+            bell[0] = 1l;
+
+            final long[] row = new long[bell.length];
+            for (int k = 1; k < row.length; ++k) {
+
+                // first row, with one element
+                row[0] = 1l;
+
+                // iterative computation of rows
+                for (int i = 1; i < k; ++i) {
+                    long previous = row[0];
+                    row[0] = row[i - 1];
+                    for (int j = 1; j <= i; ++j) {
+                        long rj = row[j - 1] + previous;
+                        previous = row[j];
+                        row[j] = rj;
+                    }
+                }
+
+                bell[k] = row[k - 1];
+
+            }
+
+            BELL.compareAndSet(null, bell);
+
+        }
+
+        return bell[n];
+
+    }
+
+    /** Generate a stream of partitions of a list.
+     * <p>
+     * This method implements the iterative algorithm described in
+     * <a href="https://academic.oup.com/comjnl/article/32/3/281/331557">Short Note:
+     * A Fast Iterative Algorithm for Generating Set Partitions</a>
+     * by B. Djokić, M. Miyakawa, S. Sekiguchi, I. Semba, and I. Stojmenović
+     * (The Computer Journal, Volume 32, Issue 3, 1989, Pages 281–282,
+     * <a href="https://doi.org/10.1093/comjnl/32.3.281">https://doi.org/10.1093/comjnl/32.3.281</a>
+     * </p>
+     * @param <T> type of the list elements
+     * @param list list to partition
+     * @return stream of partitions of the list, each partition is an array or parts
+     * and each part is a list of elements
+     * @since 2.2
+     */
+    public static <T> Stream<List<T>[]> partitions(final List<T> list) {
+
+        // handle special cases of empty and singleton lists
+        if (list.size() < 2) {
+            @SuppressWarnings("unchecked")
+            final List<T>[] partition = (List<T>[]) Array.newInstance(List.class, 1);
+            partition[0] = list;
+            final Stream.Builder<List<T>[]> builder = Stream.builder();
+            return builder.add(partition).build();
+        }
+
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PartitionsIterator<T>(list),
+                                                                        Spliterator.DISTINCT | Spliterator.NONNULL |
+                                                                        Spliterator.IMMUTABLE | Spliterator.ORDERED),
+                                    false);
+
+    }
+
+    /** Generate a stream of permutations of a list.
+     * <p>
+     * This method implements the Steinhaus–Johnson–Trotter algorithm
+     * with Even's speedup
+     * <a href="https://en.wikipedia.org/wiki/Steinhaus%E2%80%93Johnson%E2%80%93Trotter_algorithm">Steinhaus–Johnson–Trotter algorithm</a>
+     * @param <T> type of the list elements
+     * @param list list to permute
+     * @return stream of permutations of the list
+     * @since 2.2
+     */
+    public static <T> Stream<List<T>> permutations(final List<T> list) {
+
+        // handle special cases of empty and singleton lists
+        if (list.size() < 2) {
+            return Stream.of(list);
+        }
+
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PermutationsIterator<T>(list),
+                                                                        Spliterator.DISTINCT | Spliterator.NONNULL |
+                                                                        Spliterator.IMMUTABLE | Spliterator.ORDERED),
+                                    false);
+
     }
 
     /**

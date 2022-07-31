@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Filtering Release Notes</title>
   </properties>
   <body>
+    <release version="2.2" date="TBD" description="TBD">
+      <action dev="bryan" type="add" due-to="Gaetan Pierre" issue="issue/199">
+        Added Unscented Kalman Filter for non linear estimations.
+      </action>
+    </release>
     <release version="2.0" date="2021-08-07" description="This is a major release">
       <action dev="luc" type="update">
         No changes directly in this module. However, lower level Hipparchus modules did change,

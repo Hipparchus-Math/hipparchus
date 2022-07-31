@@ -1,8 +1,8 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Hipparchus project under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -15,22 +15,8 @@
  * limitations under the License.
  */
 
-/*
- * This is not the original file distributed by the Apache Software Foundation
- * It has been modified by the Hipparchus project
+/**
+ * Unscented Kalman filter implementation.
+ * @since 2.2
  */
-package org.hipparchus.exception;
-
-public class LocalizedCoreFormatsTest extends LocalizedFormatsAbstractTest {
-
-    @Override
-    protected Class<LocalizedCoreFormats> getFormatsClass() {
-        return LocalizedCoreFormats.class;
-    }
-
-    @Override
-    protected int getExpectedNumber() {
-        return 183;
-    }
-
-}
+package org.hipparchus.filtering.kalman.unscented;

@@ -49,6 +49,32 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
+    <release version="2.2" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issue/191">
+        Added rebase to {Field}DerivativeStructure, which enables changing
+        the base variables a {Field}DerivativeStructure depends on.
+      </action>
+      <action dev="luc" type="add" issue="issue/198">
+        Added CombinatoricsUtils.permutations.
+      </action>
+      <action dev="luc" type="add">
+        Added computation of Bell numbers.
+      </action>
+      <action dev="luc" type="add" due-to="Axel Kramer" issue="issue/197">
+        Added RosenNumberPartitionIterator.
+      </action>
+      <action dev="luc" type="add" issue="issue/197">
+        Added CombinatoricsUtils.partitions.
+      </action>
+      <action dev="luc" type="add" issue="issue/195">
+        Added FieldMultivariateFunction, CalculusFieldMultivariateFunction,
+        FieldMultivariateVectorFunction, CalculusFieldMultivariateVectorFunction,
+        FieldMultivariateMatrixFunction and CalculusFieldMultivariateMatrixFunction
+      </action>
+      <action dev="luc" type="add" due-to="Romain Serra" issue="issue/192">
+        Added integration/differentiation of {Field}DerivativeStructure.
+      </action>
+    </release>
     <release version="2.1" date="2022-04-24" description="Thist is a maintenance release. The main
       changes are addition of inverse Jacobi elliptic functions, optional modified weights to
       Akima interpolation, modified Gram-Schmidt basis orthonormalization process, generation

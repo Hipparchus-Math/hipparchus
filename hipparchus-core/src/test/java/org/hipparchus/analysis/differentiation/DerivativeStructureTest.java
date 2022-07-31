@@ -31,7 +31,10 @@ import java.util.Map;
 import org.hipparchus.CalculusFieldElementAbstractTest;
 import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
+import org.hipparchus.analysis.CalculusFieldMultivariateFunction;
+import org.hipparchus.analysis.CalculusFieldMultivariateVectorFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
@@ -1532,6 +1535,167 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
+    public void testIntegration() {
+        // check that first-order integration on two variables does not depend on sequence of operations
+        final RandomGenerator random = new Well19937a(0x87bb96d6e11557bdl);
+        final DSFactory factory = new DSFactory(3, 7);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final DerivativeStructure f       = factory.build(data);
+            final DerivativeStructure i2fIxIy = f.integrate(0, 1).integrate(1, 1);
+            final DerivativeStructure i2fIyIx = f.integrate(1, 1).integrate(0, 1);
+            checkEquals(i2fIxIy, i2fIyIx, 0.);
+        }
+    }
+
+    @Test
+    public void testIntegrationGreaterThanOrder() {
+        // check that integration to a too high order generates zero
+        // as integration constants are set to zero
+        final RandomGenerator random = new Well19937a(0x4744a847b11e4c6fl);
+        final DSFactory factory = new DSFactory(3, 7);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final DerivativeStructure f = factory.build(data);
+            for (int index = 0; index < factory.getCompiler().getFreeParameters(); ++index) {
+                final DerivativeStructure integ = f.integrate(index, factory.getCompiler().getOrder() + 1);
+                checkEquals(factory.constant(0), integ, 0.);
+            }
+        }
+    }
+
+    @Test
+    public void testIntegrationNoOp() {
+        // check that integration of order 0 is no-op
+        final RandomGenerator random = new Well19937a(0x75a35152f30f644bl);
+        final DSFactory factory = new DSFactory(3, 7);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final DerivativeStructure f = factory.build(data);
+            for (int index = 0; index < factory.getCompiler().getFreeParameters(); ++index) {
+                final DerivativeStructure integ = f.integrate(index, 0);
+                checkEquals(f, integ, 0.);
+            }
+        }
+    }
+
+    @Test
+    public void testDifferentiationNoOp() {
+        // check that differentiation of order 0 is no-op
+        final RandomGenerator random = new Well19937a(0x3b6ae4c2f1282949l);
+        final DSFactory factory = new DSFactory(3, 7);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final DerivativeStructure f = factory.build(data);
+            for (int index = 0; index < factory.getCompiler().getFreeParameters(); ++index) {
+                final DerivativeStructure integ = f.differentiate(index, 0);
+                checkEquals(f, integ, 0.);
+            }
+        }
+    }
+
+    @Test
+    public void testIntegrationDifferentiation() {
+        // check that integration and differentiation for univariate functions are each other inverse except for constant
+        // term and highest order one
+        final RandomGenerator random = new Well19937a(0x67fe66c05e5ee222l);
+        final DSFactory factory = new DSFactory(1, 25);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 1; i < size - 1; i++) {
+                data[i] = random.nextDouble();
+            }
+            final int indexVar = 0;
+            final DerivativeStructure f = factory.build(data);
+            final DerivativeStructure f2 = f.integrate(indexVar, 1).differentiate(indexVar, 1);
+            final DerivativeStructure f3 = f.differentiate(indexVar, 1).integrate(indexVar, 1);
+            checkEquals(f2, f, 0.);
+            checkEquals(f2, f3, 0.);
+            // check special case when non-positive integration order actually returns differentiation
+            final DerivativeStructure df = f.integrate(indexVar, -1);
+            final DerivativeStructure df2 = f.differentiate(indexVar, 1);
+            checkEquals(df, df2, 0.);
+            // check special case when non-positive differentiation order actually returns integration
+            final DerivativeStructure fi  = f.differentiate(indexVar, -1);
+            final DerivativeStructure fi2 = f.integrate(indexVar, 1);
+            checkEquals(fi, fi2, 0.);
+        }
+    }
+
+    @Test
+    public void testDifferentiation1() {
+        // check differentiation operator with result obtained manually
+        final int freeParam = 3;
+        final int order = 5;
+        final DSFactory factory = new DSFactory(freeParam, order);
+        final DerivativeStructure f = factory.variable(0, 1.0);
+        final int[] orders = new int[freeParam];
+        orders[0] = 2;
+        orders[1] = 1;
+        orders[2] = 1;
+        final double value = 10.;
+        f.setDerivativeComponent(factory.getCompiler().getPartialDerivativeIndex(orders), value);
+        final DerivativeStructure dfDx = f.differentiate(0, 1);
+        orders[0] -= 1;
+        Assert.assertEquals(1., dfDx.getPartialDerivative(new int[freeParam]), 0.);
+        Assert.assertEquals(value, dfDx.getPartialDerivative(orders), 0.);
+        checkEquals(factory.constant(0), f.differentiate(0, order + 1), 0.);
+    }
+
+    @Test
+    public void testDifferentiation2() {
+        // check that first-order differentiation twice is same as second-order differentiation
+        final RandomGenerator random = new Well19937a(0xec293aaee352de94l);
+        final DSFactory factory = new DSFactory(5, 4);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final DerivativeStructure f = factory.build(data);
+            final DerivativeStructure d2fDx2 = f.differentiate(0, 1).differentiate(0, 1);
+            final DerivativeStructure d2fDx2Bis = f.differentiate(0, 2);
+            checkEquals(d2fDx2, d2fDx2Bis, 0.);
+        }
+    }
+
+    @Test
+    public void testDifferentiation3() {
+        // check that first-order differentiation on two variables does not depend on sequence of operations
+        final RandomGenerator random = new Well19937a(0x35409ecc1348e46cl);
+        final DSFactory factory = new DSFactory(3, 7);
+        final int size = factory.getCompiler().getSize();
+        for (int count = 0; count < 100; ++count) {
+            final double[] data = new double[size];
+            for (int i = 0; i < size; i++) {
+                data[i] = random.nextDouble();
+            }
+            final DerivativeStructure f = factory.build(data);
+            final DerivativeStructure d2fDxDy = f.differentiate(0, 1).differentiate(1, 1);
+            final DerivativeStructure d2fDyDx = f.differentiate(1, 1).differentiate(0, 1);
+            checkEquals(d2fDxDy, d2fDyDx, 0.);
+        }
+    }
+
+    @Test
     public void testField() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
@@ -1789,6 +1953,105 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
+    public void testRebaseConditions() {
+        final DSFactory f32 = new DSFactory(3, 2);
+        final DSFactory f22 = new DSFactory(2, 2);
+        final DSFactory f31 = new DSFactory(3, 1);
+        try {
+            f32.variable(0, 0).rebase(f22.variable(0, 0), f22.variable(1, 1.0));
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+        }
+        try {
+            f32.variable(0, 0).rebase(f31.variable(0, 0), f31.variable(1, 1.0), f31.variable(2, 2.0));
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(1, ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
+
+    @Test
+    public void testRebaseNoVariables() {
+        final DerivativeStructure x = new DSFactory(0, 2).constant(1.0);
+        Assert.assertSame(x, x.rebase());
+    }
+
+    @Test
+    public void testRebaseValueMoreIntermediateThanBase() {
+        doTestRebaseValue(createBaseVariables(new DSFactory(2, 4), 1.5, -2.0),
+                          q -> new DerivativeStructure[] {
+                              q[0].add(q[1].multiply(3)),
+                              q[0].log(),
+                              q[1].divide(q[0].sin())
+                          },
+                          new DSFactory(3, 4),
+                          p -> p[0].add(p[1].divide(p[2])),
+                          1.0e-15);
+    }
+
+    @Test
+    public void testRebaseValueLessIntermediateThanBase() {
+        doTestRebaseValue(createBaseVariables(new DSFactory(3, 4), 1.5, -2.0, 0.5),
+                          q -> new DerivativeStructure[] {
+                              q[0].add(q[1].multiply(3)),
+                              q[0].add(q[1]).subtract(q[2])
+                          },
+                          new DSFactory(2, 4),
+                          p -> p[0].multiply(p[1]),
+                          1.0e-15);
+    }
+
+    @Test
+    public void testRebaseValueEqualIntermediateAndBase() {
+        doTestRebaseValue(createBaseVariables(new DSFactory(2, 4), 1.5, -2.0),
+                          q -> new DerivativeStructure[] {
+                              q[0].add(q[1].multiply(3)),
+                              q[0].add(q[1])
+                          },
+                          new DSFactory(2, 4),
+                          p -> p[0].multiply(p[1]),
+                          1.0e-15);
+    }
+
+    private void doTestRebaseValue(final DerivativeStructure[] q,
+                                   final CalculusFieldMultivariateVectorFunction<DerivativeStructure> qToP,
+                                   final DSFactory factoryP,
+                                   final CalculusFieldMultivariateFunction<DerivativeStructure> f,
+                                   final double tol) {
+
+        // intermediate variables as functions of base variables
+        final DerivativeStructure[] pBase = qToP.value(q);
+        
+        // reference function
+        final DerivativeStructure ref = f.value(pBase);
+
+        // intermediate variables as independent variables
+        final DerivativeStructure[] pIntermediate = creatIntermediateVariables(factoryP, pBase);
+
+        // function of the intermediate variables
+        final DerivativeStructure fI = f.value(pIntermediate);
+
+        // function rebased to base variables
+        final DerivativeStructure rebased = fI.rebase(pBase);
+
+        Assert.assertEquals(q[0].getFreeParameters(),                   ref.getFreeParameters());
+        Assert.assertEquals(q[0].getOrder(),                            ref.getOrder());
+        Assert.assertEquals(factoryP.getCompiler().getFreeParameters(), fI.getFreeParameters());
+        Assert.assertEquals(factoryP.getCompiler().getOrder(),          fI.getOrder());
+        Assert.assertEquals(ref.getFreeParameters(),                    rebased.getFreeParameters());
+        Assert.assertEquals(ref.getOrder(),                             rebased.getOrder());
+
+        checkEquals(ref, rebased, tol);
+
+        // compare with Taylor map based implementation
+        checkEquals(composeWithTaylorMap(fI, pBase), rebased, tol);
+
+    }
+
+    @Test
     public void testRunTimeClass() {
         Field<DerivativeStructure> field = new DSFactory(3, 2).constant(0.0).getField();
         Assert.assertEquals(DerivativeStructure.class, field.getRuntimeClass());
@@ -1847,6 +2110,131 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
         }
 
+    }
+
+    /** Compose the present derivatives on the right with a compatible so-called Taylor map i.e. an array of other
+     * partial derivatives. The output has the same number of independent variables than the right-hand side. */
+    private DerivativeStructure composeWithTaylorMap(final DerivativeStructure lhs, final DerivativeStructure[] rhs) {
+
+        // turn right-hand side of composition into Taylor expansions without constant term
+        final DSFactory rhsFactory = rhs[0].getFactory();
+        final TaylorExpansion[] rhsAsExpansions = new TaylorExpansion[rhs.length];
+        for (int k = 0; k < rhs.length; k++) {
+            final DerivativeStructure copied = new DerivativeStructure(rhsFactory, rhs[k].getAllDerivatives());
+            copied.setDerivativeComponent(0, 0.);
+            rhsAsExpansions[k] = new TaylorExpansion(copied);
+        }
+        // turn left-hand side of composition into Taylor expansion
+        final TaylorExpansion lhsAsExpansion = new TaylorExpansion(lhs);
+
+        // initialize quantities
+        TaylorExpansion te = new TaylorExpansion(rhsFactory.constant(lhs.getValue()));
+        TaylorExpansion[][] powers = new TaylorExpansion[rhs.length][lhs.getOrder()];  // for lazy storage of powers
+
+        // compose the Taylor expansions
+        final double[] coefficients = lhsAsExpansion.coefficients;
+        for (int j = 1; j < coefficients.length; j++) {
+            if (coefficients[j] != 0.) {  // filter out null terms
+                TaylorExpansion inter = new TaylorExpansion(rhsFactory.constant(coefficients[j]));
+                final int[] orders = lhs.getFactory().getCompiler().getPartialDerivativeOrders(j);
+                for (int i = 0; i < orders.length; i++) {
+                    if (orders[i] != 0) {  // only consider non-trivial powers
+                        if (powers[i][orders[i] - 1] == null) {
+                            // this power has not been computed yet
+                            final DerivativeStructure ds = new DerivativeStructure(rhsFactory, rhs[i].getAllDerivatives());
+                            ds.setDerivativeComponent(0, 0.);
+                            TaylorExpansion inter2 = new TaylorExpansion(ds);
+                            for (int k = 1; k < orders[i]; k++) {
+                                inter2 = inter2.multiply(rhsAsExpansions[i]);
+                            }
+                            powers[i][orders[i] - 1] = inter2;
+                        }
+                        inter = inter.multiply(powers[i][orders[i] - 1]);
+                    }
+                }
+                te = te.add(inter);
+            }
+        }
+
+        // convert into derivatives object
+        return te.buildDsEquivalent();
+    }
+
+    /** Class to map partial derivatives to corresponding Taylor expansion. */
+    private static class TaylorExpansion {
+
+        /** Polynomial coefficients of the Taylor expansion in the local canonical basis. */
+        final double[] coefficients;
+
+        final double[] factorials;
+        final DSFactory dsFactory;
+
+       /** Constructor. */
+        TaylorExpansion(final DerivativeStructure ds) {
+            final double[] data = ds.getAllDerivatives();
+            this.dsFactory = ds.getFactory();
+            this.coefficients = new double[data.length];
+
+            // compute relevant factorials (would be more efficient to compute products of factorials to map Taylor
+            // expansions and partial derivatives)
+            this.factorials = new double[ds.getOrder() + 1];
+            Arrays.fill(this.factorials, 1.);
+            for (int i = 2; i < this.factorials.length; i++) {
+                this.factorials[i] = this.factorials[i - 1] * (double) (i);  // avoid limit of 20! in ArithmeticUtils
+            }
+
+            // transform partial derivatives into coefficients of Taylor expansion
+            for (int j = 0; j < data.length; j++) {
+                this.coefficients[j] = data[j];
+                if (this.coefficients[j] != 0.) {
+                    int[] orders = ds.getFactory().getCompiler().getPartialDerivativeOrders(j);
+                    for (int order : orders) {
+                        this.coefficients[j] /= this.factorials[order];
+                    }
+                }
+            }
+        }
+
+        /** Builder for the corresponding {@link DerivativeStructure}. */
+        public DerivativeStructure buildDsEquivalent() throws MathIllegalArgumentException {
+            final DSCompiler dsc = this.dsFactory.getCompiler();
+            final double[] data = new double[this.coefficients.length];
+            for (int j = 0; j < data.length; j++) {
+                data[j] = this.coefficients[j];
+                if (data[j] != 0.) {
+                    int[] orders = dsc.getPartialDerivativeOrders(j);
+                    for (int order : orders) {
+                        data[j] *= this.factorials[order];
+                    }
+                }
+            }
+            return new DerivativeStructure(this.dsFactory, data);
+        }
+
+        TaylorExpansion add(final TaylorExpansion te) {
+            return new TaylorExpansion(this.buildDsEquivalent().add(te.buildDsEquivalent()));
+        }
+
+        TaylorExpansion multiply(final TaylorExpansion te) {
+            return new TaylorExpansion(this.buildDsEquivalent().multiply(te.buildDsEquivalent()));
+        }
+
+    }
+
+    private DerivativeStructure[] createBaseVariables(final DSFactory factory, double... q) {
+        final DerivativeStructure[] qDS = new DerivativeStructure[q.length];
+        for (int i = 0; i < q.length; ++i) {
+            qDS[i] = factory.variable(i, q[i]);
+        }
+        return qDS;
+    }
+
+    private DerivativeStructure[] creatIntermediateVariables(final DSFactory factory, DerivativeStructure... pBase) {
+        final DerivativeStructure[] pIntermediate = new DerivativeStructure[pBase.length];
+        for (int i = 0; i < pBase.length; ++i) {
+            pIntermediate[i] = factory.variable(i, pBase[i].getValue());
+        }
+        return pIntermediate;
     }
 
 }

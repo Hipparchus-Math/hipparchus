@@ -65,6 +65,7 @@
           +double getValue()
           +double getPartialDerivative(int[] orders)
           +double taylor(double[] delta)
+          +DerivativeStructure rebase(DerivativeStructure... p)
           +int getExponent()
           +DerivativeStructure compose(double[] f)
           +DerivativeStructure cos()
@@ -87,6 +88,7 @@
           +void checkCompatibility(DSCompiler compiler)
           +void compose(double[] operand, int operandOffset, double[] f, double[] result, int resultOffset)
           +double taylor(double[] ds, int dsOffset, double[] delta)
+          +void rebase(double[] ds, int dsOffset, DSCompiler baseCompiler, double[] p, double[] result, int resultOffset)
           +void add(double[] lhs, int lhsOffset, double[] rhs, int rhsOffset, double[] result, int resultOffset)
           +void exp(double[] operand, int operandOffset, double[] result, int resultOffset)
         }

@@ -359,6 +359,8 @@ A [UnivariateIntegrator](../apidocs/org/hipparchus/analysis/integration/Univaria
 provides the means to numerically integrate
 [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html).
 
+Integration is also available as part of [DerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html).
+
 Hipparchus includes implementations of the following integration algorithms:
 
 * [Romberg's method](../apidocs/org/hipparchus/analysis/integration/RombergIntegrator.html)
@@ -512,6 +514,24 @@ parameter 1):
     System.out.println("d2g/dx2  = " + g.getPartialDerivative(2, 0);
     System.out.println("d2g/dxdy = " + g.getPartialDerivative(1, 1);
     System.out.println("d2g/dy2  = " + g.getPartialDerivative(0, 2);
+
+It is possible to integrate or differentiate a `DerivativeStructure`. When integrating,
+the integration constants are systematically set to zero. When differentiating, the
+resulting derivative structure is truncated to the initial order (i.e. a derivative
+structure up to order 3 differentiated twice will still be of order 3, and the two
+highest order terms (4 and 5) will be dropped.
+
+If a function `\(f\)` is a function of `\(n\)` independent parameters `\(p_0, p_1, \ldots p_{n-1}\)`,
+then it can be computed as a `DerivativeStructure` with `\(n\)` parameters.
+If however, in another part of the computation the parameters are themselves
+considered to be functions of `\(m\)` more base variables `\(p_0 = p_0(q_0, q_1, \ldots q_{m-1})\)`,
+`\(p_1 = p_1(q_0, q_1, \ldots q_{m-1})\)`, … `\(p_{n-1} = p_{n-1}(q_0, q_1, \ldots q_{m-1})\)`,
+then it is possible to `rebase` the initial `DerivativeStructure` by providing the intermediate
+variables `\(p_i\)` as `DerivativeStructure` with `\(m\)` parameters. The result will be
+a `DerivativeStructure` with `\(m\)` parameters representing `\(f(q_0, q_1, \ldots q_{m-1})\)`.
+When rebasing, the number of intermediate variables `\(p_i\)` provided must match the
+number `\(n\)` of parameters of the initial `DerivativeStructure`, and the
+derivation orders must all match.
 
 There is a field version of `DerivativeStructure`:
 [FieldDerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/FieldDerivativeStructure.html).

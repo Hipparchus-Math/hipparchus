@@ -197,3 +197,5 @@ ZERO_DENOMINATOR_IN_FRACTION = dénominateur nul dans le nombre rationnel {0}/{1
 ZERO_FRACTION_TO_DIVIDE_BY = division par un nombre rationnel nul : {0}/{1}
 ZERO_NORM = norme nulle
 ZERO_NOT_ALLOWED = la valeur zéro n''est pas autorisée ici
+ZERO_STATE_SIZE = la dimension de l''état doit être différente de 0
+NEGATIVE_DEFINITE_MATRIX = la matrice ne doit pas être définie négative
