@@ -150,6 +150,9 @@ public class DSCompiler {
     /** Orders array for partial derivatives. */
     private final int[][] derivativesOrders;
 
+    /** Sum of orders array for partial derivatives. */
+    private final int[] derivativesOrdersSum;
+
     /** Indirection array of the lower derivative elements. */
     private final int[] lowerIndirection;
 
@@ -173,23 +176,20 @@ public class DSCompiler {
                        final DSCompiler valueCompiler, final DSCompiler derivativeCompiler)
         throws MathIllegalArgumentException {
 
-        this.parameters = parameters;
-        this.order      = order;
-        this.sizes      = compileSizes(parameters, order, valueCompiler);
-        this.derivativesOrders =
-                compileDerivativesOrders(parameters, order,
-                                         valueCompiler, derivativeCompiler);
-
-        this.lowerIndirection =
-                compileLowerIndirection(parameters, order,
-                                        valueCompiler, derivativeCompiler);
-        this.multIndirection =
-                compileMultiplicationIndirection(parameters, order,
-                                                 valueCompiler, derivativeCompiler, lowerIndirection);
-        this.compIndirection =
-                compileCompositionIndirection(parameters, order,
-                                              valueCompiler, derivativeCompiler,
-                                              sizes, derivativesOrders);
+        this.parameters           = parameters;
+        this.order                = order;
+        this.sizes                = compileSizes(parameters, order, valueCompiler);
+        this.derivativesOrders    = compileDerivativesOrders(parameters, order,
+                                                             valueCompiler, derivativeCompiler);
+        this.derivativesOrdersSum = compileDerivativesOrdersSum(derivativesOrders);
+        this.lowerIndirection     = compileLowerIndirection(parameters, order,
+                                                            valueCompiler, derivativeCompiler);
+        this.multIndirection      = compileMultiplicationIndirection(parameters, order,
+                                                                     valueCompiler, derivativeCompiler,
+                                                                     lowerIndirection);
+        this.compIndirection      = compileCompositionIndirection(parameters, order,
+                                                                  valueCompiler, derivativeCompiler,
+                                                                  sizes, derivativesOrders);
 
         this.rebaseIndirection = new ArrayList<>();
     }
@@ -307,6 +307,25 @@ public class DSCompiler {
         }
 
         return derivativesOrders;
+
+    }
+
+    /** Compile the sum of orders array for partial derivatives.
+     * @param derivativesOrders orders array for partial derivatives
+     * @return sum of orders array for partial derivatives
+     */
+    private static int[] compileDerivativesOrdersSum(final int[][] derivativesOrders) {
+
+        final int[] derivativesOrdersSum = new int[derivativesOrders.length];
+
+        // locate the partial derivatives at order 1
+        for (int i = 0; i < derivativesOrdersSum.length; ++i) {
+            for (final int o : derivativesOrders[i]) {
+                derivativesOrdersSum[i] += o;
+            }
+        }
+
+        return derivativesOrdersSum;
 
     }
 
@@ -796,11 +815,26 @@ public class DSCompiler {
      * This method is the inverse of {@link #getPartialDerivativeIndex(int...)}.
      * </p>
      * @param index of the partial derivative
-     * @return orders derivation orders with respect to each parameter
+     * @return derivation orders with respect to each parameter
      * @see #getPartialDerivativeIndex(int...)
      */
     public int[] getPartialDerivativeOrders(final int index) {
         return derivativesOrders[index].clone();
+    }
+
+    /** Get the sum of derivation orders for a specific index in the array.
+     * <p>
+     * This method return the sum of the elements returned by
+     * {@link #getPartialDerivativeIndex(int...)}, using precomputed
+     * values
+     * </p>
+     * @param index of the partial derivative
+     * @return sum of derivation orders with respect to each parameter
+     * @see #getPartialDerivativeIndex(int...)
+     * @since 2.2
+     */
+    public int getPartialDerivativeOrdersSum(final int index) {
+        return derivativesOrdersSum[index];
     }
 
     /** Get the number of free parameters.

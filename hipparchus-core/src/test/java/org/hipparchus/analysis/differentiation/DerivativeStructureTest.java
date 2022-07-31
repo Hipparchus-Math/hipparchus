@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import org.hipparchus.CalculusFieldElementAbstractTest;
 import org.hipparchus.Field;
@@ -2052,6 +2053,19 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
+    public void testOrdersSum() {
+        for (int i = 0; i < 6; ++i) {
+            for (int j = 0; j < 4; ++j) {
+                DSCompiler compiler = DSCompiler.getCompiler(i, j);
+                for (int k = 0; k < compiler.getSize(); ++k) {
+                    Assert.assertEquals(IntStream.of(compiler.getPartialDerivativeOrders(k)).sum(),
+                                        compiler.getPartialDerivativeOrdersSum(k));
+                }
+            }
+        }
+    }
+
+    @Test
     public void testRunTimeClass() {
         Field<DerivativeStructure> field = new DSFactory(3, 2).constant(0.0).getField();
         Assert.assertEquals(DerivativeStructure.class, field.getRuntimeClass());
@@ -2075,7 +2089,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
     }
 
-    private void checkEquals(DerivativeStructure ds1, DerivativeStructure ds2, double epsilon) {
+    public static void checkEquals(DerivativeStructure ds1, DerivativeStructure ds2, double epsilon) {
 
         // check dimension
         Assert.assertEquals(ds1.getFreeParameters(), ds2.getFreeParameters());

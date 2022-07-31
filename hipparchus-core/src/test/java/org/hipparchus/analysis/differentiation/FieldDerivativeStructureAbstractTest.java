@@ -2363,7 +2363,9 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
 
     }
 
-    protected void checkEquals(FieldDerivativeStructure<T> ds1, FieldDerivativeStructure<T> ds2, double epsilon) {
+    public static <T extends CalculusFieldElement<T>> void checkEquals(FieldDerivativeStructure<T> ds1,
+                                                                       FieldDerivativeStructure<T> ds2,
+                                                                       double epsilon) {
 
         // check dimension
         Assert.assertEquals(ds1.getFreeParameters(), ds2.getFreeParameters());

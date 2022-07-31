@@ -119,7 +119,7 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
     /** Set a derivative component.
      * <p>
      * This method is package-private (no modifier specified), as it is intended
-     * to be used only by {@link DSFactory} since it relied on the ordering of
+     * to be used only by Hipparchus classes since it relied on the ordering of
      * derivatives within the class. This allows avoiding checks on the index,
      * for performance reasons.
      * </p>
@@ -129,6 +129,21 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
      */
     void setDerivativeComponent(final int index, final double value) {
         data[index] = value;
+    }
+
+    /** Get a derivative component.
+     * <p>
+     * This method is package-private (no modifier specified), as it is intended
+     * to be used only by Hipparchus classes since it relied on the ordering of
+     * derivatives within the class. This allows avoiding checks on the index,
+     * for performance reasons.
+     * </p>
+     * @param index index of the derivative
+     * @return value of the derivative
+     * @since 2.2
+     */
+    double getDerivativeComponent(final int index) {
+        return data[index];
     }
 
     /** {@inheritDoc}
