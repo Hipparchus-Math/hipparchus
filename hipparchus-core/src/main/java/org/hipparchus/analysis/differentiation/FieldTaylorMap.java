@@ -16,11 +16,16 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import java.lang.reflect.Array;
+
+import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.MatrixDecomposer;
+import org.hipparchus.linear.FieldMatrix;
+import org.hipparchus.linear.FieldMatrixDecomposer;
 import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
 /** Container for a Taylor map.
@@ -29,15 +34,16 @@ import org.hipparchus.util.MathUtils;
  * \((f_1, f_2, \ldots, f_n)\) depending on m parameters \((p_1, p_2, \ldots, p_m)\),
  * with positive n and m.
  * </p>
+ * @param <T> the type of the function parameters and value
  * @since 2.2
  */
-public class TaylorMap {
+public class FieldTaylorMap<T extends CalculusFieldElement<T>> {
 
     /** Evaluation point. */
-    private final double[] point;
+    private final T[] point;
 
     /** Mapping functions. */
-    private final DerivativeStructure[] functions;
+    private final FieldDerivativeStructure<T>[] functions;
 
     /** Simple constructor.
      * <p>
@@ -47,7 +53,7 @@ public class TaylorMap {
      * @param point point at which map is evaluated
      * @param functions functions composing the map (must contain at least one element)
      */
-    public TaylorMap(final double[] point, final DerivativeStructure[] functions) {
+    public FieldTaylorMap(final T[] point, final FieldDerivativeStructure<T>[] functions) {
         if (point == null || point.length == 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE,
                                                    point == null ? 0 : point.length);
@@ -58,7 +64,7 @@ public class TaylorMap {
         }
         this.point     = point.clone();
         this.functions = functions.clone();
-        final DSFactory factory0 = functions[0].getFactory();
+        final FDSFactory<T> factory0 = functions[0].getFactory();
         MathUtils.checkDimension(point.length, factory0.getCompiler().getFreeParameters());
         for (int i = 1; i < functions.length; ++i) {
             factory0.checkCompatibility(functions[i].getFactory());
@@ -69,24 +75,28 @@ public class TaylorMap {
      * <p>
      * The identity is considered to be evaluated at origin.
      * </p>
+     * @param valueField field for the function parameters and value
      * @param parameters number of free parameters
      * @param order derivation order
      * @param nbFunctions number of functions
      */
-    public TaylorMap(final int parameters, final int order, final int nbFunctions) {
-        this(parameters, nbFunctions);
-        final DSFactory factory = new DSFactory(parameters, order);
+    public FieldTaylorMap(final Field<T> valueField, final int parameters, final int order, final int nbFunctions) {
+        this(valueField, parameters, nbFunctions);
+        final FDSFactory<T> factory = new FDSFactory<>(valueField, parameters, order);
         for (int i = 0; i < nbFunctions; ++i) {
             functions[i] = factory.variable(i, 0.0);
         }
     }
 
     /** Build an empty map evaluated at origin.
-     * @param nbFunctions number of free parameters (dimension of the Taylor map)
+     * @param valueField field for the function parameters and value
+     * @param parameters number of free parameters
+     * @param nbFunctions number of functions
      */
-    private TaylorMap(final int parameters, final int nbFunctions) {
-        this.point     = new double[parameters];
-        this.functions = new DerivativeStructure[nbFunctions];
+    @SuppressWarnings("unchecked")
+    private FieldTaylorMap(final Field<T> valueField, final int parameters, final int nbFunctions) {
+        this.point     = MathArrays.buildArray(valueField, parameters);
+        this.functions = (FieldDerivativeStructure<T>[]) Array.newInstance(FieldDerivativeStructure.class, nbFunctions);
     }
 
     /** Get the number of parameters of the map.
@@ -106,7 +116,7 @@ public class TaylorMap {
     /** Get the point at which map is evaluated.
      * @return point at which map is evaluated
      */
-    public double[] getPoint() {
+    public T[] getPoint() {
         return point.clone();
     }
 
@@ -114,7 +124,7 @@ public class TaylorMap {
      * @param i index of the function (must be between 0 included and {@link #getDimension()} excluded
      * @return function at index i
      */
-    public DerivativeStructure getFunction(final int i) {
+    public FieldDerivativeStructure<T> getFunction(final int i) {
         return functions[i];
     }
 
@@ -122,8 +132,9 @@ public class TaylorMap {
      * @param other map to subtract from instance
      * @return this - map
      */
-    private TaylorMap subtract(final TaylorMap map) {
-        final TaylorMap result = new TaylorMap(point.length, functions.length);
+    private FieldTaylorMap<T> subtract(final FieldTaylorMap<T> map) {
+        final FieldTaylorMap<T> result = new FieldTaylorMap<>(functions[0].getFactory().getValueField(),
+                                                              point.length, functions.length);
         for (int i = 0; i < result.functions.length; ++i) {
             result.functions[i] = functions[i].subtract(map.functions[i]);
         }
@@ -134,8 +145,20 @@ public class TaylorMap {
      * @param deltaP parameters offsets \((\Delta p_1, \Delta p_2, \ldots, \Delta p_n)\)
      * @return value of the Taylor expansion at \((p_1 + \Delta p_1, p_2 + \Delta p_2, \ldots, p_n + \Delta p_n)\)
      */
-    public double[] value(final double... deltaP) {
-        final double[] value = new double[functions.length];
+    public T[] value(final double... deltaP) {
+        final T[] value = MathArrays.buildArray(functions[0].getFactory().getValueField(), functions.length);
+        for (int i = 0; i < functions.length; ++i) {
+            value[i] = functions[i].taylor(deltaP);
+        }
+        return value;
+    }
+
+    /** Evaluate Taylor expansion of the map at some offset.
+     * @param deltaP parameters offsets \((\Delta p_1, \Delta p_2, \ldots, \Delta p_n)\)
+     * @return value of the Taylor expansion at \((p_1 + \Delta p_1, p_2 + \Delta p_2, \ldots, p_n + \Delta p_n)\)
+     */
+    public T[] value(@SuppressWarnings("unchecked") final T... deltaP) {
+        final T[] value = MathArrays.buildArray(functions[0].getFactory().getValueField(), functions.length);
         for (int i = 0; i < functions.length; ++i) {
             value[i] = functions[i].taylor(deltaP);
         }
@@ -146,17 +169,19 @@ public class TaylorMap {
      * @param other map with which instance must be composed
      * @return composed map \(\mathrm{this} \circ \mathrm{other}\)
      */
-    public TaylorMap compose(final TaylorMap other) {
+    public FieldTaylorMap<T> compose(final FieldTaylorMap<T> other) {
 
         // safety check
         MathUtils.checkDimension(getNbParameters(), other.getNbFunctions());
 
-        final DerivativeStructure[] composed = new DerivativeStructure[functions.length];
+        @SuppressWarnings("unchecked")
+        final FieldDerivativeStructure<T>[] composed = (FieldDerivativeStructure<T>[]) Array.newInstance(FieldDerivativeStructure.class,
+                                                                                                         functions.length);
         for (int i = 0; i < functions.length; ++i) {
             composed[i] = functions[i].rebase(other.functions);
         }
 
-        return new TaylorMap(other.point, composed);
+        return new FieldTaylorMap<>(other.point, composed);
 
     }
 
@@ -178,11 +203,12 @@ public class TaylorMap {
      * 2 of Advances in Imaging and Electron Physics, vol 108
      * by Martin Berz</a>
      */
-    public TaylorMap invert(final MatrixDecomposer decomposer) {
+    public FieldTaylorMap<T> invert(final FieldMatrixDecomposer<T> decomposer) {
 
-        final DSFactory  factory  = functions[0].getFactory();
-        final DSCompiler compiler = factory.getCompiler();
-        final int        n        = functions.length;
+        final FDSFactory<T>  factory  = functions[0].getFactory();
+        final Field<T>       field    = factory.getValueField();
+        final DSCompiler     compiler = factory.getCompiler();
+        final int            n        = functions.length;
 
         // safety check
         MathUtils.checkDimension(n, functions[0].getFreeParameters());
@@ -197,25 +223,25 @@ public class TaylorMap {
         }
 
         // separate linear and non-linear terms
-        final RealMatrix linear      = MatrixUtils.createRealMatrix(n, n);
-        final TaylorMap  nonLinearTM = new TaylorMap(n, n);
+        final FieldMatrix<T> linear      = MatrixUtils.createFieldMatrix(field, n, n);
+        final FieldTaylorMap<T>  nonLinearTM = new FieldTaylorMap<>(field, n, n);
         for (int i = 0; i < n; ++i) {
             nonLinearTM.functions[i] = factory.build(functions[i].getAllDerivatives());
-            nonLinearTM.functions[i].setDerivativeComponent(0, 0.0);
+            nonLinearTM.functions[i].setDerivativeComponent(0, field.getZero());
             for (int j = 0; j < n; ++j) {
                 final int k = indirection[j];
                 linear.setEntry(i, j, functions[i].getDerivativeComponent(k));
-                nonLinearTM.functions[i].setDerivativeComponent(k, 0.0);
+                nonLinearTM.functions[i].setDerivativeComponent(k, field.getZero());
             }
         }
 
         // invert the linear part
-        final RealMatrix linearInvert = decomposer.decompose(linear).getInverse();
+        final FieldMatrix<T> linearInvert = decomposer.decompose(linear).getInverse();
 
         // convert the invert of linear part back to a Taylor map
-        final TaylorMap  linearInvertTM = new TaylorMap(n, n);
+        final FieldTaylorMap<T>  linearInvertTM = new FieldTaylorMap<>(field, n, n);
         for (int i = 0; i < n; ++i) {
-            linearInvertTM.functions[i] = new DerivativeStructure(factory);
+            linearInvertTM.functions[i] = new FieldDerivativeStructure<>(factory);
             for (int j = 0; j < n; ++j) {
                 linearInvertTM.functions[i].setDerivativeComponent(indirection[j], linearInvert.getEntry(i, j));
             }
@@ -223,8 +249,8 @@ public class TaylorMap {
 
         // perform fixed-point evaluation of the inverse
         // adding one derivation order at each iteration
-        final TaylorMap identity = new TaylorMap(n, compiler.getOrder(), n);
-        TaylorMap invertTM = linearInvertTM;
+        final FieldTaylorMap<T> identity = new FieldTaylorMap<>(field, n, compiler.getOrder(), n);
+        FieldTaylorMap<T> invertTM = linearInvertTM;
         for (int k = 1; k < compiler.getOrder(); ++k) {
             invertTM = linearInvertTM.compose(identity.subtract(nonLinearTM.compose(invertTM)));
         }

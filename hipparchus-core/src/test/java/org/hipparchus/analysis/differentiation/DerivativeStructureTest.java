@@ -2089,7 +2089,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
     }
 
-    private void checkEquals(DerivativeStructure ds1, DerivativeStructure ds2, double epsilon) {
+    public static void checkEquals(DerivativeStructure ds1, DerivativeStructure ds2, double epsilon) {
 
         // check dimension
         Assert.assertEquals(ds1.getFreeParameters(), ds2.getFreeParameters());

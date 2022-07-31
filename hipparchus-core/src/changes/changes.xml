@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.2" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issue/190">
+        Added {Field}TaylorMap, supporting evaluation, composition and inversion.
+      </action>
       <action dev="luc" type="add" issue="issue/200">
         Added FieldMatrixDecomposer.
       </action>
