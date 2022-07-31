@@ -32,8 +32,6 @@ import org.hipparchus.Field;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
@@ -817,11 +815,26 @@ public class DSCompiler {
      * This method is the inverse of {@link #getPartialDerivativeIndex(int...)}.
      * </p>
      * @param index of the partial derivative
-     * @return orders derivation orders with respect to each parameter
+     * @return derivation orders with respect to each parameter
      * @see #getPartialDerivativeIndex(int...)
      */
     public int[] getPartialDerivativeOrders(final int index) {
         return derivativesOrders[index].clone();
+    }
+
+    /** Get the sum of derivation orders for a specific index in the array.
+     * <p>
+     * This method return the sum of the elements returned by
+     * {@link #getPartialDerivativeIndex(int...)}, using precomputed
+     * values
+     * </p>
+     * @param index of the partial derivative
+     * @return sum of derivation orders with respect to each parameter
+     * @see #getPartialDerivativeIndex(int...)
+     * @since 2.2
+     */
+    public int getPartialDerivativeOrdersSum(final int index) {
+        return derivativesOrdersSum[index];
     }
 
     /** Get the number of free parameters.
@@ -3561,41 +3574,6 @@ public class DSCompiler {
             value = value.add(term);
         }
         return value;
-    }
-
-    /** Invert a Taylor map.
-     * @param ds arrays holding the map derivative structures
-     * @return array with the inverted map derivative structures
-     * @see <a href="https://doi.org/10.1016/S1076-5670(08)70228-3">chapter
-     * 2 of Advances in Imaging and Electron Physics, vol 108
-     * by Martin Berz</a>
-     * @since 2.2
-     */
-    public double[][] invertMap(final double[][] ds) {
-
-        final int n = ds.length;
-
-        // separate linear and non linear terms (constant terms are ignored)
-        final RealMatrix linear    = MatrixUtils.createRealMatrix(n, n);
-        final double[][] nonLinear = new double[n][getSize()];
-        int linearIndex = 0;
-        for (int i = 0; i < n; ++i) {
-            for (int k = 1; k < getSize(); ++k) { // starting at 1 as we ignore the order 0 term
-                if (derivativesOrdersSum[k] == 1) {
-                    // this is a linear term
-                    // we know they are stored in increasing index order
-                    // so we just increment the local linear index
-                    linear.setEntry(i, linearIndex++, ds[i][k]);
-                } else {
-                    // this is a non-linear term
-                    nonLinear[i][k] = ds[i][k];
-                }
-            }
-        }
-
-        // TODO
-        return null;
-
     }
 
     /** Rebase derivative structure with respect to low level parameter functions.

@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import org.hipparchus.CalculusFieldElementAbstractTest;
 import org.hipparchus.Field;
@@ -2049,6 +2050,19 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
         // compare with Taylor map based implementation
         checkEquals(composeWithTaylorMap(fI, pBase), rebased, tol);
 
+    }
+
+    @Test
+    public void testOrdersSum() {
+        for (int i = 0; i < 6; ++i) {
+            for (int j = 0; j < 4; ++j) {
+                DSCompiler compiler = DSCompiler.getCompiler(i, j);
+                for (int k = 0; k < compiler.getSize(); ++k) {
+                    Assert.assertEquals(IntStream.of(compiler.getPartialDerivativeOrders(k)).sum(),
+                                        compiler.getPartialDerivativeOrdersSum(k));
+                }
+            }
+        }
     }
 
     @Test
