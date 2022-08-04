@@ -49,7 +49,9 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
-    <release version="2.2" date="TBD" description="TBD">
+    <release version="2.2" date="2022-08-10" description="This is a maintenance release. The main
+    changes are: addition of Unscented Kalman Filter for non linear estimations and
+    addition of Taylor map inversion.">
       <action dev="luc" type="add" issue="issue/190">
         Added {Field}TaylorMap, supporting evaluation, composition and inversion.
       </action>
@@ -87,7 +89,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         Added integration/differentiation of {Field}DerivativeStructure.
       </action>
     </release>
-    <release version="2.1" date="2022-04-24" description="This is a maintenande release. The main
+    <release version="2.1" date="2022-04-24" description="This is a maintenance release. The main
       changes are: addition of 3D version of complex function plotter, addition of
       ConvergenceCheckerOrMultiplexer and ConvergenceCheckerAndMultiplexer, addition of inverse
       Jacobi elliptic functions, optional modified weights to Akima interpolation, modified

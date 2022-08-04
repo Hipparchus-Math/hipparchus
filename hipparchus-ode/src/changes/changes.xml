@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
-    <release version="2.2" date="TBD" description="TBD">
+    <release version="2.2" date="2022-08-10" description="This is a maintenance release.">
       <action dev="luc" type="fix" issue="issues/194">
         Added a getPrimary method to FieldExpandableODE.
       </action>

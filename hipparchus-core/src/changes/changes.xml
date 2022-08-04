@@ -49,7 +49,8 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
-    <release version="2.2" date="TBD" description="TBD">
+    <release version="2.2" date="2022-08-10" description="This is a maintenance release. The main
+    change is: addition of Taylor map inversion.">
       <action dev="luc" type="add" issue="issue/190">
         Added {Field}TaylorMap, supporting evaluation, composition and inversion.
       </action>
