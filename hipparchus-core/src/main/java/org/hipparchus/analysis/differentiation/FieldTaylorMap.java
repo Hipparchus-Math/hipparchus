@@ -129,7 +129,7 @@ public class FieldTaylorMap<T extends CalculusFieldElement<T>> {
     }
 
     /** Subtract two maps.
-     * @param other map to subtract from instance
+     * @param map map to subtract from instance
      * @return this - map
      */
     private FieldTaylorMap<T> subtract(final FieldTaylorMap<T> map) {

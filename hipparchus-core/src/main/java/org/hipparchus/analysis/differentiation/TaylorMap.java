@@ -82,7 +82,8 @@ public class TaylorMap {
     }
 
     /** Build an empty map evaluated at origin.
-     * @param nbFunctions number of free parameters (dimension of the Taylor map)
+     * @param parameters number of free parameters
+     * @param nbFunctions number of functions
      */
     private TaylorMap(final int parameters, final int nbFunctions) {
         this.point     = new double[parameters];
@@ -119,7 +120,7 @@ public class TaylorMap {
     }
 
     /** Subtract two maps.
-     * @param other map to subtract from instance
+     * @param map map to subtract from instance
      * @return this - map
      */
     private TaylorMap subtract(final TaylorMap map) {
