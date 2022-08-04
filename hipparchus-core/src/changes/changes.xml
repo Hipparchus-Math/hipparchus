@@ -51,34 +51,34 @@ If the output is not quite correct, check for invisible trailing spaces!
   <body>
     <release version="2.2" date="2022-08-10" description="This is a maintenance release. The main
     change is: addition of Taylor map inversion.">
-      <action dev="luc" type="add" issue="issue/190">
+      <action dev="luc" type="add" issue="issues/190">
         Added {Field}TaylorMap, supporting evaluation, composition and inversion.
       </action>
-      <action dev="luc" type="add" issue="issue/200">
+      <action dev="luc" type="add" issue="issues/200">
         Added FieldMatrixDecomposer.
       </action>
-      <action dev="luc" type="add" issue="issue/191">
+      <action dev="luc" type="add" issue="issues/191">
         Added rebase to {Field}DerivativeStructure, which enables changing
         the base variables a {Field}DerivativeStructure depends on.
       </action>
-      <action dev="luc" type="add" issue="issue/198">
+      <action dev="luc" type="add" issue="issues/198">
         Added CombinatoricsUtils.permutations.
       </action>
       <action dev="luc" type="add">
         Added computation of Bell numbers.
       </action>
-      <action dev="luc" type="add" due-to="Axel Kramer" issue="issue/197">
+      <action dev="luc" type="add" due-to="Axel Kramer" issue="issues/197">
         Added RosenNumberPartitionIterator.
       </action>
-      <action dev="luc" type="add" issue="issue/197">
+      <action dev="luc" type="add" issue="issues/197">
         Added CombinatoricsUtils.partitions.
       </action>
-      <action dev="luc" type="add" issue="issue/195">
+      <action dev="luc" type="add" issue="issues/195">
         Added FieldMultivariateFunction, CalculusFieldMultivariateFunction,
         FieldMultivariateVectorFunction, CalculusFieldMultivariateVectorFunction,
         FieldMultivariateMatrixFunction and CalculusFieldMultivariateMatrixFunction
       </action>
-      <action dev="luc" type="add" due-to="Romain Serra" issue="issue/192">
+      <action dev="luc" type="add" due-to="Romain Serra" issue="issues/192">
         Added integration/differentiation of {Field}DerivativeStructure.
       </action>
     </release>
@@ -86,38 +86,38 @@ If the output is not quite correct, check for invisible trailing spaces!
       changes are addition of inverse Jacobi elliptic functions, optional modified weights to
       Akima interpolation, modified Gram-Schmidt basis orthonormalization process, generation
       of convergents streams in continued fractions. Various bugs were fixed.">
-      <action dev="luc" type="fix" issue="issue/189">
+      <action dev="luc" type="fix" issue="issues/189">
         Fixed some wrong branch cuts in inverse Jacobi elliptic functions in the complex case.
       </action>
-      <action dev="luc" type="add" issue="issue/172">
+      <action dev="luc" type="add" issue="issues/172">
         Added optional modified weights to avoid overshoots in Akima interpolation
         near constant slopes sub-samples.
       </action>
-      <action dev="luc" type="fix" issue="issue/186">
+      <action dev="luc" type="fix" issue="issues/186">
         Avoid building an intermediate complex for computing double norm.
       </action>
-      <action dev="luc" type="fix" issue="issue/175">
+      <action dev="luc" type="fix" issue="issues/175">
         Fixed overflows for incrementors that are allowed to reach Integer.MAX_VALUE.
       </action>
-      <action dev="luc" type="fix" issue="issue/188">
+      <action dev="luc" type="fix" issue="issues/188">
         Added inverse Jacobi elliptic functions, for both double and field values.
       </action>
-      <action dev="luc" type="fix" issue="issue/183">
+      <action dev="luc" type="fix" issue="issues/183">
         Avoid too many calls to function in BracketingNthOrderBrentSolver when using
         AllowedSolution.ANY_SIDE.
       </action>
-      <action dev="luc" type="fix" issue="issue/178">
+      <action dev="luc" type="fix" issue="issues/178">
         Added Modified Gram-Schmidt basis orthonormalization process in MatrixUtils
         for double-based and CalculusFieldElement-based list of vectors.
       </action>
-      <action dev="luc" type="fix" issue="issue/177">
+      <action dev="luc" type="fix" issue="issues/177">
         Fixed issue in Laguerre solver related to different representations of signed zeros.
       </action>
-      <action dev="luc" type="add" issue="issue/176">
+      <action dev="luc" type="add" issue="issues/176">
         Allow generation of continued fractions convergents as streams of BigFraction/Fraction
         to allow user to apply their own convergence criterion to select one convergent.
       </action>
-      <action dev="luc" type="add" issue="issue/173">
+      <action dev="luc" type="add" issue="issues/173">
         Fixed inconsistency of eigenvalues and eigenvectors between OrderedComplexEigenDecomposition
         and base class ComplexEigenDecomposition.
       </action>
@@ -131,16 +131,16 @@ If the output is not quite correct, check for invisible trailing spaces!
     have been added. Beware the elliptic integrals for complex and field complex numbers in the incomplete
     case are considered experimental for now, they have known issues. Methods deprecated during the 1.X
     series have been removed. Numerous bugs were also fixed.">
-      <action dev="luc" type="add" issue="issue/153">
+      <action dev="luc" type="add" issue="issues/153">
         Added field versions of univariate integrators.
       </action>
       <action dev="luc" type="add" >
         Added numerical evaluation of complex elliptic integrals.
       </action>
-      <action dev="luc" type="add" issue="issue/149">
+      <action dev="luc" type="add" issue="issues/149">
         Added complex and field complex univariate integrals (including contour integrals).
       </action>
-      <action dev="luc" type="add" issue="issue/143">
+      <action dev="luc" type="add" issue="issues/143">
         Added ArrayFieldVector.toString().
       </action>
       <action dev="luc" type="fix" due-to="Axel Kramer" issue="issues/144">

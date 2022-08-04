@@ -51,7 +51,7 @@ If the output is not quite correct, check for invisible trailing spaces!
   <body>
     <release version="2.2" date="2022-08-10" description="This is a maintenance release. The main
     change is: addition of Unscented Kalman Filter for non linear estimations.">
-      <action dev="bryan" type="add" due-to="Gaetan Pierre" issue="issue/199">
+      <action dev="bryan" type="add" due-to="Gaetan Pierre" issue="issues/199">
         Added Unscented Kalman Filter for non linear estimations.
       </action>
     </release>
