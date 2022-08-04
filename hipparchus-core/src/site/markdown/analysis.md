@@ -533,8 +533,20 @@ When rebasing, the number of intermediate variables `\(p_i\)` provided must matc
 number `\(n\)` of parameters of the initial `DerivativeStructure`, and the
 derivation orders must all match.
 
-There is a field version of `DerivativeStructure`:
-[FieldDerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/FieldDerivativeStructure.html).
+The `TaylorMap` class is a container that gather several `DerivativeStructure` and one
+evaluation point `\(p_0, p_1, \ldots p_{n-1}\)` to represent a vector-valued function.
+Taylor maps can be evaluated at points close to the central evaluation point by
+providing the offsets `\(\Delta p_0, \Deltap_1, \ldots \Deltap_{n-1}\)`. They can
+be composed with other Taylor maps, which corresponds to call `rebase` on all vector
+components, if the number of functions of the inner map is equal to the number of
+parameters of the outer map. If a Taylor map is square (i.e. if its number of
+parameters is equal to its number of functions) and if its first order derivatives
+are non-singular, then it can be inverted. Taylor map inversion is a major feature that
+can be used in optimization and control of complicated dynamics.
+
+There are field versions of `DerivativeStructure`:
+[FieldDerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/FieldDerivativeStructure.html),
+and `TaylorMap`: [FieldTaylorMap](../apidocs/org/hipparchus/analysis/differentiation/FieldTaylorMap.html).
 
 ### Automated differentiation for simple needs
 
