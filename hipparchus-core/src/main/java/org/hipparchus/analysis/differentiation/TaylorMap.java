@@ -111,7 +111,7 @@ public class TaylorMap {
     }
 
     /** Get a function from the map.
-     * @param i index of the function (must be between 0 included and {@link #getDimension()} excluded
+     * @param i index of the function (must be between 0 included and {@link #getNbFunctions()} excluded
      * @return function at index i
      */
     public DerivativeStructure getFunction(final int i) {
