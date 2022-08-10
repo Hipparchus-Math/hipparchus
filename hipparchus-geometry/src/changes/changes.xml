@@ -49,6 +49,12 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Geometry Release Notes</title>
   </properties>
   <body>
+    <release version="2.2" date="2022-08-10" description="This is a maintenance release.">
+      <action dev="luc" type="update">
+        No changes directly in this module. However, lower level Hipparchus modules did change,
+        hence a new release was needed.
+      </action>
+    </release>
     <release version="2.1" date="2022-04-24" description="This is a maintenance release. The main
       change is addition of equalsIee754 to points in all topologies to handle NaN coordinates.">
       <action dev="luc" type="fix" issue="issues/187">

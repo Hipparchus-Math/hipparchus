@@ -121,7 +121,7 @@ public class FieldTaylorMap<T extends CalculusFieldElement<T>> {
     }
 
     /** Get a function from the map.
-     * @param i index of the function (must be between 0 included and {@link #getDimension()} excluded
+     * @param i index of the function (must be between 0 included and {@link #getNbFunctions()} excluded
      * @return function at index i
      */
     public FieldDerivativeStructure<T> getFunction(final int i) {
@@ -129,7 +129,7 @@ public class FieldTaylorMap<T extends CalculusFieldElement<T>> {
     }
 
     /** Subtract two maps.
-     * @param other map to subtract from instance
+     * @param map map to subtract from instance
      * @return this - map
      */
     private FieldTaylorMap<T> subtract(final FieldTaylorMap<T> map) {

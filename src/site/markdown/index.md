@@ -66,15 +66,10 @@ at fork time.
 
  ---
 
-## 2.1 Release is out!
+## 2.2 Release is out!
 
-Hipparchus 2.1 is now available for download from the [Hipparchus download page](downloads.html) or on
-Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 2.1 release are:
+Hipparchus 2.2 is now available for download from the [Hipparchus download page](downloads.html) or on
+Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 2.2 release are:
 
-  * addition of 3D version of complex function plotter,
-  * addition of ConvergenceCheckerOrMultiplexer and ConvergenceCheckerAndMultiplexer,
-  * addition of inverse Jacobi elliptic functions,
-  * optional modified weights to Akima interpolation,
-  * modified Gram-Schmidt basis orthonormalization process,
-  * generation of convergents streams in continued fractions,
-  * addition of equalsIee754 to points in all topologies to handle NaN coordinates.
+  * Addition of Unscented Kalman Filter for non linear estimations,
+  * Addition of {Field}TaylorMap, supporting evaluation, composition and inversion.

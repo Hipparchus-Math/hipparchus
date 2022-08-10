@@ -30,7 +30,7 @@ import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.UnscentedTransformProvider;
 
 /**
- * Unscented Kalman filter for {@link UscentedProcess unscented process}.
+ * Unscented Kalman filter for {@link UnscentedProcess unscented process}.
  * @param <T> the type of the measurements
  *
  * @see "Wan, E. A., & Van Der Merwe, R. (2000, October). The unscented Kalman filter for nonlinear estimation.

@@ -979,7 +979,7 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
      * Its {@link #getPartialDerivative(int...) partial derivatives} are therefore
      * \(f, \frac{\partial f}{\partial p_0}, \frac{\partial f}{\partial p_1}, \ldots
      * \frac{\partial^2 f}{\partial p_0^2}, \frac{\partial^2 f}{\partial p_0 p_1},
-     * \ldots \frac{\partial^o f}{\partial p_{n-1}^o\). The free parameters
+     * \ldots \frac{\partial^o f}{\partial p_{n-1}^o}\). The free parameters
      * \(p_0, p_1, \ldots p_{n-1}\) are considered to be functions of \(m\) lower
      * level other parameters \(q_0, q_1, \ldots q_{m-1}\).
      * </p>
@@ -990,12 +990,12 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
      * \end{align}\)
      * <p>
      * This method compute the composition of the partial derivatives of \(f\)
-     * and the partial derivatives of \(p_0, p_1, \ldots p_{n-1}, i.e. the
+     * and the partial derivatives of \(p_0, p_1, \ldots p_{n-1}\), i.e. the
      * {@link #getPartialDerivative(int...) partial derivatives} of the value
      * returned will be
      * \(f, \frac{\partial f}{\partial q_0}, \frac{\partial f}{\partial q_1}, \ldots
      * \frac{\partial^2 f}{\partial q_0^2}, \frac{\partial^2 f}{\partial q_0 q_1},
-     * \ldots \frac{\partial^o f}{\partial q_{m-1}^o\).
+     * \ldots \frac{\partial^o f}{\partial q_{m-1}^o}\).
      * </p>
      * <p>
      * The number of parameters must match {@link #getFreeParameters()} and the
