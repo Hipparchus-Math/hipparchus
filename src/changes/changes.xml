@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
+    <release version="2.3" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issues/204">
+        Changed SchurTransformer visibility to public.
+      </action>
+    </release>
     <release version="2.2" date="2022-08-10" description="This is a maintenance release. The main
     changes are: addition of Unscented Kalman Filter for non linear estimations and
     addition of Taylor map inversion.">
