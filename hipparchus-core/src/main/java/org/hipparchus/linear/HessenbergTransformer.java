@@ -44,7 +44,7 @@ import org.hipparchus.util.Precision;
  * @see <a href="http://mathworld.wolfram.com/HessenbergDecomposition.html">MathWorld</a>
  * @see <a href="http://en.wikipedia.org/wiki/Householder_transformation">Householder Transformations</a>
  */
-class HessenbergTransformer {
+public class HessenbergTransformer {
     /** Householder vectors. */
     private final double householderVectors[][];
     /** Temporary storage vector. */
@@ -62,7 +62,7 @@ class HessenbergTransformer {
      * @param matrix matrix to transform
      * @throws MathIllegalArgumentException if the matrix is not square
      */
-    HessenbergTransformer(final RealMatrix matrix) {
+    public HessenbergTransformer(final RealMatrix matrix) {
         if (!matrix.isSquare()) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());
