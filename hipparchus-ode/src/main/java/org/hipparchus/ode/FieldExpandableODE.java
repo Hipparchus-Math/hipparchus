@@ -68,6 +68,14 @@ public class FieldExpandableODE<T extends CalculusFieldElement<T>> {
         this.mapper     = new FieldEquationsMapper<>(null, primary.getDimension());
     }
 
+    /** Get the primary set of differential equations to be integrated.
+     * @return primary set of differential equations to be integrated
+     * @since 2.2
+     */
+    public FieldOrdinaryDifferentialEquation<T> getPrimary() {
+        return primary;
+    }
+
     /** Get the mapper for the set of equations.
      * @return mapper for the set of equations
      */

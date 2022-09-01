@@ -23,8 +23,11 @@
 package org.hipparchus.analysis.differentiation;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.CombinatoricsUtils;
@@ -156,88 +159,105 @@ public class DSCompilerTest {
         }
     }
 
-    @Test public void testMultiplicationRules()
-        throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+    @Test
+    public void testMultiplicationRules()
+        throws SecurityException, NoSuchFieldException, IllegalArgumentException,
+               IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
         Map<String,String> referenceRules = new HashMap<String, String>();
-        referenceRules.put("(f*g)",          "f * g");
-        referenceRules.put("d(f*g)/dx",      "f * dg/dx + df/dx * g");
-        referenceRules.put("d(f*g)/dy",      referenceRules.get("d(f*g)/dx").replaceAll("x", "y"));
-        referenceRules.put("d(f*g)/dz",      referenceRules.get("d(f*g)/dx").replaceAll("x", "z"));
-        referenceRules.put("d(f*g)/dt",      referenceRules.get("d(f*g)/dx").replaceAll("x", "t"));
-        referenceRules.put("d2(f*g)/dx2",    "f * d2g/dx2 + 2 * df/dx * dg/dx + d2f/dx2 * g");
-        referenceRules.put("d2(f*g)/dy2",    referenceRules.get("d2(f*g)/dx2").replaceAll("x", "y"));
-        referenceRules.put("d2(f*g)/dz2",    referenceRules.get("d2(f*g)/dx2").replaceAll("x", "z"));
-        referenceRules.put("d2(f*g)/dt2",    referenceRules.get("d2(f*g)/dx2").replaceAll("x", "t"));
-        referenceRules.put("d2(f*g)/dxdy",   "f * d2g/dxdy + df/dy * dg/dx + df/dx * dg/dy + d2f/dxdy * g");
-        referenceRules.put("d2(f*g)/dxdz",   referenceRules.get("d2(f*g)/dxdy").replaceAll("y", "z"));
-        referenceRules.put("d2(f*g)/dxdt",   referenceRules.get("d2(f*g)/dxdy").replaceAll("y", "t"));
-        referenceRules.put("d2(f*g)/dydz",   referenceRules.get("d2(f*g)/dxdz").replaceAll("x", "y"));
-        referenceRules.put("d2(f*g)/dydt",   referenceRules.get("d2(f*g)/dxdt").replaceAll("x", "y"));
-        referenceRules.put("d2(f*g)/dzdt",   referenceRules.get("d2(f*g)/dxdt").replaceAll("x", "z"));
-        referenceRules.put("d3(f*g)/dx3",    "f * d3g/dx3 +" +
-                                             " 3 * df/dx * d2g/dx2 +" +
-                                             " 3 * d2f/dx2 * dg/dx +" +
-                                             " d3f/dx3 * g");
-        referenceRules.put("d3(f*g)/dy3",   referenceRules.get("d3(f*g)/dx3").replaceAll("x", "y"));
-        referenceRules.put("d3(f*g)/dz3",   referenceRules.get("d3(f*g)/dx3").replaceAll("x", "z"));
-        referenceRules.put("d3(f*g)/dt3",   referenceRules.get("d3(f*g)/dx3").replaceAll("x", "t"));
-        referenceRules.put("d3(f*g)/dx2dy",  "f * d3g/dx2dy +" +
-                                             " df/dy * d2g/dx2 +" +
-                                             " 2 * df/dx * d2g/dxdy +" +
-                                             " 2 * d2f/dxdy * dg/dx +" +
-                                             " d2f/dx2 * dg/dy +" +
-                                             " d3f/dx2dy * g");
-        referenceRules.put("d3(f*g)/dxdy2",  "f * d3g/dxdy2 +" +
-                                             " 2 * df/dy * d2g/dxdy +" +
-                                             " d2f/dy2 * dg/dx +" +
-                                             " df/dx * d2g/dy2 +" +
-                                             " 2 * d2f/dxdy * dg/dy +" +
-                                             " d3f/dxdy2 * g");
-        referenceRules.put("d3(f*g)/dx2dz",   referenceRules.get("d3(f*g)/dx2dy").replaceAll("y", "z"));
-        referenceRules.put("d3(f*g)/dy2dz",   referenceRules.get("d3(f*g)/dx2dz").replaceAll("x", "y"));
-        referenceRules.put("d3(f*g)/dxdz2",   referenceRules.get("d3(f*g)/dxdy2").replaceAll("y", "z"));
-        referenceRules.put("d3(f*g)/dydz2",   referenceRules.get("d3(f*g)/dxdz2").replaceAll("x", "y"));
-        referenceRules.put("d3(f*g)/dx2dt",   referenceRules.get("d3(f*g)/dx2dz").replaceAll("z", "t"));
-        referenceRules.put("d3(f*g)/dy2dt",   referenceRules.get("d3(f*g)/dx2dt").replaceAll("x", "y"));
-        referenceRules.put("d3(f*g)/dz2dt",   referenceRules.get("d3(f*g)/dx2dt").replaceAll("x", "z"));
-        referenceRules.put("d3(f*g)/dxdt2",   referenceRules.get("d3(f*g)/dxdy2").replaceAll("y", "t"));
-        referenceRules.put("d3(f*g)/dydt2",   referenceRules.get("d3(f*g)/dxdt2").replaceAll("x", "y"));
-        referenceRules.put("d3(f*g)/dzdt2",   referenceRules.get("d3(f*g)/dxdt2").replaceAll("x", "z"));
-        referenceRules.put("d3(f*g)/dxdydz", "f * d3g/dxdydz +" +
-                                             " df/dz * d2g/dxdy +" +
-                                             " df/dy * d2g/dxdz +" +
-                                             " d2f/dydz * dg/dx +" +
-                                             " df/dx * d2g/dydz +" +
-                                             " d2f/dxdz * dg/dy +" +
-                                             " d2f/dxdy * dg/dz +" +
-                                             " d3f/dxdydz * g");
-        referenceRules.put("d3(f*g)/dxdydt", referenceRules.get("d3(f*g)/dxdydz").replaceAll("z", "t"));
-        referenceRules.put("d3(f*g)/dxdzdt", referenceRules.get("d3(f*g)/dxdydt").replaceAll("y", "z"));
-        referenceRules.put("d3(f*g)/dydzdt", referenceRules.get("d3(f*g)/dxdzdt").replaceAll("x", "y"));
+        referenceRules.put("(f*g)",             "f * g");
+        referenceRules.put("∂(f*g)/∂p₀",        "f * ∂g/∂p₀ + ∂f/∂p₀ * g");
+        referenceRules.put("∂(f*g)/∂p₁",        referenceRules.get("∂(f*g)/∂p₀").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂(f*g)/∂p₂",        referenceRules.get("∂(f*g)/∂p₀").replaceAll("p₀", "p₂"));
+        referenceRules.put("∂(f*g)/∂p₃",        referenceRules.get("∂(f*g)/∂p₀").replaceAll("p₀", "p₃"));
+        referenceRules.put("∂²(f*g)/∂p₀²",      "f * ∂²g/∂p₀² + 2 * ∂f/∂p₀ * ∂g/∂p₀ + ∂²f/∂p₀² * g");
+        referenceRules.put("∂²(f*g)/∂p₁²",      referenceRules.get("∂²(f*g)/∂p₀²").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂²(f*g)/∂p₂²",      referenceRules.get("∂²(f*g)/∂p₀²").replaceAll("p₀", "p₂"));
+        referenceRules.put("∂²(f*g)/∂p₃²",      referenceRules.get("∂²(f*g)/∂p₀²").replaceAll("p₀", "p₃"));
+        referenceRules.put("∂²(f*g)/∂p₀∂p₁",    "f * ∂²g/∂p₀∂p₁ + ∂f/∂p₁ * ∂g/∂p₀ + ∂f/∂p₀ * ∂g/∂p₁ + ∂²f/∂p₀∂p₁ * g");
+        referenceRules.put("∂²(f*g)/∂p₀∂p₂",    referenceRules.get("∂²(f*g)/∂p₀∂p₁").replaceAll("p₁", "p₂"));
+        referenceRules.put("∂²(f*g)/∂p₀∂p₃",    referenceRules.get("∂²(f*g)/∂p₀∂p₁").replaceAll("p₁", "p₃"));
+        referenceRules.put("∂²(f*g)/∂p₁∂p₂",    referenceRules.get("∂²(f*g)/∂p₀∂p₂").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂²(f*g)/∂p₁∂p₃",    referenceRules.get("∂²(f*g)/∂p₀∂p₃").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂²(f*g)/∂p₂∂p₃",    referenceRules.get("∂²(f*g)/∂p₀∂p₃").replaceAll("p₀", "p₂"));
+        referenceRules.put("∂³(f*g)/∂p₀³",      "f * ∂³g/∂p₀³ +" +
+                                                " 3 * ∂f/∂p₀ * ∂²g/∂p₀² +" +
+                                                " 3 * ∂²f/∂p₀² * ∂g/∂p₀ +" +
+                                                " ∂³f/∂p₀³ * g");
+        referenceRules.put("∂³(f*g)/∂p₁³",      referenceRules.get("∂³(f*g)/∂p₀³").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂³(f*g)/∂p₂³",      referenceRules.get("∂³(f*g)/∂p₀³").replaceAll("p₀", "p₂"));
+        referenceRules.put("∂³(f*g)/∂p₃³",      referenceRules.get("∂³(f*g)/∂p₀³").replaceAll("p₀", "p₃"));
+        referenceRules.put("∂³(f*g)/∂p₀²∂p₁",   "f * ∂³g/∂p₀²∂p₁ +" +
+                                                " ∂f/∂p₁ * ∂²g/∂p₀² +" +
+                                                " 2 * ∂f/∂p₀ * ∂²g/∂p₀∂p₁ +" +
+                                                " 2 * ∂²f/∂p₀∂p₁ * ∂g/∂p₀ +" +
+                                                " ∂²f/∂p₀² * ∂g/∂p₁ +" +
+                                                " ∂³f/∂p₀²∂p₁ * g");
+        referenceRules.put("∂³(f*g)/∂p₀∂p₁²",   "f * ∂³g/∂p₀∂p₁² +" +
+                                                " 2 * ∂f/∂p₁ * ∂²g/∂p₀∂p₁ +" +
+                                                " ∂²f/∂p₁² * ∂g/∂p₀ +" +
+                                                " ∂f/∂p₀ * ∂²g/∂p₁² +" +
+                                                " 2 * ∂²f/∂p₀∂p₁ * ∂g/∂p₁ +" +
+                                                " ∂³f/∂p₀∂p₁² * g");
+        referenceRules.put("∂³(f*g)/∂p₀²∂p₂",   referenceRules.get("∂³(f*g)/∂p₀²∂p₁").replaceAll("p₁", "p₂"));
+        referenceRules.put("∂³(f*g)/∂p₁²∂p₂",   referenceRules.get("∂³(f*g)/∂p₀²∂p₂").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂³(f*g)/∂p₀∂p₂²",   referenceRules.get("∂³(f*g)/∂p₀∂p₁²").replaceAll("p₁", "p₂"));
+        referenceRules.put("∂³(f*g)/∂p₁∂p₂²",   referenceRules.get("∂³(f*g)/∂p₀∂p₂²").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂³(f*g)/∂p₀²∂p₃",   referenceRules.get("∂³(f*g)/∂p₀²∂p₂").replaceAll("p₂", "p₃"));
+        referenceRules.put("∂³(f*g)/∂p₁²∂p₃",   referenceRules.get("∂³(f*g)/∂p₀²∂p₃").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂³(f*g)/∂p₂²∂p₃",   referenceRules.get("∂³(f*g)/∂p₀²∂p₃").replaceAll("p₀", "p₂"));
+        referenceRules.put("∂³(f*g)/∂p₀∂p₃²",   referenceRules.get("∂³(f*g)/∂p₀∂p₁²").replaceAll("p₁", "p₃"));
+        referenceRules.put("∂³(f*g)/∂p₁∂p₃²",   referenceRules.get("∂³(f*g)/∂p₀∂p₃²").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂³(f*g)/∂p₂∂p₃²",   referenceRules.get("∂³(f*g)/∂p₀∂p₃²").replaceAll("p₀", "p₂"));
+        referenceRules.put("∂³(f*g)/∂p₀∂p₁∂p₂", "f * ∂³g/∂p₀∂p₁∂p₂ +" +
+                                                " ∂f/∂p₂ * ∂²g/∂p₀∂p₁ +" +
+                                                " ∂f/∂p₁ * ∂²g/∂p₀∂p₂ +" +
+                                                " ∂²f/∂p₁∂p₂ * ∂g/∂p₀ +" +
+                                                " ∂f/∂p₀ * ∂²g/∂p₁∂p₂ +" +
+                                                " ∂²f/∂p₀∂p₂ * ∂g/∂p₁ +" +
+                                                " ∂²f/∂p₀∂p₁ * ∂g/∂p₂ +" +
+                                                " ∂³f/∂p₀∂p₁∂p₂ * g");
+        referenceRules.put("∂³(f*g)/∂p₀∂p₁∂p₃", referenceRules.get("∂³(f*g)/∂p₀∂p₁∂p₂").replaceAll("p₂", "p₃"));
+        referenceRules.put("∂³(f*g)/∂p₀∂p₂∂p₃", referenceRules.get("∂³(f*g)/∂p₀∂p₁∂p₃").replaceAll("p₁", "p₂"));
+        referenceRules.put("∂³(f*g)/∂p₁∂p₂∂p₃", referenceRules.get("∂³(f*g)/∂p₀∂p₂∂p₃").replaceAll("p₀", "p₁"));
 
         Field multFieldArrayField = DSCompiler.class.getDeclaredField("multIndirection");
         multFieldArrayField.setAccessible(true);
+        Class<?> abstractMapperClass = Stream.
+                        of(DSCompiler.class.getDeclaredClasses()).
+                        filter(c -> c.getName().endsWith("AbstractMapper")).
+                        findAny().
+                        get();
+        Class<?> multiplicationMapperClass = Stream.
+                        of(DSCompiler.class.getDeclaredClasses()).
+                        filter(c -> c.getName().endsWith("MultiplicationMapper")).
+                        findAny().
+                        get();
+        Method coeffMethod = abstractMapperClass.getDeclaredMethod("getCoeff");
+        Field lhsField = multiplicationMapperClass.getDeclaredField("lhsIndex");
+        lhsField.setAccessible(true);
+        Field rhsField = multiplicationMapperClass.getDeclaredField("rhsIndex");
+        rhsField.setAccessible(true);
         for (int i = 0; i < 5; ++i) {
             for (int j = 0; j < 4; ++j) {
                 DSCompiler compiler = DSCompiler.getCompiler(i, j);
-                int[][][] multIndirection = (int[][][]) multFieldArrayField.get(compiler);
+                Object[][] multIndirection = (Object[][]) multFieldArrayField.get(compiler);
                 for (int k = 0; k < multIndirection.length; ++k) {
                     String product = ordersToString(compiler.getPartialDerivativeOrders(k),
-                                                    "(f*g)", "x", "y", "z", "t");
+                                                    "(f*g)", variables("p"));
                     StringBuilder rule = new StringBuilder();
-                    for (int[] term : multIndirection[k]) {
+                    for (Object term : multIndirection[k]) {
                         if (rule.length() > 0) {
                             rule.append(" + ");
                         }
-                        if (term[0] > 1) {
-                            rule.append(term[0]).append(" * ");
+                        if (((Integer) coeffMethod.invoke(term)).intValue() > 1) {
+                            rule.append(((Integer) coeffMethod.invoke(term)).intValue()).append(" * ");
                         }
-                        rule.append(ordersToString(compiler.getPartialDerivativeOrders(term[1]),
-                                                   "f", "x", "y", "z", "t"));
+                        rule.append(ordersToString(compiler.getPartialDerivativeOrders(((Integer) lhsField.get(term)).intValue()),
+                                                   "f", variables("p")));
                         rule.append(" * ");
-                        rule.append(ordersToString(compiler.getPartialDerivativeOrders(term[2]),
-                                                   "g", "x", "y", "z", "t"));
+                        rule.append(ordersToString(compiler.getPartialDerivativeOrders(((Integer) rhsField.get(term)).intValue()),
+                                                   "g", variables("p")));
                     }
                     Assert.assertEquals(product, referenceRules.get(product), rule.toString());
                 }
@@ -245,192 +265,266 @@ public class DSCompilerTest {
         }
     }
 
-    @Test public void testCompositionRules()
-        throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+    @Test
+    public void testCompositionRules()
+        throws SecurityException, NoSuchFieldException, IllegalArgumentException,
+               IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 
         // the following reference rules have all been computed independently from the library,
         // using only pencil and paper and some search and replace to handle symmetries
         Map<String,String> referenceRules = new HashMap<String, String>();
         referenceRules.put("(f(g))",              "(f(g))");
-        referenceRules.put("d(f(g))/dx",          "d(f(g))/dg * dg/dx");
-        referenceRules.put("d(f(g))/dy",          referenceRules.get("d(f(g))/dx").replaceAll("x", "y"));
-        referenceRules.put("d(f(g))/dz",          referenceRules.get("d(f(g))/dx").replaceAll("x", "z"));
-        referenceRules.put("d(f(g))/dt",          referenceRules.get("d(f(g))/dx").replaceAll("x", "t"));
-        referenceRules.put("d2(f(g))/dx2",        "d2(f(g))/dg2 * dg/dx * dg/dx + d(f(g))/dg * d2g/dx2");
-        referenceRules.put("d2(f(g))/dy2",        referenceRules.get("d2(f(g))/dx2").replaceAll("x", "y"));
-        referenceRules.put("d2(f(g))/dz2",        referenceRules.get("d2(f(g))/dx2").replaceAll("x", "z"));
-        referenceRules.put("d2(f(g))/dt2",        referenceRules.get("d2(f(g))/dx2").replaceAll("x", "t"));
-        referenceRules.put("d2(f(g))/dxdy",       "d2(f(g))/dg2 * dg/dx * dg/dy + d(f(g))/dg * d2g/dxdy");
-        referenceRules.put("d2(f(g))/dxdz",       referenceRules.get("d2(f(g))/dxdy").replaceAll("y", "z"));
-        referenceRules.put("d2(f(g))/dxdt",       referenceRules.get("d2(f(g))/dxdy").replaceAll("y", "t"));
-        referenceRules.put("d2(f(g))/dydz",       referenceRules.get("d2(f(g))/dxdz").replaceAll("x", "y"));
-        referenceRules.put("d2(f(g))/dydt",       referenceRules.get("d2(f(g))/dxdt").replaceAll("x", "y"));
-        referenceRules.put("d2(f(g))/dzdt",       referenceRules.get("d2(f(g))/dxdt").replaceAll("x", "z"));
-        referenceRules.put("d3(f(g))/dx3",        "d3(f(g))/dg3 * dg/dx * dg/dx * dg/dx +" +
-                                                  " 3 * d2(f(g))/dg2 * dg/dx * d2g/dx2 +" +
-                                                  " d(f(g))/dg * d3g/dx3");
-        referenceRules.put("d3(f(g))/dy3",        referenceRules.get("d3(f(g))/dx3").replaceAll("x", "y"));
-        referenceRules.put("d3(f(g))/dz3",        referenceRules.get("d3(f(g))/dx3").replaceAll("x", "z"));
-        referenceRules.put("d3(f(g))/dt3",        referenceRules.get("d3(f(g))/dx3").replaceAll("x", "t"));
-        referenceRules.put("d3(f(g))/dxdy2",      "d3(f(g))/dg3 * dg/dx * dg/dy * dg/dy +" +
-                                                  " 2 * d2(f(g))/dg2 * dg/dy * d2g/dxdy +" +
-                                                  " d2(f(g))/dg2 * dg/dx * d2g/dy2 +" +
-                                                  " d(f(g))/dg * d3g/dxdy2");
-        referenceRules.put("d3(f(g))/dxdz2",      referenceRules.get("d3(f(g))/dxdy2").replaceAll("y", "z"));
-        referenceRules.put("d3(f(g))/dxdt2",      referenceRules.get("d3(f(g))/dxdy2").replaceAll("y", "t"));
-        referenceRules.put("d3(f(g))/dydz2",      referenceRules.get("d3(f(g))/dxdz2").replaceAll("x", "y"));
-        referenceRules.put("d3(f(g))/dydt2",      referenceRules.get("d3(f(g))/dxdt2").replaceAll("x", "y"));
-        referenceRules.put("d3(f(g))/dzdt2",      referenceRules.get("d3(f(g))/dxdt2").replaceAll("x", "z"));
-        referenceRules.put("d3(f(g))/dx2dy",      "d3(f(g))/dg3 * dg/dx * dg/dx * dg/dy +" +
-                                                  " 2 * d2(f(g))/dg2 * dg/dx * d2g/dxdy +" +
-                                                  " d2(f(g))/dg2 * d2g/dx2 * dg/dy +" +
-                                                  " d(f(g))/dg * d3g/dx2dy");
-        referenceRules.put("d3(f(g))/dx2dz",      referenceRules.get("d3(f(g))/dx2dy").replaceAll("y", "z"));
-        referenceRules.put("d3(f(g))/dx2dt",      referenceRules.get("d3(f(g))/dx2dy").replaceAll("y", "t"));
-        referenceRules.put("d3(f(g))/dy2dz",      referenceRules.get("d3(f(g))/dx2dz").replaceAll("x", "y"));
-        referenceRules.put("d3(f(g))/dy2dt",      referenceRules.get("d3(f(g))/dx2dt").replaceAll("x", "y"));
-        referenceRules.put("d3(f(g))/dz2dt",      referenceRules.get("d3(f(g))/dx2dt").replaceAll("x", "z"));
-        referenceRules.put("d3(f(g))/dxdydz",     "d3(f(g))/dg3 * dg/dx * dg/dy * dg/dz +" +
-                                                  " d2(f(g))/dg2 * dg/dy * d2g/dxdz +" +
-                                                  " d2(f(g))/dg2 * dg/dx * d2g/dydz +" +
-                                                  " d2(f(g))/dg2 * d2g/dxdy * dg/dz +" +
-                                                  " d(f(g))/dg * d3g/dxdydz");
-        referenceRules.put("d3(f(g))/dxdydt",     referenceRules.get("d3(f(g))/dxdydz").replaceAll("z", "t"));
-        referenceRules.put("d3(f(g))/dxdzdt",     referenceRules.get("d3(f(g))/dxdydt").replaceAll("y", "z"));
-        referenceRules.put("d3(f(g))/dydzdt",     referenceRules.get("d3(f(g))/dxdzdt").replaceAll("x", "y"));
-        referenceRules.put("d4(f(g))/dx4",        "d4(f(g))/dg4 * dg/dx * dg/dx * dg/dx * dg/dx +" +
-                                                  " 6 * d3(f(g))/dg3 * dg/dx * dg/dx * d2g/dx2 +" +
-                                                  " 3 * d2(f(g))/dg2 * d2g/dx2 * d2g/dx2 +" +
-                                                  " 4 * d2(f(g))/dg2 * dg/dx * d3g/dx3 +" +
-                                                  " d(f(g))/dg * d4g/dx4");
-        referenceRules.put("d4(f(g))/dy4",        referenceRules.get("d4(f(g))/dx4").replaceAll("x", "y"));
-        referenceRules.put("d4(f(g))/dz4",        referenceRules.get("d4(f(g))/dx4").replaceAll("x", "z"));
-        referenceRules.put("d4(f(g))/dt4",        referenceRules.get("d4(f(g))/dx4").replaceAll("x", "t"));
-        referenceRules.put("d4(f(g))/dx3dy",      "d4(f(g))/dg4 * dg/dx * dg/dx * dg/dx * dg/dy +" +
-                                                  " 3 * d3(f(g))/dg3 * dg/dx * dg/dx * d2g/dxdy +" +
-                                                  " 3 * d3(f(g))/dg3 * dg/dx * d2g/dx2 * dg/dy +" +
-                                                  " 3 * d2(f(g))/dg2 * d2g/dx2 * d2g/dxdy +" +
-                                                  " 3 * d2(f(g))/dg2 * dg/dx * d3g/dx2dy +" +
-                                                  " d2(f(g))/dg2 * d3g/dx3 * dg/dy +" +
-                                                  " d(f(g))/dg * d4g/dx3dy");
-        referenceRules.put("d4(f(g))/dx3dz",      referenceRules.get("d4(f(g))/dx3dy").replaceAll("y", "z"));
-        referenceRules.put("d4(f(g))/dx3dt",      referenceRules.get("d4(f(g))/dx3dy").replaceAll("y", "t"));
-        referenceRules.put("d4(f(g))/dxdy3",      "d4(f(g))/dg4 * dg/dx * dg/dy * dg/dy * dg/dy +" +
-                                                  " 3 * d3(f(g))/dg3 * dg/dy * dg/dy * d2g/dxdy +" +
-                                                  " 3 * d3(f(g))/dg3 * dg/dx * dg/dy * d2g/dy2 +" +
-                                                  " 3 * d2(f(g))/dg2 * d2g/dxdy * d2g/dy2 +" +
-                                                  " 3 * d2(f(g))/dg2 * dg/dy * d3g/dxdy2 +" +
-                                                  " d2(f(g))/dg2 * dg/dx * d3g/dy3 +" +
-                                                  " d(f(g))/dg * d4g/dxdy3");
-        referenceRules.put("d4(f(g))/dxdz3",      referenceRules.get("d4(f(g))/dxdy3").replaceAll("y", "z"));
-        referenceRules.put("d4(f(g))/dxdt3",      referenceRules.get("d4(f(g))/dxdy3").replaceAll("y", "t"));
-        referenceRules.put("d4(f(g))/dy3dz",      referenceRules.get("d4(f(g))/dx3dz").replaceAll("x", "y"));
-        referenceRules.put("d4(f(g))/dy3dt",      referenceRules.get("d4(f(g))/dx3dt").replaceAll("x", "y"));
-        referenceRules.put("d4(f(g))/dydz3",      referenceRules.get("d4(f(g))/dxdz3").replaceAll("x", "y"));
-        referenceRules.put("d4(f(g))/dydt3",      referenceRules.get("d4(f(g))/dxdt3").replaceAll("x", "y"));
-        referenceRules.put("d4(f(g))/dz3dt",      referenceRules.get("d4(f(g))/dx3dt").replaceAll("x", "z"));
-        referenceRules.put("d4(f(g))/dzdt3",      referenceRules.get("d4(f(g))/dxdt3").replaceAll("x", "z"));
-        referenceRules.put("d4(f(g))/dx2dy2",     "d4(f(g))/dg4 * dg/dx * dg/dx * dg/dy * dg/dy +" +
-                                                  " 4 * d3(f(g))/dg3 * dg/dx * dg/dy * d2g/dxdy +" +
-                                                  " d3(f(g))/dg3 * dg/dx * dg/dx * d2g/dy2 +" +
-                                                  " 2 * d2(f(g))/dg2 * d2g/dxdy * d2g/dxdy +" +
-                                                  " 2 * d2(f(g))/dg2 * dg/dx * d3g/dxdy2 +" +
-                                                  " d3(f(g))/dg3 * d2g/dx2 * dg/dy * dg/dy +" +
-                                                  " 2 * d2(f(g))/dg2 * dg/dy * d3g/dx2dy +" +
-                                                  " d2(f(g))/dg2 * d2g/dx2 * d2g/dy2 +" +
-                                                  " d(f(g))/dg * d4g/dx2dy2");
-        referenceRules.put("d4(f(g))/dx2dz2",     referenceRules.get("d4(f(g))/dx2dy2").replaceAll("y", "z"));
-        referenceRules.put("d4(f(g))/dx2dt2",     referenceRules.get("d4(f(g))/dx2dy2").replaceAll("y", "t"));
-        referenceRules.put("d4(f(g))/dy2dz2",     referenceRules.get("d4(f(g))/dx2dz2").replaceAll("x", "y"));
-        referenceRules.put("d4(f(g))/dy2dt2",     referenceRules.get("d4(f(g))/dx2dt2").replaceAll("x", "y"));
-        referenceRules.put("d4(f(g))/dz2dt2",     referenceRules.get("d4(f(g))/dx2dt2").replaceAll("x", "z"));
+        referenceRules.put("∂(f(g))/∂p₀",          "∂(f(g))/∂g * ∂g/∂p₀");
+        referenceRules.put("∂(f(g))/∂p₁",          referenceRules.get("∂(f(g))/∂p₀").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂(f(g))/∂p₂",          referenceRules.get("∂(f(g))/∂p₀").replaceAll("p₀", "p₂"));
+        referenceRules.put("∂(f(g))/∂p₃",          referenceRules.get("∂(f(g))/∂p₀").replaceAll("p₀", "p₃"));
+        referenceRules.put("∂²(f(g))/∂p₀²",        "∂²(f(g))/∂g² * ∂g/∂p₀ * ∂g/∂p₀ + ∂(f(g))/∂g * ∂²g/∂p₀²");
+        referenceRules.put("∂²(f(g))/∂p₁²",        referenceRules.get("∂²(f(g))/∂p₀²").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂²(f(g))/∂p₂²",        referenceRules.get("∂²(f(g))/∂p₀²").replaceAll("p₀", "p₂"));
+        referenceRules.put("∂²(f(g))/∂p₃²",        referenceRules.get("∂²(f(g))/∂p₀²").replaceAll("p₀", "p₃"));
+        referenceRules.put("∂²(f(g))/∂p₀∂p₁",       "∂²(f(g))/∂g² * ∂g/∂p₀ * ∂g/∂p₁ + ∂(f(g))/∂g * ∂²g/∂p₀∂p₁");
+        referenceRules.put("∂²(f(g))/∂p₀∂p₂",       referenceRules.get("∂²(f(g))/∂p₀∂p₁").replaceAll("p₁", "p₂"));
+        referenceRules.put("∂²(f(g))/∂p₀∂p₃",       referenceRules.get("∂²(f(g))/∂p₀∂p₁").replaceAll("p₁", "p₃"));
+        referenceRules.put("∂²(f(g))/∂p₁∂p₂",       referenceRules.get("∂²(f(g))/∂p₀∂p₂").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂²(f(g))/∂p₁∂p₃",       referenceRules.get("∂²(f(g))/∂p₀∂p₃").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂²(f(g))/∂p₂∂p₃",       referenceRules.get("∂²(f(g))/∂p₀∂p₃").replaceAll("p₀", "p₂"));
+        referenceRules.put("∂³(f(g))/∂p₀³",        "∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₀ * ∂g/∂p₀ +" +
+                                                  " 3 * ∂²(f(g))/∂g² * ∂g/∂p₀ * ∂²g/∂p₀² +" +
+                                                  " ∂(f(g))/∂g * ∂³g/∂p₀³");
+        referenceRules.put("∂³(f(g))/∂p₁³",        referenceRules.get("∂³(f(g))/∂p₀³").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂³(f(g))/∂p₂³",        referenceRules.get("∂³(f(g))/∂p₀³").replaceAll("p₀", "p₂"));
+        referenceRules.put("∂³(f(g))/∂p₃³",        referenceRules.get("∂³(f(g))/∂p₀³").replaceAll("p₀", "p₃"));
+        referenceRules.put("∂³(f(g))/∂p₀∂p₁²",      "∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₁ * ∂g/∂p₁ +" +
+                                                  " 2 * ∂²(f(g))/∂g² * ∂g/∂p₁ * ∂²g/∂p₀∂p₁ +" +
+                                                  " ∂²(f(g))/∂g² * ∂g/∂p₀ * ∂²g/∂p₁² +" +
+                                                  " ∂(f(g))/∂g * ∂³g/∂p₀∂p₁²");
+        referenceRules.put("∂³(f(g))/∂p₀∂p₂²",      referenceRules.get("∂³(f(g))/∂p₀∂p₁²").replaceAll("p₁", "p₂"));
+        referenceRules.put("∂³(f(g))/∂p₀∂p₃²",      referenceRules.get("∂³(f(g))/∂p₀∂p₁²").replaceAll("p₁", "p₃"));
+        referenceRules.put("∂³(f(g))/∂p₁∂p₂²",      referenceRules.get("∂³(f(g))/∂p₀∂p₂²").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂³(f(g))/∂p₁∂p₃²",      referenceRules.get("∂³(f(g))/∂p₀∂p₃²").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂³(f(g))/∂p₂∂p₃²",      referenceRules.get("∂³(f(g))/∂p₀∂p₃²").replaceAll("p₀", "p₂"));
+        referenceRules.put("∂³(f(g))/∂p₀²∂p₁",      "∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₀ * ∂g/∂p₁ +" +
+                                                  " 2 * ∂²(f(g))/∂g² * ∂g/∂p₀ * ∂²g/∂p₀∂p₁ +" +
+                                                  " ∂²(f(g))/∂g² * ∂²g/∂p₀² * ∂g/∂p₁ +" +
+                                                  " ∂(f(g))/∂g * ∂³g/∂p₀²∂p₁");
+        referenceRules.put("∂³(f(g))/∂p₀²∂p₂",      referenceRules.get("∂³(f(g))/∂p₀²∂p₁").replaceAll("p₁", "p₂"));
+        referenceRules.put("∂³(f(g))/∂p₀²∂p₃",      referenceRules.get("∂³(f(g))/∂p₀²∂p₁").replaceAll("p₁", "p₃"));
+        referenceRules.put("∂³(f(g))/∂p₁²∂p₂",      referenceRules.get("∂³(f(g))/∂p₀²∂p₂").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂³(f(g))/∂p₁²∂p₃",      referenceRules.get("∂³(f(g))/∂p₀²∂p₃").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂³(f(g))/∂p₂²∂p₃",      referenceRules.get("∂³(f(g))/∂p₀²∂p₃").replaceAll("p₀", "p₂"));
+        referenceRules.put("∂³(f(g))/∂p₀∂p₁∂p₂",     "∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₁ * ∂g/∂p₂ +" +
+                                                  " ∂²(f(g))/∂g² * ∂g/∂p₁ * ∂²g/∂p₀∂p₂ +" +
+                                                  " ∂²(f(g))/∂g² * ∂g/∂p₀ * ∂²g/∂p₁∂p₂ +" +
+                                                  " ∂²(f(g))/∂g² * ∂²g/∂p₀∂p₁ * ∂g/∂p₂ +" +
+                                                  " ∂(f(g))/∂g * ∂³g/∂p₀∂p₁∂p₂");
+        referenceRules.put("∂³(f(g))/∂p₀∂p₁∂p₃",     referenceRules.get("∂³(f(g))/∂p₀∂p₁∂p₂").replaceAll("p₂", "p₃"));
+        referenceRules.put("∂³(f(g))/∂p₀∂p₂∂p₃",     referenceRules.get("∂³(f(g))/∂p₀∂p₁∂p₃").replaceAll("p₁", "p₂"));
+        referenceRules.put("∂³(f(g))/∂p₁∂p₂∂p₃",     referenceRules.get("∂³(f(g))/∂p₀∂p₂∂p₃").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂⁴(f(g))/∂p₀⁴",        "∂⁴(f(g))/∂g⁴ * ∂g/∂p₀ * ∂g/∂p₀ * ∂g/∂p₀ * ∂g/∂p₀ +" +
+                                                  " 6 * ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₀ * ∂²g/∂p₀² +" +
+                                                  " 3 * ∂²(f(g))/∂g² * ∂²g/∂p₀² * ∂²g/∂p₀² +" +
+                                                  " 4 * ∂²(f(g))/∂g² * ∂g/∂p₀ * ∂³g/∂p₀³ +" +
+                                                  " ∂(f(g))/∂g * ∂⁴g/∂p₀⁴");
+        referenceRules.put("∂⁴(f(g))/∂p₁⁴",        referenceRules.get("∂⁴(f(g))/∂p₀⁴").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂⁴(f(g))/∂p₂⁴",        referenceRules.get("∂⁴(f(g))/∂p₀⁴").replaceAll("p₀", "p₂"));
+        referenceRules.put("∂⁴(f(g))/∂p₃⁴",        referenceRules.get("∂⁴(f(g))/∂p₀⁴").replaceAll("p₀", "p₃"));
+        referenceRules.put("∂⁴(f(g))/∂p₀³∂p₁",      "∂⁴(f(g))/∂g⁴ * ∂g/∂p₀ * ∂g/∂p₀ * ∂g/∂p₀ * ∂g/∂p₁ +" +
+                                                  " 3 * ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₀ * ∂²g/∂p₀∂p₁ +" +
+                                                  " 3 * ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂²g/∂p₀² * ∂g/∂p₁ +" +
+                                                  " 3 * ∂²(f(g))/∂g² * ∂²g/∂p₀² * ∂²g/∂p₀∂p₁ +" +
+                                                  " 3 * ∂²(f(g))/∂g² * ∂g/∂p₀ * ∂³g/∂p₀²∂p₁ +" +
+                                                  " ∂²(f(g))/∂g² * ∂³g/∂p₀³ * ∂g/∂p₁ +" +
+                                                  " ∂(f(g))/∂g * ∂⁴g/∂p₀³∂p₁");
+        referenceRules.put("∂⁴(f(g))/∂p₀³∂p₂",      referenceRules.get("∂⁴(f(g))/∂p₀³∂p₁").replaceAll("p₁", "p₂"));
+        referenceRules.put("∂⁴(f(g))/∂p₀³∂p₃",      referenceRules.get("∂⁴(f(g))/∂p₀³∂p₁").replaceAll("p₁", "p₃"));
+        referenceRules.put("∂⁴(f(g))/∂p₀∂p₁³",      "∂⁴(f(g))/∂g⁴ * ∂g/∂p₀ * ∂g/∂p₁ * ∂g/∂p₁ * ∂g/∂p₁ +" +
+                                                  " 3 * ∂³(f(g))/∂g³ * ∂g/∂p₁ * ∂g/∂p₁ * ∂²g/∂p₀∂p₁ +" +
+                                                  " 3 * ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₁ * ∂²g/∂p₁² +" +
+                                                  " 3 * ∂²(f(g))/∂g² * ∂²g/∂p₀∂p₁ * ∂²g/∂p₁² +" +
+                                                  " 3 * ∂²(f(g))/∂g² * ∂g/∂p₁ * ∂³g/∂p₀∂p₁² +" +
+                                                  " ∂²(f(g))/∂g² * ∂g/∂p₀ * ∂³g/∂p₁³ +" +
+                                                  " ∂(f(g))/∂g * ∂⁴g/∂p₀∂p₁³");
+        referenceRules.put("∂⁴(f(g))/∂p₀∂p₂³",      referenceRules.get("∂⁴(f(g))/∂p₀∂p₁³").replaceAll("p₁", "p₂"));
+        referenceRules.put("∂⁴(f(g))/∂p₀∂p₃³",      referenceRules.get("∂⁴(f(g))/∂p₀∂p₁³").replaceAll("p₁", "p₃"));
+        referenceRules.put("∂⁴(f(g))/∂p₁³∂p₂",      referenceRules.get("∂⁴(f(g))/∂p₀³∂p₂").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂⁴(f(g))/∂p₁³∂p₃",      referenceRules.get("∂⁴(f(g))/∂p₀³∂p₃").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂⁴(f(g))/∂p₁∂p₂³",      referenceRules.get("∂⁴(f(g))/∂p₀∂p₂³").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂⁴(f(g))/∂p₁∂p₃³",      referenceRules.get("∂⁴(f(g))/∂p₀∂p₃³").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂⁴(f(g))/∂p₂³∂p₃",      referenceRules.get("∂⁴(f(g))/∂p₀³∂p₃").replaceAll("p₀", "p₂"));
+        referenceRules.put("∂⁴(f(g))/∂p₂∂p₃³",      referenceRules.get("∂⁴(f(g))/∂p₀∂p₃³").replaceAll("p₀", "p₂"));
+        referenceRules.put("∂⁴(f(g))/∂p₀²∂p₁²",     "∂⁴(f(g))/∂g⁴ * ∂g/∂p₀ * ∂g/∂p₀ * ∂g/∂p₁ * ∂g/∂p₁ +" +
+                                                  " 4 * ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₁ * ∂²g/∂p₀∂p₁ +" +
+                                                  " ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₀ * ∂²g/∂p₁² +" +
+                                                  " 2 * ∂²(f(g))/∂g² * ∂²g/∂p₀∂p₁ * ∂²g/∂p₀∂p₁ +" +
+                                                  " 2 * ∂²(f(g))/∂g² * ∂g/∂p₀ * ∂³g/∂p₀∂p₁² +" +
+                                                  " ∂³(f(g))/∂g³ * ∂²g/∂p₀² * ∂g/∂p₁ * ∂g/∂p₁ +" +
+                                                  " 2 * ∂²(f(g))/∂g² * ∂g/∂p₁ * ∂³g/∂p₀²∂p₁ +" +
+                                                  " ∂²(f(g))/∂g² * ∂²g/∂p₀² * ∂²g/∂p₁² +" +
+                                                  " ∂(f(g))/∂g * ∂⁴g/∂p₀²∂p₁²");
+        referenceRules.put("∂⁴(f(g))/∂p₀²∂p₂²",     referenceRules.get("∂⁴(f(g))/∂p₀²∂p₁²").replaceAll("p₁", "p₂"));
+        referenceRules.put("∂⁴(f(g))/∂p₀²∂p₃²",     referenceRules.get("∂⁴(f(g))/∂p₀²∂p₁²").replaceAll("p₁", "p₃"));
+        referenceRules.put("∂⁴(f(g))/∂p₁²∂p₂²",     referenceRules.get("∂⁴(f(g))/∂p₀²∂p₂²").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂⁴(f(g))/∂p₁²∂p₃²",     referenceRules.get("∂⁴(f(g))/∂p₀²∂p₃²").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂⁴(f(g))/∂p₂²∂p₃²",     referenceRules.get("∂⁴(f(g))/∂p₀²∂p₃²").replaceAll("p₀", "p₂"));
 
-        referenceRules.put("d4(f(g))/dx2dydz",    "d4(f(g))/dg4 * dg/dx * dg/dx * dg/dy * dg/dz +" +
-                                                  " 2 * d3(f(g))/dg3 * dg/dx * dg/dy * d2g/dxdz +" +
-                                                  " d3(f(g))/dg3 * dg/dx * dg/dx * d2g/dydz +" +
-                                                  " 2 * d3(f(g))/dg3 * dg/dx * d2g/dxdy * dg/dz +" +
-                                                  " 2 * d2(f(g))/dg2 * d2g/dxdy * d2g/dxdz +" +
-                                                  " 2 * d2(f(g))/dg2 * dg/dx * d3g/dxdydz +" +
-                                                  " d3(f(g))/dg3 * d2g/dx2 * dg/dy * dg/dz +" +
-                                                  " d2(f(g))/dg2 * dg/dy * d3g/dx2dz +" +
-                                                  " d2(f(g))/dg2 * d2g/dx2 * d2g/dydz +" +
-                                                  " d2(f(g))/dg2 * d3g/dx2dy * dg/dz +" +
-                                                  " d(f(g))/dg * d4g/dx2dydz");
-        referenceRules.put("d4(f(g))/dx2dydt",    referenceRules.get("d4(f(g))/dx2dydz").replaceAll("z", "t"));
-        referenceRules.put("d4(f(g))/dx2dzdt",    referenceRules.get("d4(f(g))/dx2dydt").replaceAll("y", "z"));
-        referenceRules.put("d4(f(g))/dxdy2dz",    "d4(f(g))/dg4 * dg/dx * dg/dy * dg/dy * dg/dz +" +
-                                                  " d3(f(g))/dg3 * dg/dy * dg/dy * d2g/dxdz +" +
-                                                  " 2 * d3(f(g))/dg3 * dg/dx * dg/dy * d2g/dydz +" +
-                                                  " 2 * d3(f(g))/dg3 * dg/dy * d2g/dxdy * dg/dz +" +
-                                                  " 2 * d2(f(g))/dg2 * d2g/dxdy * d2g/dydz +" +
-                                                  " 2 * d2(f(g))/dg2 * dg/dy * d3g/dxdydz +" +
-                                                  " d3(f(g))/dg3 * dg/dx * d2g/dy2 * dg/dz +" +
-                                                  " d2(f(g))/dg2 * d2g/dy2 * d2g/dxdz +" +
-                                                  " d2(f(g))/dg2 * dg/dx * d3g/dy2dz +" +
-                                                  " d2(f(g))/dg2 * d3g/dxdy2 * dg/dz +" +
-                                                  " d(f(g))/dg * d4g/dxdy2dz");
-        referenceRules.put("d4(f(g))/dxdy2dt",    referenceRules.get("d4(f(g))/dxdy2dz").replaceAll("z", "t"));
-        referenceRules.put("d4(f(g))/dy2dzdt",    referenceRules.get("d4(f(g))/dx2dzdt").replaceAll("x", "y"));
-        referenceRules.put("d4(f(g))/dxdydz2",    "d4(f(g))/dg4 * dg/dx * dg/dy * dg/dz * dg/dz +" +
-                                                  " 2 * d3(f(g))/dg3 * dg/dy * dg/dz * d2g/dxdz +" +
-                                                  " 2 * d3(f(g))/dg3 * dg/dx * dg/dz * d2g/dydz +" +
-                                                  " d3(f(g))/dg3 * dg/dx * dg/dy * d2g/dz2 +" +
-                                                  " 2 * d2(f(g))/dg2 * d2g/dxdz * d2g/dydz +" +
-                                                  " d2(f(g))/dg2 * dg/dy * d3g/dxdz2 +" +
-                                                  " d2(f(g))/dg2 * dg/dx * d3g/dydz2 +" +
-                                                  " d3(f(g))/dg3 * d2g/dxdy * dg/dz * dg/dz +" +
-                                                  " 2 * d2(f(g))/dg2 * dg/dz * d3g/dxdydz +" +
-                                                  " d2(f(g))/dg2 * d2g/dxdy * d2g/dz2 +" +
-                                                  " d(f(g))/dg * d4g/dxdydz2");
-        referenceRules.put("d4(f(g))/dxdz2dt",    referenceRules.get("d4(f(g))/dxdy2dt").replaceAll("y", "z"));
-        referenceRules.put("d4(f(g))/dydz2dt",    referenceRules.get("d4(f(g))/dxdz2dt").replaceAll("x", "y"));
-        referenceRules.put("d4(f(g))/dxdydt2",    referenceRules.get("d4(f(g))/dxdydz2").replaceAll("z", "t"));
-        referenceRules.put("d4(f(g))/dxdzdt2",    referenceRules.get("d4(f(g))/dxdydt2").replaceAll("y", "z"));
-        referenceRules.put("d4(f(g))/dydzdt2",    referenceRules.get("d4(f(g))/dxdzdt2").replaceAll("x", "y"));
-        referenceRules.put("d4(f(g))/dxdydzdt",   "d4(f(g))/dg4 * dg/dx * dg/dy * dg/dz * dg/dt +" +
-                                                  " d3(f(g))/dg3 * dg/dy * dg/dz * d2g/dxdt +" +
-                                                  " d3(f(g))/dg3 * dg/dx * dg/dz * d2g/dydt +" +
-                                                  " d3(f(g))/dg3 * dg/dx * dg/dy * d2g/dzdt +" +
-                                                  " d3(f(g))/dg3 * dg/dy * d2g/dxdz * dg/dt +" +
-                                                  " d2(f(g))/dg2 * d2g/dxdz * d2g/dydt +" +
-                                                  " d2(f(g))/dg2 * dg/dy * d3g/dxdzdt +" +
-                                                  " d3(f(g))/dg3 * dg/dx * d2g/dydz * dg/dt +" +
-                                                  " d2(f(g))/dg2 * d2g/dydz * d2g/dxdt +" +
-                                                  " d2(f(g))/dg2 * dg/dx * d3g/dydzdt +" +
-                                                  " d3(f(g))/dg3 * d2g/dxdy * dg/dz * dg/dt +" +
-                                                  " d2(f(g))/dg2 * dg/dz * d3g/dxdydt +" +
-                                                  " d2(f(g))/dg2 * d2g/dxdy * d2g/dzdt +" +
-                                                  " d2(f(g))/dg2 * d3g/dxdydz * dg/dt +" +
-                                                  " d(f(g))/dg * d4g/dxdydzdt");
+        referenceRules.put("∂⁴(f(g))/∂p₀²∂p₁∂p₂",    "∂⁴(f(g))/∂g⁴ * ∂g/∂p₀ * ∂g/∂p₀ * ∂g/∂p₁ * ∂g/∂p₂ +" +
+                                                  " 2 * ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₁ * ∂²g/∂p₀∂p₂ +" +
+                                                  " ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₀ * ∂²g/∂p₁∂p₂ +" +
+                                                  " 2 * ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂²g/∂p₀∂p₁ * ∂g/∂p₂ +" +
+                                                  " 2 * ∂²(f(g))/∂g² * ∂²g/∂p₀∂p₁ * ∂²g/∂p₀∂p₂ +" +
+                                                  " 2 * ∂²(f(g))/∂g² * ∂g/∂p₀ * ∂³g/∂p₀∂p₁∂p₂ +" +
+                                                  " ∂³(f(g))/∂g³ * ∂²g/∂p₀² * ∂g/∂p₁ * ∂g/∂p₂ +" +
+                                                  " ∂²(f(g))/∂g² * ∂g/∂p₁ * ∂³g/∂p₀²∂p₂ +" +
+                                                  " ∂²(f(g))/∂g² * ∂²g/∂p₀² * ∂²g/∂p₁∂p₂ +" +
+                                                  " ∂²(f(g))/∂g² * ∂³g/∂p₀²∂p₁ * ∂g/∂p₂ +" +
+                                                  " ∂(f(g))/∂g * ∂⁴g/∂p₀²∂p₁∂p₂");
+        referenceRules.put("∂⁴(f(g))/∂p₀²∂p₁∂p₃",    referenceRules.get("∂⁴(f(g))/∂p₀²∂p₁∂p₂").replaceAll("p₂", "p₃"));
+        referenceRules.put("∂⁴(f(g))/∂p₀²∂p₂∂p₃",    referenceRules.get("∂⁴(f(g))/∂p₀²∂p₁∂p₃").replaceAll("p₁", "p₂"));
+        referenceRules.put("∂⁴(f(g))/∂p₀∂p₁²∂p₂",    "∂⁴(f(g))/∂g⁴ * ∂g/∂p₀ * ∂g/∂p₁ * ∂g/∂p₁ * ∂g/∂p₂ +" +
+                                                  " ∂³(f(g))/∂g³ * ∂g/∂p₁ * ∂g/∂p₁ * ∂²g/∂p₀∂p₂ +" +
+                                                  " 2 * ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₁ * ∂²g/∂p₁∂p₂ +" +
+                                                  " 2 * ∂³(f(g))/∂g³ * ∂g/∂p₁ * ∂²g/∂p₀∂p₁ * ∂g/∂p₂ +" +
+                                                  " 2 * ∂²(f(g))/∂g² * ∂²g/∂p₀∂p₁ * ∂²g/∂p₁∂p₂ +" +
+                                                  " 2 * ∂²(f(g))/∂g² * ∂g/∂p₁ * ∂³g/∂p₀∂p₁∂p₂ +" +
+                                                  " ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂²g/∂p₁² * ∂g/∂p₂ +" +
+                                                  " ∂²(f(g))/∂g² * ∂²g/∂p₁² * ∂²g/∂p₀∂p₂ +" +
+                                                  " ∂²(f(g))/∂g² * ∂g/∂p₀ * ∂³g/∂p₁²∂p₂ +" +
+                                                  " ∂²(f(g))/∂g² * ∂³g/∂p₀∂p₁² * ∂g/∂p₂ +" +
+                                                  " ∂(f(g))/∂g * ∂⁴g/∂p₀∂p₁²∂p₂");
+        referenceRules.put("∂⁴(f(g))/∂p₀∂p₁²∂p₃",    referenceRules.get("∂⁴(f(g))/∂p₀∂p₁²∂p₂").replaceAll("p₂", "p₃"));
+        referenceRules.put("∂⁴(f(g))/∂p₁²∂p₂∂p₃",    referenceRules.get("∂⁴(f(g))/∂p₀²∂p₂∂p₃").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂⁴(f(g))/∂p₀∂p₁∂p₂²",    "∂⁴(f(g))/∂g⁴ * ∂g/∂p₀ * ∂g/∂p₁ * ∂g/∂p₂ * ∂g/∂p₂ +" +
+                                                  " 2 * ∂³(f(g))/∂g³ * ∂g/∂p₁ * ∂g/∂p₂ * ∂²g/∂p₀∂p₂ +" +
+                                                  " 2 * ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₂ * ∂²g/∂p₁∂p₂ +" +
+                                                  " ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₁ * ∂²g/∂p₂² +" +
+                                                  " 2 * ∂²(f(g))/∂g² * ∂²g/∂p₀∂p₂ * ∂²g/∂p₁∂p₂ +" +
+                                                  " ∂²(f(g))/∂g² * ∂g/∂p₁ * ∂³g/∂p₀∂p₂² +" +
+                                                  " ∂²(f(g))/∂g² * ∂g/∂p₀ * ∂³g/∂p₁∂p₂² +" +
+                                                  " ∂³(f(g))/∂g³ * ∂²g/∂p₀∂p₁ * ∂g/∂p₂ * ∂g/∂p₂ +" +
+                                                  " 2 * ∂²(f(g))/∂g² * ∂g/∂p₂ * ∂³g/∂p₀∂p₁∂p₂ +" +
+                                                  " ∂²(f(g))/∂g² * ∂²g/∂p₀∂p₁ * ∂²g/∂p₂² +" +
+                                                  " ∂(f(g))/∂g * ∂⁴g/∂p₀∂p₁∂p₂²");
+        referenceRules.put("∂⁴(f(g))/∂p₀∂p₂²∂p₃",    referenceRules.get("∂⁴(f(g))/∂p₀∂p₁²∂p₃").replaceAll("p₁", "p₂"));
+        referenceRules.put("∂⁴(f(g))/∂p₁∂p₂²∂p₃",    referenceRules.get("∂⁴(f(g))/∂p₀∂p₂²∂p₃").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂⁴(f(g))/∂p₀∂p₁∂p₃²",    referenceRules.get("∂⁴(f(g))/∂p₀∂p₁∂p₂²").replaceAll("p₂", "p₃"));
+        referenceRules.put("∂⁴(f(g))/∂p₀∂p₂∂p₃²",    referenceRules.get("∂⁴(f(g))/∂p₀∂p₁∂p₃²").replaceAll("p₁", "p₂"));
+        referenceRules.put("∂⁴(f(g))/∂p₁∂p₂∂p₃²",    referenceRules.get("∂⁴(f(g))/∂p₀∂p₂∂p₃²").replaceAll("p₀", "p₁"));
+        referenceRules.put("∂⁴(f(g))/∂p₀∂p₁∂p₂∂p₃",   "∂⁴(f(g))/∂g⁴ * ∂g/∂p₀ * ∂g/∂p₁ * ∂g/∂p₂ * ∂g/∂p₃ +" +
+                                                  " ∂³(f(g))/∂g³ * ∂g/∂p₁ * ∂g/∂p₂ * ∂²g/∂p₀∂p₃ +" +
+                                                  " ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₂ * ∂²g/∂p₁∂p₃ +" +
+                                                  " ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂g/∂p₁ * ∂²g/∂p₂∂p₃ +" +
+                                                  " ∂³(f(g))/∂g³ * ∂g/∂p₁ * ∂²g/∂p₀∂p₂ * ∂g/∂p₃ +" +
+                                                  " ∂²(f(g))/∂g² * ∂²g/∂p₀∂p₂ * ∂²g/∂p₁∂p₃ +" +
+                                                  " ∂²(f(g))/∂g² * ∂g/∂p₁ * ∂³g/∂p₀∂p₂∂p₃ +" +
+                                                  " ∂³(f(g))/∂g³ * ∂g/∂p₀ * ∂²g/∂p₁∂p₂ * ∂g/∂p₃ +" +
+                                                  " ∂²(f(g))/∂g² * ∂²g/∂p₁∂p₂ * ∂²g/∂p₀∂p₃ +" +
+                                                  " ∂²(f(g))/∂g² * ∂g/∂p₀ * ∂³g/∂p₁∂p₂∂p₃ +" +
+                                                  " ∂³(f(g))/∂g³ * ∂²g/∂p₀∂p₁ * ∂g/∂p₂ * ∂g/∂p₃ +" +
+                                                  " ∂²(f(g))/∂g² * ∂g/∂p₂ * ∂³g/∂p₀∂p₁∂p₃ +" +
+                                                  " ∂²(f(g))/∂g² * ∂²g/∂p₀∂p₁ * ∂²g/∂p₂∂p₃ +" +
+                                                  " ∂²(f(g))/∂g² * ∂³g/∂p₀∂p₁∂p₂ * ∂g/∂p₃ +" +
+                                                  " ∂(f(g))/∂g * ∂⁴g/∂p₀∂p₁∂p₂∂p₃");
 
         Field compFieldArrayField = DSCompiler.class.getDeclaredField("compIndirection");
         compFieldArrayField.setAccessible(true);
+
         for (int i = 0; i < 5; ++i) {
             for (int j = 0; j < 5; ++j) {
                 DSCompiler compiler = DSCompiler.getCompiler(i, j);
-                int[][][] compIndirection = (int[][][]) compFieldArrayField.get(compiler);
+                Object[][] compIndirection = (Object[][]) compFieldArrayField.get(compiler);
                 for (int k = 0; k < compIndirection.length; ++k) {
                     String product = ordersToString(compiler.getPartialDerivativeOrders(k),
-                                                    "(f(g))", "x", "y", "z", "t");
-                    StringBuilder rule = new StringBuilder();
-                    for (int[] term : compIndirection[k]) {
-                        if (rule.length() > 0) {
-                            rule.append(" + ");
-                        }
-                        if (term[0] > 1) {
-                            rule.append(term[0]).append(" * ");
-                        }
-                        rule.append(orderToString(term[1], "(f(g))", "g"));
-                        for (int l = 2; l < term.length; ++l) {
-                            rule.append(" * ");
-                            rule.append(ordersToString(compiler.getPartialDerivativeOrders(term[l]),
-                                                       "g", "x", "y", "z", "t"));
-                        }
-                    }
+                                                    "(f(g))", variables("p"));
+                    String rule = univariateCompositionMappersToString(compiler, compIndirection[k]);
                     Assert.assertEquals(product, referenceRules.get(product), rule.toString());
                 }
             }
         }
+
+    }
+
+    @Test
+    public void testRebaserRules()
+        throws IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+               NoSuchMethodException, SecurityException, NoSuchFieldException {
+
+        // the following reference rules have all been computed independently from the library,
+        // using only pencil and paper (which was really tedious) and using search and replace to handle symmetries
+        Map<String,String> referenceRules = new HashMap<String, String>();
+        referenceRules.put("f",              "f");
+        referenceRules.put("∂f/∂q₀",         "∂f/∂p₀ ∂p₀/∂q₀ + ∂f/∂p₁ ∂p₁/∂q₀");
+        referenceRules.put("∂f/∂q₁",         referenceRules.get("∂f/∂q₀").replaceAll("q₀", "q₁"));
+        referenceRules.put("∂f/∂q₂",         referenceRules.get("∂f/∂q₀").replaceAll("q₀", "q₂"));
+        referenceRules.put("∂²f/∂q₀²",       "∂²f/∂p₀² (∂p₀/∂q₀)² + 2 ∂²f/∂p₀∂p₁ ∂p₀/∂q₀ ∂p₁/∂q₀" +
+                                             " + ∂f/∂p₀ ∂²p₀/∂q₀² + ∂²f/∂p₁² (∂p₁/∂q₀)² + ∂f/∂p₁ ∂²p₁/∂q₀²");
+        referenceRules.put("∂²f/∂q₁²",       referenceRules.get("∂²f/∂q₀²").replaceAll("q₀", "q₁"));
+        referenceRules.put("∂²f/∂q₂²",       referenceRules.get("∂²f/∂q₀²").replaceAll("q₀", "q₂"));
+        referenceRules.put("∂²f/∂q₀∂q₁",     "∂²f/∂p₀² ∂p₀/∂q₀ ∂p₀/∂q₁ + ∂²f/∂p₀∂p₁ ∂p₀/∂q₁ ∂p₁/∂q₀ + ∂f/∂p₀ ∂²p₀/∂q₀∂q₁" +
+                                             " + ∂²f/∂p₀∂p₁ ∂p₀/∂q₀ ∂p₁/∂q₁ + ∂²f/∂p₁² ∂p₁/∂q₀ ∂p₁/∂q₁ + ∂f/∂p₁ ∂²p₁/∂q₀∂q₁");
+        referenceRules.put("∂²f/∂q₀∂q₂",     referenceRules.get("∂²f/∂q₀∂q₁").replaceAll("q₁", "q₂"));
+        referenceRules.put("∂²f/∂q₁∂q₂",     referenceRules.get("∂²f/∂q₀∂q₂").replaceAll("q₀", "q₁"));
+        referenceRules.put("∂³f/∂q₀³",       "∂³f/∂p₀³ (∂p₀/∂q₀)³ + 3 ∂³f/∂p₀²∂p₁ (∂p₀/∂q₀)² ∂p₁/∂q₀" +
+                                             " + 3 ∂²f/∂p₀² ∂p₀/∂q₀ ∂²p₀/∂q₀² + 3 ∂³f/∂p₀∂p₁² ∂p₀/∂q₀ (∂p₁/∂q₀)²" +
+                                             " + 3 ∂²f/∂p₀∂p₁ ∂²p₀/∂q₀² ∂p₁/∂q₀ + 3 ∂²f/∂p₀∂p₁ ∂p₀/∂q₀ ∂²p₁/∂q₀²" +
+                                             " + ∂f/∂p₀ ∂³p₀/∂q₀³ + ∂³f/∂p₁³ (∂p₁/∂q₀)³" +
+                                             " + 3 ∂²f/∂p₁² ∂p₁/∂q₀ ∂²p₁/∂q₀² + ∂f/∂p₁ ∂³p₁/∂q₀³");
+        referenceRules.put("∂³f/∂q₁³",       referenceRules.get("∂³f/∂q₀³").replaceAll("q₀", "q₁"));
+        referenceRules.put("∂³f/∂q₂³",       referenceRules.get("∂³f/∂q₀³").replaceAll("q₀", "q₂"));
+        referenceRules.put("∂³f/∂q₀²∂q₁",    "∂³f/∂p₀³ (∂p₀/∂q₀)² ∂p₀/∂q₁ + 2 ∂³f/∂p₀²∂p₁ ∂p₀/∂q₀ ∂p₀/∂q₁ ∂p₁/∂q₀" +
+                                             " + ∂²f/∂p₀² ∂²p₀/∂q₀² ∂p₀/∂q₁ + 2 ∂²f/∂p₀² ∂p₀/∂q₀ ∂²p₀/∂q₀∂q₁" +
+                                             " + ∂³f/∂p₀∂p₁² ∂p₀/∂q₁ (∂p₁/∂q₀)² + 2 ∂²f/∂p₀∂p₁ ∂²p₀/∂q₀∂q₁ ∂p₁/∂q₀" +
+                                             " + ∂²f/∂p₀∂p₁ ∂p₀/∂q₁ ∂²p₁/∂q₀² + ∂f/∂p₀ ∂³p₀/∂q₀²∂q₁" +
+                                             " + ∂³f/∂p₀²∂p₁ (∂p₀/∂q₀)² ∂p₁/∂q₁ + 2 ∂³f/∂p₀∂p₁² ∂p₀/∂q₀ ∂p₁/∂q₀ ∂p₁/∂q₁" +
+                                             " + ∂²f/∂p₀∂p₁ ∂²p₀/∂q₀² ∂p₁/∂q₁ + 2 ∂²f/∂p₀∂p₁ ∂p₀/∂q₀ ∂²p₁/∂q₀∂q₁" +
+                                             " + ∂³f/∂p₁³ (∂p₁/∂q₀)² ∂p₁/∂q₁ + ∂²f/∂p₁² ∂²p₁/∂q₀² ∂p₁/∂q₁" +
+                                             " + 2 ∂²f/∂p₁² ∂p₁/∂q₀ ∂²p₁/∂q₀∂q₁ + ∂f/∂p₁ ∂³p₁/∂q₀²∂q₁");
+        referenceRules.put("∂³f/∂q₀²∂q₂",    referenceRules.get("∂³f/∂q₀²∂q₁").replaceAll("q₁", "q₂"));
+        referenceRules.put("∂³f/∂q₁²∂q₂",    referenceRules.get("∂³f/∂q₀²∂q₂").replaceAll("q₀", "q₁"));
+        referenceRules.put("∂³f/∂q₁²∂q₀",    referenceRules.get("∂³f/∂q₁²∂q₂").replaceAll("q₂", "q₀"));
+        referenceRules.put("∂³f/∂q₀∂q₁²",    "∂³f/∂p₀³ ∂p₀/∂q₀ (∂p₀/∂q₁)² + ∂³f/∂p₀²∂p₁ (∂p₀/∂q₁)² ∂p₁/∂q₀" +
+                                             " + 2 ∂²f/∂p₀² ∂p₀/∂q₁ ∂²p₀/∂q₀∂q₁ + 2 ∂³f/∂p₀²∂p₁ ∂p₀/∂q₀ ∂p₀/∂q₁ ∂p₁/∂q₁" +
+                                             " + 2 ∂³f/∂p₀∂p₁² ∂p₀/∂q₁ ∂p₁/∂q₀ ∂p₁/∂q₁ + 2 ∂²f/∂p₀∂p₁ ∂²p₀/∂q₀∂q₁ ∂p₁/∂q₁" +
+                                             " + 2 ∂²f/∂p₀∂p₁ ∂p₀/∂q₁ ∂²p₁/∂q₀∂q₁ + ∂²f/∂p₀² ∂p₀/∂q₀ ∂²p₀/∂q₁²" +
+                                             " + ∂²f/∂p₀∂p₁ ∂²p₀/∂q₁² ∂p₁/∂q₀ + ∂f/∂p₀ ∂³p₀/∂q₀∂q₁²" +
+                                             " + ∂³f/∂p₀∂p₁² ∂p₀/∂q₀ (∂p₁/∂q₁)² + ∂³f/∂p₁³ ∂p₁/∂q₀ (∂p₁/∂q₁)²" +
+                                             " + 2 ∂²f/∂p₁² ∂p₁/∂q₁ ∂²p₁/∂q₀∂q₁ + ∂²f/∂p₀∂p₁ ∂p₀/∂q₀ ∂²p₁/∂q₁²" +
+                                             " + ∂²f/∂p₁² ∂p₁/∂q₀ ∂²p₁/∂q₁²" +
+                                             " + ∂f/∂p₁ ∂³p₁/∂q₀∂q₁²");
+        referenceRules.put("∂³f/∂q₀∂q₂²",   referenceRules.get("∂³f/∂q₀∂q₁²").replaceAll("q₁", "q₂"));
+        referenceRules.put("∂³f/∂q₁∂q₂²",   referenceRules.get("∂³f/∂q₀∂q₂²").replaceAll("q₀", "q₁"));
+        referenceRules.put("∂³f/∂q₀∂q₁∂q₂", "∂³f/∂p₀³ ∂p₀/∂q₀ ∂p₀/∂q₁ ∂p₀/∂q₂ + ∂³f/∂p₀²∂p₁ ∂p₀/∂q₁ ∂p₀/∂q₂ ∂p₁/∂q₀" +
+                                            " + ∂²f/∂p₀² ∂²p₀/∂q₀∂q₁ ∂p₀/∂q₂ + ∂²f/∂p₀² ∂p₀/∂q₁ ∂²p₀/∂q₀∂q₂" +
+                                            " + ∂³f/∂p₀²∂p₁ ∂p₀/∂q₀ ∂p₀/∂q₂ ∂p₁/∂q₁ + ∂³f/∂p₀∂p₁² ∂p₀/∂q₂ ∂p₁/∂q₀ ∂p₁/∂q₁" +
+                                            " + ∂²f/∂p₀∂p₁ ∂²p₀/∂q₀∂q₂ ∂p₁/∂q₁ + ∂²f/∂p₀∂p₁ ∂p₀/∂q₂ ∂²p₁/∂q₀∂q₁" +
+                                            " + ∂²f/∂p₀² ∂p₀/∂q₀ ∂²p₀/∂q₁∂q₂ + ∂²f/∂p₀∂p₁ ∂²p₀/∂q₁∂q₂ ∂p₁/∂q₀" +
+                                            " + ∂f/∂p₀ ∂³p₀/∂q₀∂q₁∂q₂ + ∂³f/∂p₀²∂p₁ ∂p₀/∂q₀ ∂p₀/∂q₁ ∂p₁/∂q₂" +
+                                            " + ∂³f/∂p₀∂p₁² ∂p₀/∂q₁ ∂p₁/∂q₀ ∂p₁/∂q₂ + ∂²f/∂p₀∂p₁ ∂²p₀/∂q₀∂q₁ ∂p₁/∂q₂" +
+                                            " + ∂²f/∂p₀∂p₁ ∂p₀/∂q₁ ∂²p₁/∂q₀∂q₂ + ∂³f/∂p₀∂p₁² ∂p₀/∂q₀ ∂p₁/∂q₁ ∂p₁/∂q₂" +
+                                            " + ∂³f/∂p₁³ ∂p₁/∂q₀ ∂p₁/∂q₁ ∂p₁/∂q₂ + ∂²f/∂p₁² ∂²p₁/∂q₀∂q₁ ∂p₁/∂q₂" +
+                                            " + ∂²f/∂p₁² ∂p₁/∂q₁ ∂²p₁/∂q₀∂q₂ + ∂²f/∂p₀∂p₁ ∂p₀/∂q₀ ∂²p₁/∂q₁∂q₂" +
+                                            " + ∂²f/∂p₁² ∂p₁/∂q₀ ∂²p₁/∂q₁∂q₂ + ∂f/∂p₁ ∂³p₁/∂q₀∂q₁∂q₂");
+
+        Method getterMethod = DSCompiler.class.getDeclaredMethod("getRebaser", DSCompiler.class);
+        getterMethod.setAccessible(true);
+
+        for (int order = 0; order < 4; ++order) {
+
+            // assuming f = f(p₀, p₁)
+            //          p₀ = p₀(q₀, q₁, q₂)
+            //          p₁ = p₁(q₀, q₁, q₂)
+            DSCompiler c2 = DSCompiler.getCompiler(2, order);
+            DSCompiler c3 = DSCompiler.getCompiler(3, order);
+            Object[][] rebaser = (Object[][]) getterMethod.invoke(c2, c3);
+
+            Assert.assertEquals(c3.getSize(), rebaser.length);
+            for (int k = 0; k < rebaser.length; ++k) {
+                String key  = ordersToString(c3.getPartialDerivativeOrders(k), "f", variables("q"));
+                String rule = multivariateCompositionMappersToString(c2, c3, rebaser[k]);
+                Assert.assertEquals(referenceRules.get(key), rule);
+            }
+
+        }
+
     }
 
     private void checkIndices(int[] indices, int ... expected) {
@@ -444,9 +538,9 @@ public class DSCompilerTest {
         if (order == 0) {
             return functionName;
         } else if (order == 1) {
-            return "d" + functionName + "/d" + parameterName;
+            return "∂" + functionName + "/∂" + parameterName;
         } else {
-            return "d" + order + functionName + "/d" + parameterName + order;
+            return "∂" + exponent(order) + functionName + "/∂" + parameterName + exponent(order);
         }
     }
 
@@ -462,21 +556,153 @@ public class DSCompilerTest {
         }
 
         StringBuilder builder = new StringBuilder();
-        builder.append('d');
+        builder.append('∂');
         if (sumOrders > 1) {
-            builder.append(sumOrders);
+            builder.append(exponent(sumOrders));
         }
         builder.append(functionName).append('/');
         for (int i = 0; i < orders.length; ++i) {
             if (orders[i] > 0) {
-                builder.append('d').append(parametersNames[i]);
+                builder.append('∂').append(parametersNames[i]);
                 if (orders[i] > 1) {
-                    builder.append(orders[i]);
+                    builder.append(exponent(orders[i]));
                 }
             }
         }
         return builder.toString();
 
+    }
+
+    private String univariateCompositionMappersToString(final DSCompiler compiler,  final Object[] mappers) {
+         try {
+             
+             Class<?> abstractMapperClass = Stream.
+                             of(DSCompiler.class.getDeclaredClasses()).
+                             filter(c -> c.getName().endsWith("AbstractMapper")).
+                             findAny().
+                             get();
+             Class<?> univariateCompositionMapperClass = Stream.
+                             of(DSCompiler.class.getDeclaredClasses()).
+                             filter(c -> c.getName().endsWith("UnivariateCompositionMapper")).
+                             findAny().
+                             get();
+             Method coeffMethod = abstractMapperClass.getDeclaredMethod("getCoeff");
+             Field fIndexField = univariateCompositionMapperClass.getDeclaredField("fIndex");
+             fIndexField.setAccessible(true);
+             Field dsIndicesField = univariateCompositionMapperClass.getDeclaredField("dsIndices");
+             dsIndicesField.setAccessible(true);
+
+             StringBuilder rule = new StringBuilder();
+             for (Object term : mappers) {
+                 if (rule.length() > 0) {
+                     rule.append(" + ");
+                 }
+                 if (((Integer) coeffMethod.invoke(term)).intValue() > 1) {
+                     rule.append(((Integer) coeffMethod.invoke(term)).intValue()).append(" * ");
+                 }
+                 rule.append(orderToString(((Integer) fIndexField.get(term)).intValue(), "(f(g))", "g"));
+                 int[] dsIndex = (int[]) dsIndicesField.get(term);
+                 for (int l = 0; l < dsIndex.length; ++l) {
+                     rule.append(" * ");
+                     rule.append(ordersToString(compiler.getPartialDerivativeOrders(dsIndex[l]),
+                                                "g", "p₀", "p₁", "p₂", "p₃"));
+                 }
+             }
+             return rule.toString();
+
+         } catch (NoSuchMethodException | SecurityException | NoSuchFieldException | IllegalAccessException |
+                  IllegalArgumentException | InvocationTargetException e) {
+             Assert.fail(e.getLocalizedMessage());
+             return null;
+         }
+     }
+
+    private String multivariateCompositionMappersToString(final DSCompiler compiler, final DSCompiler baseCompiler,
+                                                          final Object[] mappers) {
+         try {
+             Class<?> abstractMapperClass = Stream.
+                             of(DSCompiler.class.getDeclaredClasses()).
+                             filter(c -> c.getName().endsWith("AbstractMapper")).
+                             findAny().
+                             get();
+             Class<?> multivariateCompositionMapperClass = Stream.
+                             of(DSCompiler.class.getDeclaredClasses()).
+                             filter(c -> c.getName().endsWith("MultivariateCompositionMapper")).
+                             findAny().
+                             get();
+             Method coeffMethod = abstractMapperClass.getDeclaredMethod("getCoeff");
+             Field dsIndexField = multivariateCompositionMapperClass.getDeclaredField("dsIndex");
+             dsIndexField.setAccessible(true);
+             Field productIndicesField = multivariateCompositionMapperClass.getDeclaredField("productIndices");
+             productIndicesField.setAccessible(true);
+
+             StringBuilder rule = new StringBuilder();
+             for (int i = 0; i < mappers.length; ++i) {
+                 if (i > 0) {
+                     rule.append(" + ");
+                 }
+                 final int coeff = ((Integer) coeffMethod.invoke(mappers[i])).intValue();
+                 if (coeff > 1) {
+                     rule.append(coeff);
+                     rule.append(' ');
+                 }
+                 final int dsIndex = dsIndexField.getInt(mappers[i]);
+                 rule.append(ordersToString(compiler.getPartialDerivativeOrders(dsIndex),
+                                            "f", variables("p")));
+                 final int[] productIndices = (int[]) productIndicesField.get(mappers[i]);
+                 int j = 0;
+                 while (j < productIndices.length) {
+                     int count = 1;
+                     while (j + count < productIndices.length && productIndices[j + count] == productIndices[j]) {
+                         ++count;
+                     }
+                     final int varIndex   = productIndices[j] / baseCompiler.getSize();
+                     final int varDSIndex = productIndices[j] % baseCompiler.getSize();
+                     rule.append(' ');
+                     if (count > 1) {
+                         rule.append('(');
+                     }
+                     rule.append(ordersToString(baseCompiler.getPartialDerivativeOrders(varDSIndex),
+                                                variables("p")[varIndex], variables("q")));
+                     if (count > 1) {
+                         rule.append(')');
+                         rule.append(exponent(count));
+                     }
+                     j += count;
+                 }
+             }
+             return rule.toString();
+
+         } catch (NoSuchMethodException | SecurityException | NoSuchFieldException | IllegalAccessException |
+                  IllegalArgumentException | InvocationTargetException e) {
+             Assert.fail(e.getLocalizedMessage());
+             return null;
+         }
+     }
+
+     private String[] variables(final String baseName) {
+         return new String[] {
+             baseName + "₀", baseName + "₁", baseName + "₂", baseName + "₃", baseName + "₄",
+             baseName + "₅", baseName + "₆", baseName + "₇", baseName + "₈", baseName + "₉"
+         };
+     }
+
+    private String exponent(int e) {
+        switch (e) {
+            case 0 : return "";
+            case 1 : return "";
+            case 2 : return "²";
+            case 3 : return "³";
+            case 4 : return "⁴";
+            case 5 : return "⁵";
+            case 6 : return "⁶";
+            case 7 : return "⁷";
+            case 8 : return "⁸";
+            case 9 : return "⁹";
+            default:
+                Assert.fail("exponent out of range");
+                return null;
+        }
     }
 
 }

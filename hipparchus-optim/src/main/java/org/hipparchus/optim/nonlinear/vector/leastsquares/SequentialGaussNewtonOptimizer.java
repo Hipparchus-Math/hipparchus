@@ -199,13 +199,46 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
      * {@link #withEvaluation(LeastSquaresProblem.Evaluation)}, so either
      * {@link #withAPrioriData(RealVector, RealMatrix)} or {@link #withEvaluation(LeastSquaresProblem.Evaluation)}
      * should be called, but not both as the last one called will override the previous one.
+     * <p>
+     * A Cholesky decomposition is used to compute the weighted jacobian from the
+     * a priori covariance. This method uses the default thresholds of the decomposition.
      * </p>
      * @param aPrioriState a priori state to use
      * @param aPrioriCovariance a priori covariance to use
      * @return a new instance.
+     * @see #withAPrioriData(RealVector, RealMatrix, double, double)
      */
     public SequentialGaussNewtonOptimizer withAPrioriData(final RealVector aPrioriState,
                                                           final RealMatrix aPrioriCovariance) {
+        return withAPrioriData(aPrioriState, aPrioriCovariance,
+                               CholeskyDecomposition.DEFAULT_RELATIVE_SYMMETRY_THRESHOLD,
+                               CholeskyDecomposition.DEFAULT_ABSOLUTE_POSITIVITY_THRESHOLD);
+    }
+
+    /**
+     * Configure from a priori state and covariance.
+     * <p>
+     * This building method generates a fake evaluation and calls
+     * {@link #withEvaluation(LeastSquaresProblem.Evaluation)}, so either
+     * {@link #withAPrioriData(RealVector, RealMatrix)} or {@link #withEvaluation(LeastSquaresProblem.Evaluation)}
+     * should be called, but not both as the last one called will override the previous one.
+     * <p>
+     * A Cholesky decomposition is used to compute the weighted jacobian from the
+     * a priori covariance.
+     * </p>
+     * @param aPrioriState a priori state to use
+     * @param aPrioriCovariance a priori covariance to use
+     * @param relativeSymmetryThreshold Cholesky decomposition threshold above which off-diagonal
+     * elements are considered too different and matrix not symmetric
+     * @param absolutePositivityThreshold Cholesky decomposition threshold below which diagonal
+     * elements are considered null and matrix not positive definite
+     * @return a new instance.
+     * @since 2.3
+     */
+    public SequentialGaussNewtonOptimizer withAPrioriData(final RealVector aPrioriState,
+                                                          final RealMatrix aPrioriCovariance,
+                                                          final double relativeSymmetryThreshold,
+                                                          final double absolutePositivityThreshold) {
 
         // we consider the a priori state and covariance come from a
         // previous estimation with exactly one observation of each state
@@ -214,7 +247,9 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
 
         // create a fake weighted Jacobian
         final RealMatrix jTj              = getDecomposer().decompose(aPrioriCovariance).getInverse();
-        final RealMatrix weightedJacobian = new CholeskyDecomposition(jTj).getLT();
+        final RealMatrix weightedJacobian = new CholeskyDecomposition(jTj,
+                                                                      relativeSymmetryThreshold,
+                                                                      absolutePositivityThreshold).getLT();
 
         // create fake zero residuals
         final RealVector residuals        = MatrixUtils.createRealVector(aPrioriState.getDimension());

@@ -340,7 +340,7 @@ public class FieldQRDecompositionTest {
     private  <T extends CalculusFieldElement<T>> void InvertTallSkinny(Field<T> field) {
         T[][] data4x3= convert(field, testData4x3            );
         FieldMatrix<T> a     = MatrixUtils.createFieldMatrix(data4x3);
-        FieldDecompositionSolver<T> solver = new FieldQRDecomposition<T>(a).getSolver();
+        FieldDecompositionSolver<T> solver = new FieldQRDecomposer<>(field.getZero()).decompose(a);
         FieldMatrix<T> pinv  = solver.getInverse();
         Assert.assertEquals(0, norm(pinv.multiply(a).subtract(MatrixUtils.createFieldIdentityMatrix(field, 3))).getReal(), 1.0e-6);
         Assert.assertEquals(testData4x3.length,    solver.getRowDimension());

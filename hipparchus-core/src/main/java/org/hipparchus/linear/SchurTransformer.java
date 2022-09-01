@@ -46,7 +46,7 @@ import org.hipparchus.util.Precision;
  * @see <a href="http://en.wikipedia.org/wiki/Schur_decomposition">Schur Decomposition - Wikipedia</a>
  * @see <a href="http://en.wikipedia.org/wiki/Householder_transformation">Householder Transformations</a>
  */
-class SchurTransformer {
+public class SchurTransformer {
     /** Maximum allowed iterations for convergence of the transformation. */
     private static final int MAX_ITERATIONS = 100;
 
@@ -70,7 +70,7 @@ class SchurTransformer {
      * @param matrix matrix to transform
      * @throws MathIllegalArgumentException if the matrix is not square
      */
-    SchurTransformer(final RealMatrix matrix) {
+    public SchurTransformer(final RealMatrix matrix) {
         if (!matrix.isSquare()) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());

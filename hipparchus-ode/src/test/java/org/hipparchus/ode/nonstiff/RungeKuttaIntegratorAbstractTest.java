@@ -290,7 +290,9 @@ public abstract class RungeKuttaIntegratorAbstractTest {
 
         RungeKuttaIntegrator integ = createIntegrator(step);
         integ.addStepHandler(new KeplerHandler(pb, expectedMaxError, epsilon));
-        integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
+        final ExpandableODE expandable = new ExpandableODE(pb);
+        Assert.assertSame(pb, expandable.getPrimary());
+        integ.integrate(expandable, pb.getInitialState(), pb.getFinalTime());
     }
 
     private static class KeplerHandler implements ODEStepHandler {

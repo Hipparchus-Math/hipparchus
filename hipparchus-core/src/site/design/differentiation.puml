@@ -65,6 +65,7 @@
           +double getValue()
           +double getPartialDerivative(int[] orders)
           +double taylor(double[] delta)
+          +DerivativeStructure rebase(DerivativeStructure... p)
           +int getExponent()
           +DerivativeStructure compose(double[] f)
           +DerivativeStructure cos()
@@ -72,7 +73,7 @@
           +DerivativeStructure exp()
           +DerivativeStructure sqrt()
         }
-        note bottom
+        note top
           lots of mathematical methods
           and constructors ommitted for clarity
         end note
@@ -87,14 +88,21 @@
           +void checkCompatibility(DSCompiler compiler)
           +void compose(double[] operand, int operandOffset, double[] f, double[] result, int resultOffset)
           +double taylor(double[] ds, int dsOffset, double[] delta)
+          +void rebase(double[] ds, int dsOffset, DSCompiler baseCompiler, double[] p, double[] result, int resultOffset)
           +void add(double[] lhs, int lhsOffset, double[] rhs, int rhsOffset, double[] result, int resultOffset)
           +void exp(double[] operand, int operandOffset, double[] result, int resultOffset)
         }
-        note bottom
+        note left
           one compiler is built for each pair
           (number of parameters, derivation order)
           they are cached for efficiency
         end note
+
+        class TaylorMap {
+          +double[] value(double... deltaP)
+          +TaylorMap compose(TaylorMap other)
+          +TaylorMap invert(MatrixDecomposer decomposer)
+        }
 
         interface UnivariateDifferentiable {
           DerivativeStructure value(DerivativeStructure t)
@@ -111,6 +119,7 @@
         UnivariateFunction  <|..     UnivariateDifferentiable
         UnivariateDifferentiable <-- UnivariateDifferentiator : creates
         UnivariateDifferentiable --> DerivativeStructure : uses
+        TaylorMap o-right-> "*" DerivativeStructure
 
       }
     }

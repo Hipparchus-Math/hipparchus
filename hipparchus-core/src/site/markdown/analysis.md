@@ -521,8 +521,32 @@ resulting derivative structure is truncated to the initial order (i.e. a derivat
 structure up to order 3 differentiated twice will still be of order 3, and the two
 highest order terms (4 and 5) will be dropped.
 
-There is a field version of `DerivativeStructure`:
-[FieldDerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/FieldDerivativeStructure.html).
+If a function `\(f\)` is a function of `\(n\)` independent parameters `\(p_0, p_1, \ldots p_{n-1}\)`,
+then it can be computed as a `DerivativeStructure` with `\(n\)` parameters.
+If however, in another part of the computation the parameters are themselves
+considered to be functions of `\(m\)` more base variables `\(p_0 = p_0(q_0, q_1, \ldots q_{m-1})\)`,
+`\(p_1 = p_1(q_0, q_1, \ldots q_{m-1})\)`, … `\(p_{n-1} = p_{n-1}(q_0, q_1, \ldots q_{m-1})\)`,
+then it is possible to `rebase` the initial `DerivativeStructure` by providing the intermediate
+variables `\(p_i\)` as `DerivativeStructure` with `\(m\)` parameters. The result will be
+a `DerivativeStructure` with `\(m\)` parameters representing `\(f(q_0, q_1, \ldots q_{m-1})\)`.
+When rebasing, the number of intermediate variables `\(p_i\)` provided must match the
+number `\(n\)` of parameters of the initial `DerivativeStructure`, and the
+derivation orders must all match.
+
+The `TaylorMap` class is a container that gather several `DerivativeStructure` and one
+evaluation point `\((p_0, p_1, \ldots p_{n-1})\)` to represent a vector-valued function.
+Taylor maps can be evaluated at points close to the central evaluation point by
+providing the offsets `\((\Delta p_0, \Delta p_1, \ldots \Delta p_{n-1})\)`. They can
+be composed with other Taylor maps, which corresponds to calling `rebase` on all vector
+components, provided that the number of functions of the inner map is equal to the number
+of parameters of the outer map. If a Taylor map is square (i.e. if its number of
+parameters is equal to its number of functions) and if its first order derivatives
+are non-singular, then it can be inverted. Taylor map inversion is a major feature that
+can be used in optimization and control of complicated dynamics.
+
+There are field versions of `DerivativeStructure`:
+[FieldDerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/FieldDerivativeStructure.html),
+and `TaylorMap`: [FieldTaylorMap](../apidocs/org/hipparchus/analysis/differentiation/FieldTaylorMap.html).
 
 ### Automated differentiation for simple needs
 

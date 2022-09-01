@@ -21,7 +21,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus</artifactId>
-  <version>2.2-SNAPSHOT</version>
+  <version>2.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Hipparchus</name>
@@ -278,6 +278,9 @@
     </contributor>
     <contributor>
       <name>Todd C. Parnell</name>
+    </contributor>
+    <contributor>
+      <name>Ga&#235;tan Pierre</name>
     </contributor>
     <contributor>
       <name>J. Pietschmann</name>
