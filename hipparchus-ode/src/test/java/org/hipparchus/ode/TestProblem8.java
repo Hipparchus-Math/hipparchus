@@ -15,9 +15,9 @@ import org.hipparchus.util.FastMath;
 public class TestProblem8 extends TestProblemAbstract {
 
     /** Moments of inertia. */
-    final double i1;
-    final double i2;
-    final double i3;
+    public final double i1;
+    public final double i2;
+    public final double i3;
 
     /** Moments of inertia converted. */
     final double i1C;
@@ -39,10 +39,10 @@ public class TestProblem8 extends TestProblemAbstract {
     final Vector3D[] axes;
 
     /** Twice the angular kinetic energy. */
-    final double twoE;
+    public final double twoE;
 
     /** Square of kinetic momentum. */
-    final double m2;
+    public final double m2;
 
     /** State scaling factor. */
     final double o1Scale;
@@ -60,7 +60,7 @@ public class TestProblem8 extends TestProblemAbstract {
     final double k2;
 
     /** Time scaling factor. */
-    final double tScale;
+    public final double tScale;
 
     /** Time reference for rotation rate. */
     final double tRef;
@@ -120,12 +120,14 @@ public class TestProblem8 extends TestProblemAbstract {
         twoE    =  i1 * o12 + i2 * o22 + i3 * o32;
         m2      =  i1 * i1 * o12 + i2 * i2 * o22 + i3 * i3 * o32;
 
-        Vector3D[] axesP = {Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K};
+        Vector3D[] axesP = { Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K };
 
+        double tScaleSign = +1;
         double[] i = {i1, i2, i3};
         double[] y0P = y0.clone();
 
         if (i[0] > i[1]) {
+            tScaleSign = -tScaleSign;
             Vector3D z = axesP[0];
             axesP[0] = axesP[1];
             axesP[1] = z;
@@ -142,6 +144,7 @@ public class TestProblem8 extends TestProblemAbstract {
         }
 
         if (i[1] > i[2]) {
+            tScaleSign = -tScaleSign;
             Vector3D z = axesP[1];
             axesP[1] = axesP[2];
             axesP[2] = z;
@@ -158,6 +161,7 @@ public class TestProblem8 extends TestProblemAbstract {
         }
 
         if (i[0] > i[1]) {
+            tScaleSign = -tScaleSign;
             Vector3D z = axesP[0];
             axesP[0] = axesP[1];
             axesP[1] = z;
@@ -181,6 +185,7 @@ public class TestProblem8 extends TestProblemAbstract {
         }
 
         if (condition < i[1]) {
+            tScaleSign = -tScaleSign;
             Vector3D z = axesP[0];
             axesP[0] = axesP[2];
             axesP[2] = z;
@@ -194,6 +199,7 @@ public class TestProblem8 extends TestProblemAbstract {
             y0P[0] = y0P[2];
             y0P[2] = v;
             y0P[1] = - y0P[1];
+
         }
 
         i1C = i[0];
@@ -210,7 +216,7 @@ public class TestProblem8 extends TestProblemAbstract {
         final Vector3D m0Body     = new Vector3D(i1C * omega0Body.getX(), i2C * omega0Body.getY(), i3C * omega0Body.getZ());
 
         final double   phi0       = 0; // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
-        final double   theta0 =  FastMath.acos(m0Body.getZ() / m0Body.getNorm());
+        final double   theta0     = FastMath.acos(m0Body.getZ() / m0Body.getNorm());
         final double   psi0       = FastMath.atan2(m0Body.getX(), m0Body.getY()); // it is really atan2(x, y), not atan2(y, x) as usual!
 
         //Compute offset rotation between inertial frame aligned with momentum and regular inertial frame
@@ -230,7 +236,7 @@ public class TestProblem8 extends TestProblemAbstract {
         i21  = i2C - i1C;
 
         // Ω is always o1Scale * cn((t-tref) * tScale), o2Scale * sn((t-tref) * tScale), o3Scale * dn((t-tref) * tScale)
-        tScale  = FastMath.copySign(FastMath.sqrt(i32 * (m2 - twoE * i1C) / (i1C * i2C * i3C)), omega0Body.getZ());
+        tScale  = FastMath.copySign(FastMath.sqrt(i32 * (m2 - twoE * i1C) / (i1C * i2C * i3C)), tScaleSign);
         o1Scale = FastMath.sqrt((twoE * i3C - m2) / (i1C * i31));
         o2Scale = FastMath.sqrt((twoE * i3C - m2) / (i2C * i32));
         o3Scale = FastMath.copySign(FastMath.sqrt((m2 - twoE * i1C) / (i3C * i31)), omega0Body.getZ());
@@ -312,8 +318,8 @@ public class TestProblem8 extends TestProblemAbstract {
 
         // Computation of omega
         final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
-        final Vector3D omegaP   = new Vector3D(o1Scale * valuesN.cn(), o2Scale * valuesN.sn(), o3Scale * valuesN.dn());
-        final Vector3D omega    = convertAxes.applyInverseTo(omegaP);
+        final Vector3D omegaP  = new Vector3D(o1Scale * valuesN.cn(), o2Scale * valuesN.sn(), o3Scale * valuesN.dn());
+        final Vector3D omega   = convertAxes.applyTo(omegaP);
 
         // Computation of the Euler angles
         final double   psi       = FastMath.atan2(i1C * omegaP.getX(), i2C * omegaP.getY());
@@ -355,7 +361,7 @@ public class TestProblem8 extends TestProblemAbstract {
         yDot[1] = y[2] * y[0] * (i3 - i1) / i2;
         yDot[2] = y[0] * y[1] * (i1 - i2) / i3;
 
-        // compute the derivatives using Qpoint = 0.5 * Omega_inertialframe * Q
+        // compute the derivatives using Qdot = 0.5 * Omega_inertialframe * Q
         yDot[3] = 0.5 * (-y[0] * y[4] -y[1] * y[5] -y[2] * y[6]);
         yDot[4] = 0.5 * (y[0] * y[3] +y[2] * y[5] -y[1] * y[6]);
         yDot[5] = 0.5 * (y[1] * y[3] -y[2] * y[4] +y[0] * y[6]);
