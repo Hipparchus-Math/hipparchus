@@ -825,6 +825,46 @@ public class SphericalPolygonsSetTest {
         }
     }
 
+    /**
+     * Tests the Hipparchus {@link RegionFactory#intersection(Region, Region)}
+     * method.
+     */
+    @Test
+    public void TestIntersectionOrder() {
+
+        final S2Point[] vertices1 = {
+            new S2Point(0.0193428339344826, 1.5537209444301618),
+            new S2Point(0.0178197572212936, 1.553415699912148),
+            new S2Point(0.01628496406053076, 1.5531081515279537),
+            new S2Point(0.016284670226196844, 1.5531096373947835),
+            new S2Point(0.019342540199680208, 1.5537224293848613)
+        };
+
+        final S2Point[] vertices2 = {
+            new S2Point(0.016, 1.555),
+            new S2Point(0.017453292519943295, 1.555),
+            new S2Point(0.017453292519943295, 1.5533430342749532),
+            new S2Point(0.016, 1.5533430342749532)
+        };
+
+        final RegionFactory<Sphere2D> regionFactory = new RegionFactory<Sphere2D>();
+
+        // thickness is small enough for proper computation of very small intersection
+        double thickness1 = 4.96740426e-11;
+        final SphericalPolygonsSet sps1 = new SphericalPolygonsSet(thickness1, vertices1);
+        final SphericalPolygonsSet sps2 = new SphericalPolygonsSet(thickness1, vertices2);
+        Assert.assertEquals(1.4886e-12, regionFactory.intersection(sps1, sps2).getSize(), 1.0e-15);
+        Assert.assertEquals(1.4881e-12, regionFactory.intersection(sps2, sps1).getSize(), 1.0e-15);
+
+        // thickness is too large, very small intersection is not computed properly in one case
+        double thickness2 = 4.96740427e-11;
+        final SphericalPolygonsSet sps3 = new SphericalPolygonsSet(thickness2, vertices1);
+        final SphericalPolygonsSet sps4 = new SphericalPolygonsSet(thickness2, vertices2);
+        Assert.assertEquals(1.4886e-12, regionFactory.intersection(sps3, sps4).getSize(), 1.0e-15);
+        Assert.assertEquals(2.4077e-06, regionFactory.intersection(sps4, sps3).getSize(), 1.0e-10);
+
+    }
+
     private SubCircle create(Vector3D pole, Vector3D x, Vector3D y,
                              double tolerance, double ... limits) {
         RegionFactory<Sphere1D> factory = new RegionFactory<Sphere1D>();
