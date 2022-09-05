@@ -25,6 +25,8 @@ import java.io.Serializable;
 import java.util.function.DoubleConsumer;
 
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.random.Well19937c;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
 import org.hipparchus.stat.descriptive.moment.Mean;
 import org.hipparchus.stat.descriptive.moment.SecondMoment;
@@ -94,8 +96,6 @@ public class StreamingStatistics
     private final boolean computeSumOfSquares;
     /** whether or not sum of logs and geometric mean are maintained */
     private final boolean computeSumOfLogs;
-    /** whether or not percentiles are maintained */
-    private final boolean computePercentiles;
     /** whether or not min and max are maintained */
     private final boolean computeExtrema;
 
@@ -104,7 +104,7 @@ public class StreamingStatistics
      * other than percentiles.
      */
     public StreamingStatistics() {
-       this(false);
+       this(Double.NaN, null);
     }
 
     /**
@@ -112,27 +112,45 @@ public class StreamingStatistics
      * other than percentiles and with/without percentiles per the argument.
      *
      * @param computePercentiles whether or not percentiles are maintained
+     * @deprecated as of 2.3, replaced by {@link #StreamingStatistics(double, RandomGenerator)}
      */
+    @Deprecated
     public StreamingStatistics(boolean computePercentiles) {
-       this(computePercentiles, true, true, true, true);
+       this(true, true, true, true,
+            computePercentiles ? RandomPercentile.DEFAULT_EPSILON : Double.NaN,
+            computePercentiles ? new Well19937c() : null);
+    }
+
+    /**
+     * Construct a new StreamingStatistics instance, maintaining all statistics
+     * other than percentiles and with/without percentiles per the arguments.
+     *
+     * @param epsilon bound on quantile estimation error (see {@link RandomGenerator})
+     * @param randomGenerator PRNG used in sampling and merge operations (null if percentiles should not be computed)
+     * @since 2.3
+     */
+    public StreamingStatistics(final double epsilon, final RandomGenerator randomGenerator) {
+       this(true, true, true, true, epsilon, randomGenerator);
     }
 
     /**
      * Private constructor used by {@link StreamingStatisticsBuilder}.
      *
-     * @param computePercentiles whether or not percentiles are maintained
      * @param computeMoments whether or not moment stats (mean, sum, variance) are maintained
      * @param computeSumOfLogs whether or not sum of logs and geometric mean are maintained
      * @param computeSumOfSquares whether or not sum of squares and quadratic mean are maintained
      * @param computeExtrema whether or not min and max are maintained
+     * @param epsilon bound on quantile estimation error (see {@link RandomGenerator})
+     * @param randomGenerator PRNG used in sampling and merge operations (null if percentiles should not be computed)
+     * @since 2.3
      */
-    private StreamingStatistics(boolean computePercentiles, boolean computeMoments,
-                                boolean computeSumOfLogs, boolean computeSumOfSquares,
-                                boolean computeExtrema) {
+    private StreamingStatistics(final boolean computeMoments,
+                                final boolean computeSumOfLogs, final boolean computeSumOfSquares,
+                                final boolean computeExtrema,
+                                final double epsilon, final RandomGenerator randomGenerator) {
         this.computeMoments = computeMoments;
         this.computeSumOfLogs = computeSumOfLogs;
         this.computeSumOfSquares = computeSumOfSquares;
-        this.computePercentiles = computePercentiles;
         this.computeExtrema = computeExtrema;
 
         this.secondMoment = computeMoments ? new SecondMoment() : null;
@@ -145,7 +163,7 @@ public class StreamingStatistics
         this.varianceImpl = computeMoments ?  new Variance(this.secondMoment) : null;
         this.geoMeanImpl = computeSumOfLogs ? new GeometricMean(this.sumOfLogsImpl) : null;
         this.populationVariance = computeMoments ? new Variance(false, this.secondMoment) : null;
-        this.randomPercentile = computePercentiles ? new RandomPercentile() : null;
+        this.randomPercentile = randomGenerator == null ? null : new RandomPercentile(epsilon, randomGenerator);
     }
 
     /**
@@ -170,12 +188,11 @@ public class StreamingStatistics
         this.varianceImpl = original.computeMoments ? new Variance(this.secondMoment) : null;
         this.geoMeanImpl  = original.computeSumOfLogs ? new GeometricMean(this.sumOfLogsImpl) : null;
         this.populationVariance = original.computeMoments ? new Variance(false, this.secondMoment) : null;
-        this.randomPercentile = original.computePercentiles ? original.randomPercentile.copy() : null;
+        this.randomPercentile = original.randomPercentile != null ? original.randomPercentile.copy() : null;
 
         this.computeMoments = original.computeMoments;
         this.computeSumOfLogs = original.computeSumOfLogs;
         this.computeSumOfSquares = original.computeSumOfSquares;
-        this.computePercentiles = original.computePercentiles;
         this.computeExtrema = original.computeExtrema;
     }
 
@@ -217,7 +234,7 @@ public class StreamingStatistics
         if (computeSumOfLogs) {
             sumOfLogsImpl.increment(value);
         }
-        if (computePercentiles) {
+        if (randomPercentile != null) {
             randomPercentile.increment(value);
         }
         n++;
@@ -248,7 +265,7 @@ public class StreamingStatistics
         if (computeSumOfSquares) {
             sumOfSquaresImpl.clear();
         }
-        if (computePercentiles) {
+        if (randomPercentile != null) {
             randomPercentile.clear();
         }
     }
@@ -406,7 +423,7 @@ public class StreamingStatistics
      * @return estimated percentile
      */
     public double getPercentile(double percentile) {
-        return randomPercentile != null ? randomPercentile.getResult(percentile) : Double.NaN;
+        return randomPercentile == null ? Double.NaN : randomPercentile.getResult(percentile);
     }
 
     /**
@@ -435,7 +452,7 @@ public class StreamingStatistics
             if (computeSumOfSquares && other.computeSumOfSquares) {
                 this.sumOfSquaresImpl.aggregate(other.sumOfSquaresImpl);
             }
-            if (computePercentiles && other.computePercentiles) {
+            if (randomPercentile != null && other.randomPercentile != null) {
                 this.randomPercentile.aggregate(other.randomPercentile);
             }
         }
@@ -534,10 +551,16 @@ public class StreamingStatistics
         private boolean computeSumOfSquares;
         /** whether or not sum of logs and geometric mean are maintained by instances created by this factory */
         private boolean computeSumOfLogs;
-        /** whether or not percentiles are maintained by instances created by this factory */
-        private boolean computePercentiles;
         /** whether or not min and max are maintained by instances created by this factory */
         private boolean computeExtrema;
+        /** bound on quantile estimation error for percentiles.
+         * @since 2.3
+         */
+        private double epsilon;
+        /** PRNG used in sampling and merge operations.
+         * @since 2.3
+         */
+        private RandomGenerator randomGenerator;
 
         /** Simple constructor.
          */
@@ -545,8 +568,8 @@ public class StreamingStatistics
             computeMoments      = true;
             computeSumOfSquares = true;
             computeSumOfLogs    = true;
-            computePercentiles  = false;
             computeExtrema      = true;
+            percentiles(Double.NaN, null);
         }
 
         /**
@@ -589,11 +612,30 @@ public class StreamingStatistics
          * Sets the computePercentiles setting of the factory.
          *
          * @param arg whether or not instances created using {@link #build()} will
-         * compute percentiles
+         * compute percentiles, using default parameters for {@link RandomPercentile}
          * @return a factory with the given computePercentiles property set
+         * @deprecated as of 2.3, replaced by {@link #percentiles(double, RandomGenerator)}
          */
+        @Deprecated
         public StreamingStatisticsBuilder percentiles(boolean arg) {
-            this.computePercentiles = arg;
+            if (arg) {
+                percentiles(RandomPercentile.DEFAULT_EPSILON, new Well19937c());
+            } else {
+                percentiles(Double.NaN, null);
+            }
+            return this;
+        }
+
+        /**
+         * Sets the computePercentiles setting of the factory.
+         * @param epsilon bound on quantile estimation error (see {@link RandomGenerator})
+         * @param randomGenerator PRNG used in sampling and merge operations
+         * @return a factory with the given computePercentiles property set
+         * @since 2.3
+         */
+        public StreamingStatisticsBuilder percentiles(final double epsilon, final RandomGenerator randomGenerator) {
+            this.epsilon         = epsilon;
+            this.randomGenerator = randomGenerator;
             return this;
         }
 
@@ -615,9 +657,10 @@ public class StreamingStatistics
          * @return newly configured StreamingStatistics instance
          */
         public StreamingStatistics build() {
-            return new StreamingStatistics(computePercentiles, computeMoments,
+            return new StreamingStatistics(computeMoments,
                                            computeSumOfLogs, computeSumOfSquares,
-                                           computeExtrema);
+                                           computeExtrema,
+                                           epsilon, randomGenerator);
         }
     }
 }
