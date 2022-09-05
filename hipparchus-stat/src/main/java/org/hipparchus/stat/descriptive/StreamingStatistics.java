@@ -628,14 +628,14 @@ public class StreamingStatistics
 
         /**
          * Sets the computePercentiles setting of the factory.
-         * @param epsilon bound on quantile estimation error (see {@link RandomGenerator})
-         * @param randomGenerator PRNG used in sampling and merge operations
+         * @param epsilonBound bound on quantile estimation error (see {@link RandomGenerator})
+         * @param generator PRNG used in sampling and merge operations
          * @return a factory with the given computePercentiles property set
          * @since 2.3
          */
-        public StreamingStatisticsBuilder percentiles(final double epsilon, final RandomGenerator randomGenerator) {
-            this.epsilon         = epsilon;
-            this.randomGenerator = randomGenerator;
+        public StreamingStatisticsBuilder percentiles(final double epsilonBound, final RandomGenerator generator) {
+            this.epsilon         = epsilonBound;
+            this.randomGenerator = generator;
             return this;
         }
 
