@@ -82,7 +82,6 @@ public class TestProblem8 extends TestProblemAbstract {
 
     /** Integral part of quadrature model over one period. */
     final double integOnePeriod;
-    private static int count = 0;
 
     /**
      * Simple constructor.
@@ -123,9 +122,7 @@ public class TestProblem8 extends TestProblemAbstract {
         double[] i = { i1, i2, i3 };
         y0C = y0.clone();
 
-        System.out.print(++count + " " + i1 + " " + i2 + " " + i3 + " " + (m2 / twoE));
         if (i[0] > i[1]) {
-            System.out.print(" 1↔2");
             Vector3D z = axesP[0];
             axesP[0] = axesP[1];
             axesP[1] = z;
@@ -139,12 +136,9 @@ public class TestProblem8 extends TestProblemAbstract {
             y0C[0] = y0C[1];
             y0C[1] = v;
             y0C[2] = -y0C[2];
-        } else {
-            System.out.print("  ∅ ");
         }
 
         if (i[1] > i[2]) {
-            System.out.print(" 2↔3");
             Vector3D z = axesP[1];
             axesP[1] = axesP[2];
             axesP[2] = z;
@@ -158,12 +152,9 @@ public class TestProblem8 extends TestProblemAbstract {
             y0C[1] = y0C[2];
             y0C[2] = v;
             y0C[0] = -y0C[0];
-        } else {
-            System.out.print("  ∅ ");
         }
 
         if (i[0] > i[1]) {
-            System.out.print(" 1↔2");
             Vector3D z = axesP[0];
             axesP[0] = axesP[1];
             axesP[1] = z;
@@ -177,15 +168,12 @@ public class TestProblem8 extends TestProblemAbstract {
             y0C[0] = y0C[1];
             y0C[1] = v;
             y0C[2] = -y0C[2];
-        } else {
-            System.out.print("  ∅ ");
         }
 
         final double condition = (twoE == 0) ? 0.0 : m2 / twoE;
 
         final boolean clockwise;
         if (condition < i[1]) {
-            System.out.print(" 1↔3");
             clockwise = true;
             Vector3D z = axesP[0];
             axesP[0] = axesP[2];
@@ -202,7 +190,6 @@ public class TestProblem8 extends TestProblemAbstract {
             y0C[1] = -y0C[1];
 
         } else {
-            System.out.print("  ∅ ");
             clockwise = false;
         }
 
@@ -211,9 +198,6 @@ public class TestProblem8 extends TestProblemAbstract {
         i3C = i[2];
 
         axes = axesP;
-        System.out.print("   " + axes[0].getX() + " " + axes[0].getY() + " " + axes[0].getZ());
-        System.out.print("   " + axes[1].getX() + " " + axes[1].getY() + " " + axes[1].getZ());
-        System.out.print("   " + axes[2].getX() + " " + axes[2].getY() + " " + axes[2].getZ());
 
         // convert initial conditions to Euler angles such the M is aligned with Z in sorted computation frame
         final Vector3D omega0Sorted = new Vector3D(y0C[0], y0C[1], y0C[2]);
@@ -223,14 +207,11 @@ public class TestProblem8 extends TestProblemAbstract {
         final double   psi0         = FastMath.atan2(m0Sorted.getX(), m0Sorted.getY()); // it is really atan2(x, y), not atan2(y, x) as usual!
 
         // compute offset rotation between inertial frame aligned with momentum and regular inertial frame
-        final Rotation mAlignedToSorted = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
-                                                       phi0, theta0, psi0);
+        final Rotation mAlignedToSorted0 = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
+                                                        phi0, theta0, psi0);
 
-        sortedToBody = new Rotation(Vector3D.PLUS_I, Vector3D.PLUS_J, axesP[0], axesP[1]);
-
-        //Est-il nécessaire de garder le r0COnvertedAxis qui n'est peut être pas adapté et ne règle peut être pas le problème
-        mAlignedToInert = sortedToBody.applyTo(r0).applyInverseTo(mAlignedToSorted);
-        //mAlignedToInert = r0.applyInverseTo(mAlignedToBody);        
+        sortedToBody    = new Rotation(Vector3D.PLUS_I, Vector3D.PLUS_J, axesP[0], axesP[1]);
+        mAlignedToInert = r0.applyInverseTo(sortedToBody.applyTo(mAlignedToSorted0));
 
         i32  = i3C - i2C;
         i31  = i3C - i1C;
@@ -239,7 +220,6 @@ public class TestProblem8 extends TestProblemAbstract {
         // Ω is always o1Scale * cn((t-tref) * tScale), o2Scale * sn((t-tref) * tScale), o3Scale * dn((t-tref) * tScale)
         tScale  = FastMath.copySign(FastMath.sqrt(i32 * (m2 - twoE * i1C) / (i1C * i2C * i3C)),
                                     clockwise ? -omega0Sorted.getZ() : omega0Sorted.getZ());
-        System.out.print(" " + tScale);
         o1Scale = FastMath.sqrt((twoE * i3C - m2) / (i1C * i31));
         o2Scale = FastMath.sqrt((twoE * i3C - m2) / (i2C * i32));
         o3Scale = FastMath.copySign(FastMath.sqrt((m2 - twoE * i1C) / (i3C * i31)), omega0Sorted.getZ());
@@ -257,21 +237,17 @@ public class TestProblem8 extends TestProblemAbstract {
                 if (omega0Sorted.getX() >= 0) {
                     // omega is roughly towards +I
                     tRef = t0 - jacobi.arcsn(omega0Sorted.getY() / o2Scale) / tScale;
-                    System.out.print(" t₀-arcsn");
                 } else {
                     // omega is roughly towards -I
                     tRef = t0 + jacobi.arcsn(omega0Sorted.getY() / o2Scale) / tScale - 0.5 * period;
-                    System.out.print(" t₀+arcsn");
                 }
             } else {
                 if (omega0Sorted.getY() >= 0) {
                     // omega is roughly towards +J
                     tRef = t0 - jacobi.arccn(omega0Sorted.getX() / o1Scale) / tScale;
-                    System.out.print(" t₀-arccn");
                 } else {
                     // omega is roughly towards -J
                     tRef = t0 + jacobi.arccn(omega0Sorted.getX() / o1Scale) / tScale;
-                    System.out.print(" t₀+arccn");
                 }
             }
         }
@@ -350,13 +326,10 @@ public class TestProblem8 extends TestProblemAbstract {
         final Rotation alignedToSorted = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
                                                       phi, theta, psi);
 
-        // combine with offset rotation to get back to regular inertial frame
-        // Inert -> aligned + aligned -> body = inert -> body (What the user wants)
-        Rotation inertToSorted = alignedToSorted.applyTo(mAlignedToInert.revert());
+        // combine with offset rotation to get back from regular inertial frame to body frame
+        Rotation inertToBody = sortedToBody.applyTo(alignedToSorted.applyTo(mAlignedToInert.revert()));
 
-        Rotation bodyToOriginalFrame = sortedToBody.applyTo(inertToSorted);
-
-        return new TfmState(t, omega, bodyToOriginalFrame, phi, theta, psi, sortedToBody, mAlignedToInert);
+        return new TfmState(t, omega, inertToBody, phi, theta, psi, sortedToBody, mAlignedToInert);
 
     }
 
