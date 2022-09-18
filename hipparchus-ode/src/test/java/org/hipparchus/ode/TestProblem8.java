@@ -329,7 +329,7 @@ public class TestProblem8 extends TestProblemAbstract {
         // combine with offset rotation to get back from regular inertial frame to body frame
         Rotation inertToBody = sortedToBody.applyTo(alignedToSorted.applyTo(mAlignedToInert.revert()));
 
-        return new TfmState(t, omega, inertToBody, phi, theta, psi, sortedToBody, mAlignedToInert);
+        return new TfmState(t, omega, inertToBody, phi, theta, psi, sortedToBody);
 
     }
 
@@ -373,18 +373,16 @@ public class TestProblem8 extends TestProblemAbstract {
         private final double theta;
         private final double psi;
         private final Rotation sortedToBody;
-        private final Rotation mAlignedToInert;
         private TfmState(final double t, final Vector3D omega, final Rotation rotation,
                          final double phi, final double theta, final double psi,
-                         final Rotation sortedToBody, final Rotation mAlignedToInert) {
+                         final Rotation sortedToBody) {
             this.t               = t;
             this.omega           = omega;
             this.rotation        = rotation;
             this.phi             = phi;
             this.theta           = theta;
             this.psi             = psi;
-            this.sortedToBody     = sortedToBody;
-            this.mAlignedToInert = mAlignedToInert;
+            this.sortedToBody    = sortedToBody;
         }
         public double getT() {
             return t;
@@ -406,9 +404,6 @@ public class TestProblem8 extends TestProblemAbstract {
         }
         public Rotation getSortedToBody() {
             return sortedToBody;
-        }
-        public Rotation getMAlignedToInert() {
-            return mAlignedToInert;
         }
     }
 
