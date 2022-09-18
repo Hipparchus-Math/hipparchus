@@ -65,8 +65,8 @@ public class TestProblem8 extends TestProblemAbstract {
     /** Time reference for rotation rate. */
     final double tRef;
 
-    /**Offset rotation  between initial inertial frame and the frame with moment vector and Z axis aligned. */
-    Rotation mAlignedToInert;
+    /** Offset rotation  between initial inertial frame and the frame with moment vector and Z axis aligned. */
+    Rotation inertToAligned;
 
     /** Rotation to switch to the converted axes frame. */
     final Rotation sortedToBody;
@@ -207,11 +207,11 @@ public class TestProblem8 extends TestProblemAbstract {
         final double   psi0         = FastMath.atan2(m0Sorted.getX(), m0Sorted.getY()); // it is really atan2(x, y), not atan2(y, x) as usual!
 
         // compute offset rotation between inertial frame aligned with momentum and regular inertial frame
-        final Rotation mAlignedToSorted0 = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
-                                                        phi0, theta0, psi0);
+        final Rotation alignedToSorted0 = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
+                                                       phi0, theta0, psi0);
 
-        sortedToBody    = new Rotation(Vector3D.PLUS_I, Vector3D.PLUS_J, axesP[0], axesP[1]);
-        mAlignedToInert = r0.applyInverseTo(sortedToBody.applyTo(mAlignedToSorted0));
+        sortedToBody   = new Rotation(Vector3D.PLUS_I, Vector3D.PLUS_J, axesP[0], axesP[1]);
+        inertToAligned = alignedToSorted0.applyInverseTo(sortedToBody.applyInverseTo(r0));
 
         i32  = i3C - i2C;
         i31  = i3C - i1C;
@@ -327,7 +327,7 @@ public class TestProblem8 extends TestProblemAbstract {
                                                       phi, theta, psi);
 
         // combine with offset rotation to get back from regular inertial frame to body frame
-        Rotation inertToBody = sortedToBody.applyTo(alignedToSorted.applyTo(mAlignedToInert.revert()));
+        Rotation inertToBody = sortedToBody.applyTo(alignedToSorted.applyTo(inertToAligned));
 
         return new TfmState(t, omega, inertToBody, phi, theta, psi, sortedToBody);
 
