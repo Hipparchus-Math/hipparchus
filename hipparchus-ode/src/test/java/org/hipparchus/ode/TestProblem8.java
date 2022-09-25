@@ -1,3 +1,19 @@
+/*
+ * Licensed to the Hipparchus project under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.hipparchus.ode;
 
 import org.hipparchus.geometry.euclidean.threed.Rotation;
@@ -19,30 +35,8 @@ public class TestProblem8 extends TestProblemAbstract {
     final double i2;
     final double i3;
 
-    /** Moments of inertia converted. */
-    final double i1C;
-    final double i2C;
-    final double i3C;
-
-    /**Substraction of inertias. */
-    final double i32;
-    final double i31;
-    final double i21;
-
-    /** Initial state. */
-    final double[] y0;
-    
-    /** Converted initial state. */
-    final double[] y0C;
-
-    /** Converted axes. */
-    final Vector3D[] axes;
-
-    /** Twice the angular kinetic energy. */
-    final double twoE;
-
-    /** Square of kinetic momentum. */
-    final double m2;
+    /** Inertia sorted to get a motion about axis 3. */
+    final Inertia sortedInertia;
 
     /** State scaling factor. */
     final double o1Scale;
@@ -55,9 +49,6 @@ public class TestProblem8 extends TestProblemAbstract {
 
     /** Jacobi elliptic function. */
     final JacobiElliptic jacobi;
-
-    /** Elliptic modulus k2 (k2 = m). */
-    final double k2;
 
     /** Time scaling factor. */
     public final double tScale;
@@ -95,8 +86,8 @@ public class TestProblem8 extends TestProblemAbstract {
      */
     public TestProblem8(final double t0, final double t1, final Vector3D omega0, final Rotation r0,
                         final double i1, final double i2, final double i3) {
-        //Arguments in the super constructor :
-        //Initial time, Primary state (o1, o2, o3, q0, q1, q2, q3), Final time, Error scale
+        // Arguments in the super constructor :
+        // Initial time, Primary state (o1, o2, o3, q0, q1, q2, q3), Final time, Error scale
         super(t0,
               new double[] {
                   omega0.getX(), omega0.getY(), omega0.getZ(),
@@ -108,99 +99,51 @@ public class TestProblem8 extends TestProblemAbstract {
         this.i2 = i2;
         this.i3 = i3;
 
-        y0 = getInitialState().getPrimaryState();
-
-        final double o12 = y0[0] * y0[0];
-        final double o22 = y0[1] * y0[1];
-        final double o32 = y0[2] * y0[2];
-
-        twoE    =  i1 * o12 + i2 * o22 + i3 * o32;
-        m2      =  i1 * i1 * o12 + i2 * i2 * o22 + i3 * i3 * o32;
-
-        Vector3D[] axesP = { Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K };
-
-        double[] i = { i1, i2, i3 };
-        y0C = y0.clone();
-
-        if (i[0] > i[1]) {
-            Vector3D z = axesP[0];
-            axesP[0] = axesP[1];
-            axesP[1] = z;
-            axesP[2] = axesP[2].negate();
-
-            final double y = i[0];
-            i[0] = i[1];
-            i[1] = y;
-
-            final double v = y0C[0];
-            y0C[0] = y0C[1];
-            y0C[1] = v;
-            y0C[2] = -y0C[2];
+        // sort axes in increasing moments of inertia order
+        Inertia inertia = new Inertia(new InertiaAxis(i1, Vector3D.PLUS_I),
+                                      new InertiaAxis(i2, Vector3D.PLUS_J),
+                                      new InertiaAxis(i3, Vector3D.PLUS_K));
+        if (inertia.getInertiaAxis1().getI() > inertia.getInertiaAxis2().getI()) {
+            inertia = inertia.swap12();
+        }
+        if (inertia.getInertiaAxis2().getI() > inertia.getInertiaAxis3().getI()) {
+            inertia = inertia.swap23();
+        }
+        if (inertia.getInertiaAxis1().getI() > inertia.getInertiaAxis2().getI()) {
+            inertia = inertia.swap12();
         }
 
-        if (i[1] > i[2]) {
-            Vector3D z = axesP[1];
-            axesP[1] = axesP[2];
-            axesP[2] = z;
-            axesP[0] = axesP[0].negate();
-
-            final double y = i[1];
-            i[1] = i[2];
-            i[2] = y;
-
-            final double v = y0C[1];
-            y0C[1] = y0C[2];
-            y0C[2] = v;
-            y0C[0] = -y0C[0];
-        }
-
-        if (i[0] > i[1]) {
-            Vector3D z = axesP[0];
-            axesP[0] = axesP[1];
-            axesP[1] = z;
-            axesP[2] = axesP[2].negate();
-
-            final double y = i[0];
-            i[0] = i[1];
-            i[1] = y;
-
-            final double v = y0C[0];
-            y0C[0] = y0C[1];
-            y0C[1] = v;
-            y0C[2] = -y0C[2];
-        }
-
-        final double condition = (twoE == 0) ? 0.0 : m2 / twoE;
-
+        // in order to simplify implementation, we want the motion to be about axis 3
+        // which is either the minimum or the maximum inertia axis
+        final double  o12               = omega0.getX() * omega0.getX();
+        final double  o22               = omega0.getY() * omega0.getY();
+        final double  o32               = omega0.getZ() * omega0.getZ();
+        final double  twoE              = i1 * o12 + i2 * o22 + i3 * o32;
+        final double  m2                = i1 * i1 * o12 + i2 * i2 * o22 + i3 * i3 * o32;
+        final double  separatrixInertia = (twoE == 0) ? 0.0 : m2 / twoE;
         final boolean clockwise;
-        if (condition < i[1]) {
-            clockwise = true;
-            Vector3D z = axesP[0];
-            axesP[0] = axesP[2];
-            axesP[2] = z;
-            axesP[1] = axesP[1].negate();
-
-            final double y = i[0];
-            i[0] = i[2];
-            i[2] = y;
-
-            final double v = y0C[0];
-            y0C[0] = y0C[2];
-            y0C[2] = v;
-            y0C[1] = -y0C[1];
-
+        if (separatrixInertia < inertia.getInertiaAxis2().getI()) {
+            // motion is about minimum inertia axis
+            // we swap axes to put them in decreasing moments order
+            // motion will be clockwise about axis 3
+            clockwise        = true;
+            inertia = inertia.swap13();
         } else {
+            // motion is about maximum inertia axis
+            // we keep axes in increasing moments order
+            // motion will be counter-clockwise about axis 3
             clockwise = false;
         }
+        sortedInertia = inertia;
 
-        i1C = i[0];
-        i2C = i[1];
-        i3C = i[2];
-
-        axes = axesP;
+        final double i1C = inertia.getInertiaAxis1().getI();
+        final double i2C = inertia.getInertiaAxis2().getI();
+        final double i3C = inertia.getInertiaAxis3().getI();
 
         // convert initial conditions to Euler angles such the M is aligned with Z in sorted computation frame
-        final Vector3D omega0Sorted = new Vector3D(y0C[0], y0C[1], y0C[2]);
+        sortedToBody   = new Rotation(Vector3D.PLUS_I, Vector3D.PLUS_J,
+                                      inertia.getInertiaAxis1().getA(), inertia.getInertiaAxis2().getA());
+        final Vector3D omega0Sorted = sortedToBody.applyInverseTo(omega0);
         final Vector3D m0Sorted     = new Vector3D(i1C * omega0Sorted.getX(), i2C * omega0Sorted.getY(), i3C * omega0Sorted.getZ());
         final double   phi0         = 0; // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
         final double   theta0       = FastMath.acos(m0Sorted.getZ() / m0Sorted.getNorm());
@@ -209,13 +152,11 @@ public class TestProblem8 extends TestProblemAbstract {
         // compute offset rotation between inertial frame aligned with momentum and regular inertial frame
         final Rotation alignedToSorted0 = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
                                                        phi0, theta0, psi0);
-
-        sortedToBody   = new Rotation(Vector3D.PLUS_I, Vector3D.PLUS_J, axesP[0], axesP[1]);
         inertToAligned = alignedToSorted0.applyInverseTo(sortedToBody.applyInverseTo(r0));
 
-        i32  = i3C - i2C;
-        i31  = i3C - i1C;
-        i21  = i2C - i1C;
+        final double i32  = i3C - i2C;
+        final double i31  = i3C - i1C;
+        final double i21  = i2C - i1C;
 
         // Ω is always o1Scale * cn((t-tref) * tScale), o2Scale * sn((t-tref) * tScale), o3Scale * dn((t-tref) * tScale)
         tScale  = FastMath.copySign(FastMath.sqrt(i32 * (m2 - twoE * i1C) / (i1C * i2C * i3C)),
@@ -224,7 +165,7 @@ public class TestProblem8 extends TestProblemAbstract {
         o2Scale = FastMath.sqrt((twoE * i3C - m2) / (i2C * i32));
         o3Scale = FastMath.copySign(FastMath.sqrt((m2 - twoE * i1C) / (i3C * i31)), omega0Sorted.getZ());
 
-        k2     = (twoE == 0) ? 0.0 : i21 * (twoE * i3C - m2) / (i32 * (m2 - twoE * i1C));
+        final double k2 = (twoE == 0) ? 0.0 : i21 * (twoE * i3C - m2) / (i32 * (m2 - twoE * i1C));
         jacobi = JacobiEllipticBuilder.build(k2);
         period = 4 * LegendreEllipticIntegral.bigK(k2) / tScale;
 
@@ -259,6 +200,10 @@ public class TestProblem8 extends TestProblemAbstract {
     }
 
     private DenseOutputModel computePhiQuadratureModel(final double t0) {
+
+        final double i1C = sortedInertia.getInertiaAxis1().getI();
+        final double i2C = sortedInertia.getInertiaAxis2().getI();
+        final double i3C = sortedInertia.getInertiaAxis3().getI();
 
         final double i32 = i3C - i2C;
         final double i31 = i3C - i1C;
@@ -298,38 +243,39 @@ public class TestProblem8 extends TestProblemAbstract {
 
     }
 
-    public TfmState computeTorqueFreeMotion(double t) {
+    public double[] computeTheoreticalState(double t) {
 
-        // Computation of omega
-        final CopolarN valuesN = jacobi.valuesN((t - tRef) * tScale);
-        final Vector3D omegaP  = new Vector3D(o1Scale * valuesN.cn(), o2Scale * valuesN.sn(), o3Scale * valuesN.dn());
-        final Vector3D omega   = sortedToBody.applyTo(omegaP);
+        // angular velocity
+        final CopolarN valuesN     = jacobi.valuesN((t - tRef) * tScale);
+        final Vector3D omegaSorted = new Vector3D(o1Scale * valuesN.cn(), o2Scale * valuesN.sn(), o3Scale * valuesN.dn());
+        final Vector3D omegaBody   = sortedToBody.applyTo(omegaSorted);
 
-        // Computation of the Euler angles
-        final double   psi       = FastMath.atan2(i1C * omegaP.getX(), i2C * omegaP.getY());
-        final double   theta     = FastMath.acos(omegaP.getZ() / phiSlope);
-        final double   phiLinear = phiSlope * t;
+        // first Euler angles are directly linked to angular velocity
+        final double   psi         = FastMath.atan2(sortedInertia.getInertiaAxis1().getI() * omegaSorted.getX(),
+                                                    sortedInertia.getInertiaAxis2().getI() * omegaSorted.getY());
+        final double   theta       = FastMath.acos(omegaSorted.getZ() / phiSlope);
+        final double   phiLinear   = phiSlope * t;
 
-        // Integration for the computation of phi
+        // third Euler angle results from a quadrature
         final double t0            = getInitialTime();
         final int    nbPeriods     = (int) FastMath.floor((t - t0) / period);
         final double tStartInteg   = t0 + nbPeriods * period;
         final double integPartial  = phiQuadratureModel.getInterpolatedState(t - tStartInteg).getPrimaryState()[0];
         final double phiQuadrature = nbPeriods * integOnePeriod + integPartial;
+        final double phi           = phiLinear + phiQuadrature;
 
-        final double phi = phiLinear + phiQuadrature;
-
-        // Computation of the quaternion
-
-        // Rotation between computation frame (aligned with momentum) and sorted computation frame
-        //(It is simply the angles equations provided by L&L)
+        // rotation between computation frame (aligned with momentum) and sorted computation frame
+        // (it is simply the angles equations provided by Landau & Lifchitz)
         final Rotation alignedToSorted = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
                                                       phi, theta, psi);
 
         // combine with offset rotation to get back from regular inertial frame to body frame
         Rotation inertToBody = sortedToBody.applyTo(alignedToSorted.applyTo(inertToAligned));
 
-        return new TfmState(t, omega, inertToBody, phi, theta, psi, sortedToBody);
+        return new double[] {
+            omegaBody.getX(), omegaBody.getY(), omegaBody.getZ(),
+            inertToBody.getQ0(), inertToBody.getQ1(), inertToBody.getQ2(), inertToBody.getQ3()
+        };
 
     }
 
@@ -352,59 +298,120 @@ public class TestProblem8 extends TestProblemAbstract {
 
     }
 
-    public double[] computeTheoreticalState(double t) {
-        final TfmState tfm = computeTorqueFreeMotion(t);
-        return new double[] {
-                tfm.getOmega().getX(),
-                tfm.getOmega().getY(),
-                tfm.getOmega().getZ(),
-                tfm.getRotation().getQ0(),
-                tfm.getRotation().getQ1(),
-                tfm.getRotation().getQ2(),
-                tfm.getRotation().getQ3()
-        };
+    /** Container for inertia of a 3D object.
+     * <p>
+     * Instances of this class are immutable
+     * </p>
+    */
+   public class Inertia {
+
+       /** Inertia along first axis. */
+       private final InertiaAxis iA1;
+
+       /** Inertia along second axis. */
+       private final InertiaAxis iA2;
+
+       /** Inertia along third axis. */
+       private final InertiaAxis iA3;
+
+       /** Simple constructor from principal axes.
+        * @param iA1 inertia along first axis
+        * @param iA2 inertia along second axis
+        * @param iA3 inertia along third axis
+        */
+       public Inertia(final InertiaAxis iA1, final InertiaAxis iA2, final InertiaAxis iA3) {
+           this.iA1 = iA1;
+           this.iA2 = iA2;
+           this.iA3 = iA3;
+       }
+
+       /** Swap axes 1 and 2.
+        * @return inertia with swapped axes
+        */
+       public Inertia swap12() {
+           return new Inertia(iA2, iA1, iA3.negate());
+       }
+
+       /** Swap axes 1 and 3.
+        * @return inertia with swapped axes
+        */
+       public Inertia swap13() {
+           return new Inertia(iA3, iA2.negate(), iA1);
+       }
+
+       /** Swap axes 2 and 3.
+        * @return inertia with swapped axes
+        */
+       public Inertia swap23() {
+           return new Inertia(iA1.negate(), iA3, iA2);
+       }
+
+       /** Get inertia along first axis.
+        * @return inertia along first axis
+        */
+       public InertiaAxis getInertiaAxis1() {
+           return iA1;
+       }
+
+       /** Get inertia along second axis.
+        * @return inertia along second axis
+        */
+       public InertiaAxis getInertiaAxis2() {
+           return iA2;
+       }
+
+       /** Get inertia along third axis.
+        * @return inertia along third axis
+        */
+       public InertiaAxis getInertiaAxis3() {
+           return iA3;
+       }
+
+   }
+
+   /** Container for moment of inertia and associated inertia axis.
+     * <p>
+     * Instances of this class are immutable
+     * </p>
+     */
+    public class InertiaAxis {
+
+        /** Moment of inertia. */
+        private final double i;
+
+        /** Inertia axis. */
+        private final Vector3D a;
+
+        /** Simple constructor to pair a moment of inertia with its associated axis.
+         * @param i moment of inertia
+         * @param a inertia axis
+         */
+        public InertiaAxis(final double i, final Vector3D a) {
+            this.i = i;
+            this.a = a;
+        }
+
+        /** Reverse the inertia axis.
+         * @return new container with reversed axis
+         */
+        public InertiaAxis negate() {
+            return new InertiaAxis(i, a.negate());
+        }
+
+        /** Get the moment of inertia.
+         * @return moment of inertia
+         */
+        public double getI() {
+            return i;
+        }
+
+        /** Get the inertia axis.
+         * @return inertia axis
+         */
+        public Vector3D getA() {
+            return a;
+        }
+
     }
 
-    public static class TfmState {
-        private final double   t;
-        private final Vector3D omega;
-        private final Rotation rotation;
-        private final double phi;
-        private final double theta;
-        private final double psi;
-        private final Rotation sortedToBody;
-        private TfmState(final double t, final Vector3D omega, final Rotation rotation,
-                         final double phi, final double theta, final double psi,
-                         final Rotation sortedToBody) {
-            this.t               = t;
-            this.omega           = omega;
-            this.rotation        = rotation;
-            this.phi             = phi;
-            this.theta           = theta;
-            this.psi             = psi;
-            this.sortedToBody    = sortedToBody;
-        }
-        public double getT() {
-            return t;
-        }
-        public Vector3D getOmega() {
-            return omega;
-        }
-        public Rotation getRotation() {
-            return rotation;
-        }
-        public double getPhi() {
-            return phi;
-        }
-        public double getTheta() {
-            return theta;
-        }
-        public double getPsi() {
-            return psi;
-        }
-        public Rotation getSortedToBody() {
-            return sortedToBody;
-        }
-    }
-
-}//Fin du programme
+}

@@ -565,19 +565,25 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             while (interpolator.getPreviousState().getTime() <= current &&
                     interpolator.getCurrentState().getTime() > current) {
                 ODEStateAndDerivative state = interpolator.getInterpolatedState(current);
-                TestProblem8.TfmState tfm   = pb.computeTorqueFreeMotion(state.getTime());
+                final double[] theoretical  = pb.computeTheoreticalState(state.getTime());
                 final double errorOmega = FastMath.max(maxErrorOmega,
                                                        Vector3D.distance(new Vector3D(state.getPrimaryState()[0],
                                                                                       state.getPrimaryState()[1],
                                                                                       state.getPrimaryState()[2]),
-                                                                         tfm.getOmega()));
+                                                                         new Vector3D(theoretical[0],
+                                                                                      theoretical[1],
+                                                                                      theoretical[2])));
                 maxErrorOmega = FastMath.max(maxErrorOmega, errorOmega);
                 final double errorQ = Rotation.distance(new Rotation(state.getPrimaryState()[3],
-                                                                       state.getPrimaryState()[4],
-                                                                       state.getPrimaryState()[5],
-                                                                       state.getPrimaryState()[6],
-                                                                       true),
-                                                          tfm.getRotation());
+                                                                     state.getPrimaryState()[4],
+                                                                     state.getPrimaryState()[5],
+                                                                     state.getPrimaryState()[6],
+                                                                     true),
+                                                        new Rotation(theoretical[3],
+                                                                     theoretical[4],
+                                                                     theoretical[5],
+                                                                     theoretical[6],
+                                                                     true));
                 maxErrorQ = FastMath.max(maxErrorQ, errorQ);
                 current += outputStep;
 
