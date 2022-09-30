@@ -50,7 +50,7 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="2.3" date="TBD" description="TBD">
-      <action dev="bryan" type="add">
+      <action dev="bryan" type="add" issue="issues/205">
         Added new signature for SequentialGaussNewtonOptimizer#withAPrioriData allowing
         to defined the Cholesky decomposition thresholds.
       </action>
