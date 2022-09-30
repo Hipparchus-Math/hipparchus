@@ -23,6 +23,8 @@ package org.hipparchus.geometry.spherical.twod;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.junit.Assert;
@@ -98,6 +100,17 @@ public class S2PointTest {
         Assert.assertEquals(FastMath.PI, a.distance(a.negate()), 1.0e-10);
         Assert.assertEquals(0.5 * FastMath.PI, S2Point.MINUS_I.distance(S2Point.MINUS_K), 1.0e-10);
         Assert.assertEquals(0.0, new S2Point(1.0, 0).distance(new S2Point(2.0, 0)), 1.0e-10);
+    }
+
+    @Test
+    public void testNegate() {
+        RandomGenerator generator = new Well1024a(0x79d1bc2e0999d238l);
+        for (int i = 0; i < 100000; ++i) {
+            S2Point p = new S2Point(MathUtils.TWO_PI * generator.nextDouble(),
+                                    FastMath.PI * generator.nextDouble());
+            S2Point np = new S2Point(p.negate().getTheta(), p.negate().getPhi());
+            Assert.assertEquals(FastMath.PI, p.distance(np), 1.4e-15);            
+        }
     }
 
     @Test

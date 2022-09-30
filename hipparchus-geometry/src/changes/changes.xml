@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Geometry Release Notes</title>
   </properties>
   <body>
+    <release version="2.3" date="TBD" description="TBD.">
+      <action dev="luc" type="fix" issue="issues/208">
+        Fixed wrong negation of point on the 2-sphere.
+      </action>
+    </release>
     <release version="2.2" date="2022-08-10" description="This is a maintenance release.">
       <action dev="luc" type="update">
         No changes directly in this module. However, lower level Hipparchus modules did change,
