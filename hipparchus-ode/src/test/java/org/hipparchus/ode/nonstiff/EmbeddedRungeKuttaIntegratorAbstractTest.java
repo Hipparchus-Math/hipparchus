@@ -485,19 +485,25 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         problems = Stream.concat(problems,
                                  permute(omegaBase).
                                  map(omega -> new TestProblem8(t0, t1, omega, rBase,
-                                                               inertiaBase.get(0), inertiaBase.get(1), inertiaBase.get(2))));
+                                                               inertiaBase.get(0), Vector3D.PLUS_I,
+                                                               inertiaBase.get(1), Vector3D.PLUS_J,
+                                                               inertiaBase.get(2), Vector3D.PLUS_K)));
 
         // add all possible permutations of the base rotation
         problems = Stream.concat(problems,
                                  permute(rBase).
                                  map(r -> new TestProblem8(t0, t1, omegaBase, r,
-                                                           inertiaBase.get(0), inertiaBase.get(1), inertiaBase.get(2))));
+                                                           inertiaBase.get(0), Vector3D.PLUS_I,
+                                                           inertiaBase.get(1), Vector3D.PLUS_J,
+                                                           inertiaBase.get(2), Vector3D.PLUS_K)));
 
         // add all possible permutations of the base inertia
         problems = Stream.concat(problems,
                                  permute(inertiaBase).
                                  map(inertia -> new TestProblem8(t0, t1, omegaBase, rBase,
-                                                                 inertia.get(0), inertia.get(1), inertia.get(2))));
+                                                                 inertia.get(0), Vector3D.PLUS_I,
+                                                                 inertia.get(1), Vector3D.PLUS_J,
+                                                                 inertia.get(2), Vector3D.PLUS_K)));
 
         problems.forEach(problem -> {
             EmbeddedRungeKuttaIntegrator integ = createIntegrator(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);   

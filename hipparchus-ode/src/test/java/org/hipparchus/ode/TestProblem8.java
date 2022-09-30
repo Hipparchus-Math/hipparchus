@@ -16,10 +16,17 @@
  */
 package org.hipparchus.ode;
 
+import java.util.Arrays;
+
 import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.geometry.euclidean.threed.RotationConvention;
 import org.hipparchus.geometry.euclidean.threed.RotationOrder;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
+import org.hipparchus.linear.CholeskyDecomposer;
+import org.hipparchus.linear.DecompositionSolver;
+import org.hipparchus.linear.MatrixUtils;
+import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.linear.RealVector;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.special.elliptic.jacobi.CopolarN;
 import org.hipparchus.special.elliptic.jacobi.JacobiElliptic;
@@ -30,10 +37,11 @@ import org.hipparchus.util.FastMath;
 
 public class TestProblem8 extends TestProblemAbstract {
 
-    /** Moments of inertia. */
-    final double i1;
-    final double i2;
-    final double i3;
+    /** Inertia tensor. */
+    final RealMatrix inertiaTensor;
+
+    /** Solver for inertia tensor. */
+    final DecompositionSolver inertiaSolver;
 
     /** Inertia sorted to get a motion about axis 3. */
     final Inertia sortedInertia;
@@ -81,11 +89,16 @@ public class TestProblem8 extends TestProblemAbstract {
      * @param omega0 initial rotation rate
      * @param r0 initial rotation
      * @param i1 inertia along first axis
+     * @param a1 first principal inertia axis
      * @param i2 inertia along second axis
+     * @param a2 second principal inertia axis
      * @param i3 inertia along third axis
+     * @param a3 third principal inertia axis
      */
     public TestProblem8(final double t0, final double t1, final Vector3D omega0, final Rotation r0,
-                        final double i1, final double i2, final double i3) {
+                        final double i1, final Vector3D a1,
+                        final double i2, final Vector3D a2,
+                        final double i3, final Vector3D a3) {
         // Arguments in the super constructor :
         // Initial time, Primary state (o1, o2, o3, q0, q1, q2, q3), Final time, Error scale
         super(t0,
@@ -95,14 +108,28 @@ public class TestProblem8 extends TestProblemAbstract {
               },
               t1,
               new double[] { 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 });
-        this.i1 = i1;
-        this.i2 = i2;
-        this.i3 = i3;
+
+        // build inertia tensor
+        final Vector3D n1  = a1.normalize();
+        final Vector3D n2  = a2.normalize();
+        final Vector3D n3  = (Vector3D.dotProduct(Vector3D.crossProduct(a1, a2), a3) > 0 ?
+                              a3.normalize() : a3.normalize().negate());
+        final RealMatrix q = MatrixUtils.createRealMatrix(3, 3);
+        q.setEntry(0, 0, n1.getX());
+        q.setEntry(0, 1, n1.getY());
+        q.setEntry(0, 2, n1.getZ());
+        q.setEntry(1, 0, n2.getX());
+        q.setEntry(1, 1, n2.getY());
+        q.setEntry(1, 2, n2.getZ());
+        q.setEntry(2, 0, n3.getX());
+        q.setEntry(2, 1, n3.getY());
+        q.setEntry(2, 2, n3.getZ());
+        final RealMatrix d = MatrixUtils.createRealDiagonalMatrix(new double[] { i1, i2, i3});
+        this.inertiaTensor = q.multiply(d.multiplyTransposed(q));
+        this.inertiaSolver = new CholeskyDecomposer(1.0e-10, 1.0e-10).decompose(inertiaTensor);
 
         // sort axes in increasing moments of inertia order
-        Inertia inertia = new Inertia(new InertiaAxis(i1, Vector3D.PLUS_I),
-                                      new InertiaAxis(i2, Vector3D.PLUS_J),
-                                      new InertiaAxis(i3, Vector3D.PLUS_K));
+        Inertia inertia = new Inertia(new InertiaAxis(i1, n1), new InertiaAxis(i2, n2), new InertiaAxis(i3, n3));
         if (inertia.getInertiaAxis1().getI() > inertia.getInertiaAxis2().getI()) {
             inertia = inertia.swap12();
         }
@@ -126,8 +153,8 @@ public class TestProblem8 extends TestProblemAbstract {
             // motion is about minimum inertia axis
             // we swap axes to put them in decreasing moments order
             // motion will be clockwise about axis 3
-            clockwise        = true;
-            inertia = inertia.swap13();
+            clockwise = true;
+            inertia   = inertia.swap13();
         } else {
             // motion is about maximum inertia axis
             // we keep axes in increasing moments order
@@ -141,8 +168,7 @@ public class TestProblem8 extends TestProblemAbstract {
         final double i3C = inertia.getInertiaAxis3().getI();
 
         // convert initial conditions to Euler angles such the M is aligned with Z in sorted computation frame
-        sortedToBody   = new Rotation(Vector3D.PLUS_I, Vector3D.PLUS_J,
-                                      inertia.getInertiaAxis1().getA(), inertia.getInertiaAxis2().getA());
+        sortedToBody   = new Rotation(n1, n2, inertia.getInertiaAxis1().getA(), inertia.getInertiaAxis2().getA());
         final Vector3D omega0Sorted = sortedToBody.applyInverseTo(omega0);
         final Vector3D m0Sorted     = new Vector3D(i1C * omega0Sorted.getX(), i2C * omega0Sorted.getY(), i3C * omega0Sorted.getZ());
         final double   phi0         = 0; // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
@@ -284,9 +310,12 @@ public class TestProblem8 extends TestProblemAbstract {
         final  double[] yDot = new double[getDimension()];
 
         // compute the derivatives using Euler equations
-        yDot[0] = y[1] * y[2] * (i2 - i3) / i1;
-        yDot[1] = y[2] * y[0] * (i3 - i1) / i2;
-        yDot[2] = y[0] * y[1] * (i1 - i2) / i3;
+        final double[]   omega    = Arrays.copyOfRange(y, 0, 3);
+        final double[]   minusOiO = Vector3D.crossProduct(new Vector3D(omega), new Vector3D(inertiaTensor.operate(omega))).negate().toArray();
+        final RealVector omegaDot = inertiaSolver.solve(MatrixUtils.createRealVector(minusOiO));
+        yDot[0] = omegaDot.getEntry(0);
+        yDot[1] = omegaDot.getEntry(1);
+        yDot[2] = omegaDot.getEntry(2);
 
         // compute the derivatives using Qdot = 0.5 * Omega_inertialframe * Q
         yDot[3] = 0.5 * (-y[0] * y[4] -y[1] * y[5] -y[2] * y[6]);
