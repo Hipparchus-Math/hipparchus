@@ -109,7 +109,7 @@ public class S2PointTest {
             S2Point p = new S2Point(MathUtils.TWO_PI * generator.nextDouble(),
                                     FastMath.PI * generator.nextDouble());
             S2Point np = new S2Point(p.negate().getTheta(), p.negate().getPhi());
-            Assert.assertEquals(FastMath.PI, p.distance(np), 1.4e-15);            
+            Assert.assertEquals(FastMath.PI, p.distance(np), 1.4e-15);
         }
     }
 
