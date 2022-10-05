@@ -1,30 +1,21 @@
 
-              Hipparchus 2.2 RELEASE NOTES
+              Hipparchus 2.3 RELEASE NOTES
 
-The Hipparchus team is pleased to announce the release of hipparchus-2.2
+The Hipparchus team is pleased to announce the release of hipparchus-2.3
 
 The Hipparchus library is a library of mathematical components. It started as a fork of Apache Commons Math.
 
 Changes in this version include:
 
 New features:
-o issue/190:  Added {Field}TaylorMap, supporting evaluation, composition and inversion. 
-o issue/200:  Added FieldMatrixDecomposer. 
-o issue/191:  Added rebase to {Field}DerivativeStructure, which enables changing
-              the base variables a {Field}DerivativeStructure depends on. 
-o issue/199:  Added Unscented Kalman Filter for non linear estimations. Thanks to Gaetan Pierre. 
-o issue/198:  Added CombinatoricsUtils.permutations. 
-o             Added computation of Bell numbers. 
-o issue/197:  Added RosenNumberPartitionIterator. Thanks to Axel Kramer. 
-o issue/197:  Added CombinatoricsUtils.partitions. 
-o issue/195:  Added FieldMultivariateFunction, CalculusFieldMultivariateFunction,
-              FieldMultivariateVectorFunction, CalculusFieldMultivariateVectorFunction,
-              FieldMultivariateMatrixFunction and CalculusFieldMultivariateMatrixFunction 
-o issue/192:  Added integration/differentiation of {Field}DerivativeStructure. Thanks to Romain Serra. 
+o issues/205:  Added new signature for SequentialGaussNewtonOptimizer#withAPrioriData allowing
+               to define the Cholesky decomposition thresholds. 
+o issues/204:  Changed HessenbergTransformer visibility to public. 
+o issues/204:  Changed SchurTransformer visibility to public. 
 
 Fixed Bugs:
-o issues/194:  Added a getPrimary method to FieldExpandableODE. 
-
+o issues/208:  Fixed wrong negation of point on the 2-sphere. 
+o issues/207:  Allow configuration of RandomPercentile in StreamingStatistics. 
 
 For complete information on Hipparchus, including instructions on how to submit bug reports,
 patches, or suggestions for improvement, see the Hipparchus website:

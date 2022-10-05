@@ -49,10 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Optim Release Notes</title>
   </properties>
   <body>
-    <release version="2.3" date="TBD" description="TBD">
-      <action dev="bryan" type="add">
+    <release version="2.3" date="2022-10-05" description="This is a maintenance release. The main change
+    is a new signature for SequentialGaussNewtonOptimizer.withAPrioriData">
+      <action dev="bryan" type="add" issue="issues/205">
         Added new signature for SequentialGaussNewtonOptimizer#withAPrioriData allowing
-        to defined the Cholesky decomposition thresholds.
+        to define the Cholesky decomposition thresholds.
       </action>
     </release>
     <release version="2.2" date="2022-08-10" description="This is a maintenance release.">

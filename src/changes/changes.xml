@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
-    <release version="2.3" date="TBD" description="TBD.">
+    <release version="2.3" date="2022-10-05" description="This is a maintenance release.">
       <action dev="luc" type="fix" issue="issues/208">
         Fixed wrong negation of point on the 2-sphere.
       </action>
@@ -58,7 +58,7 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
       <action dev="bryan" type="add" issue="issues/205">
         Added new signature for SequentialGaussNewtonOptimizer#withAPrioriData allowing
-        to defined the Cholesky decomposition thresholds.
+        to define the Cholesky decomposition thresholds.
       </action>
       <action dev="luc" type="add" issue="issues/204">
         Changed HessenbergTransformer visibility to public.
