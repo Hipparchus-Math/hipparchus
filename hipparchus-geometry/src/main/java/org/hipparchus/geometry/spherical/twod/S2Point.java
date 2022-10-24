@@ -168,7 +168,7 @@ public class S2Point implements Point<Sphere2D> {
      * @return a new vector which is opposite to the instance
      */
     public S2Point negate() {
-        return new S2Point(-theta, FastMath.PI - phi, vector.negate());
+        return new S2Point(FastMath.PI + theta, FastMath.PI - phi, vector.negate());
     }
 
     /** {@inheritDoc} */
