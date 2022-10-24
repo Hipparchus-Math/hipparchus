@@ -28,7 +28,6 @@ import java.util.Locale;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.util.Blendable;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -39,7 +38,7 @@ import org.hipparchus.util.MathUtils;
  *
  */
 public abstract class AbstractRealMatrix
-    implements RealMatrix, RealLinearOperator, Blendable<RealMatrix> {
+    implements RealMatrix, RealLinearOperator {
 
     /** Default format. */
     private static final RealMatrixFormat DEFAULT_FORMAT = RealMatrixFormat.getRealMatrixFormat(Locale.US);

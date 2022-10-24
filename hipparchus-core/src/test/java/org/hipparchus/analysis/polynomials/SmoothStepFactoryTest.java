@@ -23,7 +23,7 @@ public class SmoothStepFactoryTest {
     @Test(expected = MathIllegalArgumentException.class)
     public void testExceptionBelowBoundary() {
         // Given
-        final double x           = 2;
+        final double                               x          = 2;
         final SmoothStepFactory.SmoothStepFunction smoothstep = SmoothStepFactory.getGeneralOrder(1);
 
         // When
@@ -33,7 +33,7 @@ public class SmoothStepFactoryTest {
     @Test(expected = MathIllegalArgumentException.class)
     public void testExceptionOverBoundary() {
         // Given
-        final double x           = 17;
+        final double                               x          = 17;
         final SmoothStepFactory.SmoothStepFunction smoothstep = SmoothStepFactory.getGeneralOrder(1);
 
         // When
@@ -63,7 +63,7 @@ public class SmoothStepFactoryTest {
     public void testNormalizedInput() {
 
         // Given
-        final double x         = 0.4;
+        final double                               x     = 0.4;
         final SmoothStepFactory.SmoothStepFunction clamp = SmoothStepFactory.getCubic();
 
         // When

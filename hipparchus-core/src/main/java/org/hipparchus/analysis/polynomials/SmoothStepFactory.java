@@ -14,6 +14,16 @@ import org.hipparchus.exception.NullArgumentException;
 public class SmoothStepFactory {
 
     /**
+     * Private constructor.
+     * <p>
+     * This class is a utility class, it should neither have a public nor a default constructor. This private
+     * constructor prevents the compiler from generating one automatically.
+     */
+    private SmoothStepFactory() {
+        // Empty constructor
+    }
+
+    /**
      * Get the {@link SmoothStepFunction clamping smoothstep function}.
      *
      * @return clamping smoothstep function
@@ -70,11 +80,11 @@ public class SmoothStepFactory {
      * @param k subset in set
      * @return number of subset {@code k} in global set {@code n}
      */
-    private static int pascalTriangle(final int n, final int k) {
+    private static int pascalTriangle(final int k, final int n) {
 
         int result = 1;
-        for (int i = 0; i < k; i++) {
-            result *= (n - i) / (i + 1);
+        for (int i = 0; i < n; i++) {
+            result *= (k - i) / (i + 1);
         }
 
         return result;
@@ -151,9 +161,9 @@ public class SmoothStepFactory {
         public double value(final double leftEdge, final double rightEdge, final double x)
                 throws MathIllegalArgumentException {
 
-            checkInput(leftEdge, rightEdge);
+            checkInputEdges(leftEdge, rightEdge);
 
-            final double xClamped = clamp(leftEdge, rightEdge, x);
+            final double xClamped = clampInput(leftEdge, rightEdge, x);
 
             final double xNormalized = normalizeInput(leftEdge, rightEdge, xClamped);
 
@@ -166,7 +176,7 @@ public class SmoothStepFactory {
          * @param leftEdge left edge
          * @param rightEdge right edge
          */
-        private void checkInput(final double leftEdge, final double rightEdge) {
+        private void checkInputEdges(final double leftEdge, final double rightEdge) {
             if (leftEdge > rightEdge) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.RIGHT_EDGE_GREATER_THAN_LEFT_EDGE,
                                                        leftEdge, rightEdge);
@@ -181,7 +191,7 @@ public class SmoothStepFactory {
          * @param x input to clamp
          * @return clamped input
          */
-        private double clamp(final double leftEdge, final double rightEdge, final double x) {
+        private double clampInput(final double leftEdge, final double rightEdge, final double x) {
             if (x <= leftEdge) {
                 return leftEdge;
             }
