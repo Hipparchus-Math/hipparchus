@@ -21,16 +21,19 @@
  */
 package org.hipparchus.geometry;
 
-import java.text.NumberFormat;
-
+import org.hipparchus.analysis.polynomials.SmoothStepFactory;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.util.Blendable;
+
+import java.text.NumberFormat;
 
 /** This interface represents a generic vector in a vectorial space or a point in an affine space.
  * @param <S> Type of the space.
  * @see Space
  * @see Point
  */
-public interface Vector<S extends Space> extends Point<S> {
+public interface Vector<S extends Space> extends Point<S>, Blendable<Vector<S>> {
 
     /** Get the null vector of the vectorial space or origin point of the affine space.
      * @return null vector of the vectorial space or origin point of the affine space
@@ -147,4 +150,10 @@ public interface Vector<S extends Space> extends Point<S> {
      */
     String toString(NumberFormat format);
 
+    @Override
+    default Vector<S> blendArithmeticallyWith(Vector<S> other, double blendingValue)
+            throws MathIllegalArgumentException {
+        SmoothStepFactory.checkBetweenZeroAndOneIncluded(blendingValue);
+        return this.scalarMultiply(1 - blendingValue).add(other.scalarMultiply(blendingValue));
+    }
 }

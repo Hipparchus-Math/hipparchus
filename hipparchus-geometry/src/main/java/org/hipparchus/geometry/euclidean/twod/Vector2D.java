@@ -30,6 +30,8 @@ import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.Vector;
+import org.hipparchus.geometry.euclidean.threed.Euclidean3D;
+import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -555,6 +557,12 @@ public class Vector2D implements Vector<Euclidean2D> {
     @Override
     public String toString(final NumberFormat format) {
         return new Vector2DFormat(format).format(this);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Vector2D blendArithmeticallyWith(final Vector<Euclidean2D> other, final double blendingValue) {
+        return (Vector2D) Vector.super.blendArithmeticallyWith(other, blendingValue);
     }
 
 }

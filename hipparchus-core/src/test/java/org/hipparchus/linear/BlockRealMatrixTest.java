@@ -21,9 +21,6 @@
  */
 package org.hipparchus.linear;
 
-import java.util.Arrays;
-import java.util.Random;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -33,6 +30,9 @@ import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Test cases for the {@link BlockRealMatrix} class.
@@ -532,6 +532,36 @@ public final class BlockRealMatrixTest {
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
+    }
+
+    @Test
+    public void testArithmeticBlending() {
+
+        // Given
+        final RealMatrix m1 = new BlockRealMatrix(new double[][] {
+                { 1, 2, 3 },
+                { 4, 5, 6 },
+                { 7, 8, 9 },
+        });
+        final RealMatrix m2 = new BlockRealMatrix(new double[][] {
+                { 10, 11, 12 },
+                { 13, 14, 15 },
+                { 16, 17, 18 },
+        });
+
+        final double blendingValue = 0.2;
+
+        // When
+        final RealMatrix blendedMatrix = m1.blendArithmeticallyWith(m2, blendingValue);
+
+        // Then
+        final RealMatrix expectedMatrix = new BlockRealMatrix(new double[][] {
+                { 2.8, 3.8, 4.8 },
+                { 5.8, 6.8, 7.8 },
+                { 8.8, 9.8, 10.8 }
+        });
+
+        assertClose(expectedMatrix, blendedMatrix, normTolerance);
     }
 
     @Test
@@ -1374,4 +1404,3 @@ public final class BlockRealMatrixTest {
         return m;
     }
 }
-

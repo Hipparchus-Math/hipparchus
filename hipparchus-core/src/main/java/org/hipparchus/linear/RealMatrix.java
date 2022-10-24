@@ -23,8 +23,10 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.polynomials.SmoothStepFactory;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.util.Blendable;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -34,7 +36,7 @@ import org.hipparchus.util.FastMath;
  * returns the element in the first row, first column of the matrix.</p>
  *
  */
-public interface RealMatrix extends AnyMatrix {
+public interface RealMatrix extends AnyMatrix, Blendable<RealMatrix> {
 
     /**
      * Create a new RealMatrix of the same type as the instance with the
@@ -164,6 +166,13 @@ public interface RealMatrix extends AnyMatrix {
      */
     RealMatrix power(int p)
         throws MathIllegalArgumentException;
+
+    /** {@inheritDoc} */
+    @Override
+    default RealMatrix blendArithmeticallyWith(final RealMatrix other, final double blendingValue) {
+        SmoothStepFactory.checkBetweenZeroAndOneIncluded(blendingValue);
+        return this.scalarMultiply(1 - blendingValue).add(other.scalarMultiply(blendingValue));
+    }
 
     /**
      * Returns matrix entries as a two-dimensional array.

@@ -22,9 +22,6 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
-import java.io.Serializable;
-import java.text.NumberFormat;
-
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -36,6 +33,10 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.SinCos;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.text.NumberFormat;
 
 /**
  * This class implements vectors in a three-dimensional space.
@@ -641,4 +642,9 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
         return new Vector3DFormat(format).format(this);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Vector3D blendArithmeticallyWith(final Vector<Euclidean3D> other, final double blendingValue) {
+        return (Vector3D) Vector.super.blendArithmeticallyWith(other, blendingValue);
+    }
 }

@@ -28,6 +28,8 @@ import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.Vector;
+import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
+import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -397,6 +399,12 @@ public class Vector1D implements Vector<Euclidean1D> {
     @Override
     public String toString(final NumberFormat format) {
         return new Vector1DFormat(format).format(this);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Vector1D blendArithmeticallyWith(final Vector<Euclidean1D> other, final double blendingValue) {
+        return (Vector1D) Vector.super.blendArithmeticallyWith(other, blendingValue);
     }
 
 }
