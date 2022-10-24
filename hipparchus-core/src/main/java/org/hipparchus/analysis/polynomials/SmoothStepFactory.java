@@ -3,13 +3,11 @@ package org.hipparchus.analysis.polynomials;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.util.CombinatoricsUtils;
-import org.hipparchus.util.FastMath;
 
 /**
  * Smoothstep function factory.
  * <p>
- * It allows for quick creation of common/generic smoothstep functions.
+ * It allows for quick creation of common and generic smoothstep functions.
  *
  * @author Vincent Cucchietti
  */
@@ -17,6 +15,7 @@ public class SmoothStepFactory {
 
     /**
      * Get the {@link SmoothStepFunction clamping smoothstep function}.
+     *
      * @return clamping smoothstep function
      */
     public static SmoothStepFunction getClamp() {
@@ -25,6 +24,7 @@ public class SmoothStepFactory {
 
     /**
      * Get the {@link SmoothStepFunction cubic smoothstep function}.
+     *
      * @return cubic smoothstep function
      */
     public static SmoothStepFunction getCubic() {
@@ -33,6 +33,7 @@ public class SmoothStepFactory {
 
     /**
      * Get the {@link SmoothStepFunction quintic smoothstep function}.
+     *
      * @return quintic smoothstep function
      */
     public static SmoothStepFunction getQuintic() {
@@ -55,11 +56,7 @@ public class SmoothStepFactory {
 
         int n = N;
         for (int i = twoNPlusOne; i > N; i--) {
-
-            coefficients[i] = FastMath.pow(-1, n)
-                    * CombinatoricsUtils.binomialCoefficient(N + n, n)
-                    * CombinatoricsUtils.binomialCoefficient(twoNPlusOne, N - n);
-
+            coefficients[i] = pascalTriangle(-N - 1, n) * pascalTriangle(2 * N + 1, N - n);
             n--;
         }
 
@@ -67,15 +64,47 @@ public class SmoothStepFactory {
     }
 
     /**
-     * Smoothstep function, it is used to do a smooth transition between the "left edge" and the "right edge" with left
-     * edge assumed to be smaller than the right edge.
+     * Returns binomial coefficient without explicit use of factorials, which can't be used with negative integers
+     *
+     * @param n set
+     * @param k subset in set
+     * @return number of subset {@code k} in global set {@code n}
+     */
+    private static int pascalTriangle(final int n, final int k) {
+
+        int result = 1;
+        for (int i = 0; i < k; i++) {
+            result *= (n - i) / (i + 1);
+        }
+
+        return result;
+    }
+
+    /**
+     * Check that input is between [0:1] included.
+     *
+     * @param input input to be checked
+     * @throws MathIllegalArgumentException if input is not between [0:1]
+     */
+    public static void checkBetweenZeroAndOneIncluded(final double input) throws MathIllegalArgumentException {
+        if (input < 0 || input > 1) {
+            throw new MathIllegalArgumentException(
+                    LocalizedCoreFormats.INPUT_EXPECTED_BETWEEN_ZERO_AND_ONE_INCLUDED);
+        }
+    }
+
+    /**
+     * Smoothstep function as defined <a href="https://en.wikipedia.org/wiki/Smoothstep>here</a>.
      * <p>
-     * By definition, for order n>1 and input x, a smoothstep function respects the following properties :
+     * It is used to do a smooth transition between the "left edge" and the "right edge" with left edge assumed to be
+     * smaller than the right edge.
+     * <p>
+     * By definition, for order n > 1 and input x, a smoothstep function respects at least the following properties :
      * <ul>
      *     <li>f(x <= leftEdge) = leftEdge and f(x >= rightEdge) = rightEdge</li>
      *     <li>f'(leftEdge) = f'(rightEdge) = 0</li>
      * </ul>
-     * If x is normalized between edges, we have :
+     * If x is normalized between edges, we have at least :
      * <ul>
      *     <li>f(x <= 0) = 0 and f(x >= 1) = 1</li>
      *     <li>f'(0) = f'(1) = 0</li>
@@ -84,7 +113,7 @@ public class SmoothStepFactory {
     public static class SmoothStepFunction extends PolynomialFunction {
 
         /**
-         * Construct a smoothstep with the given coefficients.  The first element of the coefficients array is the
+         * Construct a smoothstep with the given coefficients. The first element of the coefficients array is the
          * constant term.  Higher degree coefficients follow in sequence.  The degree of the resulting polynomial is the
          * index of the last non-null element of the array, or 0 if all elements are null.
          * <p>
@@ -101,29 +130,19 @@ public class SmoothStepFactory {
         /**
          * Compute the value of the smoothstep for the given argument normalized between edges.
          *
-         * @param xNormalized Normalized argument for which the function value should be computed.
+         * @param xNormalized Normalized argument for which the function value should be computed. It is
+         *         expected to be between [0:1] and will throw an exception otherwise.
          * @return the value of the polynomial at the given point.
          * @see org.hipparchus.analysis.UnivariateFunction#value(double)
          */
         @Override
         public double value(final double xNormalized) {
-
-            if (xNormalized <= 0) {
-                return 0;
-            }
-            if (xNormalized >= 1) {
-                return 1;
-            }
-
+            checkBetweenZeroAndOneIncluded(xNormalized);
             return super.value(xNormalized);
         }
 
         /**
          * Compute the value of the smoothstep function for the given edges and argument.
-         * <p>
-         * This implementation is based on "Advanced Real-Time Shader Techniques". AND. p. 94. Retrieved 2022-04-16. by
-         * Natalya Tatarchuk (2003).
-         * </p>
          *
          * @param x Argument for which the function value should be computed.
          * @return the value of the polynomial at the given point.
@@ -132,20 +151,56 @@ public class SmoothStepFactory {
         public double value(final double leftEdge, final double rightEdge, final double x)
                 throws MathIllegalArgumentException {
 
+            checkInput(leftEdge, rightEdge);
+
+            final double xClamped = clamp(leftEdge, rightEdge, x);
+
+            final double xNormalized = normalizeInput(leftEdge, rightEdge, xClamped);
+
+            return super.value(xNormalized);
+        }
+
+        /**
+         * Check that left edge is lower than right edge. Otherwise, throw an exception.
+         *
+         * @param leftEdge left edge
+         * @param rightEdge right edge
+         */
+        private void checkInput(final double leftEdge, final double rightEdge) {
             if (leftEdge > rightEdge) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.RIGHT_EDGE_GREATER_THAN_LEFT_EDGE,
                                                        leftEdge, rightEdge);
             }
+        }
+
+        /**
+         * Clamp input between edges.
+         *
+         * @param leftEdge left edge
+         * @param rightEdge right edge
+         * @param x input to clamp
+         * @return clamped input
+         */
+        private double clamp(final double leftEdge, final double rightEdge, final double x) {
             if (x <= leftEdge) {
-                return 0;
+                return leftEdge;
             }
             if (x >= rightEdge) {
-                return 1;
+                return rightEdge;
             }
+            return x;
+        }
 
-            final double xNormalized = (x - leftEdge) / (rightEdge - leftEdge);
-
-            return super.value(xNormalized);
+        /**
+         * Normalize input between left and right edges.
+         *
+         * @param leftEdge left edge
+         * @param rightEdge right edge
+         * @param x input to normalize
+         * @return normalized input
+         */
+        private double normalizeInput(final double leftEdge, final double rightEdge, final double x) {
+            return (x - leftEdge) / (rightEdge - leftEdge);
         }
     }
 

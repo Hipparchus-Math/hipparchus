@@ -199,4 +199,5 @@ ZERO_NORM = norme nulle
 ZERO_NOT_ALLOWED = la valeur zéro n''est pas autorisée ici
 ZERO_STATE_SIZE = la dimension de l''état doit être différente de 0
 NEGATIVE_DEFINITE_MATRIX = la matrice ne doit pas être définie négative
-RIGHT_EDGE_GREATER_THAN_LEFT_EDGE = Le bord gauche {0} doit être plus petit que le bord droit {1}
+RIGHT_EDGE_GREATER_THAN_LEFT_EDGE = le bord gauche {0} doit être plus petit que le bord droit {1}
+INPUT_EXPECTED_BETWEEN_ZERO_AND_ONE_INCLUDED = l''entrée {0} doit être comprise entre [0:1]
