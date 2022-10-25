@@ -8,8 +8,6 @@ import org.hipparchus.exception.NullArgumentException;
  * Smoothstep function factory.
  * <p>
  * It allows for quick creation of common and generic smoothstep functions.
- *
- * @author Vincent Cucchietti
  */
 public class SmoothStepFactory {
 
@@ -153,9 +151,14 @@ public class SmoothStepFactory {
 
         /**
          * Compute the value of the smoothstep function for the given edges and argument.
+         * <p>
+         * Note that right edge is expected to be greater than left edge. It will throw an exception otherwise.
          *
-         * @param x Argument for which the function value should be computed.
-         * @return the value of the polynomial at the given point.
+         * @param leftEdge left edge
+         * @param rightEdge right edge
+         * @param x Argument for which the function value should be computed
+         * @return the value of the polynomial at the given point
+         * @throws MathIllegalArgumentException if right edge is greater than left edge
          * @see org.hipparchus.analysis.UnivariateFunction#value(double)
          */
         public double value(final double leftEdge, final double rightEdge, final double x)

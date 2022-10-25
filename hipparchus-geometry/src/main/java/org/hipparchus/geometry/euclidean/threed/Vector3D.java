@@ -34,7 +34,6 @@ import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.SinCos;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.text.NumberFormat;
 
