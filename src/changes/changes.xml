@@ -51,8 +51,8 @@ If the output is not quite correct, check for invisible trailing spaces!
   <body>
     <release version="2.4" date="TBA" description="This is a maintenance release.">
       <action dev="vincent" type="add" issue="issues/212">
-          Added Blendable interface and its implementation in RealMatrix and Vector interfaces.
-          Added SmoothStepFactory which allow for quick creation of common and generic smoothstep function.
+        Added Blendable interface and its implementation in RealMatrix and Vector interfaces.
+        Added SmoothStepFactory which allow for quick creation of common and generic smoothstep function.
       </action>
     </release>
     <release version="2.3" date="2022-10-05" description="This is a maintenance release.">
