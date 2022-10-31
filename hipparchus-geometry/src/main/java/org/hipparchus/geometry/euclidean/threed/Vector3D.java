@@ -25,7 +25,6 @@ package org.hipparchus.geometry.euclidean.threed;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.Vector;
@@ -41,7 +40,7 @@ import java.text.NumberFormat;
  * This class implements vectors in a three-dimensional space.
  * <p>Instance of this class are guaranteed to be immutable.</p>
  */
-public class Vector3D implements Serializable, Vector<Euclidean3D> {
+public class Vector3D implements Serializable, Vector<Euclidean3D, Vector3D> {
 
     /** Null vector (coordinates: 0, 0, 0). */
     public static final Vector3D ZERO   = new Vector3D(0, 0, 0);
@@ -286,38 +285,28 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
 
     /** {@inheritDoc} */
     @Override
-    public Vector3D add(final Vector<Euclidean3D> v) {
+    public Vector3D add(final Vector<Euclidean3D, Vector3D> v) {
         final Vector3D v3 = (Vector3D) v;
         return new Vector3D(x + v3.x, y + v3.y, z + v3.z);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector3D add(double factor, final Vector<Euclidean3D> v) {
+    public Vector3D add(double factor, final Vector<Euclidean3D, Vector3D> v) {
         return new Vector3D(1, this, factor, (Vector3D) v);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector3D subtract(final Vector<Euclidean3D> v) {
+    public Vector3D subtract(final Vector<Euclidean3D, Vector3D> v) {
         final Vector3D v3 = (Vector3D) v;
         return new Vector3D(x - v3.x, y - v3.y, z - v3.z);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector3D subtract(final double factor, final Vector<Euclidean3D> v) {
+    public Vector3D subtract(final double factor, final Vector<Euclidean3D, Vector3D> v) {
         return new Vector3D(1, this, -factor, (Vector3D) v);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Vector3D normalize() throws MathRuntimeException {
-        double s = getNorm();
-        if (s == 0) {
-            throw new MathRuntimeException(LocalizedGeometryFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
-        }
-        return scalarMultiply(1 / s);
     }
 
     /** Get a vector orthogonal to the instance.
@@ -505,7 +494,7 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
      * @see MathArrays#linearCombination(double, double, double, double, double, double)
      */
     @Override
-    public double dotProduct(final Vector<Euclidean3D> v) {
+    public double dotProduct(final Vector<Euclidean3D, Vector3D> v) {
         final Vector3D v3 = (Vector3D) v;
         return MathArrays.linearCombination(x, v3.x, y, v3.y, z, v3.z);
     }
@@ -514,7 +503,7 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
      * @param v other vector
      * @return the cross product this ^ v as a new Vector3D
      */
-    public Vector3D crossProduct(final Vector<Euclidean3D> v) {
+    public Vector3D crossProduct(final Vector<Euclidean3D, Vector3D> v) {
         final Vector3D v3 = (Vector3D) v;
         return new Vector3D(MathArrays.linearCombination(y, v3.z, -z, v3.y),
                             MathArrays.linearCombination(z, v3.x, -x, v3.z),
@@ -523,7 +512,7 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
 
     /** {@inheritDoc} */
     @Override
-    public double distance1(Vector<Euclidean3D> v) {
+    public double distance1(Vector<Euclidean3D, Vector3D> v) {
         final Vector3D v3 = (Vector3D) v;
         final double dx = FastMath.abs(v3.x - x);
         final double dy = FastMath.abs(v3.y - y);
@@ -543,7 +532,7 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
 
     /** {@inheritDoc} */
     @Override
-    public double distanceInf(Vector<Euclidean3D> v) {
+    public double distanceInf(Vector<Euclidean3D, Vector3D> v) {
         final Vector3D v3 = (Vector3D) v;
         final double dx = FastMath.abs(v3.x - x);
         final double dy = FastMath.abs(v3.y - y);
@@ -553,7 +542,7 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
 
     /** {@inheritDoc} */
     @Override
-    public double distanceSq(Vector<Euclidean3D> v) {
+    public double distanceSq(Vector<Euclidean3D, Vector3D> v) {
         final Vector3D v3 = (Vector3D) v;
         final double dx = v3.x - x;
         final double dy = v3.y - y;
@@ -641,9 +630,4 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
         return new Vector3DFormat(format).format(this);
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public Vector3D blendArithmeticallyWith(final Vector<Euclidean3D> other, final double blendingValue) {
-        return (Vector3D) Vector.super.blendArithmeticallyWith(other, blendingValue);
-    }
 }

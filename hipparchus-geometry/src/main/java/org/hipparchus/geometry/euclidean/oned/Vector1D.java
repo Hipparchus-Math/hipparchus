@@ -23,8 +23,6 @@ package org.hipparchus.geometry.euclidean.oned;
 
 import java.text.NumberFormat;
 
-import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.Vector;
@@ -34,7 +32,7 @@ import org.hipparchus.util.MathUtils;
 /** This class represents a 1D vector.
  * <p>Instances of this class are guaranteed to be immutable.</p>
  */
-public class Vector1D implements Vector<Euclidean1D> {
+public class Vector1D implements Vector<Euclidean1D, Vector1D> {
 
     /** Origin (coordinates: 0). */
     public static final Vector1D ZERO = new Vector1D(0.0);
@@ -170,41 +168,32 @@ public class Vector1D implements Vector<Euclidean1D> {
 
     /** {@inheritDoc} */
     @Override
-    public Vector1D add(Vector<Euclidean1D> v) {
+    public Vector1D add(Vector<Euclidean1D, Vector1D> v) {
         Vector1D v1 = (Vector1D) v;
         return new Vector1D(x + v1.getX());
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector1D add(double factor, Vector<Euclidean1D> v) {
+    public Vector1D add(double factor, Vector<Euclidean1D, Vector1D> v) {
         Vector1D v1 = (Vector1D) v;
         return new Vector1D(x + factor * v1.getX());
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector1D subtract(Vector<Euclidean1D> p) {
+    public Vector1D subtract(Vector<Euclidean1D, Vector1D> p) {
         Vector1D p3 = (Vector1D) p;
         return new Vector1D(x - p3.x);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector1D subtract(double factor, Vector<Euclidean1D> v) {
+    public Vector1D subtract(double factor, Vector<Euclidean1D, Vector1D> v) {
         Vector1D v1 = (Vector1D) v;
         return new Vector1D(x - factor * v1.getX());
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public Vector1D normalize() throws MathRuntimeException {
-        double s = getNorm();
-        if (s == 0) {
-            throw new MathRuntimeException(LocalizedGeometryFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
-        }
-        return scalarMultiply(1 / s);
-    }
     /** {@inheritDoc} */
     @Override
     public Vector1D negate() {
@@ -231,7 +220,7 @@ public class Vector1D implements Vector<Euclidean1D> {
 
     /** {@inheritDoc} */
     @Override
-    public double distance1(Vector<Euclidean1D> p) {
+    public double distance1(Vector<Euclidean1D, Vector1D> p) {
         Vector1D p3 = (Vector1D) p;
         return FastMath.abs(p3.x - x);
     }
@@ -245,14 +234,14 @@ public class Vector1D implements Vector<Euclidean1D> {
 
     /** {@inheritDoc} */
     @Override
-    public double distanceInf(Vector<Euclidean1D> p) {
+    public double distanceInf(Vector<Euclidean1D, Vector1D> p) {
         Vector1D p3 = (Vector1D) p;
         return FastMath.abs(p3.x - x);
     }
 
     /** {@inheritDoc} */
     @Override
-    public double distanceSq(Vector<Euclidean1D> p) {
+    public double distanceSq(Vector<Euclidean1D, Vector1D> p) {
         Vector1D p3 = (Vector1D) p;
         final double dx = p3.x - x;
         return dx * dx;
@@ -260,7 +249,7 @@ public class Vector1D implements Vector<Euclidean1D> {
 
     /** {@inheritDoc} */
     @Override
-    public double dotProduct(final Vector<Euclidean1D> v) {
+    public double dotProduct(final Vector<Euclidean1D, Vector1D> v) {
         final Vector1D v1 = (Vector1D) v;
         return x * v1.x;
     }
@@ -397,12 +386,6 @@ public class Vector1D implements Vector<Euclidean1D> {
     @Override
     public String toString(final NumberFormat format) {
         return new Vector1DFormat(format).format(this);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Vector1D blendArithmeticallyWith(final Vector<Euclidean1D> other, final double blendingValue) {
-        return (Vector1D) Vector.super.blendArithmeticallyWith(other, blendingValue);
     }
 
 }

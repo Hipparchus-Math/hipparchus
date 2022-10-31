@@ -230,7 +230,7 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
      * @return (n-1)-dimension point of the sub-space corresponding to
      * the specified space point
      */
-    public Vector1D toSubSpace(Vector<Euclidean2D> vector) {
+    public Vector1D toSubSpace(Vector<Euclidean2D, Vector2D> vector) {
         return toSubSpace((Point<Euclidean2D>) vector);
     }
 
@@ -239,7 +239,7 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
      * @return n-dimension point of the space corresponding to the
      * specified sub-space point
      */
-    public Vector2D toSpace(Vector<Euclidean1D> vector) {
+    public Vector2D toSpace(Vector<Euclidean1D, Vector1D> vector) {
         return toSpace((Point<Euclidean1D>) vector);
     }
 
@@ -326,7 +326,7 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
      * @param vector vector to check
      * @return offset of the vector
      */
-    public double getOffset(Vector<Euclidean2D> vector) {
+    public double getOffset(Vector<Euclidean2D, Vector2D> vector) {
         return getOffset((Point<Euclidean2D>) vector);
     }
 

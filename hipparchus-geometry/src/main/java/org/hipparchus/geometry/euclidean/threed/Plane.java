@@ -253,7 +253,7 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
      * @return (n-1)-dimension point of the sub-space corresponding to
      * the specified space point
      */
-    public Vector2D toSubSpace(Vector<Euclidean3D> vector) {
+    public Vector2D toSubSpace(Vector<Euclidean3D, Vector3D> vector) {
         return toSubSpace((Point<Euclidean3D>) vector);
     }
 
@@ -262,7 +262,7 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
      * @return n-dimension point of the space corresponding to the
      * specified sub-space point
      */
-    public Vector3D toSpace(Vector<Euclidean2D> vector) {
+    public Vector3D toSpace(Vector<Euclidean2D, Vector2D> vector) {
         return toSpace((Point<Euclidean2D>) vector);
     }
 
@@ -473,7 +473,7 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
      * @param vector vector to check
      * @return offset of the vector
      */
-    public double getOffset(Vector<Euclidean3D> vector) {
+    public double getOffset(Vector<Euclidean3D, Vector3D> vector) {
         return getOffset((Point<Euclidean3D>) vector);
     }
 

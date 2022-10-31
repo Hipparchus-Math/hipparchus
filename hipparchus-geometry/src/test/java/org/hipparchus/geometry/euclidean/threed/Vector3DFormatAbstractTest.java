@@ -51,15 +51,15 @@ public abstract class Vector3DFormatAbstractTest {
 
     @Test
     public void testDefaults() {
-        VectorFormat<Euclidean3D> vFormat = new VectorFormat<Euclidean3D>() {
-            public StringBuffer format(Vector<Euclidean3D> vector,
+        VectorFormat<Euclidean3D, Vector3D> vFormat = new VectorFormat<Euclidean3D, Vector3D>() {
+            public StringBuffer format(Vector<Euclidean3D, Vector3D> vector,
                                        StringBuffer toAppendTo, FieldPosition pos) {
                 return null;
             }
-            public Vector<Euclidean3D> parse(String source, ParsePosition parsePosition) {
+            public Vector<Euclidean3D, Vector3D> parse(String source, ParsePosition parsePosition) {
                 return null;
             }
-            public Vector<Euclidean3D> parse(String source) {
+            public Vector<Euclidean3D, Vector3D> parse(String source) {
                 return null;
             }
         };
@@ -72,15 +72,15 @@ public abstract class Vector3DFormatAbstractTest {
     @Test
     public void testNumberFormat() {
         NumberFormat nf = NumberFormat.getInstance(Locale.FRENCH);
-        VectorFormat<Euclidean3D> vFormat = new VectorFormat<Euclidean3D>(nf) {
-            public StringBuffer format(Vector<Euclidean3D> vector,
+        VectorFormat<Euclidean3D, Vector3D> vFormat = new VectorFormat<Euclidean3D, Vector3D>(nf) {
+            public StringBuffer format(Vector<Euclidean3D, Vector3D> vector,
                                        StringBuffer toAppendTo, FieldPosition pos) {
                 return null;
             }
-            public Vector<Euclidean3D> parse(String source, ParsePosition parsePosition) {
+            public Vector<Euclidean3D, Vector3D> parse(String source, ParsePosition parsePosition) {
                 return null;
             }
-            public Vector<Euclidean3D> parse(String source) {
+            public Vector<Euclidean3D, Vector3D> parse(String source) {
                 return null;
             }
         };
@@ -92,15 +92,15 @@ public abstract class Vector3DFormatAbstractTest {
 
     @Test
     public void testPrefixSuffixSeparator() {
-        VectorFormat<Euclidean3D> vFormat = new VectorFormat<Euclidean3D>("<", ">", "|") {
-            public StringBuffer format(Vector<Euclidean3D> vector,
+        VectorFormat<Euclidean3D, Vector3D> vFormat = new VectorFormat<Euclidean3D, Vector3D>("<", ">", "|") {
+            public StringBuffer format(Vector<Euclidean3D, Vector3D> vector,
                                        StringBuffer toAppendTo, FieldPosition pos) {
                 return null;
             }
-            public Vector<Euclidean3D> parse(String source, ParsePosition parsePosition) {
+            public Vector<Euclidean3D, Vector3D> parse(String source, ParsePosition parsePosition) {
                 return null;
             }
-            public Vector<Euclidean3D> parse(String source) {
+            public Vector<Euclidean3D, Vector3D> parse(String source) {
                 return null;
             }
         };

@@ -48,7 +48,7 @@ import org.hipparchus.util.CompositeFormat;
  * to use a {@link NumberFormat} instance with disabled grouping in such a case.</p>
  *
  */
-public class Vector2DFormat extends VectorFormat<Euclidean2D> {
+public class Vector2DFormat extends VectorFormat<Euclidean2D, Vector2D> {
 
     /**
      * Create an instance with default settings.
@@ -113,7 +113,7 @@ public class Vector2DFormat extends VectorFormat<Euclidean2D> {
 
     /** {@inheritDoc} */
     @Override
-    public StringBuffer format(final Vector<Euclidean2D> vector, final StringBuffer toAppendTo,
+    public StringBuffer format(final Vector<Euclidean2D, Vector2D> vector, final StringBuffer toAppendTo,
                                final FieldPosition pos) {
         final Vector2D p2 = (Vector2D) vector;
         return format(toAppendTo, pos, p2.getX(), p2.getY());

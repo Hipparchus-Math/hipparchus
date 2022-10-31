@@ -320,11 +320,12 @@ public abstract class AbstractRegion<S extends Space, T extends Space> implement
 
     /** Check a point with respect to the region.
      * @param point point to check
+     * @param <V> type of vector implementing Vector interface
      * @return a code representing the point status: either {@link
      * Region.Location#INSIDE}, {@link Region.Location#OUTSIDE} or
      * {@link Region.Location#BOUNDARY}
      */
-    public Location checkPoint(final Vector<S> point) {
+    public <V extends Vector<S, V>> Location checkPoint(final Vector<S, V> point) {
         return checkPoint((Point<S>) point);
     }
 
@@ -337,11 +338,12 @@ public abstract class AbstractRegion<S extends Space, T extends Space> implement
     /** Check a point with respect to the region starting at a given node.
      * @param node root node of the region
      * @param point point to check
+     * @param <V> type of vector implementing Vector interface
      * @return a code representing the point status: either {@link
      * Region.Location#INSIDE INSIDE}, {@link Region.Location#OUTSIDE
      * OUTSIDE} or {@link Region.Location#BOUNDARY BOUNDARY}
      */
-    protected Location checkPoint(final BSPTree<S> node, final Vector<S> point) {
+    protected <V extends Vector<S, V>>  Location checkPoint(final BSPTree<S> node, final Vector<S, V> point) {
         return checkPoint(node, (Point<S>) point);
     }
 
@@ -411,8 +413,9 @@ public abstract class AbstractRegion<S extends Space, T extends Space> implement
 
     /** Set the barycenter of the instance.
      * @param barycenter barycenter of the instance
+     * @param <V> type of vector implementing Vector interface
      */
-    protected void setBarycenter(final Vector<S> barycenter) {
+    protected <V extends Vector<S, V>>  void setBarycenter(final Vector<S, V> barycenter) {
         setBarycenter((Point<S>) barycenter);
     }
 
