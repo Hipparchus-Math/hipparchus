@@ -30,7 +30,7 @@ The following algorithms are available:
 * [Multi-KMeans++](../apidocs/org/hipparchus/clustering/MultiKMeansPlusPlusClusterer.html): Multi-KMeans++ is a meta algorithm that basically performs n runs using KMeans++ and then chooses the best clustering (i.e., the one with the lowest distance variance over all clusters) from those runs.
 
 
-An comparison of the available clustering algorithms:<br/>
+An comparison of the available clustering algorithms:<br>
 ![Comparison of clustering algorithms](images/userguide/cluster_comparison.png)
 
 

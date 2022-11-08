@@ -49,7 +49,7 @@ import org.hipparchus.util.MathUtils;
  * <p>
  * The algorithm then tries to minimize the objective function:
  * <pre>
- * J = &#8721;<sub>i=1..C</sub>&#8721;<sub>k=1..N</sub> u<sub>ik</sub><sup>m</sup>d<sub>ik</sub><sup>2</sup>
+ * <var>J = &#8721;<sub>i=1..C</sub>&#8721;<sub>k=1..N</sub> u<sub>ik</sub><sup>m</sup>d<sub>ik</sub><sup>2</sup></var>
  * </pre>
  * with d<sub>ik</sub> being the distance between data point i and the cluster center k.
  * <p>
@@ -300,7 +300,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
         // there is at least one point
         final int pointDimension = points.get(0).getPoint().length;
         for (int i = 0; i < k; i++) {
-            clusters.add(new CentroidCluster<T>(new DoublePoint(new double[pointDimension])));
+            clusters.add(new CentroidCluster<>(new DoublePoint(new double[pointDimension])));
         }
 
         int iteration = 0;
@@ -338,7 +338,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
                 i++;
             }
             MathArrays.scaleInPlace(1.0 / sum, arr);
-            newClusters.add(new CentroidCluster<T>(new DoublePoint(arr)));
+            newClusters.add(new CentroidCluster<>(new DoublePoint(arr)));
             j++;
         }
         clusters.clear();
