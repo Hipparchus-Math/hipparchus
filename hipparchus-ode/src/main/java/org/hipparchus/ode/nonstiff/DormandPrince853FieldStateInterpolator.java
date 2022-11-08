@@ -199,10 +199,10 @@ class DormandPrince853FieldStateInterpolator<T extends CalculusFieldElement<T>>
                                                                final FieldODEStateAndDerivative<T> newSoftPreviousState,
                                                                final FieldODEStateAndDerivative<T> newSoftCurrentState,
                                                                final FieldEquationsMapper<T> newMapper) {
-        return new DormandPrince853FieldStateInterpolator<T>(newField, newForward, newYDotK,
-                                                             newGlobalPreviousState, newGlobalCurrentState,
-                                                             newSoftPreviousState, newSoftCurrentState,
-                                                             newMapper);
+        return new DormandPrince853FieldStateInterpolator<>(newField, newForward, newYDotK,
+                                                            newGlobalPreviousState, newGlobalCurrentState,
+                                                            newSoftPreviousState, newSoftCurrentState,
+                                                            newMapper);
     }
 
     /** Create a fraction.

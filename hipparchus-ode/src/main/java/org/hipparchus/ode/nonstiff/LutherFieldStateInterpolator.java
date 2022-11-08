@@ -129,10 +129,10 @@ class LutherFieldStateInterpolator<T extends CalculusFieldElement<T>>
                                                      final FieldODEStateAndDerivative<T> newSoftPreviousState,
                                                      final FieldODEStateAndDerivative<T> newSoftCurrentState,
                                                      final FieldEquationsMapper<T> newMapper) {
-        return new LutherFieldStateInterpolator<T>(newField, newForward, newYDotK,
-                                                   newGlobalPreviousState, newGlobalCurrentState,
-                                                   newSoftPreviousState, newSoftCurrentState,
-                                                   newMapper);
+        return new LutherFieldStateInterpolator<>(newField, newForward, newYDotK,
+                                                  newGlobalPreviousState, newGlobalCurrentState,
+                                                  newSoftPreviousState, newSoftCurrentState,
+                                                  newMapper);
     }
 
     /** {@inheritDoc} */

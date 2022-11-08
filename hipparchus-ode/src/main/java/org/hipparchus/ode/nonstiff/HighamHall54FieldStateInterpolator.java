@@ -69,10 +69,10 @@ class HighamHall54FieldStateInterpolator<T extends CalculusFieldElement<T>>
                                                            final FieldODEStateAndDerivative<T> newSoftPreviousState,
                                                            final FieldODEStateAndDerivative<T> newSoftCurrentState,
                                                            final FieldEquationsMapper<T> newMapper) {
-        return new HighamHall54FieldStateInterpolator<T>(newField, newForward, newYDotK,
-                                                         newGlobalPreviousState, newGlobalCurrentState,
-                                                         newSoftPreviousState, newSoftCurrentState,
-                                                         newMapper);
+        return new HighamHall54FieldStateInterpolator<>(newField, newForward, newYDotK,
+                                                        newGlobalPreviousState, newGlobalCurrentState,
+                                                        newSoftPreviousState, newSoftCurrentState,
+                                                        newMapper);
     }
 
     /** {@inheritDoc} */

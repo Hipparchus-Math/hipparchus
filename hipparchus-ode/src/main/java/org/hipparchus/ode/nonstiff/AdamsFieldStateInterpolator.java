@@ -126,11 +126,11 @@ class AdamsFieldStateInterpolator<T extends CalculusFieldElement<T>> extends Abs
                                                     FieldODEStateAndDerivative<T> newSoftPreviousState,
                                                     FieldODEStateAndDerivative<T> newSoftCurrentState,
                                                     FieldEquationsMapper<T> newMapper) {
-        return new AdamsFieldStateInterpolator<T>(scalingH, reference, scaled, nordsieck,
-                                                  newForward,
-                                                  newGlobalPreviousState, newGlobalCurrentState,
-                                                  newSoftPreviousState, newSoftCurrentState,
-                                                  newMapper);
+        return new AdamsFieldStateInterpolator<>(scalingH, reference, scaled, nordsieck,
+                                                 newForward,
+                                                 newGlobalPreviousState, newGlobalCurrentState,
+                                                 newSoftPreviousState, newSoftCurrentState,
+                                                 newMapper);
 
     }
 

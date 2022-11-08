@@ -94,7 +94,7 @@ public class EulerFieldIntegrator<T extends CalculusFieldElement<T>> extends Run
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState,
                            final FieldEquationsMapper<T> mapper) {
-        return new EulerFieldStateInterpolator<T>(getField(), forward, yDotK,
+        return new EulerFieldStateInterpolator<>(getField(), forward, yDotK,
                                                  globalPreviousState, globalCurrentState,
                                                  globalPreviousState, globalCurrentState,
                                                  mapper);

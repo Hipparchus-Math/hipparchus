@@ -315,7 +315,7 @@ public class DormandPrince853FieldIntegrator<T extends CalculusFieldElement<T>>
         createInterpolator(final boolean forward, T[][] yDotK,
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState, final FieldEquationsMapper<T> mapper) {
-        return new DormandPrince853FieldStateInterpolator<T>(getField(), forward, yDotK,
+        return new DormandPrince853FieldStateInterpolator<>(getField(), forward, yDotK,
                                                             globalPreviousState, globalCurrentState,
                                                             globalPreviousState, globalCurrentState,
                                                             mapper);

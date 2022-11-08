@@ -145,10 +145,10 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
                                 final int maxIterationCount) {
         addEventHandler(handler, maxCheckInterval, convergence,
                         maxIterationCount,
-                        new FieldBracketingNthOrderBrentSolver<T>(field.getZero().add(DEFAULT_RELATIVE_ACCURACY),
-                                                                  field.getZero().add(convergence),
-                                                                  field.getZero().add(DEFAULT_FUNCTION_VALUE_ACCURACY),
-                                                                  5));
+                        new FieldBracketingNthOrderBrentSolver<>(field.getZero().add(DEFAULT_RELATIVE_ACCURACY),
+                                                                 field.getZero().add(convergence),
+                                                                 field.getZero().add(DEFAULT_FUNCTION_VALUE_ACCURACY),
+                                                                 5));
     }
 
     /** {@inheritDoc} */
@@ -158,8 +158,8 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
                                 final double convergence,
                                 final int maxIterationCount,
                                 final BracketedRealFieldUnivariateSolver<T> solver) {
-        eventsStates.add(new FieldEventState<T>(handler, maxCheckInterval, field.getZero().newInstance(convergence),
-                                                maxIterationCount, solver));
+        eventsStates.add(new FieldEventState<>(handler, maxCheckInterval, field.getZero().newInstance(convergence),
+                                               maxIterationCount, solver));
     }
 
     /** {@inheritDoc} */

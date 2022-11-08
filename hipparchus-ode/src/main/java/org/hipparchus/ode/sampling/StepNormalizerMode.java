@@ -70,5 +70,5 @@ public enum StepNormalizerMode {
      * @see StepNormalizer
      * @see StepNormalizerBounds
      */
-    MULTIPLES;
+    MULTIPLES
 }
