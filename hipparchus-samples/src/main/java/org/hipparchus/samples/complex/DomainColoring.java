@@ -30,7 +30,6 @@ import org.hipparchus.util.MathUtils;
  *   <li>saturation is constant</li>
  * </ul>
  * Their differences lie on what value represents.
- * </p>
  */
 public abstract class DomainColoring {
 
@@ -60,11 +59,11 @@ public abstract class DomainColoring {
     public double saturation(Complex z) {
         return saturation;
     }
-    
+
     /** Get value for a complex value.
      * @param z complex value
      * @return value
      */
     protected abstract double value(Complex z);
-    
+
 }
