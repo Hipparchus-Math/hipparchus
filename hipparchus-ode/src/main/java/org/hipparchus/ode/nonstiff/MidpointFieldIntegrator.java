@@ -40,7 +40,6 @@ import org.hipparchus.util.MathArrays;
  *       |----------
  *       |  0    1
  * </pre>
- * </p>
  *
  * @see EulerFieldIntegrator
  * @see ClassicalRungeKuttaFieldIntegrator
@@ -94,7 +93,7 @@ public class MidpointFieldIntegrator<T extends CalculusFieldElement<T>> extends 
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState,
                            final FieldEquationsMapper<T> mapper) {
-        return new MidpointFieldStateInterpolator<T>(getField(), forward, yDotK,
+        return new MidpointFieldStateInterpolator<>(getField(), forward, yDotK,
                                                     globalPreviousState, globalCurrentState,
                                                     globalPreviousState, globalCurrentState,
                                                     mapper);

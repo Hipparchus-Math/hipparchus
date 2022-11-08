@@ -66,17 +66,17 @@ import org.hipparchus.util.FastMath;
  *
  * <p>We define scaled derivatives s<sub>i</sub>(n) at step n as:
  * <pre>
- * s<sub>1</sub>(n) = h y'<sub>n</sub> for first derivative
- * s<sub>2</sub>(n) = h<sup>2</sup>/2 y''<sub>n</sub> for second derivative
- * s<sub>3</sub>(n) = h<sup>3</sup>/6 y'''<sub>n</sub> for third derivative
+ * <var>s<sub>1</sub>(n) = h y'<sub>n</sub> for first derivative</var>
+ * <var>s<sub>2</sub>(n) = h<sup>2</sup>/2 y''<sub>n</sub> for second derivative</var>
+ * <var>s<sub>3</sub>(n) = h<sup>3</sup>/6 y'''<sub>n</sub> for third derivative</var>
  * ...
- * s<sub>k</sub>(n) = h<sup>k</sup>/k! y<sup>(k)</sup><sub>n</sub> for k<sup>th</sup> derivative
- * </pre></p>
+ * <var>s<sub>k</sub>(n) = h<sup>k</sup>/k! y<sup>(k)</sup><sub>n</sub> for k<sup>th</sup> derivative</var>
+ * </pre>
  *
  * <p>The definitions above use the classical representation with several previous first
  * derivatives. Lets define
  * <pre>
- *   q<sub>n</sub> = [ s<sub>1</sub>(n-1) s<sub>1</sub>(n-2) ... s<sub>1</sub>(n-(k-1)) ]<sup>T</sup>
+ *   <var>q<sub>n</sub> = [ s<sub>1</sub>(n-1) s<sub>1</sub>(n-2) ... s<sub>1</sub>(n-(k-1)) ]<sup>T</sup></var>
  * </pre>
  * (we omit the k index in the notation for clarity). With these definitions,
  * Adams-Moulton methods can be written:
@@ -86,31 +86,30 @@ import org.hipparchus.util.FastMath;
  *   <li>k = 3: y<sub>n+1</sub> = y<sub>n</sub> + 5/12 s<sub>1</sub>(n+1) + [ 8/12 -1/12 ] q<sub>n+1</sub></li>
  *   <li>k = 4: y<sub>n+1</sub> = y<sub>n</sub> + 9/24 s<sub>1</sub>(n+1) + [ 19/24 -5/24 1/24 ] q<sub>n+1</sub></li>
  *   <li>...</li>
- * </ul></p>
+ * </ul>
  *
  * <p>Instead of using the classical representation with first derivatives only (y<sub>n</sub>,
  * s<sub>1</sub>(n+1) and q<sub>n+1</sub>), our implementation uses the Nordsieck vector with
  * higher degrees scaled derivatives all taken at the same step (y<sub>n</sub>, s<sub>1</sub>(n)
  * and r<sub>n</sub>) where r<sub>n</sub> is defined as:
  * <pre>
- * r<sub>n</sub> = [ s<sub>2</sub>(n), s<sub>3</sub>(n) ... s<sub>k</sub>(n) ]<sup>T</sup>
+ * <var>r<sub>n</sub> = [ s<sub>2</sub>(n), s<sub>3</sub>(n) ... s<sub>k</sub>(n) ]<sup>T</sup></var>
  * </pre>
  * (here again we omit the k index in the notation for clarity)
- * </p>
  *
  * <p>Taylor series formulas show that for any index offset i, s<sub>1</sub>(n-i) can be
  * computed from s<sub>1</sub>(n), s<sub>2</sub>(n) ... s<sub>k</sub>(n), the formula being exact
  * for degree k polynomials.
  * <pre>
- * s<sub>1</sub>(n-i) = s<sub>1</sub>(n) + &sum;<sub>j&gt;0</sub> (j+1) (-i)<sup>j</sup> s<sub>j+1</sub>(n)
+ * <var>s<sub>1</sub>(n-i) = s<sub>1</sub>(n) + &sum;<sub>j&gt;0</sub> (j+1) (-i)<sup>j</sup> s<sub>j+1</sub>(n)</var>
  * </pre>
  * The previous formula can be used with several values for i to compute the transform between
  * classical representation and Nordsieck vector. The transform between r<sub>n</sub>
  * and q<sub>n</sub> resulting from the Taylor series formulas above is:
  * <pre>
- * q<sub>n</sub> = s<sub>1</sub>(n) u + P r<sub>n</sub>
+ * <var>q<sub>n</sub> = s<sub>1</sub>(n) u + P r<sub>n</sub></var>
  * </pre>
- * where u is the [ 1 1 ... 1 ]<sup>T</sup> vector and P is the (k-1)&times;(k-1) matrix built
+ * where u is the [ 1 1 ... 1 ]<sup>T</sup> vector and P is the (k-1) &times; (k-1) matrix built
  * with the (j+1) (-i)<sup>j</sup> terms with i being the row number starting from 1 and j being
  * the column number starting from 1:
  * <pre>
@@ -119,7 +118,7 @@ import org.hipparchus.util.FastMath;
  *   P =  [  -6  27 -108  405  ... ]
  *        [  -8  48 -256 1280  ... ]
  *        [          ...           ]
- * </pre></p>
+ * </pre>
  *
  * <p>Using the Nordsieck vector has several advantages:
  * <ul>
@@ -128,7 +127,7 @@ import org.hipparchus.util.FastMath;
  *   <li>it simplifies step changes that occur when discrete events that truncate
  *   the step are triggered,</li>
  *   <li>it allows to extend the methods in order to support adaptive stepsize.</li>
- * </ul></p>
+ * </ul>
  *
  * <p>The predicted Nordsieck vector at step n+1 is computed from the Nordsieck vector at step
  * n as follows:
@@ -155,7 +154,7 @@ import org.hipparchus.util.FastMath;
  * </ul>
  * where the upper case Y<sub>n+1</sub>, S<sub>1</sub>(n+1) and R<sub>n+1</sub> represent the
  * predicted states whereas the lower case y<sub>n+1</sub>, s<sub>n+1</sub> and r<sub>n+1</sub>
- * represent the corrected states.</p>
+ * represent the corrected states.
  *
  * <p>The P<sup>-1</sup>u vector and the P<sup>-1</sup> A P matrix do not depend on the state,
  * they only depend on k and therefore are precomputed once for all.</p>
@@ -258,7 +257,6 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
      * <pre>
      * Y<sub>n+1</sub> = y<sub>n</sub> + s<sub>1</sub>(n+1) + [ -1 +1 -1 +1 ... &plusmn;1 ] r<sub>n+1</sub>
      * </pre>
-     * </p>
      */
     private class Corrector implements RealMatrixPreservingVisitor {
 

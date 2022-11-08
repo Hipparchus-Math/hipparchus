@@ -32,7 +32,6 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  *       |----------
  *       |  0    1
  * </pre>
- * </p>
  *
  * @see EulerIntegrator
  * @see ClassicalRungeKuttaIntegrator

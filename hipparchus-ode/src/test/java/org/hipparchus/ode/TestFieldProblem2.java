@@ -38,7 +38,6 @@ import org.hipparchus.util.MathArrays;
  * <pre>
  *   y (t) = t^2 + 2 (exp (- t^2 / 2) - 1)
  * </pre>
- * </p>
 
  * @param <T> the type of the field elements
  */

@@ -73,8 +73,8 @@ public interface FieldSecondaryODE<T extends CalculusFieldElement<T>> {
      * case, the primary and secondary equations are not really independent from each
      * other, so if possible it would be better to put state and co-state and their
      * equations all in the primary equations. As this is not always possible, this
-     * method explicitly <emph>allows</emph> to modify the content of the {@code primaryDot}
-     * array. This array will be used to evolve the primary state only <emph>after</emph>
+     * method explicitly <em>allows</em> to modify the content of the {@code primaryDot}
+     * array. This array will be used to evolve the primary state only <em>after</em>
      * all secondary equations have computed their derivatives, hence allowing this
      * side effect.
      * </p>

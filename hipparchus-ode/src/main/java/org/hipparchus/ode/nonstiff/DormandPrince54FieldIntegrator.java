@@ -50,7 +50,7 @@ import org.hipparchus.util.MathArrays;
  *  J. R. Dormand and P. J. Prince
  *  Journal of Computational and Applied Mathematics
  *  volume 6, no 1, 1980, pp. 19-26
- * </pre></p>
+ * </pre>
  *
  * @param <T> the type of the field elements
  */
@@ -162,7 +162,7 @@ public class DormandPrince54FieldIntegrator<T extends CalculusFieldElement<T>>
         createInterpolator(final boolean forward, T[][] yDotK,
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState, final FieldEquationsMapper<T> mapper) {
-        return new DormandPrince54FieldStateInterpolator<T>(getField(), forward, yDotK,
+        return new DormandPrince54FieldStateInterpolator<>(getField(), forward, yDotK,
                                                            globalPreviousState, globalCurrentState,
                                                            globalPreviousState, globalCurrentState,
                                                            mapper);

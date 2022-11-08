@@ -58,9 +58,8 @@ import org.hipparchus.util.FastMath;
  * for this code is available <a
  * href="http://www.unige.ch/~hairer/prog/licence.txt">here</a>, for
  * convenience, it is reproduced below.</p>
- * </p>
  *
- * <table border="0" width="80%" cellpadding="10" align="center" bgcolor="#E0E0E0">
+ * <table summary="" border="0" width="80%" cellpadding="10" style="text-align:center;background-color: #E0E0E0;">
  * <tr><td>Copyright (c) 2004, Ernst Hairer</td></tr>
  *
  * <tr><td>Redistribution and use in source and binary forms, with or
@@ -236,13 +235,13 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
      * </pre>
      * where err is the scaled error and k the iteration number of the
      * extrapolation scheme (counting from 0). The default values are
-     * 0.65 for stepControl1 and 0.94 for stepControl2.</p>
+     * 0.65 for stepControl1 and 0.94 for stepControl2.
      * <p>The step size is subject to the restriction:
      * <pre>
      * stepControl3^(1/(2k + 1))/stepControl4 &lt;= hNew/h &lt;= 1/stepControl3^(1/(2k + 1))
      * </pre>
      * The default values are 0.02 for stepControl3 and 4.0 for
-     * stepControl4.</p>
+     * stepControl4.
      * @param control1 first stepsize control factor (the factor is
      * reset to default if lower than 0.0001 or greater than 0.9999)
      * @param control2 second stepsize control factor (the factor

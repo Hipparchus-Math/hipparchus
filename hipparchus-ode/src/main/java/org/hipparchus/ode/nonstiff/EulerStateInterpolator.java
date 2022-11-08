@@ -34,10 +34,9 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  *     y(t<sub>n</sub> + &theta; h) = y (t<sub>n</sub> + h) - (1-&theta;) h y'
  *   </li>
  * </ul>
- * </p>
  *
  * where &theta; belongs to [0 ; 1] and where y' is the evaluation of
- * the derivatives already computed during the step.</p>
+ * the derivatives already computed during the step.
  *
  * @see EulerIntegrator
  */

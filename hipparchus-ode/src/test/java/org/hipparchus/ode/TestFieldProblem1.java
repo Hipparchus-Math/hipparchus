@@ -37,7 +37,6 @@ import org.hipparchus.util.MathArrays;
  * <pre>
  *   y (t) = y (t0) exp (t0-t)
  * </pre>
- * </p>
 
  * @param <T> the type of the field elements
  */

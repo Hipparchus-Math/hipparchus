@@ -40,7 +40,6 @@ import org.hipparchus.util.MathArrays;
  * <pre>
  *   y1 (t) = ...
  * </pre>
- * </p>
 
  * @param <T> the type of the field elements
  */

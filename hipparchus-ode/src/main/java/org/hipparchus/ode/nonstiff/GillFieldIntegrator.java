@@ -43,7 +43,7 @@ import org.hipparchus.util.MathArrays;
  *       |-------------------------------
  *       |   1/6    (2-q)/6 (2+q)/6  1/6
  * </pre>
- * where q = sqrt(2)</p>
+ * where q = sqrt(2)
  *
  * @see EulerFieldIntegrator
  * @see ClassicalRungeKuttaFieldIntegrator
@@ -119,7 +119,7 @@ public class GillFieldIntegrator<T extends CalculusFieldElement<T>>
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState,
                            final FieldEquationsMapper<T> mapper) {
-        return new GillFieldStateInterpolator<T>(getField(), forward, yDotK,
+        return new GillFieldStateInterpolator<>(getField(), forward, yDotK,
                                                 globalPreviousState, globalCurrentState,
                                                 globalPreviousState, globalCurrentState,
                                                 mapper);

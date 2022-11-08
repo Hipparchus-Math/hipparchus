@@ -54,7 +54,6 @@ import org.hipparchus.util.FastMath;
  *   Ω₂ (τ) = √([2EI₃-M²]/[I₂(I₃-I₂)]) sn(τ)
  *   Ω₃ (τ) = √([M²-2EI₁]/[I₃(I₃-I₁)]) dn(τ)
  * </pre>
- * </p>
 
  */
 public class TestProblem7 extends TestProblemAbstract {

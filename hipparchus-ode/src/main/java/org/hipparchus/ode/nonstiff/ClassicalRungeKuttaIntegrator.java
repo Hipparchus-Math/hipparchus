@@ -35,7 +35,6 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  *       |--------------------
  *       | 1/6  1/3  1/3  1/6
  * </pre>
- * </p>
  *
  * @see EulerIntegrator
  * @see GillIntegrator

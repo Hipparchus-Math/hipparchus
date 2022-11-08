@@ -52,7 +52,7 @@ import org.hipparchus.util.MathArrays;
  *            |--------------------------------------------------------------------------------------------------------------------------------------------------
  *            |              1/20                   0                   16/45                  0                   49/180                 49/180         1/20
  * </pre>
- * where q = &radic;21</p>
+ * where q = &radic;21
  *
  * @see EulerFieldIntegrator
  * @see ClassicalRungeKuttaFieldIntegrator
@@ -144,7 +144,7 @@ public class LutherFieldIntegrator<T extends CalculusFieldElement<T>>
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState,
                            final FieldEquationsMapper<T> mapper) {
-        return new LutherFieldStateInterpolator<T>(getField(), forward, yDotK,
+        return new LutherFieldStateInterpolator<>(getField(), forward, yDotK,
                                                   globalPreviousState, globalCurrentState,
                                                   globalPreviousState, globalCurrentState,
                                                   mapper);

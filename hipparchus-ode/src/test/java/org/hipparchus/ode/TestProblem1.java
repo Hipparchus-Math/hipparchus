@@ -35,7 +35,6 @@ import org.hipparchus.util.FastMath;
  * <pre>
  *   y (t) = y (t0) exp (t0-t)
  * </pre>
- * </p>
 
  */
 public class TestProblem1 extends TestProblemAbstract {

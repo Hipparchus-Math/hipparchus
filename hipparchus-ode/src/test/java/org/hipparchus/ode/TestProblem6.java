@@ -34,7 +34,6 @@ package org.hipparchus.ode;
  * <pre>
  *   y (t) = 3x^5 - 15x^4 + 60x^3 - 180x^2 + 360x - 360
  * </pre>
- * </p>
 
  */
 public class TestProblem6 extends TestProblemAbstract {

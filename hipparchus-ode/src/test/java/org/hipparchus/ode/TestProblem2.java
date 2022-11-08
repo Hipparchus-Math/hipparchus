@@ -36,7 +36,6 @@ import org.hipparchus.util.FastMath;
  * <pre>
  *   y (t) = t^2 + 2 (exp (- t^2 / 2) - 1)
  * </pre>
- * </p>
 
  */
 public class TestProblem2 extends TestProblemAbstract {

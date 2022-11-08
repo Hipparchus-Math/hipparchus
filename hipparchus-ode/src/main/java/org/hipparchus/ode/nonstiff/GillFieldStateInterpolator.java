@@ -50,7 +50,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  *                                          ]
  *   </li>
  * </ul>
- * </p>
  * where &theta; belongs to [0 ; 1] and where y'<sub>1</sub> to y'<sub>4</sub>
  * are the four evaluations of the derivatives already computed during
  * the step.</p>
@@ -101,10 +100,10 @@ class GillFieldStateInterpolator<T extends CalculusFieldElement<T>>
                                                    final FieldODEStateAndDerivative<T> newSoftPreviousState,
                                                    final FieldODEStateAndDerivative<T> newSoftCurrentState,
                                                    final FieldEquationsMapper<T> newMapper) {
-        return new GillFieldStateInterpolator<T>(newField, newForward, newYDotK,
-                                                 newGlobalPreviousState, newGlobalCurrentState,
-                                                 newSoftPreviousState, newSoftCurrentState,
-                                                 newMapper);
+        return new GillFieldStateInterpolator<>(newField, newForward, newYDotK,
+                                                newGlobalPreviousState, newGlobalCurrentState,
+                                                newSoftPreviousState, newSoftCurrentState,
+                                                newMapper);
     }
 
     /** {@inheritDoc} */

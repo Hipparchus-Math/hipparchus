@@ -36,7 +36,7 @@ import org.hipparchus.util.FastMath;
  *       |-------------------------------
  *       |   1/6    (2-q)/6 (2+q)/6  1/6
  * </pre>
- * where q = sqrt(2)</p>
+ * where q = sqrt(2)
  *
  * @see EulerIntegrator
  * @see ClassicalRungeKuttaIntegrator

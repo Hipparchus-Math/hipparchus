@@ -57,7 +57,6 @@ import org.hipparchus.util.MathArrays;
  *   Ω₂ (τ) = √([2EI₃-M²]/[I₂(I₃-I₂)]) sn(τ)
  *   Ω₃ (τ) = √([M²-2EI₁]/[I₃(I₃-I₁)]) dn(τ)
  * </pre>
- * </p>
  * @param <T> the type of the field elements
  */
 public class TestFieldProblem7<T extends CalculusFieldElement<T>>

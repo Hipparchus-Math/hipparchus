@@ -36,19 +36,19 @@ import org.hipparchus.util.FastMath;
  * Differential Equations.
  * <p>We define scaled derivatives s<sub>i</sub>(n) at step n as:
  * <pre>
- * s<sub>1</sub>(n) = h y'<sub>n</sub> for first derivative
- * s<sub>2</sub>(n) = h<sup>2</sup>/2 y''<sub>n</sub> for second derivative
- * s<sub>3</sub>(n) = h<sup>3</sup>/6 y'''<sub>n</sub> for third derivative
+ * <var>s<sub>1</sub>(n) = h y'<sub>n</sub> for first derivative</var>
+ * <var>s<sub>2</sub>(n) = h<sup>2</sup>/2 y''<sub>n</sub> for second derivative</var>
+ * <var>s<sub>3</sub>(n) = h<sup>3</sup>/6 y'''<sub>n</sub> for third derivative</var>
  * ...
- * s<sub>k</sub>(n) = h<sup>k</sup>/k! y<sup>(k)</sup><sub>n</sub> for k<sup>th</sup> derivative
- * </pre></p>
+ * <var>s<sub>k</sub>(n) = h<sup>k</sup>/k! y<sup>(k)</sup><sub>n</sub> for k<sup>th</sup> derivative</var>
+ * </pre>
  * <p>Rather than storing several previous steps separately, this implementation uses
  * the Nordsieck vector with higher degrees scaled derivatives all taken at the same
  * step (y<sub>n</sub>, s<sub>1</sub>(n) and r<sub>n</sub>) where r<sub>n</sub> is defined as:
  * <pre>
- * r<sub>n</sub> = [ s<sub>2</sub>(n), s<sub>3</sub>(n) ... s<sub>k</sub>(n) ]<sup>T</sup>
+ * <var>r<sub>n</sub> = [ s<sub>2</sub>(n), s<sub>3</sub>(n) ... s<sub>k</sub>(n) ]<sup>T</sup></var>
  * </pre>
- * (we omit the k index in the notation for clarity)</p>
+ * (we omit the k index in the notation for clarity)
  * <p>
  * Multistep integrators with Nordsieck representation are highly sensitive to
  * large step changes because when the step is multiplied by factor a, the

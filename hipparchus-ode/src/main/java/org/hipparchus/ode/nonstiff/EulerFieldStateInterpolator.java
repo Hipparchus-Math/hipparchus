@@ -41,7 +41,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  *     y(t<sub>n</sub> + &theta; h) = y (t<sub>n</sub> + h) - (1-&theta;) h y'
  *   </li>
  * </ul>
- * </p>
  *
  * where &theta; belongs to [0 ; 1] and where y' is the evaluation of
  * the derivatives already computed during the step.</p>
@@ -83,10 +82,10 @@ class EulerFieldStateInterpolator<T extends CalculusFieldElement<T>>
                                                     final FieldODEStateAndDerivative<T> newSoftPreviousState,
                                                     final FieldODEStateAndDerivative<T> newSoftCurrentState,
                                                     final FieldEquationsMapper<T> newMapper) {
-        return new EulerFieldStateInterpolator<T>(newField, newForward, newYDotK,
-                                                  newGlobalPreviousState, newGlobalCurrentState,
-                                                  newSoftPreviousState, newSoftCurrentState,
-                                                  newMapper);
+        return new EulerFieldStateInterpolator<>(newField, newForward, newYDotK,
+                                                 newGlobalPreviousState, newGlobalCurrentState,
+                                                 newSoftPreviousState, newSoftCurrentState,
+                                                 newMapper);
     }
 
     /** {@inheritDoc} */

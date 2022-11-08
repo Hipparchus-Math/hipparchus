@@ -43,43 +43,42 @@ import org.hipparchus.util.MathArrays;
  *
  * <p>We define scaled derivatives s<sub>i</sub>(n) at step n as:
  * <pre>
- * s<sub>1</sub>(n) = h y'<sub>n</sub> for first derivative
- * s<sub>2</sub>(n) = h<sup>2</sup>/2 y''<sub>n</sub> for second derivative
- * s<sub>3</sub>(n) = h<sup>3</sup>/6 y'''<sub>n</sub> for third derivative
+ * <var>s<sub>1</sub>(n) = h y'<sub>n</sub> for first derivative</var>
+ * <var>s<sub>2</sub>(n) = h<sup>2</sup>/2 y''<sub>n</sub> for second derivative</var>
+ * <var>s<sub>3</sub>(n) = h<sup>3</sup>/6 y'''<sub>n</sub> for third derivative</var>
  * ...
- * s<sub>k</sub>(n) = h<sup>k</sup>/k! y<sup>(k)</sup><sub>n</sub> for k<sup>th</sup> derivative
- * </pre></p>
+ * <var>s<sub>k</sub>(n) = h<sup>k</sup>/k! y<sup>(k)</sup><sub>n</sub> for k<sup>th</sup> derivative</var>
+ * </pre>
  *
  * <p>With the previous definition, the classical representation of multistep methods
  * uses first derivatives only, i.e. it handles y<sub>n</sub>, s<sub>1</sub>(n) and
  * q<sub>n</sub> where q<sub>n</sub> is defined as:
  * <pre>
- *   q<sub>n</sub> = [ s<sub>1</sub>(n-1) s<sub>1</sub>(n-2) ... s<sub>1</sub>(n-(k-1)) ]<sup>T</sup>
+ *   <var>q<sub>n</sub> = [ s<sub>1</sub>(n-1) s<sub>1</sub>(n-2) ... s<sub>1</sub>(n-(k-1)) ]<sup>T</sup></var>
  * </pre>
- * (we omit the k index in the notation for clarity).</p>
+ * (we omit the k index in the notation for clarity).
  *
  * <p>Another possible representation uses the Nordsieck vector with
  * higher degrees scaled derivatives all taken at the same step, i.e it handles y<sub>n</sub>,
  * s<sub>1</sub>(n) and r<sub>n</sub>) where r<sub>n</sub> is defined as:
  * <pre>
- * r<sub>n</sub> = [ s<sub>2</sub>(n), s<sub>3</sub>(n) ... s<sub>k</sub>(n) ]<sup>T</sup>
+ * <var>r<sub>n</sub> = [ s<sub>2</sub>(n), s<sub>3</sub>(n) ... s<sub>k</sub>(n) ]<sup>T</sup></var>
  * </pre>
  * (here again we omit the k index in the notation for clarity)
- * </p>
  *
  * <p>Taylor series formulas show that for any index offset i, s<sub>1</sub>(n-i) can be
  * computed from s<sub>1</sub>(n), s<sub>2</sub>(n) ... s<sub>k</sub>(n), the formula being exact
  * for degree k polynomials.
  * <pre>
- * s<sub>1</sub>(n-i) = s<sub>1</sub>(n) + &sum;<sub>j&gt;0</sub> (j+1) (-i)<sup>j</sup> s<sub>j+1</sub>(n)
+ * <var>s<sub>1</sub>(n-i) = s<sub>1</sub>(n) + &sum;<sub>j&gt;0</sub> (j+1) (-i)<sup>j</sup> s<sub>j+1</sub>(n)</var>
  * </pre>
  * The previous formula can be used with several values for i to compute the transform between
  * classical representation and Nordsieck vector at step end. The transform between r<sub>n</sub>
  * and q<sub>n</sub> resulting from the Taylor series formulas above is:
  * <pre>
- * q<sub>n</sub> = s<sub>1</sub>(n) u + P r<sub>n</sub>
+ * <var>q<sub>n</sub> = s<sub>1</sub>(n) u + P r<sub>n</sub></var>
  * </pre>
- * where u is the [ 1 1 ... 1 ]<sup>T</sup> vector and P is the (k-1)&times;(k-1) matrix built
+ * where u is the [ 1 1 ... 1 ]<sup>T</sup> vector and P is the (k-1) &times; (k-1) matrix built
  * with the (j+1) (-i)<sup>j</sup> terms with i being the row number starting from 1 and j being
  * the column number starting from 1:
  * <pre>
@@ -88,7 +87,7 @@ import org.hipparchus.util.MathArrays;
  *   P =  [  -6  27 -108  405  ... ]
  *        [  -8  48 -256 1280  ... ]
  *        [          ...           ]
- * </pre></p>
+ * </pre>
  *
  * <p>Changing -i into +i in the formula above can be used to compute a similar transform between
  * classical representation and Nordsieck vector at step start. The resulting matrix is simply
@@ -110,7 +109,7 @@ import org.hipparchus.util.MathArrays;
  *        [       ...      | 0 ]
  *        [ 0 0   ...  1 0 | 0 ]
  *        [ 0 0   ...  0 1 | 0 ]
- * </pre></p>
+ * </pre>
  *
  * <p>For {@link AdamsMoultonIntegrator Adams-Moulton} method, the predicted Nordsieck vector
  * at step n+1 is computed from the Nordsieck vector at step n as follows:
@@ -127,7 +126,7 @@ import org.hipparchus.util.MathArrays;
  * </ul>
  * where the upper case Y<sub>n+1</sub>, S<sub>1</sub>(n+1) and R<sub>n+1</sub> represent the
  * predicted states whereas the lower case y<sub>n+1</sub>, s<sub>n+1</sub> and r<sub>n+1</sub>
- * represent the corrected states.</p>
+ * represent the corrected states.
  *
  * <p>We observe that both methods use similar update formulas. In both cases a P<sup>-1</sup>u
  * vector and a P<sup>-1</sup> A P matrix are used that do not depend on the state,
@@ -164,11 +163,11 @@ public class AdamsNordsieckFieldTransformer<T extends CalculusFieldElement<T>> {
         // compute coefficients
         FieldMatrix<T> bigP = buildP(rows);
         FieldDecompositionSolver<T> pSolver =
-            new FieldLUDecomposition<T>(bigP).getSolver();
+                new FieldLUDecomposition<>(bigP).getSolver();
 
         T[] u = MathArrays.buildArray(field, rows);
         Arrays.fill(u, field.getOne());
-        c1 = pSolver.solve(new ArrayFieldVector<T>(u, false)).toArray();
+        c1 = pSolver.solve(new ArrayFieldVector<>(u, false)).toArray();
 
         // update coefficients are computed by combining transform from
         // Nordsieck to multistep, then shifting rows to represent step advance
@@ -180,7 +179,7 @@ public class AdamsNordsieckFieldTransformer<T extends CalculusFieldElement<T>> {
         }
         shiftedP[0] = MathArrays.buildArray(field, rows);
         Arrays.fill(shiftedP[0], field.getZero());
-        update = new Array2DRowFieldMatrix<>(pSolver.solve(new Array2DRowFieldMatrix<T>(shiftedP, false)).getData());
+        update = new Array2DRowFieldMatrix<>(pSolver.solve(new Array2DRowFieldMatrix<>(shiftedP, false)).getData());
 
     }
 
@@ -221,7 +220,7 @@ public class AdamsNordsieckFieldTransformer<T extends CalculusFieldElement<T>> {
      *   P =  [  -6  27 -108  405  ... ]
      *        [  -8  48 -256 1280  ... ]
      *        [          ...           ]
-     * </pre></p>
+     * </pre>
      * @param rows number of rows of the matrix
      * @return P matrix
      */
@@ -240,7 +239,7 @@ public class AdamsNordsieckFieldTransformer<T extends CalculusFieldElement<T>> {
             }
         }
 
-        return new Array2DRowFieldMatrix<T>(pData, false);
+        return new Array2DRowFieldMatrix<>(pData, false);
 
     }
 
@@ -304,8 +303,8 @@ public class AdamsNordsieckFieldTransformer<T extends CalculusFieldElement<T>> {
 
         // solve the linear system to get the best estimate of the Nordsieck vector [s2 ... sk],
         // with the additional terms s(k+1) and c grabbing the parts after the truncated Taylor expansion
-        final FieldLUDecomposition<T> decomposition = new FieldLUDecomposition<>(new Array2DRowFieldMatrix<T>(a, false));
-        final FieldMatrix<T> x = decomposition.getSolver().solve(new Array2DRowFieldMatrix<T>(b, false));
+        final FieldLUDecomposition<T> decomposition = new FieldLUDecomposition<>(new Array2DRowFieldMatrix<>(a, false));
+        final FieldMatrix<T> x = decomposition.getSolver().solve(new Array2DRowFieldMatrix<>(b, false));
 
         // extract just the Nordsieck vector [s2 ... sk]
         final Array2DRowFieldMatrix<T> truncatedX =
@@ -322,9 +321,9 @@ public class AdamsNordsieckFieldTransformer<T extends CalculusFieldElement<T>> {
     /** Update the high order scaled derivatives for Adams integrators (phase 1).
      * <p>The complete update of high order derivatives has a form similar to:
      * <pre>
-     * r<sub>n+1</sub> = (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u + P<sup>-1</sup> A P r<sub>n</sub>
+     * <var>r<sub>n+1</sub> = (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u + P<sup>-1</sup> A P r<sub>n</sub></var>
      * </pre>
-     * this method computes the P<sup>-1</sup> A P r<sub>n</sub> part.</p>
+     * this method computes the P<sup>-1</sup> A P r<sub>n</sub> part.
      * @param highOrder high order scaled derivatives
      * (h<sup>2</sup>/2 y'', ... h<sup>k</sup>/k! y(k))
      * @return updated high order derivatives
@@ -337,9 +336,9 @@ public class AdamsNordsieckFieldTransformer<T extends CalculusFieldElement<T>> {
     /** Update the high order scaled derivatives Adams integrators (phase 2).
      * <p>The complete update of high order derivatives has a form similar to:
      * <pre>
-     * r<sub>n+1</sub> = (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u + P<sup>-1</sup> A P r<sub>n</sub>
+     * <var>r<sub>n+1</sub> = (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u + P<sup>-1</sup> A P r<sub>n</sub></var>
      * </pre>
-     * this method computes the (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u part.</p>
+     * this method computes the (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u part.
      * <p>Phase 1 of the update must already have been performed.</p>
      * @param start first order scaled derivatives at step start
      * @param end first order scaled derivatives at step end

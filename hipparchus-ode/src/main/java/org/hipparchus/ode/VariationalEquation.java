@@ -35,7 +35,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * be completed with a finite differences configuration to compute local
  * partial derivatives (so-called internal differentiation).</li>
  * </ul>
- * </p>
  * <p>
  * As the variational equation automatically inserts {@link
  * ExpandableODE#addSecondaryEquations(SecondaryODE) secondary differential

@@ -44,7 +44,6 @@ import org.hipparchus.util.FastMath;
  *       |--------------------------
  *       |  b1   b2  ...   bs-1  bs
  * </pre>
- * </p>
  *
  * @see EulerIntegrator
  * @see ClassicalRungeKuttaIntegrator

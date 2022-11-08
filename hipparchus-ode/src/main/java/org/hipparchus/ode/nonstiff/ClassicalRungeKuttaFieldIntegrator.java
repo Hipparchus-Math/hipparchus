@@ -43,7 +43,6 @@ import org.hipparchus.util.MathArrays;
  *       |--------------------
  *       | 1/6  1/3  1/3  1/6
  * </pre>
- * </p>
  *
  * @see EulerFieldIntegrator
  * @see GillFieldIntegrator
@@ -109,7 +108,7 @@ public class ClassicalRungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState,
                            final FieldEquationsMapper<T> mapper) {
-        return new ClassicalRungeKuttaFieldStateInterpolator<T>(getField(), forward, yDotK,
+        return new ClassicalRungeKuttaFieldStateInterpolator<>(getField(), forward, yDotK,
                                                                globalPreviousState, globalCurrentState,
                                                                globalPreviousState, globalCurrentState,
                                                                mapper);

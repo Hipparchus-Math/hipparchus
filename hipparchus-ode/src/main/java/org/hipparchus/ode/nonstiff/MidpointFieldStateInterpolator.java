@@ -42,7 +42,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  *   y(t<sub>n</sub> + &theta; h) = y (t<sub>n</sub> + h) + (1-&theta;) h [&theta; y'<sub>1</sub> - (1+&theta;) y'<sub>2</sub>]
  *   </li>
  * </ul>
- * </p>
  *
  * where &theta; belongs to [0 ; 1] and where y'<sub>1</sub> and y'<sub>2</sub> are the two
  * evaluations of the derivatives already computed during the
@@ -85,10 +84,10 @@ class MidpointFieldStateInterpolator<T extends CalculusFieldElement<T>>
                                                        final FieldODEStateAndDerivative<T> newSoftPreviousState,
                                                        final FieldODEStateAndDerivative<T> newSoftCurrentState,
                                                        final FieldEquationsMapper<T> newMapper) {
-        return new MidpointFieldStateInterpolator<T>(newField, newForward, newYDotK,
-                                                     newGlobalPreviousState, newGlobalCurrentState,
-                                                     newSoftPreviousState, newSoftCurrentState,
-                                                     newMapper);
+        return new MidpointFieldStateInterpolator<>(newField, newForward, newYDotK,
+                                                    newGlobalPreviousState, newGlobalCurrentState,
+                                                    newSoftPreviousState, newSoftCurrentState,
+                                                    newMapper);
     }
 
     /** {@inheritDoc} */

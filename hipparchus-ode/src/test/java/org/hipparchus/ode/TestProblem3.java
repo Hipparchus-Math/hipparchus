@@ -38,7 +38,6 @@ import org.hipparchus.util.FastMath;
  * <pre>
  *   y1 (t) = ...
  * </pre>
- * </p>
 
  */
 public class TestProblem3 extends TestProblemAbstract {
