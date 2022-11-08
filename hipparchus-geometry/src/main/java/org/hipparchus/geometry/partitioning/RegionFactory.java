@@ -223,7 +223,7 @@ public class RegionFactory<S extends Space> {
                 final SubHyperplane<S> plusInside  =
                         (attribute.getPlusOutside() == null) ? null : attribute.getPlusOutside().copySelf();
                 // we start with an empty list of splitters, it will be filled in out of recursion
-                attribute = new BoundaryAttribute<>(plusOutside, plusInside, new NodesSet<S>());
+                attribute = new BoundaryAttribute<>(plusOutside, plusInside, new NodesSet<>());
             }
 
             transformedNode = new BSPTree<>(node.getCut().copySelf(),
@@ -334,8 +334,8 @@ public class RegionFactory<S extends Space> {
             final BSPTree<S> cell = node.pruneAroundConvexCell(Boolean.TRUE, Boolean.FALSE, null);
             final Region<S> r = region1.buildNew(cell);
             final Point<S> p = r.getBarycenter();
-            return new BSPTree<S>(region1.checkPoint(p) == Location.INSIDE &&
-                                  region2.checkPoint(p) == Location.OUTSIDE);
+            return new BSPTree<>(region1.checkPoint(p) == Location.INSIDE &&
+                                         region2.checkPoint(p) == Location.OUTSIDE);
         }
 
     }
@@ -380,10 +380,10 @@ public class RegionFactory<S extends Space> {
         public BSPTree<S> fixNode(final BSPTree<S> node) {
             if (node.getPlus().getAttribute().equals(node.getMinus().getAttribute())) {
                 // no ambiguity
-                return new BSPTree<S>(node.getPlus().getAttribute());
+                return new BSPTree<>(node.getPlus().getAttribute());
             } else {
                 // ambiguous node
-                return new BSPTree<S>(inside);
+                return new BSPTree<>(inside);
             }
         }
 

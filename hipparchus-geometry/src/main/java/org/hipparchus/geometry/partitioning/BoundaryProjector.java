@@ -134,7 +134,7 @@ class BoundaryProjector<S extends Space, T extends Space> implements BSPTreeVisi
         // fix offset sign
         offset = FastMath.copySign(offset, (Boolean) leaf.getAttribute() ? -1 : +1);
 
-        return new BoundaryProjection<S>(original, projected, offset);
+        return new BoundaryProjection<>(original, projected, offset);
 
     }
 

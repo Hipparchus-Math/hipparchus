@@ -220,7 +220,7 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * <p>If the angular separation between u<sub>1</sub> and u<sub>2</sub> is
      * not the same as the angular separation between v<sub>1</sub> and
      * v<sub>2</sub>, then a corrected v'<sub>2</sub> will be used rather than
-     * v<sub>2</sub>, the corrected vector will be in the (&pm;v<sub>1</sub>,
+     * v<sub>2</sub>, the corrected vector will be in the (<span>&#177;</span>v<sub>1</sub>,
      * +v<sub>2</sub>) half-plane.</p>
 
      * @param u1 first vector of the origin pair
@@ -420,7 +420,7 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * of the instance
      */
     public FieldRotation<T> revert() {
-        return new FieldRotation<T>(q0.negate(), q1, q2, q3, false);
+        return new FieldRotation<>(q0.negate(), q1, q2, q3, false);
     }
 
     /** Get the scalar coordinate of the quaternion.
@@ -465,17 +465,18 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
         final T squaredSine = q1.multiply(q1).add(q2.multiply(q2)).add(q3.multiply(q3));
         if (squaredSine.getReal() == 0) {
             final Field<T> field = squaredSine.getField();
-            return new FieldVector3D<T>(convention == RotationConvention.VECTOR_OPERATOR ? field.getOne(): field.getOne().negate(),
-                                        field.getZero(),
-                                        field.getZero());
+            return new FieldVector3D<>(
+                    convention == RotationConvention.VECTOR_OPERATOR ? field.getOne() : field.getOne().negate(),
+                    field.getZero(),
+                    field.getZero());
         } else {
             final double sgn = convention == RotationConvention.VECTOR_OPERATOR ? +1 : -1;
             if (q0.getReal() < 0) {
                 T inverse = squaredSine.sqrt().reciprocal().multiply(sgn);
-                return new FieldVector3D<T>(q1.multiply(inverse), q2.multiply(inverse), q3.multiply(inverse));
+                return new FieldVector3D<>(q1.multiply(inverse), q2.multiply(inverse), q3.multiply(inverse));
             }
             final T inverse = squaredSine.sqrt().reciprocal().negate().multiply(sgn);
-            return new FieldVector3D<T>(q1.multiply(inverse), q2.multiply(inverse), q3.multiply(inverse));
+            return new FieldVector3D<>(q1.multiply(inverse), q2.multiply(inverse), q3.multiply(inverse));
         }
     }
 
@@ -945,7 +946,7 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      */
     private FieldVector3D<T> vector(final double x, final double y, final double z) {
         final T zero = q0.getField().getZero();
-        return new FieldVector3D<T>(zero.add(x), zero.add(y), zero.add(z));
+        return new FieldVector3D<>(zero.add(x), zero.add(y), zero.add(z));
     }
 
     /** Get the 3X3 matrix corresponding to the instance
@@ -1003,9 +1004,13 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
 
         final T s = q1.multiply(x).add(q2.multiply(y)).add(q3.multiply(z));
 
-        return new FieldVector3D<T>(q0.multiply(x.multiply(q0).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
-                                    q0.multiply(y.multiply(q0).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
-                                    q0.multiply(z.multiply(q0).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
+        return new FieldVector3D<>(
+                q0.multiply(x.multiply(q0).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1))
+                  .multiply(2).subtract(x),
+                q0.multiply(y.multiply(q0).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2))
+                  .multiply(2).subtract(y),
+                q0.multiply(z.multiply(q0).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3))
+                  .multiply(2).subtract(z));
 
     }
 
@@ -1021,9 +1026,13 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
 
         final T s = q1.multiply(x).add(q2.multiply(y)).add(q3.multiply(z));
 
-        return new FieldVector3D<T>(q0.multiply(q0.multiply(x).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
-                                    q0.multiply(q0.multiply(y).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
-                                    q0.multiply(q0.multiply(z).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
+        return new FieldVector3D<>(
+                q0.multiply(q0.multiply(x).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1))
+                  .multiply(2).subtract(x),
+                q0.multiply(q0.multiply(y).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2))
+                  .multiply(2).subtract(y),
+                q0.multiply(q0.multiply(z).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3))
+                  .multiply(2).subtract(z));
 
     }
 
@@ -1078,9 +1087,12 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
 
         final T s = x.multiply(r.getQ1()).add(y.multiply(r.getQ2())).add(z.multiply(r.getQ3()));
 
-        return new FieldVector3D<T>(x.multiply(r.getQ0()).subtract(z.multiply(r.getQ2()).subtract(y.multiply(r.getQ3()))).multiply(r.getQ0()).add(s.multiply(r.getQ1())).multiply(2).subtract(x),
-                                    y.multiply(r.getQ0()).subtract(x.multiply(r.getQ3()).subtract(z.multiply(r.getQ1()))).multiply(r.getQ0()).add(s.multiply(r.getQ2())).multiply(2).subtract(y),
-                                    z.multiply(r.getQ0()).subtract(y.multiply(r.getQ1()).subtract(x.multiply(r.getQ2()))).multiply(r.getQ0()).add(s.multiply(r.getQ3())).multiply(2).subtract(z));
+        return new FieldVector3D<>(x.multiply(r.getQ0()).subtract(z.multiply(r.getQ2()).subtract(y.multiply(r.getQ3())))
+                                    .multiply(r.getQ0()).add(s.multiply(r.getQ1())).multiply(2).subtract(x),
+                                   y.multiply(r.getQ0()).subtract(x.multiply(r.getQ3()).subtract(z.multiply(r.getQ1())))
+                                    .multiply(r.getQ0()).add(s.multiply(r.getQ2())).multiply(2).subtract(y),
+                                   z.multiply(r.getQ0()).subtract(y.multiply(r.getQ1()).subtract(x.multiply(r.getQ2())))
+                                    .multiply(r.getQ0()).add(s.multiply(r.getQ3())).multiply(2).subtract(z));
 
     }
 
@@ -1097,9 +1109,13 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
         final T s  = q1.multiply(x).add(q2.multiply(y)).add(q3.multiply(z));
         final T m0 = q0.negate();
 
-        return new FieldVector3D<T>(m0.multiply(x.multiply(m0).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
-                                    m0.multiply(y.multiply(m0).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
-                                    m0.multiply(z.multiply(m0).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
+        return new FieldVector3D<>(
+                m0.multiply(x.multiply(m0).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1))
+                  .multiply(2).subtract(x),
+                m0.multiply(y.multiply(m0).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2))
+                  .multiply(2).subtract(y),
+                m0.multiply(z.multiply(m0).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3))
+                  .multiply(2).subtract(z));
 
     }
 
@@ -1116,9 +1132,13 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
         final T s  = q1.multiply(x).add(q2.multiply(y)).add(q3.multiply(z));
         final T m0 = q0.negate();
 
-        return new FieldVector3D<T>(m0.multiply(m0.multiply(x).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
-                                    m0.multiply(m0.multiply(y).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
-                                    m0.multiply(m0.multiply(z).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
+        return new FieldVector3D<>(
+                m0.multiply(m0.multiply(x).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1))
+                  .multiply(2).subtract(x),
+                m0.multiply(m0.multiply(y).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2))
+                  .multiply(2).subtract(y),
+                m0.multiply(m0.multiply(z).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3))
+                  .multiply(2).subtract(z));
 
     }
 
@@ -1176,9 +1196,13 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
         final T s  = x.multiply(r.getQ1()).add(y.multiply(r.getQ2())).add(z.multiply(r.getQ3()));
         final double m0 = -r.getQ0();
 
-        return new FieldVector3D<T>(x.multiply(m0).subtract(z.multiply(r.getQ2()).subtract(y.multiply(r.getQ3()))).multiply(m0).add(s.multiply(r.getQ1())).multiply(2).subtract(x),
-                                    y.multiply(m0).subtract(x.multiply(r.getQ3()).subtract(z.multiply(r.getQ1()))).multiply(m0).add(s.multiply(r.getQ2())).multiply(2).subtract(y),
-                                    z.multiply(m0).subtract(y.multiply(r.getQ1()).subtract(x.multiply(r.getQ2()))).multiply(m0).add(s.multiply(r.getQ3())).multiply(2).subtract(z));
+        return new FieldVector3D<>(
+                x.multiply(m0).subtract(z.multiply(r.getQ2()).subtract(y.multiply(r.getQ3()))).multiply(m0)
+                 .add(s.multiply(r.getQ1())).multiply(2).subtract(x),
+                y.multiply(m0).subtract(x.multiply(r.getQ3()).subtract(z.multiply(r.getQ1()))).multiply(m0)
+                 .add(s.multiply(r.getQ2())).multiply(2).subtract(y),
+                z.multiply(m0).subtract(y.multiply(r.getQ1()).subtract(x.multiply(r.getQ2()))).multiply(m0)
+                 .add(s.multiply(r.getQ3())).multiply(2).subtract(z));
 
     }
 
@@ -1230,11 +1254,12 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * using vector operator convention
      */
     private FieldRotation<T> composeInternal(final FieldRotation<T> r) {
-        return new FieldRotation<T>(r.q0.multiply(q0).subtract(r.q1.multiply(q1).add(r.q2.multiply(q2)).add(r.q3.multiply(q3))),
-                                    r.q1.multiply(q0).add(r.q0.multiply(q1)).add(r.q2.multiply(q3).subtract(r.q3.multiply(q2))),
-                                    r.q2.multiply(q0).add(r.q0.multiply(q2)).add(r.q3.multiply(q1).subtract(r.q1.multiply(q3))),
-                                    r.q3.multiply(q0).add(r.q0.multiply(q3)).add(r.q1.multiply(q2).subtract(r.q2.multiply(q1))),
-                                    false);
+        return new FieldRotation<>(
+                r.q0.multiply(q0).subtract(r.q1.multiply(q1).add(r.q2.multiply(q2)).add(r.q3.multiply(q3))),
+                r.q1.multiply(q0).add(r.q0.multiply(q1)).add(r.q2.multiply(q3).subtract(r.q3.multiply(q2))),
+                r.q2.multiply(q0).add(r.q0.multiply(q2)).add(r.q3.multiply(q1).subtract(r.q1.multiply(q3))),
+                r.q3.multiply(q0).add(r.q0.multiply(q3)).add(r.q1.multiply(q2).subtract(r.q2.multiply(q1))),
+                false);
     }
 
     /** Apply the instance to another rotation.
@@ -1285,11 +1310,15 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * using vector operator convention
      */
     private FieldRotation<T> composeInternal(final Rotation r) {
-        return new FieldRotation<T>(q0.multiply(r.getQ0()).subtract(q1.multiply(r.getQ1()).add(q2.multiply(r.getQ2())).add(q3.multiply(r.getQ3()))),
-                        q0.multiply(r.getQ1()).add(q1.multiply(r.getQ0())).add(q3.multiply(r.getQ2()).subtract(q2.multiply(r.getQ3()))),
-                        q0.multiply(r.getQ2()).add(q2.multiply(r.getQ0())).add(q1.multiply(r.getQ3()).subtract(q3.multiply(r.getQ1()))),
-                        q0.multiply(r.getQ3()).add(q3.multiply(r.getQ0())).add(q2.multiply(r.getQ1()).subtract(q1.multiply(r.getQ2()))),
-                        false);
+        return new FieldRotation<>(q0.multiply(r.getQ0()).subtract(
+                q1.multiply(r.getQ1()).add(q2.multiply(r.getQ2())).add(q3.multiply(r.getQ3()))),
+                                   q0.multiply(r.getQ1()).add(q1.multiply(r.getQ0()))
+                                     .add(q3.multiply(r.getQ2()).subtract(q2.multiply(r.getQ3()))),
+                                   q0.multiply(r.getQ2()).add(q2.multiply(r.getQ0()))
+                                     .add(q1.multiply(r.getQ3()).subtract(q3.multiply(r.getQ1()))),
+                                   q0.multiply(r.getQ3()).add(q3.multiply(r.getQ0()))
+                                     .add(q2.multiply(r.getQ1()).subtract(q1.multiply(r.getQ2()))),
+                                   false);
     }
 
     /** Apply a rotation to another rotation.
@@ -1304,11 +1333,18 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * @return a new rotation which is the composition of r by the instance
      */
     public static <T extends CalculusFieldElement<T>> FieldRotation<T> applyTo(final Rotation r1, final FieldRotation<T> rInner) {
-        return new FieldRotation<T>(rInner.q0.multiply(r1.getQ0()).subtract(rInner.q1.multiply(r1.getQ1()).add(rInner.q2.multiply(r1.getQ2())).add(rInner.q3.multiply(r1.getQ3()))),
-                                    rInner.q1.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ1())).add(rInner.q2.multiply(r1.getQ3()).subtract(rInner.q3.multiply(r1.getQ2()))),
-                                    rInner.q2.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ2())).add(rInner.q3.multiply(r1.getQ1()).subtract(rInner.q1.multiply(r1.getQ3()))),
-                                    rInner.q3.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ3())).add(rInner.q1.multiply(r1.getQ2()).subtract(rInner.q2.multiply(r1.getQ1()))),
-                                    false);
+        return new FieldRotation<>(rInner.q0.multiply(r1.getQ0()).subtract(
+                rInner.q1.multiply(r1.getQ1()).add(rInner.q2.multiply(r1.getQ2())).add(rInner.q3.multiply(r1.getQ3()))),
+                                   rInner.q1.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ1()))
+                                            .add(rInner.q2.multiply(r1.getQ3())
+                                                          .subtract(rInner.q3.multiply(r1.getQ2()))),
+                                   rInner.q2.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ2()))
+                                            .add(rInner.q3.multiply(r1.getQ1())
+                                                          .subtract(rInner.q1.multiply(r1.getQ3()))),
+                                   rInner.q3.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ3()))
+                                            .add(rInner.q1.multiply(r1.getQ2())
+                                                          .subtract(rInner.q2.multiply(r1.getQ1()))),
+                                   false);
     }
 
     /** Apply the inverse of the instance to another rotation.
@@ -1363,11 +1399,12 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * of the instance using vector operator convention
      */
     private FieldRotation<T> composeInverseInternal(FieldRotation<T> r) {
-        return new FieldRotation<T>(r.q0.multiply(q0).add(r.q1.multiply(q1).add(r.q2.multiply(q2)).add(r.q3.multiply(q3))).negate(),
-                                    r.q0.multiply(q1).add(r.q2.multiply(q3).subtract(r.q3.multiply(q2))).subtract(r.q1.multiply(q0)),
-                                    r.q0.multiply(q2).add(r.q3.multiply(q1).subtract(r.q1.multiply(q3))).subtract(r.q2.multiply(q0)),
-                                    r.q0.multiply(q3).add(r.q1.multiply(q2).subtract(r.q2.multiply(q1))).subtract(r.q3.multiply(q0)),
-                                    false);
+        return new FieldRotation<>(
+                r.q0.multiply(q0).add(r.q1.multiply(q1).add(r.q2.multiply(q2)).add(r.q3.multiply(q3))).negate(),
+                r.q0.multiply(q1).add(r.q2.multiply(q3).subtract(r.q3.multiply(q2))).subtract(r.q1.multiply(q0)),
+                r.q0.multiply(q2).add(r.q3.multiply(q1).subtract(r.q1.multiply(q3))).subtract(r.q2.multiply(q0)),
+                r.q0.multiply(q3).add(r.q1.multiply(q2).subtract(r.q2.multiply(q1))).subtract(r.q3.multiply(q0)),
+                false);
     }
 
     /** Apply the inverse of the instance to another rotation.
@@ -1422,11 +1459,15 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * of the instance using vector operator convention
      */
     private FieldRotation<T> composeInverseInternal(Rotation r) {
-        return new FieldRotation<T>(q0.multiply(r.getQ0()).add(q1.multiply(r.getQ1()).add(q2.multiply(r.getQ2())).add(q3.multiply(r.getQ3()))).negate(),
-                                    q1.multiply(r.getQ0()).add(q3.multiply(r.getQ2()).subtract(q2.multiply(r.getQ3()))).subtract(q0.multiply(r.getQ1())),
-                                    q2.multiply(r.getQ0()).add(q1.multiply(r.getQ3()).subtract(q3.multiply(r.getQ1()))).subtract(q0.multiply(r.getQ2())),
-                                    q3.multiply(r.getQ0()).add(q2.multiply(r.getQ1()).subtract(q1.multiply(r.getQ2()))).subtract(q0.multiply(r.getQ3())),
-                                    false);
+        return new FieldRotation<>(q0.multiply(r.getQ0()).add(q1.multiply(r.getQ1()).add(q2.multiply(r.getQ2()))
+                                                                .add(q3.multiply(r.getQ3()))).negate(),
+                                   q1.multiply(r.getQ0()).add(q3.multiply(r.getQ2()).subtract(q2.multiply(r.getQ3())))
+                                     .subtract(q0.multiply(r.getQ1())),
+                                   q2.multiply(r.getQ0()).add(q1.multiply(r.getQ3()).subtract(q3.multiply(r.getQ1())))
+                                     .subtract(q0.multiply(r.getQ2())),
+                                   q3.multiply(r.getQ0()).add(q2.multiply(r.getQ1()).subtract(q1.multiply(r.getQ2())))
+                                     .subtract(q0.multiply(r.getQ3())),
+                                   false);
     }
 
     /** Apply the inverse of a rotation to another rotation.
@@ -1443,11 +1484,21 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * of the instance
      */
     public static <T extends CalculusFieldElement<T>> FieldRotation<T> applyInverseTo(final Rotation rOuter, final FieldRotation<T> rInner) {
-        return new FieldRotation<T>(rInner.q0.multiply(rOuter.getQ0()).add(rInner.q1.multiply(rOuter.getQ1()).add(rInner.q2.multiply(rOuter.getQ2())).add(rInner.q3.multiply(rOuter.getQ3()))).negate(),
-                                    rInner.q0.multiply(rOuter.getQ1()).add(rInner.q2.multiply(rOuter.getQ3()).subtract(rInner.q3.multiply(rOuter.getQ2()))).subtract(rInner.q1.multiply(rOuter.getQ0())),
-                                    rInner.q0.multiply(rOuter.getQ2()).add(rInner.q3.multiply(rOuter.getQ1()).subtract(rInner.q1.multiply(rOuter.getQ3()))).subtract(rInner.q2.multiply(rOuter.getQ0())),
-                                    rInner.q0.multiply(rOuter.getQ3()).add(rInner.q1.multiply(rOuter.getQ2()).subtract(rInner.q2.multiply(rOuter.getQ1()))).subtract(rInner.q3.multiply(rOuter.getQ0())),
-                                    false);
+        return new FieldRotation<>(rInner.q0.multiply(rOuter.getQ0()).add(rInner.q1.multiply(rOuter.getQ1())
+                                                                                   .add(rInner.q2.multiply(
+                                                                                           rOuter.getQ2()))
+                                                                                   .add(rInner.q3.multiply(
+                                                                                           rOuter.getQ3()))).negate(),
+                                   rInner.q0.multiply(rOuter.getQ1()).add(rInner.q2.multiply(rOuter.getQ3()).subtract(
+                                                 rInner.q3.multiply(rOuter.getQ2())))
+                                            .subtract(rInner.q1.multiply(rOuter.getQ0())),
+                                   rInner.q0.multiply(rOuter.getQ2()).add(rInner.q3.multiply(rOuter.getQ1()).subtract(
+                                                 rInner.q1.multiply(rOuter.getQ3())))
+                                            .subtract(rInner.q2.multiply(rOuter.getQ0())),
+                                   rInner.q0.multiply(rOuter.getQ3()).add(rInner.q1.multiply(rOuter.getQ2()).subtract(
+                                                 rInner.q2.multiply(rOuter.getQ1())))
+                                            .subtract(rInner.q3.multiply(rOuter.getQ0())),
+                                   false);
     }
 
     /** Perfect orthogonality on a 3X3 matrix.
@@ -1551,7 +1602,7 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * the rotation r that prepended to one of the rotations gives the other
      * one:</p>
      * <pre>
-     *        r<sub>1</sub>(r) = r<sub>2</sub>
+     *        <var>r<sub>1</sub>(r) = r<sub>2</sub></var>
      * </pre>
      * <p>This distance is an angle between 0 and &pi;. Its value is the smallest
      * possible upper bound of the angle in radians between r<sub>1</sub>(v)

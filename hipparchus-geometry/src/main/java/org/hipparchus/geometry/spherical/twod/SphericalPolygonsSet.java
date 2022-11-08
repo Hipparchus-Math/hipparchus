@@ -73,10 +73,10 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      */
     public SphericalPolygonsSet(final Vector3D pole, final double tolerance)
         throws MathIllegalArgumentException {
-        super(new BSPTree<Sphere2D>(new Circle(pole, tolerance).wholeHyperplane(),
-                                    new BSPTree<Sphere2D>(Boolean.FALSE),
-                                    new BSPTree<Sphere2D>(Boolean.TRUE),
-                                    null),
+        super(new BSPTree<>(new Circle(pole, tolerance).wholeHyperplane(),
+                            new BSPTree<>(Boolean.FALSE),
+                            new BSPTree<>(Boolean.TRUE),
+                            null),
               tolerance);
         Sphere2D.checkTolerance(tolerance);
     }
@@ -238,7 +238,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
         final int n = vertices.length;
         if (n == 0) {
             // the tree represents the whole space
-            return new BSPTree<Sphere2D>(Boolean.TRUE);
+            return new BSPTree<>(Boolean.TRUE);
         }
 
         // build the vertices
@@ -762,10 +762,10 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
 
         // handle special cases first
         if (isEmpty()) {
-            return new EnclosingBall<Sphere2D, S2Point>(S2Point.PLUS_K, Double.NEGATIVE_INFINITY);
+            return new EnclosingBall<>(S2Point.PLUS_K, Double.NEGATIVE_INFINITY);
         }
         if (isFull()) {
-            return new EnclosingBall<Sphere2D, S2Point>(S2Point.PLUS_K, Double.POSITIVE_INFINITY);
+            return new EnclosingBall<>(S2Point.PLUS_K, Double.POSITIVE_INFINITY);
         }
 
         // as the polygons is neither empty nor full, it has some boundaries and cut hyperplanes
@@ -773,14 +773,14 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
         if (isEmpty(root.getMinus()) && isFull(root.getPlus())) {
             // the polygon covers an hemisphere, and its boundary is one 2π long edge
             final Circle circle = (Circle) root.getCut().getHyperplane();
-            return new EnclosingBall<Sphere2D, S2Point>(new S2Point(circle.getPole()).negate(),
-                                                        0.5 * FastMath.PI);
+            return new EnclosingBall<>(new S2Point(circle.getPole()).negate(),
+                                       0.5 * FastMath.PI);
         }
         if (isFull(root.getMinus()) && isEmpty(root.getPlus())) {
             // the polygon covers an hemisphere, and its boundary is one 2π long edge
             final Circle circle = (Circle) root.getCut().getHyperplane();
-            return new EnclosingBall<Sphere2D, S2Point>(new S2Point(circle.getPole()),
-                                                        0.5 * FastMath.PI);
+            return new EnclosingBall<>(new S2Point(circle.getPole()),
+                                       0.5 * FastMath.PI);
         }
 
         // gather some inside points, to be used by the encloser

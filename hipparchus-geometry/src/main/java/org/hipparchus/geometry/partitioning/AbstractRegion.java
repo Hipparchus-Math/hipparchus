@@ -371,7 +371,7 @@ public abstract class AbstractRegion<S extends Space, T extends Space> implement
     public BSPTree<S> getTree(final boolean includeBoundaryAttributes) {
         if (includeBoundaryAttributes && (tree.getCut() != null) && (tree.getAttribute() == null)) {
             // compute the boundary attributes
-            tree.visit(new BoundaryBuilder<S>());
+            tree.visit(new BoundaryBuilder<>());
         }
         return tree;
     }

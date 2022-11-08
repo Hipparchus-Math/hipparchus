@@ -63,11 +63,11 @@ public class SubLimitAngle extends AbstractSubHyperplane<Sphere1D, Sphere1D> {
     public SplitSubHyperplane<Sphere1D> split(final Hyperplane<Sphere1D> hyperplane) {
         final double global = hyperplane.getOffset(((LimitAngle) getHyperplane()).getLocation());
         if (global < -hyperplane.getTolerance())  {
-            return new SplitSubHyperplane<Sphere1D>(null, this);
+            return new SplitSubHyperplane<>(null, this);
         } else if (global > hyperplane.getTolerance()) {
-            return new SplitSubHyperplane<Sphere1D>(this, null);
+            return new SplitSubHyperplane<>(this, null);
         } else {
-            return new SplitSubHyperplane<Sphere1D>(null, null);
+            return new SplitSubHyperplane<>(null, null);
         }
     }
 

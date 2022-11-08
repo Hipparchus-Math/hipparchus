@@ -32,12 +32,12 @@ import org.hipparchus.geometry.LocalizedGeometryFormats;
 /**
  * This class is a utility representing a rotation order specification
  * for Cardan or Euler angles specification.
- *
+ * <p>
  * This class cannot be instanciated by the user. He can only use one
  * of the twelve predefined supported orders as an argument to either
  * the {@link Rotation#Rotation(RotationOrder, RotationConvention, double, double, double)}
  * constructor or the {@link Rotation#getAngles} method.
- *
+ * <p>
  * Since Hipparchus 1.7 this class is an enumerate class.
  *
  */

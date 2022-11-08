@@ -171,11 +171,11 @@ public class SubLine extends AbstractSubHyperplane<Euclidean2D, Euclidean1D> {
             // the lines are parallel
             final double global = otherLine.getOffset(thisLine);
             if (global < -tolerance) {
-                return new SplitSubHyperplane<Euclidean2D>(null, this);
+                return new SplitSubHyperplane<>(null, this);
             } else if (global > tolerance) {
-                return new SplitSubHyperplane<Euclidean2D>(this, null);
+                return new SplitSubHyperplane<>(this, null);
             } else {
-                return new SplitSubHyperplane<Euclidean2D>(null, null);
+                return new SplitSubHyperplane<>(null, null);
             }
         }
 

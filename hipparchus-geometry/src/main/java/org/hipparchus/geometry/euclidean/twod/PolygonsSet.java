@@ -201,7 +201,7 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
         final int n = vertices.length;
         if (n == 0) {
             // the tree represents the whole space
-            return new BSPTree<Euclidean2D>(Boolean.TRUE);
+            return new BSPTree<>(Boolean.TRUE);
         }
 
         // build the vertices

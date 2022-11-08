@@ -250,7 +250,7 @@ public class Rotation implements Serializable {
    * <p>If the angular separation between u<sub>1</sub> and u<sub>2</sub> is
    * not the same as the angular separation between v<sub>1</sub> and
    * v<sub>2</sub>, then a corrected v'<sub>2</sub> will be used rather than
-   * v<sub>2</sub>, the corrected vector will be in the (&pm;v<sub>1</sub>,
+   * v<sub>2</sub>, the corrected vector will be in the (<span>&#177;</span>v<sub>1</sub>,
    * +v<sub>2</sub>) half-plane.</p>
 
    * @param u1 first vector of the origin pair
@@ -1329,7 +1329,7 @@ public class Rotation implements Serializable {
    * the rotation r that prepended to one of the rotations gives the other
    * one:</p>
    * <pre>
-   *        r<sub>1</sub>(r) = r<sub>2</sub>
+   *        <var>r<sub>1</sub>(r) = r<sub>2</sub></var>
    * </pre>
    * <p>This distance is an angle between 0 and &pi;. Its value is the smallest
    * possible upper bound of the angle in radians between r<sub>1</sub>(v)

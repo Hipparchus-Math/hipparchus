@@ -71,11 +71,11 @@ public class SubPlane extends AbstractSubHyperplane<Euclidean3D, Euclidean2D> {
             // the hyperplanes are parallel
             final double global = otherPlane.getOffset(thisPlane);
             if (global < -tolerance) {
-                return new SplitSubHyperplane<Euclidean3D>(null, this);
+                return new SplitSubHyperplane<>(null, this);
             } else if (global > tolerance) {
-                return new SplitSubHyperplane<Euclidean3D>(this, null);
+                return new SplitSubHyperplane<>(this, null);
             } else {
-                return new SplitSubHyperplane<Euclidean3D>(null, null);
+                return new SplitSubHyperplane<>(null, null);
             }
         }
 

@@ -135,7 +135,7 @@ public class OutlineExtractor {
          * @param tolerance tolerance below which points are considered identical
          */
         BoundaryProjector(final double tolerance) {
-            this.projected = new PolygonsSet(new BSPTree<Euclidean2D>(Boolean.FALSE), tolerance);
+            this.projected = new PolygonsSet(new BSPTree<>(Boolean.FALSE), tolerance);
             this.tolerance = tolerance;
         }
 

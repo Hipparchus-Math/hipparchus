@@ -145,8 +145,8 @@ public class FieldLine<T extends CalculusFieldElement<T>> {
      * @return one point belonging to the line, at specified abscissa
      */
     public FieldVector3D<T> pointAt(final T abscissa) {
-        return new FieldVector3D<T>(abscissa.getField().getOne(), zero,
-                                    abscissa, direction);
+        return new FieldVector3D<>(abscissa.getField().getOne(), zero,
+                                   abscissa, direction);
     }
 
     /** Get one point from the line.
@@ -154,7 +154,7 @@ public class FieldLine<T extends CalculusFieldElement<T>> {
      * @return one point belonging to the line, at specified abscissa
      */
     public FieldVector3D<T> pointAt(final double abscissa) {
-        return new FieldVector3D<T>(1, zero, abscissa, direction);
+        return new FieldVector3D<>(1, zero, abscissa, direction);
     }
 
     /** Check if the instance is similar to another line.
@@ -244,8 +244,8 @@ public class FieldLine<T extends CalculusFieldElement<T>> {
         final T a                     = delta0.dotProduct(direction);
         final T b                     = delta0.dotProduct(line.direction);
 
-        return new FieldVector3D<T>(a.getField().getOne(), zero,
-                                    a.subtract(b.multiply(cos)).divide(n), direction);
+        return new FieldVector3D<>(a.getField().getOne(), zero,
+                                   a.subtract(b.multiply(cos)).divide(n), direction);
 
     }
 

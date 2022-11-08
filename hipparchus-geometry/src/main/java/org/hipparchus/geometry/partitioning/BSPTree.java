@@ -185,11 +185,11 @@ public class BSPTree<S extends Space> {
     public BSPTree<S> copySelf() {
 
         if (cut == null) {
-            return new BSPTree<S>(attribute);
+            return new BSPTree<>(attribute);
         }
 
-        return new BSPTree<S>(cut.copySelf(), plus.copySelf(), minus.copySelf(),
-                           attribute);
+        return new BSPTree<>(cut.copySelf(), plus.copySelf(), minus.copySelf(),
+                             attribute);
 
     }
 
@@ -557,7 +557,7 @@ public class BSPTree<S extends Space> {
     public BSPTree<S> split(final SubHyperplane<S> sub) {
 
         if (cut == null) {
-            return new BSPTree<S>(sub, copySelf(), new BSPTree<S>(attribute), null);
+            return new BSPTree<>(sub, copySelf(), new BSPTree<>(attribute), null);
         }
 
         final Hyperplane<S> cHyperplane = cut.getHyperplane();
