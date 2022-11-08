@@ -34,7 +34,7 @@ import org.hipparchus.util.FastMath;
  * difference between the objective function values is smaller than a
  * threshold or if either the absolute difference between the objective
  * function values is smaller than another threshold for all vectors elements.
- * <br/>
+ * <br>
  * The {@link #converged(int,PointVectorValuePair,PointVectorValuePair) converged}
  * method will also return {@code true} if the number of iterations has been set
  * (see {@link #SimpleVectorValueChecker(double,double,int) this constructor}).

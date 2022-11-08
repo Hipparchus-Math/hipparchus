@@ -90,10 +90,9 @@ public class MultivariateFunctionPenaltyAdapter
      * point during the optimization process, the penalty function value should
      * be defined with care. This value is computed as:
      * <pre>
-     *   penalty(point) = offset + &sum;<sub>i</sub>[scale[i] * &radic;|point[i]-boundary[i]|]
+     *   <var>penalty(point) = offset + &sum;<sub>i</sub>[scale[i] * &radic;|point[i]-boundary[i]|]</var>
      * </pre>
      * where indices i correspond to all the components that violates their boundaries.
-     * </p>
      * <p>
      * So when attempting a function minimization, offset should be larger than
      * the maximum expected value of the underlying function and scale components

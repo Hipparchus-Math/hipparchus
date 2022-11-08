@@ -60,9 +60,8 @@ import org.hipparchus.util.Precision;
  * </ul>
  * The redistribution policy for MINPACK is available <a
  * href="http://www.netlib.org/minpack/disclaimer">here</a>, for convenience, it
- * is reproduced below.</p>
- *
- * <table border="0" width="80%" cellpadding="10" align="center" bgcolor="#E0E0E0">
+ * is reproduced below.
+ * <table summary="" border="0" width="80%" cellpadding="10" style="text-align:center;background-color: #E0E0E0;">
  * <tr><td>
  *    Minpack Copyright Notice (1999) University of Chicago.
  *    All rights reserved
@@ -107,7 +106,7 @@ import org.hipparchus.util.Precision;
  *     (INCLUDING NEGLIGENCE OR STRICT LIABILITY), OR OTHERWISE,
  *     EVEN IF ANY OF SAID PARTIES HAS BEEN WARNED OF THE
  *     POSSIBILITY OF SUCH LOSS OR DAMAGES.</strong></li>
- * <ol></td></tr>
+ * </ol></td></tr>
  * </table>
  *
  */

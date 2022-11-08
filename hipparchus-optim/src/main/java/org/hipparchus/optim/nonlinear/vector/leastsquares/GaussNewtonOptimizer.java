@@ -63,7 +63,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
 
     /**
      * Creates a Gauss Newton optimizer.
-     * <p/>
+     * <p>
      * The default for the algorithm is to use QR decomposition and not
      * form normal equations.
      * </p>
@@ -245,7 +245,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
                 normal.setEntry(i, j, normal.getEntry(j, i));
             }
         }
-        return new Pair<RealMatrix, RealVector>(normal, jTr);
+        return new Pair<>(normal, jTr);
     }
 
 }

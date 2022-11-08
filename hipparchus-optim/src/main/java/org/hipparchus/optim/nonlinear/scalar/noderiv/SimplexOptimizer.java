@@ -56,7 +56,6 @@ import org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer;
  *  set of n+1 points in dimension n) that is updated by the algorithms
  *  steps.
  * <p>
- * <p>
  *  The simplex update procedure ({@link NelderMeadSimplex} or
  * {@link MultiDirectionalSimplex})  must be passed to the
  * {@code optimize} method.
@@ -84,7 +83,7 @@ import org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer;
  *  MultivariateFunctionMappingAdapter} or
  *  {@link org.hipparchus.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapter
  *  MultivariateFunctionPenaltyAdapter}.
- *  <br/>
+ *  <br>
  *  The call to {@link #optimize(OptimizationData[]) optimize} will throw
  *  {@link MathRuntimeException} if bounds are passed to it.
  * </p>

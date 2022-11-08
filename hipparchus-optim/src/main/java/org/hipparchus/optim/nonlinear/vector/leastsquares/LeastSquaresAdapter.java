@@ -62,7 +62,8 @@ public class LeastSquaresAdapter implements LeastSquaresProblem {
     }
 
     /** {@inheritDoc}
-     * @param point*/
+     * @param point the parameter values.
+     */
     @Override
     public Evaluation evaluate(final RealVector point) {
         return problem.evaluate(point);

@@ -28,7 +28,7 @@ import org.hipparchus.util.MathUtils;
 
 /**
  * Search interval and (optional) start value.
- * <br/>
+ * <br>
  * Immutable class.
  *
  */

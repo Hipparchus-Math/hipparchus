@@ -24,7 +24,7 @@ package org.hipparchus.optim;
 
 /**
  * Starting point (first guess) of the optimization procedure.
- * <br/>
+ * <br>
  * Immutable class.
  *
  */

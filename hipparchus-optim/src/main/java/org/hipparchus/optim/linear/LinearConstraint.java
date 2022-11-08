@@ -47,7 +47,6 @@ import org.hipparchus.linear.RealVector;
  * </ul>
  * The c<sub>i</sub>, l<sub>i</sub> or r<sub>i</sub> are the coefficients of the constraints, the x<sub>i</sub>
  * are the coordinates of the current point and v is the value of the constraint.
- * </p>
  *
  */
 public class LinearConstraint implements Serializable {
@@ -69,7 +68,7 @@ public class LinearConstraint implements Serializable {
      *   <li>c<sub>1</sub>x<sub>1</sub> + ... c<sub>n</sub>x<sub>n</sub> &lt;= v</li>
      *   <li>c<sub>1</sub>x<sub>1</sub> + ... c<sub>n</sub>x<sub>n</sub> &gt;= v</li>
      * </ul>
-     * </p>
+     *
      * @param coefficients The coefficients of the constraint (left hand side)
      * @param relationship The type of (in)equality used in the constraint
      * @param value The value of the constraint (right hand side)
@@ -89,7 +88,7 @@ public class LinearConstraint implements Serializable {
      *   <li>c<sub>1</sub>x<sub>1</sub> + ... c<sub>n</sub>x<sub>n</sub> &lt;= v</li>
      *   <li>c<sub>1</sub>x<sub>1</sub> + ... c<sub>n</sub>x<sub>n</sub> &gt;= v</li>
      * </ul>
-     * </p>
+     *
      * @param coefficients The coefficients of the constraint (left hand side)
      * @param relationship The type of (in)equality used in the constraint
      * @param value The value of the constraint (right hand side)
@@ -114,7 +113,7 @@ public class LinearConstraint implements Serializable {
      *   <li>l<sub>1</sub>x<sub>1</sub> + ... l<sub>n</sub>x<sub>n</sub> + l<sub>cst</sub> &gt;=
      *       r<sub>1</sub>x<sub>1</sub> + ... r<sub>n</sub>x<sub>n</sub> + r<sub>cst</sub></li>
      * </ul>
-     * </p>
+     *
      * @param lhsCoefficients The coefficients of the linear expression on the left hand side of the constraint
      * @param lhsConstant The constant term of the linear expression on the left hand side of the constraint
      * @param relationship The type of (in)equality used in the constraint
@@ -145,7 +144,7 @@ public class LinearConstraint implements Serializable {
      *   <li>l<sub>1</sub>x<sub>1</sub> + ... l<sub>n</sub>x<sub>n</sub> + l<sub>cst</sub> &gt;=
      *       r<sub>1</sub>x<sub>1</sub> + ... r<sub>n</sub>x<sub>n</sub> + r<sub>cst</sub></li>
      * </ul>
-     * </p>
+     *
      * @param lhsCoefficients The coefficients of the linear expression on the left hand side of the constraint
      * @param lhsConstant The constant term of the linear expression on the left hand side of the constraint
      * @param relationship The type of (in)equality used in the constraint

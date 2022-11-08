@@ -28,7 +28,7 @@ import org.hipparchus.random.RandomVectorGenerator;
 
 /**
  * Base class multi-start optimizer for a multivariate function.
- * <br/>
+ * <br>
  * This class wraps an optimizer in order to use it several times in
  * turn with different starting points (trying to avoid being trapped
  * in a local extremum when looking for a global one).
@@ -106,7 +106,7 @@ public abstract class BaseMultiStartMultivariateOptimizer<P>
      * restarts. The {@code optimize} method returns the best point only.
      * This method returns all the points found at the end of each starts,
      * including the best one already returned by the {@code optimize} method.
-     * <br/>
+     * <br>
      * The returned array as one element for each start as specified
      * in the constructor. It is ordered with the results from the
      * runs that did converge first, sorted from best to worst
@@ -117,7 +117,7 @@ public abstract class BaseMultiStartMultivariateOptimizer<P>
      * an exception.
      * This also means that if the first element is not {@code null}, it is
      * the best point found across all starts.
-     * <br/>
+     * <br>
      * The behaviour is undefined if this method is called before
      * {@code optimize}; it will likely throw {@code NullPointerException}.
      *

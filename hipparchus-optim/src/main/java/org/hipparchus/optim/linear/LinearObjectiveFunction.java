@@ -37,11 +37,10 @@ import org.hipparchus.optim.OptimizationData;
  * <p>
  * A linear objective function has one the form:
  * <pre>
- * c<sub>1</sub>x<sub>1</sub> + ... c<sub>n</sub>x<sub>n</sub> + d
+ * <var>c<sub>1</sub>x<sub>1</sub> + ... c<sub>n</sub>x<sub>n</sub> + d</var>
  * </pre>
  * The c<sub>i</sub> and d are the coefficients of the equation,
  * the x<sub>i</sub> are the coordinates of the current point.
- * </p>
  *
  */
 public class LinearObjectiveFunction
