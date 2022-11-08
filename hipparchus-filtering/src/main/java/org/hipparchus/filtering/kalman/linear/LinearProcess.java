@@ -34,7 +34,6 @@ import org.hipparchus.filtering.kalman.Measurement;
  *   <li>u<sub>k-1</sub> is the command</li>
  *   <li>w<sub>k-1</sub> is the process noise, which has covariance matrix Q<sub>k-1</sub></li>
  * </ul>
- * </p>
  * @param <T> the type of the measurements
  * @see LinearKalmanFilter
  * @see org.hipparchus.filtering.kalman.extended.NonLinearProcess
