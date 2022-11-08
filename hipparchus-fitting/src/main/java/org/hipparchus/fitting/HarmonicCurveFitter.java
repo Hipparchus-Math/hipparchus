@@ -39,7 +39,7 @@ import org.hipparchus.util.SinCos;
  * Fits points to a {@link
  * org.hipparchus.analysis.function.HarmonicOscillator.Parametric harmonic oscillator}
  * function.
- * <br/>
+ * <br>
  * The {@link #withStartPoint(double[]) initial guess values} must be passed
  * in the following order:
  * <ul>
@@ -196,7 +196,7 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
      * \[
      *   B = \frac{\sum x_i x_i \sum y_i z_i - \sum x_i y_i \sum x_i z_i}
      *            {\sum x_i x_i \sum y_i y_i - \sum x_i y_i \sum x_i y_i}
-     *
+     * <p>
      * \]
      *
      * <p>In fact, we can assume that both \(a\) and \(\omega\) are positive and
@@ -211,7 +211,7 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
      * \[ z_i = \int_{t_1}^{t_i} f'^2(t) dt \]
      * and update the sums:
      * \[ \sum x_i x_i, \sum y_i y_i, \sum x_i y_i, \sum x_i z_i, \sum y_i z_i \]
-     *
+     * <p>
      * Then:
      * \[
      *  a = \sqrt{\frac{\sum y_i y_i  \sum x_i z_i - \sum x_i y_i \sum y_i z_i }

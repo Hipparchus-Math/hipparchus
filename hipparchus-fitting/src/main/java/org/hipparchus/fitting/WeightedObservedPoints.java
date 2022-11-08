@@ -103,7 +103,7 @@ public class WeightedObservedPoints implements Serializable {
         // The copy is necessary to ensure thread-safety because of the
         // "clear" method (which otherwise would be able to empty the
         // list of points while it is being used by another thread).
-        return new ArrayList<WeightedObservedPoint>(observations);
+        return new ArrayList<>(observations);
     }
 
     /**
