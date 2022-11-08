@@ -68,7 +68,6 @@ import org.hipparchus.util.FastMath;
  *       products derived from this software without specific prior written
  *       permission.</li>
  * </ol></td></tr>
- * <p>
  * <tr><td><strong>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
  * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
