@@ -73,7 +73,7 @@ public class PearsonsCorrelation {
     /**
      * Create a PearsonsCorrelation from a rectangular array
      * whose columns represent values of variables to be correlated.
-     *
+     * <p>
      * Throws MathIllegalArgumentException if the input array does not have at least
      * two columns and two rows.  Pairwise correlations are set to NaN if one
      * of the correlates has zero variance.
@@ -90,7 +90,7 @@ public class PearsonsCorrelation {
     /**
      * Create a PearsonsCorrelation from a RealMatrix whose columns
      * represent variables to be correlated.
-     *
+     * <p>
      * Throws MathIllegalArgumentException if the matrix does not have at least
      * two columns and two rows.  Pairwise correlations are set to NaN if one
      * of the correlates has zero variance.
@@ -147,11 +147,11 @@ public class PearsonsCorrelation {
 
     /**
      * Returns a matrix of standard errors associated with the estimates
-     * in the correlation matrix.<br/>
+     * in the correlation matrix.<br>
      * <code>getCorrelationStandardErrors().getEntry(i,j)</code> is the standard
      * error associated with <code>getCorrelationMatrix.getEntry(i,j)</code>
      *
-     * <p>The formula used to compute the standard error is <br/>
+     * <p>The formula used to compute the standard error is <br>
      * <code>SE<sub>r</sub> = ((1 - r<sup>2</sup>) / (n - 2))<sup>1/2</sup></code>
      * where <code>r</code> is the estimated correlation coefficient and
      * <code>n</code> is the number of observations in the source dataset.</p>
@@ -216,7 +216,7 @@ public class PearsonsCorrelation {
     /**
      * Computes the correlation matrix for the columns of the
      * input matrix, using {@link #correlation(double[], double[])}.
-     *
+     * <p>
      * Throws MathIllegalArgumentException if the matrix does not have at least
      * two columns and two rows.  Pairwise correlations are set to NaN if one
      * of the correlates has zero variance.
@@ -245,7 +245,7 @@ public class PearsonsCorrelation {
      * Computes the correlation matrix for the columns of the
      * input rectangular array.  The columns of the array represent values
      * of variables to be correlated.
-     *
+     * <p>
      * Throws MathIllegalArgumentException if the matrix does not have at least
      * two columns and two rows or if the array is not rectangular. Pairwise
      * correlations are set to NaN if one of the correlates has zero variance.
@@ -290,7 +290,7 @@ public class PearsonsCorrelation {
     /**
      * Derives a correlation matrix from a covariance matrix.
      *
-     * <p>Uses the formula <br/>
+     * <p>Uses the formula <br>
      * <code>r(X,Y) = cov(X,Y)/s(X)s(Y)</code> where
      * <code>r(&middot;,&middot;)</code> is the correlation coefficient and
      * <code>s(&middot;)</code> means standard deviation.</p>

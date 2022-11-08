@@ -151,11 +151,11 @@ public class Sum extends AbstractStorelessUnivariateStatistic
      *     <li>the weights array contains one or more NaN values</li>
      *     <li>the weights array contains negative values</li>
      *     <li>the start and length arguments do not determine a valid array</li>
-     * </ul></p>
+     * </ul>
      * <p>
      * Uses the formula, <pre>
      *    weighted sum = &Sigma;(values[i] * weights[i])
-     * </pre></p>
+     * </pre>
      *
      * @param values the input array
      * @param weights the weights array

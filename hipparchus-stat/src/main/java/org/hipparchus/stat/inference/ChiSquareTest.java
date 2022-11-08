@@ -365,7 +365,7 @@ public class ChiSquareTest {
      * <p>
      * where
      * <p>
-     * <code>K = &sqrt;[&sum;(observed2 / &sum;(observed1)]</code>
+     * <code>K = <span>&#8730;</span>[&sum;(observed2 / &sum;(observed1)]</code>
      * <p>
      * This statistic can be used to perform a Chi-Square test evaluating the
      * null hypothesis that both observed counts follow the same distribution.

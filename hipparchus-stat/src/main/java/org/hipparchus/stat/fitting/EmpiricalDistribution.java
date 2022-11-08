@@ -69,7 +69,7 @@ import org.hipparchus.util.MathUtils;
  * Applications can use <code>EmpiricalDistribution</code> to build grouped
  * frequency histograms representing the input data or to generate random values
  * "like" those in the input file -- i.e., the values generated will follow the
- * distribution of the values in the file.</p>
+ * distribution of the values in the file.
  *
  * <p>The implementation uses what amounts to the
  * <a href="http://nedwww.ipac.caltech.edu/level5/March02/Silverman/Silver2_6.html">
@@ -85,7 +85,7 @@ import org.hipparchus.util.MathUtils;
  * <li>Generate a uniformly distributed value in (0,1) </li>
  * <li>Select the subinterval to which the value belongs.
  * <li>Generate a random Gaussian value with mean = mean of the associated
- *     bin and std dev = std dev of associated bin.</li></ol></p>
+ *     bin and std dev = std dev of associated bin.</li></ol>
  *
  * <p>EmpiricalDistribution implements the {@link RealDistribution} interface
  * as follows.  Given x within the range of values in the dataset, let B
@@ -103,7 +103,7 @@ import org.hipparchus.util.MathUtils;
  *    by 10. </li>
  *<li>The input file <i>must</i> be a plain text file containing one valid numeric
  *    entry per line.</li>
- * </ul></p>
+ * </ul>
  *
  */
 public class EmpiricalDistribution extends AbstractRealDistribution {
@@ -498,7 +498,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * <p>Returns a fresh copy of the array of upper bounds for the bins.
-     * Bins are: <br/>
+     * Bins are: <br>
      * [min,upperBounds[0]],(upperBounds[0],upperBounds[1]],...,
      *  (upperBounds[binCount-2], upperBounds[binCount-1] = max].</p>
      *
@@ -563,7 +563,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * <li>Compute K(B) = the mass of B with respect to the within-bin kernel (i.e., the
      * integral of the kernel density over B).</li>
      * <li>Return k(x) * P(B) / K(B), where k is the within-bin kernel density
-     * and P(B) is the mass of B.</li></ol></p>
+     * and P(B) is the mass of B.</li></ol>
      */
     @Override
     public double density(double x) {
@@ -586,7 +586,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * <li>Return P(B-) + P(B) * [K(x) - K(B-)] / K(B) where
      * K(x) is the within-bin kernel distribution function evaluated at x.</li></ol>
      * If K is a constant distribution, we return P(B-) + P(B) (counting the full
-     * mass of B).</p>
+     * mass of B).
      *
      */
     @Override
@@ -622,16 +622,16 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * <li>Find the smallest i such that the sum of the masses of the bins
      *  through i is at least p.</li>
      * <li>
-     *   Let K be the within-bin kernel distribution for bin i.</br>
-     *   Let K(B) be the mass of B under K. <br/>
+     *   Let K be the within-bin kernel distribution for bin i.<br>
+     *   Let K(B) be the mass of B under K. <br>
      *   Let K(B-) be K evaluated at the lower endpoint of B (the combined
-     *   mass of the bins below B under K).<br/>
-     *   Let P(B) be the probability of bin i.<br/>
-     *   Let P(B-) be the sum of the bin masses below bin i. <br/>
-     *   Let pCrit = p - P(B-)<br/>
-     * <li>Return the inverse of K evaluated at <br/>
+     *   mass of the bins below B under K).<br>
+     *   Let P(B) be the probability of bin i.<br>
+     *   Let P(B-) be the sum of the bin masses below bin i. <br>
+     *   Let pCrit = p - P(B-)<br>
+     * <li>Return the inverse of K evaluated at <br>
      *    K(B-) + pCrit * K(B) / P(B) </li>
-     *  </ol></p>
+     *  </ol>
      *
      */
     @Override

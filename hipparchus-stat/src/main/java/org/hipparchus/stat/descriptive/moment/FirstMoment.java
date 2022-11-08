@@ -36,7 +36,6 @@ import org.hipparchus.util.MathUtils;
  * <p>
  * To limit numeric errors, the value of the statistic is computed using the
  * following recursive updating algorithm:
- * <p>
  * <ol>
  * <li>Initialize <code>m = </code> the first value</li>
  * <li>For each additional value, update using <br>

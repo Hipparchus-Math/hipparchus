@@ -62,7 +62,7 @@ import org.hipparchus.util.Precision;
  * the {@link #SimpleRegression(boolean)} constructor.  When the
  * {@code hasIntercept} property is false, the model is estimated without a
  * constant term and {@link #getIntercept()} returns {@code 0}.</li>
- * </ul></p>
+ * </ul>
  *
  */
 public class SimpleRegression implements Serializable, UpdatingMultipleLinearRegression {
@@ -371,7 +371,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double,NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @param x input <code>x</code> value
      * @return predicted <code>y</code> value
@@ -397,7 +397,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double,NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return the intercept of the regression line if the model includes an
      * intercept; 0 otherwise
@@ -430,7 +430,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
     * must have been added before invoking this method. If this method is
     * invoked before a model can be estimated, <code>Double.NaN</code> is
     * returned.
-    * </li></ul></p>
+    * </li></ul>
     *
     * @return the slope of the regression line
     */
@@ -469,7 +469,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double,NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return sum of squared errors associated with the regression model
      */
@@ -496,8 +496,8 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
 
     /**
      * Returns the sum of squared deviations of the x values about their mean.
-     *
-     * If {@code n < 2}, this returns <code>Double.NaN</code>.</p>
+     * <p>
+     * If {@code n < 2}, this returns <code>Double.NaN</code>.
      *
      * @return sum of squared deviations of x values
      */
@@ -522,14 +522,14 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * their mean (which equals the mean of y).
      * <p>
      * This is usually abbreviated SSR or SSM.  It is defined as SSM
-     * <a href="http://www.xycoon.com/SumOfSquares.htm">here</a></p>
+     * <a href="http://www.xycoon.com/SumOfSquares.htm">here</a>
      * <p>
      * <strong>Preconditions</strong>: <ul>
      * <li>At least two observations (with at least two different x values)
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double.NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return sum of squared deviations of predicted y values
      */
@@ -564,7 +564,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double,NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return Pearson's r
      */
@@ -587,7 +587,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double,NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return r-square
      */
@@ -682,7 +682,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * </li>
      * <li>{@code (0 < alpha < 1)}; otherwise an
      * <code>MathIllegalArgumentException</code> is thrown.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @param alpha the desired significance level
      * @return half-width of 95% confidence interval for the slope estimate

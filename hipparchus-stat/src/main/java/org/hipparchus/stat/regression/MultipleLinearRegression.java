@@ -29,7 +29,7 @@ package org.hipparchus.stat.regression;
  * where y is an <code>n-vector</code> <b>regressand</b>, X is a <code>[n,k]</code> matrix whose <code>k</code> columns are called
  * <b>regressors</b>, b is <code>k-vector</code> of <b>regression parameters</b> and <code>u</code> is an <code>n-vector</code>
  * of <b>error terms</b> or <b>residuals</b>.
- *
+ * <p>
  * The notation is quite standard in literature,
  * cf eg <a href="http://www.econ.queensu.ca/ETM">Davidson and MacKinnon, Econometrics Theory and Methods, 2004</a>.
  */

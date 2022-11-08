@@ -217,12 +217,12 @@ public class KolmogorovSmirnovTest {
      * <li>When the product of the sample sizes exceeds {@link #LARGE_SAMPLE_PRODUCT}, the
      * asymptotic distribution of \(D_{n,m}\) is used. See {@link #approximateP(double, int, int)}
      * for details on the approximation.</li>
-     * </ul><p>
+     * </ul>
      * If {@code x.length * y.length} &lt; {@link #LARGE_SAMPLE_PRODUCT} and the combined set of values in
      * {@code x} and {@code y} contains ties, random jitter is added to {@code x} and {@code y} to
      * break ties before computing \(D_{n,m}\) and the p-value. The jitter is uniformly distributed
      * on (-minDelta / 2, minDelta / 2) where minDelta is the smallest pairwise difference between
-     * values in the combined sample.</p>
+     * values in the combined sample.
      * <p>
      * If ties are known to be present in the data, {@link #bootstrap(double[], double[], int, boolean)}
      * may be used as an alternative method for estimating the p-value.</p>
@@ -809,7 +809,7 @@ public class KolmogorovSmirnovTest {
                 }
             }
         }
-        return new Array2DRowFieldMatrix<BigFraction>(BigFractionField.getInstance(), Hdata);
+        return new Array2DRowFieldMatrix<>(BigFractionField.getInstance(), Hdata);
     }
 
     /***
@@ -1101,7 +1101,7 @@ public class KolmogorovSmirnovTest {
      * minDelta is the minimum difference between unequal values in the combined
      * sample.  A fixed seed is used to generate the jitter, so repeated activations
      * with the same input arrays result in the same values.
-     *
+     * <p>
      * NOTE: if there are ties in the data, this method overwrites the data in
      * x and y with the jittered values.
      *

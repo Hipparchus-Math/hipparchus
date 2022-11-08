@@ -62,7 +62,7 @@ public class OneWayAnova {
      * <code>double[]</code> arrays.</li>
      * <li> There must be at least two <code>double[]</code> arrays in the
      * <code>categoryData</code> collection and each of these arrays must
-     * contain at least two values.</li></ul></p><p>
+     * contain at least two values.</li></ul>
      * This implementation computes the F statistic using the definitional
      * formula<pre>
      *   F = msbg/mswg</pre>
@@ -70,7 +70,7 @@ public class OneWayAnova {
      *  msbg = between group mean square
      *  mswg = within group mean square</pre>
      * are as defined <a href="http://faculty.vassar.edu/lowry/ch13pt1.html">
-     * here</a></p>
+     * here</a>
      *
      * @param categoryData <code>Collection</code> of <code>double[]</code>
      * arrays each containing data for one category
@@ -96,14 +96,14 @@ public class OneWayAnova {
      * <code>double[]</code> arrays.</li>
      * <li> There must be at least two <code>double[]</code> arrays in the
      * <code>categoryData</code> collection and each of these arrays must
-     * contain at least two values.</li></ul></p><p>
+     * contain at least two values.</li></ul>
      * This implementation uses the
      * {@link org.hipparchus.distribution.continuous.FDistribution
      * Hipparchus F Distribution implementation} to estimate the exact
      * p-value, using the formula<pre>
      *   p = 1 - cumulativeProbability(F)</pre>
      * where <code>F</code> is the F value and <code>cumulativeProbability</code>
-     * is the Hipparchus implementation of the F distribution.</p>
+     * is the Hipparchus implementation of the F distribution.
      *
      * @param categoryData <code>Collection</code> of <code>double[]</code>
      * arrays each containing data for one category
@@ -134,14 +134,14 @@ public class OneWayAnova {
      * {@link StreamingStatistics}.</li>
      * <li> There must be at least two {@link StreamingStatistics} in the
      * <code>categoryData</code> collection and each of these statistics must
-     * contain at least two values.</li></ul></p><p>
+     * contain at least two values.</li></ul>
      * This implementation uses the
      * {@link org.hipparchus.distribution.continuous.FDistribution
      * Hipparchus F Distribution implementation} to estimate the exact
      * p-value, using the formula<pre>
      *   p = 1 - cumulativeProbability(F)</pre>
      * where <code>F</code> is the F value and <code>cumulativeProbability</code>
-     * is the Hipparchus implementation of the F distribution.</p>
+     * is the Hipparchus implementation of the F distribution.
      *
      * @param categoryData <code>Collection</code> of {@link StreamingStatistics}
      * each containing data for one category
@@ -213,14 +213,14 @@ public class OneWayAnova {
      * <code>categoryData</code> collection and each of these arrays must
      * contain at least two values.</li>
      * <li>alpha must be strictly greater than 0 and less than or equal to 0.5.
-     * </li></ul></p><p>
+     * </li></ul>
      * This implementation uses the
      * {@link org.hipparchus.distribution.continuous.FDistribution
      * Hipparchus F Distribution implementation} to estimate the exact
      * p-value, using the formula<pre>
      *   p = 1 - cumulativeProbability(F)</pre>
      * where <code>F</code> is the F value and <code>cumulativeProbability</code>
-     * is the Hipparchus implementation of the F distribution.</p>
+     * is the Hipparchus implementation of the F distribution.
      * <p>True is returned iff the estimated p-value is less than alpha.</p>
      *
      * @param categoryData <code>Collection</code> of <code>double[]</code>

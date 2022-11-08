@@ -38,9 +38,9 @@ import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Pair;
 
 /**
- * Expectation-Maximization</a> algorithm for fitting the parameters of
+ * Expectation-Maximization algorithm for fitting the parameters of
  * multivariate normal mixture model distributions.
- *
+ * <p>
  * This implementation is pure original code based on <a
  * href="https://www.ee.washington.edu/techsite/papers/documents/UWEETR-2010-0002.pdf">
  * EM Demystified: An Expectation-Maximization Tutorial</a> by Yihua Chen and Maya R. Gupta,
@@ -98,7 +98,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
 
     /**
      * Fit a mixture model to the data supplied to the constructor.
-     *
+     * <p>
      * The quality of the fit depends on the concavity of the data provided to
      * the constructor and the initial mixture provided to this function. If the
      * data has many local optima, multiple runs of the fitting function with
@@ -250,7 +250,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
 
     /**
      * Fit a mixture model to the data supplied to the constructor.
-     *
+     * <p>
      * The quality of the fit depends on the concavity of the data provided to
      * the constructor and the initial mixture provided to this function. If the
      * data has many local optima, multiple runs of the fitting function with
@@ -273,7 +273,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
     /**
      * Helper method to create a multivariate normal mixture model which can be
      * used to initialize {@link #fit(MixtureMultivariateNormalDistribution)}.
-     *
+     * <p>
      * This method uses the data supplied to the constructor to try to determine
      * a good mixture model at which to start the fit, but it is not guaranteed
      * to supply a model which will find the optimal solution or even converge.
@@ -355,7 +355,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
             final MultivariateNormalDistribution mvn
                 = new MultivariateNormalDistribution(columnMeans, covMat);
 
-            components.add(new Pair<Double, MultivariateNormalDistribution>(weight, mvn));
+            components.add(new Pair<>(weight, mvn));
         }
 
         return new MixtureMultivariateNormalDistribution(components);

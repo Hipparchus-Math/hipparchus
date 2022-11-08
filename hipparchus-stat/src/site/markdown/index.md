@@ -603,7 +603,7 @@ Then the matrix of standard errors is
     correlation.getCorrelationStandardErrors();
 
 The formula used to compute the standard error is
-`\(SE_r = \sqrt{(1 - r^2) / (n - 2)}\)`<br/>
+`\(SE_r = \sqrt{(1 - r^2) / (n - 2)}\)`<br>
 where `\(r\)` is the estimated correlation coefficient and `\(n\)` is the number of
 observations in the source dataset.
 

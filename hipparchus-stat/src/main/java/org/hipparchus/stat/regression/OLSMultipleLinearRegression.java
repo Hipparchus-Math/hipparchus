@@ -35,7 +35,7 @@ import org.hipparchus.stat.descriptive.moment.SecondMoment;
  * multiple linear regression model.</p>
  *
  * <p>The regression coefficients, <code>b</code>, satisfy the normal equations:
- * <pre><code> X<sup>T</sup> X b = X<sup>T</sup> y </code></pre></p>
+ * <pre><code> X<sup>T</sup> X b = X<sup>T</sup> y </code></pre>
  *
  * <p>To solve the normal equations, this implementation uses QR decomposition
  * of the <code>X</code> matrix. (See {@link QRDecomposition} for details on the
@@ -50,7 +50,7 @@ import org.hipparchus.stat.descriptive.moment.SecondMoment;
  * R<sup>T</sup> (Q<sup>T</sup>Q) R b = R<sup>T</sup> Q<sup>T</sup> y
  * R<sup>T</sup> R b = R<sup>T</sup> Q<sup>T</sup> y
  * (R<sup>T</sup>)<sup>-1</sup> R<sup>T</sup> R b = (R<sup>T</sup>)<sup>-1</sup> R<sup>T</sup> Q<sup>T</sup> y
- * R b = Q<sup>T</sup> y </code></pre></p>
+ * R b = Q<sup>T</sup> y </code></pre>
  *
  * <p>Given <code>Q</code> and <code>R</code>, the last equation is solved by back-substitution.</p>
  *
@@ -82,7 +82,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
 
     /**
      * Loads model x and y sample data, overriding any previous sample.
-     *
+     * <p>
      * Computes and caches QR decomposition of the X matrix.
      * @param y the [n,1] array representing the y sample
      * @param x the [n,k] array representing the x sample
@@ -185,7 +185,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
 
     /**
      * Returns the R-Squared statistic, defined by the formula <pre>
-     * R<sup>2</sup> = 1 - SSR / SSTO
+     * <var>R<sup>2</sup></var> = <var>1</var> - <var>SSR / SSTO</var>
      * </pre>
      * where SSR is the {@link #calculateResidualSumOfSquares() sum of squared residuals}
      * and SSTO is the {@link #calculateTotalSumOfSquares() total sum of squares}
@@ -202,15 +202,15 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
 
     /**
      * <p>Returns the adjusted R-squared statistic, defined by the formula <pre>
-     * R<sup>2</sup><sub>adj</sub> = 1 - [SSR (n - 1)] / [SSTO (n - p)]
+     * <var>R<sup>2</sup><sub>adj</sub></var> = <var>1</var> - <var>[SSR (n - 1)]</var> / <var>[SSTO (n - p)]</var>
      * </pre>
      * where SSR is the {@link #calculateResidualSumOfSquares() sum of squared residuals},
      * SSTO is the {@link #calculateTotalSumOfSquares() total sum of squares}, n is the number
-     * of observations and p is the number of parameters estimated (including the intercept).</p>
+     * of observations and p is the number of parameters estimated (including the intercept).
      *
      * <p>If the regression is estimated without an intercept term, what is returned is <pre>
      * <code> 1 - (1 - {@link #calculateRSquared()}) * (n / (n - p)) </code>
-     * </pre></p>
+     * </pre>
      *
      * <p>If there is no variance in y, i.e., SSTO = 0, NaN is returned.</p>
      *

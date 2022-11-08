@@ -28,7 +28,7 @@ import org.hipparchus.linear.RealVector;
 
 /**
  * The GLS implementation of multiple linear regression.
- *
+ * <p>
  * GLS assumes a general covariance matrix Omega of the error
  * <pre>
  * u ~ N(0, Omega)

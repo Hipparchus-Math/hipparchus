@@ -33,30 +33,30 @@ import org.hipparchus.util.MathArrays;
 /**
  * Implementation of Kendall's Tau-b rank correlation.
  * <p>
- * A pair of observations (x<sub>1</sub>, y<sub>1</sub>) and
- * (x<sub>2</sub>, y<sub>2</sub>) are considered <i>concordant</i> if
- * x<sub>1</sub> &lt; x<sub>2</sub> and y<sub>1</sub> &lt; y<sub>2</sub>
- * or x<sub>2</sub> &lt; x<sub>1</sub> and y<sub>2</sub> &lt; y<sub>1</sub>.
- * The pair is <i>discordant</i> if x<sub>1</sub> &lt; x<sub>2</sub> and
- * y<sub>2</sub> &lt; y<sub>1</sub> or x<sub>2</sub> &lt; x<sub>1</sub> and
- * y<sub>1</sub> &lt; y<sub>2</sub>.  If either x<sub>1</sub> = x<sub>2</sub>
- * or y<sub>1</sub> = y<sub>2</sub>, the pair is neither concordant nor
+ * A pair of observations (<var>x<sub>1</sub></var>, <var>y<sub>1</sub></var>) and
+ * (<var>x<sub>2</sub></var>, <var>y<sub>2</sub></var>) are considered <i>concordant</i> if
+ * <var>x<sub>1</sub></var> &lt; <var>x<sub>2</sub></var> and <var>y<sub>1</sub></var> &lt; <var>y<sub>2</sub></var>
+ * or <var>x<sub>2</sub></var> &lt; <var>x<sub>1</sub></var> and <var>y<sub>2</sub></var> &lt; <var>y<sub>1</sub></var>.
+ * The pair is <i>discordant</i> if <var><var>x<sub>1</sub></var></var> &lt; <var><var>x<sub>2</sub></var></var> and
+ * <var><var>y<sub>2</sub></var></var> &lt; <var><var>y<sub>1</sub></var></var> or <var><var>x<sub>2</sub></var></var> &lt; <var><var>x<sub>1</sub></var></var> and
+ * <var><var>y<sub>1</sub></var></var> &lt; <var><var>y<sub>2</sub></var></var>.  If either <var><var>x<sub>1</sub></var></var> = <var><var>x<sub>2</sub></var></var>
+ * or <var><var>y<sub>1</sub></var></var> = <var><var>y<sub>2</sub></var></var>, the pair is neither concordant nor
  * discordant.
  * <p>
  * Kendall's Tau-b is defined as:
  * <pre>
- * tau<sub>b</sub> = (n<sub>c</sub> - n<sub>d</sub>) / sqrt((n<sub>0</sub> - n<sub>1</sub>) * (n<sub>0</sub> - n<sub>2</sub>))
+ * <var><var>tau<sub>b</sub></var></var> = (<var><var>n<sub>c</sub></var></var> - <var><var>n<sub>d</sub></var></var>) / sqrt((<var>n<sub>0</sub></var> - <var>n<sub>1</sub></var>) * (<var>n<sub>0</sub></var> - <var>n<sub>2</sub></var>))
  * </pre>
  * <p>
  * where:
  * <ul>
- *     <li>n<sub>0</sub> = n * (n - 1) / 2</li>
- *     <li>n<sub>c</sub> = Number of concordant pairs</li>
- *     <li>n<sub>d</sub> = Number of discordant pairs</li>
- *     <li>n<sub>1</sub> = sum of t<sub>i</sub> * (t<sub>i</sub> - 1) / 2 for all i</li>
- *     <li>n<sub>2</sub> = sum of u<sub>j</sub> * (u<sub>j</sub> - 1) / 2 for all j</li>
- *     <li>t<sub>i</sub> = Number of tied values in the i<sup>th</sup> group of ties in x</li>
- *     <li>u<sub>j</sub> = Number of tied values in the j<sup>th</sup> group of ties in y</li>
+ *     <li><var>n<sub>0</sub></var> = n * (n - 1) / 2</li>
+ *     <li><var>n<sub>c</sub></var> = Number of concordant pairs</li>
+ *     <li><var>n<sub>d</sub></var> = Number of discordant pairs</li>
+ *     <li><var>n<sub>1</sub></var> = sum of <var>t<sub>i</sub></var> * (<var>t<sub>i</sub></var> - 1) / 2 for all i</li>
+ *     <li><var>n<sub>2</sub></var> = sum of <var>u<sub>j</sub></var> * (<var>u<sub>j</sub></var> - 1) / 2 for all j</li>
+ *     <li><var>t<sub>i</sub></var> = Number of tied values in the i<sup>th</sup> group of ties in x</li>
+ *     <li><var>u<sub>j</sub></var> = Number of tied values in the j<sup>th</sup> group of ties in y</li>
  * </ul>
  * <p>
  * This implementation uses the O(n log n) algorithm described in

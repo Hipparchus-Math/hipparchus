@@ -289,14 +289,14 @@ public class RegressionResults implements Serializable {
      * their mean (which equals the mean of y).</p>
      *
      * <p>This is usually abbreviated SSR or SSM.  It is defined as SSM
-     * <a href="http://www.xycoon.com/SumOfSquares.htm">here</a></p>
+     * <a href="http://www.xycoon.com/SumOfSquares.htm">here</a>
      *
      * <p><strong>Preconditions</strong>: <ul>
      * <li>At least two observations (with at least two different x values)
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double.NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return sum of squared deviations of predicted y values
      */
@@ -318,7 +318,7 @@ public class RegressionResults implements Serializable {
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double,NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return sum of squared errors associated with the regression model
      */
@@ -350,7 +350,7 @@ public class RegressionResults implements Serializable {
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, {@code Double,NaN} is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return r-square, a double in the interval [0, 1]
      */
@@ -360,15 +360,15 @@ public class RegressionResults implements Serializable {
 
     /**
      * <p>Returns the adjusted R-squared statistic, defined by the formula <pre>
-     * R<sup>2</sup><sub>adj</sub> = 1 - [SSR (n - 1)] / [SSTO (n - p)]
+     * <var>R<sup>2</sup><sub>adj</sub></var> = <var>1</var> - <var>[SSR (n - 1)]</var> / <var>[SSTO (n - p)]</var>
      * </pre>
      * where SSR is the sum of squared residuals},
      * SSTO is the total sum of squares}, n is the number
-     * of observations and p is the number of parameters estimated (including the intercept).</p>
+     * of observations and p is the number of parameters estimated (including the intercept).
      *
      * <p>If the regression is estimated without an intercept term, what is returned is <pre>
      * <code> 1 - (1 - {@link #getRSquared()} ) * (n / (n - p)) </code>
-     * </pre></p>
+     * </pre>
      *
      * @return adjusted R-Squared statistic
      */

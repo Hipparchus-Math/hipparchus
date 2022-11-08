@@ -37,7 +37,7 @@ import org.hipparchus.util.MathArrays;
 
 /**
  * An implementation of the Wilcoxon signed-rank test.
- *
+ * <p>
  * This implementation currently handles only paired (equal length) samples
  * and discards tied pairs from the analysis. The latter behavior differs from
  * the R implementation of wilcox.test and corresponds to the "wilcox"
@@ -181,7 +181,7 @@ public class WilcoxonSignedRankTest {
      * ordered, so the comparisons greater than, less than, and equal to are
      * meaningful.</li>
      * </ul>
-     * </p>
+     *
      *
      * @param x the first sample
      * @param y the second sample
@@ -315,7 +315,7 @@ public class WilcoxonSignedRankTest {
      *     paired = TRUE, exact = FALSE, correct = TRUE)} in R (as long as
      * there are no tied pairs in the data).</li>
      * </ul>
-     * </p>
+     *
      *
      * @param x the first sample
      * @param y the second sample
