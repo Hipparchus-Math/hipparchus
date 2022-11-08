@@ -43,8 +43,8 @@ import org.hipparchus.util.MathUtils;
  *   to user specified {@link AllowedSolution}</li>
  *   <li>the maximal order for the invert polynomial root search is
  *   user-specified instead of being invert quadratic only</li>
- * </ul><p>
- * The given interval must bracket the root.</p>
+ * </ul>
+ * The given interval must bracket the root.
  *
  * @param <T> the type of the field elements
  */

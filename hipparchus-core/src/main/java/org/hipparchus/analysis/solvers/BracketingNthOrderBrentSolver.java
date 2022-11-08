@@ -39,8 +39,8 @@ import org.hipparchus.util.Precision;
  *   to user specified {@link AllowedSolution},</li>
  *   <li>the maximal order for the invert polynomial root search is
  *   user-specified instead of being invert quadratic only</li>
- * </ul><p>
- * The given interval must bracket the root.</p>
+ * </ul>
+ * The given interval must bracket the root.
  *
  */
 public class BracketingNthOrderBrentSolver
@@ -266,7 +266,7 @@ public class BracketingNthOrderBrentSolver
                 nextX = guessX(targetY, tmpX, y, start, end);
 
                 if (!((nextX > xA) && (nextX < xB))) {
-                    // the guessed root is not strictly inside of the tightest bracketing interval
+                    // the guessed root is not strictly inside the tightest bracketing interval
 
                     // the guessed root is either not strictly inside the interval or it
                     // is a NaN (which occurs when some sampling points share the same y)
@@ -298,7 +298,7 @@ public class BracketingNthOrderBrentSolver
             if (nextY == 0.0 || FastMath.abs(nextY) < getFunctionValueAccuracy() && allowed == AllowedSolution.ANY_SIDE) {
                 // we have either:
                 // - an exact root, so we don't we don't need to bother about the allowed solutions setting
-                // - or an approximate root and we know allowed solutions setting if to retrieve the value closest to zero
+                // - or an approximate root, and we know allowed solutions setting if to retrieve the value closest to zero
                 return new Interval(nextX, nextY, nextX, nextY);
             }
 

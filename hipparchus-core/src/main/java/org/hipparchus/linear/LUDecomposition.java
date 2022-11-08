@@ -29,9 +29,9 @@ import org.hipparchus.util.FastMath;
 /**
  * Calculates the LUP-decomposition of a square matrix.
  * <p>The LUP-decomposition of a matrix A consists of three matrices L, U and
- * P that satisfy: P&times;A = L&times;U. L is lower triangular (with unit
+ * P that satisfy: P &times; A = L &times; U. L is lower triangular (with unit
  * diagonal terms), U is upper triangular and P is a permutation matrix. All
- * matrices are m&times;m.</p>
+ * matrices are m &times; m.</p>
  * <p>As shown by the presence of the P matrix, this decomposition is
  * implemented using partial pivoting.</p>
  * <p>This class is based on the class with similar name from the

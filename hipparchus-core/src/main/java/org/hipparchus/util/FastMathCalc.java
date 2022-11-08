@@ -387,10 +387,10 @@ class FastMathCalc {
      *  in = c + d.
      *  want to find x + y such that x+y = 1/(c+d) and x is much
      *  larger than y and x has several zero bits on the right.
-     *
+     * <p>
      *  Set b = 1/(2^22),  a = 1 - b.  Thus (a+b) = 1.
      *  Use following identity to compute (a+b)/(c+d)
-     *
+     * <p>
      *  (a+b)/(c+d)  =   a/c   +    (bc - ad) / (c^2 + cd)
      *  set x = a/c  and y = (bc - ad) / (c^2 + cd)
      *  This will be close to the right answer, but there will be
@@ -534,14 +534,14 @@ class FastMathCalc {
      *      x+1           /          x        x        x          \
      *  ln ----- =   2 *  |  x  +   ----  +  ----  +  ---- + ...  |
      *      1-x           \          3        5        7          /
-     *
+     * <p>
      * So, compute a Remez approximation of the following function
-     *
+     * <p>
      *  ln ((sqrt(x)+1)/(1-sqrt(x)))  /  x
-     *
+     * <p>
      * This will be an even function with only positive coefficents.
      * x is in the range [0 - 1/3].
-     *
+     * <p>
      * Transform xi for input to the above function by setting
      * x = (xi-1)/(xi+1).   Input to the polynomial is x^2, then
      * the result is multiplied by x.

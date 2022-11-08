@@ -45,7 +45,6 @@ import org.hipparchus.util.MathUtils;
  * while matrix-vector products of the type M &middot; y remain comparatively
  * easy to compute. In this library, M (not M<sup>-1</sup>!) is called the
  * <em>preconditionner</em>.
- * </p>
  * <p>
  * Concrete implementations of this abstract class must be provided with the
  * preconditioner M, as a {@link RealLinearOperator}.

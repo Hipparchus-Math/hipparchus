@@ -40,16 +40,16 @@ import org.hipparchus.util.Precision;
  * matrix are independent. On example is the square matrix
  * \[
  * A = \left(\begin{matrix}
- * 3 & -2\\
- * 4 & -1
+ * 3 &amp; -2\\
+ * 4 &amp; -1
  * \end{matrix}\right)
  * \]
  * which has two conjugate eigenvalues \(\lambda_1=1+2i\) and \(\lambda_2=1-2i\)
  * with associated eigenvectors \(v_1^T = (1, 1-i)\) and \(v_2^T = (1, 1+i)\).
  * \[
  * V\timesV^T = \left(\begin{matrix}
- * 2 & 2\\
- * 2 & 0
+ * 2 &amp; 2\\
+ * 2 &amp; 0
  * \end{matrix}\right)
  * \]
  * which is not the identity matrix. Therefore, despite \(A \times V = V \times D\),
@@ -58,7 +58,7 @@ import org.hipparchus.util.Precision;
  *
  * Compute complex eigen values from the Schur transform. Compute complex eigen
  * vectors based on eigen values and the inverse iteration method.
- *
+ * <p>
  * see: https://en.wikipedia.org/wiki/Inverse_iteration
  * https://en.wikiversity.org/wiki/Shifted_inverse_iteration
  * http://www.robots.ox.ac.uk/~sjrob/Teaching/EngComp/ecl4.pdf

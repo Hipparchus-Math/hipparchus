@@ -28,7 +28,7 @@ real-valued distributions can be represented via the
 [MultivariateRealDistribution](../apidocs/org/hipparchus/distribution/MultiVariateRealDistribution.html)
 interface.
 
-An overview of available continuous distributions:<br/>
+An overview of available continuous distributions:<br>
 ![Overview of continuous distributions](images/userguide/real_distribution_examples.png)
 
 ## Distribution Framework

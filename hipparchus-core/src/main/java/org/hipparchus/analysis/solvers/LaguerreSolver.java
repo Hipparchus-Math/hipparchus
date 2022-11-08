@@ -133,7 +133,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
 
     /**
      * Find a real root in the given interval.
-     *
+     * <p>
      * Despite the bracketing condition, the root returned by
      * {@link LaguerreSolver.ComplexSolver#solve(Complex[],Complex)} may
      * not be a real zero inside {@code [min, max]}.

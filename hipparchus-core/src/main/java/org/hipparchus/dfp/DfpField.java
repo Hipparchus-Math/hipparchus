@@ -733,55 +733,55 @@ public class DfpField implements Field<Dfp> {
 
 
     /** Compute ln(a).
-     *
+     * <p>
      *  Let f(x) = ln(x),
-     *
+     * <p>
      *  We know that f'(x) = 1/x, thus from Taylor's theorem we have:
-     *
+     * <p>
      *           -----          n+1         n
      *  f(x) =   \           (-1)    (x - 1)
      *           /          ----------------    for 1 &lt;= n &lt;= infinity
      *           -----             n
-     *
+     * <p>
      *  or
      *                       2        3       4
      *                   (x-1)   (x-1)    (x-1)
      *  ln(x) =  (x-1) - ----- + ------ - ------ + ...
      *                     2       3        4
-     *
+     * <p>
      *  alternatively,
-     *
+     * <p>
      *                  2    3   4
      *                 x    x   x
      *  ln(x+1) =  x - -  + - - - + ...
      *                 2    3   4
-     *
+     * <p>
      *  This series can be used to compute ln(x), but it converges too slowly.
-     *
+     * <p>
      *  If we substitute -x for x above, we get
-     *
+     * <p>
      *                   2    3    4
      *                  x    x    x
      *  ln(1-x) =  -x - -  - -  - - + ...
      *                  2    3    4
-     *
+     * <p>
      *  Note that all terms are now negative.  Because the even powered ones
      *  absorbed the sign.  Now, subtract the series above from the previous
      *  one to get ln(x+1) - ln(1-x).  Note the even terms cancel out leaving
      *  only the odd ones
-     *
+     * <p>
      *                             3     5      7
      *                           2x    2x     2x
      *  ln(x+1) - ln(x-1) = 2x + --- + --- + ---- + ...
      *                            3     5      7
-     *
+     * <p>
      *  By the property of logarithms that ln(a) - ln(b) = ln (a/b) we have:
-     *
+     * <p>
      *                                3        5        7
      *      x+1           /          x        x        x          \
      *  ln ----- =   2 *  |  x  +   ----  +  ----  +  ---- + ...  |
      *      x-1           \          3        5        7          /
-     *
+     * <p>
      *  But now we want to find ln(a), so we need to find the value of x
      *  such that a = (x+1)/(x-1).   This is easily solved to find that
      *  x = (a-1)/(a+1).

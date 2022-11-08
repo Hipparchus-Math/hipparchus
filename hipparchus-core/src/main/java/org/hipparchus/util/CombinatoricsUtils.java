@@ -92,7 +92,7 @@ public final class CombinatoricsUtils {
      * {@code  < Long.MAX_VALUE} is 66. If the computed value exceeds
      * {@code Long.MAX_VALUE} a {@code MathRuntimeException} is
      * thrown.</li>
-     * </ul></p>
+     * </ul>
      *
      * @param n the size of the set
      * @param k the size of the subsets to be counted
@@ -173,7 +173,7 @@ public final class CombinatoricsUtils {
      * largest value of {@code n} for which all coefficients are &lt;
      * Double.MAX_VALUE is 1029. If the computed value exceeds Double.MAX_VALUE,
      * Double.POSITIVE_INFINITY is returned</li>
-     * </ul></p>
+     * </ul>
      *
      * @param n the size of the set
      * @param k the size of the subsets to be counted
@@ -218,7 +218,7 @@ public final class CombinatoricsUtils {
      * <ul>
      * <li> {@code 0 <= k <= n } (otherwise
      * {@code MathIllegalArgumentException} is thrown)</li>
-     * </ul></p>
+     * </ul>
      *
      * @param n the size of the set
      * @param k the size of the subsets to be counted
@@ -290,7 +290,7 @@ public final class CombinatoricsUtils {
      * Long.MAX_VALUE} is 20. If the computed value exceeds {@code Long.MAX_VALUE}
      * an {@code MathRuntimeException } is thrown.</li>
      * </ul>
-     * </p>
+     *
      *
      * @param n argument
      * @return {@code n!}
@@ -553,7 +553,7 @@ public final class CombinatoricsUtils {
             return builder.add(partition).build();
         }
 
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PartitionsIterator<T>(list),
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PartitionsIterator<>(list),
                                                                         Spliterator.DISTINCT | Spliterator.NONNULL |
                                                                         Spliterator.IMMUTABLE | Spliterator.ORDERED),
                                     false);
@@ -577,7 +577,7 @@ public final class CombinatoricsUtils {
             return Stream.of(list);
         }
 
-        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PermutationsIterator<T>(list),
+        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new PermutationsIterator<>(list),
                                                                         Spliterator.DISTINCT | Spliterator.NONNULL |
                                                                         Spliterator.IMMUTABLE | Spliterator.ORDERED),
                                     false);
@@ -602,7 +602,7 @@ public final class CombinatoricsUtils {
          *
          * @param numValues Number of values of the function to compute.
          * @param cache Existing cache.
-         * @throw MathIllegalArgumentException if {@code n < 0}.
+         * @throws MathIllegalArgumentException if {@code n < 0}.
          */
         private FactorialLog(int numValues,
                              double[] cache) {

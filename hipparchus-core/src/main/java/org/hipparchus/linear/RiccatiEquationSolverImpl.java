@@ -25,7 +25,7 @@ import org.hipparchus.util.FastMath;
 /**
  *
  * This solver computes the solution using the following approach:
- *
+ * <p>
  * 1. Compute the Hamiltonian matrix 2. Extract its complex eigen vectors (not
  * the best solution, a better solution would be ordered Schur transformation)
  * 3. Approximate the initial solution given by 2 using the Kleinman algorithm
@@ -167,7 +167,7 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
         final FieldMatrix<Complex> u21 = u.getSubMatrix(m11.getRowDimension(),
                                                         2 * m11.getRowDimension() - 1, 0, m11.getColumnDimension() - 1);
 
-        final FieldDecompositionSolver<Complex> solver = new FieldLUDecomposition<Complex>(u11).getSolver();
+        final FieldDecompositionSolver<Complex> solver = new FieldLUDecomposition<>(u11).getSolver();
 
         if (!solver.isNonSingular()) {
             throw new MathRuntimeException(LocalizedCoreFormats.SINGULAR_MATRIX);

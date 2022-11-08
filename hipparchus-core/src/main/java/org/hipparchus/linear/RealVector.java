@@ -804,7 +804,7 @@ public abstract class RealVector {
      * Acts as if it is implemented as:
      * <pre>
      *  Entry e = null;
-     *  for(Iterator<Entry> it = iterator(); it.hasNext(); e = it.next()) {
+     * {@literal for(Iterator<Entry>} it = iterator(); it.hasNext(); e = it.next()) {
      *      e.setValue(function.value(e.getValue()));
      *  }
      * </pre>
@@ -906,7 +906,7 @@ public abstract class RealVector {
 
     /**
      * Visits (but does not alter) all entries of this vector in optimized
-     * order. The order in which the entries are visited is selected so as to
+     * order. The order in which the entries are visited is selected to
      * lead to the most efficient implementation; it might depend on the
      * concrete implementation of this abstract class.
      *
@@ -921,7 +921,7 @@ public abstract class RealVector {
 
     /**
      * Visits (but does not alter) some entries of this vector in optimized
-     * order. The order in which the entries are visited is selected so as to
+     * order. The order in which the entries are visited is selected to
      * lead to the most efficient implementation; it might depend on the
      * concrete implementation of this abstract class.
      *
@@ -982,7 +982,7 @@ public abstract class RealVector {
 
     /**
      * Visits (and possibly alters) all entries of this vector in optimized
-     * order. The order in which the entries are visited is selected so as to
+     * order. The order in which the entries are visited is selected to
      * lead to the most efficient implementation; it might depend on the
      * concrete implementation of this abstract class.
      *
@@ -997,7 +997,7 @@ public abstract class RealVector {
 
     /**
      * Visits (and possibly change) some entries of this vector in optimized
-     * order. The order in which the entries are visited is selected so as to
+     * order. The order in which the entries are visited is selected to
      * lead to the most efficient implementation; it might depend on the
      * concrete implementation of this abstract class.
      *
@@ -1107,10 +1107,10 @@ public abstract class RealVector {
      * This class should rarely be used, but is here to provide
      * a default implementation of sparseIterator(), which is implemented
      * by walking over the entries, skipping those that are zero.
-     *
+     * <p>
      * Concrete subclasses which are SparseVector implementations should
      * make their own sparse iterator, rather than using this one.
-     *
+     * <p>
      * This implementation might be useful for ArrayRealVector, when expensive
      * operations which preserve the default value are to be done on the entries,
      * and the fraction of non-default values is small (i.e. someone took a

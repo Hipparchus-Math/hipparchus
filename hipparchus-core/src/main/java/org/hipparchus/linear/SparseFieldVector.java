@@ -218,7 +218,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> copy() {
-        return new SparseFieldVector<T>(this);
+        return new SparseFieldVector<>(this);
     }
 
     /** {@inheritDoc} */
@@ -628,7 +628,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
 
     /**
      * Visits (but does not alter) all entries of this vector in optimized
-     * order. The order in which the entries are visited is selected so as to
+     * order. The order in which the entries are visited is selected to
      * lead to the most efficient implementation; it might depend on the
      * concrete implementation of this abstract class.
      *
@@ -643,7 +643,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
 
     /**
      * Visits (but does not alter) some entries of this vector in optimized
-     * order. The order in which the entries are visited is selected so as to
+     * order. The order in which the entries are visited is selected to
      * lead to the most efficient implementation; it might depend on the
      * concrete implementation of this abstract class.
      *
@@ -704,7 +704,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
 
     /**
      * Visits (and possibly alters) all entries of this vector in optimized
-     * order. The order in which the entries are visited is selected so as to
+     * order. The order in which the entries are visited is selected to
      * lead to the most efficient implementation; it might depend on the
      * concrete implementation of this abstract class.
      *
@@ -719,7 +719,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
 
     /**
      * Visits (and possibly change) some entries of this vector in optimized
-     * order. The order in which the entries are visited is selected so as to
+     * order. The order in which the entries are visited is selected to
      * lead to the most efficient implementation; it might depend on the
      * concrete implementation of this abstract class.
      *

@@ -108,7 +108,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     }
 
     /**
-     * Construct a vector from part of a array.
+     * Construct a vector from part of an array.
      *
      * @param d Array.
      * @param pos Position of first entry.

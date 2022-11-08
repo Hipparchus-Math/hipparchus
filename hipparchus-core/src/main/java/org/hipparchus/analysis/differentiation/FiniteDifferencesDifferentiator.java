@@ -105,7 +105,7 @@ public class FiniteDifferencesDifferentiator
      * @param stepSize step size (gap between each point)
      * @exception MathIllegalArgumentException if {@code stepsize <= 0} (note that
      * {@link MathIllegalArgumentException} extends {@link MathIllegalArgumentException})
-     * @exception MathIllegalArgumentException {@code nbPoint <= 1}
+     * @exception MathIllegalArgumentException if {@code nbPoint <= 1}
      */
     public FiniteDifferencesDifferentiator(final int nbPoints, final double stepSize)
         throws MathIllegalArgumentException {
@@ -138,8 +138,8 @@ public class FiniteDifferencesDifferentiator
      * if there are no upper bounds)
      * @exception MathIllegalArgumentException if {@code stepsize <= 0} (note that
      * {@link MathIllegalArgumentException} extends {@link MathIllegalArgumentException})
-     * @exception MathIllegalArgumentException {@code nbPoint <= 1}
-     * @exception MathIllegalArgumentException {@code stepSize * (nbPoints - 1) >= tUpper - tLower}
+     * @exception MathIllegalArgumentException if {@code nbPoint <= 1}
+     * @exception MathIllegalArgumentException if {@code stepSize * (nbPoints - 1) >= tUpper - tLower}
      */
     public FiniteDifferencesDifferentiator(final int nbPoints, final double stepSize,
                                            final double tLower, final double tUpper)

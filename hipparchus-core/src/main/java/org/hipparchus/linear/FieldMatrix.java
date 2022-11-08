@@ -47,7 +47,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     Field<T> getField();
 
     /**
-     * Create a new FieldMatrix<T> of the same type as the instance with
+     * Create a new {@literal FieldMatrix<T>} of the same type as the instance with
      * the supplied row and column dimensions.
      *
      * @param rowDimension  the number of rows in the new matrix
@@ -270,7 +270,6 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * 9  5  6  2
      * </pre>
      *
-     * </p>
      *
      * @param subMatrix Array containing the submatrix replacement data.
      * @param row Row coordinate of the top-left element to be replaced.

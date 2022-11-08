@@ -36,7 +36,7 @@ import org.hipparchus.util.MathArrays;
  * <p>The LUP-decomposition of a matrix A consists of three matrices
  * L, U and P that satisfy: PA = LU, L is lower triangular, and U is
  * upper triangular and P is a permutation matrix. All matrices are
- * m&times;m.</p>
+ * m &times; m.</p>
  * <p>This class is based on the class with similar name from the
  * <a href="http://math.nist.gov/javanumerics/jama/">JAMA</a> library.</p>
  * <ul>
@@ -364,7 +364,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
                     }
                 }
 
-                return new ArrayFieldVector<T>(field, bp, false);
+                return new ArrayFieldVector<>(field, bp, false);
 
             }
         }
@@ -410,7 +410,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
                 }
             }
 
-            return new ArrayFieldVector<T>(bp, false);
+            return new ArrayFieldVector<>(bp, false);
         }
 
         /** {@inheritDoc} */
@@ -465,7 +465,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
                 }
             }
 
-            return new Array2DRowFieldMatrix<T>(field, bp, false);
+            return new Array2DRowFieldMatrix<>(field, bp, false);
 
         }
 

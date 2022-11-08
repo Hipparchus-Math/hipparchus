@@ -131,7 +131,7 @@ public class MatrixUtils {
     /**
      * Returns a {@link RealMatrix} with specified dimensions.
      * <p>The type of matrix returned depends on the dimension. Below
-     * 2<sup>12</sup> elements (i.e. 4096 elements or 64&times;64 for a
+     * 2<sup>12</sup> elements (i.e. 4096 elements or 64 &times; 64 for a
      * square matrix) which can be stored in a 32kB array, a {@link
      * Array2DRowRealMatrix} instance is built. Above this threshold a {@link
      * BlockRealMatrix} instance is built.</p>
@@ -149,7 +149,7 @@ public class MatrixUtils {
     /**
      * Returns a {@link FieldMatrix} with specified dimensions.
      * <p>The type of matrix returned depends on the dimension. Below
-     * 2<sup>12</sup> elements (i.e. 4096 elements or 64&times;64 for a
+     * 2<sup>12</sup> elements (i.e. 4096 elements or 64 &times; 64 for a
      * square matrix), a {@link FieldMatrix} instance is built. Above
      * this threshold a {@link BlockFieldMatrix} instance is built.</p>
      * <p>The matrix elements are all set to field.getZero().</p>
@@ -164,14 +164,14 @@ public class MatrixUtils {
                                                                                final int rows,
                                                                                final int columns) {
         return (rows * columns <= 4096) ?
-                new Array2DRowFieldMatrix<T>(field, rows, columns) : new BlockFieldMatrix<T>(field, rows, columns);
+                new Array2DRowFieldMatrix<>(field, rows, columns) : new BlockFieldMatrix<>(field, rows, columns);
     }
 
     /**
      * Returns a {@link RealMatrix} whose entries are the the values in the
      * the input array.
      * <p>The type of matrix returned depends on the dimension. Below
-     * 2<sup>12</sup> elements (i.e. 4096 elements or 64&times;64 for a
+     * 2<sup>12</sup> elements (i.e. 4096 elements or 64 &times; 64 for a
      * square matrix) which can be stored in a 32kB array, a {@link
      * Array2DRowRealMatrix} instance is built. Above this threshold a {@link
      * BlockRealMatrix} instance is built.</p>
@@ -201,7 +201,7 @@ public class MatrixUtils {
      * Returns a {@link FieldMatrix} whose entries are the the values in the
      * the input array.
      * <p>The type of matrix returned depends on the dimension. Below
-     * 2<sup>12</sup> elements (i.e. 4096 elements or 64&times;64 for a
+     * 2<sup>12</sup> elements (i.e. 4096 elements or 64 &times; 64 for a
      * square matrix), a {@link FieldMatrix} instance is built. Above
      * this threshold a {@link BlockFieldMatrix} instance is built.</p>
      * <p>The input array is copied, not referenced.</p>
@@ -222,7 +222,7 @@ public class MatrixUtils {
             throw new NullArgumentException();
         }
         return (data.length * data[0].length <= 4096) ?
-                new Array2DRowFieldMatrix<T>(data) : new BlockFieldMatrix<T>(data);
+                new Array2DRowFieldMatrix<>(data) : new BlockFieldMatrix<>(data);
     }
 
     /**
@@ -259,7 +259,7 @@ public class MatrixUtils {
             Arrays.fill(dRow, zero);
             dRow[row] = one;
         }
-        return new Array2DRowFieldMatrix<T>(field, d, false);
+        return new Array2DRowFieldMatrix<>(field, d, false);
     }
 
     /**
@@ -340,7 +340,7 @@ public class MatrixUtils {
         if (data.length == 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
         }
-        return new ArrayFieldVector<T>(data[0].getField(), data, true);
+        return new ArrayFieldVector<>(data[0].getField(), data, true);
     }
 
     /**
@@ -844,7 +844,6 @@ public class MatrixUtils {
      *
      * }
      * </code></pre>
-     * </p>
      *
      * @param vector real vector to serialize
      * @param oos stream where the real vector should be written
@@ -941,7 +940,6 @@ public class MatrixUtils {
      *
      * }
      * </code></pre>
-     * </p>
      *
      * @param matrix real matrix to serialize
      * @param oos stream where the real matrix should be written
@@ -1222,7 +1220,7 @@ public class MatrixUtils {
     /**
      * Computes the <a href="https://mathworld.wolfram.com/MatrixExponential.html">
      * matrix exponential</a> of the given matrix.
-     *
+     * <p>
      * The algorithm implementation follows the Pade approximant method of
      * <p>Higham, Nicholas J. “The Scaling and Squaring Method for the Matrix Exponential
      * Revisited.” SIAM Journal on Matrix Analysis and Applications 26, no. 4 (January 2005): 1179–93.</p>

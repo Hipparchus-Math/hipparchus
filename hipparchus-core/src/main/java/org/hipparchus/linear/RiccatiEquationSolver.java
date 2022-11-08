@@ -21,17 +21,17 @@ package org.hipparchus.linear;
  * An algebraic Riccati equation is a type of nonlinear equation that arises in
  * the context of infinite-horizon optimal control problems in continuous time
  * or discrete time.
- *
+ * <p>
  * The continuous time algebraic Riccati equation (CARE):
  * \[
  * A^{T}X+XA-XBR^{-1}B^{T}X+Q=0
  * \}
- *
+ * <p>
  * And the respective linear controller is:
  * \[
  * K = R^{-1}B^{T}P
  * \]
- *
+ * <p>
  * A solver receives A, B, Q and R and computes P and K.
  *
  */

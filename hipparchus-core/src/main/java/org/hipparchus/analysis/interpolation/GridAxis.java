@@ -32,7 +32,6 @@ import org.hipparchus.util.MathArrays;
  * {@code n} where {@code n} is the number of points required for
  * interpolation (i.e. 2 for linear interpolation, 3 for quadratic...)
  * <p>
- * </p>
  * The method uses linear interpolation to select the nodes indices.
  * It should be O(1) for sufficiently regular data, therefore much faster
  * than bisection. It also features caching, which improves speed when
@@ -41,10 +40,9 @@ import org.hipparchus.util.MathArrays;
  * nodes. This occurs for example when scanning with small steps a loose
  * grid. The method also works on non-regular grids, but may be slower in
  * this case.
- * </p>
  * <p>
  * This class is thread-safe.
- * </p>
+ *
  * @since 1.4
  */
 public class GridAxis implements Serializable {

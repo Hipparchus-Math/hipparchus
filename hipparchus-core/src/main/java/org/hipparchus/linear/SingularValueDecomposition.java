@@ -695,7 +695,7 @@ public class SingularValueDecomposition {
         /**
          * Solve the linear equation A &times; X = B in least square sense.
          * <p>
-         * The m&times;n matrix A may not be square, the solution X is such that
+         * The m &times; n matrix A may not be square, the solution X is such that
          * ||A &times; X - B|| is minimal.
          * </p>
          * @param b Right-hand side of the equation A &times; X = B
@@ -711,7 +711,7 @@ public class SingularValueDecomposition {
         /**
          * Solve the linear equation A &times; X = B in least square sense.
          * <p>
-         * The m&times;n matrix A may not be square, the solution X is such that
+         * The m &times; n matrix A may not be square, the solution X is such that
          * ||A &times; X - B|| is minimal.
          * </p>
          *

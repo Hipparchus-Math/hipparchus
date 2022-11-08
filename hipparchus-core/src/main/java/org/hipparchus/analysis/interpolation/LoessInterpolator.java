@@ -39,7 +39,7 @@ import org.hipparchus.util.MathUtils;
  * For reference, see
  * <a href="http://amstat.tandfonline.com/doi/abs/10.1080/01621459.1979.10481038">
  * William S. Cleveland - Robust Locally Weighted Regression and Smoothing
- * Scatterplots</a></p>
+ * Scatterplots</a>
  * <p>
  * This class implements both the loess method and serves as an interpolation
  * adapter to it, allowing one to build a spline on the obtained loess fit.</p>

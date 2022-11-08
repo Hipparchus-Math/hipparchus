@@ -35,16 +35,16 @@ public class BilinearInterpolatingFunction implements BivariateFunction, FieldBi
     /** Serializable UID. */
     private static final long serialVersionUID = 20180926L;
 
-    /** Grid along the x axis. */
+    /** Grid along the x-axis. */
     private final GridAxis xGrid;
 
-    /** Grid along the y axis. */
+    /** Grid along the y-axis. */
     private final GridAxis yGrid;
 
-    /** Grid size along the y axis. */
+    /** Grid size along the y-axis. */
     private final int ySize;
 
-    /** Values of the interpolation points on all the grid knots (in a flatten array). */
+    /** Values of the interpolation points on all the grid knots (in a flattened array). */
     private final double[] fVal;
 
     /** Simple constructor.

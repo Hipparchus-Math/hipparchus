@@ -246,7 +246,7 @@ public class ResizableDoubleArray implements Serializable {
 
     /**
      * Creates an instance with the specified properties.
-     * <br/>
+     * <br>
      * Throws MathIllegalArgumentException if the following conditions
      * are not met:
      * <ul>

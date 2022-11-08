@@ -122,7 +122,7 @@ public class BigFraction
 
     /**
      * Create a {@link BigFraction} given the numerator and denominator as
-     * {@code BigInteger}. The {@link BigFraction} is reduced to lowest terms.
+     * {@code BigInteger}. The {@link BigFraction} is reduced to the lowest terms.
      *
      * @param num the numerator, must not be {@code null}.
      * @param den the denominator, must not be {@code null}.
@@ -225,7 +225,6 @@ public class BigFraction
      * <li><a href="http://mathworld.wolfram.com/ContinuedFraction.html">
      * Continued Fraction</a> equations (11) and (22)-(26)</li>
      * </ul>
-     * </p>
      *
      * @param value
      *            the double value to convert to a fraction.
@@ -262,7 +261,6 @@ public class BigFraction
      * <li><a href="http://mathworld.wolfram.com/ContinuedFraction.html">
      * Continued Fraction</a> equations (11) and (22)-(26)</li>
      * </ul>
-     * </p>
      *
      * @param value
      *            the double value to convert to a fraction.
@@ -470,7 +468,7 @@ public class BigFraction
      * </p>
      *
      * @param bg
-     *            the {@link BigInteger} to add, must'nt be <code>null</code>.
+     *            the {@link BigInteger} to add, mustn't be <code>null</code>.
      * @return a <code>BigFraction</code> instance with the resulting values.
      * @throws NullArgumentException
      *             if the {@link BigInteger} is <code>null</code>.

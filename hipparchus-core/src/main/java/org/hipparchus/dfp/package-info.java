@@ -36,7 +36,7 @@
  *       algebraic operation</li>
  *  <li>Comply with IEEE 854-1987 as much as possible.
  *       (See IEEE 854-1987 notes below)</li>
- * </ol></p>
+ * </ol>
  *
  * <p>Trade offs:
  * <ol>
@@ -45,15 +45,15 @@
  *  <li>Digits are bigger, so rounding is a greater loss.  So, if you
  *       really need 12 decimal digits, better use 4 base 10000 digits
  *       there can be one partially filled.</li>
- * </ol></p>
+ * </ol>
  *
  * <p>Numbers are represented  in the following form:
  * <pre>
- * n  =  sign &times; mant &times; (radix)<sup>exp</sup>;</p>
+ * <var>n</var>  =  <var>sign</var> &times; <var>mant</var> &times; <var>(radix)<sup>exp</sup></var>;
  * </pre>
  * where sign is &plusmn;1, mantissa represents a fractional number between
  * zero and one.  mant[0] is the least significant digit.
- * exp is in the range of -32767 to 32768</p>
+ * exp is in the range of -32767 to 32768
  *
  * <p>IEEE 854-1987  Notes and differences</p>
  *

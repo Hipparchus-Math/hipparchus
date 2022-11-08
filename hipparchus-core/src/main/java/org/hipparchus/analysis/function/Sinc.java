@@ -46,14 +46,12 @@ public class Sinc implements UnivariateDifferentiableFunction {
      * d^(2n)sinc/dx^(2n)     = Sum_(k>=0) (-1)^(n+k) / ((2k)!(2n+2k+1)) x^(2k)
      *                        = (-1)^n     [ 1/(2n+1) - x^2/(4n+6) + x^4/(48n+120) - x^6/(1440n+5040) + O(x^8) ]
      * </pre>
-     * </p>
      * <p>
      * The Taylor series for sinc odd order derivatives are:
      * <pre>
      * d^(2n+1)sinc/dx^(2n+1) = Sum_(k>=0) (-1)^(n+k+1) / ((2k+1)!(2n+2k+3)) x^(2k+1)
      *                        = (-1)^(n+1) [ x/(2n+3) - x^3/(12n+30) + x^5/(240n+840) - x^7/(10080n+45360) + O(x^9) ]
      * </pre>
-     * </p>
      * <p>
      * So the ratio of the fourth term with respect to the first term
      * is always smaller than x^6/720, for all derivative orders.

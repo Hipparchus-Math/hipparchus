@@ -115,9 +115,9 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
      * Create a new dense matrix copying entries from raw layout data.
      * <p>The input array <em>must</em> already be in raw layout.</p>
      * <p>Calling this constructor is equivalent to call:
-     * <pre>matrix = new BlockFieldMatrix<T>(getField(), rawData.length, rawData[0].length,
-     *                                   toBlocksLayout(rawData), false);</pre>
-     * </p>
+     * <pre>matrix = new{@literal BlockFieldMatrix<T>}(getField(), rawData.length, rawData[0].length,
+     *                                   toBlocksLayout(rawData), false);
+     * </pre>
      *
      * @param rawData Data for the new matrix, in raw layout.
      * @throws MathIllegalArgumentException if the {@code blockData} shape is
@@ -296,8 +296,8 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     public FieldMatrix<T> createMatrix(final int rowDimension,
                                        final int columnDimension)
         throws MathIllegalArgumentException {
-        return new BlockFieldMatrix<T>(getField(), rowDimension,
-                                       columnDimension);
+        return new BlockFieldMatrix<>(getField(), rowDimension,
+                                      columnDimension);
     }
 
     /** {@inheritDoc} */
@@ -1271,7 +1271,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
             outIndex += jWidth;
         }
 
-        return new ArrayFieldVector<T>(getField(), outData, false);
+        return new ArrayFieldVector<>(getField(), outData, false);
     }
 
     /** {@inheritDoc} */
@@ -1305,7 +1305,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
             }
         }
 
-        return new ArrayFieldVector<T>(getField(), outData, false);
+        return new ArrayFieldVector<>(getField(), outData, false);
     }
 
     /** {@inheritDoc} */

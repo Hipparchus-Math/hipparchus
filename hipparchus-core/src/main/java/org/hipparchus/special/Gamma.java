@@ -52,7 +52,6 @@ import org.hipparchus.util.FastMath;
  * indicates that unless otherwise stated in the code, all FORTRAN functions in
  * this library are license free. Since no such notice appears in the code these
  * functions can safely be ported to Hipparchus.
- * </p>
  *
  */
 public class Gamma {
@@ -283,7 +282,7 @@ public class Gamma {
 
     /**
      * Returns the regularized gamma function P(a, x).
-     *
+     * <p>
      * The implementation of this method is based on:
      * <ul>
      *  <li>
@@ -364,7 +363,7 @@ public class Gamma {
 
     /**
      * Returns the regularized gamma function Q(a, x) = 1 - P(a, x).
-     *
+     * <p>
      * The implementation of this method is based on:
      * <ul>
      *  <li>
@@ -443,7 +442,7 @@ public class Gamma {
      * @param x Argument.
      * @return digamma(x) to within 10-8 relative or absolute error whichever is smaller.
      * @see <a href="http://en.wikipedia.org/wiki/Digamma_function">Digamma</a>
-     * @see <a href="http://www.uv.es/~bernardo/1976AppStatist.pdf">Bernardo&apos;s original article </a>
+     * @see <a href="http://www.uv.es/~bernardo/1976AppStatist.pdf">Bernardo&quot;s original article </a>
      */
     public static double digamma(double x) {
         if (Double.isNaN(x) || Double.isInfinite(x)) {
@@ -509,7 +508,6 @@ public class Gamma {
      *                   * exp(-x - g - 0.5) * lanczos(x)},
      * </center>
      * where {@code g} is the Lanczos constant.
-     * </p>
      *
      * @param x Argument.
      * @return The Lanczos approximation.

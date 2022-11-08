@@ -218,7 +218,7 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
 
     /** '&times;' operator.
      * @param a right hand side parameter of the operator
-     * @return this&times;a
+     * @return this &times; a
      */
     public FieldDerivativeStructure<T> multiply(final T a) {
         final FieldDerivativeStructure<T> ds = factory.build();
@@ -1150,8 +1150,8 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
      * @param b1 second factor of the first term
      * @param a2 first factor of the second term
      * @param b2 second factor of the second term
-     * @return a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub>
+     * @return a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub>
      * @see #linearCombination(double, FieldDerivativeStructure, double, FieldDerivativeStructure)
      * @see #linearCombination(double, FieldDerivativeStructure, double, FieldDerivativeStructure, double, FieldDerivativeStructure, double, FieldDerivativeStructure)
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
@@ -1226,8 +1226,8 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
      * @param b2 second factor of the second term
      * @param a3 first factor of the third term
      * @param b3 second factor of the third term
-     * @return a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
+     * @return a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub> + a<sub>3</sub> &times; b<sub>3</sub>
      * @see #linearCombination(double, FieldDerivativeStructure, double, FieldDerivativeStructure)
      * @see #linearCombination(double, FieldDerivativeStructure, double, FieldDerivativeStructure, double, FieldDerivativeStructure, double, FieldDerivativeStructure)
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
@@ -1312,9 +1312,9 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
      * @param b3 second factor of the third term
      * @param a4 first factor of the third term
      * @param b4 second factor of the third term
-     * @return a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub> +
-     * a<sub>4</sub>&times;b<sub>4</sub>
+     * @return a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub> + a<sub>3</sub> &times; b<sub>3</sub> +
+     * a<sub>4</sub> &times; b<sub>4</sub>
      * @see #linearCombination(double, FieldDerivativeStructure, double, FieldDerivativeStructure)
      * @see #linearCombination(double, FieldDerivativeStructure, double, FieldDerivativeStructure, double, FieldDerivativeStructure)
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent

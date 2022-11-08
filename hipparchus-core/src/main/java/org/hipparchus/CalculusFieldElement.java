@@ -64,7 +64,7 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
 
     /** '&times;' operator.
      * @param a right hand side parameter of the operator
-     * @return this&times;a
+     * @return this &times; a
      */
     T multiply(double a);
 
@@ -311,8 +311,8 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @param b1 second factor of the first term
      * @param a2 first factor of the second term
      * @param b2 second factor of the second term
-     * @return a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub>
+     * @return a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub>
      * @see #linearCombination(FieldElement, FieldElement, FieldElement, FieldElement, FieldElement, FieldElement)
      * @see #linearCombination(FieldElement, FieldElement, FieldElement, FieldElement, FieldElement, FieldElement, FieldElement, FieldElement)
      */
@@ -324,8 +324,8 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @param b1 second factor of the first term
      * @param a2 first factor of the second term
      * @param b2 second factor of the second term
-     * @return a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub>
+     * @return a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub>
      * @see #linearCombination(double, FieldElement, double, FieldElement, double, FieldElement)
      * @see #linearCombination(double, FieldElement, double, FieldElement, double, FieldElement, double, FieldElement)
      */
@@ -339,8 +339,8 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @param b2 second factor of the second term
      * @param a3 first factor of the third term
      * @param b3 second factor of the third term
-     * @return a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
+     * @return a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub> + a<sub>3</sub> &times; b<sub>3</sub>
      * @see #linearCombination(FieldElement, FieldElement, FieldElement, FieldElement)
      * @see #linearCombination(FieldElement, FieldElement, FieldElement, FieldElement, FieldElement, FieldElement, FieldElement, FieldElement)
      */
@@ -354,8 +354,8 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @param b2 second factor of the second term
      * @param a3 first factor of the third term
      * @param b3 second factor of the third term
-     * @return a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
+     * @return a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub> + a<sub>3</sub> &times; b<sub>3</sub>
      * @see #linearCombination(double, FieldElement, double, FieldElement)
      * @see #linearCombination(double, FieldElement, double, FieldElement, double, FieldElement, double, FieldElement)
      */
@@ -371,9 +371,9 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @param b3 second factor of the third term
      * @param a4 first factor of the fourth term
      * @param b4 second factor of the fourth term
-     * @return a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub> +
-     * a<sub>4</sub>&times;b<sub>4</sub>
+     * @return a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub> + a<sub>3</sub> &times; b<sub>3</sub> +
+     * a<sub>4</sub> &times; b<sub>4</sub>
      * @see #linearCombination(FieldElement, FieldElement, FieldElement, FieldElement)
      * @see #linearCombination(FieldElement, FieldElement, FieldElement, FieldElement, FieldElement, FieldElement)
      */
@@ -389,9 +389,9 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @param b3 second factor of the third term
      * @param a4 first factor of the fourth term
      * @param b4 second factor of the fourth term
-     * @return a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub> +
-     * a<sub>4</sub>&times;b<sub>4</sub>
+     * @return a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub> + a<sub>3</sub> &times; b<sub>3</sub> +
+     * a<sub>4</sub> &times; b<sub>4</sub>
      * @see #linearCombination(double, FieldElement, double, FieldElement)
      * @see #linearCombination(double, FieldElement, double, FieldElement, double, FieldElement)
      */

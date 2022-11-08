@@ -67,12 +67,12 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
      * Table containing the constants
      * q_i = sum_{j=1}^i (ln 2)^j/j! = ln 2 + (ln 2)^2/2 + ... + (ln 2)^i/i!
      * until the largest representable fraction below 1 is exceeded.
-     *
+     * <p>
      * Note that
      * 1 = 2 - 1 = exp(ln 2) - 1 = sum_{n=1}^infty (ln 2)^n / n!
      * thus q_i -> 1 as i -> +inf,
      * so the higher i, the closer to one we get (the series is not alternating).
-     *
+     * <p>
      * By trying, n = 16 in Java is enough to reach 1.0.
      */
     private static final double[] EXPONENTIAL_SA_QI;
@@ -194,7 +194,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
                     final EnumeratedRealDistribution edist =
                             (EnumeratedRealDistribution) dist;
                     EnumeratedDistributionSampler<Double> sampler =
-                            generator.new EnumeratedDistributionSampler<Double>(edist.getPmf());
+                            generator.new EnumeratedDistributionSampler<>(edist.getPmf());
                     return sampler.sample();
                 });
 
@@ -218,7 +218,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
                                     final EnumeratedIntegerDistribution edist =
                                             (EnumeratedIntegerDistribution) dist;
                                     EnumeratedDistributionSampler<Integer> sampler =
-                                            generator.new EnumeratedDistributionSampler<Integer>(edist.getPmf());
+                                            generator.new EnumeratedDistributionSampler<>(edist.getPmf());
                                     return sampler.sample();
                                 });
     }
@@ -719,7 +719,6 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
      * Random</li>
      * <li>Each binary byte is translated into 2 hex digits</li>
      * </ol>
-     * </p>
      *
      * @param len the desired string length.
      * @return the random string.
@@ -767,7 +766,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
      * This method calls {@link MathArrays#shuffle(int[],RandomGenerator)
      * MathArrays.shuffle} in order to create a random shuffle of the set
      * of natural numbers {@code { 0, 1, ..., n - 1 }}.
-     *
+     * <p>
      *
      * @param n the domain of the permutation
      * @param k the size of the permutation

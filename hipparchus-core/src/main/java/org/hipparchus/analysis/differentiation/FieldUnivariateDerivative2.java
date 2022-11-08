@@ -210,7 +210,7 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
 
     /** '&times;' operator.
      * @param a right hand side parameter of the operator
-     * @return this&times;a
+     * @return this &times; a
      */
     public FieldUnivariateDerivative2<T> multiply(final T a) {
         return new FieldUnivariateDerivative2<>(f0.multiply(a), f1.multiply(a), f2.multiply(a));
@@ -929,8 +929,8 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
      * @param b2 second factor of the second term
      * @param a3 first factor of the third term
      * @param b3 second factor of the third term
-     * @return a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
+     * @return a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub> + a<sub>3</sub> &times; b<sub>3</sub>
      * @see #linearCombination(double, FieldUnivariateDerivative2, double, FieldUnivariateDerivative2)
      * @see #linearCombination(double, FieldUnivariateDerivative2, double, FieldUnivariateDerivative2, double, FieldUnivariateDerivative2, double, FieldUnivariateDerivative2)
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent

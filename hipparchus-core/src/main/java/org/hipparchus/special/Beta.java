@@ -52,7 +52,6 @@ import org.hipparchus.util.MathUtils;
  * indicates that unless otherwise stated in the code, all FORTRAN functions in
  * this library are license free. Since no such notice appears in the code these
  * functions can safely be ported to Hipparchus.
- * </p>
  */
 public class Beta {
     /** Maximum allowed numerical error. */
@@ -160,7 +159,7 @@ public class Beta {
 
     /**
      * Returns the regularized beta function I(x, a, b).
-     *
+     * <p>
      * The implementation of this method is based on:
      * <ul>
      * <li>

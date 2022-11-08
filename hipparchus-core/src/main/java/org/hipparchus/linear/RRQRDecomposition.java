@@ -29,7 +29,7 @@ import org.hipparchus.util.FastMath;
  * Calculates the rank-revealing QR-decomposition of a matrix, with column pivoting.
  * <p>The rank-revealing QR-decomposition of a matrix A consists of three matrices Q,
  * R and P such that AP=QR.  Q is orthogonal (Q<sup>T</sup>Q = I), and R is upper triangular.
- * If A is m&times;n, Q is m&times;m and R is m&times;n and P is n&times;n.</p>
+ * If A is m &times; n, Q is m &times; m and R is m &times; n and P is n &times; n.</p>
  * <p>QR decomposition with column pivoting produces a rank-revealing QR
  * decomposition and the {@link #getRank(double)} method may be used to return the rank of the
  * input matrix A.</p>
@@ -132,7 +132,7 @@ public class RRQRDecomposition extends QRDecomposition {
 
     /**
      * Returns the pivot matrix, P, used in the QR Decomposition of matrix A such that AP = QR.
-     *
+     * <p>
      * If no pivoting is used in this decomposition then P is equal to the identity matrix.
      *
      * @return a permutation matrix.

@@ -34,11 +34,11 @@ import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
 /**
- * Implementation of FieldMatrix<T> using a {@link FieldElement}[][] array to store entries.
+ * Implementation of {@literal FieldMatrix<T>} using a {@link FieldElement}[][] array to store entries.
  * <p>
  * As specified in the {@link FieldMatrix} interface, matrix element indexing
  * is 0-based -- e.g., <code>getEntry(0, 0)</code>
- * returns the element in the first row, first column of the matrix.</li></ul>
+ * returns the element in the first row, first column of the matrix.
  * </p>
  *
  * @param <T> the type of the field elements
@@ -208,13 +208,13 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     public FieldMatrix<T> createMatrix(final int rowDimension,
                                        final int columnDimension)
         throws MathIllegalArgumentException {
-        return new Array2DRowFieldMatrix<T>(getField(), rowDimension, columnDimension);
+        return new Array2DRowFieldMatrix<>(getField(), rowDimension, columnDimension);
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldMatrix<T> copy() {
-        return new Array2DRowFieldMatrix<T>(getField(), copyOut(), false);
+        return new Array2DRowFieldMatrix<>(getField(), copyOut(), false);
     }
 
     /**
@@ -242,7 +242,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
             }
         }
 
-        return new Array2DRowFieldMatrix<T>(getField(), outData, false);
+        return new Array2DRowFieldMatrix<>(getField(), outData, false);
     }
 
     /**
@@ -270,7 +270,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
             }
         }
 
-        return new Array2DRowFieldMatrix<T>(getField(), outData, false);
+        return new Array2DRowFieldMatrix<>(getField(), outData, false);
 
     }
 
@@ -303,7 +303,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
             }
         }
 
-        return new Array2DRowFieldMatrix<T>(getField(), outData, false);
+        return new Array2DRowFieldMatrix<>(getField(), outData, false);
 
     }
 

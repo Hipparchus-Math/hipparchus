@@ -175,7 +175,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     }
 
     /**
-     * Construct a vector from part of a array.
+     * Construct a vector from part of an array.
      *
      * @param d Array.
      * @param pos Position of the first entry.
@@ -197,7 +197,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     }
 
     /**
-     * Construct a vector from part of a array.
+     * Construct a vector from part of an array.
      *
      * @param field Field to which the elements belong.
      * @param d Array.
@@ -386,7 +386,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> copy() {
-        return new ArrayFieldVector<T>(this, true);
+        return new ArrayFieldVector<>(this, true);
     }
 
     /** {@inheritDoc} */
@@ -401,7 +401,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
             for (int i = 0; i < data.length; i++) {
                 out[i] = data[i].add(v.getEntry(i));
             }
-            return new ArrayFieldVector<T>(field, out, false);
+            return new ArrayFieldVector<>(field, out, false);
         }
     }
 
@@ -419,7 +419,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         for (int i = 0; i < data.length; i++) {
             out[i] = data[i].add(v.data[i]);
         }
-        return new ArrayFieldVector<T>(field, out, false);
+        return new ArrayFieldVector<>(field, out, false);
     }
 
     /** {@inheritDoc} */
@@ -434,7 +434,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
             for (int i = 0; i < data.length; i++) {
                 out[i] = data[i].subtract(v.getEntry(i));
             }
-            return new ArrayFieldVector<T>(field, out, false);
+            return new ArrayFieldVector<>(field, out, false);
         }
     }
 
@@ -452,7 +452,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         for (int i = 0; i < data.length; i++) {
             out[i] = data[i].subtract(v.data[i]);
         }
-        return new ArrayFieldVector<T>(field, out, false);
+        return new ArrayFieldVector<>(field, out, false);
     }
 
     /** {@inheritDoc} */
@@ -462,7 +462,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         for (int i = 0; i < data.length; i++) {
             out[i] = data[i].add(d);
         }
-        return new ArrayFieldVector<T>(field, out, false);
+        return new ArrayFieldVector<>(field, out, false);
     }
 
     /** {@inheritDoc} */
@@ -481,7 +481,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         for (int i = 0; i < data.length; i++) {
             out[i] = data[i].subtract(d);
         }
-        return new ArrayFieldVector<T>(field, out, false);
+        return new ArrayFieldVector<>(field, out, false);
     }
 
     /** {@inheritDoc} */
@@ -500,7 +500,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         for (int i = 0; i < data.length; i++) {
             out[i] = data[i].multiply(d);
         }
-        return new ArrayFieldVector<T>(field, out, false);
+        return new ArrayFieldVector<>(field, out, false);
     }
 
     /** {@inheritDoc} */
@@ -521,7 +521,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         for (int i = 0; i < data.length; i++) {
             out[i] = data[i].divide(d);
         }
-        return new ArrayFieldVector<T>(field, out, false);
+        return new ArrayFieldVector<>(field, out, false);
     }
 
     /** {@inheritDoc} */
@@ -547,7 +547,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
                 throw new MathRuntimeException(e, LocalizedCoreFormats.INDEX, i);
             }
         }
-        return new ArrayFieldVector<T>(field, out, false);
+        return new ArrayFieldVector<>(field, out, false);
     }
 
     /** {@inheritDoc} */
@@ -576,7 +576,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
             for (int i = 0; i < data.length; i++) {
                 out[i] = data[i].multiply(v.getEntry(i));
             }
-            return new ArrayFieldVector<T>(field, out, false);
+            return new ArrayFieldVector<>(field, out, false);
         }
     }
 
@@ -594,7 +594,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         for (int i = 0; i < data.length; i++) {
             out[i] = data[i].multiply(v.data[i]);
         }
-        return new ArrayFieldVector<T>(field, out, false);
+        return new ArrayFieldVector<>(field, out, false);
     }
 
     /** {@inheritDoc} */
@@ -613,7 +613,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
                     throw new MathRuntimeException(e, LocalizedCoreFormats.INDEX, i);
                 }
             }
-            return new ArrayFieldVector<T>(field, out, false);
+            return new ArrayFieldVector<>(field, out, false);
         }
     }
 
@@ -636,7 +636,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
                 throw new MathRuntimeException(e, LocalizedCoreFormats.INDEX, i);
             }
         }
-        return new ArrayFieldVector<T>(field, out, false);
+        return new ArrayFieldVector<>(field, out, false);
     }
 
     /**
@@ -753,7 +753,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         if (v instanceof ArrayFieldVector) {
             return append((ArrayFieldVector<T>) v);
         } else {
-            return new ArrayFieldVector<T>(this,new ArrayFieldVector<T>(v));
+            return new ArrayFieldVector<>(this, new ArrayFieldVector<>(v));
         }
     }
 
@@ -763,7 +763,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @return a new vector
      */
     public ArrayFieldVector<T> append(ArrayFieldVector<T> v) {
-        return new ArrayFieldVector<T>(this, v);
+        return new ArrayFieldVector<>(this, v);
     }
 
     /** {@inheritDoc} */
@@ -772,7 +772,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         final T[] out = MathArrays.buildArray(field, data.length + 1);
         System.arraycopy(data, 0, out, 0, data.length);
         out[data.length] = in;
-        return new ArrayFieldVector<T>(field, out, false);
+        return new ArrayFieldVector<>(field, out, false);
     }
 
     /** {@inheritDoc} */
@@ -916,7 +916,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
 
     /**
      * Visits (but does not alter) all entries of this vector in optimized
-     * order. The order in which the entries are visited is selected so as to
+     * order. The order in which the entries are visited is selected to
      * lead to the most efficient implementation; it might depend on the
      * concrete implementation of this abstract class.
      *
@@ -931,7 +931,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
 
     /**
      * Visits (but does not alter) some entries of this vector in optimized
-     * order. The order in which the entries are visited is selected so as to
+     * order. The order in which the entries are visited is selected to
      * lead to the most efficient implementation; it might depend on the
      * concrete implementation of this abstract class.
      *
@@ -992,7 +992,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
 
     /**
      * Visits (and possibly alters) all entries of this vector in optimized
-     * order. The order in which the entries are visited is selected so as to
+     * order. The order in which the entries are visited is selected to
      * lead to the most efficient implementation; it might depend on the
      * concrete implementation of this abstract class.
      *
@@ -1007,7 +1007,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
 
     /**
      * Visits (and possibly change) some entries of this vector in optimized
-     * order. The order in which the entries are visited is selected so as to
+     * order. The order in which the entries are visited is selected to
      * lead to the most efficient implementation; it might depend on the
      * concrete implementation of this abstract class.
      *

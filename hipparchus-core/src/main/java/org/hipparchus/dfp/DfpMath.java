@@ -385,53 +385,53 @@ public class DfpMath {
 
     /** Computes the natural log of a number between 0 and 2.
      *  Let f(x) = ln(x),
-     *
+     * <p>
      *  We know that f'(x) = 1/x, thus from Taylor's theorum we have:
-     *
+     * <p>
      *           -----          n+1         n
      *  f(x) =   \           (-1)    (x - 1)
      *           /          ----------------    for 1 &lt;= n &lt;= infinity
      *           -----             n
-     *
+     * <p>
      *  or
      *                       2        3       4
      *                   (x-1)   (x-1)    (x-1)
      *  ln(x) =  (x-1) - ----- + ------ - ------ + ...
      *                     2       3        4
-     *
+     * <p>
      *  alternatively,
-     *
+     * <p>
      *                  2    3   4
      *                 x    x   x
      *  ln(x+1) =  x - -  + - - - + ...
      *                 2    3   4
-     *
+     * <p>
      *  This series can be used to compute ln(x), but it converges too slowly.
-     *
+     * <p>
      *  If we substitute -x for x above, we get
-     *
+     * <p>
      *                   2    3    4
      *                  x    x    x
      *  ln(1-x) =  -x - -  - -  - - + ...
      *                  2    3    4
-     *
+     * <p>
      *  Note that all terms are now negative.  Because the even powered ones
      *  absorbed the sign.  Now, subtract the series above from the previous
      *  one to get ln(x+1) - ln(1-x).  Note the even terms cancel out leaving
      *  only the odd ones
-     *
+     * <p>
      *                             3     5      7
      *                           2x    2x     2x
      *  ln(x+1) - ln(x-1) = 2x + --- + --- + ---- + ...
      *                            3     5      7
-     *
+     * <p>
      *  By the property of logarithms that ln(a) - ln(b) = ln (a/b) we have:
-     *
+     * <p>
      *                                3        5        7
      *      x+1           /          x        x        x          \
      *  ln ----- =   2 *  |  x  +   ----  +  ----  +  ---- + ...  |
      *      x-1           \          3        5        7          /
-     *
+     * <p>
      *  But now we want to find ln(a), so we need to find the value of x
      *  such that a = (x+1)/(x-1).   This is easily solved to find that
      *  x = (a-1)/(a+1).
@@ -468,10 +468,10 @@ public class DfpMath {
 
     }
 
+
     /** Computes x to the y power.<p>
      *
-     *  Uses the following method:<p>
-     *
+     *  Uses the following method:
      *  <ol>
      *  <li> Set u = rint(y), v = y-u
      *  <li> Compute a = v * ln(x)
@@ -481,7 +481,7 @@ public class DfpMath {
      *  </ol>
      *  if |y| &gt; 1e8, then we compute by exp(y*ln(x))   <p>
      *
-     *  <b>Special Cases</b><p>
+     *  <b>Special Cases</b>
      *  <ul>
      *  <li>  if y is 0.0 or -0.0 then result is 1.0
      *  <li>  if y is 1.0 then result is x
@@ -862,14 +862,14 @@ public class DfpMath {
     }
 
     /** computes the arc tangent of the argument
-     *
+     * <p>
      *  Uses the typical taylor series
-     *
+     * <p>
      *  but may reduce arguments using the following identity
      * tan(x+y) = (tan(x) + tan(y)) / (1 - tan(x)*tan(y))
-     *
+     * <p>
      * since tan(PI/8) = sqrt(2)-1,
-     *
+     * <p>
      * atan(x) = atan( (x - sqrt(2) + 1) / (1+x*sqrt(2) - x) + PI/8.0
      * @param a number from which arc-tangent is desired
      * @return atan(a)

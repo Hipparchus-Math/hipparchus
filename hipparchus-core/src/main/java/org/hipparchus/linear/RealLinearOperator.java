@@ -40,7 +40,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  *  supply a subroutine for computing y (and perhaps z) given x, which permits
  *  full exploitation of the sparsity or other special structure of A.
  * </blockquote>
- * <p>
  * <dl>
  *  <dt><a name="BARR1994">Barret et al. (1994)</a></dt>
  *  <dd>

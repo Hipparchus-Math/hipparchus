@@ -118,7 +118,6 @@ import org.hipparchus.util.MathUtils;
  * initial phase. If x<sub>0</sub> is known to be a good approximation to x, one
  * should compute r<sub>0</sub> = b - A &middot; x, solve A &middot; dx = r0,
  * and set x = x<sub>0</sub> + dx.
- * </p>
  * <h3><a id="context">Exception context</a></h3>
  * <p>
  * Besides standard {@link MathIllegalArgumentException}, this class might throw
@@ -131,7 +130,6 @@ import org.hipparchus.util.MathUtils;
  * that x<sup>T</sup> &middot; L &middot; y &ne; y<sup>T</sup> &middot; L
  * &middot; x (within a certain accuracy).</li>
  * </ul>
- * </p>
  * <p>
  * {@link MathIllegalArgumentException} might also be thrown in case the
  * preconditioner is not positive definite.

@@ -23,7 +23,7 @@ import org.hipparchus.complex.ComplexComparator;
 
 /**
  * Given a matrix A, it computes an eigen decomposition A = VDV^{T}.
- *
+ * <p>
  * It also ensures that eigen values in the diagonal of D are in ascending
  * order.
  *

@@ -290,7 +290,7 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
 
     /** '&times;' operator.
      * @param n right hand side parameter of the operator
-     * @return this&times;n
+     * @return this &times; n
      */
     public FieldGradient<T> multiply(final T n) {
         final FieldGradient<T> result = newInstance(value.multiply(n));
@@ -993,8 +993,8 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
      * @param b2 second factor of the second term
      * @param a3 first factor of the third term
      * @param b3 second factor of the third term
-     * @return a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
+     * @return a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub> + a<sub>3</sub> &times; b<sub>3</sub>
      * @see #linearCombination(double, FieldGradient, double, FieldGradient)
      * @see #linearCombination(double, FieldGradient, double, FieldGradient, double, FieldGradient, double, FieldGradient)
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent

@@ -33,7 +33,7 @@ import org.hipparchus.util.FastMath;
  * Calculates the QR-decomposition of a matrix.
  * <p>The QR-decomposition of a matrix A consists of two matrices Q and R
  * that satisfy: A = QR, Q is orthogonal (Q<sup>T</sup>Q = I), and R is
- * upper triangular. If A is m&times;n, Q is m&times;m and R m&times;n.</p>
+ * upper triangular. If A is m &times; n, Q is m &times; m and R m &times; n.</p>
  * <p>This class compute the decomposition using Householder reflectors.</p>
  * <p>For efficiency purposes, the decomposition in packed form is transposed.
  * This allows inner loop to iterate inside rows, which is much more cache-efficient

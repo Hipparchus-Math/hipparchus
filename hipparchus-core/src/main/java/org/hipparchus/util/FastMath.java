@@ -994,17 +994,17 @@ public class FastMath {
 
     /**
      * Exponential function.
-     *
+     * <p>
      * Computes exp(x), function result is nearly rounded.   It will be correctly
      * rounded to the theoretical value for 99.9% of input values, otherwise it will
      * have a 1 ULP error.
-     *
+     * <p>
      * Method:
      *    Lookup intVal = exp(int(x))
      *    Lookup fracVal = exp(int(x-int(x) / 1024.0) * 1024.0 );
      *    Compute z as the exponential of the remaining bits by a polynomial minus one
      *    exp(x) = intVal * fracVal * (1 + z)
-     *
+     * <p>
      * Accuracy:
      *    Calculation is done with 63 bits of precision, so result should be correctly
      *    rounded for 99.9% of input values, with less than 1 ULP error otherwise.
@@ -1598,7 +1598,7 @@ public class FastMath {
     /**
      * Computes the <a href="http://mathworld.wolfram.com/Logarithm.html">
      * logarithm</a> in a given base.
-     *
+     * <p>
      * Returns {@code NaN} if either argument is negative.
      * If {@code base} is 0 and {@code x} is positive, 0 is returned.
      * If {@code base} is positive and {@code x} is 0,
@@ -3580,8 +3580,7 @@ public class FastMath {
      * <li>+MIN_VALUE</li>
      * <li>+MAX_VALUE</li>
      * <li>+INFINITY</li>
-     * <li></li>
-     * <p>
+     * </ul>
      * If arguments compare equal, then the second argument is returned.
      * <p>
      * If {@code direction} is greater than {@code d},
@@ -3636,8 +3635,7 @@ public class FastMath {
      * <li>+MIN_VALUE</li>
      * <li>+MAX_VALUE</li>
      * <li>+INFINITY</li>
-     * <li></li>
-     * <p>
+     * </ul>
      * If arguments compare equal, then the second argument is returned.
      * <p>
      * If {@code direction} is greater than {@code f},
@@ -3943,7 +3941,7 @@ public class FastMath {
 
     /**
      * Returns the hypotenuse of a triangle with sides {@code x} and {@code y}
-     * - sqrt(<i>x</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)<br/>
+     * - sqrt(<i>x</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)<br>
      * avoiding intermediate overflow or underflow.
      *
      * <ul>
@@ -3997,7 +3995,6 @@ public class FastMath {
      * of the quotient {@code x/y}.
      * If two mathematical integers are equally close to {@code x/y} then
      * {@code n} is the integer that is even.
-     * <p>
      * <ul>
      * <li>If either operand is NaN, the result is NaN.</li>
      * <li>If the result is not NaN, the sign of the result equals the sign of the dividend.</li>
@@ -4624,17 +4621,17 @@ public class FastMath {
 
     /**
      * Exponential function.
-     *
+     * <p>
      * Computes exp(x), function result is nearly rounded.   It will be correctly
      * rounded to the theoretical value for 99.9% of input values, otherwise it will
      * have a 1 ULP error.
-     *
+     * <p>
      * Method:
      *    Lookup intVal = exp(int(x))
      *    Lookup fracVal = exp(int(x-int(x) / 1024.0) * 1024.0 );
      *    Compute z as the exponential of the remaining bits by a polynomial minus one
      *    exp(x) = intVal * fracVal * (1 + z)
-     *
+     * <p>
      * Accuracy:
      *    Calculation is done with 63 bits of precision, so result should be correctly
      *    rounded for 99.9% of input values, with less than 1 ULP error otherwise.
@@ -5008,7 +5005,7 @@ public class FastMath {
 
     /**
      * Returns the hypotenuse of a triangle with sides {@code x} and {@code y}
-     * - sqrt(<i>x</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)<br/>
+     * - sqrt(<i>x</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)<br>
      * avoiding intermediate overflow or underflow.
      *
      * <ul>
@@ -5033,7 +5030,6 @@ public class FastMath {
      * of the quotient {@code x/y}.
      * If two mathematical integers are equally close to {@code x/y} then
      * {@code n} is the integer that is even.
-     * <p>
      * <ul>
      * <li>If either operand is NaN, the result is NaN.</li>
      * <li>If the result is not NaN, the sign of the result equals the sign of the dividend.</li>
@@ -5058,7 +5054,6 @@ public class FastMath {
      * of the quotient {@code x/y}.
      * If two mathematical integers are equally close to {@code x/y} then
      * {@code n} is the integer that is even.
-     * <p>
      * <ul>
      * <li>If either operand is NaN, the result is NaN.</li>
      * <li>If the result is not NaN, the sign of the result equals the sign of the dividend.</li>

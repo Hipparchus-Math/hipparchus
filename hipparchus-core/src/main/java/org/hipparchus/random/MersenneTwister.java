@@ -52,8 +52,7 @@ import org.hipparchus.util.FastMath;
  * This class is mainly a Java port of the 2002-01-26 version of
  * the generator written in C by Makoto Matsumoto and Takuji
  * Nishimura. Here is their original copyright:
- * <p>
- * <table border="0" width="80%" cellpadding="10" align="center" bgcolor="#E0E0E0">
+ * <table summary="" border="0" width="80%" cellpadding="10" style="background-color: #000000;text-align:center;">
  * <tr><td>Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
  *     All rights reserved.</td></tr>
  * <tr><td>Redistribution and use in source and binary forms, with or without
@@ -69,7 +68,7 @@ import org.hipparchus.util.FastMath;
  *       products derived from this software without specific prior written
  *       permission.</li>
  * </ol></td></tr>
- *
+ * <p>
  * <tr><td><strong>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
  * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF

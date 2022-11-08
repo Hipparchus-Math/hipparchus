@@ -91,9 +91,9 @@ public final class MathUtils {
      * Normalize an angle in a 2&pi; wide interval around a center value.
      * <p>This method has three main uses:</p>
      * <ul>
-     *   <li>normalize an angle between 0 and 2&pi;:<br/>
+     *   <li>normalize an angle between 0 and 2&pi;:<br>
      *       {@code a = MathUtils.normalizeAngle(a, FastMath.PI);}</li>
-     *   <li>normalize an angle between -&pi; and +&pi;<br/>
+     *   <li>normalize an angle between -&pi; and +&pi;<br>
      *       {@code a = MathUtils.normalizeAngle(a, 0.0);}</li>
      *   <li>compute the angle between two defining angular positions:<br>
      *       {@code angle = MathUtils.normalizeAngle(end, start) - start;}</li>
@@ -113,9 +113,9 @@ public final class MathUtils {
       * Normalize an angle in a 2&pi; wide interval around a center value.
       * <p>This method has three main uses:</p>
       * <ul>
-      *   <li>normalize an angle between 0 and 2&pi;:<br/>
+      *   <li>normalize an angle between 0 and 2&pi;:<br>
       *       {@code a = MathUtils.normalizeAngle(a, FastMath.PI);}</li>
-      *   <li>normalize an angle between -&pi; and +&pi;<br/>
+      *   <li>normalize an angle between -&pi; and +&pi;<br>
       *       {@code a = MathUtils.normalizeAngle(a, zero);}</li>
       *   <li>compute the angle between two defining angular positions:<br>
       *       {@code angle = MathUtils.normalizeAngle(end, start).subtract(start);}</li>
@@ -156,7 +156,7 @@ public final class MathUtils {
      * <p>Reduce {@code |a - offset|} to the primary interval
      * {@code [0, |period|)}.</p>
      *
-     * <p>Specifically, the value returned is <br/>
+     * <p>Specifically, the value returned is <br>
      * {@code a - |period| * floor((a - offset) / |period|) - offset}.</p>
      *
      * <p>If any of the parameters are {@code NaN} or infinite, the result is
@@ -379,7 +379,7 @@ public final class MathUtils {
      * <li>Møller, Ole. "Quasi double-precision in floating point addition." BIT
      * 5, 37–50 (1965).</li>
      * <li>Shewchuk, Richard J. "Adaptive Precision Floating-Point Arithmetic
-     * and Fast Robust Geometric Predicates." Discrete & Computational Geometry
+     * and Fast Robust Geometric Predicates." Discrete &amp; Computational Geometry
      * 18, 305–363 (1997).</li>
      * <li><a href=
      * "https://en.wikipedia.org/wiki/2Sum">https://en.wikipedia.org/wiki/2Sum</a></li>
@@ -406,7 +406,7 @@ public final class MathUtils {
      * <li>Møller, Ole. "Quasi double-precision in floating point addition." BIT
      * 5, 37–50 (1965).</li>
      * <li>Shewchuk, Richard J. "Adaptive Precision Floating-Point Arithmetic
-     * and Fast Robust Geometric Predicates." Discrete & Computational Geometry
+     * and Fast Robust Geometric Predicates." Discrete &amp; Computational Geometry
      * 18, 305–363 (1997).</li>
      * <li><a href=
      * "https://en.wikipedia.org/wiki/2Sum">https://en.wikipedia.org/wiki/2Sum</a></li>

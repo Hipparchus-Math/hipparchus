@@ -764,12 +764,11 @@ public class MathArrays {
     /**
      * Returns the Cartesian norm (2-norm), handling both overflow and underflow.
      * Translation of the minpack enorm subroutine.
-     *
+     * <p>
      * The redistribution policy for MINPACK is available
      * <a href="http://www.netlib.org/minpack/disclaimer">here</a>, for
-     * convenience, it is reproduced below.</p>
-     *
-     * <table border="0" width="80%" cellpadding="10" align="center" bgcolor="#E0E0E0">
+     * convenience, it is reproduced below.
+     * <table summary="" border="0" width="80%" cellpadding="10" style="text-align:center;background-color: #E0E0E0;">
      * <tr><td>
      *    Minpack Copyright Notice (1999) University of Chicago.
      *    All rights reserved
@@ -814,7 +813,7 @@ public class MathArrays {
      *     (INCLUDING NEGLIGENCE OR STRICT LIABILITY), OR OTHERWISE,
      *     EVEN IF ANY OF SAID PARTIES HAS BEEN WARNED OF THE
      *     POSSIBILITY OF SUCH LOSS OR DAMAGES.</strong></li>
-     * <ol></td></tr>
+     * </ol></td></tr>
      * </table>
      *
      * @param v Vector of doubles.
@@ -1022,7 +1021,7 @@ public class MathArrays {
      * <code>a<sub>i</sub> b<sub>i</sub></code> to high accuracy.
      * It does so by using specific multiplication and addition algorithms to
      * preserve accuracy and reduce cancellation effects.
-     * <br/>
+     * <br>
      * It is based on the 2005 paper
      * <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.2.1547">
      * Accurate Sum and Dot Product</a> by Takeshi Ogita, Siegfried M. Rump,
@@ -1096,8 +1095,8 @@ public class MathArrays {
     /**
      * Compute a linear combination accurately.
      * <p>
-     * This method computes a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub> to high accuracy. It does
+     * This method computes a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub> to high accuracy. It does
      * so by using specific multiplication and addition algorithms to
      * preserve accuracy and reduce cancellation effects. It is based
      * on the 2005 paper <a
@@ -1109,8 +1108,8 @@ public class MathArrays {
      * @param b1 second factor of the first term
      * @param a2 first factor of the second term
      * @param b2 second factor of the second term
-     * @return a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub>
+     * @return a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub>
      * @see #linearCombination(double, double, double, double, double, double)
      * @see #linearCombination(double, double, double, double, double, double, double, double)
      */
@@ -1169,8 +1168,8 @@ public class MathArrays {
     /**
      * Compute a linear combination accurately.
      * <p>
-     * This method computes a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
+     * This method computes a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub> + a<sub>3</sub> &times; b<sub>3</sub>
      * to high accuracy. It does so by using specific multiplication and
      * addition algorithms to preserve accuracy and reduce cancellation effects.
      * It is based on the 2005 paper <a
@@ -1184,8 +1183,8 @@ public class MathArrays {
      * @param b2 second factor of the second term
      * @param a3 first factor of the third term
      * @param b3 second factor of the third term
-     * @return a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
+     * @return a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub> + a<sub>3</sub> &times; b<sub>3</sub>
      * @see #linearCombination(double, double, double, double)
      * @see #linearCombination(double, double, double, double, double, double, double, double)
      */
@@ -1260,9 +1259,9 @@ public class MathArrays {
     /**
      * Compute a linear combination accurately.
      * <p>
-     * This method computes a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub> +
-     * a<sub>4</sub>&times;b<sub>4</sub>
+     * This method computes a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub> + a<sub>3</sub> &times; b<sub>3</sub> +
+     * a<sub>4</sub> &times; b<sub>4</sub>
      * to high accuracy. It does so by using specific multiplication and
      * addition algorithms to preserve accuracy and reduce cancellation effects.
      * It is based on the 2005 paper <a
@@ -1278,9 +1277,9 @@ public class MathArrays {
      * @param b3 second factor of the third term
      * @param a4 first factor of the third term
      * @param b4 second factor of the third term
-     * @return a<sub>1</sub>&times;b<sub>1</sub> +
-     * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub> +
-     * a<sub>4</sub>&times;b<sub>4</sub>
+     * @return a<sub>1</sub> &times; b<sub>1</sub> +
+     * a<sub>2</sub> &times; b<sub>2</sub> + a<sub>3</sub> &times; b<sub>3</sub> +
+     * a<sub>4</sub> &times; b<sub>4</sub>
      * @see #linearCombination(double, double, double, double)
      * @see #linearCombination(double, double, double, double, double, double)
      */
@@ -1777,7 +1776,7 @@ public class MathArrays {
 
     /**
      * Shuffle the entries of the given array, using the
-     * <a href="http://en.wikipedia.org/wiki/Fisher–Yates_shuffle#The_modern_algorithm">
+     * <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle#The_modern_algorithm">
      * Fisher–Yates</a> algorithm.
      * The {@code start} and {@code pos} parameters select which portion
      * of the array is randomized and which is left untouched.
@@ -1876,15 +1875,14 @@ public class MathArrays {
     /**
      * This method is used
      * to verify that the input parameters designate a subarray of positive length.
-     * <p>
      * <ul>
      * <li>returns <code>true</code> iff the parameters designate a subarray of
      * positive length</li>
      * <li>throws <code>MathIllegalArgumentException</code> if the array is null or
      * or the indices are invalid</li>
-     * <li>returns <code>false</li> if the array is non-null, but
-     * <code>length</code> is 0.
-     * </ul></p>
+     * <li>returns <code>false</code> if the array is non-null, but
+     * <code>length</code> is 0.</li>
+     * </ul>
      *
      * @param values the input array
      * @param begin index of the first array element to include
@@ -1900,15 +1898,14 @@ public class MathArrays {
     /**
      * This method is used
      * to verify that the input parameters designate a subarray of positive length.
-     * <p>
      * <ul>
      * <li>returns <code>true</code> iff the parameters designate a subarray of
      * non-negative length</li>
      * <li>throws <code>IllegalArgumentException</code> if the array is null or
      * or the indices are invalid</li>
-     * <li>returns <code>false</li> if the array is non-null, but
-     * <code>length</code> is 0 unless <code>allowEmpty</code> is <code>true</code>
-     * </ul></p>
+     * <li>returns <code>false</code> if the array is non-null, but
+     * <code>length</code> is 0 unless <code>allowEmpty</code> is <code>true</code></li>
+     * </ul>
      *
      * @param values the input array
      * @param begin index of the first array element to include
@@ -1946,7 +1943,6 @@ public class MathArrays {
      * This method is used
      * to verify that the begin and length parameters designate a subarray of positive length
      * and the weights are all non-negative, non-NaN, finite, and not all zero.
-     * <p>
      * <ul>
      * <li>returns <code>true</code> iff the parameters designate a subarray of
      * positive length and the weights array contains legitimate values.</li>
@@ -1959,8 +1955,8 @@ public class MathArrays {
      *     <li>the weights array contains negative values</li>
      *     <li>the start and length arguments do not determine a valid array</li></ul>
      * </li>
-     * <li>returns <code>false</li> if the array is non-null, but
-     * <code>length</code> is 0.
+     * <li>returns <code>false</code> if the array is non-null, but
+     * <code>length</code> is 0.</li>
      * </ul>
      *
      * @param values the input array
@@ -1982,7 +1978,6 @@ public class MathArrays {
      * This method is used
      * to verify that the begin and length parameters designate a subarray of positive length
      * and the weights are all non-negative, non-NaN, finite, and not all zero.
-     * <p>
      * <ul>
      * <li>returns <code>true</code> iff the parameters designate a subarray of
      * non-negative length and the weights array contains legitimate values.</li>
@@ -1995,8 +1990,8 @@ public class MathArrays {
      *     <li>the weights array contains negative values</li>
      *     <li>the start and length arguments do not determine a valid array</li></ul>
      * </li>
-     * <li>returns <code>false</li> if the array is non-null, but
-     * <code>length</code> is 0 unless <code>allowEmpty</code> is <code>true</code>.
+     * <li>returns <code>false</code> if the array is non-null, but
+     * <code>length</code> is 0 unless <code>allowEmpty</code> is <code>true</code>.</li>
      * </ul>
      *
      * @param values the input array.

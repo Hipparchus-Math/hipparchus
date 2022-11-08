@@ -81,7 +81,7 @@ public class ISAACRandom extends IntRandomGenerator implements Serializable {
 
     /**
      * Creates a new ISAAC random number generator.
-     * <br/>
+     * <br>
      * The instance is initialized using a combination of the
      * current time and system hash code of the instance as the seed.
      */

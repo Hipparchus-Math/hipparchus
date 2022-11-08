@@ -64,7 +64,7 @@ public class LevyDistribution extends AbstractRealDistribution {
     * over the domain is
     * </p>
     * <pre>
-    * f(x; &mu;, c) = &radic;(c / 2&pi;) * e<sup>-c / 2 (x - &mu;)</sup> / (x - &mu;)<sup>3/2</sup>
+    * <var>f(x; &mu;, c)</var> = <var>&radic;(c / 2&pi;)</var> * <var>e<sup>-c / 2 (x - &mu;)</sup></var> / <var>(x - &mu;)<sup>3/2</sup></var>
     * </pre>
     * <p>
     * For this distribution, {@code X}, this method returns {@code P(X < x)}.

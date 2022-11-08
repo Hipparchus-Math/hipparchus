@@ -98,14 +98,14 @@ public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Seri
         d = new BigDecimal(val, mc);
     }
 
-    /** Build an instance from a characters representation.
+    /** Build an instance from a characters' representation.
      * @param in character representation of the value
      */
     public BigReal(char[] in) {
         d = new BigDecimal(in);
     }
 
-    /** Build an instance from a characters representation.
+    /** Build an instance from a characters' representation.
      * @param in character representation of the value
      * @param offset offset of the first character to analyze
      * @param len length of the array slice to analyze
@@ -114,7 +114,7 @@ public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Seri
         d = new BigDecimal(in, offset, len);
     }
 
-    /** Build an instance from a characters representation.
+    /** Build an instance from a characters' representation.
      * @param in character representation of the value
      * @param offset offset of the first character to analyze
      * @param len length of the array slice to analyze
@@ -124,7 +124,7 @@ public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Seri
         d = new BigDecimal(in, offset, len, mc);
     }
 
-    /** Build an instance from a characters representation.
+    /** Build an instance from a characters' representation.
      * @param in character representation of the value
      * @param mc context to use
      */

@@ -29,8 +29,8 @@ import org.hipparchus.exception.MathIllegalStateException;
 /**
  * Interface for (univariate real) rootfinding algorithms.
  * Implementations will search for only one zero in the given interval.
- *
- * This class is not intended for use outside of the Hipparchus
+ * <p>
+ * This class is not intended for use outside Hipparchus
  * library, regular user should rely on more specific interfaces like
  * {@link UnivariateSolver}, {@link PolynomialSolver} or {@link
  * UnivariateDifferentiableSolver}.
