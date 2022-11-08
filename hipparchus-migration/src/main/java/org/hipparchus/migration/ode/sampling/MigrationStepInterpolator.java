@@ -37,9 +37,7 @@ import org.hipparchus.ode.sampling.ODEStateInterpolator;
  * handlers can use these objects to retrieve the state vector at
  * intermediate times between the previous and the current grid points
  * (this feature is often called dense output).</p>
- * </p>
  *
- * @see org.hipparchus.ode.FirstOrderIntegrator
  * @see StepHandler
  * @deprecated as of 1.0, this class is a temporary wrapper between
  * {@link ODEStateInterpolator} and {@link MigrationStepInterpolator}

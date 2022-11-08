@@ -130,7 +130,7 @@ public interface EventHandler extends ODEEventHandler {
          * #eventOccurred eventOccurred} method when the integration should go
          * on after the event ending the current step.</p>
          */
-        CONTINUE;
+        CONTINUE
 
     }
 
@@ -157,7 +157,7 @@ public interface EventHandler extends ODEEventHandler {
      * <p>Also note that the integrator expect that once an event has occurred,
      * the sign of the switching function at the start of the next step (i.e.
      * just after the event) is the opposite of the sign just before the event.
-     * This consistency between the steps <string>must</strong> be preserved,
+     * This consistency between the steps <strong>must</strong> be preserved,
      * otherwise {@link org.hipparchus.exception.MathIllegalArgumentException
      * exceptions} related to root not being bracketed will occur.</p>
      * <p>This need for consistency is sometimes tricky to achieve. A typical

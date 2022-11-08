@@ -56,7 +56,6 @@ import org.hipparchus.ode.SecondaryODE;
  * <ul>
  * <li>a {@link ParametersController}</li>
  * </ul>
- * </p>
  *
  * @see ExpandableODE
  * @see FirstOrderDifferentialEquations
