@@ -21,11 +21,14 @@
  */
 package org.hipparchus.special;
 
+import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.ContinuedFraction;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.FieldContinuedFraction;
 
 /**
  * <p>
@@ -102,7 +105,7 @@ public class Gamma {
     private static final double C_LIMIT = 49;
 
     /** S limit. */
-    private static final double S_LIMIT = 1e-5;
+    private static final double S_LIMIT = 1e-8;
 
     /*
      * Constants for the computation of double invGamma1pm1(double).
@@ -272,6 +275,60 @@ public class Gamma {
     }
 
     /**
+     * <p>
+     * Returns the value of log&nbsp;&Gamma;(x) for x&nbsp;&gt;&nbsp;0.
+     * </p>
+     * <p>
+     * For x &le; 8, the implementation is based on the double precision
+     * implementation in the <em>NSWC Library of Mathematics Subroutines</em>,
+     * {@code DGAMLN}. For x &gt; 8, the implementation is based on
+     * </p>
+     * <ul>
+     * <li><a href="http://mathworld.wolfram.com/GammaFunction.html">Gamma
+     *     Function</a>, equation (28).</li>
+     * <li><a href="http://mathworld.wolfram.com/LanczosApproximation.html">
+     *     Lanczos Approximation</a>, equations (1) through (5).</li>
+     * <li><a href="http://my.fit.edu/~gabdo/gamma.txt">Paul Godfrey, A note on
+     *     the computation of the convergent Lanczos complex Gamma
+     *     approximation</a></li>
+     * </ul>
+     *
+     * @param x Argument.
+     * @param <T> Type of the field elements.
+     * @return the value of {@code log(Gamma(x))}, {@code Double.NaN} if
+     * {@code x <= 0.0}.
+     */
+    public static <T extends CalculusFieldElement<T>> T logGamma(T x) {
+        final Field<T> field = x.getField();
+        T              ret;
+
+        if (x.isNaN() || (x.getReal() <= 0.0)) {
+            ret = field.getOne().multiply(Double.NaN);
+        }
+        else if (x.getReal() < 0.5) {
+            return logGamma1p(x).subtract(x.log());
+        }
+        else if (x.getReal() <= 2.5) {
+            return logGamma1p(x.subtract(1));
+        }
+        else if (x.getReal() <= 8.0) {
+            final int n    = (int) x.subtract(1.5).floor().getReal();
+            T         prod = field.getOne();
+            for (int i = 1; i <= n; i++) {
+                prod = prod.multiply(x.subtract(i));
+            }
+            return logGamma1p(x.subtract(n + 1)).add(prod.log());
+        }
+        else {
+            T sum = lanczos(x);
+            T tmp = x.add(LANCZOS_G + .5);
+            ret = x.add(.5).multiply(tmp.log()).subtract(tmp).add(HALF_LOG_2_PI).add(sum.divide(x).log());
+        }
+
+        return ret;
+    }
+
+    /**
      * Returns the regularized gamma function P(a, x).
      *
      * @param a Parameter.
@@ -286,6 +343,19 @@ public class Gamma {
     /**
      * Returns the regularized gamma function P(a, x).
      *
+     * @param a Parameter.
+     * @param x Value.
+     * @param <T> Type of the field elements.
+     * @return the regularized gamma function P(a, x).
+     * @throws MathIllegalStateException if the algorithm fails to converge.
+     */
+    public static <T extends CalculusFieldElement<T>> T regularizedGammaP(T a, T x) {
+        return regularizedGammaP(a, x, DEFAULT_EPSILON, Integer.MAX_VALUE);
+    }
+
+    /**
+     * Returns the regularized gamma function P(a, x).
+     * <p>
      * The implementation of this method is based on:
      * <ul>
      *  <li>
@@ -353,6 +423,85 @@ public class Gamma {
     }
 
     /**
+     * Returns the regularized gamma function P(a, x).
+     * <p>
+     * The implementation of this method is based on:
+     * <ul>
+     *  <li>
+     *   <a href="http://mathworld.wolfram.com/RegularizedGammaFunction.html">
+     *   Regularized Gamma Function</a>, equation (1)
+     *  </li>
+     *  <li>
+     *   <a href="http://mathworld.wolfram.com/IncompleteGammaFunction.html">
+     *   Incomplete Gamma Function</a>, equation (4).
+     *  </li>
+     *  <li>
+     *   <a href="http://mathworld.wolfram.com/ConfluentHypergeometricFunctionoftheFirstKind.html">
+     *   Confluent Hypergeometric Function of the First Kind</a>, equation (1).
+     *  </li>
+     * </ul>
+     *
+     * @param a the a parameter.
+     * @param x the value.
+     * @param epsilon When the absolute value of the nth item in the
+     * series is less than epsilon the approximation ceases to calculate
+     * further elements in the series.
+     * @param maxIterations Maximum number of "iterations" to complete.
+     * @param <T> Type of the field elements.
+     * @return the regularized gamma function P(a, x)
+     * @throws MathIllegalStateException if the algorithm fails to converge.
+     */
+    public static <T extends CalculusFieldElement<T>> T regularizedGammaP(T a,
+                                           T x,
+                                           double epsilon,
+                                           int maxIterations) {
+        final Field<T> field = x.getField();
+        final T        zero  = field.getZero();
+        final T        one   = field.getOne();
+
+        T ret;
+
+        if (a.isNaN() || x.isNaN() || (a.getReal() <= 0.0) || (x.getReal() < 0.0)) {
+            ret = one.multiply(Double.NaN);
+        }
+        else if (x.getReal() == 0.0) {
+            ret = zero;
+        }
+        else if (x.getReal() >= a.add(1).getReal()) {
+            // use regularizedGammaQ because it should converge faster in this
+            // case.
+            ret = one.subtract(regularizedGammaQ(a, x, epsilon, maxIterations));
+        }
+        else {
+            // calculate series
+            double n   = 0.0; // current element index
+            T      an  = one.divide(a); // n-th element in the series
+            T      sum = an; // partial sum
+            while (an.divide(sum).abs().getReal() > epsilon &&
+                    n < maxIterations &&
+                    sum.getReal() < Double.POSITIVE_INFINITY) {
+                // compute next element in the series
+                n += 1.0;
+                an = an.multiply(x.divide(a.add(n)));
+
+                // update partial sum
+                sum = sum.add(an);
+            }
+            if (n >= maxIterations) {
+                throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, maxIterations);
+            }
+            else if (sum.isInfinite()) {
+                ret = one;
+            }
+            else {
+                ret = a.multiply(x.log()).subtract(logGamma(a)).subtract(x).exp().multiply(sum);
+            }
+        }
+
+        return ret;
+    }
+
+    /**
      * Returns the regularized gamma function Q(a, x) = 1 - P(a, x).
      *
      * @param a the a parameter.
@@ -367,6 +516,19 @@ public class Gamma {
     /**
      * Returns the regularized gamma function Q(a, x) = 1 - P(a, x).
      *
+     * @param a the a parameter.
+     * @param x the value.
+     * @param <T> Type of the field elements.
+     * @return the regularized gamma function Q(a, x)
+     * @throws MathIllegalStateException if the algorithm fails to converge.
+     */
+    public static <T extends CalculusFieldElement<T>> T regularizedGammaQ(T a, T x) {
+        return regularizedGammaQ(a, x, DEFAULT_EPSILON, Integer.MAX_VALUE);
+    }
+
+    /**
+     * Returns the regularized gamma function Q(a, x) = 1 - P(a, x).
+     * <p>
      * The implementation of this method is based on:
      * <ul>
      *  <li>
@@ -427,6 +589,77 @@ public class Gamma {
         return ret;
     }
 
+    /**
+     * Returns the regularized gamma function Q(a, x) = 1 - P(a, x).
+     * <p>
+     * The implementation of this method is based on:
+     * <ul>
+     *  <li>
+     *   <a href="http://mathworld.wolfram.com/RegularizedGammaFunction.html">
+     *   Regularized Gamma Function</a>, equation (1).
+     *  </li>
+     *  <li>
+     *   <a href="http://functions.wolfram.com/GammaBetaErf/GammaRegularized/10/0003/">
+     *   Regularized incomplete gamma function: Continued fraction representations
+     *   (formula 06.08.10.0003)</a>
+     *  </li>
+     * </ul>
+     *
+     * @param a the a parameter.
+     * @param x the value.
+     * @param epsilon When the absolute value of the nth item in the
+     * series is less than epsilon the approximation ceases to calculate
+     * further elements in the series.
+     * @param maxIterations Maximum number of "iterations" to complete.
+     * @param <T> Type fo the field elements.
+     * @return the regularized gamma function P(a, x)
+     * @throws MathIllegalStateException if the algorithm fails to converge.
+     */
+    public static <T extends CalculusFieldElement<T>> T regularizedGammaQ(final T a,
+                                                                          T x,
+                                                                          double epsilon,
+                                                                          int maxIterations) {
+        final Field<T> field = x.getField();
+        final T        one   = field.getOne();
+
+        T ret;
+
+        if (a.isNaN() || x.isNaN() || a.getReal() <= 0.0 || x.getReal() < 0.0) {
+            ret = field.getOne().multiply(Double.NaN);
+        }
+        else if (x.getReal() == 0.0) {
+            ret = one;
+        }
+        else if (x.getReal() < a.add(1.0).getReal()) {
+            // use regularizedGammaP because it should converge faster in this
+            // case.
+            ret = one.subtract(regularizedGammaP(a, x, epsilon, maxIterations));
+        }
+        else {
+            // create continued fraction
+            FieldContinuedFraction cf = new FieldContinuedFraction() {
+
+                /** {@inheritDoc} */
+                @Override
+                @SuppressWarnings("unchecked")
+                public <C extends CalculusFieldElement<C>> C getA(final int n, final C x) {
+                    return x.subtract((C) a).add((2.0 * n) + 1.0);
+                }
+
+                /** {@inheritDoc} */
+                @Override
+                @SuppressWarnings("unchecked")
+                public <C extends CalculusFieldElement<C>> C getB(final int n, final C x) {
+                    return (C) a.subtract(n).multiply(n);
+                }
+            };
+
+            ret = one.divide(cf.evaluate(x, epsilon, maxIterations));
+            ret = a.multiply(x.log()).subtract(logGamma(a)).subtract(x).exp().multiply(ret);
+        }
+
+        return ret;
+    }
 
     /**
      * <p>Computes the digamma function of x.</p>
@@ -457,17 +690,72 @@ public class Gamma {
             // accurate to O(x)
             return -GAMMA - 1 / x;
         }
-
         if (x >= C_LIMIT) {
-            // use method 4 (accurate to O(1/x^8)
+            // use method 8 (accurate to O(1/x^8))
             double inv = 1 / (x * x);
-            //            1       1        1         1
-            // log(x) -  --- - ------ + ------- - -------
-            //           2 x   12 x^2   120 x^4   252 x^6
-            return FastMath.log(x) - 0.5 / x - inv * ((1.0 / 12) + inv * (1.0 / 120 - inv / 252));
+            //            1       1        1         1         1         5           691         1
+            // log(x) -  --- - ------ + ------- - ------- + ------- - ------- +  ---------- - -------
+            //           2 x   12 x^2   120 x^4   252 x^6   240 x^8   660 x^10   32760 x^12   12 x^14
+            return FastMath.log(x) - 0.5 / x - inv * ((1.0 / 12) + inv * (1.0 / 120 - inv * (1.0 / 252 + inv *
+                    (1.0 / 240 - inv * (5.0 / 660 + inv * (691.0 / 32760 - inv / 12))))));
         }
 
         return digamma(x + 1) - 1 / x;
+    }
+
+    /**
+     * <p>Computes the digamma function of x.</p>
+     *
+     * <p>This is an independently written implementation of the algorithm described in
+     * Jose Bernardo, Algorithm AS 103: Psi (Digamma) Function, Applied Statistics, 1976.</p>
+     *
+     * <p>Some of the constants have been changed to increase accuracy at the moderate expense
+     * of run-time.  The result should be accurate to within 10^-8 absolute tolerance for
+     * x &gt;= 10^-5 and within 10^-8 relative tolerance for x &gt; 0.</p>
+     *
+     * <p>Performance for large negative values of x will be quite expensive (proportional to
+     * |x|).  Accuracy for negative values of x should be about 10^-8 absolute for results
+     * less than 10^5 and 10^-8 relative for results larger than that.</p>
+     *
+     * @param x Argument.
+     * @param <T> Type of the field elements.
+     * @return digamma(x) to within 10-8 relative or absolute error whichever is smaller.
+     * @see <a href="http://en.wikipedia.org/wiki/Digamma_function">Digamma</a>
+     * @see <a href="http://www.uv.es/~bernardo/1976AppStatist.pdf">Bernardo&apos;s original article </a>
+     */
+    public static <T extends CalculusFieldElement<T>> T digamma(T x) {
+        if (x.isNaN() || x.isInfinite()) {
+            return x;
+        }
+
+        if (x.getReal() > 0 && x.getReal() <= S_LIMIT) {
+            // use method 5 from Bernardo AS103
+            // accurate to O(x)
+            return x.pow(-1).negate().subtract(GAMMA);
+        }
+
+        if (x.getReal() >= C_LIMIT) {
+            // use method 8 (accurate to O(1/x^8))
+            T inv = x.multiply(x).reciprocal();
+            //            1       1        1         1         1         5           691         1
+            // log(x) -  --- - ------ + ------- - ------- + ------- - ------- +  ---------- - -------
+            //           2 x   12 x^2   120 x^4   252 x^6   240 x^8   660 x^10   32760 x^12   12 x^14
+            return x.log().subtract(x.pow(-1).multiply(0.5)).add(
+                    inv.multiply(
+                            inv.multiply(
+                                    inv.multiply(
+                                            inv.multiply(
+                                                    inv.multiply(
+                                                            inv.multiply(inv.divide(-12.)
+                                                                            .add(691. / 32760))
+                                                               .subtract(5. / 660))
+                                                       .add(1.0 / 240))
+                                               .subtract(1.0 / 252))
+                                       .add(1.0 / 120))
+                               .subtract(1.0 / 12)));
+        }
+
+        return digamma(x.add(1.)).subtract(x.pow(-1));
     }
 
     /**
@@ -491,14 +779,64 @@ public class Gamma {
 
         if (x >= C_LIMIT) {
             double inv = 1 / (x * x);
-            //  1    1      1       1       1
-            //  - + ---- + ---- - ----- + -----
-            //  x      2      3       5       7
-            //      2 x    6 x    30 x    42 x
-            return 1 / x + inv / 2 + inv / x * (1.0 / 6 - inv * (1.0 / 30 + inv / 42));
+            //  1    1      1       1       1      1         5        691        7
+            //  - + ---- + ---- - ----- + ----- - ----- + ------- - -------- + ------
+            //  x      2      3       5       7       9        11         13       15
+            //      2 x    6 x    30 x    42 x    30 x    66 x      2730 x      6 x
+            return 1 / x + inv * 0.5 + inv / x * (1.0 / 6 - inv * (1.0 / 30 + inv * (1.0 / 42 - inv * (1.0 / 30 + inv *
+                    (5.0 / 66 - inv * (691. / 2730 + inv * 7. / 15))))));
         }
 
         return trigamma(x + 1) + 1 / (x * x);
+    }
+
+    /**
+     * Computes the trigamma function of x.
+     * This function is derived by taking the derivative of the implementation
+     * of digamma.
+     *
+     * @param x Argument.
+     * @param <T> Type of the field elements.
+     * @return trigamma(x) to within 10-8 relative or absolute error whichever is smaller
+     * @see <a href="http://en.wikipedia.org/wiki/Trigamma_function">Trigamma</a>
+     * @see Gamma#digamma(double)
+     */
+    public static <T extends CalculusFieldElement<T>> T trigamma(T x) {
+        if (x.isNaN() || x.isInfinite()) {
+            return x;
+        }
+
+        if (x.getReal() > 0 && x.getReal() <= S_LIMIT) {
+            // use method 5 from Bernardo AS103
+            // accurate to O(x)
+            return x.multiply(x).reciprocal();
+        }
+
+        if (x.getReal() >= C_LIMIT) {
+            // use method 4 (accurate to O(1/x^8)
+            T inv    = x.multiply(x).reciprocal();
+            T invCub = inv.multiply(x.reciprocal());
+            //  1    1      1       1       1      1         5        691        7
+            //  - + ---- + ---- - ----- + ----- + ----- + ------- - -------- + ------
+            //  x      2      3       5       7       9        11         13       15
+            //      2 x    6 x    30 x    42 x    30 x    66 x      2730 x      6 x
+            return x.pow(-1).add(
+                    inv.multiply(0.5)).add(
+                            invCub.multiply(
+                                    inv.multiply(
+                                            inv.multiply(
+                                                    inv.multiply(
+                                                            inv.multiply(
+                                                                    inv.multiply(inv.multiply(7. / 6)
+                                                                                    .subtract(691. / 2730))
+                                                                       .add(5. / 66))
+                                                               .subtract(1.0 / 30))
+                                                       .add(1.0 / 42))
+                                               .subtract(1.0 / 30))
+                                       .add(1.0 / 6)));
+        }
+
+        return trigamma(x.add(1.)).add(x.multiply(x).reciprocal());
     }
 
     /**
@@ -526,6 +864,35 @@ public class Gamma {
             sum += LANCZOS[i] / (x + i);
         }
         return sum + LANCZOS[0];
+    }
+
+    /**
+     * <p>
+     * Returns the Lanczos approximation used to compute the gamma function.
+     * The Lanczos approximation is related to the Gamma function by the
+     * following equation
+     * <center>
+     * {@code gamma(x) = sqrt(2 * pi) / x * (x + g + 0.5) ^ (x + 0.5)
+     *                   * exp(-x - g - 0.5) * lanczos(x)},
+     * </center>
+     * where {@code g} is the Lanczos constant.
+     * </p>
+     *
+     * @param x Argument.
+     * @param <T> Type of the field elements.
+     * @return The Lanczos approximation.
+     * @see <a href="http://mathworld.wolfram.com/LanczosApproximation.html">Lanczos Approximation</a>
+     * equations (1) through (5), and Paul Godfrey's
+     * <a href="http://my.fit.edu/~gabdo/gamma.txt">Note on the computation
+     * of the convergent Lanczos complex Gamma approximation</a>
+     */
+    public static <T extends CalculusFieldElement<T>> T lanczos(final T x) {
+        final Field<T> field = x.getField();
+        T              sum   = field.getZero();
+        for (int i = LANCZOS.length - 1; i > 0; --i) {
+            sum = sum.add(x.add(i).pow(-1.).multiply(LANCZOS[i]));
+        }
+        return sum.add(LANCZOS[0]);
     }
 
     /**
@@ -624,6 +991,106 @@ public class Gamma {
     }
 
     /**
+     * Returns the value of 1 / &Gamma;(1 + x) - 1 for -0&#46;5 &le; x &le;
+     * 1&#46;5. This implementation is based on the double precision
+     * implementation in the <em>NSWC Library of Mathematics Subroutines</em>,
+     * {@code DGAM1}.
+     *
+     * @param x Argument.
+     * @param <T> Type of the field elements.
+     * @return The value of {@code 1.0 / Gamma(1.0 + x) - 1.0}.
+     * @throws MathIllegalArgumentException if {@code x < -0.5}
+     * @throws MathIllegalArgumentException if {@code x > 1.5}
+     */
+    public static <T extends CalculusFieldElement<T>> T invGamma1pm1(final T x) {
+        final T one = x.getField().getOne();
+
+        if (x.getReal() < -0.5) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
+                                                   x, -0.5);
+        }
+        if (x.getReal() > 1.5) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
+                                                   x, 1.5);
+        }
+
+        final T ret;
+        final T t = x.getReal() <= 0.5 ? x : x.subtract(1);
+        if (t.getReal() < 0.0) {
+            final T a = one.multiply(INV_GAMMA1P_M1_A0).add(t.multiply(INV_GAMMA1P_M1_A1));
+            T       b = one.multiply(INV_GAMMA1P_M1_B8);
+            b = one.multiply(INV_GAMMA1P_M1_B7).add(t.multiply(b));
+            b = one.multiply(INV_GAMMA1P_M1_B6).add(t.multiply(b));
+            b = one.multiply(INV_GAMMA1P_M1_B5).add(t.multiply(b));
+            b = one.multiply(INV_GAMMA1P_M1_B4).add(t.multiply(b));
+            b = one.multiply(INV_GAMMA1P_M1_B3).add(t.multiply(b));
+            b = one.multiply(INV_GAMMA1P_M1_B2).add(t.multiply(b));
+            b = one.multiply(INV_GAMMA1P_M1_B1).add(t.multiply(b));
+            b = one.add(t.multiply(b));
+
+            T c = one.multiply(INV_GAMMA1P_M1_C13).add(t.multiply(a.divide(b)));
+            c = one.multiply(INV_GAMMA1P_M1_C12).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C11).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C10).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C9).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C8).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C7).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C6).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C5).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C4).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C3).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C2).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C1).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C).add(t.multiply(c));
+            if (x.getReal() > 0.5) {
+                ret = t.multiply(c).divide(x);
+            }
+            else {
+                ret = x.multiply(c.add(1));
+            }
+        }
+        else {
+            T p = one.multiply(INV_GAMMA1P_M1_P6);
+            p = one.multiply(INV_GAMMA1P_M1_P5).add(t.multiply(p));
+            p = one.multiply(INV_GAMMA1P_M1_P4).add(t.multiply(p));
+            p = one.multiply(INV_GAMMA1P_M1_P3).add(t.multiply(p));
+            p = one.multiply(INV_GAMMA1P_M1_P2).add(t.multiply(p));
+            p = one.multiply(INV_GAMMA1P_M1_P1).add(t.multiply(p));
+            p = one.multiply(INV_GAMMA1P_M1_P0).add(t.multiply(p));
+
+            T q = one.multiply(INV_GAMMA1P_M1_Q4);
+            q = one.multiply(INV_GAMMA1P_M1_Q3).add(t.multiply(q));
+            q = one.multiply(INV_GAMMA1P_M1_Q2).add(t.multiply(q));
+            q = one.multiply(INV_GAMMA1P_M1_Q1).add(t.multiply(q));
+            q = one.add(t.multiply(q));
+
+            T c = one.multiply(INV_GAMMA1P_M1_C13).add(t.multiply(p.divide(q)));
+            c = one.multiply(INV_GAMMA1P_M1_C12).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C11).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C10).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C9).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C8).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C7).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C6).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C5).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C4).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C3).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C2).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C1).add(t.multiply(c));
+            c = one.multiply(INV_GAMMA1P_M1_C0).add(t.multiply(c));
+
+            if (x.getReal() > 0.5) {
+                ret = t.divide(x).multiply(c.subtract(1));
+            }
+            else {
+                ret = x.multiply(c);
+            }
+        }
+
+        return ret;
+    }
+
+    /**
      * Returns the value of log &Gamma;(1 + x) for -0&#46;5 &le; x &le; 1&#46;5.
      * This implementation is based on the double precision implementation in
      * the <em>NSWC Library of Mathematics Subroutines</em>, {@code DGMLN1}.
@@ -646,6 +1113,32 @@ public class Gamma {
         }
 
         return -FastMath.log1p(invGamma1pm1(x));
+    }
+
+    /**
+     * Returns the value of log &Gamma;(1 + x) for -0&#46;5 &le; x &le; 1&#46;5.
+     * This implementation is based on the double precision implementation in
+     * the <em>NSWC Library of Mathematics Subroutines</em>, {@code DGMLN1}.
+     *
+     * @param x Argument.
+     * @param <T> Type of the field elements.
+     * @return The value of {@code log(Gamma(1 + x))}.
+     * @throws MathIllegalArgumentException if {@code x < -0.5}.
+     * @throws MathIllegalArgumentException if {@code x > 1.5}.
+     */
+    public static <T extends CalculusFieldElement<T>> T logGamma1p(final T x)
+            throws MathIllegalArgumentException {
+
+        if (x.getReal() < -0.5) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
+                                                   x, -0.5);
+        }
+        if (x.getReal() > 1.5) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
+                                                   x, 1.5);
+        }
+
+        return invGamma1pm1(x).log1p().negate();
     }
 
 
@@ -716,6 +1209,81 @@ public class Gamma {
                  */
                 ret = -FastMath.PI /
                       (x * FastMath.sin(FastMath.PI * x) * gammaAbs);
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Returns the value of Γ(x). Based on the <em>NSWC Library of
+     * Mathematics Subroutines</em> double precision implementation,
+     * {@code DGAMMA}.
+     *
+     * @param x Argument.
+     * @param <T> Type of the field elements.
+     * @return the value of {@code Gamma(x)}.
+     */
+    public static <T extends CalculusFieldElement<T>> T gamma(final T x) {
+        final T one = x.getField().getOne();
+
+        if ((x.getReal() == x.rint().getReal()) && (x.getReal() <= 0.0)) {
+            return one.multiply(Double.NaN);
+        }
+
+        final T ret;
+        final T absX = x.abs();
+        if (absX.getReal() <= 20.0) {
+            if (x.getReal() >= 1.0) {
+                /*
+                 * From the recurrence relation
+                 * Gamma(x) = (x - 1) * ... * (x - n) * Gamma(x - n),
+                 * then
+                 * Gamma(t) = 1 / [1 + invGamma1pm1(t - 1)],
+                 * where t = x - n. This means that t must satisfy
+                 * -0.5 <= t - 1 <= 1.5.
+                 */
+                T prod = one;
+                T t    = x;
+                while (t.getReal() > 2.5) {
+                    t    = t.subtract(1.0);
+                    prod = prod.multiply(t);
+                }
+                ret = prod.divide(invGamma1pm1(t.subtract(1.0)).add(1.0));
+            }
+            else {
+                /*
+                 * From the recurrence relation
+                 * Gamma(x) = Gamma(x + n + 1) / [x * (x + 1) * ... * (x + n)]
+                 * then
+                 * Gamma(x + n + 1) = 1 / [1 + invGamma1pm1(x + n)],
+                 * which requires -0.5 <= x + n <= 1.5.
+                 */
+                T prod = x;
+                T t    = x;
+                while (t.getReal() < -0.5) {
+                    t    = t.add(1.0);
+                    prod = prod.multiply(t);
+                }
+                ret = prod.multiply(invGamma1pm1(t).add(1)).reciprocal();
+            }
+        }
+        else {
+            final T y = absX.add(LANCZOS_G + 0.5);
+            final T gammaAbs = absX.reciprocal().multiply(SQRT_TWO_PI).multiply(y.pow(absX.add(0.5)))
+                                   .multiply(y.negate().exp()).multiply(lanczos(absX));
+            if (x.getReal() > 0.0) {
+                ret = gammaAbs;
+            }
+            else {
+                /*
+                 * From the reflection formula
+                 * Gamma(x) * Gamma(1 - x) * sin(pi * x) = pi,
+                 * and the recurrence relation
+                 * Gamma(1 - x) = -x * Gamma(-x),
+                 * it is found
+                 * Gamma(x) = -pi / [x * sin(pi * x) * Gamma(-x)].
+                 */
+                ret = x.multiply(x.multiply(FastMath.PI).sin()).multiply(gammaAbs).reciprocal().multiply(-FastMath.PI);
             }
         }
         return ret;

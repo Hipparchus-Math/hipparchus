@@ -17,7 +17,10 @@
 
 package org.hipparchus.special;
 
+import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
+import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,12 +28,24 @@ import org.junit.Test;
 /**
  */
 public class ErfTest {
+    final Field<Decimal64> field = Decimal64Field.getInstance();
+    final Decimal64 zero = field.getZero();
+    final Decimal64 one = field.getOne();
+
     @Test
     public void testErf0() {
         double actual = Erf.erf(0.0);
         double expected = 0.0;
         Assert.assertEquals(expected, actual, 1.0e-15);
         Assert.assertEquals(1 - expected, Erf.erfc(0.0), 1.0e-15);
+    }
+
+    @Test
+    public void testErf0Field() {
+        Decimal64 actual   = Erf.erf(zero);
+        Decimal64 expected = zero;
+        Assert.assertEquals(zero.getReal(), actual.getReal(), 1.0e-15);
+        Assert.assertEquals(one.subtract(expected).getReal(), Erf.erfc(zero).getReal(), 1.0e-15);
     }
 
     @Test
@@ -48,6 +63,20 @@ public class ErfTest {
     }
 
     @Test
+    public void testErf1960Field() {
+        Decimal64 x = one.multiply(1.960).divide(FastMath.sqrt(2.0));
+        Decimal64 actual = Erf.erf(x);
+        Decimal64 expected = one.multiply(0.95);
+        Assert.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        Assert.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x).getReal(), 1.0e-15);
+
+        actual = Erf.erf(x.negate());
+        expected = expected.negate();
+        Assert.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        Assert.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x.negate()).getReal(), 1.0e-15);
+    }
+
+    @Test
     public void testErf2576() {
         double x = 2.576 / FastMath.sqrt(2.0);
         double actual = Erf.erf(x);
@@ -59,6 +88,20 @@ public class ErfTest {
         expected = -expected;
         Assert.assertEquals(expected, actual, 1.0e-5);
         Assert.assertEquals(1 - actual, Erf.erfc(-x), 1.0e-15);
+    }
+
+    @Test
+    public void testErf2576Field() {
+        Decimal64 x = one.multiply(2.576).divide(FastMath.sqrt(2.0));
+        Decimal64 actual = Erf.erf(x);
+        Decimal64 expected = one.multiply(0.99);
+        Assert.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        Assert.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x).getReal(), 1.0e-15);
+
+        actual = Erf.erf(x.negate());
+        expected = expected.negate();
+        Assert.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        Assert.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x.negate()).getReal(), 1.0e-15);
     }
 
     @Test
@@ -76,6 +119,20 @@ public class ErfTest {
     }
 
     @Test
+    public void testErf2807Field() {
+        Decimal64 x = one.multiply(2.807).divide(FastMath.sqrt(2.0));
+        Decimal64 actual = Erf.erf(x);
+        Decimal64 expected = one.multiply(0.995);
+        Assert.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        Assert.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x).getReal(), 1.0e-15);
+
+        actual = Erf.erf(x.negate());
+        expected = expected.negate();
+        Assert.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        Assert.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x.negate()).getReal(), 1.0e-15);
+    }
+
+    @Test
     public void testErf3291() {
         double x = 3.291 / FastMath.sqrt(2.0);
         double actual = Erf.erf(x);
@@ -87,6 +144,20 @@ public class ErfTest {
         expected = -expected;
         Assert.assertEquals(expected, actual, 1.0e-5);
         Assert.assertEquals(1 - expected, Erf.erfc(-x), 1.0e-5);
+    }
+
+    @Test
+    public void testErf3291Field() {
+        Decimal64 x = one.multiply(3.291).divide(FastMath.sqrt(2.0));
+        Decimal64 actual = Erf.erf(x);
+        Decimal64 expected = one.multiply(0.999);
+        Assert.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        Assert.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x).getReal(), 1.0e-15);
+
+        actual = Erf.erf(x.negate());
+        expected = expected.negate();
+        Assert.assertEquals(expected.getReal(), actual.getReal(), 1.0e-5);
+        Assert.assertEquals(one.subtract(actual).getReal(), Erf.erfc(x.negate()).getReal(), 1.0e-15);
     }
 
     /**
@@ -115,6 +186,32 @@ public class ErfTest {
     }
 
     /**
+     * MATH-301, MATH-456
+     */
+    @Test
+    public void testLargeValuesField() {
+        for (int i = 1; i < 200; i*=10) {
+            final Decimal64 iField = new Decimal64(i);
+            Decimal64 result = Erf.erf(iField);
+            Assert.assertFalse(result.isNaN());
+            Assert.assertTrue(result.getReal() > 0 && result.getReal() <= 1);
+            result = Erf.erf(iField.negate());
+            Assert.assertFalse(result.isNaN());
+            Assert.assertTrue(result.getReal() >= -1 && result.getReal() < 0);
+            result = Erf.erfc(iField);
+            Assert.assertFalse(result.isNaN());
+            Assert.assertTrue(result.getReal() >= 0 && result.getReal() < 1);
+            result = Erf.erfc(iField.negate());
+            Assert.assertFalse(result.isNaN());
+            Assert.assertTrue(result.getReal() >= 1 && result.getReal() <= 2);
+        }
+        Assert.assertEquals(one.negate().getReal(), Erf.erf(new Decimal64(Double.NEGATIVE_INFINITY)).getReal(), 0);
+        Assert.assertEquals(one.getReal(), Erf.erf(new Decimal64(Double.POSITIVE_INFINITY)).getReal(), 0);
+        Assert.assertEquals(one.multiply(2).getReal(), new Decimal64(Erf.erfc(Double.NEGATIVE_INFINITY)).getReal(), 0);
+        Assert.assertEquals(zero.getReal(), Erf.erfc(new Decimal64(Double.POSITIVE_INFINITY)).getReal(), 0);
+    }
+
+    /**
      * Compare Erf.erf against reference values computed using GCC 4.2.1 (Apple OSX packaged version)
      * erfl (extended precision erf).
      */
@@ -139,6 +236,30 @@ public class ErfTest {
     }
 
     /**
+     * Compare Erf.erf against reference values computed using GCC 4.2.1 (Apple OSX packaged version)
+     * erfl (extended precision erf).
+     */
+    @Test
+    public void testErfGnuField() {
+        final double tol = 1E-15;
+        final Decimal64[] gnuValues = new Decimal64[] {one.negate(), one.negate(), one.negate(), one.negate(), one.negate(),
+        one.negate(), one.negate(), one.negate(), new Decimal64(-0.99999999999999997848),
+        new Decimal64(-0.99999999999999264217), new Decimal64(-0.99999999999846254017), new Decimal64(-0.99999999980338395581), new Decimal64(-0.99999998458274209971),
+        new Decimal64(-0.9999992569016276586), new Decimal64(-0.99997790950300141459), new Decimal64(-0.99959304798255504108), new Decimal64(-0.99532226501895273415),
+        new Decimal64(-0.96610514647531072711), new Decimal64(-0.84270079294971486948), new Decimal64(-0.52049987781304653809),  zero,
+         new Decimal64(0.52049987781304653809), new Decimal64(0.84270079294971486948), new Decimal64(0.96610514647531072711), new Decimal64(0.99532226501895273415),
+         new Decimal64(0.99959304798255504108), new Decimal64(0.99997790950300141459), new Decimal64(0.9999992569016276586), new Decimal64(0.99999998458274209971),
+         new Decimal64(0.99999999980338395581), new Decimal64(0.99999999999846254017), new Decimal64(0.99999999999999264217), new Decimal64(0.99999999999999997848),
+         one,  one,  one,  one,
+         one,  one,  one,  one};
+        Decimal64 x = one.multiply(-10d);
+        for (int i = 0; i < 41; i++) {
+            Assert.assertEquals(gnuValues[i].getReal(), Erf.erf(x).getReal(), tol);
+            x = x.add(0.5d);
+        }
+    }
+
+    /**
      * Compare Erf.erfc against reference values computed using GCC 4.2.1 (Apple OSX packaged version)
      * erfcl (extended precision erfc).
      */
@@ -159,6 +280,30 @@ public class ErfTest {
         for (int i = 0; i < 41; i++) {
             Assert.assertEquals(gnuValues[i], Erf.erfc(x), tol);
             x += 0.5d;
+        }
+    }
+
+    /**
+     * Compare Erf.erfc against reference values computed using GCC 4.2.1 (Apple OSX packaged version)
+     * erfcl (extended precision erfc).
+     */
+    @Test
+    public void testErfcGnuField() {
+        final double tol = 1E-15;
+        final Decimal64[] gnuValues = new Decimal64[] { new Decimal64(2),  new Decimal64(2),  new Decimal64(2),  new Decimal64(2),  new Decimal64(2),
+        new Decimal64(2),  new Decimal64(2),  new Decimal64(2), new Decimal64(1.9999999999999999785),
+        new Decimal64(1.9999999999999926422), new Decimal64(1.9999999999984625402), new Decimal64(1.9999999998033839558), new Decimal64(1.9999999845827420998),
+        new Decimal64(1.9999992569016276586), new Decimal64(1.9999779095030014146), new Decimal64(1.9995930479825550411), new Decimal64(1.9953222650189527342),
+        new Decimal64(1.9661051464753107271), new Decimal64(1.8427007929497148695), new Decimal64(1.5204998778130465381),  one,
+        new Decimal64(0.47950012218695346194), new Decimal64(0.15729920705028513051), new Decimal64(0.033894853524689272893), new Decimal64(0.0046777349810472658333),
+        new Decimal64(0.00040695201744495893941), new Decimal64(2.2090496998585441366E-05), new Decimal64(7.4309837234141274516E-07), new Decimal64(1.5417257900280018858E-08),
+        new Decimal64(1.966160441542887477E-10), new Decimal64(1.5374597944280348501E-12), new Decimal64(7.3578479179743980661E-15), new Decimal64(2.1519736712498913103E-17),
+        new Decimal64(3.8421483271206474691E-20), new Decimal64(4.1838256077794144006E-23), new Decimal64(2.7766493860305691016E-26), new Decimal64(1.1224297172982927079E-29),
+        new Decimal64(2.7623240713337714448E-33), new Decimal64(4.1370317465138102353E-37), new Decimal64(3.7692144856548799402E-41),new Decimal64( 2.0884875837625447567E-45)};
+        Decimal64 x = new Decimal64(-10d);
+        for (int i = 0; i < 41; i++) {
+            Assert.assertEquals(gnuValues[i].getReal(), Erf.erfc(x).getReal(), tol);
+            x = x.add(0.5d);
         }
     }
 
@@ -195,6 +340,38 @@ public class ErfTest {
     }
 
     /**
+     * Tests erfc against reference data computed using Maple reported in Marsaglia, G,,
+     * "Evaluating the Normal Distribution," Journal of Statistical Software, July, 2004.
+     * http//www.jstatsoft.org/v11/a05/paper
+     */
+    @Test
+    public void testErfcMapleField() {
+        Decimal64[][] ref = new Decimal64[][]
+                {{new Decimal64(0.1), new Decimal64(4.60172162722971e-01)},
+                 {new Decimal64(1.2), new Decimal64(1.15069670221708e-01)},
+                 {new Decimal64(2.3), new Decimal64(1.07241100216758e-02)},
+                 {new Decimal64(3.4), new Decimal64(3.36929265676881e-04)},
+                 {new Decimal64(4.5), new Decimal64(3.39767312473006e-06)},
+                 {new Decimal64(5.6), new Decimal64(1.07175902583109e-08)},
+                 {new Decimal64(6.7), new Decimal64(1.04209769879652e-11)},
+                 {new Decimal64(7.8), new Decimal64(3.09535877195870e-15)},
+                 {new Decimal64(8.9), new Decimal64(2.79233437493966e-19)},
+                 {new Decimal64(10.0), new Decimal64(7.61985302416053e-24)},
+                 {new Decimal64(11.1), new Decimal64(6.27219439321703e-29)},
+                 {new Decimal64(12.2), new Decimal64(1.55411978638959e-34)},
+                 {new Decimal64(13.3), new Decimal64(1.15734162836904e-40)},
+                 {new Decimal64(14.4), new Decimal64(2.58717592540226e-47)},
+                 {new Decimal64(15.5), new Decimal64(1.73446079179387e-54)},
+                 {new Decimal64(16.6), new Decimal64(3.48454651995041e-62)}
+                };
+        for (int i = 0; i < 15; i++) {
+            final Decimal64 result = Erf.erfc(ref[i][0].divide(FastMath.sqrt(2))).multiply(0.5);
+            Assert.assertEquals(ref[i][1].getReal(), result.getReal(), 1E-15);
+            UnitTestUtils.assertRelativelyEquals(ref[i][1].getReal(), result.getReal(), 1E-13);
+        }
+    }
+
+    /**
      * Test the implementation of Erf.erf(double, double) for consistency with results
      * obtained from Erf.erf(double) and Erf.erfc(double).
      */
@@ -212,6 +389,24 @@ public class ErfTest {
         }
     }
 
+    /**
+     * Test the implementation of Erf.erf(double, double) for consistency with results
+     * obtained from Erf.erf(double) and Erf.erfc(double).
+     */
+    @Test
+    public void testTwoArgumentErfField() {
+        Decimal64[] xi = new Decimal64[]{new Decimal64(-2.0), new Decimal64(-1.0), new Decimal64(-0.9), new Decimal64(-0.1), new Decimal64(0.0), new Decimal64(0.1), new Decimal64(0.9), new Decimal64(1.0), new Decimal64(2.0)};
+        for(Decimal64 x1 : xi) {
+            for(Decimal64 x2 : xi) {
+                Decimal64 a = Erf.erf(x1, x2);
+                Decimal64 b = Erf.erf(x2).subtract(Erf.erf(x1));
+                Decimal64 c = Erf.erfc(x1).subtract(Erf.erfc(x2));
+                Assert.assertEquals(a.getReal(), b.getReal(), 1E-15);
+                Assert.assertEquals(a.getReal(), c.getReal(), 1E-15);
+            }
+        }
+    }
+
     @Test
     public void testErfInvNaN() {
         Assert.assertTrue(Double.isNaN(Erf.erfInv(-1.001)));
@@ -219,7 +414,21 @@ public class ErfTest {
     }
 
     @Test
+    public void testErfInvNaNField() {
+        Assert.assertTrue((Erf.erfInv(new Decimal64(-1.001))).isNaN());
+        Assert.assertTrue(Erf.erfInv(new Decimal64(+1.001)).isNaN());
+    }
+
+    @Test
     public void testErfInvInfinite() {
+        Assert.assertTrue(Double.isInfinite(Erf.erfInv(-1)));
+        Assert.assertTrue(Erf.erfInv(-1) < 0);
+        Assert.assertTrue(Double.isInfinite(Erf.erfInv(+1)));
+        Assert.assertTrue(Erf.erfInv(+1) > 0);
+    }
+
+    @Test
+    public void testErfInvInfiniteField() {
         Assert.assertTrue(Double.isInfinite(Erf.erfInv(-1)));
         Assert.assertTrue(Erf.erfInv(-1) < 0);
         Assert.assertTrue(Double.isInfinite(Erf.erfInv(+1)));
@@ -236,9 +445,24 @@ public class ErfTest {
     }
 
     @Test
+    public void testErfInvField() {
+        for (Decimal64 x = new Decimal64(-5.9); x.getReal() < 5.9; x = x.add(0.01)) {
+            final Decimal64 y = Erf.erf(x);
+            final Decimal64 dydx = x.multiply(x).negate().exp().multiply(2/FastMath.sqrt(FastMath.PI));
+            Assert.assertEquals(x.getReal(), Erf.erfInv(y).getReal(), 1.0e-15 / dydx.getReal());
+        }
+    }
+
+    @Test
     public void testErfcInvNaN() {
         Assert.assertTrue(Double.isNaN(Erf.erfcInv(-0.001)));
         Assert.assertTrue(Double.isNaN(Erf.erfcInv(+2.001)));
+    }
+
+    @Test
+    public void testErfcInvNaNField() {
+        Assert.assertTrue(Erf.erfcInv(new Decimal64(-0.001)).isNaN());
+        Assert.assertTrue(Erf.erfcInv(new Decimal64(+2.001)).isNaN());
     }
 
     @Test
@@ -250,11 +474,28 @@ public class ErfTest {
     }
 
     @Test
+    public void testErfcInvInfiniteField() {
+        Assert.assertTrue(Erf.erfcInv(new Decimal64(-0)).isInfinite());
+        Assert.assertTrue(Erf.erfcInv( zero).getReal() > 0);
+        Assert.assertTrue(Erf.erfcInv(new Decimal64(+2)).isInfinite());
+        Assert.assertTrue(Erf.erfcInv(new Decimal64(+2)).getReal() < 0);
+    }
+
+    @Test
     public void testErfcInv() {
         for (double x = -5.85; x < 5.9; x += 0.01) {
             final double y = Erf.erfc(x);
             final double dydxAbs = 2 * FastMath.exp(-x * x) / FastMath.sqrt(FastMath.PI);
             Assert.assertEquals(x, Erf.erfcInv(y), 1.0e-15 / dydxAbs);
+        }
+    }
+
+    @Test
+    public void testErfcInvField() {
+        for (Decimal64 x = new Decimal64(-5.85); x.getReal() < 5.9; x = x.add(0.01)) {
+            final Decimal64 y = Erf.erfc(x);
+            final Decimal64 dydxAbs = x.multiply(x).negate().exp().multiply(2/FastMath.sqrt(FastMath.PI));
+            Assert.assertEquals(x.getReal(), Erf.erfcInv(y).getReal(), 1.0e-15 / dydxAbs.getReal());
         }
     }
 }
