@@ -132,7 +132,8 @@ public class Erf {
      *
      * <p>The value returned is always between 0 and 2 (inclusive).
      * If {@code abs(x) > 40}, then {@code erf(x)} is indistinguishable from either 0 or 2 as a double, so the
-     * appropriate extreme value is returned.
+     * appropriate extreme value is returned. <b>This implies that the current implementation does not allow the use of
+     * {@link org.hipparchus.dfp.Dfp Dfp} with extended precision.</b>
      * </p>
      *
      * @param x the value
