@@ -186,7 +186,7 @@ public class Line implements Embedding<Euclidean3D, Euclidean1D> {
      * @return (n-1)-dimension point of the sub-space corresponding to
      * the specified space point
      */
-    public Vector1D toSubSpace(Vector<Euclidean3D> vector) {
+    public Vector1D toSubSpace(Vector<Euclidean3D, Vector3D> vector) {
         return toSubSpace((Point<Euclidean3D>) vector);
     }
 
@@ -195,7 +195,7 @@ public class Line implements Embedding<Euclidean3D, Euclidean1D> {
      * @return n-dimension point of the space corresponding to the
      * specified sub-space point
      */
-    public Vector3D toSpace(Vector<Euclidean1D> vector) {
+    public Vector3D toSpace(Vector<Euclidean1D, Vector1D> vector) {
         return toSpace((Point<Euclidean1D>) vector);
     }
 

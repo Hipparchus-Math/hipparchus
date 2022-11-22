@@ -30,6 +30,7 @@ import java.util.Locale;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Space;
+import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.euclidean.twod.FieldVector2D;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
@@ -234,6 +235,22 @@ public class Vector1DTest {
     @Test
     public void testNegate() {
         checkVector(new Vector1D(0.1).negate(), -0.1);
+    }
+
+    @Test
+    public void testArithmeticBlending() {
+
+        // Given
+        final Vector1D v1 = new Vector1D(1);
+        final Vector1D v2 = new Vector1D(2);
+
+        final double blendingValue = 0.7;
+
+        // When
+        final Vector1D blendedVector = v1.blendArithmeticallyWith(v2, blendingValue);
+
+        // Then
+        checkVector(blendedVector, 1.7);
     }
 
     private void checkVector(Vector1D v, double x) {

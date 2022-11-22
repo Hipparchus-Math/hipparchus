@@ -31,6 +31,7 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Space;
+import org.hipparchus.geometry.Vector;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
@@ -422,6 +423,22 @@ public class Vector3DTest {
             Vector3D cAccurate = new Vector3D(ux, uy, uz).crossProduct(new Vector3D(vx, vy, vz));
             Assert.assertEquals(0.0, cAccurate.distance(cNaive), 6.0e-15 * cAccurate.getNorm());
         }
+    }
+
+    @Test
+    public void testArithmeticBlending() {
+
+        // Given
+        final Vector3D v1 = new Vector3D(1,2,3);
+        final Vector3D v2 = new Vector3D(4,5,6);
+
+        final double blendingValue = 0.7;
+
+        // When
+        final Vector3D blendedVector = v1.blendArithmeticallyWith(v2, blendingValue);
+
+        // Then
+        checkVector(blendedVector, 3.1, 4.1, 5.1);
     }
 
     private void checkVector(Vector3D v, double x, double y, double z) {

@@ -45,8 +45,9 @@ import org.hipparchus.util.CompositeFormat;
  * to use a {@link NumberFormat} instance with disabled grouping in such a case.</p>
  *
  * @param <S> Type of the space.
+ * @param <V> Type of vector implementing Vector interface.
  */
-public abstract class VectorFormat<S extends Space> {
+public abstract class VectorFormat<S extends Space, V extends Vector<S,V>> {
 
     /** The default prefix: "{". */
     public static final String DEFAULT_PREFIX = "{";
@@ -172,7 +173,7 @@ public abstract class VectorFormat<S extends Space> {
      * @param vector the object to format.
      * @return a formatted string.
      */
-    public String format(Vector<S> vector) {
+    public String format(Vector<S, V> vector) {
         return format(vector, new StringBuffer(), new FieldPosition(0)).toString();
     }
 
@@ -184,7 +185,7 @@ public abstract class VectorFormat<S extends Space> {
      *            offsets of the alignment field
      * @return the value passed in as toAppendTo.
      */
-    public abstract StringBuffer format(Vector<S> vector,
+    public abstract StringBuffer format(Vector<S, V> vector,
                                         StringBuffer toAppendTo, FieldPosition pos);
 
     /**
@@ -226,7 +227,7 @@ public abstract class VectorFormat<S extends Space> {
      * @throws MathIllegalStateException if the beginning of the specified string
      * cannot be parsed.
      */
-    public abstract Vector<S> parse(String source) throws MathIllegalStateException;
+    public abstract Vector<S, V> parse(String source) throws MathIllegalStateException;
 
     /**
      * Parses a string to produce a {@link Vector} object.
@@ -234,7 +235,7 @@ public abstract class VectorFormat<S extends Space> {
      * @param pos input/output parsing parameter.
      * @return the parsed {@link Vector} object.
      */
-    public abstract Vector<S> parse(String source, ParsePosition pos);
+    public abstract Vector<S, V> parse(String source, ParsePosition pos);
 
     /**
      * Parses a string to produce an array of coordinates.

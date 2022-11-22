@@ -233,7 +233,7 @@ public class PolyhedronsSetTest {
                          1.0, c,
                          1.0, r.applyTo(barycenter.subtract(c)));
         Assert.assertEquals(0.0,
-                            newB.subtract((Vector<Euclidean3D>) tree.getBarycenter()).getNorm(),
+                            newB.subtract((Vector<Euclidean3D, Vector3D>) tree.getBarycenter()).getNorm(),
                             1.0e-10);
 
         final Vector3D[] expectedV = new Vector3D[] {

@@ -21,21 +21,25 @@
  */
 package org.hipparchus.geometry;
 
-import java.text.NumberFormat;
-
+import org.hipparchus.analysis.polynomials.SmoothStepFactory;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.util.Blendable;
+
+import java.text.NumberFormat;
 
 /** This interface represents a generic vector in a vectorial space or a point in an affine space.
  * @param <S> Type of the space.
+ * @param <V> Type of vector implementing this interface.
  * @see Space
  * @see Point
  */
-public interface Vector<S extends Space> extends Point<S> {
+public interface Vector<S extends Space, V extends Vector<S,V>> extends Point<S>, Blendable<Vector<S,V>> {
 
     /** Get the null vector of the vectorial space or origin point of the affine space.
      * @return null vector of the vectorial space or origin point of the affine space
      */
-    Vector<S> getZero();
+    V getZero();
 
     /** Get the L<sub>1</sub> norm for the vector.
      * @return L<sub>1</sub> norm for the vector
@@ -61,44 +65,50 @@ public interface Vector<S extends Space> extends Point<S> {
      * @param v vector to add
      * @return a new vector
      */
-    Vector<S> add(Vector<S> v);
+    V add(Vector<S,V> v);
 
     /** Add a scaled vector to the instance.
      * @param factor scale factor to apply to v before adding it
      * @param v vector to add
      * @return a new vector
      */
-    Vector<S> add(double factor, Vector<S> v);
+    V add(double factor, Vector<S,V> v);
 
     /** Subtract a vector from the instance.
      * @param v vector to subtract
      * @return a new vector
      */
-    Vector<S> subtract(Vector<S> v);
+    V subtract(Vector<S,V> v);
 
     /** Subtract a scaled vector from the instance.
      * @param factor scale factor to apply to v before subtracting it
      * @param v vector to subtract
      * @return a new vector
      */
-    Vector<S> subtract(double factor, Vector<S> v);
+    V subtract(double factor, Vector<S,V> v);
 
     /** Get the opposite of the instance.
      * @return a new vector which is opposite to the instance
      */
-    Vector<S> negate();
+    V negate();
 
     /** Get a normalized vector aligned with the instance.
      * @return a new normalized vector
      * @exception MathRuntimeException if the norm is zero
      */
-    Vector<S> normalize() throws MathRuntimeException;
+    default V normalize() throws MathRuntimeException{
+        double s = getNorm();
+        if (s == 0) {
+            throw new MathRuntimeException(LocalizedGeometryFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
+        }
+        return scalarMultiply(1 / s);
+    }
 
     /** Multiply the instance by a scalar.
      * @param a scalar
      * @return a new vector
      */
-    Vector<S> scalarMultiply(double a);
+    V scalarMultiply(double a);
 
     /**
      * Returns true if any coordinate of this vector is infinite and none are NaN;
@@ -115,7 +125,7 @@ public interface Vector<S extends Space> extends Point<S> {
      * @param v second vector
      * @return the distance between the instance and p according to the L<sub>1</sub> norm
      */
-    double distance1(Vector<S> v);
+    double distance1(Vector<S,V> v);
 
     /** Compute the distance between the instance and another vector according to the L<sub>&infin;</sub> norm.
      * <p>Calling this method is equivalent to calling:
@@ -124,7 +134,7 @@ public interface Vector<S extends Space> extends Point<S> {
      * @param v second vector
      * @return the distance between the instance and p according to the L<sub>&infin;</sub> norm
      */
-    double distanceInf(Vector<S> v);
+    double distanceInf(Vector<S,V> v);
 
     /** Compute the square of the distance between the instance and another vector.
      * <p>Calling this method is equivalent to calling:
@@ -133,13 +143,13 @@ public interface Vector<S extends Space> extends Point<S> {
      * @param v second vector
      * @return the square of the distance between the instance and p
      */
-    double distanceSq(Vector<S> v);
+    double distanceSq(Vector<S,V> v);
 
     /** Compute the dot-product of the instance and another vector.
      * @param v second vector
      * @return the dot product this.v
      */
-    double dotProduct(Vector<S> v);
+    double dotProduct(Vector<S,V> v);
 
     /** Get a string representation of this vector.
      * @param format the custom format for components
@@ -147,4 +157,10 @@ public interface Vector<S extends Space> extends Point<S> {
      */
     String toString(NumberFormat format);
 
+    @Override
+    default V blendArithmeticallyWith(Vector<S,V> other, double blendingValue)
+            throws MathIllegalArgumentException {
+        SmoothStepFactory.checkBetweenZeroAndOneIncluded(blendingValue);
+        return this.scalarMultiply(1 - blendingValue).add(other.scalarMultiply(blendingValue));
+    }
 }

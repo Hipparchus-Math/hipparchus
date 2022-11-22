@@ -67,7 +67,7 @@ public class OrientedPoint implements Hyperplane<Euclidean1D> {
      * @param vector vector to check
      * @return offset of the vector
      */
-    public double getOffset(Vector<Euclidean1D> vector) {
+    public double getOffset(Vector<Euclidean1D, Vector1D> vector) {
         return getOffset((Point<Euclidean1D>) vector);
     }
 

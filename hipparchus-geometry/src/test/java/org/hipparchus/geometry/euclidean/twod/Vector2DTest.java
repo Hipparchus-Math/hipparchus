@@ -28,6 +28,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
+import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.SinCos;
@@ -277,6 +278,22 @@ public class Vector2DTest {
                                                  new Vector2D(1, 0),
                                                  new Vector2D(2, 0)),
                             1.0e-15);
+    }
+
+    @Test
+    public void testArithmeticBlending() {
+
+        // Given
+        final Vector2D v1 = new Vector2D(1,2);
+        final Vector2D v2 = new Vector2D(3,4);
+
+        final double blendingValue = 0.7;
+
+        // When
+        final Vector2D blendedVector = v1.blendArithmeticallyWith(v2, blendingValue);
+
+        // Then
+        check(blendedVector, 2.4, 3.4, 1e-12);
     }
 
     private void check(final Vector2D v, final double x, final double y, final double tol) {

@@ -51,15 +51,15 @@ public abstract class Vector2DFormatAbstractTest {
 
     @Test
     public void testDefaults() {
-        VectorFormat<Euclidean2D> vFormat = new VectorFormat<Euclidean2D>() {
-            public StringBuffer format(Vector<Euclidean2D> vector,
+        VectorFormat<Euclidean2D, Vector2D> vFormat = new VectorFormat<Euclidean2D, Vector2D>() {
+            public StringBuffer format(Vector<Euclidean2D, Vector2D> vector,
                                        StringBuffer toAppendTo, FieldPosition pos) {
                 return null;
             }
-            public Vector<Euclidean2D> parse(String source, ParsePosition parsePosition) {
+            public Vector<Euclidean2D, Vector2D> parse(String source, ParsePosition parsePosition) {
                 return null;
             }
-            public Vector<Euclidean2D> parse(String source) {
+            public Vector<Euclidean2D, Vector2D> parse(String source) {
                 return null;
             }
         };
@@ -72,15 +72,15 @@ public abstract class Vector2DFormatAbstractTest {
     @Test
     public void testNumberFormat() {
         NumberFormat nf = NumberFormat.getInstance(Locale.FRENCH);
-        VectorFormat<Euclidean2D> vFormat = new VectorFormat<Euclidean2D>(nf) {
-            public StringBuffer format(Vector<Euclidean2D> vector,
+        VectorFormat<Euclidean2D, Vector2D> vFormat = new VectorFormat<Euclidean2D, Vector2D>(nf) {
+            public StringBuffer format(Vector<Euclidean2D, Vector2D> vector,
                                        StringBuffer toAppendTo, FieldPosition pos) {
                 return null;
             }
-            public Vector<Euclidean2D> parse(String source, ParsePosition parsePosition) {
+            public Vector<Euclidean2D, Vector2D> parse(String source, ParsePosition parsePosition) {
                 return null;
             }
-            public Vector<Euclidean2D> parse(String source) {
+            public Vector<Euclidean2D, Vector2D> parse(String source) {
                 return null;
             }
         };
@@ -92,15 +92,15 @@ public abstract class Vector2DFormatAbstractTest {
 
     @Test
     public void testPrefixSuffixSeparator() {
-        VectorFormat<Euclidean2D> vFormat = new VectorFormat<Euclidean2D>("<", ">", "|") {
-            public StringBuffer format(Vector<Euclidean2D> vector,
+        VectorFormat<Euclidean2D, Vector2D> vFormat = new VectorFormat<Euclidean2D, Vector2D>("<", ">", "|") {
+            public StringBuffer format(Vector<Euclidean2D, Vector2D> vector,
                                        StringBuffer toAppendTo, FieldPosition pos) {
                 return null;
             }
-            public Vector<Euclidean2D> parse(String source, ParsePosition parsePosition) {
+            public Vector<Euclidean2D, Vector2D> parse(String source, ParsePosition parsePosition) {
                 return null;
             }
-            public Vector<Euclidean2D> parse(String source) {
+            public Vector<Euclidean2D, Vector2D> parse(String source) {
                 return null;
             }
         };

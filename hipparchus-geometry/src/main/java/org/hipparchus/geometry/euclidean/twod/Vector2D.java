@@ -26,7 +26,6 @@ import java.text.NumberFormat;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.Vector;
@@ -37,7 +36,7 @@ import org.hipparchus.util.MathUtils;
 /** This class represents a 2D vector.
  * <p>Instances of this class are guaranteed to be immutable.</p>
  */
-public class Vector2D implements Vector<Euclidean2D> {
+public class Vector2D implements Vector<Euclidean2D, Vector2D> {
 
     /** Origin (coordinates: 0, 0). */
     public static final Vector2D ZERO   = new Vector2D(0, 0);
@@ -231,40 +230,30 @@ public class Vector2D implements Vector<Euclidean2D> {
 
     /** {@inheritDoc} */
     @Override
-    public Vector2D add(Vector<Euclidean2D> v) {
+    public Vector2D add(Vector<Euclidean2D, Vector2D> v) {
         Vector2D v2 = (Vector2D) v;
         return new Vector2D(x + v2.getX(), y + v2.getY());
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector2D add(double factor, Vector<Euclidean2D> v) {
+    public Vector2D add(double factor, Vector<Euclidean2D, Vector2D> v) {
         Vector2D v2 = (Vector2D) v;
         return new Vector2D(x + factor * v2.getX(), y + factor * v2.getY());
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector2D subtract(Vector<Euclidean2D> p) {
+    public Vector2D subtract(Vector<Euclidean2D, Vector2D> p) {
         Vector2D p3 = (Vector2D) p;
         return new Vector2D(x - p3.x, y - p3.y);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Vector2D subtract(double factor, Vector<Euclidean2D> v) {
+    public Vector2D subtract(double factor, Vector<Euclidean2D, Vector2D> v) {
         Vector2D v2 = (Vector2D) v;
         return new Vector2D(x - factor * v2.getX(), y - factor * v2.getY());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Vector2D normalize() throws MathRuntimeException {
-        double s = getNorm();
-        if (s == 0) {
-            throw new MathRuntimeException(LocalizedGeometryFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
-        }
-        return scalarMultiply(1 / s);
     }
 
     /** Compute the angular separation between two vectors.
@@ -327,7 +316,7 @@ public class Vector2D implements Vector<Euclidean2D> {
 
     /** {@inheritDoc} */
     @Override
-    public double distance1(Vector<Euclidean2D> p) {
+    public double distance1(Vector<Euclidean2D, Vector2D> p) {
         Vector2D p3 = (Vector2D) p;
         final double dx = FastMath.abs(p3.x - x);
         final double dy = FastMath.abs(p3.y - y);
@@ -345,7 +334,7 @@ public class Vector2D implements Vector<Euclidean2D> {
 
     /** {@inheritDoc} */
     @Override
-    public double distanceInf(Vector<Euclidean2D> p) {
+    public double distanceInf(Vector<Euclidean2D, Vector2D> p) {
         Vector2D p3 = (Vector2D) p;
         final double dx = FastMath.abs(p3.x - x);
         final double dy = FastMath.abs(p3.y - y);
@@ -354,7 +343,7 @@ public class Vector2D implements Vector<Euclidean2D> {
 
     /** {@inheritDoc} */
     @Override
-    public double distanceSq(Vector<Euclidean2D> p) {
+    public double distanceSq(Vector<Euclidean2D, Vector2D> p) {
         Vector2D p3 = (Vector2D) p;
         final double dx = p3.x - x;
         final double dy = p3.y - y;
@@ -363,7 +352,7 @@ public class Vector2D implements Vector<Euclidean2D> {
 
     /** {@inheritDoc} */
     @Override
-    public double dotProduct(final Vector<Euclidean2D> v) {
+    public double dotProduct(final Vector<Euclidean2D, Vector2D> v) {
         final Vector2D v2 = (Vector2D) v;
         return MathArrays.linearCombination(x, v2.x, y, v2.y);
     }

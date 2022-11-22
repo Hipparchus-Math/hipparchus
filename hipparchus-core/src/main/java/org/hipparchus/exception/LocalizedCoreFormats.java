@@ -226,7 +226,10 @@ public enum LocalizedCoreFormats implements Localizable {
     ZERO_FRACTION_TO_DIVIDE_BY("the fraction to divide by must not be zero: {0}/{1}"),
     ZERO_NORM("zero norm"),
     ZERO_NOT_ALLOWED("zero not allowed here"),
-    ZERO_STATE_SIZE("state dimension must be different from 0");
+    ZERO_STATE_SIZE("state dimension must be different from 0"),
+    RIGHT_EDGE_GREATER_THAN_LEFT_EDGE("left edge {0} should be smaller than right edge {1}"),
+    INPUT_EXPECTED_BETWEEN_ZERO_AND_ONE_INCLUDED("input {0} is expected to be between [0:1]");
+
 
     // CHECKSTYLE: resume JavadocVariable
     // CHECKSTYLE: resume MultipleVariableDeclarations
