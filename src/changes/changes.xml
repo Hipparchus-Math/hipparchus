@@ -49,9 +49,10 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
-    <release version="2.4" date="TBA" description="This is a maintenance release.">
+    <release version="3.0" date="TBD" description="This is a major release.">
       <action dev="vincent" type="add" issue="issues/212">
         Added Blendable interface and its implementation in RealMatrix and Vector interfaces.
+        Changed Vector interface parameters.
         Added SmoothStepFactory which allow for quick creation of common and generic smoothstep function.
       </action>
     </release>
