@@ -55,7 +55,8 @@ public enum LocalizedStatFormats implements Localizable {
     SIGNIFICANCE_LEVEL("significance level ({0})"),
     TOO_MANY_REGRESSORS("too many regressors ({0}) specified, only {1} in the model"),
     TWO_OR_MORE_CATEGORIES_REQUIRED("two or more categories required, got {0}"),
-    TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED("two or more values required in each category, one has {0}");
+    TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED("two or more values required in each category, one has {0}"),
+    ILLEGAL_STATE_PCA("you must fit the PCA projection before calling {0}");
 
     /** Source English format. */
     private final String sourceFormat;
