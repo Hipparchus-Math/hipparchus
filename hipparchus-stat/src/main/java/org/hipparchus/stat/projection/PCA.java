@@ -30,6 +30,7 @@ import org.hipparchus.stat.descriptive.moment.StandardDeviation;
  * <a href="https://en.wikipedia.org/wiki/Principal_component_analysis">PCA</a> can be thought of as a
  * projection or scaling of the data to reduce the number of dimensions but done in a way
  * that preserves as much information as possible.
+ * @since 3.0
  */
 public class PCA {
     /**
@@ -181,6 +182,10 @@ public class PCA {
         return this;
     }
 
+    /** Check if the state allows an operation to be performed.
+     * @param from name of the operation
+     * @exception MathIllegalStateException if the state does not allows operation
+     */
     private void validateState(String from) {
         if (center == null) {
             throw new MathIllegalStateException(LocalizedStatFormats.ILLEGAL_STATE_PCA, from);
@@ -188,6 +193,12 @@ public class PCA {
 
     }
 
+    /** Compute eigenvalues and principal components.
+     * <p>
+     * The results are stored in the instance itself
+     * <p>
+     * @param normalizedM normalized matrix
+     */
     private void calculatePrincipalComponents(RealMatrix normalizedM) {
         RealMatrix covarianceM = new Covariance(normalizedM).getCovarianceMatrix();
         EigenDecomposition decomposition = new EigenDecomposition(covarianceM);
@@ -236,6 +247,11 @@ public class PCA {
         return MatrixUtils.createRealMatrix(normalized);
     }
 
+    /** compute normalized parameters.
+     * @param input the input data
+     * @param numS number of data rows
+     * @param f index of the component
+     */
     private void calculateNormalizeParameters(double[][] input, int numS, int f) {
         double[] column = new double[numS];
         for (int s = 0; s < numS; s++) {
