@@ -17,6 +17,7 @@
 package org.hipparchus.stat.projection;
 
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.stat.LocalizedStatFormats;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -140,10 +141,16 @@ public class PCATest {
         assertExpected(EXPECTED_COR_NO_BIAS, actual);
     }
 
-    @Test(expected = MathIllegalStateException.class)
+    @Test
     public void transformWithoutFit() {
         PCA pca = new PCA(2);
-        double[][] actual = pca.transform(SCORES);
+        try {
+            pca.transform(SCORES);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalStateException mise) {
+            Assert.assertEquals(LocalizedStatFormats.ILLEGAL_STATE_PCA, mise.getSpecifier());
+            Assert.assertEquals("transform", mise.getParts()[0]);
+        }
     }
 
     private static void assertExpected(double[][] expected, double[][] actual) {
