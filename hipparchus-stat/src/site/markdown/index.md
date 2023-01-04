@@ -948,9 +948,28 @@ method), first compute the d-statistic and then use the `exactP` method
 
     final double d = TestUtils.kolmogorovSmirnovStatistic(x, y);
     TestUtils.exactP(d, x.length, y.length, false)
-    
+
 assuming that the non-strict form of the null hypothesis is desired. Note, however,
 that exact computation for large samples takes a long time.
 
 When there are ties in the data in a 2-sample Kolmogorov-Smirnov test, the p-value is strictly speaking undefined. If the combined sample size is less than 10,000 and there are ties in the data, random jitter is by default added to break the ties.  If ties are known to be present in the data, the `bootstrap` method may be used as an alternative for estimating the p-value. See the javadoc for details on the p-value estimation algorithms used and how they are selected.
 
+## Projections
+[Principal component analysis](../apidocs/org/hipparchus/stat/projection/PCA.html)
+is a statistical technique for reducing the dimensionality of a dataset.
+Typically, the input data is transformed into a new reduced dimension
+dataset but the projection model can also be applied to additional datasets.
+A PCA projection is constructed and used as follows
+
+    PCA pca = new PCA(2);
+    double[][] reduced = pca.fitAndTransform(original);
+
+The javadoc describes some options that exist for altering the
+transformation such as whether to scale as well as center the data
+during the transformation process. The decision to scale or not
+is not a black and white choice. There are many factors that you
+[might want to consider](https://stats.stackexchange.com/questions/53/pca-on-correlation-or-covariance) but the general
+rule of thumb is that you scale when the features under analysis
+have widely varying scales, e.g. one column might be temperature
+in Kelvin vs another with temperature in Celsius or distance in
+kilometers vs weight in micrograms.
