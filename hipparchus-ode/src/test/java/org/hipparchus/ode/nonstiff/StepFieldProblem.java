@@ -22,24 +22,51 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
-import org.hipparchus.ode.FieldODEState;
+import org.hipparchus.Field;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
+import org.hipparchus.ode.events.AbstractFieldODEDetector;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.FieldODEEventDetector;
 import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.util.MathArrays;
 
 
 public class StepFieldProblem<T extends CalculusFieldElement<T>>
-    implements FieldOrdinaryDifferentialEquation<T>, FieldODEEventHandler<T> {
+    extends AbstractFieldODEDetector<StepFieldProblem<T>, T>
+    implements FieldOrdinaryDifferentialEquation<T> {
 
-    public StepFieldProblem(Field<T> field, T rateBefore, T rateAfter, T switchTime) {
+    private Field<T> field;
+    private T        rateBefore;
+    private T        rateAfter;
+    private T        rate;
+    private T        switchTime;
+
+    public StepFieldProblem(Field<T> field,
+                            final T maxCheck, final T threshold, final int maxIter,
+                            T rateBefore, T rateAfter, T switchTime) {
+        this(field, maxCheck, threshold, maxIter, new LocalHandler<>(),
+             rateBefore, rateAfter, switchTime);
+    }
+
+    private StepFieldProblem(Field<T> field,
+                             final T maxCheck, final T threshold,
+                             final int maxIter, final FieldODEEventHandler<T> handler,
+                             final T rateBefore, final T rateAfter,
+                             final T switchTime) {
+        super(maxCheck, threshold, maxIter, handler);
         this.field      = field;
+        this.rateBefore = rateBefore;
         this.rateAfter  = rateAfter;
         this.switchTime = switchTime;
         setRate(rateBefore);
+    }
+
+    protected StepFieldProblem<T> create(T newMaxCheck, T newThreshold,
+                                         int newMaxIter, FieldODEEventHandler<T> newHandler) {
+        return new StepFieldProblem<>(field, newMaxCheck, newThreshold, newMaxIter, newHandler,
+                                      rateBefore, rateAfter, switchTime);
     }
 
     public T[] computeDerivatives(T t, T[] y) {
@@ -62,22 +89,17 @@ public class StepFieldProblem<T extends CalculusFieldElement<T>>
     public void init(FieldODEStateAndDerivative<T> state0, T t) {
     }
 
-    public Action eventOccurred(FieldODEStateAndDerivative<T> state, boolean increasing) {
-        setRate(rateAfter);
-        return Action.RESET_DERIVATIVES;
+    private static class LocalHandler<T extends CalculusFieldElement<T>> implements FieldODEEventHandler<T> {
+        public Action eventOccurred(FieldODEStateAndDerivative<T> state, FieldODEEventDetector<T> detector, boolean increasing) {
+            final StepFieldProblem<T> sp = (StepFieldProblem<T>) detector;
+            sp.setRate(sp.rateAfter);
+            return Action.RESET_DERIVATIVES;
+        }
+
     }
 
     public T g(FieldODEStateAndDerivative<T> state) {
         return state.getTime().subtract(switchTime);
     }
-
-    public FieldODEState<T> resetState(FieldODEStateAndDerivative<T> state) {
-        return state;
-    }
-
-    private Field<T> field;
-    private T        rate;
-    private T        rateAfter;
-    private T        switchTime;
 
 }

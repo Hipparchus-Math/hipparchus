@@ -22,21 +22,6 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
-import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.events.Action;
-import org.hipparchus.ode.events.EventHandlerConfiguration;
-import org.hipparchus.ode.events.EventState;
-import org.hipparchus.ode.events.EventState.EventOccurrence;
-import org.hipparchus.ode.events.ODEEventHandler;
-import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
-import org.hipparchus.ode.sampling.ODEStepHandler;
-import org.hipparchus.util.FastMath;
-import org.hipparchus.util.Incrementor;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -45,16 +30,21 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.EventState;
+import org.hipparchus.ode.events.EventState.EventOccurrence;
+import org.hipparchus.ode.events.ODEEventDetector;
+import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
+import org.hipparchus.ode.sampling.ODEStepHandler;
+import org.hipparchus.util.FastMath;
+import org.hipparchus.util.Incrementor;
+
 /**
  * Base class managing common boilerplate for all integrators.
  */
 public abstract class AbstractIntegrator implements ODEIntegrator {
-
-    /** Default relative accuracy. */
-    private static final double DEFAULT_RELATIVE_ACCURACY = 0;
-
-    /** Default function value accuracy. */
-    private static final double DEFAULT_FUNCTION_VALUE_ACCURACY = 0;
 
     /** Step handler. */
     private Collection<ODEStepHandler> stepHandlers;
@@ -125,48 +115,23 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    public void addEventHandler(final ODEEventHandler handler,
-                                final double maxCheckInterval,
-                                final double convergence,
-                                final int maxIterationCount) {
-        addEventHandler(handler, maxCheckInterval, convergence,
-                        maxIterationCount,
-                        new BracketingNthOrderBrentSolver(DEFAULT_RELATIVE_ACCURACY,
-                                                          convergence,
-                                                          DEFAULT_FUNCTION_VALUE_ACCURACY,
-                                                          5));
+    public void addEventDetector(final ODEEventDetector detector) {
+        eventsStates.add(new EventState(detector));
     }
 
     /** {@inheritDoc} */
     @Override
-    public void addEventHandler(final ODEEventHandler handler,
-                                final double maxCheckInterval,
-                                final double convergence,
-                                final int maxIterationCount,
-                                final BracketedUnivariateSolver<UnivariateFunction> solver) {
-        eventsStates.add(new EventState(handler, maxCheckInterval, convergence,
-                                        maxIterationCount, solver));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Collection<ODEEventHandler> getEventHandlers() {
-        final List<ODEEventHandler> list = new ArrayList<>(eventsStates.size());
+    public Collection<ODEEventDetector> getEventDetectors() {
+        final List<ODEEventDetector> list = new ArrayList<>(eventsStates.size());
         for (EventState state : eventsStates) {
-            list.add(state.getEventHandler());
+            list.add(state.getEventDetector());
         }
         return Collections.unmodifiableCollection(list);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Collection<EventHandlerConfiguration> getEventHandlersConfigurations() {
-        return Collections.unmodifiableCollection(eventsStates);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void clearEventHandlers() {
+    public void clearEventDetectors() {
         eventsStates.clear();
     }
 
@@ -222,7 +187,7 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
 
         // initialize event handlers
         for (final EventState state : eventsStates) {
-            state.getEventHandler().init(s0WithDerivatives, t);
+            state.init(s0WithDerivatives, t);
         }
 
         // initialize step handlers

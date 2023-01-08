@@ -32,7 +32,7 @@ import org.hipparchus.ode.TestProblem4;
 import org.hipparchus.ode.TestProblem5;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
-import org.hipparchus.ode.events.ODEEventHandler;
+import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
@@ -188,13 +188,13 @@ public class GraggBulirschStoerIntegratorTest {
                                                                scalRelativeTolerance);
         TestProblemHandler handler = new TestProblemHandler(pb, integ);
         integ.addStepHandler(handler);
-        ODEEventHandler[] functions = pb.getEventsHandlers();
         // since state is approx. linear at g=0 need convergence <= (state tolerance) / 2.
         double convergence = 1.0e-11;
+        ODEEventDetector[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY, convergence, 1000);
         for (int l = 0; l < functions.length; ++l) {
-            integ.addEventHandler(functions[l], Double.POSITIVE_INFINITY, convergence, 1000);
+            integ.addEventDetector(functions[l]);
         }
-        Assert.assertEquals(functions.length, integ.getEventHandlers().size());
+        Assert.assertEquals(functions.length, integ.getEventDetectors().size());
         integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
         MatcherAssert.assertThat(handler.getMaximalValueError(), Matchers.lessThan(2.5e-11));
@@ -202,8 +202,8 @@ public class GraggBulirschStoerIntegratorTest {
         // so tolerance is slightly more than the convergence.
         Assert.assertEquals(0, handler.getMaximalTimeError(), 1.5 * convergence);
         Assert.assertEquals(12.0, handler.getLastTime(), convergence);
-        integ.clearEventHandlers();
-        Assert.assertEquals(0, integ.getEventHandlers().size());
+        integ.clearEventDetectors();
+        Assert.assertEquals(0, integ.getEventDetectors().size());
 
     }
 
@@ -272,10 +272,10 @@ public class GraggBulirschStoerIntegratorTest {
 
     @Test
     public void testUnstableDerivative() {
-        final StepProblem stepProblem = new StepProblem(0.0, 1.0, 2.0);
+        final StepProblem stepProblem = new StepProblem(1.0, 1.0e-12, 1000, 0.0, 1.0, 2.0);
         ODEIntegrator integ =
                         new GraggBulirschStoerIntegrator(0.1, 10, 1.0e-12, 0.0);
-        integ.addEventHandler(stepProblem, 1.0, 1.0e-12, 1000);
+        integ.addEventDetector(stepProblem);
         Assert.assertEquals(8.0,
                             integ.integrate(stepProblem, new ODEState(0.0, new double[] { 0.0 }), 10.0).getPrimaryState()[0],
                             1.0e-12);

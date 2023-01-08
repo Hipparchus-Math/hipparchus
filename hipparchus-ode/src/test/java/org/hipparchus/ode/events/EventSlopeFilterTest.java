@@ -23,8 +23,6 @@ package org.hipparchus.ode.events;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
-import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldExpandableODE;
@@ -46,7 +44,7 @@ import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class EventFilterTest {
+public class EventSlopeFilterTest {
 
     @Test
     public void testHistoryIncreasingForward() {
@@ -185,9 +183,8 @@ public class EventFilterTest {
     }
 
     private void testHistory(FilterType type, double t0, double t1, double refSwitch, double signEven) {
-        Event onlyIncreasing = new Event(false, true);
-        EventFilter eventFilter =
-                new EventFilter(onlyIncreasing, type);
+        Event onlyIncreasing = new Event(Double.POSITIVE_INFINITY, 1.0e-10, 1000, false, true);
+        EventSlopeFilter<Event> eventFilter = new EventSlopeFilter<>(onlyIncreasing, type);
         eventFilter.init(new ODEStateAndDerivative(t0,
                                                    new double[] { FastMath.sin(t0),  FastMath.cos(t0) },
                                                    new double[] { FastMath.cos(t0), -FastMath.sin(t0) }),
@@ -221,8 +218,9 @@ public class EventFilterTest {
     }
 
     private <T extends CalculusFieldElement<T>> void testHistoryField(Field<T> field, FilterType type, double t0, double t1, double refSwitch, double signEven) {
-        FieldEvent<T> onlyIncreasing = new FieldEvent<>(false, true);
-        FieldEventFilter<T> eventFilter = new FieldEventFilter<>(field, onlyIncreasing, type);
+        FieldEvent<T> onlyIncreasing = new FieldEvent<>(field.getZero().newInstance(Double.POSITIVE_INFINITY),
+                                                        field.getZero().newInstance(1.0e-10), 1000, false, true);
+        FieldEventSlopeFilter<FieldEvent<T>, T> eventFilter = new FieldEventSlopeFilter<>(field, onlyIncreasing, type);
         eventFilter.init(buildStateAndDerivative(field, t0), field.getZero().add(t1));
 
         // first pass to set up switches history for a long period
@@ -259,26 +257,14 @@ public class EventFilterTest {
         return new FieldODEStateAndDerivative<>(t0F, y0F, y0DotF);
     }
 
-    private <T extends CalculusFieldElement<T>> FieldBracketingNthOrderBrentSolver<T> buildSolver(Field<T> field) {
-        return new FieldBracketingNthOrderBrentSolver<>(field.getZero().add(1.0e-7),
-                    field.getZero().add(1.0e-14),
-                    field.getZero().add(1.0e-15),
-                    5);
-    }
-
     @Test
     public void testIncreasingOnly()
         throws MathIllegalArgumentException, MathIllegalStateException {
-        double e = 1e-15;
         ODEIntegrator integrator = new DormandPrince853Integrator(1.0e-3, 100.0, 1e-7, 1e-7);
-        Event allEvents = new Event(true, true);
-        integrator.addEventHandler(allEvents, 0.1, e, 1000,
-                                   new BracketingNthOrderBrentSolver(1.0e-7, 5));
-        Event onlyIncreasing = new Event(false, true);
-        integrator.addEventHandler(new EventFilter(onlyIncreasing,
-                                                   FilterType.TRIGGER_ONLY_INCREASING_EVENTS),
-                                   0.1, e, 100,
-                                   new BracketingNthOrderBrentSolver(1.0e-7, 5));
+        Event allEvents = new Event(0.1, 1.0e-7, 100, true, true);
+        integrator.addEventDetector(allEvents);
+        Event onlyIncreasing = new Event(0.1, 1.0e-7, 100, false, true);
+        integrator.addEventDetector(new EventSlopeFilter<>(onlyIncreasing, FilterType.TRIGGER_ONLY_INCREASING_EVENTS));
         double t0 = 0.5 * FastMath.PI;
         double tEnd = 5.5 * FastMath.PI;
         double[] y = { 0.0, 1.0 };
@@ -297,14 +283,14 @@ public class EventFilterTest {
     }
 
     private <T extends CalculusFieldElement<T>> void doTestIncreasingOnlyField(Field<T> field) {
-        double e = 1e-15;
         FieldODEIntegrator<T> integrator = new DormandPrince853FieldIntegrator<>(field, 1.0e-3, 100.0, 1e-7, 1e-7);
-        FieldEvent<T> allEvents = new FieldEvent<>(true, true);
-        integrator.addEventHandler(allEvents, 0.1, e, 1000, buildSolver(field));
-        FieldEvent<T> onlyIncreasing = new FieldEvent<>(false, true);
-        integrator.addEventHandler(new FieldEventFilter<>(field, onlyIncreasing,
-                                                          FilterType.TRIGGER_ONLY_INCREASING_EVENTS),
-                                   0.1, e, 100, buildSolver(field));
+        FieldEvent<T> allEvents = new FieldEvent<>(field.getZero().newInstance(0.1),
+                                                   field.getZero().newInstance(1.0e-7), 100, true, true);
+        integrator.addEventDetector(allEvents);
+        FieldEvent<T> onlyIncreasing = new FieldEvent<>(field.getZero().newInstance(0.1),
+                                                        field.getZero().newInstance(1.0e-7), 100, false, true);
+        integrator.addEventDetector(new FieldEventSlopeFilter<>(field, onlyIncreasing,
+                                                                FilterType.TRIGGER_ONLY_INCREASING_EVENTS));
         T t0   = field.getZero().add(0.5 * FastMath.PI);
         T tEnd = field.getZero().add(5.5 * FastMath.PI);
         T[] y  = MathArrays.buildArray(field, 2);
@@ -323,16 +309,11 @@ public class EventFilterTest {
     @Test
     public void testDecreasingOnly()
         throws MathIllegalArgumentException, MathIllegalStateException {
-        double e = 1e-15;
         ODEIntegrator integrator = new DormandPrince853Integrator(1.0e-3, 100.0, 1e-7, 1e-7);
-        Event allEvents = new Event(true, true);
-        integrator.addEventHandler(allEvents, 0.1, e, 1000,
-                                   new BracketingNthOrderBrentSolver(1.0e-7, 5));
-        Event onlyDecreasing = new Event(true, false);
-        integrator.addEventHandler(new EventFilter(onlyDecreasing,
-                                                   FilterType.TRIGGER_ONLY_DECREASING_EVENTS),
-                                   0.1, e, 1000,
-                                   new BracketingNthOrderBrentSolver(1.0e-7, 5));
+        Event allEvents = new Event(0.1, 1.0e-7, 1000, true, true);
+        integrator.addEventDetector(allEvents);
+        Event onlyDecreasing = new Event(0.1, 1.0e-7, 1000, true, false);
+        integrator.addEventDetector(new EventSlopeFilter<>(onlyDecreasing, FilterType.TRIGGER_ONLY_DECREASING_EVENTS));
         double t0 = 0.5 * FastMath.PI;
         double tEnd = 5.5 * FastMath.PI;
         double[] y = { 0.0, 1.0 };
@@ -351,14 +332,14 @@ public class EventFilterTest {
     }
 
     private <T extends CalculusFieldElement<T>> void doTestDecreasingOnlyField(Field<T> field) {
-        double e = 1e-15;
         FieldODEIntegrator<T> integrator = new DormandPrince853FieldIntegrator<>(field, 1.0e-3, 100.0, 1e-7, 1e-7);
-        FieldEvent<T> allEvents = new FieldEvent<>(true, true);
-        integrator.addEventHandler(allEvents, 0.1, e, 1000, buildSolver(field));
-        FieldEvent<T> onlyDecreasing = new FieldEvent<>(true, false);
-        integrator.addEventHandler(new FieldEventFilter<>(field, onlyDecreasing,
-                                                          FilterType.TRIGGER_ONLY_DECREASING_EVENTS),
-                                   0.1, e, 1000, buildSolver(field));
+        FieldEvent<T> allEvents = new FieldEvent<>(field.getZero().newInstance(0.1),
+                                                   field.getZero().newInstance(1.0e-7), 100, true, true);
+        integrator.addEventDetector(allEvents);
+        FieldEvent<T> onlyDecreasing = new FieldEvent<>(field.getZero().newInstance(0.1),
+                                                        field.getZero().newInstance(1.0e-7), 100, true, false);
+        integrator.addEventDetector(new FieldEventSlopeFilter<>(field, onlyDecreasing,
+                                                                FilterType.TRIGGER_ONLY_DECREASING_EVENTS));
         T t0   = field.getZero().add(0.5 * FastMath.PI);
         T tEnd = field.getZero().add(5.5 * FastMath.PI);
         T[] y  = MathArrays.buildArray(field, 2);
@@ -377,21 +358,13 @@ public class EventFilterTest {
     @Test
     public void testTwoOppositeFilters()
         throws MathIllegalArgumentException, MathIllegalStateException {
-        double e = 1e-15;
         ODEIntegrator integrator = new DormandPrince853Integrator(1.0e-3, 100.0, 1e-7, 1e-7);
-        Event allEvents = new Event(true, true);
-        integrator.addEventHandler(allEvents, 0.1, e, 1000,
-                                   new BracketingNthOrderBrentSolver(1.0e-7, 5));
-        Event onlyIncreasing = new Event(false, true);
-        integrator.addEventHandler(new EventFilter(onlyIncreasing,
-                                                   FilterType.TRIGGER_ONLY_INCREASING_EVENTS),
-                                   0.1, e, 1000,
-                                   new BracketingNthOrderBrentSolver(1.0e-7, 5));
-        Event onlyDecreasing = new Event(true, false);
-        integrator.addEventHandler(new EventFilter(onlyDecreasing,
-                                                   FilterType.TRIGGER_ONLY_DECREASING_EVENTS),
-                                   0.1, e, 1000,
-                                   new BracketingNthOrderBrentSolver(1.0e-7, 5));
+        Event allEvents = new Event(0.1, 1.0e-7, 1000, true, true);
+        integrator.addEventDetector(allEvents);
+        Event onlyIncreasing = new Event(0.1, 1.0e-7, 1000, false, true);
+        integrator.addEventDetector(new EventSlopeFilter<>(onlyIncreasing, FilterType.TRIGGER_ONLY_INCREASING_EVENTS));
+        Event onlyDecreasing = new Event(0.1, 1.0e-7, 1000, true, false);
+        integrator.addEventDetector(new EventSlopeFilter<>(onlyDecreasing, FilterType.TRIGGER_ONLY_DECREASING_EVENTS));
         double t0 = 0.5 * FastMath.PI;
         double tEnd = 5.5 * FastMath.PI;
         double[] y = { 0.0, 1.0 };
@@ -412,18 +385,18 @@ public class EventFilterTest {
 
     private <T extends CalculusFieldElement<T>> void doestTwoOppositeFiltersField(Field<T> field)
         throws MathIllegalArgumentException, MathIllegalStateException {
-        double e = 1e-15;
         FieldODEIntegrator<T> integrator = new DormandPrince853FieldIntegrator<>(field, 1.0e-3, 100.0, 1e-7, 1e-7);
-        FieldEvent<T> allEvents = new FieldEvent<>(true, true);
-        integrator.addEventHandler(allEvents, 0.1, e, 1000, buildSolver(field));
-        FieldEvent<T> onlyIncreasing = new FieldEvent<>(false, true);
-        integrator.addEventHandler(new FieldEventFilter<>(field, onlyIncreasing,
-                                                          FilterType.TRIGGER_ONLY_INCREASING_EVENTS),
-                                   0.1, e, 1000, buildSolver(field));
-        FieldEvent<T> onlyDecreasing = new FieldEvent<>(true, false);
-        integrator.addEventHandler(new FieldEventFilter<T>(field, onlyDecreasing,
-                                                           FilterType.TRIGGER_ONLY_DECREASING_EVENTS),
-                                   0.1, e, 1000, buildSolver(field));
+        FieldEvent<T> allEvents = new FieldEvent<>(field.getZero().newInstance(0.1),
+                                                   field.getZero().newInstance(1.0e-7), 100, true, true);
+        integrator.addEventDetector(allEvents);
+        FieldEvent<T> onlyIncreasing = new FieldEvent<>(field.getZero().newInstance(0.1),
+                                                        field.getZero().newInstance(1.0e-7), 100, false, true);
+        integrator.addEventDetector(new FieldEventSlopeFilter<>(field, onlyIncreasing,
+                                                                FilterType.TRIGGER_ONLY_INCREASING_EVENTS));
+        FieldEvent<T> onlyDecreasing = new FieldEvent<>(field.getZero().newInstance(0.1),
+                                                        field.getZero().newInstance(1.0e-7), 100, true, false);
+        integrator.addEventDetector(new FieldEventSlopeFilter<>(field, onlyDecreasing,
+                                                                FilterType.TRIGGER_ONLY_DECREASING_EVENTS));
         T t0   = field.getZero().add(0.5 * FastMath.PI);
         T tEnd = field.getZero().add(5.5 * FastMath.PI);
         T[] y  = MathArrays.buildArray(field, 2);
@@ -464,15 +437,34 @@ public class EventFilterTest {
     }
 
     /** State events for this unit test. */
-    protected static class Event implements ODEEventHandler {
+    protected static class Event implements ODEEventDetector {
 
+        private final double  maxCheck;
+        private final double  threshold;
+        private final int     maxIter;
         private final boolean expectDecreasing;
         private final boolean expectIncreasing;
         private int eventCount;
 
-        public Event(boolean expectDecreasing, boolean expectIncreasing) {
+        public Event(final double maxCheck, final double threshold, final int maxIter,
+                     boolean expectDecreasing, boolean expectIncreasing) {
+            this.maxCheck         = maxCheck;
+            this.threshold        = threshold;
+            this.maxIter          = maxIter;
             this.expectDecreasing = expectDecreasing;
             this.expectIncreasing = expectIncreasing;
+        }
+
+        public double getMaxCheckInterval() {
+            return maxCheck;
+        }
+
+        public double getThreshold() {
+            return threshold;
+        }
+
+        public int getMaxIterationCount() {
+            return maxIter;
         }
 
         public int getEventCount() {
@@ -487,28 +479,49 @@ public class EventFilterTest {
             return s.getPrimaryState()[0];
         }
 
-        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
-            if (increasing) {
-                Assert.assertTrue(expectIncreasing);
-            } else {
-                Assert.assertTrue(expectDecreasing);
-            }
-            eventCount++;
-            return Action.RESET_STATE;
+        public ODEEventHandler getHandler() {
+            return (ODEStateAndDerivative s, ODEEventDetector detector, boolean increasing) -> {
+                if (increasing) {
+                    Assert.assertTrue(expectIncreasing);
+                } else {
+                    Assert.assertTrue(expectDecreasing);
+                }
+                eventCount++;
+                return Action.RESET_STATE;
+            };
         }
 
     }
 
     /** State events for this unit test. */
-    protected static class  FieldEvent<T extends CalculusFieldElement<T>> implements FieldODEEventHandler<T> {
+    protected static class FieldEvent<T extends CalculusFieldElement<T>> implements FieldODEEventDetector<T> {
 
+        private final T       maxCheck;
+        private final T       threshold;
+        private final int     maxIter;
         private final boolean expectDecreasing;
         private final boolean expectIncreasing;
         private int eventCount;
 
-        public FieldEvent(boolean expectDecreasing, boolean expectIncreasing) {
+        public FieldEvent(final T maxCheck, final T threshold, final int maxIter,
+                          boolean expectDecreasing, boolean expectIncreasing) {
+            this.maxCheck         = maxCheck;
+            this.threshold        = threshold;
+            this.maxIter          = maxIter;
             this.expectDecreasing = expectDecreasing;
             this.expectIncreasing = expectIncreasing;
+        }
+
+        public T getMaxCheckInterval() {
+            return maxCheck;
+        }
+
+        public T getThreshold() {
+            return threshold;
+        }
+
+        public int getMaxIterationCount() {
+            return maxIter;
         }
 
         public int getEventCount() {
@@ -523,14 +536,16 @@ public class EventFilterTest {
             return s.getPrimaryState()[0];
         }
 
-        public Action eventOccurred(FieldODEStateAndDerivative<T> s, boolean increasing) {
-            if (increasing) {
-                Assert.assertTrue(expectIncreasing);
-            } else {
-                Assert.assertTrue(expectDecreasing);
-            }
-            eventCount++;
-            return Action.RESET_STATE;
+        public FieldODEEventHandler<T> getHandler() {
+            return (FieldODEStateAndDerivative<T> s, FieldODEEventDetector<T> detector, boolean increasing) -> {
+                if (increasing) {
+                    Assert.assertTrue(expectIncreasing);
+                } else {
+                    Assert.assertTrue(expectDecreasing);
+                }
+                eventCount++;
+                return Action.RESET_STATE;
+            };
         }
 
     }

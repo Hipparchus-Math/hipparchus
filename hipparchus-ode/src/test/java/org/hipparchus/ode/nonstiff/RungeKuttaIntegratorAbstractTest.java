@@ -47,6 +47,7 @@ import org.hipparchus.ode.TestProblem6;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
@@ -99,17 +100,26 @@ public abstract class RungeKuttaIntegratorAbstractTest {
             Assert.assertEquals(y0[i] * FastMath.exp(k[i] * (result.getTime() - t0)), y[i], epsilonY);
         }
 
-        integrator.addEventHandler(new ODEEventHandler() {
-
+        integrator.addEventDetector(new ODEEventDetector() {
+            public double getMaxCheckInterval() {
+                return Double.POSITIVE_INFINITY;
+            }
+            public double getThreshold() {
+                return 1.0e-20;
+            }
+            public int getMaxIterationCount() {
+                return 100;
+            }
             public double g(ODEStateAndDerivative state) {
                 return state.getTime() - tEvent;
             }
-
-            public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
-                Assert.assertEquals(tEvent, state.getTime(), epsilonT);
-                return Action.CONTINUE;
+            public ODEEventHandler getHandler() {
+                return (state, detector, increasing) -> {
+                    Assert.assertEquals(tEvent, state.getTime(), epsilonT);
+                    return Action.CONTINUE;
+                };
             }
-        }, Double.POSITIVE_INFINITY, 1.0e-20, 100);
+        });
         result = integrator.integrate(new ExpandableODE(ode),
                                       new ODEState(t0, y0),
                                       tEvent + 120);
@@ -169,13 +179,12 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                 RungeKuttaIntegrator integ = createIntegrator(step);
                 TestProblemHandler handler = new TestProblemHandler(pb, integ);
                 integ.addStepHandler(handler);
-                ODEEventHandler[] functions = pb.getEventsHandlers();
                 double eventTol = 1.0e-6 * step;
+                ODEEventDetector[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY, eventTol, 1000);
                 for (int l = 0; l < functions.length; ++l) {
-                    integ.addEventHandler(functions[l],
-                                          Double.POSITIVE_INFINITY, eventTol, 1000);
+                    integ.addEventDetector(functions[l]);
                 }
-                Assert.assertEquals(functions.length, integ.getEventHandlers().size());
+                Assert.assertEquals(functions.length, integ.getEventDetectors().size());
                 ODEStateAndDerivative stop = integ.integrate(new ExpandableODE(pb),
                                                                      pb.getInitialState(),
                                                                      pb.getFinalTime());
@@ -200,8 +209,8 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                 }
                 previousTimeError = timeError;
 
-                integ.clearEventHandlers();
-                Assert.assertEquals(0, integ.getEventHandlers().size());
+                integ.clearEventDetectors();
+                Assert.assertEquals(0, integ.getEventDetectors().size());
             }
 
         }
@@ -402,9 +411,9 @@ public abstract class RungeKuttaIntegratorAbstractTest {
     public abstract void testUnstableDerivative();
 
     protected void doTestUnstableDerivative(double epsilon) {
-      final StepProblem stepProblem = new StepProblem(0.0, 1.0, 2.0);
+      final StepProblem stepProblem = new StepProblem(1.0, 1.0e-12, 1000, 0.0, 1.0, 2.0);
       RungeKuttaIntegrator integ = createIntegrator(0.3);
-      integ.addEventHandler(stepProblem, 1.0, 1.0e-12, 1000);
+      integ.addEventDetector(stepProblem);
       ODEStateAndDerivative result = integ.integrate(new ExpandableODE(stepProblem),
                                                      new ODEState(0, new double[1]),
                                                      10.0);

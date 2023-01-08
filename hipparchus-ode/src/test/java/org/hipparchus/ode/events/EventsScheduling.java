@@ -74,8 +74,8 @@ public class EventsScheduling {
         });
 
         for (int i = 0; i < 10; ++i) {
-            integrator.addEventHandler(new SimpleDetector(0.0625 * (i + 1), checker),
-                                       1.0, 1.0e-9, 100);
+            integrator.addEventDetector(new SimpleDetector(0.0625 * (i + 1), checker,
+                                                           1.0, 1.0e-9, 100));
         }
 
         final OrdinaryDifferentialEquation ode = new OrdinaryDifferentialEquation() {
@@ -109,8 +109,7 @@ public class EventsScheduling {
         });
 
         for (int i = 0; i < 10; ++i) {
-            integrator.addEventHandler(new SimpleFieldDetector(0.0625 * (i + 1), checker),
-                                       1.0, 1.0e-9, 100);
+            integrator.addEventDetector(new SimpleFieldDetector(0.0625 * (i + 1), checker, 1.0, 1.0e-9, 100));
         }
 
         final FieldOrdinaryDifferentialEquation<Decimal64> ode =
@@ -168,13 +167,40 @@ public class EventsScheduling {
 
     }
 
-    private static class SimpleDetector implements ODEEventHandler {
+    private static class SimpleDetector implements ODEEventDetector {
 
-        private final double tEvent;
+        private final double          maxCheck;
+        private final double          threshold;
+        private final int             maxIter;
+        private final double          tEvent;
         private final ScheduleChecker checker;
-        SimpleDetector(final double tEvent, final ScheduleChecker checker) {
-            this.tEvent  = tEvent;
-            this.checker = checker;
+        SimpleDetector(final double tEvent, final ScheduleChecker checker,
+                       final double maxCheck, final double threshold, final int maxIter) {
+            this.maxCheck  = maxCheck;
+            this.threshold = threshold;
+            this.maxIter   = maxIter;
+            this.tEvent    = tEvent;
+            this.checker   = checker;
+        }
+
+        public double getMaxCheckInterval() {
+            return maxCheck;
+        }
+
+        public double getThreshold() {
+            return threshold;
+        }
+
+        public int getMaxIterationCount() {
+            return maxIter;
+        }
+
+        /** {@inheritDoc} */
+        public ODEEventHandler getHandler() {
+            return (state, detector, increasing) -> {
+                checker.callTime(state.getTime());
+                return Action.CONTINUE;
+            };
         }
 
         @Override
@@ -182,34 +208,49 @@ public class EventsScheduling {
             return state.getTime() - tEvent;
         }
 
-        @Override
-        public Action eventOccurred(final ODEStateAndDerivative state, final boolean increasing) {
-            checker.callTime(state.getTime());
-            return Action.CONTINUE;
-        }
-        
     }
 
-    private static class SimpleFieldDetector implements FieldODEEventHandler<Decimal64> {
+    private static class SimpleFieldDetector implements FieldODEEventDetector<Decimal64> {
 
-        private final double tEvent;
+        private final Decimal64       maxCheck;
+        private final Decimal64       threshold;
+        private final int             maxIter;
+        private final double          tEvent;
         private final ScheduleChecker checker;
-        SimpleFieldDetector(final double tEvent, final ScheduleChecker checker) {
-            this.tEvent  = tEvent;
-            this.checker = checker;
+        SimpleFieldDetector(final double tEvent, final ScheduleChecker checker,
+                            final double maxCheck, final double threshold, final int maxIter) {
+            this.maxCheck  = new Decimal64(maxCheck);
+            this.threshold = new Decimal64(threshold);
+            this.maxIter   = maxIter;
+            this.tEvent    = tEvent;
+            this.checker   = checker;
         }
 
+        public Decimal64 getMaxCheckInterval() {
+            return maxCheck;
+        }
+
+        public Decimal64 getThreshold() {
+            return threshold;
+        }
+
+        public int getMaxIterationCount() {
+            return maxIter;
+        }
+
+        @Override
+        public FieldODEEventHandler<Decimal64> getHandler() {
+            return (state, detector, increasing) -> {
+                checker.callTime(state.getTime().getReal());
+                return Action.CONTINUE;
+            };
+        }
+        
         @Override
         public Decimal64 g(final FieldODEStateAndDerivative<Decimal64> state) {
             return state.getTime().subtract(tEvent);
         }
 
-        @Override
-        public Action eventOccurred(final FieldODEStateAndDerivative<Decimal64> state, final boolean increasing) {
-            checker.callTime(state.getTime().getReal());
-            return Action.CONTINUE;
-        }
-        
     }
 
 }

@@ -24,9 +24,10 @@ package org.hipparchus.ode;
 
 import java.lang.reflect.Array;
 
-import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.FieldODEEventDetector;
 import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -75,12 +76,12 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
     }
 
     @Override
-    public FieldODEEventHandler<T>[] getEventsHandlers() {
+    public FieldODEEventDetector<T>[] getEventDetectors(final T maxCheck, final T threshold, final int maxIter) {
         @SuppressWarnings("unchecked")
-        FieldODEEventHandler<T>[] handlers =
-                        (FieldODEEventHandler<T>[]) Array.newInstance(FieldODEEventHandler.class, 2);
-        handlers[0] = new Bounce<T>();
-        handlers[1] = new Stop<T>();
+        FieldODEEventDetector<T>[] handlers =
+                        (FieldODEEventDetector<T>[]) Array.newInstance(FieldODEEventDetector.class, 2);
+        handlers[0] = new Bounce<>(maxCheck, threshold, maxIter);
+        handlers[1] = new Stop<>(maxCheck, threshold, maxIter);
         return handlers;
     }
 
@@ -117,11 +118,43 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
         return y;
     }
 
-    private static class Bounce<T extends CalculusFieldElement<T>> implements FieldODEEventHandler<T> {
+    private static abstract class BaseDetector<T extends CalculusFieldElement<T>>
+        implements FieldODEEventDetector<T>, FieldODEEventHandler<T> {
+
+        final T maxCheck;
+        final T threshold;
+        final int maxIter;
+
+        protected BaseDetector(final T maxCheck, final T threshold, final int maxIter) {
+            this.maxCheck  = maxCheck;
+            this.threshold = threshold;
+            this.maxIter   = maxIter;
+        }
+
+        public T getMaxCheckInterval() {
+            return maxCheck;
+        }
+
+        public int getMaxIterationCount() {
+            return maxIter;
+        }
+
+        public T getThreshold() {
+            return threshold;
+        }
+
+        public FieldODEEventHandler<T> getHandler() {
+            return this;
+        }
+
+    }
+
+    private static class Bounce<T extends CalculusFieldElement<T>> extends BaseDetector<T> {
 
         private int sign;
 
-        public Bounce() {
+        public Bounce(final T maxCheck, final T threshold, final int maxIter) {
+            super(maxCheck, threshold, maxIter);
             sign = +1;
         }
 
@@ -132,13 +165,16 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
             return state.getPrimaryState()[0].multiply(sign);
         }
 
-        public Action eventOccurred(FieldODEStateAndDerivative<T> state, boolean increasing) {
+        public Action eventOccurred(FieldODEStateAndDerivative<T> state,
+                                    FieldODEEventDetector<T> detector,
+                                    boolean increasing) {
             // this sign change is needed because the state will be reset soon
             sign = -sign;
             return Action.RESET_STATE;
         }
 
-        public FieldODEState<T> resetState(FieldODEStateAndDerivative<T> state) {
+        public FieldODEState<T> resetState(FieldODEEventDetector<T> detector,
+                                           FieldODEStateAndDerivative<T> state) {
             T[] y = state.getPrimaryState();
             y[0] = y[0].negate();
             y[1] = y[1].negate();
@@ -147,9 +183,10 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
 
     }
 
-    private static class Stop<T extends CalculusFieldElement<T>> implements FieldODEEventHandler<T> {
+    private static class Stop<T extends CalculusFieldElement<T>> extends BaseDetector<T> {
 
-        public Stop() {
+        public Stop(final T maxCheck, final T threshold, final int maxIter) {
+            super(maxCheck, threshold, maxIter);
         }
 
         public void init(FieldODEStateAndDerivative<T> state0, T t) {
@@ -159,11 +196,14 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
             return state.getTime().subtract(12.0);
         }
 
-        public Action eventOccurred(FieldODEStateAndDerivative<T> state, boolean increasing) {
+        public Action eventOccurred(FieldODEStateAndDerivative<T> state,
+                                    FieldODEEventDetector<T> detector,
+                                    boolean increasing) {
             return Action.STOP;
         }
 
-        public FieldODEState<T> resetState(FieldODEStateAndDerivative<T> state) {
+        public FieldODEState<T> resetState(FieldODEEventDetector<T> detector,
+                                           FieldODEStateAndDerivative<T> state) {
             return state;
         }
 

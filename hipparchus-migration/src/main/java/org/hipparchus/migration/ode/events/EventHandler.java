@@ -24,6 +24,7 @@ package org.hipparchus.migration.ode.events;
 
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.events.ODEEventHandler;
 
 /** This interface represents a handler for discrete events triggered
@@ -51,10 +52,10 @@ import org.hipparchus.ode.events.ODEEventHandler;
  * stepsize control provided by integrators that monitor the local
  * error (this event handling feature is available for all integrators,
  * including fixed step ones).</p>
- * @deprecated as of 1.0, replaced with {@link ODEEventHandler}
+ * @deprecated as of 1.0, replaced with {@link ODEEventDetector}
  */
 @Deprecated
-public interface EventHandler extends ODEEventHandler {
+public interface EventHandler extends ODEEventDetector {
 
     /** {@inheritDoc} */
     @Override
@@ -70,27 +71,32 @@ public interface EventHandler extends ODEEventHandler {
 
     /** {@inheritDoc} */
     @Override
-    default org.hipparchus.ode.events.Action eventOccurred(final ODEStateAndDerivative state,
-                                                           final boolean increasing) {
-        switch (eventOccurred(state.getTime(), state.getPrimaryState(), increasing)) {
-            case CONTINUE:
-                return org.hipparchus.ode.events.Action.CONTINUE;
-            case RESET_DERIVATIVES:
-                return org.hipparchus.ode.events.Action.RESET_DERIVATIVES;
-            case RESET_STATE:
-                return org.hipparchus.ode.events.Action.RESET_STATE;
-            default:
-                return org.hipparchus.ode.events.Action.STOP;
-        }
-    }
+    default ODEEventHandler getHandler() {
+        return new ODEEventHandler() {
+            /** {@inheritDoc} */
+            @Override
+            public org.hipparchus.ode.events.Action eventOccurred(ODEStateAndDerivative state, ODEEventDetector detector, boolean increasing) {
+                switch (EventHandler.this.eventOccurred(state.getTime(), state.getPrimaryState(), increasing)) {
+                    case CONTINUE:
+                        return org.hipparchus.ode.events.Action.CONTINUE;
+                    case RESET_DERIVATIVES:
+                        return org.hipparchus.ode.events.Action.RESET_DERIVATIVES;
+                    case RESET_STATE:
+                        return org.hipparchus.ode.events.Action.RESET_STATE;
+                    default:
+                        return org.hipparchus.ode.events.Action.STOP;
+                }
+            }
 
-    /** {@inheritDoc} */
-    @Override
-    default ODEState resetState(final ODEStateAndDerivative state) {
-        final double   t = state.getTime();
-        final double[] y = state.getPrimaryState();
-        resetState(t, y);
-        return new ODEState(t, y);
+            /** {@inheritDoc} */
+            @Override
+            public ODEState resetState(final ODEEventDetector detector, final ODEStateAndDerivative state) {
+                final double   t = state.getTime();
+                final double[] y = state.getPrimaryState();
+                EventHandler.this.resetState(t, y);
+                return new ODEState(t, y);
+            }
+        };
     }
 
     /** Enumerate for actions to be performed when an event occurs.

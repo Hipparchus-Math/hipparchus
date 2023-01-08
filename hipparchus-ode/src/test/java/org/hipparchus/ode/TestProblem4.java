@@ -23,6 +23,7 @@
 package org.hipparchus.ode;
 
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.util.FastMath;
 
@@ -56,8 +57,11 @@ public class TestProblem4 extends TestProblemAbstract {
     }
 
     @Override
-    public ODEEventHandler[] getEventsHandlers() {
-        return new ODEEventHandler[] { new Bounce(), new Stop() };
+    public ODEEventDetector[] getEventDetectors(final double maxCheck, final double threshold, final int maxIter) {
+        return new ODEEventDetector[] {
+            new Bounce(maxCheck, threshold, maxIter),
+            new Stop(maxCheck, threshold, maxIter)
+        };
     }
 
     /**
@@ -92,11 +96,42 @@ public class TestProblem4 extends TestProblemAbstract {
         };
     }
 
-    private static class Bounce implements ODEEventHandler {
+    private static abstract class BaseDetector implements ODEEventDetector, ODEEventHandler {
+
+        final double maxCheck;
+        final double threshold;
+        final int maxIter;
+
+        protected BaseDetector(final double maxCheck, final double threshold, final int maxIter) {
+            this.maxCheck  = maxCheck;
+            this.threshold = threshold;
+            this.maxIter   = maxIter;
+        }
+
+        public double getMaxCheckInterval() {
+            return maxCheck;
+        }
+
+        public int getMaxIterationCount() {
+            return maxIter;
+        }
+
+        public double getThreshold() {
+            return threshold;
+        }
+
+        public ODEEventHandler getHandler() {
+            return this;
+        }
+
+    }
+
+    private static class Bounce extends BaseDetector {
 
         private int sign;
 
-        public Bounce() {
+        public Bounce(final double maxCheck, final double threshold, final int maxIter) {
+            super(maxCheck, threshold, maxIter);
             sign = +1;
         }
 
@@ -104,13 +139,13 @@ public class TestProblem4 extends TestProblemAbstract {
             return sign * s.getPrimaryState()[0];
         }
 
-        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
+        public Action eventOccurred(ODEStateAndDerivative s, ODEEventDetector detector, boolean increasing) {
             // this sign change is needed because the state will be reset soon
             sign = -sign;
             return Action.RESET_STATE;
         }
 
-        public ODEStateAndDerivative resetState(ODEStateAndDerivative s) {
+        public ODEStateAndDerivative resetState(ODEEventDetector detector, ODEStateAndDerivative s) {
             final double[] y    = s.getPrimaryState();
             final double[] yDot = s.getPrimaryDerivative();
             y[0]    = -y[0];
@@ -122,13 +157,17 @@ public class TestProblem4 extends TestProblemAbstract {
 
     }
 
-    private static class Stop implements ODEEventHandler {
+    private static class Stop extends BaseDetector {
+
+        public Stop(final double maxCheck, final double threshold, final int maxIter) {
+            super(maxCheck, threshold, maxIter);
+        }
 
         public double g(ODEStateAndDerivative s) {
             return s.getTime() - 12.0;
         }
 
-        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
+        public Action eventOccurred(ODEStateAndDerivative s, ODEEventDetector detector, boolean increasing) {
             return Action.STOP;
         }
 

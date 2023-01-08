@@ -24,8 +24,6 @@ package org.hipparchus.ode.events;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.analysis.solvers.BaseSecantSolver;
-import org.hipparchus.analysis.solvers.PegasusSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ODEIntegrator;
@@ -83,11 +81,10 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
         throws MathIllegalArgumentException, MathIllegalStateException {
         double e = 1e-15;
         ODEIntegrator integrator = new DormandPrince853Integrator(e, 100.0, 1e-7, 1e-7);
-        BaseSecantSolver rootSolver = new PegasusSolver(e, e);
-        ODEEventHandler evt1 = new Event(0, eventType);
-        ODEEventHandler evt2 = new Event(1, eventType);
-        integrator.addEventHandler(evt1, 0.1, e, 999, rootSolver);
-        integrator.addEventHandler(evt2, 0.1, e, 999, rootSolver);
+        ODEEventDetector evt1 = new Event(0.1, e, 999, 0, eventType);
+        ODEEventDetector evt2 = new Event(0.1, e, 999, 1, eventType);
+        integrator.addEventDetector(evt1);
+        integrator.addEventDetector(evt2);
         double t = 0.0;
         double tEnd = 9.75;
         double[] y = {0.0, 0.0};
@@ -132,31 +129,51 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
     }
 
     /** State events for this unit test. */
-    private class Event implements ODEEventHandler {
-        /** The index of the continuous variable to use. */
-        private final int idx;
+    private class Event implements ODEEventDetector {
 
-        /** The event type to use. See {@link #g}. */
-        private final int eventType;
+        private final double  maxCheck;
+        private final double  threshold;
+        private final int     maxIter;
+        private final int     idx;
+        private final int     eventType;
 
         /** Constructor for the {@link Event} class.
+         * @param maxCheck maximum checking interval, must be strictly positive (s)
+         * @param threshold convergence threshold (s)
+         * @param maxIter maximum number of iterations in the event time search
          * @param idx the index of the continuous variable to use
          * @param eventType the type of event to use. See {@link #g}
          */
-        public Event(int idx, int eventType) {
-            this.idx = idx;
+        public Event(final double maxCheck, final double threshold, final int maxIter,
+                     final int idx, final int eventType) {
+            this.maxCheck  = maxCheck;
+            this.threshold = threshold;
+            this.maxIter   = maxIter;
+            this.idx       = idx;
             this.eventType = eventType;
+        }
+
+        public double getMaxCheckInterval() {
+            return maxCheck;
+        }
+
+        public double getThreshold() {
+            return threshold;
+        }
+
+        public int getMaxIterationCount() {
+            return maxIter;
+        }
+
+        /** {@inheritDoc} */
+        public ODEEventHandler getHandler() {
+            return (state, detector, increasing) -> Action.STOP;
         }
 
         /** {@inheritDoc} */
         public double g(ODEStateAndDerivative s) {
             return (eventType == 0) ? s.getPrimaryState()[idx] >= 1.0 ? 1.0 : -1.0
                                     : s.getPrimaryState()[idx] - 1.0;
-        }
-
-        /** {@inheritDoc} */
-        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
-            return Action.STOP;
         }
 
     }

@@ -28,7 +28,7 @@ import org.hipparchus.util.Precision;
 
 
 /** Transformer for {@link ODEEventHandler#g(org.hipparchus.ode.ODEStateAndDerivative) g functions}.
- * @see EventFilter
+ * @see EventSlopeFilter
  * @see FilterType
  */
 enum Transformer {

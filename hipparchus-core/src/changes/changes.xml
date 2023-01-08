@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
+    <release version="3.0" date="TBD" description="TBD">
+      <action dev="luc" type="update" issue="issues/223">
+        Separated {Field}ODEEventDetector and {Field}ODEEventHandler.
+      </action>
+    </release>
     <release version="2.3" date="2022-10-05" description="This is a maintenance release. The main
     changes are HessenbergTransformer and SchurTransformer are now public.">
       <action dev="luc" type="add" issue="issues/204">

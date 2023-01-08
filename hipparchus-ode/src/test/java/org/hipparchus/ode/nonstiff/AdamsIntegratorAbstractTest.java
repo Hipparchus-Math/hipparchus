@@ -18,7 +18,6 @@
 package org.hipparchus.ode.nonstiff;
 
 
-import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractIntegrator;
@@ -36,6 +35,7 @@ import org.hipparchus.ode.TestProblem6;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
@@ -160,21 +160,35 @@ public abstract class AdamsIntegratorAbstractTest {
         final double range = pb.getFinalTime() - pb.getInitialState().getTime();
 
         AdamsIntegrator integ = createIntegrator(4, 0, range, 1.0e-12, 1.0e-12);
-        ODEEventHandler event = new ODEEventHandler() {
+        ODEEventDetector event = new ODEEventDetector() {
+
+            @Override
+            public double getMaxCheckInterval() {
+                return 0.5 * range;
+            }
+
+            @Override
+            public double getThreshold() {
+                return 1.0e-6 * range;
+            }
+
+            @Override
+            public int getMaxIterationCount() {
+                return 100;
+            }
+
+            @Override
+            public ODEEventHandler getHandler() {
+                return (state, detector, increasing) -> Action.RESET_STATE;
+            }
 
             @Override
             public double g(ODEStateAndDerivative state) {
                 return state.getTime() - resetTime;
             }
 
-            @Override
-            public Action eventOccurred(ODEStateAndDerivative state,
-                                        boolean increasing) {
-                return Action.RESET_STATE;
-            }
         };
-        integ.addEventHandler(event, 0.5 * range, 1.0e-6 * range, 100,
-                              new BracketingNthOrderBrentSolver(1.0e-7, 1.0e-14, 1.0e-15, 5));
+        integ.addEventDetector(event);
         TestProblemHandler handler = new TestProblemHandler(pb, integ);
         integ.addStepHandler(handler);
         integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
@@ -194,21 +208,35 @@ public abstract class AdamsIntegratorAbstractTest {
 
         for (int nSteps = 2; nSteps < 8; ++nSteps) {
             AdamsIntegrator integ = createIntegrator(nSteps, 1.0e-6 * range, 0.1 * range, 1.0e-4, 1.0e-4);
-            ODEEventHandler event = new ODEEventHandler() {
+            ODEEventDetector event = new ODEEventDetector() {
+
+                @Override
+                public double getMaxCheckInterval() {
+                    return 0.5 * range;
+                }
+
+                @Override
+                public double getThreshold() {
+                    return 1.0e-6 * range;
+                }
+
+                @Override
+                public int getMaxIterationCount() {
+                    return 100;
+                }
+
+                @Override
+                public ODEEventHandler getHandler() {
+                    return (state, detector, increasing) -> Action.RESET_STATE;
+                }
 
                 @Override
                 public double g(ODEStateAndDerivative state) {
                     return state.getTime() - (pb.getInitialState().getTime() + 0.5 * range);
                 }
 
-                @Override
-                public Action eventOccurred(ODEStateAndDerivative state,
-                                            boolean increasing) {
-                    return Action.RESET_STATE;
-                }
             };
-            integ.addEventHandler(event, 0.5 * range, 1.0e-6 * range, 100,
-                                  new BracketingNthOrderBrentSolver(1.0e-7, 1.0e-14, 1.0e-15, 5));
+            integ.addEventDetector(event);
             integ.setStarterIntegrator(new PerfectStarter(pb, nSteps));
             TestProblemHandler handler = new TestProblemHandler(pb, integ);
             integ.addStepHandler(handler);

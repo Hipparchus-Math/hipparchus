@@ -23,7 +23,6 @@
 package org.hipparchus.ode.events;
 
 
-import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.EquationsMapper;
@@ -50,9 +49,7 @@ public class EventStateTest {
         final double gap = r2 - r1;
 
         final double tolerance = 0.1;
-        EventState es = new EventState(new CloseEventsGenerator(r1, r2), 1.5 * gap,
-                                       tolerance, 100,
-                                       new BracketingNthOrderBrentSolver(tolerance, 5));
+        EventState es = new EventState(new CloseEventsGenerator(r1, r2, 1.5 * gap, tolerance, 100));
         EquationsMapper mapper = new ExpandableODE(new OrdinaryDifferentialEquation() {
             @Override
             public int getDimension() {
@@ -109,8 +106,8 @@ public class EventStateTest {
         };
 
         DormandPrince853Integrator integrator = new DormandPrince853Integrator(0.001, 1000, 1.0e-14, 1.0e-14);
-        integrator.addEventHandler(new ResettingEvent(10.99), 0.1, 1.0e-9, 1000);
-        integrator.addEventHandler(new ResettingEvent(11.01), 0.1, 1.0e-9, 1000);
+        integrator.addEventDetector(new ResettingEvent(10.99, 0.1, 1.0e-9, 1000));
+        integrator.addEventDetector(new ResettingEvent(11.01, 0.1, 1.0e-9, 1000));
         integrator.setInitialStepSize(3.0);
 
         double target = 30.0;
@@ -121,13 +118,32 @@ public class EventStateTest {
 
     }
 
-    private static class ResettingEvent implements ODEEventHandler {
+    private static class ResettingEvent implements ODEEventDetector {
 
         private static double lastTriggerTime = Double.NEGATIVE_INFINITY;
-        private final double tEvent;
+        private final double  maxCheck;
+        private final double  threshold;
+        private final int     maxIter;
+        private final double  tEvent;
 
-        public ResettingEvent(final double tEvent) {
-            this.tEvent = tEvent;
+        public ResettingEvent(final double tEvent,
+                              final double maxCheck, final double threshold, final int maxIter) {
+            this.maxCheck  = maxCheck;
+            this.threshold = threshold;
+            this.maxIter   = maxIter;
+            this.tEvent    = tEvent;
+        }
+
+        public double getMaxCheckInterval() {
+            return maxCheck;
+        }
+
+        public double getThreshold() {
+            return threshold;
+        }
+
+        public int getMaxIterationCount() {
+            return maxIter;
         }
 
         public double g(ODEStateAndDerivative s) {
@@ -140,16 +156,20 @@ public class EventStateTest {
             return s.getTime() - tEvent;
         }
 
-        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
-            // remember in a class variable when the event was triggered
-            lastTriggerTime = s.getTime();
-            return Action.RESET_STATE;
-        }
+        public ODEEventHandler getHandler() {
+            return new ODEEventHandler() {
+                public Action eventOccurred(ODEStateAndDerivative s, ODEEventDetector detector, boolean increasing) {
+                    // remember in a class variable when the event was triggered
+                    lastTriggerTime = s.getTime();
+                    return Action.RESET_STATE;
+                }
 
-        public ODEStateAndDerivative resetState(ODEStateAndDerivative s) {
-            double[] y = s.getPrimaryState();
-            y[0] += 1.0;
-            return new ODEStateAndDerivative(s.getTime(), y, s.getPrimaryDerivative());
+                public ODEStateAndDerivative resetState(ODEEventDetector detector, ODEStateAndDerivative s) {
+                    double[] y = s.getPrimaryState();
+                    y[0] += 1.0;
+                    return new ODEStateAndDerivative(s.getTime(), y, s.getPrimaryDerivative());
+                }
+            };
         }
 
     }
@@ -179,7 +199,7 @@ public class EventStateTest {
         Assert.assertEquals(1, index);
 
         DormandPrince853Integrator integrator = new DormandPrince853Integrator(0.001, 1000, 1.0e-14, 1.0e-14);
-        integrator.addEventHandler(new SecondaryStateEvent(index, -3.0), 0.1, 1.0e-9, 1000);
+        integrator.addEventDetector(new SecondaryStateEvent(index, -3.0, 0.1, 1.0e-9, 1000));
         integrator.setInitialStepSize(3.0);
 
         ODEState initialState = new ODEState(0.0,
@@ -192,22 +212,42 @@ public class EventStateTest {
 
     }
 
-    private static class SecondaryStateEvent implements ODEEventHandler {
+    private static class SecondaryStateEvent implements ODEEventDetector {
 
+        private final double  maxCheck;
+        private final double  threshold;
+        private final int     maxIter;
         private int index;
         private final double target;
 
-        public SecondaryStateEvent(final int index, final double target) {
-            this.index  = index;
-            this.target = target;
+        public SecondaryStateEvent(final int index, final double target,
+                                   final double maxCheck, final double threshold, final int maxIter) {
+            this.maxCheck  = maxCheck;
+            this.threshold = threshold;
+            this.maxIter   = maxIter;
+            this.index     = index;
+            this.target    = target;
+        }
+
+        public double getMaxCheckInterval() {
+            return maxCheck;
+        }
+
+        public double getThreshold() {
+            return threshold;
+        }
+
+        public int getMaxIterationCount() {
+            return maxIter;
+        }
+
+        /** {@inheritDoc} */
+        public ODEEventHandler getHandler() {
+            return (state, detector, increasing) -> Action.STOP;
         }
 
         public double g(ODEStateAndDerivative s) {
             return s.getSecondaryState(index)[0] - target;
-        }
-
-        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
-            return Action.STOP;
         }
 
     }
@@ -229,32 +269,51 @@ public class EventStateTest {
 
         LutherIntegrator integrator = new LutherIntegrator(20.0);
         CloseEventsGenerator eventsGenerator =
-                        new CloseEventsGenerator(9.0 - 1.0 / 128, 9.0 + 1.0 / 128);
-        integrator.addEventHandler(eventsGenerator, 1.0, 0.02, 1000);
+                        new CloseEventsGenerator(9.0 - 1.0 / 128, 9.0 + 1.0 / 128, 1.0, 0.02, 1000);
+        integrator.addEventDetector(eventsGenerator);
         double tEnd = integrator.integrate(equation, new ODEState(0.0, new double[1]), 100.0).getTime();
         Assert.assertEquals( 2, eventsGenerator.getCount());
         Assert.assertEquals( 9.0 + 1.0 / 128, tEnd, 1.0 / 32.0);
 
     }
 
-    private class CloseEventsGenerator implements ODEEventHandler {
+    private class CloseEventsGenerator implements ODEEventDetector {
 
+        private final double  maxCheck;
+        private final double  threshold;
+        private final int     maxIter;
         final double r1;
         final double r2;
         int count;
 
-        public CloseEventsGenerator(final double r1, final double r2) {
-            this.r1    = r1;
-            this.r2    = r2;
-            this.count = 0;
+        public CloseEventsGenerator(final double r1, final double r2,
+                                    final double maxCheck, final double threshold, final int maxIter) {
+            this.maxCheck  = maxCheck;
+            this.threshold = threshold;
+            this.maxIter   = maxIter;
+            this.r1        = r1;
+            this.r2        = r2;
+            this.count     = 0;
+        }
+
+        public double getMaxCheckInterval() {
+            return maxCheck;
+        }
+
+        public double getThreshold() {
+            return threshold;
+        }
+
+        public int getMaxIterationCount() {
+            return maxIter;
         }
 
         public double g(ODEStateAndDerivative s) {
             return (s.getTime() - r1) * (r2 - s.getTime());
         }
 
-        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
-            return ++count < 2 ? Action.CONTINUE : Action.STOP;
+        public ODEEventHandler getHandler() {
+            return (state, detector, increasing) -> ++count < 2 ? Action.CONTINUE : Action.STOP;
         }
 
         public int getCount() {

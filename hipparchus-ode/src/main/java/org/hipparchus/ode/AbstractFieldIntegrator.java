@@ -32,15 +32,12 @@ import java.util.Queue;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
-import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.events.Action;
-import org.hipparchus.ode.events.FieldEventHandlerConfiguration;
 import org.hipparchus.ode.events.FieldEventState;
 import org.hipparchus.ode.events.FieldEventState.EventOccurrence;
-import org.hipparchus.ode.events.FieldODEEventHandler;
+import org.hipparchus.ode.events.FieldODEEventDetector;
 import org.hipparchus.ode.sampling.AbstractFieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.util.FastMath;
@@ -51,12 +48,6 @@ import org.hipparchus.util.Incrementor;
  * @param <T> the type of the field elements
  */
 public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>> implements FieldODEIntegrator<T> {
-
-    /** Default relative accuracy. */
-    private static final double DEFAULT_RELATIVE_ACCURACY = 0;
-
-    /** Default function value accuracy. */
-    private static final double DEFAULT_FUNCTION_VALUE_ACCURACY = 0;
 
     /** Step handler. */
     private Collection<FieldODEStepHandler<T>> stepHandlers;
@@ -139,48 +130,23 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public void addEventHandler(final FieldODEEventHandler<T> handler,
-                                final double maxCheckInterval,
-                                final double convergence,
-                                final int maxIterationCount) {
-        addEventHandler(handler, maxCheckInterval, convergence,
-                        maxIterationCount,
-                        new FieldBracketingNthOrderBrentSolver<T>(field.getZero().add(DEFAULT_RELATIVE_ACCURACY),
-                                                                  field.getZero().add(convergence),
-                                                                  field.getZero().add(DEFAULT_FUNCTION_VALUE_ACCURACY),
-                                                                  5));
+    public void addEventDetector(final FieldODEEventDetector<T> detector) {
+        eventsStates.add(new FieldEventState<>(detector));
     }
 
     /** {@inheritDoc} */
     @Override
-    public void addEventHandler(final FieldODEEventHandler<T> handler,
-                                final double maxCheckInterval,
-                                final double convergence,
-                                final int maxIterationCount,
-                                final BracketedRealFieldUnivariateSolver<T> solver) {
-        eventsStates.add(new FieldEventState<T>(handler, maxCheckInterval, field.getZero().newInstance(convergence),
-                                                maxIterationCount, solver));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Collection<FieldODEEventHandler<T>> getEventHandlers() {
-        final List<FieldODEEventHandler<T>> list = new ArrayList<>(eventsStates.size());
+    public Collection<FieldODEEventDetector<T>> getEventDetectors() {
+        final List<FieldODEEventDetector<T>> list = new ArrayList<>(eventsStates.size());
         for (FieldEventState<T> state : eventsStates) {
-            list.add(state.getEventHandler());
+            list.add(state.getEventDetector());
         }
         return Collections.unmodifiableCollection(list);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Collection<FieldEventHandlerConfiguration<T>> getEventHandlersConfigurations() {
-        return Collections.unmodifiableCollection(eventsStates);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void clearEventHandlers() {
+    public void clearEventDetectors() {
         eventsStates.clear();
     }
 
@@ -234,7 +200,7 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
 
         // initialize event handlers
         for (final FieldEventState<T> state : eventsStates) {
-            state.getEventHandler().init(s0WithDerivatives, t);
+            state.init(s0WithDerivatives, t);
         }
 
         // initialize step handlers

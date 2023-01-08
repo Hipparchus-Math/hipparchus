@@ -23,7 +23,6 @@ package org.hipparchus.ode.events;
 
 import java.util.Arrays;
 
-import org.hipparchus.analysis.solvers.PegasusSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ODEIntegrator;
@@ -57,8 +56,7 @@ public class ReappearingEventTest {
         ODEIntegrator integrator = (integratorType == 1) ?
                                    new DormandPrince853Integrator(e, 100.0, 1e-7, 1e-7) :
                                    new GraggBulirschStoerIntegrator(e, 100.0, 1e-7, 1e-7);
-        PegasusSolver rootSolver = new PegasusSolver(e, e);
-        integrator.addEventHandler(new Event(), 0.1, e, 1000, rootSolver);
+        integrator.addEventDetector(new Event(0.1, e, 1000));
         double t0 = 6.0;
         double tEnd = 10.0;
         double[] y = {2.0, 2.0, 2.0, 4.0, 2.0, 7.0, 15.0};
@@ -78,14 +76,42 @@ public class ReappearingEventTest {
     }
 
     /** State events for this unit test. */
-    protected static class Event implements ODEEventHandler {
+    protected static class Event implements ODEEventDetector {
+
+        private final double  maxCheck;
+        private final double  threshold;
+        private final int     maxIter;
+
+        /** Constructor for the {@link Event} class.
+         * @param maxCheck maximum checking interval, must be strictly positive (s)
+         * @param threshold convergence threshold (s)
+         * @param maxIter maximum number of iterations in the event time search
+         */
+        public Event(final double maxCheck, final double threshold, final int maxIter) {
+            this.maxCheck  = maxCheck;
+            this.threshold = threshold;
+            this.maxIter   = maxIter;
+        }
+
+        public double getMaxCheckInterval() {
+            return maxCheck;
+        }
+
+        public double getThreshold() {
+            return threshold;
+        }
+
+        public int getMaxIterationCount() {
+            return maxIter;
+        }
+
+        /** {@inheritDoc} */
+        public ODEEventHandler getHandler() {
+            return (state, detector, increasing) -> Action.STOP;
+        }
 
         public double g(ODEStateAndDerivative s) {
             return s.getPrimaryState()[6] - 15.0;
-        }
-
-        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
-            return Action.STOP;
         }
 
     }

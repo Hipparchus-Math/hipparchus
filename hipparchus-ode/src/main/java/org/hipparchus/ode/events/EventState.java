@@ -25,9 +25,11 @@ package org.hipparchus.ode.events;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver.Interval;
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
@@ -44,19 +46,21 @@ import org.hipparchus.util.FastMath;
  * proposed step.</p>
  *
  */
-public class EventState implements EventHandlerConfiguration {
+public class EventState {
+
+    /** Event detector.
+     * @since 3.0
+     */
+    private final ODEEventDetector detector;
 
     /** Event handler. */
     private final ODEEventHandler handler;
 
-    /** Maximal time interval between events handler checks. */
-    private final double maxCheckInterval;
+    /** Time of the previous call to g. */
+    private double lastT;
 
-    /** Convergence threshold for event localization. */
-    private final double convergence;
-
-    /** Upper limit in the iteration count for event localization. */
-    private final int maxIterationCount;
+    /** Value from the previous call to g. */
+    private double lastG;
 
     /** Time at the beginning of the step. */
     private double t0;
@@ -97,27 +101,13 @@ public class EventState implements EventHandlerConfiguration {
      */
     private boolean increasing;
 
-    /** Root-finding algorithm to use to detect state events. */
-    private final BracketedUnivariateSolver<UnivariateFunction> solver;
-
     /** Simple constructor.
-     * @param handler event handler
-     * @param maxCheckInterval maximal time interval between switching
-     * function checks (this interval prevents missing sign changes in
-     * case the integration steps becomes very large)
-     * @param convergence convergence threshold in the event time search
-     * @param maxIterationCount upper limit of the iteration count in
-     * the event time search
-     * @param solver Root-finding algorithm to use to detect state events
+     * @param detector event detector
+     * @since 3.0
      */
-    public EventState(final ODEEventHandler handler, final double maxCheckInterval,
-                      final double convergence, final int maxIterationCount,
-                      final BracketedUnivariateSolver<UnivariateFunction> solver) {
-        this.handler           = handler;
-        this.maxCheckInterval  = maxCheckInterval;
-        this.convergence       = FastMath.abs(convergence);
-        this.maxIterationCount = maxIterationCount;
-        this.solver            = solver;
+    public EventState(final ODEEventDetector detector) {
+        this.detector     = detector;
+        this.handler      = detector.getHandler();
 
         // some dummy values ...
         t0                = Double.NaN;
@@ -131,34 +121,42 @@ public class EventState implements EventHandlerConfiguration {
         afterG = Double.NaN;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public ODEEventHandler getEventHandler() {
-        return handler;
+    /** Get the underlying event detector.
+     * @return underlying event detector
+     * @since 3.0
+     */
+    public ODEEventDetector getEventDetector() {
+        return detector;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public double getMaxCheckInterval() {
-        return maxCheckInterval;
+    /** Initialize event handler at the start of an integration.
+     * <p>
+     * This method is called once at the start of the integration. It
+     * may be used by the event handler to initialize some internal data
+     * if needed.
+     * </p>
+     * @param s0 initial state
+     * @param t target time for the integration
+     *
+     */
+    public void init(final ODEStateAndDerivative s0, final double t) {
+        detector.init(s0, t);
+        lastT = Double.NEGATIVE_INFINITY;
+        lastG = Double.NaN;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public double getConvergence() {
-        return convergence;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public int getMaxIterationCount() {
-        return maxIterationCount;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
-        return solver;
+    /** Compute the value of the switching function.
+     * This function must be continuous (at least in its roots neighborhood),
+     * as the integrator will need to find its roots to locate the events.
+     * @param s the current state information: date, kinematics, attitude
+     * @return value of the switching function
+     */
+    private double g(final ODEStateAndDerivative s) {
+        if (s.getTime() != lastT) {
+            lastG = detector.g(s);
+            lastT = s.getTime();
+        }
+        return lastG;
     }
 
     /** Reinitialize the beginning of the step.
@@ -172,7 +170,7 @@ public class EventState implements EventHandlerConfiguration {
         forward = interpolator.isForward();
         final ODEStateAndDerivative s0 = interpolator.getPreviousState();
         t0 = s0.getTime();
-        g0 = handler.g(s0);
+        g0 = g(s0);
         while (g0 == 0) {
             // excerpt from MATH-421 issue:
             // If an ODE solver is setup with an ODEEventHandler that return STOP
@@ -188,15 +186,13 @@ public class EventState implements EventHandlerConfiguration {
 
             // extremely rare case: there is a zero EXACTLY at interval start
             // we will use the sign slightly after step beginning to force ignoring this zero
-            final double epsilon = FastMath.max(solver.getAbsoluteAccuracy(),
-                                                FastMath.abs(solver.getRelativeAccuracy() * t0));
-            double tStart = t0 + (forward ? 0.5 : -0.5) * epsilon;
+            double tStart = t0 + (forward ? 0.5 : -0.5) * detector.getThreshold();
             // check for case where tolerance is too small to make a difference
             if (tStart == t0) {
                 tStart = nextAfter(t0);
             }
             t0 = tStart;
-            g0 = handler.g(interpolator.getInterpolatedState(tStart));
+            g0 = g(interpolator.getInterpolatedState(tStart));
         }
         g0Positive = g0 > 0;
         // "last" event was increasing
@@ -221,14 +217,13 @@ public class EventState implements EventHandlerConfiguration {
         final ODEStateAndDerivative s1 = interpolator.getCurrentState();
         final double t1 = s1.getTime();
         final double dt = t1 - t0;
-        if (FastMath.abs(dt) < convergence) {
+        if (FastMath.abs(dt) < detector.getThreshold()) {
             // we cannot do anything on such a small step, don't trigger any events
             return false;
         }
         // number of points to check in the current step
-        final int n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt) / maxCheckInterval));
+        final int n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt) / detector.getMaxCheckInterval()));
         final double h = dt / n;
-
 
         double ta = t0;
         double ga = g0;
@@ -236,7 +231,7 @@ public class EventState implements EventHandlerConfiguration {
 
             // evaluate handler value at the end of the substep
             final double tb = (i == n - 1) ? t1 : t0 + (i + 1) * h;
-            final double gb = handler.g(interpolator.getInterpolatedState(tb));
+            final double gb = g(interpolator.getInterpolatedState(tb));
 
             // check events occurrence
             if (gb == 0.0 || (g0Positive ^ (gb > 0))) {
@@ -280,7 +275,11 @@ public class EventState implements EventHandlerConfiguration {
         // check there appears to be a root in [ta, tb]
         check(ga == 0.0 || gb == 0.0 || (ga > 0.0 && gb < 0.0) || (ga < 0.0 && gb > 0.0));
 
-        final UnivariateFunction f = t -> handler.g(interpolator.getInterpolatedState(t));
+        final double convergence = detector.getThreshold();
+        final int maxIterationCount = detector.getMaxIterationCount();
+        final BracketedUnivariateSolver<UnivariateFunction> solver =
+                new BracketingNthOrderBrentSolver(0, convergence, 0, 5);
+        final UnivariateFunction f = t -> g(interpolator.getInterpolatedState(t));
 
         // prepare loop below
         double loopT = ta;
@@ -327,8 +326,8 @@ public class EventState implements EventHandlerConfiguration {
                 } else {
                     beforeRootT = ta;
                     beforeRootG = newGa;
-                    afterRootT = nextT;
-                    afterRootG = nextG;
+                    afterRootT  = nextT;
+                    afterRootG  = nextG;
                 }
 
             }
@@ -348,19 +347,33 @@ public class EventState implements EventHandlerConfiguration {
             } else {
                 // both non-zero, the usual case, use a root finder.
                 if (forward) {
-                    final Interval interval =
-                            solver.solveInterval(maxIterationCount, f, loopT, tb);
-                    beforeRootT = interval.getLeftAbscissa();
-                    beforeRootG = interval.getLeftValue();
-                    afterRootT = interval.getRightAbscissa();
-                    afterRootG = interval.getRightValue();
+                    try {
+                        final Interval interval =
+                                        solver.solveInterval(maxIterationCount, f, loopT, tb);
+                        beforeRootT = interval.getLeftAbscissa();
+                        beforeRootG = interval.getLeftValue();
+                        afterRootT = interval.getRightAbscissa();
+                        afterRootG = interval.getRightValue();
+                        // CHECKSTYLE: stop IllegalCatch check
+                    } catch (RuntimeException e) {
+                        // CHECKSTYLE: resume IllegalCatch check
+                        throw new MathIllegalStateException(e, LocalizedODEFormats.FIND_ROOT,
+                                                            detector, loopT, loopG, tb, gb, lastT, lastG);
+                    }
                 } else {
-                    final Interval interval =
-                            solver.solveInterval(maxIterationCount, f, tb, loopT);
-                    beforeRootT = interval.getRightAbscissa();
-                    beforeRootG = interval.getRightValue();
-                    afterRootT = interval.getLeftAbscissa();
-                    afterRootG = interval.getLeftValue();
+                    try {
+                        final Interval interval =
+                                        solver.solveInterval(maxIterationCount, f, tb, loopT);
+                        beforeRootT = interval.getRightAbscissa();
+                        beforeRootG = interval.getRightValue();
+                        afterRootT = interval.getLeftAbscissa();
+                        afterRootG = interval.getLeftValue();
+                        // CHECKSTYLE: stop IllegalCatch check
+                    } catch (RuntimeException e) {
+                        // CHECKSTYLE: resume IllegalCatch check
+                        throw new MathIllegalStateException(e, LocalizedODEFormats.FIND_ROOT,
+                                                            detector, tb, gb, loopT, loopG, lastT, lastG);
+                    }
                 }
             }
             // tolerance is set to less than 1 ulp
@@ -451,7 +464,7 @@ public class EventState implements EventHandlerConfiguration {
             meFirst = false;
         } else {
             // check g function to see if there is a new event
-            final double g = handler.g(state);
+            final double g = g(state);
             final boolean positive = g > 0;
 
             if (positive == g0Positive) {
@@ -494,10 +507,10 @@ public class EventState implements EventHandlerConfiguration {
         check(pendingEvent);
         check(state.getTime() == this.pendingEventTime);
 
-        final Action action = handler.eventOccurred(state, increasing == forward);
+        final Action action = handler.eventOccurred(state, detector, increasing == forward);
         final ODEState newState;
         if (action == Action.RESET_STATE) {
-            newState = handler.resetState(state);
+            newState = handler.resetState(detector, state);
         } else {
             newState = state;
         }

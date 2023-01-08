@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ExpandableODE;
@@ -43,7 +42,7 @@ import org.hipparchus.ode.TestProblem7;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.VariationalEquation;
 import org.hipparchus.ode.events.Action;
-import org.hipparchus.ode.events.EventHandlerConfiguration;
+import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
@@ -173,21 +172,19 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                                                             scalAbsoluteTolerance, scalRelativeTolerance);
       TestProblemHandler handler = new TestProblemHandler(pb, integ);
       integ.addStepHandler(handler);
-      ODEEventHandler[] functions = pb.getEventsHandlers();
       double convergence = 1.0e-8 * maxStep;
+      ODEEventDetector[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY, convergence, 1000);
       for (int l = 0; l < functions.length; ++l) {
-          integ.addEventHandler(functions[l], Double.POSITIVE_INFINITY, convergence, 1000);
+          integ.addEventDetector(functions[l]);
       }
-      Assert.assertEquals(functions.length, integ.getEventHandlers().size());
+      List<ODEEventDetector> detectors = new ArrayList<>(integ.getEventDetectors());
+      Assert.assertEquals(functions.length, detectors.size());
 
-      List<EventHandlerConfiguration> configurations = new ArrayList<>(integ.getEventHandlersConfigurations());
-      Assert.assertEquals(2, configurations.size());
-      for (int i = 0; i < configurations.size(); ++i) {
-          Assert.assertSame(functions[i], configurations.get(i).getEventHandler());
-          Assert.assertEquals(Double.POSITIVE_INFINITY, configurations.get(i).getMaxCheckInterval(), 1.0);
-          Assert.assertEquals(convergence, configurations.get(i).getConvergence(), 1.0e-15 * convergence);
-          Assert.assertEquals(1000, configurations.get(i).getMaxIterationCount());
-          Assert.assertTrue(configurations.get(i).getSolver() instanceof BracketingNthOrderBrentSolver);
+      for (int i = 0; i < detectors.size(); ++i) {
+          Assert.assertSame(functions[i], detectors.get(i).getHandler());
+          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval(), 1.0);
+          Assert.assertEquals(convergence, detectors.get(i).getThreshold(), 1.0e-15 * convergence);
+          Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
 
       integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
@@ -196,8 +193,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
       Assert.assertEquals(0, handler.getMaximalTimeError(), convergence);
       Assert.assertEquals(12.0, handler.getLastTime(), convergence);
       Assert.assertEquals(name, integ.getName());
-      integ.clearEventHandlers();
-      Assert.assertEquals(0, integ.getEventHandlers().size());
+      integ.clearEventDetectors();
+      Assert.assertEquals(0, integ.getEventDetectors().size());
 
     }
 
@@ -214,11 +211,18 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             TestProblemHandler handler = new TestProblemHandler(pb, integ);
             integ.addStepHandler(handler);
 
-            integ.addEventHandler(new ODEEventHandler() {
-                public void init(ODEStateAndDerivative state0, double t) {
+            integ.addEventDetector(new ODEEventDetector() {
+                public double getMaxCheckInterval() {
+                    return Double.POSITIVE_INFINITY;
                 }
-                public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
-                    return Action.CONTINUE;
+                public double getThreshold() {
+                    return 1.0e-8 * maxStep;
+                }
+                public int getMaxIterationCount() {
+                    return 1000;
+                }
+                public ODEEventHandler getHandler() {
+                    return (state, detector, increasing) -> Action.CONTINUE;
                 }
                 public double g(ODEStateAndDerivative state) {
                     double middle = 0.5 * (pb.getInitialState().getTime() + pb.getFinalTime());
@@ -228,10 +232,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                     }
                     return offset;
                 }
-                public ODEState resetState(ODEStateAndDerivative state) {
-                    return state;
-                }
-            }, Double.POSITIVE_INFINITY, 1.0e-8 * maxStep, 1000);
+            });
 
             integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
         } catch (LocalException le) {
@@ -253,19 +254,25 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         TestProblemHandler handler = new TestProblemHandler(pb, integ);
         integ.addStepHandler(handler);
 
-        integ.addEventHandler(new ODEEventHandler() {
-            public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
-                return Action.CONTINUE;
+        integ.addEventDetector(new ODEEventDetector() {
+            public double getMaxCheckInterval() {
+                return Double.POSITIVE_INFINITY;
+            }
+            public double getThreshold() {
+                return 1.0e-8 * maxStep;
+            }
+            public int getMaxIterationCount() {
+                return 3;
+            }
+            public ODEEventHandler getHandler() {
+                return (state, detector, increasing) -> Action.CONTINUE;
             }
             public double g(ODEStateAndDerivative state) {
                 double middle = 0.5 * (pb.getInitialState().getTime() + pb.getFinalTime());
                 double offset = state.getTime() - middle;
                 return (offset > 0) ? offset + 0.5 : offset - 0.5;
             }
-            public ODEState resetState(ODEStateAndDerivative state) {
-                return state;
-            }
-        }, Double.POSITIVE_INFINITY, 1.0e-8 * maxStep, 3);
+        });
 
         try {
             integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
@@ -492,17 +499,23 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         }
 
         integrator.setInitialStepSize(60.0);
-        integrator.addEventHandler(new ODEEventHandler() {
-
+        integrator.addEventDetector(new ODEEventDetector() {
+            public double getMaxCheckInterval() {
+                return Double.POSITIVE_INFINITY;
+            }
+            public double getThreshold() {
+                return 1.0e-20;
+            }
+            public int getMaxIterationCount() {
+                return 100;
+            }
+            public ODEEventHandler getHandler() {
+                return (state, detector, increasing) -> Action.CONTINUE;
+            }
             public double g(ODEStateAndDerivative s) {
                 return s.getTime() - tEvent;
             }
-
-            public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
-                Assert.assertEquals(tEvent, s.getTime(), epsilonT);
-                return Action.CONTINUE;
-            }
-        }, Double.POSITIVE_INFINITY, 1.0e-20, 100);
+        });
         finalState = integrator.integrate(new ExpandableODE(ode), new ODEState(t0, y0), tEvent + 120);
         Assert.assertEquals(tEvent + 120, finalState.getTime(), epsilonT);
         y = finalState.getPrimaryState();
@@ -561,9 +574,9 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
     public abstract void testUnstableDerivative();
 
     protected void doTestUnstableDerivative(final double epsilon) {
-        final StepProblem stepProblem = new StepProblem(0.0, 1.0, 2.0);
+        final StepProblem stepProblem = new StepProblem(1.0, 1.0e-12, 1000, 0.0, 1.0, 2.0);
         ODEIntegrator integ = createIntegrator(0.1, 10, 1.0e-12, 0.0);
-        integ.addEventHandler(stepProblem, 1.0, 1.0e-12, 1000);
+        integ.addEventDetector(stepProblem);
         final ODEStateAndDerivative finalState =
                         integ.integrate(stepProblem, new ODEState(0.0, new double[] { 0.0 }), 10.0);
         Assert.assertEquals(8.0, finalState.getPrimaryState()[0], epsilon);
@@ -588,9 +601,9 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         SchedulingChecker cosChecker = new SchedulingChecker(1); // events at PI/2, 3PI/2, 5PI/2 ...
 
         ODEIntegrator integ = createIntegrator(0.001, 1.0, 1.0e-12, 0.0);
-        integ.addEventHandler(sinChecker, 0.01, 1.0e-7, 100);
+        integ.addEventDetector(sinChecker);
         integ.addStepHandler(sinChecker);
-        integ.addEventHandler(cosChecker, 0.01, 1.0e-7, 100);
+        integ.addEventDetector(cosChecker);
         integ.addStepHandler(cosChecker);
         double   t0 = 0.5;
         double[] y0 = new double[] { FastMath.sin(t0), FastMath.cos(t0) };
@@ -599,13 +612,25 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
     }
 
-    private static class SchedulingChecker implements ODEStepHandler, ODEEventHandler {
+    private static class SchedulingChecker implements ODEStepHandler, ODEEventDetector {
 
         int index;
         double tMin;
 
         public SchedulingChecker(int index) {
             this.index = index;
+        }
+
+        public double getMaxCheckInterval() {
+            return 0.01;
+        }
+
+        public double getThreshold() {
+            return 1.0e-7;
+        }
+
+        public int getMaxIterationCount() {
+            return 100;
         }
 
         public void init(ODEStateAndDerivative s0, double t) {
@@ -623,13 +648,17 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             return s.getPrimaryState()[index];
         }
 
-        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
-            return Action.RESET_STATE;
-        }
+        public ODEEventHandler getHandler() {
+            return new ODEEventHandler() {
+                public Action eventOccurred(ODEStateAndDerivative s, ODEEventDetector detector, boolean increasing) {
+                    return Action.RESET_STATE;
+                }
 
-        public ODEStateAndDerivative resetState(ODEStateAndDerivative s) {
-            // in fact, we don't need to reset anything for the test
-            return s;
+                public ODEStateAndDerivative resetState(ODEEventDetector detector, ODEStateAndDerivative s) {
+                    // in fact, we don't need to reset anything for the test
+                    return s;
+                }
+            };
         }
 
     }

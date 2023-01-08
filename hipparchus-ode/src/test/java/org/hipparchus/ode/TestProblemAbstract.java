@@ -22,7 +22,7 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.ode.events.ODEEventHandler;
+import org.hipparchus.ode.events.ODEEventDetector;
 
 /**
  * This class is used as the base class of the problems that are
@@ -94,10 +94,13 @@ public abstract class TestProblemAbstract
     }
 
     /**
-     * Get the events handlers.
-     * @return events handlers   */
-    public ODEEventHandler[] getEventsHandlers() {
-        return new ODEEventHandler[0];
+     * Get the event detectors.
+     * @param maxCheck maximum checking interval, must be strictly positive (s)
+     * @param threshold convergence threshold (s)
+     * @param maxIter maximum number of iterations in the event time search
+     * @return events detectors   */
+    public ODEEventDetector[] getEventDetectors(final double maxCheck, final double threshold, final int maxIter) {
+        return new ODEEventDetector[0];
     }
 
     /**
