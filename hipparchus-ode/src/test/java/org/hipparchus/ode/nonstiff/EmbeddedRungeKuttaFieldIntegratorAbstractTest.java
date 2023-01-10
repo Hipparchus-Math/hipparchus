@@ -48,6 +48,8 @@ import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.util.CombinatoricsUtils;
+import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -676,6 +678,26 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
         integrator.integrate(ode, new FieldODEState<>(t0, initState), tf);
 
+    }
+
+    @Test
+    public void testInfiniteIntegration() {
+        Field<Decimal64> field = Decimal64Field.getInstance();
+        EmbeddedRungeKuttaFieldIntegrator<Decimal64> fieldIntegrator = createIntegrator(Decimal64Field.getInstance(), 0.01, 1.0, 0.1, 0.1);
+        TestFieldProblem1<Decimal64> pb = new TestFieldProblem1<Decimal64>(field);
+        fieldIntegrator.addEventHandler(
+                new FieldODEEventHandler<Decimal64>() {
+                    @Override
+                    public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+                        return state.getTime().subtract(pb.getFinalTime());
+                    }
+                    @Override
+                    public Action eventOccurred(FieldODEStateAndDerivative<Decimal64> state, boolean increasing) {
+                        return Action.STOP;
+                    }
+                },
+                Double.POSITIVE_INFINITY, 1.0e-6, 1000);
+        fieldIntegrator.integrate(new FieldExpandableODE<>(pb), pb.getInitialState(), Decimal64.POSITIVE_INFINITY);
     }
 
     private double dYdP(final DerivativeStructure y, final int parameter) {
