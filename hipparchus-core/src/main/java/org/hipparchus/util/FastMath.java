@@ -1124,6 +1124,10 @@ public class FastMath {
         // If tempC is positive infinite, the evaluation below could result in NaN,
         // because z could be negative at the same time.
         if (tempC == Double.POSITIVE_INFINITY) {
+            if (hiPrec != null) {
+                hiPrec[0] = Double.POSITIVE_INFINITY;
+                hiPrec[1] = 0.0;
+            }
             return Double.POSITIVE_INFINITY;
         }
 

@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.0" date="TBD" description="This is a major release.">
+      <action dev="luc" type="fix" issue="issues/228">
+        Fixed FastMath.expm1(x) for huge values of x.
+      </action>
       <action dev="luc" type="add" due-to="Paul King" issue="issues/221">
         Added Principal Component Analysis.
       </action>

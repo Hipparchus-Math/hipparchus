@@ -967,6 +967,11 @@ public class FastMathTest {
     }
 
     @Test
+    public void testExpm1Huge() {
+        Assert.assertTrue(Double.isInfinite(FastMath.expm1(709.85)));
+    }
+
+    @Test
     public void testExpm1Accuracy() {
         double maxerrulp = 0.0;
 
