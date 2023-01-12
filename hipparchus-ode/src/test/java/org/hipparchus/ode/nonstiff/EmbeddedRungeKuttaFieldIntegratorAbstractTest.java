@@ -124,17 +124,14 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
     protected <T extends CalculusFieldElement<T>> void doTestForwardBackwardExceptions(final Field<T> field) {
         FieldOrdinaryDifferentialEquation<T> equations = new FieldOrdinaryDifferentialEquation<T>() {
 
-            @Override
-			public int getDimension() {
+            public int getDimension() {
                 return 1;
             }
 
-            @Override
-			public void init(T t0, T[] y0, T t) {
+            public void init(T t0, T[] y0, T t) {
             }
 
-            @Override
-			public T[] computeDerivatives(T t, T[] y) {
+            public T[] computeDerivatives(T t, T[] y) {
                 if (t.getReal() < -0.5) {
                     throw new LocalException();
                 } else {
@@ -286,15 +283,12 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         integ.addStepHandler(handler);
 
         integ.addEventHandler(new FieldODEEventHandler<T>() {
-          @Override
-		public void init(FieldODEStateAndDerivative<T> state0, T t) {
+          public void init(FieldODEStateAndDerivative<T> state0, T t) {
           }
-          @Override
-		public Action eventOccurred(FieldODEStateAndDerivative<T> state, boolean increasing) {
+          public Action eventOccurred(FieldODEStateAndDerivative<T> state, boolean increasing) {
             return Action.CONTINUE;
           }
-          @Override
-		public T g(FieldODEStateAndDerivative<T> state) {
+          public T g(FieldODEStateAndDerivative<T> state) {
             T middle = pb.getInitialState().getTime().add(pb.getFinalTime()).multiply(0.5);
             T offset = state.getTime().subtract(middle);
             if (offset.getReal() > 0) {
@@ -302,8 +296,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             }
             return offset;
           }
-          @Override
-		public FieldODEState<T> resetState(FieldODEStateAndDerivative<T> state) {
+          public FieldODEState<T> resetState(FieldODEStateAndDerivative<T> state) {
               return state;
           }
         }, Double.POSITIVE_INFINITY, 1.0e-8 * maxStep, 1000);
@@ -329,21 +322,17 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         integ.addStepHandler(handler);
 
         integ.addEventHandler(new FieldODEEventHandler<T>() {
-            @Override
-			public void init(FieldODEStateAndDerivative<T> state0, T t) {
+            public void init(FieldODEStateAndDerivative<T> state0, T t) {
             }
-            @Override
-			public Action eventOccurred(FieldODEStateAndDerivative<T> state, boolean increasing) {
+            public Action eventOccurred(FieldODEStateAndDerivative<T> state, boolean increasing) {
                 return Action.CONTINUE;
             }
-            @Override
-			public T g(FieldODEStateAndDerivative<T> state) {
+            public T g(FieldODEStateAndDerivative<T> state) {
                 T middle = pb.getInitialState().getTime().add(pb.getFinalTime()).multiply(0.5);
                 T offset = state.getTime().subtract(middle);
                 return (offset.getReal() > 0) ? offset.add(0.5) : offset.subtract(0.5);
             }
-            @Override
-			public FieldODEState<T> resetState(FieldODEStateAndDerivative<T> state) {
+            public FieldODEState<T> resetState(FieldODEStateAndDerivative<T> state) {
                 return state;
             }
         }, Double.POSITIVE_INFINITY, 1.0e-8 * maxStep, 3);
@@ -449,12 +438,10 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             this.epsilon = epsilon;
             maxError = pb.getField().getZero();
         }
-        @Override
-		public void init(FieldODEStateAndDerivative<T> state0, T t) {
+        public void init(FieldODEStateAndDerivative<T> state0, T t) {
             maxError = pb.getField().getZero();
         }
-        @Override
-		public void handleStep(FieldODEStateInterpolator<T> interpolator) {
+        public void handleStep(FieldODEStateInterpolator<T> interpolator) {
 
             FieldODEStateAndDerivative<T> current = interpolator.getCurrentState();
             T[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
@@ -465,8 +452,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                 maxError = error;
             }
         }
-        @Override
-		public void finish(FieldODEStateAndDerivative<T> finalState) {
+        public void finish(FieldODEStateAndDerivative<T> finalState) {
             Assert.assertEquals(0.0, maxError.getReal(), epsilon);
         }
     }
@@ -497,12 +483,10 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             this.epsilon = epsilon;
             maxError     = pb.getField().getZero();
         }
-        @Override
-		public void init(FieldODEStateAndDerivative<T> state0, T t) {
+        public void init(FieldODEStateAndDerivative<T> state0, T t) {
             maxError = pb.getField().getZero();
         }
-        @Override
-		public void handleStep(FieldODEStateInterpolator<T> interpolator) {
+        public void handleStep(FieldODEStateInterpolator<T> interpolator) {
 
             FieldODEStateAndDerivative<T> current = interpolator.getCurrentState();
             T[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
@@ -514,8 +498,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                 maxError = error;
             }
         }
-        @Override
-		public void finish(FieldODEStateAndDerivative<T> finalState) {
+        public void finish(FieldODEStateAndDerivative<T> finalState) {
             Assert.assertEquals(0.0, maxError.getReal(), epsilon);
         }
     }
@@ -742,13 +725,11 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             this.omega = omega;
         }
 
-        @Override
-		public int getDimension() {
+        public int getDimension() {
             return 2;
         }
 
-        @Override
-		public void init(final DerivativeStructure t0, final DerivativeStructure[] y0,
+        public void init(final DerivativeStructure t0, final DerivativeStructure[] y0,
                          final DerivativeStructure finalTime) {
 
             // theoretical solution is y(t) = { r * sin(omega * t + alpha), r * cos(omega * t + alpha) }
@@ -767,8 +748,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
         }
 
-        @Override
-		public DerivativeStructure[] computeDerivatives(final DerivativeStructure t, final DerivativeStructure[] y) {
+        public DerivativeStructure[] computeDerivatives(final DerivativeStructure t, final DerivativeStructure[] y) {
             return new DerivativeStructure[] {
                 omega.multiply(y[1]),
                 omega.multiply(y[0]).negate()
