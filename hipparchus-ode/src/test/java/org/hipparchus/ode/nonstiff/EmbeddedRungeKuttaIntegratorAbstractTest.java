@@ -67,11 +67,13 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
     protected void doTestForwardBackwardExceptions() {
         OrdinaryDifferentialEquation equations = new OrdinaryDifferentialEquation() {
 
-            public int getDimension() {
+            @Override
+			public int getDimension() {
                 return 1;
             }
 
-            public double[] computeDerivatives(double t, double[] y) {
+            @Override
+			public double[] computeDerivatives(double t, double[] y) {
                 if (t < -0.5) {
                     throw new LocalException();
                 } else {
@@ -215,12 +217,15 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             integ.addStepHandler(handler);
 
             integ.addEventHandler(new ODEEventHandler() {
-                public void init(ODEStateAndDerivative state0, double t) {
+                @Override
+				public void init(ODEStateAndDerivative state0, double t) {
                 }
-                public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
+                @Override
+				public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
                     return Action.CONTINUE;
                 }
-                public double g(ODEStateAndDerivative state) {
+                @Override
+				public double g(ODEStateAndDerivative state) {
                     double middle = 0.5 * (pb.getInitialState().getTime() + pb.getFinalTime());
                     double offset = state.getTime() - middle;
                     if (offset > 0) {
@@ -228,7 +233,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                     }
                     return offset;
                 }
-                public ODEState resetState(ODEStateAndDerivative state) {
+                @Override
+				public ODEState resetState(ODEStateAndDerivative state) {
                     return state;
                 }
             }, Double.POSITIVE_INFINITY, 1.0e-8 * maxStep, 1000);
@@ -254,15 +260,18 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         integ.addStepHandler(handler);
 
         integ.addEventHandler(new ODEEventHandler() {
-            public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
+            @Override
+			public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
                 return Action.CONTINUE;
             }
-            public double g(ODEStateAndDerivative state) {
+            @Override
+			public double g(ODEStateAndDerivative state) {
                 double middle = 0.5 * (pb.getInitialState().getTime() + pb.getFinalTime());
                 double offset = state.getTime() - middle;
                 return (offset > 0) ? offset + 0.5 : offset - 0.5;
             }
-            public ODEState resetState(ODEStateAndDerivative state) {
+            @Override
+			public ODEState resetState(ODEStateAndDerivative state) {
                 return state;
             }
         }, Double.POSITIVE_INFINITY, 1.0e-8 * maxStep, 3);
@@ -390,10 +399,12 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             this.epsilon = epsilon;
             maxError     = 0;
         }
-        public void init(ODEStateAndDerivative state0, double t) {
+        @Override
+		public void init(ODEStateAndDerivative state0, double t) {
             maxError = 0;
         }
-        public void handleStep(ODEStateInterpolator interpolator) {
+        @Override
+		public void handleStep(ODEStateInterpolator interpolator) {
 
             ODEStateAndDerivative current = interpolator.getCurrentState();
             double[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
@@ -404,7 +415,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                 maxError = error;
             }
         }
-        public void finish(ODEStateAndDerivative finalState) {
+        @Override
+		public void finish(ODEStateAndDerivative finalState) {
             Assert.assertEquals(0.0, maxError, epsilon);
         }
     }
@@ -434,10 +446,12 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             this.epsilon = epsilon;
             maxError     = 0;
         }
-        public void init(ODEStateAndDerivative state0, double t) {
+        @Override
+		public void init(ODEStateAndDerivative state0, double t) {
             maxError = 0;
         }
-        public void handleStep(ODEStateInterpolator interpolator) {
+        @Override
+		public void handleStep(ODEStateInterpolator interpolator) {
 
             ODEStateAndDerivative current = interpolator.getCurrentState();
             double[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
@@ -449,7 +463,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                 maxError = error;
             }
         }
-        public void finish(ODEStateAndDerivative finalState) {
+        @Override
+		public void finish(ODEStateAndDerivative finalState) {
             Assert.assertEquals(0.0, maxError, epsilon);
         }
     }
@@ -463,11 +478,13 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         final double[] k  = { 1.0e-4, 1.0e-5, 1.0e-6 };
         OrdinaryDifferentialEquation ode = new OrdinaryDifferentialEquation() {
 
-            public int getDimension() {
+            @Override
+			public int getDimension() {
                 return k.length;
             }
 
-            public double[] computeDerivatives(double t, double[] y) {
+            @Override
+			public double[] computeDerivatives(double t, double[] y) {
                 final double[] yDot = new double[y.length];
                 for (int i = 0; i < y.length; ++i) {
                     yDot[i] = k[i] * y[i];
@@ -494,11 +511,13 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         integrator.setInitialStepSize(60.0);
         integrator.addEventHandler(new ODEEventHandler() {
 
-            public double g(ODEStateAndDerivative s) {
+            @Override
+			public double g(ODEStateAndDerivative s) {
                 return s.getTime() - tEvent;
             }
 
-            public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
+            @Override
+			public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
                 Assert.assertEquals(tEvent, s.getTime(), epsilonT);
                 return Action.CONTINUE;
             }
@@ -521,11 +540,13 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         final double end   = 0.001;
         OrdinaryDifferentialEquation equations = new OrdinaryDifferentialEquation() {
 
-            public int getDimension() {
+            @Override
+			public int getDimension() {
                 return 1;
             }
 
-            public double[] computeDerivatives(double t, double[] y) {
+            @Override
+			public double[] computeDerivatives(double t, double[] y) {
                 Assert.assertTrue(t >= FastMath.nextAfter(start, Double.NEGATIVE_INFINITY));
                 Assert.assertTrue(t <= FastMath.nextAfter(end,   Double.POSITIVE_INFINITY));
                 return new double[] { -100.0 * y[0] };
@@ -574,11 +595,13 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
         OrdinaryDifferentialEquation sincos = new OrdinaryDifferentialEquation() {
 
-            public int getDimension() {
+            @Override
+			public int getDimension() {
                 return 2;
             }
 
-            public double[] computeDerivatives(double t, double[] y) {
+            @Override
+			public double[] computeDerivatives(double t, double[] y) {
                 return new double[] { y[1], -y[0] };
             }
 
@@ -608,26 +631,31 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             this.index = index;
         }
 
-        public void init(ODEStateAndDerivative s0, double t) {
+        @Override
+		public void init(ODEStateAndDerivative s0, double t) {
             tMin = s0.getTime();
         }
 
-        public void handleStep(ODEStateInterpolator interpolator) {
+        @Override
+		public void handleStep(ODEStateInterpolator interpolator) {
             tMin = interpolator.getCurrentState().getTime();
         }
 
-        public double g(ODEStateAndDerivative s) {
+        @Override
+		public double g(ODEStateAndDerivative s) {
             // once a step has been handled by handleStep,
             // events checking should only refer to dates after the step
             Assert.assertTrue(s.getTime() >= tMin);
             return s.getPrimaryState()[index];
         }
 
-        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
+        @Override
+		public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
             return Action.RESET_STATE;
         }
 
-        public ODEStateAndDerivative resetState(ODEStateAndDerivative s) {
+        @Override
+		public ODEStateAndDerivative resetState(ODEStateAndDerivative s) {
             // in fact, we don't need to reset anything for the test
             return s;
         }
@@ -644,12 +672,14 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             minStep   = 0;
             maxStep   = 0;
         }
-        public void init(ODEStateAndDerivative s0, double t) {
+        @Override
+		public void init(ODEStateAndDerivative s0, double t) {
             firstTime = true;
             minStep = 0;
             maxStep = 0;
         }
-        public void handleStep(ODEStateInterpolator interpolator) {
+        @Override
+		public void handleStep(ODEStateInterpolator interpolator) {
 
             double step = FastMath.abs(interpolator.getCurrentState().getTime() -
                                        interpolator.getPreviousState().getTime());
@@ -666,7 +696,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                 }
             }
         }
-        public void finish(ODEStateAndDerivative finalState) {
+        @Override
+		public void finish(ODEStateAndDerivative finalState) {
             Assert.assertEquals(min, minStep, 0.01 * min);
             Assert.assertEquals(max, maxStep, 0.01 * max);
         }
@@ -681,14 +712,16 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                         createIntegrator(0.0, 1.0, 1.0e-10, 1.0e-10);
         OrdinaryDifferentialEquation equations =
                         new OrdinaryDifferentialEquation() {
-            public double[] computeDerivatives(double t, double[] y) {
+            @Override
+			public double[] computeDerivatives(double t, double[] y) {
                 if (t < -0.5) {
                     throw new LocalException();
                 } else {
                     throw new RuntimeException("oops");
                 }
             }
-            public int getDimension() {
+            @Override
+			public int getDimension() {
                 return 1;
             }
         };
@@ -833,10 +866,12 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         try {
             ODEIntegrator integ = createIntegrator(0.01, 1.0, 0.1, 0.1);
             integ.integrate(new OrdinaryDifferentialEquation() {
-                public int getDimension() {
+                @Override
+				public int getDimension() {
                     return 1;
                 }
-                public double[] computeDerivatives(double t, double[] y) {
+                @Override
+				public double[] computeDerivatives(double t, double[] y) {
                     return new double[] { FastMath.log(t) };
                 }
             }, new ODEState(1.0, new double[] { 1.0 }), -1.0);
@@ -851,6 +886,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
     public void testInfiniteIntegration() {
         ODEIntegrator integ = createIntegrator(0.01, 1.0, 0.1, 0.1);
         TestProblem1 pb = new TestProblem1();
+        double convergence = 1e-6;
         integ.addEventHandler(
                 new ODEEventHandler() {
                     @Override
@@ -862,8 +898,9 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                         return Action.STOP;
                     }
                 },
-                Double.POSITIVE_INFINITY, 1.0e-6, 1000);
-        integ.integrate(pb, pb.getInitialState(), Double.POSITIVE_INFINITY);
+                Double.POSITIVE_INFINITY, convergence, 1000);
+        ODEStateAndDerivative finalState = integ.integrate(pb, pb.getInitialState(), Double.POSITIVE_INFINITY);
+        Assert.assertEquals(pb.getFinalTime(), finalState.getTime(), convergence);
     }
 
     private static class SinCos implements ODEJacobiansProvider {
@@ -884,11 +921,13 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             this.omega = omega;
         }
 
-        public int getDimension() {
+        @Override
+		public int getDimension() {
             return 2;
         }
 
-        public void init(final double t0, final double[] y0,
+        @Override
+		public void init(final double t0, final double[] y0,
                          final double finalTime) {
 
             // theoretical solution is y(t) = { r * sin(omega * t + alpha), r * cos(omega * t + alpha) }
