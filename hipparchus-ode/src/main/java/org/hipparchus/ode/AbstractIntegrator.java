@@ -397,7 +397,7 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
             doneWithStep = true;
         } while (!doneWithStep);
 
-        isLastStep = isLastStep || FastMath.abs(currentState.getTime() - tEnd) <= FastMath.ulp(tEnd);
+        isLastStep = isLastStep || FastMath.abs(currentState.getTime() - tEnd) < FastMath.ulp(tEnd);
 
         // handle the remaining part of the step, after all events if any
         for (ODEStepHandler handler : stepHandlers) {
@@ -424,7 +424,7 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
         final double threshold = 1000 * FastMath.ulp(FastMath.max(FastMath.abs(initialState.getTime()),
                                                                   FastMath.abs(t)));
         final double dt = FastMath.abs(initialState.getTime() - t);
-        if (dt <= threshold) {
+        if (dt < threshold) {
             throw new MathIllegalArgumentException(LocalizedODEFormats.TOO_SMALL_INTEGRATION_INTERVAL,
                                                    dt, threshold, false);
         }
