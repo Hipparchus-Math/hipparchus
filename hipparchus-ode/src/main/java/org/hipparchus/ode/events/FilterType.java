@@ -24,7 +24,7 @@ package org.hipparchus.ode.events;
 
 import org.hipparchus.exception.MathRuntimeException;
 
-/** Enumerate for {@link EventFilter filtering events}.
+/** Enumerate for {@link EventSlopeFilter filtering events}.
  *
  */
 

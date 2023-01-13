@@ -25,20 +25,39 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.AbstractODEDetector;
+import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.events.ODEEventHandler;
 
 
-public class StepProblem implements OrdinaryDifferentialEquation, ODEEventHandler {
+public class StepProblem extends AbstractODEDetector<StepProblem> implements OrdinaryDifferentialEquation {
 
-    private double rate;
+    private double rateBefore;
     private double rateAfter;
+    private double rate;
     private double switchTime;
 
-    public StepProblem(double rateBefore, double rateAfter,
-                       double switchTime) {
+    public StepProblem(final double maxCheck, final double threshold, final int maxIter,
+                       double rateBefore, double rateAfter, double switchTime) {
+        this(maxCheck, threshold, maxIter, new LocalHandler(),
+             rateBefore, rateAfter, switchTime);
+    }
+
+    private StepProblem(final double maxCheck, final double threshold,
+                        final int maxIter, final ODEEventHandler handler,
+                        final double rateBefore, final double rateAfter,
+                        final double switchTime) {
+        super(maxCheck, threshold, maxIter, handler);
+        this.rateBefore = rateBefore;
         this.rateAfter  = rateAfter;
         this.switchTime = switchTime;
         setRate(rateBefore);
+    }
+
+    protected StepProblem create(double newMaxCheck, double newThreshold,
+                                 int newMaxIter, ODEEventHandler newHandler) {
+        return new StepProblem(newMaxCheck, newThreshold, newMaxIter, newHandler,
+                               rateBefore, rateAfter, switchTime);
     }
 
     public double[] computeDerivatives(double t, double[] y) {
@@ -58,16 +77,16 @@ public class StepProblem implements OrdinaryDifferentialEquation, ODEEventHandle
     public void init(double t0, double[] y0, double t) {
     }
 
-    public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
-        setRate(rateAfter);
-        return Action.RESET_DERIVATIVES;
+    private static class LocalHandler implements ODEEventHandler {
+        public Action eventOccurred(ODEStateAndDerivative state, ODEEventDetector detector, boolean increasing) {
+            final StepProblem sp = (StepProblem) detector;
+            sp.setRate(sp.rateAfter);
+            return Action.RESET_DERIVATIVES;
+        }
     }
 
     public double g(ODEStateAndDerivative s) {
         return s.getTime() - switchTime;
-    }
-
-    public void resetState(double t, double[] y) {
     }
 
 }

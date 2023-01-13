@@ -46,6 +46,15 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * error (this event handling feature is available for all integrators,
  * including fixed step ones).</p>
  *
+ * <p>
+ * Note that prior to Hipparchus 3.0, some of the methods that are now in
+ * {@link FieldODEEventDetector} were in this interface (and the remaining
+ * ones were in the defunct {@code FieldEventHandlerConfiguration} interface).
+ * The interfaces have been reorganized to allow different objects to be
+ * used in event detection and event handling, hence allowing users to
+ * reuse predefined events detectors with custom handlers.
+ * </p>
+ * @see org.hipparchus.ode.events
  * @param <T> the type of the field elements
  */
 public interface FieldODEEventHandler<T extends CalculusFieldElement<T>>  {
@@ -61,57 +70,11 @@ public interface FieldODEEventHandler<T extends CalculusFieldElement<T>>  {
      * </p>
      * @param initialState initial time, state vector and derivative
      * @param finalTime target time for the integration
+     * @param detector event detector related to the event handler
      */
-    default void init(FieldODEStateAndDerivative<T> initialState, T finalTime) {
+    default void init(FieldODEStateAndDerivative<T> initialState, T finalTime, FieldODEEventDetector<T> detector) {
         // nothing by default
     }
-
-    /** Compute the value of the switching function.
-
-     * <p>The discrete events are generated when the sign of this
-     * switching function changes. The integrator will take care to change
-     * the stepsize in such a way these events occur exactly at step boundaries.
-     * The switching function must be continuous in its roots neighborhood
-     * (but not necessarily smooth), as the integrator will need to find its
-     * roots to locate precisely the events.</p>
-     * <p>Also note that the integrator expect that once an event has occurred,
-     * the sign of the switching function at the start of the next step (i.e.
-     * just after the event) is the opposite of the sign just before the event.
-     * This consistency between the steps <string>must</strong> be preserved,
-     * otherwise {@link org.hipparchus.exception.MathIllegalArgumentException
-     * exceptions} related to root not being bracketed will occur.</p>
-     * <p>This need for consistency is sometimes tricky to achieve. A typical
-     * example is using an event to model a ball bouncing on the floor. The first
-     * idea to represent this would be to have {@code g(state) = h(state)} where h is the
-     * height above the floor at time {@code state.getTime()}. When {@code g(state)} reaches 0, the
-     * ball is on the floor, so it should bounce and the typical way to do this is
-     * to reverse its vertical velocity. However, this would mean that before the
-     * event {@code g(state)} was decreasing from positive values to 0, and after the
-     * event {@code g(state)} would be increasing from 0 to positive values again.
-     * Consistency is broken here! The solution here is to have {@code g(state) = sign
-     * * h(state)}, where sign is a variable with initial value set to {@code +1}. Each
-     * time {@link #eventOccurred(FieldODEStateAndDerivative, boolean) eventOccurred}
-     * method is called, {@code sign} is reset to {@code -sign}. This allows the
-     * {@code g(state)} function to remain continuous (and even smooth) even across events,
-     * despite {@code h(state)} is not. Basically, the event is used to <em>fold</em>
-     * {@code h(state)} at bounce points, and {@code sign} is used to <em>unfold</em> it
-     * back, so the solvers sees a {@code g(state)} function which behaves smoothly even
-     * across events.</p>
-     *
-     * <p>This method is idempotent, that is calling this multiple times with the same
-     * state will result in the same value, with two exceptions. First, the definition of
-     * the g function may change when an {@link #eventOccurred(FieldODEStateAndDerivative,
-     * boolean) event occurs} on this handler, as in the above example. Second, the
-     * definition of the g function may change when the {@link
-     * #eventOccurred(FieldODEStateAndDerivative, boolean) eventOccurred} method of any
-     * other event handler in the same integrator returns {@link Action#RESET_EVENTS},
-     * {@link Action#RESET_DERIVATIVES}, or {@link Action#RESET_STATE}.
-     *
-     * @param state current value of the independent <i>time</i> variable, state vector
-     * and derivative
-     * @return value of the g switching function
-     */
-    T g(FieldODEStateAndDerivative<T> state);
 
     /** Handle an event and choose what to do next.
 
@@ -150,6 +113,7 @@ public interface FieldODEEventHandler<T extends CalculusFieldElement<T>>  {
      *
      * @param state current value of the independent <i>time</i> variable, state vector
      * and derivative
+     * @param detector detector that triggered the event
      * @param increasing if true, the value of the switching function increases
      * when times increases around event (note that increase is measured with respect
      * to physical time, not with respect to integration which may go backward in time)
@@ -158,7 +122,7 @@ public interface FieldODEEventHandler<T extends CalculusFieldElement<T>>  {
      * {@link Action#RESET_DERIVATIVES}, {@link Action#RESET_EVENTS}, or
      * {@link Action#CONTINUE}
      */
-    Action eventOccurred(FieldODEStateAndDerivative<T> state, boolean increasing);
+    Action eventOccurred(FieldODEStateAndDerivative<T> state, FieldODEEventDetector<T> detector, boolean increasing);
 
     /** Reset the state prior to continue the integration.
 
@@ -169,12 +133,13 @@ public interface FieldODEEventHandler<T extends CalculusFieldElement<T>>  {
      * the state vector for the next step, without perturbing the step handler of the
      * finishing step.</p>
      * <p>The default implementation returns its argument.</p>
+     * @param detector detector that triggered the event
      * @param state current value of the independent <i>time</i> variable, state vector
      * and derivative
      * @return reset state (note that it does not include the derivatives, they will
      * be added automatically by the integrator afterwards)
      */
-    default FieldODEState<T> resetState(FieldODEStateAndDerivative<T> state) {
+    default FieldODEState<T> resetState(FieldODEEventDetector<T> detector, FieldODEStateAndDerivative<T> state) {
         return state;
     }
 

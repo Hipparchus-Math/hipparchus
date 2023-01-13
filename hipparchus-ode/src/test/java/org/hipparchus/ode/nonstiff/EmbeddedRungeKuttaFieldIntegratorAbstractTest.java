@@ -27,7 +27,6 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldExpandableODE;
@@ -43,7 +42,7 @@ import org.hipparchus.ode.TestFieldProblem5;
 import org.hipparchus.ode.TestFieldProblem7;
 import org.hipparchus.ode.TestFieldProblemHandler;
 import org.hipparchus.ode.events.Action;
-import org.hipparchus.ode.events.FieldEventHandlerConfiguration;
+import org.hipparchus.ode.events.FieldODEEventDetector;
 import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
@@ -223,8 +222,8 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
     public abstract void testEvents();
 
     protected <T extends CalculusFieldElement<T>> void doTestEvents(final Field<T> field,
-                                                                final double epsilonMaxValue,
-                                                                final String name) {
+                                                                    final double epsilonMaxValue,
+                                                                    final String name) {
 
       TestFieldProblem4<T> pb = new TestFieldProblem4<T>(field);
       double minStep = 0;
@@ -236,21 +235,21 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                                                             scalAbsoluteTolerance, scalRelativeTolerance);
       TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
       integ.addStepHandler(handler);
-      FieldODEEventHandler<T>[] functions = pb.getEventsHandlers();
       double convergence = 1.0e-8 * maxStep;
+      FieldODEEventDetector<T>[] functions = pb.getEventDetectors(field.getZero().newInstance(Double.POSITIVE_INFINITY),
+                                                                  field.getZero().newInstance(convergence),
+                                                                  1000);
       for (int l = 0; l < functions.length; ++l) {
-          integ.addEventHandler(functions[l], Double.POSITIVE_INFINITY, convergence, 1000);
+          integ.addEventDetector(functions[l]);
       }
-      Assert.assertEquals(functions.length, integ.getEventHandlers().size());
+      List<FieldODEEventDetector<T>> detectors = new ArrayList<>(integ.getEventDetectors());
+      Assert.assertEquals(functions.length, integ.getEventDetectors().size());
 
-      List<FieldEventHandlerConfiguration<T>> configurations = new ArrayList<>(integ.getEventHandlersConfigurations());
-      Assert.assertEquals(2, configurations.size());
-      for (int i = 0; i < configurations.size(); ++i) {
-          Assert.assertSame(functions[i], configurations.get(i).getEventHandler());
-          Assert.assertEquals(Double.POSITIVE_INFINITY, configurations.get(i).getMaxCheckInterval(), 1.0);
-          Assert.assertEquals(convergence, configurations.get(i).getConvergence().getReal(), 1.0e-15 * convergence);
-          Assert.assertEquals(1000, configurations.get(i).getMaxIterationCount());
-          Assert.assertTrue(configurations.get(i).getSolver() instanceof FieldBracketingNthOrderBrentSolver);
+      for (int i = 0; i < detectors.size(); ++i) {
+          Assert.assertSame(functions[i], detectors.get(i).getHandler());
+          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().getReal(), 1.0);
+          Assert.assertEquals(convergence, detectors.get(i).getThreshold().getReal(), 1.0e-15 * convergence);
+          Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
 
       integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
@@ -259,8 +258,8 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
       Assert.assertEquals(0, handler.getMaximalTimeError().getReal(), convergence);
       Assert.assertEquals(12.0, handler.getLastTime().getReal(), convergence);
       Assert.assertEquals(name, integ.getName());
-      integ.clearEventHandlers();
-      Assert.assertEquals(0, integ.getEventHandlers().size());
+      integ.clearEventDetectors();
+      Assert.assertEquals(0, integ.getEventDetectors().size());
 
     }
 
@@ -280,24 +279,28 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
         integ.addStepHandler(handler);
 
-        integ.addEventHandler(new FieldODEEventHandler<T>() {
-          public void init(FieldODEStateAndDerivative<T> state0, T t) {
-          }
-          public Action eventOccurred(FieldODEStateAndDerivative<T> state, boolean increasing) {
-            return Action.CONTINUE;
-          }
-          public T g(FieldODEStateAndDerivative<T> state) {
-            T middle = pb.getInitialState().getTime().add(pb.getFinalTime()).multiply(0.5);
-            T offset = state.getTime().subtract(middle);
-            if (offset.getReal() > 0) {
-              throw new LocalException();
+        integ.addEventDetector(new FieldODEEventDetector<T>() {
+            public T getMaxCheckInterval() {
+                return field.getZero().newInstance(Double.POSITIVE_INFINITY);
             }
-            return offset;
-          }
-          public FieldODEState<T> resetState(FieldODEStateAndDerivative<T> state) {
-              return state;
-          }
-        }, Double.POSITIVE_INFINITY, 1.0e-8 * maxStep, 1000);
+            public T getThreshold() {
+                return field.getZero().newInstance(1.0e-8 * maxStep);
+            }
+            public int getMaxIterationCount() {
+                return 1000;
+            }
+            public FieldODEEventHandler<T> getHandler() {
+                return (state, detector, increasing) -> Action.CONTINUE;
+            }
+            public T g(FieldODEStateAndDerivative<T> state) {
+                T middle = pb.getInitialState().getTime().add(pb.getFinalTime()).multiply(0.5);
+                T offset = state.getTime().subtract(middle);
+                if (offset.getReal() > 0) {
+                    throw new LocalException();
+                }
+                return offset;
+            }
+        });
 
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
 
@@ -319,21 +322,25 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
         integ.addStepHandler(handler);
 
-        integ.addEventHandler(new FieldODEEventHandler<T>() {
-            public void init(FieldODEStateAndDerivative<T> state0, T t) {
+        integ.addEventDetector(new FieldODEEventDetector<T>() {
+            public T getMaxCheckInterval() {
+                return field.getZero().newInstance(Double.POSITIVE_INFINITY);
             }
-            public Action eventOccurred(FieldODEStateAndDerivative<T> state, boolean increasing) {
-                return Action.CONTINUE;
+            public T getThreshold() {
+                return field.getZero().newInstance(1.0e-8 * maxStep);
+            }
+            public int getMaxIterationCount() {
+                return 3;
+            }
+            public FieldODEEventHandler<T> getHandler() {
+                return (state, detector, increasing) -> Action.CONTINUE;
             }
             public T g(FieldODEStateAndDerivative<T> state) {
                 T middle = pb.getInitialState().getTime().add(pb.getFinalTime()).multiply(0.5);
                 T offset = state.getTime().subtract(middle);
                 return (offset.getReal() > 0) ? offset.add(0.5) : offset.subtract(0.5);
             }
-            public FieldODEState<T> resetState(FieldODEStateAndDerivative<T> state) {
-                return state;
-            }
-        }, Double.POSITIVE_INFINITY, 1.0e-8 * maxStep, 3);
+        });
 
         try {
             integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());

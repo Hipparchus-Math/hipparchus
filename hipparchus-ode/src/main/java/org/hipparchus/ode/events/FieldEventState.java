@@ -24,13 +24,15 @@ package org.hipparchus.ode.events;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
-import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver.Interval;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
+import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 
@@ -46,19 +48,21 @@ import org.hipparchus.util.FastMath;
  *
  * @param <T> the type of the field elements
  */
-public class FieldEventState<T extends CalculusFieldElement<T>> implements FieldEventHandlerConfiguration<T> {
+public class FieldEventState<T extends CalculusFieldElement<T>> {
+
+    /** Event detector.
+     * @since 3.0
+     */
+    private final FieldODEEventDetector<T> detector;
 
     /** Event handler. */
     private final FieldODEEventHandler<T> handler;
 
-    /** Maximal time interval between events handler checks. */
-    private final double maxCheckInterval;
+    /** Time of the previous call to g. */
+    private T lastT;
 
-    /** Convergence threshold for event localization. */
-    private final T convergence;
-
-    /** Upper limit in the iteration count for event localization. */
-    private final int maxIterationCount;
+    /** Value from the previous call to g. */
+    private T lastG;
 
     /** Time at the beginning of the step. */
     private T t0;
@@ -98,27 +102,13 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
      */
     private boolean increasing;
 
-    /** Root-finding algorithm to use to detect state events. */
-    private final BracketedRealFieldUnivariateSolver<T> solver;
-
     /** Simple constructor.
-     * @param handler event handler
-     * @param maxCheckInterval maximal time interval between switching
-     * function checks (this interval prevents missing sign changes in
-     * case the integration steps becomes very large)
-     * @param convergence convergence threshold in the event time search
-     * @param maxIterationCount upper limit of the iteration count in
-     * the event time search
-     * @param solver Root-finding algorithm to use to detect state events
+     * @param detector event detector
+     * @since 3.0
      */
-    public FieldEventState(final FieldODEEventHandler<T> handler, final double maxCheckInterval,
-                           final T convergence, final int maxIterationCount,
-                           final BracketedRealFieldUnivariateSolver<T> solver) {
-        this.handler           = handler;
-        this.maxCheckInterval  = maxCheckInterval;
-        this.convergence       = convergence.abs();
-        this.maxIterationCount = maxIterationCount;
-        this.solver            = solver;
+    public FieldEventState(final FieldODEEventDetector<T> detector) {
+        this.detector     = detector;
+        this.handler      = detector.getHandler();
 
         // some dummy values ...
         t0                = null;
@@ -133,34 +123,42 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
 
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public FieldODEEventHandler<T> getEventHandler() {
-        return handler;
+    /** Get the underlying event detector.
+     * @return underlying event detector
+     * @since 3.0
+     */
+    public FieldODEEventDetector<T> getEventDetector() {
+        return detector;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public double getMaxCheckInterval() {
-        return maxCheckInterval;
+    /** Initialize event handler at the start of an integration.
+     * <p>
+     * This method is called once at the start of the integration. It
+     * may be used by the event handler to initialize some internal data
+     * if needed.
+     * </p>
+     * @param s0 initial state
+     * @param t target time for the integration
+     *
+     */
+    public void init(final FieldODEStateAndDerivative<T> s0, final T t) {
+        detector.init(s0, t);
+        lastT = t.getField().getZero().newInstance(Double.NEGATIVE_INFINITY);
+        lastG = null;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public T getConvergence() {
-        return convergence;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public int getMaxIterationCount() {
-        return maxIterationCount;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public BracketedRealFieldUnivariateSolver<T> getSolver() {
-        return solver;
+    /** Compute the value of the switching function.
+     * This function must be continuous (at least in its roots neighborhood),
+     * as the integrator will need to find its roots to locate the events.
+     * @param s the current state information: date, kinematics, attitude
+     * @return value of the switching function
+     */
+    private T g(final FieldODEStateAndDerivative<T> s) {
+        if (!s.getTime().subtract(lastT).isZero()) {
+            lastG = detector.g(s);
+            lastT = s.getTime();
+        }
+        return lastG;
     }
 
     /** Reinitialize the beginning of the step.
@@ -174,8 +172,8 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
         forward = interpolator.isForward();
         final FieldODEStateAndDerivative<T> s0 = interpolator.getPreviousState();
         t0 = s0.getTime();
-        g0 = handler.g(s0);
-        while (g0.getReal() == 0) {
+        g0 = g(s0);
+        while (g0.isZero()) {
             // excerpt from MATH-421 issue:
             // If an ODE solver is setup with a FieldODEEventHandler that return STOP
             // when the even is triggered, the integrator stops (which is exactly
@@ -189,14 +187,12 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
 
             // extremely rare case: there is a zero EXACTLY at interval start
             // we will use the sign slightly after step beginning to force ignoring this zero
-            final T epsilon = max(solver.getAbsoluteAccuracy(),
-                                  solver.getRelativeAccuracy().multiply(t0).abs());
-            T tStart = t0.add(epsilon.multiply(forward ? 0.5 : -0.5));
+            T tStart = t0.add(detector.getThreshold().multiply(forward ? 0.5 : -0.5));
             if (tStart.equals(t0)) {
                 tStart = nextAfter(t0);
             }
             t0 = tStart;
-            g0 = handler.g(interpolator.getInterpolatedState(tStart));
+            g0 = g(interpolator.getInterpolatedState(tStart));
         }
         g0Positive = g0.getReal() > 0;
         // "last" event was increasing
@@ -241,11 +237,11 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
         final FieldODEStateAndDerivative<T> s1 = interpolator.getCurrentState();
         final T t1 = s1.getTime();
         final T dt = t1.subtract(t0);
-        if (dt.abs().subtract(convergence).getReal() < 0) {
+        if (dt.abs().subtract(detector.getThreshold()).getReal() < 0) {
             // we cannot do anything on such a small step, don't trigger any events
             return false;
         }
-        final int n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt.getReal()) / maxCheckInterval));
+        final int n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt.getReal()) / detector.getMaxCheckInterval().getReal()));
         final T   h = dt.divide(n);
 
         T ta = t0;
@@ -254,7 +250,7 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
 
             // evaluate handler value at the end of the substep
             final T tb = (i == n - 1) ? t1 : t0.add(h.multiply(i + 1));
-            final T gb = handler.g(interpolator.getInterpolatedState(tb));
+            final T gb = g(interpolator.getInterpolatedState(tb));
 
             // check events occurrence
             if (gb.getReal() == 0.0 || (g0Positive ^ (gb.getReal() > 0))) {
@@ -300,8 +296,12 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
                 (ga.getReal() > 0.0 && gb.getReal() < 0.0) ||
                 (ga.getReal() < 0.0 && gb.getReal() > 0.0));
 
-        final CalculusFieldUnivariateFunction<T> f =
-                t -> handler.g(interpolator.getInterpolatedState(t));
+        final T zero        = ta.getField().getZero();
+        final T convergence = detector.getThreshold();
+        final int maxIterationCount = detector.getMaxIterationCount();
+        final BracketedRealFieldUnivariateSolver<T> solver =
+                new FieldBracketingNthOrderBrentSolver<>(zero, convergence, zero, 5);
+        final CalculusFieldUnivariateFunction<T> f = t -> g(interpolator.getInterpolatedState(t));
 
         // prepare loop below
         T loopT = ta;
@@ -313,7 +313,7 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
         // time on the other side of the root.
         // Initialized the the loop below executes once.
         T afterRootT = ta;
-        T afterRootG = ga.getField().getZero();
+        T afterRootG = zero;
 
         // check for some conditions that the root finders don't like
         // these conditions cannot not happen in the loop below
@@ -324,7 +324,7 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
             beforeRootG = ga;
             afterRootT = shiftedBy(beforeRootT, convergence);
             afterRootG = f.value(afterRootT);
-        } else if (ga.getReal() != 0.0 && gb.getReal() == 0.0) {
+        } else if (!ga.isZero() && gb.isZero()) {
             // hard: ga != 0.0 and gb == 0.0
             // look past gb by up to convergence to find next sign
             // throw an exception if g(t) = 0.0 in [tb, tb + convergence]
@@ -332,7 +332,7 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
             beforeRootG = gb;
             afterRootT = shiftedBy(beforeRootT, convergence);
             afterRootG = f.value(afterRootT);
-        } else if (ga.getReal() != 0.0) {
+        } else if (!ga.isZero()) {
             final T newGa = f.value(ta);
             if (ga.getReal() > 0 != newGa.getReal() > 0) {
                 // both non-zero, step sign change at ta, possibly due to reset state
@@ -356,9 +356,9 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
 
         // loop to skip through "fake" roots, i.e. where g(t) = g'(t) = 0.0
         // executed once if we didn't hit a special case above
-        while ((afterRootG.getReal() == 0.0 || afterRootG.getReal() > 0.0 == g0Positive) &&
+        while ((afterRootG.isZero() || afterRootG.getReal() > 0.0 == g0Positive) &&
                strictlyAfter(afterRootT, tb)) {
-            if (loopG.getReal() == 0.0) {
+            if (loopG.isZero()) {
                 // ga == 0.0 and gb may or may not be 0.0
                 // handle the root at ta first
                 beforeRootT = loopT;
@@ -368,19 +368,37 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
             } else {
                 // both non-zero, the usual case, use a root finder.
                 if (forward) {
-                    final Interval<T> interval =
-                            solver.solveInterval(maxIterationCount, f, loopT, tb);
-                    beforeRootT = interval.getLeftAbscissa();
-                    beforeRootG = interval.getLeftValue();
-                    afterRootT = interval.getRightAbscissa();
-                    afterRootG = interval.getRightValue();
+                    try {
+                        final Interval<T> interval =
+                                        solver.solveInterval(maxIterationCount, f, loopT, tb);
+                        beforeRootT = interval.getLeftAbscissa();
+                        beforeRootG = interval.getLeftValue();
+                        afterRootT = interval.getRightAbscissa();
+                        afterRootG = interval.getRightValue();
+                        // CHECKSTYLE: stop IllegalCatch check
+                    } catch (RuntimeException e) {
+                        // CHECKSTYLE: resume IllegalCatch check
+                        throw new MathIllegalStateException(e, LocalizedODEFormats.FIND_ROOT,
+                                                            detector, loopT.getReal(), loopG.getReal(),
+                                                            tb.getReal(), gb.getReal(),
+                                                            lastT.getReal(), lastG.getReal());
+                    }
                 } else {
-                    final Interval<T> interval =
-                            solver.solveInterval(maxIterationCount, f, tb, loopT);
-                    beforeRootT = interval.getRightAbscissa();
-                    beforeRootG = interval.getRightValue();
-                    afterRootT = interval.getLeftAbscissa();
-                    afterRootG = interval.getLeftValue();
+                    try {
+                        final Interval<T> interval =
+                                        solver.solveInterval(maxIterationCount, f, tb, loopT);
+                        beforeRootT = interval.getRightAbscissa();
+                        beforeRootG = interval.getRightValue();
+                        afterRootT = interval.getLeftAbscissa();
+                        afterRootG = interval.getLeftValue();
+                        // CHECKSTYLE: stop IllegalCatch check
+                    } catch (RuntimeException e) {
+                        // CHECKSTYLE: resume IllegalCatch check
+                        throw new MathIllegalStateException(e, LocalizedODEFormats.FIND_ROOT,
+                                                            detector, tb.getReal(), gb.getReal(),
+                                                            loopT.getReal(), loopG.getReal(),
+                                                            lastT.getReal(), lastG.getReal());
+                    }
                 }
             }
             // tolerance is set to less than 1 ulp
@@ -398,7 +416,7 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
         }
 
         // figure out the result of root finding, and return accordingly
-        if (afterRootG.getReal() == 0.0 || afterRootG.getReal() > 0.0 == g0Positive) {
+        if (afterRootG.isZero() || afterRootG.getReal() > 0.0 == g0Positive) {
             // loop gave up and didn't find any crossing within this step
             return false;
         } else {
@@ -407,7 +425,7 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
             // variation direction, with respect to the integration direction
             increasing = !g0Positive;
             pendingEventTime = beforeRootT;
-            stopTime = beforeRootG.getReal() == 0.0 ? beforeRootT : afterRootT;
+            stopTime = beforeRootG.isZero() ? beforeRootT : afterRootT;
             pendingEvent = true;
             afterEvent = afterRootT;
             afterG = afterRootG;
@@ -447,7 +465,7 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
             meFirst = false;
         } else {
             // check g function to see if there is a new event
-            final T g = handler.g(state);
+            final T g = g(state);
             final boolean positive = g.getReal() > 0;
 
             if (positive == g0Positive) {
@@ -489,10 +507,10 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
         check(pendingEvent);
         check(state.getTime() == this.pendingEventTime);
 
-        final Action action = handler.eventOccurred(state, increasing == forward);
+        final Action action = handler.eventOccurred(state, detector, increasing == forward);
         final FieldODEState<T> newState;
         if (action == Action.RESET_STATE) {
-            newState = handler.resetState(state);
+            newState = handler.resetState(detector, state);
         } else {
             newState = state;
         }
@@ -505,7 +523,7 @@ public class FieldEventState<T extends CalculusFieldElement<T>> implements Field
         g0 = afterG;
         g0Positive = increasing;
         // check g0Positive set correctly
-        check(g0.getReal() == 0.0 || g0Positive == (g0.getReal() > 0));
+        check(g0.isZero() || g0Positive == (g0.getReal() > 0));
         return new EventOccurrence<>(action, newState, stopTime);
     }
 

@@ -19,12 +19,9 @@ package org.hipparchus.ode;
 
 import java.util.Collection;
 
-import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.events.EventHandlerConfiguration;
-import org.hipparchus.ode.events.ODEEventHandler;
+import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 
 /** This interface represents a first order integrator for
@@ -68,76 +65,28 @@ public interface ODEIntegrator  {
      */
     void clearStepHandlers();
 
-    /**
-     * Add an event handler to the integrator.
-     *
-     * <p> Uses a default {@link org.hipparchus.analysis.solvers.UnivariateSolver} with an absolute accuracy equal to the
-     * given convergence threshold, as root-finding algorithm to detect the state events.
-     *
-     * @param handler           event handler
-     * @param maxCheckInterval  maximal time interval between switching function checks
-     *                          (this interval prevents missing sign changes in case the
-     *                          integration steps becomes very large)
-     * @param convergence       convergence threshold in the event time search. Must be
-     *                          smaller than {@code maxCheckInterval} and should be small
-     *                          compared to time scale of the ODE dynamics.
-     * @param maxIterationCount upper limit of the iteration count in the event time
-     *                          search
-     * @see #getEventHandlers()
-     * @see #getEventHandlersConfigurations()
-     * @see #clearEventHandlers()
+    /** Add an event detector to the integrator.
+     * @param detector event detector
+     * @see #getEventDetectors()
+     * @see #clearEventDetectors()
+     * @since 3.0
      */
-    void addEventHandler(ODEEventHandler handler, double maxCheckInterval,
-                         double convergence, int maxIterationCount);
+    void addEventDetector(ODEEventDetector detector);
 
-    /**
-     * Add an event handler to the integrator.
-     *
-     * @param handler           event handler
-     * @param maxCheckInterval  maximal time interval between switching function checks
-     *                          (this interval prevents missing sign changes in case the
-     *                          integration steps becomes very large)
-     * @param convergence       convergence threshold in the event time search. Must be
-     *                          smaller than {@code maxCheckInterval} and should be small
-     *                          compared to time scale of the ODE dynamics.
-     * @param maxIterationCount upper limit of the iteration count in the event time
-     *                          search
-     * @param solver            The root-finding algorithm to use to detect the state
-     *                          events.
-     * @see #getEventHandlers()
-     * @see #getEventHandlersConfigurations()
-     * @see #clearEventHandlers()
+    /** Get all the event detectors that have been added to the integrator.
+     * @return an unmodifiable collection of the added events detectors
+     * @see #addEventDetector(ODEEventDetector)
+     * @see #clearEventDetectors()
+     * @since 3.0
      */
-    void addEventHandler(ODEEventHandler handler, double maxCheckInterval,
-                         double convergence, int maxIterationCount,
-                         BracketedUnivariateSolver<UnivariateFunction> solver);
-
-    /** Get all the event handlers that have been added to the integrator.
-     * @return an unmodifiable collection of the added events handlers
-     * @see #addEventHandler(ODEEventHandler, double, double, int)
-     * @see #addEventHandler(ODEEventHandler, double, double, int, BracketedUnivariateSolver)
-     * @see #getEventHandlersConfigurations()
-     * @see #clearEventHandlers()
-     */
-    Collection<ODEEventHandler> getEventHandlers();
-
-    /** Get all the event handlers configurations that have been added to the integrator.
-     * @return an unmodifiable collection of the added events handlers configurations
-     * @see #addEventHandler(ODEEventHandler, double, double, int)
-     * @see #addEventHandler(ODEEventHandler, double, double, int, BracketedUnivariateSolver)
-     * @see #getEventHandlers()
-     * @see #clearEventHandlers()
-     * @since 2.0
-     */
-    Collection<EventHandlerConfiguration> getEventHandlersConfigurations();
+    Collection<ODEEventDetector> getEventDetectors();
 
     /** Remove all the event handlers that have been added to the integrator.
-     * @see #addEventHandler(ODEEventHandler, double, double, int)
-     * @see #addEventHandler(ODEEventHandler, double, double, int, BracketedUnivariateSolver)
+     * @see #addEventDetector(ODEEventDetector)
      * @see #getEventHandlers()
-     * @see #getEventHandlersConfigurations()
+     * @since 3.0
      */
-    void clearEventHandlers();
+    void clearEventDetectors();
 
     /** Get the state at step start time t<sub>i</sub>.
      * <p>This method can be called during integration (typically by

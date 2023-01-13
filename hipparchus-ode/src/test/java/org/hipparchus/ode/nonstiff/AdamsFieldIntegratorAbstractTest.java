@@ -22,7 +22,6 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
@@ -40,6 +39,7 @@ import org.hipparchus.ode.TestFieldProblem6;
 import org.hipparchus.ode.TestFieldProblemAbstract;
 import org.hipparchus.ode.TestFieldProblemHandler;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.FieldODEEventDetector;
 import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
@@ -175,24 +175,34 @@ public abstract class AdamsFieldIntegratorAbstractTest {
         double range = pb.getFinalTime().subtract(pb.getInitialState().getTime()).getReal();
 
         AdamsFieldIntegrator<T> integ = createIntegrator(field, 4, 0, range, 1.0e-12, 1.0e-12);
-        FieldODEEventHandler<T> event = new FieldODEEventHandler<T>() {
+        FieldODEEventDetector<T> event = new FieldODEEventDetector<T>() {
 
+            @Override
+            public T getMaxCheckInterval() {
+                return field.getZero().newInstance(0.5 * range);
+            }
+
+            @Override
+            public T getThreshold() {
+                return field.getZero().newInstance(1.0e-6 * range);
+            }
+
+            @Override
+            public int getMaxIterationCount() {
+                return 100;
+            }
+
+            @Override
+            public FieldODEEventHandler<T> getHandler() {
+                return (state, detector, increasing) -> Action.RESET_STATE;
+            }
             @Override
             public T g(FieldODEStateAndDerivative<T> state) {
                 return state.getTime().subtract(resetTime);
             }
 
-            @Override
-            public Action eventOccurred(FieldODEStateAndDerivative<T> state,
-                                        boolean increasing) {
-                return Action.RESET_STATE;
-            }
         };
-        integ.addEventHandler(event, 0.5 * range, 1.0e-6 * range, 100,
-                              new FieldBracketingNthOrderBrentSolver<T>(field.getZero().add(1.0e-7),
-                                                                        field.getZero().add(1.0e-14),
-                                                                        field.getZero().add(1.0e-15),
-                                                                        5));
+        integ.addEventDetector(event);
         TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
         integ.addStepHandler(handler);
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
@@ -215,24 +225,36 @@ public abstract class AdamsFieldIntegratorAbstractTest {
 
         for (int nSteps = 2; nSteps < 8; ++nSteps) {
             AdamsFieldIntegrator<T> integ = createIntegrator(field, nSteps, 1.0e-6 * range, 0.1 * range, 1.0e-4, 1.0e-4);
-            FieldODEEventHandler<T> event = new FieldODEEventHandler<T>() {
+            FieldODEEventDetector<T> event = new FieldODEEventDetector<T>() {
+
+                @Override
+                public T getMaxCheckInterval() {
+                    return field.getZero().newInstance(0.5 * range);
+                }
+
+                @Override
+                public T getThreshold() {
+                    return field.getZero().newInstance(1.0e-6 * range);
+                }
+
+                @Override
+                public int getMaxIterationCount() {
+                    return 100;
+                }
+
+                @Override
+                public FieldODEEventHandler<T> getHandler() {
+                    return (state, detector, increasing) -> Action.RESET_STATE;
+                }
+
 
                 @Override
                 public T g(FieldODEStateAndDerivative<T> state) {
                     return state.getTime().subtract(pb.getInitialState().getTime().getReal() + 0.5 * range);
                 }
 
-                @Override
-                public Action eventOccurred(FieldODEStateAndDerivative<T> state,
-                                            boolean increasing) {
-                    return Action.RESET_STATE;
-                }
             };
-            integ.addEventHandler(event, 0.5 * range, 1.0e-6 * range, 100,
-                                  new FieldBracketingNthOrderBrentSolver<T>(field.getZero().add(1.0e-7),
-                                                                            field.getZero().add(1.0e-14),
-                                                                            field.getZero().add(1.0e-15),
-                                                                            5));
+            integ.addEventDetector(event);
             integ.setStarterIntegrator(new PerfectStarter<T>(pb, nSteps));
             TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
             integ.addStepHandler(handler);

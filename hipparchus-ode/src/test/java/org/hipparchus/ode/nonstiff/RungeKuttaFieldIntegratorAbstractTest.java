@@ -45,6 +45,7 @@ import org.hipparchus.ode.TestFieldProblem6;
 import org.hipparchus.ode.TestFieldProblemAbstract;
 import org.hipparchus.ode.TestFieldProblemHandler;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.FieldODEEventDetector;
 import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
@@ -113,7 +114,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     public abstract void testMissedEndEvent();
 
     protected <T extends CalculusFieldElement<T>> void doTestMissedEndEvent(final Field<T> field,
-                                                                        final double epsilonT, final double epsilonY)
+                                                                            final double epsilonT, final double epsilonY)
         throws MathIllegalArgumentException, MathIllegalStateException {
         final T   t0     = field.getZero().add(1878250320.0000029);
         final T   tEvent = field.getZero().add(1878250379.9999986);
@@ -154,17 +155,26 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                                 epsilonY);
         }
 
-        integrator.addEventHandler(new FieldODEEventHandler<T>() {
-
+        integrator.addEventDetector(new FieldODEEventDetector<T>() {
+            public T getMaxCheckInterval() {
+                return field.getZero().newInstance(Double.POSITIVE_INFINITY);
+            }
+            public T getThreshold() {
+                return field.getZero().newInstance(1.0e-20);
+            }
+            public int getMaxIterationCount() {
+                return 100;
+            }
             public T g(FieldODEStateAndDerivative<T> state) {
                 return state.getTime().subtract(tEvent);
             }
-
-            public Action eventOccurred(FieldODEStateAndDerivative<T> state, boolean increasing) {
-                Assert.assertEquals(tEvent.getReal(), state.getTime().getReal(), epsilonT);
-                return Action.CONTINUE;
+            public FieldODEEventHandler<T> getHandler() {
+                return (state, detector, increasing) -> {
+                    Assert.assertEquals(tEvent.getReal(), state.getTime().getReal(), epsilonT);
+                    return Action.CONTINUE;
+                };
             }
-        }, Double.POSITIVE_INFINITY, 1.0e-20, 100);
+        });
         result = integrator.integrate(new FieldExpandableODE<T>(ode),
                                       new FieldODEState<T>(t0, y0),
                                       tEvent.add(120));
@@ -233,13 +243,13 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                 RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
                 TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
                 integ.addStepHandler(handler);
-                FieldODEEventHandler<T>[] functions = pb.getEventsHandlers();
+                final T maxCheck = field.getZero().newInstance(Double.POSITIVE_INFINITY);
                 final T eventTol = step.multiply(1.0e-6);
+                FieldODEEventDetector<T>[] functions = pb.getEventDetectors(maxCheck, eventTol, 1000);
                 for (int l = 0; l < functions.length; ++l) {
-                    integ.addEventHandler(functions[l],
-                                          Double.POSITIVE_INFINITY, eventTol.getReal(), 1000);
+                    integ.addEventDetector(functions[l]);
                 }
-                Assert.assertEquals(functions.length, integ.getEventHandlers().size());
+                Assert.assertEquals(functions.length, integ.getEventDetectors().size());
                 FieldODEStateAndDerivative<T> stop = integ.integrate(new FieldExpandableODE<T>(pb),
                                                                      pb.getInitialState(),
                                                                      pb.getFinalTime());
@@ -261,8 +271,8 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                 }
                 previousTimeError = timeError;
 
-                integ.clearEventHandlers();
-                Assert.assertEquals(0, integ.getEventHandlers().size());
+                integ.clearEventDetectors();
+                Assert.assertEquals(0, integ.getEventDetectors().size());
             }
 
         }
@@ -487,11 +497,14 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
     protected <T extends CalculusFieldElement<T>> void doTestUnstableDerivative(Field<T> field, double epsilon) {
       final StepFieldProblem<T> stepProblem = new StepFieldProblem<T>(field,
-                                                                      field.getZero().add(0.0),
-                                                                      field.getZero().add(1.0),
-                                                                      field.getZero().add(2.0));
+                                                                      field.getZero().newInstance(1.0),
+                                                                      field.getZero().newInstance(1.0e-12),
+                                                                      100,
+                                                                      field.getZero().newInstance(0.0),
+                                                                      field.getZero().newInstance(1.0),
+                                                                      field.getZero().newInstance(2.0));
       RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, field.getZero().add(0.3));
-      integ.addEventHandler(stepProblem, 1.0, 1.0e-12, 1000);
+      integ.addEventDetector(stepProblem);
       FieldODEStateAndDerivative<T> result = integ.integrate(new FieldExpandableODE<T>(stepProblem),
                                                              new FieldODEState<T>(field.getZero(), MathArrays.buildArray(field, 1)),
                                                              field.getZero().add(10.0));

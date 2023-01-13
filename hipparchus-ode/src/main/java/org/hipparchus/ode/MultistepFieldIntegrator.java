@@ -230,7 +230,7 @@ public abstract class MultistepFieldIntegrator<T extends CalculusFieldElement<T>
 
         // make sure NO user events nor user step handlers are triggered,
         // this is the task of the top level integrator, not the task of the starter integrator
-        starter.clearEventHandlers();
+        starter.clearEventDetectors();
         starter.clearStepHandlers();
 
         // set up one specific step handler to extract initial Nordsieck vector

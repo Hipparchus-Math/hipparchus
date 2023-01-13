@@ -24,13 +24,16 @@ package org.hipparchus.ode.events;
 
 import java.util.Arrays;
 
-import org.hipparchus.ode.ODEState;
-import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
+import org.hipparchus.ode.FieldODEState;
+import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.util.MathArrays;
 
 /** Wrapper used to detect only increasing or decreasing events.
  *
- * <p>General {@link ODEEventHandler events} are defined implicitly
- * by a {@link ODEEventHandler#g(ODEStateAndDerivative) g function} crossing
+ * <p>General {@link FieldODEEventHandler events} are defined implicitly
+ * by a {@link FieldODEEventHandler#g(FieldODEStateAndDerivative) g function} crossing
  * zero. This function needs to be continuous in the event neighborhood,
  * and its sign must remain consistent between events. This implies that
  * during an ODE integration, events triggered are alternately events
@@ -44,28 +47,33 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * cases, looking precisely for all events location and triggering
  * events that will later be ignored is a waste of computing time.</p>
  *
- * <p>Users can wrap a regular {@link ODEEventHandler event handler} in
+ * <p>Users can wrap a regular {@link FieldODEEventHandler event handler} in
  * an instance of this class and provide this wrapping instance to
- * the {@link org.hipparchus.ode.ODEIntegrator ODE solver}
+ * the {@link org.hipparchus.ode.FieldODEIntegrator ODE solver}
  * in order to avoid wasting time looking for uninteresting events.
  * The wrapper will intercept the calls to the {@link
- * ODEEventHandler#g(ODEStateAndDerivative) g function} and to the {@link
- * ODEEventHandler#eventOccurred(ODEStateAndDerivative, boolean)
+ * FieldODEEventHandler#g(FieldODEStateAndDerivative) g function} and to the {@link
+ * FieldODEEventHandler#eventOccurred(FieldODEStateAndDerivative, boolean)
  * eventOccurred} method in order to ignore uninteresting events. The
- * wrapped regular {@link ODEEventHandler event handler} will the see only
+ * wrapped regular {@link FieldODEEventHandler event handler} will the see only
  * the interesting events, i.e. either only {@code increasing} events or
  * {@code decreasing} events. the number of calls to the {@link
- * ODEEventHandler#g(ODEStateAndDerivative) g function} will also be reduced.</p>
+ * FieldODEEventHandler#g(FieldODEStateAndDerivative) g function} will also be reduced.</p>
  *
+ * @param <T> the type of the field elements
+ * @since 3.0
  */
 
-public class EventFilter implements ODEEventHandler {
+public class FieldEventSlopeFilter<T extends FieldODEEventDetector<E>, E extends CalculusFieldElement<E>>
+    extends AbstractFieldODEDetector<FieldEventSlopeFilter<T, E>, E> {
 
     /** Number of past transformers updates stored. */
     private static final int HISTORY_SIZE = 100;
 
-    /** Wrapped event handler. */
-    private final ODEEventHandler rawHandler;
+    /** Wrapped event detector.
+     * @since 3.0
+     */
+    private final T rawDetector;
 
     /** Filter to use. */
     private final FilterType filter;
@@ -74,35 +82,77 @@ public class EventFilter implements ODEEventHandler {
     private final Transformer[] transformers;
 
     /** Update time of the transformers. */
-    private final double[] updates;
+    private final E[] updates;
 
     /** Indicator for forward integration. */
     private boolean forward;
 
     /** Extreme time encountered so far. */
-    private double extremeT;
+    private E extremeT;
 
-    /** Wrap an {@link ODEEventHandler event handler}.
-     * @param rawHandler event handler to wrap
+    /** Wrap a {@link FieldODEEventDetector eve,t detector}.
+     * @param field field to which array elements belong
+     * @param rawDetector event detector to wrap
      * @param filter filter to use
      */
-    public EventFilter(final ODEEventHandler rawHandler, final FilterType filter) {
-        this.rawHandler   = rawHandler;
+    public FieldEventSlopeFilter(final Field<E> field, final T rawDetector, final FilterType filter) {
+        this(field,
+             rawDetector.getMaxCheckInterval(), rawDetector.getThreshold(),
+             rawDetector.getMaxIterationCount(), new LocalHandler<>(rawDetector.getHandler()),
+             rawDetector, filter);
+    }
+
+    /** Private constructor with full parameters.
+     * <p>
+     * This constructor is private as users are expected to use the builder
+     * API with the various {@code withXxx()} methods to set up the instance
+     * in a readable manner without using a huge amount of parameters.
+     * </p>
+     * @param field field to which array elements belong
+     * @param maxCheck maximum checking interval (s)
+     * @param threshold convergence threshold (s)
+     * @param maxIter maximum number of iterations in the event time search
+     * @param handler event handler to call at event occurrences
+     * @param rawDetector event detector to wrap
+     * @param filter filter to use
+     */
+    private FieldEventSlopeFilter(final Field<E> field,
+                                  final E maxCheck, final E threshold, final int maxIter,
+                                  final FieldODEEventHandler<E> handler,
+                                  final T rawDetector, final FilterType filter) {
+        super(maxCheck, threshold, maxIter, handler);
+        this.rawDetector  = rawDetector;
         this.filter       = filter;
         this.transformers = new Transformer[HISTORY_SIZE];
-        this.updates      = new double[HISTORY_SIZE];
+        this.updates      = MathArrays.buildArray(field, HISTORY_SIZE);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected FieldEventSlopeFilter<T, E> create(final E newMaxCheck, final E newThreshold,
+                                                 final int newMaxIter, final FieldODEEventHandler<E> newHandler) {
+        return new FieldEventSlopeFilter<T, E>(newThreshold.getField(),
+                                               newMaxCheck, newThreshold, newMaxIter, newHandler, rawDetector, filter);
+    }
+
+    /**
+     * Get the wrapped raw detector.
+     * @return the wrapped raw detector
+     */
+    public T getDetector() {
+        return rawDetector;
     }
 
     /**  {@inheritDoc} */
     @Override
-    public void init(final ODEStateAndDerivative initialState, double finalTime) {
+    public void init(final FieldODEStateAndDerivative<E> initialState, E finalTime) {
 
         // delegate to raw handler
-        rawHandler.init(initialState, finalTime);
+        rawDetector.init(initialState, finalTime);
 
         // initialize events triggering logic
-        forward  = finalTime >= initialState.getTime();
-        extremeT = forward ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
+        forward  = finalTime.subtract(initialState.getTime()).getReal() >= 0;
+        extremeT = finalTime.getField().getZero().newInstance(forward ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY);
         Arrays.fill(transformers, Transformer.UNINITIALIZED);
         Arrays.fill(updates, extremeT);
 
@@ -110,19 +160,19 @@ public class EventFilter implements ODEEventHandler {
 
     /**  {@inheritDoc} */
     @Override
-    public double g(final ODEStateAndDerivative state) {
+    public E g(final FieldODEStateAndDerivative<E> state) {
 
-        final double rawG = rawHandler.g(state);
+        final E rawG = rawDetector.g(state);
 
         // search which transformer should be applied to g
         if (forward) {
             final int last = transformers.length - 1;
-            if (extremeT < state.getTime()) {
+            if (extremeT.subtract(state.getTime()).getReal() < 0) {
                 // we are at the forward end of the history
 
                 // check if a new rough root has been crossed
                 final Transformer previous = transformers[last];
-                final Transformer next     = filter.selectTransformer(previous, rawG, forward);
+                final Transformer next     = filter.selectTransformer(previous, rawG.getReal(), forward);
                 if (next != previous) {
                     // there is a root somewhere between extremeT and t.
                     // the new transformer is valid for t (this is how we have just computed
@@ -146,7 +196,7 @@ public class EventFilter implements ODEEventHandler {
 
                 // select the transformer
                 for (int i = last; i > 0; --i) {
-                    if (updates[i] <= state.getTime()) {
+                    if (updates[i].subtract(state.getTime()).getReal() <= 0) {
                         // apply the transform
                         return transformers[i].transformed(rawG);
                     }
@@ -156,12 +206,12 @@ public class EventFilter implements ODEEventHandler {
 
             }
         } else {
-            if (state.getTime() < extremeT) {
+            if (state.getTime().subtract(extremeT).getReal() < 0) {
                 // we are at the backward end of the history
 
                 // check if a new rough root has been crossed
                 final Transformer previous = transformers[0];
-                final Transformer next     = filter.selectTransformer(previous, rawG, forward);
+                final Transformer next     = filter.selectTransformer(previous, rawG.getReal(), forward);
                 if (next != previous) {
                     // there is a root somewhere between extremeT and t.
                     // the new transformer is valid for t (this is how we have just computed
@@ -185,7 +235,7 @@ public class EventFilter implements ODEEventHandler {
 
                 // select the transformer
                 for (int i = 0; i < updates.length - 1; ++i) {
-                    if (state.getTime() <= updates[i]) {
+                    if (state.getTime().subtract(updates[i]).getReal() <= 0) {
                         // apply the transform
                         return transformers[i].transformed(rawG);
                     }
@@ -198,18 +248,41 @@ public class EventFilter implements ODEEventHandler {
 
     }
 
-    /**  {@inheritDoc} */
-    @Override
-    public Action eventOccurred(final ODEStateAndDerivative state, final boolean increasing) {
-        // delegate to raw handler, fixing increasing status on the fly
-        return rawHandler.eventOccurred(state, filter.isTriggeredOnIncreasing());
-    }
+    /** Local handler. */
+    private static class LocalHandler<T extends FieldODEEventDetector<E>, E extends CalculusFieldElement<E>>
+        implements FieldODEEventHandler<E> {
 
-    /**  {@inheritDoc} */
-    @Override
-    public ODEState resetState(final ODEStateAndDerivative state) {
-        // delegate to raw handler
-        return rawHandler.resetState(state);
+        /** Raw handler. */
+        private final FieldODEEventHandler<E> rawHandler;
+
+        /** Simple constructor.
+         * @param rawHandler raw handler
+         */
+        LocalHandler(final FieldODEEventHandler<E> rawHandler) {
+            this.rawHandler = rawHandler;
+        }
+
+        /**  {@inheritDoc} */
+        @Override
+        public Action eventOccurred(final FieldODEStateAndDerivative<E> state,
+                                    final FieldODEEventDetector<E> detector,
+                                    final boolean increasing) {
+            // delegate to raw handler, fixing increasing status on the fly
+            @SuppressWarnings("unchecked")
+            final FieldEventSlopeFilter<T, E> esf = (FieldEventSlopeFilter<T, E>) detector;
+            return rawHandler.eventOccurred(state, esf, esf.filter.isTriggeredOnIncreasing());
+        }
+
+        /**  {@inheritDoc} */
+        @Override
+        public FieldODEState<E> resetState(final FieldODEEventDetector<E> detector,
+                                           final FieldODEStateAndDerivative<E> state) {
+            // delegate to raw handler
+            @SuppressWarnings("unchecked")
+            final FieldEventSlopeFilter<T, E> esf = (FieldEventSlopeFilter<T, E>) detector;
+            return rawHandler.resetState(esf, state);
+        }
+
     }
 
 }

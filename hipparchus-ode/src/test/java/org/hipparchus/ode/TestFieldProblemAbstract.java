@@ -24,9 +24,9 @@ package org.hipparchus.ode;
 
 import java.lang.reflect.Array;
 
-import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.ode.events.FieldODEEventHandler;
+import org.hipparchus.Field;
+import org.hipparchus.ode.events.FieldODEEventDetector;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -110,12 +110,15 @@ public abstract class TestFieldProblemAbstract<T extends CalculusFieldElement<T>
     }
 
     /**
-     * Get the events handlers.
-     * @return events handlers   */
-    public FieldODEEventHandler<T>[] getEventsHandlers() {
+     * Get the event detectors.
+     * @param maxCheck maximum checking interval, must be strictly positive (s)
+     * @param threshold convergence threshold (s)
+     * @param maxIter maximum number of iterations in the event time search
+     * @return events detectors   */
+    public FieldODEEventDetector<T>[] getEventDetectors(final T maxCheck, final T threshold, final int maxIter) {
         @SuppressWarnings("unchecked")
-        final FieldODEEventHandler<T>[] empty =
-                        (FieldODEEventHandler<T>[]) Array.newInstance(FieldODEEventHandler.class, 0);
+        final FieldODEEventDetector<T>[] empty =
+                        (FieldODEEventDetector<T>[]) Array.newInstance(FieldODEEventDetector.class, 0);
         return empty;
     }
 
