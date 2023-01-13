@@ -881,18 +881,28 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         ODEIntegrator integ = createIntegrator(0.01, 1.0, 0.1, 0.1);
         TestProblem1 pb = new TestProblem1();
         double convergence = 1e-6;
-        integ.addEventHandler(
-                new ODEEventHandler() {
-                    @Override
-                    public double g(ODEStateAndDerivative state) {
-                        return state.getTime() - pb.getFinalTime();
-                    }
-                    @Override
-                    public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
-                        return Action.STOP;
-                    }
-                },
-                Double.POSITIVE_INFINITY, convergence, 1000);
+        integ.addEventDetector(new ODEEventDetector() {
+            @Override
+            public double getMaxCheckInterval() {
+                return Double.POSITIVE_INFINITY;
+            }
+            @Override
+            public double getThreshold() {
+                return convergence;
+            }
+            @Override
+            public int getMaxIterationCount() {
+                return 1000;
+            }
+            @Override
+            public double g(ODEStateAndDerivative state) {
+                return state.getTime() - pb.getFinalTime();
+            }
+            @Override
+            public ODEEventHandler getHandler() {
+                return (state, detector, increasing) -> Action.STOP;
+            }
+        });
         ODEStateAndDerivative finalState = integ.integrate(pb, pb.getInitialState(), Double.POSITIVE_INFINITY);
         Assert.assertEquals(pb.getFinalTime(), finalState.getTime(), convergence);
     }

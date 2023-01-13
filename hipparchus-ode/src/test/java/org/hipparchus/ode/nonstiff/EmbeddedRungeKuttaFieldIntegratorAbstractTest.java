@@ -693,18 +693,28 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         EmbeddedRungeKuttaFieldIntegrator<Decimal64> fieldIntegrator = createIntegrator(Decimal64Field.getInstance(), 0.01, 1.0, 0.1, 0.1);
         TestFieldProblem1<Decimal64> pb = new TestFieldProblem1<Decimal64>(field);
         double convergence = 1e-6;
-        fieldIntegrator.addEventHandler(
-                new FieldODEEventHandler<Decimal64>() {
-                    @Override
-                    public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
-                        return state.getTime().subtract(pb.getFinalTime());
-                    }
-                    @Override
-                    public Action eventOccurred(FieldODEStateAndDerivative<Decimal64> state, boolean increasing) {
-                        return Action.STOP;
-                    }
-                },
-                Double.POSITIVE_INFINITY, convergence, 1000);
+        fieldIntegrator.addEventDetector(new FieldODEEventDetector<Decimal64>() {
+            @Override
+            public Decimal64 getMaxCheckInterval() {
+                return new Decimal64(Double.POSITIVE_INFINITY);
+            }
+            @Override
+            public Decimal64 getThreshold() {
+                return new Decimal64(convergence);
+            }
+            @Override
+            public int getMaxIterationCount() {
+                return 1000;
+            }
+            @Override
+            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+                return state.getTime().subtract(pb.getFinalTime());
+            }
+            @Override
+            public FieldODEEventHandler<Decimal64> getHandler() {
+                return (state, detector, increasing) -> Action.STOP;
+            }
+        });
         FieldODEStateAndDerivative<Decimal64> finalState = fieldIntegrator.integrate(new FieldExpandableODE<>(pb), pb.getInitialState(), Decimal64.POSITIVE_INFINITY);
         Assert.assertEquals(pb.getFinalTime().getReal(), finalState.getTime().getReal(), convergence);
     }
