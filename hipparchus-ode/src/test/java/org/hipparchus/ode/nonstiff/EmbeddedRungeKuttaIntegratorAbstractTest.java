@@ -876,6 +876,37 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         }
     }
 
+    @Test
+    public void testInfiniteIntegration() {
+        ODEIntegrator integ = createIntegrator(0.01, 1.0, 0.1, 0.1);
+        TestProblem1 pb = new TestProblem1();
+        double convergence = 1e-6;
+        integ.addEventDetector(new ODEEventDetector() {
+            @Override
+            public double getMaxCheckInterval() {
+                return Double.POSITIVE_INFINITY;
+            }
+            @Override
+            public double getThreshold() {
+                return convergence;
+            }
+            @Override
+            public int getMaxIterationCount() {
+                return 1000;
+            }
+            @Override
+            public double g(ODEStateAndDerivative state) {
+                return state.getTime() - pb.getFinalTime();
+            }
+            @Override
+            public ODEEventHandler getHandler() {
+                return (state, detector, increasing) -> Action.STOP;
+            }
+        });
+        ODEStateAndDerivative finalState = integ.integrate(pb, pb.getInitialState(), Double.POSITIVE_INFINITY);
+        Assert.assertEquals(pb.getFinalTime(), finalState.getTime(), convergence);
+    }
+
     private static class SinCos implements ODEJacobiansProvider {
 
         public static String OMEGA_PARAMETER = "omega";

@@ -413,7 +413,7 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
         } while (!doneWithStep);
 
 
-        isLastStep = isLastStep || currentState.getTime().subtract(tEnd).norm() <= FastMath.ulp(tEnd.getReal());
+        isLastStep = isLastStep || currentState.getTime().subtract(tEnd).norm() < FastMath.ulp(tEnd.getReal());
 
         // handle the remaining part of the step, after all events if any
         for (FieldODEStepHandler<T> handler : stepHandlers) {
@@ -440,7 +440,7 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
         final double threshold = 1000 * FastMath.ulp(FastMath.max(FastMath.abs(initialState.getTime().getReal()),
                                                                   FastMath.abs(t.getReal())));
         final double dt = initialState.getTime().subtract(t).norm();
-        if (dt <= threshold) {
+        if (dt < threshold) {
             throw new MathIllegalArgumentException(LocalizedODEFormats.TOO_SMALL_INTEGRATION_INTERVAL,
                                                    dt, threshold, false);
         }
