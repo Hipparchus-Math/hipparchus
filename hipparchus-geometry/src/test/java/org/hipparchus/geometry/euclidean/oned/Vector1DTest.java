@@ -30,7 +30,6 @@ import java.util.Locale;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Space;
-import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.euclidean.twod.FieldVector2D;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
