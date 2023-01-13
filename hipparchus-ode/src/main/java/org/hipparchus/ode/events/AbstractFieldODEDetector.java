@@ -88,25 +88,30 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
      * handler. If a subclass overrides this method it should call {@code
      * super.init(s0, t)}.
      */
+    @Override
     public void init(final FieldODEStateAndDerivative<E> s0, final E t) {
         forward = t.subtract(s0.getTime()).getReal() >= 0;
         getHandler().init(s0, t, this);
     }
 
     /** {@inheritDoc} */
+    @Override
     public abstract E g(FieldODEStateAndDerivative<E> s);
 
     /** {@inheritDoc} */
+    @Override
     public E getMaxCheckInterval() {
         return maxCheck;
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getMaxIterationCount() {
         return maxIter;
     }
 
     /** {@inheritDoc} */
+    @Override
     public E getThreshold() {
         return threshold;
     }

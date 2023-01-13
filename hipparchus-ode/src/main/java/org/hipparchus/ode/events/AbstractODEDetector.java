@@ -85,25 +85,30 @@ public abstract class AbstractODEDetector<T extends AbstractODEDetector<T>> impl
      * handler. If a subclass overrides this method it should call {@code
      * super.init(s0, t)}.
      */
+    @Override
     public void init(final ODEStateAndDerivative s0, final double t) {
         forward = t >= s0.getTime();
         getHandler().init(s0, t, this);
     }
 
     /** {@inheritDoc} */
+    @Override
     public abstract double g(ODEStateAndDerivative s);
 
     /** {@inheritDoc} */
+    @Override
     public double getMaxCheckInterval() {
         return maxCheck;
     }
 
     /** {@inheritDoc} */
+    @Override
     public int getMaxIterationCount() {
         return maxIter;
     }
 
     /** {@inheritDoc} */
+    @Override
     public double getThreshold() {
         return threshold;
     }

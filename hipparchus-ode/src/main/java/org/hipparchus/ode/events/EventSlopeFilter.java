@@ -56,9 +56,9 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * the interesting events, i.e. either only {@code increasing} events or
  * {@code decreasing} events. the number of calls to the {@link
  * ODEEventHandler#g(ODEStateAndDerivative) g function} will also be reduced.</p>
+ * @param <T> type of the event detector
  * @since 3.0
  */
-
 public class EventSlopeFilter<T extends ODEEventDetector> extends AbstractODEDetector<EventSlopeFilter<T>> {
 
     /** Number of past transformers updates stored. */
@@ -238,7 +238,9 @@ public class EventSlopeFilter<T extends ODEEventDetector> extends AbstractODEDet
 
     }
 
-    /** Local handler. */
+    /** Local handler.
+     * @param <T> type of the event detector
+     */
     private static class LocalHandler<T extends ODEEventDetector> implements ODEEventHandler {
 
         /** Raw handler. */

@@ -60,7 +60,8 @@ import org.hipparchus.util.MathArrays;
  * {@code decreasing} events. the number of calls to the {@link
  * FieldODEEventHandler#g(FieldODEStateAndDerivative) g function} will also be reduced.</p>
  *
- * @param <T> the type of the field elements
+ * @param <T> type of the event detector
+ * @param <E> the type of the field elements
  * @since 3.0
  */
 
@@ -248,7 +249,10 @@ public class FieldEventSlopeFilter<T extends FieldODEEventDetector<E>, E extends
 
     }
 
-    /** Local handler. */
+    /** Local handler.
+     * @param <T> type of the event detector
+     * @param <E> the type of the field elements
+     */
     private static class LocalHandler<T extends FieldODEEventDetector<E>, E extends CalculusFieldElement<E>>
         implements FieldODEEventHandler<E> {
 

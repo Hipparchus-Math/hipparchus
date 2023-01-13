@@ -141,7 +141,7 @@ public class SmoothStepFactory {
 
         /** Serializable UID. */
         private static final long serialVersionUID = 20230113L;
-        
+
         /**
          * Construct a smoothstep with the given coefficients. The first element of the coefficients array is the
          * constant term.  Higher degree coefficients follow in sequence.  The degree of the resulting polynomial is the
