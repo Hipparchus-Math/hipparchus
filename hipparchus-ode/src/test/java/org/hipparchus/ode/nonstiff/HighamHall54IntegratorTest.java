@@ -45,6 +45,11 @@ public class HighamHall54IntegratorTest extends EmbeddedRungeKuttaIntegratorAbst
     }
 
     @Override
+    public void testTorqueFreeMotionOmegaOnly() {
+        doTestTorqueFreeMotionOmegaOnly(2.7e-15);
+    }
+
+    @Override
     public void testTorqueFreeMotion() {
         doTestTorqueFreeMotion(1.5e-15, 5.6e-16);
     }
@@ -90,12 +95,6 @@ public class HighamHall54IntegratorTest extends EmbeddedRungeKuttaIntegratorAbst
     @Test
     public void testSecondaryEquations() {
         doTestSecondaryEquations(9.7e-12, 1.3e-14);
-    }
-
-    @Override
-    public void testTorqueFreeMotionOmegaOnly() {
-        // TODO Auto-generated method stub
-        
     }
 
 }

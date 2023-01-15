@@ -332,17 +332,18 @@ public class TestProblem8 extends TestProblemAbstract {
 
         // compute the derivatives using Euler equations
         final double[]   omega    = Arrays.copyOfRange(y, 0, 3);
-        final double[]   minusOiO = Vector3D.crossProduct(new Vector3D(omega), new Vector3D(inertiaTensor.operate(omega))).negate().toArray();
+        final double[]   minusOiO = Vector3D.crossProduct(new Vector3D(omega),
+                                                          new Vector3D(inertiaTensor.operate(omega))).negate().toArray();
         final RealVector omegaDot = inertiaSolver.solve(MatrixUtils.createRealVector(minusOiO));
         yDot[0] = omegaDot.getEntry(0);
         yDot[1] = omegaDot.getEntry(1);
         yDot[2] = omegaDot.getEntry(2);
 
         // compute the derivatives using Qdot = 0.5 * Omega_inertialframe * Q
-        yDot[3] = 0.5 * (-y[0] * y[4] -y[1] * y[5] -y[2] * y[6]);
-        yDot[4] = 0.5 * (y[0] * y[3] +y[2] * y[5] -y[1] * y[6]);
-        yDot[5] = 0.5 * (y[1] * y[3] -y[2] * y[4] +y[0] * y[6]);
-        yDot[6] = 0.5 * (y[2] * y[3] +y[1] * y[4] -y[0] * y[5]);
+        yDot[3] = 0.5 * (-y[0] * y[4] - y[1] * y[5] - y[2] * y[6]);
+        yDot[4] = 0.5 * ( y[0] * y[3] + y[2] * y[5] - y[1] * y[6]);
+        yDot[5] = 0.5 * ( y[1] * y[3] - y[2] * y[4] + y[0] * y[6]);
+        yDot[6] = 0.5 * ( y[2] * y[3] + y[1] * y[4] - y[0] * y[5]);
 
         return yDot;
 
@@ -353,7 +354,7 @@ public class TestProblem8 extends TestProblemAbstract {
      * Instances of this class are immutable
      * </p>
     */
-   public class Inertia {
+   public static class Inertia {
 
        /** Inertia along first axis. */
        private final InertiaAxis iA1;
@@ -424,7 +425,7 @@ public class TestProblem8 extends TestProblemAbstract {
      * Instances of this class are immutable
      * </p>
      */
-    public class InertiaAxis {
+    public static class InertiaAxis {
 
         /** Moment of inertia. */
         private final double i;

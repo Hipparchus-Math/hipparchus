@@ -576,16 +576,15 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
             current += outputStep;
             while (interpolator.getPreviousState().getTime() <= current &&
-                    interpolator.getCurrentState().getTime() > current) {
+                   interpolator.getCurrentState().getTime() > current) {
                 ODEStateAndDerivative state = interpolator.getInterpolatedState(current);
                 final double[] theoretical  = pb.computeTheoreticalState(state.getTime());
-                final double errorOmega = FastMath.max(maxErrorOmega,
-                                                       Vector3D.distance(new Vector3D(state.getPrimaryState()[0],
-                                                                                      state.getPrimaryState()[1],
-                                                                                      state.getPrimaryState()[2]),
-                                                                         new Vector3D(theoretical[0],
-                                                                                      theoretical[1],
-                                                                                      theoretical[2])));
+                final double errorOmega = Vector3D.distance(new Vector3D(state.getPrimaryState()[0],
+                                                                         state.getPrimaryState()[1],
+                                                                         state.getPrimaryState()[2]),
+                                                            new Vector3D(theoretical[0],
+                                                                         theoretical[1],
+                                                                         theoretical[2]));
                 maxErrorOmega = FastMath.max(maxErrorOmega, errorOmega);
                 final double errorQ = Rotation.distance(new Rotation(state.getPrimaryState()[3],
                                                                      state.getPrimaryState()[4],

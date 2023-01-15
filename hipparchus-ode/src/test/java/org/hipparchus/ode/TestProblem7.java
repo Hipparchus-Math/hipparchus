@@ -55,6 +55,10 @@ import org.hipparchus.util.FastMath;
  *   Ω₃ (τ) = √([M²-2EI₁]/[I₃(I₃-I₁)]) dn(τ)
  * </pre>
  * </p>
+ * <p>
+ * This problem solves only solves the rotation rate part, whereas {@code TestProblem8}
+ * solves the full motion (rotation rate and rotation).
+ * </p>
 
  */
 public class TestProblem7 extends TestProblemAbstract {

@@ -58,8 +58,13 @@ public class HighamHall54FieldIntegratorTest extends EmbeddedRungeKuttaFieldInte
     }
 
     @Override
+    public void testTorqueFreeMotionOmegaOnly() {
+        doTestTorqueFreeMotionOmegaOnly(Binary64Field.getInstance(), 3.0e-15);
+    }
+
+    @Override
     public void testTorqueFreeMotion() {
-        doTestTorqueFreeMotion(Binary64Field.getInstance(), 3.0e-15);
+        doTestTorqueFreeMotion(Binary64Field.getInstance(), 1.6e-15, 5.6e-16);
     }
 
     @Override
