@@ -22,9 +22,9 @@ import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.geometry.euclidean.threed.RotationConvention;
 import org.hipparchus.geometry.euclidean.threed.RotationOrder;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
-import org.hipparchus.linear.CholeskyDecomposer;
 import org.hipparchus.linear.DecompositionSolver;
 import org.hipparchus.linear.MatrixUtils;
+import org.hipparchus.linear.QRDecomposer;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
@@ -34,7 +34,28 @@ import org.hipparchus.special.elliptic.jacobi.JacobiEllipticBuilder;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.hipparchus.util.FastMath;
 
+/**
+ * This class is used in the junit tests for the ODE integrators.
 
+ * <p>This specific problem correspond to torque-free motion of a solid body
+ * with moments of inertia I₁, I₂, and I₃ with respect to body axes x, y, and z.
+ * We use here the notations from Landau and Lifchitz Course of Theoretical Physics,
+ * Mechanics vol 1.
+ * </p>
+ * <p>
+ * The equations of torque-free motion are given in the solid body frame by
+ * equation 36.5:
+ * <pre>
+ *    I₁ dΩ₁/dt + (I₃ - I₂) Ω₂ Ω₃ = 0
+ *    I₂ dΩ₂/dt + (I₁ - I₃) Ω₃ Ω₁ = 0
+ *    I₃ dΩ₃/dt + (I₂ - I₁) Ω₁ Ω₂ = 0
+ * </pre>
+ * <p>
+ * This problem solves the full motion (rotation rate and rotation), whereas
+ * {@code TestProblem7} only solves the rotation rate part.
+ * </p>
+ * @param <T> the type of the field elements
+ */
 public class TestProblem8 extends TestProblemAbstract {
 
     /** Inertia tensor. */
@@ -126,7 +147,7 @@ public class TestProblem8 extends TestProblemAbstract {
         q.setEntry(2, 2, n3.getZ());
         final RealMatrix d = MatrixUtils.createRealDiagonalMatrix(new double[] { i1, i2, i3});
         this.inertiaTensor = q.multiply(d.multiplyTransposed(q));
-        this.inertiaSolver = new CholeskyDecomposer(1.0e-10, 1.0e-10).decompose(inertiaTensor);
+        this.inertiaSolver = new QRDecomposer(1.0e-10).decompose(inertiaTensor);
 
         // sort axes in increasing moments of inertia order
         Inertia inertia = new Inertia(new InertiaAxis(i1, n1), new InertiaAxis(i2, n2), new InertiaAxis(i3, n3));
