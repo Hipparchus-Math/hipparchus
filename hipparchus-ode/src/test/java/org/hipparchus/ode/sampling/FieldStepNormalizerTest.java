@@ -25,8 +25,8 @@ import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.ode.TestFieldProblem3;
 import org.hipparchus.ode.TestFieldProblemAbstract;
 import org.hipparchus.ode.nonstiff.DormandPrince54FieldIntegrator;
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,9 +36,9 @@ public class FieldStepNormalizerTest {
 
     @Test
     public void testBoundariesDefault() {
-        final TestFieldProblemAbstract<Decimal64> pb = new TestFieldProblem3<Decimal64>(new Decimal64(0.9));
-        final Decimal64 range = pb.getFinalTime().subtract(pb.getInitialTime());
-        final Decimal64 stepSize = range.divide(5.5);
+        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<Binary64>(new Binary64(0.9));
+        final Binary64 range = pb.getFinalTime().subtract(pb.getInitialTime());
+        final Binary64 stepSize = range.divide(5.5);
         doTestBoundaries(pb, null, stepSize,
                          pb.getInitialTime(),
                          pb.getInitialTime().add(FastMath.floor(range.divide(stepSize)).multiply(stepSize)));
@@ -46,9 +46,9 @@ public class FieldStepNormalizerTest {
 
     @Test
     public void testBoundariesNeither() {
-        final TestFieldProblemAbstract<Decimal64> pb = new TestFieldProblem3<Decimal64>(new Decimal64(0.9));
-        final Decimal64 range = pb.getFinalTime().subtract(pb.getInitialTime());
-        final Decimal64 stepSize = range.divide(5.5);
+        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<Binary64>(new Binary64(0.9));
+        final Binary64 range = pb.getFinalTime().subtract(pb.getInitialTime());
+        final Binary64 stepSize = range.divide(5.5);
         doTestBoundaries(pb, StepNormalizerBounds.NEITHER, stepSize,
                          pb.getInitialTime().add(stepSize),
                          pb.getInitialTime().add(FastMath.floor(range.divide(stepSize)).multiply(stepSize)));
@@ -56,9 +56,9 @@ public class FieldStepNormalizerTest {
 
     @Test
     public void testBoundariesFirst() {
-        final TestFieldProblemAbstract<Decimal64> pb = new TestFieldProblem3<Decimal64>(new Decimal64(0.9));
-        final Decimal64 range = pb.getFinalTime().subtract(pb.getInitialTime());
-        final Decimal64 stepSize = range.divide(5.5);
+        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<Binary64>(new Binary64(0.9));
+        final Binary64 range = pb.getFinalTime().subtract(pb.getInitialTime());
+        final Binary64 stepSize = range.divide(5.5);
         doTestBoundaries(pb, StepNormalizerBounds.FIRST, stepSize,
                          pb.getInitialTime(),
                          pb.getInitialTime().add(FastMath.floor(range.divide(stepSize)).multiply(stepSize)));
@@ -66,9 +66,9 @@ public class FieldStepNormalizerTest {
 
     @Test
     public void testBoundariesLast() {
-        final TestFieldProblemAbstract<Decimal64> pb = new TestFieldProblem3<Decimal64>(new Decimal64(0.9));
-        final Decimal64 range = pb.getFinalTime().subtract(pb.getInitialTime());
-        final Decimal64 stepSize = range.divide(5.5);
+        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<Binary64>(new Binary64(0.9));
+        final Binary64 range = pb.getFinalTime().subtract(pb.getInitialTime());
+        final Binary64 stepSize = range.divide(5.5);
         doTestBoundaries(pb, StepNormalizerBounds.LAST, stepSize,
                          pb.getInitialTime().add(stepSize),
                          pb.getFinalTime());
@@ -76,9 +76,9 @@ public class FieldStepNormalizerTest {
 
     @Test
     public void testBoundariesBoth() {
-        final TestFieldProblemAbstract<Decimal64> pb = new TestFieldProblem3<Decimal64>(new Decimal64(0.9));
-        final Decimal64 range = pb.getFinalTime().subtract(pb.getInitialTime());
-        final Decimal64 stepSize = range.divide(5.5);
+        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<Binary64>(new Binary64(0.9));
+        final Binary64 range = pb.getFinalTime().subtract(pb.getInitialTime());
+        final Binary64 stepSize = range.divide(5.5);
         doTestBoundaries(pb, StepNormalizerBounds.BOTH, stepSize,
                          pb.getInitialTime(),
                          pb.getFinalTime());
@@ -86,9 +86,9 @@ public class FieldStepNormalizerTest {
 
     @Test
     public void testBeforeEnd() {
-        final TestFieldProblemAbstract<Decimal64> pb = new TestFieldProblem3<Decimal64>(new Decimal64(0.9));
-        final Decimal64 range = pb.getFinalTime().subtract(pb.getInitialTime());
-        final Decimal64 stepSize = range.divide(10.5);
+        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<Binary64>(new Binary64(0.9));
+        final Binary64 range = pb.getFinalTime().subtract(pb.getInitialTime());
+        final Binary64 stepSize = range.divide(10.5);
         doTestBoundaries(pb, null, stepSize,
                          pb.getInitialTime(),
                          pb.getFinalTime().subtract(range.divide(21.0)));
@@ -140,18 +140,18 @@ public class FieldStepNormalizerTest {
                                            final double t0, final double t1,
                                            final double expectedFirst,
                                            final double expectedLast) {
-        final TestFieldProblemAbstract<Decimal64> pb = new TestFieldProblem3<Decimal64>(new Decimal64(0.9));
+        final TestFieldProblemAbstract<Binary64> pb = new TestFieldProblem3<Binary64>(new Binary64(0.9));
         double minStep = 0;
         double maxStep = pb.getFinalTime().getReal() - pb.getInitialTime().getReal();
-        FieldODEIntegrator<Decimal64> integ =
-                        new DormandPrince54FieldIntegrator<>(Decimal64Field.getInstance(),
+        FieldODEIntegrator<Binary64> integ =
+                        new DormandPrince54FieldIntegrator<>(Binary64Field.getInstance(),
                                                              minStep, maxStep, 10.e-8, 1.0e-8);
-        final Checker<Decimal64> checker = new Checker<>();
-        integ.addStepHandler(new FieldStepNormalizer<Decimal64>(stepSize, checker, mode));
-        integ.integrate(new FieldExpandableODE<>(new FieldOrdinaryDifferentialEquation<Decimal64>() {
+        final Checker<Binary64> checker = new Checker<>();
+        integ.addStepHandler(new FieldStepNormalizer<Binary64>(stepSize, checker, mode));
+        integ.integrate(new FieldExpandableODE<>(new FieldOrdinaryDifferentialEquation<Binary64>() {
             public int getDimension() { return 1; }
-            public Decimal64[] computeDerivatives(Decimal64 t, Decimal64[] y) { return y; }
-        }), new FieldODEState<>(new Decimal64(t0), new Decimal64[] { new Decimal64(0) }), new Decimal64(t1));
+            public Binary64[] computeDerivatives(Binary64 t, Binary64[] y) { return y; }
+        }), new FieldODEState<>(new Binary64(t0), new Binary64[] { new Binary64(0) }), new Binary64(t1));
         Assert.assertEquals(expectedFirst, checker.firstTime.getReal(), 1.0e-10);
         Assert.assertEquals(expectedLast, checker.lastTime.getReal(),  1.0e-10);
     }

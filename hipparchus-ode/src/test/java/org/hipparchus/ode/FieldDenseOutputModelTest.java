@@ -31,7 +31,7 @@ import org.hipparchus.ode.nonstiff.DormandPrince54FieldIntegrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
 import org.hipparchus.ode.sampling.DummyFieldStepInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -42,7 +42,7 @@ public class FieldDenseOutputModelTest {
 
     @Test
     public void testBoundaries() {
-        doTestBoundaries(Decimal64Field.getInstance());
+        doTestBoundaries(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestBoundaries(final Field<T> field) {
@@ -60,7 +60,7 @@ public class FieldDenseOutputModelTest {
 
     @Test
     public void testRandomAccess() {
-        doTestRandomAccess(Decimal64Field.getInstance());
+        doTestRandomAccess(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestRandomAccess(final Field<T> field)  {
@@ -99,7 +99,7 @@ public class FieldDenseOutputModelTest {
 
     @Test
     public void testModelsMerging() {
-        doTestModelsMerging(Decimal64Field.getInstance());
+        doTestModelsMerging(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestModelsMerging(final Field<T> field) {
@@ -164,7 +164,7 @@ public class FieldDenseOutputModelTest {
 
     @Test
     public void testErrorConditions() {
-        doTestErrorConditions(Decimal64Field.getInstance());
+        doTestErrorConditions(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestErrorConditions(final Field<T> field) {

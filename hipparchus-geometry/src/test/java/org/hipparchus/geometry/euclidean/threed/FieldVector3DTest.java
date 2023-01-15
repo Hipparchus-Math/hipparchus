@@ -33,8 +33,8 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.random.Well1024a;
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -190,7 +190,7 @@ public class FieldVector3DTest {
     @Test
     public void testCanonical() {
 
-        final Field<Decimal64> field = Decimal64Field.getInstance();
+        final Field<Binary64> field = Binary64Field.getInstance();
 
         Assert.assertEquals(0.0, FieldVector3D.getZero(field).getNorm().getReal(), 1.0e-20);
         Assert.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getPlusI(field), Vector3D.PLUS_I).getReal(),   1.0e-20);

@@ -42,7 +42,7 @@ import org.hipparchus.random.Well1024a;
 import org.hipparchus.random.Well19937a;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.CombinatoricsUtils;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.FieldSinhCosh;
@@ -1949,7 +1949,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
         @SuppressWarnings("unchecked")
         Field<DerivativeStructure> first = (Field<DerivativeStructure>) map.entrySet().iterator().next().getKey();
         Assert.assertTrue(first.equals(first));
-        Assert.assertFalse(first.equals(Decimal64Field.getInstance()));
+        Assert.assertFalse(first.equals(Binary64Field.getInstance()));
 
     }
 

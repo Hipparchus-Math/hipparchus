@@ -17,29 +17,29 @@
 
 package org.hipparchus.analysis.differentiation;
 
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test for class {@link FieldUnivariateDerivative2} on {@link Decimal64}.
+ * Test for class {@link FieldUnivariateDerivative1} on {@link Binary64}.
  */
-public class FieldUnivariateDerivative2Decimal64Test extends FieldUnivariateDerivative2AbstractTest<Decimal64> {
+public class FieldUnivariateDerivative1Binary64Test extends FieldUnivariateDerivative1AbstractTest<Binary64> {
 
     @Override
-    protected Decimal64Field getValueField() {
-        return Decimal64Field.getInstance();
+    protected Binary64Field getValueField() {
+        return Binary64Field.getInstance();
     }
 
     @Test
     public void testHashcode() {
-        Assert.assertEquals(905969981, build(2, 1, 4).hashCode());
+        Assert.assertEquals(2108686789, build(2, 1).hashCode());
     }
 
     @Override
     @Test
     public void testLinearCombinationReference() {
-        doTestLinearCombinationReference(x -> build(x), 5.0e-16, 1.0);
+        doTestLinearCombinationReference(x -> build(x), 5.0e-9, 1.0);
     }
 }

@@ -30,42 +30,42 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * standard class {@link Double}, while also implementing the
  * {@link CalculusFieldElement} interface.
  */
-public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>, Comparable<Decimal64> {
+public class Binary64 extends Number implements CalculusFieldElement<Binary64>, Comparable<Binary64> {
 
-    /** The constant value of {@code 0d} as a {@code Decimal64}. */
-    public static final Decimal64 ZERO;
+    /** The constant value of {@code 0d} as a {@code Binary64}. */
+    public static final Binary64 ZERO;
 
-    /** The constant value of {@code 1d} as a {@code Decimal64}. */
-    public static final Decimal64 ONE;
+    /** The constant value of {@code 1d} as a {@code Binary64}. */
+    public static final Binary64 ONE;
 
-    /** The constant value of π as a {@code Decimal64}. */
-    public static final Decimal64 PI;
+    /** The constant value of π as a {@code Binary64}. */
+    public static final Binary64 PI;
 
     /**
      * The constant value of {@link Double#NEGATIVE_INFINITY} as a
-     * {@code Decimal64}.
+     * {@code Binary64}.
      */
-    public static final Decimal64 NEGATIVE_INFINITY;
+    public static final Binary64 NEGATIVE_INFINITY;
 
     /**
      * The constant value of {@link Double#POSITIVE_INFINITY} as a
-     * {@code Decimal64}.
+     * {@code Binary64}.
      */
-    public static final Decimal64 POSITIVE_INFINITY;
+    public static final Binary64 POSITIVE_INFINITY;
 
-    /** The constant value of {@link Double#NaN} as a {@code Decimal64}. */
-    public static final Decimal64 NAN;
+    /** The constant value of {@link Double#NaN} as a {@code Binary64}. */
+    public static final Binary64 NAN;
 
     /** */
     private static final long serialVersionUID = 20120227L;
 
     static {
-        ZERO = new Decimal64(0d);
-        ONE  = new Decimal64(1d);
-        PI   = new Decimal64(FastMath.PI);
-        NEGATIVE_INFINITY = new Decimal64(Double.NEGATIVE_INFINITY);
-        POSITIVE_INFINITY = new Decimal64(Double.POSITIVE_INFINITY);
-        NAN = new Decimal64(Double.NaN);
+        ZERO = new Binary64(0d);
+        ONE  = new Binary64(1d);
+        PI   = new Binary64(FastMath.PI);
+        NEGATIVE_INFINITY = new Binary64(Double.NEGATIVE_INFINITY);
+        POSITIVE_INFINITY = new Binary64(Double.POSITIVE_INFINITY);
+        NAN = new Binary64(Double.NaN);
     }
 
     /** The primitive {@code double} value of this object. */
@@ -76,7 +76,7 @@ public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>
      *
      * @param x the primitive {@code double} value of the object to be created
      */
-    public Decimal64(final double x) {
+    public Binary64(final double x) {
         this.value = x;
     }
 
@@ -86,97 +86,97 @@ public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 newInstance(final double v) {
-        return new Decimal64(v);
+    public Binary64 newInstance(final double v) {
+        return new Binary64(v);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Field<Decimal64> getField() {
-        return Decimal64Field.getInstance();
+    public Field<Binary64> getField() {
+        return Binary64Field.getInstance();
     }
 
     /**
      * {@inheritDoc}
      *
      * The current implementation strictly enforces
-     * {@code this.add(a).equals(new Decimal64(this.doubleValue()
+     * {@code this.add(a).equals(new Binary64(this.doubleValue()
      * + a.doubleValue()))}.
      */
     @Override
-    public Decimal64 add(final Decimal64 a) {
-        return new Decimal64(this.value + a.value);
+    public Binary64 add(final Binary64 a) {
+        return new Binary64(this.value + a.value);
     }
 
     /**
      * {@inheritDoc}
      *
      * The current implementation strictly enforces
-     * {@code this.subtract(a).equals(new Decimal64(this.doubleValue()
+     * {@code this.subtract(a).equals(new Binary64(this.doubleValue()
      * - a.doubleValue()))}.
      */
     @Override
-    public Decimal64 subtract(final Decimal64 a) {
-        return new Decimal64(this.value - a.value);
+    public Binary64 subtract(final Binary64 a) {
+        return new Binary64(this.value - a.value);
     }
 
     /**
      * {@inheritDoc}
      *
      * The current implementation strictly enforces
-     * {@code this.negate().equals(new Decimal64(-this.doubleValue()))}.
+     * {@code this.negate().equals(new Binary64(-this.doubleValue()))}.
      */
     @Override
-    public Decimal64 negate() {
-        return new Decimal64(-this.value);
+    public Binary64 negate() {
+        return new Binary64(-this.value);
     }
 
     /**
      * {@inheritDoc}
      *
      * The current implementation strictly enforces
-     * {@code this.multiply(a).equals(new Decimal64(this.doubleValue()
+     * {@code this.multiply(a).equals(new Binary64(this.doubleValue()
      * * a.doubleValue()))}.
      */
     @Override
-    public Decimal64 multiply(final Decimal64 a) {
-        return new Decimal64(this.value * a.value);
+    public Binary64 multiply(final Binary64 a) {
+        return new Binary64(this.value * a.value);
     }
 
     /**
      * {@inheritDoc}
      *
      * The current implementation strictly enforces
-     * {@code this.multiply(n).equals(new Decimal64(n * this.doubleValue()))}.
+     * {@code this.multiply(n).equals(new Binary64(n * this.doubleValue()))}.
      */
     @Override
-    public Decimal64 multiply(final int n) {
-        return new Decimal64(n * this.value);
+    public Binary64 multiply(final int n) {
+        return new Binary64(n * this.value);
     }
 
     /**
      * {@inheritDoc}
      *
      * The current implementation strictly enforces
-     * {@code this.divide(a).equals(new Decimal64(this.doubleValue()
+     * {@code this.divide(a).equals(new Binary64(this.doubleValue()
      * / a.doubleValue()))}.
      *
      */
     @Override
-    public Decimal64 divide(final Decimal64 a) {
-        return new Decimal64(this.value / a.value);
+    public Binary64 divide(final Binary64 a) {
+        return new Binary64(this.value / a.value);
     }
 
     /**
      * {@inheritDoc}
      *
      * The current implementation strictly enforces
-     * {@code this.reciprocal().equals(new Decimal64(1.0
+     * {@code this.reciprocal().equals(new Binary64(1.0
      * / this.doubleValue()))}.
      */
     @Override
-    public Decimal64 reciprocal() {
-        return new Decimal64(1.0 / this.value);
+    public Binary64 reciprocal() {
+        return new Binary64(1.0 / this.value);
     }
 
     /*
@@ -253,7 +253,7 @@ public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>
      * @see Double#compareTo(Double)
      */
     @Override
-    public int compareTo(final Decimal64 o) {
+    public int compareTo(final Binary64 o) {
         return Double.compare(this.value, o.value);
     }
 
@@ -264,8 +264,8 @@ public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>
     /** {@inheritDoc} */
     @Override
     public boolean equals(final Object obj) {
-        if (obj instanceof Decimal64) {
-            final Decimal64 that = (Decimal64) obj;
+        if (obj instanceof Binary64) {
+            final Binary64 that = (Binary64) obj;
             return Double.doubleToLongBits(this.value) == Double
                     .doubleToLongBits(that.value);
         }
@@ -344,279 +344,279 @@ public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 add(final double a) {
-        return new Decimal64(value + a);
+    public Binary64 add(final double a) {
+        return new Binary64(value + a);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 subtract(final double a) {
-        return new Decimal64(value - a);
+    public Binary64 subtract(final double a) {
+        return new Binary64(value - a);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 multiply(final double a) {
-        return new Decimal64(value * a);
+    public Binary64 multiply(final double a) {
+        return new Binary64(value * a);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 divide(final double a) {
-        return new Decimal64(value / a);
+    public Binary64 divide(final double a) {
+        return new Binary64(value / a);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 remainder(final double a) {
-        return new Decimal64(FastMath.IEEEremainder(value, a));
+    public Binary64 remainder(final double a) {
+        return new Binary64(FastMath.IEEEremainder(value, a));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 remainder(final Decimal64 a) {
-        return new Decimal64(FastMath.IEEEremainder(value, a.value));
+    public Binary64 remainder(final Binary64 a) {
+        return new Binary64(FastMath.IEEEremainder(value, a.value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 abs() {
-        return new Decimal64(FastMath.abs(value));
+    public Binary64 abs() {
+        return new Binary64(FastMath.abs(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 ceil() {
-        return new Decimal64(FastMath.ceil(value));
+    public Binary64 ceil() {
+        return new Binary64(FastMath.ceil(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 floor() {
-        return new Decimal64(FastMath.floor(value));
+    public Binary64 floor() {
+        return new Binary64(FastMath.floor(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 rint() {
-        return new Decimal64(FastMath.rint(value));
+    public Binary64 rint() {
+        return new Binary64(FastMath.rint(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 sign() {
-        return new Decimal64(FastMath.signum(value));
+    public Binary64 sign() {
+        return new Binary64(FastMath.signum(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 copySign(final Decimal64 sign) {
-        return new Decimal64(FastMath.copySign(value, sign.value));
+    public Binary64 copySign(final Binary64 sign) {
+        return new Binary64(FastMath.copySign(value, sign.value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 copySign(final double sign) {
-        return new Decimal64(FastMath.copySign(value, sign));
+    public Binary64 copySign(final double sign) {
+        return new Binary64(FastMath.copySign(value, sign));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 scalb(final int n) {
-        return new Decimal64(FastMath.scalb(value, n));
+    public Binary64 scalb(final int n) {
+        return new Binary64(FastMath.scalb(value, n));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 ulp() {
-        return new Decimal64(FastMath.ulp(value));
+    public Binary64 ulp() {
+        return new Binary64(FastMath.ulp(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 hypot(final Decimal64 y) {
-        return new Decimal64(FastMath.hypot(value, y.value));
+    public Binary64 hypot(final Binary64 y) {
+        return new Binary64(FastMath.hypot(value, y.value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 sqrt() {
-        return new Decimal64(FastMath.sqrt(value));
+    public Binary64 sqrt() {
+        return new Binary64(FastMath.sqrt(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 cbrt() {
-        return new Decimal64(FastMath.cbrt(value));
+    public Binary64 cbrt() {
+        return new Binary64(FastMath.cbrt(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 rootN(final int n) {
+    public Binary64 rootN(final int n) {
         if (value < 0) {
-            return (n % 2 == 0) ? Decimal64.NAN : new Decimal64(-FastMath.pow(-value, 1.0 / n));
+            return (n % 2 == 0) ? Binary64.NAN : new Binary64(-FastMath.pow(-value, 1.0 / n));
         } else {
-            return new Decimal64(FastMath.pow(value, 1.0 / n));
+            return new Binary64(FastMath.pow(value, 1.0 / n));
         }
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 pow(final double p) {
-        return new Decimal64(FastMath.pow(value, p));
+    public Binary64 pow(final double p) {
+        return new Binary64(FastMath.pow(value, p));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 pow(final int n) {
-        return new Decimal64(FastMath.pow(value, n));
+    public Binary64 pow(final int n) {
+        return new Binary64(FastMath.pow(value, n));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 pow(final Decimal64 e) {
-        return new Decimal64(FastMath.pow(value, e.value));
+    public Binary64 pow(final Binary64 e) {
+        return new Binary64(FastMath.pow(value, e.value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 exp() {
-        return new Decimal64(FastMath.exp(value));
+    public Binary64 exp() {
+        return new Binary64(FastMath.exp(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 expm1() {
-        return new Decimal64(FastMath.expm1(value));
+    public Binary64 expm1() {
+        return new Binary64(FastMath.expm1(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 log() {
-        return new Decimal64(FastMath.log(value));
+    public Binary64 log() {
+        return new Binary64(FastMath.log(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 log1p() {
-        return new Decimal64(FastMath.log1p(value));
+    public Binary64 log1p() {
+        return new Binary64(FastMath.log1p(value));
     }
 
     /** Base 10 logarithm.
      * @return base 10 logarithm of the instance
      */
     @Override
-    public Decimal64 log10() {
-        return new Decimal64(FastMath.log10(value));
+    public Binary64 log10() {
+        return new Binary64(FastMath.log10(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 cos() {
-        return new Decimal64(FastMath.cos(value));
+    public Binary64 cos() {
+        return new Binary64(FastMath.cos(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 sin() {
-        return new Decimal64(FastMath.sin(value));
+    public Binary64 sin() {
+        return new Binary64(FastMath.sin(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public FieldSinCos<Decimal64> sinCos() {
+    public FieldSinCos<Binary64> sinCos() {
         final SinCos sc = FastMath.sinCos(value);
-        return new FieldSinCos<>(new Decimal64(sc.sin()), new Decimal64(sc.cos()));
+        return new FieldSinCos<>(new Binary64(sc.sin()), new Binary64(sc.cos()));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 tan() {
-        return new Decimal64(FastMath.tan(value));
+    public Binary64 tan() {
+        return new Binary64(FastMath.tan(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 acos() {
-        return new Decimal64(FastMath.acos(value));
+    public Binary64 acos() {
+        return new Binary64(FastMath.acos(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 asin() {
-        return new Decimal64(FastMath.asin(value));
+    public Binary64 asin() {
+        return new Binary64(FastMath.asin(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 atan() {
-        return new Decimal64(FastMath.atan(value));
+    public Binary64 atan() {
+        return new Binary64(FastMath.atan(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 atan2(final Decimal64 x) {
-        return new Decimal64(FastMath.atan2(value, x.value));
+    public Binary64 atan2(final Binary64 x) {
+        return new Binary64(FastMath.atan2(value, x.value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 cosh() {
-        return new Decimal64(FastMath.cosh(value));
+    public Binary64 cosh() {
+        return new Binary64(FastMath.cosh(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 sinh() {
-        return new Decimal64(FastMath.sinh(value));
+    public Binary64 sinh() {
+        return new Binary64(FastMath.sinh(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public FieldSinhCosh<Decimal64> sinhCosh() {
+    public FieldSinhCosh<Binary64> sinhCosh() {
         final SinhCosh sch = FastMath.sinhCosh(value);
-        return new FieldSinhCosh<>(new Decimal64(sch.sinh()), new Decimal64(sch.cosh()));
+        return new FieldSinhCosh<>(new Binary64(sch.sinh()), new Binary64(sch.cosh()));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 tanh() {
-        return new Decimal64(FastMath.tanh(value));
+    public Binary64 tanh() {
+        return new Binary64(FastMath.tanh(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 acosh() {
-        return new Decimal64(FastMath.acosh(value));
+    public Binary64 acosh() {
+        return new Binary64(FastMath.acosh(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 asinh() {
-        return new Decimal64(FastMath.asinh(value));
+    public Binary64 asinh() {
+        return new Binary64(FastMath.asinh(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 atanh() {
-        return new Decimal64(FastMath.atanh(value));
+    public Binary64 atanh() {
+        return new Binary64(FastMath.atanh(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 toDegrees() {
-        return new Decimal64(FastMath.toDegrees(value));
+    public Binary64 toDegrees() {
+        return new Binary64(FastMath.toDegrees(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 toRadians() {
-        return new Decimal64(FastMath.toRadians(value));
+    public Binary64 toRadians() {
+        return new Binary64(FastMath.toRadians(value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 linearCombination(final Decimal64[] a, final Decimal64[] b)
+    public Binary64 linearCombination(final Binary64[] a, final Binary64[] b)
         throws MathIllegalArgumentException {
         MathUtils.checkDimension(a.length, b.length);
         final double[] aDouble = new double[a.length];
@@ -625,64 +625,64 @@ public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>
             aDouble[i] = a[i].value;
             bDouble[i] = b[i].value;
         }
-        return new Decimal64(MathArrays.linearCombination(aDouble, bDouble));
+        return new Binary64(MathArrays.linearCombination(aDouble, bDouble));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 linearCombination(final double[] a, final Decimal64[] b)
+    public Binary64 linearCombination(final double[] a, final Binary64[] b)
         throws MathIllegalArgumentException {
         MathUtils.checkDimension(a.length, b.length);
         final double[] bDouble = new double[b.length];
         for (int i = 0; i < a.length; ++i) {
             bDouble[i] = b[i].value;
         }
-        return new Decimal64(MathArrays.linearCombination(a, bDouble));
+        return new Binary64(MathArrays.linearCombination(a, bDouble));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 linearCombination(final Decimal64 a1, final Decimal64 b1,
-                                       final Decimal64 a2, final Decimal64 b2) {
-        return new Decimal64(MathArrays.linearCombination(a1.value, b1.value,
+    public Binary64 linearCombination(final Binary64 a1, final Binary64 b1,
+                                       final Binary64 a2, final Binary64 b2) {
+        return new Binary64(MathArrays.linearCombination(a1.value, b1.value,
                                                           a2.value, b2.value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 linearCombination(final double a1, final Decimal64 b1,
-                                       final double a2, final Decimal64 b2) {
-        return new Decimal64(MathArrays.linearCombination(a1, b1.value,
+    public Binary64 linearCombination(final double a1, final Binary64 b1,
+                                       final double a2, final Binary64 b2) {
+        return new Binary64(MathArrays.linearCombination(a1, b1.value,
                                                           a2, b2.value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 linearCombination(final Decimal64 a1, final Decimal64 b1,
-                                       final Decimal64 a2, final Decimal64 b2,
-                                       final Decimal64 a3, final Decimal64 b3) {
-        return new Decimal64(MathArrays.linearCombination(a1.value, b1.value,
+    public Binary64 linearCombination(final Binary64 a1, final Binary64 b1,
+                                       final Binary64 a2, final Binary64 b2,
+                                       final Binary64 a3, final Binary64 b3) {
+        return new Binary64(MathArrays.linearCombination(a1.value, b1.value,
                                                           a2.value, b2.value,
                                                           a3.value, b3.value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 linearCombination(final double a1, final Decimal64 b1,
-                                       final double a2, final Decimal64 b2,
-                                       final double a3, final Decimal64 b3) {
-        return new Decimal64(MathArrays.linearCombination(a1, b1.value,
+    public Binary64 linearCombination(final double a1, final Binary64 b1,
+                                       final double a2, final Binary64 b2,
+                                       final double a3, final Binary64 b3) {
+        return new Binary64(MathArrays.linearCombination(a1, b1.value,
                                                           a2, b2.value,
                                                           a3, b3.value));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 linearCombination(final Decimal64 a1, final Decimal64 b1,
-                                       final Decimal64 a2, final Decimal64 b2,
-                                       final Decimal64 a3, final Decimal64 b3,
-                                       final Decimal64 a4, final Decimal64 b4) {
-        return new Decimal64(MathArrays.linearCombination(a1.value, b1.value,
+    public Binary64 linearCombination(final Binary64 a1, final Binary64 b1,
+                                       final Binary64 a2, final Binary64 b2,
+                                       final Binary64 a3, final Binary64 b3,
+                                       final Binary64 a4, final Binary64 b4) {
+        return new Binary64(MathArrays.linearCombination(a1.value, b1.value,
                                                           a2.value, b2.value,
                                                           a3.value, b3.value,
                                                           a4.value, b4.value));
@@ -690,11 +690,11 @@ public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 linearCombination(final double a1, final Decimal64 b1,
-                                       final double a2, final Decimal64 b2,
-                                       final double a3, final Decimal64 b3,
-                                       final double a4, final Decimal64 b4) {
-        return new Decimal64(MathArrays.linearCombination(a1, b1.value,
+    public Binary64 linearCombination(final double a1, final Binary64 b1,
+                                       final double a2, final Binary64 b2,
+                                       final double a3, final Binary64 b3,
+                                       final double a4, final Binary64 b4) {
+        return new Binary64(MathArrays.linearCombination(a1, b1.value,
                                                           a2, b2.value,
                                                           a3, b3.value,
                                                           a4, b4.value));
@@ -702,7 +702,7 @@ public class Decimal64 extends Number implements CalculusFieldElement<Decimal64>
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 getPi() {
+    public Binary64 getPi() {
         return PI;
     }
 

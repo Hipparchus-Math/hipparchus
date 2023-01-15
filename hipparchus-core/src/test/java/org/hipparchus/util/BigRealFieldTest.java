@@ -52,7 +52,7 @@ public class BigRealFieldTest {
         // there should be only one field for all values
         Assert.assertEquals(1, map.size());
         Assert.assertTrue(BigRealField.getInstance().equals(map.entrySet().iterator().next().getKey()));
-        Assert.assertFalse(BigRealField.getInstance().equals(Decimal64Field.getInstance()));
+        Assert.assertFalse(BigRealField.getInstance().equals(Binary64Field.getInstance()));
     }
 
     @Test

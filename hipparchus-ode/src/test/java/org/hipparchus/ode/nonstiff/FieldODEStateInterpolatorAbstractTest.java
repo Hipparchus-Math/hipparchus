@@ -30,7 +30,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.sampling.AbstractFieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -95,7 +95,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
 
     @Test
     public void restrictPrevious() {
-        doRestrictPrevious(Decimal64Field.getInstance(), 1e-15, 1e-15);
+        doRestrictPrevious(Binary64Field.getInstance(), 1e-15, 1e-15);
     }
 
     protected <T extends CalculusFieldElement<T>> void doRestrictPrevious(
@@ -129,7 +129,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
 
     @Test
     public void restrictCurrent() {
-        doRestrictCurrent(Decimal64Field.getInstance(), 1e-15, 1e-15);
+        doRestrictCurrent(Binary64Field.getInstance(), 1e-15, 1e-15);
     }
 
     protected <T extends CalculusFieldElement<T>> void doRestrictCurrent(Field<T> field,
@@ -162,7 +162,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
 
     @Test
     public void restrictBothEnds() {
-        doRestrictBothEnds(Decimal64Field.getInstance(), 1e-15, 1e-15);
+        doRestrictBothEnds(Binary64Field.getInstance(), 1e-15, 1e-15);
     }
 
     protected <T extends CalculusFieldElement<T>> void doRestrictBothEnds(Field<T> field,
@@ -196,7 +196,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
 
     @Test
     public void degenerateInterpolation() {
-        doDegenerateInterpolation(Decimal64Field.getInstance());
+        doDegenerateInterpolation(Binary64Field.getInstance());
     }
 
     protected <T extends CalculusFieldElement<T>> void doDegenerateInterpolation(Field<T> field) {

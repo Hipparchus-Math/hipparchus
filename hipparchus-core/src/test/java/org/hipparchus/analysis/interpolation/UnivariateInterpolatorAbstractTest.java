@@ -31,7 +31,7 @@ import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Binary64;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -78,21 +78,21 @@ public abstract class UnivariateInterpolatorAbstractTest {
     @Test
     public void testInterpolateLinearDegenerateTwoSegmentD64()
         {
-        Decimal64 x[] = buildD64(0.0, 0.5, 1.0);
-        Decimal64 y[] = buildD64(0.0, 0.5, 1.0);
+        Binary64 x[] = buildD64(0.0, 0.5, 1.0);
+        Binary64 y[] = buildD64(0.0, 0.5, 1.0);
         FieldUnivariateInterpolator i = buildFieldInterpolator();
-        CalculusFieldUnivariateFunction<Decimal64> f = i.interpolate(x, y);
+        CalculusFieldUnivariateFunction<Binary64> f = i.interpolate(x, y);
         verifyInterpolation(f, x, y);
 
         // Verify coefficients using analytical values
-        FieldPolynomialFunction<Decimal64> polynomials[] = ((FieldPolynomialSplineFunction<Decimal64>) f).getPolynomials();
+        FieldPolynomialFunction<Binary64> polynomials[] = ((FieldPolynomialSplineFunction<Binary64>) f).getPolynomials();
         checkCoeffs(coefficientTolerance, polynomials[0], y[0].getReal(), 1.0);
         checkCoeffs(coefficientTolerance, polynomials[1], y[1].getReal(), 1.0);
 
         // Check interpolation
-        Assert.assertEquals(0.0, f.value(new Decimal64(0.0)).getReal(), interpolationTolerance);
-        Assert.assertEquals(0.4, f.value(new Decimal64(0.4)).getReal(), interpolationTolerance);
-        Assert.assertEquals(1.0, f.value(new Decimal64(1.0)).getReal(), interpolationTolerance);
+        Assert.assertEquals(0.0, f.value(new Binary64(0.0)).getReal(), interpolationTolerance);
+        Assert.assertEquals(0.4, f.value(new Binary64(0.4)).getReal(), interpolationTolerance);
+        Assert.assertEquals(1.0, f.value(new Binary64(1.0)).getReal(), interpolationTolerance);
     }
 
     @Test
@@ -122,22 +122,22 @@ public abstract class UnivariateInterpolatorAbstractTest {
     @Test
     public void testInterpolateLinearDegenerateThreeSegmentD64()
         {
-        Decimal64 x[] = buildD64(0.0, 0.5, 1.0, 1.5);
-        Decimal64 y[] = buildD64(0.0, 0.5, 1.0, 1.5);
+        Binary64 x[] = buildD64(0.0, 0.5, 1.0, 1.5);
+        Binary64 y[] = buildD64(0.0, 0.5, 1.0, 1.5);
         FieldUnivariateInterpolator i = buildFieldInterpolator();
-        CalculusFieldUnivariateFunction<Decimal64> f = i.interpolate(x, y);
+        CalculusFieldUnivariateFunction<Binary64> f = i.interpolate(x, y);
         verifyInterpolation(f, x, y);
 
         // Verify coefficients using analytical values
-        FieldPolynomialFunction<Decimal64> polynomials[] = ((FieldPolynomialSplineFunction<Decimal64>) f).getPolynomials();
+        FieldPolynomialFunction<Binary64> polynomials[] = ((FieldPolynomialSplineFunction<Binary64>) f).getPolynomials();
         checkCoeffs(coefficientTolerance, polynomials[0], y[0].getReal(), 1.0);
         checkCoeffs(coefficientTolerance, polynomials[1], y[1].getReal(), 1.0);
         checkCoeffs(coefficientTolerance, polynomials[2], y[2].getReal(), 1.0);
 
         // Check interpolation
-        Assert.assertEquals(0,   f.value(new Decimal64(0)).getReal(),   interpolationTolerance);
-        Assert.assertEquals(1.4, f.value(new Decimal64(1.4)).getReal(), interpolationTolerance);
-        Assert.assertEquals(1.5, f.value(new Decimal64(1.5)).getReal(), interpolationTolerance);
+        Assert.assertEquals(0,   f.value(new Binary64(0)).getReal(),   interpolationTolerance);
+        Assert.assertEquals(1.4, f.value(new Binary64(1.4)).getReal(), interpolationTolerance);
+        Assert.assertEquals(1.5, f.value(new Binary64(1.5)).getReal(), interpolationTolerance);
     }
 
     @Test
@@ -199,7 +199,7 @@ public abstract class UnivariateInterpolatorAbstractTest {
         FieldUnivariateInterpolator i = buildFieldInterpolator();
         try
         {
-            Decimal64 yval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
+            Binary64 yval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
             i.interpolate( null, yval );
             Assert.fail( "Failed to detect x null pointer" );
         }
@@ -210,7 +210,7 @@ public abstract class UnivariateInterpolatorAbstractTest {
 
         try
         {
-            Decimal64 xval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
+            Binary64 xval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
             i.interpolate( xval, null );
             Assert.fail( "Failed to detect y null pointer" );
         }
@@ -221,8 +221,8 @@ public abstract class UnivariateInterpolatorAbstractTest {
 
         // Data set arrays of different size.
         try {
-            Decimal64 xval[] = buildD64(0.0, 1.0);
-            Decimal64 yval[] = buildD64(0.0, 1.0, 2.0);
+            Binary64 xval[] = buildD64(0.0, 1.0);
+            Binary64 yval[] = buildD64(0.0, 1.0, 2.0);
             i.interpolate(xval, yval);
             Assert.fail("Failed to detect data set array with different sizes.");
         } catch (MathIllegalArgumentException iae) {
@@ -230,8 +230,8 @@ public abstract class UnivariateInterpolatorAbstractTest {
         }
         // X values not sorted.
         try {
-            Decimal64 xval[] = buildD64(0.0, 1.0, 0.5);
-            Decimal64 yval[] = buildD64(0.0, 1.0, 2.0);
+            Binary64 xval[] = buildD64(0.0, 1.0, 0.5);
+            Binary64 yval[] = buildD64(0.0, 1.0, 2.0);
             i.interpolate(xval, yval);
             Assert.fail("Failed to detect unsorted arguments.");
         } catch (MathIllegalArgumentException iae) {
@@ -239,8 +239,8 @@ public abstract class UnivariateInterpolatorAbstractTest {
         }
         // Not enough data to interpolate.
         try {
-            Decimal64 xval[] = buildD64(0.0);
-            Decimal64 yval[] = buildD64(0.0);
+            Binary64 xval[] = buildD64(0.0);
+            Binary64 yval[] = buildD64(0.0);
             i.interpolate(xval, yval);
             Assert.fail("Failed to detect unsorted arguments.");
         } catch (MathIllegalArgumentException iae) {
@@ -267,10 +267,10 @@ public abstract class UnivariateInterpolatorAbstractTest {
         }
     }
 
-    protected Decimal64[] buildD64(double...c) {
-        Decimal64[] array = new Decimal64[c.length];
+    protected Binary64[] buildD64(double...c) {
+        Binary64[] array = new Binary64[c.length];
         for (int i = 0; i < c.length; ++i) {
-            array[i] = new Decimal64(c[i]);
+            array[i] = new Binary64(c[i]);
         }
         return array;
     }

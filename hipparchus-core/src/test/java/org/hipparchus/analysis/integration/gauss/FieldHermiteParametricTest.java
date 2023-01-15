@@ -24,8 +24,8 @@ package org.hipparchus.analysis.integration.gauss;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -42,7 +42,7 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(value=Parameterized.class)
 public class FieldHermiteParametricTest extends FieldGaussianQuadratureAbstractTest {
     private static final double SQRT_PI = FastMath.sqrt(Math.PI);
-    private static final FieldGaussIntegratorFactory<Decimal64> factory = new FieldGaussIntegratorFactory<>(Decimal64Field.getInstance());
+    private static final FieldGaussIntegratorFactory<Binary64> factory = new FieldGaussIntegratorFactory<>(Binary64Field.getInstance());
 
     /**
      * The highest order quadrature rule to be tested.

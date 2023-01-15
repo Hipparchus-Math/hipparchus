@@ -24,7 +24,7 @@ import org.hipparchus.Field;
 import org.hipparchus.analysis.differentiation.UnivariateDerivative1;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -33,67 +33,67 @@ public class FieldJacobiEllipticTest {
 
     @Test
     public void testCircular() {
-        doTestCircular(Decimal64Field.getInstance());
+        doTestCircular(Binary64Field.getInstance());
     }
 
     @Test
     public void testHyperbolic() {
-        doTestHyperbolic(Decimal64Field.getInstance());
+        doTestHyperbolic(Binary64Field.getInstance());
     }
 
     @Test
     public void testNoConvergence() {
-        doTestNoConvergence(Decimal64Field.getInstance());
+        doTestNoConvergence(Binary64Field.getInstance());
     }
 
     @Test
     public void testNegativeParameter() {
-        doTestNegativeParameter(Decimal64Field.getInstance());
+        doTestNegativeParameter(Binary64Field.getInstance());
     }
 
     @Test
     public void testAbramowitzStegunExample1() {
-        doTestAbramowitzStegunExample1(Decimal64Field.getInstance());
+        doTestAbramowitzStegunExample1(Binary64Field.getInstance());
     }
 
     @Test
     public void testAbramowitzStegunExample2() {
-        doTestAbramowitzStegunExample2(Decimal64Field.getInstance());
+        doTestAbramowitzStegunExample2(Binary64Field.getInstance());
     }
 
     @Test
     public void testAbramowitzStegunExample3() {
-        doTestAbramowitzStegunExample3(Decimal64Field.getInstance());
+        doTestAbramowitzStegunExample3(Binary64Field.getInstance());
     }
 
     @Test
     public void testAbramowitzStegunExample4() {
-        doTestAbramowitzStegunExample4(Decimal64Field.getInstance());
+        doTestAbramowitzStegunExample4(Binary64Field.getInstance());
     }
 
     @Test
     public void testAbramowitzStegunExample5() {
-        doTestAbramowitzStegunExample5(Decimal64Field.getInstance());
+        doTestAbramowitzStegunExample5(Binary64Field.getInstance());
     }
 
     @Test
     public void testAbramowitzStegunExample7() {
-        doTestAbramowitzStegunExample7(Decimal64Field.getInstance());
+        doTestAbramowitzStegunExample7(Binary64Field.getInstance());
     }
 
     @Test
     public void testAbramowitzStegunExample8() {
-        doTestAbramowitzStegunExample8(Decimal64Field.getInstance());
+        doTestAbramowitzStegunExample8(Binary64Field.getInstance());
     }
 
     @Test
     public void testAbramowitzStegunExample9() {
-        doTestAbramowitzStegunExample9(Decimal64Field.getInstance());
+        doTestAbramowitzStegunExample9(Binary64Field.getInstance());
     }
 
     @Test
     public void testAllFunctions() {
-        doTestAllFunctions(Decimal64Field.getInstance());
+        doTestAllFunctions(Binary64Field.getInstance());
     }
 
     @Test
@@ -108,22 +108,22 @@ public class FieldJacobiEllipticTest {
 
     @Test
     public void testInverseCopolarN() {
-        doTestInverseCopolarN(Decimal64Field.getInstance());
+        doTestInverseCopolarN(Binary64Field.getInstance());
     }
 
     @Test
     public void testInverseCopolarS() {
-        doTestInverseCopolarS(Decimal64Field.getInstance());
+        doTestInverseCopolarS(Binary64Field.getInstance());
     }
 
     @Test
     public void testInverseCopolarC() {
-        doTestInverseCopolarC(Decimal64Field.getInstance());
+        doTestInverseCopolarC(Binary64Field.getInstance());
     }
 
     @Test
     public void testInverseCopolarD() {
-        doTestInverseCopolarD(Decimal64Field.getInstance());
+        doTestInverseCopolarD(Binary64Field.getInstance());
     }
 
     @Test

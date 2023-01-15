@@ -25,8 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.hipparchus.Field;
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -34,12 +34,12 @@ public class FieldComplexFieldTest {
 
     @Test
     public void testZero() {
-        Assert.assertEquals(new FieldComplex<>(Decimal64.ZERO), FieldComplexField.getField(Decimal64Field.getInstance()).getZero());
+        Assert.assertEquals(new FieldComplex<>(Binary64.ZERO), FieldComplexField.getField(Binary64Field.getInstance()).getZero());
     }
 
     @Test
     public void testOne() {
-        Assert.assertEquals(new FieldComplex<>(Decimal64.ONE), FieldComplexField.getField(Decimal64Field.getInstance()).getOne());
+        Assert.assertEquals(new FieldComplex<>(Binary64.ONE), FieldComplexField.getField(Binary64Field.getInstance()).getOne());
     }
 
     @SuppressWarnings("unlikely-arg-type")
@@ -47,13 +47,13 @@ public class FieldComplexFieldTest {
     public void testMap() {
         Map<Field<?>, Integer> map = new HashMap<>();
         for (int i = 1; i < 100; ++i) {
-            map.put(new FieldComplex<>(new Decimal64(i)).getField(), 0);
+            map.put(new FieldComplex<>(new Binary64(i)).getField(), 0);
         }
         // there should be only one field for all values
-        FieldComplexField<Decimal64> field = FieldComplexField.getField(Decimal64Field.getInstance());
+        FieldComplexField<Binary64> field = FieldComplexField.getField(Binary64Field.getInstance());
         Assert.assertEquals(1, map.size());
         Assert.assertTrue(field.equals(map.entrySet().iterator().next().getKey()));
-        Assert.assertFalse(field.equals(Decimal64Field.getInstance()));
+        Assert.assertFalse(field.equals(Binary64Field.getInstance()));
     }
 
     @Test

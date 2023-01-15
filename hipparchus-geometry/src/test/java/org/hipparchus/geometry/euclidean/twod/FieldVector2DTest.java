@@ -25,7 +25,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.SinCos;
@@ -36,87 +36,87 @@ public class FieldVector2DTest {
 
     @Test
     public void testConstructors() {
-        doTestConstructors(Decimal64Field.getInstance());
+        doTestConstructors(Binary64Field.getInstance());
     }
 
     @Test
     public void testConstants() {
-        doTestConstants(Decimal64Field.getInstance());
+        doTestConstants(Binary64Field.getInstance());
     }
 
     @Test
     public void testToMethods() {
-        doTestToMethods(Decimal64Field.getInstance());
+        doTestToMethods(Binary64Field.getInstance());
     }
 
     @Test
     public void testNorms() {
-        doTestNorms(Decimal64Field.getInstance());
+        doTestNorms(Binary64Field.getInstance());
     }
 
     @Test
     public void testDistances() {
-        doTestDistances(Decimal64Field.getInstance());
+        doTestDistances(Binary64Field.getInstance());
     }
 
     @Test
     public void testAdd() {
-        doTestAdd(Decimal64Field.getInstance());
+        doTestAdd(Binary64Field.getInstance());
     }
 
     @Test
     public void testSubtract() {
-        doTestSubtract(Decimal64Field.getInstance());
+        doTestSubtract(Binary64Field.getInstance());
     }
 
     @Test
     public void testNormalize() {
-        doTestNormalize(Decimal64Field.getInstance());
+        doTestNormalize(Binary64Field.getInstance());
     }
 
     @Test
     public void testAngle() {
-        doTestAngle(Decimal64Field.getInstance());
+        doTestAngle(Binary64Field.getInstance());
     }
 
     @Test
     public void testNegate() {
-        doTestNegate(Decimal64Field.getInstance());
+        doTestNegate(Binary64Field.getInstance());
     }
 
     @Test
     public void testScalarMultiply() {
-        doTestScalarMultiply(Decimal64Field.getInstance());
+        doTestScalarMultiply(Binary64Field.getInstance());
     }
 
     @Test
     public void testIsNaN() {
-        doTestIsNaN(Decimal64Field.getInstance());
+        doTestIsNaN(Binary64Field.getInstance());
     }
 
     @Test
     public void testIsInfinite() {
-        doTestIsInfinite(Decimal64Field.getInstance());
+        doTestIsInfinite(Binary64Field.getInstance());
     }
 
     @Test
     public void testEquals() {
-        doTestEquals(Decimal64Field.getInstance());
+        doTestEquals(Binary64Field.getInstance());
     }
 
     @Test
     public void testHashCode() {
-        doTestHashCode(Decimal64Field.getInstance());
+        doTestHashCode(Binary64Field.getInstance());
     }
 
     @Test
     public void testCrossProduct() {
-        doTestCrossProduct(Decimal64Field.getInstance());
+        doTestCrossProduct(Binary64Field.getInstance());
     }
 
     @Test
     public void testOrientation() {
-        doTestOrientation(Decimal64Field.getInstance());
+        doTestOrientation(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestConstructors(final Field<T> field) {

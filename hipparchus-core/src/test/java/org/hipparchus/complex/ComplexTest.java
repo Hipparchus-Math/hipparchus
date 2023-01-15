@@ -30,7 +30,7 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Binary64;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
@@ -1487,7 +1487,7 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
             for (int n = 1; n < 5; ++n) {
                 if (x < 0) {
                     // special case for Complex
-                    final double doubleRoot = new Decimal64(x).rootN(n).getReal();
+                    final double doubleRoot = new Binary64(x).rootN(n).getReal();
                     if (n % 2 == 0) {
                         Assert.assertTrue(Double.isNaN(doubleRoot));
                     } else {

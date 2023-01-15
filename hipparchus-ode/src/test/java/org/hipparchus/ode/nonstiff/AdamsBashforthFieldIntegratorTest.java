@@ -22,7 +22,7 @@ import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.junit.Test;
 
 public class AdamsBashforthFieldIntegratorTest extends AdamsFieldIntegratorAbstractTest {
@@ -48,7 +48,7 @@ public class AdamsBashforthFieldIntegratorTest extends AdamsFieldIntegratorAbstr
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testMinStep() {
-        doDimensionCheck(Decimal64Field.getInstance());
+        doDimensionCheck(Binary64Field.getInstance());
     }
 
     @Test
@@ -56,32 +56,32 @@ public class AdamsBashforthFieldIntegratorTest extends AdamsFieldIntegratorAbstr
         // the 2.6 and 122 factors are only valid for this test
         // and has been obtained from trial and error
         // there are no general relationship between local and global errors
-        doTestIncreasingTolerance(Decimal64Field.getInstance(), 2.6, 122);
+        doTestIncreasingTolerance(Binary64Field.getInstance(), 2.6, 122);
     }
 
     @Test(expected = MathIllegalStateException.class)
     public void exceedMaxEvaluations() {
-        doExceedMaxEvaluations(Decimal64Field.getInstance(), 650);
+        doExceedMaxEvaluations(Binary64Field.getInstance(), 650);
     }
 
     @Test
     public void backward() {
-        doBackward(Decimal64Field.getInstance(), 4.3e-8, 4.3e-8, 1.0e-16, "Adams-Bashforth");
+        doBackward(Binary64Field.getInstance(), 4.3e-8, 4.3e-8, 1.0e-16, "Adams-Bashforth");
     }
 
     @Test
     public void polynomial() {
-        doPolynomial(Decimal64Field.getInstance(), 5, 9.0e-4, 9.3e-10);
+        doPolynomial(Binary64Field.getInstance(), 5, 9.0e-4, 9.3e-10);
     }
 
     @Test
     public void testSecondaryEquations() {
-        doTestSecondaryEquations(Decimal64Field.getInstance(), 4.3e-10, 8.9e-16);
+        doTestSecondaryEquations(Binary64Field.getInstance(), 4.3e-10, 8.9e-16);
     }
 
     @Test(expected=MathIllegalStateException.class)
     public void testStartFailure() {
-        doTestStartFailure(Decimal64Field.getInstance());
+        doTestStartFailure(Binary64Field.getInstance());
     }
 
 }

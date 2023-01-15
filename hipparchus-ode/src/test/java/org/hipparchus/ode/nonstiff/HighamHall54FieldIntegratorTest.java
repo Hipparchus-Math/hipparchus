@@ -20,7 +20,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.junit.Test;
 
 public class HighamHall54FieldIntegratorTest extends EmbeddedRungeKuttaFieldIntegratorAbstractTest {
@@ -39,37 +39,37 @@ public class HighamHall54FieldIntegratorTest extends EmbeddedRungeKuttaFieldInte
 
     @Override
     public void testNonFieldIntegratorConsistency() {
-        doTestNonFieldIntegratorConsistency(Decimal64Field.getInstance());
+        doTestNonFieldIntegratorConsistency(Binary64Field.getInstance());
     }
 
     @Override
     public void testSanityChecks() {
-        doTestSanityChecks(Decimal64Field.getInstance());
+        doTestSanityChecks(Binary64Field.getInstance());
     }
 
     @Override
     public void testBackward() {
-        doTestBackward(Decimal64Field.getInstance(), 5.0e-7, 5.0e-7, 1.0e-12, "Higham-Hall 5(4)");
+        doTestBackward(Binary64Field.getInstance(), 5.0e-7, 5.0e-7, 1.0e-12, "Higham-Hall 5(4)");
     }
 
     @Override
     public void testKepler() {
-        doTestKepler(Decimal64Field.getInstance(), 1.5e-4);
+        doTestKepler(Binary64Field.getInstance(), 1.5e-4);
     }
 
     @Override
     public void testTorqueFreeMotion() {
-        doTestTorqueFreeMotion(Decimal64Field.getInstance(), 3.0e-15);
+        doTestTorqueFreeMotion(Binary64Field.getInstance(), 3.0e-15);
     }
 
     @Override
     public void testForwardBackwardExceptions() {
-        doTestForwardBackwardExceptions(Decimal64Field.getInstance());
+        doTestForwardBackwardExceptions(Binary64Field.getInstance());
     }
 
     @Override
     public void testMinStep() {
-        doTestMinStep(Decimal64Field.getInstance());
+        doTestMinStep(Binary64Field.getInstance());
     }
 
     @Override
@@ -77,22 +77,22 @@ public class HighamHall54FieldIntegratorTest extends EmbeddedRungeKuttaFieldInte
         // the 1.3 factor is only valid for this test
         // and has been obtained from trial and error
         // there is no general relation between local and global errors
-        doTestIncreasingTolerance(Decimal64Field.getInstance(), 1.3, 1.0e-12);
+        doTestIncreasingTolerance(Binary64Field.getInstance(), 1.3, 1.0e-12);
     }
 
     @Override
     public void testEvents() {
-        doTestEvents(Decimal64Field.getInstance(), 1.0e-7, "Higham-Hall 5(4)");
+        doTestEvents(Binary64Field.getInstance(), 1.0e-7, "Higham-Hall 5(4)");
     }
 
     @Override
     public void testEventsErrors() {
-        doTestEventsErrors(Decimal64Field.getInstance());
+        doTestEventsErrors(Binary64Field.getInstance());
     }
 
     @Override
     public void testEventsNoConvergence() {
-        doTestEventsNoConvergence(Decimal64Field.getInstance());
+        doTestEventsNoConvergence(Binary64Field.getInstance());
     }
 
     @Override
@@ -102,7 +102,7 @@ public class HighamHall54FieldIntegratorTest extends EmbeddedRungeKuttaFieldInte
 
     @Test
     public void testSecondaryEquations() {
-        doTestSecondaryEquations(Decimal64Field.getInstance(), 9.7e-12, 1.3e-14);
+        doTestSecondaryEquations(Binary64Field.getInstance(), 9.7e-12, 1.3e-14);
     }
 
 }

@@ -32,8 +32,8 @@ import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -357,22 +357,22 @@ public final class BlockFieldMatrixTest {
     @Test
     public void testMultiplyTransposedBlockRealMatrix() {
         RandomGenerator randomGenerator = new Well1024a(0xfaa1594a49a1359el);
-        final FieldMatrixChangingVisitor<Decimal64> randomSetter = new DefaultFieldMatrixChangingVisitor<Decimal64>(Decimal64Field.getInstance().getZero()) {
-            public Decimal64 visit(final int row, final int column, final Decimal64 value) {
-                return new Decimal64(randomGenerator.nextDouble());
+        final FieldMatrixChangingVisitor<Binary64> randomSetter = new DefaultFieldMatrixChangingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
+            public Binary64 visit(final int row, final int column, final Binary64 value) {
+                return new Binary64(randomGenerator.nextDouble());
             }
         };
-        final FieldMatrixPreservingVisitor<Decimal64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Decimal64>(Decimal64Field.getInstance().getZero()) {
-            public void visit(final int row, final int column, final Decimal64 value) {
+        final FieldMatrixPreservingVisitor<Binary64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
+            public void visit(final int row, final int column, final Binary64 value) {
                 Assert.assertEquals(0.0, value.doubleValue(), 1.0e-15);
             }
         };
         for (int rows = 1; rows <= 64; rows += 7) {
             for (int cols = 1; cols <= 64; cols += 7) {
-                final BlockFieldMatrix<Decimal64> a = new BlockFieldMatrix<>(Decimal64Field.getInstance(), rows, cols);
+                final BlockFieldMatrix<Binary64> a = new BlockFieldMatrix<>(Binary64Field.getInstance(), rows, cols);
                 a.walkInOptimizedOrder(randomSetter);
                 for (int interm = 1; interm <= 64; interm += 7) {
-                    final BlockFieldMatrix<Decimal64> b = new BlockFieldMatrix<>(Decimal64Field.getInstance(), interm, cols);
+                    final BlockFieldMatrix<Binary64> b = new BlockFieldMatrix<>(Binary64Field.getInstance(), interm, cols);
                     b.walkInOptimizedOrder(randomSetter);
                     a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).walkInOptimizedOrder(zeroChecker);
                 }
@@ -383,22 +383,22 @@ public final class BlockFieldMatrixTest {
     @Test
     public void testMultiplyTransposedArray2DRowRealMatrix() {
         RandomGenerator randomGenerator = new Well1024a(0xac2d0185fc69670bl);
-        final FieldMatrixChangingVisitor<Decimal64> randomSetter = new DefaultFieldMatrixChangingVisitor<Decimal64>(Decimal64Field.getInstance().getZero()) {
-            public Decimal64 visit(final int row, final int column, final Decimal64 value) {
-                return new Decimal64(randomGenerator.nextDouble());
+        final FieldMatrixChangingVisitor<Binary64> randomSetter = new DefaultFieldMatrixChangingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
+            public Binary64 visit(final int row, final int column, final Binary64 value) {
+                return new Binary64(randomGenerator.nextDouble());
             }
         };
-        final FieldMatrixPreservingVisitor<Decimal64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Decimal64>(Decimal64Field.getInstance().getZero()) {
-            public void visit(final int row, final int column, final Decimal64 value) {
+        final FieldMatrixPreservingVisitor<Binary64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
+            public void visit(final int row, final int column, final Binary64 value) {
                 Assert.assertEquals(0.0, value.doubleValue(), 1.0e-15);
             }
         };
         for (int rows = 1; rows <= 64; rows += 7) {
             for (int cols = 1; cols <= 64; cols += 7) {
-                final BlockFieldMatrix<Decimal64> a = new BlockFieldMatrix<>(Decimal64Field.getInstance(), rows, cols);
+                final BlockFieldMatrix<Binary64> a = new BlockFieldMatrix<>(Binary64Field.getInstance(), rows, cols);
                 a.walkInOptimizedOrder(randomSetter);
                 for (int interm = 1; interm <= 64; interm += 7) {
-                    final Array2DRowFieldMatrix<Decimal64> b = new Array2DRowFieldMatrix<>(Decimal64Field.getInstance(), interm, cols);
+                    final Array2DRowFieldMatrix<Binary64> b = new Array2DRowFieldMatrix<>(Binary64Field.getInstance(), interm, cols);
                     b.walkInOptimizedOrder(randomSetter);
                     a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).walkInOptimizedOrder(zeroChecker);
                 }
@@ -409,8 +409,8 @@ public final class BlockFieldMatrixTest {
     @Test
     public void testMultiplyTransposedWrongDimensions() {
         try {
-            new BlockFieldMatrix<Decimal64>(Decimal64Field.getInstance(), 2, 3).
-            multiplyTransposed(new BlockFieldMatrix<Decimal64>(Decimal64Field.getInstance(), 3, 2));
+            new BlockFieldMatrix<Binary64>(Binary64Field.getInstance(), 2, 3).
+            multiplyTransposed(new BlockFieldMatrix<Binary64>(Binary64Field.getInstance(), 3, 2));
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
             Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
@@ -422,22 +422,22 @@ public final class BlockFieldMatrixTest {
     @Test
     public void testTransposeMultiplyBlockRealMatrix() {
         RandomGenerator randomGenerator = new Well1024a(0xfaa1594a49a1359el);
-        final FieldMatrixChangingVisitor<Decimal64> randomSetter = new DefaultFieldMatrixChangingVisitor<Decimal64>(Decimal64Field.getInstance().getZero()) {
-            public Decimal64 visit(final int row, final int column, final Decimal64 value) {
-                return new Decimal64(randomGenerator.nextDouble());
+        final FieldMatrixChangingVisitor<Binary64> randomSetter = new DefaultFieldMatrixChangingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
+            public Binary64 visit(final int row, final int column, final Binary64 value) {
+                return new Binary64(randomGenerator.nextDouble());
             }
         };
-        final FieldMatrixPreservingVisitor<Decimal64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Decimal64>(Decimal64Field.getInstance().getZero()) {
-            public void visit(final int row, final int column, final Decimal64 value) {
+        final FieldMatrixPreservingVisitor<Binary64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
+            public void visit(final int row, final int column, final Binary64 value) {
                 Assert.assertEquals(0.0, value.doubleValue(), 2.0e-14);
             }
         };
         for (int rows = 1; rows <= 64; rows += 7) {
             for (int cols = 1; cols <= 64; cols += 7) {
-                final BlockFieldMatrix<Decimal64> a = new BlockFieldMatrix<>(Decimal64Field.getInstance(), rows, cols);
+                final BlockFieldMatrix<Binary64> a = new BlockFieldMatrix<>(Binary64Field.getInstance(), rows, cols);
                 a.walkInOptimizedOrder(randomSetter);
                 for (int interm = 1; interm <= 64; interm += 7) {
-                    final BlockFieldMatrix<Decimal64> b = new BlockFieldMatrix<>(Decimal64Field.getInstance(), rows, interm);
+                    final BlockFieldMatrix<Binary64> b = new BlockFieldMatrix<>(Binary64Field.getInstance(), rows, interm);
                     b.walkInOptimizedOrder(randomSetter);
                     a.transposeMultiply(b).subtract(a.transpose().multiply(b)).walkInOptimizedOrder(zeroChecker);
                 }
@@ -448,22 +448,22 @@ public final class BlockFieldMatrixTest {
     @Test
     public void testTransposeMultiplyArray2DRowRealMatrix() {
         RandomGenerator randomGenerator = new Well1024a(0xac2d0185fc69670bl);
-        final FieldMatrixChangingVisitor<Decimal64> randomSetter = new DefaultFieldMatrixChangingVisitor<Decimal64>(Decimal64Field.getInstance().getZero()) {
-            public Decimal64 visit(final int row, final int column, final Decimal64 value) {
-                return new Decimal64(randomGenerator.nextDouble());
+        final FieldMatrixChangingVisitor<Binary64> randomSetter = new DefaultFieldMatrixChangingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
+            public Binary64 visit(final int row, final int column, final Binary64 value) {
+                return new Binary64(randomGenerator.nextDouble());
             }
         };
-        final FieldMatrixPreservingVisitor<Decimal64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Decimal64>(Decimal64Field.getInstance().getZero()) {
-            public void visit(final int row, final int column, final Decimal64 value) {
+        final FieldMatrixPreservingVisitor<Binary64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
+            public void visit(final int row, final int column, final Binary64 value) {
                 Assert.assertEquals(0.0, value.doubleValue(), 1.0e-15);
             }
         };
         for (int rows = 1; rows <= 64; rows += 7) {
             for (int cols = 1; cols <= 64; cols += 7) {
-                final BlockFieldMatrix<Decimal64> a = new BlockFieldMatrix<>(Decimal64Field.getInstance(), rows, cols);
+                final BlockFieldMatrix<Binary64> a = new BlockFieldMatrix<>(Binary64Field.getInstance(), rows, cols);
                 a.walkInOptimizedOrder(randomSetter);
                 for (int interm = 1; interm <= 64; interm += 7) {
-                    final Array2DRowFieldMatrix<Decimal64> b = new Array2DRowFieldMatrix<>(Decimal64Field.getInstance(), rows, interm);
+                    final Array2DRowFieldMatrix<Binary64> b = new Array2DRowFieldMatrix<>(Binary64Field.getInstance(), rows, interm);
                     b.walkInOptimizedOrder(randomSetter);
                     a.transposeMultiply(b).subtract(a.transpose().multiply(b)).walkInOptimizedOrder(zeroChecker);
                 }
@@ -474,8 +474,8 @@ public final class BlockFieldMatrixTest {
     @Test
     public void testTransposeMultiplyWrongDimensions() {
         try {
-            new BlockFieldMatrix<Decimal64>(Decimal64Field.getInstance(), 2, 3).
-            transposeMultiply(new BlockFieldMatrix<Decimal64>(Decimal64Field.getInstance(), 3, 2));
+            new BlockFieldMatrix<Binary64>(Binary64Field.getInstance(), 2, 3).
+            transposeMultiply(new BlockFieldMatrix<Binary64>(Binary64Field.getInstance(), 3, 2));
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
             Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());

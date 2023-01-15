@@ -28,8 +28,8 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -97,8 +97,8 @@ public class EventsScheduling {
 
     private static void doTestField(final double start, final double stop, final int expectedCalls) {
 
-        final FieldODEIntegrator<Decimal64> integrator =
-                new DormandPrince853FieldIntegrator<Decimal64>(Decimal64Field.getInstance(), 10, 100.0, 1e-7, 1e-7);
+        final FieldODEIntegrator<Binary64> integrator =
+                new DormandPrince853FieldIntegrator<Binary64>(Binary64Field.getInstance(), 10, 100.0, 1e-7, 1e-7);
 
         // checker that will be used in both step handler and events handlers
         // to check they are called in consistent order
@@ -112,20 +112,20 @@ public class EventsScheduling {
             integrator.addEventDetector(new SimpleFieldDetector(0.0625 * (i + 1), checker, 1.0, 1.0e-9, 100));
         }
 
-        final FieldOrdinaryDifferentialEquation<Decimal64> ode =
-                        new FieldOrdinaryDifferentialEquation<Decimal64>() {
+        final FieldOrdinaryDifferentialEquation<Binary64> ode =
+                        new FieldOrdinaryDifferentialEquation<Binary64>() {
             public int getDimension() {
                 return 1;
             }
-            public Decimal64[] computeDerivatives(Decimal64 t, Decimal64[] y) {
-                return new Decimal64[] { Decimal64.ONE };
+            public Binary64[] computeDerivatives(Binary64 t, Binary64[] y) {
+                return new Binary64[] { Binary64.ONE };
             }
         };
 
-        final FieldODEState<Decimal64> initialState =
-                        new FieldODEState<>(new Decimal64(start), new Decimal64[] { Decimal64.ZERO });
+        final FieldODEState<Binary64> initialState =
+                        new FieldODEState<>(new Binary64(start), new Binary64[] { Binary64.ZERO });
 
-        integrator.integrate(new FieldExpandableODE<>(ode), initialState, new Decimal64(stop));
+        integrator.integrate(new FieldExpandableODE<>(ode), initialState, new Binary64(stop));
 
         Assert.assertEquals(expectedCalls, checker.calls);
 
@@ -210,27 +210,27 @@ public class EventsScheduling {
 
     }
 
-    private static class SimpleFieldDetector implements FieldODEEventDetector<Decimal64> {
+    private static class SimpleFieldDetector implements FieldODEEventDetector<Binary64> {
 
-        private final Decimal64       maxCheck;
-        private final Decimal64       threshold;
+        private final Binary64       maxCheck;
+        private final Binary64       threshold;
         private final int             maxIter;
         private final double          tEvent;
         private final ScheduleChecker checker;
         SimpleFieldDetector(final double tEvent, final ScheduleChecker checker,
                             final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = new Decimal64(maxCheck);
-            this.threshold = new Decimal64(threshold);
+            this.maxCheck  = new Binary64(maxCheck);
+            this.threshold = new Binary64(threshold);
             this.maxIter   = maxIter;
             this.tEvent    = tEvent;
             this.checker   = checker;
         }
 
-        public Decimal64 getMaxCheckInterval() {
+        public Binary64 getMaxCheckInterval() {
             return maxCheck;
         }
 
-        public Decimal64 getThreshold() {
+        public Binary64 getThreshold() {
             return threshold;
         }
 
@@ -239,7 +239,7 @@ public class EventsScheduling {
         }
 
         @Override
-        public FieldODEEventHandler<Decimal64> getHandler() {
+        public FieldODEEventHandler<Binary64> getHandler() {
             return (state, detector, increasing) -> {
                 checker.callTime(state.getTime().getReal());
                 return Action.CONTINUE;
@@ -247,7 +247,7 @@ public class EventsScheduling {
         }
         
         @Override
-        public Decimal64 g(final FieldODEStateAndDerivative<Decimal64> state) {
+        public Binary64 g(final FieldODEStateAndDerivative<Binary64> state) {
             return state.getTime().subtract(tEvent);
         }
 

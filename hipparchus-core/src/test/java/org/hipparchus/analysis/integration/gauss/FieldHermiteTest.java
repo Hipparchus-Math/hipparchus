@@ -22,8 +22,8 @@
 package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -33,11 +33,11 @@ import org.junit.Test;
  *
  */
 public class FieldHermiteTest {
-    private static final FieldGaussIntegratorFactory<Decimal64> factory = new FieldGaussIntegratorFactory<>(Decimal64Field.getInstance());
+    private static final FieldGaussIntegratorFactory<Binary64> factory = new FieldGaussIntegratorFactory<>(Binary64Field.getInstance());
 
     @Test
     public void testNormalDistribution() {
-        final Decimal64 oneOverSqrtPi = new Decimal64(1 / FastMath.sqrt(Math.PI));
+        final Binary64 oneOverSqrtPi = new Binary64(1 / FastMath.sqrt(Math.PI));
 
         // By defintion, Gauss-Hermite quadrature readily provides the
         // integral of the normal distribution density.
@@ -49,9 +49,9 @@ public class FieldHermiteTest {
         //   N(x, mu, sigma)
         // is transformed to
         //   f(y) * exp(-y^2)
-        final CalculusFieldUnivariateFunction<Decimal64> f = y -> oneOverSqrtPi;
+        final CalculusFieldUnivariateFunction<Binary64> f = y -> oneOverSqrtPi;
 
-        final FieldGaussIntegrator<Decimal64> integrator = factory.hermite(numPoints);
+        final FieldGaussIntegrator<Binary64> integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f).getReal();
         final double expected = 1;
         Assert.assertEquals(expected, result, FastMath.ulp(expected));
@@ -59,11 +59,11 @@ public class FieldHermiteTest {
 
     @Test
     public void testNormalMean() {
-        final Decimal64 sqrtTwo = new Decimal64(FastMath.sqrt(2));
-        final Decimal64 oneOverSqrtPi = new Decimal64(1 / FastMath.sqrt(Math.PI));
+        final Binary64 sqrtTwo = new Binary64(FastMath.sqrt(2));
+        final Binary64 oneOverSqrtPi = new Binary64(1 / FastMath.sqrt(Math.PI));
 
-        final Decimal64 mu = new Decimal64(12345.6789);
-        final Decimal64 sigma = new Decimal64(987.654321);
+        final Binary64 mu = new Binary64(12345.6789);
+        final Binary64 sigma = new Binary64(987.654321);
         final int numPoints = 6;
 
         // Change of variable:
@@ -72,10 +72,10 @@ public class FieldHermiteTest {
         //   x * N(x, mu, sigma)
         // is transformed to
         //   f(y) * exp(-y^2)
-        final CalculusFieldUnivariateFunction<Decimal64> f =
+        final CalculusFieldUnivariateFunction<Binary64> f =
                         y ->  oneOverSqrtPi.multiply(sqrtTwo.multiply(sigma).multiply(y).add(mu));
 
-        final FieldGaussIntegrator<Decimal64> integrator = factory.hermite(numPoints);
+        final FieldGaussIntegrator<Binary64> integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f).getReal();
         final double expected = mu.getReal();
         Assert.assertEquals(expected, result, 5 * FastMath.ulp(expected));
@@ -83,10 +83,10 @@ public class FieldHermiteTest {
 
     @Test
     public void testNormalVariance() {
-        final Decimal64 twoOverSqrtPi = new Decimal64(2 / FastMath.sqrt(Math.PI));
+        final Binary64 twoOverSqrtPi = new Binary64(2 / FastMath.sqrt(Math.PI));
 
-        final Decimal64 sigma = new Decimal64(987.654321);
-        final Decimal64 sigma2 = sigma.multiply(sigma);
+        final Binary64 sigma = new Binary64(987.654321);
+        final Binary64 sigma2 = sigma.multiply(sigma);
         final int numPoints = 5;
 
         // Change of variable:
@@ -95,10 +95,10 @@ public class FieldHermiteTest {
         //   (x - mu)^2 * N(x, mu, sigma)
         // is transformed to
         //   f(y) * exp(-y^2)
-        final CalculusFieldUnivariateFunction<Decimal64> f =
+        final CalculusFieldUnivariateFunction<Binary64> f =
                         y -> twoOverSqrtPi.multiply(sigma2).multiply(y).multiply(y);
 
-        final FieldGaussIntegrator<Decimal64> integrator = factory.hermite(numPoints);
+        final FieldGaussIntegrator<Binary64> integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f).getReal();
         final double expected = sigma2.getReal();
         Assert.assertEquals(expected, result, 10 * FastMath.ulp(expected));

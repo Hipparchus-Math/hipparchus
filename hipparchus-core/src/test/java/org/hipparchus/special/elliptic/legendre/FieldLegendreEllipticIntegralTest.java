@@ -19,7 +19,7 @@ package org.hipparchus.special.elliptic.legendre;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.special.elliptic.carlson.CarlsonEllipticIntegral;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.junit.Assert;
@@ -29,7 +29,7 @@ public class FieldLegendreEllipticIntegralTest {
 
     @Test
     public void testNoConvergence() {
-        doTestNoConvergence(Decimal64Field.getInstance());
+        doTestNoConvergence(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNoConvergence(final Field<T> field) {
@@ -38,7 +38,7 @@ public class FieldLegendreEllipticIntegralTest {
 
     @Test
     public void testComplementary() {
-        doTestComplementary(Decimal64Field.getInstance());
+        doTestComplementary(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestComplementary(final Field<T> field) {
@@ -51,7 +51,7 @@ public class FieldLegendreEllipticIntegralTest {
 
     @Test
     public void testAbramowitzStegunExample3() {
-        doTestAbramowitzStegunExample3(Decimal64Field.getInstance());
+        doTestAbramowitzStegunExample3(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestAbramowitzStegunExample3(final Field<T> field) {
@@ -60,100 +60,100 @@ public class FieldLegendreEllipticIntegralTest {
     }
 
     public void testAbramowitzStegunExample4() {
-        doTestBigE(Decimal64Field.getInstance(), 80.0 / 81.0, 1.019106060, 2.0e-8);
+        doTestBigE(Binary64Field.getInstance(), 80.0 / 81.0, 1.019106060, 2.0e-8);
     }
 
     @Test
     public void testAbramowitzStegunExample8() {
         final double m    = 1.0 / 5.0;
-        doTestBigF(Decimal64Field.getInstance(), FastMath.acos(FastMath.sqrt(2) / 3.0), m, 1.115921, 1.0e-6);
-        doTestBigF(Decimal64Field.getInstance(), FastMath.acos(FastMath.sqrt(2) / 2.0), m, 0.800380, 1.0e-6);
+        doTestBigF(Binary64Field.getInstance(), FastMath.acos(FastMath.sqrt(2) / 3.0), m, 1.115921, 1.0e-6);
+        doTestBigF(Binary64Field.getInstance(), FastMath.acos(FastMath.sqrt(2) / 2.0), m, 0.800380, 1.0e-6);
     }
 
     @Test
     public void testAbramowitzStegunExample9() {
         final double m    = 1.0 / 2.0;
-        doTestBigF(Decimal64Field.getInstance(), MathUtils.SEMI_PI, m, 1.854075, 1.0e-6);
-        doTestBigF(Decimal64Field.getInstance(), FastMath.PI / 6.0, m, 0.535623, 1.0e-6);
+        doTestBigF(Binary64Field.getInstance(), MathUtils.SEMI_PI, m, 1.854075, 1.0e-6);
+        doTestBigF(Binary64Field.getInstance(), FastMath.PI / 6.0, m, 0.535623, 1.0e-6);
     }
 
     @Test
     public void testAbramowitzStegunExample10() {
         final double m    = 4.0 / 5.0;
-        doTestBigF(Decimal64Field.getInstance(), FastMath.PI / 6.0, m, 0.543604, 1.0e-6);
+        doTestBigF(Binary64Field.getInstance(), FastMath.PI / 6.0, m, 0.543604, 1.0e-6);
     }
 
     @Test
     public void testAbramowitzStegunExample14() {
         final double k    = 3.0 / 5.0;
-        doTestBigE(Decimal64Field.getInstance(), FastMath.asin(FastMath.sqrt(5.0) / 3.0),          k * k, 0.80904, 1.0e-5);
-        doTestBigE(Decimal64Field.getInstance(), FastMath.asin(5.0 / (3.0 * FastMath.sqrt(17.0))), k * k, 0.41192, 1.0e-5);
+        doTestBigE(Binary64Field.getInstance(), FastMath.asin(FastMath.sqrt(5.0) / 3.0),          k * k, 0.80904, 1.0e-5);
+        doTestBigE(Binary64Field.getInstance(), FastMath.asin(5.0 / (3.0 * FastMath.sqrt(17.0))), k * k, 0.41192, 1.0e-5);
     }
 
     @Test
     public void testAbramowitzStegunTable175() {
         final double sinAlpha1 = FastMath.sin(FastMath.toRadians(32));
-        doTestBigF(Decimal64Field.getInstance(), FastMath.toRadians(15), sinAlpha1 * sinAlpha1, 0.26263487, 1.0e-8);
+        doTestBigF(Binary64Field.getInstance(), FastMath.toRadians(15), sinAlpha1 * sinAlpha1, 0.26263487, 1.0e-8);
         final double sinAlpha2 = FastMath.sin(FastMath.toRadians(46));
-        doTestBigF(Decimal64Field.getInstance(), FastMath.toRadians(80), sinAlpha2 * sinAlpha2, 1.61923762, 1.0e-8);
+        doTestBigF(Binary64Field.getInstance(), FastMath.toRadians(80), sinAlpha2 * sinAlpha2, 1.61923762, 1.0e-8);
     }
 
     @Test
     public void testAbramowitzStegunTable176() {
         final double sinAlpha1 = FastMath.sin(FastMath.toRadians(64));
-        doTestBigE(Decimal64Field.getInstance(), FastMath.toRadians(25), sinAlpha1 * sinAlpha1, 0.42531712, 1.0e-8);
+        doTestBigE(Binary64Field.getInstance(), FastMath.toRadians(25), sinAlpha1 * sinAlpha1, 0.42531712, 1.0e-8);
         final double sinAlpha2 = FastMath.sin(FastMath.toRadians(76));
-        doTestBigE(Decimal64Field.getInstance(), FastMath.toRadians(70), sinAlpha2 * sinAlpha2, 0.96208074, 1.0e-8);
+        doTestBigE(Binary64Field.getInstance(), FastMath.toRadians(70), sinAlpha2 * sinAlpha2, 0.96208074, 1.0e-8);
     }
 
     @Test
     public void testAbramowitzStegunTable179() {
         final double sinAlpha1 = FastMath.sin(FastMath.toRadians(15));
-        doTestBigPi(Decimal64Field.getInstance(), FastMath.toRadians(75), 0.4, sinAlpha1 * sinAlpha1, 1.62298, 1.0e-5);
+        doTestBigPi(Binary64Field.getInstance(), FastMath.toRadians(75), 0.4, sinAlpha1 * sinAlpha1, 1.62298, 1.0e-5);
         final double sinAlpha2 = FastMath.sin(FastMath.toRadians(60));
-        doTestBigPi(Decimal64Field.getInstance(), FastMath.toRadians(45), 0.8, sinAlpha2 * sinAlpha2, 1.03076, 1.0e-5);
+        doTestBigPi(Binary64Field.getInstance(), FastMath.toRadians(45), 0.8, sinAlpha2 * sinAlpha2, 1.03076, 1.0e-5);
         final double sinAlpha3 = FastMath.sin(FastMath.toRadians(15));
-        doTestBigPi(Decimal64Field.getInstance(), FastMath.toRadians(75), 0.9, sinAlpha3 * sinAlpha3, 2.79990, 1.0e-5);
+        doTestBigPi(Binary64Field.getInstance(), FastMath.toRadians(75), 0.9, sinAlpha3 * sinAlpha3, 2.79990, 1.0e-5);
     }
 
     @Test
     public void testCompleteVsIncompleteF() {
-        doTestCompleteVsIncompleteF(Decimal64Field.getInstance());
+        doTestCompleteVsIncompleteF(Binary64Field.getInstance());
     }
 
     @Test
     public void testCompleteVsIncompleteE() {
-        doTestCompleteVsIncompleteE(Decimal64Field.getInstance());
+        doTestCompleteVsIncompleteE(Binary64Field.getInstance());
     }
 
     @Test
     public void testCompleteVsIncompleteD() {
-        doTestCompleteVsIncompleteD(Decimal64Field.getInstance());
+        doTestCompleteVsIncompleteD(Binary64Field.getInstance());
     }
 
     @Test
     public void testCompleteVsIncompletePi() {
-        doTestCompleteVsIncompletePi(Decimal64Field.getInstance());
+        doTestCompleteVsIncompletePi(Binary64Field.getInstance());
     }
 
     @Test
     public void testNomeMediumParameter() {
-        doTestNomeMediumParameter(Decimal64Field.getInstance());
+        doTestNomeMediumParameter(Binary64Field.getInstance());
     }
 
     @Test
     public void testNomeSmallParameter() {
-        doTestNomeSmallParameter(Decimal64Field.getInstance());
+        doTestNomeSmallParameter(Binary64Field.getInstance());
     }
 
     @Test
     public void testPrecomputedDelta() {
-        doTestPrecomputedDelta(Decimal64Field.getInstance());
+        doTestPrecomputedDelta(Binary64Field.getInstance());
     }
 
     @Test
     public void testIntegralsSmallParameter() {
-        doTestIntegralsSmallParameter(Decimal64Field.getInstance());
+        doTestIntegralsSmallParameter(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestBigE(final Field<T> field, final double m,

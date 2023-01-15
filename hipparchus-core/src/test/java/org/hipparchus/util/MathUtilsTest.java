@@ -161,7 +161,7 @@ public final class MathUtilsTest {
 
     @Test
     public void testFieldNormalizeAngle() {
-        doTestFieldNormalizeAngle(Decimal64Field.getInstance());
+        doTestFieldNormalizeAngle(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestFieldNormalizeAngle(final Field<T> field) {

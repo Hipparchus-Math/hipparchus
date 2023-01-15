@@ -24,7 +24,7 @@ package org.hipparchus.analysis.polynomials;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
-import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Binary64;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -45,14 +45,14 @@ public final class FieldPolynomialFunctionTest {
     @Test
     public void testConstants() {
         double c0 = 2.5;
-        FieldPolynomialFunction<Decimal64> f = buildD64(c0);
+        FieldPolynomialFunction<Binary64> f = buildD64(c0);
 
         // verify that we are equal to c[0] at several (nonsymmetric) places
         Assert.assertEquals(c0, f.value(0).getReal(), tolerance);
         Assert.assertEquals(c0, f.value(-1).getReal(), tolerance);
         Assert.assertEquals(c0, f.value(-123.5).getReal(), tolerance);
         Assert.assertEquals(c0, f.value(3).getReal(), tolerance);
-        Assert.assertEquals(c0, f.value(new Decimal64(456.89)).getReal(), tolerance);
+        Assert.assertEquals(c0, f.value(new Binary64(456.89)).getReal(), tolerance);
 
         Assert.assertEquals(0, f.degree());
         Assert.assertEquals(0, f.polynomialDerivative().value(0).getReal(), tolerance);
@@ -71,17 +71,17 @@ public final class FieldPolynomialFunctionTest {
      */
     @Test
     public void testLinear() {
-       FieldPolynomialFunction<Decimal64> f = buildD64(-1.5, 3);
+       FieldPolynomialFunction<Binary64> f = buildD64(-1.5, 3);
 
         // verify that we are equal to c[0] when x=0
-        Assert.assertEquals(-1.5, f.value(new Decimal64(0)).getReal(), tolerance);
+        Assert.assertEquals(-1.5, f.value(new Binary64(0)).getReal(), tolerance);
 
         // now check a few other places
-        Assert.assertEquals(-4.5, f.value(new Decimal64(-1)).getReal(), tolerance);
-        Assert.assertEquals(-9, f.value(new Decimal64(-2.5)).getReal(), tolerance);
-        Assert.assertEquals(0, f.value(new Decimal64(0.5)).getReal(), tolerance);
-        Assert.assertEquals(3, f.value(new Decimal64(1.5)).getReal(), tolerance);
-        Assert.assertEquals(7.5, f.value(new Decimal64(3)).getReal(), tolerance);
+        Assert.assertEquals(-4.5, f.value(new Binary64(-1)).getReal(), tolerance);
+        Assert.assertEquals(-9, f.value(new Binary64(-2.5)).getReal(), tolerance);
+        Assert.assertEquals(0, f.value(new Binary64(0.5)).getReal(), tolerance);
+        Assert.assertEquals(3, f.value(new Binary64(1.5)).getReal(), tolerance);
+        Assert.assertEquals(7.5, f.value(new Binary64(3)).getReal(), tolerance);
 
         Assert.assertEquals(1, f.degree());
 
@@ -94,7 +94,7 @@ public final class FieldPolynomialFunctionTest {
      */
     @Test
     public void testQuadratic() {
-        FieldPolynomialFunction<Decimal64> f = buildD64(-2, -3, 2);
+        FieldPolynomialFunction<Binary64> f = buildD64(-2, -3, 2);
 
         // verify that we are equal to c[0] when x=0
         Assert.assertEquals(-2, f.value(0).getReal(), tolerance);
@@ -113,7 +113,7 @@ public final class FieldPolynomialFunctionTest {
      */
     @Test
     public void testQuintic() {
-        FieldPolynomialFunction<Decimal64> f = buildD64(0, 0, 15, -13, -3, 1);
+        FieldPolynomialFunction<Binary64> f = buildD64(0, 0, 15, -13, -3, 1);
 
         // verify that we are equal to c[0] when x=0
         Assert.assertEquals(0, f.value(0).getReal(), tolerance);
@@ -141,9 +141,9 @@ public final class FieldPolynomialFunctionTest {
         double[] g_coeff = { 6, -4, 3 };
         double[] h_coeff = { -4, 6 };
 
-        FieldPolynomialFunction<Decimal64> f = buildD64(f_coeff);
-        FieldPolynomialFunction<Decimal64> g = buildD64(g_coeff);
-        FieldPolynomialFunction<Decimal64> h = buildD64(h_coeff);
+        FieldPolynomialFunction<Binary64> f = buildD64(f_coeff);
+        FieldPolynomialFunction<Binary64> g = buildD64(g_coeff);
+        FieldPolynomialFunction<Binary64> h = buildD64(h_coeff);
 
         // compare f' = g
         Assert.assertEquals(f.polynomialDerivative().value(0).getReal(), g.value(0).getReal(), tolerance);
@@ -159,8 +159,8 @@ public final class FieldPolynomialFunctionTest {
 
     @Test
     public void testAddition() {
-        FieldPolynomialFunction<Decimal64> p1 = buildD64( -2, 1 );
-        FieldPolynomialFunction<Decimal64> p2 = buildD64( 2, -1, 0 );
+        FieldPolynomialFunction<Binary64> p1 = buildD64( -2, 1 );
+        FieldPolynomialFunction<Binary64> p2 = buildD64( 2, -1, 0 );
         checkNullPolynomial(p1.add(p2));
 
         p2 = p1.add(p1);
@@ -175,10 +175,10 @@ public final class FieldPolynomialFunctionTest {
 
     @Test
     public void testSubtraction() {
-        FieldPolynomialFunction<Decimal64> p1 = buildD64( -2, 1 );
+        FieldPolynomialFunction<Binary64> p1 = buildD64( -2, 1 );
         checkNullPolynomial(p1.subtract(p1));
 
-        FieldPolynomialFunction<Decimal64> p2 = buildD64( -2, 6 );
+        FieldPolynomialFunction<Binary64> p2 = buildD64( -2, 6 );
         p2 = p2.subtract(p1);
         checkCoeffs(Double.MIN_VALUE, p2, 0, 5);
 
@@ -191,8 +191,8 @@ public final class FieldPolynomialFunctionTest {
 
     @Test
     public void testMultiplication() {
-        FieldPolynomialFunction<Decimal64> p1 = buildD64( -3, 2 );
-        FieldPolynomialFunction<Decimal64> p2 = buildD64( 3, 2, 1 );
+        FieldPolynomialFunction<Binary64> p1 = buildD64( -3, 2 );
+        FieldPolynomialFunction<Binary64> p2 = buildD64( 3, 2, 1 );
         checkCoeffs(Double.MIN_VALUE, p1.multiply(p2), -9, 0, 1, 2);
 
         p1 = buildD64( 0, 1 );
@@ -218,9 +218,9 @@ public final class FieldPolynomialFunctionTest {
         double[] g_coeff = { 6, -4, 3 };
         double[] h_coeff = { -4, 6 };
 
-        FieldPolynomialFunction<Decimal64> f = buildD64(f_coeff);
-        FieldPolynomialFunction<Decimal64> g = buildD64(g_coeff);
-        FieldPolynomialFunction<Decimal64> h = buildD64(h_coeff);
+        FieldPolynomialFunction<Binary64> f = buildD64(f_coeff);
+        FieldPolynomialFunction<Binary64> g = buildD64(g_coeff);
+        FieldPolynomialFunction<Binary64> h = buildD64(h_coeff);
 
         // compare f' = g
         Assert.assertEquals(f.polynomialDerivative().value(0).getReal(), g.value(0).getReal(), tolerance);
@@ -238,7 +238,7 @@ public final class FieldPolynomialFunctionTest {
     public void testAntiDerivative() {
         // 1 + 2x + 3x^2
         final double[] coeff = {1, 2, 3};
-        final FieldPolynomialFunction<Decimal64> p = buildD64(coeff);
+        final FieldPolynomialFunction<Binary64> p = buildD64(coeff);
         // x + x^2 + x^3
         checkCoeffs(Double.MIN_VALUE, p.antiDerivative(), 0, 1, 1, 1);
     }
@@ -246,14 +246,14 @@ public final class FieldPolynomialFunctionTest {
     @Test
     public void testAntiDerivativeConstant() {
         final double[] coeff = {2};
-        final FieldPolynomialFunction<Decimal64> p = buildD64(coeff);
+        final FieldPolynomialFunction<Binary64> p = buildD64(coeff);
         checkCoeffs(Double.MIN_VALUE, p.antiDerivative(), 0, 2);
     }
 
     @Test
     public void testAntiDerivativeZero() {
         final double[] coeff = {0};
-        final FieldPolynomialFunction<Decimal64> p = buildD64(coeff);
+        final FieldPolynomialFunction<Binary64> p = buildD64(coeff);
         checkCoeffs(Double.MIN_VALUE, p.antiDerivative(), 0);
     }
 
@@ -261,7 +261,7 @@ public final class FieldPolynomialFunctionTest {
     public void testAntiDerivativeRandom() {
         final RandomDataGenerator ran = new RandomDataGenerator(1000);
         double[] coeff = null;
-        FieldPolynomialFunction<Decimal64> p = null;
+        FieldPolynomialFunction<Binary64> p = null;
         int d = 0;
         for (int i = 0; i < 20; i++) {
             d = ran.nextInt(1, 50);
@@ -278,11 +278,11 @@ public final class FieldPolynomialFunctionTest {
     public void testIntegrate() {
         // -x^2
         final double[] coeff = {0, 0, -1};
-        final FieldPolynomialFunction<Decimal64> p = buildD64(coeff);
+        final FieldPolynomialFunction<Binary64> p = buildD64(coeff);
         Assert.assertEquals(-2d/3d, p.integrate(-1, 1).getReal(),Double.MIN_VALUE);
 
         // x(x-1)(x+1) - should integrate to 0 over [-1,1]
-        final FieldPolynomialFunction<Decimal64> p2 = buildD64(0, 1).
+        final FieldPolynomialFunction<Binary64> p2 = buildD64(0, 1).
                                                       multiply(buildD64(-1, 1)).
                                                       multiply(buildD64(1, 1));
         Assert.assertEquals(0, p2.integrate(-1, 1).getReal(), Double.MIN_VALUE);
@@ -290,13 +290,13 @@ public final class FieldPolynomialFunctionTest {
 
     @Test(expected = MathIllegalArgumentException.class)
     public void testIntegrateInfiniteBounds() {
-        final FieldPolynomialFunction<Decimal64> p = buildD64(1);
+        final FieldPolynomialFunction<Binary64> p = buildD64(1);
         p.integrate(0, Double.POSITIVE_INFINITY);
     }
 
     @Test(expected = MathIllegalArgumentException.class)
     public void testIntegrateBadInterval() {
-        final FieldPolynomialFunction<Decimal64> p = buildD64(1);
+        final FieldPolynomialFunction<Binary64> p = buildD64(1);
         p.integrate(0, -1);
     }
 
@@ -324,10 +324,10 @@ public final class FieldPolynomialFunctionTest {
         }
     }
 
-    private FieldPolynomialFunction<Decimal64> buildD64(double...c) {
-        Decimal64[] array = new Decimal64[c.length];
+    private FieldPolynomialFunction<Binary64> buildD64(double...c) {
+        Binary64[] array = new Binary64[c.length];
         for (int i = 0; i < c.length; ++i) {
-            array[i] = new Decimal64(c[i]);
+            array[i] = new Binary64(c[i]);
         }
         return new FieldPolynomialFunction<>(array);
     }

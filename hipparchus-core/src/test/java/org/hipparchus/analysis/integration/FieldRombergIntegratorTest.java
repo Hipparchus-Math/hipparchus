@@ -23,8 +23,8 @@ package org.hipparchus.analysis.integration;
 
 import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -45,10 +45,10 @@ public final class FieldRombergIntegratorTest {
      */
     @Test
     public void testSinFunction() {
-        FieldUnivariateIntegrator<Decimal64> integrator = new FieldRombergIntegrator<>(Decimal64Field.getInstance());
+        FieldUnivariateIntegrator<Binary64> integrator = new FieldRombergIntegrator<>(Binary64Field.getInstance());
 
-        Decimal64 min = new Decimal64(0);
-        Decimal64 max = new Decimal64(FastMath.PI);
+        Binary64 min = new Binary64(0);
+        Binary64 max = new Binary64(FastMath.PI);
         double expected = 2;
         double tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         double result = integrator.integrate(100, x -> x.sin(), min, max).getReal();
@@ -56,8 +56,8 @@ public final class FieldRombergIntegratorTest {
         Assert.assertTrue(integrator.getIterations()  < 10);
         Assert.assertEquals(expected, result, tolerance);
 
-        min = new Decimal64(-FastMath.PI/3);
-        max = new Decimal64(0);
+        min = new Binary64(-FastMath.PI/3);
+        max = new Binary64(0);
         expected = -0.5;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(100, x -> x.sin(), min, max).getReal();
@@ -71,12 +71,12 @@ public final class FieldRombergIntegratorTest {
      */
     @Test
     public void testQuinticFunction() {
-        CalculusFieldUnivariateFunction<Decimal64> f =
+        CalculusFieldUnivariateFunction<Binary64> f =
                         t -> t.subtract(1).multiply(t.subtract(0.5)).multiply(t).multiply(t.add(0.5)).multiply(t.add(1));
-        FieldUnivariateIntegrator<Decimal64> integrator = new FieldRombergIntegrator<>(Decimal64Field.getInstance());
+        FieldUnivariateIntegrator<Binary64> integrator = new FieldRombergIntegrator<>(Binary64Field.getInstance());
 
-        Decimal64 min = new Decimal64(0);
-        Decimal64 max = new Decimal64(1);
+        Binary64 min = new Binary64(0);
+        Binary64 max = new Binary64(1);
         double expected = -1.0 / 48;
         double tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         double result = integrator.integrate(100, f, min, max).getReal();
@@ -84,8 +84,8 @@ public final class FieldRombergIntegratorTest {
         Assert.assertTrue(integrator.getIterations()  < 5);
         Assert.assertEquals(expected, result, tolerance);
 
-        min = new Decimal64(0);
-        max = new Decimal64(0.5);
+        min = new Binary64(0);
+        max = new Binary64(0.5);
         expected = 11.0 / 768;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(100, f, min, max).getReal();
@@ -93,8 +93,8 @@ public final class FieldRombergIntegratorTest {
         Assert.assertTrue(integrator.getIterations()  < 5);
         Assert.assertEquals(expected, result, tolerance);
 
-        min = new Decimal64(-1);
-        max = new Decimal64(4);
+        min = new Binary64(-1);
+        max = new Binary64(4);
         expected = 2048 / 3.0 - 78 + 1.0 / 48;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(100, f, min, max).getReal();
@@ -111,22 +111,22 @@ public final class FieldRombergIntegratorTest {
 
         try {
             // bad interval
-            new FieldRombergIntegrator<>(Decimal64Field.getInstance()).integrate(1000, x -> x.sin(),
-                                                                                 new Decimal64(1), new Decimal64(-1));
+            new FieldRombergIntegrator<>(Binary64Field.getInstance()).integrate(1000, x -> x.sin(),
+                                                                                 new Binary64(1), new Binary64(-1));
             Assert.fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
-            new FieldRombergIntegrator<>(Decimal64Field.getInstance(), 5, 4);
+            new FieldRombergIntegrator<>(Binary64Field.getInstance(), 5, 4);
             Assert.fail("Expecting MathIllegalArgumentException - bad iteration limits");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
-            new FieldRombergIntegrator<>(Decimal64Field.getInstance(), 10, 50);
+            new FieldRombergIntegrator<>(Binary64Field.getInstance(), 10, 50);
             Assert.fail("Expecting MathIllegalArgumentException - bad iteration limits");
         } catch (MathIllegalArgumentException ex) {
             // expected

@@ -53,6 +53,9 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="fix" issue="issues/228">
         Fixed FastMath.expm1(x) for huge values of x.
       </action>
+      <action dev="luc" type="update" issue="issues/227">
+        Renamed Decimal64{Field} into Binary64{Field}.
+      </action>
       <action dev="luc" type="add" due-to="Paul King" issue="issues/221">
         Added Principal Component Analysis.
       </action>

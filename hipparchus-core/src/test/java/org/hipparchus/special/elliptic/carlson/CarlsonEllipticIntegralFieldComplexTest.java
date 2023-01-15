@@ -17,36 +17,36 @@
 package org.hipparchus.special.elliptic.carlson;
 
 import org.hipparchus.complex.FieldComplex;
-import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Binary64;
 
-public class CarlsonEllipticIntegralFieldComplexTest extends CarlsonEllipticIntegralAbstractComplexTest<FieldComplex<Decimal64>> {
+public class CarlsonEllipticIntegralFieldComplexTest extends CarlsonEllipticIntegralAbstractComplexTest<FieldComplex<Binary64>> {
 
-    protected FieldComplex<Decimal64> buildComplex(double realPart) {
-        return new FieldComplex<>(new Decimal64(realPart));
+    protected FieldComplex<Binary64> buildComplex(double realPart) {
+        return new FieldComplex<>(new Binary64(realPart));
     }
 
-    protected FieldComplex<Decimal64> buildComplex(double realPart, double imaginaryPart) {
-        return new FieldComplex<>(new Decimal64(realPart), new Decimal64(imaginaryPart));
+    protected FieldComplex<Binary64> buildComplex(double realPart, double imaginaryPart) {
+        return new FieldComplex<>(new Binary64(realPart), new Binary64(imaginaryPart));
     }
 
-    protected FieldComplex<Decimal64> rF(FieldComplex<Decimal64> x, FieldComplex<Decimal64> y, FieldComplex<Decimal64> z) {
+    protected FieldComplex<Binary64> rF(FieldComplex<Binary64> x, FieldComplex<Binary64> y, FieldComplex<Binary64> z) {
         return CarlsonEllipticIntegral.rF(x, y, z);
     }
 
-    protected FieldComplex<Decimal64> rC(FieldComplex<Decimal64> x, FieldComplex<Decimal64> y) {
+    protected FieldComplex<Binary64> rC(FieldComplex<Binary64> x, FieldComplex<Binary64> y) {
         return CarlsonEllipticIntegral.rC(x, y);
     }
 
-    protected FieldComplex<Decimal64> rJ(FieldComplex<Decimal64> x, FieldComplex<Decimal64> y,
-                                         FieldComplex<Decimal64> z, FieldComplex<Decimal64> p) {
+    protected FieldComplex<Binary64> rJ(FieldComplex<Binary64> x, FieldComplex<Binary64> y,
+                                         FieldComplex<Binary64> z, FieldComplex<Binary64> p) {
         return CarlsonEllipticIntegral.rJ(x, y, z, p);
     }
 
-    protected FieldComplex<Decimal64> rD(FieldComplex<Decimal64> x, FieldComplex<Decimal64> y, FieldComplex<Decimal64> z) {
+    protected FieldComplex<Binary64> rD(FieldComplex<Binary64> x, FieldComplex<Binary64> y, FieldComplex<Binary64> z) {
         return CarlsonEllipticIntegral.rD(x, y, z);
     }
 
-    protected FieldComplex<Decimal64> rG(FieldComplex<Decimal64> x, FieldComplex<Decimal64> y, FieldComplex<Decimal64> z) {
+    protected FieldComplex<Binary64> rG(FieldComplex<Binary64> x, FieldComplex<Binary64> y, FieldComplex<Binary64> z) {
         return CarlsonEllipticIntegral.rG(x, y, z);
     }
 

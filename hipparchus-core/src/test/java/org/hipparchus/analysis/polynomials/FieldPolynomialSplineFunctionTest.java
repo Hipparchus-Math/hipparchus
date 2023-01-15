@@ -27,7 +27,7 @@ import java.util.Arrays;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Binary64;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,10 +51,10 @@ public class FieldPolynomialSplineFunctionTest {
      * Defined so that evaluation using FieldPolynomialSplineFunction evaluation
      * algorithm agrees at knot point boundaries.
      */
-    private FieldPolynomialFunction<Decimal64>[] polynomials;
+    private FieldPolynomialFunction<Binary64>[] polynomials;
 
     /** Knot points  */
-    private Decimal64[] knots;
+    private Binary64[] knots;
 
     /** Derivative of test polynomials -- 2x + 1  */
     protected PolynomialFunction dp =
@@ -63,23 +63,23 @@ public class FieldPolynomialSplineFunctionTest {
 
     @Test
     public void testConstructor() {
-        FieldPolynomialSplineFunction<Decimal64> spline =
+        FieldPolynomialSplineFunction<Binary64> spline =
             new FieldPolynomialSplineFunction<>(knots, polynomials);
         Assert.assertTrue(Arrays.equals(knots, spline.getKnots()));
         Assert.assertEquals(1d, spline.getPolynomials()[0].getCoefficients()[2].getReal(), 0);
         Assert.assertEquals(3, spline.getN());
 
         try { // too few knots
-            new FieldPolynomialSplineFunction<>(new Decimal64[] { new Decimal64(0) }, polynomials);
+            new FieldPolynomialSplineFunction<>(new Binary64[] { new Binary64(0) }, polynomials);
             Assert.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try { // too many knots
-            new FieldPolynomialSplineFunction<>(new Decimal64[] {
-                new Decimal64(0), new Decimal64(1), new Decimal64(2),
-                new Decimal64(3), new Decimal64(4)
+            new FieldPolynomialSplineFunction<>(new Binary64[] {
+                new Binary64(0), new Binary64(1), new Binary64(2),
+                new Binary64(3), new Binary64(4)
             }, polynomials);
             Assert.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
@@ -87,8 +87,8 @@ public class FieldPolynomialSplineFunctionTest {
         }
 
         try { // knots not increasing
-            new FieldPolynomialSplineFunction<>(new Decimal64[] {
-                new Decimal64(0), new Decimal64(1), new Decimal64(3), new Decimal64(2)
+            new FieldPolynomialSplineFunction<>(new Binary64[] {
+                new Binary64(0), new Binary64(1), new Binary64(3), new Binary64(2)
             }, polynomials);
             Assert.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
@@ -98,9 +98,9 @@ public class FieldPolynomialSplineFunctionTest {
 
     @Test
     public void testValues() {
-        FieldPolynomialSplineFunction<Decimal64> spline =
+        FieldPolynomialSplineFunction<Binary64> spline =
             new FieldPolynomialSplineFunction<>(knots, polynomials);
-        FieldPolynomialSplineFunction<Decimal64> dSpline = spline.polynomialSplineDerivative();
+        FieldPolynomialSplineFunction<Binary64> dSpline = spline.polynomialSplineDerivative();
 
         /**
          * interior points -- spline value at x should equal p(x - knot)
@@ -113,11 +113,11 @@ public class FieldPolynomialSplineFunctionTest {
            x += 0.25;
            index = findKnot(knots, x);
            Assert.assertEquals("spline function evaluation failed for x=" + x,
-                               polynomials[index].value(new Decimal64(x).subtract(knots[index])).getReal(),
+                               polynomials[index].value(new Binary64(x).subtract(knots[index])).getReal(),
                                spline.value(x).getReal(),
                                tolerance);
            Assert.assertEquals("spline derivative evaluation failed for x=" + x,
-                               dp.value(new Decimal64(x).subtract(knots[index])).getReal(),
+                               dp.value(new Binary64(x).subtract(knots[index])).getReal(),
                                dSpline.value(x).getReal(),
                                tolerance);
         }
@@ -151,12 +151,12 @@ public class FieldPolynomialSplineFunctionTest {
 
     @Test
     public void testIsValidPoint() {
-        final FieldPolynomialSplineFunction<Decimal64> spline =
+        final FieldPolynomialSplineFunction<Binary64> spline =
             new FieldPolynomialSplineFunction<>(knots, polynomials);
-        final Decimal64 xMin = knots[0];
-        final Decimal64 xMax = knots[knots.length - 1];
+        final Binary64 xMin = knots[0];
+        final Binary64 xMax = knots[knots.length - 1];
 
-        Decimal64 x;
+        Binary64 x;
 
         x = xMin;
         Assert.assertTrue(spline.isValidPoint(x));
@@ -168,13 +168,13 @@ public class FieldPolynomialSplineFunctionTest {
         // Ensure that no exception is thrown.
         spline.value(x);
 
-        final Decimal64 xRange = xMax.subtract(xMin);
+        final Binary64 xRange = xMax.subtract(xMin);
         x = xMin.add(xRange.divide(3.4));
         Assert.assertTrue(spline.isValidPoint(x));
         // Ensure that no exception is thrown.
         spline.value(x);
 
-        final Decimal64 small = new Decimal64(1e-8);
+        final Binary64 small = new Binary64(1e-8);
         x = xMin.subtract(small);
         Assert.assertFalse(spline.isValidPoint(x));
         // Ensure that an exception would have been thrown.
@@ -188,7 +188,7 @@ public class FieldPolynomialSplineFunctionTest {
      *  Do linear search to find largest knot point less than or equal to x.
      *  Implementation does binary search.
      */
-     protected int findKnot(Decimal64[] knots, double x) {
+     protected int findKnot(Binary64[] knots, double x) {
          if (x < knots[0].getReal() || x >= knots[knots.length -1].getReal()) {
              throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                     x, knots[0], knots[knots.length -1]);
@@ -201,10 +201,10 @@ public class FieldPolynomialSplineFunctionTest {
          throw new MathIllegalStateException(LocalizedCoreFormats.ILLEGAL_STATE);
      }
 
-     private FieldPolynomialFunction<Decimal64> buildD64(double...c) {
-         Decimal64[] array = new Decimal64[c.length];
+     private FieldPolynomialFunction<Binary64> buildD64(double...c) {
+         Binary64[] array = new Binary64[c.length];
          for (int i = 0; i < c.length; ++i) {
-             array[i] = new Decimal64(c[i]);
+             array[i] = new Binary64(c[i]);
          }
          return new FieldPolynomialFunction<>(array);
      }
@@ -213,12 +213,12 @@ public class FieldPolynomialSplineFunctionTest {
      @SuppressWarnings("unchecked")
      public void setUp() {
          tolerance = 1.0e-12;
-         polynomials = (FieldPolynomialFunction<Decimal64>[]) Array.newInstance(FieldPolynomialFunction.class, 3);
+         polynomials = (FieldPolynomialFunction<Binary64>[]) Array.newInstance(FieldPolynomialFunction.class, 3);
          polynomials[0] = buildD64(0, 1, 1);
          polynomials[1] = buildD64(2, 1, 1);
          polynomials[2] = buildD64(4, 1, 1);
-         knots = new Decimal64[] {
-             new Decimal64(-1), new Decimal64(0), new Decimal64(1), new Decimal64(2)
+         knots = new Binary64[] {
+             new Binary64(-1), new Binary64(0), new Binary64(1), new Binary64(2)
          };
      }
 

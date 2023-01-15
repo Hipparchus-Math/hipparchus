@@ -20,7 +20,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.junit.Test;
 
 public class ThreeEighthesFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractTest {
@@ -32,68 +32,68 @@ public class ThreeEighthesFieldIntegratorTest extends RungeKuttaFieldIntegratorA
 
     @Override
     public void testNonFieldIntegratorConsistency() {
-        doTestNonFieldIntegratorConsistency(Decimal64Field.getInstance());
+        doTestNonFieldIntegratorConsistency(Binary64Field.getInstance());
     }
 
     @Override
     public void testMissedEndEvent() {
-        doTestMissedEndEvent(Decimal64Field.getInstance(), 1.0e-15, 6.0e-5);
+        doTestMissedEndEvent(Binary64Field.getInstance(), 1.0e-15, 6.0e-5);
     }
 
     @Override
     public void testSanityChecks() {
-        doTestSanityChecks(Decimal64Field.getInstance());
+        doTestSanityChecks(Binary64Field.getInstance());
     }
 
     @Override
     public void testDecreasingSteps() {
-        doTestDecreasingSteps(Decimal64Field.getInstance(), 1.0, 1.0, 1.0e-10);
+        doTestDecreasingSteps(Binary64Field.getInstance(), 1.0, 1.0, 1.0e-10);
     }
 
     @Override
     public void testSmallStep() {
-        doTestSmallStep(Decimal64Field.getInstance(), 2.0e-13, 4.0e-12, 1.0e-12, "3/8");
+        doTestSmallStep(Binary64Field.getInstance(), 2.0e-13, 4.0e-12, 1.0e-12, "3/8");
     }
 
     @Override
     public void testBigStep() {
-        doTestBigStep(Decimal64Field.getInstance(), 0.0004, 0.005, 1.0e-12, "3/8");
+        doTestBigStep(Binary64Field.getInstance(), 0.0004, 0.005, 1.0e-12, "3/8");
 
     }
 
     @Override
     public void testBackward() {
-        doTestBackward(Decimal64Field.getInstance(), 5.0e-10, 7.0e-10, 1.0e-12, "3/8");
+        doTestBackward(Binary64Field.getInstance(), 5.0e-10, 7.0e-10, 1.0e-12, "3/8");
     }
 
     @Override
     public void testKepler() {
-        doTestKepler(Decimal64Field.getInstance(), 0.0348, 1.0e-4);
+        doTestKepler(Binary64Field.getInstance(), 0.0348, 1.0e-4);
     }
 
     @Override
     public void testStepSize() {
-        doTestStepSize(Decimal64Field.getInstance(), 1.0e-12);
+        doTestStepSize(Binary64Field.getInstance(), 1.0e-12);
     }
 
     @Override
     public void testSingleStep() {
-        doTestSingleStep(Decimal64Field.getInstance(), 0.21);
+        doTestSingleStep(Binary64Field.getInstance(), 0.21);
     }
 
     @Override
     public void testTooLargeFirstStep() {
-        doTestTooLargeFirstStep(Decimal64Field.getInstance());
+        doTestTooLargeFirstStep(Binary64Field.getInstance());
     }
 
     @Override
     public void testUnstableDerivative() {
-        doTestUnstableDerivative(Decimal64Field.getInstance(), 1.0e-12);
+        doTestUnstableDerivative(Binary64Field.getInstance(), 1.0e-12);
     }
 
     @Override
     public void testDerivativesConsistency() {
-        doTestDerivativesConsistency(Decimal64Field.getInstance(), 1.0e-10);
+        doTestDerivativesConsistency(Binary64Field.getInstance(), 1.0e-10);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class ThreeEighthesFieldIntegratorTest extends RungeKuttaFieldIntegratorA
 
     @Test
     public void testSecondaryEquations() {
-        doTestSecondaryEquations(Decimal64Field.getInstance(), 1.1e-12, 5.6e-13);
+        doTestSecondaryEquations(Binary64Field.getInstance(), 1.1e-12, 5.6e-13);
     }
 
 }

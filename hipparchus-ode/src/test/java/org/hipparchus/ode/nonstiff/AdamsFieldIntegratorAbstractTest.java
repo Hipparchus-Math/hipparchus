@@ -43,7 +43,7 @@ import org.hipparchus.ode.events.FieldODEEventDetector;
 import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -81,7 +81,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
 
     protected void doNbPointsTest() {
         try {
-            createIntegrator(Decimal64Field.getInstance(), 1, 1.0e-3, 1.0e+3, 1.0e-15, 1.0e-15);
+            createIntegrator(Binary64Field.getInstance(), 1, 1.0e-3, 1.0e+3, 1.0e-15, 1.0e-15);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
             Assert.assertEquals(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
@@ -90,7 +90,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
         try {
             double[] vecAbsoluteTolerance = { 1.0e-15, 1.0e-16 };
             double[] vecRelativeTolerance = { 1.0e-15, 1.0e-16 };
-            createIntegrator(Decimal64Field.getInstance(),
+            createIntegrator(Binary64Field.getInstance(),
                              1, 1.0e-3, 1.0e+3, vecAbsoluteTolerance, vecRelativeTolerance);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
@@ -270,7 +270,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
 
     @Test
     public void testNaNAppearing() {
-        doTestNaNAppearing(Decimal64Field.getInstance());
+        doTestNaNAppearing(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNaNAppearing(final Field<T> field) {

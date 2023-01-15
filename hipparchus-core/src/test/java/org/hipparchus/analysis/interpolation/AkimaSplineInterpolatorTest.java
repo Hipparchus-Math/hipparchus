@@ -31,7 +31,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
-import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Binary64;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Precision;
@@ -150,7 +150,7 @@ public class AkimaSplineInterpolatorTest {
 
         try
         {
-            Decimal64 yval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
+            Binary64 yval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
             i.interpolate( null, yval );
             Assert.fail( "Failed to detect x null pointer" );
         }
@@ -161,7 +161,7 @@ public class AkimaSplineInterpolatorTest {
 
         try
         {
-            Decimal64 xval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
+            Binary64 xval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
             i.interpolate( xval, null );
             Assert.fail( "Failed to detect y null pointer" );
         }
@@ -172,8 +172,8 @@ public class AkimaSplineInterpolatorTest {
 
         try
         {
-            Decimal64 xval[] = buildD64(0.0, 1.0, 2.0, 3.0);
-            Decimal64 yval[] = buildD64(0.0, 1.0, 2.0, 3.0);
+            Binary64 xval[] = buildD64(0.0, 1.0, 2.0, 3.0);
+            Binary64 yval[] = buildD64(0.0, 1.0, 2.0, 3.0);
             i.interpolate( xval, yval );
             Assert.fail( "Failed to detect insufficient data" );
         }
@@ -184,8 +184,8 @@ public class AkimaSplineInterpolatorTest {
 
         try
         {
-            Decimal64 xval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
-            Decimal64 yval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0, 5.0);
+            Binary64 xval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
+            Binary64 yval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0, 5.0);
             i.interpolate( xval, yval );
             Assert.fail( "Failed to detect data set array with different sizes." );
         }
@@ -197,8 +197,8 @@ public class AkimaSplineInterpolatorTest {
         // X values not sorted.
         try
         {
-            Decimal64 xval[] = buildD64(0.0, 1.0, 0.5, 7.0, 3.5, 2.2, 8.0);
-            Decimal64 yval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
+            Binary64 xval[] = buildD64(0.0, 1.0, 0.5, 7.0, 3.5, 2.2, 8.0);
+            Binary64 yval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
             i.interpolate( xval, yval );
             Assert.fail( "Failed to detect unsorted arguments." );
         }
@@ -238,13 +238,13 @@ public class AkimaSplineInterpolatorTest {
     public void testInterpolateLineD64()
     {
         final int numberOfElements = 10;
-        final Decimal64 minimumX = new Decimal64(-10);
-        final Decimal64 maximumX = new Decimal64(10);
+        final Binary64 minimumX = new Binary64(-10);
+        final Binary64 maximumX = new Binary64(10);
         final int numberOfSamples = 100;
         final double interpolationTolerance = 1e-15;
         final double maxTolerance = 1e-15;
 
-        CalculusFieldUnivariateFunction<Decimal64> f = x -> x.multiply(2).subtract(5);
+        CalculusFieldUnivariateFunction<Binary64> f = x -> x.multiply(2).subtract(5);
 
         testInterpolation( minimumX, maximumX, numberOfElements, numberOfSamples, f, interpolationTolerance,
                            maxTolerance );
@@ -282,13 +282,13 @@ public class AkimaSplineInterpolatorTest {
     public void testInterpolateParabolaD64()
     {
         final int numberOfElements = 10;
-        final Decimal64 minimumX = new Decimal64(-10);
-        final Decimal64 maximumX = new Decimal64(10);
+        final Binary64 minimumX = new Binary64(-10);
+        final Binary64 maximumX = new Binary64(10);
         final int numberOfSamples = 100;
         final double interpolationTolerance = 7e-15;
         final double maxTolerance = 6e-14;
 
-        CalculusFieldUnivariateFunction<Decimal64> f = x -> x.multiply(x).multiply(3).
+        CalculusFieldUnivariateFunction<Binary64> f = x -> x.multiply(x).multiply(3).
                                                         subtract(x.multiply(5)).
                                                         add(7);
 
@@ -326,13 +326,13 @@ public class AkimaSplineInterpolatorTest {
     public void testInterpolateCubic64()
     {
         final int numberOfElements = 10;
-        final Decimal64 minimumX = new Decimal64(-3);
-        final Decimal64 maximumX = new Decimal64(3);
+        final Binary64 minimumX = new Binary64(-3);
+        final Binary64 maximumX = new Binary64(3);
         final int numberOfSamples = 100;
         final double interpolationTolerance = 0.37;
         final double maxTolerance = 3.8;
 
-        CalculusFieldUnivariateFunction<Decimal64> f = x -> x.multiply(x).multiply(x).multiply(3).
+        CalculusFieldUnivariateFunction<Binary64> f = x -> x.multiply(x).multiply(x).multiply(3).
                                                         subtract(x.multiply(x).multiply(0.5)).
                                                         add(x).
                                                         subtract(1);
@@ -429,10 +429,10 @@ public class AkimaSplineInterpolatorTest {
         assertEquals(0.0, sumError / numberOfSamples, tolerance);
     }
 
-    private Decimal64[] buildD64(double...c) {
-        Decimal64[] array = new Decimal64[c.length];
+    private Binary64[] buildD64(double...c) {
+        Binary64[] array = new Binary64[c.length];
         for (int i = 0; i < c.length; ++i) {
-            array[i] = new Decimal64(c[i]);
+            array[i] = new Binary64(c[i]);
         }
         return array;
     }
