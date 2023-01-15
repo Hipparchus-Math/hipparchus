@@ -1071,7 +1071,6 @@ public class FieldCloseEventsTest {
         Assert.assertEquals(9.0 + 0.5 * small, end.getTime().getReal(),             1.0e-12);
     }
 
-
     /* The following tests are copies of the above tests, except that they propagate in
      * the reverse direction and all the signs on the time values are negated.
      */
