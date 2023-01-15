@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.0" date="TBD" description="TBD">
+      <action dev="luc" type="add" du-to="Lucas Girodet">
+        Added torque-free motion model for non-symmetrical rigid body in ODE tests,
+        with analytical theoretical reference solution.
+      </action>
       <action dev="luc" type="update" issue="issues/223">
         Separated {Field}ODEEventDetector and {Field}ODEEventHandler.
       </action>

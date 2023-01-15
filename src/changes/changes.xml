@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.0" date="TBD" description="This is a major release.">
+      <action dev="luc" type="add" du-to="Lucas Girodet">
+        Added torque-free motion model for non-symmetrical rigid body in ODE tests,
+        with analytical theoretical reference solution.
+      </action>
       <action dev="luc" type="fix" issue="issues/228">
         Fixed FastMath.expm1(x) for huge values of x.
       </action>
