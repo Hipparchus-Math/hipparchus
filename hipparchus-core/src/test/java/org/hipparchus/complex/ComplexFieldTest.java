@@ -26,7 +26,7 @@ import java.util.Map;
 
 import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -52,7 +52,7 @@ public class ComplexFieldTest {
         // there should be only one field for all values
         Assert.assertEquals(1, map.size());
         Assert.assertTrue(ComplexField.getInstance().equals(map.entrySet().iterator().next().getKey()));
-        Assert.assertFalse(ComplexField.getInstance().equals(Decimal64Field.getInstance()));
+        Assert.assertFalse(ComplexField.getInstance().equals(Binary64Field.getInstance()));
     }
 
     @Test

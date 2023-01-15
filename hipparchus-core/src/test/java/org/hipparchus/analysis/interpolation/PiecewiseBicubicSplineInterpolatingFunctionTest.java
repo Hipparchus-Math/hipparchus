@@ -26,7 +26,7 @@ import org.hipparchus.analysis.CalculusFieldBivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
-import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Binary64;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -147,7 +147,7 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
 
         // Function values
         BivariateFunction f = (x, y) -> 2 * x - 3 * y + 5;
-        CalculusFieldBivariateFunction<Decimal64> fT = (x, y) -> x.multiply(2).subtract(y.multiply(3)).add(5);
+        CalculusFieldBivariateFunction<Binary64> fT = (x, y) -> x.multiply(2).subtract(y.multiply(3)).add(5);
 
         testInterpolation(minimumX,
                           maximumX,
@@ -179,7 +179,7 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
 
         // Function values
         BivariateFunction f = (x, y) -> 2 * x * x - 3 * y * y + 4 * x * y - 5;
-        CalculusFieldBivariateFunction<Decimal64> fT = (x, y) -> x.multiply(x).multiply(2).
+        CalculusFieldBivariateFunction<Binary64> fT = (x, y) -> x.multiply(x).multiply(2).
                                                              subtract(y.multiply(y).multiply(3)).
                                                              add(x.multiply(y).multiply(4)).
                                                              subtract(5);
@@ -203,7 +203,7 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
      * @param numberOfElements Number of data points (along each dimension).
      * @param numberOfSamples Number of test points.
      * @param f Function to test.
-     * @param fT Decimal64 version of the function to test
+     * @param fT Binary64 version of the function to test
      * @param meanTolerance Allowed average error (mean error on all interpolated values).
      * @param maxTolerance Allowed error on each interpolated value.
      */
@@ -214,17 +214,17 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
                                    int numberOfElements,
                                    int numberOfSamples,
                                    BivariateFunction f,
-                                   final CalculusFieldBivariateFunction<Decimal64> fT,
+                                   final CalculusFieldBivariateFunction<Binary64> fT,
                                    double meanTolerance,
                                    double maxTolerance) {
         double expected;
         double actual;
-        Decimal64 expected64;
-        Decimal64 actual64;
+        Binary64 expected64;
+        Binary64 actual64;
         double currentX;
         double currentY;
-        Decimal64 currentX64;
-        Decimal64 currentY64;
+        Binary64 currentX64;
+        Binary64 currentY64;
         final double deltaX = (maximumX - minimumX) / ((double) numberOfElements);
         final double deltaY = (maximumY - minimumY) / ((double) numberOfElements);
         final double[] xValues = new double[numberOfElements];
@@ -246,10 +246,10 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
 
         for (int i = 0; i < numberOfElements; i++) {
             currentX = xValues[i];
-            currentX64 = new Decimal64(currentX);
+            currentX64 = new Binary64(currentX);
             for (int j = 0; j < numberOfElements; j++) {
                 currentY = yValues[j];
-                currentY64 = new Decimal64(currentY);
+                currentY64 = new Binary64(currentY);
                 Assert.assertTrue(Precision.equals(f.value(currentX, currentY),
                                                    interpolation.value(currentX, currentY)));
                 Assert.assertTrue(Precision.equals(fT.value(currentX64, currentY64).getReal(),
@@ -264,8 +264,8 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
         for (int i = 0; i < numberOfSamples; i++) {
             currentX = gen.nextUniform(xValues[0], xValues[xValues.length - 1]);
             currentY = gen.nextUniform(yValues[0], yValues[yValues.length - 1]);
-            currentX64 = new Decimal64(currentX);
-            currentY64 = new Decimal64(currentY);
+            currentX64 = new Binary64(currentX);
+            currentY64 = new Binary64(currentY);
             expected = f.value(currentX, currentY);
             actual = interpolation.value(currentX, currentY);
             expected64 = fT.value(currentX64, currentY64);

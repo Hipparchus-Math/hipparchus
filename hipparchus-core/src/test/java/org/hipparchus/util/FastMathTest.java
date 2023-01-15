@@ -110,19 +110,19 @@ public class FastMathTest {
         for (double[] pair : pairs) {
             assertEquals("min(" + pair[0] + ", " + pair[1] + ")",
                          Math.min(pair[0], pair[1]),
-                         FastMath.min(new Decimal64(pair[0]), new Decimal64(pair[1])).getReal(),
+                         FastMath.min(new Binary64(pair[0]), new Binary64(pair[1])).getReal(),
                          Precision.EPSILON);
             assertEquals("min(" + pair[1] + ", " + pair[0] + ")",
                          Math.min(pair[1], pair[0]),
-                         FastMath.min(new Decimal64(pair[0]), new Decimal64(pair[1])).getReal(),
+                         FastMath.min(new Binary64(pair[0]), new Binary64(pair[1])).getReal(),
                          Precision.EPSILON);
             assertEquals("max(" + pair[0] + ", " + pair[1] + ")",
                          Math.max(pair[0], pair[1]),
-                         FastMath.max(new Decimal64(pair[0]), new Decimal64(pair[1])).getReal(),
+                         FastMath.max(new Binary64(pair[0]), new Binary64(pair[1])).getReal(),
                          Precision.EPSILON);
             assertEquals("max(" + pair[1] + ", " + pair[0] + ")",
                          Math.max(pair[1], pair[0]),
-                         FastMath.max(new Decimal64(pair[0]), new Decimal64(pair[1])).getReal(),
+                         FastMath.max(new Binary64(pair[0]), new Binary64(pair[1])).getReal(),
                          Precision.EPSILON);
         }
     }

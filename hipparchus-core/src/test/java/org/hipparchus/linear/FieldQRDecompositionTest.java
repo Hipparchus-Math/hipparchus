@@ -29,7 +29,7 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
 import org.junit.Test;
@@ -67,67 +67,67 @@ public class FieldQRDecompositionTest {
     @Test
     public void testDimensions() {
         doTestDimensions(DSField);   
-        doTestDimensions(Decimal64Field.getInstance());   
+        doTestDimensions(Binary64Field.getInstance());   
     }
 
     /**Testing if is impossible to solve QR.*/
     @Test(expected=MathIllegalArgumentException.class)
     public void testQRSingular(){
         QRSingular(DSField);
-        QRSingular(Decimal64Field.getInstance());
+        QRSingular(Binary64Field.getInstance());
     }
 
     /**Testing if Q is orthogonal*/
     @Test
     public void testQOrthogonal(){
         QOrthogonal(DSField);
-        QOrthogonal(Decimal64Field.getInstance());
+        QOrthogonal(Binary64Field.getInstance());
     }
 
     /**Testing if A = Q * R*/
     @Test
     public void testAEqualQR(){
         AEqualQR(DSField);
-        AEqualQR(Decimal64Field.getInstance());
+        AEqualQR(Binary64Field.getInstance());
     }
 
     /**Testing if R is upper triangular.*/
     @Test
     public void testRUpperTriangular(){
         RUpperTriangular(DSField);
-        RUpperTriangular(Decimal64Field.getInstance());
+        RUpperTriangular(Binary64Field.getInstance());
     }
 
     /**Testing if H is trapezoidal.*/
     @Test
     public void testHTrapezoidal(){
         HTrapezoidal(DSField);
-        HTrapezoidal(Decimal64Field.getInstance());
+        HTrapezoidal(Binary64Field.getInstance());
     }
     /**Testing the values of the matrices.*/
     @Test
     public void testMatricesValues(){
         MatricesValues(DSField);
-        MatricesValues(Decimal64Field.getInstance());
+        MatricesValues(Binary64Field.getInstance());
     }
 
     /**Testing if there is an error inverting a non invertible matrix.*/
     @Test(expected=MathIllegalArgumentException.class)
     public void testNonInvertible(){
         NonInvertible(DSField);
-        NonInvertible(Decimal64Field.getInstance());
+        NonInvertible(Binary64Field.getInstance());
     }
     /**Testing to invert a tall and skinny matrix.*/
     @Test
     public void testInvertTallSkinny(){
         InvertTallSkinny(DSField);
-        InvertTallSkinny(Decimal64Field.getInstance());
+        InvertTallSkinny(Binary64Field.getInstance());
     }
     /**Testing to invert a short and wide matrix.*/
     @Test
     public void testInvertShortWide(){
         InvertShortWide(DSField);
-        InvertShortWide(Decimal64Field.getInstance());
+        InvertShortWide(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestDimensions(Field<T> field){

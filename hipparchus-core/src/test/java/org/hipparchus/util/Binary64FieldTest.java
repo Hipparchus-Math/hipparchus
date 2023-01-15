@@ -30,16 +30,16 @@ import org.hipparchus.UnitTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class Decimal64FieldTest {
+public class Binary64FieldTest {
 
     @Test
     public void testZero() {
-        Assert.assertEquals(Decimal64.ZERO, Decimal64Field.getInstance().getZero());
+        Assert.assertEquals(Binary64.ZERO, Binary64Field.getInstance().getZero());
     }
 
     @Test
     public void testOne() {
-        Assert.assertEquals(Decimal64.ONE, Decimal64Field.getInstance().getOne());
+        Assert.assertEquals(Binary64.ONE, Binary64Field.getInstance().getOne());
     }
 
     @SuppressWarnings("unlikely-arg-type")
@@ -47,23 +47,23 @@ public class Decimal64FieldTest {
     public void testMap() {
         Map<Field<?>, Integer> map = new HashMap<>();
         for (int i = 1; i < 100; ++i) {
-            map.put(new Decimal64(i).getField(), 0);
+            map.put(new Binary64(i).getField(), 0);
         }
         // there should be only one field for all values
         Assert.assertEquals(1, map.size());
-        Assert.assertTrue(Decimal64Field.getInstance().equals(map.entrySet().iterator().next().getKey()));
-        Assert.assertFalse(Decimal64Field.getInstance().equals(BigRealField.getInstance()));
+        Assert.assertTrue(Binary64Field.getInstance().equals(map.entrySet().iterator().next().getKey()));
+        Assert.assertFalse(Binary64Field.getInstance().equals(BigRealField.getInstance()));
     }
 
     @Test
     public void testRunTImeClass() {
-        Assert.assertEquals(Decimal64.class, Decimal64Field.getInstance().getRuntimeClass());
+        Assert.assertEquals(Binary64.class, Binary64Field.getInstance().getRuntimeClass());
     }
 
     @Test
     public void testSerial() {
         // deserializing the singleton should give the singleton itself back
-        Decimal64Field field = Decimal64Field.getInstance();
+        Binary64Field field = Binary64Field.getInstance();
         Assert.assertTrue(field == UnitTestUtils.serializeAndRecover(field));
     }
 

@@ -28,7 +28,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.SinCos;
 import org.junit.Assert;
@@ -216,7 +216,7 @@ public class Vector2DTest {
         Assert.assertTrue(u1.equals(u2));
         Assert.assertFalse(u1.equals(v1));
         Assert.assertFalse(u1.equals(v2));
-        Assert.assertFalse(u1.equals(FieldVector2D.getPlusI(Decimal64Field.getInstance())));
+        Assert.assertFalse(u1.equals(FieldVector2D.getPlusI(Binary64Field.getInstance())));
         Assert.assertTrue(new Vector2D(Double.NaN, u1).equals(Vector2D.NaN));
         Assert.assertFalse(u1.equals(Vector2D.NaN));
         Assert.assertFalse(Vector2D.NaN.equals(v2));
@@ -231,7 +231,7 @@ public class Vector2DTest {
         Assert.assertTrue(u1.equalsIeee754(u2));
         Assert.assertFalse(u1.equalsIeee754(v1));
         Assert.assertFalse(u1.equalsIeee754(v2));
-        Assert.assertFalse(u1.equalsIeee754(FieldVector2D.getPlusI(Decimal64Field.getInstance())));
+        Assert.assertFalse(u1.equalsIeee754(FieldVector2D.getPlusI(Binary64Field.getInstance())));
         Assert.assertFalse(new Vector2D(Double.NaN, u1).equalsIeee754(Vector2D.NaN));
         Assert.assertFalse(u1.equalsIeee754(Vector2D.NaN));
         Assert.assertFalse(Vector2D.NaN.equalsIeee754(v2));

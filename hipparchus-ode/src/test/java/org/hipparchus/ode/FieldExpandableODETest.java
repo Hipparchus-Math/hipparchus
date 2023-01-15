@@ -26,7 +26,7 @@ package org.hipparchus.ode;
 import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class FieldExpandableODETest {
 
     @Test
     public void testOnlyMainEquation() {
-        doTestOnlyMainEquation(Decimal64Field.getInstance());
+        doTestOnlyMainEquation(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestOnlyMainEquation(final Field<T> field) {
@@ -65,7 +65,7 @@ public class FieldExpandableODETest {
 
     @Test
     public void testPrimaryAndSecondary() {
-        doTestPrimaryAndSecondary(Decimal64Field.getInstance());
+        doTestPrimaryAndSecondary(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestPrimaryAndSecondary(final Field<T> field) {
@@ -122,7 +122,7 @@ public class FieldExpandableODETest {
 
     @Test
     public void testMap() {
-        doTestMap(Decimal64Field.getInstance());
+        doTestMap(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestMap(final Field<T> field) {
@@ -209,7 +209,7 @@ public class FieldExpandableODETest {
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testExtractDimensionMismatch() {
-        doTestExtractDimensionMismatch(Decimal64Field.getInstance());
+        doTestExtractDimensionMismatch(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestExtractDimensionMismatch(final Field<T> field)
@@ -225,7 +225,7 @@ public class FieldExpandableODETest {
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testInsertTooShortComplete() {
-        doTestInsertTooShortComplete(Decimal64Field.getInstance());
+        doTestInsertTooShortComplete(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestInsertTooShortComplete(final Field<T> field)
@@ -242,7 +242,7 @@ public class FieldExpandableODETest {
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testInsertWrongEquationData() {
-        doTestInsertWrongEquationData(Decimal64Field.getInstance());
+        doTestInsertWrongEquationData(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestInsertWrongEquationData(final Field<T> field)
@@ -259,7 +259,7 @@ public class FieldExpandableODETest {
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testNegativeIndex() {
-        doTestNegativeIndex(Decimal64Field.getInstance());
+        doTestNegativeIndex(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNegativeIndex(final Field<T> field)
@@ -273,7 +273,7 @@ public class FieldExpandableODETest {
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testTooLargeIndex() {
-        doTestTooLargeIndex(Decimal64Field.getInstance());
+        doTestTooLargeIndex(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestTooLargeIndex(final Field<T> field)

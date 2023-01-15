@@ -21,7 +21,7 @@
  */
 package org.hipparchus.analysis.integration.gauss;
 
-import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Binary64;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -44,7 +44,7 @@ public abstract class FieldGaussianQuadratureAbstractTest {
     /**
      * The quadrature rule under test.
      */
-    private final FieldGaussIntegrator<Decimal64> integrator;
+    private final FieldGaussIntegrator<Binary64> integrator;
     /**
      * Maximum degree of monomials to be tested.
      */
@@ -66,7 +66,7 @@ public abstract class FieldGaussianQuadratureAbstractTest {
      * @param eps &epsilon;.
      * @param numUlps Value of the maximum relative error (in ulps).
      */
-    public FieldGaussianQuadratureAbstractTest(FieldGaussIntegrator<Decimal64> integrator,
+    public FieldGaussianQuadratureAbstractTest(FieldGaussIntegrator<Binary64> integrator,
                                                int maxDegree,
                                                double eps,
                                                double numUlps) {

@@ -28,7 +28,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Binary64;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,7 +38,7 @@ import org.junit.Test;
 public class UnivariateSolverUtilsTest {
 
     private UnivariateFunction sin = new Sin();
-    private CalculusFieldUnivariateFunction<Decimal64> fieldSin = x -> x.sin();
+    private CalculusFieldUnivariateFunction<Binary64> fieldSin = x -> x.sin();
 
     @Test(expected=NullArgumentException.class)
     public void testSolveNull() {
@@ -185,18 +185,18 @@ public class UnivariateSolverUtilsTest {
 
     @Test
     public void testFieldBracketSin() {
-        Decimal64[] result = UnivariateSolverUtils.bracket(fieldSin,new Decimal64(0.0),
-                                                           new Decimal64(-2.0),new Decimal64(2.0));
+        Binary64[] result = UnivariateSolverUtils.bracket(fieldSin,new Binary64(0.0),
+                                                           new Binary64(-2.0),new Binary64(2.0));
         Assert.assertTrue(fieldSin.value(result[0]).getReal() < 0);
         Assert.assertTrue(fieldSin.value(result[1]).getReal() > 0);
     }
 
     @Test
     public void testFieldBracketCentered() {
-        Decimal64 initial = new Decimal64(0.1);
-        Decimal64[] result = UnivariateSolverUtils.bracket(fieldSin, initial,
-                                                           new Decimal64(-2.0), new Decimal64(2.0),
-                                                           new Decimal64(0.2), new Decimal64(1.0),
+        Binary64 initial = new Binary64(0.1);
+        Binary64[] result = UnivariateSolverUtils.bracket(fieldSin, initial,
+                                                           new Binary64(-2.0), new Binary64(2.0),
+                                                           new Binary64(0.2), new Binary64(1.0),
                                                            100);
         Assert.assertTrue(result[0].getReal() < initial.getReal());
         Assert.assertTrue(result[1].getReal() > initial.getReal());
@@ -206,10 +206,10 @@ public class UnivariateSolverUtilsTest {
 
     @Test
     public void testFieldBracketLow() {
-        Decimal64 initial = new Decimal64(0.5);
-        Decimal64[] result = UnivariateSolverUtils.bracket(fieldSin, initial,
-                                                           new Decimal64(-2.0), new Decimal64(2.0),
-                                                           new Decimal64(0.2), new Decimal64(1.0),
+        Binary64 initial = new Binary64(0.5);
+        Binary64[] result = UnivariateSolverUtils.bracket(fieldSin, initial,
+                                                           new Binary64(-2.0), new Binary64(2.0),
+                                                           new Binary64(0.2), new Binary64(1.0),
                                                            100);
         Assert.assertTrue(result[0].getReal() < initial.getReal());
         Assert.assertTrue(result[1].getReal() < initial.getReal());
@@ -219,10 +219,10 @@ public class UnivariateSolverUtilsTest {
 
     @Test
     public void testFieldBracketHigh(){
-        Decimal64 initial = new Decimal64(-0.5);
-        Decimal64[] result = UnivariateSolverUtils.bracket(fieldSin, initial,
-                                                           new Decimal64(-2.0), new Decimal64(2.0),
-                                                           new Decimal64(0.2), new Decimal64(1.0),
+        Binary64 initial = new Binary64(-0.5);
+        Binary64[] result = UnivariateSolverUtils.bracket(fieldSin, initial,
+                                                           new Binary64(-2.0), new Binary64(2.0),
+                                                           new Binary64(0.2), new Binary64(1.0),
                                                            100);
         Assert.assertTrue(result[0].getReal() > initial.getReal());
         Assert.assertTrue(result[1].getReal() > initial.getReal());
@@ -232,71 +232,71 @@ public class UnivariateSolverUtilsTest {
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testFieldBracketLinear(){
-        UnivariateSolverUtils.bracket(new CalculusFieldUnivariateFunction<Decimal64>() {
-            public Decimal64 value(Decimal64 x) {
+        UnivariateSolverUtils.bracket(new CalculusFieldUnivariateFunction<Binary64>() {
+            public Binary64 value(Binary64 x) {
                 return x.negate().add(1);
             }
         },
-        new Decimal64(1000),
-        new Decimal64(Double.NEGATIVE_INFINITY), new Decimal64(Double.POSITIVE_INFINITY),
-        new Decimal64(1.0), new Decimal64(1.0), 100);
+        new Binary64(1000),
+        new Binary64(Double.NEGATIVE_INFINITY), new Binary64(Double.POSITIVE_INFINITY),
+        new Binary64(1.0), new Binary64(1.0), 100);
     }
 
     @Test
     public void testFieldBracketExponential(){
-        Decimal64[] result = UnivariateSolverUtils.bracket(new CalculusFieldUnivariateFunction<Decimal64>() {
-            public Decimal64 value(Decimal64 x) {
+        Binary64[] result = UnivariateSolverUtils.bracket(new CalculusFieldUnivariateFunction<Binary64>() {
+            public Binary64 value(Binary64 x) {
                 return x.negate().add(1);
             }
         },
-        new Decimal64(1000),
-        new Decimal64(Double.NEGATIVE_INFINITY), new Decimal64(Double.POSITIVE_INFINITY),
-        new Decimal64(1.0), new Decimal64(2.0), 10);
+        new Binary64(1000),
+        new Binary64(Double.NEGATIVE_INFINITY), new Binary64(Double.POSITIVE_INFINITY),
+        new Binary64(1.0), new Binary64(2.0), 10);
         Assert.assertTrue(result[0].getReal() <= 1);
         Assert.assertTrue(result[1].getReal() >= 1);
     }
 
     @Test
     public void testFieldBracketEndpointRoot() {
-        Decimal64[] result = UnivariateSolverUtils.bracket(fieldSin,
-                                                           new Decimal64(1.5), new Decimal64(0),
-                                                           new Decimal64(2.0), 100);
+        Binary64[] result = UnivariateSolverUtils.bracket(fieldSin,
+                                                           new Binary64(1.5), new Binary64(0),
+                                                           new Binary64(2.0), 100);
         Assert.assertEquals(0.0, fieldSin.value(result[0]).getReal(), 1.0e-15);
         Assert.assertTrue(fieldSin.value(result[1]).getReal() > 0);
     }
 
     @Test(expected=NullArgumentException.class)
     public void testFieldNullFunction() {
-        UnivariateSolverUtils.bracket(null, new Decimal64(1.5), new Decimal64(0), new Decimal64(2.0));
+        UnivariateSolverUtils.bracket(null, new Binary64(1.5), new Binary64(0), new Binary64(2.0));
     }
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testFieldBadInitial() {
-        UnivariateSolverUtils.bracket(fieldSin, new Decimal64(2.5), new Decimal64(0), new Decimal64(2.0));
+        UnivariateSolverUtils.bracket(fieldSin, new Binary64(2.5), new Binary64(0), new Binary64(2.0));
     }
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testFieldBadAdditive() {
-        UnivariateSolverUtils.bracket(fieldSin, new Decimal64(1.0), new Decimal64(-2.0), new Decimal64(3.0),
-                                      new Decimal64(-1.0), new Decimal64(1.0), 100);
+        UnivariateSolverUtils.bracket(fieldSin, new Binary64(1.0), new Binary64(-2.0), new Binary64(3.0),
+                                      new Binary64(-1.0), new Binary64(1.0), 100);
     }
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testFieldIterationExceeded() {
-        UnivariateSolverUtils.bracket(fieldSin, new Decimal64(1.0), new Decimal64(-2.0), new Decimal64(3.0),
-                                      new Decimal64(1.0e-5), new Decimal64(1.0), 100);
+        UnivariateSolverUtils.bracket(fieldSin, new Binary64(1.0), new Binary64(-2.0), new Binary64(3.0),
+                                      new Binary64(1.0e-5), new Binary64(1.0), 100);
     }
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testFieldBadEndpoints() {
         // endpoints not valid
-        UnivariateSolverUtils.bracket(fieldSin, new Decimal64(1.5), new Decimal64(2.0), new Decimal64(1.0));
+        UnivariateSolverUtils.bracket(fieldSin, new Binary64(1.5), new Binary64(2.0), new Binary64(1.0));
     }
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testFieldBadMaximumIterations() {
         // bad maximum iterations
-        UnivariateSolverUtils.bracket(fieldSin, new Decimal64(1.5), new Decimal64(0), new Decimal64(2.0), 0);
+        UnivariateSolverUtils.bracket(fieldSin, new Binary64(1.5), new Binary64(0), new Binary64(2.0), 0);
     }
 
     /** check the search continues when a = lowerBound and b &lt; upperBound. */

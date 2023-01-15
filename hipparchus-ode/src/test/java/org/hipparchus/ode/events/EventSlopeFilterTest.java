@@ -38,7 +38,7 @@ import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937a;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -67,15 +67,15 @@ public class EventSlopeFilterTest {
     public void testHistoryIncreasingForwardField() {
 
         // start point: g > 0
-        testHistoryField(Decimal64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
+        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
                          0.5 * FastMath.PI, 30.5 * FastMath.PI, FastMath.PI, -1);
 
         // start point: g = 0
-        testHistoryField(Decimal64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
+        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
                          0, 30.5 * FastMath.PI, FastMath.PI, -1);
 
         // start point: g < 0
-        testHistoryField(Decimal64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
+        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
                          1.5 * FastMath.PI, 30.5 * FastMath.PI, FastMath.PI, +1);
 
     }
@@ -101,15 +101,15 @@ public class EventSlopeFilterTest {
     public void testHistoryIncreasingBackwardField() {
 
         // start point: g > 0
-        testHistoryField(Decimal64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
+        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
                          0.5 * FastMath.PI, -30.5 * FastMath.PI, FastMath.PI, -1);
 
         // start point: g = 0
-        testHistoryField(Decimal64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
+        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
                          0, -30.5 * FastMath.PI, FastMath.PI, +1);
 
         // start point: g < 0
-        testHistoryField(Decimal64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
+        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_INCREASING_EVENTS,
                          1.5 * FastMath.PI, -30.5 * FastMath.PI, FastMath.PI, -1);
 
     }
@@ -135,15 +135,15 @@ public class EventSlopeFilterTest {
     public void testHistoryDecreasingForwardField() {
 
         // start point: g > 0
-        testHistoryField(Decimal64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
+        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
                          0.5 * FastMath.PI, 30.5 * FastMath.PI, 0, +1);
 
         // start point: g = 0
-        testHistoryField(Decimal64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
+        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
                          0, 30.5 * FastMath.PI, 0, +1);
 
         // start point: g < 0
-        testHistoryField(Decimal64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
+        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
                          1.5 * FastMath.PI, 30.5 * FastMath.PI, 0, +1);
 
     }
@@ -169,15 +169,15 @@ public class EventSlopeFilterTest {
     public void testHistoryDecreasingBackwardField() {
 
         // start point: g > 0
-        testHistoryField(Decimal64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
+        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
                          0.5 * FastMath.PI, -30.5 * FastMath.PI, 0, -1);
 
         // start point: g = 0
-        testHistoryField(Decimal64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
+        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
                          0, -30.5 * FastMath.PI, 0, -1);
 
         // start point: g < 0
-        testHistoryField(Decimal64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
+        testHistoryField(Binary64Field.getInstance(), FilterType.TRIGGER_ONLY_DECREASING_EVENTS,
                          1.5 * FastMath.PI, -30.5 * FastMath.PI, 0, +1);
 
     }
@@ -279,7 +279,7 @@ public class EventSlopeFilterTest {
 
     @Test
     public void testIncreasingOnlyField() {
-        doTestIncreasingOnlyField(Decimal64Field.getInstance());
+        doTestIncreasingOnlyField(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestIncreasingOnlyField(Field<T> field) {
@@ -328,7 +328,7 @@ public class EventSlopeFilterTest {
 
     @Test
     public void testDecreasingOnlyField() {
-        doTestDecreasingOnlyField(Decimal64Field.getInstance());
+        doTestDecreasingOnlyField(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestDecreasingOnlyField(Field<T> field) {
@@ -380,7 +380,7 @@ public class EventSlopeFilterTest {
 
     @Test
     public void testTwoOppositeFiltersField() {
-        doestTwoOppositeFiltersField(Decimal64Field.getInstance());
+        doestTwoOppositeFiltersField(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doestTwoOppositeFiltersField(Field<T> field)

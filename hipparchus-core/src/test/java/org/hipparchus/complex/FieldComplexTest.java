@@ -24,8 +24,8 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -34,40 +34,40 @@ import org.junit.Assert;
 import org.junit.Test;
 
 
-public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComplex<Decimal64>> {
+public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComplex<Binary64>> {
 
 
-    private FieldComplex<Decimal64> oneInf       = build(1,                        Double.POSITIVE_INFINITY);
-    private FieldComplex<Decimal64> oneNegInf    = build(1,                        Double.NEGATIVE_INFINITY);
-    private FieldComplex<Decimal64> infOne       = build(Double.POSITIVE_INFINITY, 1);
-    private FieldComplex<Decimal64> infZero      = build(Double.POSITIVE_INFINITY, 0);
-    private FieldComplex<Decimal64> infNaN       = build(Double.POSITIVE_INFINITY, Double.NaN);
-    private FieldComplex<Decimal64> infNegInf    = build(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
-    private FieldComplex<Decimal64> infInf       = build(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
-    private FieldComplex<Decimal64> negInfInf    = build(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-    private FieldComplex<Decimal64> negInfZero   = build(Double.NEGATIVE_INFINITY, 0);
-    private FieldComplex<Decimal64> negInfOne    = build(Double.NEGATIVE_INFINITY, 1);
-    private FieldComplex<Decimal64> negInfNaN    = build(Double.NEGATIVE_INFINITY, Double.NaN);
-    private FieldComplex<Decimal64> negInfNegInf = build(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
-    private FieldComplex<Decimal64> oneNaN       = build(1,                        Double.NaN);
-    private FieldComplex<Decimal64> zeroInf      = build(0,                        Double.POSITIVE_INFINITY);
-    private FieldComplex<Decimal64> zeroNaN      = build(0,                        Double.NaN);
-    private FieldComplex<Decimal64> nanInf       = build(Double.NaN,               Double.POSITIVE_INFINITY);
-    private FieldComplex<Decimal64> nanNegInf    = build(Double.NaN,               Double.NEGATIVE_INFINITY);
-    private FieldComplex<Decimal64> nanZero      = build(Double.NaN);
+    private FieldComplex<Binary64> oneInf       = build(1,                        Double.POSITIVE_INFINITY);
+    private FieldComplex<Binary64> oneNegInf    = build(1,                        Double.NEGATIVE_INFINITY);
+    private FieldComplex<Binary64> infOne       = build(Double.POSITIVE_INFINITY, 1);
+    private FieldComplex<Binary64> infZero      = build(Double.POSITIVE_INFINITY, 0);
+    private FieldComplex<Binary64> infNaN       = build(Double.POSITIVE_INFINITY, Double.NaN);
+    private FieldComplex<Binary64> infNegInf    = build(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+    private FieldComplex<Binary64> infInf       = build(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+    private FieldComplex<Binary64> negInfInf    = build(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+    private FieldComplex<Binary64> negInfZero   = build(Double.NEGATIVE_INFINITY, 0);
+    private FieldComplex<Binary64> negInfOne    = build(Double.NEGATIVE_INFINITY, 1);
+    private FieldComplex<Binary64> negInfNaN    = build(Double.NEGATIVE_INFINITY, Double.NaN);
+    private FieldComplex<Binary64> negInfNegInf = build(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
+    private FieldComplex<Binary64> oneNaN       = build(1,                        Double.NaN);
+    private FieldComplex<Binary64> zeroInf      = build(0,                        Double.POSITIVE_INFINITY);
+    private FieldComplex<Binary64> zeroNaN      = build(0,                        Double.NaN);
+    private FieldComplex<Binary64> nanInf       = build(Double.NaN,               Double.POSITIVE_INFINITY);
+    private FieldComplex<Binary64> nanNegInf    = build(Double.NaN,               Double.NEGATIVE_INFINITY);
+    private FieldComplex<Binary64> nanZero      = build(Double.NaN);
 
     @Override
-    protected FieldComplex<Decimal64> build(final double x) {
+    protected FieldComplex<Binary64> build(final double x) {
         return build(x, 0.0);
     }
 
-    private FieldComplex<Decimal64> build(final double real, double imaginary) {
-        return new FieldComplex<>(new Decimal64(real), new Decimal64(imaginary));
+    private FieldComplex<Binary64> build(final double real, double imaginary) {
+        return new FieldComplex<>(new Binary64(real), new Binary64(imaginary));
     }
 
     @Test
     public void testConstructor() {
-        FieldComplex<Decimal64> z = build(3.0, 4.0);
+        FieldComplex<Binary64> z = build(3.0, 4.0);
         Assert.assertEquals(3.0, z.getRealPart().getReal(), 1.0e-5);
         Assert.assertEquals(4.0, z.getImaginary().getReal(), 1.0e-5);
         Assert.assertEquals(3.0, z.getRealPart().getReal(), 1.0e-5);
@@ -76,7 +76,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testConstructorNaN() {
-        FieldComplex<Decimal64> z = build(3.0, Double.NaN);
+        FieldComplex<Binary64> z = build(3.0, Double.NaN);
         Assert.assertTrue(z.isNaN());
 
         z = build(Double.NaN, 4.0);
@@ -88,20 +88,20 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testNorm() {
-        FieldComplex<Decimal64> z = build(3.0, 4.0);
+        FieldComplex<Binary64> z = build(3.0, 4.0);
         Assert.assertEquals(5.0, z.norm(), 1.0e-5);
     }
 
     @Test
     public void testNormNaN() {
-        Assert.assertTrue(Double.isNaN(FieldComplex.getNaN(Decimal64Field.getInstance()).norm()));
-        FieldComplex<Decimal64> z = build(Double.POSITIVE_INFINITY, Double.NaN);
+        Assert.assertTrue(Double.isNaN(FieldComplex.getNaN(Binary64Field.getInstance()).norm()));
+        FieldComplex<Binary64> z = build(Double.POSITIVE_INFINITY, Double.NaN);
         Assert.assertTrue(Double.isNaN(z.norm()));
     }
 
     @Test
     public void testNormInfinite() {
-        FieldComplex<Decimal64> z = FieldComplex.getNaN(Decimal64Field.getInstance()).newInstance(Double.POSITIVE_INFINITY);
+        FieldComplex<Binary64> z = FieldComplex.getNaN(Binary64Field.getInstance()).newInstance(Double.POSITIVE_INFINITY);
         Assert.assertEquals(Double.POSITIVE_INFINITY, z.norm(), 0);
         z = build(0, Double.NEGATIVE_INFINITY);
         Assert.assertEquals(Double.POSITIVE_INFINITY, z.norm(), 0);
@@ -111,36 +111,36 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testAdd() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
-        FieldComplex<Decimal64> y = build(5.0, 6.0);
-        FieldComplex<Decimal64> z = x.add(y);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> y = build(5.0, 6.0);
+        FieldComplex<Binary64> z = x.add(y);
         Assert.assertEquals(8.0, z.getRealPart().getReal(), 1.0e-5);
         Assert.assertEquals(10.0, z.getImaginary().getReal(), 1.0e-5);
     }
 
     @Test
     public void testAddT() {
-        FieldComplex<Decimal64> z = build(3.0, 4.0).add(new Decimal64(5.0));
+        FieldComplex<Binary64> z = build(3.0, 4.0).add(new Binary64(5.0));
         Assert.assertEquals(8.0, z.getRealPart().getReal(), 1.0e-5);
         Assert.assertEquals(4.0, z.getImaginary().getReal(), 1.0e-5);
     }
 
     @Test
     public void testAddNaN() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
-        FieldComplex<Decimal64> z = x.add(FieldComplex.getNaN(Decimal64Field.getInstance()));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), z);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> z = x.add(FieldComplex.getNaN(Binary64Field.getInstance()));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), z);
         z = build(1, Double.NaN);
-        FieldComplex<Decimal64> w = x.add(z);
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), w);
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), FieldComplex.getNaN(Decimal64Field.getInstance()).add(Double.NaN));
+        FieldComplex<Binary64> w = x.add(z);
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), w);
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), FieldComplex.getNaN(Binary64Field.getInstance()).add(Double.NaN));
     }
 
     @Test
     public void testAddInf() {
-        FieldComplex<Decimal64> x = build(1, 1);
-        FieldComplex<Decimal64> z = build(Double.POSITIVE_INFINITY, 0);
-        FieldComplex<Decimal64> w = x.add(z);
+        FieldComplex<Binary64> x = build(1, 1);
+        FieldComplex<Binary64> z = build(Double.POSITIVE_INFINITY, 0);
+        FieldComplex<Binary64> w = x.add(z);
         Assert.assertEquals(w.getImaginary().getReal(), 1, 0);
         Assert.assertEquals(Double.POSITIVE_INFINITY, w.getRealPart().getReal(), 0);
 
@@ -150,56 +150,56 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testScalarAdd() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
         double yDouble = 2.0;
-        FieldComplex<Decimal64> yComplex = build(yDouble);
+        FieldComplex<Binary64> yComplex = build(yDouble);
         Assert.assertEquals(x.add(yComplex), x.add(yDouble));
-        Assert.assertEquals(x.add(yComplex), x.add(new Decimal64(yDouble)));
+        Assert.assertEquals(x.add(yComplex), x.add(new Binary64(yDouble)));
     }
 
     @Test
     public void testScalarAddNaN() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
         double yDouble = Double.NaN;
-        FieldComplex<Decimal64> yComplex = build(yDouble);
+        FieldComplex<Binary64> yComplex = build(yDouble);
         Assert.assertEquals(x.add(yComplex), x.add(yDouble));
-        Assert.assertEquals(x.add(yComplex), x.add(new Decimal64(yDouble)));
+        Assert.assertEquals(x.add(yComplex), x.add(new Binary64(yDouble)));
         Assert.assertTrue(build(Double.NaN).add(0).isNaN());
-        Assert.assertTrue(build(Double.NaN).add(Decimal64.ZERO).isNaN());
+        Assert.assertTrue(build(Double.NaN).add(Binary64.ZERO).isNaN());
     }
 
     @Test
     public void testScalarAddInf() {
-        FieldComplex<Decimal64> x = build(1, 1);
+        FieldComplex<Binary64> x = build(1, 1);
         double yDouble = Double.POSITIVE_INFINITY;
 
-        FieldComplex<Decimal64> yComplex = build(yDouble);
+        FieldComplex<Binary64> yComplex = build(yDouble);
         Assert.assertEquals(x.add(yComplex), x.add(yDouble));
-        Assert.assertEquals(x.add(yComplex), x.add(new Decimal64(yDouble)));
+        Assert.assertEquals(x.add(yComplex), x.add(new Binary64(yDouble)));
 
         x = build(Double.NEGATIVE_INFINITY, 0);
         Assert.assertEquals(x.add(yComplex), x.add(yDouble));
-        Assert.assertEquals(x.add(yComplex), x.add(new Decimal64(yDouble)));
+        Assert.assertEquals(x.add(yComplex), x.add(new Binary64(yDouble)));
 
     }
 
     @Test
     public void testConjugate() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
-        FieldComplex<Decimal64> z = x.conjugate();
+        FieldComplex<Binary64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> z = x.conjugate();
         Assert.assertEquals(3.0, z.getRealPart().getReal(), 1.0e-5);
         Assert.assertEquals(-4.0, z.getImaginaryPart().getReal(), 1.0e-5);
     }
 
     @Test
     public void testConjugateNaN() {
-        FieldComplex<Decimal64> z = FieldComplex.getNaN(Decimal64Field.getInstance()).conjugate();
+        FieldComplex<Binary64> z = FieldComplex.getNaN(Binary64Field.getInstance()).conjugate();
         Assert.assertTrue(z.isNaN());
     }
 
     @Test
     public void testConjugateInfiinite() {
-        FieldComplex<Decimal64> z = build(0, Double.POSITIVE_INFINITY);
+        FieldComplex<Binary64> z = build(0, Double.POSITIVE_INFINITY);
         Assert.assertEquals(Double.NEGATIVE_INFINITY, z.conjugate().getImaginary().getReal(), 0);
         z = build(0, Double.NEGATIVE_INFINITY);
         Assert.assertEquals(Double.POSITIVE_INFINITY, z.conjugate().getImaginary().getReal(), 0);
@@ -207,35 +207,35 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testDivide() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
-        FieldComplex<Decimal64> y = build(5.0, 6.0);
-        FieldComplex<Decimal64> z = x.divide(y);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> y = build(5.0, 6.0);
+        FieldComplex<Binary64> z = x.divide(y);
         Assert.assertEquals(39.0 / 61.0, z.getRealPart().getReal(), 1.0e-5);
         Assert.assertEquals(2.0 / 61.0, z.getImaginaryPart().getReal(), 1.0e-5);
     }
 
     @Test
     public void testDivideReal() {
-        FieldComplex<Decimal64> x = build(2d, 3d);
-        FieldComplex<Decimal64> y = build(2d, 0d);
+        FieldComplex<Binary64> x = build(2d, 3d);
+        FieldComplex<Binary64> y = build(2d, 0d);
         Assert.assertEquals(build(1d, 1.5), x.divide(y));
 
     }
 
     @Test
     public void testDivideImaginary() {
-        FieldComplex<Decimal64> x = build(2d, 3d);
-        FieldComplex<Decimal64> y = build(0d, 2d);
+        FieldComplex<Binary64> x = build(2d, 3d);
+        FieldComplex<Binary64> y = build(0d, 2d);
         Assert.assertEquals(build(1.5d, -1d), x.divide(y));
     }
 
     @Test
     public void testDivideInf() {
-        FieldComplex<Decimal64> x = build(3, 4);
-        FieldComplex<Decimal64> w = build(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-        Assert.assertTrue(x.divide(w).equals(FieldComplex.getZero(Decimal64Field.getInstance())));
+        FieldComplex<Binary64> x = build(3, 4);
+        FieldComplex<Binary64> w = build(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+        Assert.assertTrue(x.divide(w).equals(FieldComplex.getZero(Binary64Field.getInstance())));
 
-        FieldComplex<Decimal64> z = w.divide(x);
+        FieldComplex<Binary64> z = w.divide(x);
         Assert.assertTrue(Double.isNaN(z.getReal()));
         Assert.assertEquals(Double.POSITIVE_INFINITY, z.getImaginary().getReal(), 0);
 
@@ -252,33 +252,33 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testDivideZero() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
-        FieldComplex<Decimal64> z = x.divide(FieldComplex.getZero(Decimal64Field.getInstance()));
-        // Assert.assertEquals(z, FieldComplex.getInf(Decimal64Field.getInstance())); // See MATH-657
-        Assert.assertEquals(z, FieldComplex.getNaN(Decimal64Field.getInstance()));
-        Assert.assertTrue(build(3.0).divide(Decimal64.ZERO).isNaN());
+        FieldComplex<Binary64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> z = x.divide(FieldComplex.getZero(Binary64Field.getInstance()));
+        // Assert.assertEquals(z, FieldComplex.getInf(Binary64Field.getInstance())); // See MATH-657
+        Assert.assertEquals(z, FieldComplex.getNaN(Binary64Field.getInstance()));
+        Assert.assertTrue(build(3.0).divide(Binary64.ZERO).isNaN());
     }
 
     @Test
     public void testDivideZeroZero() {
-        FieldComplex<Decimal64> x = build(0.0, 0.0);
-        FieldComplex<Decimal64> z = x.divide(FieldComplex.getZero(Decimal64Field.getInstance()));
-        Assert.assertEquals(z, FieldComplex.getNaN(Decimal64Field.getInstance()));
+        FieldComplex<Binary64> x = build(0.0, 0.0);
+        FieldComplex<Binary64> z = x.divide(FieldComplex.getZero(Binary64Field.getInstance()));
+        Assert.assertEquals(z, FieldComplex.getNaN(Binary64Field.getInstance()));
     }
 
     @Test
     public void testDivideNaN() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
-        FieldComplex<Decimal64> z = x.divide(FieldComplex.getNaN(Decimal64Field.getInstance()));
+        FieldComplex<Binary64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> z = x.divide(FieldComplex.getNaN(Binary64Field.getInstance()));
         Assert.assertTrue(z.isNaN());
-        Assert.assertTrue(x.divide(Decimal64.NAN).isNaN());
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).divide(Decimal64.ONE).isNaN());
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).divide(FieldComplex.getNaN(Decimal64Field.getInstance())).isNaN());
+        Assert.assertTrue(x.divide(Binary64.NAN).isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).divide(Binary64.ONE).isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).divide(FieldComplex.getNaN(Binary64Field.getInstance())).isNaN());
     }
 
     @Test
     public void testDivideNaNInf() {
-       FieldComplex<Decimal64> z = oneInf.divide(FieldComplex.getOne(Decimal64Field.getInstance()));
+       FieldComplex<Binary64> z = oneInf.divide(FieldComplex.getOne(Binary64Field.getInstance()));
        Assert.assertTrue(Double.isNaN(z.getReal()));
        Assert.assertEquals(Double.POSITIVE_INFINITY, z.getImaginary().getReal(), 0);
 
@@ -286,60 +286,60 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
        Assert.assertTrue(Double.isNaN(z.getReal()));
        Assert.assertTrue(Double.isNaN(z.getImaginary().getReal()));
 
-       z = negInfInf.divide(FieldComplex.getOne(Decimal64Field.getInstance()));
+       z = negInfInf.divide(FieldComplex.getOne(Binary64Field.getInstance()));
        Assert.assertTrue(Double.isNaN(z.getReal()));
        Assert.assertTrue(Double.isNaN(z.getImaginary().getReal()));
     }
 
     @Test
     public void testScalarDivide() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
         double yDouble = 2.0;
-        FieldComplex<Decimal64> yComplex = build(yDouble);
+        FieldComplex<Binary64> yComplex = build(yDouble);
         Assert.assertEquals(x.divide(yComplex), x.divide(yDouble));
-        Assert.assertEquals(x.divide(yComplex), x.divide(new Decimal64(yDouble)));
+        Assert.assertEquals(x.divide(yComplex), x.divide(new Binary64(yDouble)));
     }
 
     @Test
     public void testScalarDivideNaN() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
         double yDouble = Double.NaN;
-        FieldComplex<Decimal64> yComplex = build(yDouble);
+        FieldComplex<Binary64> yComplex = build(yDouble);
         Assert.assertEquals(x.divide(yComplex), x.divide(yDouble));
-        Assert.assertEquals(x.divide(yComplex), x.divide(new Decimal64(yDouble)));
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).divide(Double.NaN).isNaN());
+        Assert.assertEquals(x.divide(yComplex), x.divide(new Binary64(yDouble)));
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).divide(Double.NaN).isNaN());
     }
 
     @Test
     public void testScalarDivideInf() {
-        FieldComplex<Decimal64> x = build(1,1);
+        FieldComplex<Binary64> x = build(1,1);
         double yDouble = Double.POSITIVE_INFINITY;
-        FieldComplex<Decimal64> yComplex = build(yDouble);
+        FieldComplex<Binary64> yComplex = build(yDouble);
         UnitTestUtils.assertEquals(x.divide(yComplex), x.divide(yDouble), 0);
-        UnitTestUtils.assertEquals(x.divide(yComplex), x.divide(new Decimal64(yDouble)), 0);
+        UnitTestUtils.assertEquals(x.divide(yComplex), x.divide(new Binary64(yDouble)), 0);
 
         yDouble = Double.NEGATIVE_INFINITY;
         yComplex = build(yDouble);
         UnitTestUtils.assertEquals(x.divide(yComplex), x.divide(yDouble), 0);
-        UnitTestUtils.assertEquals(x.divide(yComplex), x.divide(new Decimal64(yDouble)), 0);
+        UnitTestUtils.assertEquals(x.divide(yComplex), x.divide(new Binary64(yDouble)), 0);
 
         x = build(1, Double.NEGATIVE_INFINITY);
         UnitTestUtils.assertEquals(x.divide(yComplex), x.divide(yDouble), 0);
-        UnitTestUtils.assertEquals(x.divide(yComplex), x.divide(new Decimal64(yDouble)), 0);
+        UnitTestUtils.assertEquals(x.divide(yComplex), x.divide(new Binary64(yDouble)), 0);
 
     }
 
     @Test
     public void testScalarDivideZero() {
-        FieldComplex<Decimal64> x = build(1,1);
-        UnitTestUtils.assertEquals(x.divide(FieldComplex.getZero(Decimal64Field.getInstance())), x.divide(0), 0);
-        UnitTestUtils.assertEquals(x.divide(FieldComplex.getZero(Decimal64Field.getInstance())), x.divide(new Decimal64(0)), 0);
+        FieldComplex<Binary64> x = build(1,1);
+        UnitTestUtils.assertEquals(x.divide(FieldComplex.getZero(Binary64Field.getInstance())), x.divide(0), 0);
+        UnitTestUtils.assertEquals(x.divide(FieldComplex.getZero(Binary64Field.getInstance())), x.divide(new Binary64(0)), 0);
     }
 
     @Test
     public void testReciprocal() {
-        FieldComplex<Decimal64> z = build(5.0, 6.0);
-        FieldComplex<Decimal64> act = z.reciprocal();
+        FieldComplex<Binary64> z = build(5.0, 6.0);
+        FieldComplex<Binary64> act = z.reciprocal();
         double expRe = 5.0 / 61.0;
         double expIm = -6.0 / 61.0;
         Assert.assertEquals(expRe, act.getRealPart().getReal(), FastMath.ulp(expRe));
@@ -348,58 +348,58 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testReciprocalReal() {
-        FieldComplex<Decimal64> z = build(-2.0, 0.0);
+        FieldComplex<Binary64> z = build(-2.0, 0.0);
         Assert.assertTrue(FieldComplex.equals(build(-0.5, 0.0), z.reciprocal()));
     }
 
     @Test
     public void testReciprocalImaginary() {
-        FieldComplex<Decimal64> z = build(0.0, -2.0);
+        FieldComplex<Binary64> z = build(0.0, -2.0);
         Assert.assertEquals(build(0.0, 0.5), z.reciprocal());
     }
 
     @Test
     public void testReciprocalInf() {
-        FieldComplex<Decimal64> z = build(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-        Assert.assertTrue(z.reciprocal().equals(FieldComplex.getZero(Decimal64Field.getInstance())));
+        FieldComplex<Binary64> z = build(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+        Assert.assertTrue(z.reciprocal().equals(FieldComplex.getZero(Binary64Field.getInstance())));
 
         z = build(1, Double.POSITIVE_INFINITY).reciprocal();
-        Assert.assertEquals(z, FieldComplex.getZero(Decimal64Field.getInstance()));
+        Assert.assertEquals(z, FieldComplex.getZero(Binary64Field.getInstance()));
     }
 
     @Test
     public void testReciprocalZero() {
-        Assert.assertEquals(FieldComplex.getZero(Decimal64Field.getInstance()).reciprocal(), FieldComplex.getInf(Decimal64Field.getInstance()));
+        Assert.assertEquals(FieldComplex.getZero(Binary64Field.getInstance()).reciprocal(), FieldComplex.getInf(Binary64Field.getInstance()));
     }
 
     @Test
     public void testReciprocalNaN() {
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).reciprocal().isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).reciprocal().isNaN());
     }
 
     @Test
     public void testMultiply() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
-        FieldComplex<Decimal64> y = build(5.0, 6.0);
-        FieldComplex<Decimal64> z = x.multiply(y);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> y = build(5.0, 6.0);
+        FieldComplex<Binary64> z = x.multiply(y);
         Assert.assertEquals(-9.0, z.getRealPart().getReal(), 1.0e-5);
         Assert.assertEquals(38.0, z.getImaginaryPart().getReal(), 1.0e-5);
     }
 
     @Test
     public void testMultiplyT() {
-        FieldComplex<Decimal64> z = build(3.0, 4.0).multiply(new Decimal64(5.0));
+        FieldComplex<Binary64> z = build(3.0, 4.0).multiply(new Binary64(5.0));
         Assert.assertEquals(15.0, z.getRealPart().getReal(), 1.0e-5);
         Assert.assertEquals(20.0, z.getImaginaryPart().getReal(), 1.0e-5);
     }
 
     @Test
     public void testMultiplyNaN() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
-        FieldComplex<Decimal64> z = x.multiply(FieldComplex.getNaN(Decimal64Field.getInstance()));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), z);
-        z = FieldComplex.getNaN(Decimal64Field.getInstance()).multiply(5);
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), z);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> z = x.multiply(FieldComplex.getNaN(Binary64Field.getInstance()));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), z);
+        z = FieldComplex.getNaN(Binary64Field.getInstance()).multiply(5);
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), z);
     }
 
     @Test
@@ -410,15 +410,15 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testMultiplyNaNInf() {
-        FieldComplex<Decimal64> z = build(1,1);
-        FieldComplex<Decimal64> w = z.multiply(infOne);
+        FieldComplex<Binary64> z = build(1,1);
+        FieldComplex<Binary64> w = z.multiply(infOne);
         Assert.assertEquals(w.getRealPart().getReal(), Double.POSITIVE_INFINITY, 0);
         Assert.assertEquals(w.getImaginaryPart().getReal(), Double.POSITIVE_INFINITY, 0);
 
         // [MATH-164]
-        Assert.assertTrue(build( 1,0).multiply(infInf).equals(FieldComplex.getInf(Decimal64Field.getInstance())));
-        Assert.assertTrue(build(-1,0).multiply(infInf).equals(FieldComplex.getInf(Decimal64Field.getInstance())));
-        Assert.assertTrue(build( 1,0).multiply(negInfZero).equals(FieldComplex.getInf(Decimal64Field.getInstance())));
+        Assert.assertTrue(build( 1,0).multiply(infInf).equals(FieldComplex.getInf(Binary64Field.getInstance())));
+        Assert.assertTrue(build(-1,0).multiply(infInf).equals(FieldComplex.getInf(Binary64Field.getInstance())));
+        Assert.assertTrue(build( 1,0).multiply(negInfZero).equals(FieldComplex.getInf(Binary64Field.getInstance())));
 
         w = oneInf.multiply(oneNegInf);
         Assert.assertEquals(w.getRealPart().getReal(), Double.POSITIVE_INFINITY, 0);
@@ -429,120 +429,120 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
         Assert.assertTrue(w.getImaginaryPart().isNaN());
 
         z = build(1, Double.NEGATIVE_INFINITY);
-        UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), z.multiply(z));
+        UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), z.multiply(z));
     }
 
     @Test
     public void testScalarMultiply() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
         double yDouble = 2.0;
-        FieldComplex<Decimal64> yComplex = build(yDouble);
+        FieldComplex<Binary64> yComplex = build(yDouble);
         Assert.assertEquals(x.multiply(yComplex), x.multiply(yDouble));
-        Assert.assertEquals(x.multiply(yComplex), x.multiply(new Decimal64(yDouble)));
+        Assert.assertEquals(x.multiply(yComplex), x.multiply(new Binary64(yDouble)));
         int zInt = -5;
-        FieldComplex<Decimal64> zComplex = build(zInt);
+        FieldComplex<Binary64> zComplex = build(zInt);
         Assert.assertEquals(x.multiply(zComplex), x.multiply(zInt));
     }
 
     @Test
     public void testScalarMultiplyNaN() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
         double yDouble = Double.NaN;
-        FieldComplex<Decimal64> yComplex = build(yDouble);
+        FieldComplex<Binary64> yComplex = build(yDouble);
         Assert.assertEquals(x.multiply(yComplex), x.multiply(yDouble));
-        Assert.assertEquals(x.multiply(yComplex), x.multiply(new Decimal64(yDouble)));
+        Assert.assertEquals(x.multiply(yComplex), x.multiply(new Binary64(yDouble)));
         Assert.assertTrue(build(Double.NaN, 0).multiply(5).isNaN());
-        Assert.assertTrue(build(Double.NaN, 0).multiply(new Decimal64(5)).isNaN());
+        Assert.assertTrue(build(Double.NaN, 0).multiply(new Binary64(5)).isNaN());
         Assert.assertTrue(build(0, Double.NaN).multiply(5).isNaN());
-        Assert.assertTrue(build(0, Double.NaN).multiply(new Decimal64(5)).isNaN());
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).multiply(5).isNaN());
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).multiply(new Decimal64(5)).isNaN());
+        Assert.assertTrue(build(0, Double.NaN).multiply(new Binary64(5)).isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).multiply(5).isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).multiply(new Binary64(5)).isNaN());
         Assert.assertTrue(build(Double.NaN, 0).multiply(5.0).isNaN());
-        Assert.assertTrue(build(Double.NaN, 0).multiply(new Decimal64(5)).isNaN());
+        Assert.assertTrue(build(Double.NaN, 0).multiply(new Binary64(5)).isNaN());
         Assert.assertTrue(build(0, Double.NaN).multiply(5.0).isNaN());
-        Assert.assertTrue(build(0, Double.NaN).multiply(new Decimal64(5)).isNaN());
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).multiply(5.0).isNaN());
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).multiply(new Decimal64(5.0)).isNaN());
-        Assert.assertTrue(FieldComplex.getOne(Decimal64Field.getInstance()).multiply(Double.NaN).isNaN());
-        Assert.assertTrue(FieldComplex.getOne(Decimal64Field.getInstance()).multiply(new Decimal64(Double.NaN)).isNaN());
+        Assert.assertTrue(build(0, Double.NaN).multiply(new Binary64(5)).isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).multiply(5.0).isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).multiply(new Binary64(5.0)).isNaN());
+        Assert.assertTrue(FieldComplex.getOne(Binary64Field.getInstance()).multiply(Double.NaN).isNaN());
+        Assert.assertTrue(FieldComplex.getOne(Binary64Field.getInstance()).multiply(new Binary64(Double.NaN)).isNaN());
     }
 
     @Test
     public void testScalarMultiplyInf() {
-        FieldComplex<Decimal64> x = build(1, 1);
+        FieldComplex<Binary64> x = build(1, 1);
         double yDouble = Double.POSITIVE_INFINITY;
-        FieldComplex<Decimal64> yComplex = build(yDouble);
+        FieldComplex<Binary64> yComplex = build(yDouble);
         Assert.assertEquals(x.multiply(yComplex), x.multiply(yDouble));
-        Assert.assertEquals(x.multiply(yComplex), x.multiply(new Decimal64(yDouble)));
+        Assert.assertEquals(x.multiply(yComplex), x.multiply(new Binary64(yDouble)));
 
         yDouble = Double.NEGATIVE_INFINITY;
         yComplex = build(yDouble);
         Assert.assertEquals(x.multiply(yComplex), x.multiply(yDouble));
-        Assert.assertEquals(x.multiply(yComplex), x.multiply(new Decimal64(yDouble)));
+        Assert.assertEquals(x.multiply(yComplex), x.multiply(new Binary64(yDouble)));
 
         Assert.assertTrue(build(Double.POSITIVE_INFINITY, 0).multiply(5).isInfinite());
-        Assert.assertTrue(build(Double.POSITIVE_INFINITY, 0).multiply(new Decimal64(5)).isInfinite());
+        Assert.assertTrue(build(Double.POSITIVE_INFINITY, 0).multiply(new Binary64(5)).isInfinite());
         Assert.assertTrue(build(0, Double.POSITIVE_INFINITY).multiply(5).isInfinite());
-        Assert.assertTrue(build(0, Double.POSITIVE_INFINITY).multiply(new Decimal64(5)).isInfinite());
-        Assert.assertTrue(FieldComplex.getInf(Decimal64Field.getInstance()).multiply(5).isInfinite());
-        Assert.assertTrue(FieldComplex.getInf(Decimal64Field.getInstance()).multiply(new Decimal64(5)).isInfinite());
+        Assert.assertTrue(build(0, Double.POSITIVE_INFINITY).multiply(new Binary64(5)).isInfinite());
+        Assert.assertTrue(FieldComplex.getInf(Binary64Field.getInstance()).multiply(5).isInfinite());
+        Assert.assertTrue(FieldComplex.getInf(Binary64Field.getInstance()).multiply(new Binary64(5)).isInfinite());
         Assert.assertTrue(build(Double.POSITIVE_INFINITY, 0).multiply(5.0).isInfinite());
-        Assert.assertTrue(build(Double.POSITIVE_INFINITY, 0).multiply(new Decimal64(5.0)).isInfinite());
+        Assert.assertTrue(build(Double.POSITIVE_INFINITY, 0).multiply(new Binary64(5.0)).isInfinite());
         Assert.assertTrue(build(0, Double.POSITIVE_INFINITY).multiply(5.0).isInfinite());
-        Assert.assertTrue(build(0, Double.POSITIVE_INFINITY).multiply(new Decimal64(5.0)).isInfinite());
-        Assert.assertTrue(FieldComplex.getInf(Decimal64Field.getInstance()).multiply(5.0).isInfinite());
-        Assert.assertTrue(FieldComplex.getInf(Decimal64Field.getInstance()).multiply(new Decimal64(5.0)).isInfinite());
-        Assert.assertTrue(FieldComplex.getOne(Decimal64Field.getInstance()).multiply(Double.POSITIVE_INFINITY).isInfinite());
-        Assert.assertTrue(FieldComplex.getOne(Decimal64Field.getInstance()).multiply(new Decimal64(Double.POSITIVE_INFINITY)).isInfinite());
+        Assert.assertTrue(build(0, Double.POSITIVE_INFINITY).multiply(new Binary64(5.0)).isInfinite());
+        Assert.assertTrue(FieldComplex.getInf(Binary64Field.getInstance()).multiply(5.0).isInfinite());
+        Assert.assertTrue(FieldComplex.getInf(Binary64Field.getInstance()).multiply(new Binary64(5.0)).isInfinite());
+        Assert.assertTrue(FieldComplex.getOne(Binary64Field.getInstance()).multiply(Double.POSITIVE_INFINITY).isInfinite());
+        Assert.assertTrue(FieldComplex.getOne(Binary64Field.getInstance()).multiply(new Binary64(Double.POSITIVE_INFINITY)).isInfinite());
     }
 
     @Test
     public void testNegate() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
-        FieldComplex<Decimal64> z = x.negate();
+        FieldComplex<Binary64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> z = x.negate();
         Assert.assertEquals(-3.0, z.getRealPart().getReal(), 1.0e-5);
         Assert.assertEquals(-4.0, z.getImaginaryPart().getReal(), 1.0e-5);
     }
 
     @Test
     public void testNegateNaN() {
-        FieldComplex<Decimal64> z = FieldComplex.getNaN(Decimal64Field.getInstance()).negate();
+        FieldComplex<Binary64> z = FieldComplex.getNaN(Binary64Field.getInstance()).negate();
         Assert.assertTrue(z.isNaN());
     }
 
     @Test
     public void testSubtract() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
-        FieldComplex<Decimal64> y = build(5.0, 6.0);
-        FieldComplex<Decimal64> z = x.subtract(y);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> y = build(5.0, 6.0);
+        FieldComplex<Binary64> z = x.subtract(y);
         Assert.assertEquals(-2.0, z.getRealPart().getReal(), 1.0e-5);
         Assert.assertEquals(-2.0, z.getImaginaryPart().getReal(), 1.0e-5);
     }
 
     @Test
     public void testSubtractT() {
-        FieldComplex<Decimal64> z = build(3.0, 4.0).subtract(new Decimal64(5.0));
+        FieldComplex<Binary64> z = build(3.0, 4.0).subtract(new Binary64(5.0));
         Assert.assertEquals(-2.0, z.getRealPart().getReal(), 1.0e-5);
         Assert.assertEquals( 4.0, z.getImaginary().getReal(), 1.0e-5);
     }
 
     @Test
     public void testSubtractNaN() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
-        FieldComplex<Decimal64> z = x.subtract(FieldComplex.getNaN(Decimal64Field.getInstance()));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), z);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> z = x.subtract(FieldComplex.getNaN(Binary64Field.getInstance()));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), z);
         z = build(1, Double.NaN);
-        FieldComplex<Decimal64> w = x.subtract(z);
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), w);
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), FieldComplex.getNaN(Decimal64Field.getInstance()).subtract(FieldComplex.getNaN(Decimal64Field.getInstance())));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), FieldComplex.getNaN(Decimal64Field.getInstance()).subtract(Double.NaN));
+        FieldComplex<Binary64> w = x.subtract(z);
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), w);
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), FieldComplex.getNaN(Binary64Field.getInstance()).subtract(FieldComplex.getNaN(Binary64Field.getInstance())));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), FieldComplex.getNaN(Binary64Field.getInstance()).subtract(Double.NaN));
     }
 
     @Test
     public void testSubtractInf() {
-        FieldComplex<Decimal64> x = build(1, 1);
-        FieldComplex<Decimal64> z = build(Double.NEGATIVE_INFINITY, 0);
-        FieldComplex<Decimal64> w = x.subtract(z);
+        FieldComplex<Binary64> x = build(1, 1);
+        FieldComplex<Binary64> z = build(Double.NEGATIVE_INFINITY, 0);
+        FieldComplex<Binary64> w = x.subtract(z);
         Assert.assertEquals(w.getImaginaryPart().getReal(), 1, 0);
         Assert.assertEquals(Double.POSITIVE_INFINITY, w.getRealPart().getReal(), 0);
 
@@ -552,40 +552,40 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testScalarSubtract() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
         double yDouble = 2.0;
-        FieldComplex<Decimal64> yComplex = build(yDouble);
+        FieldComplex<Binary64> yComplex = build(yDouble);
         Assert.assertEquals(x.subtract(yComplex), x.subtract(yDouble));
-        Assert.assertEquals(x.subtract(yComplex), x.subtract(new Decimal64(yDouble)));
+        Assert.assertEquals(x.subtract(yComplex), x.subtract(new Binary64(yDouble)));
     }
 
     @Test
     public void testScalarSubtractNaN() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
         double yDouble = Double.NaN;
-        FieldComplex<Decimal64> yComplex = build(yDouble);
+        FieldComplex<Binary64> yComplex = build(yDouble);
         Assert.assertEquals(x.subtract(yComplex), x.subtract(yDouble));
-        Assert.assertEquals(x.subtract(yComplex), x.subtract(new Decimal64(yDouble)));
+        Assert.assertEquals(x.subtract(yComplex), x.subtract(new Binary64(yDouble)));
         Assert.assertTrue(build(Double.NaN).subtract(0).isNaN());
-        Assert.assertTrue(build(Double.NaN).subtract(Decimal64.ZERO).isNaN());
+        Assert.assertTrue(build(Double.NaN).subtract(Binary64.ZERO).isNaN());
     }
 
     @Test
     public void testScalarSubtractInf() {
-        FieldComplex<Decimal64> x = build(1, 1);
+        FieldComplex<Binary64> x = build(1, 1);
         double yDouble = Double.POSITIVE_INFINITY;
-        FieldComplex<Decimal64> yComplex = build(yDouble);
+        FieldComplex<Binary64> yComplex = build(yDouble);
         Assert.assertEquals(x.subtract(yComplex), x.subtract(yDouble));
-        Assert.assertEquals(x.subtract(yComplex), x.subtract(new Decimal64(yDouble)));
+        Assert.assertEquals(x.subtract(yComplex), x.subtract(new Binary64(yDouble)));
 
         x = build(Double.NEGATIVE_INFINITY, 0);
         Assert.assertEquals(x.subtract(yComplex), x.subtract(yDouble));
-        Assert.assertEquals(x.subtract(yComplex), x.subtract(new Decimal64(yDouble)));
+        Assert.assertEquals(x.subtract(yComplex), x.subtract(new Binary64(yDouble)));
     }
 
     @Test
     public void testEqualsNull() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
         Assert.assertFalse(x.equals(null));
     }
 
@@ -601,13 +601,13 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEqualsClass() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
         Assert.assertFalse(x.equals(this));
     }
 
     @Test
     public void testEqualsSame() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
         Assert.assertTrue(x.equals(x));
     }
 
@@ -616,8 +616,8 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
         double re = -3.21;
         double im = 456789e10;
 
-        final FieldComplex<Decimal64> x = build(re, im);
-        FieldComplex<Decimal64> y = build(re, im);
+        final FieldComplex<Binary64> x = build(re, im);
+        FieldComplex<Binary64> y = build(re, im);
 
         Assert.assertTrue(x.equals(y));
         Assert.assertTrue(FieldComplex.equals(x, y));
@@ -638,7 +638,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testFloatingPointEqualsNaN() {
-        FieldComplex<Decimal64> c = build(Double.NaN, 1);
+        FieldComplex<Binary64> c = build(Double.NaN, 1);
         Assert.assertFalse(FieldComplex.equals(c, c));
 
         c = build(1, Double.NaN);
@@ -650,8 +650,8 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
         final double re = 153.0000;
         final double im = 152.9375;
         final double tol1 = 0.0625;
-        final FieldComplex<Decimal64> x = build(re, im);
-        final FieldComplex<Decimal64> y = build(re + tol1, im + tol1);
+        final FieldComplex<Binary64> x = build(re, im);
+        final FieldComplex<Binary64> y = build(re + tol1, im + tol1);
         Assert.assertTrue(FieldComplex.equals(x, y, tol1));
 
         final double tol2 = 0.0624;
@@ -660,9 +660,9 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testFloatingPointEqualsWithAllowedDeltaNaN() {
-        final FieldComplex<Decimal64> x = build(0, Double.NaN);
-        final FieldComplex<Decimal64> y = build(Double.NaN, 0);
-        Assert.assertFalse(FieldComplex.equals(x, FieldComplex.getZero(Decimal64Field.getInstance()), 0.1));
+        final FieldComplex<Binary64> x = build(0, Double.NaN);
+        final FieldComplex<Binary64> y = build(Double.NaN, 0);
+        Assert.assertFalse(FieldComplex.equals(x, FieldComplex.getZero(Binary64Field.getInstance()), 0.1));
         Assert.assertFalse(FieldComplex.equals(x, x, 0.1));
         Assert.assertFalse(FieldComplex.equals(x, y, 0.1));
     }
@@ -674,46 +674,46 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
         final double im = 1e10;
 
         final double f = 1 + tol;
-        final FieldComplex<Decimal64> x = build(re, im);
-        final FieldComplex<Decimal64> y = build(re * f, im * f);
+        final FieldComplex<Binary64> x = build(re, im);
+        final FieldComplex<Binary64> y = build(re * f, im * f);
         Assert.assertTrue(FieldComplex.equalsWithRelativeTolerance(x, y, tol));
     }
 
     @Test
     public void testFloatingPointEqualsWithRelativeToleranceNaN() {
-        final FieldComplex<Decimal64> x = build(0, Double.NaN);
-        final FieldComplex<Decimal64> y = build(Double.NaN, 0);
-        Assert.assertFalse(FieldComplex.equalsWithRelativeTolerance(x, FieldComplex.getZero(Decimal64Field.getInstance()), 0.1));
+        final FieldComplex<Binary64> x = build(0, Double.NaN);
+        final FieldComplex<Binary64> y = build(Double.NaN, 0);
+        Assert.assertFalse(FieldComplex.equalsWithRelativeTolerance(x, FieldComplex.getZero(Binary64Field.getInstance()), 0.1));
         Assert.assertFalse(FieldComplex.equalsWithRelativeTolerance(x, x, 0.1));
         Assert.assertFalse(FieldComplex.equalsWithRelativeTolerance(x, y, 0.1));
     }
 
     @Test
     public void testEqualsTrue() {
-        FieldComplex<Decimal64> x = build(3.0, 4.0);
-        FieldComplex<Decimal64> y = build(3.0, 4.0);
+        FieldComplex<Binary64> x = build(3.0, 4.0);
+        FieldComplex<Binary64> y = build(3.0, 4.0);
         Assert.assertTrue(x.equals(y));
     }
 
     @Test
     public void testEqualsRealDifference() {
-        FieldComplex<Decimal64> x = build(0.0, 0.0);
-        FieldComplex<Decimal64> y = build(0.0 + Double.MIN_VALUE, 0.0);
+        FieldComplex<Binary64> x = build(0.0, 0.0);
+        FieldComplex<Binary64> y = build(0.0 + Double.MIN_VALUE, 0.0);
         Assert.assertFalse(x.equals(y));
     }
 
     @Test
     public void testEqualsImaginaryDifference() {
-        FieldComplex<Decimal64> x = build(0.0, 0.0);
-        FieldComplex<Decimal64> y = build(0.0, 0.0 + Double.MIN_VALUE);
+        FieldComplex<Binary64> x = build(0.0, 0.0);
+        FieldComplex<Binary64> y = build(0.0, 0.0 + Double.MIN_VALUE);
         Assert.assertFalse(x.equals(y));
     }
 
     @Test
     public void testEqualsNaN() {
-        FieldComplex<Decimal64> realNaN = build(Double.NaN, 0.0);
-        FieldComplex<Decimal64> imaginaryNaN = build(0.0, Double.NaN);
-        FieldComplex<Decimal64> complexNaN = FieldComplex.getNaN(Decimal64Field.getInstance());
+        FieldComplex<Binary64> realNaN = build(Double.NaN, 0.0);
+        FieldComplex<Binary64> imaginaryNaN = build(0.0, Double.NaN);
+        FieldComplex<Binary64> complexNaN = FieldComplex.getNaN(Binary64Field.getInstance());
         Assert.assertTrue(realNaN.equals(imaginaryNaN));
         Assert.assertTrue(imaginaryNaN.equals(complexNaN));
         Assert.assertTrue(realNaN.equals(complexNaN));
@@ -721,15 +721,15 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testHashCode() {
-        FieldComplex<Decimal64> x = build(0.0, 0.0);
-        FieldComplex<Decimal64> y = build(0.0, 0.0 + Double.MIN_VALUE);
+        FieldComplex<Binary64> x = build(0.0, 0.0);
+        FieldComplex<Binary64> y = build(0.0, 0.0 + Double.MIN_VALUE);
         Assert.assertFalse(x.hashCode()==y.hashCode());
         y = build(0.0 + Double.MIN_VALUE, 0.0);
         Assert.assertFalse(x.hashCode()==y.hashCode());
-        FieldComplex<Decimal64> realNaN = build(Double.NaN, 0.0);
-        FieldComplex<Decimal64> imaginaryNaN = build(0.0, Double.NaN);
+        FieldComplex<Binary64> realNaN = build(Double.NaN, 0.0);
+        FieldComplex<Binary64> imaginaryNaN = build(0.0, Double.NaN);
         Assert.assertEquals(realNaN.hashCode(), imaginaryNaN.hashCode());
-        Assert.assertEquals(imaginaryNaN.hashCode(), FieldComplex.getNaN(Decimal64Field.getInstance()).hashCode());
+        Assert.assertEquals(imaginaryNaN.hashCode(), FieldComplex.getNaN(Binary64Field.getInstance()).hashCode());
 
         // MATH-1118
         // "equals" and "hashCode" must be compatible: if two objects have
@@ -749,42 +749,42 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testToDegreesComplex() {
-        FieldComplex<Decimal64> z = build(3, 4);
-        FieldComplex<Decimal64> expected = build(FastMath.toDegrees(z.getRealPart().getReal()), FastMath.toDegrees(z.getImaginaryPart().getReal()));
+        FieldComplex<Binary64> z = build(3, 4);
+        FieldComplex<Binary64> expected = build(FastMath.toDegrees(z.getRealPart().getReal()), FastMath.toDegrees(z.getImaginaryPart().getReal()));
         UnitTestUtils.assertEquals(expected, z.toDegrees(), 1.0e-15);
     }
 
     @Test
     public void testToRadiansComplex() {
-        FieldComplex<Decimal64> z = build(3, 4);
-        FieldComplex<Decimal64> expected = build(FastMath.toRadians(z.getRealPart().getReal()), FastMath.toRadians(z.getImaginaryPart().getReal()));
+        FieldComplex<Binary64> z = build(3, 4);
+        FieldComplex<Binary64> expected = build(FastMath.toRadians(z.getRealPart().getReal()), FastMath.toRadians(z.getImaginaryPart().getReal()));
         UnitTestUtils.assertEquals(expected, z.toRadians(), 1.0e-15);
     }
 
     @Test
     public void testAcosComplex() {
-        FieldComplex<Decimal64> z = build(3, 4);
-        FieldComplex<Decimal64> expected = build(0.936812, -2.30551);
+        FieldComplex<Binary64> z = build(3, 4);
+        FieldComplex<Binary64> expected = build(0.936812, -2.30551);
         UnitTestUtils.assertEquals(expected, z.acos(), 1.0e-5);
         UnitTestUtils.assertEquals(build(FastMath.acos(0), 0),
-                FieldComplex.getZero(Decimal64Field.getInstance()).acos(), 1.0e-12);
+                FieldComplex.getZero(Binary64Field.getInstance()).acos(), 1.0e-12);
     }
 
     @Test
     public void testAcosNaN() {
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).acos().isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).acos().isNaN());
     }
 
     @Test
     public void testAcosInf() {
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneInf.acos());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneNegInf.acos());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infOne.acos());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfOne.acos());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.acos());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.acos());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfInf.acos());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.acos());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), oneInf.acos());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), oneNegInf.acos());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infOne.acos());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfOne.acos());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.acos());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.acos());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfInf.acos());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.acos());
     }
 
     @Test
@@ -804,26 +804,26 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     }
     @Test
     public void testAsinComplex() {
-        FieldComplex<Decimal64> z = build(3, 4);
-        FieldComplex<Decimal64> expected = build(0.633984, 2.30551);
+        FieldComplex<Binary64> z = build(3, 4);
+        FieldComplex<Binary64> expected = build(0.633984, 2.30551);
         UnitTestUtils.assertEquals(expected, z.asin(), 1.0e-5);
     }
 
     @Test
     public void testAsinNaN() {
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).asin().isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).asin().isNaN());
     }
 
     @Test
     public void testAsinInf() {
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneInf.asin());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneNegInf.asin());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infOne.asin());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfOne.asin());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.asin());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.asin());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfInf.asin());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.asin());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), oneInf.asin());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), oneNegInf.asin());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infOne.asin());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfOne.asin());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.asin());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.asin());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfInf.asin());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.asin());
     }
 
     @Test
@@ -844,31 +844,31 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testAtanComplex() {
-        FieldComplex<Decimal64> z = build(3, 4);
-        FieldComplex<Decimal64> expected = build(1.44831, 0.158997);
+        FieldComplex<Binary64> z = build(3, 4);
+        FieldComplex<Binary64> expected = build(1.44831, 0.158997);
         UnitTestUtils.assertEquals(expected, z.atan(), 1.0e-5);
     }
 
     @Test
     public void testAtanInf() {
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneInf.atan());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneNegInf.atan());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infOne.atan());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfOne.atan());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.atan());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.atan());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfInf.atan());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.atan());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), oneInf.atan());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), oneNegInf.atan());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infOne.atan());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfOne.atan());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.atan());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.atan());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfInf.atan());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.atan());
     }
 
     @Test
     public void testAtanI() {
-        Assert.assertTrue(FieldComplex.getI(Decimal64Field.getInstance()).atan().isNaN());
+        Assert.assertTrue(FieldComplex.getI(Binary64Field.getInstance()).atan().isNaN());
     }
 
     @Test
     public void testAtanNaN() {
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).atan().isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).atan().isNaN());
     }
 
     @Test
@@ -908,7 +908,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     public void testAtan2() {
         for (double x = -3; x < 3; x += 0.2) {
             for (double y = -3; y < 3; y += 0.2) {
-                final FieldComplex<Decimal64> z = build(x).atan2(build(y));
+                final FieldComplex<Binary64> z = build(x).atan2(build(y));
                 final double  r = FastMath.atan2(x, y);
                 checkRelative(r, build(MathUtils.normalizeAngle(z.getRealPart().getReal(), r), z.getImaginaryPart().getReal()));
             }
@@ -919,13 +919,13 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     public void testAtan2Complex() {
         for (double r1 : Arrays.asList(-3, 3)) {
             for (double i1 : Arrays.asList(-2, 0, 2)) {
-                final FieldComplex<Decimal64> c1 = build(r1, i1);
+                final FieldComplex<Binary64> c1 = build(r1, i1);
                 for (double r2 : Arrays.asList(-1, 1)) {
                     for (double i2 : Arrays.asList(-5, 0, 5)) {
-                        final FieldComplex<Decimal64> c2 = build(r2, i2);
+                        final FieldComplex<Binary64> c2 = build(r2, i2);
                         UnitTestUtils.assertEquals(c1.divide(c2), c1.atan2(c2).tan(), 1.0e-14);
-                        final FieldComplex<Decimal64> atan   = c1.divide(c2).atan();
-                        final FieldComplex<Decimal64> atan2  = c1.atan2(c2);
+                        final FieldComplex<Binary64> atan   = c1.divide(c2).atan();
+                        final FieldComplex<Binary64> atan2  = c1.atan2(c2);
                         final double  deltaR = FastMath.abs(atan.getReal() - atan2.getReal()) / FastMath.PI;
                         Assert.assertTrue(FastMath.abs(deltaR - FastMath.rint(deltaR)) < 1.0e-14);
                         Assert.assertEquals(atan.getImaginaryPart().getReal(), atan2.getImaginaryPart().getReal(), 1.0e-14);
@@ -938,9 +938,9 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     @Test
     public void testAtan2Real() {
         for (double r1 : Arrays.asList(-3, 3)) {
-            final FieldComplex<Decimal64> c1 = build(r1, 0);
+            final FieldComplex<Binary64> c1 = build(r1, 0);
             for (double r2 : Arrays.asList(-1, 1)) {
-                final FieldComplex<Decimal64> c2 = build(r2, 0);
+                final FieldComplex<Binary64> c2 = build(r2, 0);
                 Assert.assertEquals(FastMath.atan2(r1, r2),
                                     MathUtils.normalizeAngle(c1.atan2(c2).getRealPart().getReal(), 0.0),
                                     1.0e-14);
@@ -959,77 +959,77 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testCosComplex() {
-        FieldComplex<Decimal64> z = build(3, 4);
-        FieldComplex<Decimal64> expected = build(-27.03495, -3.851153);
+        FieldComplex<Binary64> z = build(3, 4);
+        FieldComplex<Binary64> expected = build(-27.03495, -3.851153);
         UnitTestUtils.assertEquals(expected, z.cos(), 1.0e-5);
     }
 
     @Test
     public void testCosNaN() {
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).cos().isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).cos().isNaN());
     }
 
     @Test
     public void testCosInf() {
         UnitTestUtils.assertSame(infNegInf, oneInf.cos());
         UnitTestUtils.assertSame(infInf, oneNegInf.cos());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infOne.cos());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfOne.cos());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.cos());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.cos());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfInf.cos());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.cos());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infOne.cos());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfOne.cos());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.cos());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.cos());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfInf.cos());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.cos());
     }
 
     @Test
     public void testCoshComplex() {
-        FieldComplex<Decimal64> z = build(3, 4);
-        FieldComplex<Decimal64> expected = build(-6.58066, -7.58155);
+        FieldComplex<Binary64> z = build(3, 4);
+        FieldComplex<Binary64> expected = build(-6.58066, -7.58155);
         UnitTestUtils.assertEquals(expected, z.cosh(), 1.0e-5);
     }
 
     @Test
     public void testCoshNaN() {
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).cosh().isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).cosh().isNaN());
     }
 
     @Test
     public void testCoshInf() {
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneInf.cosh());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneNegInf.cosh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), oneInf.cosh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), oneNegInf.cosh());
         UnitTestUtils.assertSame(infInf, infOne.cosh());
         UnitTestUtils.assertSame(infNegInf, negInfOne.cosh());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.cosh());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.cosh());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfInf.cosh());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.cosh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.cosh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.cosh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfInf.cosh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.cosh());
     }
 
     @Test
     public void testExpComplex() {
-        FieldComplex<Decimal64> z = build(3, 4);
-        FieldComplex<Decimal64> expected = build(-13.12878, -15.20078);
+        FieldComplex<Binary64> z = build(3, 4);
+        FieldComplex<Binary64> expected = build(-13.12878, -15.20078);
         UnitTestUtils.assertEquals(expected, z.exp(), 1.0e-5);
-        UnitTestUtils.assertEquals(FieldComplex.getOne(Decimal64Field.getInstance()),
-                FieldComplex.getZero(Decimal64Field.getInstance()).exp(), 10e-12);
-        FieldComplex<Decimal64> iPi = FieldComplex.getI(Decimal64Field.getInstance()).multiply(build(FastMath.PI, 0));
-        UnitTestUtils.assertEquals(FieldComplex.getOne(Decimal64Field.getInstance()).negate(),
+        UnitTestUtils.assertEquals(FieldComplex.getOne(Binary64Field.getInstance()),
+                FieldComplex.getZero(Binary64Field.getInstance()).exp(), 10e-12);
+        FieldComplex<Binary64> iPi = FieldComplex.getI(Binary64Field.getInstance()).multiply(build(FastMath.PI, 0));
+        UnitTestUtils.assertEquals(FieldComplex.getOne(Binary64Field.getInstance()).negate(),
                 iPi.exp(), 10e-12);
     }
 
     @Test
     public void testExpNaN() {
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).exp().isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).exp().isNaN());
     }
 
     @Test
     public void testExpInf1() {
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneInf.exp());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), oneInf.exp());
     }
 
     @Test
     public void testExpInf2() {
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneNegInf.exp());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), oneNegInf.exp());
     }
 
     @Test
@@ -1039,33 +1039,33 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testExpInf4() {
-        final FieldComplex<Decimal64> exp = negInfOne.exp();
-        UnitTestUtils.assertSame(FieldComplex.getZero(Decimal64Field.getInstance()), exp);
+        final FieldComplex<Binary64> exp = negInfOne.exp();
+        UnitTestUtils.assertSame(FieldComplex.getZero(Binary64Field.getInstance()), exp);
     }
 
     @Test
     public void testExpInf5() {
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.exp());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.exp());
     }
 
     @Test
     public void testExpInf6() {
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.exp());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.exp());
     }
 
     @Test
     public void testExpInf7() {
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfInf.exp());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfInf.exp());
     }
 
     @Test
     public void testExpInf8() {
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.exp());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.exp());
     }
 
     @Test
     public void testExpM1() {
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), FieldComplex.getNaN(Decimal64Field.getInstance()).expm1());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), FieldComplex.getNaN(Binary64Field.getInstance()).expm1());
         final double testValue = FastMath.scalb(1.0, -30);
         Assert.assertEquals(FastMath.expm1(testValue), build(testValue, 0).expm1().getRealPart().getReal(), 1.0e-30);
         Assert.assertTrue(FastMath.expm1(testValue) - build(testValue).exp().subtract(1.0).getReal() > 4.0e-19);
@@ -1075,14 +1075,14 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testLogComplex() {
-        FieldComplex<Decimal64> z = build(3, 4);
-        FieldComplex<Decimal64> expected = build(1.60944, 0.927295);
+        FieldComplex<Binary64> z = build(3, 4);
+        FieldComplex<Binary64> expected = build(1.60944, 0.927295);
         UnitTestUtils.assertEquals(expected, z.log(), 1.0e-5);
     }
 
     @Test
     public void testLogNaN() {
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).log().isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).log().isNaN());
     }
 
     @Test
@@ -1106,13 +1106,13 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testLogZero() {
-        UnitTestUtils.assertSame(negInfZero, FieldComplex.getZero(Decimal64Field.getInstance()).log());
+        UnitTestUtils.assertSame(negInfZero, FieldComplex.getZero(Binary64Field.getInstance()).log());
     }
 
     @Test
     public void testLog1P() {
-        FieldComplex<Decimal64> z = build(2, 4);
-        FieldComplex<Decimal64> expected = build(1.60944, 0.927295);
+        FieldComplex<Binary64> z = build(2, 4);
+        FieldComplex<Binary64> expected = build(1.60944, 0.927295);
         UnitTestUtils.assertEquals(expected, z.log1p(), 1.0e-5);
     }
 
@@ -1174,9 +1174,9 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
                 if ( x < 0) {
                     // special case for Complex
                     Assert.assertTrue(Double.isNaN(FastMath.pow(x, y)));
-                    Assert.assertFalse(build(x).pow(new Decimal64(y)).isNaN());
+                    Assert.assertFalse(build(x).pow(new Binary64(y)).isNaN());
                 } else {
-                    checkRelative(FastMath.pow(x, y), build(x).pow(new Decimal64(y)));
+                    checkRelative(FastMath.pow(x, y), build(x).pow(new Binary64(y)));
                 }
             }
         }
@@ -1184,9 +1184,9 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testPow() {
-        FieldComplex<Decimal64> x = build(3, 4);
-        FieldComplex<Decimal64> y = build(5, 6);
-        FieldComplex<Decimal64> expected = build(-1.860893, 11.83677);
+        FieldComplex<Binary64> x = build(3, 4);
+        FieldComplex<Binary64> y = build(5, 6);
+        FieldComplex<Binary64> expected = build(-1.860893, 11.83677);
         UnitTestUtils.assertEquals(expected, x.pow(y), 1.0e-5);
         UnitTestUtils.assertEquals(build(-46, 9).divide(2197), build(2, -3).pow(build(-3, 0)), 1.0e-15);
         UnitTestUtils.assertEquals(build(-1, 0).divide(8), build(-2, 0).pow(build(-3, 0)), 1.0e-15);
@@ -1197,154 +1197,154 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testPowNaNBase() {
-        FieldComplex<Decimal64> x = build(3, 4);
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).pow(x).isNaN());
+        FieldComplex<Binary64> x = build(3, 4);
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).pow(x).isNaN());
     }
 
     @Test
     public void testPowNaNExponent() {
-        FieldComplex<Decimal64> x = build(3, 4);
-        Assert.assertTrue(x.pow(FieldComplex.getNaN(Decimal64Field.getInstance())).isNaN());
+        FieldComplex<Binary64> x = build(3, 4);
+        Assert.assertTrue(x.pow(FieldComplex.getNaN(Binary64Field.getInstance())).isNaN());
     }
 
     @Test
     public void testPowInf() {
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), FieldComplex.getOne(Decimal64Field.getInstance()).pow(oneInf));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), FieldComplex.getOne(Decimal64Field.getInstance()).pow(oneNegInf));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), FieldComplex.getOne(Decimal64Field.getInstance()).pow(infOne));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), FieldComplex.getOne(Decimal64Field.getInstance()).pow(infInf));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), FieldComplex.getOne(Decimal64Field.getInstance()).pow(infNegInf));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), FieldComplex.getOne(Decimal64Field.getInstance()).pow(negInfInf));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), FieldComplex.getOne(Decimal64Field.getInstance()).pow(negInfNegInf));
-        UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), infOne.pow(FieldComplex.getOne(Decimal64Field.getInstance())));
-        UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), negInfOne.pow(FieldComplex.getOne(Decimal64Field.getInstance())));
-        UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), infInf.pow(FieldComplex.getOne(Decimal64Field.getInstance())));
-        UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), infNegInf.pow(FieldComplex.getOne(Decimal64Field.getInstance())));
-        UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), negInfInf.pow(FieldComplex.getOne(Decimal64Field.getInstance())));
-        UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), negInfNegInf.pow(FieldComplex.getOne(Decimal64Field.getInstance())));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.pow(infNegInf));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.pow(negInfNegInf));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.pow(infInf));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.pow(infNegInf));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.pow(negInfNegInf));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.pow(infInf));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.pow(infNegInf));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.pow(negInfNegInf));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.pow(infInf));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), FieldComplex.getOne(Binary64Field.getInstance()).pow(oneInf));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), FieldComplex.getOne(Binary64Field.getInstance()).pow(oneNegInf));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), FieldComplex.getOne(Binary64Field.getInstance()).pow(infOne));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), FieldComplex.getOne(Binary64Field.getInstance()).pow(infInf));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), FieldComplex.getOne(Binary64Field.getInstance()).pow(infNegInf));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), FieldComplex.getOne(Binary64Field.getInstance()).pow(negInfInf));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), FieldComplex.getOne(Binary64Field.getInstance()).pow(negInfNegInf));
+        UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), infOne.pow(FieldComplex.getOne(Binary64Field.getInstance())));
+        UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), negInfOne.pow(FieldComplex.getOne(Binary64Field.getInstance())));
+        UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), infInf.pow(FieldComplex.getOne(Binary64Field.getInstance())));
+        UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), infNegInf.pow(FieldComplex.getOne(Binary64Field.getInstance())));
+        UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), negInfInf.pow(FieldComplex.getOne(Binary64Field.getInstance())));
+        UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), negInfNegInf.pow(FieldComplex.getOne(Binary64Field.getInstance())));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.pow(infNegInf));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.pow(negInfNegInf));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.pow(infInf));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.pow(infNegInf));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.pow(negInfNegInf));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.pow(infInf));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.pow(infNegInf));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.pow(negInfNegInf));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.pow(infInf));
     }
 
     @Test
     public void testPowZero() {
-        UnitTestUtils.assertEquals(FieldComplex.getZero(Decimal64Field.getInstance()),
-                                 FieldComplex.getZero(Decimal64Field.getInstance()).pow(FieldComplex.getOne(Decimal64Field.getInstance())), 1.0e-12);
-        UnitTestUtils.assertSame(FieldComplex.getOne(Decimal64Field.getInstance()),
-                                 FieldComplex.getZero(Decimal64Field.getInstance()).pow(FieldComplex.getZero(Decimal64Field.getInstance())));
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()),
-                                 FieldComplex.getZero(Decimal64Field.getInstance()).pow(FieldComplex.getI(Decimal64Field.getInstance())));
-        UnitTestUtils.assertEquals(FieldComplex.getOne(Decimal64Field.getInstance()),
-                                   FieldComplex.getOne(Decimal64Field.getInstance()).pow(FieldComplex.getZero(Decimal64Field.getInstance())), 10e-12);
-        UnitTestUtils.assertEquals(FieldComplex.getOne(Decimal64Field.getInstance()),
-                                   FieldComplex.getI(Decimal64Field.getInstance()).pow(FieldComplex.getZero(Decimal64Field.getInstance())), 10e-12);
-        UnitTestUtils.assertEquals(FieldComplex.getOne(Decimal64Field.getInstance()),
-                                   build(-1, 3).pow(FieldComplex.getZero(Decimal64Field.getInstance())), 10e-12);
+        UnitTestUtils.assertEquals(FieldComplex.getZero(Binary64Field.getInstance()),
+                                 FieldComplex.getZero(Binary64Field.getInstance()).pow(FieldComplex.getOne(Binary64Field.getInstance())), 1.0e-12);
+        UnitTestUtils.assertSame(FieldComplex.getOne(Binary64Field.getInstance()),
+                                 FieldComplex.getZero(Binary64Field.getInstance()).pow(FieldComplex.getZero(Binary64Field.getInstance())));
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()),
+                                 FieldComplex.getZero(Binary64Field.getInstance()).pow(FieldComplex.getI(Binary64Field.getInstance())));
+        UnitTestUtils.assertEquals(FieldComplex.getOne(Binary64Field.getInstance()),
+                                   FieldComplex.getOne(Binary64Field.getInstance()).pow(FieldComplex.getZero(Binary64Field.getInstance())), 10e-12);
+        UnitTestUtils.assertEquals(FieldComplex.getOne(Binary64Field.getInstance()),
+                                   FieldComplex.getI(Binary64Field.getInstance()).pow(FieldComplex.getZero(Binary64Field.getInstance())), 10e-12);
+        UnitTestUtils.assertEquals(FieldComplex.getOne(Binary64Field.getInstance()),
+                                   build(-1, 3).pow(FieldComplex.getZero(Binary64Field.getInstance())), 10e-12);
     }
 
     @Test
     public void testZeroPow() {
-        UnitTestUtils.assertEquals(FieldComplex.getZero(Decimal64Field.getInstance()), FieldComplex.getZero(Decimal64Field.getInstance()).pow(2.0), 1.0e-5);
+        UnitTestUtils.assertEquals(FieldComplex.getZero(Binary64Field.getInstance()), FieldComplex.getZero(Binary64Field.getInstance()).pow(2.0), 1.0e-5);
     }
 
     @Test
     public void testScalarPow() {
-        FieldComplex<Decimal64> x = build(3, 4);
+        FieldComplex<Binary64> x = build(3, 4);
         double yDouble = 5.0;
-        FieldComplex<Decimal64> yComplex = build(yDouble);
+        FieldComplex<Binary64> yComplex = build(yDouble);
         Assert.assertEquals(x.pow(yComplex), x.pow(yDouble));
-        Assert.assertEquals(x.pow(yComplex), x.pow(new Decimal64(yDouble)));
-        UnitTestUtils.assertEquals(FieldComplex.getOne(Decimal64Field.getInstance()).negate(),
-                                   FieldComplex.getOne(Decimal64Field.getInstance()).negate().pow(0.5).pow(2),
+        Assert.assertEquals(x.pow(yComplex), x.pow(new Binary64(yDouble)));
+        UnitTestUtils.assertEquals(FieldComplex.getOne(Binary64Field.getInstance()).negate(),
+                                   FieldComplex.getOne(Binary64Field.getInstance()).negate().pow(0.5).pow(2),
                                    1.0e-15);
-        UnitTestUtils.assertEquals(FieldComplex.getOne(Decimal64Field.getInstance()).negate(),
-                                   FieldComplex.getOne(Decimal64Field.getInstance()).negate().pow(new Decimal64(0.5)).pow(new Decimal64(2)),
+        UnitTestUtils.assertEquals(FieldComplex.getOne(Binary64Field.getInstance()).negate(),
+                                   FieldComplex.getOne(Binary64Field.getInstance()).negate().pow(new Binary64(0.5)).pow(new Binary64(2)),
                                    1.0e-15);
         UnitTestUtils.assertEquals(build(2, 0), build(4, 0).pow(0.5), 1.0e-15);
-        UnitTestUtils.assertEquals(build(2, 0), build(4, 0).pow(new Decimal64(0.5)), 1.0e-15);
+        UnitTestUtils.assertEquals(build(2, 0), build(4, 0).pow(new Binary64(0.5)), 1.0e-15);
         UnitTestUtils.assertEquals(build(2, 0), build(4, 0).pow(build(0.5, 0)), 1.0e-15);
     }
 
     @Test
     public void testScalarPowNaNBase() {
-        FieldComplex<Decimal64> x = FieldComplex.getNaN(Decimal64Field.getInstance());
+        FieldComplex<Binary64> x = FieldComplex.getNaN(Binary64Field.getInstance());
         double yDouble = 5.0;
-        FieldComplex<Decimal64> yComplex = build(yDouble);
+        FieldComplex<Binary64> yComplex = build(yDouble);
         Assert.assertEquals(x.pow(yComplex), x.pow(yDouble));
-        Assert.assertEquals(x.pow(yComplex), x.pow(new Decimal64(yDouble)));
+        Assert.assertEquals(x.pow(yComplex), x.pow(new Binary64(yDouble)));
     }
 
     @Test
     public void testScalarPowNaNExponent() {
-        FieldComplex<Decimal64> x = build(3, 4);
+        FieldComplex<Binary64> x = build(3, 4);
         double yDouble = Double.NaN;
-        FieldComplex<Decimal64> yComplex = build(yDouble);
+        FieldComplex<Binary64> yComplex = build(yDouble);
         Assert.assertEquals(x.pow(yComplex), x.pow(yDouble));
-        Assert.assertEquals(x.pow(yComplex), x.pow(new Decimal64(yDouble)));
+        Assert.assertEquals(x.pow(yComplex), x.pow(new Binary64(yDouble)));
     }
 
    @Test
    public void testScalarPowInf() {
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), FieldComplex.getOne(Decimal64Field.getInstance()).pow(Double.POSITIVE_INFINITY));
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), FieldComplex.getOne(Decimal64Field.getInstance()).pow(new Decimal64(Double.POSITIVE_INFINITY)));
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), FieldComplex.getOne(Decimal64Field.getInstance()).pow(Double.NEGATIVE_INFINITY));
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), FieldComplex.getOne(Decimal64Field.getInstance()).pow(new Decimal64(Double.NEGATIVE_INFINITY)));
-       UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), infOne.pow(1.0));
-       UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), infOne.pow(new Decimal64(1.0)));
-       UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), negInfOne.pow(1.0));
-       UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), negInfOne.pow(new Decimal64(1.0)));
-       UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), infInf.pow(1.0));
-       UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), infInf.pow(new Decimal64(1.0)));
-       UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), infNegInf.pow(1.0));
-       UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), infNegInf.pow(new Decimal64(1.0)));
-       UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), negInfInf.pow(10));
-       UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), negInfInf.pow(new Decimal64(10)));
-       UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), negInfNegInf.pow(1.0));
-       UnitTestUtils.assertSame(FieldComplex.getInf(Decimal64Field.getInstance()), negInfNegInf.pow(new Decimal64(1.0)));
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.pow(Double.POSITIVE_INFINITY));
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.pow(new Decimal64(Double.POSITIVE_INFINITY)));
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.pow(Double.POSITIVE_INFINITY));
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.pow(new Decimal64(Double.POSITIVE_INFINITY)));
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.pow(Double.POSITIVE_INFINITY));
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.pow(new Decimal64(Double.POSITIVE_INFINITY)));
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.pow(Double.NEGATIVE_INFINITY));
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.pow(new Decimal64(Double.NEGATIVE_INFINITY)));
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.pow(Double.NEGATIVE_INFINITY));
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.pow(new Decimal64(Double.NEGATIVE_INFINITY)));
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.pow(Double.POSITIVE_INFINITY));
-       UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.pow(new Decimal64(Double.POSITIVE_INFINITY)));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), FieldComplex.getOne(Binary64Field.getInstance()).pow(Double.POSITIVE_INFINITY));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), FieldComplex.getOne(Binary64Field.getInstance()).pow(new Binary64(Double.POSITIVE_INFINITY)));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), FieldComplex.getOne(Binary64Field.getInstance()).pow(Double.NEGATIVE_INFINITY));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), FieldComplex.getOne(Binary64Field.getInstance()).pow(new Binary64(Double.NEGATIVE_INFINITY)));
+       UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), infOne.pow(1.0));
+       UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), infOne.pow(new Binary64(1.0)));
+       UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), negInfOne.pow(1.0));
+       UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), negInfOne.pow(new Binary64(1.0)));
+       UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), infInf.pow(1.0));
+       UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), infInf.pow(new Binary64(1.0)));
+       UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), infNegInf.pow(1.0));
+       UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), infNegInf.pow(new Binary64(1.0)));
+       UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), negInfInf.pow(10));
+       UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), negInfInf.pow(new Binary64(10)));
+       UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), negInfNegInf.pow(1.0));
+       UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), negInfNegInf.pow(new Binary64(1.0)));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.pow(Double.POSITIVE_INFINITY));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.pow(new Binary64(Double.POSITIVE_INFINITY)));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.pow(Double.POSITIVE_INFINITY));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.pow(new Binary64(Double.POSITIVE_INFINITY)));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.pow(Double.POSITIVE_INFINITY));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.pow(new Binary64(Double.POSITIVE_INFINITY)));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.pow(Double.NEGATIVE_INFINITY));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.pow(new Binary64(Double.NEGATIVE_INFINITY)));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.pow(Double.NEGATIVE_INFINITY));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.pow(new Binary64(Double.NEGATIVE_INFINITY)));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.pow(Double.POSITIVE_INFINITY));
+       UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.pow(new Binary64(Double.POSITIVE_INFINITY)));
    }
 
    @Test
    public void testScalarPowZero() {
-       UnitTestUtils.assertEquals(FieldComplex.getZero(Decimal64Field.getInstance()), FieldComplex.getZero(Decimal64Field.getInstance()).pow(1.0), 1.0e-12);
-       UnitTestUtils.assertEquals(FieldComplex.getZero(Decimal64Field.getInstance()), FieldComplex.getZero(Decimal64Field.getInstance()).pow(new Decimal64(1.0)), 1.0e-12);
-       UnitTestUtils.assertSame(FieldComplex.getOne(Decimal64Field.getInstance()), FieldComplex.getZero(Decimal64Field.getInstance()).pow(0.0));
-       UnitTestUtils.assertSame(FieldComplex.getOne(Decimal64Field.getInstance()), FieldComplex.getZero(Decimal64Field.getInstance()).pow(new Decimal64(0.0)));
-       UnitTestUtils.assertEquals(FieldComplex.getOne(Decimal64Field.getInstance()), FieldComplex.getOne(Decimal64Field.getInstance()).pow(0.0), 10e-12);
-       UnitTestUtils.assertEquals(FieldComplex.getOne(Decimal64Field.getInstance()), FieldComplex.getOne(Decimal64Field.getInstance()).pow(new Decimal64(0.0)), 10e-12);
-       UnitTestUtils.assertEquals(FieldComplex.getOne(Decimal64Field.getInstance()), FieldComplex.getI(Decimal64Field.getInstance()).pow(0.0), 10e-12);
-       UnitTestUtils.assertEquals(FieldComplex.getOne(Decimal64Field.getInstance()), FieldComplex.getI(Decimal64Field.getInstance()).pow(new Decimal64(0.0)), 10e-12);
-       UnitTestUtils.assertEquals(FieldComplex.getOne(Decimal64Field.getInstance()), build(-1, 3).pow(0.0), 10e-12);
-       UnitTestUtils.assertEquals(FieldComplex.getOne(Decimal64Field.getInstance()), build(-1, 3).pow(new Decimal64(0.0)), 10e-12);
+       UnitTestUtils.assertEquals(FieldComplex.getZero(Binary64Field.getInstance()), FieldComplex.getZero(Binary64Field.getInstance()).pow(1.0), 1.0e-12);
+       UnitTestUtils.assertEquals(FieldComplex.getZero(Binary64Field.getInstance()), FieldComplex.getZero(Binary64Field.getInstance()).pow(new Binary64(1.0)), 1.0e-12);
+       UnitTestUtils.assertSame(FieldComplex.getOne(Binary64Field.getInstance()), FieldComplex.getZero(Binary64Field.getInstance()).pow(0.0));
+       UnitTestUtils.assertSame(FieldComplex.getOne(Binary64Field.getInstance()), FieldComplex.getZero(Binary64Field.getInstance()).pow(new Binary64(0.0)));
+       UnitTestUtils.assertEquals(FieldComplex.getOne(Binary64Field.getInstance()), FieldComplex.getOne(Binary64Field.getInstance()).pow(0.0), 10e-12);
+       UnitTestUtils.assertEquals(FieldComplex.getOne(Binary64Field.getInstance()), FieldComplex.getOne(Binary64Field.getInstance()).pow(new Binary64(0.0)), 10e-12);
+       UnitTestUtils.assertEquals(FieldComplex.getOne(Binary64Field.getInstance()), FieldComplex.getI(Binary64Field.getInstance()).pow(0.0), 10e-12);
+       UnitTestUtils.assertEquals(FieldComplex.getOne(Binary64Field.getInstance()), FieldComplex.getI(Binary64Field.getInstance()).pow(new Binary64(0.0)), 10e-12);
+       UnitTestUtils.assertEquals(FieldComplex.getOne(Binary64Field.getInstance()), build(-1, 3).pow(0.0), 10e-12);
+       UnitTestUtils.assertEquals(FieldComplex.getOne(Binary64Field.getInstance()), build(-1, 3).pow(new Binary64(0.0)), 10e-12);
    }
 
     @Test(expected=NullArgumentException.class)
     public void testpowNull() {
-        FieldComplex.getOne(Decimal64Field.getInstance()).pow((FieldComplex<Decimal64>) null);
+        FieldComplex.getOne(Binary64Field.getInstance()).pow((FieldComplex<Binary64>) null);
     }
 
     @Test
     public void testSinComplex() {
-        FieldComplex<Decimal64> z = build(3, 4);
-        FieldComplex<Decimal64> expected = build(3.853738, -27.01681);
+        FieldComplex<Binary64> z = build(3, 4);
+        FieldComplex<Binary64> expected = build(3.853738, -27.01681);
         UnitTestUtils.assertEquals(expected, z.sin(), 1.0e-5);
     }
 
@@ -1352,48 +1352,48 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     public void testSinInf() {
         UnitTestUtils.assertSame(infInf, oneInf.sin());
         UnitTestUtils.assertSame(infNegInf, oneNegInf.sin());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infOne.sin());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfOne.sin());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.sin());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.sin());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfInf.sin());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.sin());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infOne.sin());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfOne.sin());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.sin());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.sin());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfInf.sin());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.sin());
     }
 
     @Test
     public void testSinNaN() {
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).sin().isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).sin().isNaN());
     }
 
     @Test
     public void testSinhComplex() {
-        FieldComplex<Decimal64> z = build(3, 4);
-        FieldComplex<Decimal64> expected = build(-6.54812, -7.61923);
+        FieldComplex<Binary64> z = build(3, 4);
+        FieldComplex<Binary64> expected = build(-6.54812, -7.61923);
         UnitTestUtils.assertEquals(expected, z.sinh(), 1.0e-5);
     }
 
     @Test
     public void testSinhNaN() {
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).sinh().isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).sinh().isNaN());
     }
 
     @Test
     public void testSinhInf() {
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneInf.sinh());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneNegInf.sinh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), oneInf.sinh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), oneNegInf.sinh());
         UnitTestUtils.assertSame(infInf, infOne.sinh());
         UnitTestUtils.assertSame(negInfInf, negInfOne.sinh());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.sinh());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.sinh());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfInf.sinh());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.sinh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.sinh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.sinh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfInf.sinh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.sinh());
     }
 
     @Test
     public void testAsinhComplex() {
         for (double x = -2; x <= 2; x += 0.125) {
             for (double y = -2; y <= 2; y += 0.125) {
-                final FieldComplex<Decimal64> z = build(x, y);
+                final FieldComplex<Binary64> z = build(x, y);
                 UnitTestUtils.assertEquals(z, z.asinh().sinh(), 1.0e-14);
             }
         }
@@ -1413,7 +1413,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     public void testAcoshComplex() {
         for (double x = -2; x <= 2; x += 0.125) {
             for (double y = -2; y <= 2; y += 0.125) {
-                final FieldComplex<Decimal64> z = build(x, y);
+                final FieldComplex<Binary64> z = build(x, y);
                 UnitTestUtils.assertEquals(z, z.acosh().cosh(), 1.0e-14);
             }
         }
@@ -1433,7 +1433,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     public void testAtanhComplex() {
         for (double x = -2; x <= 2; x += 0.125) {
             for (double y = -2; y <= 2; y += 0.125) {
-                final FieldComplex<Decimal64> z = build(x, y);
+                final FieldComplex<Binary64> z = build(x, y);
                 if (FastMath.abs(x) == 1.0 && y == 0.0) {
                     Assert.assertTrue(z.atanh().isInfinite());
                 } else {
@@ -1455,54 +1455,54 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testSqrtRealPositive() {
-        FieldComplex<Decimal64> z = build(3, 4);
-        FieldComplex<Decimal64> expected = build(2, 1);
+        FieldComplex<Binary64> z = build(3, 4);
+        FieldComplex<Binary64> expected = build(2, 1);
         UnitTestUtils.assertEquals(expected, z.sqrt(), 1.0e-5);
     }
 
     @Test
     public void testSqrtRealZero() {
-        FieldComplex<Decimal64> z = build(0.0, 4);
-        FieldComplex<Decimal64> expected = build(1.41421, 1.41421);
+        FieldComplex<Binary64> z = build(0.0, 4);
+        FieldComplex<Binary64> expected = build(1.41421, 1.41421);
         UnitTestUtils.assertEquals(expected, z.sqrt(), 1.0e-5);
     }
 
     @Test
     public void testSqrtZero() {
-        UnitTestUtils.assertEquals(FieldComplex.getZero(Decimal64Field.getInstance()), FieldComplex.getZero(Decimal64Field.getInstance()).sqrt(), 1.0e-15);
+        UnitTestUtils.assertEquals(FieldComplex.getZero(Binary64Field.getInstance()), FieldComplex.getZero(Binary64Field.getInstance()).sqrt(), 1.0e-15);
     }
 
     @Test
     public void testSqrtRealNegative() {
-        FieldComplex<Decimal64> z = build(-3.0, 4);
-        FieldComplex<Decimal64> expected = build(1, 2);
+        FieldComplex<Binary64> z = build(-3.0, 4);
+        FieldComplex<Binary64> expected = build(1, 2);
         UnitTestUtils.assertEquals(expected, z.sqrt(), 1.0e-5);
     }
 
     @Test
     public void testSqrtImaginaryZero() {
-        FieldComplex<Decimal64> z = build(-3.0, 0.0);
-        FieldComplex<Decimal64> expected = build(0.0, 1.73205);
+        FieldComplex<Binary64> z = build(-3.0, 0.0);
+        FieldComplex<Binary64> expected = build(0.0, 1.73205);
         UnitTestUtils.assertEquals(expected, z.sqrt(), 1.0e-5);
     }
 
     @Test
     public void testSqrtImaginaryNegative() {
-        FieldComplex<Decimal64> z = build(-3.0, -4.0);
-        FieldComplex<Decimal64> expected = build(1.0, -2.0);
+        FieldComplex<Binary64> z = build(-3.0, -4.0);
+        FieldComplex<Binary64> expected = build(1.0, -2.0);
         UnitTestUtils.assertEquals(expected, z.sqrt(), 1.0e-5);
     }
 
     @Test
     public void testSqrtPolar() {
-        Decimal64 r = Decimal64.ONE;
+        Binary64 r = Binary64.ONE;
         for (int i = 0; i < 5; i++) {
             r = r.add(i);
-            Decimal64 theta = Decimal64.ZERO;
+            Binary64 theta = Binary64.ZERO;
             for (int j =0; j < 11; j++) {
                 theta = theta.add(FastMath.PI / 12);
-                FieldComplex<Decimal64> z = ComplexUtils.polar2Complex(r, theta);
-                FieldComplex<Decimal64> sqrtz = ComplexUtils.polar2Complex(FastMath.sqrt(r), theta.divide(2));
+                FieldComplex<Binary64> z = ComplexUtils.polar2Complex(r, theta);
+                FieldComplex<Binary64> sqrtz = ComplexUtils.polar2Complex(FastMath.sqrt(r), theta.divide(2));
                 UnitTestUtils.assertEquals(sqrtz, z.sqrt(), 10e-12);
             }
         }
@@ -1510,7 +1510,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testSqrtNaN() {
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).sqrt().isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).sqrt().isNaN());
     }
 
     @Test
@@ -1527,14 +1527,14 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testSqrt1z() {
-        FieldComplex<Decimal64> z = build(3, 4);
-        FieldComplex<Decimal64> expected = build(4.08033, -2.94094);
+        FieldComplex<Binary64> z = build(3, 4);
+        FieldComplex<Binary64> expected = build(4.08033, -2.94094);
         UnitTestUtils.assertEquals(expected, z.sqrt1z(), 1.0e-5);
     }
 
     @Test
     public void testSqrt1zNaN() {
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).sqrt1z().isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).sqrt1z().isNaN());
     }
 
     @Test
@@ -1553,15 +1553,15 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testCbrtComplex() {
-        FieldComplex<Decimal64> z = build(15, 2);
+        FieldComplex<Binary64> z = build(15, 2);
         UnitTestUtils.assertEquals(z, z.multiply(z).multiply(z).cbrt(), 1.0e-14);
-        FieldComplex<Decimal64> branchCutPlus = build(-8.0, +0.0);
-        FieldComplex<Decimal64> cbrtPlus = branchCutPlus.cbrt();
+        FieldComplex<Binary64> branchCutPlus = build(-8.0, +0.0);
+        FieldComplex<Binary64> cbrtPlus = branchCutPlus.cbrt();
         UnitTestUtils.assertEquals(branchCutPlus, cbrtPlus.multiply(cbrtPlus).multiply(cbrtPlus), 1.0e-14);
         Assert.assertEquals(1.0, cbrtPlus.getRealPart().getReal(), 1.0e-15);
         Assert.assertEquals(FastMath.sqrt(3.0), cbrtPlus.getImaginaryPart().getReal(), 1.0e-15);
-        FieldComplex<Decimal64> branchCutMinus = build(-8.0, -0.0);
-        FieldComplex<Decimal64> cbrtMinus = branchCutMinus.cbrt();
+        FieldComplex<Binary64> branchCutMinus = build(-8.0, -0.0);
+        FieldComplex<Binary64> cbrtMinus = branchCutMinus.cbrt();
         UnitTestUtils.assertEquals(branchCutMinus, cbrtMinus.multiply(cbrtMinus).multiply(cbrtMinus), 1.0e-14);
         Assert.assertEquals(1.0, cbrtMinus.getRealPart().getReal(), 1.0e-15);
         Assert.assertEquals(-FastMath.sqrt(3.0), cbrtMinus.getImaginaryPart().getReal(), 1.0e-15);
@@ -1574,7 +1574,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
             for (int n = 1; n < 5; ++n) {
                 if (x < 0) {
                     // special case for Complex
-                    final double doubleRoot = new Decimal64(x).rootN(n).getReal();
+                    final double doubleRoot = new Binary64(x).rootN(n).getReal();
                     if (n % 2 == 0) {
                         Assert.assertTrue(Double.isNaN(doubleRoot));
                     } else {
@@ -1590,15 +1590,15 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testRootNComplex() {
-        FieldComplex<Decimal64> z = build(15, 2);
+        FieldComplex<Binary64> z = build(15, 2);
         UnitTestUtils.assertEquals(z, z.multiply(z).multiply(z).rootN(3), 1.0e-14);
-        FieldComplex<Decimal64> branchCutPlus = build(-8.0, +0.0);
-        FieldComplex<Decimal64> cbrtPlus = branchCutPlus.rootN(3);
+        FieldComplex<Binary64> branchCutPlus = build(-8.0, +0.0);
+        FieldComplex<Binary64> cbrtPlus = branchCutPlus.rootN(3);
         UnitTestUtils.assertEquals(branchCutPlus, cbrtPlus.multiply(cbrtPlus).multiply(cbrtPlus), 1.0e-14);
         Assert.assertEquals(1.0, cbrtPlus.getRealPart().getReal(), 1.0e-15);
         Assert.assertEquals(FastMath.sqrt(3.0), cbrtPlus.getImaginaryPart().getReal(), 1.0e-15);
-        FieldComplex<Decimal64> branchCutMinus = build(-8.0, -0.0);
-        FieldComplex<Decimal64> cbrtMinus = branchCutMinus.rootN(3);
+        FieldComplex<Binary64> branchCutMinus = build(-8.0, -0.0);
+        FieldComplex<Binary64> cbrtMinus = branchCutMinus.rootN(3);
         UnitTestUtils.assertEquals(branchCutMinus, cbrtMinus.multiply(cbrtMinus).multiply(cbrtMinus), 1.0e-14);
         Assert.assertEquals(1.0, cbrtMinus.getRealPart().getReal(), 1.0e-15);
         Assert.assertEquals(-FastMath.sqrt(3.0), cbrtMinus.getImaginaryPart().getReal(), 1.0e-15);
@@ -1606,11 +1606,11 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testTanComplex() {
-        FieldComplex<Decimal64> z = build(3, 4);
-        FieldComplex<Decimal64> expected = build(-0.000187346, 0.999356);
+        FieldComplex<Binary64> z = build(3, 4);
+        FieldComplex<Binary64> expected = build(-0.000187346, 0.999356);
         UnitTestUtils.assertEquals(expected, z.tan(), 1.0e-5);
         /* Check that no overflow occurs (MATH-722) */
-        FieldComplex<Decimal64> actual = build(3.0, 1E10).tan();
+        FieldComplex<Binary64> actual = build(3.0, 1E10).tan();
         expected = build(0, 1);
         UnitTestUtils.assertEquals(expected, actual, 1.0e-5);
         actual = build(3.0, -1E10).tan();
@@ -1620,19 +1620,19 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testTanNaN() {
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).tan().isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).tan().isNaN());
     }
 
     @Test
     public void testTanInf() {
-        UnitTestUtils.assertSame(FieldComplex.valueOf(new Decimal64(0.0), new Decimal64(1.0)), oneInf.tan());
-        UnitTestUtils.assertSame(FieldComplex.valueOf(new Decimal64(0.0), new Decimal64(-1.0)), oneNegInf.tan());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infOne.tan());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfOne.tan());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.tan());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.tan());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfInf.tan());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.tan());
+        UnitTestUtils.assertSame(FieldComplex.valueOf(new Binary64(0.0), new Binary64(1.0)), oneInf.tan());
+        UnitTestUtils.assertSame(FieldComplex.valueOf(new Binary64(0.0), new Binary64(-1.0)), oneNegInf.tan());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infOne.tan());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfOne.tan());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.tan());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.tan());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfInf.tan());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.tan());
     }
 
    @Test
@@ -1643,11 +1643,11 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testTanhComplex() {
-        FieldComplex<Decimal64> z = build(3, 4);
-        FieldComplex<Decimal64> expected = build(1.00071, 0.00490826);
+        FieldComplex<Binary64> z = build(3, 4);
+        FieldComplex<Binary64> expected = build(1.00071, 0.00490826);
         UnitTestUtils.assertEquals(expected, z.tanh(), 1.0e-5);
         /* Check that no overflow occurs (MATH-722) */
-        FieldComplex<Decimal64> actual = build(1E10, 3.0).tanh();
+        FieldComplex<Binary64> actual = build(1E10, 3.0).tanh();
         expected = build(1, 0);
         UnitTestUtils.assertEquals(expected, actual, 1.0e-5);
         actual = build(-1E10, 3.0).tanh();
@@ -1657,19 +1657,19 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
 
     @Test
     public void testTanhNaN() {
-        Assert.assertTrue(FieldComplex.getNaN(Decimal64Field.getInstance()).tanh().isNaN());
+        Assert.assertTrue(FieldComplex.getNaN(Binary64Field.getInstance()).tanh().isNaN());
     }
 
     @Test
     public void testTanhInf() {
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneInf.tanh());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), oneNegInf.tanh());
-        UnitTestUtils.assertSame(FieldComplex.valueOf(new Decimal64(1.0), new Decimal64(0.0)), infOne.tanh());
-        UnitTestUtils.assertSame(FieldComplex.valueOf(new Decimal64(-1.0), new Decimal64(0.0)), negInfOne.tanh());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infInf.tanh());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), infNegInf.tanh());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfInf.tanh());
-        UnitTestUtils.assertSame(FieldComplex.getNaN(Decimal64Field.getInstance()), negInfNegInf.tanh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), oneInf.tanh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), oneNegInf.tanh());
+        UnitTestUtils.assertSame(FieldComplex.valueOf(new Binary64(1.0), new Binary64(0.0)), infOne.tanh());
+        UnitTestUtils.assertSame(FieldComplex.valueOf(new Binary64(-1.0), new Binary64(0.0)), negInfOne.tanh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infInf.tanh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), infNegInf.tanh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfInf.tanh());
+        UnitTestUtils.assertSame(FieldComplex.getNaN(Binary64Field.getInstance()), negInfNegInf.tanh());
     }
 
     @Test
@@ -1697,9 +1697,9 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     @Test
     public void testNthRoot_normal_thirdRoot() {
         // The complex number we want to compute all third-roots for.
-        FieldComplex<Decimal64> z = build(-2,2);
+        FieldComplex<Binary64> z = build(-2,2);
         // The List holding all third roots
-        List<FieldComplex<Decimal64>> thirdRootsOfZ = z.nthRoot(3);
+        List<FieldComplex<Binary64>> thirdRootsOfZ = z.nthRoot(3);
         // Returned Collection must not be empty!
         Assert.assertEquals(3, thirdRootsOfZ.size());
         // test z_0
@@ -1729,9 +1729,9 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     @Test
     public void testNthRoot_normal_fourthRoot() {
         // The complex number we want to compute all third-roots for.
-        FieldComplex<Decimal64> z = build(5,-2);
+        FieldComplex<Binary64> z = build(5,-2);
         // The List holding all fourth roots
-        List<FieldComplex<Decimal64>> fourthRootsOfZ = z.nthRoot(4);
+        List<FieldComplex<Binary64>> fourthRootsOfZ = z.nthRoot(4);
         // Returned Collection must not be empty!
         Assert.assertEquals(4, fourthRootsOfZ.size());
         // test z_0
@@ -1763,9 +1763,9 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     public void testNthRoot_cornercase_thirdRoot_imaginaryPartEmpty() {
         // The number 8 has three third roots. One we all already know is the number 2.
         // But there are two more complex roots.
-        FieldComplex<Decimal64> z = build(8,0);
+        FieldComplex<Binary64> z = build(8,0);
         // The List holding all third roots
-        List<FieldComplex<Decimal64>> thirdRootsOfZ = z.nthRoot(3);
+        List<FieldComplex<Binary64>> thirdRootsOfZ = z.nthRoot(3);
         // Returned Collection must not be empty!
         Assert.assertEquals(3, thirdRootsOfZ.size());
         // test z_0
@@ -1793,9 +1793,9 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     @Test
     public void testNthRoot_cornercase_thirdRoot_realPartZero() {
         // complex number with only imaginary part
-        FieldComplex<Decimal64> z = build(0,2);
+        FieldComplex<Binary64> z = build(0,2);
         // The List holding all third roots
-        List<FieldComplex<Decimal64>> thirdRootsOfZ = z.nthRoot(3);
+        List<FieldComplex<Binary64>> thirdRootsOfZ = z.nthRoot(3);
         // Returned Collection must not be empty!
         Assert.assertEquals(3, thirdRootsOfZ.size());
         // test z_0
@@ -1815,34 +1815,34 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     @Test
     public void testNthRoot_cornercase_NAN_Inf() {
         // NaN + finite -> NaN
-        List<FieldComplex<Decimal64>> roots = oneNaN.nthRoot(3);
+        List<FieldComplex<Binary64>> roots = oneNaN.nthRoot(3);
         Assert.assertEquals(1,roots.size());
-        Assert.assertEquals(FieldComplex.getNaN(Decimal64Field.getInstance()), roots.get(0));
+        Assert.assertEquals(FieldComplex.getNaN(Binary64Field.getInstance()), roots.get(0));
 
         roots = nanZero.nthRoot(3);
         Assert.assertEquals(1,roots.size());
-        Assert.assertEquals(FieldComplex.getNaN(Decimal64Field.getInstance()), roots.get(0));
+        Assert.assertEquals(FieldComplex.getNaN(Binary64Field.getInstance()), roots.get(0));
 
         // NaN + infinite -> NaN
         roots = nanInf.nthRoot(3);
         Assert.assertEquals(1,roots.size());
-        Assert.assertEquals(FieldComplex.getNaN(Decimal64Field.getInstance()), roots.get(0));
+        Assert.assertEquals(FieldComplex.getNaN(Binary64Field.getInstance()), roots.get(0));
 
         // finite + infinite -> Inf
         roots = oneInf.nthRoot(3);
         Assert.assertEquals(1,roots.size());
-        Assert.assertEquals(FieldComplex.getInf(Decimal64Field.getInstance()), roots.get(0));
+        Assert.assertEquals(FieldComplex.getInf(Binary64Field.getInstance()), roots.get(0));
 
         // infinite + infinite -> Inf
         roots = negInfInf.nthRoot(3);
         Assert.assertEquals(1,roots.size());
-        Assert.assertEquals(FieldComplex.getInf(Decimal64Field.getInstance()), roots.get(0));
+        Assert.assertEquals(FieldComplex.getInf(Binary64Field.getInstance()), roots.get(0));
     }
 
     @Test
     public void testNthRootError() {
         try {
-            FieldComplex.getOne(Decimal64Field.getInstance()).nthRoot(-1);
+            FieldComplex.getOne(Binary64Field.getInstance()).nthRoot(-1);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
             Assert.assertEquals(LocalizedCoreFormats.CANNOT_COMPUTE_NTH_ROOT_FOR_NEGATIVE_N,
@@ -1892,7 +1892,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
      */
     @Test
     public void testGetArgument() {
-        FieldComplex<Decimal64> z = build(1, 0);
+        FieldComplex<Binary64> z = build(1, 0);
         Assert.assertEquals(0.0, z.getArgument().getReal(), 1.0e-12);
 
         z = build(1, 1);
@@ -1940,31 +1940,31 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     public void testGetArgumentNaN() {
         Assert.assertTrue(Double.isNaN(nanZero.getArgument().getReal()));
         Assert.assertTrue(Double.isNaN(zeroNaN.getArgument().getReal()));
-        Assert.assertTrue(Double.isNaN(FieldComplex.getNaN(Decimal64Field.getInstance()).getArgument().getReal()));
+        Assert.assertTrue(Double.isNaN(FieldComplex.getNaN(Binary64Field.getInstance()).getArgument().getReal()));
     }
 
     @Test
     public void testValueOf() {
-        Assert.assertEquals(2.0, FieldComplex.valueOf(new Decimal64(2.0)).getRealPart().getReal(), 1.0e-15);
-        Assert.assertEquals(0.0, FieldComplex.valueOf(new Decimal64(2.0)).getImaginaryPart().getReal(), 1.0e-15);
-        Assert.assertTrue(FieldComplex.valueOf(new Decimal64(Double.NaN)).isNaN());
-        Assert.assertTrue(FieldComplex.valueOf(new Decimal64(Double.POSITIVE_INFINITY)).isInfinite());
-        Assert.assertEquals( 2.0, FieldComplex.valueOf(new Decimal64(2.0), new Decimal64(-1.0)).getRealPart().getReal(), 1.0e-15);
-        Assert.assertEquals(-1.0, FieldComplex.valueOf(new Decimal64(2.0), new Decimal64(-1.0)).getImaginaryPart().getReal(), 1.0e-15);
-        Assert.assertTrue(FieldComplex.valueOf(new Decimal64(Double.NaN), new Decimal64(0.0)).isNaN());
-        Assert.assertTrue(FieldComplex.valueOf(new Decimal64(Double.POSITIVE_INFINITY), new Decimal64(0.0)).isInfinite());
-        Assert.assertTrue(FieldComplex.valueOf(new Decimal64(Double.NaN), new Decimal64(-1.0)).isNaN());
-        Assert.assertTrue(FieldComplex.valueOf(new Decimal64(Double.POSITIVE_INFINITY), new Decimal64(-1.0)).isInfinite());
-        Assert.assertTrue(FieldComplex.valueOf(new Decimal64(0.0), new Decimal64(Double.NaN)).isNaN());
-        Assert.assertTrue(FieldComplex.valueOf(new Decimal64(0.0), new Decimal64(Double.POSITIVE_INFINITY)).isInfinite());
-        Assert.assertTrue(FieldComplex.valueOf(new Decimal64(-1.0), new Decimal64(Double.NaN)).isNaN());
-        Assert.assertTrue(FieldComplex.valueOf(new Decimal64(-1.0), new Decimal64(Double.POSITIVE_INFINITY)).isInfinite());
+        Assert.assertEquals(2.0, FieldComplex.valueOf(new Binary64(2.0)).getRealPart().getReal(), 1.0e-15);
+        Assert.assertEquals(0.0, FieldComplex.valueOf(new Binary64(2.0)).getImaginaryPart().getReal(), 1.0e-15);
+        Assert.assertTrue(FieldComplex.valueOf(new Binary64(Double.NaN)).isNaN());
+        Assert.assertTrue(FieldComplex.valueOf(new Binary64(Double.POSITIVE_INFINITY)).isInfinite());
+        Assert.assertEquals( 2.0, FieldComplex.valueOf(new Binary64(2.0), new Binary64(-1.0)).getRealPart().getReal(), 1.0e-15);
+        Assert.assertEquals(-1.0, FieldComplex.valueOf(new Binary64(2.0), new Binary64(-1.0)).getImaginaryPart().getReal(), 1.0e-15);
+        Assert.assertTrue(FieldComplex.valueOf(new Binary64(Double.NaN), new Binary64(0.0)).isNaN());
+        Assert.assertTrue(FieldComplex.valueOf(new Binary64(Double.POSITIVE_INFINITY), new Binary64(0.0)).isInfinite());
+        Assert.assertTrue(FieldComplex.valueOf(new Binary64(Double.NaN), new Binary64(-1.0)).isNaN());
+        Assert.assertTrue(FieldComplex.valueOf(new Binary64(Double.POSITIVE_INFINITY), new Binary64(-1.0)).isInfinite());
+        Assert.assertTrue(FieldComplex.valueOf(new Binary64(0.0), new Binary64(Double.NaN)).isNaN());
+        Assert.assertTrue(FieldComplex.valueOf(new Binary64(0.0), new Binary64(Double.POSITIVE_INFINITY)).isInfinite());
+        Assert.assertTrue(FieldComplex.valueOf(new Binary64(-1.0), new Binary64(Double.NaN)).isNaN());
+        Assert.assertTrue(FieldComplex.valueOf(new Binary64(-1.0), new Binary64(Double.POSITIVE_INFINITY)).isInfinite());
     }
 
     @Test
     public void testField() {
-        Assert.assertEquals(FieldComplexField.getField(Decimal64Field.getInstance()),
-                            FieldComplex.getZero(Decimal64Field.getInstance()).getField());
+        Assert.assertEquals(FieldComplexField.getField(Binary64Field.getInstance()),
+                            FieldComplex.getZero(Binary64Field.getInstance()).getField());
     }
 
     @Test
@@ -1988,7 +1988,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     public void testCeilComplex() {
         for (double x = -3.9; x < 3.9; x += 0.05) {
             for (double y = -3.9; y < 3.9; y += 0.05) {
-                final FieldComplex<Decimal64> z = build(x, y);
+                final FieldComplex<Binary64> z = build(x, y);
                 Assert.assertEquals(FastMath.ceil(x), z.ceil().getRealPart().getReal(), 1.0e-15);
                 Assert.assertEquals(FastMath.ceil(y), z.ceil().getImaginaryPart().getReal(), 1.0e-15);
             }
@@ -1999,7 +1999,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     public void testFloorComplex() {
         for (double x = -3.9; x < 3.9; x += 0.05) {
             for (double y = -3.9; y < 3.9; y += 0.05) {
-                final FieldComplex<Decimal64> z = build(x, y);
+                final FieldComplex<Binary64> z = build(x, y);
                 Assert.assertEquals(FastMath.floor(x), z.floor().getRealPart().getReal(), 1.0e-15);
                 Assert.assertEquals(FastMath.floor(y), z.floor().getImaginaryPart().getReal(), 1.0e-15);
             }
@@ -2010,7 +2010,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     public void testRintComplex() {
         for (double x = -3.9; x < 3.9; x += 0.05) {
             for (double y = -3.9; y < 3.9; y += 0.05) {
-                final FieldComplex<Decimal64> z = build(x, y);
+                final FieldComplex<Binary64> z = build(x, y);
                 Assert.assertEquals(FastMath.rint(x), z.rint().getRealPart().getReal(), 1.0e-15);
                 Assert.assertEquals(FastMath.rint(y), z.rint().getImaginaryPart().getReal(), 1.0e-15);
             }
@@ -2021,12 +2021,12 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     public void testRemainderComplexComplex() {
         for (double x1 = -3.9; x1 < 3.9; x1 += 0.125) {
             for (double y1 = -3.9; y1 < 3.9; y1 += 0.125) {
-                final FieldComplex<Decimal64> z1 = build(x1, y1);
+                final FieldComplex<Binary64> z1 = build(x1, y1);
                 for (double x2 = -3.92; x2 < 3.9; x2 += 0.125) {
                     for (double y2 = -3.92; y2 < 3.9; y2 += 0.125) {
-                        final FieldComplex<Decimal64> z2 = build(x2, y2);
-                        final FieldComplex<Decimal64> r  = z1.remainder(z2);
-                        final FieldComplex<Decimal64> q  = z1.subtract(r).divide(z2);
+                        final FieldComplex<Binary64> z2 = build(x2, y2);
+                        final FieldComplex<Binary64> r  = z1.remainder(z2);
+                        final FieldComplex<Binary64> q  = z1.subtract(r).divide(z2);
                         Assert.assertTrue(r.norm() <= z2.norm());
                         Assert.assertEquals(FastMath.rint(q.getRealPart().getReal()), q.getRealPart().getReal(), 2.0e-14);
                         Assert.assertEquals(FastMath.rint(q.getImaginaryPart().getReal()), q.getImaginaryPart().getReal(), 2.0e-14);
@@ -2040,10 +2040,10 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     public void testRemainderComplexDouble() {
         for (double x1 = -3.9; x1 < 3.9; x1 += 0.125) {
             for (double y1 = -3.9; y1 < 3.9; y1 += 0.125) {
-                final FieldComplex<Decimal64> z1 = build(x1, y1);
+                final FieldComplex<Binary64> z1 = build(x1, y1);
                 for (double a = -3.92; a < 3.9; a += 0.125) {
-                        final FieldComplex<Decimal64> r  = z1.remainder(a);
-                        final FieldComplex<Decimal64> q  = z1.subtract(r).divide(a);
+                        final FieldComplex<Binary64> r  = z1.remainder(a);
+                        final FieldComplex<Binary64> q  = z1.subtract(r).divide(a);
                         Assert.assertTrue(r.norm() <= FastMath.abs(a));
                         Assert.assertEquals(FastMath.rint(q.getRealPart().getReal()), q.getRealPart().getReal(), 2.0e-14);
                         Assert.assertEquals(FastMath.rint(q.getImaginaryPart().getReal()), q.getImaginaryPart().getReal(), 2.0e-14);
@@ -2060,13 +2060,13 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
         checkRemainder(build(-5.89, 0.33), build(2.4, -0.123), build(-1.09, 0.084));
     }
 
-    private void checkRemainder(final FieldComplex<Decimal64> c1, final FieldComplex<Decimal64> c2, final FieldComplex<Decimal64> expectedRemainder) {
+    private void checkRemainder(final FieldComplex<Binary64> c1, final FieldComplex<Binary64> c2, final FieldComplex<Binary64> expectedRemainder) {
 
-        final FieldComplex<Decimal64> remainder = c1.remainder(c2);
+        final FieldComplex<Binary64> remainder = c1.remainder(c2);
         Assert.assertEquals(expectedRemainder.getRealPart().getReal(),      remainder.getRealPart().getReal(),      1.0e-15);
         Assert.assertEquals(expectedRemainder.getImaginaryPart().getReal(), remainder.getImaginaryPart().getReal(), 1.0e-15);
 
-        final FieldComplex<Decimal64> crossCheck = c1.subtract(remainder).divide(c2);
+        final FieldComplex<Binary64> crossCheck = c1.subtract(remainder).divide(c2);
         Assert.assertTrue(Precision.isMathematicalInteger(crossCheck.getRealPart().getReal()));
         Assert.assertTrue(Precision.isMathematicalInteger(crossCheck.getImaginaryPart().getReal()));
 
@@ -2076,10 +2076,10 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     public void testCopySignFieldComplex() {
         for (double x1 = -3.9; x1 < 3.9; x1 += 0.08) {
             for (double y1 = -3.9; y1 < 3.9; y1 += 0.08) {
-                final FieldComplex<Decimal64> z1 = build(x1, y1);
+                final FieldComplex<Binary64> z1 = build(x1, y1);
                 for (double x2 = -3.9; x2 < 3.9; x2 += 0.08) {
                     for (double y2 = -3.9; y2 < 3.9; y2 += 0.08) {
-                        final FieldComplex<Decimal64> z2 = build(x2, y2);
+                        final FieldComplex<Binary64> z2 = build(x2, y2);
                         Assert.assertEquals(FastMath.copySign(x1, x2), z1.copySign(z2).getRealPart().getReal(), 1.0e-15);
                         Assert.assertEquals(FastMath.copySign(y1, y2), z1.copySign(z2).getImaginaryPart().getReal(), 1.0e-15);
                     }
@@ -2092,7 +2092,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     public void testCopySignDoubleComplex() {
         for (double x1 = -3.9; x1 < 3.9; x1 += 0.05) {
             for (double y1 = -3.9; y1 < 3.9; y1 += 0.05) {
-                final FieldComplex<Decimal64> z1 = build(x1, y1);
+                final FieldComplex<Binary64> z1 = build(x1, y1);
                 for (double r = -3.9; r < 3.9; r += 0.05) {
                     Assert.assertEquals(FastMath.copySign(x1, r), z1.copySign(r).getRealPart().getReal(), 1.0e-15);
                     Assert.assertEquals(FastMath.copySign(y1, r), z1.copySign(r).getImaginaryPart().getReal(), 1.0e-15);
@@ -2105,42 +2105,42 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     public void testSignumComplex() {
         for (double x = -3.9; x < 3.9; x += 0.05) {
             for (double y = -3.9; y < 3.9; y += 0.05) {
-                final FieldComplex<Decimal64> z = build(x, y);
+                final FieldComplex<Binary64> z = build(x, y);
                 Assert.assertEquals(1.0, z.sign().norm(), 1.0e-15);
-                Assert.assertEquals(FastMath.copySign(1, FastMath.signum(x)), FastMath.copySign(Decimal64.ONE, z.sign().getRealPart()).getReal(), 1.0e-15);
-                Assert.assertEquals(FastMath.copySign(1, FastMath.signum(y)), FastMath.copySign(Decimal64.ONE, z.sign().getImaginaryPart()).getReal(), 1.0e-15);
+                Assert.assertEquals(FastMath.copySign(1, FastMath.signum(x)), FastMath.copySign(Binary64.ONE, z.sign().getRealPart()).getReal(), 1.0e-15);
+                Assert.assertEquals(FastMath.copySign(1, FastMath.signum(y)), FastMath.copySign(Binary64.ONE, z.sign().getImaginaryPart()).getReal(), 1.0e-15);
             }
         }
         Assert.assertTrue(Complex.NaN.sign().isNaN());
         for (int sR : Arrays.asList(-1, +1)) {
             for (int sI : Arrays.asList(-1, +1)) {
-                FieldComplex<Decimal64> z = build(FastMath.copySign(0, sR), FastMath.copySign(0, sI));
+                FieldComplex<Binary64> z = build(FastMath.copySign(0, sR), FastMath.copySign(0, sI));
                 Assert.assertTrue(z.isZero());
-                FieldComplex<Decimal64> zSign = z.sign();
+                FieldComplex<Binary64> zSign = z.sign();
                 Assert.assertTrue(zSign.isZero());
-                Assert.assertEquals(sR, FastMath.copySign(Decimal64.ONE, zSign.getRealPart()).getReal(), 1.0e-15);
-                Assert.assertEquals(sI, FastMath.copySign(Decimal64.ONE, zSign.getImaginaryPart()).getReal(), 1.0e-15);
+                Assert.assertEquals(sR, FastMath.copySign(Binary64.ONE, zSign.getRealPart()).getReal(), 1.0e-15);
+                Assert.assertEquals(sI, FastMath.copySign(Binary64.ONE, zSign.getImaginaryPart()).getReal(), 1.0e-15);
             }
         }
     }
 
     @Test
     public void testLinearCombination1() {
-        final FieldComplex<Decimal64>[] a = MathArrays.buildArray(build(0.0).getField(), 2);
+        final FieldComplex<Binary64>[] a = MathArrays.buildArray(build(0.0).getField(), 2);
         a[0] = build(-1321008684645961.0 / 268435456.0, +5774608829631843.0 / 268435456.0);
         a[1] = build(-7645843051051357.0 / 8589934592.0, 0.0);
-        final FieldComplex<Decimal64>[] b = MathArrays.buildArray(build(0.0).getField(), 2);
+        final FieldComplex<Binary64>[] b = MathArrays.buildArray(build(0.0).getField(), 2);
         b[0] = build(-5712344449280879.0 / 2097152.0, -4550117129121957.0 / 2097152.0);
         b[1] = build(8846951984510141.0 / 131072.0, 0.0);
 
-        final FieldComplex<Decimal64> abSumInline = FieldComplex.getZero(Decimal64Field.getInstance()).linearCombination(a[0], b[0],
+        final FieldComplex<Binary64> abSumInline = FieldComplex.getZero(Binary64Field.getInstance()).linearCombination(a[0], b[0],
                                                                                                                          a[1], b[1]);
-        final FieldComplex<Decimal64> abSumArray = FieldComplex.getZero(Decimal64Field.getInstance()).linearCombination(a, b);
+        final FieldComplex<Binary64> abSumArray = FieldComplex.getZero(Binary64Field.getInstance()).linearCombination(a, b);
 
         UnitTestUtils.assertEquals(abSumInline, abSumArray, 0);
         UnitTestUtils.assertEquals(-1.8551294182586248737720779899, abSumInline.getRealPart().getReal(), 1.0e-15);
 
-        final FieldComplex<Decimal64> naive = a[0].multiply(b[0]).add(a[1].multiply(b[1]));
+        final FieldComplex<Binary64> naive = a[0].multiply(b[0]).add(a[1].multiply(b[1]));
         Assert.assertTrue(naive.subtract(abSumInline).norm() > 1.5);
 
     }
@@ -2158,28 +2158,28 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
         Assert.assertTrue(build(+0.0, -0.0).isZero());
         Assert.assertTrue(build(+0.0, +0.0).isZero());
 
-        Assert.assertFalse(build(-0.0, -0.0).equals(FieldComplex.getZero(Decimal64Field.getInstance())));
-        Assert.assertFalse(build(-0.0, +0.0).equals(FieldComplex.getZero(Decimal64Field.getInstance())));
-        Assert.assertFalse(build(+0.0, -0.0).equals(FieldComplex.getZero(Decimal64Field.getInstance())));
-        Assert.assertTrue(build(+0.0, +0.0).equals(FieldComplex.getZero(Decimal64Field.getInstance())));
+        Assert.assertFalse(build(-0.0, -0.0).equals(FieldComplex.getZero(Binary64Field.getInstance())));
+        Assert.assertFalse(build(-0.0, +0.0).equals(FieldComplex.getZero(Binary64Field.getInstance())));
+        Assert.assertFalse(build(+0.0, -0.0).equals(FieldComplex.getZero(Binary64Field.getInstance())));
+        Assert.assertTrue(build(+0.0, +0.0).equals(FieldComplex.getZero(Binary64Field.getInstance())));
 
     }
 
     /**
      * Class to test extending Complex
      */
-    public static class TestComplex extends FieldComplex<Decimal64> {
+    public static class TestComplex extends FieldComplex<Binary64> {
 
-        public TestComplex(Decimal64 real, Decimal64 imaginary) {
+        public TestComplex(Binary64 real, Binary64 imaginary) {
             super(real, imaginary);
         }
 
-        public TestComplex(FieldComplex<Decimal64> other) {
+        public TestComplex(FieldComplex<Binary64> other) {
             this(other.getRealPart(), other.getImaginaryPart());
         }
 
         @Override
-        protected TestComplex createComplex(Decimal64 real, Decimal64 imaginary) {
+        protected TestComplex createComplex(Binary64 real, Binary64 imaginary) {
             return new TestComplex(real, imaginary);
         }
 

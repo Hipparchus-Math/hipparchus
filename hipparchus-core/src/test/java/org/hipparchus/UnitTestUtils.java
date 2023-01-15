@@ -43,7 +43,7 @@ import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.FieldMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Binary64;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -110,7 +110,7 @@ public class UnitTestUtils {
      * Verifies that real and imaginary parts of the two complex arguments
      * differ by at most delta.  Also ensures that NaN / infinite components match.
      */
-    public static void assertEquals(FieldComplex<Decimal64> expected, FieldComplex<Decimal64> actual, double delta) {
+    public static void assertEquals(FieldComplex<Binary64> expected, FieldComplex<Binary64> actual, double delta) {
         Assert.assertEquals(expected.getRealPart().getReal(), actual.getRealPart().getReal(), delta);
         Assert.assertEquals(expected.getImaginaryPart().getReal(), actual.getImaginaryPart().getReal(), delta);
     }
@@ -119,7 +119,7 @@ public class UnitTestUtils {
      * Verifies that real and imaginary parts of the two complex arguments
      * are exactly the same.  Also ensures that NaN / infinite components match.
      */
-    public static void assertSame(FieldComplex<Decimal64> expected, FieldComplex<Decimal64> actual) {
+    public static void assertSame(FieldComplex<Binary64> expected, FieldComplex<Binary64> actual) {
         assertSame(expected.getRealPart().getReal(), actual.getRealPart().getReal());
         assertSame(expected.getImaginaryPart().getReal(), actual.getImaginaryPart().getReal());
     }

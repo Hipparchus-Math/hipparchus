@@ -16,8 +16,8 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -25,13 +25,13 @@ public class FieldMatrixTest {
 
     @Test
     public void testDefaultMultiplyTransposed() {
-        FieldMatrix<Decimal64> a = createMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
-        FieldMatrix<Decimal64> b = createMatrix(new double[][] { {4d, -5d, 6d} });
-        FieldMatrix<Decimal64> abTRef = a.multiplyTransposed(b);
+        FieldMatrix<Binary64> a = createMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
+        FieldMatrix<Binary64> b = createMatrix(new double[][] { {4d, -5d, 6d} });
+        FieldMatrix<Binary64> abTRef = a.multiplyTransposed(b);
         DefaultMatrix dma = new DefaultMatrix(a);
         DefaultMatrix dmb = new DefaultMatrix(b);
-        FieldMatrix<Decimal64> abT = dma.multiplyTransposed(dmb);
-        FieldMatrix<Decimal64> diff = abT.subtract(abTRef);
+        FieldMatrix<Binary64> abT = dma.multiplyTransposed(dmb);
+        FieldMatrix<Binary64> diff = abT.subtract(abTRef);
         for (int i = 0; i < diff.getRowDimension(); ++i) {
             for (int j = 0; j < diff.getColumnDimension(); ++j) {
                 Assert.assertEquals(0.0, diff.getEntry(i, j).doubleValue(), 1.0e-10);
@@ -41,13 +41,13 @@ public class FieldMatrixTest {
 
     @Test
     public void testDefaultTransposeMultiply() {
-        FieldMatrix<Decimal64> a = createMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
-        FieldMatrix<Decimal64> b = createMatrix(new double[][] { {4d}, {-5d}, {6d} });
-        FieldMatrix<Decimal64> aTbRef = a.transposeMultiply(b);
+        FieldMatrix<Binary64> a = createMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
+        FieldMatrix<Binary64> b = createMatrix(new double[][] { {4d}, {-5d}, {6d} });
+        FieldMatrix<Binary64> aTbRef = a.transposeMultiply(b);
         DefaultMatrix dma = new DefaultMatrix(a);
         DefaultMatrix dmb = new DefaultMatrix(b);
-        FieldMatrix<Decimal64> aTb = dma.transposeMultiply(dmb);
-        FieldMatrix<Decimal64> diff = aTb.subtract(aTbRef);
+        FieldMatrix<Binary64> aTb = dma.transposeMultiply(dmb);
+        FieldMatrix<Binary64> diff = aTb.subtract(aTbRef);
         for (int i = 0; i < diff.getRowDimension(); ++i) {
             for (int j = 0; j < diff.getColumnDimension(); ++j) {
                 Assert.assertEquals(0.0, diff.getEntry(i, j).doubleValue(), 1.0e-10);
@@ -57,12 +57,12 @@ public class FieldMatrixTest {
 
     @Test
     public void testDefaultMap() {
-        FieldMatrix<Decimal64> a = createMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
-        FieldMatrix<Decimal64> result = a.add(a.map(x -> x.negate()));
-        result.walkInOptimizedOrder(new FieldMatrixPreservingVisitor<Decimal64>() {
+        FieldMatrix<Binary64> a = createMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
+        FieldMatrix<Binary64> result = a.add(a.map(x -> x.negate()));
+        result.walkInOptimizedOrder(new FieldMatrixPreservingVisitor<Binary64>() {
             
             @Override
-            public void visit(int row, int column, Decimal64 value) {
+            public void visit(int row, int column, Binary64 value) {
                 Assert.assertEquals(0.0, value.getReal(), 1.0e-10);
             }
             
@@ -72,19 +72,19 @@ public class FieldMatrixTest {
             }
             
             @Override
-            public Decimal64 end() {
-                return Decimal64Field.getInstance().getZero();
+            public Binary64 end() {
+                return Binary64Field.getInstance().getZero();
             }
         });
     }
 
     // local class that does NOT override multiplyTransposed nor transposeMultiply nor map nor mapToSelf
     // so the default methods are called
-    private class DefaultMatrix extends AbstractFieldMatrix<Decimal64> {
+    private class DefaultMatrix extends AbstractFieldMatrix<Binary64> {
 
-        FieldMatrix<Decimal64> m;
-        public DefaultMatrix(FieldMatrix<Decimal64> m) {
-            super(Decimal64Field.getInstance());
+        FieldMatrix<Binary64> m;
+        public DefaultMatrix(FieldMatrix<Binary64> m) {
+            super(Binary64Field.getInstance());
             this.m = m;
         }
 
@@ -99,43 +99,43 @@ public class FieldMatrixTest {
         }
 
         @Override
-        public FieldMatrix<Decimal64> createMatrix(int rowDimension, int columnDimension) {
+        public FieldMatrix<Binary64> createMatrix(int rowDimension, int columnDimension) {
             return m.createMatrix(rowDimension, columnDimension);
         }
 
         @Override
-        public FieldMatrix<Decimal64> copy() {
+        public FieldMatrix<Binary64> copy() {
             return m.copy();
         }
 
         @Override
-        public void setEntry(int row, int column, Decimal64 value) {
+        public void setEntry(int row, int column, Binary64 value) {
             m.setEntry(row, column, value);
         }
 
         @Override
-        public void addToEntry(int row, int column, Decimal64 increment) {
+        public void addToEntry(int row, int column, Binary64 increment) {
             m.addToEntry(row, column, increment);
         }
 
         @Override
-        public void multiplyEntry(int row, int column, Decimal64 factor) {
+        public void multiplyEntry(int row, int column, Binary64 factor) {
             m.multiplyEntry(row, column, factor);
         }
 
         @Override
-        public Decimal64 getEntry(int row, int column) {
+        public Binary64 getEntry(int row, int column) {
             return m.getEntry(row, column);
         }
 
     }
 
-    private FieldMatrix<Decimal64> createMatrix(double[][] a) {
-        FieldMatrix<Decimal64> m = MatrixUtils.createFieldMatrix(Decimal64Field.getInstance(),
+    private FieldMatrix<Binary64> createMatrix(double[][] a) {
+        FieldMatrix<Binary64> m = MatrixUtils.createFieldMatrix(Binary64Field.getInstance(),
                                                                  a.length, a[0].length);
         for (int i = 0; i < m.getRowDimension(); ++i) {
             for (int j = 0; j < m.getColumnDimension(); ++j) {
-                m.setEntry(i, j, new Decimal64(a[i][j]));
+                m.setEntry(i, j, new Binary64(a[i][j]));
             }
         }
         return m;

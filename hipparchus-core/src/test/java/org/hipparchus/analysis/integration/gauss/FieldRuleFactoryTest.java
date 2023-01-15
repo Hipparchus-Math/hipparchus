@@ -31,8 +31,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
@@ -56,14 +56,14 @@ public class FieldRuleFactoryTest {
             = new ThreadPoolExecutor(3, numTasks, 1, TimeUnit.SECONDS,
                                      new ArrayBlockingQueue<Runnable>(2));
 
-        final List<Future<Pair<Decimal64[], Decimal64[]>>> results
-            = new ArrayList<Future<Pair<Decimal64[], Decimal64[]>>>();
+        final List<Future<Pair<Binary64[], Binary64[]>>> results
+            = new ArrayList<Future<Pair<Binary64[], Binary64[]>>>();
         for (int i = 0; i < numTasks; i++) {
             results.add(exec.submit(new RuleBuilder()));
         }
 
         // Ensure that all computations have completed.
-        for (Future<Pair<Decimal64[], Decimal64[]>> f : results) {
+        for (Future<Pair<Binary64[], Binary64[]>> f : results) {
             f.get();
         }
 
@@ -72,10 +72,10 @@ public class FieldRuleFactoryTest {
         Assert.assertEquals("Rule computation was called " + n + " times", 1, n);
     }
 
-    private static class RuleBuilder implements Callable<Pair<Decimal64[], Decimal64[]>> {
+    private static class RuleBuilder implements Callable<Pair<Binary64[], Binary64[]>> {
         private static final DummyRuleFactory factory = new DummyRuleFactory();
 
-        public Pair<Decimal64[], Decimal64[]> call() {
+        public Pair<Binary64[], Binary64[]> call() {
             final int dummy = 2; // Always request the same rule.
             return factory.getRule(dummy);
         }
@@ -85,17 +85,17 @@ public class FieldRuleFactoryTest {
         }
     }
 
-    private static class DummyRuleFactory extends FieldAbstractRuleFactory<Decimal64> {
+    private static class DummyRuleFactory extends FieldAbstractRuleFactory<Binary64> {
         /** Rule computations counter. */
         private static AtomicInteger nCalls = new AtomicInteger();
 
         
         DummyRuleFactory() {
-            super(Decimal64Field.getInstance());
+            super(Binary64Field.getInstance());
         }
 
         @Override
-        protected Pair<Decimal64[], Decimal64[]> computeRule(int order) {
+        protected Pair<Binary64[], Binary64[]> computeRule(int order) {
             // Tracks whether this computation has been called more than once.
             nCalls.getAndIncrement();
 
@@ -107,11 +107,11 @@ public class FieldRuleFactoryTest {
             }
 
             // Dummy rule (but contents must exist).
-            final Decimal64[] p = new Decimal64[order];
-            final Decimal64[] w = new Decimal64[order];
+            final Binary64[] p = new Binary64[order];
+            final Binary64[] w = new Binary64[order];
             for (int i = 0; i < order; i++) {
-                p[i] = new Decimal64(i);
-                w[i] = new Decimal64(i);
+                p[i] = new Binary64(i);
+                w[i] = new Binary64(i);
             }
             return new Pair<>(p, w);
         }

@@ -20,7 +20,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.junit.Test;
 
 public class DormandPrince853FieldIntegratorTest extends EmbeddedRungeKuttaFieldIntegratorAbstractTest {
@@ -39,37 +39,37 @@ public class DormandPrince853FieldIntegratorTest extends EmbeddedRungeKuttaField
 
     @Override
     public void testNonFieldIntegratorConsistency() {
-        doTestNonFieldIntegratorConsistency(Decimal64Field.getInstance());
+        doTestNonFieldIntegratorConsistency(Binary64Field.getInstance());
     }
 
     @Override
     public void testSanityChecks() {
-        doTestSanityChecks(Decimal64Field.getInstance());
+        doTestSanityChecks(Binary64Field.getInstance());
     }
 
     @Override
     public void testBackward() {
-        doTestBackward(Decimal64Field.getInstance(), 8.1e-8, 1.1e-7, 1.0e-12, "Dormand-Prince 8 (5, 3)");
+        doTestBackward(Binary64Field.getInstance(), 8.1e-8, 1.1e-7, 1.0e-12, "Dormand-Prince 8 (5, 3)");
     }
 
     @Override
     public void testKepler() {
-        doTestKepler(Decimal64Field.getInstance(), 4.4e-11);
+        doTestKepler(Binary64Field.getInstance(), 4.4e-11);
     }
 
     @Override
     public void testTorqueFreeMotion() {
-        doTestTorqueFreeMotion(Decimal64Field.getInstance(), 4.0e-16);
+        doTestTorqueFreeMotion(Binary64Field.getInstance(), 4.0e-16);
     }
 
     @Override
     public void testForwardBackwardExceptions() {
-        doTestForwardBackwardExceptions(Decimal64Field.getInstance());
+        doTestForwardBackwardExceptions(Binary64Field.getInstance());
     }
 
     @Override
     public void testMinStep() {
-        doTestMinStep(Decimal64Field.getInstance());
+        doTestMinStep(Binary64Field.getInstance());
     }
 
     @Override
@@ -77,22 +77,22 @@ public class DormandPrince853FieldIntegratorTest extends EmbeddedRungeKuttaField
         // the 1.3 factor is only valid for this test
         // and has been obtained from trial and error
         // there is no general relation between local and global errors
-        doTestIncreasingTolerance(Decimal64Field.getInstance(), 1.3, 1.0e-12);
+        doTestIncreasingTolerance(Binary64Field.getInstance(), 1.3, 1.0e-12);
     }
 
     @Override
     public void testEvents() {
-        doTestEvents(Decimal64Field.getInstance(), 2.1e-7, "Dormand-Prince 8 (5, 3)");
+        doTestEvents(Binary64Field.getInstance(), 2.1e-7, "Dormand-Prince 8 (5, 3)");
     }
 
     @Override
     public void testEventsErrors() {
-        doTestEventsErrors(Decimal64Field.getInstance());
+        doTestEventsErrors(Binary64Field.getInstance());
     }
 
     @Override
     public void testEventsNoConvergence() {
-        doTestEventsNoConvergence(Decimal64Field.getInstance());
+        doTestEventsNoConvergence(Binary64Field.getInstance());
     }
 
     @Override
@@ -102,7 +102,7 @@ public class DormandPrince853FieldIntegratorTest extends EmbeddedRungeKuttaField
 
     @Test
     public void testSecondaryEquations() {
-        doTestSecondaryEquations(Decimal64Field.getInstance(), 3.3e-12, 8.9e-15);
+        doTestSecondaryEquations(Binary64Field.getInstance(), 3.3e-12, 8.9e-15);
     }
 
 }

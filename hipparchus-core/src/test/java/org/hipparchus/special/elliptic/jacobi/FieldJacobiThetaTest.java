@@ -19,7 +19,7 @@ package org.hipparchus.special.elliptic.jacobi;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.junit.Assert;
@@ -29,7 +29,7 @@ public class FieldJacobiThetaTest {
 
     @Test
     public void testNoConvergence() {
-        doTestNoConvergence(Decimal64Field.getInstance());
+        doTestNoConvergence(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNoConvergence(Field<T> field) {
@@ -38,7 +38,7 @@ public class FieldJacobiThetaTest {
 
     @Test
     public void testRealZero() {
-        doTestRealZero(Decimal64Field.getInstance());
+        doTestRealZero(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestRealZero(Field<T> field) {
@@ -55,7 +55,7 @@ public class FieldJacobiThetaTest {
 
     @Test
     public void testQuarterPeriod() {
-        doTestQuarterPeriod(Decimal64Field.getInstance());
+        doTestQuarterPeriod(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestQuarterPeriod(Field<T> field) {
@@ -70,7 +70,7 @@ public class FieldJacobiThetaTest {
 
     @Test
     public void testEllipticFunctions() {
-        doTestEllipticFunctions(Decimal64Field.getInstance());
+        doTestEllipticFunctions(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestEllipticFunctions(Field<T> field) {

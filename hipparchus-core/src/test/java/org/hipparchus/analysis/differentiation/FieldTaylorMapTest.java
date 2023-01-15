@@ -24,7 +24,7 @@ import org.hipparchus.Field;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.FieldQRDecomposer;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -37,72 +37,72 @@ public class FieldTaylorMapTest {
 
     @Test
     public void testNullPoint() {
-        doTestNullPoint(Decimal64Field.getInstance());
+        doTestNullPoint(Binary64Field.getInstance());
     }
 
     @Test
     public void testDim0Point() {
-        doTestDim0Point(Decimal64Field.getInstance());
+        doTestDim0Point(Binary64Field.getInstance());
     }
 
     @Test
     public void testNullFunctions() {
-        doTestNullFunctions(Decimal64Field.getInstance());
+        doTestNullFunctions(Binary64Field.getInstance());
     }
 
     @Test
     public void testNoFunctions() {
-        doTestNoFunctions(Decimal64Field.getInstance());
+        doTestNoFunctions(Binary64Field.getInstance());
     }
 
     @Test
     public void testIncompatiblePointAndFunctions() {
-        doTestIncompatiblePointAndFunctions(Decimal64Field.getInstance());
+        doTestIncompatiblePointAndFunctions(Binary64Field.getInstance());
     }
 
     @Test
     public void testIncompatible() {
-        doTestIncompatible(Decimal64Field.getInstance());
+        doTestIncompatible(Binary64Field.getInstance());
     }
 
     @Test
     public void testNbParameters() {
-        doTestNbParameters(Decimal64Field.getInstance());
+        doTestNbParameters(Binary64Field.getInstance());
     }
 
     @Test
     public void testNbFunctions() {
-        doTestNbFunctions(Decimal64Field.getInstance());
+        doTestNbFunctions(Binary64Field.getInstance());
     }
 
     @Test
     public void testIdentity() {
-        doTestIdentity(Decimal64Field.getInstance());
+        doTestIdentity(Binary64Field.getInstance());
     }
 
     @Test
     public void testValue() {
-        doTestValue(Decimal64Field.getInstance());
+        doTestValue(Binary64Field.getInstance());
     }
 
     @Test
     public void testCompose() {
-        doTestCompose(Decimal64Field.getInstance());
+        doTestCompose(Binary64Field.getInstance());
     }
 
     @Test
     public void testInvertNonSquare() {
-        doTestInvertNonSquare(Decimal64Field.getInstance());
+        doTestInvertNonSquare(Binary64Field.getInstance());
     }
 
     @Test
     public void testInvertMonoDimensional() {
-        doTestInvertMonoDimensional(Decimal64Field.getInstance());
+        doTestInvertMonoDimensional(Binary64Field.getInstance());
     }
 
     @Test
     public void testInvertBiDimensional() {
-        doTestInvertBiDimensional(Decimal64Field.getInstance());
+        doTestInvertBiDimensional(Binary64Field.getInstance());
     }
 
     @SuppressWarnings("unchecked")

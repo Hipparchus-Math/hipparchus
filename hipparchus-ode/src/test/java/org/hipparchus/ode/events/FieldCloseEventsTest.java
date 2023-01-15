@@ -30,8 +30,8 @@ import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
 import org.hipparchus.ode.nonstiff.LutherFieldIntegrator;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -44,11 +44,11 @@ import org.junit.Test;
 public class FieldCloseEventsTest {
 
     /** type of field. */
-    private static final Field<Decimal64> field = Decimal64Field.getInstance();
-    private static final Decimal64 zero = field.getZero();
-    private static final Decimal64 one = field.getOne();
-    private static final FieldODEState<Decimal64> initialState =
-            new FieldODEState<>(zero, new Decimal64[]{zero, zero});
+    private static final Field<Binary64> field = Binary64Field.getInstance();
+    private static final Binary64 zero = field.getZero();
+    private static final Binary64 one = field.getOne();
+    private static final FieldODEState<Binary64> initialState =
+            new FieldODEState<>(zero, new Binary64[]{zero, zero});
 
     @Test
     public void testCloseEventsFirstOneIsReset() {
@@ -62,7 +62,7 @@ public class FieldCloseEventsTest {
         // and end of the interval so we need another event less than half a max
         // check interval after d2 so that the g function will be negative at
         // all three times. Then we get a non bracketing exception.
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 100.0, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(10, 1e-9, 100, Action.RESET_DERIVATIVES, 9);
@@ -85,7 +85,7 @@ public class FieldCloseEventsTest {
     public void testCloseEvents() {
         // setup
         double e = 1e-15;
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, e, 100.0, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(10, 1, 100, 5);
@@ -108,7 +108,7 @@ public class FieldCloseEventsTest {
     @Test
     public void testSimultaneousEvents() {
         // setup
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 100.0, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(10, 1, 100, 5);
@@ -137,14 +137,14 @@ public class FieldCloseEventsTest {
     public void testSimultaneousEventsResetReverse() {
         // setup
         double tol = 1e-10;
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 100.0, 1e-7, 1e-7);
         boolean[] firstEventOccurred = {false};
         List<Event> events = new ArrayList<>();
 
         TimeDetector detector1 = new TimeDetector(10, tol, 100, events, -5) {
             @Override
-            public FieldODEEventHandler<Decimal64> getHandler() {
+            public FieldODEEventHandler<Binary64> getHandler() {
                 return (state, detector, increasing) -> {
                 firstEventOccurred[0] = true;
                 super.getHandler().eventOccurred(state, detector, increasing);
@@ -156,7 +156,7 @@ public class FieldCloseEventsTest {
         // this detector changes it's g function definition when detector1 fires
         TimeDetector detector2 = new TimeDetector(1, tol, 100, events, -1, -3, -5) {
             @Override
-            public Decimal64 g(final FieldODEStateAndDerivative<Decimal64> state) {
+            public Binary64 g(final FieldODEStateAndDerivative<Binary64> state) {
                 if (firstEventOccurred[0]) {
                     return super.g(state);
                 }
@@ -190,12 +190,12 @@ public class FieldCloseEventsTest {
         // setup
         double t = FastMath.PI;
         double tol = 1e-10;
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         List<Event> events = new ArrayList<>();
 
         TimeDetector resetDetector =
-                new ResetDetector(10, tol, 100, events, new FieldODEState<>(zero.add(t), new Decimal64[]{zero.add(1e100), zero}), t);
+                new ResetDetector(10, tol, 100, events, new FieldODEState<>(zero.add(t), new Binary64[]{zero.add(1e100), zero}), t);
         integrator.addEventDetector(resetDetector);
         List<BaseDetector> detectors = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
@@ -205,7 +205,7 @@ public class FieldCloseEventsTest {
         }
 
         // action
-        integrator.integrate(new Equation(), new FieldODEState<>(zero, new Decimal64[]{zero.add(-1e100), zero}), zero.add(10));
+        integrator.integrate(new Equation(), new FieldODEState<>(zero, new Binary64[]{zero.add(-1e100), zero}), zero.add(10));
 
         // verify
         Assert.assertEquals(t, events.get(0).getT(), tol);
@@ -230,7 +230,7 @@ public class FieldCloseEventsTest {
     public void testFastSwitching() {
         // setup
         // step size of 10 to land in between two events we would otherwise miss
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(10, 0.2, 100, 9.9, 10.1, 12);
@@ -260,7 +260,7 @@ public class FieldCloseEventsTest {
         TimeDetector detectorB = new TimeDetector(maxCheck, tolerance, 100, events, -10, t1, t2, t5);
         TimeDetector detectorC = new TimeDetector(maxCheck, tolerance, 100, Action.RESET_DERIVATIVES, events, t4);
 
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -298,7 +298,7 @@ public class FieldCloseEventsTest {
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new TimeDetector(maxCheck, 1e-6, 100, events, t2);
         TimeDetector detectorB = new FlatDetector(maxCheck, 0.5, 100, events, t3);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -333,7 +333,7 @@ public class FieldCloseEventsTest {
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new TimeDetector(maxCheck, 1e-6, 100, events, t2);
         TimeDetector detectorB = new TimeDetector(maxCheck, toleranceB, 100, events, t1, t3);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -370,7 +370,7 @@ public class FieldCloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorB = new FlatDetector(maxCheck, tolerance, 100, events, t1, t2, t3);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorB);
 
@@ -399,7 +399,7 @@ public class FieldCloseEventsTest {
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new TimeDetector(maxCheck, tolerance, 100, events, t1);
         TimeDetector detectorB = new TimeDetector(maxCheck, tolerance, 100, events, t1, t1);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -433,7 +433,7 @@ public class FieldCloseEventsTest {
         TimeDetector detectorA = new TimeDetector(maxCheck, tolerance, 100, events, t1);
         TimeDetector detectorB = new ContinuousDetector(maxCheck, tolerance, 100, events, -20, t1, t1);
         detectorB.g(state(t1));
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -462,7 +462,7 @@ public class FieldCloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ContinuousDetector(maxCheck, tolerance, 100, events, t1, t2);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
 
@@ -489,7 +489,7 @@ public class FieldCloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ContinuousDetector(maxCheck, tolerance, 100, events, -10, t1, t2);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
 
@@ -519,7 +519,7 @@ public class FieldCloseEventsTest {
         TimeDetector detectorB = new ContinuousDetector(maxCheck, tolerance, 100, events, t1, t3, t4, t7);
         TimeDetector detectorC = new ContinuousDetector(maxCheck, tolerance, 100, events, t2, t5);
 
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -565,14 +565,14 @@ public class FieldCloseEventsTest {
         double maxCheck = 10;
         double tolerance = 1e-6;
         double t1 = 15.0;
-        final FieldODEState<Decimal64> newState = new FieldODEState<>(
-                zero.add(t1), new Decimal64[]{zero.add(-20), zero});
+        final FieldODEState<Binary64> newState = new FieldODEState<>(
+                zero.add(t1), new Binary64[]{zero.add(-20), zero});
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ResetDetector(maxCheck, tolerance, 100, events, newState, t1);
         BaseDetector detectorB = new StateDetector(maxCheck, tolerance, 100, events, -1);
 
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -604,7 +604,7 @@ public class FieldCloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ContinuousDetector(maxCheck, tolerance, 100, events, t1);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
 
@@ -628,7 +628,7 @@ public class FieldCloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new FlatDetector(maxCheck, tolerance, 100, events, t1);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
 
@@ -661,7 +661,7 @@ public class FieldCloseEventsTest {
         boolean[] swap = new boolean[1];
         final TimeDetector detectorA = new ContinuousDetector(maxCheck, tolerance, 100, events, t1) {
             @Override
-            public FieldODEEventHandler<Decimal64> getHandler() {
+            public FieldODEEventHandler<Binary64> getHandler() {
                 return (state, detector, increasing) -> {
                     swap[0] = true;
                     return super.getHandler().eventOccurred(state, detector, increasing);
@@ -672,7 +672,7 @@ public class FieldCloseEventsTest {
         BaseDetector detectorC = new BaseDetector(maxCheck, tolerance, 100, Action.CONTINUE, events) {
 
             @Override
-            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+            public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
                 if (swap[0]) {
                     return detectorB.g(state);
                 } else {
@@ -681,7 +681,7 @@ public class FieldCloseEventsTest {
             }
 
         };
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorC);
@@ -718,7 +718,7 @@ public class FieldCloseEventsTest {
         final TimeDetector detectorA =
                         new ContinuousDetector(maxCheck, tolerance, 100, Action.RESET_EVENTS, events, t1) {
             @Override
-            public FieldODEEventHandler<Decimal64> getHandler() {
+            public FieldODEEventHandler<Binary64> getHandler() {
                 return (state, detector, increasing) -> {
                     swap[0] = true;
                     return super.getHandler().eventOccurred(state, detector, increasing);
@@ -729,7 +729,7 @@ public class FieldCloseEventsTest {
         BaseDetector detectorC = new BaseDetector(maxCheck, tolerance, 100, Action.CONTINUE, events) {
 
             @Override
-            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+            public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
                 if (!swap[0]) {
                     return detectorB.g(state);
                 } else {
@@ -738,7 +738,7 @@ public class FieldCloseEventsTest {
             }
 
         };
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorC);
@@ -771,7 +771,7 @@ public class FieldCloseEventsTest {
         final TimeDetector detectorA =
                         new ContinuousDetector(maxCheck, tolerance, 100, Action.RESET_EVENTS, events, t1) {
             @Override
-            public FieldODEEventHandler<Decimal64> getHandler() {
+            public FieldODEEventHandler<Binary64> getHandler() {
                 return (state, detector, increasing) -> {
                     swap[0] = true;
                     return super.getHandler().eventOccurred(state, detector, increasing);
@@ -783,7 +783,7 @@ public class FieldCloseEventsTest {
         BaseDetector detectorC = new BaseDetector(maxCheck, tolerance, 100, Action.CONTINUE, events) {
 
             @Override
-            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+            public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
                 if (!swap[0]) {
                     return detectorB.g(state);
                 } else {
@@ -792,7 +792,7 @@ public class FieldCloseEventsTest {
             }
 
         };
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorC);
@@ -828,7 +828,7 @@ public class FieldCloseEventsTest {
         final TimeDetector detectorA =
                         new ContinuousDetector(maxCheck, tolerance, 100, Action.RESET_EVENTS, events, t1) {
             @Override
-            public FieldODEEventHandler<Decimal64> getHandler() {
+            public FieldODEEventHandler<Binary64> getHandler() {
                 return (state, detector, increasing) -> {
                     swap[0] = true;
                     return super.getHandler().eventOccurred(state, detector, increasing);
@@ -840,7 +840,7 @@ public class FieldCloseEventsTest {
         BaseDetector detectorC = new BaseDetector(maxCheck, tolerance, 100, Action.CONTINUE, events) {
 
             @Override
-            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+            public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
                 if (swap[0]) {
                     return detectorB.g(state);
                 } else {
@@ -849,7 +849,7 @@ public class FieldCloseEventsTest {
             }
 
         };
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorC);
@@ -877,12 +877,12 @@ public class FieldCloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new FlatDetector(maxCheck, tolerance, 100, Action.STOP, events, t1);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
 
         // action
-        FieldODEStateAndDerivative<Decimal64> finalState =
+        FieldODEStateAndDerivative<Binary64> finalState =
                 integrator.integrate(new Equation(), initialState, zero.add(30.0));
 
         // verify
@@ -913,7 +913,7 @@ public class FieldCloseEventsTest {
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new TimeDetector(maxCheck, tolerance, 100, Action.STOP, events, -50) {
             @Override
-            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+            public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
                 if (state.getTime().getReal() < 2) {
                     return zero;
                 } else {
@@ -921,7 +921,7 @@ public class FieldCloseEventsTest {
                 }
             }
         };
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
 
@@ -948,8 +948,8 @@ public class FieldCloseEventsTest {
         // never zero so there is no easy way out
         TimeDetector detectorA = new TimeDetector(maxCheck, tolerance, 100, events) {
             @Override
-            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
-                final Decimal64 t = state.getTime();
+            public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
+                final Binary64 t = state.getTime();
                 if (t.getReal() < t1) {
                     return one.negate();
                 } else if (t.getReal() < t2) {
@@ -960,7 +960,7 @@ public class FieldCloseEventsTest {
             }
         };
         TimeDetector detectorB = new TimeDetector(maxCheck, tolerance, 100, events, t1);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -986,14 +986,14 @@ public class FieldCloseEventsTest {
     public void testEventStepHandler() {
         // setup
         double tolerance = 1e-18;
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(new TimeDetector(100.0, tolerance, 100, 5));
         StepHandler stepHandler = new StepHandler();
         integrator.addStepHandler(stepHandler);
 
         // action
-        FieldODEStateAndDerivative<Decimal64> finalState = integrator
+        FieldODEStateAndDerivative<Binary64> finalState = integrator
                 .integrate(new Equation(), initialState, zero.add(10));
 
         // verify
@@ -1003,7 +1003,7 @@ public class FieldCloseEventsTest {
         Assert.assertEquals(10.0, stepHandler.finalTime.getReal(), tolerance);
         Assert.assertEquals(10.0,
                 stepHandler.finalState.getTime().getReal(), tolerance);
-        FieldODEStateInterpolator<Decimal64> interpolator = stepHandler.interpolators.get(0);
+        FieldODEStateInterpolator<Binary64> interpolator = stepHandler.interpolators.get(0);
         Assert.assertEquals(0.0,
                 interpolator.getPreviousState().getTime().getReal(), tolerance);
         Assert.assertEquals(5.0,
@@ -1022,23 +1022,23 @@ public class FieldCloseEventsTest {
         // setup
         TimeDetector detectorA = new TimeDetector(10, 1e-6, 100, Action.RESET_STATE, 15.0) {
             @Override
-            public FieldODEEventHandler<Decimal64> getHandler() {
-                return new FieldODEEventHandler<Decimal64>() {
+            public FieldODEEventHandler<Binary64> getHandler() {
+                return new FieldODEEventHandler<Binary64>() {
                     @Override
-                    public Action eventOccurred(FieldODEStateAndDerivative<Decimal64> state,
-                                                FieldODEEventDetector<Decimal64> detector,
+                    public Action eventOccurred(FieldODEStateAndDerivative<Binary64> state,
+                                                FieldODEEventDetector<Binary64> detector,
                                                 boolean increasing) {
                         return Action.RESET_STATE;
                     }
                     @Override
-                    public FieldODEState<Decimal64> resetState(FieldODEEventDetector<Decimal64> detector,
-                                                               FieldODEStateAndDerivative<Decimal64> state) {
+                    public FieldODEState<Binary64> resetState(FieldODEEventDetector<Binary64> detector,
+                                                               FieldODEStateAndDerivative<Binary64> state) {
                         return null;
                     }
                 };
             }
         };
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
 
@@ -1053,19 +1053,19 @@ public class FieldCloseEventsTest {
 
     @Test
     public void testResetChangesSign() {
-        FieldOrdinaryDifferentialEquation<Decimal64> equation = new FieldOrdinaryDifferentialEquation<Decimal64>() {
+        FieldOrdinaryDifferentialEquation<Binary64> equation = new FieldOrdinaryDifferentialEquation<Binary64>() {
             public int getDimension() { return 1; }
-            public Decimal64[] computeDerivatives(Decimal64 t, Decimal64[] y) { return new Decimal64[] { new Decimal64(1.0) }; }
+            public Binary64[] computeDerivatives(Binary64 t, Binary64[] y) { return new Binary64[] { new Binary64(1.0) }; }
         };
 
-        LutherFieldIntegrator<Decimal64> integrator = new LutherFieldIntegrator<>(Decimal64Field.getInstance(), new Decimal64(20.0));
+        LutherFieldIntegrator<Binary64> integrator = new LutherFieldIntegrator<>(Binary64Field.getInstance(), new Binary64(20.0));
         final double small = 1.0e-10;
         ResetChangesSignGenerator eventsGenerator = new ResetChangesSignGenerator(6.0, 9.0, -0.5 * small, 8.0, small, 1000);
         integrator.addEventDetector(eventsGenerator);
-        final FieldODEStateAndDerivative<Decimal64> end = integrator.integrate(new FieldExpandableODE<>(equation),
-                new FieldODEState<>(new Decimal64(0.0),
-                        new Decimal64[] { new Decimal64(0.0) }),
-                new Decimal64(100.0));
+        final FieldODEStateAndDerivative<Binary64> end = integrator.integrate(new FieldExpandableODE<>(equation),
+                new FieldODEState<>(new Binary64(0.0),
+                        new Binary64[] { new Binary64(0.0) }),
+                new Binary64(100.0));
         Assert.assertEquals(2,                 eventsGenerator.getCount());
         Assert.assertEquals(9.0,               end.getCompleteState()[0].getReal(), 1.0e-12);
         Assert.assertEquals(9.0 + 0.5 * small, end.getTime().getReal(),             1.0e-12);
@@ -1089,7 +1089,7 @@ public class FieldCloseEventsTest {
         // and end of the interval so we need another event less than half a max
         // check interval after d2 so that the g function will be negative at
         // all three times. Then we get a non bracketing exception.
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 100.0, 1e-7, 1e-7);
 
         // switched for 9 to 1 to be close to the start of the step
@@ -1114,7 +1114,7 @@ public class FieldCloseEventsTest {
     public void testCloseEventsReverse() {
         // setup
         double e = 1e-15;
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, e, 100.0, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(10, 1, 100, -5);
@@ -1137,7 +1137,7 @@ public class FieldCloseEventsTest {
     @Test
     public void testSimultaneousEventsReverse() {
         // setup
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 100.0, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(10, 1, 100, -5);
@@ -1166,14 +1166,14 @@ public class FieldCloseEventsTest {
     public void testSimultaneousEventsReset() {
         // setup
         double tol = 1e-10;
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 100.0, 1e-7, 1e-7);
         boolean[] firstEventOccurred = {false};
         List<Event> events = new ArrayList<>();
 
         TimeDetector detector1 = new TimeDetector(10, tol, 100, events, 5) {
             @Override
-            public FieldODEEventHandler<Decimal64> getHandler() {
+            public FieldODEEventHandler<Binary64> getHandler() {
                 return (state, detector, increasing) -> {
                     firstEventOccurred[0] = true;
                     super.getHandler().eventOccurred(state, detector, increasing);
@@ -1185,7 +1185,7 @@ public class FieldCloseEventsTest {
         // this detector changes it's g function definition when detector1 fires
         TimeDetector detector2 = new TimeDetector(1, tol, 100, events, 1, 3, 5) {
             @Override
-            public Decimal64 g(final FieldODEStateAndDerivative<Decimal64> state) {
+            public Binary64 g(final FieldODEStateAndDerivative<Binary64> state) {
                 if (firstEventOccurred[0]) {
                     return super.g(state);
                 }
@@ -1219,12 +1219,12 @@ public class FieldCloseEventsTest {
         // setup
         double t = -FastMath.PI;
         double tol = 1e-10;
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         List<Event> events = new ArrayList<>();
 
         TimeDetector resetDetector =
-                new ResetDetector(10, tol, 100, events, new FieldODEState<>(zero.add(t), new Decimal64[]{zero.add(1e100), zero}), t);
+                new ResetDetector(10, tol, 100, events, new FieldODEState<>(zero.add(t), new Binary64[]{zero.add(1e100), zero}), t);
         integrator.addEventDetector(resetDetector);
         List<BaseDetector> detectors = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
@@ -1234,7 +1234,7 @@ public class FieldCloseEventsTest {
         }
 
         // action
-        integrator.integrate(new Equation(), new FieldODEState<>(zero, new Decimal64[]{zero.add(-1e100), zero}), zero.add(-10));
+        integrator.integrate(new Equation(), new FieldODEState<>(zero, new Binary64[]{zero.add(-1e100), zero}), zero.add(-10));
 
         // verify
         Assert.assertEquals(t, events.get(0).getT(), tol);
@@ -1259,7 +1259,7 @@ public class FieldCloseEventsTest {
     public void testFastSwitchingReverse() {
         // setup
         // step size of 10 to land in between two events we would otherwise miss
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(10, 0.2, 100, -9.9, -10.1, -12);
@@ -1289,7 +1289,7 @@ public class FieldCloseEventsTest {
         TimeDetector detectorB = new TimeDetector(maxCheck, tolerance, 100, events, -50, t1, t2, t5);
         TimeDetector detectorC = new TimeDetector(maxCheck, tolerance, 100, Action.RESET_DERIVATIVES, events, t4);
 
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -1327,7 +1327,7 @@ public class FieldCloseEventsTest {
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new TimeDetector(maxCheck, 1e-6, 100, events, t2);
         FlatDetector detectorB = new FlatDetector(maxCheck, 0.5, 100, events, t3);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -1362,7 +1362,7 @@ public class FieldCloseEventsTest {
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new TimeDetector(maxCheck, tolerance, 100, events, t2);
         TimeDetector detectorB = new TimeDetector(maxCheck, toleranceB, 100, events, -50, t1, t3);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -1398,7 +1398,7 @@ public class FieldCloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorB = new FlatDetector(maxCheck, tolerance, 100, events, t1, t2, t3);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorB);
 
@@ -1427,7 +1427,7 @@ public class FieldCloseEventsTest {
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new TimeDetector(maxCheck, tolerance, 100, events, t1);
         TimeDetector detectorB = new TimeDetector(maxCheck, tolerance, 100, events, t1, t1);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -1461,7 +1461,7 @@ public class FieldCloseEventsTest {
         TimeDetector detectorA = new TimeDetector(maxCheck, tolerance, 100, events, t1);
         TimeDetector detectorB = new ContinuousDetector(maxCheck, tolerance, 100, events, -50, t1, t1);
         detectorB.g(state(t1));
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -1490,7 +1490,7 @@ public class FieldCloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ContinuousDetector(maxCheck, tolerance, 100, events, -50, t1, t2);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
 
@@ -1517,7 +1517,7 @@ public class FieldCloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ContinuousDetector(maxCheck, tolerance, 100, events, t1, t2);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
 
@@ -1547,7 +1547,7 @@ public class FieldCloseEventsTest {
         TimeDetector detectorB = new ContinuousDetector(maxCheck, tolerance, 100, events, -50, t1, t3, t4, t7);
         TimeDetector detectorC = new ContinuousDetector(maxCheck, tolerance, 100, events, -50, t2, t5);
 
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -1593,14 +1593,14 @@ public class FieldCloseEventsTest {
         double maxCheck = 10;
         double tolerance = 1e-6;
         double t1 = -15.0;
-        final FieldODEState<Decimal64> newState =
-                new FieldODEState<>(zero.add(t1), new Decimal64[]{zero.add(20), zero});
+        final FieldODEState<Binary64> newState =
+                new FieldODEState<>(zero.add(t1), new Binary64[]{zero.add(20), zero});
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ResetDetector(maxCheck, tolerance, 100, events, newState, t1);
         BaseDetector detectorB = new StateDetector(maxCheck, tolerance, 100, events, 1);
 
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -1632,7 +1632,7 @@ public class FieldCloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ContinuousDetector(maxCheck, tolerance, 100, events, t1);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
 
@@ -1656,7 +1656,7 @@ public class FieldCloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new FlatDetector(maxCheck, tolerance, 100, events, t1);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
 
@@ -1689,7 +1689,7 @@ public class FieldCloseEventsTest {
         boolean[] swap = new boolean[1];
         final TimeDetector detectorA = new ContinuousDetector(maxCheck, tolerance, 100, events, t1) {
             @Override
-            public FieldODEEventHandler<Decimal64> getHandler() {
+            public FieldODEEventHandler<Binary64> getHandler() {
                 return (state, detector, increasing) -> {
                     swap[0] = true;
                     return super.getHandler().eventOccurred(state, detector, increasing);
@@ -1700,7 +1700,7 @@ public class FieldCloseEventsTest {
         BaseDetector detectorC = new BaseDetector(maxCheck, tolerance, 100, Action.CONTINUE, events) {
 
             @Override
-            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+            public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
                 if (swap[0]) {
                     return detectorB.g(state);
                 } else {
@@ -1709,7 +1709,7 @@ public class FieldCloseEventsTest {
             }
 
         };
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorC);
@@ -1746,7 +1746,7 @@ public class FieldCloseEventsTest {
         final TimeDetector detectorA =
                         new ContinuousDetector(maxCheck, tolerance, 100, Action.RESET_EVENTS, events, t1) {
             @Override
-            public FieldODEEventHandler<Decimal64> getHandler() {
+            public FieldODEEventHandler<Binary64> getHandler() {
                 return (state, detector, increasing) -> {
                     swap[0] = true;
                     return super.getHandler().eventOccurred(state, detector, increasing);
@@ -1757,7 +1757,7 @@ public class FieldCloseEventsTest {
         BaseDetector detectorC = new BaseDetector(maxCheck, tolerance, 100, Action.CONTINUE, events) {
 
             @Override
-            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+            public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
                 if (!swap[0]) {
                     return detectorB.g(state);
                 } else {
@@ -1766,7 +1766,7 @@ public class FieldCloseEventsTest {
             }
 
         };
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorC);
@@ -1800,7 +1800,7 @@ public class FieldCloseEventsTest {
         final TimeDetector detectorA =
                         new ContinuousDetector(maxCheck, tolerance, 100, Action.RESET_EVENTS, events, t1) {
             @Override
-            public FieldODEEventHandler<Decimal64> getHandler() {
+            public FieldODEEventHandler<Binary64> getHandler() {
                 return (state, detector, increasing) -> {
                     swap[0] = true;
                     return super.getHandler().eventOccurred(state, detector, increasing);
@@ -1812,7 +1812,7 @@ public class FieldCloseEventsTest {
         BaseDetector detectorC = new BaseDetector(maxCheck, tolerance, 100, Action.CONTINUE, events) {
 
             @Override
-            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+            public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
                 if (!swap[0]) {
                     return detectorB.g(state);
                 } else {
@@ -1821,7 +1821,7 @@ public class FieldCloseEventsTest {
             }
 
         };
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorC);
@@ -1857,7 +1857,7 @@ public class FieldCloseEventsTest {
         final TimeDetector detectorA =
                         new ContinuousDetector(maxCheck, tolerance, 100, Action.RESET_EVENTS, events, t1) {
             @Override
-            public FieldODEEventHandler<Decimal64> getHandler() {
+            public FieldODEEventHandler<Binary64> getHandler() {
                 return (state, detector, increasing) -> {
                     swap[0] = true;
                     return super.getHandler().eventOccurred(state, detector, increasing);
@@ -1869,7 +1869,7 @@ public class FieldCloseEventsTest {
         BaseDetector detectorC = new BaseDetector(maxCheck, tolerance, 100, Action.CONTINUE, events) {
 
             @Override
-            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+            public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
                 if (swap[0]) {
                     return detectorB.g(state);
                 } else {
@@ -1878,7 +1878,7 @@ public class FieldCloseEventsTest {
             }
 
         };
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorC);
@@ -1906,12 +1906,12 @@ public class FieldCloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new FlatDetector(maxCheck, tolerance, 100, Action.STOP, events, t1);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
 
         // action
-        FieldODEStateAndDerivative<Decimal64> finalState =
+        FieldODEStateAndDerivative<Binary64> finalState =
                 integrator.integrate(new Equation(), initialState, zero.add(-30.0));
 
         // verify
@@ -1942,7 +1942,7 @@ public class FieldCloseEventsTest {
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new TimeDetector(maxCheck, tolerance, 100, Action.STOP, events, 50) {
             @Override
-            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+            public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
                 if (state.getTime().getReal() > -2) {
                     return zero;
                 } else {
@@ -1950,7 +1950,7 @@ public class FieldCloseEventsTest {
                 }
             }
         };
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
 
@@ -1977,8 +1977,8 @@ public class FieldCloseEventsTest {
         // never zero so there is no easy way out
         TimeDetector detectorA = new TimeDetector(maxCheck, tolerance, 100, events) {
             @Override
-            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
-                final Decimal64 t = state.getTime();
+            public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
+                final Binary64 t = state.getTime();
                 if (t.getReal() > t1) {
                     return one.negate();
                 } else if (t.getReal() > t2) {
@@ -1989,7 +1989,7 @@ public class FieldCloseEventsTest {
             }
         };
         TimeDetector detectorB = new TimeDetector(maxCheck, tolerance, 100, events, t1);
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
         integrator.addEventDetector(detectorB);
@@ -2015,14 +2015,14 @@ public class FieldCloseEventsTest {
     public void testEventStepHandlerReverse() {
         // setup
         double tolerance = 1e-18;
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(new TimeDetector(100.0, tolerance, 100, -5));
         StepHandler stepHandler = new StepHandler();
         integrator.addStepHandler(stepHandler);
 
         // action
-        FieldODEStateAndDerivative<Decimal64> finalState = integrator
+        FieldODEStateAndDerivative<Binary64> finalState = integrator
                 .integrate(new Equation(), initialState, zero.add(-10));
 
         // verify
@@ -2032,7 +2032,7 @@ public class FieldCloseEventsTest {
         Assert.assertEquals(-10.0, stepHandler.finalTime.getReal(), tolerance);
         Assert.assertEquals(-10.0,
                 stepHandler.finalState.getTime().getReal(), tolerance);
-        FieldODEStateInterpolator<Decimal64> interpolator = stepHandler.interpolators.get(0);
+        FieldODEStateInterpolator<Binary64> interpolator = stepHandler.interpolators.get(0);
         Assert.assertEquals(0.0,
                 interpolator.getPreviousState().getTime().getReal(), tolerance);
         Assert.assertEquals(-5.0,
@@ -2051,23 +2051,23 @@ public class FieldCloseEventsTest {
         // setup
         TimeDetector detectorA = new TimeDetector(10, 1e-6, 100, Action.RESET_STATE, -15.0) {
             @Override
-            public FieldODEEventHandler<Decimal64> getHandler() {
-                return new FieldODEEventHandler<Decimal64>() {
+            public FieldODEEventHandler<Binary64> getHandler() {
+                return new FieldODEEventHandler<Binary64>() {
                     @Override
-                    public Action eventOccurred(FieldODEStateAndDerivative<Decimal64> state,
-                                                FieldODEEventDetector<Decimal64> detector,
+                    public Action eventOccurred(FieldODEStateAndDerivative<Binary64> state,
+                                                FieldODEEventDetector<Binary64> detector,
                                                 boolean increasing) {
                         return Action.RESET_STATE;
                     }
                     @Override
-                    public FieldODEState<Decimal64> resetState(FieldODEEventDetector<Decimal64> detector,
-                                                               FieldODEStateAndDerivative<Decimal64> state) {
+                    public FieldODEState<Binary64> resetState(FieldODEEventDetector<Binary64> detector,
+                                                               FieldODEStateAndDerivative<Binary64> state) {
                         return null;
                     }
                 };
             }
         };
-        FieldODEIntegrator<Decimal64> integrator =
+        FieldODEIntegrator<Binary64> integrator =
                 new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventDetector(detectorA);
 
@@ -2082,19 +2082,19 @@ public class FieldCloseEventsTest {
 
     @Test
     public void testResetChangesSignReverse() {
-        FieldOrdinaryDifferentialEquation<Decimal64> equation = new FieldOrdinaryDifferentialEquation<Decimal64>() {
+        FieldOrdinaryDifferentialEquation<Binary64> equation = new FieldOrdinaryDifferentialEquation<Binary64>() {
             public int getDimension() { return 1; }
-            public Decimal64[] computeDerivatives(Decimal64 t, Decimal64[] y) { return new Decimal64[] { new Decimal64(1.0) }; }
+            public Binary64[] computeDerivatives(Binary64 t, Binary64[] y) { return new Binary64[] { new Binary64(1.0) }; }
         };
 
-        LutherFieldIntegrator<Decimal64> integrator = new LutherFieldIntegrator<>(Decimal64Field.getInstance(), new Decimal64(20.0));
+        LutherFieldIntegrator<Binary64> integrator = new LutherFieldIntegrator<>(Binary64Field.getInstance(), new Binary64(20.0));
         final double small = 1.0e-10;
         ResetChangesSignGenerator eventsGenerator = new ResetChangesSignGenerator(-6.0, -9.0, +0.5 * small, 8.0, small, 1000);
         integrator.addEventDetector(eventsGenerator);
-        final FieldODEStateAndDerivative<Decimal64> end = integrator.integrate(new FieldExpandableODE<>(equation),
-                                                                               new FieldODEState<>(new Decimal64(0.0),
-                                                                                                   new Decimal64[] { new Decimal64(0.0) }),
-                                                                               new Decimal64(-100.0));
+        final FieldODEStateAndDerivative<Binary64> end = integrator.integrate(new FieldExpandableODE<>(equation),
+                                                                               new FieldODEState<>(new Binary64(0.0),
+                                                                                                   new Binary64[] { new Binary64(0.0) }),
+                                                                               new Binary64(-100.0));
         Assert.assertEquals(2,                  eventsGenerator.getCount());
         Assert.assertEquals(-9.0,               end.getCompleteState()[0].getReal(), 1.0e-12);
         Assert.assertEquals(-9.0 - 0.5 * small, end.getTime().getReal(),             1.0e-12);
@@ -2108,16 +2108,16 @@ public class FieldCloseEventsTest {
      * @param t time of state.
      * @return new state.
      */
-    private FieldODEStateAndDerivative<Decimal64> state(double t) {
+    private FieldODEStateAndDerivative<Binary64> state(double t) {
         return new FieldODEStateAndDerivative<>(
-                zero.add(t), new Decimal64[0], new Decimal64[0]);
+                zero.add(t), new Binary64[0], new Binary64[0]);
     }
 
     /** Base class to record events that occurred. */
-    private static abstract class BaseDetector implements FieldODEEventDetector<Decimal64> {
+    private static abstract class BaseDetector implements FieldODEEventDetector<Binary64> {
 
-        private final Decimal64 maxCheck;
-        private final Decimal64 threshold;
+        private final Binary64 maxCheck;
+        private final Binary64 threshold;
         private final int       maxIter;
         protected final Action  action;
 
@@ -2126,18 +2126,18 @@ public class FieldCloseEventsTest {
 
         public BaseDetector(final double maxCheck, final double threshold, final int maxIter,
                             Action action, List<Event> events) {
-            this.maxCheck  = new Decimal64(maxCheck);
-            this.threshold = new Decimal64(threshold);
+            this.maxCheck  = new Binary64(maxCheck);
+            this.threshold = new Binary64(threshold);
             this.maxIter   = maxIter;
             this.action    = action;
             this.events    = events;
         }
 
-        public Decimal64 getMaxCheckInterval() {
+        public Binary64 getMaxCheckInterval() {
             return maxCheck;
         }
 
-        public Decimal64 getThreshold() {
+        public Binary64 getThreshold() {
             return threshold;
         }
 
@@ -2155,11 +2155,11 @@ public class FieldCloseEventsTest {
         }
 
         @Override
-        public FieldODEEventHandler<Decimal64> getHandler() {
-            return new FieldODEEventHandler<Decimal64>() {
+        public FieldODEEventHandler<Binary64> getHandler() {
+            return new FieldODEEventHandler<Binary64>() {
                 @Override
-                public Action eventOccurred(FieldODEStateAndDerivative<Decimal64> state,
-                                            FieldODEEventDetector<Decimal64> detector,
+                public Action eventOccurred(FieldODEStateAndDerivative<Binary64> state,
+                                            FieldODEEventDetector<Binary64> detector,
                                             boolean increasing) {
                     events.add(new Event(state, detector, increasing));
                     return action;
@@ -2203,8 +2203,8 @@ public class FieldCloseEventsTest {
         }
 
         @Override
-        public Decimal64 g(final FieldODEStateAndDerivative<Decimal64> state) {
-            final Decimal64 t = state.getTime();
+        public Binary64 g(final FieldODEStateAndDerivative<Binary64> state) {
+            final Binary64 t = state.getTime();
             int i = 0;
             while (i < eventTs.length && t.getReal() > eventTs[i]) {
                 i++;
@@ -2222,12 +2222,12 @@ public class FieldCloseEventsTest {
 
     private static class Event {
 
-        private final FieldODEStateAndDerivative<Decimal64> state;
+        private final FieldODEStateAndDerivative<Binary64> state;
         private final boolean increasing;
-        private final FieldODEEventDetector<Decimal64> detector;
+        private final FieldODEEventDetector<Binary64> detector;
 
-        public Event(FieldODEStateAndDerivative<Decimal64> state,
-                     FieldODEEventDetector<Decimal64> detector,
+        public Event(FieldODEStateAndDerivative<Binary64> state,
+                     FieldODEEventDetector<Binary64> detector,
                      boolean increasing) {
             this.increasing = increasing;
             this.state = state;
@@ -2242,7 +2242,7 @@ public class FieldCloseEventsTest {
             return state.getTime().getReal();
         }
 
-        public FieldODEEventDetector<Decimal64> getDetector() {
+        public FieldODEEventDetector<Binary64> getDetector() {
             return detector;
         }
 
@@ -2273,8 +2273,8 @@ public class FieldCloseEventsTest {
         }
 
         @Override
-        public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
-            final Decimal64 g = super.g(state);
+        public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
+            final Binary64 g = super.g(state);
             return g.sign();
         }
 
@@ -2294,8 +2294,8 @@ public class FieldCloseEventsTest {
         }
 
         @Override
-        public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
-            final Decimal64 t = state.getTime();
+        public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
+            final Binary64 t = state.getTime();
             int i = 0;
             while (i < eventTs.length && t.getReal() > eventTs[i]) {
                 i++;
@@ -2316,25 +2316,25 @@ public class FieldCloseEventsTest {
     /** Reset the state at a particular time. */
     private static class ResetDetector extends TimeDetector {
 
-        private final FieldODEState<Decimal64> resetState;
+        private final FieldODEState<Binary64> resetState;
 
         public ResetDetector(final double maxCheck, final double threshold, final int maxIter,
-                             final List<Event> events, final FieldODEState<Decimal64> state, final double eventT) {
+                             final List<Event> events, final FieldODEState<Binary64> state, final double eventT) {
             super(maxCheck, threshold, maxIter, Action.RESET_STATE, events, eventT);
             this.resetState = state;
         }
 
         @Override
-        public FieldODEEventHandler<Decimal64> getHandler() {
-            return new FieldODEEventHandler<Decimal64>() {
+        public FieldODEEventHandler<Binary64> getHandler() {
+            return new FieldODEEventHandler<Binary64>() {
                 @Override
-                public Action eventOccurred(FieldODEStateAndDerivative<Decimal64> state,
-                                            FieldODEEventDetector<Decimal64> detector, boolean increasing) {
+                public Action eventOccurred(FieldODEStateAndDerivative<Binary64> state,
+                                            FieldODEEventDetector<Binary64> detector, boolean increasing) {
                     return ResetDetector.super.getHandler().eventOccurred(state, detector, increasing);
                 }
                 @Override
-                public FieldODEState<Decimal64> resetState(FieldODEEventDetector<Decimal64> detector,
-                                                           FieldODEStateAndDerivative<Decimal64> state) {
+                public FieldODEState<Binary64> resetState(FieldODEEventDetector<Binary64> detector,
+                                                           FieldODEStateAndDerivative<Binary64> state) {
                     Assert.assertEquals(eventTs[0], state.getTime().getReal(), 0);
                     return resetState;
                 }
@@ -2355,61 +2355,61 @@ public class FieldCloseEventsTest {
         }
 
         @Override
-        public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+        public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
             return state.getPrimaryState()[0].subtract(this.triggerState);
         }
     }
 
     /** Some basic equations to integrate. */
-    public static class Equation extends FieldExpandableODE<Decimal64> {
+    public static class Equation extends FieldExpandableODE<Binary64> {
         public Equation() {
             super(new EquationODE());
         }
     }
 
     /** Some basic equations to integrate. */
-    public static class EquationODE implements FieldOrdinaryDifferentialEquation<Decimal64> {
+    public static class EquationODE implements FieldOrdinaryDifferentialEquation<Binary64> {
 
         public int getDimension() {
             return 2;
         }
 
         @Override
-        public Decimal64[] computeDerivatives(Decimal64 t, Decimal64[] y) {
-            return new Decimal64[]{one, one.multiply(2)};
+        public Binary64[] computeDerivatives(Binary64 t, Binary64[] y) {
+            return new Binary64[]{one, one.multiply(2)};
         }
 
     }
 
-    private static class StepHandler implements FieldODEStepHandler<Decimal64> {
+    private static class StepHandler implements FieldODEStepHandler<Binary64> {
 
-        private FieldODEStateAndDerivative<Decimal64> initialState;
-        private Decimal64 finalTime;
-        private List<FieldODEStateInterpolator<Decimal64>> interpolators = new ArrayList<>();
-        private FieldODEStateAndDerivative<Decimal64> finalState;
+        private FieldODEStateAndDerivative<Binary64> initialState;
+        private Binary64 finalTime;
+        private List<FieldODEStateInterpolator<Binary64>> interpolators = new ArrayList<>();
+        private FieldODEStateAndDerivative<Binary64> finalState;
 
         @Override
-        public void init(FieldODEStateAndDerivative<Decimal64> initialState,
-                         Decimal64 finalTime) {
+        public void init(FieldODEStateAndDerivative<Binary64> initialState,
+                         Binary64 finalTime) {
             this.initialState = initialState;
             this.finalTime = finalTime;
         }
 
         @Override
-        public void handleStep(FieldODEStateInterpolator<Decimal64> interpolator) {
+        public void handleStep(FieldODEStateInterpolator<Binary64> interpolator) {
             this.interpolators.add(interpolator);
         }
 
         @Override
-        public void finish(FieldODEStateAndDerivative<Decimal64> finalState) {
+        public void finish(FieldODEStateAndDerivative<Binary64> finalState) {
             this.finalState = finalState;
         }
     }
 
-    private class ResetChangesSignGenerator implements FieldODEEventDetector<Decimal64> {
+    private class ResetChangesSignGenerator implements FieldODEEventDetector<Binary64> {
 
-        private final Decimal64 maxCheck;
-        private final Decimal64 threshold;
+        private final Binary64 maxCheck;
+        private final Binary64 threshold;
         private final int       maxIter;
         final double y1;
         final double y2;
@@ -2418,8 +2418,8 @@ public class FieldCloseEventsTest {
 
         public ResetChangesSignGenerator(final double y1, final double y2, final double change,
                                          final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = new Decimal64(maxCheck);
-            this.threshold = new Decimal64(threshold);
+            this.maxCheck  = new Binary64(maxCheck);
+            this.threshold = new Binary64(threshold);
             this.maxIter   = maxIter;
             this.y1     = y1;
             this.y2     = y2;
@@ -2427,11 +2427,11 @@ public class FieldCloseEventsTest {
             this.count  = 0;
         }
 
-        public Decimal64 getMaxCheckInterval() {
+        public Binary64 getMaxCheckInterval() {
             return maxCheck;
         }
 
-        public Decimal64 getThreshold() {
+        public Binary64 getThreshold() {
             return threshold;
         }
 
@@ -2440,22 +2440,22 @@ public class FieldCloseEventsTest {
         }
 
         /** {@inheritDoc} */
-        public FieldODEEventHandler<Decimal64> getHandler() {
-            return new FieldODEEventHandler<Decimal64>() {
-                public Action eventOccurred(FieldODEStateAndDerivative<Decimal64> s,
-                                            FieldODEEventDetector<Decimal64> detector,
+        public FieldODEEventHandler<Binary64> getHandler() {
+            return new FieldODEEventHandler<Binary64>() {
+                public Action eventOccurred(FieldODEStateAndDerivative<Binary64> s,
+                                            FieldODEEventDetector<Binary64> detector,
                                             boolean increasing) {
                     return ++count < 2 ? Action.RESET_STATE : Action.STOP;
                 }
 
-                public FieldODEState<Decimal64> resetState(FieldODEEventDetector<Decimal64> detector,
-                                                           FieldODEStateAndDerivative<Decimal64> s) {
-                    return new FieldODEState<>(s.getTime(), new Decimal64[] { s.getCompleteState()[0].add(change) });
+                public FieldODEState<Binary64> resetState(FieldODEEventDetector<Binary64> detector,
+                                                           FieldODEStateAndDerivative<Binary64> s) {
+                    return new FieldODEState<>(s.getTime(), new Binary64[] { s.getCompleteState()[0].add(change) });
                 }
             };
         }
 
-        public Decimal64 g(FieldODEStateAndDerivative<Decimal64> s) {
+        public Binary64 g(FieldODEStateAndDerivative<Binary64> s) {
             return s.getCompleteState()[0].subtract(y1).multiply(s.getCompleteState()[0].subtract(y2));
         }
 

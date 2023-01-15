@@ -735,8 +735,8 @@ ${fromprefix}.util.Combinations                                                 
 ${fromprefix}.util.CombinatoricsUtils                                                ${toprefix}.util.CombinatoricsUtils
 ${fromprefix}.util.CompositeFormat                                                   ${toprefix}.util.CompositeFormat
 ${fromprefix}.util.ContinuedFraction                                                 ${toprefix}.util.ContinuedFraction
-${fromprefix}.util.Decimal64                                                         ${toprefix}.util.Decimal64
-${fromprefix}.util.Decimal64Field                                                    ${toprefix}.util.Decimal64Field
+${fromprefix}.util.Decimal64                                                         ${toprefix}.util.Binary64
+${fromprefix}.util.Decimal64Field                                                    ${toprefix}.util.Binary64Field
 ${fromprefix}.util.DefaultTransformer                                                ${toprefix}.util.DefaultTransformer
 ${fromprefix}.util.DoubleArray                                                       ${toprefix}.util.DoubleArray
 ${fromprefix}.util.FastMath                                                          ${toprefix}.util.FastMath

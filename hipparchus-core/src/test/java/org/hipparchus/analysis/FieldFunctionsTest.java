@@ -17,8 +17,8 @@
 package org.hipparchus.analysis;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,12 +32,12 @@ public class FieldFunctionsTest {
                 return x.multiply(2);
             }
         };
-        CalculusFieldUnivariateFunction<Decimal64> f1Converted = f1.toCalculusFieldUnivariateFunction(Decimal64Field.getInstance());
-        CalculusFieldUnivariateFunction<Decimal64> f2 = x -> x.multiply(2);
+        CalculusFieldUnivariateFunction<Binary64> f1Converted = f1.toCalculusFieldUnivariateFunction(Binary64Field.getInstance());
+        CalculusFieldUnivariateFunction<Binary64> f2 = x -> x.multiply(2);
 
         for (double x = 0; x < 1; x += 0.01) {
-            Assert.assertEquals(f2.value(new Decimal64(x)).getReal(),
-                                f1Converted.value(new Decimal64(x)).getReal(),
+            Assert.assertEquals(f2.value(new Binary64(x)).getReal(),
+                                f1Converted.value(new Binary64(x)).getReal(),
                                 1.0e-15);
         }
     }
@@ -49,13 +49,13 @@ public class FieldFunctionsTest {
                 return x[0].multiply(2).add(x[1]);
             }
         };
-        CalculusFieldMultivariateFunction<Decimal64> f1Converted = f1.toCalculusFieldMultivariateFunction(Decimal64Field.getInstance());
-        CalculusFieldMultivariateFunction<Decimal64> f2 = x -> x[0].multiply(2).add(x[1]);
+        CalculusFieldMultivariateFunction<Binary64> f1Converted = f1.toCalculusFieldMultivariateFunction(Binary64Field.getInstance());
+        CalculusFieldMultivariateFunction<Binary64> f2 = x -> x[0].multiply(2).add(x[1]);
 
         for (double x0 = 0; x0 < 1; x0 += 0.01) {
             for (double x1 = 0; x1 < 1; x1 += 0.01) {
-                Assert.assertEquals(f2.value(new Decimal64(x0), new Decimal64(x1)).getReal(),
-                                    f1Converted.value(new Decimal64(x0), new Decimal64(x1)).getReal(),
+                Assert.assertEquals(f2.value(new Binary64(x0), new Binary64(x1)).getReal(),
+                                    f1Converted.value(new Binary64(x0), new Binary64(x1)).getReal(),
                                     1.0e-15);
             }
         }
@@ -72,15 +72,15 @@ public class FieldFunctionsTest {
                 return y;
             }
         };
-        CalculusFieldUnivariateVectorFunction<Decimal64> f1Converted = f1.toCalculusFieldUnivariateVectorFunction(Decimal64Field.getInstance());
-        CalculusFieldUnivariateVectorFunction<Decimal64> f2 = x -> new Decimal64[] {
+        CalculusFieldUnivariateVectorFunction<Binary64> f1Converted = f1.toCalculusFieldUnivariateVectorFunction(Binary64Field.getInstance());
+        CalculusFieldUnivariateVectorFunction<Binary64> f2 = x -> new Binary64[] {
             x.add(1), x.multiply(2), x.multiply(x)
         };
 
         for (double x = 0; x < 1; x += 0.01) {
             for (int i = 0; i < 3; ++i) {
-                Assert.assertEquals(f2.value(new Decimal64(x))[i].getReal(),
-                                    f1Converted.value(new Decimal64(x))[i].getReal(),
+                Assert.assertEquals(f2.value(new Binary64(x))[i].getReal(),
+                                    f1Converted.value(new Binary64(x))[i].getReal(),
                                     1.0e-15);
             }
         }
@@ -97,16 +97,16 @@ public class FieldFunctionsTest {
                 return y;
             }
         };
-        CalculusFieldMultivariateVectorFunction<Decimal64> f1Converted = f1.toCalculusFieldMultivariateVectorFunction(Decimal64Field.getInstance());
-        CalculusFieldMultivariateVectorFunction<Decimal64> f2 = x -> new Decimal64[] {
+        CalculusFieldMultivariateVectorFunction<Binary64> f1Converted = f1.toCalculusFieldMultivariateVectorFunction(Binary64Field.getInstance());
+        CalculusFieldMultivariateVectorFunction<Binary64> f2 = x -> new Binary64[] {
             x[0].add(1), x[1].multiply(2), x[0].multiply(x[1])
         };
 
         for (double x0 = 0; x0 < 1; x0 += 0.01) {
             for (double x1 = 0; x1 < 1; x1 += 0.01) {
                 for (int i = 0; i < 3; ++i) {
-                    Assert.assertEquals(f2.value(new Decimal64(x0), new Decimal64(x1))[i].getReal(),
-                                        f1Converted.value(new Decimal64(x0), new Decimal64(x1))[i].getReal(),
+                    Assert.assertEquals(f2.value(new Binary64(x0), new Binary64(x1))[i].getReal(),
+                                        f1Converted.value(new Binary64(x0), new Binary64(x1))[i].getReal(),
                                         1.0e-15);
                 }
             }
@@ -125,8 +125,8 @@ public class FieldFunctionsTest {
                 return y;
             }
         };
-        CalculusFieldUnivariateMatrixFunction<Decimal64> f1Converted = f1.toCalculusFieldUnivariateMatrixFunction(Decimal64Field.getInstance());
-        CalculusFieldUnivariateMatrixFunction<Decimal64> f2 = x -> new Decimal64[][] {
+        CalculusFieldUnivariateMatrixFunction<Binary64> f1Converted = f1.toCalculusFieldUnivariateMatrixFunction(Binary64Field.getInstance());
+        CalculusFieldUnivariateMatrixFunction<Binary64> f2 = x -> new Binary64[][] {
             { x.add(1), x.multiply(2) },
             { x.multiply(x), x.sin() }
         };
@@ -134,8 +134,8 @@ public class FieldFunctionsTest {
         for (double x = 0; x < 1; x += 0.01) {
             for (int i = 0; i < 2; ++i) {
                 for (int j = 0; j < 2; ++j) {
-                    Assert.assertEquals(f2.value(new Decimal64(x))[i][j].getReal(),
-                                        f1Converted.value(new Decimal64(x))[i][j].getReal(),
+                    Assert.assertEquals(f2.value(new Binary64(x))[i][j].getReal(),
+                                        f1Converted.value(new Binary64(x))[i][j].getReal(),
                                         1.0e-15);
                 }
             }
@@ -154,8 +154,8 @@ public class FieldFunctionsTest {
                 return y;
             }
         };
-        CalculusFieldMultivariateMatrixFunction<Decimal64> f1Converted = f1.toCalculusFieldMultivariateMatrixFunction(Decimal64Field.getInstance());
-        CalculusFieldMultivariateMatrixFunction<Decimal64> f2 = x -> new Decimal64[][] {
+        CalculusFieldMultivariateMatrixFunction<Binary64> f1Converted = f1.toCalculusFieldMultivariateMatrixFunction(Binary64Field.getInstance());
+        CalculusFieldMultivariateMatrixFunction<Binary64> f2 = x -> new Binary64[][] {
             { x[0].add(1), x[1].multiply(2) },
             { x[0].multiply(x[1]), x[1].sin() }
         };
@@ -164,8 +164,8 @@ public class FieldFunctionsTest {
             for (double x1 = 0; x1 < 1; x1 += 0.01) {
                 for (int i = 0; i < 2; ++i) {
                     for (int j = 0; j < 2; ++j) {
-                        Assert.assertEquals(f2.value(new Decimal64(x0), new Decimal64(x1))[i][j].getReal(),
-                                            f1Converted.value(new Decimal64(x0), new Decimal64(x1))[i][j].getReal(),
+                        Assert.assertEquals(f2.value(new Binary64(x0), new Binary64(x1))[i][j].getReal(),
+                                            f1Converted.value(new Binary64(x0), new Binary64(x1))[i][j].getReal(),
                                             1.0e-15);
                     }
                 }

@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.hipparchus.CalculusFieldElementAbstractTest;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.After;
@@ -1804,7 +1804,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         Assert.assertEquals(decimalDigits.length, map.size());
         DfpField first = map.entrySet().iterator().next().getKey();
         Assert.assertTrue(first.equals(first));
-        Assert.assertFalse(first.equals(Decimal64Field.getInstance()));
+        Assert.assertFalse(first.equals(Binary64Field.getInstance()));
 
     }
 

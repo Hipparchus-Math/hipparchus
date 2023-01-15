@@ -30,7 +30,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
 import org.junit.Test;
@@ -365,7 +365,7 @@ public class FieldLUDecompositionTest {
 
     @Test
     public void testComparisonWithReal() {
-        doTestComparisonWithReal(Decimal64Field.getInstance());
+        doTestComparisonWithReal(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestComparisonWithReal(final Field<T> field) {

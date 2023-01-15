@@ -47,8 +47,8 @@ import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.util.CombinatoricsUtils;
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -689,33 +689,33 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
     @Test
     public void testInfiniteIntegration() {
-        Field<Decimal64> field = Decimal64Field.getInstance();
-        EmbeddedRungeKuttaFieldIntegrator<Decimal64> fieldIntegrator = createIntegrator(Decimal64Field.getInstance(), 0.01, 1.0, 0.1, 0.1);
-        TestFieldProblem1<Decimal64> pb = new TestFieldProblem1<Decimal64>(field);
+        Field<Binary64> field = Binary64Field.getInstance();
+        EmbeddedRungeKuttaFieldIntegrator<Binary64> fieldIntegrator = createIntegrator(Binary64Field.getInstance(), 0.01, 1.0, 0.1, 0.1);
+        TestFieldProblem1<Binary64> pb = new TestFieldProblem1<Binary64>(field);
         double convergence = 1e-6;
-        fieldIntegrator.addEventDetector(new FieldODEEventDetector<Decimal64>() {
+        fieldIntegrator.addEventDetector(new FieldODEEventDetector<Binary64>() {
             @Override
-            public Decimal64 getMaxCheckInterval() {
-                return new Decimal64(Double.POSITIVE_INFINITY);
+            public Binary64 getMaxCheckInterval() {
+                return new Binary64(Double.POSITIVE_INFINITY);
             }
             @Override
-            public Decimal64 getThreshold() {
-                return new Decimal64(convergence);
+            public Binary64 getThreshold() {
+                return new Binary64(convergence);
             }
             @Override
             public int getMaxIterationCount() {
                 return 1000;
             }
             @Override
-            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+            public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {
                 return state.getTime().subtract(pb.getFinalTime());
             }
             @Override
-            public FieldODEEventHandler<Decimal64> getHandler() {
+            public FieldODEEventHandler<Binary64> getHandler() {
                 return (state, detector, increasing) -> Action.STOP;
             }
         });
-        FieldODEStateAndDerivative<Decimal64> finalState = fieldIntegrator.integrate(new FieldExpandableODE<>(pb), pb.getInitialState(), Decimal64.POSITIVE_INFINITY);
+        FieldODEStateAndDerivative<Binary64> finalState = fieldIntegrator.integrate(new FieldExpandableODE<>(pb), pb.getInitialState(), Binary64.POSITIVE_INFINITY);
         Assert.assertEquals(pb.getFinalTime().getReal(), finalState.getTime().getReal(), convergence);
     }
 

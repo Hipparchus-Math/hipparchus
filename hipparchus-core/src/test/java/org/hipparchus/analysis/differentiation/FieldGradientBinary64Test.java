@@ -17,19 +17,19 @@
 
 package org.hipparchus.analysis.differentiation;
 
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test for class {@link FieldGradient} on {@link Decimal64}.
+ * Test for class {@link FieldGradient} on {@link Binary64}.
  */
-public class FieldGradientDecimal64Test extends FieldGradientAbstractTest<Decimal64> {
+public class FieldGradientBinary64Test extends FieldGradientAbstractTest<Binary64> {
 
     @Override
-    protected Decimal64Field getValueField() {
-        return Decimal64Field.getInstance();
+    protected Binary64Field getValueField() {
+        return Binary64Field.getInstance();
     }
 
     @Test

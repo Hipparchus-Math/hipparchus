@@ -22,7 +22,7 @@
 package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
-import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
@@ -37,8 +37,8 @@ public class FieldGaussIntegratorTest {
         final double[] points = { 0, 1.2, 3.4 };
         final double[] weights = { 9.8, 7.6, 5.4 };
 
-        final FieldGaussIntegrator<Decimal64> integrator
-            = new FieldGaussIntegrator<>(new Pair<>(toDecimal64(points), toDecimal64(weights)));
+        final FieldGaussIntegrator<Binary64> integrator
+            = new FieldGaussIntegrator<>(new Pair<>(toBinary64(points), toBinary64(weights)));
 
         Assert.assertEquals(weights.length, integrator.getNumberOfPoints());
 
@@ -52,8 +52,8 @@ public class FieldGaussIntegratorTest {
         final double[] points = { 0, 1.2, 3.4 };
         final double[] weights = { 9.8, 7.6, 5.4 };
 
-        final FieldGaussIntegrator<Decimal64> integrator
-        = new FieldGaussIntegrator<>(new Pair<>(toDecimal64(points), toDecimal64(weights)));
+        final FieldGaussIntegrator<Binary64> integrator
+        = new FieldGaussIntegrator<>(new Pair<>(toBinary64(points), toBinary64(weights)));
 
         Assert.assertEquals(points.length, integrator.getNumberOfPoints());
 
@@ -67,20 +67,20 @@ public class FieldGaussIntegratorTest {
         final double[] points = { 0, 1, 2, 3, 4, 5 };
         final double[] weights = { 1, 1, 1, 1, 1, 1 };
 
-        final FieldGaussIntegrator<Decimal64> integrator
-        = new FieldGaussIntegrator<>(new Pair<>(toDecimal64(points), toDecimal64(weights)));
+        final FieldGaussIntegrator<Binary64> integrator
+        = new FieldGaussIntegrator<>(new Pair<>(toBinary64(points), toBinary64(weights)));
 
-        final Decimal64 val = new Decimal64(123.456);
-        final CalculusFieldUnivariateFunction<Decimal64> c = x -> val;
+        final Binary64 val = new Binary64(123.456);
+        final CalculusFieldUnivariateFunction<Binary64> c = x -> val;
 
-        final Decimal64 s = integrator.integrate(c);
+        final Binary64 s = integrator.integrate(c);
         Assert.assertEquals(val.multiply(points.length).getReal(), s.getReal(), 0d);
     }
 
-    private Decimal64[] toDecimal64(final double[] a) {
-        final Decimal64[] d = new Decimal64[a.length];
+    private Binary64[] toBinary64(final double[] a) {
+        final Binary64[] d = new Binary64[a.length];
         for (int i = 0; i < a.length; ++i) {
-            d[i] = new Decimal64(a[i]);
+            d[i] = new Binary64(a[i]);
         }
         return d;
     }

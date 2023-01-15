@@ -28,7 +28,7 @@ import org.hipparchus.analysis.polynomials.FieldPolynomialFunction;
 import org.hipparchus.analysis.polynomials.FieldPolynomialSplineFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Binary64;
 import org.junit.Test;
 
 /**
@@ -62,14 +62,14 @@ public class LinearInterpolatorTest extends UnivariateInterpolatorAbstractTest {
 
     @Test
     public void testInterpolateLinearD64() {
-        Decimal64 x[] = buildD64(0.0, 0.5, 1.0);
-        Decimal64 y[] = buildD64(0.0, 0.5, 0.0);
+        Binary64 x[] = buildD64(0.0, 0.5, 1.0);
+        Binary64 y[] = buildD64(0.0, 0.5, 0.0);
         FieldUnivariateInterpolator i = buildFieldInterpolator();
-        CalculusFieldUnivariateFunction<Decimal64> f = i.interpolate(x, y);
+        CalculusFieldUnivariateFunction<Binary64> f = i.interpolate(x, y);
         verifyInterpolation(f, x, y);
 
         // Verify coefficients using analytical values
-        FieldPolynomialFunction<Decimal64> polynomials[] = ((FieldPolynomialSplineFunction<Decimal64>) f).getPolynomials();
+        FieldPolynomialFunction<Binary64> polynomials[] = ((FieldPolynomialSplineFunction<Binary64>) f).getPolynomials();
         checkCoeffs(coefficientTolerance, polynomials[0], y[0].getReal(), +1.0);
         checkCoeffs(coefficientTolerance, polynomials[1], y[1].getReal(), -1.0);
     }

@@ -23,8 +23,8 @@ package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,12 +34,12 @@ import org.junit.Test;
  *
  */
 public class FieldLegendreTest {
-    private static final FieldGaussIntegratorFactory<Decimal64> factory = new FieldGaussIntegratorFactory<>(Decimal64Field.getInstance());
+    private static final FieldGaussIntegratorFactory<Binary64> factory = new FieldGaussIntegratorFactory<>(Binary64Field.getInstance());
 
     @Test
     public void testTooLArgeNumberOfPoints() {
         try {
-            factory.legendre(10000, new Decimal64(0), new Decimal64(Math.PI / 2));
+            factory.legendre(10000, new Binary64(0), new Binary64(Math.PI / 2));
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
             Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, miae.getSpecifier());
@@ -50,7 +50,7 @@ public class FieldLegendreTest {
 
     @Test
     public void testCos() {
-        final FieldGaussIntegrator<Decimal64> integrator = factory.legendre(7, new Decimal64(0), new Decimal64(Math.PI / 2));
+        final FieldGaussIntegrator<Binary64> integrator = factory.legendre(7, new Binary64(0), new Binary64(Math.PI / 2));
         final double s = integrator.integrate(x -> FastMath.cos(x)).getReal();
         // System.out.println("s=" + s + " e=" + 1);
         Assert.assertEquals(1, s, Math.ulp(1d));
@@ -60,10 +60,10 @@ public class FieldLegendreTest {
     @Test
     public void testInverse() {
 
-        final Decimal64 lo = new Decimal64(12.34);
-        final Decimal64 hi = new Decimal64(456.78);
+        final Binary64 lo = new Binary64(12.34);
+        final Binary64 hi = new Binary64(456.78);
 
-        final FieldGaussIntegrator<Decimal64> integrator = factory.legendre(60, lo, hi);
+        final FieldGaussIntegrator<Binary64> integrator = factory.legendre(60, lo, hi);
         final double s = integrator.integrate(x -> x.reciprocal()).getReal();
         final double expected = FastMath.log(hi).subtract(FastMath.log(lo)).getReal();
         // System.out.println("s=" + s + " e=" + expected);

@@ -26,17 +26,17 @@ import java.io.Serializable;
 import org.hipparchus.Field;
 
 /**
- * The field of double precision floating-point numbers.
+ * The field of {@link Binary64 double precision floating-point numbers}.
  *
- * @see Decimal64
+ * @see Binary64
  */
-public class Decimal64Field implements Field<Decimal64>, Serializable {
+public class Binary64Field implements Field<Binary64>, Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20161219L;
 
     /** Default constructor. */
-    private Decimal64Field() {
+    private Binary64Field() {
         // Do nothing
     }
 
@@ -45,26 +45,26 @@ public class Decimal64Field implements Field<Decimal64>, Serializable {
      *
      * @return the unique instance of this class
      */
-    public static final Decimal64Field getInstance() {
+    public static final Binary64Field getInstance() {
         return LazyHolder.INSTANCE;
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 getZero() {
-        return Decimal64.ZERO;
+    public Binary64 getZero() {
+        return Binary64.ZERO;
     }
 
     /** {@inheritDoc} */
     @Override
-    public Decimal64 getOne() {
-        return Decimal64.ONE;
+    public Binary64 getOne() {
+        return Binary64.ONE;
     }
 
     /** {@inheritDoc} */
     @Override
-    public Class<Decimal64> getRuntimeClass() {
-        return Decimal64.class;
+    public Class<Binary64> getRuntimeClass() {
+        return Binary64.class;
     }
 
     /** {@inheritDoc} */
@@ -85,7 +85,7 @@ public class Decimal64Field implements Field<Decimal64>, Serializable {
      */
     private static class LazyHolder {
         /** Cached field instance. */
-        private static final Decimal64Field INSTANCE = new Decimal64Field();
+        private static final Binary64Field INSTANCE = new Binary64Field();
     }
     // CHECKSTYLE: resume HideUtilityClassConstructor
 

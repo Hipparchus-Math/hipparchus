@@ -22,7 +22,7 @@ import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64Field;
 import org.junit.Test;
 
 public class HighamHall54FieldStateInterpolatorTest extends RungeKuttaFieldStateInterpolatorAbstractTest {
@@ -47,17 +47,17 @@ public class HighamHall54FieldStateInterpolatorTest extends RungeKuttaFieldState
 
     @Test
     public void interpolationAtBounds() {
-        doInterpolationAtBounds(Decimal64Field.getInstance(), 4.9e-16);
+        doInterpolationAtBounds(Binary64Field.getInstance(), 4.9e-16);
     }
 
     @Test
     public void interpolationInside() {
-        doInterpolationInside(Decimal64Field.getInstance(), 4.0e-13, 2.7e-15);
+        doInterpolationInside(Binary64Field.getInstance(), 4.0e-13, 2.7e-15);
     }
 
     @Test
     public void nonFieldInterpolatorConsistency() {
-        doNonFieldInterpolatorConsistency(Decimal64Field.getInstance(), 1.3e-16, 1.0e-50, 3.6e-15, 2.1e-16);
+        doNonFieldInterpolatorConsistency(Binary64Field.getInstance(), 1.3e-16, 1.0e-50, 3.6e-15, 2.1e-16);
     }
 
 }

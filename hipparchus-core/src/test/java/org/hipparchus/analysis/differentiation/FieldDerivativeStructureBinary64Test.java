@@ -18,18 +18,18 @@
 package org.hipparchus.analysis.differentiation;
 
 import org.hipparchus.Field;
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.junit.Test;
 
 /**
- * Test for class {@link FieldDerivativeStructure} on {@link Decimal64}.
+ * Test for class {@link FieldDerivativeStructure} on {@link Binary64}.
  */
-public class FieldDerivativeStructureDecimal64Test extends FieldDerivativeStructureAbstractTest<Decimal64> {
+public class FieldDerivativeStructureBinary64Test extends FieldDerivativeStructureAbstractTest<Binary64> {
 
     @Override
-    protected Field<Decimal64> getField() {
-        return Decimal64Field.getInstance();
+    protected Field<Binary64> getField() {
+        return Binary64Field.getInstance();
     }
 
     @Override

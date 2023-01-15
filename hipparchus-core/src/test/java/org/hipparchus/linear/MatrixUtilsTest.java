@@ -35,8 +35,8 @@ import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -145,14 +145,14 @@ public final class MatrixUtilsTest {
 
     @Test
     public void testCreateFieldVector() {
-        FieldVector<Decimal64> v1 = MatrixUtils.createFieldVector(new Decimal64[] {
-            new Decimal64(0.0), new Decimal64(1.0), new Decimal64(2.0), new Decimal64(3.0)
+        FieldVector<Binary64> v1 = MatrixUtils.createFieldVector(new Binary64[] {
+            new Binary64(0.0), new Binary64(1.0), new Binary64(2.0), new Binary64(3.0)
         });
         Assert.assertEquals(4, v1.getDimension());
         for (int i = 0; i < v1.getDimension(); ++i) {
             Assert.assertEquals(i, v1.getEntry(i).getReal(), 1.0e-15);
         }
-        FieldVector<Decimal64> v2 = MatrixUtils.createFieldVector(Decimal64Field.getInstance(), 7);
+        FieldVector<Binary64> v2 = MatrixUtils.createFieldVector(Binary64Field.getInstance(), 7);
         Assert.assertEquals(7, v2.getDimension());
         for (int i = 0; i < v2.getDimension(); ++i) {
             Assert.assertEquals(0.0, v2.getEntry(i).getReal(), 1.0e-15);
@@ -767,42 +767,42 @@ public final class MatrixUtilsTest {
 
     @Test
     public void testFieldOrthonormalize1() {
-        doTestOrthonormalize1(Decimal64Field.getInstance());
+        doTestOrthonormalize1(Binary64Field.getInstance());
     }
 
     @Test
     public void testFieldOrthonormalize2() {
-        doTestOrthonormalize2(Decimal64Field.getInstance());
+        doTestOrthonormalize2(Binary64Field.getInstance());
     }
 
     @Test
     public void testFieldOrthonormalize3() {
-        doTestOrthonormalize3(Decimal64Field.getInstance());
+        doTestOrthonormalize3(Binary64Field.getInstance());
     }
 
     @Test
     public void testFieldOrthonormalizeIncompleteBasis() {
-        doTestOrthonormalizeIncompleteBasis(Decimal64Field.getInstance());
+        doTestOrthonormalizeIncompleteBasis(Binary64Field.getInstance());
     }
 
     @Test
     public void testFieldOrthonormalizeDependent() {
-        doTestOrthonormalizeDependent(Decimal64Field.getInstance());
+        doTestOrthonormalizeDependent(Binary64Field.getInstance());
     }
 
     @Test
     public void testFieldOrthonormalizeDependentGenerateException() {
-        doTestOrthonormalizeDependentGenerateException(Decimal64Field.getInstance());
+        doTestOrthonormalizeDependentGenerateException(Binary64Field.getInstance());
     }
 
     @Test
     public void testFieldOrthonormalizeDependentAddZeroNorm() {
-        doTestOrthonormalizeDependentAddZeroNorm(Decimal64Field.getInstance());
+        doTestOrthonormalizeDependentAddZeroNorm(Binary64Field.getInstance());
     }
 
     @Test
     public void testFieldOrthonormalizeDependentReduceToSpan() {
-        doTestOrthonormalizeDependentReduceToSpan(Decimal64Field.getInstance());
+        doTestOrthonormalizeDependentReduceToSpan(Binary64Field.getInstance());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestOrthonormalize1(final Field<T> field) {
