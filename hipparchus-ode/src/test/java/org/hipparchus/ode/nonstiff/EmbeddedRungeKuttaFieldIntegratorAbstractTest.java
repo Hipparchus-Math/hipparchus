@@ -27,6 +27,8 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
+import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldExpandableODE;
@@ -250,7 +252,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
       for (int i = 0; i < detectors.size(); ++i) {
           Assert.assertSame(functions[i], detectors.get(i).getHandler());
           Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().getReal(), 1.0);
-          Assert.assertEquals(convergence, detectors.get(i).getThreshold().getReal(), 1.0e-15 * convergence);
+          Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
           Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
 
@@ -285,11 +287,14 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             public T getMaxCheckInterval() {
                 return field.getZero().newInstance(Double.POSITIVE_INFINITY);
             }
-            public T getThreshold() {
-                return field.getZero().newInstance(1.0e-8 * maxStep);
-            }
             public int getMaxIterationCount() {
                 return 1000;
+            }
+            public BracketedRealFieldUnivariateSolver<T> getSolver() {
+                return new FieldBracketingNthOrderBrentSolver<T>(field.getZero(),
+                                                                 field.getZero().newInstance(1.0e-8 * maxStep),
+                                                                 field.getZero(),
+                                                                 5);
             }
             public FieldODEEventHandler<T> getHandler() {
                 return (state, detector, increasing) -> Action.CONTINUE;
@@ -328,11 +333,14 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             public T getMaxCheckInterval() {
                 return field.getZero().newInstance(Double.POSITIVE_INFINITY);
             }
-            public T getThreshold() {
-                return field.getZero().newInstance(1.0e-8 * maxStep);
-            }
             public int getMaxIterationCount() {
                 return 3;
+            }
+            public BracketedRealFieldUnivariateSolver<T> getSolver() {
+                return new FieldBracketingNthOrderBrentSolver<T>(field.getZero(),
+                                                                 field.getZero().newInstance(1.0e-8 * maxStep),
+                                                                 field.getZero(),
+                                                                 5);
             }
             public FieldODEEventHandler<T> getHandler() {
                 return (state, detector, increasing) -> Action.CONTINUE;
@@ -699,12 +707,15 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                 return new Binary64(Double.POSITIVE_INFINITY);
             }
             @Override
-            public Binary64 getThreshold() {
-                return new Binary64(convergence);
-            }
-            @Override
             public int getMaxIterationCount() {
                 return 1000;
+            }
+            @Override
+            public BracketedRealFieldUnivariateSolver<Binary64> getSolver() {
+                return new FieldBracketingNthOrderBrentSolver<>(new Binary64(0),
+                                                                new Binary64(convergence),
+                                                                new Binary64(0),
+                                                                5);
             }
             @Override
             public Binary64 g(FieldODEStateAndDerivative<Binary64> state) {

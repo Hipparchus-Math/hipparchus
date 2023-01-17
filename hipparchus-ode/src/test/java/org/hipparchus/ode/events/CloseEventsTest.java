@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.ode.ODEIntegrator;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
@@ -2081,10 +2084,10 @@ public class CloseEventsTest {
     /** Base class to record events that occurred. */
     private static abstract class BaseDetector implements ODEEventDetector {
 
-        private final double  maxCheck;
-        private final double  threshold;
-        private final int     maxIter;
-        protected final Action action;
+        private final double                        maxCheck;
+        private final int                           maxIter;
+        private final BracketingNthOrderBrentSolver solver;
+        protected final Action                      action;
 
         /** times the event was actually triggered. */
         private final List<Event> events;
@@ -2092,8 +2095,8 @@ public class CloseEventsTest {
         public BaseDetector(final double maxCheck, final double threshold, final int maxIter,
                             Action action, List<Event> events) {
             this.maxCheck  = maxCheck;
-            this.threshold = threshold;
             this.maxIter   = maxIter;
+            this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.action    = action;
             this.events    = events;
         }
@@ -2102,12 +2105,12 @@ public class CloseEventsTest {
             return maxCheck;
         }
 
-        public double getThreshold() {
-            return threshold;
-        }
-
         public int getMaxIterationCount() {
             return maxIter;
+        }
+
+        public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+            return solver;
         }
 
         /**
@@ -2365,19 +2368,19 @@ public class CloseEventsTest {
 
     private class ResetChangesSignGenerator implements ODEEventDetector {
 
-        private final double  maxCheck;
-        private final double  threshold;
-        private final int     maxIter;
-        final double y1;
-        final double y2;
-        final double change;
-        int count;
+        private final double                        maxCheck;
+        private final int                           maxIter;
+        private final BracketingNthOrderBrentSolver solver;
+        final double                                y1;
+        final double                                y2;
+        final double                                change;
+        int                                         count;
 
         public ResetChangesSignGenerator(final double y1, final double y2, final double change,
                                          final double maxCheck, final double threshold, final int maxIter) {
             this.maxCheck  = maxCheck;
-            this.threshold = threshold;
             this.maxIter   = maxIter;
+            this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.y1        = y1;
             this.y2        = y2;
             this.change    = change;
@@ -2388,15 +2391,14 @@ public class CloseEventsTest {
             return maxCheck;
         }
 
-        public double getThreshold() {
-            return threshold;
-        }
-
         public int getMaxIterationCount() {
             return maxIter;
         }
 
-        /** {@inheritDoc} */
+        public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+            return solver;
+        }
+
         public ODEEventHandler getHandler() {
             return new ODEEventHandler() {
                 public Action eventOccurred(ODEStateAndDerivative s, ODEEventDetector detector, boolean increasing) {

@@ -26,6 +26,8 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
+import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -159,11 +161,14 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
             public T getMaxCheckInterval() {
                 return field.getZero().newInstance(Double.POSITIVE_INFINITY);
             }
-            public T getThreshold() {
-                return field.getZero().newInstance(1.0e-20);
-            }
             public int getMaxIterationCount() {
                 return 100;
+            }
+            public BracketedRealFieldUnivariateSolver<T> getSolver() {
+                return new FieldBracketingNthOrderBrentSolver<T>(field.getZero(),
+                                                                 field.getZero().newInstance(1.0e-20),
+                                                                 field.getZero(),
+                                                                 5);
             }
             public T g(FieldODEStateAndDerivative<T> state) {
                 return state.getTime().subtract(tEvent);
@@ -497,12 +502,19 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
     protected <T extends CalculusFieldElement<T>> void doTestUnstableDerivative(Field<T> field, double epsilon) {
       final StepFieldProblem<T> stepProblem = new StepFieldProblem<T>(field,
-                                                                      field.getZero().newInstance(1.0),
-                                                                      field.getZero().newInstance(1.0e-12),
-                                                                      100,
+                                                                      field.getZero().newInstance(999.0),
+                                                                      field.getZero().newInstance(1.0e+12),
+                                                                      1000000,
                                                                       field.getZero().newInstance(0.0),
                                                                       field.getZero().newInstance(1.0),
-                                                                      field.getZero().newInstance(2.0));
+                                                                      field.getZero().newInstance(2.0)).
+                                              withMaxCheck(field.getZero().newInstance(1.0)).
+                                              withMaxIter(1000).
+                                              withThreshold(field.getZero().newInstance(1.0e-12));
+      Assert.assertEquals(1.0,     stepProblem.getMaxCheckInterval().getReal(), 1.0e-15);
+      Assert.assertEquals(1000,    stepProblem.getMaxIterationCount());
+      Assert.assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy().getReal(), 1.0e-25);
+      Assert.assertNotNull(stepProblem.getHandler());
       RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, field.getZero().add(0.3));
       integ.addEventDetector(stepProblem);
       FieldODEStateAndDerivative<T> result = integ.integrate(new FieldExpandableODE<T>(stepProblem),

@@ -24,6 +24,8 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
+import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.ode.events.AbstractFieldODEDetector;
@@ -46,16 +48,19 @@ public class StepFieldProblem<T extends CalculusFieldElement<T>>
     public StepFieldProblem(Field<T> field,
                             final T maxCheck, final T threshold, final int maxIter,
                             T rateBefore, T rateAfter, T switchTime) {
-        this(field, maxCheck, threshold, maxIter, new LocalHandler<>(),
+        this(field, maxCheck, maxIter,
+             new FieldBracketingNthOrderBrentSolver<>(field.getZero(), threshold, field.getZero(), 5),
+             new LocalHandler<>(),
              rateBefore, rateAfter, switchTime);
     }
 
     private StepFieldProblem(Field<T> field,
-                             final T maxCheck, final T threshold,
-                             final int maxIter, final FieldODEEventHandler<T> handler,
+                             final T maxCheck, final int maxIter,
+                             final BracketedRealFieldUnivariateSolver<T> solver,
+                             final FieldODEEventHandler<T> handler,
                              final T rateBefore, final T rateAfter,
                              final T switchTime) {
-        super(maxCheck, threshold, maxIter, handler);
+        super(maxCheck, maxIter, solver, handler);
         this.field      = field;
         this.rateBefore = rateBefore;
         this.rateAfter  = rateAfter;
@@ -63,9 +68,10 @@ public class StepFieldProblem<T extends CalculusFieldElement<T>>
         setRate(rateBefore);
     }
 
-    protected StepFieldProblem<T> create(T newMaxCheck, T newThreshold,
-                                         int newMaxIter, FieldODEEventHandler<T> newHandler) {
-        return new StepFieldProblem<>(field, newMaxCheck, newThreshold, newMaxIter, newHandler,
+    protected StepFieldProblem<T> create(T newMaxCheck, int newMaxIter,
+                                         BracketedRealFieldUnivariateSolver<T> newSolver,
+                                         FieldODEEventHandler<T> newHandler) {
+        return new StepFieldProblem<>(field, newMaxCheck, newMaxIter, newSolver, newHandler,
                                       rateBefore, rateAfter, switchTime);
     }
 

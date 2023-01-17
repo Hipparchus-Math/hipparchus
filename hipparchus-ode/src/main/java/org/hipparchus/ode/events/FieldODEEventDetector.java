@@ -18,6 +18,7 @@
 package org.hipparchus.ode.events;
 
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 
 /** This interface represents a handler for discrete events triggered
@@ -65,15 +66,15 @@ public interface FieldODEEventDetector<T extends CalculusFieldElement<T>>  {
      */
     T getMaxCheckInterval();
 
-    /** Get the convergence threshold for event localization.
-     * @return convergence threshold for event localization
-     */
-    T getThreshold();
-
     /** Get the upper limit in the iteration count for event localization.
      * @return upper limit in the iteration count for event localization
      */
     int getMaxIterationCount();
+
+    /** Get the root-finding algorithm to use to detect state events.
+     * @return root-finding algorithm to use to detect state events
+     */
+    BracketedRealFieldUnivariateSolver<T> getSolver();
 
     /** Get the underlying event handler.
      * @return underlying event handler

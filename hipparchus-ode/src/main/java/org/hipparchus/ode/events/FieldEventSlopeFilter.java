@@ -26,6 +26,7 @@ import java.util.Arrays;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.MathArrays;
@@ -98,8 +99,8 @@ public class FieldEventSlopeFilter<T extends FieldODEEventDetector<E>, E extends
      */
     public FieldEventSlopeFilter(final Field<E> field, final T rawDetector, final FilterType filter) {
         this(field,
-             rawDetector.getMaxCheckInterval(), rawDetector.getThreshold(),
-             rawDetector.getMaxIterationCount(), new LocalHandler<>(rawDetector.getHandler()),
+             rawDetector.getMaxCheckInterval(), rawDetector.getMaxIterationCount(),
+             rawDetector.getSolver(), new LocalHandler<>(rawDetector.getHandler()),
              rawDetector, filter);
     }
 
@@ -111,17 +112,17 @@ public class FieldEventSlopeFilter<T extends FieldODEEventDetector<E>, E extends
      * </p>
      * @param field field to which array elements belong
      * @param maxCheck maximum checking interval (s)
-     * @param threshold convergence threshold (s)
      * @param maxIter maximum number of iterations in the event time search
      * @param handler event handler to call at event occurrences
      * @param rawDetector event detector to wrap
      * @param filter filter to use
      */
     private FieldEventSlopeFilter(final Field<E> field,
-                                  final E maxCheck, final E threshold, final int maxIter,
+                                  final E maxCheck, final int maxIter,
+                                  final BracketedRealFieldUnivariateSolver<E> solver,
                                   final FieldODEEventHandler<E> handler,
                                   final T rawDetector, final FilterType filter) {
-        super(maxCheck, threshold, maxIter, handler);
+        super(maxCheck, maxIter, solver, handler);
         this.rawDetector  = rawDetector;
         this.filter       = filter;
         this.transformers = new Transformer[HISTORY_SIZE];
@@ -130,10 +131,11 @@ public class FieldEventSlopeFilter<T extends FieldODEEventDetector<E>, E extends
 
     /** {@inheritDoc} */
     @Override
-    protected FieldEventSlopeFilter<T, E> create(final E newMaxCheck, final E newThreshold,
-                                                 final int newMaxIter, final FieldODEEventHandler<E> newHandler) {
-        return new FieldEventSlopeFilter<T, E>(newThreshold.getField(),
-                                               newMaxCheck, newThreshold, newMaxIter, newHandler, rawDetector, filter);
+    protected FieldEventSlopeFilter<T, E> create(final E newMaxCheck, final int newMaxIter,
+                                                 final BracketedRealFieldUnivariateSolver<E> newSolver,
+                                                 final FieldODEEventHandler<E> newHandler) {
+        return new FieldEventSlopeFilter<T, E>(newMaxCheck.getField(), newMaxCheck, newMaxIter,
+                                               newSolver, newHandler, rawDetector, filter);
     }
 
     /**

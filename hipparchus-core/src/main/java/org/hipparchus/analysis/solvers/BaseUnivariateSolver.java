@@ -41,12 +41,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * @see UnivariateDifferentiableSolver
  */
 public interface BaseUnivariateSolver<F extends UnivariateFunction> {
-    /**
-     * Get the maximum number of function evaluations.
-     *
-     * @return the maximum number of function evaluations.
-     */
-    int getMaxEvaluations();
 
     /**
      * Get the number of evaluations of the objective function.

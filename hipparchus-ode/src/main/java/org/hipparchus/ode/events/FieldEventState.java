@@ -24,9 +24,8 @@ package org.hipparchus.ode.events;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
-import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver.Interval;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
-import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver.Interval;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -54,6 +53,11 @@ public class FieldEventState<T extends CalculusFieldElement<T>> {
      * @since 3.0
      */
     private final FieldODEEventDetector<T> detector;
+
+    /** Event solver.
+     * @since 3.0
+     */
+    private final BracketedRealFieldUnivariateSolver<T> solver;
 
     /** Event handler. */
     private final FieldODEEventHandler<T> handler;
@@ -107,7 +111,9 @@ public class FieldEventState<T extends CalculusFieldElement<T>> {
      * @since 3.0
      */
     public FieldEventState(final FieldODEEventDetector<T> detector) {
+
         this.detector     = detector;
+        this.solver       = detector.getSolver();
         this.handler      = detector.getHandler();
 
         // some dummy values ...
@@ -187,7 +193,7 @@ public class FieldEventState<T extends CalculusFieldElement<T>> {
 
             // extremely rare case: there is a zero EXACTLY at interval start
             // we will use the sign slightly after step beginning to force ignoring this zero
-            T tStart = t0.add(detector.getThreshold().multiply(forward ? 0.5 : -0.5));
+            T tStart = t0.add(solver.getAbsoluteAccuracy().multiply(forward ? 0.5 : -0.5));
             if (tStart.equals(t0)) {
                 tStart = nextAfter(t0);
             }
@@ -237,7 +243,7 @@ public class FieldEventState<T extends CalculusFieldElement<T>> {
         final FieldODEStateAndDerivative<T> s1 = interpolator.getCurrentState();
         final T t1 = s1.getTime();
         final T dt = t1.subtract(t0);
-        if (dt.abs().subtract(detector.getThreshold()).getReal() < 0) {
+        if (dt.abs().subtract(solver.getAbsoluteAccuracy()).getReal() < 0) {
             // we cannot do anything on such a small step, don't trigger any events
             return false;
         }
@@ -296,11 +302,7 @@ public class FieldEventState<T extends CalculusFieldElement<T>> {
                 (ga.getReal() > 0.0 && gb.getReal() < 0.0) ||
                 (ga.getReal() < 0.0 && gb.getReal() > 0.0));
 
-        final T zero        = ta.getField().getZero();
-        final T convergence = detector.getThreshold();
         final int maxIterationCount = detector.getMaxIterationCount();
-        final BracketedRealFieldUnivariateSolver<T> solver =
-                new FieldBracketingNthOrderBrentSolver<>(zero, convergence, zero, 5);
         final CalculusFieldUnivariateFunction<T> f = t -> g(interpolator.getInterpolatedState(t));
 
         // prepare loop below
@@ -313,7 +315,7 @@ public class FieldEventState<T extends CalculusFieldElement<T>> {
         // time on the other side of the root.
         // Initialized the the loop below executes once.
         T afterRootT = ta;
-        T afterRootG = zero;
+        T afterRootG = ta.getField().getZero();
 
         // check for some conditions that the root finders don't like
         // these conditions cannot not happen in the loop below
@@ -322,7 +324,7 @@ public class FieldEventState<T extends CalculusFieldElement<T>> {
             // both non-zero but times are the same. Probably due to reset state
             beforeRootT = ta;
             beforeRootG = ga;
-            afterRootT = shiftedBy(beforeRootT, convergence);
+            afterRootT = shiftedBy(beforeRootT, solver.getAbsoluteAccuracy());
             afterRootG = f.value(afterRootT);
         } else if (!ga.isZero() && gb.isZero()) {
             // hard: ga != 0.0 and gb == 0.0
@@ -330,13 +332,13 @@ public class FieldEventState<T extends CalculusFieldElement<T>> {
             // throw an exception if g(t) = 0.0 in [tb, tb + convergence]
             beforeRootT = tb;
             beforeRootG = gb;
-            afterRootT = shiftedBy(beforeRootT, convergence);
+            afterRootT = shiftedBy(beforeRootT, solver.getAbsoluteAccuracy());
             afterRootG = f.value(afterRootT);
         } else if (!ga.isZero()) {
             final T newGa = f.value(ta);
             if (ga.getReal() > 0 != newGa.getReal() > 0) {
                 // both non-zero, step sign change at ta, possibly due to reset state
-                final T nextT = minTime(shiftedBy(ta, convergence), tb);
+                final T nextT = minTime(shiftedBy(ta, solver.getAbsoluteAccuracy()), tb);
                 final T nextG = f.value(nextT);
                 if (nextG.getReal() > 0.0 == g0Positive) {
                     // the sign change between ga and new Ga just moved the root less than one convergence
@@ -363,7 +365,7 @@ public class FieldEventState<T extends CalculusFieldElement<T>> {
                 // handle the root at ta first
                 beforeRootT = loopT;
                 beforeRootG = loopG;
-                afterRootT = minTime(shiftedBy(beforeRootT, convergence), tb);
+                afterRootT = minTime(shiftedBy(beforeRootT, solver.getAbsoluteAccuracy()), tb);
                 afterRootG = f.value(afterRootT);
             } else {
                 // both non-zero, the usual case, use a root finder.

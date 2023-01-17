@@ -18,6 +18,9 @@
 package org.hipparchus.ode.nonstiff;
 
 
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractIntegrator;
@@ -168,13 +171,13 @@ public abstract class AdamsIntegratorAbstractTest {
             }
 
             @Override
-            public double getThreshold() {
-                return 1.0e-6 * range;
+            public int getMaxIterationCount() {
+                return 100;
             }
 
             @Override
-            public int getMaxIterationCount() {
-                return 100;
+            public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+                return new BracketingNthOrderBrentSolver(0, 1.0e-6 * range, 0, 5);
             }
 
             @Override
@@ -216,13 +219,13 @@ public abstract class AdamsIntegratorAbstractTest {
                 }
 
                 @Override
-                public double getThreshold() {
-                    return 1.0e-6 * range;
+                public int getMaxIterationCount() {
+                    return 100;
                 }
 
                 @Override
-                public int getMaxIterationCount() {
-                    return 100;
+                public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+                    return new BracketingNthOrderBrentSolver(0, 1.0e-6 * range, 0, 5);
                 }
 
                 @Override
