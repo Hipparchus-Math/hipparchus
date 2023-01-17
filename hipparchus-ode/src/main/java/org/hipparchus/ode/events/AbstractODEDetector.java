@@ -17,6 +17,9 @@
 
 package org.hipparchus.ode.events;
 
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ode.ODEStateAndDerivative;
@@ -39,11 +42,11 @@ public abstract class AbstractODEDetector<T extends AbstractODEDetector<T>> impl
     /** Max check interval. */
     private final double maxCheck;
 
-    /** Convergence threshold. */
-    private final double threshold;
-
     /** Maximum number of iterations in the event time search. */
     private final int maxIter;
+
+    /** Root-finding algorithm to use to detect state events. */
+    private final BracketedUnivariateSolver<UnivariateFunction> solver;
 
     /** Default handler for event overrides. */
     private final ODEEventHandler handler;
@@ -53,17 +56,17 @@ public abstract class AbstractODEDetector<T extends AbstractODEDetector<T>> impl
 
     /** Build a new instance.
      * @param maxCheck maximum checking interval, must be strictly positive (s)
-     * @param threshold convergence threshold (s)
      * @param maxIter maximum number of iterations in the event time search
+     * @param solver root-finding algorithm to use to detect state events
      * @param handler event handler to call at event occurrences
      */
-    protected AbstractODEDetector(final double maxCheck, final double threshold, final int maxIter,
+    protected AbstractODEDetector(final double maxCheck, final int maxIter,
+                                  final BracketedUnivariateSolver<UnivariateFunction> solver,
                                   final ODEEventHandler handler) {
         checkStrictlyPositive(maxCheck);
-        checkStrictlyPositive(threshold);
         this.maxCheck  = maxCheck;
-        this.threshold = threshold;
         this.maxIter   = maxIter;
+        this.solver    = solver;
         this.handler   = handler;
         this.forward   = true;
     }
@@ -109,8 +112,8 @@ public abstract class AbstractODEDetector<T extends AbstractODEDetector<T>> impl
 
     /** {@inheritDoc} */
     @Override
-    public double getThreshold() {
-        return threshold;
+    public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+        return solver;
     }
 
     /**
@@ -122,7 +125,7 @@ public abstract class AbstractODEDetector<T extends AbstractODEDetector<T>> impl
      * @return a new detector with updated configuration (the instance is not changed)
      */
     public T withMaxCheck(final double newMaxCheck) {
-        return create(newMaxCheck, getThreshold(), getMaxIterationCount(), getHandler());
+        return create(newMaxCheck, getMaxIterationCount(), getSolver(), getHandler());
     }
 
     /**
@@ -134,19 +137,34 @@ public abstract class AbstractODEDetector<T extends AbstractODEDetector<T>> impl
      * @return a new detector with updated configuration (the instance is not changed)
      */
     public T withMaxIter(final int newMaxIter) {
-        return create(getMaxCheckInterval(), getThreshold(), newMaxIter,  getHandler());
+        return create(getMaxCheckInterval(), newMaxIter, getSolver(), getHandler());
     }
 
     /**
      * Setup the convergence threshold.
      * <p>
-     * This will override a convergence threshold if it has been configured previously.
+     * This is equivalent to call {@code withSolver(new BracketingNthOrderBrentSolver(0,
+     * newThreshold, 0, 5))}, so it will override a solver if one has been configured previously.
      * </p>
-     * @param newThreshold convergence threshold (s)
+     * @param newThreshold convergence threshold
      * @return a new detector with updated configuration (the instance is not changed)
+     * @see #withSolver(BracketedUnivariateSolver)
      */
     public T withThreshold(final double newThreshold) {
-        return create(getMaxCheckInterval(), newThreshold, getMaxIterationCount(),  getHandler());
+        return withSolver(new BracketingNthOrderBrentSolver(0, newThreshold, 0, 5));
+    }
+
+    /**
+     * Setup the root-finding algorithm to use to detect state events.
+     * <p>
+     * This will override a solver if it has been configured previously.
+     * </p>
+     * @param newSolver root-finding algorithm to use to detect state events
+     * @return a new detector with updated configuration (the instance is not changed)
+     * @see #withThreshold(double)
+     */
+    public T withSolver(final BracketedUnivariateSolver<UnivariateFunction> newSolver) {
+        return create(getMaxCheckInterval(), getMaxIterationCount(), newSolver, getHandler());
     }
 
     /**
@@ -158,7 +176,7 @@ public abstract class AbstractODEDetector<T extends AbstractODEDetector<T>> impl
      * @return a new detector with updated configuration (the instance is not changed)
      */
     public T withHandler(final ODEEventHandler newHandler) {
-        return create(getMaxCheckInterval(), getThreshold(), getMaxIterationCount(), newHandler);
+        return create(getMaxCheckInterval(), getMaxIterationCount(), getSolver(), newHandler);
     }
 
     /** {@inheritDoc} */
@@ -169,13 +187,14 @@ public abstract class AbstractODEDetector<T extends AbstractODEDetector<T>> impl
 
     /** Build a new instance.
      * @param newMaxCheck maximum checking interval (s)
-     * @param newThreshold convergence threshold (s)
-     * @param newMaxIter maximum number of iterations in the event time search
+     * @param newmaxIter maximum number of iterations in the event time search
+     * @param newSolver root-finding algorithm to use to detect state events
      * @param newHandler event handler to call at event occurrences
      * @return a new instance of the appropriate sub-type
      */
-    protected abstract T create(double newMaxCheck, double newThreshold,
-                                int newMaxIter, ODEEventHandler newHandler);
+    protected abstract T create(double newMaxCheck, int newmaxIter,
+                                BracketedUnivariateSolver<UnivariateFunction> newSolver,
+                                ODEEventHandler newHandler);
 
     /** Check if the current propagation is forward or backward.
      * @return true if the current propagation is forward

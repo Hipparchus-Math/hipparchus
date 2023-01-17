@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ExpandableODE;
@@ -183,7 +186,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
       for (int i = 0; i < detectors.size(); ++i) {
           Assert.assertSame(functions[i], detectors.get(i).getHandler());
           Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval(), 1.0);
-          Assert.assertEquals(convergence, detectors.get(i).getThreshold(), 1.0e-15 * convergence);
+          Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy(), 1.0e-15 * convergence);
           Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
 
@@ -215,11 +218,11 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                 public double getMaxCheckInterval() {
                     return Double.POSITIVE_INFINITY;
                 }
-                public double getThreshold() {
-                    return 1.0e-8 * maxStep;
-                }
                 public int getMaxIterationCount() {
                     return 1000;
+                }
+                public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+                    return new BracketingNthOrderBrentSolver(0, 1.0e-8 * maxStep, 0, 5);
                 }
                 public ODEEventHandler getHandler() {
                     return (state, detector, increasing) -> Action.CONTINUE;
@@ -258,11 +261,11 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             public double getMaxCheckInterval() {
                 return Double.POSITIVE_INFINITY;
             }
-            public double getThreshold() {
-                return 1.0e-8 * maxStep;
-            }
             public int getMaxIterationCount() {
                 return 3;
+            }
+            public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+                return new BracketingNthOrderBrentSolver(0, 1.0e-8 * maxStep, 0, 5);
             }
             public ODEEventHandler getHandler() {
                 return (state, detector, increasing) -> Action.CONTINUE;
@@ -503,11 +506,11 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             public double getMaxCheckInterval() {
                 return Double.POSITIVE_INFINITY;
             }
-            public double getThreshold() {
-                return 1.0e-20;
-            }
             public int getMaxIterationCount() {
                 return 100;
+            }
+            public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+                return new BracketingNthOrderBrentSolver(0, 1.0e-20, 0, 5);
             }
             public ODEEventHandler getHandler() {
                 return (state, detector, increasing) -> Action.CONTINUE;
@@ -574,7 +577,14 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
     public abstract void testUnstableDerivative();
 
     protected void doTestUnstableDerivative(final double epsilon) {
-        final StepProblem stepProblem = new StepProblem(1.0, 1.0e-12, 1000, 0.0, 1.0, 2.0);
+        final StepProblem stepProblem = new StepProblem(999.0, 1.0e+12, 1000000, 0.0, 1.0, 2.0).
+                        withMaxCheck(1.0).
+                        withMaxIter(1000).
+                        withThreshold(1.0e-12);
+        Assert.assertEquals(1.0,     stepProblem.getMaxCheckInterval(), 1.0e-15);
+        Assert.assertEquals(1000,    stepProblem.getMaxIterationCount());
+        Assert.assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy(), 1.0e-25);
+        Assert.assertNotNull(stepProblem.getHandler());
         ODEIntegrator integ = createIntegrator(0.1, 10, 1.0e-12, 0.0);
         integ.addEventDetector(stepProblem);
         final ODEStateAndDerivative finalState =
@@ -625,12 +635,12 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             return 0.01;
         }
 
-        public double getThreshold() {
-            return 1.0e-7;
-        }
-
         public int getMaxIterationCount() {
             return 100;
+        }
+
+        public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+            return new BracketingNthOrderBrentSolver(0, 1.0e-7, 0, 5);
         }
 
         public void init(ODEStateAndDerivative s0, double t) {
@@ -887,12 +897,12 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                 return Double.POSITIVE_INFINITY;
             }
             @Override
-            public double getThreshold() {
-                return convergence;
-            }
-            @Override
             public int getMaxIterationCount() {
                 return 1000;
+            }
+            @Override
+            public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+                return new BracketingNthOrderBrentSolver(0, convergence, 0, 5);
             }
             @Override
             public double g(ODEStateAndDerivative state) {

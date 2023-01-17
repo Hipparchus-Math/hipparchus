@@ -23,6 +23,9 @@ package org.hipparchus.ode.events;
 
 import java.util.Arrays;
 
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ODEIntegrator;
@@ -78,9 +81,9 @@ public class ReappearingEventTest {
     /** State events for this unit test. */
     protected static class Event implements ODEEventDetector {
 
-        private final double  maxCheck;
-        private final double  threshold;
-        private final int     maxIter;
+        private final double                        maxCheck;
+        private final int                           maxIter;
+        private final BracketingNthOrderBrentSolver solver;
 
         /** Constructor for the {@link Event} class.
          * @param maxCheck maximum checking interval, must be strictly positive (s)
@@ -89,23 +92,22 @@ public class ReappearingEventTest {
          */
         public Event(final double maxCheck, final double threshold, final int maxIter) {
             this.maxCheck  = maxCheck;
-            this.threshold = threshold;
             this.maxIter   = maxIter;
+            this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
         }
 
         public double getMaxCheckInterval() {
             return maxCheck;
         }
 
-        public double getThreshold() {
-            return threshold;
-        }
-
         public int getMaxIterationCount() {
             return maxIter;
         }
 
-        /** {@inheritDoc} */
+        public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+            return solver;
+        }
+
         public ODEEventHandler getHandler() {
             return (state, detector, increasing) -> Action.STOP;
         }

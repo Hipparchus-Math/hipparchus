@@ -25,7 +25,6 @@ package org.hipparchus.ode.events;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver.Interval;
-import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -52,6 +51,11 @@ public class EventState {
      * @since 3.0
      */
     private final ODEEventDetector detector;
+
+    /** Event solver.
+     * @since 3.0
+     */
+    private final BracketedUnivariateSolver<UnivariateFunction> solver;
 
     /** Event handler. */
     private final ODEEventHandler handler;
@@ -106,7 +110,9 @@ public class EventState {
      * @since 3.0
      */
     public EventState(final ODEEventDetector detector) {
+
         this.detector     = detector;
+        this.solver       = detector.getSolver();
         this.handler      = detector.getHandler();
 
         // some dummy values ...
@@ -186,7 +192,7 @@ public class EventState {
 
             // extremely rare case: there is a zero EXACTLY at interval start
             // we will use the sign slightly after step beginning to force ignoring this zero
-            double tStart = t0 + (forward ? 0.5 : -0.5) * detector.getThreshold();
+            double tStart = t0 + (forward ? 0.5 : -0.5) * solver.getAbsoluteAccuracy();
             // check for case where tolerance is too small to make a difference
             if (tStart == t0) {
                 tStart = nextAfter(t0);
@@ -217,7 +223,7 @@ public class EventState {
         final ODEStateAndDerivative s1 = interpolator.getCurrentState();
         final double t1 = s1.getTime();
         final double dt = t1 - t0;
-        if (FastMath.abs(dt) < detector.getThreshold()) {
+        if (FastMath.abs(dt) < solver.getAbsoluteAccuracy()) {
             // we cannot do anything on such a small step, don't trigger any events
             return false;
         }
@@ -275,10 +281,7 @@ public class EventState {
         // check there appears to be a root in [ta, tb]
         check(ga == 0.0 || gb == 0.0 || (ga > 0.0 && gb < 0.0) || (ga < 0.0 && gb > 0.0));
 
-        final double convergence = detector.getThreshold();
         final int maxIterationCount = detector.getMaxIterationCount();
-        final BracketedUnivariateSolver<UnivariateFunction> solver =
-                new BracketingNthOrderBrentSolver(0, convergence, 0, 5);
         final UnivariateFunction f = t -> g(interpolator.getInterpolatedState(t));
 
         // prepare loop below
@@ -300,7 +303,7 @@ public class EventState {
             // both non-zero but times are the same. Probably due to reset state
             beforeRootT = ta;
             beforeRootG = ga;
-            afterRootT = shiftedBy(beforeRootT, convergence);
+            afterRootT = shiftedBy(beforeRootT, solver.getAbsoluteAccuracy());
             afterRootG = f.value(afterRootT);
         } else if (ga != 0.0 && gb == 0.0) {
             // hard: ga != 0.0 and gb == 0.0
@@ -308,13 +311,13 @@ public class EventState {
             // throw an exception if g(t) = 0.0 in [tb, tb + convergence]
             beforeRootT = tb;
             beforeRootG = gb;
-            afterRootT = shiftedBy(beforeRootT, convergence);
+            afterRootT = shiftedBy(beforeRootT, solver.getAbsoluteAccuracy());
             afterRootG = f.value(afterRootT);
         } else if (ga != 0.0) {
             final double newGa = f.value(ta);
             if (ga > 0 != newGa > 0) {
                 // both non-zero, step sign change at ta, possibly due to reset state
-                final double nextT = minTime(shiftedBy(ta, convergence), tb);
+                final double nextT = minTime(shiftedBy(ta, solver.getAbsoluteAccuracy()), tb);
                 final double nextG = f.value(nextT);
                 if (nextG > 0.0 == g0Positive) {
                     // the sign change between ga and new Ga just moved the root less than one convergence
@@ -342,7 +345,7 @@ public class EventState {
                 // handle the root at ta first
                 beforeRootT = loopT;
                 beforeRootG = loopG;
-                afterRootT = minTime(shiftedBy(beforeRootT, convergence), tb);
+                afterRootT = minTime(shiftedBy(beforeRootT, solver.getAbsoluteAccuracy()), tb);
                 afterRootG = f.value(afterRootT);
             } else {
                 // both non-zero, the usual case, use a root finder.

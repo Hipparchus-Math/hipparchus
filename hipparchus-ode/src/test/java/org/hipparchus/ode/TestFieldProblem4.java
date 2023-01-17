@@ -26,6 +26,8 @@ import java.lang.reflect.Array;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
+import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.FieldODEEventDetector;
 import org.hipparchus.ode.events.FieldODEEventHandler;
@@ -121,14 +123,17 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
     private static abstract class BaseDetector<T extends CalculusFieldElement<T>>
         implements FieldODEEventDetector<T>, FieldODEEventHandler<T> {
 
-        final T maxCheck;
-        final T threshold;
-        final int maxIter;
+        final T                                     maxCheck;
+        final int                                   maxIter;
+        final BracketedRealFieldUnivariateSolver<T> solver;
 
         protected BaseDetector(final T maxCheck, final T threshold, final int maxIter) {
             this.maxCheck  = maxCheck;
-            this.threshold = threshold;
             this.maxIter   = maxIter;
+            this.solver    = new FieldBracketingNthOrderBrentSolver<>(threshold.getField().getZero(),
+                                                                      threshold,
+                                                                      threshold.getField().getZero(),
+                                                                      5);
         }
 
         public T getMaxCheckInterval() {
@@ -139,8 +144,8 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
             return maxIter;
         }
 
-        public T getThreshold() {
-            return threshold;
+        public BracketedRealFieldUnivariateSolver<T> getSolver() {
+            return solver;
         }
 
         public FieldODEEventHandler<T> getHandler() {

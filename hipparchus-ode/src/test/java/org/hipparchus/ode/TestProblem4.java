@@ -22,6 +22,9 @@
 
 package org.hipparchus.ode;
 
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.events.ODEEventHandler;
@@ -98,14 +101,14 @@ public class TestProblem4 extends TestProblemAbstract {
 
     private static abstract class BaseDetector implements ODEEventDetector, ODEEventHandler {
 
-        final double maxCheck;
-        final double threshold;
-        final int maxIter;
+        final double                                        maxCheck;
+        final int                                           maxIter;
+        final BracketedUnivariateSolver<UnivariateFunction> solver;
 
         protected BaseDetector(final double maxCheck, final double threshold, final int maxIter) {
             this.maxCheck  = maxCheck;
-            this.threshold = threshold;
             this.maxIter   = maxIter;
+            this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
         }
 
         public double getMaxCheckInterval() {
@@ -116,8 +119,8 @@ public class TestProblem4 extends TestProblemAbstract {
             return maxIter;
         }
 
-        public double getThreshold() {
-            return threshold;
+        public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+            return solver;
         }
 
         public ODEEventHandler getHandler() {

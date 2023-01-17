@@ -24,6 +24,9 @@ package org.hipparchus.ode.events;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ODEIntegrator;
@@ -131,11 +134,11 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
     /** State events for this unit test. */
     private class Event implements ODEEventDetector {
 
-        private final double  maxCheck;
-        private final double  threshold;
-        private final int     maxIter;
-        private final int     idx;
-        private final int     eventType;
+        private final double                        maxCheck;
+        private final int                           maxIter;
+        private final BracketingNthOrderBrentSolver solver;
+        private final int                           idx;
+        private final int                           eventType;
 
         /** Constructor for the {@link Event} class.
          * @param maxCheck maximum checking interval, must be strictly positive (s)
@@ -147,8 +150,8 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
         public Event(final double maxCheck, final double threshold, final int maxIter,
                      final int idx, final int eventType) {
             this.maxCheck  = maxCheck;
-            this.threshold = threshold;
             this.maxIter   = maxIter;
+            this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.idx       = idx;
             this.eventType = eventType;
         }
@@ -157,15 +160,14 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
             return maxCheck;
         }
 
-        public double getThreshold() {
-            return threshold;
-        }
-
         public int getMaxIterationCount() {
             return maxIter;
         }
 
-        /** {@inheritDoc} */
+        public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+            return solver;
+        }
+
         public ODEEventHandler getHandler() {
             return (state, detector, increasing) -> Action.STOP;
         }

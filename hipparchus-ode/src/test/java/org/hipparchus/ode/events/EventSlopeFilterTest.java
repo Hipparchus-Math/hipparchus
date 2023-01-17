@@ -23,6 +23,11 @@ package org.hipparchus.ode.events;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
+import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldExpandableODE;
@@ -439,18 +444,18 @@ public class EventSlopeFilterTest {
     /** State events for this unit test. */
     protected static class Event implements ODEEventDetector {
 
-        private final double  maxCheck;
-        private final double  threshold;
-        private final int     maxIter;
-        private final boolean expectDecreasing;
-        private final boolean expectIncreasing;
-        private int eventCount;
+        private final double                                        maxCheck;
+        private final int                                           maxIter;
+        private final BracketedUnivariateSolver<UnivariateFunction> solver;
+        private final boolean                                       expectDecreasing;
+        private final boolean                                       expectIncreasing;
+        private int                                                 eventCount;
 
         public Event(final double maxCheck, final double threshold, final int maxIter,
                      boolean expectDecreasing, boolean expectIncreasing) {
             this.maxCheck         = maxCheck;
-            this.threshold        = threshold;
             this.maxIter          = maxIter;
+            this.solver           = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.expectDecreasing = expectDecreasing;
             this.expectIncreasing = expectIncreasing;
         }
@@ -459,12 +464,12 @@ public class EventSlopeFilterTest {
             return maxCheck;
         }
 
-        public double getThreshold() {
-            return threshold;
-        }
-
         public int getMaxIterationCount() {
             return maxIter;
+        }
+
+        public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+            return solver;
         }
 
         public int getEventCount() {
@@ -496,18 +501,21 @@ public class EventSlopeFilterTest {
     /** State events for this unit test. */
     protected static class FieldEvent<T extends CalculusFieldElement<T>> implements FieldODEEventDetector<T> {
 
-        private final T       maxCheck;
-        private final T       threshold;
-        private final int     maxIter;
-        private final boolean expectDecreasing;
-        private final boolean expectIncreasing;
-        private int eventCount;
+        private final T                                     maxCheck;
+        private final int                                   maxIter;
+        private final BracketedRealFieldUnivariateSolver<T> solver;
+        private final boolean                               expectDecreasing;
+        private final boolean                               expectIncreasing;
+        private int                                         eventCount;
 
         public FieldEvent(final T maxCheck, final T threshold, final int maxIter,
                           boolean expectDecreasing, boolean expectIncreasing) {
             this.maxCheck         = maxCheck;
-            this.threshold        = threshold;
             this.maxIter          = maxIter;
+            this.solver           = new FieldBracketingNthOrderBrentSolver<>(threshold.getField().getZero(),
+                                                                            threshold,
+                                                                            threshold.getField().getZero(),
+                                                                            5);
             this.expectDecreasing = expectDecreasing;
             this.expectIncreasing = expectIncreasing;
         }
@@ -516,12 +524,12 @@ public class EventSlopeFilterTest {
             return maxCheck;
         }
 
-        public T getThreshold() {
-            return threshold;
-        }
-
         public int getMaxIterationCount() {
             return maxIter;
+        }
+
+        public BracketedRealFieldUnivariateSolver<T> getSolver() {
+            return solver;
         }
 
         public int getEventCount() {
