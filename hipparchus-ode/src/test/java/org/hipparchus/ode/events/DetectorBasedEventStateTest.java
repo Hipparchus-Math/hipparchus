@@ -41,7 +41,7 @@ import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class EventStateTest {
+public class DetectorBasedEventStateTest {
 
     // JIRA: MATH-322
     @Test
@@ -52,7 +52,7 @@ public class EventStateTest {
         final double gap = r2 - r1;
 
         final double tolerance = 0.1;
-        EventState es = new EventState(new CloseEventsGenerator(r1, r2, 1.5 * gap, tolerance, 100));
+        DetectorBasedEventState es = new DetectorBasedEventState(new CloseEventsGenerator(r1, r2, 1.5 * gap, tolerance, 100));
         EquationsMapper mapper = new ExpandableODE(new OrdinaryDifferentialEquation() {
             @Override
             public int getDimension() {

@@ -66,6 +66,21 @@ public class DormandPrince54IntegratorTest extends EmbeddedRungeKuttaIntegratorA
         doTestEvents(1.7e-7, "Dormand-Prince 5(4)");
     }
 
+    @Override
+    public void testStepEnd() {
+        doTestStepEnd(119, "Dormand-Prince 5(4)");
+    }
+
+    @Override
+    public void testStopAfterStep() {
+        doTestStopAfterStep(12, 1.117270);
+    }
+
+    @Override
+    public void testResetAfterStep() {
+        doTestResetAfterStep(12, 14);
+    }
+
     @Test
     public void testMissedEndEvent() {
         doTestMissedEndEvent(1.0e-15, 1.0e-15);

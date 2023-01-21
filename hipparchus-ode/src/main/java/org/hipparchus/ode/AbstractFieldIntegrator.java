@@ -23,21 +23,25 @@
 package org.hipparchus.ode;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.FieldDetectorBasedEventState;
+import org.hipparchus.ode.events.FieldEventOccurrence;
 import org.hipparchus.ode.events.FieldEventState;
-import org.hipparchus.ode.events.FieldEventState.EventOccurrence;
 import org.hipparchus.ode.events.FieldODEEventDetector;
+import org.hipparchus.ode.events.FieldODEStepEndHandler;
+import org.hipparchus.ode.events.FieldStepEndEventState;
 import org.hipparchus.ode.sampling.AbstractFieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.util.FastMath;
@@ -50,7 +54,7 @@ import org.hipparchus.util.Incrementor;
 public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>> implements FieldODEIntegrator<T> {
 
     /** Step handler. */
-    private Collection<FieldODEStepHandler<T>> stepHandlers;
+    private List<FieldODEStepHandler<T>> stepHandlers;
 
     /** Current step start. */
     private FieldODEStateAndDerivative<T> stepStart;
@@ -68,7 +72,10 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
     private final Field<T> field;
 
     /** Events states. */
-    private Collection<FieldEventState<T>> eventsStates;
+    private List<FieldDetectorBasedEventState<T>> detectorBasedEventsStates;
+
+    /** Events states related to step end. */
+    private List<FieldStepEndEventState<T>> stepEndEventsStates;
 
     /** Initialization indicator of events states. */
     private boolean statesInitialized;
@@ -87,14 +94,15 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
      * @param name name of the method
      */
     protected AbstractFieldIntegrator(final Field<T> field, final String name) {
-        this.field        = field;
-        this.name         = name;
-        stepHandlers      = new ArrayList<>();
-        stepStart         = null;
-        stepSize          = null;
-        eventsStates      = new ArrayList<>();
-        statesInitialized = false;
-        evaluations       = new Incrementor();
+        this.field                = field;
+        this.name                 = name;
+        stepHandlers              = new ArrayList<>();
+        stepStart                 = null;
+        stepSize                  = null;
+        detectorBasedEventsStates = new ArrayList<>();
+        stepEndEventsStates       = new ArrayList<>();
+        statesInitialized         = false;
+        evaluations               = new Incrementor();
     }
 
     /** Get the field to which state vector elements belong.
@@ -118,8 +126,8 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public Collection<FieldODEStepHandler<T>> getStepHandlers() {
-        return Collections.unmodifiableCollection(stepHandlers);
+    public List<FieldODEStepHandler<T>> getStepHandlers() {
+        return Collections.unmodifiableList(stepHandlers);
     }
 
     /** {@inheritDoc} */
@@ -131,23 +139,37 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void addEventDetector(final FieldODEEventDetector<T> detector) {
-        eventsStates.add(new FieldEventState<>(detector));
+        detectorBasedEventsStates.add(new FieldDetectorBasedEventState<>(detector));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Collection<FieldODEEventDetector<T>> getEventDetectors() {
-        final List<FieldODEEventDetector<T>> list = new ArrayList<>(eventsStates.size());
-        for (FieldEventState<T> state : eventsStates) {
-            list.add(state.getEventDetector());
-        }
-        return Collections.unmodifiableCollection(list);
+    public List<FieldODEEventDetector<T>> getEventDetectors() {
+        return detectorBasedEventsStates.stream().map(es -> es.getEventDetector()).collect(Collectors.toList());
     }
 
     /** {@inheritDoc} */
     @Override
     public void clearEventDetectors() {
-        eventsStates.clear();
+        detectorBasedEventsStates.clear();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void addStepEndHandler(FieldODEStepEndHandler<T> handler) {
+        stepEndEventsStates.add(new FieldStepEndEventState<>(handler));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<FieldODEStepEndHandler<T>> getStepEndHandlers() {
+        return stepEndEventsStates.stream().map(es -> es.getHandler()).collect(Collectors.toList());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void clearStepEndHandlers() {
+        stepEndEventsStates.clear();
     }
 
     /** {@inheritDoc} */
@@ -198,10 +220,9 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
         final FieldODEStateAndDerivative<T> s0WithDerivatives =
                         eqn.getMapper().mapStateAndDerivative(t0, y0, y0Dot);
 
-        // initialize event handlers
-        for (final FieldEventState<T> state : eventsStates) {
-            state.init(s0WithDerivatives, t);
-        }
+        // initialize event states (both detector based and step end based)
+        Stream.concat(detectorBasedEventsStates.stream(), stepEndEventsStates.stream()).
+        forEach(s -> s.init(s0WithDerivatives, t));
 
         // initialize step handlers
         for (FieldODEStepHandler<T> handler : stepHandlers) {
@@ -277,11 +298,13 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
 
         // initialize the events states if needed
         if (!statesInitialized) {
-            for (FieldEventState<T> state : eventsStates) {
-                state.reinitializeBegin(interpolator);
-            }
+            // initialize event states
+            detectorBasedEventsStates.stream().forEach(s -> s.reinitializeBegin(interpolator));
             statesInitialized = true;
         }
+
+        // set end of step
+        stepEndEventsStates.stream().forEach(s -> s.setStepEnd(currentState.getTime()));
 
         // search for next events that may occur during the step
         final int orderingSign = interpolator.isForward() ? +1 : -1;
@@ -298,14 +321,15 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
         resetEvents:
         do {
 
-            // Evaluate all event detectors for events
+            // Evaluate all event detectors and end steps for events
             occurringEvents.clear();
-            for (final FieldEventState<T> state : eventsStates) {
-                if (state.evaluateStep(restricted)) {
+            final AbstractFieldODEStateInterpolator<T> finalRestricted = restricted;
+            Stream.concat(detectorBasedEventsStates.stream(), stepEndEventsStates.stream()).
+            forEach(s -> { if (s.evaluateStep(finalRestricted)) {
                     // the event occurs during the current step
-                    occurringEvents.add(state);
+                    occurringEvents.add(s);
                 }
-            }
+            });
 
 
             do {
@@ -323,8 +347,8 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
                     // restrict the interpolator to the first part of the step, up to the event
                     restricted = restricted.restrictStep(previousState, eventState);
 
-                    // try to advance all event states to current time
-                    for (final FieldEventState<T> state : eventsStates) {
+                    // try to advance all event states related to detectors to current time
+                    for (final FieldDetectorBasedEventState<T> state : detectorBasedEventsStates) {
                         if (state != currentEvent && state.tryAdvance(eventState, interpolator)) {
                             // we need to handle another event first
                             // remove event we just updated to prevent heap corruption
@@ -344,7 +368,7 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
                     }
 
                     // acknowledge event occurrence
-                    final EventOccurrence<T> occurrence = currentEvent.doEvent(eventState);
+                    final FieldEventOccurrence<T> occurrence = currentEvent.doEvent(eventState);
                     final Action action = occurrence.getAction();
                     isLastStep = action == Action.STOP;
 
@@ -398,10 +422,14 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
 
                 }
 
-                // last part of the step, after the last event
-                // may be a new event here if the last event modified the g function of
-                // another event detector.
-                for (final FieldEventState<T> state : eventsStates) {
+                // last part of the step, after the last event. Advance all event
+                // detectors to the end of the step. Should never find new events unless
+                // a previous event modified the g function of another event detector when
+                // it returned Action.CONTINUE. Detecting such events here is unreliable
+                // and RESET_EVENTS should be used instead. Other option is to replace
+                // tryAdvance(...) with a doAdvance(...) that throws an exception when
+                // the g function sign is not as expected.
+                for (final FieldDetectorBasedEventState<T> state : detectorBasedEventsStates) {
                     if (state.tryAdvance(currentState, interpolator)) {
                         occurringEvents.add(state);
                     }

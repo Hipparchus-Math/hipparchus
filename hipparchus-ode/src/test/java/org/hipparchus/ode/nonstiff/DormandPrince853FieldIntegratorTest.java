@@ -86,6 +86,21 @@ public class DormandPrince853FieldIntegratorTest extends EmbeddedRungeKuttaField
     }
 
     @Override
+    public void testStepEnd() {
+        doTestStepEnd(Binary64Field.getInstance(), 20, "Dormand-Prince 8 (5, 3)");
+    }
+
+    @Override
+    public void testStopAfterStep() {
+        doTestStopAfterStep(Binary64Field.getInstance(), 12, 6.842171);
+    }
+
+    @Override
+    public void testResetAfterStep() {
+        doTestResetAfterStep(Binary64Field.getInstance(), 12, 13);
+    }
+
+    @Override
     public void testEventsErrors() {
         doTestEventsErrors(Binary64Field.getInstance());
     }
