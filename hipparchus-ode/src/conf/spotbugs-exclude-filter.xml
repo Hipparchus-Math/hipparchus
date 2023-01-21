@@ -30,7 +30,7 @@
 
   <!-- Floating point equality is acceptable when the algorithm is designed for it. -->
   <Match>
-    <Class name="org.hipparchus.ode.events.EventState"/>
+    <Class name="org.hipparchus.ode.events.DetectorBasedEventState"/>
     <Method name="reinitializeBegin"/>
     <Bug pattern="FE_FLOATING_POINT_EQUALITY"/>
   </Match>
