@@ -23,19 +23,23 @@
 package org.hipparchus.ode;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.DetectorBasedEventState;
+import org.hipparchus.ode.events.EventOccurrence;
 import org.hipparchus.ode.events.EventState;
-import org.hipparchus.ode.events.EventState.EventOccurrence;
 import org.hipparchus.ode.events.ODEEventDetector;
+import org.hipparchus.ode.events.ODEStepEndHandler;
+import org.hipparchus.ode.events.StepEndEventState;
 import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.FastMath;
@@ -47,7 +51,7 @@ import org.hipparchus.util.Incrementor;
 public abstract class AbstractIntegrator implements ODEIntegrator {
 
     /** Step handler. */
-    private Collection<ODEStepHandler> stepHandlers;
+    private List<ODEStepHandler> stepHandlers;
 
     /** Current step start time. */
     private ODEStateAndDerivative stepStart;
@@ -61,8 +65,11 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
     /** Indicator that a state or derivative reset was triggered by some event. */
     private boolean resetOccurred;
 
-    /** Events states. */
-    private Collection<EventState> eventsStates;
+    /** Events states related to event detectors. */
+    private List<DetectorBasedEventState> detectorBasedEventsStates;
+
+    /** Events states related to step end. */
+    private List<StepEndEventState> stepEndEventsStates;
 
     /** Initialization indicator of events states. */
     private boolean statesInitialized;
@@ -80,13 +87,14 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
      * @param name name of the method
      */
     protected AbstractIntegrator(final String name) {
-        this.name         = name;
-        stepHandlers      = new ArrayList<>();
-        stepStart         = null;
-        stepSize          = Double.NaN;
-        eventsStates      = new ArrayList<>();
-        statesInitialized = false;
-        evaluations       = new Incrementor();
+        this.name                 = name;
+        stepHandlers              = new ArrayList<>();
+        stepStart                 = null;
+        stepSize                  = Double.NaN;
+        detectorBasedEventsStates = new ArrayList<>();
+        stepEndEventsStates       = new ArrayList<>();
+        statesInitialized         = false;
+        evaluations               = new Incrementor();
     }
 
     /** {@inheritDoc} */
@@ -103,8 +111,8 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    public Collection<ODEStepHandler> getStepHandlers() {
-        return Collections.unmodifiableCollection(stepHandlers);
+    public List<ODEStepHandler> getStepHandlers() {
+        return Collections.unmodifiableList(stepHandlers);
     }
 
     /** {@inheritDoc} */
@@ -116,23 +124,37 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
     /** {@inheritDoc} */
     @Override
     public void addEventDetector(final ODEEventDetector detector) {
-        eventsStates.add(new EventState(detector));
+        detectorBasedEventsStates.add(new DetectorBasedEventState(detector));
     }
 
     /** {@inheritDoc} */
     @Override
-    public Collection<ODEEventDetector> getEventDetectors() {
-        final List<ODEEventDetector> list = new ArrayList<>(eventsStates.size());
-        for (EventState state : eventsStates) {
-            list.add(state.getEventDetector());
-        }
-        return Collections.unmodifiableCollection(list);
+    public List<ODEEventDetector> getEventDetectors() {
+        return detectorBasedEventsStates.stream().map(es -> es.getEventDetector()).collect(Collectors.toList());
     }
 
     /** {@inheritDoc} */
     @Override
     public void clearEventDetectors() {
-        eventsStates.clear();
+        detectorBasedEventsStates.clear();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void addStepEndHandler(ODEStepEndHandler handler) {
+        stepEndEventsStates.add(new StepEndEventState(handler));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public List<ODEStepEndHandler> getStepEndHandlers() {
+        return stepEndEventsStates.stream().map(es -> es.getHandler()).collect(Collectors.toList());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void clearStepEndHandlers() {
+        stepEndEventsStates.clear();
     }
 
     /** {@inheritDoc} */
@@ -185,10 +207,9 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
         final ODEStateAndDerivative s0WithDerivatives =
                         eqn.getMapper().mapStateAndDerivative(t0, y0, y0Dot);
 
-        // initialize event handlers
-        for (final EventState state : eventsStates) {
-            state.init(s0WithDerivatives, t);
-        }
+        // initialize event states (both detector based and step end based)
+        Stream.concat(detectorBasedEventsStates.stream(), stepEndEventsStates.stream()).
+        forEach(s -> s.init(s0WithDerivatives, t));
 
         // initialize step handlers
         for (ODEStepHandler handler : stepHandlers) {
@@ -260,11 +281,13 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
 
         // initialize the events states if needed
         if (!statesInitialized) {
-            for (EventState state : eventsStates) {
-                state.reinitializeBegin(interpolator);
-            }
+            // initialize event states
+            detectorBasedEventsStates.stream().forEach(s -> s.reinitializeBegin(interpolator));
             statesInitialized = true;
         }
+
+        // set end of step
+        stepEndEventsStates.stream().forEach(s -> s.setStepEnd(currentState.getTime()));
 
         // search for next events that may occur during the step
         final int orderingSign = interpolator.isForward() ? +1 : -1;
@@ -281,14 +304,15 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
         resetEvents:
         do {
 
-            // Evaluate all event detectors for events
+            // Evaluate all event detectors and end steps for events
             occurringEvents.clear();
-            for (final EventState state : eventsStates) {
-                if (state.evaluateStep(restricted)) {
+            final AbstractODEStateInterpolator finalRestricted = restricted;
+            Stream.concat(detectorBasedEventsStates.stream(), stepEndEventsStates.stream()).
+            forEach(s -> { if (s.evaluateStep(finalRestricted)) {
                     // the event occurs during the current step
-                    occurringEvents.add(state);
+                    occurringEvents.add(s);
                 }
-            }
+            });
 
             do {
 
@@ -304,8 +328,8 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
                     // restrict the interpolator to the first part of the step, up to the event
                     restricted = restricted.restrictStep(previousState, eventState);
 
-                    // try to advance all event states to current time
-                    for (final EventState state : eventsStates) {
+                    // try to advance all event states related to detectors to current time
+                    for (final DetectorBasedEventState state : detectorBasedEventsStates) {
                         if (state != currentEvent && state.tryAdvance(eventState, interpolator)) {
                             // we need to handle another event first
                             // remove event we just updated to prevent heap corruption
@@ -386,7 +410,7 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
                 // and RESET_EVENTS should be used instead. Other option is to replace
                 // tryAdvance(...) with a doAdvance(...) that throws an exception when
                 // the g function sign is not as expected.
-                for (final EventState state : eventsStates) {
+                for (final DetectorBasedEventState state : detectorBasedEventsStates) {
                     if (state.tryAdvance(currentState, interpolator)) {
                         occurringEvents.add(state);
                     }

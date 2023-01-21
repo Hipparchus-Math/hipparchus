@@ -17,12 +17,13 @@
 
 package org.hipparchus.ode;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.events.FieldODEEventDetector;
+import org.hipparchus.ode.events.FieldODEStepEndHandler;
 import org.hipparchus.ode.sampling.FieldODEStepHandler;
 
 /** This interface represents a first order integrator for
@@ -58,7 +59,7 @@ public interface FieldODEIntegrator<T extends CalculusFieldElement<T>> {
      * @see #addStepHandler(FieldODEStepHandler)
      * @see #clearStepHandlers()
      */
-    Collection<FieldODEStepHandler<T>> getStepHandlers();
+    List<FieldODEStepHandler<T>> getStepHandlers();
 
     /** Remove all the step handlers that have been added to the integrator.
      * @see #addStepHandler(FieldODEStepHandler)
@@ -80,7 +81,7 @@ public interface FieldODEIntegrator<T extends CalculusFieldElement<T>> {
      * @see #clearEventDetectors()
      * @since 3.0
      */
-    Collection<FieldODEEventDetector<T>> getEventDetectors();
+    List<FieldODEEventDetector<T>> getEventDetectors();
 
     /** Remove all the event handlers that have been added to the integrator.
      * @see #addEventDetector(FieldODEEventDetector)
@@ -88,6 +89,34 @@ public interface FieldODEIntegrator<T extends CalculusFieldElement<T>> {
      * @since 3.0
      */
     void clearEventDetectors();
+
+    /** Add a handler for step ends to the integrator.
+     * <p>
+     * The {@link FieldODEStepEndHandler#stepEndOccurred(FieldODEStateAndDerivative, boolean)
+     * stepEndOccurred(state, forward)} method of the {@code handler} will be called
+     * at each step end.
+     * </p>
+     * @param handler handler for step ends
+     * @see #getStepEndHandlers()
+     * @see #clearStepEndHandlers()
+     * @since 3.0
+     */
+    void addStepEndHandler(FieldODEStepEndHandler<T> handler);
+
+    /** Get all the handlers for step ends that have been added to the integrator.
+     * @return an unmodifiable list of the added step end handlers
+     * @see #addStepEndHandler(FieldODEStepEndHandler)
+     * @see #clearStepEndHandlers()
+     * @since 3.0
+     */
+    List<FieldODEStepEndHandler<T>> getStepEndHandlers();
+
+    /** Remove all the handlers for step ends that have been added to the integrator.
+     * @see #addStepEndHandler(FieldODEStepEndHandler)
+     * @see #getStepEndHandlers()
+     * @since 3.0
+     */
+    void clearStepEndHandlers();
 
     /** Get the state at step start time t<sub>i</sub>.
      * <p>This method can be called during integration (typically by

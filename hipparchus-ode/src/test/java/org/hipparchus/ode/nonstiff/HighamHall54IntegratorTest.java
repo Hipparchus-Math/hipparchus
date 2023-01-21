@@ -67,6 +67,21 @@ public class HighamHall54IntegratorTest extends EmbeddedRungeKuttaIntegratorAbst
         doTestEvents(1.0e-7, "Higham-Hall 5(4)");
     }
 
+    @Override
+    public void testStepEnd() {
+        doTestStepEnd(119, "Higham-Hall 5(4)");
+    }
+
+    @Override
+    public void testStopAfterStep() {
+        doTestStopAfterStep(12, 1.110791);
+    }
+
+    @Override
+    public void testResetAfterStep() {
+        doTestResetAfterStep(12, 14);
+    }
+
     @Test
     public void testMissedEndEvent() {
         doTestMissedEndEvent(1.0e-15, 1.0e-15);

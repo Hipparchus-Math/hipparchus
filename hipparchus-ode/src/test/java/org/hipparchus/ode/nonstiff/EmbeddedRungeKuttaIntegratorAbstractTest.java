@@ -47,6 +47,7 @@ import org.hipparchus.ode.VariationalEquation;
 import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.events.ODEEventHandler;
+import org.hipparchus.ode.events.ODEStepEndHandler;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.FastMath;
@@ -199,6 +200,139 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
       integ.clearEventDetectors();
       Assert.assertEquals(0, integ.getEventDetectors().size());
 
+    }
+
+    @Test
+    public abstract void testStepEnd();
+
+    protected void doTestStepEnd(final int expectedCount, final String name) {
+        TestProblem4 pb = new TestProblem4();
+        double minStep = 0;
+        double maxStep = pb.getFinalTime() - pb.getInitialState().getTime();
+        double scalAbsoluteTolerance = 1.0e-8;
+        double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
+
+        ODEIntegrator integ = createIntegrator(minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
+        double convergence = 1.0e-8 * maxStep;
+        ODEEventDetector[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY, convergence, 1000);
+        for (int l = 0; l < functions.length; ++l) {
+            integ.addEventDetector(functions[l]);
+        }
+        List<ODEEventDetector> detectors = new ArrayList<>(integ.getEventDetectors());
+        Assert.assertEquals(functions.length, detectors.size());
+
+        for (int i = 0; i < detectors.size(); ++i) {
+            Assert.assertSame(functions[i], detectors.get(i).getHandler());
+            Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval(), 1.0);
+            Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy(), 1.0e-15 * convergence);
+            Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
+        }
+
+        final StepCounter counter = new StepCounter(expectedCount + 10, Action.STOP);
+        integ.addStepEndHandler(counter);
+        Assert.assertEquals(1, integ.getStepEndHandlers().size());
+        integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
+
+        Assert.assertEquals(expectedCount, counter.count);
+        Assert.assertEquals(name, integ.getName());
+        integ.clearEventDetectors();
+        Assert.assertEquals(0, integ.getEventDetectors().size());
+        integ.clearStepEndHandlers();
+        Assert.assertEquals(0, integ.getStepEndHandlers().size());
+    }
+
+    @Test
+    public abstract void testStopAfterStep();
+
+    protected void doTestStopAfterStep(final int count, final double expectedTime) {
+        TestProblem4 pb = new TestProblem4();
+        double minStep = 0;
+        double maxStep = pb.getFinalTime() - pb.getInitialState().getTime();
+        double scalAbsoluteTolerance = 1.0e-8;
+        double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
+
+        ODEIntegrator integ = createIntegrator(minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
+        double convergence = 1.0e-8 * maxStep;
+        ODEEventDetector[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY, convergence, 1000);
+        for (int l = 0; l < functions.length; ++l) {
+            integ.addEventDetector(functions[l]);
+        }
+        List<ODEEventDetector> detectors = new ArrayList<>(integ.getEventDetectors());
+        Assert.assertEquals(functions.length, detectors.size());
+
+        for (int i = 0; i < detectors.size(); ++i) {
+            Assert.assertSame(functions[i], detectors.get(i).getHandler());
+            Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval(), 1.0);
+            Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy(), 1.0e-15 * convergence);
+            Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
+        }
+
+        final StepCounter counter = new StepCounter(count, Action.STOP);
+        integ.addStepEndHandler(counter);
+        Assert.assertEquals(1, integ.getStepEndHandlers().size());
+        ODEStateAndDerivative finalState = integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
+
+        Assert.assertEquals(count, counter.count);
+        Assert.assertEquals(expectedTime, finalState.getTime(), 1.0e-6);
+
+    }
+
+    @Test
+    public abstract void testResetAfterStep();
+
+    protected void doTestResetAfterStep(final int resetCount, final int expectedCount) {
+        TestProblem4 pb = new TestProblem4();
+        double minStep = 0;
+        double maxStep = pb.getFinalTime() - pb.getInitialState().getTime();
+        double scalAbsoluteTolerance = 1.0e-8;
+        double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
+
+        ODEIntegrator integ = createIntegrator(minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
+        double convergence = 1.0e-8 * maxStep;
+        ODEEventDetector[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY, convergence, 1000);
+        for (int l = 0; l < functions.length; ++l) {
+            integ.addEventDetector(functions[l]);
+        }
+        List<ODEEventDetector> detectors = new ArrayList<>(integ.getEventDetectors());
+        Assert.assertEquals(functions.length, detectors.size());
+
+        for (int i = 0; i < detectors.size(); ++i) {
+            Assert.assertSame(functions[i], detectors.get(i).getHandler());
+            Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval(), 1.0);
+            Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy(), 1.0e-15 * convergence);
+            Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
+        }
+
+        final StepCounter counter = new StepCounter(resetCount, Action.RESET_STATE);
+        integ.addStepEndHandler(counter);
+        Assert.assertEquals(1, integ.getStepEndHandlers().size());
+        ODEStateAndDerivative finalState = integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
+
+        Assert.assertEquals(expectedCount, counter.count);
+        Assert.assertEquals(12.0, finalState.getTime(), 1.0e-6); // this corresponds to the Stop event detector
+        for (int i = 0; i < finalState.getPrimaryStateDimension(); ++i) {
+            Assert.assertEquals(0.0, finalState.getPrimaryState()[i], 1.0e-15);
+            Assert.assertEquals(0.0, finalState.getPrimaryDerivative()[i], 1.0e-15);
+        }
+
+    }
+
+    private static class StepCounter implements ODEStepEndHandler {
+        final int    max;
+        final Action actionAtMax;
+        int          count;
+        StepCounter(final int max, final Action actionAtMax) {
+            this.max         = max;
+            this.actionAtMax = actionAtMax;
+            this.count       = 0;
+        }
+        public Action stepEndOccurred(final ODEStateAndDerivative state, final boolean forward) {
+            return ++count == max ? actionAtMax : Action.CONTINUE;
+        }
+        public ODEState resetState(ODEStateAndDerivative state) {
+            return new ODEState(state.getTime(),
+                                new double[state.getPrimaryStateDimension()]);
+        }
     }
 
     @Test
