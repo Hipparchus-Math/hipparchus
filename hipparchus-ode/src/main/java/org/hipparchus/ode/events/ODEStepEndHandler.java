@@ -38,9 +38,8 @@ public interface ODEStepEndHandler  {
      * </p>
      * @param initialState initial time, state vector and derivative
      * @param finalTime target time for the integration
-     * @param detector event detector related to the event handler
      */
-    default void init(ODEStateAndDerivative initialState, double finalTime, ODEEventDetector detector) {
+    default void init(ODEStateAndDerivative initialState, double finalTime) {
         // nothing by default
     }
 

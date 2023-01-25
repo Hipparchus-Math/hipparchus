@@ -220,9 +220,17 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
         final FieldODEStateAndDerivative<T> s0WithDerivatives =
                         eqn.getMapper().mapStateAndDerivative(t0, y0, y0Dot);
 
-        // initialize event states (both detector based and step end based)
-        Stream.concat(detectorBasedEventsStates.stream(), stepEndEventsStates.stream()).
-        forEach(s -> s.init(s0WithDerivatives, t));
+        // initialize detector based event states (both  and step end based)
+        detectorBasedEventsStates.stream().forEach(s -> {
+            s.init(s0WithDerivatives, t);
+            s.getEventDetector().getHandler().init(s0WithDerivatives, t, s.getEventDetector());
+        });
+
+        // initialize step end based event states
+        stepEndEventsStates.stream().forEach(s -> {
+            s.init(s0WithDerivatives, t);
+            s.getHandler().init(s0WithDerivatives, t);
+        });
 
         // initialize step handlers
         for (FieldODEStepHandler<T> handler : stepHandlers) {

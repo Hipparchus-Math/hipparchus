@@ -40,9 +40,8 @@ public interface FieldODEStepEndHandler<T extends CalculusFieldElement<T>>  {
      * </p>
      * @param initialState initial time, state vector and derivative
      * @param finalTime target time for the integration
-     * @param detector event detector related to the event handler
      */
-    default void init(FieldODEStateAndDerivative<T> initialState, T finalTime, FieldODEEventDetector<T> detector) {
+    default void init(FieldODEStateAndDerivative<T> initialState, T finalTime) {
         // nothing by default
     }
 
