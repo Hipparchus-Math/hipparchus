@@ -24,6 +24,8 @@ package org.hipparchus.ode.events;
 
 import java.util.Arrays;
 
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 
@@ -90,8 +92,8 @@ public class EventSlopeFilter<T extends ODEEventDetector> extends AbstractODEDet
      * @since 3.0
      */
     public EventSlopeFilter(final T rawDetector, final FilterType filter) {
-        this(rawDetector.getMaxCheckInterval(), rawDetector.getThreshold(),
-             rawDetector.getMaxIterationCount(), new LocalHandler<>(rawDetector.getHandler()),
+        this(rawDetector.getMaxCheckInterval(), rawDetector.getMaxIterationCount(),
+             rawDetector.getSolver(), new LocalHandler<>(rawDetector.getHandler()),
              rawDetector, filter);
     }
 
@@ -102,16 +104,17 @@ public class EventSlopeFilter<T extends ODEEventDetector> extends AbstractODEDet
      * in a readable manner without using a huge amount of parameters.
      * </p>
      * @param maxCheck maximum checking interval (s)
-     * @param threshold convergence threshold (s)
      * @param maxIter maximum number of iterations in the event time search
+     * @param solver root-finding algorithm to use to detect state events
      * @param handler event handler to call at event occurrences
      * @param rawDetector event detector to wrap
      * @param filter filter to use
      */
-    private EventSlopeFilter(final double maxCheck, final double threshold,
-                             final int maxIter, final ODEEventHandler handler,
+    private EventSlopeFilter(final double maxCheck, final int maxIter,
+                             final BracketedUnivariateSolver<UnivariateFunction> solver,
+                             final ODEEventHandler handler,
                              final T rawDetector, final FilterType filter) {
-        super(maxCheck, threshold, maxIter, handler);
+        super(maxCheck, maxIter, solver, handler);
         this.rawDetector  = rawDetector;
         this.filter       = filter;
         this.transformers = new Transformer[HISTORY_SIZE];
@@ -120,9 +123,11 @@ public class EventSlopeFilter<T extends ODEEventDetector> extends AbstractODEDet
 
     /** {@inheritDoc} */
     @Override
-    protected EventSlopeFilter<T> create(final double newMaxCheck, final double newThreshold,
-                                         final int newMaxIter, final ODEEventHandler newHandler) {
-        return new EventSlopeFilter<T>(newMaxCheck, newThreshold, newMaxIter, newHandler, rawDetector, filter);
+    protected EventSlopeFilter<T> create(final double newMaxCheck, final int newMaxIter,
+                                         final BracketedUnivariateSolver<UnivariateFunction> newSolver,
+                                         final ODEEventHandler newHandler) {
+        return new EventSlopeFilter<>(newMaxCheck, newMaxIter, newSolver, newHandler,
+                                      rawDetector, filter);
     }
 
     /**

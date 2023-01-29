@@ -23,6 +23,9 @@
 package org.hipparchus.ode.events;
 
 
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.EquationsMapper;
@@ -38,7 +41,7 @@ import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class EventStateTest {
+public class DetectorBasedEventStateTest {
 
     // JIRA: MATH-322
     @Test
@@ -49,7 +52,7 @@ public class EventStateTest {
         final double gap = r2 - r1;
 
         final double tolerance = 0.1;
-        EventState es = new EventState(new CloseEventsGenerator(r1, r2, 1.5 * gap, tolerance, 100));
+        DetectorBasedEventState es = new DetectorBasedEventState(new CloseEventsGenerator(r1, r2, 1.5 * gap, tolerance, 100));
         EquationsMapper mapper = new ExpandableODE(new OrdinaryDifferentialEquation() {
             @Override
             public int getDimension() {
@@ -121,16 +124,16 @@ public class EventStateTest {
     private static class ResettingEvent implements ODEEventDetector {
 
         private static double lastTriggerTime = Double.NEGATIVE_INFINITY;
-        private final double  maxCheck;
-        private final double  threshold;
-        private final int     maxIter;
-        private final double  tEvent;
+        private final double                        maxCheck;
+        private final int                           maxIter;
+        private final BracketingNthOrderBrentSolver solver;
+        private final double                        tEvent;
 
         public ResettingEvent(final double tEvent,
                               final double maxCheck, final double threshold, final int maxIter) {
             this.maxCheck  = maxCheck;
-            this.threshold = threshold;
             this.maxIter   = maxIter;
+            this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.tEvent    = tEvent;
         }
 
@@ -138,12 +141,12 @@ public class EventStateTest {
             return maxCheck;
         }
 
-        public double getThreshold() {
-            return threshold;
-        }
-
         public int getMaxIterationCount() {
             return maxIter;
+        }
+
+        public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+            return solver;
         }
 
         public double g(ODEStateAndDerivative s) {
@@ -214,17 +217,17 @@ public class EventStateTest {
 
     private static class SecondaryStateEvent implements ODEEventDetector {
 
-        private final double  maxCheck;
-        private final double  threshold;
-        private final int     maxIter;
-        private int index;
-        private final double target;
+        private final double                        maxCheck;
+        private final int                           maxIter;
+        private final BracketingNthOrderBrentSolver solver;
+        private int                                 index;
+        private final double                        target;
 
         public SecondaryStateEvent(final int index, final double target,
                                    final double maxCheck, final double threshold, final int maxIter) {
             this.maxCheck  = maxCheck;
-            this.threshold = threshold;
             this.maxIter   = maxIter;
+            this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.index     = index;
             this.target    = target;
         }
@@ -233,12 +236,12 @@ public class EventStateTest {
             return maxCheck;
         }
 
-        public double getThreshold() {
-            return threshold;
-        }
-
         public int getMaxIterationCount() {
             return maxIter;
+        }
+
+        public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+            return solver;
         }
 
         /** {@inheritDoc} */
@@ -279,18 +282,18 @@ public class EventStateTest {
 
     private class CloseEventsGenerator implements ODEEventDetector {
 
-        private final double  maxCheck;
-        private final double  threshold;
-        private final int     maxIter;
-        final double r1;
-        final double r2;
-        int count;
+        private final double                        maxCheck;
+        private final int                           maxIter;
+        private final BracketingNthOrderBrentSolver solver;
+        final double                                r1;
+        final double                                r2;
+        int                                         count;
 
         public CloseEventsGenerator(final double r1, final double r2,
                                     final double maxCheck, final double threshold, final int maxIter) {
             this.maxCheck  = maxCheck;
-            this.threshold = threshold;
             this.maxIter   = maxIter;
+            this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.r1        = r1;
             this.r2        = r2;
             this.count     = 0;
@@ -300,12 +303,12 @@ public class EventStateTest {
             return maxCheck;
         }
 
-        public double getThreshold() {
-            return threshold;
-        }
-
         public int getMaxIterationCount() {
             return maxIter;
+        }
+
+        public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+            return solver;
         }
 
         public double g(ODEStateAndDerivative s) {

@@ -53,7 +53,7 @@ public abstract class BaseAbstractUnivariateSolver<F extends UnivariateFunction>
     /** Relative accuracy. */
     private final double relativeAccuracy;
     /** Evaluations counter. */
-    private Incrementor evaluations = new Incrementor();
+    private Incrementor evaluations;
     /** Lower end of search interval. */
     private double searchMin;
     /** Higher end of search interval. */
@@ -97,16 +97,12 @@ public abstract class BaseAbstractUnivariateSolver<F extends UnivariateFunction>
     protected BaseAbstractUnivariateSolver(final double relativeAccuracy,
                                            final double absoluteAccuracy,
                                            final double functionValueAccuracy) {
-        this.absoluteAccuracy = absoluteAccuracy;
-        this.relativeAccuracy = relativeAccuracy;
+        this.absoluteAccuracy      = absoluteAccuracy;
+        this.relativeAccuracy      = relativeAccuracy;
         this.functionValueAccuracy = functionValueAccuracy;
+        this.evaluations           = new Incrementor();
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public int getMaxEvaluations() {
-        return evaluations.getMaximalCount();
-    }
     /** {@inheritDoc} */
     @Override
     public int getEvaluations() {

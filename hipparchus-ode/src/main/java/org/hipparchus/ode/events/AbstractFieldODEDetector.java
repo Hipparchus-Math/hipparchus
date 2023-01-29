@@ -18,6 +18,8 @@
 package org.hipparchus.ode.events;
 
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
+import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
@@ -42,11 +44,11 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
     /** Max check interval. */
     private final E maxCheck;
 
-    /** Convergence threshold. */
-    private final E threshold;
-
     /** Maximum number of iterations in the event time search. */
     private final int maxIter;
+
+    /** Root-finding algorithm to use to detect state events. */
+    private final BracketedRealFieldUnivariateSolver<E> solver;
 
     /** Default handler for event overrides. */
     private final FieldODEEventHandler<E> handler;
@@ -56,17 +58,17 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
 
     /** Build a new instance.
      * @param maxCheck maximum checking interval, must be strictly positive (s)
-     * @param threshold convergence threshold (s)
      * @param maxIter maximum number of iterations in the event time search
+     * @param solver root-finding algorithm to use to detect state events
      * @param handler event handler to call at event occurrences
      */
-    protected AbstractFieldODEDetector(final E maxCheck, final E threshold, final int maxIter,
+    protected AbstractFieldODEDetector(final E maxCheck, final int maxIter,
+                                       final BracketedRealFieldUnivariateSolver<E> solver,
                                        final FieldODEEventHandler<E> handler) {
         checkStrictlyPositive(maxCheck);
-        checkStrictlyPositive(threshold);
         this.maxCheck  = maxCheck;
-        this.threshold = threshold;
         this.maxIter   = maxIter;
+        this.solver    = solver;
         this.handler   = handler;
         this.forward   = true;
     }
@@ -112,8 +114,8 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
 
     /** {@inheritDoc} */
     @Override
-    public E getThreshold() {
-        return threshold;
+    public BracketedRealFieldUnivariateSolver<E> getSolver() {
+        return solver;
     }
 
     /**
@@ -125,7 +127,7 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
      * @return a new detector with updated configuration (the instance is not changed)
      */
     public T withMaxCheck(final E newMaxCheck) {
-        return create(newMaxCheck, getThreshold(), getMaxIterationCount(), getHandler());
+        return create(newMaxCheck, getMaxIterationCount(), getSolver(), getHandler());
     }
 
     /**
@@ -137,19 +139,35 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
      * @return a new detector with updated configuration (the instance is not changed)
      */
     public T withMaxIter(final int newMaxIter) {
-        return create(getMaxCheckInterval(), getThreshold(), newMaxIter,  getHandler());
+        return create(getMaxCheckInterval(), newMaxIter, getSolver(), getHandler());
     }
 
     /**
      * Setup the convergence threshold.
      * <p>
-     * This will override a convergence threshold if it has been configured previously.
+     * This is equivalent to call {@code withSolver(new FieldBracketingNthOrderBrentSolver<>(zero,
+     * newThreshold, zero, 5)}, so it will override a solver if one has been configured previously.
      * </p>
-     * @param newThreshold convergence threshold (s)
+     * @param newThreshold convergence threshold
      * @return a new detector with updated configuration (the instance is not changed)
+     * @see #withSolver(BracketedRealFieldUnivariateSolver)
      */
     public T withThreshold(final E newThreshold) {
-        return create(getMaxCheckInterval(), newThreshold, getMaxIterationCount(),  getHandler());
+        final E zero = newThreshold.getField().getZero();
+        return withSolver(new FieldBracketingNthOrderBrentSolver<>(zero, newThreshold, zero, 5));
+    }
+
+    /**
+     * Setup the root-finding algorithm to use to detect state events.
+     * <p>
+     * This will override a solver if it has been configured previously.
+     * </p>
+     * @param newSolver root-finding algorithm to use to detect state events
+     * @return a new detector with updated configuration (the instance is not changed)
+     * @see #withThreshold(CalculusFieldElement)
+     */
+    public T withSolver(final BracketedRealFieldUnivariateSolver<E> newSolver) {
+        return create(getMaxCheckInterval(), getMaxIterationCount(), newSolver, getHandler());
     }
 
     /**
@@ -161,7 +179,7 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
      * @return a new detector with updated configuration (the instance is not changed)
      */
     public T withHandler(final FieldODEEventHandler<E> newHandler) {
-        return create(getMaxCheckInterval(), getThreshold(), getMaxIterationCount(), newHandler);
+        return create(getMaxCheckInterval(), getMaxIterationCount(), getSolver(), newHandler);
     }
 
     /** {@inheritDoc} */
@@ -172,13 +190,14 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
 
     /** Build a new instance.
      * @param newMaxCheck maximum checking interval (s)
-     * @param newThreshold convergence threshold (s)
      * @param newMaxIter maximum number of iterations in the event time search
+     * @param newSolver root-finding algorithm to use to detect state events
      * @param newHandler event handler to call at event occurrences
      * @return a new instance of the appropriate sub-type
      */
-    protected abstract T create(E newMaxCheck, E newThreshold,
-                                int newMaxIter, FieldODEEventHandler<E> newHandler);
+    protected abstract T create(E newMaxCheck, int newMaxIter,
+                                BracketedRealFieldUnivariateSolver<E> newSolver,
+                                FieldODEEventHandler<E> newHandler);
 
     /** Check if the current propagation is forward or backward.
      * @return true if the current propagation is forward

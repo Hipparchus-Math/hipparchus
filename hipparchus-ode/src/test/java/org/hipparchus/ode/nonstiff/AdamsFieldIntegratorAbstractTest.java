@@ -22,6 +22,8 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
+import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
@@ -183,13 +185,16 @@ public abstract class AdamsFieldIntegratorAbstractTest {
             }
 
             @Override
-            public T getThreshold() {
-                return field.getZero().newInstance(1.0e-6 * range);
+            public int getMaxIterationCount() {
+                return 100;
             }
 
             @Override
-            public int getMaxIterationCount() {
-                return 100;
+            public BracketedRealFieldUnivariateSolver<T> getSolver() {
+                return new FieldBracketingNthOrderBrentSolver<T>(field.getZero(),
+                                                                 field.getZero().newInstance(1.0e-6 * range),
+                                                                 field.getZero(),
+                                                                 5);
             }
 
             @Override
@@ -233,13 +238,16 @@ public abstract class AdamsFieldIntegratorAbstractTest {
                 }
 
                 @Override
-                public T getThreshold() {
-                    return field.getZero().newInstance(1.0e-6 * range);
+                public int getMaxIterationCount() {
+                    return 100;
                 }
 
                 @Override
-                public int getMaxIterationCount() {
-                    return 100;
+                public BracketedRealFieldUnivariateSolver<T> getSolver() {
+                    return new FieldBracketingNthOrderBrentSolver<T>(field.getZero(),
+                                                                     field.getZero().newInstance(1.0e-6 * range),
+                                                                     field.getZero(),
+                                                                     5);
                 }
 
                 @Override

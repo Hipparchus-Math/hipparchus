@@ -27,6 +27,9 @@ import java.util.Random;
 
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -104,11 +107,11 @@ public abstract class RungeKuttaIntegratorAbstractTest {
             public double getMaxCheckInterval() {
                 return Double.POSITIVE_INFINITY;
             }
-            public double getThreshold() {
-                return 1.0e-20;
-            }
             public int getMaxIterationCount() {
                 return 100;
+            }
+            public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+                return new BracketingNthOrderBrentSolver(0, 1.0e-20, 0, 5);
             }
             public double g(ODEStateAndDerivative state) {
                 return state.getTime() - tEvent;
@@ -411,8 +414,15 @@ public abstract class RungeKuttaIntegratorAbstractTest {
     public abstract void testUnstableDerivative();
 
     protected void doTestUnstableDerivative(double epsilon) {
-      final StepProblem stepProblem = new StepProblem(1.0, 1.0e-12, 1000, 0.0, 1.0, 2.0);
-      RungeKuttaIntegrator integ = createIntegrator(0.3);
+        final StepProblem stepProblem = new StepProblem(999.0, 1.0e+12, 1000000, 0.0, 1.0, 2.0).
+                        withMaxCheck(1.0).
+                        withMaxIter(1000).
+                        withThreshold(1.0e-12);
+        Assert.assertEquals(1.0,     stepProblem.getMaxCheckInterval(), 1.0e-15);
+        Assert.assertEquals(1000,    stepProblem.getMaxIterationCount());
+        Assert.assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy(), 1.0e-25);
+        Assert.assertNotNull(stepProblem.getHandler());
+        RungeKuttaIntegrator integ = createIntegrator(0.3);
       integ.addEventDetector(stepProblem);
       ODEStateAndDerivative result = integ.integrate(new ExpandableODE(stepProblem),
                                                      new ODEState(0, new double[1]),

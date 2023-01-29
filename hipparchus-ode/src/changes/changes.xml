@@ -57,6 +57,9 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="update" issue="issues/223">
         Separated {Field}ODEEventDetector and {Field}ODEEventHandler.
       </action>
+      <action dev="luc" type="update" issue="issues/220">
+        Added reset state and stop integration capability at end of step for ODE integrators.
+      </action>
     </release>
     <release version="2.3" date="2022-10-05" description="This is a maintenance release.">
       <action dev="luc" type="update">

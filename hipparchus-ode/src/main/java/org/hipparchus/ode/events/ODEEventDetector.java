@@ -17,6 +17,8 @@
 
 package org.hipparchus.ode.events;
 
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.ode.ODEStateAndDerivative;
 
 /** This interface represents a detector for discrete events triggered
@@ -64,15 +66,15 @@ public interface ODEEventDetector  {
      */
     double getMaxCheckInterval();
 
-    /** Get the convergence threshold for event localization.
-     * @return convergence threshold for event localization
-     */
-    double getThreshold();
-
     /** Get the upper limit in the iteration count for event localization.
      * @return upper limit in the iteration count for event localization
      */
     int getMaxIterationCount();
+
+    /** Get the root-finding algorithm to use to detect state events.
+     * @return root-finding algorithm to use to detect state events
+     */
+    BracketedUnivariateSolver<UnivariateFunction> getSolver();
 
     /** Get the underlying event handler.
      * @return underlying event handler

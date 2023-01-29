@@ -91,6 +91,21 @@ public class HighamHall54FieldIntegratorTest extends EmbeddedRungeKuttaFieldInte
     }
 
     @Override
+    public void testStepEnd() {
+        doTestStepEnd(Binary64Field.getInstance(), 119, "Higham-Hall 5(4)");
+    }
+
+    @Override
+    public void testStopAfterStep() {
+        doTestStopAfterStep(Binary64Field.getInstance(), 12, 1.110791);
+    }
+
+    @Override
+    public void testResetAfterStep() {
+        doTestResetAfterStep(Binary64Field.getInstance(), 12, 14);
+    }
+
+    @Override
     public void testEventsErrors() {
         doTestEventsErrors(Binary64Field.getInstance());
     }

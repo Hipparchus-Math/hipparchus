@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.Field;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
+import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEIntegrator;
 import org.hipparchus.ode.FieldODEState;
@@ -2115,10 +2117,10 @@ public class FieldCloseEventsTest {
     /** Base class to record events that occurred. */
     private static abstract class BaseDetector implements FieldODEEventDetector<Binary64> {
 
-        private final Binary64 maxCheck;
-        private final Binary64 threshold;
-        private final int       maxIter;
-        protected final Action  action;
+        private final Binary64                                     maxCheck;
+        private final int                                          maxIter;
+        private final BracketedRealFieldUnivariateSolver<Binary64> solver;
+        protected final Action                                     action;
 
         /** times the event was actually triggered. */
         private final List<Event> events;
@@ -2126,8 +2128,11 @@ public class FieldCloseEventsTest {
         public BaseDetector(final double maxCheck, final double threshold, final int maxIter,
                             Action action, List<Event> events) {
             this.maxCheck  = new Binary64(maxCheck);
-            this.threshold = new Binary64(threshold);
             this.maxIter   = maxIter;
+            this.solver    = new FieldBracketingNthOrderBrentSolver<>(new Binary64(0),
+                                                                      new Binary64(threshold),
+                                                                      new Binary64(0),
+                                                                      5);
             this.action    = action;
             this.events    = events;
         }
@@ -2136,12 +2141,12 @@ public class FieldCloseEventsTest {
             return maxCheck;
         }
 
-        public Binary64 getThreshold() {
-            return threshold;
-        }
-
         public int getMaxIterationCount() {
             return maxIter;
+        }
+
+        public BracketedRealFieldUnivariateSolver<Binary64> getSolver() {
+            return solver;
         }
 
         /**
@@ -2407,38 +2412,40 @@ public class FieldCloseEventsTest {
 
     private class ResetChangesSignGenerator implements FieldODEEventDetector<Binary64> {
 
-        private final Binary64 maxCheck;
-        private final Binary64 threshold;
-        private final int       maxIter;
-        final double y1;
-        final double y2;
-        final double change;
-        int count;
+        private final Binary64                                     maxCheck;
+        private final int                                          maxIter;
+        private final BracketedRealFieldUnivariateSolver<Binary64> solver;
+        final double                                               y1;
+        final double                                               y2;
+        final double                                               change;
+        int                                                        count;
 
         public ResetChangesSignGenerator(final double y1, final double y2, final double change,
                                          final double maxCheck, final double threshold, final int maxIter) {
             this.maxCheck  = new Binary64(maxCheck);
-            this.threshold = new Binary64(threshold);
             this.maxIter   = maxIter;
-            this.y1     = y1;
-            this.y2     = y2;
-            this.change = change;
-            this.count  = 0;
+            this.solver    = new FieldBracketingNthOrderBrentSolver<>(new Binary64(0),
+                            new Binary64(threshold),
+                            new Binary64(0),
+                            5);
+            this.y1        = y1;
+            this.y2        = y2;
+            this.change    = change;
+            this.count     = 0;
         }
 
         public Binary64 getMaxCheckInterval() {
             return maxCheck;
         }
 
-        public Binary64 getThreshold() {
-            return threshold;
-        }
-
         public int getMaxIterationCount() {
             return maxIter;
         }
 
-        /** {@inheritDoc} */
+        public BracketedRealFieldUnivariateSolver<Binary64> getSolver() {
+            return solver;
+        }
+
         public FieldODEEventHandler<Binary64> getHandler() {
             return new FieldODEEventHandler<Binary64>() {
                 public Action eventOccurred(FieldODEStateAndDerivative<Binary64> s,

@@ -16,6 +16,11 @@
  */
 package org.hipparchus.ode.events;
 
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
+import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEIntegrator;
@@ -169,16 +174,16 @@ public class EventsScheduling {
 
     private static class SimpleDetector implements ODEEventDetector {
 
-        private final double          maxCheck;
-        private final double          threshold;
-        private final int             maxIter;
-        private final double          tEvent;
-        private final ScheduleChecker checker;
+        private final double                        maxCheck;
+        private final int                           maxIter;
+        private final BracketingNthOrderBrentSolver solver;
+        private final double                        tEvent;
+        private final ScheduleChecker               checker;
         SimpleDetector(final double tEvent, final ScheduleChecker checker,
                        final double maxCheck, final double threshold, final int maxIter) {
             this.maxCheck  = maxCheck;
-            this.threshold = threshold;
             this.maxIter   = maxIter;
+            this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.tEvent    = tEvent;
             this.checker   = checker;
         }
@@ -187,15 +192,14 @@ public class EventsScheduling {
             return maxCheck;
         }
 
-        public double getThreshold() {
-            return threshold;
-        }
-
         public int getMaxIterationCount() {
             return maxIter;
         }
 
-        /** {@inheritDoc} */
+        public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+            return solver;
+        }
+
         public ODEEventHandler getHandler() {
             return (state, detector, increasing) -> {
                 checker.callTime(state.getTime());
@@ -212,16 +216,20 @@ public class EventsScheduling {
 
     private static class SimpleFieldDetector implements FieldODEEventDetector<Binary64> {
 
-        private final Binary64       maxCheck;
-        private final Binary64       threshold;
-        private final int             maxIter;
-        private final double          tEvent;
-        private final ScheduleChecker checker;
+        private final Binary64                                     maxCheck;
+        private final int                                          maxIter;
+        private final BracketedRealFieldUnivariateSolver<Binary64> solver;
+        private final double                                       tEvent;
+        private final ScheduleChecker                              checker;
+
         SimpleFieldDetector(final double tEvent, final ScheduleChecker checker,
                             final double maxCheck, final double threshold, final int maxIter) {
             this.maxCheck  = new Binary64(maxCheck);
-            this.threshold = new Binary64(threshold);
             this.maxIter   = maxIter;
+            this.solver    = new FieldBracketingNthOrderBrentSolver<>(new Binary64(0),
+                                                                      new Binary64(threshold),
+                                                                      new Binary64(0),
+                                                                      5);
             this.tEvent    = tEvent;
             this.checker   = checker;
         }
@@ -230,15 +238,14 @@ public class EventsScheduling {
             return maxCheck;
         }
 
-        public Binary64 getThreshold() {
-            return threshold;
-        }
-
         public int getMaxIterationCount() {
             return maxIter;
         }
 
-        @Override
+        public BracketedRealFieldUnivariateSolver<Binary64> getSolver() {
+            return solver;
+        }
+
         public FieldODEEventHandler<Binary64> getHandler() {
             return (state, detector, increasing) -> {
                 checker.callTime(state.getTime().getReal());

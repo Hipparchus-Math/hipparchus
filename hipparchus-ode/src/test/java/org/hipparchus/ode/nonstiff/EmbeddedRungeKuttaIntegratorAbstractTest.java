@@ -25,6 +25,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.euclidean.threed.Rotation;
@@ -48,6 +51,7 @@ import org.hipparchus.ode.VariationalEquation;
 import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.events.ODEEventHandler;
+import org.hipparchus.ode.events.ODEStepEndHandler;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.CombinatoricsUtils;
@@ -189,7 +193,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
       for (int i = 0; i < detectors.size(); ++i) {
           Assert.assertSame(functions[i], detectors.get(i).getHandler());
           Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval(), 1.0);
-          Assert.assertEquals(convergence, detectors.get(i).getThreshold(), 1.0e-15 * convergence);
+          Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy(), 1.0e-15 * convergence);
           Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
 
@@ -202,6 +206,139 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
       integ.clearEventDetectors();
       Assert.assertEquals(0, integ.getEventDetectors().size());
 
+    }
+
+    @Test
+    public abstract void testStepEnd();
+
+    protected void doTestStepEnd(final int expectedCount, final String name) {
+        TestProblem4 pb = new TestProblem4();
+        double minStep = 0;
+        double maxStep = pb.getFinalTime() - pb.getInitialState().getTime();
+        double scalAbsoluteTolerance = 1.0e-8;
+        double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
+
+        ODEIntegrator integ = createIntegrator(minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
+        double convergence = 1.0e-8 * maxStep;
+        ODEEventDetector[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY, convergence, 1000);
+        for (int l = 0; l < functions.length; ++l) {
+            integ.addEventDetector(functions[l]);
+        }
+        List<ODEEventDetector> detectors = new ArrayList<>(integ.getEventDetectors());
+        Assert.assertEquals(functions.length, detectors.size());
+
+        for (int i = 0; i < detectors.size(); ++i) {
+            Assert.assertSame(functions[i], detectors.get(i).getHandler());
+            Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval(), 1.0);
+            Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy(), 1.0e-15 * convergence);
+            Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
+        }
+
+        final StepCounter counter = new StepCounter(expectedCount + 10, Action.STOP);
+        integ.addStepEndHandler(counter);
+        Assert.assertEquals(1, integ.getStepEndHandlers().size());
+        integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
+
+        Assert.assertEquals(expectedCount, counter.count);
+        Assert.assertEquals(name, integ.getName());
+        integ.clearEventDetectors();
+        Assert.assertEquals(0, integ.getEventDetectors().size());
+        integ.clearStepEndHandlers();
+        Assert.assertEquals(0, integ.getStepEndHandlers().size());
+    }
+
+    @Test
+    public abstract void testStopAfterStep();
+
+    protected void doTestStopAfterStep(final int count, final double expectedTime) {
+        TestProblem4 pb = new TestProblem4();
+        double minStep = 0;
+        double maxStep = pb.getFinalTime() - pb.getInitialState().getTime();
+        double scalAbsoluteTolerance = 1.0e-8;
+        double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
+
+        ODEIntegrator integ = createIntegrator(minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
+        double convergence = 1.0e-8 * maxStep;
+        ODEEventDetector[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY, convergence, 1000);
+        for (int l = 0; l < functions.length; ++l) {
+            integ.addEventDetector(functions[l]);
+        }
+        List<ODEEventDetector> detectors = new ArrayList<>(integ.getEventDetectors());
+        Assert.assertEquals(functions.length, detectors.size());
+
+        for (int i = 0; i < detectors.size(); ++i) {
+            Assert.assertSame(functions[i], detectors.get(i).getHandler());
+            Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval(), 1.0);
+            Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy(), 1.0e-15 * convergence);
+            Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
+        }
+
+        final StepCounter counter = new StepCounter(count, Action.STOP);
+        integ.addStepEndHandler(counter);
+        Assert.assertEquals(1, integ.getStepEndHandlers().size());
+        ODEStateAndDerivative finalState = integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
+
+        Assert.assertEquals(count, counter.count);
+        Assert.assertEquals(expectedTime, finalState.getTime(), 1.0e-6);
+
+    }
+
+    @Test
+    public abstract void testResetAfterStep();
+
+    protected void doTestResetAfterStep(final int resetCount, final int expectedCount) {
+        TestProblem4 pb = new TestProblem4();
+        double minStep = 0;
+        double maxStep = pb.getFinalTime() - pb.getInitialState().getTime();
+        double scalAbsoluteTolerance = 1.0e-8;
+        double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
+
+        ODEIntegrator integ = createIntegrator(minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
+        double convergence = 1.0e-8 * maxStep;
+        ODEEventDetector[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY, convergence, 1000);
+        for (int l = 0; l < functions.length; ++l) {
+            integ.addEventDetector(functions[l]);
+        }
+        List<ODEEventDetector> detectors = new ArrayList<>(integ.getEventDetectors());
+        Assert.assertEquals(functions.length, detectors.size());
+
+        for (int i = 0; i < detectors.size(); ++i) {
+            Assert.assertSame(functions[i], detectors.get(i).getHandler());
+            Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval(), 1.0);
+            Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy(), 1.0e-15 * convergence);
+            Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
+        }
+
+        final StepCounter counter = new StepCounter(resetCount, Action.RESET_STATE);
+        integ.addStepEndHandler(counter);
+        Assert.assertEquals(1, integ.getStepEndHandlers().size());
+        ODEStateAndDerivative finalState = integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
+
+        Assert.assertEquals(expectedCount, counter.count);
+        Assert.assertEquals(12.0, finalState.getTime(), 1.0e-6); // this corresponds to the Stop event detector
+        for (int i = 0; i < finalState.getPrimaryStateDimension(); ++i) {
+            Assert.assertEquals(0.0, finalState.getPrimaryState()[i], 1.0e-15);
+            Assert.assertEquals(0.0, finalState.getPrimaryDerivative()[i], 1.0e-15);
+        }
+
+    }
+
+    private static class StepCounter implements ODEStepEndHandler {
+        final int    max;
+        final Action actionAtMax;
+        int          count;
+        StepCounter(final int max, final Action actionAtMax) {
+            this.max         = max;
+            this.actionAtMax = actionAtMax;
+            this.count       = 0;
+        }
+        public Action stepEndOccurred(final ODEStateAndDerivative state, final boolean forward) {
+            return ++count == max ? actionAtMax : Action.CONTINUE;
+        }
+        public ODEState resetState(ODEStateAndDerivative state) {
+            return new ODEState(state.getTime(),
+                                new double[state.getPrimaryStateDimension()]);
+        }
     }
 
     @Test
@@ -221,11 +358,11 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                 public double getMaxCheckInterval() {
                     return Double.POSITIVE_INFINITY;
                 }
-                public double getThreshold() {
-                    return 1.0e-8 * maxStep;
-                }
                 public int getMaxIterationCount() {
                     return 1000;
+                }
+                public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+                    return new BracketingNthOrderBrentSolver(0, 1.0e-8 * maxStep, 0, 5);
                 }
                 public ODEEventHandler getHandler() {
                     return (state, detector, increasing) -> Action.CONTINUE;
@@ -264,11 +401,11 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             public double getMaxCheckInterval() {
                 return Double.POSITIVE_INFINITY;
             }
-            public double getThreshold() {
-                return 1.0e-8 * maxStep;
-            }
             public int getMaxIterationCount() {
                 return 3;
+            }
+            public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+                return new BracketingNthOrderBrentSolver(0, 1.0e-8 * maxStep, 0, 5);
             }
             public ODEEventHandler getHandler() {
                 return (state, detector, increasing) -> Action.CONTINUE;
@@ -652,11 +789,11 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             public double getMaxCheckInterval() {
                 return Double.POSITIVE_INFINITY;
             }
-            public double getThreshold() {
-                return 1.0e-20;
-            }
             public int getMaxIterationCount() {
                 return 100;
+            }
+            public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+                return new BracketingNthOrderBrentSolver(0, 1.0e-20, 0, 5);
             }
             public ODEEventHandler getHandler() {
                 return (state, detector, increasing) -> Action.CONTINUE;
@@ -723,7 +860,14 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
     public abstract void testUnstableDerivative();
 
     protected void doTestUnstableDerivative(final double epsilon) {
-        final StepProblem stepProblem = new StepProblem(1.0, 1.0e-12, 1000, 0.0, 1.0, 2.0);
+        final StepProblem stepProblem = new StepProblem(999.0, 1.0e+12, 1000000, 0.0, 1.0, 2.0).
+                        withMaxCheck(1.0).
+                        withMaxIter(1000).
+                        withThreshold(1.0e-12);
+        Assert.assertEquals(1.0,     stepProblem.getMaxCheckInterval(), 1.0e-15);
+        Assert.assertEquals(1000,    stepProblem.getMaxIterationCount());
+        Assert.assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy(), 1.0e-25);
+        Assert.assertNotNull(stepProblem.getHandler());
         ODEIntegrator integ = createIntegrator(0.1, 10, 1.0e-12, 0.0);
         integ.addEventDetector(stepProblem);
         final ODEStateAndDerivative finalState =
@@ -774,12 +918,12 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             return 0.01;
         }
 
-        public double getThreshold() {
-            return 1.0e-7;
-        }
-
         public int getMaxIterationCount() {
             return 100;
+        }
+
+        public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+            return new BracketingNthOrderBrentSolver(0, 1.0e-7, 0, 5);
         }
 
         public void init(ODEStateAndDerivative s0, double t) {
@@ -1036,12 +1180,12 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                 return Double.POSITIVE_INFINITY;
             }
             @Override
-            public double getThreshold() {
-                return convergence;
-            }
-            @Override
             public int getMaxIterationCount() {
                 return 1000;
+            }
+            @Override
+            public BracketedUnivariateSolver<UnivariateFunction> getSolver() {
+                return new BracketingNthOrderBrentSolver(0, convergence, 0, 5);
             }
             @Override
             public double g(ODEStateAndDerivative state) {

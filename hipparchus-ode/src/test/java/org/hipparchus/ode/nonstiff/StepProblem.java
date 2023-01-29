@@ -22,10 +22,13 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
-import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.AbstractODEDetector;
+import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.events.ODEEventHandler;
 
@@ -39,24 +42,26 @@ public class StepProblem extends AbstractODEDetector<StepProblem> implements Ord
 
     public StepProblem(final double maxCheck, final double threshold, final int maxIter,
                        double rateBefore, double rateAfter, double switchTime) {
-        this(maxCheck, threshold, maxIter, new LocalHandler(),
-             rateBefore, rateAfter, switchTime);
+        this(maxCheck, maxIter, new BracketingNthOrderBrentSolver(0, threshold, 0, 5),
+             new LocalHandler(), rateBefore, rateAfter, switchTime);
     }
 
-    private StepProblem(final double maxCheck, final double threshold,
-                        final int maxIter, final ODEEventHandler handler,
+    private StepProblem(final double maxCheck, final int maxIter,
+                        final BracketedUnivariateSolver<UnivariateFunction> solver,
+                        final ODEEventHandler handler,
                         final double rateBefore, final double rateAfter,
                         final double switchTime) {
-        super(maxCheck, threshold, maxIter, handler);
+        super(maxCheck, maxIter, solver, handler);
         this.rateBefore = rateBefore;
         this.rateAfter  = rateAfter;
         this.switchTime = switchTime;
         setRate(rateBefore);
     }
 
-    protected StepProblem create(double newMaxCheck, double newThreshold,
-                                 int newMaxIter, ODEEventHandler newHandler) {
-        return new StepProblem(newMaxCheck, newThreshold, newMaxIter, newHandler,
+    protected StepProblem create(double newMaxCheck, int newMaxIter,
+                                 BracketedUnivariateSolver<UnivariateFunction> newSolver,
+                                 ODEEventHandler newHandler) {
+        return new StepProblem(newMaxCheck, newMaxIter, newSolver, newHandler,
                                rateBefore, rateAfter, switchTime);
     }
 
