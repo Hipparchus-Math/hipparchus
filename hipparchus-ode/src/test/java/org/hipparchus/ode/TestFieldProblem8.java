@@ -211,7 +211,7 @@ public class TestFieldProblem8<T extends CalculusFieldElement<T>>
         final T i21  = i2C.subtract(i1C);
 
         // Ω is always o1Scale * cn((t-tref) * tScale), o2Scale * sn((t-tref) * tScale), o3Scale * dn((t-tref) * tScale)
-        tScale  = FastMath.copySign(FastMath.sqrt(i32.multiply(m2.subtract(twoE.multiply(i1C))).subtract((i1C.multiply(i2C).multiply(i3C)))),
+        tScale  = FastMath.copySign(FastMath.sqrt(i32.multiply(m2.subtract(twoE.multiply(i1C))).divide((i1C.multiply(i2C).multiply(i3C)))),
                                     clockwise ? omega0Sorted.getZ().negate() : omega0Sorted.getZ());
         o1Scale = FastMath.sqrt(twoE.multiply(i3C).subtract(m2).divide(i1C.multiply(i31)));
         o2Scale = FastMath.sqrt(twoE.multiply(i3C).subtract(m2).divide(i2C.multiply(i32)));
