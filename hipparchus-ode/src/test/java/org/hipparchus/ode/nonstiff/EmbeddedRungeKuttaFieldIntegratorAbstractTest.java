@@ -21,7 +21,9 @@ package org.hipparchus.ode.nonstiff;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
@@ -31,6 +33,8 @@ import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.geometry.euclidean.threed.FieldRotation;
+import org.hipparchus.geometry.euclidean.threed.FieldVector3D;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEIntegrator;
 import org.hipparchus.ode.FieldODEState;
@@ -42,6 +46,7 @@ import org.hipparchus.ode.TestFieldProblem3;
 import org.hipparchus.ode.TestFieldProblem4;
 import org.hipparchus.ode.TestFieldProblem5;
 import org.hipparchus.ode.TestFieldProblem7;
+import org.hipparchus.ode.TestFieldProblem8;
 import org.hipparchus.ode.TestFieldProblemHandler;
 import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.FieldODEEventDetector;
@@ -627,9 +632,9 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
     }
 
     @Test
-    public abstract void testTorqueFreeMotion();
+    public abstract void testTorqueFreeMotionOmegaOnly();
 
-    protected <T extends CalculusFieldElement<T>> void doTestTorqueFreeMotion(Field<T> field, double epsilon) {
+    protected <T extends CalculusFieldElement<T>> void doTestTorqueFreeMotionOmegaOnly(Field<T> field, double epsilon) {
 
         final TestFieldProblem7<T> pb  = new TestFieldProblem7<>(field);
         double minStep = 1.0e-10;
@@ -639,15 +644,15 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
         FieldODEIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
                                                        vecAbsoluteTolerance, vecRelativeTolerance);
-        integ.addStepHandler(new TorqueFreeHandler<>(pb, epsilon));
+        integ.addStepHandler(new TorqueFreeHandlerOmegaOnly<>(pb, epsilon));
         integ.integrate(new FieldExpandableODE<>(pb), pb.getInitialState(), pb.getFinalTime());
     }
 
-    private static class TorqueFreeHandler<T extends CalculusFieldElement<T>> implements FieldODEStepHandler<T> {
+    private static class TorqueFreeHandlerOmegaOnly<T extends CalculusFieldElement<T>> implements FieldODEStepHandler<T> {
         private T maxError;
         private final TestFieldProblem7<T> pb;
         private final double epsilon;
-        public TorqueFreeHandler(TestFieldProblem7<T> pb, double epsilon) {
+        public TorqueFreeHandlerOmegaOnly(TestFieldProblem7<T> pb, double epsilon) {
             this.pb      = pb;
             this.epsilon = epsilon;
             maxError     = pb.getField().getZero();
@@ -670,6 +675,152 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         public void finish(FieldODEStateAndDerivative<T> finalState) {
             Assert.assertEquals(0.0, maxError.getReal(), epsilon);
         }
+    }
+
+    @Test
+    /** Compare that the analytical model and the numerical model that compute the  the quaternion in a torque-free configuration give same results.
+     * This test is used to validate the results of the analytical model as defined by Landau & Lifchitz.
+     */
+    public abstract void testTorqueFreeMotion();
+
+    protected <T extends CalculusFieldElement<T>> void doTestTorqueFreeMotion(Field<T> field, double epsilonOmega, double epsilonQ) {
+
+        final T   zero        = field.getZero();
+        final T   t0          = zero;
+        final T   t1          = zero.newInstance(20.0);
+        final FieldVector3D<T> omegaBase   = new FieldVector3D<>(zero.newInstance(5.0), zero.newInstance(0.0), zero.newInstance(4.0));
+        final FieldRotation<T> rBase       = new FieldRotation<>(zero.newInstance(0.9), zero.newInstance(0.437),
+                                                                 zero.newInstance(0.0), zero.newInstance(0.0),
+                                                                 true);
+        final List<T> inertiaBase = Arrays.asList(zero.newInstance(3.0 / 8.0), zero.newInstance(1.0 / 2.0), zero.newInstance(5.0 / 8.0));
+        double minStep = 1.0e-10;
+        double maxStep = t1.subtract(t0).getReal();
+        double[] vecAbsoluteTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
+        double[] vecRelativeTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
+
+        // prepare a stream of problems to integrate
+        Stream<TestFieldProblem8<T>> problems = Stream.empty();
+
+        // add all possible permutations of the base rotation rate
+        problems = Stream.concat(problems,
+                                 permute(omegaBase).
+                                 map(omega -> new TestFieldProblem8<>(t0, t1, omega, rBase,
+                                                                      inertiaBase.get(0), FieldVector3D.getPlusI(field),
+                                                                      inertiaBase.get(1), FieldVector3D.getPlusJ(field),
+                                                                      inertiaBase.get(2), FieldVector3D.getPlusK(field))));
+
+        // add all possible permutations of the base rotation
+        problems = Stream.concat(problems,
+                                 permute(rBase).
+                                 map(r -> new TestFieldProblem8<>(t0, t1, omegaBase, r,
+                                                                  inertiaBase.get(0), FieldVector3D.getPlusI(field),
+                                                                  inertiaBase.get(1), FieldVector3D.getPlusJ(field),
+                                                                  inertiaBase.get(2), FieldVector3D.getPlusK(field))));
+
+        // add all possible permutations of the base inertia
+        problems = Stream.concat(problems,
+                                 permute(inertiaBase).
+                                 map(inertia -> new TestFieldProblem8<>(t0, t1, omegaBase, rBase,
+                                                                        inertia.get(0), FieldVector3D.getPlusI(field),
+                                                                        inertia.get(1), FieldVector3D.getPlusJ(field),
+                                                                        inertia.get(2), FieldVector3D.getPlusK(field))));
+
+        problems.forEach(problem -> {
+            EmbeddedRungeKuttaFieldIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
+                                                                          vecAbsoluteTolerance, vecRelativeTolerance);   
+            integ.addStepHandler(new TorqueFreeHandler<>(problem, epsilonOmega, epsilonQ));
+            integ.integrate(new FieldExpandableODE<>(problem), problem.getInitialState(), problem.getFinalTime());
+        });
+
+    }
+
+    /** Generate all permutations of vector coordinates.
+     * @param v vector to permute
+     * @return permuted vector
+     */
+    private <T extends CalculusFieldElement<T>> Stream<FieldVector3D<T>> permute(final FieldVector3D<T> v) {
+        return CombinatoricsUtils.
+                        permutations(Arrays.asList(v.getX(), v.getY(), v.getZ())).
+                        map(a -> new FieldVector3D<>(a.get(0), a.get(1), a.get(2)));
+    }
+
+    /** Generate all permutations of rotation coordinates.
+     * @param r rotation to permute
+     * @return permuted rotation
+     */
+    private <T extends CalculusFieldElement<T>> Stream<FieldRotation<T>> permute(final FieldRotation<T> r) {
+        return CombinatoricsUtils.
+                        permutations(Arrays.asList(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3())).
+                        map(a -> new FieldRotation<>(a.get(0), a.get(1), a.get(2), a.get(3), false));
+    }
+
+    /** Generate all permutations of a list.
+     * @param list list to permute
+     * @return permuted list
+     */
+    private <T extends CalculusFieldElement<T>> Stream<List<T>> permute(final List<T> list) {
+        return CombinatoricsUtils.permutations(list);
+    }
+
+    private static class TorqueFreeHandler<T extends CalculusFieldElement<T>> implements FieldODEStepHandler<T> {
+        private T maxErrorOmega;
+        private T maxErrorQ;
+        private final TestFieldProblem8<T> pb;
+        private final double epsilonOmega;
+        private final double epsilonQ;
+        private double outputStep;
+        private T current;
+
+        public TorqueFreeHandler(TestFieldProblem8<T> pb, double epsilonOmega, double epsilonQ) {
+            this.pb           = pb;
+            this.epsilonOmega = epsilonOmega;
+            this.epsilonQ     = epsilonQ;
+            maxErrorOmega     = pb.getField().getZero();
+            maxErrorQ         = pb.getField().getZero();
+            outputStep        = 0.01;
+        }
+
+        public void init(FieldODEStateAndDerivative<T> state0, T t) {
+            maxErrorOmega = pb.getField().getZero();
+            maxErrorQ     = pb.getField().getZero();
+            current       = state0.getTime().subtract(outputStep);
+        }
+
+        public void handleStep(FieldODEStateInterpolator<T> interpolator) {
+
+            current = current.add(outputStep);
+            while (interpolator.getPreviousState().getTime().subtract(current).getReal() <= 0 &&
+                   interpolator.getCurrentState().getTime().subtract(current).getReal() > 0) {
+                FieldODEStateAndDerivative<T> state = interpolator.getInterpolatedState(current);
+                final T[] theoretical  = pb.computeTheoreticalState(state.getTime());
+                final T errorOmega = FieldVector3D.distance(new FieldVector3D<>(state.getPrimaryState()[0],
+                                                                                state.getPrimaryState()[1],
+                                                                                state.getPrimaryState()[2]),
+                                                            new FieldVector3D<>(theoretical[0],
+                                                                                theoretical[1],
+                                                                                theoretical[2]));
+                maxErrorOmega = FastMath.max(maxErrorOmega, errorOmega);
+                final T errorQ = FieldRotation.distance(new FieldRotation<>(state.getPrimaryState()[3],
+                                                                            state.getPrimaryState()[4],
+                                                                            state.getPrimaryState()[5],
+                                                                            state.getPrimaryState()[6],
+                                                                            true),
+                                                        new FieldRotation<>(theoretical[3],
+                                                                            theoretical[4],
+                                                                            theoretical[5],
+                                                                            theoretical[6],
+                                                                            true));
+                maxErrorQ = FastMath.max(maxErrorQ, errorQ);
+                current = current.add(outputStep);
+
+            }
+        }
+
+        public void finish(FieldODEStateAndDerivative<T> finalState) {
+            Assert.assertEquals(0.0, maxErrorOmega.getReal(), epsilonOmega);
+            Assert.assertEquals(0.0, maxErrorQ.getReal(),     epsilonQ);
+        }
+
     }
 
     @Test

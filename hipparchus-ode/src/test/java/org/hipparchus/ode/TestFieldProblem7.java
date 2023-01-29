@@ -58,6 +58,10 @@ import org.hipparchus.util.MathArrays;
  *   Ω₃ (τ) = √([M²-2EI₁]/[I₃(I₃-I₁)]) dn(τ)
  * </pre>
  * </p>
+ * <p>
+ * This problem solves only solves the rotation rate part, whereas {@code FieldTestProblem8}
+ * solves the full motion (rotation rate and rotation).
+ * </p>
  * @param <T> the type of the field elements
  */
 public class TestFieldProblem7<T extends CalculusFieldElement<T>>

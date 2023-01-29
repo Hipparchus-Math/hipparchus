@@ -23,12 +23,15 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.geometry.euclidean.threed.Rotation;
+import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEIntegrator;
@@ -42,6 +45,7 @@ import org.hipparchus.ode.TestProblem3;
 import org.hipparchus.ode.TestProblem4;
 import org.hipparchus.ode.TestProblem5;
 import org.hipparchus.ode.TestProblem7;
+import org.hipparchus.ode.TestProblem8;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.VariationalEquation;
 import org.hipparchus.ode.events.Action;
@@ -50,19 +54,21 @@ import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.events.ODEStepEndHandler;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
+import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
+
 
 public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
     protected abstract EmbeddedRungeKuttaIntegrator
     createIntegrator(final double minStep, final double maxStep,
-                     final double scalAbsoluteTolerance, final double scalRelativeTolerance);
+            final double scalAbsoluteTolerance, final double scalRelativeTolerance);
 
     protected abstract EmbeddedRungeKuttaIntegrator
     createIntegrator(final double minStep, final double maxStep,
-                     final double[] vecAbsoluteTolerance, final double[] vecRelativeTolerance);
+            final double[] vecAbsoluteTolerance, final double[] vecRelativeTolerance);
 
     @Test
     public abstract void testForwardBackwardExceptions();
@@ -87,21 +93,21 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
         try  {
             integrator.integrate(new ExpandableODE(equations),
-                                 new ODEState(-1, new double[1]),
-                                 0);
+                    new ODEState(-1, new double[1]),
+                    0);
             Assert.fail("an exception should have been thrown");
-          } catch(LocalException de) {
+        } catch(LocalException de) {
             // expected behavior
-          }
+        }
 
-          try  {
-              integrator.integrate(new ExpandableODE(equations),
-                                   new ODEState(0, new double[1]),
-                                   1);
-               Assert.fail("an exception should have been thrown");
-          } catch(RuntimeException de) {
+        try  {
+            integrator.integrate(new ExpandableODE(equations),
+                    new ODEState(0, new double[1]),
+                    1);
+            Assert.fail("an exception should have been thrown");
+        } catch(RuntimeException de) {
             // expected behavior
-          }
+        }
     }
 
     protected static class LocalException extends RuntimeException {
@@ -118,14 +124,14 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             double[] vecRelativeTolerance = { 1.0e-15, 1.0e-16 };
 
             ODEIntegrator integ = createIntegrator(minStep, maxStep,
-                                                   vecAbsoluteTolerance, vecRelativeTolerance);
+                    vecAbsoluteTolerance, vecRelativeTolerance);
             TestProblemHandler handler = new TestProblemHandler(pb, integ);
             integ.addStepHandler(handler);
             integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
             Assert.assertEquals(LocalizedODEFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
-                                miae.getSpecifier());
+                    miae.getSpecifier());
         }
 
     }
@@ -144,7 +150,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
 
             ODEIntegrator integ = createIntegrator(minStep, maxStep,
-                                                                  scalAbsoluteTolerance, scalRelativeTolerance);
+                    scalAbsoluteTolerance, scalRelativeTolerance);
             TestProblemHandler handler = new TestProblemHandler(pb, integ);
             integ.addStepHandler(handler);
             integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
@@ -166,11 +172,11 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
     protected void doTestEvents(final double epsilonMaxValue, final String name) {
 
-      TestProblem4 pb = new TestProblem4();
-      double minStep = 0;
-      double maxStep = pb.getFinalTime() - pb.getInitialState().getTime();
-      double scalAbsoluteTolerance = 1.0e-8;
-      double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
+        TestProblem4 pb = new TestProblem4();
+        double minStep = 0;
+        double maxStep = pb.getFinalTime() - pb.getInitialState().getTime();
+        double scalAbsoluteTolerance = 1.0e-8;
+        double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
 
       ODEIntegrator integ = createIntegrator(minStep, maxStep,
                                                             scalAbsoluteTolerance, scalRelativeTolerance);
@@ -191,7 +197,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
           Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
 
-      integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
+        integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
 
       Assert.assertEquals(0, handler.getMaximalValueError(), epsilonMaxValue);
       Assert.assertEquals(0, handler.getMaximalTimeError(), convergence);
@@ -425,28 +431,28 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         TestProblem3 pb = new TestProblem3();
         try  {
             EmbeddedRungeKuttaIntegrator integrator = createIntegrator(0,
-                                                                       pb.getFinalTime() - pb.getInitialState().getTime(),
-                                                                       new double[4], new double[4]);
+                    pb.getFinalTime() - pb.getInitialState().getTime(),
+                    new double[4], new double[4]);
             integrator.integrate(new ExpandableODE(pb),
-                                 new ODEState(pb.getInitialState().getTime(), new double[6]),
-                                 pb.getFinalTime());
+                    new ODEState(pb.getInitialState().getTime(), new double[6]),
+                    pb.getFinalTime());
             Assert.fail("an exception should have been thrown");
         } catch(MathIllegalArgumentException ie) {
         }
         try  {
             EmbeddedRungeKuttaIntegrator integrator =
-                            createIntegrator(0,
-                                             pb.getFinalTime() - pb.getInitialState().getTime(),
-                                             new double[2], new double[4]);
+                    createIntegrator(0,
+                            pb.getFinalTime() - pb.getInitialState().getTime(),
+                            new double[2], new double[4]);
             integrator.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
             Assert.fail("an exception should have been thrown");
         } catch(MathIllegalArgumentException ie) {
         }
         try  {
             EmbeddedRungeKuttaIntegrator integrator =
-                            createIntegrator(0,
-                                             pb.getFinalTime() - pb.getInitialState().getTime(),
-                                             new double[4], new double[4]);
+                    createIntegrator(0,
+                            pb.getFinalTime() - pb.getInitialState().getTime(),
+                            new double[4], new double[4]);
             integrator.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getInitialState().getTime());
             Assert.fail("an exception should have been thrown");
         } catch(MathIllegalArgumentException ie) {
@@ -455,17 +461,17 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
     @Test
     public void testNullIntervalCheck()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
         try {
             TestProblem1 pb = new TestProblem1();
             EmbeddedRungeKuttaIntegrator integrator = createIntegrator(0.0, 1.0, 1.0e-10, 1.0e-10);
             integrator.integrate(pb,
-                                 new ODEState(0.0, new double[pb.getDimension()]),
-                                 0.0);
+                    new ODEState(0.0, new double[pb.getDimension()]),
+                    0.0);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
             Assert.assertEquals(LocalizedODEFormats.TOO_SMALL_INTEGRATION_INTERVAL,
-                                miae.getSpecifier());
+                    miae.getSpecifier());
         }
     }
 
@@ -473,8 +479,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
     public abstract void testBackward();
 
     protected void doTestBackward(final double epsilonLast, final double epsilonMaxValue,
-                                  final double epsilonMaxTime, final String name)
-        throws MathIllegalArgumentException, MathIllegalStateException {
+            final double epsilonMaxTime, final String name)
+                    throws MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem5 pb = new TestProblem5();
         double minStep = 0;
@@ -483,8 +489,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
 
         EmbeddedRungeKuttaIntegrator integ = createIntegrator(minStep, maxStep,
-                                                                      scalAbsoluteTolerance,
-                                                                      scalRelativeTolerance);
+                scalAbsoluteTolerance,
+                scalRelativeTolerance);
         TestProblemHandler handler = new TestProblemHandler(pb, integ);
         integ.addStepHandler(handler);
         integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
@@ -554,9 +560,9 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
     }
 
     @Test
-    public abstract void testTorqueFreeMotion();
+    public abstract void testTorqueFreeMotionOmegaOnly();
 
-    protected void doTestTorqueFreeMotion(double epsilon) {
+    protected void doTestTorqueFreeMotionOmegaOnly(double epsilon) {
 
         final TestProblem7 pb  = new TestProblem7();
         double minStep = 1.0e-10;
@@ -565,15 +571,15 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         double[] vecRelativeTolerance = { 1.0e-10, 1.0e-10, 1.0e-10 };
 
         EmbeddedRungeKuttaIntegrator integ = createIntegrator(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
-        integ.addStepHandler(new TorqueFreeHandler(pb, epsilon));
+        integ.addStepHandler(new TorqueFreeOmegaOnlyHandler(pb, epsilon));
         integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
     }
 
-    private static class TorqueFreeHandler implements ODEStepHandler {
+    private static class TorqueFreeOmegaOnlyHandler implements ODEStepHandler {
         private double maxError;
         private final TestProblem7 pb;
         private final double epsilon;
-        public TorqueFreeHandler(TestProblem7 pb, double epsilon) {
+        public TorqueFreeOmegaOnlyHandler(TestProblem7 pb, double epsilon) {
             this.pb      = pb;
             this.epsilon = epsilon;
             maxError     = 0;
@@ -597,6 +603,149 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             Assert.assertEquals(0.0, maxError, epsilon);
         }
     }
+
+    @Test
+    /** Compare that the analytical model and the numerical model that compute the  the quaternion in a torque-free configuration give same results.
+     * This test is used to validate the results of the analytical model as defined by Landau & Lifchitz.
+     */
+    public abstract void testTorqueFreeMotion();
+
+    protected void doTestTorqueFreeMotion(double epsilonOmega, double epsilonQ) {
+
+        final double   t0          =  0.0;
+        final double   t1          = 20.0;
+        final Vector3D omegaBase   = new Vector3D(5.0, 0.0, 4.0);
+        final Rotation rBase       = new Rotation(0.9, 0.437, 0.0, 0.0, true);
+        final List<Double> inertiaBase = Arrays.asList(3.0 / 8.0, 1.0 / 2.0, 5.0 / 8.0);
+        double minStep = 1.0e-10;
+        double maxStep = t1 - t0;
+        double[] vecAbsoluteTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
+        double[] vecRelativeTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
+
+        // prepare a stream of problems to integrate
+        Stream<TestProblem8> problems = Stream.empty();
+
+        // add all possible permutations of the base rotation rate
+        problems = Stream.concat(problems,
+                                 permute(omegaBase).
+                                 map(omega -> new TestProblem8(t0, t1, omega, rBase,
+                                                               inertiaBase.get(0), Vector3D.PLUS_I,
+                                                               inertiaBase.get(1), Vector3D.PLUS_J,
+                                                               inertiaBase.get(2), Vector3D.PLUS_K)));
+
+        // add all possible permutations of the base rotation
+        problems = Stream.concat(problems,
+                                 permute(rBase).
+                                 map(r -> new TestProblem8(t0, t1, omegaBase, r,
+                                                           inertiaBase.get(0), Vector3D.PLUS_I,
+                                                           inertiaBase.get(1), Vector3D.PLUS_J,
+                                                           inertiaBase.get(2), Vector3D.PLUS_K)));
+
+        // add all possible permutations of the base inertia
+        problems = Stream.concat(problems,
+                                 permute(inertiaBase).
+                                 map(inertia -> new TestProblem8(t0, t1, omegaBase, rBase,
+                                                                 inertia.get(0), Vector3D.PLUS_I,
+                                                                 inertia.get(1), Vector3D.PLUS_J,
+                                                                 inertia.get(2), Vector3D.PLUS_K)));
+
+        problems.forEach(problem -> {
+            EmbeddedRungeKuttaIntegrator integ = createIntegrator(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);   
+            integ.addStepHandler(new TorqueFreeHandler(problem, epsilonOmega, epsilonQ));
+            integ.integrate(new ExpandableODE(problem), problem.getInitialState(), problem.getFinalTime());
+        });
+
+    }
+
+    /** Generate all permutations of vector coordinates.
+     * @param v vector to permute
+     * @return permuted vector
+     */
+    private Stream<Vector3D> permute(final Vector3D v) {
+        return CombinatoricsUtils.
+                        permutations(Arrays.asList(v.getX(), v.getY(), v.getZ())).
+                        map(a -> new Vector3D(a.get(0), a.get(1), a.get(2)));
+    }
+
+    /** Generate all permutations of rotation coordinates.
+     * @param r rotation to permute
+     * @return permuted rotation
+     */
+    private Stream<Rotation> permute(final Rotation r) {
+        return CombinatoricsUtils.
+                        permutations(Arrays.asList(r.getQ0(), r.getQ1(), r.getQ2(), r.getQ3())).
+                        map(a -> new Rotation(a.get(0), a.get(1), a.get(2), a.get(3), false));
+    }
+
+    /** Generate all permutations of a list.
+     * @param list list to permute
+     * @return permuted list
+     */
+    private Stream<List<Double>> permute(final List<Double> list) {
+        return CombinatoricsUtils.permutations(list);
+    }
+
+    private static class TorqueFreeHandler implements ODEStepHandler {
+        private double maxErrorOmega;
+        private double maxErrorQ;
+        private final TestProblem8 pb;
+        private final double epsilonOmega;
+        private final double epsilonQ;
+        private double outputStep;
+        private double current;
+
+        public TorqueFreeHandler(TestProblem8 pb, double epsilonOmega, double epsilonQ) {
+            this.pb           = pb;
+            this.epsilonOmega = epsilonOmega;
+            this.epsilonQ     = epsilonQ;
+            maxErrorOmega     = 0;
+            maxErrorQ         = 0;
+            outputStep        = 0.01;
+        }
+
+        public void init(ODEStateAndDerivative state0, double t) {
+            maxErrorOmega = 0;
+            maxErrorQ     = 0;
+            current       = state0.getTime() - outputStep;
+        }
+
+        public void handleStep(ODEStateInterpolator interpolator) {
+
+            current += outputStep;
+            while (interpolator.getPreviousState().getTime() <= current &&
+                   interpolator.getCurrentState().getTime() > current) {
+                ODEStateAndDerivative state = interpolator.getInterpolatedState(current);
+                final double[] theoretical  = pb.computeTheoreticalState(state.getTime());
+                final double errorOmega = Vector3D.distance(new Vector3D(state.getPrimaryState()[0],
+                                                                         state.getPrimaryState()[1],
+                                                                         state.getPrimaryState()[2]),
+                                                            new Vector3D(theoretical[0],
+                                                                         theoretical[1],
+                                                                         theoretical[2]));
+                maxErrorOmega = FastMath.max(maxErrorOmega, errorOmega);
+                final double errorQ = Rotation.distance(new Rotation(state.getPrimaryState()[3],
+                                                                     state.getPrimaryState()[4],
+                                                                     state.getPrimaryState()[5],
+                                                                     state.getPrimaryState()[6],
+                                                                     true),
+                                                        new Rotation(theoretical[3],
+                                                                     theoretical[4],
+                                                                     theoretical[5],
+                                                                     theoretical[6],
+                                                                     true));
+                maxErrorQ = FastMath.max(maxErrorQ, errorQ);
+                current += outputStep;
+
+            }
+        }
+
+        public void finish(ODEStateAndDerivative finalState) {
+            Assert.assertEquals(0.0, maxErrorOmega, epsilonOmega);
+            Assert.assertEquals(0.0, maxErrorQ,     epsilonQ);
+        }
+
+    }
+
 
     @Test
     public abstract void testMissedEndEvent();
@@ -666,7 +815,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
     public void testTooLargeFirstStep() {
 
         AdaptiveStepsizeIntegrator integ =
-                        createIntegrator(0, Double.POSITIVE_INFINITY, Double.NaN, Double.NaN);
+                createIntegrator(0, Double.POSITIVE_INFINITY, Double.NaN, Double.NaN);
         final double start = 0.0;
         final double end   = 0.001;
         OrdinaryDifferentialEquation equations = new OrdinaryDifferentialEquation() {
@@ -700,8 +849,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         double scalRelativeTolerance = scalAbsoluteTolerance;
 
         ODEIntegrator integ = createIntegrator(minStep, maxStep,
-                                               scalAbsoluteTolerance,
-                                               scalRelativeTolerance);
+                scalAbsoluteTolerance,
+                scalRelativeTolerance);
         integ.addStepHandler(new VariableHandler(min, max));
         double stopTime = integ.integrate(pb, pb.getInitialState(), pb.getFinalTime()).getTime();
         Assert.assertEquals(pb.getFinalTime(), stopTime, 1.0e-10);
@@ -722,7 +871,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         ODEIntegrator integ = createIntegrator(0.1, 10, 1.0e-12, 0.0);
         integ.addEventDetector(stepProblem);
         final ODEStateAndDerivative finalState =
-                        integ.integrate(stepProblem, new ODEState(0.0, new double[] { 0.0 }), 10.0);
+                integ.integrate(stepProblem, new ODEState(0.0, new double[] { 0.0 }), 10.0);
         Assert.assertEquals(8.0, finalState.getPrimaryState()[0], epsilon);
     }
 
@@ -825,7 +974,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         public void handleStep(ODEStateInterpolator interpolator) {
 
             double step = FastMath.abs(interpolator.getCurrentState().getTime() -
-                                       interpolator.getPreviousState().getTime());
+                    interpolator.getPreviousState().getTime());
             if (firstTime) {
                 minStep   = FastMath.abs(step);
                 maxStep   = minStep;
@@ -851,9 +1000,9 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
     @Test
     public void testWrongDerivative() {
         EmbeddedRungeKuttaIntegrator integrator =
-                        createIntegrator(0.0, 1.0, 1.0e-10, 1.0e-10);
+                createIntegrator(0.0, 1.0, 1.0e-10, 1.0e-10);
         OrdinaryDifferentialEquation equations =
-                        new OrdinaryDifferentialEquation() {
+                new OrdinaryDifferentialEquation() {
             public double[] computeDerivatives(double t, double[] y) {
                 if (t < -0.5) {
                     throw new LocalException();
@@ -886,20 +1035,20 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
     public abstract void testPartialDerivatives();
 
     protected void doTestPartialDerivatives(final double epsilonY,
-                                            final double epsilonPartials) {
+            final double epsilonPartials) {
 
         double omega = 1.3;
         double t0    = 1.3;
         double[] y0  = new double[] { 3.0, 4.0 };
         double t     = 6.0;
-        SinCos sinCos = new SinCos(omega);
+        SinCosJacobiansProvider sinCos = new SinCosJacobiansProvider(omega);
 
         ExpandableODE       expandable   = new ExpandableODE(sinCos);
         VariationalEquation ve           = new VariationalEquation(expandable, sinCos);
         ODEState            initialState = ve.setUpInitialState(new ODEState(t0, y0));
 
         EmbeddedRungeKuttaIntegrator integrator =
-                        createIntegrator(0.001 * (t - t0), t - t0, 1.0e-12, 1.0e-12);
+                createIntegrator(0.001 * (t - t0), t - t0, 1.0e-12, 1.0e-12);
         ODEStateAndDerivative finalState = integrator.integrate(expandable, initialState, t);
 
         // check that the final state contains both the state vector and its partial derivatives
@@ -921,7 +1070,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             }
         }
 
-        double[] dydp0 = ve.extractParameterJacobian(finalState, SinCos.OMEGA_PARAMETER);
+        double[] dydp0 = ve.extractParameterJacobian(finalState, SinCosJacobiansProvider.OMEGA_PARAMETER);
         for (int i = 0; i < dydp0.length; ++i) {
             Assert.assertEquals(sinCos.exactDyDomega(t)[i], dydp0[i], epsilonPartials);
         }
@@ -932,7 +1081,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
     public abstract void testSecondaryEquations();
 
     protected void doTestSecondaryEquations(final double epsilonSinCos,
-                                            final double epsilonLinear) {
+            final double epsilonLinear) {
         OrdinaryDifferentialEquation sinCos = new OrdinaryDifferentialEquation() {
 
             @Override
@@ -980,11 +1129,11 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                     Assert.assertEquals(1, state.getSecondaryStateDimension(1));
                     Assert.assertEquals(3, state.getCompleteStateDimension());
                     max[0] = FastMath.max(max[0],
-                                          FastMath.abs(FastMath.sin(t) - state.getPrimaryState()[0]));
+                            FastMath.abs(FastMath.sin(t) - state.getPrimaryState()[0]));
                     max[0] = FastMath.max(max[0],
-                                          FastMath.abs(FastMath.cos(t) - state.getPrimaryState()[1]));
+                            FastMath.abs(FastMath.cos(t) - state.getPrimaryState()[1]));
                     max[1] = FastMath.max(max[1],
-                                          FastMath.abs(1 - t - state.getSecondaryState(1)[0]));
+                            FastMath.abs(1 - t - state.getSecondaryState(1)[0]));
                 }
             }
         });
@@ -994,7 +1143,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         ODEState initialState = new ODEState(0.0, primary0, secondary0);
 
         ODEStateAndDerivative finalState =
-                        integrator.integrate(expandable, initialState, 10.0);
+                integrator.integrate(expandable, initialState, 10.0);
         Assert.assertEquals(10.0, finalState.getTime(), 1.0e-12);
         Assert.assertEquals(0, max[0], epsilonSinCos);
         Assert.assertEquals(0, max[1], epsilonLinear);
@@ -1051,7 +1200,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         Assert.assertEquals(pb.getFinalTime(), finalState.getTime(), convergence);
     }
 
-    private static class SinCos implements ODEJacobiansProvider {
+    private static class SinCosJacobiansProvider implements ODEJacobiansProvider {
 
         public static String OMEGA_PARAMETER = "omega";
 
@@ -1065,7 +1214,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         private double dAlphadY00;
         private double dAlphadY01;
 
-        protected SinCos(final double omega) {
+        protected SinCosJacobiansProvider(final double omega) {
             this.omega = omega;
         }
 
@@ -1074,7 +1223,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         }
 
         public void init(final double t0, final double[] y0,
-                         final double finalTime) {
+                final double finalTime) {
 
             // theoretical solution is y(t) = { r * sin(omega * t + alpha), r * cos(omega * t + alpha) }
             // so we retrieve alpha by identification from the initial state
@@ -1094,8 +1243,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         @Override
         public double[] computeDerivatives(final double t, final double[] y) {
             return new double[] {
-                omega *  y[1],
-                omega * -y[0]
+                    omega *  y[1],
+                    omega * -y[0]
             };
         }
 
@@ -1110,22 +1259,22 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
         @Override
         public double[] computeParameterJacobian(final double t, final double[] y, final double[] yDot,
-                                                 final String paramName)
-            throws MathIllegalArgumentException, MathIllegalStateException {
+                final String paramName)
+                        throws MathIllegalArgumentException, MathIllegalStateException {
             if (!isSupported(paramName)) {
                 throw new MathIllegalArgumentException(LocalizedODEFormats.UNKNOWN_PARAMETER, paramName);
             }
             // this is the Jacobian of dYdot/dOmega
             return new double[] {
-                y[1],
-               -y[0]
+                    y[1],
+                    -y[0]
             };
         }
 
         public double[] theoreticalY(final double t) {
             final double theta = omega * t + alpha;
             return new double[] {
-                r * FastMath.sin(theta), r * FastMath.cos(theta)
+                    r * FastMath.sin(theta), r * FastMath.cos(theta)
             };
         }
 
@@ -1155,8 +1304,8 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             final double y1           = r * cos;
 
             return new double[] {
-                y1 * (t + dAlphadOmega),
-               -y0 * (t + dAlphadOmega)
+                    y1 * (t + dAlphadOmega),
+                    -y0 * (t + dAlphadOmega)
             };
 
         }
