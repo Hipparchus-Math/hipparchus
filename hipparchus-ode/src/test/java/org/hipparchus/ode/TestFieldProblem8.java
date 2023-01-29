@@ -315,6 +315,8 @@ public class TestFieldProblem8<T extends CalculusFieldElement<T>>
 
     public T[] computeTheoreticalState(T t) {
 
+        final T t0            = getInitialTime();
+
         // angular velocity
         final FieldCopolarN<T> valuesN     = jacobi.valuesN(t.subtract(tRef).multiply(tScale));
         final FieldVector3D<T> omegaSorted = new FieldVector3D<>(o1Scale.multiply(valuesN.cn()),
@@ -326,10 +328,9 @@ public class TestFieldProblem8<T extends CalculusFieldElement<T>>
         final T   psi         = FastMath.atan2(sortedInertia.getInertiaAxis1().getI().multiply(omegaSorted.getX()),
                                                sortedInertia.getInertiaAxis2().getI().multiply(omegaSorted.getY()));
         final T   theta       = FastMath.acos(omegaSorted.getZ().divide(phiSlope));
-        final T   phiLinear   = phiSlope.multiply(t);
+        final T   phiLinear   = phiSlope.multiply(t.subtract(t0));
 
         // third Euler angle results from a quadrature
-        final T t0            = getInitialTime();
         final int nbPeriods   = (int) FastMath.floor(t.subtract(t0).divide(period)).getReal();
         final T tStartInteg   = t0.add(period.multiply(nbPeriods));
         final T integPartial  = phiQuadratureModel.getInterpolatedState(t.subtract(tStartInteg)).getPrimaryState()[0];

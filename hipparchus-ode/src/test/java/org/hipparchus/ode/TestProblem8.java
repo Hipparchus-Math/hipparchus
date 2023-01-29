@@ -292,6 +292,8 @@ public class TestProblem8 extends TestProblemAbstract {
 
     public double[] computeTheoreticalState(double t) {
 
+        final double t0            = getInitialTime();
+
         // angular velocity
         final CopolarN valuesN     = jacobi.valuesN((t - tRef) * tScale);
         final Vector3D omegaSorted = new Vector3D(o1Scale * valuesN.cn(), o2Scale * valuesN.sn(), o3Scale * valuesN.dn());
@@ -301,10 +303,9 @@ public class TestProblem8 extends TestProblemAbstract {
         final double   psi         = FastMath.atan2(sortedInertia.getInertiaAxis1().getI() * omegaSorted.getX(),
                                                     sortedInertia.getInertiaAxis2().getI() * omegaSorted.getY());
         final double   theta       = FastMath.acos(omegaSorted.getZ() / phiSlope);
-        final double   phiLinear   = phiSlope * t;
+        final double   phiLinear   = phiSlope * (t - t0);
 
         // third Euler angle results from a quadrature
-        final double t0            = getInitialTime();
         final int    nbPeriods     = (int) FastMath.floor((t - t0) / period);
         final double tStartInteg   = t0 + nbPeriods * period;
         final double integPartial  = phiQuadratureModel.getInterpolatedState(t - tStartInteg).getPrimaryState()[0];
