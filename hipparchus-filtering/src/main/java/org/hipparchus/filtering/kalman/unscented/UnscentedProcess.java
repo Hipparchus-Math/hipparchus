@@ -41,6 +41,13 @@ public interface UnscentedProcess<T extends Measurement>  {
      */
     UnscentedEvolution getEvolution(double previousTime, RealVector[] sigmaPoints, T measurement);
 
+    /** Get the state evolution between two times.
+     * @param predictedSigmaPoints predicted state sigma points
+     * @param measurement measurement to process
+     * @return predicted measurement sigma points
+     */
+    RealVector[] getPredictedMeasurements(RealVector[] predictedSigmaPoints, T measurement);
+
     /** Get the innovation brought by a measurement.
      * @param measurement measurement to process
      * @param predictedMeasurement predicted measurement

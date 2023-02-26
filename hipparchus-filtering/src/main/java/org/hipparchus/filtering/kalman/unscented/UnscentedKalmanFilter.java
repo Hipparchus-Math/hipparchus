@@ -107,12 +107,16 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         predict(evolution.getCurrentTime(), evolution.getCurrentStates(),
                 evolution.getProcessNoiseMatrix());
 
+        // Calculate sigma points from predicted state
+        final RealVector[] predictedSigmaPoints = utProvider.unscentedTransform(predicted.getState(),
+                                                                                predicted.getCovariance());
+
         // Correction phase
-        final RealVector[] predictedMeasurements = evolution.getCurrentMeasurements();
+        final RealVector[] predictedMeasurements = process.getPredictedMeasurements(predictedSigmaPoints, measurement);
         final RealVector   predictedMeasurement  = sum(predictedMeasurements, measurement.getValue().getDimension());
         final RealMatrix   r                     = computeInnovationCovarianceMatrix(predictedMeasurements, predictedMeasurement, measurement.getCovariance());
-        final RealMatrix   crossCovarianceMatrix = computeCrossCovarianceMatrix(evolution.getCurrentStates(), predicted.getState(),
-                                                                                evolution.getCurrentMeasurements(), predictedMeasurement);
+        final RealMatrix   crossCovarianceMatrix = computeCrossCovarianceMatrix(predictedSigmaPoints, predicted.getState(),
+                                                                                predictedMeasurements, predictedMeasurement);
         final RealVector   innovation            = (r == null) ? null : process.getInnovation(measurement, predictedMeasurement, predicted.getState(), r);
         correct(measurement, r, crossCovarianceMatrix, innovation);
         return getCorrected();

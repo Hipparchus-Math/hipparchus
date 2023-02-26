@@ -21,15 +21,16 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.filtering.kalman.Measurement;
 import org.hipparchus.filtering.kalman.ProcessEstimate;
 import org.hipparchus.filtering.kalman.Reference;
 import org.hipparchus.filtering.kalman.SimpleMeasurement;
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.CholeskyDecomposer;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
+import org.hipparchus.filtering.kalman.extended.ExtendedKalmanFilter;
+import org.hipparchus.filtering.kalman.extended.NonLinearEvolution;
+import org.hipparchus.filtering.kalman.extended.NonLinearProcess;
+import org.hipparchus.linear.*;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
@@ -117,9 +118,14 @@ public class UnscentedKalmanFilterTest {
         public UnscentedEvolution getEvolution(double previousTime, final RealVector[] previousStateSamples,  SimpleMeasurement measurement) {
             return new UnscentedEvolution(measurement.getTime(),
                                           previousStateSamples,
-                                          previousStateSamples,
                                           q);
         }
+
+        @Override
+        public RealVector[] getPredictedMeasurements(RealVector[] predictedSigmaPoints, SimpleMeasurement measurement) {
+            return predictedSigmaPoints;
+        }
+
         @Override
         public RealVector getInnovation(SimpleMeasurement measurement, RealVector predictedMeasurement, RealVector predictedState,
                 RealMatrix innovationCovarianceMatrix) {
@@ -138,7 +144,7 @@ public class UnscentedKalmanFilterTest {
                             { 0.00, 0.00, 0.00, 0.00 },
                             { 0.00, 0.00, 0.00, 0.00 },
                          }, "cannonball-zero-process-noise.txt",
-                         2.0e-12, 2.0e-12);
+                         1.0e-11, 2.0e-12);
     }
 
     @Test
@@ -232,7 +238,17 @@ public class UnscentedKalmanFilterTest {
             
 
             
-            return new UnscentedEvolution(measurement.getTime(), states, measurementSamples, q);
+            return new UnscentedEvolution(measurement.getTime(), states, q);
+        }
+
+        @Override
+        public RealVector[] getPredictedMeasurements(RealVector[] predictedSigmaPoints, SimpleMeasurement measurement) {
+            final RealVector[] measurementSamples = new RealVector[9];
+            for (int i = 0 ; i < 9 ; i++) {
+                measurementSamples[i]= MatrixUtils.createRealVector(new double[] { predictedSigmaPoints[i].getEntry(0),
+                        predictedSigmaPoints[i].getEntry(2) });
+            }
+            return measurementSamples;
         }
 
         @Override
@@ -317,9 +333,15 @@ public class UnscentedKalmanFilterTest {
                                                RealVector[] previousStates,
                                                SimpleMeasurement measurement) {
             return new UnscentedEvolution(measurement.getTime(),
-                                          previousStates, previousStates
-                                          ,q);
+                                          previousStates,
+                                          q);
         }
+
+        @Override
+        public RealVector[] getPredictedMeasurements(RealVector[] predictedSigmaPoints, SimpleMeasurement measurement) {
+            return predictedSigmaPoints;
+        }
+
         @Override
         public RealVector getInnovation(SimpleMeasurement measurement, RealVector predictedMeasurement, RealVector predictedState,
                 RealMatrix innovationCovarianceMatrix) {
@@ -342,7 +364,7 @@ public class UnscentedKalmanFilterTest {
                                                                  { 0.00, 100., 0.00},
                                                                  { 0.00, 0.00, 100.}}));
         final UnscentedProcess<SimpleMeasurement> process = new RadarProcess();
-        MerweUnscentedTransform utProvider = new MerweUnscentedTransform(initial.getState().getDimension(), 0.001, 2, 0 );
+        MerweUnscentedTransform utProvider = new MerweUnscentedTransform(initial.getState().getDimension(), 1.0, 2, 0 );
         final UnscentedKalmanFilter<SimpleMeasurement> filter =
                 new UnscentedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial, utProvider);
         
@@ -377,7 +399,7 @@ public class UnscentedKalmanFilterTest {
     }
     
     /**
-     * Cross validation for the {@link UscentedKalmanFilter unscented kalman filter} with Roger Labbe's filterpy python library.
+     * Cross validation for the {@link UnscentedKalmanFilter unscented kalman filter} with Roger Labbe's filterpy python library.
      * Class implementing test_radar from test_ukf. Data in "radar.txt" were generated using test_radar. 
      * @see "Roger Labbe's tests for Unscented Kalman Filter: https://github.com/rlabbe/filterpy/blob/master/filterpy/kalman/tests/test_ukf.py"
      */
@@ -410,7 +432,19 @@ public class UnscentedKalmanFilterTest {
                 { 0.00, 0.00, 0.01}
             });
 
-            return new UnscentedEvolution(measurement.getTime(), states, measurementSamples,  processNoiseMatrix);
+            return new UnscentedEvolution(measurement.getTime(), states,  processNoiseMatrix);
+        }
+
+        @Override
+        public RealVector[] getPredictedMeasurements(RealVector[] predictedSigmaPoints, SimpleMeasurement measurement) {
+            final RealVector[] measurementSamples = new RealVector[7];
+            for (int i = 0; i < 7; i++) {
+                measurementSamples[i] = MatrixUtils.createRealVector(new double[] {
+                        FastMath.sqrt(FastMath.pow(predictedSigmaPoints[i].getEntry(0), 2) +
+                                FastMath.pow(predictedSigmaPoints[i].getEntry(2), 2))
+                });
+            }
+            return measurementSamples;
         }
 
 
@@ -419,6 +453,188 @@ public class UnscentedKalmanFilterTest {
                 RealMatrix innovationCovarianceMatrix) {
             return measurement.getValue().subtract(predictedMeasurement);
         }
+
+    }
+
+
+
+    private static final int STATE_DIMENSION = 2;
+    final static double ALPHA = 1.0;
+    final static double BETA = 2.0;
+    final static double KAPPA = 3.0 - STATE_DIMENSION;
+
+
+    static class TestMeasurement implements Measurement {
+
+        private final double time;
+        private final RealVector value;
+        private final RealMatrix covariance;
+
+        TestMeasurement(final double time, final RealVector value) {
+            this.time = time;
+            this.value = value;
+            this.covariance = MatrixUtils.createRealIdentityMatrix(value.getDimension());
+        }
+
+        @Override
+        public double getTime() {
+            return time;
+        }
+
+        @Override
+        public RealVector getValue() {
+            return value;
+        }
+
+        @Override
+        public RealMatrix getCovariance() {
+            return covariance;
+        }
+    }
+
+    static class TestEKFProcess<T extends Measurement> implements NonLinearProcess<T> {
+
+        private final double processNoiseScale;
+
+        public TestEKFProcess(final double processNoiseScale) {
+            this.processNoiseScale = processNoiseScale;
+        }
+
+        @Override
+        public NonLinearEvolution getEvolution(final double time,
+                                               final RealVector state,
+                                               T measurement) {
+            // Time delta
+            double dt = measurement.getTime() - time;
+
+            // State transition matrix
+            RealMatrix stateTransitionMatrix = MatrixUtils.createRealIdentityMatrix(STATE_DIMENSION);
+            stateTransitionMatrix.setEntry(0, 1, dt);
+
+            // Process noise covariance
+            RealMatrix processNoiseCovariance = MatrixUtils.createRealMatrix(STATE_DIMENSION, STATE_DIMENSION);
+            processNoiseCovariance.setEntry(0, 0, dt * dt * dt / 3.0);
+            processNoiseCovariance.setEntry(0, 1, dt * dt / 2.0);
+            processNoiseCovariance.setEntry(1, 0, dt * dt / 2.0);
+            processNoiseCovariance.setEntry(1, 1, dt);
+            processNoiseCovariance = processNoiseCovariance.scalarMultiply(processNoiseScale);
+
+            // Measurement matrix
+            int measurementDimension = measurement.getValue().getDimension();
+            RealMatrix measurementMatrix = MatrixUtils.createRealMatrix(measurementDimension, STATE_DIMENSION);
+            for (int row = 0; row < measurementDimension; ++row) {
+                measurementMatrix.setEntry(row, 0, 1.0);
+            }
+
+            // Predicted state
+            RealVector predictedState = stateTransitionMatrix.operate(state);
+
+            return new NonLinearEvolution(measurement.getTime(), predictedState, stateTransitionMatrix,
+                    processNoiseCovariance, measurementMatrix);
+        }
+
+        @Override
+        public RealVector getInnovation(T measurement, NonLinearEvolution evolution, RealMatrix innovationCovariance) {
+            // Observed  - expected measurement
+            return measurement.getValue().subtract(evolution.getCurrentState().getSubVector(0, 1));
+        }
+    }
+
+
+    static class TestUKFProcess<T extends Measurement> implements UnscentedProcess<T> {
+
+        private final double processNoiseScale;
+
+        public TestUKFProcess(final double processNoiseScale) {
+            this.processNoiseScale = processNoiseScale;
+        }
+
+        @Override
+        public UnscentedEvolution getEvolution(double previousTime, RealVector[] sigmaPoints, T measurement) {
+
+            // Number of sigma-points
+            int numPoints = sigmaPoints.length;
+            Assert.assertEquals(STATE_DIMENSION * 2 + 1, numPoints);
+
+            // Time delta
+            double dt = measurement.getTime() - previousTime;
+
+            // Predicted states without process noise
+            RealVector[] predictedPoints = new RealVector[numPoints];
+            for (int i = 0; i < numPoints; ++i) {
+                double[] point = sigmaPoints[i].toArray();
+                point[0] = point[0] + dt * point[1];
+                predictedPoints[i] = MatrixUtils.createRealVector(point);
+            }
+
+            // Process noise covariance
+            RealMatrix processNoiseCovariance = MatrixUtils.createRealMatrix(STATE_DIMENSION, STATE_DIMENSION);
+            processNoiseCovariance.setEntry(0, 0, dt * dt * dt / 3.0);
+            processNoiseCovariance.setEntry(0, 1, dt * dt / 2.0);
+            processNoiseCovariance.setEntry(1, 0, dt * dt / 2.0);
+            processNoiseCovariance.setEntry(1, 1, dt);
+            processNoiseCovariance = processNoiseCovariance.scalarMultiply(processNoiseScale);
+
+            return new UnscentedEvolution(measurement.getTime(), predictedPoints, processNoiseCovariance);
+        }
+
+        @Override
+        public RealVector[] getPredictedMeasurements(RealVector[] predictedSigmaPoints, T measurement) {
+            RealVector[] measurementPoints = new RealVector[predictedSigmaPoints.length];
+            for (int i = 0; i < predictedSigmaPoints.length; ++i) {
+                measurementPoints[i] = predictedSigmaPoints[i].getSubVector(0, 1);
+            }
+            return measurementPoints;
+        }
+
+        @Override
+        public RealVector getInnovation(T measurement, RealVector predictedMeasurement,
+                                        RealVector predictedState, RealMatrix innovationCovarianceMatrix) {
+            // Observed  - expected measurement
+            return measurement.getValue().subtract(predictedMeasurement);
+        }
+    }
+
+
+    @Test
+    public void testUkfEkfComparison() {
+
+        // Common parameters
+        final double processNoiseScale = 1.0;
+        final double initialTime = 0.0;
+        final double[] initalState = {1.0, -0.8};
+        final double[] initialCovarianceDiagonal = {1.1, 0.2};
+        final ProcessEstimate initialEstimate = new ProcessEstimate(initialTime,
+                MatrixUtils.createRealVector(initalState),
+                MatrixUtils.createRealDiagonalMatrix(initialCovarianceDiagonal));
+
+        // Set up EKF
+        ExtendedKalmanFilter<TestMeasurement> extendedKalmanFilter = new ExtendedKalmanFilter<>(
+                new QRDecomposer(0.0),
+                new TestEKFProcess<>(processNoiseScale),
+                initialEstimate);
+
+        // Set up UKF
+        UnscentedKalmanFilter<TestMeasurement> unscentedFilter = new UnscentedKalmanFilter<>(
+                new QRDecomposer(0.0),
+                new TestUKFProcess<>(processNoiseScale),
+                initialEstimate,
+                new MerweUnscentedTransform(STATE_DIMENSION, ALPHA, BETA, KAPPA));
+
+        // First measurement
+        final double measurement1Time = 0.8;
+        final double[] measurement1Value = {0.3};
+        final TestMeasurement measurement1 = new TestMeasurement(measurement1Time, MatrixUtils.createRealVector(measurement1Value));
+
+        // Run filters
+        ProcessEstimate ekfEstimate = extendedKalmanFilter.estimationStep(measurement1);
+        ProcessEstimate ukfEstimate = unscentedFilter.estimationStep(measurement1);
+
+        // Make sure we get the same for both (the problem is linear)
+        UnitTestUtils.assertEquals("EKF and UKF states",
+                ekfEstimate.getState(), ukfEstimate.getState(), 1e-15);
+        UnitTestUtils.assertEquals("EKF and UKF covariances",
+                ekfEstimate.getCovariance(), ukfEstimate.getCovariance(), 1e-15);
 
     }
 
