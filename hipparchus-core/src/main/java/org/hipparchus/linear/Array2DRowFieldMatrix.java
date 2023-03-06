@@ -23,7 +23,6 @@
 package org.hipparchus.linear;
 
 import java.io.Serializable;
-
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -493,10 +492,15 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     @Override
     public T getEntry(final int row, final int column)
         throws MathIllegalArgumentException {
+      try {
+        return data[row][column];
+      } catch (IndexOutOfBoundsException e) {
+        // throw the exact cause of the exception
         checkRowIndex(row);
         checkColumnIndex(column);
-
-        return data[row][column];
+        // should never happen
+        throw e;
+      }
     }
 
     /** {@inheritDoc} */
