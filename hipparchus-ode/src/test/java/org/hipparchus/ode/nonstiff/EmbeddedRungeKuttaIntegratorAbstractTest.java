@@ -18,18 +18,24 @@
 package org.hipparchus.ode.nonstiff;
 
 
+import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.ode.ExpandableODE;
@@ -56,6 +62,7 @@ import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.RyuDouble;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -657,6 +664,36 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
     }
 
+    @Test
+    public abstract void testTorqueFreeMotionIssue230();
+
+    protected void doTestTorqueFreeMotionIssue230(double epsilonOmega, double epsilonQ) {
+
+        TestProblem8 problem = new TestProblem8(0, 20,
+                                                new Vector3D(5.0, 0.0, 4.0),
+                                                Rotation.IDENTITY,
+                                                5.0 / 8.0, Vector3D.PLUS_K,
+                                                1.0 / 2.0, Vector3D.PLUS_J,
+                                                3.0 / 8.0, Vector3D.MINUS_I);
+
+//        TestProblem8 problem = new TestProblem8(0, 20,
+//                                                new Vector3D(5.0, 0.0, 4.0),
+//                                                Rotation.IDENTITY,// new Rotation(0.9, 0.437, 0.0, 0.0, true),
+//                                                3.0 / 8.0, Vector3D.PLUS_I,
+//                                                5.0 / 8.0, Vector3D.PLUS_K,
+//                                                1.0 / 2.0, Vector3D.PLUS_J);
+
+        double minStep = 1.0e-10;
+        double maxStep = problem.getFinalTime() - problem.getInitialTime();
+        double[] vecAbsoluteTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
+        double[] vecRelativeTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
+
+        EmbeddedRungeKuttaIntegrator integ = createIntegrator(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
+        integ.addStepHandler(new TorqueFreeHandler(problem, epsilonOmega, epsilonQ));
+        integ.integrate(new ExpandableODE(problem), problem.getInitialState(), problem.getFinalTime());
+
+    }
+
     /** Generate all permutations of vector coordinates.
      * @param v vector to permute
      * @return permuted vector
@@ -693,6 +730,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         private final double epsilonQ;
         private double outputStep;
         private double current;
+        private PrintStream out;
 
         public TorqueFreeHandler(TestProblem8 pb, double epsilonOmega, double epsilonQ) {
             this.pb           = pb;
@@ -707,6 +745,27 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             maxErrorOmega = 0;
             maxErrorQ     = 0;
             current       = state0.getTime() - outputStep;
+            final ProcessBuilder pbg = new ProcessBuilder("gnuplot").
+                            redirectOutput(ProcessBuilder.Redirect.INHERIT).
+                            redirectError(ProcessBuilder.Redirect.INHERIT);
+            pbg.environment().remove("XDG_SESSION_TYPE");
+            current = state0.getTime() - outputStep;
+
+            try {
+                Process gnuplot = pbg.start();
+                out = new PrintStream(gnuplot.getOutputStream(), false, StandardCharsets.UTF_8.name());
+                out.format(Locale.US, "set terminal qt size %d, %d title 'complex plotter'%n", 1000, 1000);
+//                out.format(Locale.US, "set terminal pngcairo size %d, %d%n", 1000, 1000);
+//                out.format(Locale.US, "set output '/tmp/issue-230-B.png'%n", 1000, 1000);
+
+                out.format(Locale.US, "set title '%s'%n", "torque-free");
+                out.format(Locale.US, "$data <<EOD%n");
+            } catch (IOException ioe) {
+                out = null;
+                throw new MathRuntimeException(ioe,
+                                               LocalizedCoreFormats.SIMPLE_MESSAGE,
+                                               ioe.getLocalizedMessage());
+            }
         }
 
         public void handleStep(ODEStateInterpolator interpolator) {
@@ -716,6 +775,14 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
                    interpolator.getCurrentState().getTime() > current) {
                 ODEStateAndDerivative state = interpolator.getInterpolatedState(current);
                 final double[] theoretical  = pb.computeTheoreticalState(state.getTime());
+                out.format(Locale.US, "%s %s %s %s %s %s %s%n",
+                           RyuDouble.doubleToString(state.getTime()),
+                           RyuDouble.doubleToString(0.375*state.getPrimaryState()[0]),
+                           RyuDouble.doubleToString(0.500*state.getPrimaryState()[1]),
+                           RyuDouble.doubleToString(0.625*state.getPrimaryState()[2]),
+                           RyuDouble.doubleToString(0.375*theoretical[0]),
+                           RyuDouble.doubleToString(0.500*theoretical[1]),
+                           RyuDouble.doubleToString(0.625*theoretical[2]));
                 final double errorOmega = Vector3D.distance(new Vector3D(state.getPrimaryState()[0],
                                                                          state.getPrimaryState()[1],
                                                                          state.getPrimaryState()[2]),
@@ -740,6 +807,17 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         }
 
         public void finish(ODEStateAndDerivative finalState) {
+            out.format(Locale.US, "EOD%n");
+//            out.format(Locale.US, "plot $data using 1:2 with lines lc 1 title 'Ω₁ (num)',\\%n ");
+//            out.format(Locale.US, "     $data using 1:3 with lines lc 2 title 'Ω₂ (num)',\\%n ");
+//            out.format(Locale.US, "     $data using 1:4 with lines lc 3 title 'Ω₃ (num)',\\%n ");
+//            out.format(Locale.US, "     $data using 1:5 with points lc 1 lt 4 ps 0.5 title 'Ω₁ (theo)',\\%n ");
+//            out.format(Locale.US, "     $data using 1:6 with points lc 2 lt 6 ps 0.5 title 'Ω₂ (theo)',\\%n ");
+//            out.format(Locale.US, "     $data using 1:7 with points lc 3 lt 8 ps 0.5 title 'Ω₃ (theo)'%n ");
+            out.format(Locale.US, "splot $data using 2:3:4 with lines lc 1 title 'num',\\%n ");
+            out.format(Locale.US, "     $data using 5:6:7 with lines lc 2 title 'theo'%n ");
+            out.format(Locale.US, "pause mouse close%n");
+            out.close();
             Assert.assertEquals(0.0, maxErrorOmega, epsilonOmega);
             Assert.assertEquals(0.0, maxErrorQ,     epsilonQ);
         }

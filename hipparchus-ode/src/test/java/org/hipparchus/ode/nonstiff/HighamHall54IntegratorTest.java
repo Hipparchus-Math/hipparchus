@@ -55,6 +55,11 @@ public class HighamHall54IntegratorTest extends EmbeddedRungeKuttaIntegratorAbst
     }
 
     @Override
+    public void testTorqueFreeMotionIssue230() {
+        doTestTorqueFreeMotionIssue230(1.0e-100, 1.0e-100);
+    }
+
+    @Override
     public void testForwardBackwardExceptions() {
         doTestForwardBackwardExceptions();
     }
