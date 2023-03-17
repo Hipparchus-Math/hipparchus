@@ -23,7 +23,6 @@
 package org.hipparchus.linear;
 
 import java.io.Serializable;
-
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -439,8 +438,14 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
     @Override
     public double getEntry(final int row, final int column)
         throws MathIllegalArgumentException {
-        MatrixUtils.checkMatrixIndex(this, row, column);
+      try {
         return data[row][column];
+      } catch (IndexOutOfBoundsException e) {
+        // throw the exact cause of the exception
+        MatrixUtils.checkMatrixIndex(this, row, column);
+        // should never happen
+        throw e;
+      }
     }
 
     /** {@inheritDoc} */
