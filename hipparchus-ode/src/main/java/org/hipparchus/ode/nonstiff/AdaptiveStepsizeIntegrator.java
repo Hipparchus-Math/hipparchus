@@ -214,6 +214,9 @@ public abstract class AdaptiveStepsizeIntegrator
 
         double h = ((yOnScale2 < 1.0e-10) || (yDotOnScale2 < 1.0e-10)) ?
                    1.0e-6 : (0.01 * FastMath.sqrt(yOnScale2 / yDotOnScale2));
+        if (h > getMaxStep()) {
+            h = getMaxStep();
+        }
         if (! forward) {
             h = -h;
         }
