@@ -646,6 +646,22 @@ public final class MatrixUtilsTest {
 
         UnitTestUtils.assertEquals("matrixExponential pade13-2 incorrect result",
                 expectedResult2, MatrixUtils.matrixExponential(exponent2), 65536.0 * Math.ulp(1e8));
+
+
+        double[][] exponentArr3 = {
+                {-1e4, 1e4},
+                {1.0, -1.0}
+        };
+        RealMatrix exponent3 = MatrixUtils.createRealMatrix(exponentArr3);
+
+        double[][] expectedResultArr3 = {
+                {9.99900009999e-05, 0.999900009999},
+                {9.99900009999e-05, 0.999900009999}
+        };
+        RealMatrix expectedResult3 = MatrixUtils.createRealMatrix(expectedResultArr3);
+
+        UnitTestUtils.assertEquals("matrixExponential pade13-3 incorrect result",
+                expectedResult3, MatrixUtils.matrixExponential(exponent3), 4096.0 * Math.ulp(1.0));
     }
 
     @Test
