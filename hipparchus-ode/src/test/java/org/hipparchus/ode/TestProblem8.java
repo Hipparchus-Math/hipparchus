@@ -163,9 +163,12 @@ public class TestProblem8 extends TestProblemAbstract {
 
         // in order to simplify implementation, we want the motion to be about axis 3
         // which is either the minimum or the maximum inertia axis
-        final double  o12               = omega0.getX() * omega0.getX();
-        final double  o22               = omega0.getY() * omega0.getY();
-        final double  o32               = omega0.getZ() * omega0.getZ();
+        final double  o1                = Vector3D.dotProduct(omega0, a1);
+        final double  o2                = Vector3D.dotProduct(omega0, a2);
+        final double  o3                = Vector3D.dotProduct(omega0, a3);
+        final double  o12               = o1 * o1;
+        final double  o22               = o2 * o2;
+        final double  o32               = o3 * o3;
         final double  twoE              = i1 * o12 + i2 * o22 + i3 * o32;
         final double  m2                = i1 * i1 * o12 + i2 * i2 * o22 + i3 * i3 * o32;
         final double  separatrixInertia = (twoE == 0) ? 0.0 : m2 / twoE;
