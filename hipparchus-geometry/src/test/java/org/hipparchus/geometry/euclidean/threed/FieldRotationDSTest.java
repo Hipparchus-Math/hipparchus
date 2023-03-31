@@ -27,7 +27,6 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
@@ -633,7 +632,10 @@ public class FieldRotationDSTest {
                 RotationOrder.YZX, RotationOrder.ZXY, RotationOrder.ZYX
             };
 
-            double[] singularCardanAngle = { FastMath.PI / 2, -FastMath.PI / 2 };
+            double[] singularCardanAngle = {
+                -FastMath.PI / 2, -FastMath.PI / 2 + 1.0e-12, -FastMath.PI / 2 + 1.0e-10,
+                FastMath.PI / 2 - 1.0e-10, FastMath.PI / 2 - 1.0e-12, FastMath.PI / 2
+           };
             for (int i = 0; i < CardanOrders.length; ++i) {
                 for (int j = 0; j < singularCardanAngle.length; ++j) {
                     FieldRotation<DerivativeStructure> r =
@@ -642,12 +644,7 @@ public class FieldRotationDSTest {
                                                                            factory.variable(0, 0.1),
                                                                            factory.variable(1, singularCardanAngle[j]),
                                                                            factory.variable(2, 0.3));
-                    try {
-                        r.getAngles(CardanOrders[i], convention);
-                        Assert.fail("an exception should have been caught");
-                    } catch (MathIllegalStateException cese) {
-                        Assert.assertEquals(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY, cese.getSpecifier());
-                    }
+                    Assert.assertEquals(singularCardanAngle[j], r.getAngles(CardanOrders[i], convention)[1].getReal(), 4.5e-16);
                 }
             }
 
@@ -656,7 +653,7 @@ public class FieldRotationDSTest {
                 RotationOrder.YZY, RotationOrder.ZXZ, RotationOrder.ZYZ
             };
 
-            double[] singularEulerAngle = { 0, FastMath.PI };
+            double[] singularEulerAngle = { 0, 1.0e-12, 1.0e-10, FastMath.PI - 1.0e-10, FastMath.PI - 1.0e-12, FastMath.PI };
             for (int i = 0; i < EulerOrders.length; ++i) {
                 for (int j = 0; j < singularEulerAngle.length; ++j) {
                     FieldRotation<DerivativeStructure> r =
@@ -665,12 +662,8 @@ public class FieldRotationDSTest {
                                                                            factory.variable(0, 0.1),
                                                                            factory.variable(1, singularEulerAngle[j]),
                                                                            factory.variable(2, 0.3));
-                    try {
-                        r.getAngles(EulerOrders[i], convention);
-                        Assert.fail("an exception should have been caught");
-                    } catch (MathIllegalStateException cese) {
-                        Assert.assertEquals(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY, cese.getSpecifier());
-                    }
+                    r.getAngles(EulerOrders[i], convention);
+                    Assert.assertEquals(singularEulerAngle[j],  r.getAngles(EulerOrders[i], convention)[1].getReal(), 1.0e-24);
                 }
             }
 

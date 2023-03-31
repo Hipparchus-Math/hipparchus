@@ -23,6 +23,7 @@
 package org.hipparchus.geometry.euclidean.threed;
 
 import java.io.Serializable;
+import java.util.function.Supplier;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
@@ -44,6 +45,11 @@ import org.hipparchus.util.MathArrays;
  */
 
 public class FieldRotation<T extends CalculusFieldElement<T>> implements Serializable {
+
+    /** Switch to safe computation of asin/acos.
+     * @since 3.0
+     */
+    private static final double SAFE_SWITCH = 0.999;
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20130224l;
@@ -541,11 +547,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 final // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
                 FieldVector3D<T> v1 = applyTo(vector(0, 0, 1));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(1, 0, 0));
-                if  ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-                }
                 return buildArray(v1.getY().negate().atan2(v1.getZ()),
-                                  v2.getZ().asin(),
+                                  safeAsin(v2, v2::getZ, v2::getX, v2::getY),
                                   v2.getY().negate().atan2(v2.getX()));
 
             } else if (order == RotationOrder.XZY) {
@@ -557,11 +560,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
                 final FieldVector3D<T> v1 = applyTo(vector(0, 1, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(1, 0, 0));
-                if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-                }
                 return buildArray(v1.getZ().atan2(v1.getY()),
-                                  v2.getY().asin().negate(),
+                                  safeAsin(v2, v2::getY, v2::getZ, v2::getX).negate(),
                                   v2.getZ().atan2(v2.getX()));
 
             } else if (order == RotationOrder.YXZ) {
@@ -573,11 +573,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
                 final FieldVector3D<T> v1 = applyTo(vector(0, 0, 1));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 1, 0));
-                if ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-                }
                 return buildArray(v1.getX().atan2(v1.getZ()),
-                                  v2.getZ().asin().negate(),
+                                  safeAsin(v2, v2::getZ, v2::getX, v2::getY).negate(),
                                   v2.getX().atan2(v2.getY()));
 
             } else if (order == RotationOrder.YZX) {
@@ -589,11 +586,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
                 final FieldVector3D<T> v1 = applyTo(vector(1, 0, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 1, 0));
-                if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-                }
                 return buildArray(v1.getZ().negate().atan2(v1.getX()),
-                                  v2.getX().asin(),
+                                  safeAsin(v2, v2::getX, v2::getY, v2::getZ),
                                   v2.getZ().negate().atan2(v2.getY()));
 
             } else if (order == RotationOrder.ZXY) {
@@ -605,11 +599,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
                 final FieldVector3D<T> v1 = applyTo(vector(0, 1, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 0, 1));
-                if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-                }
                 return buildArray(v1.getX().negate().atan2(v1.getY()),
-                                  v2.getY().asin(),
+                                  safeAsin(v2, v2::getY, v2::getZ, v2::getX),
                                   v2.getX().negate().atan2(v2.getZ()));
 
             } else if (order == RotationOrder.ZYX) {
@@ -621,11 +612,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
                 final FieldVector3D<T> v1 = applyTo(vector(1, 0, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 0, 1));
-                if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-                }
                 return buildArray(v1.getY().atan2(v1.getX()),
-                                  v2.getX().asin().negate(),
+                                  safeAsin(v2, v2::getX, v2::getY, v2::getZ).negate(),
                                   v2.getY().atan2(v2.getZ()));
 
             } else if (order == RotationOrder.XYX) {
@@ -637,11 +625,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have theta in the interval [0 ; PI]
                 final FieldVector3D<T> v1 = applyTo(vector(1, 0, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(1, 0, 0));
-                if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-                }
                 return buildArray(v1.getY().atan2(v1.getZ().negate()),
-                                  v2.getX().acos(),
+                                  safeAcos(v2, v2::getX, v2::getY, v2::getZ),
                                   v2.getY().atan2(v2.getZ()));
 
             } else if (order == RotationOrder.XZX) {
@@ -653,11 +638,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have psi in the interval [0 ; PI]
                 final FieldVector3D<T> v1 = applyTo(vector(1, 0, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(1, 0, 0));
-                if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-                }
                 return buildArray(v1.getZ().atan2(v1.getY()),
-                                  v2.getX().acos(),
+                                  safeAcos(v2, v2::getX, v2::getY, v2::getZ),
                                   v2.getZ().atan2(v2.getY().negate()));
 
             } else if (order == RotationOrder.YXY) {
@@ -669,11 +651,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have phi in the interval [0 ; PI]
                 final FieldVector3D<T> v1 = applyTo(vector(0, 1, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 1, 0));
-                if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-                }
                 return buildArray(v1.getX().atan2(v1.getZ()),
-                                  v2.getY().acos(),
+                                  safeAcos(v2, v2::getY, v2::getZ, v2::getX),
                                   v2.getX().atan2(v2.getZ().negate()));
 
             } else if (order == RotationOrder.YZY) {
@@ -685,11 +664,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have psi in the interval [0 ; PI]
                 final FieldVector3D<T> v1 = applyTo(vector(0, 1, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 1, 0));
-                if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-                }
                 return buildArray(v1.getZ().atan2(v1.getX().negate()),
-                                  v2.getY().acos(),
+                                  safeAcos(v2, v2::getY, v2::getZ, v2::getX),
                                   v2.getZ().atan2(v2.getX()));
 
             } else if (order == RotationOrder.ZXZ) {
@@ -701,11 +677,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have phi in the interval [0 ; PI]
                 final FieldVector3D<T> v1 = applyTo(vector(0, 0, 1));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 0, 1));
-                if ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-                }
                 return buildArray(v1.getX().atan2(v1.getY().negate()),
-                                  v2.getZ().acos(),
+                                  safeAcos(v2, v2::getZ, v2::getX, v2::getY),
                                   v2.getX().atan2(v2.getY()));
 
             } else { // last possibility is ZYZ
@@ -717,11 +690,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have theta in the interval [0 ; PI]
                 final FieldVector3D<T> v1 = applyTo(vector(0, 0, 1));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 0, 1));
-                if ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-                }
                 return buildArray(v1.getY().atan2(v1.getX()),
-                                  v2.getZ().acos(),
+                                  safeAcos(v2, v2::getZ, v2::getX, v2::getY),
                                   v2.getY().atan2(v2.getX().negate()));
 
             }
@@ -735,11 +705,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_I);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_K);
-                if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-                }
                 return buildArray(v2.getY().negate().atan2(v2.getZ()),
-                                  v2.getX().asin(),
+                                  safeAsin(v2, v2::getX, v2::getY, v2::getZ),
                                   v1.getY().negate().atan2(v1.getX()));
 
             } else if (order == RotationOrder.XZY) {
@@ -751,11 +718,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_I);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_J);
-                if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-                }
                 return buildArray(v2.getZ().atan2(v2.getY()),
-                                  v2.getX().asin().negate(),
+                                  safeAsin(v2, v2::getX, v2::getY, v2::getZ).negate(),
                                   v1.getZ().atan2(v1.getX()));
 
             } else if (order == RotationOrder.YXZ) {
@@ -767,11 +731,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_J);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_K);
-                if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-                }
                 return buildArray(v2.getX().atan2(v2.getZ()),
-                                  v2.getY().asin().negate(),
+                                  safeAsin(v2, v2::getY, v2::getZ, v2::getX).negate(),
                                   v1.getX().atan2(v1.getY()));
 
             } else if (order == RotationOrder.YZX) {
@@ -783,11 +744,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_J);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_I);
-                if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-                }
                 return buildArray(v2.getZ().negate().atan2(v2.getX()),
-                                  v2.getY().asin(),
+                                  safeAsin(v2, v2::getY, v2::getZ, v2::getX),
                                   v1.getZ().negate().atan2(v1.getY()));
 
             } else if (order == RotationOrder.ZXY) {
@@ -799,11 +757,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_K);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_J);
-                if ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-                }
                 return buildArray(v2.getX().negate().atan2(v2.getY()),
-                                  v2.getZ().asin(),
+                                  safeAsin(v2, v2::getZ, v2::getX, v2::getY),
                                   v1.getX().negate().atan2(v1.getZ()));
 
             } else if (order == RotationOrder.ZYX) {
@@ -815,11 +770,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_K);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_I);
-                if  ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-                }
                 return buildArray(v2.getY().atan2(v2.getX()),
-                                  v2.getZ().asin().negate(),
+                                  safeAsin(v2, v2::getZ, v2::getX, v2::getY).negate(),
                                   v1.getY().atan2(v1.getZ()));
 
             } else if (order == RotationOrder.XYX) {
@@ -831,11 +783,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have theta in the interval [0 ; PI]
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_I);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_I);
-                if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-                }
                 return buildArray(v2.getY().atan2(v2.getZ().negate()),
-                                  v2.getX().acos(),
+                                  safeAcos(v2, v2::getX, v2::getY, v2::getZ),
                                   v1.getY().atan2(v1.getZ()));
 
             } else if (order == RotationOrder.XZX) {
@@ -847,11 +796,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have psi in the interval [0 ; PI]
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_I);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_I);
-                if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-                }
                 return buildArray(v2.getZ().atan2(v2.getY()),
-                                  v2.getX().acos(),
+                                  safeAcos(v2, v2::getX, v2::getY, v2::getZ),
                                   v1.getZ().atan2(v1.getY().negate()));
 
             } else if (order == RotationOrder.YXY) {
@@ -863,11 +809,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have phi in the interval [0 ; PI]
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_J);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_J);
-                if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-                }
                 return buildArray(v2.getX().atan2(v2.getZ()),
-                                  v2.getY().acos(),
+                                  safeAcos(v2, v2::getY, v2::getZ, v2::getX),
                                   v1.getX().atan2(v1.getZ().negate()));
 
             } else if (order == RotationOrder.YZY) {
@@ -879,11 +822,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have psi in the interval [0 ; PI]
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_J);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_J);
-                if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-                }
                 return buildArray(v2.getZ().atan2(v2.getX().negate()),
-                                  v2.getY().acos(),
+                                  safeAcos(v2, v2::getY, v2::getZ, v2::getX),
                                   v1.getZ().atan2(v1.getX()));
 
             } else if (order == RotationOrder.ZXZ) {
@@ -895,11 +835,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have phi in the interval [0 ; PI]
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_K);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_K);
-                if ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-                }
                 return buildArray(v2.getX().atan2(v2.getY().negate()),
-                                  v2.getZ().acos(),
+                                  safeAcos(v2, v2::getZ, v2::getX, v2::getY),
                                   v1.getX().atan2(v1.getY()));
 
             } else { // last possibility is ZYZ
@@ -911,16 +848,65 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
                 // and we can choose to have theta in the interval [0 ; PI]
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_K);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_K);
-                if ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-                }
                 return buildArray(v2.getY().atan2(v2.getX()),
-                                  v2.getZ().acos(),
+                                  safeAcos(v2, v2::getZ, v2::getX, v2::getY),
                                   v1.getY().atan2(v1.getX().negate()));
 
             }
         }
 
+    }
+
+    /** Safe computation of acos(some vector coordinate) working around singularities.
+     * @param v vector
+     * @param cosGetter getter for the cosine coordinate
+     * @param sin1Getter getter for one of the sine coordinates
+     * @param sin2Getter getter for the other sine coordinate
+     * @param acos of the coordinate
+     * @since 3.0
+     */
+    private T safeAcos(final FieldVector3D<T> v,
+                       final Supplier<T> cosGetter,
+                       final Supplier<T> sin1Getter,
+                       final Supplier<T> sin2Getter) {
+        final T cos = cosGetter.get();
+        if (cos.getReal() < -SAFE_SWITCH) {
+            final T s1 = sin1Getter.get();
+            final T s2 = sin2Getter.get();
+            return FastMath.asin(FastMath.sqrt(s1.multiply(s1).add(s2.multiply(s2)))).subtract(s1.getPi()).negate();
+        } else if (cos.getReal() > SAFE_SWITCH) {
+            final T s1 = sin1Getter.get();
+            final T s2 = sin2Getter.get();
+            return FastMath.asin(FastMath.sqrt(s1.multiply(s1).add(s2.multiply(s2))));
+        } else {
+            return FastMath.acos(cos);
+        }
+    }
+
+    /** Safe computation of asin(some vector coordinate) working around singularities.
+     * @param v vector
+     * @param sinGetter getter for the sine coordinate
+     * @param cos1Getter getter for one of the cosine coordinates
+     * @param cos2Getter getter for the other cosine coordinate
+     * @param acos of the coordinate
+     * @since 3.0
+     */
+    private T safeAsin(final FieldVector3D<T> v,
+                       final Supplier<T> sinGetter,
+                       final Supplier<T> cos1Getter,
+                       final Supplier<T> cos2Getter) {
+        final T sin = sinGetter.get();
+        if (sin.getReal() < -SAFE_SWITCH) {
+            final T c1 = cos1Getter.get();
+            final T c2 = cos2Getter.get();
+            return FastMath.acos(FastMath.sqrt(c1.multiply(c1).add(c2.multiply(c2)))).negate();
+        } else if (sin.getReal() > SAFE_SWITCH) {
+            final T c1 = cos1Getter.get();
+            final T c2 = cos2Getter.get();
+            return FastMath.acos(FastMath.sqrt(c1.multiply(c1).add(c2.multiply(c2))));
+        } else {
+            return FastMath.asin(sin);
+        }
     }
 
     /** Create a dimension 3 array.

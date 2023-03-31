@@ -24,6 +24,7 @@ package org.hipparchus.migration.geometry.euclidean;
 
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
+import org.hipparchus.migration.LocalizedMigrationFormats;
 
 /** This class represents exceptions thrown while extractiong Cardan
  * or Euler angles from a rotation.
@@ -44,7 +45,7 @@ public class CardanEulerSingularityException
      * if false it is related to EulerAngles
      */
     public CardanEulerSingularityException(boolean isCardan) {
-        super(isCardan ? LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY : LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
+        super(isCardan ? LocalizedMigrationFormats.CARDAN_ANGLES_SINGULARITY : LocalizedMigrationFormats.EULER_ANGLES_SINGULARITY);
     }
 
 }
