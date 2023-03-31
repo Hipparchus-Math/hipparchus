@@ -48,12 +48,10 @@ public enum LocalizedGeometryFormats implements Localizable {
     // CHECKSTYLE: stop JavadocVariable
 
     CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR("cannot normalize a zero norm vector"),
-    CARDAN_ANGLES_SINGULARITY("Cardan angles singularity"),
     CLOSE_VERTICES("too close vertices near point ({0}, {1}, {2})"),
     CLOSEST_ORTHOGONAL_MATRIX_HAS_NEGATIVE_DETERMINANT("the closest orthogonal matrix has a negative determinant {0}"),
     CROSSING_BOUNDARY_LOOPS("some outline boundary loops cross each other"),
     EDGE_CONNECTED_TO_ONE_FACET("edge joining points ({0}, {1}, {2}) and ({3}, {4}, {5}) is connected to one facet only"),
-    EULER_ANGLES_SINGULARITY("Euler angles singularity"),
     FACET_ORIENTATION_MISMATCH("facets orientation mismatch around edge joining points ({0}, {1}, {2}) and ({3}, {4}, {5})"),
     INCONSISTENT_STATE_AT_2_PI_WRAPPING("inconsistent state at 2\u03c0 wrapping"),
     NON_INVERTIBLE_TRANSFORM("non-invertible affine transform collapses some lines into single points"),

@@ -17,12 +17,10 @@
 # It has been modified by the Hipparchus project
 
 CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR = impossible de normer un vecteur de norme nulle
-CARDAN_ANGLES_SINGULARITY = singularité d''angles de Cardan
 CLOSEST_ORTHOGONAL_MATRIX_HAS_NEGATIVE_DETERMINANT = la matrice orthogonale la plus proche a un déterminant négatif {0}
 CLOSE_VERTICES = sommets trop proches à proximité du point ({0}, {1}, {2})
 CROSSING_BOUNDARY_LOOPS = certains périmètres de frontières se croisent
 EDGE_CONNECTED_TO_ONE_FACET = l''arête joignant les points ({0}, {1}, {2}) et ({3}, {4}, {5}) n''est connectée qu''à une seule facette
-EULER_ANGLES_SINGULARITY = singularité d''angles d''Euler
 FACET_ORIENTATION_MISMATCH = orientations incohérentes des facettes de part et d''autre de l''arête joignant les points ({0}, {1}, {2}) et ({3}, {4}, {5})
 INCONSISTENT_STATE_AT_2_PI_WRAPPING = état incohérent au niveau du recollement à 2π
 NON_INVERTIBLE_TRANSFORM = la transformation affine non-inversible réduit des lignes à de simples points
