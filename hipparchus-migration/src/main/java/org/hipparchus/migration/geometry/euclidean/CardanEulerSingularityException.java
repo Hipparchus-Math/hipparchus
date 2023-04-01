@@ -23,7 +23,6 @@
 package org.hipparchus.migration.geometry.euclidean;
 
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.migration.LocalizedMigrationFormats;
 
 /** This class represents exceptions thrown while extractiong Cardan
