@@ -27,11 +27,13 @@ import java.text.NumberFormat;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
+import org.hipparchus.analysis.polynomials.SmoothStepFactory;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.FieldBlendable;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
 
@@ -40,7 +42,7 @@ import org.hipparchus.util.MathArrays;
  * <p>Instance of this class are guaranteed to be immutable.</p>
  * @param <T> the type of the field elements
  */
-public class FieldVector3D<T extends CalculusFieldElement<T>> implements Serializable {
+public class FieldVector3D<T extends CalculusFieldElement<T>> implements FieldBlendable<FieldVector3D<T>, T>, Serializable {
 
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20130224L;
@@ -1276,4 +1278,12 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements Seriali
         return new Vector3DFormat(format).format(toVector3D());
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldVector3D<T> blendArithmeticallyWith(final FieldVector3D<T> other, final T blendingValue)
+            throws MathIllegalArgumentException {
+        SmoothStepFactory.checkBetweenZeroAndOneIncluded(blendingValue.getReal());
+        final T one = x.getField().getOne();
+        return this.scalarMultiply(one.subtract(blendingValue)).add(other.scalarMultiply(blendingValue));
+    }
 }

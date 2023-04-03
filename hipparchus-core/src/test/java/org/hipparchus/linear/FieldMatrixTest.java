@@ -16,6 +16,7 @@
  */
 package org.hipparchus.linear;
 
+import org.hipparchus.Field;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.junit.Assert;
@@ -76,6 +77,35 @@ public class FieldMatrixTest {
                 return Binary64Field.getInstance().getZero();
             }
         });
+    }
+
+    @Test
+    public void testArithmeticalBlending() {
+        // Given
+        final Field<Binary64> field = Binary64Field.getInstance();
+
+        final FieldMatrix<Binary64> matrix1 = MatrixUtils.createFieldMatrix(field, 2, 2);
+        matrix1.setEntry(0, 0, new Binary64(1));
+        matrix1.setEntry(0, 1, new Binary64(2));
+        matrix1.setEntry(1, 0, new Binary64(3));
+        matrix1.setEntry(1, 1, new Binary64(4));
+
+        final FieldMatrix<Binary64> matrix2 = MatrixUtils.createFieldMatrix(field, 2, 2);
+        matrix2.setEntry(0, 0, new Binary64(2));
+        matrix2.setEntry(0, 1, new Binary64(4));
+        matrix2.setEntry(1, 0, new Binary64(9));
+        matrix2.setEntry(1, 1, new Binary64(16));
+
+        final Binary64 blendingValue = new Binary64(0.65);
+
+        // When
+        final FieldMatrix<Binary64> blendedMatrix = matrix1.blendArithmeticallyWith(matrix2, blendingValue);
+
+        // Then
+        Assert.assertEquals(1.65 , blendedMatrix.getEntry(0,0).getReal(), 1.0e-15);
+        Assert.assertEquals(3.3  , blendedMatrix.getEntry(0,1).getReal(), 1.0e-15);
+        Assert.assertEquals(6.9  , blendedMatrix.getEntry(1,0).getReal(), 1.0e-15);
+        Assert.assertEquals(11.8 , blendedMatrix.getEntry(1,1).getReal(), 1.0e-15);
     }
 
     // local class that does NOT override multiplyTransposed nor transposeMultiply nor map nor mapToSelf

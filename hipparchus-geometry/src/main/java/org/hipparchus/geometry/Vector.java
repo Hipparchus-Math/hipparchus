@@ -157,6 +157,7 @@ public interface Vector<S extends Space, V extends Vector<S,V>> extends Point<S>
      */
     String toString(NumberFormat format);
 
+    /** {@inheritDoc} */
     @Override
     default V blendArithmeticallyWith(Vector<S,V> other, double blendingValue)
             throws MathIllegalArgumentException {
