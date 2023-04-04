@@ -96,6 +96,42 @@ public class SmoothStepFactoryTest {
     }
 
     @Test
+    public void testQuadraticFunction1() {
+
+        // Given
+        final double leftEdge  = 5;
+        final double rightEdge = 10;
+        final double x         = 7;
+
+        final SmoothStepFactory.SmoothStepFunction quadratic = SmoothStepFactory.getQuadratic();
+
+        // When
+        final double computedResult = quadratic.value(leftEdge, rightEdge, x);
+
+        // Then
+        Assert.assertEquals(0.32, computedResult, THRESHOLD);
+
+    }
+
+    @Test
+    public void testQuadraticFunction2() {
+
+        // Given
+        final double leftEdge  = 5;
+        final double rightEdge = 10;
+        final double x         = 8;
+
+        final SmoothStepFactory.SmoothStepFunction quadratic = SmoothStepFactory.getQuadratic();
+
+        // When
+        final double computedResult = quadratic.value(leftEdge, rightEdge, x);
+
+        // Then
+        Assert.assertEquals(0.68, computedResult, THRESHOLD);
+
+    }
+
+    @Test
     public void testCubicFunction() {
 
         // Given
@@ -136,9 +172,9 @@ public class SmoothStepFactoryTest {
         // Given
         final Field<Binary64> field = Binary64Field.getInstance();
 
-        final double                                              leftEdge   = 5;
-        final double                                              rightEdge  = 2;
-        final Binary64                                            x          = new Binary64(3);
+        final double   leftEdge  = 5;
+        final double   rightEdge = 2;
+        final Binary64 x         = new Binary64(3);
         final SmoothStepFactory.FieldSmoothStepFunction<Binary64> smoothstep =
                 SmoothStepFactory.getFieldGeneralOrder(field, 1);
 
@@ -204,6 +240,49 @@ public class SmoothStepFactoryTest {
     }
 
     @Test
+    public void testFieldQuadraticFunction1() {
+
+        // Given
+        final Field<Binary64> field     = Binary64Field.getInstance();
+        final double          leftEdge  = 5;
+        final double          rightEdge = 10;
+        final double          x         = 7;
+        final Binary64        xField    = new Binary64(x);
+
+        final SmoothStepFactory.FieldSmoothStepFunction<Binary64> quadratic = SmoothStepFactory.getQuadratic(field);
+
+        // When
+        final Binary64 computedResult  = quadratic.value(leftEdge, rightEdge, xField);
+        final Binary64 computedResult2 = quadratic.value((x - leftEdge) / (rightEdge - leftEdge));
+
+        // Then
+        Assert.assertEquals(0.32, computedResult.getReal(), THRESHOLD);
+        Assert.assertEquals(computedResult.getReal(), computedResult2.getReal(), THRESHOLD);
+
+    }
+
+    @Test
+    public void testFieldQuadraticFunction2() {
+
+        // Given
+        final Field<Binary64> field     = Binary64Field.getInstance();
+        final double          leftEdge  = 5;
+        final double          rightEdge = 10;
+        final double          x         = 8;
+        final Binary64        xField    = new Binary64(x);
+
+        final SmoothStepFactory.FieldSmoothStepFunction<Binary64> quadratic = SmoothStepFactory.getQuadratic(field);
+
+        final Binary64 computedResult  = quadratic.value(leftEdge, rightEdge, xField);
+        final Binary64 computedResult2 = quadratic.value((x - leftEdge) / (rightEdge - leftEdge));
+
+        // Then
+        Assert.assertEquals(0.68, computedResult.getReal(), THRESHOLD);
+        Assert.assertEquals(computedResult.getReal(), computedResult2.getReal(), THRESHOLD);
+
+    }
+
+    @Test
     public void testFieldCubicFunction() {
 
         // Given
@@ -226,19 +305,24 @@ public class SmoothStepFactoryTest {
     public void testFieldQuinticFunction() {
 
         // Given
-        final Field<Binary64> field     = Binary64Field.getInstance();
-        final double          leftEdge  = 5;
-        final double          rightEdge = 10;
-        final Binary64        x         = new Binary64(7);
+        final Field<Binary64> field       = Binary64Field.getInstance();
+        final double          leftEdge    = 5;
+        final double          rightEdge   = 10;
+        final double          x           = 7;
+        final double          xNormalized = (x - leftEdge) / (rightEdge - leftEdge);
+        final Binary64        xField      = new Binary64(x);
 
         final SmoothStepFactory.FieldSmoothStepFunction<Binary64> quintic = SmoothStepFactory.getQuintic(field);
 
         // When
-        final Binary64 computedResult = quintic.value(leftEdge, rightEdge, x);
+        final Binary64 computedResult  = quintic.value(leftEdge, rightEdge, xField);
+        final Binary64 computedResult2 = quintic.value(xNormalized);
+        final Binary64 computedResult3 = quintic.value(new Binary64(xNormalized));
 
         // Then
         Assert.assertEquals(0.31744, computedResult.getReal(), THRESHOLD);
-
+        Assert.assertEquals(computedResult.getReal(), computedResult2.getReal(), THRESHOLD);
+        Assert.assertEquals(computedResult2.getReal(), computedResult3.getReal(), THRESHOLD);
     }
 
 }
