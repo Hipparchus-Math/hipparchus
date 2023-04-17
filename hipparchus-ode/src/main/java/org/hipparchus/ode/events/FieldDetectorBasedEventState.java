@@ -206,28 +206,6 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
 
     }
 
-    /**
-     * Get the larger of two numbers.
-     *
-     * @param a first number.
-     * @param b second number.
-     * @return the larger of a and b.
-     */
-    private T max(T a, T b) {
-        return a.getReal() > b.getReal() ? a : b;
-    }
-
-    /**
-     * Get the smaller of two numbers.
-     *
-     * @param a first number.
-     * @param b second number.
-     * @return the smaller of a and b.
-     */
-    private T min(T a, T b) {
-        return a.getReal() < b.getReal() ? a : b;
-    }
-
     /** Evaluate the impact of the proposed step on the event handler.
      * @param interpolator step interpolator for the proposed step
      * @return true if the event handler triggers an event before
@@ -577,7 +555,7 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
      * @return min(a, b) if forward, else max (a, b)
      */
     private T minTime(final T a, final T b) {
-        return forward ? min(a, b) : max(a, b);
+        return forward ? FastMath.min(a, b) : FastMath.max(a, b);
     }
 
     /**
