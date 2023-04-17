@@ -27,8 +27,10 @@ import java.util.function.Function;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
+import org.hipparchus.analysis.polynomials.SmoothStepFactory;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.util.FieldBlendable;
 
 /**
  * Interface defining field-valued matrix with basic algebraic operations.
@@ -38,7 +40,7 @@ import org.hipparchus.exception.NullArgumentException;
  *
  * @param <T> the type of the field elements
  */
-public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
+public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix, FieldBlendable<FieldMatrix<T>, T> {
     /**
      * Get the type of field elements of the matrix.
      *
@@ -168,6 +170,14 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @throws MathIllegalArgumentException if {@code this matrix} is not square
      */
     FieldMatrix<T> power(int p) throws MathIllegalArgumentException;
+
+    /** {@inheritDoc} */
+    @Override
+    default FieldMatrix<T> blendArithmeticallyWith(final FieldMatrix<T> other, final T blendingValue) {
+        SmoothStepFactory.checkBetweenZeroAndOneIncluded(blendingValue.getReal());
+        return this.scalarMultiply(getField().getOne().subtract(blendingValue))
+                   .add(other.scalarMultiply(blendingValue));
+    }
 
     /**
      * Returns matrix entries as a two-dimensional array.

@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.0" date="TBD" description="This is a major release.">
+      <action dev="vincent" type="add" issue="issues/244">
+        Added field version of Blendable interface method (implemented in FieldMatrix and FieldVector3D)
+        Added field version of smoothstep function in SmoothStepFactory
+      </action>
       <action dev="luc" type="update" issue="issues/243">
         Improve management of Cardan/Euler rotations close to singularity.
       </action>
