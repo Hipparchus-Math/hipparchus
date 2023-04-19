@@ -121,7 +121,8 @@ public interface FieldODEEventDetector<T extends CalculusFieldElement<T>>  {
      * event {@code g(state)} would be increasing from 0 to positive values again.
      * Consistency is broken here! The solution here is to have {@code g(state) = sign
      * * h(state)}, where sign is a variable with initial value set to {@code +1}. Each
-     * time {@link #eventOccurred(FieldODEStateAndDerivative, boolean) eventOccurred}
+     * time {@link FieldODEEventHandler#eventOccurred(FieldODEStateAndDerivative,
+     * FieldODEEventDetector, boolean) eventOccurred}
      * method is called, {@code sign} is reset to {@code -sign}. This allows the
      * {@code g(state)} function to remain continuous (and even smooth) even across events,
      * despite {@code h(state)} is not. Basically, the event is used to <em>fold</em>
@@ -131,12 +132,13 @@ public interface FieldODEEventDetector<T extends CalculusFieldElement<T>>  {
      *
      * <p>This method is idempotent, that is calling this multiple times with the same
      * state will result in the same value, with two exceptions. First, the definition of
-     * the g function may change when an {@link #eventOccurred(FieldODEStateAndDerivative,
-     * boolean) event occurs} on this handler, as in the above example. Second, the
+     * the g function may change when an {@link
+     * FieldODEEventHandler#eventOccurred(FieldODEStateAndDerivative, FieldODEEventDetector,
+     * boolean) event occurs} on the handler, as in the above example. Second, the
      * definition of the g function may change when the {@link
-     * #eventOccurred(FieldODEStateAndDerivative, boolean) eventOccurred} method of any
-     * other event handler in the same integrator returns {@link Action#RESET_EVENTS},
-     * {@link Action#RESET_DERIVATIVES}, or {@link Action#RESET_STATE}.
+     * FieldODEEventHandler#eventOccurred(FieldODEStateAndDerivative, FieldODEEventDetector,
+     * boolean) event occurs} method of any other event handler in the same integrator returns
+     * {@link Action#RESET_EVENTS}, {@link Action#RESET_DERIVATIVES}, or {@link Action#RESET_STATE}.
      *
      * @param state current value of the independent <i>time</i> variable, state vector
      * and derivative

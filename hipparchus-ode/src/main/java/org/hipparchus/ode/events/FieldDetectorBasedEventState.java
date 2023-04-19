@@ -471,8 +471,8 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
 
     /**
      * Notify the user's listener of the event. The event occurs wholly within this method
-     * call including a call to {@link FieldODEEventHandler#resetState(FieldODEStateAndDerivative)}
-     * if necessary.
+     * call including a call to {@link FieldODEEventHandler#resetState(FieldODEEventDetector,
+     * FieldODEStateAndDerivative)} if necessary.
      *
      * @param state the state at the time of the event. This must be at the same time as
      *              the current value of {@link #getEventTime()}.

@@ -128,8 +128,8 @@ public interface FieldODEEventHandler<T extends CalculusFieldElement<T>>  {
 
      * <p>This method is called after the step handler has returned and
      * before the next step is started, but only when {@link
-     * #eventOccurred(FieldODEStateAndDerivative, boolean) eventOccurred} has itself
-     * returned the {@link Action#RESET_STATE} indicator. It allows the user to reset
+     * #eventOccurred(FieldODEStateAndDerivative, FieldODEEventDetector, boolean) eventOccurred}
+     * has itself returned the {@link Action#RESET_STATE} indicator. It allows the user to reset
      * the state vector for the next step, without perturbing the step handler of the
      * finishing step.</p>
      * <p>The default implementation returns its argument.</p>
