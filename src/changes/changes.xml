@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.0" date="TBD" description="This is a major release.">
+      <action dev="luc" type="fix" issue="issues/249">
+        Generate zero vectors in OrderedComplexEigenDecomposition when the number
+        of eigenvectors is smaller than the dimension.
+      </action>
       <action dev="luc" type="fix" issue="issues/248">
         Allow customization of eigen value ordering in OrderedComplexEigenDecomposition.
       </action>

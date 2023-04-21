@@ -337,6 +337,16 @@ public class ComplexEigenDecomposition {
                 }
             }
 
+            if (eigenvectors[i] == null) {
+                // for consistency with Wolfram langage
+                // https://reference.wolfram.com/language/ref/Eigenvectors.html
+                // we add zero vectors when the geometric multiplicity of the eigenvalue
+                // is smaller than its algebraic multiplicity (hence the regular eigenvector
+                // matrix should be non-square). With these additional null vectors, the
+                // eigenvectors matrix becomes square
+                eigenvectors[i] = MatrixUtils.createFieldVector(ComplexField.getInstance(), n);
+            }
+
         }
     }
 
