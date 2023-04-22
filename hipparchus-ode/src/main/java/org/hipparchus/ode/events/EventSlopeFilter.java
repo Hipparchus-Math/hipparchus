@@ -31,8 +31,8 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 
 /** Wrapper used to detect only increasing or decreasing events.
  *
- * <p>General {@link ODEEventHandler events} are defined implicitly
- * by a {@link ODEEventHandler#g(ODEStateAndDerivative) g function} crossing
+ * <p>General {@link ODEEventDetector events} are defined implicitly
+ * by a {@link ODEEventDetector#g(ODEStateAndDerivative) g function} crossing
  * zero. This function needs to be continuous in the event neighborhood,
  * and its sign must remain consistent between events. This implies that
  * during an ODE integration, events triggered are alternately events
@@ -46,18 +46,18 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * cases, looking precisely for all events location and triggering
  * events that will later be ignored is a waste of computing time.</p>
  *
- * <p>Users can wrap a regular {@link ODEEventHandler event handler} in
+ * <p>Users can wrap a regular {@link ODEEventDetector event detector} in
  * an instance of this class and provide this wrapping instance to
  * the {@link org.hipparchus.ode.ODEIntegrator ODE solver}
  * in order to avoid wasting time looking for uninteresting events.
  * The wrapper will intercept the calls to the {@link
- * ODEEventHandler#g(ODEStateAndDerivative) g function} and to the {@link
- * ODEEventHandler#eventOccurred(ODEStateAndDerivative, boolean)
+ * ODEEventDetector#g(ODEStateAndDerivative) g function} and to the {@link
+ * ODEEventHandler#eventOccurred(ODEStateAndDerivative, ODEEventDetector, boolean)
  * eventOccurred} method in order to ignore uninteresting events. The
  * wrapped regular {@link ODEEventHandler event handler} will the see only
  * the interesting events, i.e. either only {@code increasing} events or
  * {@code decreasing} events. the number of calls to the {@link
- * ODEEventHandler#g(ODEStateAndDerivative) g function} will also be reduced.</p>
+ * ODEEventDetector#g(ODEStateAndDerivative) g function} will also be reduced.</p>
  * @param <T> type of the event detector
  * @since 3.0
  */

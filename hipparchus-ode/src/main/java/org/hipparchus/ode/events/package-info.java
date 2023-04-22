@@ -30,8 +30,10 @@
  *
  * <p>
  * Discrete events detection is based on switching functions. The user provides
- * a simple {@link org.hipparchus.ode.events.ODEEventHandler#g(org.hipparchus.ode.ODEStateAndDerivative)
- * g(state)} function depending on the current time and state. The integrator will monitor
+ * a simple {@link org.hipparchus.ode.events.ODEEventDetector#g(org.hipparchus.ode.ODEStateAndDerivative)
+ * g(state)} function depending on the current time and state in a detector object and a
+ * {@link org.hipparchus.ode.events.ODEEventHandler#eventOccurred(org.hipparchus.ode.ODEStateAndDerivative,
+ * ODEEventDetector, boolean) handler function} in a handler object. The integrator will monitor
  * the value of the function throughout integration range and will trigger the
  * event when its sign changes. The magnitude of the value is almost irrelevant,
  * it should however be continuous (but not necessarily smooth) for the sake of
@@ -53,13 +55,15 @@
  * ODE must be solved up to some target state is reached, with a known value of
  * the state but an unknown occurrence time. As an example, if we want to monitor
  * a chemical reaction up to some predefined concentration for the first substance,
- * we can use the following switching function setting:
+ * we can use the following switching function setting in the detector:
  * <pre>
  *  public double g(final ODEStateAndDerivative state) {
  *    return state.getState()[0] - targetConcentration;
  *  }
- *
- *  public Action eventOccurred(final ODEStateAndDerivative state, final boolean increasing) {
+ * </pre>
+ * and the following setting in the event handler:
+ * <pre>
+ *  public Action eventOccurred(final ODEStateAndDerivative state, final ODEEventDetector detector, final boolean increasing) {
  *    return STOP;
  *  }
  * </pre>
@@ -77,8 +81,10 @@
  *  public double g(final ODEStateAndDerivative state) {
  *    return (state.getTime() - tManeuverStart) &lowast; (state.getTime() - tManeuverStop);
  *  }
- *
- *  public Action eventOccurred(final ODEStateAndDerivative state, final boolean increasing) {
+ * </pre>
+ * and the following setting in the event handler:
+ * <pre>
+ *  public Action eventOccurred(final ODEStateAndDerivative state, final ODEEventDetector detector, final boolean increasing) {
  *    return RESET_DERIVATIVES;
  *  }
  * </pre>
@@ -91,8 +97,10 @@
  *  final double[] y = state.getState();
  *    return y[0] - y[1];
  *  }
- *
- *  public Action eventOccurred(final ODEStateAndDerivative state, final boolean increasing) {
+ * </pre>
+ * and the following setting in the event handler:
+ * <pre>
+ *  public Action eventOccurred(final ODEStateAndDerivative state, final ODEEventDetector detector, final boolean increasing) {
  *    logger.log("y0(t) and y1(t) curves cross at t = " + t);
  *    return CONTINUE;
  *  }
@@ -115,18 +123,19 @@
  *     <li> For a given tolerance, h, and root, r, the event may occur at any point on the
  *     interval [r-h, r+h]. The tolerance is the larger of the {@code convergence}
  *     parameter and the convergence settings of the root finder specified when
- *     {@link org.hipparchus.ode.ODEIntegrator#addEventHandler(org.hipparchus.ode.events.ODEEventHandler, double, double, int, org.hipparchus.analysis.solvers.BracketedUnivariateSolver) adding}
- *     the event handler. </li>
+ *     {@link org.hipparchus.ode.ODEIntegrator#addEventDetector(ODEEventDetector) adding}
+ *     the event detector. </li>
  *     <li> At most one event is triggered per root. </li>
  *     <li> Events from the same event detector must alternate between increasing and
  *     decreasing events. That is, for every pair of increasing events there must exist an
  *     intervening decreasing event and vice-versa. </li>
  *     <li> An event starts occurring when the
- *     {@link org.hipparchus.ode.events.ODEEventHandler#eventOccurred(org.hipparchus.ode.ODEStateAndDerivative, boolean) eventOccurred()}
+ *     {@link org.hipparchus.ode.events.ODEEventHandler#eventOccurred(org.hipparchus.ode.ODEStateAndDerivative,
+ *     ODEEventDetector, boolean) eventOccured()}
  *     method is called. An event stops occurring when eventOccurred() returns or when the
  *     handler's
- *     {@link org.hipparchus.ode.events.ODEEventHandler#resetState(org.hipparchus.ode.ODEStateAndDerivative) resetState()}
- *     method returns if eventOccured() returned
+ *     {@link org.hipparchus.ode.events.ODEEventHandler#resetState(ODEEventDetector,
+ *     org.hipparchus.ode.ODEStateAndDerivative) resetState()} method returns if eventOccured() returned
  *     {@link org.hipparchus.ode.events.Action#RESET_STATE RESET_STATE}. </li>
  *     <li> If event A happens before event B then the effects of A occurring are visible
  *     to B. (Including resetting the state or derivatives, or stopping) </li>

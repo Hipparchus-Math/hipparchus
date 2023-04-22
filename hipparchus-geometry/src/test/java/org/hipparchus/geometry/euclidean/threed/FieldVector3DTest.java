@@ -725,6 +725,23 @@ public class FieldVector3DTest {
         }
     }
 
+    @Test
+    public void testArithmeticalBlending(){
+        // Given
+        final FieldVector3D<Binary64> vector1 = new FieldVector3D<>(new Binary64(1), new Binary64(2), new Binary64(3));
+        final FieldVector3D<Binary64> vector2 = new FieldVector3D<>(new Binary64(2), new Binary64(4), new Binary64(9));
+
+        final Binary64 blendingValue = new Binary64(0.65);
+
+        // When
+        final FieldVector3D<Binary64> blendedVector = vector1.blendArithmeticallyWith(vector2, blendingValue);
+
+        // Then
+        Assert.assertEquals(1.65, blendedVector.getX().getReal(), 1.0e-15);
+        Assert.assertEquals(3.3 , blendedVector.getY().getReal(), 1.0e-15);
+        Assert.assertEquals(6.9 , blendedVector.getZ().getReal(), 1.0e-15);
+    }
+
     private FieldVector3D<DerivativeStructure> createVector(double x, double y, double z, int params) {
         DSFactory factory = new DSFactory(params, 1);
         return new FieldVector3D<>(factory.variable(0, x),

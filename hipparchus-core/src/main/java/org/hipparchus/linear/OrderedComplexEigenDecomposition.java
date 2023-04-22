@@ -17,6 +17,7 @@
 package org.hipparchus.linear;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 import org.hipparchus.complex.Complex;
 
@@ -50,6 +51,11 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
      * a new inverse iteration with a different start vector. This value should be
      * much larger than {@code epsilon} which is used for convergence
      * </p>
+     * <p>
+     * This constructor calls {@link #OrderedComplexEigenDecomposition(RealMatrix, double,
+     * double, double, Comparator)} with a comparator using real ordering as the primary
+     * sort order and imaginary ordering as the secondary sort order..
+     * </>
      * @param matrix real matrix.
      * @param eigenVectorsEquality threshold below which eigenvectors are considered equal
      * @param epsilon Epsilon used for internal tests (e.g. is singular, eigenvalue ratio, etc.)
@@ -58,6 +64,37 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
      */
     public OrderedComplexEigenDecomposition(final RealMatrix matrix, final double eigenVectorsEquality,
                                             final double epsilon, final double epsilonAVVDCheck) {
+        this(matrix, eigenVectorsEquality, epsilon, epsilonAVVDCheck,
+             (c1, c2) -> {
+                 final int cR = Double.compare(c1.getReal(), c2.getReal());
+                 if (cR == 0) {
+                     return Double.compare(c1.getImaginary(), c2.getImaginary());
+                 } else {
+                     return cR;
+                 }
+             });
+    }
+
+    /**
+     * Constructor for decomposition.
+     * <p>
+     * The {@code eigenVectorsEquality} threshold is used to ensure the L∞-normalized
+     * eigenvectors found using inverse iteration are different from each other.
+     * if \(min(|e_i-e_j|,|e_i+e_j|)\) is smaller than this threshold, the algorithm
+     * considers it has found again an already known vector, so it drops it and attempts
+     * a new inverse iteration with a different start vector. This value should be
+     * much larger than {@code epsilon} which is used for convergence
+     * </p>
+     * @param matrix real matrix.
+     * @param eigenVectorsEquality threshold below which eigenvectors are considered equal
+     * @param epsilon Epsilon used for internal tests (e.g. is singular, eigenvalue ratio, etc.)
+     * @param epsilonAVVDCheck Epsilon criteria for final AV=VD check
+     * @param eigenValuesComparator comparator for sorting eigen values
+     * @since 3.0
+     */
+    public OrderedComplexEigenDecomposition(final RealMatrix matrix, final double eigenVectorsEquality,
+                                            final double epsilon, final double epsilonAVVDCheck,
+                                            final Comparator<Complex> eigenValuesComparator) {
         super(matrix, eigenVectorsEquality, epsilon, epsilonAVVDCheck);
         final FieldMatrix<Complex> D = this.getD();
         final FieldMatrix<Complex> V = this.getV();
@@ -69,7 +106,7 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
         }
 
         // ordering
-        Arrays.sort(eigenValues);
+        Arrays.sort(eigenValues, (v1, v2) -> eigenValuesComparator.compare(v1.eigenValue, v2.eigenValue));
         for (int ij = 0; ij < matrix.getRowDimension() - 1; ij++) {
             final IndexedEigenvalue eij = eigenValues[ij];
 
@@ -112,7 +149,7 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
     }
 
     /** Container for index and eigenvalue pair. */
-    private static class IndexedEigenvalue implements Comparable<IndexedEigenvalue> {
+    private static class IndexedEigenvalue {
 
         /** Index in the diagonal matrix. */
         private int index;
@@ -127,22 +164,6 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
         IndexedEigenvalue(final int index, final Complex eigenvalue) {
             this.index      = index;
             this.eigenValue = eigenvalue;
-        }
-
-        /** {@inheritDoc}
-         * <p>
-         * Ordering uses real ordering as the primary sort order and
-         * imaginary ordering as the secondary sort order.
-         * </p>
-         */
-        @Override
-        public int compareTo(final IndexedEigenvalue other) {
-            final int cR = Double.compare(eigenValue.getReal(), other.eigenValue.getReal());
-            if (cR == 0) {
-                return Double.compare(eigenValue.getImaginary(),other.eigenValue.getImaginary());
-            } else {
-                return cR;
-            }
         }
 
         /** {@inheritDoc} */

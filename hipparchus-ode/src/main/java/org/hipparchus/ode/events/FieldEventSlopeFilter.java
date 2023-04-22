@@ -33,8 +33,8 @@ import org.hipparchus.util.MathArrays;
 
 /** Wrapper used to detect only increasing or decreasing events.
  *
- * <p>General {@link FieldODEEventHandler events} are defined implicitly
- * by a {@link FieldODEEventHandler#g(FieldODEStateAndDerivative) g function} crossing
+ * <p>General {@link FieldODEEventDetector events} are defined implicitly
+ * by a {@link FieldODEEventDetector#g(FieldODEStateAndDerivative) g function} crossing
  * zero. This function needs to be continuous in the event neighborhood,
  * and its sign must remain consistent between events. This implies that
  * during an ODE integration, events triggered are alternately events
@@ -48,18 +48,18 @@ import org.hipparchus.util.MathArrays;
  * cases, looking precisely for all events location and triggering
  * events that will later be ignored is a waste of computing time.</p>
  *
- * <p>Users can wrap a regular {@link FieldODEEventHandler event handler} in
+ * <p>Users can wrap a regular {@link FieldODEEventDetector event detector} in
  * an instance of this class and provide this wrapping instance to
  * the {@link org.hipparchus.ode.FieldODEIntegrator ODE solver}
  * in order to avoid wasting time looking for uninteresting events.
  * The wrapper will intercept the calls to the {@link
- * FieldODEEventHandler#g(FieldODEStateAndDerivative) g function} and to the {@link
- * FieldODEEventHandler#eventOccurred(FieldODEStateAndDerivative, boolean)
+ * FieldODEEventDetector#g(FieldODEStateAndDerivative) g function} and to the {@link
+ * FieldODEEventHandler#eventOccurred(FieldODEStateAndDerivative, FieldODEEventDetector, boolean)
  * eventOccurred} method in order to ignore uninteresting events. The
- * wrapped regular {@link FieldODEEventHandler event handler} will the see only
+ * wrapped regular {@link FieldODEEventDetector event detector} will the see only
  * the interesting events, i.e. either only {@code increasing} events or
  * {@code decreasing} events. the number of calls to the {@link
- * FieldODEEventHandler#g(FieldODEStateAndDerivative) g function} will also be reduced.</p>
+ * FieldODEEventDetector#g(FieldODEStateAndDerivative) g function} will also be reduced.</p>
  *
  * @param <T> type of the event detector
  * @param <E> the type of the field elements
