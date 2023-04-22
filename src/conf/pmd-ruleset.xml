@@ -32,7 +32,6 @@
   <rule ref="category/java/errorprone.xml">
 
     <exclude name="AvoidLiteralsInIfCondition"/>
-    <exclude name="BeanMembersShouldSerialize"/>
     <exclude name="AvoidFieldNameMatchingMethodName"/>
     <exclude name="NullAssignment"/>
     <exclude name="ConstructorCallsOverridableMethod"/>
