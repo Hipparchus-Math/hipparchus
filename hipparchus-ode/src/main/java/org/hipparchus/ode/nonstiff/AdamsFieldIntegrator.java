@@ -240,9 +240,9 @@ public abstract class AdamsFieldIntegrator<T extends CalculusFieldElement<T>> ex
 
     /** Update the high order scaled derivatives for Adams integrators (phase 1).
      * <p>The complete update of high order derivatives has a form similar to:
-     * <pre>
-     * r<sub>n+1</sub> = (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u + P<sup>-1</sup> A P r<sub>n</sub>
-     * </pre>
+     * \[
+     * r_{n+1} = (s_1(n) - s_1(n+1)) P^{-1} u + P^{-1} A P r_n
+     * \]
      * this method computes the P<sup>-1</sup> A P r<sub>n</sub> part.</p>
      * @param highOrder high order scaled derivatives
      * (h<sup>2</sup>/2 y'', ... h<sup>k</sup>/k! y(k))
@@ -255,9 +255,9 @@ public abstract class AdamsFieldIntegrator<T extends CalculusFieldElement<T>> ex
 
     /** Update the high order scaled derivatives Adams integrators (phase 2).
      * <p>The complete update of high order derivatives has a form similar to:
-     * <pre>
-     * r<sub>n+1</sub> = (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u + P<sup>-1</sup> A P r<sub>n</sub>
-     * </pre>
+     * \[
+     * r_{n+1} = (s_1(n) - s_1(n+1)) P^{-1} u + P^{-1} A P r_n
+     * \]
      * this method computes the (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u part.</p>
      * <p>Phase 1 of the update must already have been performed.</p>
      * @param start first order scaled derivatives at step start

@@ -81,14 +81,13 @@ public class BinomialTest {
      * (0 success and n success where n is the number of trials from the sample) and determine their likelihood.
      * The lower value is added to the p-Value (if both values are equal, both are added). Then we continue with
      * the next extreme value, until we added the value for the actual observed sample.</p>
-     * <p>
-     * <strong>Preconditions</strong>:
+     * <p>* <strong>Preconditions</strong>:</p>
      * <ul>
      * <li>Number of trials must be &ge; 0.</li>
      * <li>Number of successes must be &ge; 0.</li>
      * <li>Number of successes must be &le; number of trials.</li>
      * <li>Probability must be &ge; 0 and &le; 1.</li>
-     * </ul></p>
+     * </ul>
      *
      * @param numberOfTrials number of trials performed
      * @param numberOfSuccesses number of successes observed

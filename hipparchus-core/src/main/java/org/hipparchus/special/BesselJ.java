@@ -38,7 +38,8 @@ import org.hipparchus.util.SinCos;
  * Stegun</a> (Ch. 9-11), and <a href="http://dlmf.nist.gov/">DLMF</a> (Ch. 10).
  * <p>
  * This implementation is based on the rjbesl Fortran routine at
- * <a href="http://www.netlib.org/specfun/rjbesl">Netlib</a>.</p>
+ * <a href="http://www.netlib.org/specfun/rjbesl">Netlib</a>.
+ * </p>
  * <p>
  * From the Fortran code: </p>
  * <p>
@@ -55,7 +56,7 @@ import org.hipparchus.util.SinCos;
  * D. J., Math. Comp. 26, 1972, pp 941-947.</li>
  * <li>"Bessel Functions of Real Argument and Integer Order," Sookne, D. J., NBS
  * Jour. of Res. B. 77B, 1973, pp 125-132.</li>
- * </ul> </p>
+ * </ul>
  */
 public class BesselJ
     implements UnivariateFunction {
@@ -180,7 +181,7 @@ public class BesselJ
      * {@link #getVals()} returns the computed function values.
      * {@link #getnVals()} is the number of values among those returned by {@link #getnVals()}
      * that can be considered accurate.
-     * </p><p>
+     * </p>
      * <ul>
      * <li>nVals &lt; 0: An argument is out of range. For example, nb &lt;= 0, alpha
      * &lt; 0 or &gt; 1, or x is too large. In this case, b(0) is set to zero, the
@@ -192,7 +193,7 @@ public class BesselJ
      * precision is lost for nVals &lt; n &lt;= nb. If b(n) does not vanish for n &gt;
      * nVals (because it is too small to be represented), and b(n)/b(nVals) =
      * \(10^{-k}\), then only the first NSIG-k significant figures of b(n) can be
-     * trusted.</li></ul></p>
+     * trusted.</li></ul>
      */
     public static class BesselJResult {
 

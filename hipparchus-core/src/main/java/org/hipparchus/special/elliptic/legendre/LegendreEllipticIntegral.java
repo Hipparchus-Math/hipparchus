@@ -34,18 +34,19 @@ import org.hipparchus.util.MathUtils;
  * The elliptic integrals are related to Jacobi elliptic functions.
  * </p>
  * <p>
- * <emph>
+ * <em>
  * BEWARE! Elliptic integrals for complex numbers in the incomplete case
  * are considered experimental for now, they have known issues:
  * <a href="https://github.com/Hipparchus-Math/hipparchus/issues/151">issue 151</a>
  * and <a href="https://github.com/Hipparchus-Math/hipparchus/issues/152">issue 152</a>.
- * </emph>
+ * </em>
  * </p>
  * <p>
  * There are different conventions to interpret the arguments of
  * Legendre elliptic integrals. In mathematical texts, these conventions show
  * up using the separator between arguments. So for example for the incomplete
  * integral of the first kind F we have:
+ * </p>
  * <ul>
  *   <li>F(φ, k): the first argument φ is an angle and the second argument k
  *       is the elliptic modulus: this is the trigonometric form of the integral</li>
@@ -56,6 +57,7 @@ import org.hipparchus.util.MathUtils;
  *   <li>F(φ\α): the first argument φ is an angle and the second argument α is the
  *       modular angle</li>
  * </ul>
+ * <p>
  * As we have no separator in a method call, we have to adopt one convention
  * and stick to it. In Hipparchus, we adopted the Legendre form (i.e. F(x|m),
  * with x=sin(φ) and m=k². These conventions are consistent with Wolfram Alpha
@@ -672,10 +674,10 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral of the first kind F(φ, m).
      * <p>
-     * <emph>
+     * <em>
      * BEWARE! Elliptic integrals for complex numbers in the incomplete case
      * are considered experimental for now, they have known issues.
-     * </emph>
+     * </em>
      * </p>
      * <p>
      * The incomplete elliptic integral of the first kind F(φ, m) is
@@ -711,10 +713,10 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral of the first kind F(φ, m) using numerical integration.
      * <p>
-     * <emph>
+     * <em>
      * BEWARE! Elliptic integrals for complex numbers in the incomplete case
      * are considered experimental for now, they have known issues.
-     * </emph>
+     * </em>
      * </p>
      * <p>
      * The incomplete elliptic integral of the first kind F(φ, m) is
@@ -745,10 +747,10 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral of the first kind F(φ, m).
      * <p>
-     * <emph>
+     * <em>
      * BEWARE! Elliptic integrals for complex numbers in the incomplete case
      * are considered experimental for now, they have known issues.
-     * </emph>
+     * </em>
      * </p>
      * <p>
      * The incomplete elliptic integral of the first kind F(φ, m) is
@@ -785,10 +787,10 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral of the first kind F(φ, m).
      * <p>
-     * <emph>
+     * <em>
      * BEWARE! Elliptic integrals for complex numbers in the incomplete case
      * are considered experimental for now, they have known issues.
-     * </emph>
+     * </em>
      * </p>
      * <p>
      * The incomplete elliptic integral of the first kind F(φ, m) is
@@ -890,10 +892,10 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral of the second kind E(φ, m).
      * <p>
-     * <emph>
+     * <em>
      * BEWARE! Elliptic integrals for complex numbers in the incomplete case
      * are considered experimental for now, they have known issues.
-     * </emph>
+     * </em>
      * </p>
      * <p>
      * The incomplete elliptic integral of the second kind E(φ, m) is
@@ -930,10 +932,10 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral of the second kind E(φ, m) using numerical integration.
      * <p>
-     * <emph>
+     * <em>
      * BEWARE! Elliptic integrals for complex numbers in the incomplete case
      * are considered experimental for now, they have known issues.
-     * </emph>
+     * </em>
      * </p>
      * <p>
      * The incomplete elliptic integral of the second kind E(φ, m) is
@@ -964,10 +966,10 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral of the second kind E(φ, m).
      * <p>
-     * <emph>
+     * <em>
      * BEWARE! Elliptic integrals for complex numbers in the incomplete case
      * are considered experimental for now, they have known issues.
-     * </emph>
+     * </em>
      * </p>
      * <p>
      * The incomplete elliptic integral of the second kind E(φ, m) is
@@ -1005,10 +1007,10 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral of the second kind E(φ, m).
      * <p>
-     * <emph>
+     * <em>
      * BEWARE! Elliptic integrals for complex numbers in the incomplete case
      * are considered experimental for now, they have known issues.
-     * </emph>
+     * </em>
      * </p>
      * <p>
      * The incomplete elliptic integral of the second kind E(φ, m) is
@@ -1104,10 +1106,10 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral D(φ, m) = [F(φ, m) - E(φ, m)]/m.
      * <p>
-     * <emph>
+     * <em>
      * BEWARE! Elliptic integrals for complex numbers in the incomplete case
      * are considered experimental for now, they have known issues.
-     * </emph>
+     * </em>
      * </p>
      * <p>
      * The incomplete elliptic integral D(φ, m) is
@@ -1141,10 +1143,10 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral D(φ, m) = [F(φ, m) - E(φ, m)]/m.
      * <p>
-     * <emph>
+     * <em>
      * BEWARE! Elliptic integrals for complex numbers in the incomplete case
      * are considered experimental for now, they have known issues.
-     * </emph>
+     * </em>
      * </p>
      * <p>
      * The incomplete elliptic integral D(φ, m) is
@@ -1254,10 +1256,10 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral of the third kind Π(n, φ, m).
      * <p>
-     * <emph>
+     * <em>
      * BEWARE! Elliptic integrals for complex numbers in the incomplete case
      * are considered experimental for now, they have known issues.
-     * </emph>
+     * </em>
      * </p>
      * <p>
      * The incomplete elliptic integral of the third kind Π(n, φ, m) is
@@ -1297,10 +1299,10 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral of the third kind Π(n, φ, m) using numerical integration.
      * <p>
-     * <emph>
+     * <em>
      * BEWARE! Elliptic integrals for complex numbers in the incomplete case
      * are considered experimental for now, they have known issues.
-     * </emph>
+     * </em>
      * </p>
      * <p>
      * The incomplete elliptic integral of the third kind Π(n, φ, m) is
@@ -1331,10 +1333,10 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral of the third kind Π(n, φ, m).
      * <p>
-     * <emph>
+     * <em>
      * BEWARE! Elliptic integrals for complex numbers in the incomplete case
      * are considered experimental for now, they have known issues.
-     * </emph>
+     * </em>
      * </p>
      * <p>
      * The incomplete elliptic integral of the third kind Π(n, φ, m) is
@@ -1377,10 +1379,10 @@ public class LegendreEllipticIntegral {
 
     /** Get the incomplete elliptic integral of the third kind Π(n, φ, m).
      * <p>
-     * <emph>
+     * <em>
      * BEWARE! Elliptic integrals for complex numbers in the incomplete case
      * are considered experimental for now, they have known issues.
-     * </emph>
+     * </em>
      * </p>
      * <p>
      * The incomplete elliptic integral of the third kind Π(n, φ, m) is

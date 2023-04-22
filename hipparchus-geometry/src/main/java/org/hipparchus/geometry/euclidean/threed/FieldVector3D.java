@@ -630,11 +630,12 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements FieldBl
      * frame with one of the axes in a predefined direction. The
      * following example shows how to build a frame having the k axis
      * aligned with the known vector u :
+     * </p>
      * <pre><code>
      *   Vector3D k = u.normalize();
      *   Vector3D i = k.orthogonal();
      *   Vector3D j = Vector3D.crossProduct(k, i);
-     * </code></pre></p>
+     * </code></pre>
      * @return a new normalized vector orthogonal to the instance
      * @exception MathRuntimeException if the norm of the instance is null
      */

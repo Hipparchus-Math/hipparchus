@@ -88,10 +88,11 @@ public class MultivariateFunctionPenaltyAdapter
      * penalty function will be used instead of the value of the underlying
      * function. In order for this penalty to be effective in rejecting this
      * point during the optimization process, the penalty function value should
-     * be defined with care. This value is computed as:
-     * <pre>
-     *   penalty(point) = offset + &sum;<sub>i</sub>[scale[i] * &radic;|point[i]-boundary[i]|]
-     * </pre>
+     * be defined with care. This value is computed as:</p>
+     * <p>
+     * penalty(point) = offset + &sum;<sub>i</sub>[scale[i] * &radic;|point[i]-boundary[i]|]
+     * </p>
+     * <p>
      * where indices i correspond to all the components that violates their boundaries.
      * </p>
      * <p>

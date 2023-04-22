@@ -57,18 +57,21 @@ public class OneWayAnova {
      * Computes the ANOVA F-value for a collection of <code>double[]</code>
      * arrays.
      *
-     * <p><strong>Preconditions</strong>: <ul>
+     * <p><strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>The categoryData <code>Collection</code> must contain
      * <code>double[]</code> arrays.</li>
      * <li> There must be at least two <code>double[]</code> arrays in the
      * <code>categoryData</code> collection and each of these arrays must
-     * contain at least two values.</li></ul></p><p>
+     * contain at least two values.</li></ul>
+     * <p>
      * This implementation computes the F statistic using the definitional
-     * formula<pre>
+     * formula</p><pre>
      *   F = msbg/mswg</pre>
-     * where<pre>
+     * <p>where</p><pre>
      *  msbg = between group mean square
      *  mswg = within group mean square</pre>
+     *  <p>
      * are as defined <a href="http://faculty.vassar.edu/lowry/ch13pt1.html">
      * here</a></p>
      *
@@ -91,18 +94,20 @@ public class OneWayAnova {
      * Computes the ANOVA P-value for a collection of <code>double[]</code>
      * arrays.
      *
-     * <p><strong>Preconditions</strong>: <ul>
+     * <p><strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>The categoryData <code>Collection</code> must contain
      * <code>double[]</code> arrays.</li>
      * <li> There must be at least two <code>double[]</code> arrays in the
      * <code>categoryData</code> collection and each of these arrays must
-     * contain at least two values.</li></ul></p><p>
+     * contain at least two values.</li></ul>
+     * <p>
      * This implementation uses the
      * {@link org.hipparchus.distribution.continuous.FDistribution
      * Hipparchus F Distribution implementation} to estimate the exact
-     * p-value, using the formula<pre>
+     * p-value, using the formula</p><pre>
      *   p = 1 - cumulativeProbability(F)</pre>
-     * where <code>F</code> is the F value and <code>cumulativeProbability</code>
+     * <p>where <code>F</code> is the F value and <code>cumulativeProbability</code>
      * is the Hipparchus implementation of the F distribution.</p>
      *
      * @param categoryData <code>Collection</code> of <code>double[]</code>
@@ -129,18 +134,20 @@ public class OneWayAnova {
     /**
      * Computes the ANOVA P-value for a collection of {@link StreamingStatistics}.
      *
-     * <p><strong>Preconditions</strong>: <ul>
+     * <p><strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>The categoryData <code>Collection</code> must contain
      * {@link StreamingStatistics}.</li>
      * <li> There must be at least two {@link StreamingStatistics} in the
      * <code>categoryData</code> collection and each of these statistics must
-     * contain at least two values.</li></ul></p><p>
+     * contain at least two values.</li></ul>
+     * <p>
      * This implementation uses the
      * {@link org.hipparchus.distribution.continuous.FDistribution
      * Hipparchus F Distribution implementation} to estimate the exact
-     * p-value, using the formula<pre>
+     * p-value, using the formula</p><pre>
      *   p = 1 - cumulativeProbability(F)</pre>
-     * where <code>F</code> is the F value and <code>cumulativeProbability</code>
+     * <p>where <code>F</code> is the F value and <code>cumulativeProbability</code>
      * is the Hipparchus implementation of the F distribution.</p>
      *
      * @param categoryData <code>Collection</code> of {@link StreamingStatistics}
@@ -206,20 +213,22 @@ public class OneWayAnova {
      * Performs an ANOVA test, evaluating the null hypothesis that there
      * is no difference among the means of the data categories.
      *
-     * <p><strong>Preconditions</strong>: <ul>
+     * <p><strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>The categoryData <code>Collection</code> must contain
      * <code>double[]</code> arrays.</li>
      * <li> There must be at least two <code>double[]</code> arrays in the
      * <code>categoryData</code> collection and each of these arrays must
      * contain at least two values.</li>
      * <li>alpha must be strictly greater than 0 and less than or equal to 0.5.
-     * </li></ul></p><p>
+     * </li></ul>
+     * <p>
      * This implementation uses the
      * {@link org.hipparchus.distribution.continuous.FDistribution
      * Hipparchus F Distribution implementation} to estimate the exact
-     * p-value, using the formula<pre>
+     * p-value, using the formula</p><pre>
      *   p = 1 - cumulativeProbability(F)</pre>
-     * where <code>F</code> is the F value and <code>cumulativeProbability</code>
+     * <p>where <code>F</code> is the F value and <code>cumulativeProbability</code>
      * is the Hipparchus implementation of the F distribution.</p>
      * <p>True is returned iff the estimated p-value is less than alpha.</p>
      *

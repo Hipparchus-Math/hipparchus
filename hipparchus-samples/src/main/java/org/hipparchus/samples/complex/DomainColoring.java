@@ -22,15 +22,13 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
 /** Base class for domain coloring.
- * <p>
- * All methods have the following features:
+ * <p>All methods have the following features:</p>
  * <ul>
  *   <li>hue represents phase (red for 0, then orange, yellow, green,
  *       blue at π, indigo, violet and back to red)</li>
  *   <li>saturation is constant</li>
  * </ul>
- * Their differences lie on what value represents.
- * </p>
+ * <p>Their differences lie on what value represents.</p>
  */
 public abstract class DomainColoring {
 

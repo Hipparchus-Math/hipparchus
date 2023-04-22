@@ -53,7 +53,7 @@ import org.hipparchus.util.MathUtils;
  * definite (but <em>must</em> be self-adjoint). The work per iteration is very
  * slightly less if shift = 0.
  * </p>
- * <h3>Preconditioning</h3>
+ * <p><strong>Preconditioning</strong></p>
  * <p>
  * Preconditioning may reduce the number of iterations required. The solver may
  * be provided with a positive definite preconditioner
@@ -82,14 +82,14 @@ import org.hipparchus.util.MathUtils;
  * the <em>preconditioned</em>, updated residual, ||P &middot; r||, not the norm
  * of the <em>true</em> residual ||r||.
  * </p>
- * <h3><a id="stopcrit">Default stopping criterion</a></h3>
+ * <p><strong>Default stopping criterion</strong></p>
  * <p>
  * A default stopping criterion is implemented. The iterations stop when || rhat
  * || &le; &delta; || Ahat || || xhat ||, where xhat is the current estimate of
  * the solution of the transformed system, rhat the current estimate of the
  * corresponding residual, and &delta; a user-specified tolerance.
  * </p>
- * <h3>Iteration count</h3>
+ * <strong>Iteration count</strong>
  * <p>
  * In the present context, an iteration should be understood as one evaluation
  * of the matrix-vector product A &middot; x. The initialization phase therefore
@@ -104,9 +104,10 @@ import org.hipparchus.util.MathUtils;
  * the original FOTRAN code, where the initialization phase was <em>not</em>
  * taken into account.
  * </p>
- * <h3><a id="initguess">Initial guess of the solution</a></h3>
+ * <strong>Initial guess of the solution</strong>
  * <p>
  * The {@code x} parameter in
+ * </p>
  * <ul>
  * <li>{@link #solve(RealLinearOperator, RealVector, RealVector)},</li>
  * <li>{@link #solve(RealLinearOperator, RealLinearOperator, RealVector, RealVector)}},</li>
@@ -114,16 +115,18 @@ import org.hipparchus.util.MathUtils;
  * <li>{@link #solveInPlace(RealLinearOperator, RealLinearOperator, RealVector, RealVector)},</li>
  * <li>{@link #solveInPlace(RealLinearOperator, RealLinearOperator, RealVector, RealVector, boolean, double)},</li>
  * </ul>
+ * <p>
  * should not be considered as an initial guess, as it is set to zero in the
  * initial phase. If x<sub>0</sub> is known to be a good approximation to x, one
  * should compute r<sub>0</sub> = b - A &middot; x, solve A &middot; dx = r0,
  * and set x = x<sub>0</sub> + dx.
  * </p>
- * <h3><a id="context">Exception context</a></h3>
+ * <p><strong>Exception context</strong></p>
  * <p>
  * Besides standard {@link MathIllegalArgumentException}, this class might throw
  * {@link MathIllegalArgumentException} if the linear operator or the
  * preconditioner are not symmetric.
+ * </p>
  * <ul>
  * <li>key {@code "operator"} points to the offending linear operator, say L,</li>
  * <li>key {@code "vector1"} points to the first offending vector, say x,
@@ -131,12 +134,11 @@ import org.hipparchus.util.MathUtils;
  * that x<sup>T</sup> &middot; L &middot; y &ne; y<sup>T</sup> &middot; L
  * &middot; x (within a certain accuracy).</li>
  * </ul>
- * </p>
  * <p>
  * {@link MathIllegalArgumentException} might also be thrown in case the
  * preconditioner is not positive definite.
  * </p>
- * <h3>References</h3>
+ * <p><strong>References</strong></p>
  * <dl>
  * <dt><a id="PAIG1975">Paige and Saunders (1975)</a></dt>
  * <dd>C. C. Paige and M. A. Saunders, <a

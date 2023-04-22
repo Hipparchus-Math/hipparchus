@@ -50,7 +50,9 @@ public class Erf {
     /**
      * Returns the error function.
      *
-     * <p>erf(x) = 2/&radic;&pi; <sub>0</sub>&int;<sup>x</sup> e<sup>-t<sup>2</sup></sup>dt </p>
+     * \[
+     * \mathrm{erf}(x) = \frac{2}{\sqrt{\pi}} \int_{t=0}^x e^{-t^2}dt
+     * \]
      *
      * <p>This implementation computes erf(x) using the
      * {@link Gamma#regularizedGammaP(double, double, double, int) regularized gamma function},
@@ -78,9 +80,8 @@ public class Erf {
     /**
      * Returns the complementary error function.
      *
-     * <p>erfc(x) = 2/&radic;&pi; <sub>x</sub>&int;<sup>&infin;</sup> e<sup>-t<sup>2</sup></sup>dt
-     * <br/>
-     *    = 1 - {@link #erf(double) erf(x)} </p>
+     * \[
+     * \mathrm{erfc}(x) =  \frac{2}{\sqrt{\pi}} \int_{t=x}^\infty e^{-t^2}dt = 1 - \mathrm{erf}
      *
      * <p>This implementation computes erfc(x) using the
      * {@link Gamma#regularizedGammaQ(double, double, double, int) regularized gamma function},

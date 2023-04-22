@@ -51,26 +51,26 @@ import org.hipparchus.util.Precision;
  * rewritten following the algorithm described in the
  * P. Lascaux and R. Theodor book <i>Analyse num&eacute;rique matricielle
  * appliqu&eacute;e &agrave; l'art de l'ing&eacute;nieur</i>, Masson 1986.</p>
- * <p>The authors of the original fortran version are:
+ * <p>The authors of the original fortran version are:</p>
  * <ul>
  * <li>Argonne National Laboratory. MINPACK project. March 1980</li>
  * <li>Burton S. Garbow</li>
  * <li>Kenneth E. Hillstrom</li>
  * <li>Jorge J. More</li>
  * </ul>
- * The redistribution policy for MINPACK is available <a
+ *<p>The redistribution policy for MINPACK is available <a
  * href="http://www.netlib.org/minpack/disclaimer">here</a>, for convenience, it
  * is reproduced below.</p>
  *
- * <table border="0" width="80%" cellpadding="10" align="center" bgcolor="#E0E0E0">
- * <tr><td>
+ * <blockquote>
+ * <p>
  *    Minpack Copyright Notice (1999) University of Chicago.
  *    All rights reserved
- * </td></tr>
- * <tr><td>
+ * </p>
+ * <p>
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
- * are met:
+ * are met:</p>
  * <ol>
  *  <li>Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.</li>
@@ -107,8 +107,8 @@ import org.hipparchus.util.Precision;
  *     (INCLUDING NEGLIGENCE OR STRICT LIABILITY), OR OTHERWISE,
  *     EVEN IF ANY OF SAID PARTIES HAS BEEN WARNED OF THE
  *     POSSIBILITY OF SUCH LOSS OR DAMAGES.</strong></li>
- * <ol></td></tr>
- * </table>
+ * </ol>
+ * </blockquote>
  *
  */
 public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {

@@ -33,11 +33,11 @@ import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
 /**
- * Implementation of FieldMatrix<T> using a {@link FieldElement}[][] array to store entries.
+ * Implementation of {@link FieldMatrix} using a {@link FieldElement}[][] array to store entries.
  * <p>
  * As specified in the {@link FieldMatrix} interface, matrix element indexing
- * is 0-based -- e.g., <code>getEntry(0, 0)</code>
- * returns the element in the first row, first column of the matrix.</li></ul>
+ * is 0-based -- e.g., {@code getEntry(0, 0)}
+ * returns the element in the first row, first column of the matrix
  * </p>
  *
  * @param <T> the type of the field elements

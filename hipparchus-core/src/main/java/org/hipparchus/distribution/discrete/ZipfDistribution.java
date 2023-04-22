@@ -32,12 +32,14 @@ import org.hipparchus.util.FastMath;
  * <strong>Parameters:</strong>
  * For a random variable {@code X} whose values are distributed according to this
  * distribution, the probability mass function is given by
+ * </p>
  * <pre>
  *   P(X = k) = H(N,s) * 1 / k^s    for {@code k = 1,2,...,N}.
  * </pre>
+ * <p>
  * {@code H(N,s)} is the normalizing constant
  * which corresponds to the generalized harmonic number of order N of s.
- * <p>
+ * </p>
  * <ul>
  * <li>{@code N} is the number of elements</li>
  * <li>{@code s} is the exponent</li>

@@ -34,7 +34,7 @@ import org.hipparchus.util.FastMath;
  * integrators for Ordinary Differential Equations.
  *
  * <p>These methods are explicit Runge-Kutta methods, their Butcher
- * arrays are as follows :
+ * arrays are as follows :</p>
  * <pre>
  *    0  |
  *   c2  | a21
@@ -44,7 +44,6 @@ import org.hipparchus.util.FastMath;
  *       |--------------------------
  *       |  b1   b2  ...   bs-1  bs
  * </pre>
- * </p>
  *
  * @see EulerIntegrator
  * @see ClassicalRungeKuttaIntegrator

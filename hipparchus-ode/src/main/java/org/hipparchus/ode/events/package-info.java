@@ -55,19 +55,18 @@
  * ODE must be solved up to some target state is reached, with a known value of
  * the state but an unknown occurrence time. As an example, if we want to monitor
  * a chemical reaction up to some predefined concentration for the first substance,
- * we can use the following switching function setting in the detector:
+ * we can use the following switching function setting in the detector:</p>
  * <pre>
  *  public double g(final ODEStateAndDerivative state) {
  *    return state.getState()[0] - targetConcentration;
  *  }
  * </pre>
- * and the following setting in the event handler:
+ * <p>and the following setting in the event handler:</p>
  * <pre>
  *  public Action eventOccurred(final ODEStateAndDerivative state, final ODEEventDetector detector, final boolean increasing) {
  *    return STOP;
  *  }
  * </pre>
- * </p>
  *
  * <p>
  * The second case, change state vector or derivatives is encountered when dealing
@@ -76,36 +75,33 @@
  * smooth as long as no maneuver are performed, depending only on gravity, drag,
  * third body attraction, radiation pressure. Firing a thruster introduces a
  * discontinuity that must be handled appropriately by the integrator. In such a case,
- * we would use a switching function setting similar to this:
+ * we would use a switching function setting similar to this:</p>
  * <pre>
  *  public double g(final ODEStateAndDerivative state) {
  *    return (state.getTime() - tManeuverStart) &lowast; (state.getTime() - tManeuverStop);
  *  }
  * </pre>
- * and the following setting in the event handler:
+ * <p>and the following setting in the event handler:</p>
  * <pre>
  *  public Action eventOccurred(final ODEStateAndDerivative state, final ODEEventDetector detector, final boolean increasing) {
  *    return RESET_DERIVATIVES;
  *  }
  * </pre>
- * </p>
  *
- * <p>
- * The third case is useful mainly for monitoring purposes, a simple example is:
+ * <p>* The third case is useful mainly for monitoring purposes, a simple example is:</p>
  * <pre>
  *  public double g(final ODEStateAndDerivative state) {
  *  final double[] y = state.getState();
  *    return y[0] - y[1];
  *  }
  * </pre>
- * and the following setting in the event handler:
+ * <p>and the following setting in the event handler:</p>
  * <pre>
  *  public Action eventOccurred(final ODEStateAndDerivative state, final ODEEventDetector detector, final boolean increasing) {
  *    logger.log("y0(t) and y1(t) curves cross at t = " + t);
  *    return CONTINUE;
  *  }
  * </pre>
- * </p>
  *
  * <h2>Rules of Event Handling</h2>
  *

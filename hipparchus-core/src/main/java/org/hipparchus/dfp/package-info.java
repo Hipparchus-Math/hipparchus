@@ -26,7 +26,7 @@
  * <p>Another floating point class.  This one is built using radix 10000
  * which is 10<sup>4</sup>, so its almost decimal.</p>
  *
- * <p>The design goals here are:
+ * <p>The design goals here are:</p>
  * <ol>
  *  <li>Decimal math, or close to it</li>
  *  <li>Settable precision (but no mix between numbers using different settings)</li>
@@ -36,21 +36,22 @@
  *       algebraic operation</li>
  *  <li>Comply with IEEE 854-1987 as much as possible.
  *       (See IEEE 854-1987 notes below)</li>
- * </ol></p>
+ * </ol>
  *
- * <p>Trade offs:
+ * <p>Trade offs:</p>
  * <ol>
  *  <li>Memory foot print.  I'm using more memory than necessary to
  *       represent numbers to get better performance.</li>
  *  <li>Digits are bigger, so rounding is a greater loss.  So, if you
  *       really need 12 decimal digits, better use 4 base 10000 digits
  *       there can be one partially filled.</li>
- * </ol></p>
+ * </ol>
  *
- * <p>Numbers are represented  in the following form:
- * <pre>
- * n  =  sign &times; mant &times; (radix)<sup>exp</sup>;</p>
- * </pre>
+ * <p>Numbers are represented  in the following form:</p>
+ *  \[
+ *  n  =  \mathrm{sign} \times \mathrm{mant} \times \mathrm{radix}^\mathrm{exp}
+ *  \]
+ * <p>
  * where sign is &plusmn;1, mantissa represents a fractional number between
  * zero and one.  mant[0] is the least significant digit.
  * exp is in the range of -32767 to 32768</p>

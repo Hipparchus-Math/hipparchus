@@ -44,13 +44,13 @@ import org.hipparchus.util.MathArrays;
  * the cost is really 6 functions evaluations per step.</p>
  *
  * <p>This method has been published (whithout the continuous output
- * that was added by Shampine in 1986) in the following article :
+ * that was added by Shampine in 1986) in the following article :</p>
  * <pre>
  *  A family of embedded Runge-Kutta formulae
  *  J. R. Dormand and P. J. Prince
  *  Journal of Computational and Applied Mathematics
  *  volume 6, no 1, 1980, pp. 19-26
- * </pre></p>
+ * </pre>
  *
  * @param <T> the type of the field elements
  */

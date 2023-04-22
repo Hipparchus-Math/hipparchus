@@ -279,7 +279,7 @@ public class Variance extends AbstractStorelessUnivariateStatistic
      * <p>
      * Uses the formula
      * <pre>
-     *   &Sigma;(weights[i]*(values[i] - weightedMean)<sup>2</sup>)/(&Sigma;(weights[i]) - 1)
+     *   &Sigma;(weights[i]*(values[i] - weightedMean)²)/(&Sigma;(weights[i]) - 1)
      * </pre>
      * where weightedMean is the weighted mean.
      * <p>
@@ -417,7 +417,7 @@ public class Variance extends AbstractStorelessUnivariateStatistic
      * <p>
      * Uses the formula
      * <pre>
-     *   &Sigma;(weights[i]*(values[i] - mean)<sup>2</sup>)/(&Sigma;(weights[i]) - 1)
+     *   &Sigma;(weights[i]*(values[i] - mean)²)/(&Sigma;(weights[i]) - 1)
      * </pre>
      * <p>
      * The formula used assumes that the supplied mean value is the weighted arithmetic
@@ -495,7 +495,7 @@ public class Variance extends AbstractStorelessUnivariateStatistic
      * <p>
      * Uses the formula
      * <pre>
-     *   &Sigma;(weights[i]*(values[i] - mean)<sup>2</sup>)/(&Sigma;(weights[i]) - 1)
+     *   &Sigma;(weights[i]*(values[i] - mean)²)/(&Sigma;(weights[i]) - 1)
      * </pre>
      * <p>
      * The formula used assumes that the supplied mean value is the weighted arithmetic

@@ -55,7 +55,7 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
      * This constructor calls {@link #OrderedComplexEigenDecomposition(RealMatrix, double,
      * double, double, Comparator)} with a comparator using real ordering as the primary
      * sort order and imaginary ordering as the secondary sort order..
-     * </>
+     * </p>
      * @param matrix real matrix.
      * @param eigenVectorsEquality threshold below which eigenvectors are considered equal
      * @param epsilon Epsilon used for internal tests (e.g. is singular, eigenvalue ratio, etc.)

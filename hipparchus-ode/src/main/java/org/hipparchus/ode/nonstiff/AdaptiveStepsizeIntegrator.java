@@ -32,9 +32,11 @@ import org.hipparchus.util.FastMath;
  * <p>These algorithms perform integration with stepsize control, which
  * means the user does not specify the integration step but rather a
  * tolerance on error. The error threshold is computed as
+ * </p>
  * <pre>
  * threshold_i = absTol_i + relTol_i * max (abs (ym), abs (ym+1))
  * </pre>
+ * <p>
  * where absTol_i is the absolute tolerance for component i of the
  * state vector and relTol_i is the relative tolerance for the same
  * component. The user can also use only two scalar values absTol and
@@ -48,12 +50,12 @@ import org.hipparchus.util.FastMath;
  * of the state vector is used for stepsize control, not the complete state vector.
  * </p>
  *
- * <p>If the estimated error for ym+1 is such that
+ * <p>If the estimated error for ym+1 is such that</p>
  * <pre>
  * sqrt((sum (errEst_i / threshold_i)^2 ) / n) &lt; 1
  * </pre>
  *
- * (where n is the main set dimension) then the step is accepted,
+ * <p>(where n is the main set dimension) then the step is accepted,
  * otherwise the step is rejected and a new attempt is made with a new
  * stepsize.</p>
  *

@@ -63,7 +63,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
 
     /**
      * Creates a Gauss Newton optimizer.
-     * <p/>
+     * <p>
      * The default for the algorithm is to use QR decomposition and not
      * form normal equations.
      * </p>

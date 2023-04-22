@@ -35,12 +35,14 @@ import org.hipparchus.util.FastMath;
  * than the MersenneTwister generator (see
  * <a href="http://www.iro.umontreal.ca/~panneton/WELLRNG.html">
  * this paper</a> for more information).
+ * </p>
  * <p>
  * This generator features an extremely long period
  * (2<sup>19937</sup>-1) and 623-dimensional equidistribution up to 32
  * bits accuracy. The home page for this generator is located at <a
  * href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html">
  * http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html</a>.
+ * </p>
  * <p>
  * This generator is described in a paper by Makoto Matsumoto and
  * Takuji Nishimura in 1998: <a
@@ -48,17 +50,18 @@ import org.hipparchus.util.FastMath;
  * Twister: A 623-Dimensionally Equidistributed Uniform Pseudo-Random
  * Number Generator</a>, ACM Transactions on Modeling and Computer
  * Simulation, Vol. 8, No. 1, January 1998, pp 3--30.
+ * </p>
  * <p>
  * This class is mainly a Java port of the 2002-01-26 version of
  * the generator written in C by Makoto Matsumoto and Takuji
  * Nishimura. Here is their original copyright:
- * <p>
- * <table border="0" width="80%" cellpadding="10" align="center" bgcolor="#E0E0E0">
- * <tr><td>Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
- *     All rights reserved.</td></tr>
- * <tr><td>Redistribution and use in source and binary forms, with or without
+ * </p>
+ * <blockquote>
+ * <p>Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
+ *     All rights reserved.</p>
+ * <p>Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
- * are met:
+ * are met:</p>
  * <ol>
  *   <li>Redistributions of source code must retain the above copyright
  *       notice, this list of conditions and the following disclaimer.</li>
@@ -68,9 +71,9 @@ import org.hipparchus.util.FastMath;
  *   <li>The names of its contributors may not be used to endorse or promote
  *       products derived from this software without specific prior written
  *       permission.</li>
- * </ol></td></tr>
+ * </ol>
  *
- * <tr><td><strong>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+ * <p><strong>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
  * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -82,8 +85,8 @@ import org.hipparchus.util.FastMath;
  * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
- * DAMAGE.</strong></td></tr>
- * </table>
+ * DAMAGE.</strong></p>
+ * </blockquote>
  */
 public class MersenneTwister extends IntRandomGenerator implements Serializable {
 

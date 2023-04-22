@@ -824,6 +824,7 @@ public class MatrixUtils {
      * <p>
      * The following example shows how a simple class with a name and a real vector
      * should be written:
+     * </p>
      * <pre><code>
      * public class NamedVector implements Serializable {
      *
@@ -844,7 +845,6 @@ public class MatrixUtils {
      *
      * }
      * </code></pre>
-     * </p>
      *
      * @param vector real vector to serialize
      * @param oos stream where the real vector should be written
@@ -921,6 +921,7 @@ public class MatrixUtils {
      * <p>
      * The following example shows how a simple class with a name and a real matrix
      * should be written:
+     * </p>
      * <pre><code>
      * public class NamedMatrix implements Serializable {
      *
@@ -941,7 +942,6 @@ public class MatrixUtils {
      *
      * }
      * </code></pre>
-     * </p>
      *
      * @param matrix real matrix to serialize
      * @param oos stream where the real matrix should be written

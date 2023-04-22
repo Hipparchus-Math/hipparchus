@@ -58,7 +58,9 @@ import org.hipparchus.util.MathUtils;
  *
  * <p>An <code>EmpiricalDistribution</code> maintains data structures, called
  * <i>distribution digests</i>, that describe empirical distributions and
- * support the following operations: <ul>
+ * support the following operations:
+ * </p>
+ * <ul>
  * <li>loading the distribution from a file of observed data values</li>
  * <li>dividing the input data into "bin ranges" and reporting bin frequency
  *     counts (data for histogram)</li>
@@ -66,15 +68,17 @@ import org.hipparchus.util.MathUtils;
  *     as well as the observations within each bin</li>
  * <li>generating random values from the distribution</li>
  * </ul>
+ * <p>
  * Applications can use <code>EmpiricalDistribution</code> to build grouped
  * frequency histograms representing the input data or to generate random values
  * "like" those in the input file -- i.e., the values generated will follow the
- * distribution of the values in the file.</p>
+ * distribution of the values in the file.
+ * </p>
  *
  * <p>The implementation uses what amounts to the
  * <a href="http://nedwww.ipac.caltech.edu/level5/March02/Silverman/Silver2_6.html">
- * Variable Kernel Method</a> with Gaussian smoothing:<p>
- * <strong>Digesting the input file</strong>
+ * Variable Kernel Method</a> with Gaussian smoothing:</p>
+ * <p><strong>Digesting the input file</strong></p>
  * <ol><li>Pass the file once to compute min and max.</li>
  * <li>Divide the range from min-max into <code>binCount</code> "bins."</li>
  * <li>Pass the data file again, computing bin counts and univariate
@@ -85,7 +89,7 @@ import org.hipparchus.util.MathUtils;
  * <li>Generate a uniformly distributed value in (0,1) </li>
  * <li>Select the subinterval to which the value belongs.
  * <li>Generate a random Gaussian value with mean = mean of the associated
- *     bin and std dev = std dev of associated bin.</li></ol></p>
+ *     bin and std dev = std dev of associated bin.</li></ol>
  *
  * <p>EmpiricalDistribution implements the {@link RealDistribution} interface
  * as follows.  Given x within the range of values in the dataset, let B
@@ -97,13 +101,14 @@ import org.hipparchus.util.MathUtils;
  * distribution at the bin endpoints and interpolates within bins using
  * within-bin kernels.</p>
  *
- *<strong>USAGE NOTES:</strong><ul>
+ *<p><strong>USAGE NOTES:</strong></p>
+ *<ul>
  *<li>The <code>binCount</code> is set by default to 1000.  A good rule of thumb
  *    is to set the bin count to approximately the length of the input file divided
  *    by 10. </li>
  *<li>The input file <i>must</i> be a plain text file containing one valid numeric
  *    entry per line.</li>
- * </ul></p>
+ * </ul>
  *
  */
 public class EmpiricalDistribution extends AbstractRealDistribution {
@@ -558,12 +563,13 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * <p>Returns the kernel density normalized so that its integral over each bin
      * equals the bin mass.</p>
      *
-     * <p>Algorithm description: <ol>
+     * <p>Algorithm description:</p>
+     * <ol>
      * <li>Find the bin B that x belongs to.</li>
      * <li>Compute K(B) = the mass of B with respect to the within-bin kernel (i.e., the
      * integral of the kernel density over B).</li>
      * <li>Return k(x) * P(B) / K(B), where k is the within-bin kernel density
-     * and P(B) is the mass of B.</li></ol></p>
+     * and P(B) is the mass of B.</li></ol>
      */
     @Override
     public double density(double x) {
@@ -578,14 +584,15 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     /**
      * {@inheritDoc}
      *
-     * <p>Algorithm description:<ol>
+     * <p>Algorithm description:</p>
+     * <ol>
      * <li>Find the bin B that x belongs to.</li>
      * <li>Compute P(B) = the mass of B and P(B-) = the combined mass of the bins below B.</li>
      * <li>Compute K(B) = the probability mass of B with respect to the within-bin kernel
      * and K(B-) = the kernel distribution evaluated at the lower endpoint of B</li>
      * <li>Return P(B-) + P(B) * [K(x) - K(B-)] / K(B) where
      * K(x) is the within-bin kernel distribution function evaluated at x.</li></ol>
-     * If K is a constant distribution, we return P(B-) + P(B) (counting the full
+     * <p>If K is a constant distribution, we return P(B-) + P(B) (counting the full
      * mass of B).</p>
      *
      */
@@ -618,11 +625,12 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     /**
      * {@inheritDoc}
      *
-     * <p>Algorithm description:<ol>
+     * <p>Algorithm description:</p>
+     * <ol>
      * <li>Find the smallest i such that the sum of the masses of the bins
      *  through i is at least p.</li>
      * <li>
-     *   Let K be the within-bin kernel distribution for bin i.</br>
+     *   Let K be the within-bin kernel distribution for bin i.<br/>
      *   Let K(B) be the mass of B under K. <br/>
      *   Let K(B-) be K evaluated at the lower endpoint of B (the combined
      *   mass of the bins below B under K).<br/>
@@ -631,7 +639,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      *   Let pCrit = p - P(B-)<br/>
      * <li>Return the inverse of K evaluated at <br/>
      *    K(B-) + pCrit * K(B) / P(B) </li>
-     *  </ol></p>
+     *  </ol>
      *
      */
     @Override

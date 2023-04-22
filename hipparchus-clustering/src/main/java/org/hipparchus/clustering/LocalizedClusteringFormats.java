@@ -44,14 +44,8 @@ import org.hipparchus.exception.UTF8Control;
  */
 public enum LocalizedClusteringFormats implements Localizable {
 
-    // CHECKSTYLE: stop MultipleVariableDeclarations
-    // CHECKSTYLE: stop JavadocVariable
-
+    /** EMPTY_CLUSTER_IN_K_MEANS. */
     EMPTY_CLUSTER_IN_K_MEANS("empty cluster in k-means");
-
-    // CHECKSTYLE: resume JavadocVariable
-    // CHECKSTYLE: resume MultipleVariableDeclarations
-
 
     /** Source English format. */
     private final String sourceFormat;

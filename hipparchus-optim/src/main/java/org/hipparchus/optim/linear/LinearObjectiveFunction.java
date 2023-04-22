@@ -36,9 +36,9 @@ import org.hipparchus.optim.OptimizationData;
  * An objective function for a linear optimization problem.
  * <p>
  * A linear objective function has one the form:
- * <pre>
- * c<sub>1</sub>x<sub>1</sub> + ... c<sub>n</sub>x<sub>n</sub> + d
- * </pre>
+ * \[
+ * c_1 x_1 + \ldots c_n x_n + d
+ * \]
  * The c<sub>i</sub> and d are the coefficients of the equation,
  * the x<sub>i</sub> are the coordinates of the current point.
  * </p>

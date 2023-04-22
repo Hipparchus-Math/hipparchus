@@ -35,6 +35,7 @@ import org.hipparchus.util.FastMath;
  * <p>
  * Implementation of {@link #invGamma1pm1(double)} and
  * {@link #logGamma1p(double)} is based on the algorithms described in
+ * </p>
  * <ul>
  * <li><a href="http://dx.doi.org/10.1145/22721.23109">Didonato and Morris
  * (1986)</a>, <em>Computation of the Incomplete Gamma Function Ratios and
@@ -43,6 +44,7 @@ import org.hipparchus.util.FastMath;
  * (1992)</a>, <em>Algorithm 708: Significant Digit Computation of the
  *     Incomplete Beta Function Ratios</em>, TOMS 18(3), 360-373,</li>
  * </ul>
+ * <p>
  * and implemented in the
  * <a href="http://www.dtic.mil/docs/citations/ADA476840">NSWC Library of Mathematical Functions</a>,
  * available
@@ -504,10 +506,10 @@ public class Gamma {
      * Returns the Lanczos approximation used to compute the gamma function.
      * The Lanczos approximation is related to the Gamma function by the
      * following equation
-     * <center>
-     * {@code gamma(x) = sqrt(2 * pi) / x * (x + g + 0.5) ^ (x + 0.5)
-     *                   * exp(-x - g - 0.5) * lanczos(x)},
-     * </center>
+     * \[
+     * \Gamma(x) = \frac{\sqrt{2\pi}}{x} \times (x + g + \frac{1}{2}) ^ (x + \frac{1}{2})
+     *                   \times e^{-x - g - 0.5} \times \mathrm{lanczos}(x)
+     * \]
      * where {@code g} is the Lanczos constant.
      * </p>
      *

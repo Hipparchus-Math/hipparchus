@@ -44,8 +44,8 @@ import org.hipparchus.util.Precision;
  * can be provided in a 2-dimensional array.  The observations are not stored
  * in memory, so there is no limit to the number of observations that can be
  * added to the model.</p>
- * <p>
- * <strong>Usage Notes</strong>: <ul>
+ * <p>* <strong>Usage Notes</strong>:</p>
+ * <ul>
  * <li> When there are fewer than two observations in the model, or when
  * there is no variation in the x values (i.e. all x values are the same)
  * all statistics return <code>NaN</code>. At least two observations with
@@ -62,7 +62,7 @@ import org.hipparchus.util.Precision;
  * the {@link #SimpleRegression(boolean)} constructor.  When the
  * {@code hasIntercept} property is false, the model is estimated without a
  * constant term and {@link #getIntercept()} returns {@code 0}.</li>
- * </ul></p>
+ * </ul>
  *
  */
 public class SimpleRegression implements Serializable, UpdatingMultipleLinearRegression {
@@ -365,13 +365,13 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * added to the model when this method is activated.
      * <p>
      * <code> predict(x) = intercept + slope * x </code></p>
-     * <p>
-     * <strong>Preconditions</strong>: <ul>
+     * <p>* <strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>At least two observations (with at least two different x values)
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double,NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @param x input <code>x</code> value
      * @return predicted <code>y</code> value
@@ -391,13 +391,13 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * The least squares estimate of the intercept is computed using the
      * <a href="http://www.xycoon.com/estimation4.htm">normal equations</a>.
      * The intercept is sometimes denoted b0.</p>
-     * <p>
-     * <strong>Preconditions</strong>: <ul>
+     * <p><strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>At least two observations (with at least two different x values)
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double,NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return the intercept of the regression line if the model includes an
      * intercept; 0 otherwise
@@ -424,13 +424,13 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
     * The least squares estimate of the slope is computed using the
     * <a href="http://www.xycoon.com/estimation4.htm">normal equations</a>.
     * The slope is sometimes denoted b1.</p>
-    * <p>
-    * <strong>Preconditions</strong>: <ul>
+    * <p>* <strong>Preconditions</strong>:</p>
+    * <ul>
     * <li>At least two observations (with at least two different x values)
     * must have been added before invoking this method. If this method is
     * invoked before a model can be estimated, <code>Double.NaN</code> is
     * returned.
-    * </li></ul></p>
+    * </li></ul>
     *
     * @return the slope of the regression line
     */
@@ -463,13 +463,13 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * The return value is constrained to be non-negative - i.e., if due to
      * rounding errors the computational formula returns a negative result,
      * 0 is returned.</p>
-     * <p>
-     * <strong>Preconditions</strong>: <ul>
+     * <p>* <strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>At least two observations (with at least two different x values)
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double,NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return sum of squared errors associated with the regression model
      */
@@ -497,7 +497,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
     /**
      * Returns the sum of squared deviations of the x values about their mean.
      *
-     * If {@code n < 2}, this returns <code>Double.NaN</code>.</p>
+     * <p>If {@code n < 2}, this returns <code>Double.NaN</code>.</p>
      *
      * @return sum of squared deviations of x values
      */
@@ -523,13 +523,13 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * <p>
      * This is usually abbreviated SSR or SSM.  It is defined as SSM
      * <a href="http://www.xycoon.com/SumOfSquares.htm">here</a></p>
-     * <p>
-     * <strong>Preconditions</strong>: <ul>
+     * <p>* <strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>At least two observations (with at least two different x values)
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double.NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return sum of squared deviations of predicted y values
      */
@@ -558,13 +558,13 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * Returns <a href="http://mathworld.wolfram.com/CorrelationCoefficient.html">
      * Pearson's product moment correlation coefficient</a>,
      * usually denoted r.
-     * <p>
-     * <strong>Preconditions</strong>: <ul>
+     * <p>* <strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>At least two observations (with at least two different x values)
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double,NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return Pearson's r
      */
@@ -581,13 +581,13 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * Returns the <a href="http://www.xycoon.com/coefficient1.htm">
      * coefficient of determination</a>,
      * usually denoted r-square.
-     * <p>
-     * <strong>Preconditions</strong>: <ul>
+     * <p>* <strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>At least two observations (with at least two different x values)
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double,NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return r-square
      */
@@ -643,8 +643,8 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * If there are fewer that <strong>three</strong> observations in the
      * model, or if there is no variation in x, this returns
      * <code>Double.NaN</code>.</p>
+     * <p>* <strong>Usage Note</strong>:</p>
      * <p>
-     * <strong>Usage Note</strong>:<br>
      * The validity of this statistic depends on the assumption that the
      * observations included in the model are drawn from a
      * <a href="http://mathworld.wolfram.com/BivariateNormalDistribution.html">
@@ -675,14 +675,14 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * <a href="http://mathworld.wolfram.com/BivariateNormalDistribution.html">
      * Bivariate Normal Distribution</a>.</p>
      * <p>
-     * <strong> Preconditions:</strong><ul>
+     * <strong> Preconditions:</strong></p><ul>
      * <li>If there are fewer that <strong>three</strong> observations in the
      * model, or if there is no variation in x, this returns
      * <code>Double.NaN</code>.
      * </li>
      * <li>{@code (0 < alpha < 1)}; otherwise an
      * <code>MathIllegalArgumentException</code> is thrown.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @param alpha the desired significance level
      * @return half-width of 95% confidence interval for the slope estimate

@@ -27,12 +27,12 @@ import org.hipparchus.util.FastMath;
  * integrals defined as:
  * \[
  *   \left\{\begin{align}
- *   R_F(x,y,z)   &= \frac{1}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{s(t)}\\
- *   R_J(x,y,z,p) &= \frac{3}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{s(t)(t+p)}\\
- *   R_G(x,y,z)   &= \frac{1}{4}\int_{0}^{\infty}\frac{1}{s(t)}
+ *   R_F(x,y,z)   &amp;= \frac{1}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{s(t)}\\
+ *   R_J(x,y,z,p) &amp;= \frac{3}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{s(t)(t+p)}\\
+ *   R_G(x,y,z)   &amp;= \frac{1}{4}\int_{0}^{\infty}\frac{1}{s(t)}
                      \left(\frac{x}{t+x}+\frac{y}{t+y}+\frac{z}{t+z}\right)t\mathrm{d}t\\
- *   R_D(x,y,z)   &= R_J(x,y,z,z)\\
- *   R_C(x,y)     &= R_F(x,y,y)
+ *   R_D(x,y,z)   &amp;= R_J(x,y,z,z)\\
+ *   R_C(x,y)     &amp;= R_F(x,y,y)
  *   \end{align}\right.
  * \]
  * </p>

@@ -38,19 +38,21 @@ import org.hipparchus.util.MathArrays;
  * This class is the base class for multistep integrators for Ordinary
  * Differential Equations.
  * <p>We define scaled derivatives s<sub>i</sub>(n) at step n as:
- * <pre>
- * s<sub>1</sub>(n) = h y'<sub>n</sub> for first derivative
- * s<sub>2</sub>(n) = h<sup>2</sup>/2 y''<sub>n</sub> for second derivative
- * s<sub>3</sub>(n) = h<sup>3</sup>/6 y'''<sub>n</sub> for third derivative
- * ...
- * s<sub>k</sub>(n) = h<sup>k</sup>/k! y<sup>(k)</sup><sub>n</sub> for k<sup>th</sup> derivative
- * </pre></p>
+ * \[
+ *   \left\{\begin{align}
+ *   s_1(n) &amp;= h y'_n \text{ for first derivative}\\
+ *   s_2(n) &amp;= \frac{h^2}{2} y_n'' \text{ for second derivative}\\
+ *   s_3(n) &amp;= \frac{h^3}{6} y_n''' \text{ for third derivative}\\
+ *   &amp;\cdots\\
+ *   s_k(n) &amp;= \frac{h^k}{k!} y_n^{(k)} \text{ for } k^\mathrm{th} \text{ derivative}
+ *   \end{align}\right.
+ * \]</p>
  * <p>Rather than storing several previous steps separately, this implementation uses
  * the Nordsieck vector with higher degrees scaled derivatives all taken at the same
  * step (y<sub>n</sub>, s<sub>1</sub>(n) and r<sub>n</sub>) where r<sub>n</sub> is defined as:
- * <pre>
- * r<sub>n</sub> = [ s<sub>2</sub>(n), s<sub>3</sub>(n) ... s<sub>k</sub>(n) ]<sup>T</sup>
- * </pre>
+ * \[
+ * r_n = [ s_2(n), s_3(n) \ldots s_k(n) ]^T
+ * \]
  * (we omit the k index in the notation for clarity)</p>
  * <p>
  * Multistep integrators with Nordsieck representation are highly sensitive to

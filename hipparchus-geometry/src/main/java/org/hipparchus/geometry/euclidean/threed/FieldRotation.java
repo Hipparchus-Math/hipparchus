@@ -171,7 +171,7 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * correction to the copy in order to perfect its orthogonality. If
      * the Frobenius norm of the correction needed is above the given
      * threshold, then the matrix is considered to be too far from a
-     * true rotation matrix and an exception is thrown.<p>
+     * true rotation matrix and an exception is thrown.</p>
 
      * @param m rotation matrix
      * @param threshold convergence threshold for the iterative
@@ -1535,10 +1535,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * rotations are almost similar (i.e. they transform vectors the same way)
      * or very different. It is mathematically defined as the angle of
      * the rotation r that prepended to one of the rotations gives the other
-     * one:</p>
-     * <pre>
-     *        r<sub>1</sub>(r) = r<sub>2</sub>
-     * </pre>
+     * one: \(r_1(r) = r_2\)
+     * </p>
      * <p>This distance is an angle between 0 and &pi;. Its value is the smallest
      * possible upper bound of the angle in radians between r<sub>1</sub>(v)
      * and r<sub>2</sub>(v) for all possible vectors v. This upper bound is

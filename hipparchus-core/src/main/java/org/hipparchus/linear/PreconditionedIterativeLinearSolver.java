@@ -33,18 +33,19 @@ import org.hipparchus.util.MathUtils;
  * This abstract class defines preconditioned iterative solvers. When A is
  * ill-conditioned, instead of solving system A &middot; x = b directly, it is
  * preferable to solve either
- * <center>
- * (M &middot; A) &middot; x = M &middot; b
- * </center>
+ * \[
+ * (M \cdot A) \cdot x = M \cdot b
+ * \]
  * (left preconditioning), or
- * <center>
- * (A &middot; M) &middot; y = b, &nbsp;&nbsp;&nbsp;&nbsp;followed by
- * M &middot; y = x
- * </center>
+ * \[
+ * (A \cdot M) \cdot y = b, \text{followed by} M \cdot y = x
+ * \]
+ * </p>
+ * <p>
  * (right preconditioning), where M approximates in some way A<sup>-1</sup>,
- * while matrix-vector products of the type M &middot; y remain comparatively
+ * while matrix-vector products of the type \(M \cdot y\) remain comparatively
  * easy to compute. In this library, M (not M<sup>-1</sup>!) is called the
- * <em>preconditionner</em>.
+ * <em>preconditioner</em>.
  * </p>
  * <p>
  * Concrete implementations of this abstract class must be provided with the

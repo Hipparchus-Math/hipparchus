@@ -22,9 +22,9 @@
 /**
  * Generic univariate and multivariate summary statistic objects.
  *
- * <h3>UnivariateStatistic API Usage Examples:</h3>
+ * <p><strong>UnivariateStatistic API Usage Examples:</strong></p>
  *
- * <h4>UnivariateStatistic:</h4>
+ * <p>UnivariateStatistic:</p>
  * <code>
  *   /&lowast; evaluation approach &lowast;/<br/>
  *   double[] values = new double[] { 1, 2, 3, 4, 5 };<br/>
@@ -32,7 +32,7 @@
  *   out.println("mean = " + <span style="font-weight: bold;">stat.evaluate(values)</span>);<br/>
  * </code>
  *
- * <h4>StorelessUnivariateStatistic:</h4>
+ * <p>StorelessUnivariateStatistic:</p>
  * <code>
  *   /&lowast; incremental approach &lowast;/<br/>
  *   double[] values = new double[] { 1, 2, 3, 4, 5 };<br/>

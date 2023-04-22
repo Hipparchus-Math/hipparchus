@@ -223,12 +223,12 @@ public class SmoothStepFactory {
      * <p>
      * By definition, for order n > 1 and input x, a smoothstep function respects at least the following properties :
      * <ul>
-     *     <li>f(x <= leftEdge) = 0 and f(x >= rightEdge) = 1</li>
+     *     <li>f(x &lt;= leftEdge) = 0 and f(x &gt;= rightEdge) = 1</li>
      *     <li>f'(leftEdge) = f'(rightEdge) = 0</li>
      * </ul>
      * If x is normalized between edges, we have at least :
      * <ul>
-     *     <li>f(x <= 0) = 0 and f(x >= 1) = 1</li>
+     *     <li>f(x &lt;= 0) = 0 and f(x &gt;= 1) = 1</li>
      *     <li>f'(0) = f'(1) = 0</li>
      * </ul>
      * Smoothstep functions of higher order n will have their higher time derivatives also equal to zero at edges...
@@ -352,6 +352,9 @@ public class SmoothStepFactory {
      */
     public static class QuadraticSmoothStepFunction extends SmoothStepFunction {
 
+        /** Serializable UID. */
+        private static final long serialVersionUID = 20230422L;
+
         /**
          * Construct a smoothstep with the given coefficients. The first element of the coefficients array is the constant
          * term. Higher degree coefficients follow in sequence.  The degree of the resulting polynomial is the index of the
@@ -397,7 +400,6 @@ public class SmoothStepFactory {
 
         /**
          * Compute the value of the quadratic smoothstep for the given argument normalized between edges.
-         * <p>
          *
          * @param xNormalized Normalized argument for which the function value should be computed. It is expected to be
          * between [0:1] and will throw an exception otherwise.
@@ -427,12 +429,12 @@ public class SmoothStepFactory {
      * <p>
      * By definition, for order n > 1 and input x, a smoothstep function respects at least the following properties :
      * <ul>
-     *     <li>f(x <= leftEdge) = 0 and f(x >= rightEdge) = 1</li>
+     *     <li>f(x &lt;= leftEdge) = 0 and f(x &gt;= rightEdge) = 1</li>
      *     <li>f'(leftEdge) = f'(rightEdge) = 0</li>
      * </ul>
      * If x is normalized between edges, we have at least :
      * <ul>
-     *     <li>f(x <= 0) = 0 and f(x >= 1) = 1</li>
+     *     <li>f(x &lt;= 0) = 0 and f(x &gt;= 1) = 1</li>
      *     <li>f'(0) = f'(1) = 0</li>
      * </ul>
      * Smoothstep functions of higher order n will have their higher time derivatives also equal to zero at edges...

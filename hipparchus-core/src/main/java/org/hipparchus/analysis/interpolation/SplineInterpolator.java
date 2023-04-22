@@ -47,12 +47,14 @@ import org.hipparchus.util.MathUtils;
  * <code>i</code> is the index of the subinterval.  See {@link PolynomialSplineFunction} for more details.
  * </p>
  * <p>
- * The interpolating polynomials satisfy: <ol>
+ * The interpolating polynomials satisfy:
+ * </p>
+ * <ol>
  * <li>The value of the PolynomialSplineFunction at each of the input x values equals the
  *  corresponding y value.</li>
  * <li>Adjacent polynomials are equal through two derivatives at the knot points (i.e., adjacent polynomials
  *  "match up" at the knot points, as do their first and second derivatives).</li>
- * </ol></p>
+ * </ol>
  * <p>
  * The cubic spline interpolation algorithm implemented is as described in R.L. Burden, J.D. Faires,
  * <u>Numerical Analysis</u>, 4th Ed., 1989, PWS-Kent, ISBN 0-53491-585-X, pp 126-131.

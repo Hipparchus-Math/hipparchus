@@ -240,9 +240,10 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
 
     /**
      * Returns an estimate of the <code>quantile</code>th percentile of the
-     * designated values in the <code>values</code> array.  The quantile
+     * designated values in the <code>values</code> array.
+     * <p>The quantile
      * estimated is determined by the <code>quantile</code> property.
-     * <p>
+     * </p>
      * <ul>
      * <li>Returns <code>Double.NaN</code> if <code>length = 0</code></li>
      * <li>Returns (for any value of <code>quantile</code>)
@@ -270,7 +271,6 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
     /**
      * Returns an estimate of the <code>p</code>th percentile of the values
      * in the <code>values</code> array.
-     * <p>
      * <ul>
      * <li>Returns <code>Double.NaN</code> if <code>values</code> has length
      * <code>0</code></li>
@@ -303,7 +303,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      * <p>
      * Calls to this method do not modify the internal <code>quantile</code>
      * state of this statistic.
-     * <p>
+     * </p>
      * <ul>
      * <li>Returns <code>Double.NaN</code> if <code>length = 0</code></li>
      * <li>Returns (for any value of <code>p</code>) <code>values[begin]</code>
