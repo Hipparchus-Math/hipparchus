@@ -592,4 +592,11 @@ public abstract class RungeKuttaIntegratorAbstractTest {
 
     }
 
+    @Test
+    public void testIssue250() {
+        final double defaultStep = 60.;
+        RungeKuttaIntegrator integrator = createIntegrator(defaultStep);
+        Assert.assertEquals(defaultStep, integrator.getDefaultStep(), 0.);
+    }
+
 }
