@@ -37,8 +37,8 @@
 
   <licenses>
     <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
     </license>
   </licenses>
 
@@ -526,8 +526,7 @@
     <hipparchus.junit.version>4.13.2</hipparchus.junit.version>
     <hipparchus.hamcrest.version>2.2</hipparchus.hamcrest.version>
     <hipparchus.reflow-velocity-tools.version>2.0.0</hipparchus.reflow-velocity-tools.version>
-    <hipparchus.mathjax.config>&lt;script type=&quot;text/x-mathjax-config&quot;&gt;MathJax.Hub.Config({ TeX: { extensions: [&quot;autoload.js&quot;]}});&lt;/script&gt;</hipparchus.mathjax.config>
-    <hipparchus.mathjax.enable>&lt;script type=&quot;text/javascript&quot; src=&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML&quot;&gt;&lt;/script&gt;</hipparchus.mathjax.enable>
+    <hipparchus.mathjax.enable>&lt;script src=&quot;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&quot; id=&quot;MathJax-script&quot;&gt;&lt;/script&gt;</hipparchus.mathjax.enable>
     <!-- sonar related properties -->
     <sonar.host.url>https://sonar.orekit.org/</sonar.host.url>
   </properties>
@@ -607,9 +606,9 @@
             <additionalOptions>
               <option>--allow-script-in-comments</option>
               <option>-header</option>
-              <option>&apos;${hipparchus.mathjax.config} ${hipparchus.mathjax.enable}&apos;</option>
+              <option>&apos;${hipparchus.mathjax.enable}&apos;</option>
             </additionalOptions>
-            <bottom><![CDATA[Copyright &copy; ${project.inceptionYear}-{currentYear} <a href="http://www.c-s.fr">CS GROUP</a>. All rights reserved.]]></bottom>
+            <bottom><![CDATA[Copyright &copy; ${project.inceptionYear}-{currentYear} <a href="https://www.c-s.fr">CS GROUP</a>. All rights reserved.]]></bottom>
           </configuration>
           <executions>
             <execution>
