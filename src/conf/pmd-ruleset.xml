@@ -164,6 +164,9 @@
     <exclude name="ClassWithOnlyPrivateConstructorsShouldBeFinal"/>
     <exclude name="AvoidUncheckedExceptionsInSignatures"/>
 
+    <!-- This is a library, its classes are intended to be used from outside -->
+    <exclude name="LoosePackageCoupling" />
+
     <!-- TODO: we should reactivate these rules -->
     <exclude name="ImmutableField"/>
     <exclude name="SimplifyBooleanReturns"/>
