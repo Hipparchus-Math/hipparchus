@@ -36,7 +36,6 @@ sub-folders:
   * `NOTICE.txt`
   * `README.md`
   * `CONTRIBUTING.md`
-  * `JenkinsFile`
   * `release.sh`
   * `pom.xml`
   * `hipparchus-clustering`
@@ -45,7 +44,6 @@ sub-folders:
   * `hipparchus-fft`
   * `hipparchus-filtering`
   * `hipparchus-fitting`
-  * `hipparchus-genetics`
   * `hipparchus-geometry`
   * `hipparchus-migration`
   * `hipparchus-ode`
