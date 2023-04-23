@@ -24,15 +24,15 @@ public class PairTest {
     @Test
     public void testAccessor() {
         final Pair<Integer, Double> p
-            = new Pair<Integer, Double>(new Integer(1), new Double(2));
-        Assert.assertEquals(new Integer(1), p.getKey());
+            = new Pair<Integer, Double>(Integer.valueOf(1), Double.valueOf(2));
+        Assert.assertEquals(Integer.valueOf(1), p.getKey());
         Assert.assertEquals(2, p.getValue().doubleValue(), Math.ulp(1d));
     }
 
     @Test
     public void testAccessor2() {
         final Pair<Integer, Double> p
-            = new Pair<Integer, Double>(new Integer(1), new Double(2));
+            = new Pair<Integer, Double>(Integer.valueOf(1), Double.valueOf(2));
 
         // Check that both APIs refer to the same data.
 
@@ -48,13 +48,13 @@ public class PairTest {
         Pair<Integer, Double> p2 = new Pair<Integer, Double>(null, null);
         Assert.assertTrue(p1.equals(p2));
 
-        p1 = new Pair<Integer, Double>(new Integer(1), new Double(2));
+        p1 = new Pair<Integer, Double>(Integer.valueOf(1), Double.valueOf(2));
         Assert.assertFalse(p1.equals(p2));
 
-        p2 = new Pair<Integer, Double>(new Integer(1), new Double(2));
+        p2 = new Pair<Integer, Double>(Integer.valueOf(1), Double.valueOf(2));
         Assert.assertTrue(p1.equals(p2));
 
-        Pair<Integer, Float> p3 = new Pair<Integer, Float>(new Integer(1), new Float(2));
+        Pair<Integer, Float> p3 = new Pair<Integer, Float>(Integer.valueOf(1), Float.valueOf(2));
         Assert.assertFalse(p1.equals(p3));
     }
 

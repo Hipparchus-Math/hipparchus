@@ -103,8 +103,8 @@ public class RuleFactoryTest {
             final double[] p = new double[order];
             final double[] w = new double[order];
             for (int i = 0; i < order; i++) {
-                p[i] = new Double(i);
-                w[i] = new Double(i);
+                p[i] = Double.valueOf(i);
+                w[i] = Double.valueOf(i);
             }
             return new Pair<>(p, w);
         }
