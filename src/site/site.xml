@@ -48,7 +48,7 @@
         Hipparchus is a pure Java library for mathematics and numerical analysis.
       </bottomDescription>
       <endContent>
-        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script"></script>
       </endContent>
       <pages>
         <index project="hipparchus-aggregator">
