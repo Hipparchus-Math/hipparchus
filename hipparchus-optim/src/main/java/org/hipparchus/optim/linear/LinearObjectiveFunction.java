@@ -28,7 +28,6 @@ import java.io.Serializable;
 
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.OptimizationData;
 
@@ -139,7 +138,11 @@ public class LinearObjectiveFunction
     private void writeObject(ObjectOutputStream oos)
         throws IOException {
         oos.defaultWriteObject();
-        MatrixUtils.serializeRealVector(coefficients, oos);
+        final int n = coefficients.getDimension();
+        oos.writeInt(n);
+        for (int i = 0; i < n; ++i) {
+            oos.writeDouble(coefficients.getEntry(i));
+        }
     }
 
     /**
@@ -151,6 +154,24 @@ public class LinearObjectiveFunction
     private void readObject(ObjectInputStream ois)
       throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
-        MatrixUtils.deserializeRealVector(this, "coefficients", ois);
+
+        // read the vector data
+        final int n = ois.readInt();
+        final double[] data = new double[n];
+        for (int i = 0; i < n; ++i) {
+            data[i] = ois.readDouble();
+        }
+
+        try {
+            // create the instance
+            ArrayRealVector vector = new ArrayRealVector(data, false);
+            final java.lang.reflect.Field f = getClass().getDeclaredField("coefficients");
+            f.setAccessible(true);
+            f.set(this, vector);
+        } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+            IOException ioe = new IOException();
+            ioe.initCause(e);
+            throw ioe;
+        }
     }
 }
