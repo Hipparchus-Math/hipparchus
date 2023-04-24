@@ -28,6 +28,112 @@
 -->
 <FindBugsFilter>
 
+  <!-- the following are considered false positive, they correspond to regular object oriented design
+       SpotBugs has just become too stringent (see https://github.com/spotbugs/spotbugs/issues/1601,
+       https://github.com/spotbugs/spotbugs/issues/1771, https://github.com/spotbugs/spotbugs/issues/2083,
+       https://github.com/spotbugs/spotbugs/issues/2344, https://github.com/spotbugs/spotbugs/issues/2356,
+       https://github.com/spotbugs/spotbugs-gradle-plugin/issues/731)
+  -->
+  <Match>
+    <Class name="org.hipparchus.ode.AbstractFieldIntegrator"/>
+    <Method name="getCurrentSignedStepsize"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.ode.AbstractParameterizable"/>
+    <Method name="getParametersNames"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.ode.ExpandableODE"/>
+    <Class name="org.hipparchus.ode.FieldExpandableODE"/>
+    </Or>
+    <Method name="getMapper"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.ode.FieldDenseOutputModel"/>
+    <Or>
+      <Method name="getInitialTime"/>
+      <Method name="getFinalTime"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.ode.FieldDenseOutputModel"/>
+    <Method name="init"/>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.ode.FieldODEState"/>
+    <Method name="getTime"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.ode.MultistepIntegrator"/>
+      <Class name="org.hipparchus.ode.MultistepFieldIntegrator"/>
+    </Or>
+    <Method name="getStarterIntegrator"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.ode.MultistepIntegrator"/>
+      <Class name="org.hipparchus.ode.MultistepFieldIntegrator"/>
+    </Or>
+    <Method name="setStarterIntegrator"/>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.ode.events.AbstractFieldODEDetector"/>
+    <Method name="getMaxCheckInterval"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.ode.events.FieldEventOccurrence"/>
+    <Method name="getStopTime"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.ode.events.FieldStepEndEventState"/>
+    <Method name="getEventTime"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.ode.events.FieldStepEndEventState"/>
+    <Method name="setStepEnd"/>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.ode.nonstiff.EmbeddedRungeKuttaFieldIntegrator"/>
+    <Or>
+      <Method name="getMaxGrowth"/>
+      <Method name="getMinReduction"/>
+      <Method name="getSafety"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.ode.nonstiff.EmbeddedRungeKuttaFieldIntegrator"/>
+    <Or>
+      <Method name="setMaxGrowth"/>
+      <Method name="setMinReduction"/>
+      <Method name="setSafety"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.ode.FieldODEState"/>
+      <Class name="org.hipparchus.ode.VariationalEquation"/>
+      <Class name="org.hipparchus.ode.events.FieldEventOccurrence"/>
+    </Or>
+    <Method name="&lt;init>"/>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+
   <!-- Floating point equality is acceptable when the algorithm is designed for it. -->
   <Match>
     <Class name="org.hipparchus.ode.events.DetectorBasedEventState"/>

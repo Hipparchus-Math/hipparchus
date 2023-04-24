@@ -40,4 +40,38 @@
     <Bug pattern="EI_EXPOSE_REP" />
   </Match>
 
+  <!-- the following are considered false positive, they correspond to regular object oriented design
+       SpotBugs has just become too stringent (see https://github.com/spotbugs/spotbugs/issues/1601,
+       https://github.com/spotbugs/spotbugs/issues/1771, https://github.com/spotbugs/spotbugs/issues/2083,
+       https://github.com/spotbugs/spotbugs/issues/2344, https://github.com/spotbugs/spotbugs/issues/2356,
+       https://github.com/spotbugs/spotbugs-gradle-plugin/issues/731)
+  -->
+  <Match>
+    <Class name="org.hipparchus.clustering.Cluster"/>
+    <Method name="getPoints"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.clustering.FuzzyKMeansClusterer"/>
+    <Or>
+      <Method name="cluster"/>
+      <Method name="getClusters"/>
+      <Method name="getRandomGenerator"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.clustering.KMeansPlusPlusClusterer"/>
+    <Method name="getRandomGenerator"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.clustering.FuzzyKMeansClusterer"/>
+      <Class name="org.hipparchus.clustering.KMeansPlusPlusClusterer"/>
+    </Or>
+    <Method name="&lt;init>"/>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+
 </FindBugsFilter>

@@ -28,6 +28,50 @@
 -->
 <FindBugsFilter>
 
+  <!-- the following are considered false positive, they correspond to regular object oriented design
+       SpotBugs has just become too stringent (see https://github.com/spotbugs/spotbugs/issues/1601,
+       https://github.com/spotbugs/spotbugs/issues/1771, https://github.com/spotbugs/spotbugs/issues/2083,
+       https://github.com/spotbugs/spotbugs/issues/2344, https://github.com/spotbugs/spotbugs/issues/2356,
+       https://github.com/spotbugs/spotbugs-gradle-plugin/issues/731)
+  -->
+  <Match>
+    <Class name="org.hipparchus.stat.correlation.Covariance"/>
+    <Method name="getCovarianceMatrix"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.stat.correlation.KendallsCorrelation"/>
+      <Class name="org.hipparchus.stat.correlation.PearsonsCorrelation"/>
+    </Or>
+    <Method name="getCorrelationMatrix"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.stat.fitting.EmpiricalDistribution"/>
+    <Or>
+      <Method name="getBinStats"/>
+      <Method name="getSampleStats"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.stat.descriptive.StreamingStatistics$StreamingStatisticsBuilder"/>
+    <Method name="percentiles"/>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.stat.descriptive.moment.GeometricMean"/>
+      <Class name="org.hipparchus.stat.descriptive.moment.Kurtosis"/>
+      <Class name="org.hipparchus.stat.descriptive.moment.Mean"/>
+      <Class name="org.hipparchus.stat.descriptive.moment.Skewness"/>
+      <Class name="org.hipparchus.stat.descriptive.rank.RandomPercentile"/>
+    </Or>
+    <Method name="&lt;init>"/>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+
   <!-- the following expositions of internal representation are intentional and documented -->
   <Match>
     <Class name="org.hipparchus.stat.regression.RegressionResults"/>
