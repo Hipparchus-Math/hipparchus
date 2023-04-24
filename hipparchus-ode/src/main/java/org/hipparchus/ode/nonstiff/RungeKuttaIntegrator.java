@@ -79,6 +79,13 @@ public abstract class RungeKuttaIntegrator extends AbstractIntegrator implements
         this.step = FastMath.abs(step);
     }
 
+    /** Getter for the default, positive step-size assigned at constructor level.
+     * @return step
+     */
+    public double getDefaultStep() {
+        return this.step;
+    }
+
     /** Create an interpolator.
      * @param forward integration direction indicator
      * @param yDotK slopes at the intermediate points
