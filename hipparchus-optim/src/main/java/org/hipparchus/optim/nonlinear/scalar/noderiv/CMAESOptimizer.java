@@ -56,16 +56,16 @@ import org.hipparchus.util.FastMath;
  * <p>
  * In general, on smooth objective functions the CMA-ES is roughly ten times
  * slower than BFGS (counting objective function evaluations, no gradients provided).
- * For up to <math>N=10</math> variables also the derivative-free simplex
+ * For up to \(n=10\) variables also the derivative-free simplex
  * direct search method (Nelder and Mead) can be faster, but it is
  * far less reliable than CMA-ES.
  * <p>
  * The CMA-ES is particularly well suited for non-separable
  * and/or badly conditioned problems. To observe the advantage of CMA compared
  * to a conventional evolution strategy, it will usually take about
- * <math>30 N</math> function evaluations. On difficult problems the complete
+ * \(30 n\) function evaluations. On difficult problems the complete
  * optimization (a single run) is expected to take <em>roughly</em> between
- * <math>30 N</math> and <math>300 N<sup>2</sup></math>
+ * \(30 n\) and \(300 n^2\)
  * function evaluations.
  * <p>
  * This implementation is translated and adapted from the Matlab version

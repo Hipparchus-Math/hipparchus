@@ -468,9 +468,9 @@ public class DfpMath {
 
     }
 
-    /** Computes x to the y power.<p>
+    /** Computes x to the y power.
      *
-     *  Uses the following method:<p>
+     *  <p>Uses the following method:</p>
      *
      *  <ol>
      *  <li> Set u = rint(y), v = y-u
@@ -479,30 +479,30 @@ public class DfpMath {
      *  <li> Compute c = a - b*ln(2)
      *  <li> x<sup>y</sup> = x<sup>u</sup>  *   2<sup>b</sup> * e<sup>c</sup>
      *  </ol>
-     *  if |y| &gt; 1e8, then we compute by exp(y*ln(x))   <p>
+     *  if |y| &gt; 1e8, then we compute by exp(y*ln(x))
      *
-     *  <b>Special Cases</b><p>
+     *  <p>Special Cases</p>
      *  <ul>
-     *  <li>  if y is 0.0 or -0.0 then result is 1.0
-     *  <li>  if y is 1.0 then result is x
-     *  <li>  if y is NaN then result is NaN
-     *  <li>  if x is NaN and y is not zero then result is NaN
-     *  <li>  if |x| &gt; 1.0 and y is +Infinity then result is +Infinity
-     *  <li>  if |x| &lt; 1.0 and y is -Infinity then result is +Infinity
-     *  <li>  if |x| &gt; 1.0 and y is -Infinity then result is +0
-     *  <li>  if |x| &lt; 1.0 and y is +Infinity then result is +0
-     *  <li>  if |x| = 1.0 and y is +/-Infinity then result is NaN
-     *  <li>  if x = +0 and y &gt; 0 then result is +0
-     *  <li>  if x = +Inf and y &lt; 0 then result is +0
-     *  <li>  if x = +0 and y &lt; 0 then result is +Inf
-     *  <li>  if x = +Inf and y &gt; 0 then result is +Inf
-     *  <li>  if x = -0 and y &gt; 0, finite, not odd integer then result is +0
-     *  <li>  if x = -0 and y &lt; 0, finite, and odd integer then result is -Inf
-     *  <li>  if x = -Inf and y &gt; 0, finite, and odd integer then result is -Inf
-     *  <li>  if x = -0 and y &lt; 0, not finite odd integer then result is +Inf
-     *  <li>  if x = -Inf and y &gt; 0, not finite odd integer then result is +Inf
-     *  <li>  if x &lt; 0 and y &gt; 0, finite, and odd integer then result is -(|x|<sup>y</sup>)
-     *  <li>  if x &lt; 0 and y &gt; 0, finite, and not integer then result is NaN
+     *  <li>  if y is 0.0 or -0.0 then result is 1.0</li>
+     *  <li>  if y is 1.0 then result is x</li>
+     *  <li>  if y is NaN then result is NaN</li>
+     *  <li>  if x is NaN and y is not zero then result is NaN</li>
+     *  <li>  if |x| &gt; 1.0 and y is +Infinity then result is +Infinity</li>
+     *  <li>  if |x| &lt; 1.0 and y is -Infinity then result is +Infinity</li>
+     *  <li>  if |x| &gt; 1.0 and y is -Infinity then result is +0</li>
+     *  <li>  if |x| &lt; 1.0 and y is +Infinity then result is +0</li>
+     *  <li>  if |x| = 1.0 and y is +/-Infinity then result is NaN</li>
+     *  <li>  if x = +0 and y &gt; 0 then result is +0</li>
+     *  <li>  if x = +Inf and y &lt; 0 then result is +0</li>
+     *  <li>  if x = +0 and y &lt; 0 then result is +Inf</li>
+     *  <li>  if x = +Inf and y &gt; 0 then result is +Inf</li>
+     *  <li>  if x = -0 and y &gt; 0, finite, not odd integer then result is +0</li>
+     *  <li>  if x = -0 and y &lt; 0, finite, and odd integer then result is -Inf</li>
+     *  <li>  if x = -Inf and y &gt; 0, finite, and odd integer then result is -Inf</li>
+     *  <li>  if x = -0 and y &lt; 0, not finite odd integer then result is +Inf</li>
+     *  <li>  if x = -Inf and y &gt; 0, not finite odd integer then result is +Inf</li>
+     *  <li>  if x &lt; 0 and y &gt; 0, finite, and odd integer then result is -(|x|<sup>y</sup>)</li>
+     *  <li>  if x &lt; 0 and y &gt; 0, finite, and not integer then result is NaN</li>
      *  </ul>
      *  @param x base to be raised
      *  @param y power to which base should be raised

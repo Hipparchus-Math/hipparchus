@@ -291,12 +291,12 @@ public class RegressionResults implements Serializable {
      * <p>This is usually abbreviated SSR or SSM.  It is defined as SSM
      * <a href="http://www.xycoon.com/SumOfSquares.htm">here</a></p>
      *
-     * <p><strong>Preconditions</strong>: <ul>
+     * <p><strong>Preconditions</strong>:</p><ul>
      * <li>At least two observations (with at least two different x values)
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double.NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return sum of squared deviations of predicted y values
      */
@@ -313,12 +313,13 @@ public class RegressionResults implements Serializable {
      * rounding errors the computational formula returns a negative result,
      * 0 is returned.</p>
      *
-     * <p><strong>Preconditions</strong>: <ul>
+     * <p><strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>numberOfParameters data pairs
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, <code>Double,NaN</code> is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return sum of squared errors associated with the regression model
      */
@@ -345,12 +346,13 @@ public class RegressionResults implements Serializable {
      * coefficient of multiple determination</a>,
      * usually denoted r-square.</p>
      *
-     * <p><strong>Preconditions</strong>: <ul>
+     * <p><strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>At least numberOfParameters observations (with at least numberOfParameters different x values)
      * must have been added before invoking this method. If this method is
      * invoked before a model can be estimated, {@code Double,NaN} is
      * returned.
-     * </li></ul></p>
+     * </li></ul>
      *
      * @return r-square, a double in the interval [0, 1]
      */
@@ -359,16 +361,17 @@ public class RegressionResults implements Serializable {
     }
 
     /**
-     * <p>Returns the adjusted R-squared statistic, defined by the formula <pre>
-     * R<sup>2</sup><sub>adj</sub> = 1 - [SSR (n - 1)] / [SSTO (n - p)]
-     * </pre>
+     * <p>Returns the adjusted R-squared statistic, defined by the formula
+     * \(
+     * R_\mathrm{adj}^2 = 1 - \frac{\mathrm{SSR} (n - 1)}{\mathrm{SSTO} (n - p)}
+     * \)
      * where SSR is the sum of squared residuals},
      * SSTO is the total sum of squares}, n is the number
      * of observations and p is the number of parameters estimated (including the intercept).</p>
      *
-     * <p>If the regression is estimated without an intercept term, what is returned is <pre>
+     * <p>If the regression is estimated without an intercept term, what is returned is</p><pre>
      * <code> 1 - (1 - {@link #getRSquared()} ) * (n / (n - p)) </code>
-     * </pre></p>
+     * </pre>
      *
      * @return adjusted R-Squared statistic
      */

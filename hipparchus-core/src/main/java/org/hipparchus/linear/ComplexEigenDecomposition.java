@@ -40,20 +40,39 @@ import org.hipparchus.util.Precision;
  * matrix are independent. On example is the square matrix
  * \[
  * A = \left(\begin{matrix}
- * 3 & -2\\
- * 4 & -1
+ * 3 &amp; -2\\
+ * 4 &amp; -1
  * \end{matrix}\right)
  * \]
  * which has two conjugate eigenvalues \(\lambda_1=1+2i\) and \(\lambda_2=1-2i\)
  * with associated eigenvectors \(v_1^T = (1, 1-i)\) and \(v_2^T = (1, 1+i)\).
  * \[
  * V\timesV^T = \left(\begin{matrix}
- * 2 & 2\\
- * 2 & 0
+ * 2 &amp; 2\\
+ * 2 &amp; 0
  * \end{matrix}\right)
  * \]
  * which is not the identity matrix. Therefore, despite \(A \times V = V \times D\),
  * \(A \ne V \times D \time V^T\), which would hold for real eigendecomposition.
+ * </p>
+ * <p>
+ * Also note that for consistency with Wolfram langage
+ * <a href="https://reference.wolfram.com/language/ref/Eigenvectors.html">eigenvectors</a>,
+ * we add zero vectors when the geometric multiplicity of the eigenvalue is smaller than
+ * its algebraic multiplicity (hence the regular eigenvector matrix should be non-square).
+ * With these additional null vectors, the eigenvectors matrix becomes square. This happens
+ * for example with the square matrix
+ * \[
+ * A = \left(\begin{matrix}
+ *  1 &amp; 0 &amp; 0\\
+ * -2 &amp; 1 &amp; 0\\
+ *  0 &amp; 0 &amp; 1
+ * \end{matrix}\right)
+ * \]
+ * Its characteristic polynomial is \((1-\lambda)^3\), hence is has one eigen value \(\lambda=1\)
+ * with algebraic multiplicity 3. However, this eigenvalue leads to only two eigenvectors
+ * \(v_1=(0, 1, 0)\) and \(v_2=(0, 0, 1)\), hence its geometric multiplicity is only 2, not 3.
+ * So we add a third zero vector \(v_3=(0, 0, 0)\), in the same way Wolfram language does.
  * </p>
  *
  * Compute complex eigen values from the Schur transform. Compute complex eigen
@@ -335,6 +354,16 @@ public class ComplexEigenDecomposition {
                     eigenvectors[i] = b;
 
                 }
+            }
+
+            if (eigenvectors[i] == null) {
+                // for consistency with Wolfram langage
+                // https://reference.wolfram.com/language/ref/Eigenvectors.html
+                // we add zero vectors when the geometric multiplicity of the eigenvalue
+                // is smaller than its algebraic multiplicity (hence the regular eigenvector
+                // matrix should be non-square). With these additional null vectors, the
+                // eigenvectors matrix becomes square
+                eigenvectors[i] = MatrixUtils.createFieldVector(ComplexField.getInstance(), n);
             }
 
         }

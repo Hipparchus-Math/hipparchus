@@ -45,8 +45,7 @@ import org.hipparchus.util.Precision;
 /**
  * A tableau for use in the Simplex method.
  *
- * <p>
- * Example:
+ * <p>Example:</p>
  * <pre>
  *   W |  Z |  x1 |  x2 |  x- | s1 |  s2 |  a1 |  RHS
  * ---------------------------------------------------
@@ -56,14 +55,15 @@ import org.hipparchus.util.Precision;
  *   0    0    0     1     0     0     1     0     3   &lt;= constraint 2
  *   0    0    1     1     0     0     0     1     4   &lt;= constraint 3
  * </pre>
- * W: Phase 1 objective function</br>
- * Z: Phase 2 objective function</br>
- * x1 &amp; x2: Decision variables</br>
- * x-: Extra decision variable to allow for negative values</br>
- * s1 &amp; s2: Slack/Surplus variables</br>
- * a1: Artificial variable</br>
- * RHS: Right hand side</br>
- * </p>
+ * <ul>
+ *   <li>W: Phase 1 objective function</li>
+ *   <li>Z: Phase 2 objective function</li>
+ *   <li>x1 &amp; x2: Decision variables</li>
+ *   <li>x-: Extra decision variable to allow for negative values</li>
+ *   <li>s1 &amp; s2: Slack/Surplus variables</li>
+ *   <li>a1: Artificial variable</li>
+ *   <li>RHS: Right hand side</li>
+ * </ul>
  */
 class SimplexTableau implements Serializable {
 

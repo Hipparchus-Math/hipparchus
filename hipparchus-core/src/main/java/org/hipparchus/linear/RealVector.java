@@ -804,7 +804,7 @@ public abstract class RealVector {
      * Acts as if it is implemented as:
      * <pre>
      *  Entry e = null;
-     *  for(Iterator<Entry> it = iterator(); it.hasNext(); e = it.next()) {
+     *  for(Iterator&lt;Entry&gt; it = iterator(); it.hasNext(); e = it.next()) {
      *      e.setValue(function.value(e.getValue()));
      *  }
      * </pre>

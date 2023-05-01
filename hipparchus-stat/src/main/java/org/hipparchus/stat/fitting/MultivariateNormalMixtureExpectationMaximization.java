@@ -38,7 +38,7 @@ import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Pair;
 
 /**
- * Expectation-Maximization</a> algorithm for fitting the parameters of
+ * Expectation-Maximization algorithm for fitting the parameters of
  * multivariate normal mixture model distributions.
  *
  * This implementation is pure original code based on <a

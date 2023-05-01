@@ -44,23 +44,35 @@ import org.hipparchus.exception.UTF8Control;
  */
 public enum LocalizedODEFormats implements Localizable {
 
-    // CHECKSTYLE: stop MultipleVariableDeclarations
-    // CHECKSTYLE: stop JavadocVariable
-
+    /** HOLE_BETWEEN_MODELS_TIME_RANGES. */
     HOLE_BETWEEN_MODELS_TIME_RANGES("{0} wide hole between models time ranges"),
+
+    /** INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS. */
     INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS("multistep method needs at least {0} previous steps, got {1}"),
+
+    /** MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION. */
     MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION("minimal step size ({1,number,0.00E00}) reached, integration needs {0,number,0.00E00}"),
+
+    /** MULTISTEP_STARTER_STOPPED_EARLY. */
     MULTISTEP_STARTER_STOPPED_EARLY("multistep integrator starter stopped early, maybe too large step size"),
+
+    /** PROPAGATION_DIRECTION_MISMATCH. */
     PROPAGATION_DIRECTION_MISMATCH("propagation direction mismatch"),
+
+    /** TOO_SMALL_INTEGRATION_INTERVAL. */
     TOO_SMALL_INTEGRATION_INTERVAL("too small integration interval: length = {0}"),
+
+    /** UNKNOWN_PARAMETER. */
     UNKNOWN_PARAMETER("unknown parameter {0}"),
+
+    /** UNMATCHED_ODE_IN_EXPANDED_SET. */
     UNMATCHED_ODE_IN_EXPANDED_SET("ode does not match the main ode set in the extended set"),
+
+    /** NAN_APPEARING_DURING_INTEGRATION. */
     NAN_APPEARING_DURING_INTEGRATION("NaN appears during integration near time {0}"),
+
+    /** FIND_ROOT. */
     FIND_ROOT("{0} failed to find root between {1} (g={2,number,0.0##############E0}) and {3} (g={4,number,0.0##############E0})\nLast iteration at {5} (g={6,number,0.0##############E0})");
-
-    // CHECKSTYLE: resume JavadocVariable
-    // CHECKSTYLE: resume MultipleVariableDeclarations
-
 
     /** Source English format. */
     private final String sourceFormat;

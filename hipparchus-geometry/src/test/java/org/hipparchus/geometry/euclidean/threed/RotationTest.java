@@ -427,16 +427,14 @@ public class RotationTest {
               RotationOrder.YZX, RotationOrder.ZXY, RotationOrder.ZYX
           };
 
-          double[] singularCardanAngle = { FastMath.PI / 2, -FastMath.PI / 2 };
+          double[] singularCardanAngle = {
+              -FastMath.PI / 2, -FastMath.PI / 2 + 1.0e-12, -FastMath.PI / 2 + 1.0e-10,
+               FastMath.PI / 2 - 1.0e-10, FastMath.PI / 2 - 1.0e-12, FastMath.PI / 2
+          };
           for (int i = 0; i < CardanOrders.length; ++i) {
               for (int j = 0; j < singularCardanAngle.length; ++j) {
                   Rotation r = new Rotation(CardanOrders[i], convention, 0.1, singularCardanAngle[j], 0.3);
-                  try {
-                      r.getAngles(CardanOrders[i], convention);
-                      Assert.fail("an exception should have been caught");
-                  } catch (MathIllegalStateException cese) {
-                      Assert.assertEquals(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY, cese.getSpecifier());
-                  }
+                  Assert.assertEquals(singularCardanAngle[j], r.getAngles(CardanOrders[i], convention)[1], 4.5e-16);
               }
           }
 
@@ -445,16 +443,11 @@ public class RotationTest {
               RotationOrder.YZY, RotationOrder.ZXZ, RotationOrder.ZYZ
           };
 
-          double[] singularEulerAngle = { 0, FastMath.PI };
+          double[] singularEulerAngle = { 0, 1.0e-12, 1.0e-10, FastMath.PI - 1.0e-10, FastMath.PI - 1.0e-12, FastMath.PI };
           for (int i = 0; i < EulerOrders.length; ++i) {
               for (int j = 0; j < singularEulerAngle.length; ++j) {
                   Rotation r = new Rotation(EulerOrders[i], convention, 0.1, singularEulerAngle[j], 0.3);
-                  try {
-                      r.getAngles(EulerOrders[i], convention);
-                      Assert.fail("an exception should have been caught");
-                  } catch (MathIllegalStateException cese) {
-                      Assert.assertEquals(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY, cese.getSpecifier());
-                  }
+                  Assert.assertEquals(singularEulerAngle[j],  r.getAngles(EulerOrders[i], convention)[1], 1.0e-24);
               }
           }
       }

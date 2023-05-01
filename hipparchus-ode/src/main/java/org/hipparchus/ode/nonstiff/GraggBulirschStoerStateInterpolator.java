@@ -37,23 +37,22 @@ import org.hipparchus.util.FastMath;
  * for this code is available <a
  * href="http://www.unige.ch/~hairer/prog/licence.txt">here</a>, for
  * convenience, it is reproduced below.</p>
- * </p>
  *
- * <table border="0" width="80%" cellpadding="10" align="center" bgcolor="#E0E0E0">
- * <tr><td>Copyright (c) 2004, Ernst Hairer</td></tr>
+ * <blockquote>
+ * <p>Copyright (c) 2004, Ernst Hairer</p>
  *
- * <tr><td>Redistribution and use in source and binary forms, with or
+ * <p>Redistribution and use in source and binary forms, with or
  * without modification, are permitted provided that the following
- * conditions are met:
+ * conditions are met:</p>
  * <ul>
  *  <li>Redistributions of source code must retain the above copyright
  *      notice, this list of conditions and the following disclaimer.</li>
  *  <li>Redistributions in binary form must reproduce the above copyright
  *      notice, this list of conditions and the following disclaimer in the
  *      documentation and/or other materials provided with the distribution.</li>
- * </ul></td></tr>
+ * </ul>
  *
- * <tr><td><strong>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
+ * <p><strong>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
  * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING,
  * BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
  * FOR A  PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR
@@ -63,8 +62,8 @@ import org.hipparchus.util.FastMath;
  * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</strong></td></tr>
- * </table>
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</strong></p>
+ * </blockquote>
  *
  * @see GraggBulirschStoerIntegrator
  */

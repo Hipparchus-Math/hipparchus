@@ -54,73 +54,80 @@ import org.hipparchus.util.FastMath;
  * ensure a sufficient number of steps can be completed before the end of integration.
  * </p>
  *
- * <h3>Implementation details</h3>
+ * <p><strong>Implementation details</strong></p>
  *
  * <p>We define scaled derivatives s<sub>i</sub>(n) at step n as:
- * <pre>
- * s<sub>1</sub>(n) = h y'<sub>n</sub> for first derivative
- * s<sub>2</sub>(n) = h<sup>2</sup>/2 y''<sub>n</sub> for second derivative
- * s<sub>3</sub>(n) = h<sup>3</sup>/6 y'''<sub>n</sub> for third derivative
- * ...
- * s<sub>k</sub>(n) = h<sup>k</sup>/k! y<sup>(k)</sup><sub>n</sub> for k<sup>th</sup> derivative
- * </pre></p>
+ * \[
+ *   \left\{\begin{align}
+ *   s_1(n) &amp;= h y'_n \text{ for first derivative}\\
+ *   s_2(n) &amp;= \frac{h^2}{2} y_n'' \text{ for second derivative}\\
+ *   s_3(n) &amp;= \frac{h^3}{6} y_n''' \text{ for third derivative}\\
+ *   &amp;\cdots\\
+ *   s_k(n) &amp;= \frac{h^k}{k!} y_n^{(k)} \text{ for } k^\mathrm{th} \text{ derivative}
+ *   \end{align}\right.
+ * \]</p>
  *
  * <p>The definitions above use the classical representation with several previous first
  * derivatives. Lets define
- * <pre>
- *   q<sub>n</sub> = [ s<sub>1</sub>(n-1) s<sub>1</sub>(n-2) ... s<sub>1</sub>(n-(k-1)) ]<sup>T</sup>
- * </pre>
+ * \[
+ *   q_n = [ s_1(n-1) s_1(n-2) \ldots s_1(n-(k-1)) ]^T
+ * \]
  * (we omit the k index in the notation for clarity). With these definitions,
- * Adams-Bashforth methods can be written:
- * <ul>
- *   <li>k = 1: y<sub>n+1</sub> = y<sub>n</sub> + s<sub>1</sub>(n)</li>
- *   <li>k = 2: y<sub>n+1</sub> = y<sub>n</sub> + 3/2 s<sub>1</sub>(n) + [ -1/2 ] q<sub>n</sub></li>
- *   <li>k = 3: y<sub>n+1</sub> = y<sub>n</sub> + 23/12 s<sub>1</sub>(n) + [ -16/12 5/12 ] q<sub>n</sub></li>
- *   <li>k = 4: y<sub>n+1</sub> = y<sub>n</sub> + 55/24 s<sub>1</sub>(n) + [ -59/24 37/24 -9/24 ] q<sub>n</sub></li>
- *   <li>...</li>
- * </ul></p>
+ * Adams-Bashforth methods can be written:</p>
+ * \[
+ *   \left\{\begin{align}
+ *   k = 1: &amp; y_{n+1} = y_n +               s_1(n) \\
+ *   k = 2: &amp; y_{n+1} = y_n + \frac{3}{2}   s_1(n) + [ \frac{-1}{2} ] q_n \\
+ *   k = 3: &amp; y_{n+1} = y_n + \frac{23}{12} s_1(n) + [ \frac{-16}{12} \frac{5}{12} ] q_n \\
+ *   k = 4: &amp; y_{n+1} = y_n + \frac{55}{24} s_1(n) + [ \frac{-59}{24} \frac{37}{24} \frac{-9}{24} ] q_n \\
+ *          &amp; \cdots
+ *   \end{align}\right.
+ * \]
  *
  * <p>Instead of using the classical representation with first derivatives only (y<sub>n</sub>,
  * s<sub>1</sub>(n) and q<sub>n</sub>), our implementation uses the Nordsieck vector with
  * higher degrees scaled derivatives all taken at the same step (y<sub>n</sub>, s<sub>1</sub>(n)
  * and r<sub>n</sub>) where r<sub>n</sub> is defined as:
- * <pre>
- * r<sub>n</sub> = [ s<sub>2</sub>(n), s<sub>3</sub>(n) ... s<sub>k</sub>(n) ]<sup>T</sup>
- * </pre>
+ * \[
+ * r_n = [ s_2(n), s_3(n) \ldots s_k(n) ]^T
+ * \]
  * (here again we omit the k index in the notation for clarity)
  * </p>
  *
  * <p>Taylor series formulas show that for any index offset i, s<sub>1</sub>(n-i) can be
  * computed from s<sub>1</sub>(n), s<sub>2</sub>(n) ... s<sub>k</sub>(n), the formula being exact
  * for degree k polynomials.
- * <pre>
- * s<sub>1</sub>(n-i) = s<sub>1</sub>(n) + &sum;<sub>j&gt;0</sub> (j+1) (-i)<sup>j</sup> s<sub>j+1</sub>(n)
- * </pre>
+ * \[
+ * s_1(n-i) = s_1(n) + \sum_{j\gt 0} (j+1) (-i)^j s_{j+1}(n)
+ * \]
  * The previous formula can be used with several values for i to compute the transform between
  * classical representation and Nordsieck vector. The transform between r<sub>n</sub>
  * and q<sub>n</sub> resulting from the Taylor series formulas above is:
- * <pre>
- * q<sub>n</sub> = s<sub>1</sub>(n) u + P r<sub>n</sub>
- * </pre>
+ * \[
+ * q_n = s_1(n) u + P r_n
+ * \]
  * where u is the [ 1 1 ... 1 ]<sup>T</sup> vector and P is the (k-1)&times;(k-1) matrix built
- * with the (j+1) (-i)<sup>j</sup> terms with i being the row number starting from 1 and j being
+ * with the \((j+1) (-i)^j\) terms with i being the row number starting from 1 and j being
  * the column number starting from 1:
- * <pre>
- *        [  -2   3   -4    5  ... ]
- *        [  -4  12  -32   80  ... ]
- *   P =  [  -6  27 -108  405  ... ]
- *        [  -8  48 -256 1280  ... ]
- *        [          ...           ]
- * </pre></p>
+ * \[
+ *   P=\begin{bmatrix}
+ *   -2  &amp;  3 &amp;   -4 &amp;    5 &amp; \ldots \\
+ *   -4  &amp; 12 &amp;  -32 &amp;   80 &amp; \ldots \\
+ *   -6  &amp; 27 &amp; -108 &amp;  405 &amp; \ldots \\
+ *   -8  &amp; 48 &amp; -256 &amp; 1280 &amp; \ldots \\
+ *       &amp;    &amp;  \ldots\\
+ *    \end{bmatrix}
+ * \]
+ * </p>
  *
- * <p>Using the Nordsieck vector has several advantages:
+ * <p>Using the Nordsieck vector has several advantages:</p>
  * <ul>
  *   <li>it greatly simplifies step interpolation as the interpolator mainly applies
  *   Taylor series formulas,</li>
  *   <li>it simplifies step changes that occur when discrete events that truncate
  *   the step are triggered,</li>
  *   <li>it allows to extend the methods in order to support adaptive stepsize.</li>
- * </ul></p>
+ * </ul>
  *
  * <p>The Nordsieck vector at step n+1 is computed from the Nordsieck vector at step n as follows:
  * <ul>
@@ -128,7 +135,7 @@ import org.hipparchus.util.FastMath;
  *   <li>s<sub>1</sub>(n+1) = h f(t<sub>n+1</sub>, y<sub>n+1</sub>)</li>
  *   <li>r<sub>n+1</sub> = (s<sub>1</sub>(n) - s<sub>1</sub>(n+1)) P<sup>-1</sup> u + P<sup>-1</sup> A P r<sub>n</sub></li>
  * </ul>
- * where A is a rows shifting matrix (the lower left part is an identity matrix):
+ * <p>where A is a rows shifting matrix (the lower left part is an identity matrix):</p>
  * <pre>
  *        [ 0 0   ...  0 0 | 0 ]
  *        [ ---------------+---]
@@ -137,7 +144,7 @@ import org.hipparchus.util.FastMath;
  *        [       ...      | 0 ]
  *        [ 0 0   ...  1 0 | 0 ]
  *        [ 0 0   ...  0 1 | 0 ]
- * </pre></p>
+ * </pre>
  *
  * <p>The P<sup>-1</sup>u vector and the P<sup>-1</sup> A P matrix do not depend on the state,
  * they only depend on k and therefore are precomputed once for all.</p>

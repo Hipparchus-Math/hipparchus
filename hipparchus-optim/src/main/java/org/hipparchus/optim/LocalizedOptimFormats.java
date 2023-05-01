@@ -44,24 +44,38 @@ import org.hipparchus.exception.UTF8Control;
  */
 public enum LocalizedOptimFormats implements Localizable {
 
-    // CHECKSTYLE: stop MultipleVariableDeclarations
-    // CHECKSTYLE: stop JavadocVariable
-
+    /** EQUAL_VERTICES_IN_SIMPLEX. */
     EQUAL_VERTICES_IN_SIMPLEX("equal vertices {0} and {1} in simplex configuration"),
+
+    /** INVALID_IMPLEMENTATION. */
     INVALID_IMPLEMENTATION("required functionality is missing in {0}"),
+
+    /** NO_FEASIBLE_SOLUTION. */
     NO_FEASIBLE_SOLUTION("no feasible solution"),
+
+    /** SIMPLEX_NEED_ONE_POINT. */
     SIMPLEX_NEED_ONE_POINT("simplex must contain at least one point"),
+
+    /** TOO_SMALL_COST_RELATIVE_TOLERANCE. */
     TOO_SMALL_COST_RELATIVE_TOLERANCE("cost relative tolerance is too small ({0}), no further reduction in the sum of squares is possible"),
+
+    /** TOO_SMALL_ORTHOGONALITY_TOLERANCE. */
     TOO_SMALL_ORTHOGONALITY_TOLERANCE("orthogonality tolerance is too small ({0}), solution is orthogonal to the jacobian"),
+
+    /** TOO_SMALL_PARAMETERS_RELATIVE_TOLERANCE. */
     TOO_SMALL_PARAMETERS_RELATIVE_TOLERANCE("parameters relative tolerance is too small ({0}), no further improvement in the approximate solution is possible"),
+
+    /** TRUST_REGION_STEP_FAILED. */
     TRUST_REGION_STEP_FAILED("trust region step has failed to reduce Q"),
+
+    /** UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN. */
     UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN("unable to perform Q.R decomposition on the {0}x{1} jacobian matrix"),
+
+    /** UNABLE_TO_SOLVE_SINGULAR_PROBLEM. */
     UNABLE_TO_SOLVE_SINGULAR_PROBLEM("unable to solve: singular problem"),
+
+    /** UNBOUNDED_SOLUTION. */
     UNBOUNDED_SOLUTION("unbounded solution");
-
-    // CHECKSTYLE: resume JavadocVariable
-    // CHECKSTYLE: resume MultipleVariableDeclarations
-
 
     /** Source English format. */
     private final String sourceFormat;

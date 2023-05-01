@@ -35,6 +35,7 @@ import org.hipparchus.util.MathUtils;
  * <p>
  * Implementation of {@link #logBeta(double, double)} is based on the
  * algorithms described in
+ * </p>
  * <ul>
  * <li><a href="http://dx.doi.org/10.1145/22721.23109">Didonato and Morris
  *     (1986)</a>, <em>Computation of the Incomplete Gamma Function Ratios
@@ -43,6 +44,7 @@ import org.hipparchus.util.MathUtils;
  *     (1992)</a>, <em>Algorithm 708: Significant Digit Computation of the
  *     Incomplete Beta Function Ratios</em>, TOMS 18(3), 360-373,</li>
  * </ul>
+ * <p>
  * and implemented in the
  * <a href="http://www.dtic.mil/docs/citations/ADA476840">NSWC Library of Mathematical Functions</a>,
  * available

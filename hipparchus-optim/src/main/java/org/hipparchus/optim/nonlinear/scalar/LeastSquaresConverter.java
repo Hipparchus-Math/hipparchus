@@ -86,9 +86,7 @@ public class LeastSquaresConverter implements MultivariateFunction {
      * specified weights.
      * <p>
      * The scalar objective function value is computed as:
-     * <pre>
      * objective = &sum;weight<sub>i</sub>(observation<sub>i</sub>-objective<sub>i</sub>)<sup>2</sup>
-     * </pre>
      * </p>
      * <p>
      * Weights can be used for example to combine residuals with different standard
@@ -130,9 +128,7 @@ public class LeastSquaresConverter implements MultivariateFunction {
      * specified weights.
      * <p>
      * The scalar objective function value is computed as:
-     * <pre>
      * objective = y<sup>T</sup>y with y = scale&times;(observation-objective)
-     * </pre>
      * </p>
      * <p>
      * The array computed by the objective function, the observations array and the

@@ -34,7 +34,7 @@ import org.hipparchus.util.MathArrays;
  * often used Runge-Kutta method).
  *
  * <p>This method is an explicit Runge-Kutta method, its Butcher-array
- * is the following one :
+ * is the following one :</p>
  * <pre>
  *    0  |  0    0    0    0
  *   1/2 | 1/2   0    0    0
@@ -43,7 +43,6 @@ import org.hipparchus.util.MathArrays;
  *       |--------------------
  *       | 1/6  1/3  1/3  1/6
  * </pre>
- * </p>
  *
  * @see EulerFieldIntegrator
  * @see GillFieldIntegrator

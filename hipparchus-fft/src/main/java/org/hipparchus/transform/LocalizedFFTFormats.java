@@ -44,17 +44,17 @@ import org.hipparchus.exception.UTF8Control;
  */
 public enum LocalizedFFTFormats implements Localizable {
 
-    // CHECKSTYLE: stop MultipleVariableDeclarations
-    // CHECKSTYLE: stop JavadocVariable
-
+    /** FIRST_ELEMENT_NOT_ZERO. */
     FIRST_ELEMENT_NOT_ZERO("first element is not 0: {0}"),
+
+    /** NOT_POWER_OF_TWO. */
     NOT_POWER_OF_TWO("{0} is not a power of 2"),
+
+    /** NOT_POWER_OF_TWO_CONSIDER_PADDING. */
     NOT_POWER_OF_TWO_CONSIDER_PADDING("{0} is not a power of 2, consider padding for fix"),
+
+    /** NOT_POWER_OF_TWO_PLUS_ONE. */
     NOT_POWER_OF_TWO_PLUS_ONE("{0} is not a power of 2 plus one");
-
-    // CHECKSTYLE: resume JavadocVariable
-    // CHECKSTYLE: resume MultipleVariableDeclarations
-
 
     /** Source English format. */
     private final String sourceFormat;

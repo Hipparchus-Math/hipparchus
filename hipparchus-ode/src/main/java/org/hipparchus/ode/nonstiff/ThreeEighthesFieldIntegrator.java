@@ -33,7 +33,7 @@ import org.hipparchus.util.MathArrays;
  * integrator for Ordinary Differential Equations.
  *
  * <p>This method is an explicit Runge-Kutta method, its Butcher-array
- * is the following one :
+ * is the following one :</p>
  * <pre>
  *    0  |  0    0    0    0
  *   1/3 | 1/3   0    0    0
@@ -42,7 +42,6 @@ import org.hipparchus.util.MathArrays;
  *       |--------------------
  *       | 1/8  3/8  3/8  1/8
  * </pre>
- * </p>
  *
  * @see EulerFieldIntegrator
  * @see ClassicalRungeKuttaFieldIntegrator

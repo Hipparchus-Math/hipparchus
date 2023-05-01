@@ -765,19 +765,22 @@ public class MathArrays {
      * Returns the Cartesian norm (2-norm), handling both overflow and underflow.
      * Translation of the minpack enorm subroutine.
      *
+     * <p>
      * The redistribution policy for MINPACK is available
      * <a href="http://www.netlib.org/minpack/disclaimer">here</a>, for
-     * convenience, it is reproduced below.</p>
+     * convenience, it is reproduced below.
+     * </p>
      *
-     * <table border="0" width="80%" cellpadding="10" align="center" bgcolor="#E0E0E0">
-     * <tr><td>
+     * <blockquote>
+     * <p>
      *    Minpack Copyright Notice (1999) University of Chicago.
      *    All rights reserved
-     * </td></tr>
-     * <tr><td>
+     * </p>
+     * <p>
      * Redistribution and use in source and binary forms, with or without
      * modification, are permitted provided that the following conditions
      * are met:
+     * </p>
      * <ol>
      *  <li>Redistributions of source code must retain the above copyright
      *      notice, this list of conditions and the following disclaimer.</li>
@@ -814,8 +817,8 @@ public class MathArrays {
      *     (INCLUDING NEGLIGENCE OR STRICT LIABILITY), OR OTHERWISE,
      *     EVEN IF ANY OF SAID PARTIES HAS BEEN WARNED OF THE
      *     POSSIBILITY OF SUCH LOSS OR DAMAGES.</strong></li>
-     * <ol></td></tr>
-     * </table>
+     * </ol>
+     * </blockquote>
      *
      * @param v Vector of doubles.
      * @return the 2-norm of the vector.
@@ -1777,7 +1780,7 @@ public class MathArrays {
 
     /**
      * Shuffle the entries of the given array, using the
-     * <a href="http://en.wikipedia.org/wiki/Fisher–Yates_shuffle#The_modern_algorithm">
+     * <a href="https://en.wikipedia.org/wiki/Fisher-Yates_shuffle#The_modern_algorithm">
      * Fisher–Yates</a> algorithm.
      * The {@code start} and {@code pos} parameters select which portion
      * of the array is randomized and which is left untouched.
@@ -1876,15 +1879,14 @@ public class MathArrays {
     /**
      * This method is used
      * to verify that the input parameters designate a subarray of positive length.
-     * <p>
      * <ul>
-     * <li>returns <code>true</code> iff the parameters designate a subarray of
+     * <li>returns {@code true} iff the parameters designate a subarray of
      * positive length</li>
-     * <li>throws <code>MathIllegalArgumentException</code> if the array is null or
+     * <li>throws {@code MathIllegalArgumentException} if the array is null or
      * or the indices are invalid</li>
-     * <li>returns <code>false</li> if the array is non-null, but
-     * <code>length</code> is 0.
-     * </ul></p>
+     * <li>returns {@code false} if the array is non-null, but
+     * {@code length} is 0.</li>
+     * </ul>
      *
      * @param values the input array
      * @param begin index of the first array element to include
@@ -1900,15 +1902,14 @@ public class MathArrays {
     /**
      * This method is used
      * to verify that the input parameters designate a subarray of positive length.
-     * <p>
      * <ul>
-     * <li>returns <code>true</code> iff the parameters designate a subarray of
+     * <li>returns {@code true} iff the parameters designate a subarray of
      * non-negative length</li>
-     * <li>throws <code>IllegalArgumentException</code> if the array is null or
+     * <li>throws {@code IllegalArgumentException} if the array is null or
      * or the indices are invalid</li>
-     * <li>returns <code>false</li> if the array is non-null, but
-     * <code>length</code> is 0 unless <code>allowEmpty</code> is <code>true</code>
-     * </ul></p>
+     * <li>returns {@code false} if the array is non-null, but
+     * {@code length} is 0 unless {@code allowEmpty} is {@code true}</li>
+     * </ul>
      *
      * @param values the input array
      * @param begin index of the first array element to include
@@ -1946,11 +1947,10 @@ public class MathArrays {
      * This method is used
      * to verify that the begin and length parameters designate a subarray of positive length
      * and the weights are all non-negative, non-NaN, finite, and not all zero.
-     * <p>
      * <ul>
-     * <li>returns <code>true</code> iff the parameters designate a subarray of
+     * <li>returns {@code true} iff the parameters designate a subarray of
      * positive length and the weights array contains legitimate values.</li>
-     * <li>throws <code>IllegalArgumentException</code> if any of the following are true:
+     * <li>throws {@code IllegalArgumentException} if any of the following are true:
      * <ul><li>the values array is null</li>
      *     <li>the weights array is null</li>
      *     <li>the weights array does not have the same length as the values array</li>
@@ -1959,8 +1959,7 @@ public class MathArrays {
      *     <li>the weights array contains negative values</li>
      *     <li>the start and length arguments do not determine a valid array</li></ul>
      * </li>
-     * <li>returns <code>false</li> if the array is non-null, but
-     * <code>length</code> is 0.
+     * <li>returns {@code false} if the array is non-null, but {@code length} is 0.</li>
      * </ul>
      *
      * @param values the input array
@@ -1982,11 +1981,10 @@ public class MathArrays {
      * This method is used
      * to verify that the begin and length parameters designate a subarray of positive length
      * and the weights are all non-negative, non-NaN, finite, and not all zero.
-     * <p>
      * <ul>
-     * <li>returns <code>true</code> iff the parameters designate a subarray of
+     * <li>returns {@code true} iff the parameters designate a subarray of
      * non-negative length and the weights array contains legitimate values.</li>
-     * <li>throws <code>MathIllegalArgumentException</code> if any of the following are true:
+     * <li>throws {@code MathIllegalArgumentException} if any of the following are true:
      * <ul><li>the values array is null</li>
      *     <li>the weights array is null</li>
      *     <li>the weights array does not have the same length as the values array</li>
@@ -1995,8 +1993,8 @@ public class MathArrays {
      *     <li>the weights array contains negative values</li>
      *     <li>the start and length arguments do not determine a valid array</li></ul>
      * </li>
-     * <li>returns <code>false</li> if the array is non-null, but
-     * <code>length</code> is 0 unless <code>allowEmpty</code> is <code>true</code>.
+     * <li>returns {@code false} if the array is non-null, but
+     * {@code length} is 0 unless {@code allowEmpty} is {@code true}</li>
      * </ul>
      *
      * @param values the input array.

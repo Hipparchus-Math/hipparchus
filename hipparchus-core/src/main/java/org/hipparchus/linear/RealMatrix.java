@@ -361,17 +361,20 @@ public interface RealMatrix extends AnyMatrix, Blendable<RealMatrix> {
     * input {@code subMatrix} array. Indexes are 0-based.
     * <p>
     * Example:<br>
-    * Starting with <pre>
+    * Starting with </p>
+    * <pre>
     * 1  2  3  4
     * 5  6  7  8
     * 9  0  1  2
     * </pre>
-    * and <code>subMatrix = {{3, 4} {5,6}}</code>, invoking
-    * {@code setSubMatrix(subMatrix,1,1))} will result in <pre>
+    * <p>
+    * and {@code subMatrix = {{3, 4} {5,6}}}, invoking
+    * {@code setSubMatrix(subMatrix,1,1))} will result in </p>
+    * <pre>
     * 1  2  3  4
     * 5  3  4  8
     * 9  5  6  2
-    * </pre></p>
+    * </pre>
     *
     * @param subMatrix  array containing the submatrix replacement data
     * @param row  row coordinate of the top, left element to be replaced

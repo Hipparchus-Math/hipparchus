@@ -85,7 +85,7 @@ public interface FieldODEIntegrator<T extends CalculusFieldElement<T>> {
 
     /** Remove all the event handlers that have been added to the integrator.
      * @see #addEventDetector(FieldODEEventDetector)
-     * @see #getEventHandlers()
+     * @see #getEventDetectors()
      * @since 3.0
      */
     void clearEventDetectors();

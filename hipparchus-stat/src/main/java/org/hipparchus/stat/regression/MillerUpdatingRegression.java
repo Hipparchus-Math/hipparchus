@@ -33,14 +33,15 @@ import org.hipparchus.util.Precision;
 /**
  * This class is a concrete implementation of the {@link UpdatingMultipleLinearRegression} interface.
  *
- * <p>The algorithm is described in: <pre>
+ * <p>The algorithm is described in:</p>
+ * <pre>
  * Algorithm AS 274: Least Squares Routines to Supplement Those of Gentleman
  * Author(s): Alan J. Miller
  * Source: Journal of the Royal Statistical Society.
  * Series C (Applied Statistics), Vol. 41, No. 2
  * (1992), pp. 458-478
  * Published by: Blackwell Publishing for the Royal Statistical Society
- * Stable URL: http://www.jstor.org/stable/2347583 </pre></p>
+ * Stable URL: http://www.jstor.org/stable/2347583 </pre>
  *
  * <p>This method for multiple regression forms the solution to the OLS problem
  * by updating the QR decomposition as described by Gentleman.</p>
@@ -594,8 +595,8 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
      * model, then the usual simple correlations are returned.</p>
      *
      * <p>If IN = 0, the value returned in array CORMAT for the correlation
-     * of variables Xi &amp; Xj is: <pre>
-     * sum ( Xi.Xj ) / Sqrt ( sum (Xi^2) . sum (Xj^2) )</pre></p>
+     * of variables Xi &amp; Xj is:</p><pre>
+     * sum ( Xi.Xj ) / Sqrt ( sum (Xi^2) . sum (Xj^2) )</pre>
      *
      * <p>On return, array CORMAT contains the upper triangle of the matrix of
      * partial correlations stored by rows, excluding the 1's on the diagonal.

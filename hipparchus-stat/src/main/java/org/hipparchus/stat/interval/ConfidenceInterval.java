@@ -46,11 +46,11 @@ public class ConfidenceInterval {
      * Create a confidence interval with the given bounds and confidence level.
      * <p>
      * Preconditions:
+     * </p>
      * <ul>
      * <li>{@code lower} must be strictly less than {@code upper}</li>
      * <li>{@code confidenceLevel} must be strictly between 0 and 1 (exclusive)</li>
      * </ul>
-     * </p>
      *
      * @param lowerBound lower endpoint of the interval
      * @param upperBound upper endpoint of the interval

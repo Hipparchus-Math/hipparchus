@@ -44,9 +44,9 @@ import org.hipparchus.util.MathArrays;
  * discordant.
  * <p>
  * Kendall's Tau-b is defined as:
- * <pre>
- * tau<sub>b</sub> = (n<sub>c</sub> - n<sub>d</sub>) / sqrt((n<sub>0</sub> - n<sub>1</sub>) * (n<sub>0</sub> - n<sub>2</sub>))
- * </pre>
+ * \[
+ * \tau_b = \frac{n_c - n_d}{\sqrt{(n_0 - n_1) (n_0 - n_2)}}
+ * \]
  * <p>
  * where:
  * <ul>

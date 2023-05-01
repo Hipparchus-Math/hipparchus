@@ -358,19 +358,19 @@ public class ChiSquareTest {
      * <p>
      * The sums of frequency counts in the two samples are not required to be the
      * same. The formula used to compute the test statistic is
-     * <p>
+     * </p>
      * <code>
      * &sum;[(K * observed1[i] - observed2[i]/K)<sup>2</sup> / (observed1[i] + observed2[i])]
      * </code>
      * <p>
      * where
-     * <p>
-     * <code>K = &sqrt;[&sum;(observed2 / &sum;(observed1)]</code>
+     * </p>
+     * <code>K = √[&sum;(observed2 / &sum;(observed1)]</code>
      * <p>
      * This statistic can be used to perform a Chi-Square test evaluating the
      * null hypothesis that both observed counts follow the same distribution.
-     * <p>
-     * <strong>Preconditions</strong>:
+     * </p>
+     * <p><strong>Preconditions</strong>:</p>
      * <ul>
      * <li>Observed counts must be non-negative.</li>
      * <li>Observed counts for a specific bin must not both be zero.</li>
@@ -381,6 +381,7 @@ public class ChiSquareTest {
      * <p>
      * If any of the preconditions are not met, an
      * <code>IllegalArgumentException</code> is thrown.
+     * </p>
      *
      * @param observed1 array of observed frequency counts of the first data set
      * @param observed2 array of observed frequency counts of the second data set

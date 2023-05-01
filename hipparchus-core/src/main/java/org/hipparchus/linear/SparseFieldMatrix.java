@@ -60,7 +60,7 @@ public class SparseFieldMatrix<T extends FieldElement<T>> extends AbstractFieldM
     }
 
     /**
-     * Create a new SparseFieldMatrix<T> with the supplied row and column
+     * Create a new {@link SparseFieldMatrix} with the supplied row and column
      * dimensions.
      *
      * @param field Field to which the elements belong.

@@ -171,8 +171,7 @@ public class WilcoxonSignedRankTest {
      * Y<sub>i</sub> the related i'th individual in the second sample. Let
      * Z<sub>i</sub> = Y<sub>i</sub> - X<sub>i</sub>.
      * </p>
-     * <p>
-     * <strong>Preconditions</strong>:
+     * <p>* <strong>Preconditions</strong>:</p>
      * <ul>
      * <li>The differences Z<sub>i</sub> must be independent.</li>
      * <li>Each Z<sub>i</sub> comes from a continuous population (they must be
@@ -181,7 +180,6 @@ public class WilcoxonSignedRankTest {
      * ordered, so the comparisons greater than, less than, and equal to are
      * meaningful.</li>
      * </ul>
-     * </p>
      *
      * @param x the first sample
      * @param y the second sample
@@ -296,7 +294,7 @@ public class WilcoxonSignedRankTest {
      * Z<sub>i</sub> = Y<sub>i</sub> - X<sub>i</sub>.
      * </p>
      * <p>
-     * <strong>Preconditions</strong>:
+     * <strong>Preconditions</strong>:</p>
      * <ul>
      * <li>The differences Z<sub>i</sub> must be independent.</li>
      * <li>Each Z<sub>i</sub> comes from a continuous population (they must be
@@ -305,7 +303,7 @@ public class WilcoxonSignedRankTest {
      * ordered, so the comparisons greater than, less than, and equal to are
      * meaningful.</li>
      * </ul>
-     * <strong>Implementation notes</strong>:
+     * <p><strong>Implementation notes</strong>:</p>
      * <ul>
      * <li>Tied pairs are discarded from the data.</li>
      * <li>When {@code exactPValue} is false, the normal approximation is used
@@ -315,7 +313,6 @@ public class WilcoxonSignedRankTest {
      *     paired = TRUE, exact = FALSE, correct = TRUE)} in R (as long as
      * there are no tied pairs in the data).</li>
      * </ul>
-     * </p>
      *
      * @param x the first sample
      * @param y the second sample

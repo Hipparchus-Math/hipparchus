@@ -25,14 +25,13 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * Ordinary Differential Equations.
  *
  * <p>This method is an explicit Runge-Kutta method, its Butcher-array
- * is the following one :
+ * is the following one :</p>
  * <pre>
  *    0  |  0    0
  *   1/2 | 1/2   0
  *       |----------
  *       |  0    1
  * </pre>
- * </p>
  *
  * @see EulerIntegrator
  * @see ClassicalRungeKuttaIntegrator

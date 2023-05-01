@@ -24,7 +24,6 @@ import org.hipparchus.Field;
 
 /**
  * Representation of the complex numbers field.
- * <p>
  *
  * @param <T> the type of the field elements
  * @see FieldComplex

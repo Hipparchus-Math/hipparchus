@@ -247,8 +247,8 @@ public class Binary64 extends Number implements CalculusFieldElement<Binary64>, 
      * {@inheritDoc}
      *
      * The current implementation returns the same value as
-     * <center> {@code new Double(this.doubleValue()).compareTo(new
-     * Double(o.doubleValue()))} </center>
+     * {@code new Double(this.doubleValue()).compareTo(new
+     * Double(o.doubleValue()))}
      *
      * @see Double#compareTo(Double)
      */

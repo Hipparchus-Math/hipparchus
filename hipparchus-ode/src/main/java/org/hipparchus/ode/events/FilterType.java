@@ -33,7 +33,7 @@ public enum FilterType {
     /** Constant for triggering only decreasing events.
      * <p>When this filter is used, the wrapped {@link ODEEventHandler
      * event handler} {@link ODEEventHandler#eventOccurred(org.hipparchus.ode.ODEStateAndDerivative,
-     * boolean) eventOccurred} method will be called <em>only</em> with
+     * ODEEventDetector, boolean) eventOccurred} method will be called <em>only</em> with
      * its {@code increasing} argument set to false.</p>
      */
     TRIGGER_ONLY_DECREASING_EVENTS {
@@ -211,7 +211,7 @@ public enum FilterType {
     /** Constant for triggering only increasing events.
      * <p>When this filter is used, the wrapped {@link ODEEventHandler
      * event handler} {@link ODEEventHandler#eventOccurred(org.hipparchus.ode.ODEStateAndDerivative,
-     * boolean) eventOccurred} method will be called <em>only</em> with
+     * ODEEventDetector, boolean) eventOccurred} method will be called <em>only</em> with
      * its {@code increasing} argument set to true.</p>
      */
     TRIGGER_ONLY_INCREASING_EVENTS {

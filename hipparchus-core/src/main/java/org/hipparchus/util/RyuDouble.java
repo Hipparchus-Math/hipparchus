@@ -140,7 +140,7 @@ public final class RyuDouble {
 
     /** Convert a double to shortest string representation, preserving full accuracy.
      * <p>
-     * Number inside of the interval [10<sup>lowExp</up>, 10<sup>highExp</up>]
+     * Number inside of the interval [10<sup>lowExp</sup>, 10<sup>highExp</sup>]
      * are represented using decimal notation, numbers outside of this
      * range are represented using scientific notation.
      * </p>

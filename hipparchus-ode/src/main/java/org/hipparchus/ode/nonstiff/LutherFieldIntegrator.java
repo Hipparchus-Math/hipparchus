@@ -40,7 +40,7 @@ import org.hipparchus.util.MathArrays;
  * </p>
 
  * <p>This method is an explicit Runge-Kutta method, its Butcher-array
- * is the following one :
+ * is the following one :</p>
  * <pre>
  *        0   |               0                     0                     0                     0                     0                     0
  *        1   |               1                     0                     0                     0                     0                     0
@@ -52,7 +52,7 @@ import org.hipparchus.util.MathArrays;
  *            |--------------------------------------------------------------------------------------------------------------------------------------------------
  *            |              1/20                   0                   16/45                  0                   49/180                 49/180         1/20
  * </pre>
- * where q = &radic;21</p>
+ * <p>where q = &radic;21</p>
  *
  * @see EulerFieldIntegrator
  * @see ClassicalRungeKuttaFieldIntegrator

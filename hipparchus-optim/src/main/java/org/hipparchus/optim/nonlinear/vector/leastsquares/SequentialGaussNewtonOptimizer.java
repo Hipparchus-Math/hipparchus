@@ -67,7 +67,7 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
 
     /**
      * Create a sequential Gauss Newton optimizer.
-     * <p/>
+     * <p>
      * The default for the algorithm is to use QR decomposition, not
      * form normal equations and have no previous evaluation
      * </p>

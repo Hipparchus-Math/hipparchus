@@ -23,6 +23,7 @@
 package org.hipparchus.geometry.euclidean.threed;
 
 import java.io.Serializable;
+import java.util.function.DoubleSupplier;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -103,6 +104,11 @@ public class Rotation implements Serializable {
 
   /** Identity rotation. */
   public static final Rotation IDENTITY = new Rotation(1.0, 0.0, 0.0, 0.0, false);
+
+  /** Switch to safe computation of asin/acos.
+   * @since 3.0
+   */
+  private static final double SAFE_SWITCH = 0.999;
 
   /** Serializable version identifier */
   private static final long serialVersionUID = -2153622329907944313L;
@@ -197,7 +203,7 @@ public class Rotation implements Serializable {
    * correction to the copy in order to perfect its orthogonality. If
    * the Frobenius norm of the correction needed is above the given
    * threshold, then the matrix is considered to be too far from a
-   * true rotation matrix and an exception is thrown.<p>
+   * true rotation matrix and an exception is thrown.</p>
 
    * @param m rotation matrix
    * @param threshold convergence threshold for the iterative
@@ -565,12 +571,9 @@ public class Rotation implements Serializable {
               // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
-              if  ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(-(v1.getY()), v1.getZ()),
-                  FastMath.asin(v2.getZ()),
+                  safeAsin(v2, v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(-(v2.getY()), v2.getX())
               };
 
@@ -583,12 +586,9 @@ public class Rotation implements Serializable {
               // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
-              if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v1.getZ(), v1.getY()),
-                 -FastMath.asin(v2.getY()),
+                 -safeAsin(v2, v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(v2.getZ(), v2.getX())
               };
 
@@ -601,12 +601,9 @@ public class Rotation implements Serializable {
               // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
-              if ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v1.getX(), v1.getZ()),
-                 -FastMath.asin(v2.getZ()),
+                 -safeAsin(v2, v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(v2.getX(), v2.getY())
               };
 
@@ -619,12 +616,9 @@ public class Rotation implements Serializable {
               // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
-              if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(-(v1.getZ()), v1.getX()),
-                  FastMath.asin(v2.getX()),
+                  safeAsin(v2, v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(-(v2.getZ()), v2.getY())
               };
 
@@ -637,12 +631,9 @@ public class Rotation implements Serializable {
               // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
-              if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(-(v1.getX()), v1.getY()),
-                  FastMath.asin(v2.getY()),
+                  safeAsin(v2, v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(-(v2.getX()), v2.getZ())
               };
 
@@ -655,12 +646,9 @@ public class Rotation implements Serializable {
               // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
-              if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v1.getY(), v1.getX()),
-                 -FastMath.asin(v2.getX()),
+                 -safeAsin(v2, v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(v2.getY(), v2.getZ())
               };
 
@@ -673,12 +661,9 @@ public class Rotation implements Serializable {
               // and we can choose to have theta in the interval [0 ; PI]
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
-              if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v1.getY(), -v1.getZ()),
-                  FastMath.acos(v2.getX()),
+                  safeAcos(v2, v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(v2.getY(), v2.getZ())
               };
 
@@ -691,12 +676,9 @@ public class Rotation implements Serializable {
               // and we can choose to have psi in the interval [0 ; PI]
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
-              if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v1.getZ(), v1.getY()),
-                  FastMath.acos(v2.getX()),
+                  safeAcos(v2, v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(v2.getZ(), -v2.getY())
               };
 
@@ -709,12 +691,9 @@ public class Rotation implements Serializable {
               // and we can choose to have phi in the interval [0 ; PI]
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
-              if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v1.getX(), v1.getZ()),
-                  FastMath.acos(v2.getY()),
+                  safeAcos(v2, v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(v2.getX(), -v2.getZ())
               };
 
@@ -727,12 +706,9 @@ public class Rotation implements Serializable {
               // and we can choose to have psi in the interval [0 ; PI]
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
-              if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v1.getZ(), -v1.getX()),
-                  FastMath.acos(v2.getY()),
+                  safeAcos(v2, v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(v2.getZ(), v2.getX())
               };
 
@@ -745,12 +721,9 @@ public class Rotation implements Serializable {
               // and we can choose to have phi in the interval [0 ; PI]
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
-              if ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v1.getX(), -v1.getY()),
-                  FastMath.acos(v2.getZ()),
+                  safeAcos(v2, v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(v2.getX(), v2.getY())
               };
 
@@ -763,12 +736,9 @@ public class Rotation implements Serializable {
               // and we can choose to have theta in the interval [0 ; PI]
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
-              if ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v1.getY(), v1.getX()),
-                  FastMath.acos(v2.getZ()),
+                  safeAcos(v2, v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(v2.getY(), -v2.getX())
               };
 
@@ -783,12 +753,9 @@ public class Rotation implements Serializable {
               // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
-              if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(-v2.getY(), v2.getZ()),
-                  FastMath.asin(v2.getX()),
+                  safeAsin(v2, v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(-v1.getY(), v1.getX())
               };
 
@@ -801,12 +768,9 @@ public class Rotation implements Serializable {
               // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
-              if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v2.getZ(), v2.getY()),
-                 -FastMath.asin(v2.getX()),
+                 -safeAsin(v2, v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(v1.getZ(), v1.getX())
               };
 
@@ -819,12 +783,9 @@ public class Rotation implements Serializable {
               // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
-              if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v2.getX(), v2.getZ()),
-                 -FastMath.asin(v2.getY()),
+                 -safeAsin(v2, v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(v1.getX(), v1.getY())
               };
 
@@ -837,12 +798,9 @@ public class Rotation implements Serializable {
               // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
-              if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(-v2.getZ(), v2.getX()),
-                  FastMath.asin(v2.getY()),
+                  safeAsin(v2, v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(-v1.getZ(), v1.getY())
               };
 
@@ -855,12 +813,9 @@ public class Rotation implements Serializable {
               // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
-              if ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(-v2.getX(), v2.getY()),
-                  FastMath.asin(v2.getZ()),
+                  safeAsin(v2, v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(-v1.getX(), v1.getZ())
               };
 
@@ -873,12 +828,9 @@ public class Rotation implements Serializable {
               // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
-              if  ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v2.getY(), v2.getX()),
-                 -FastMath.asin(v2.getZ()),
+                 -safeAsin(v2, v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(v1.getY(), v1.getZ())
               };
 
@@ -891,12 +843,9 @@ public class Rotation implements Serializable {
               // and we can choose to have theta in the interval [0 ; PI]
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
-              if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v2.getY(), -v2.getZ()),
-                  FastMath.acos(v2.getX()),
+                  safeAcos(v2, v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(v1.getY(), v1.getZ())
               };
 
@@ -909,12 +858,9 @@ public class Rotation implements Serializable {
               // and we can choose to have psi in the interval [0 ; PI]
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
-              if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v2.getZ(), v2.getY()),
-                  FastMath.acos(v2.getX()),
+                  safeAcos(v2, v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(v1.getZ(), -v1.getY())
               };
 
@@ -927,12 +873,9 @@ public class Rotation implements Serializable {
               // and we can choose to have phi in the interval [0 ; PI]
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
-              if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v2.getX(), v2.getZ()),
-                  FastMath.acos(v2.getY()),
+                  safeAcos(v2, v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(v1.getX(), -v1.getZ())
               };
 
@@ -945,12 +888,9 @@ public class Rotation implements Serializable {
               // and we can choose to have psi in the interval [0 ; PI]
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
-              if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v2.getZ(), -v2.getX()),
-                  FastMath.acos(v2.getY()),
+                  safeAcos(v2, v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(v1.getZ(), v1.getX())
               };
 
@@ -963,12 +903,9 @@ public class Rotation implements Serializable {
               // and we can choose to have phi in the interval [0 ; PI]
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
-              if ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v2.getX(), -v2.getY()),
-                  FastMath.acos(v2.getZ()),
+                  safeAcos(v2, v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(v1.getX(), v1.getY())
               };
 
@@ -981,18 +918,67 @@ public class Rotation implements Serializable {
               // and we can choose to have theta in the interval [0 ; PI]
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
-              if ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
-              }
               return new double[] {
                   FastMath.atan2(v2.getY(), v2.getX()),
-                  FastMath.acos(v2.getZ()),
+                  safeAcos(v2, v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(v1.getY(), -v1.getX())
               };
 
           }
       }
 
+  }
+
+  /** Safe computation of acos(some vector coordinate) working around singularities.
+   * @param v vector
+   * @param cosGetter getter for the cosine coordinate
+   * @param sin1Getter getter for one of the sine coordinates
+   * @param sin2Getter getter for the other sine coordinate
+   * @param acos of the coordinate
+   * @since 3.0
+   */
+  private double safeAcos(final Vector3D v,
+                          final DoubleSupplier cosGetter,
+                          final DoubleSupplier sin1Getter,
+                          final DoubleSupplier sin2Getter) {
+      final double cos = cosGetter.getAsDouble();
+      if (cos < -SAFE_SWITCH) {
+          final double s1 = sin1Getter.getAsDouble();
+          final double s2 = sin2Getter.getAsDouble();
+          return FastMath.PI - FastMath.asin(FastMath.sqrt(s1 * s1 + s2 * s2));
+      } else if (cos > SAFE_SWITCH) {
+          final double s1 = sin1Getter.getAsDouble();
+          final double s2 = sin2Getter.getAsDouble();
+          return FastMath.asin(FastMath.sqrt(s1 * s1 + s2 * s2));
+      } else {
+          return FastMath.acos(cos);
+      }
+  }
+
+  /** Safe computation of asin(some vector coordinate) working around singularities.
+   * @param v vector
+   * @param sinGetter getter for the sine coordinate
+   * @param cos1Getter getter for one of the cosine coordinates
+   * @param cos2Getter getter for the other cosine coordinate
+   * @param acos of the coordinate
+   * @since 3.0
+   */
+  private double safeAsin(final Vector3D v,
+                          final DoubleSupplier sinGetter,
+                          final DoubleSupplier cos1Getter,
+                          final DoubleSupplier cos2Getter) {
+      final double sin = sinGetter.getAsDouble();
+      if (sin < -SAFE_SWITCH) {
+          final double c1 = cos1Getter.getAsDouble();
+          final double c2 = cos2Getter.getAsDouble();
+          return -FastMath.acos(FastMath.sqrt(c1 * c1 + c2 * c2));
+      } else if (sin > SAFE_SWITCH) {
+          final double c1 = cos1Getter.getAsDouble();
+          final double c2 = cos2Getter.getAsDouble();
+          return FastMath.acos(FastMath.sqrt(c1 * c1 + c2 * c2));
+      } else {
+          return FastMath.asin(sin);
+      }
   }
 
   /** Get the 3X3 matrix corresponding to the instance
@@ -1327,10 +1313,8 @@ public class Rotation implements Serializable {
    * rotations are almost similar (i.e. they transform vectors the same way)
    * or very different. It is mathematically defined as the angle of
    * the rotation r that prepended to one of the rotations gives the other
-   * one:</p>
-   * <pre>
-   *        r<sub>1</sub>(r) = r<sub>2</sub>
-   * </pre>
+   * one: \(r_1(r) = r_2\)
+   * </p>
    * <p>This distance is an angle between 0 and &pi;. Its value is the smallest
    * possible upper bound of the angle in radians between r<sub>1</sub>(v)
    * and r<sub>2</sub>(v) for all possible vectors v. This upper bound is

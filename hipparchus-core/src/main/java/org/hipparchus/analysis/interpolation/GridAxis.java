@@ -31,8 +31,8 @@ import org.hipparchus.util.MathArrays;
  * It works on any sorted data without duplication and size at least
  * {@code n} where {@code n} is the number of points required for
  * interpolation (i.e. 2 for linear interpolation, 3 for quadratic...)
- * <p>
  * </p>
+ * <p>
  * The method uses linear interpolation to select the nodes indices.
  * It should be O(1) for sufficiently regular data, therefore much faster
  * than bisection. It also features caching, which improves speed when
