@@ -1228,7 +1228,7 @@ public class DSCompiler {
         }
     }
 
-    /** Perform division of two derivative structures.
+    /** Perform division of two derivative structures. Based on the multiplication operator.
      * @param lhs array holding left hand side of division
      * @param lhsOffset offset of the left hand side in its array
      * @param rhs array right hand side of division
@@ -1241,12 +1241,19 @@ public class DSCompiler {
     public void divide(final double[] lhs, final int lhsOffset,
                        final double[] rhs, final int rhsOffset,
                        final double[] result, final int resultOffset) {
-        final double[] reciprocal = new double[getSize()];
-        pow(rhs, lhsOffset, -1, reciprocal, 0);
-        multiply(lhs, lhsOffset, reciprocal, 0, result, resultOffset);
+        result[resultOffset] = lhs[lhsOffset] / rhs[rhsOffset];
+        for (int i = 1; i < multIndirection.length; ++i) {
+            result[resultOffset + i] = lhs[lhsOffset + i];
+            for (int j = 0; j < multIndirection[i].length - 1; j++) {
+                final MultiplicationMapper mapping = multIndirection[i][j];
+                result[resultOffset + i] -= mapping.getCoeff() *
+                        (result[resultOffset + mapping.lhsIndex] * rhs[rhsOffset + mapping.rhsIndex]);
+            }
+            result[resultOffset + i] /= rhs[lhsOffset] * multIndirection[i][0].getCoeff();
+        }
     }
 
-    /** Perform division of two derivative structures.
+    /** Perform division of two derivative structures. Based on the multiplication operator.
      * @param lhs array holding left hand side of division
      * @param lhsOffset offset of the left hand side in its array
      * @param rhs array right hand side of division
@@ -1260,9 +1267,63 @@ public class DSCompiler {
     public <T extends CalculusFieldElement<T>> void divide(final T[] lhs, final int lhsOffset,
                                                            final T[] rhs, final int rhsOffset,
                                                            final T[] result, final int resultOffset) {
-        final T[] reciprocal = MathArrays.buildArray(lhs[lhsOffset].getField(), getSize());
-        pow(rhs, lhsOffset, -1, reciprocal, 0);
-        multiply(lhs, lhsOffset, reciprocal, 0, result, resultOffset);
+        final T zero = lhs[lhsOffset].getField().getZero();
+        result[resultOffset] = lhs[lhsOffset].divide(rhs[rhsOffset]);
+        for (int i = 1; i < multIndirection.length; ++i) {
+            result[resultOffset + i] = lhs[lhsOffset + i].add(zero);
+            for (int j = 0; j < multIndirection[i].length - 1; j++) {
+                final MultiplicationMapper mapping = multIndirection[i][j];
+                result[resultOffset + i] = result[resultOffset + i].subtract(
+                        result[resultOffset + mapping.lhsIndex].multiply(rhs[rhsOffset + mapping.rhsIndex]).
+                                multiply(mapping.getCoeff()));
+            }
+            result[resultOffset + i] = result[resultOffset + i].divide(rhs[lhsOffset].
+                    multiply(multIndirection[i][0].getCoeff()));
+        }
+    }
+
+    /** Compute reciprocal of derivative structure. Based on the multiplication operator.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored
+     * @param resultOffset offset of the result in its array
+     */
+    public void reciprocal(final double[] operand, final int operandOffset,
+                           final double[] result, final int resultOffset) {
+        result[resultOffset] = 1. / operand[operandOffset];
+        for (int i = 1; i < multIndirection.length; ++i) {
+            result[resultOffset + i] = 0.;
+            for (int j = 0; j < multIndirection[i].length - 1; j++) {
+                final MultiplicationMapper mapping = multIndirection[i][j];
+                result[resultOffset + i] -= mapping.getCoeff() *
+                        (result[resultOffset + mapping.lhsIndex] * operand[operandOffset + mapping.rhsIndex]);
+            }
+            result[resultOffset + i] /= operand[operandOffset] * multIndirection[i][0].getCoeff();
+        }
+    }
+
+    /** Compute reciprocal of derivative structure. Based on the multiplication operator.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored
+     * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
+     */
+    public <T extends CalculusFieldElement<T>> void reciprocal(final T[] operand, final int operandOffset,
+                                                               final T[] result, final int resultOffset) {
+        final T zero = operand[operandOffset].getField().getZero();
+        result[resultOffset] = operand[operandOffset].reciprocal();
+        for (int i = 1; i < multIndirection.length; ++i) {
+            result[resultOffset + i] = zero;
+            for (int j = 0; j < multIndirection[i].length - 1; j++) {
+                final MultiplicationMapper mapping = multIndirection[i][j];
+                result[resultOffset + i] = result[resultOffset + i].subtract(
+                        (result[resultOffset + mapping.lhsIndex].multiply(operand[operandOffset + mapping.rhsIndex])).
+                                multiply(mapping.getCoeff()));
+            }
+            result[resultOffset + i] = result[resultOffset + i].divide(operand[operandOffset].
+                    multiply(multIndirection[i][0].getCoeff()));
+        }
     }
 
     /** Perform remainder of two derivative structures.
@@ -1646,6 +1707,57 @@ public class DSCompiler {
         final T[] yLogX = MathArrays.buildArray(x[xOffset].getField(), getSize());
         multiply(logX, 0, y, yOffset, yLogX, 0);
         exp(yLogX, 0, result, resultOffset);
+    }
+
+    /** Compute square root of a derivative structure. Based on the multiplication operator.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * square root the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public void sqrt(final double[] operand, final int operandOffset,
+                     final double[] result, final int resultOffset) {
+        final double sqrtConstant = FastMath.sqrt(operand[operandOffset]);
+        result[resultOffset] = sqrtConstant;
+        for (int i = 1; i < multIndirection.length; ++i) {
+            result[resultOffset + i] = operand[operandOffset + i];
+            for (int j = 1; j < multIndirection[i].length - 1; j++) {
+                final MultiplicationMapper mapping = multIndirection[i][j];
+                result[resultOffset + i] -= mapping.getCoeff() *
+                        (result[resultOffset + mapping.lhsIndex] * result[operandOffset + mapping.rhsIndex]);
+            }
+            result[resultOffset + i] /= sqrtConstant * (multIndirection[i][multIndirection[i].length - 1].getCoeff() +
+                    multIndirection[i][0].getCoeff());
+        }
+    }
+
+    /** Compute square root of a derivative structure. Based on the multiplication operator.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * square root the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
+     */
+    public <T extends CalculusFieldElement<T>> void sqrt(final T[] operand, final int operandOffset,
+                                                         final T[] result, final int resultOffset) {
+        final T zero = operand[operandOffset].getField().getZero();
+        final T sqrtConstant = operand[operandOffset].sqrt();
+        result[resultOffset] = sqrtConstant.add(zero);
+        for (int i = 1; i < multIndirection.length; ++i) {
+            result[resultOffset + i] = operand[operandOffset + i].add(zero);
+            for (int j = 1; j < multIndirection[i].length - 1; j++) {
+                final MultiplicationMapper mapping = multIndirection[i][j];
+                result[resultOffset + i] = result[resultOffset + i].subtract(
+                        (result[resultOffset + mapping.lhsIndex].multiply(result[operandOffset + mapping.rhsIndex])).
+                                multiply(mapping.getCoeff()));
+            }
+            result[resultOffset + i] = result[resultOffset + i].divide(sqrtConstant.multiply(
+                    multIndirection[i][0].getCoeff() + multIndirection[i][multIndirection[i].length - 1].getCoeff()));
+        }
     }
 
     /** Compute n<sup>th</sup> root of a derivative structure.
