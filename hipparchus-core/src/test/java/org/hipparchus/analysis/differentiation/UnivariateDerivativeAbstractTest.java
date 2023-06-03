@@ -220,6 +220,30 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
     }
 
     @Test
+    public void testSqrtVsDS() {
+        for (double x = 0.001; x < 3.25; x+= 0.5) {
+            checkAgainstDS(x,
+                    new FieldUnivariateFunction() {
+                        public <S extends CalculusFieldElement<S>> S value(S x) {
+                            return x.sqrt();
+                        }
+                    });
+        }
+    }
+
+    @Test
+    public void testCbrtVsDS() {
+        for (double x = 0.001; x < 3.25; x+= 0.5) {
+            checkAgainstDS(x,
+                    new FieldUnivariateFunction() {
+                        public <S extends CalculusFieldElement<S>> S value(S x) {
+                            return x.cbrt();
+                        }
+                    });
+        }
+    }
+
+    @Test
     public void testRootsVsDS() {
         for (double x = 0.001; x < 3.25; x+= 0.5) {
             checkAgainstDS(x,
