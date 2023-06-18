@@ -22,6 +22,8 @@
 package org.hipparchus.analysis.polynomials;
 
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.analysis.differentiation.*;
+import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.Binary64;
@@ -300,6 +302,49 @@ public final class FieldPolynomialFunctionTest {
         p.integrate(0, -1);
     }
 
+    @Test
+    public void testIssue259WithComplex() {
+        final double nonZeroParameterForQuadraticCoeff = -1.;
+        final Complex[] coefficients = buildImaginaryCoefficients(1., 2., nonZeroParameterForQuadraticCoeff);
+        templateIssue259DisappearingCoefficients(coefficients);
+    }
+
+    @Test
+    public void testIssue259WithGradient() {
+        final double nonZeroParameterForQuadraticCoeff = -1.;
+        final Gradient[] coefficients = buildUnivariateGradientCoefficients(1.,2., nonZeroParameterForQuadraticCoeff);
+        templateIssue259DisappearingCoefficients(coefficients);
+    }
+
+    @Test
+    public void testIssue259WithDerivativeStructure() {
+        final double nonZeroParameterForQuadraticCoeff = -1.;
+        final DerivativeStructure[] coefficients = buildUnivariateDSCoefficients(1.,2., nonZeroParameterForQuadraticCoeff);
+        templateIssue259DisappearingCoefficients(coefficients);
+    }
+
+    @Test
+    public void testIssue259WithUnivariateDerivative1() {
+        final double nonZeroParameterForQuadraticCoeff = -1.;
+        final UnivariateDerivative1[] coefficients = buildUnivariateDerivative1Coefficients(1.,2., nonZeroParameterForQuadraticCoeff);
+        templateIssue259DisappearingCoefficients(coefficients);
+    }
+
+    @Test
+    public void testIssue259WithUnivariateDerivative2() {
+        final double nonZeroParameterForQuadraticCoeff = -1.;
+        final UnivariateDerivative2[] coefficients = buildUnivariateDerivative2Coefficients(1.,2., nonZeroParameterForQuadraticCoeff);
+        templateIssue259DisappearingCoefficients(coefficients);
+    }
+
+    private <T extends CalculusFieldElement<T>> void templateIssue259DisappearingCoefficients(T[] coefficients) {
+        final FieldPolynomialFunction<T> polynomialFunction = new FieldPolynomialFunction<>(coefficients);
+        Assert.assertEquals(coefficients.length, polynomialFunction.getCoefficients().length);
+        for (int i = 0; i < coefficients.length; i++) {
+            Assert.assertEquals(coefficients[i], polynomialFunction.getCoefficients()[i]);
+        }
+    }
+
     private <T extends CalculusFieldElement<T>> void checkInverseDifferentiation(FieldPolynomialFunction<T> p) {
         final T[] c0 = p.getCoefficients();
         final T[] c1 = p.antiDerivative().polynomialDerivative().getCoefficients();
@@ -331,4 +376,46 @@ public final class FieldPolynomialFunctionTest {
         }
         return new FieldPolynomialFunction<>(array);
     }
+
+    private Complex[] buildImaginaryCoefficients(double...c) {
+        Complex[] array = new Complex[c.length];
+        for (int i = 0; i < c.length; ++i) {
+            array[i] = new Complex(0., c[i]);
+        }
+        return array;
+    }
+
+    private DerivativeStructure[] buildUnivariateDSCoefficients(double...c) {
+        DerivativeStructure[] array = new DerivativeStructure[c.length];
+        final DSFactory factory = new DSFactory(1, 1);
+        for (int i = 0; i < c.length; ++i) {
+            array[i] = factory.variable(0, 0.).multiply(c[i]);
+        }
+        return array;
+    }
+
+    private Gradient[] buildUnivariateGradientCoefficients(double...c) {
+        Gradient[] array = new Gradient[c.length];
+        for (int i = 0; i < c.length; ++i) {
+            array[i] = Gradient.variable(1, 0, 0.).multiply(c[i]);
+        }
+        return array;
+    }
+
+    private UnivariateDerivative1[] buildUnivariateDerivative1Coefficients(double...c) {
+        UnivariateDerivative1[] array = new UnivariateDerivative1[c.length];
+        for (int i = 0; i < c.length; ++i) {
+            array[i] = new UnivariateDerivative1(0., c[i]);
+        }
+        return array;
+    }
+
+    private UnivariateDerivative2[] buildUnivariateDerivative2Coefficients(double...c) {
+        UnivariateDerivative2[] array = new UnivariateDerivative2[c.length];
+        for (int i = 0; i < c.length; ++i) {
+            array[i] = new UnivariateDerivative2(0., c[i], 0.);
+        }
+        return array;
+    }
+
 }
