@@ -66,7 +66,7 @@ public class FieldPolynomialFunction<T extends CalculusFieldElement<T>> implemen
         if (n == 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
         }
-        while ((n > 1) && (c[n - 1].getReal() == 0)) {
+        while ((n > 1) && (c[n - 1].isZero())) {
             --n;
         }
         this.coefficients = MathArrays.buildArray(c[0].getField(), n);

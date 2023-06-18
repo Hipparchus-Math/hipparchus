@@ -72,8 +72,8 @@ public class SqrtTest {
        Assert.assertEquals(0.45643546458763842789, s.getPartialDerivative(1), 1.0e-16);
        Assert.assertEquals(-0.1901814435781826783,  s.getPartialDerivative(2), 1.0e-16);
        Assert.assertEquals(0.23772680447272834785,  s.getPartialDerivative(3), 1.0e-16);
-       Assert.assertEquals(-0.49526417598485072465,   s.getPartialDerivative(4), 1.0e-16);
-       Assert.assertEquals(1.4445205132891479465,  s.getPartialDerivative(5), 5.0e-16);
+       Assert.assertEquals(-0.49526417598485072465,   s.getPartialDerivative(4), 5.0e-16);
+       Assert.assertEquals(1.4445205132891479465,  s.getPartialDerivative(5), 7.0e-16);
    }
 
 }

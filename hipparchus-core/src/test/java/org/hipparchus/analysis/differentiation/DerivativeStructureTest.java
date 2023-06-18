@@ -554,7 +554,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
     @Test
     public void testSqrtDefinition() {
-        double[] epsilon = new double[] { 5.0e-16, 5.0e-16, 2.0e-15, 5.0e-14, 2.0e-12 };
+        double[] epsilon = new double[] { 5.0e-16, 5.0e-16, 2.7e-15, 5.7e-14, 2.0e-12 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -1085,7 +1085,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
     @Test
     public void testTangentDefinition() {
-        double[] epsilon = new double[] { 5.0e-16, 2.0e-15, 3.0e-14, 5.0e-13, 2.0e-11 };
+        double[] epsilon = new double[] { 5.0e-16, 2.7e-15, 3.0e-14, 5.0e-13, 2.0e-11 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -1103,7 +1103,7 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     @Override
     @Test
     public void testAtan2() {
-        double[] epsilon = new double[] { 5.0e-16, 3.0e-15, 2.2e-14, 1.0e-12, 8.0e-11 };
+        double[] epsilon = new double[] { 5.0e-16, 3.0e-15, 2.9e-14, 1.0e-12, 8.0e-11 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(2, maxOrder);
             for (double x = -1.7; x < 2; x += 0.2) {
@@ -2066,6 +2066,29 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
     }
 
     @Test
+    public void testDivisionVersusAlternativeImplementation() {
+        final DSFactory factory = new DSFactory(3, 10);
+        final DerivativeStructure lhs = FastMath.cos(factory.variable(1, 2.5));
+        final DerivativeStructure rhs = factory.variable(2, -4).multiply(factory.variable(0, -3.));
+        compareDivisionToVersionViaPower(lhs, rhs, 1e-12);
+    }
+
+    @Test
+    public void testReciprocalVersusAlternativeImplementation() {
+        final DSFactory factory = new DSFactory(2, 15);
+        final DerivativeStructure operand = factory.variable(0, 1.).
+                add(factory.variable(1, 0.).multiply(2.));
+        compareReciprocalToVersionViaPower(operand, 1e-15);
+    }
+
+    @Test
+    public void testSqrtVersusRootN() {
+        final DSFactory factory = new DSFactory(2, 8);
+        DerivativeStructure ds = factory.variable(1, -2.).multiply(factory.variable(0, 1.));
+        Assert.assertArrayEquals(ds.sqrt().getAllDerivatives(), ds.rootN(2).getAllDerivatives(), 1e-10);
+    }
+
+    @Test
     public void testRunTimeClass() {
         Field<DerivativeStructure> field = new DSFactory(3, 2).constant(0.0).getField();
         Assert.assertEquals(DerivativeStructure.class, field.getRuntimeClass());
@@ -2249,6 +2272,25 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             pIntermediate[i] = factory.variable(i, pBase[i].getValue());
         }
         return pIntermediate;
+    }
+
+    private void compareDivisionToVersionViaPower(final DerivativeStructure lhs, final DerivativeStructure rhs,
+                                                  final double tolerance) {
+        DSCompiler compiler = lhs.getFactory().getCompiler();
+        final double[] result = new double[compiler.getSize()];
+        compiler.multiply(lhs.getAllDerivatives(), 0, rhs.reciprocal().getAllDerivatives(), 0, result, 0);
+        final double[] result2 = result.clone();
+        compiler.divide(lhs.getAllDerivatives(), 0, rhs.getAllDerivatives(), 0, result2, 0);
+        Assert.assertArrayEquals(result, result2, tolerance);
+    }
+
+    private void compareReciprocalToVersionViaPower(final DerivativeStructure operand, final double tolerance) {
+        DSCompiler compiler = operand.getFactory().getCompiler();
+        final double[] result = new double[compiler.getSize()];
+        compiler.pow(operand.getAllDerivatives(), 0, -1, result, 0);
+        final double[] result2 = result.clone();
+        compiler.reciprocal(operand.getAllDerivatives(), 0, result2, 0);
+        Assert.assertArrayEquals(result, result2, tolerance);
     }
 
 }

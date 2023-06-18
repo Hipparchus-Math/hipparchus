@@ -89,6 +89,13 @@ public abstract class RungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
         this.step = step.abs();
     }
 
+    /** Getter for the default, positive step-size assigned at constructor level.
+     * @return step
+     */
+    public T getDefaultStep() {
+        return this.step;
+    }
+
     /** Create a fraction.
      * @param p numerator
      * @param q denominator

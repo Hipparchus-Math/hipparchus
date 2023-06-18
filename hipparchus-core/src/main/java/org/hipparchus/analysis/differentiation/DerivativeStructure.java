@@ -496,7 +496,7 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
     @Override
     public DerivativeStructure reciprocal() {
         final DerivativeStructure result = factory.build();
-        factory.getCompiler().pow(data, 0, -1, result.data, 0);
+        factory.getCompiler().reciprocal(data, 0, result.data, 0);
         return result;
     }
 
@@ -504,7 +504,9 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
      */
     @Override
     public DerivativeStructure sqrt() {
-        return rootN(2);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().sqrt(data, 0, result.data, 0);
+        return result;
     }
 
     /** {@inheritDoc}

@@ -954,7 +954,7 @@ public class FieldRotationDSTest {
     @Test
     public void testDerivatives() {
 
-        double eps      = 5.0e-16;
+        double eps      = 7.e-16;
         double kx       = 2;
         double ky       = -3;
         double kz       = 5;

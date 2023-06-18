@@ -562,7 +562,7 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
     @Override
     public FieldDerivativeStructure<T> reciprocal() {
         final FieldDerivativeStructure<T> result = factory.build();
-        factory.getCompiler().pow(data, 0, -1, result.data, 0);
+        factory.getCompiler().reciprocal(data, 0, result.data, 0);
         return result;
     }
 
@@ -570,7 +570,9 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
      */
     @Override
     public FieldDerivativeStructure<T> sqrt() {
-        return rootN(2);
+        final FieldDerivativeStructure<T> result = factory.build();
+        factory.getCompiler().sqrt(data, 0, result.data, 0);
+        return result;
     }
 
     /** {@inheritDoc}

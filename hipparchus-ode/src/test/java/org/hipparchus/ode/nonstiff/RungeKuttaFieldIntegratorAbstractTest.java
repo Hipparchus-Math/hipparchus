@@ -26,6 +26,7 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.Gradient;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -764,6 +765,13 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
         }
 
+    }
+
+    @Test
+    public void testIssue250() {
+        final Gradient defaultStep = Gradient.constant(3, 60.);
+        RungeKuttaFieldIntegrator<Gradient> integrator = createIntegrator(defaultStep.getField(), defaultStep);
+        Assert.assertEquals(defaultStep.getReal(), integrator.getDefaultStep().getReal(), 0.);
     }
 
 }
