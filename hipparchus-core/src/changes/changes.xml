@@ -50,6 +50,13 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.0" date="TBD" description="This is a major release.">
+      <action dev="luc" type="fix" due-to="Romain Serra" issue="issues/259">
+        Only remove input coefficients of FieldPolynomialFunction that satisfy isZero().
+      </action>
+      <action dev="luc" type="update" due-to="Romain Serra" issue="issues/256">
+        Improved performance for reciprocal, division and square root with
+        DerivativeStructure and FieldDerivativeStructure.
+      </action>
       <action dev="luc" type="fix" issue="issues/249">
         Generate zero vectors in OrderedComplexEigenDecomposition when the number
         of eigenvectors is smaller than the dimension.

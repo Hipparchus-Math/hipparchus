@@ -86,7 +86,7 @@ public class FieldDerivativeStructureComplexTest extends FieldDerivativeStructur
     @Override
     @Test
     public void testAtan2() {
-        double[] epsilon = new double[] { 9.0e-16, 3.0e-15, 2.2e-14, 1.0e-12, 8.0e-11 };
+        double[] epsilon = new double[] { 9.0e-16, 3.0e-15, 2.9e-14, 1.0e-12, 8.0e-11 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Complex> factory = buildFactory(2, maxOrder);
             for (double x = -1.7; x < 2; x += 0.2) {

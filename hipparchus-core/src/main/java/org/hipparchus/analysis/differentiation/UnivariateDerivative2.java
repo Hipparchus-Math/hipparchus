@@ -386,8 +386,11 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
     /** {@inheritDoc} */
     @Override
     public UnivariateDerivative2 sqrt() {
-        final double s = FastMath.sqrt(f0);
-        return compose(s, 1 / (2 * s), -1 / (4 * s * f0));
+        final double s0 = FastMath.sqrt(f0);
+        final double s0twice = 2. * s0;
+        final double s1 = f1 / s0twice;
+        final double s2 = (f2 - 2. * s1 * s1) / s0twice;
+        return new UnivariateDerivative2(s0, s1, s2);
     }
 
     /** {@inheritDoc} */
