@@ -68,6 +68,11 @@ public class DormandPrince853FieldIntegratorTest extends EmbeddedRungeKuttaField
     }
 
     @Override
+    public void testTorqueFreeMotionIssue230() {
+        doTestTorqueFreeMotionIssue230(Binary64Field.getInstance(), 2.9e-14, 7.8e-14);
+    }
+
+    @Override
     public void testForwardBackwardExceptions() {
         doTestForwardBackwardExceptions(Binary64Field.getInstance());
     }

@@ -152,6 +152,10 @@ public class TestFieldProblem8<T extends CalculusFieldElement<T>>
         this.inertiaTensor = q.multiply(d.multiplyTransposed(q));
         this.inertiaSolver = new FieldQRDecomposer<>(t0.getField().getZero().newInstance(1.0e-10)).decompose(inertiaTensor);
 
+        final FieldVector3D<T> m0 = new FieldVector3D<>(i1.multiply(FieldVector3D.dotProduct(omega0, n1)), n1,
+                                                        i2.multiply(FieldVector3D.dotProduct(omega0, n2)), n2,
+                                                        i3.multiply(FieldVector3D.dotProduct(omega0, n3)), n3);
+
         // sort axes in increasing moments of inertia order
         Inertia<T> inertia = new Inertia<>(new InertiaAxis<>(i1, n1), new InertiaAxis<>(i2, n2), new InertiaAxis<>(i3, n3));
         if (inertia.getInertiaAxis1().getI().subtract(inertia.getInertiaAxis2().getI()).getReal() > 0) {
@@ -166,9 +170,12 @@ public class TestFieldProblem8<T extends CalculusFieldElement<T>>
 
         // in order to simplify implementation, we want the motion to be about axis 3
         // which is either the minimum or the maximum inertia axis
-        final T  o12               = omega0.getX().multiply(omega0.getX());
-        final T  o22               = omega0.getY().multiply(omega0.getY());
-        final T  o32               = omega0.getZ().multiply(omega0.getZ());
+        final T  o1                = FieldVector3D.dotProduct(omega0, n1);
+        final T  o2                = FieldVector3D.dotProduct(omega0, n2);
+        final T  o3                = FieldVector3D.dotProduct(omega0, n3);
+        final T  o12               = o1.multiply(o1);
+        final T  o22               = o2.multiply(o2);
+        final T  o32               = o3.multiply(o3);
         final T  twoE              = i1.multiply(o12).add(i2.multiply(o22)).add(i3.multiply(o32));
         final T  m2                = i1.multiply(i1).multiply(o12).add(i2.multiply(i2).multiply(o22)).add(i3.multiply(i3).multiply(o32));
         final T  separatrixInertia = (twoE.isZero()) ? t0.getField().getZero() : m2.divide(twoE);
@@ -190,13 +197,17 @@ public class TestFieldProblem8<T extends CalculusFieldElement<T>>
         final T i1C = inertia.getInertiaAxis1().getI();
         final T i2C = inertia.getInertiaAxis2().getI();
         final T i3C = inertia.getInertiaAxis3().getI();
+        final T i32 = i3C.subtract(i2C);
+        final T i31 = i3C.subtract(i1C);
+        final T i21 = i2C.subtract(i1C);
 
-        // convert initial conditions to Euler angles such the M is aligned with Z in sorted computation frame
-        sortedToBody   = new FieldRotation<>(n1, n2, inertia.getInertiaAxis1().getA(), inertia.getInertiaAxis2().getA());
+         // convert initial conditions to Euler angles such the M is aligned with Z in sorted computation frame
+        sortedToBody   = new FieldRotation<>(FieldVector3D.getPlusI(t0.getField()),
+                                             FieldVector3D.getPlusJ(t0.getField()),
+                                             inertia.getInertiaAxis1().getA(),
+                                             inertia.getInertiaAxis2().getA());
         final FieldVector3D<T> omega0Sorted = sortedToBody.applyInverseTo(omega0);
-        final FieldVector3D<T> m0Sorted     = new FieldVector3D<>(i1C.multiply(omega0Sorted.getX()),
-                                                                  i2C.multiply(omega0Sorted.getY()),
-                                                                  i3C.multiply(omega0Sorted.getZ()));
+        final FieldVector3D<T> m0Sorted     = sortedToBody.applyInverseTo(m0);
         final T   phi0         = t0.getField().getZero(); // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
         final T   theta0       = FastMath.acos(m0Sorted.getZ().divide(m0Sorted.getNorm()));
         final T   psi0         = FastMath.atan2(m0Sorted.getX(), m0Sorted.getY()); // it is really atan2(x, y), not atan2(y, x) as usual!
@@ -205,10 +216,6 @@ public class TestFieldProblem8<T extends CalculusFieldElement<T>>
         final FieldRotation<T> alignedToSorted0 = new FieldRotation<>(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
                                                                       phi0, theta0, psi0);
         inertToAligned = alignedToSorted0.applyInverseTo(sortedToBody.applyInverseTo(r0));
-
-        final T i32  = i3C.subtract(i2C);
-        final T i31  = i3C.subtract(i1C);
-        final T i21  = i2C.subtract(i1C);
 
         // Ω is always o1Scale * cn((t-tref) * tScale), o2Scale * sn((t-tref) * tScale), o3Scale * dn((t-tref) * tScale)
         tScale  = FastMath.copySign(FastMath.sqrt(i32.multiply(m2.subtract(twoE.multiply(i1C))).divide((i1C.multiply(i2C).multiply(i3C)))),
