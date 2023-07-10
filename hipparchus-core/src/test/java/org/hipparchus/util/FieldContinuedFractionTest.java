@@ -42,7 +42,7 @@ public class FieldContinuedFractionTest {
 
         };
 
-        Decimal64 gr = cf.evaluate(new Decimal64(0.0), 10e-9);
+        Binary64 gr = cf.evaluate(new Binary64(0.0), 10e-9);
         Assert.assertEquals(1.61803399, gr.getReal(), 10e-9);
     }
 
@@ -62,7 +62,7 @@ public class FieldContinuedFractionTest {
 
         };
 
-        cf.evaluate(new Decimal64(0.0), 10e-9, 10);
+        cf.evaluate(new Binary64(0.0), 10e-9, 10);
     }
 
     @Test(expected = MathIllegalStateException.class)
@@ -81,6 +81,6 @@ public class FieldContinuedFractionTest {
 
         };
 
-        cf.evaluate(new Decimal64(1));
+        cf.evaluate(new Binary64(1));
     }
 }

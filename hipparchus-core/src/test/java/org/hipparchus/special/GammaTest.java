@@ -26,8 +26,8 @@ import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.util.Decimal64;
-import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.Binary64;
+import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,9 +36,9 @@ import org.junit.Test;
  */
 public class GammaTest {
 
-    final Field<Decimal64> field = Decimal64Field.getInstance();
-    final Decimal64 zero = field.getZero();
-    final Decimal64 one = field.getOne();
+    final Field<Binary64> field = Binary64Field.getInstance();
+    final Binary64 zero = field.getZero();
+    final Binary64 one = field.getOne();
 
     private void testRegularizedGamma(double expected, double a, double x) {
         double actualP = Gamma.regularizedGammaP(a, x);
@@ -85,7 +85,7 @@ public class GammaTest {
 
     @Test
     public void testRegularizedGammaNanPositiveField() {
-        testRegularizedGammaField(Double.NaN, new Decimal64(Double.NaN), one);
+        testRegularizedGammaField(Double.NaN, new Binary64(Double.NaN), one);
     }
 
     @Test
@@ -95,7 +95,7 @@ public class GammaTest {
 
     @Test
     public void testRegularizedGammaPositiveNanField() {
-        testRegularizedGammaField(Double.NaN, one, new Decimal64(Double.NaN));
+        testRegularizedGammaField(Double.NaN, one, new Binary64(Double.NaN));
     }
 
     @Test
@@ -105,7 +105,7 @@ public class GammaTest {
 
     @Test
     public void testRegularizedGammaNegativePositiveField() {
-        testRegularizedGammaField(Double.NaN, new Decimal64(-1.5), one);
+        testRegularizedGammaField(Double.NaN, new Binary64(-1.5), one);
     }
 
     @Test
@@ -165,7 +165,7 @@ public class GammaTest {
 
     @Test
     public void testLogGammaNanField() {
-        testLogGammaField(new Decimal64(Double.NaN), new Decimal64(Double.NaN));
+        testLogGammaField(new Binary64(Double.NaN), new Binary64(Double.NaN));
     }
 
     @Test
@@ -175,7 +175,7 @@ public class GammaTest {
 
     @Test
     public void testLogGammaNegativeField() {
-        testLogGammaField(new Decimal64(Double.NaN), one.negate());
+        testLogGammaField(new Binary64(Double.NaN), one.negate());
     }
 
     @Test
@@ -185,7 +185,7 @@ public class GammaTest {
 
     @Test
     public void testLogGammaZeroField() {
-        testLogGammaField(new Decimal64(Double.NaN), zero);
+        testLogGammaField(new Binary64(Double.NaN), zero);
     }
 
     @Test
@@ -195,7 +195,7 @@ public class GammaTest {
 
     @Test
     public void testLogGammaPositiveField() {
-        testLogGammaField(new Decimal64(0.6931471805599457), new Decimal64(3.0));
+        testLogGammaField(new Binary64(0.6931471805599457), new Binary64(3.0));
     }
 
     @Test
@@ -217,17 +217,17 @@ public class GammaTest {
     @Test
     public void testDigammaLargeArgsField() {
         double eps = 1e-8;
-        Assert.assertEquals(4.6001618527380874002, Gamma.digamma(new Decimal64(100)).getReal(), eps);
-        Assert.assertEquals(3.9019896734278921970, Gamma.digamma(new Decimal64(50)).getReal(), eps);
-        Assert.assertEquals(2.9705239922421490509, Gamma.digamma(new Decimal64(20)).getReal(), eps);
-        Assert.assertEquals(2.9958363947076465821, Gamma.digamma(new Decimal64(20.5)).getReal(), eps);
-        Assert.assertEquals(2.2622143570941481605, Gamma.digamma(new Decimal64(10.1)).getReal(), eps);
-        Assert.assertEquals(2.1168588189004379233, Gamma.digamma(new Decimal64(8.8)).getReal(), eps);
-        Assert.assertEquals(1.8727843350984671394, Gamma.digamma(new Decimal64(7)).getReal(), eps);
-        Assert.assertEquals(0.42278433509846713939, Gamma.digamma(new Decimal64(2)).getReal(), eps);
-        Assert.assertEquals(-100.56088545786867450, Gamma.digamma(new Decimal64(0.01)).getReal(), eps);
-        Assert.assertEquals(-4.0390398965921882955, Gamma.digamma(new Decimal64(-0.8)).getReal(), eps);
-        Assert.assertEquals(4.2003210041401844726, Gamma.digamma(new Decimal64(-6.3)).getReal(), eps);
+        Assert.assertEquals(4.6001618527380874002, Gamma.digamma(new Binary64(100)).getReal(), eps);
+        Assert.assertEquals(3.9019896734278921970, Gamma.digamma(new Binary64(50)).getReal(), eps);
+        Assert.assertEquals(2.9705239922421490509, Gamma.digamma(new Binary64(20)).getReal(), eps);
+        Assert.assertEquals(2.9958363947076465821, Gamma.digamma(new Binary64(20.5)).getReal(), eps);
+        Assert.assertEquals(2.2622143570941481605, Gamma.digamma(new Binary64(10.1)).getReal(), eps);
+        Assert.assertEquals(2.1168588189004379233, Gamma.digamma(new Binary64(8.8)).getReal(), eps);
+        Assert.assertEquals(1.8727843350984671394, Gamma.digamma(new Binary64(7)).getReal(), eps);
+        Assert.assertEquals(0.42278433509846713939, Gamma.digamma(new Binary64(2)).getReal(), eps);
+        Assert.assertEquals(-100.56088545786867450, Gamma.digamma(new Binary64(0.01)).getReal(), eps);
+        Assert.assertEquals(-4.0390398965921882955, Gamma.digamma(new Binary64(-0.8)).getReal(), eps);
+        Assert.assertEquals(4.2003210041401844726, Gamma.digamma(new Binary64(-6.3)).getReal(), eps);
     }
 
     @Test
@@ -256,7 +256,7 @@ public class GammaTest {
                              -1e+17, -1e+18, -1e+19, -1e+20, -1e+21, -1e+22, -1e+23, -1e+24, -1e+25, -1e+26,
                              -1e+27, -1e+28, -1e+29, -1e+30};
         for (double n = 1; n < 30; n++) {
-            checkRelativeError(String.format("Test %.0f: ", n), expected[(int) (n - 1)], Gamma.digamma(new Decimal64(FastMath.pow(10.0, -n))).getReal(), 1e-8);
+            checkRelativeError(String.format("Test %.0f: ", n), expected[(int) (n - 1)], Gamma.digamma(new Binary64(FastMath.pow(10.0, -n))).getReal(), 1e-8);
         }
     }
 
@@ -269,9 +269,9 @@ public class GammaTest {
 
     @Test
     public void testDigammaNonRealArgsField() {
-        Assert.assertTrue(Gamma.digamma(new Decimal64(Double.NaN)).isNaN());
-        Assert.assertTrue(Gamma.digamma(new Decimal64(Double.POSITIVE_INFINITY)).isInfinite());
-        Assert.assertTrue(Gamma.digamma(new Decimal64(Double.NEGATIVE_INFINITY)).isInfinite());
+        Assert.assertTrue(Gamma.digamma(new Binary64(Double.NaN)).isNaN());
+        Assert.assertTrue(Gamma.digamma(new Binary64(Double.POSITIVE_INFINITY)).isInfinite());
+        Assert.assertTrue(Gamma.digamma(new Binary64(Double.NEGATIVE_INFINITY)).isInfinite());
     }
 
     @Test
@@ -307,21 +307,21 @@ public class GammaTest {
         // computed using webMathematica.  For example, to compute trigamma($i) = Polygamma(1, $i), use
         //
         // http://functions.wolfram.com/webMathematica/Evaluated.jsp?name=PolyGamma2&plottype=0&vars={%221%22,%22$i%22}&digits=20
-        Decimal64[] data = {
-                new Decimal64(1e-6), new Decimal64(1.00000000000164493166e12) ,
-                new Decimal64(1e-4), new Decimal64(1.0000000164469368793e8) ,
-                new Decimal64(1e-3), new Decimal64(1.0000016425331958690e6),
-                new Decimal64(1e-2), new Decimal64(10001.621213528313220),
-                new Decimal64(1e-1), new Decimal64(101.43329915079275882),
-                new Decimal64(1), new Decimal64(1.6449340668482264365),
-                new Decimal64(2), new Decimal64(0.64493406684822643647),
-                new Decimal64(3), new Decimal64(0.39493406684822643647),
-                new Decimal64(4), new Decimal64(0.28382295573711532536),
-                new Decimal64(5), new Decimal64(0.22132295573711532536),
-                new Decimal64(10), new Decimal64(0.10516633568168574612),
-                new Decimal64(20), new Decimal64(0.051270822935203119832),
-                new Decimal64(50), new Decimal64(0.020201333226697125806),
-                new Decimal64(100), new Decimal64(0.010050166663333571395)
+        Binary64[] data = {
+                new Binary64(1e-6), new Binary64(1.00000000000164493166e12) ,
+                new Binary64(1e-4), new Binary64(1.0000000164469368793e8) ,
+                new Binary64(1e-3), new Binary64(1.0000016425331958690e6),
+                new Binary64(1e-2), new Binary64(10001.621213528313220),
+                new Binary64(1e-1), new Binary64(101.43329915079275882),
+                new Binary64(1), new Binary64(1.6449340668482264365),
+                new Binary64(2), new Binary64(0.64493406684822643647),
+                new Binary64(3), new Binary64(0.39493406684822643647),
+                new Binary64(4), new Binary64(0.28382295573711532536),
+                new Binary64(5), new Binary64(0.22132295573711532536),
+                new Binary64(10), new Binary64(0.10516633568168574612),
+                new Binary64(20), new Binary64(0.051270822935203119832),
+                new Binary64(50), new Binary64(0.020201333226697125806),
+                new Binary64(100), new Binary64(0.010050166663333571395)
         };
         for (int i = data.length - 2; i >= 0; i -= 2) {
             Assert.assertEquals(String.format("trigamma %.6f", data[i].getReal()), data[i + 1].getReal(),
@@ -340,7 +340,7 @@ public class GammaTest {
     public void testTrigammaSmallArgField() {
         double eps = 2;
         Assert.assertEquals(String.format("trigamma %.8f", 1e-8), 1e16,
-                            Gamma.trigamma(new Decimal64(1e-8)).getReal(), eps);
+                            Gamma.trigamma(new Binary64(1e-8)).getReal(), eps);
     }
 
     @Test
@@ -352,9 +352,9 @@ public class GammaTest {
 
     @Test
     public void testTrigammaNonRealArgsField() {
-        Assert.assertTrue(Gamma.trigamma(new Decimal64(Double.NaN)).isNaN());
-        Assert.assertTrue(Gamma.trigamma(new Decimal64(Double.POSITIVE_INFINITY)).isInfinite());
-        Assert.assertTrue(Gamma.trigamma(new Decimal64(Double.NEGATIVE_INFINITY)).isInfinite());
+        Assert.assertTrue(Gamma.trigamma(new Binary64(Double.NaN)).isNaN());
+        Assert.assertTrue(Gamma.trigamma(new Binary64(Double.POSITIVE_INFINITY)).isInfinite());
+        Assert.assertTrue(Gamma.trigamma(new Binary64(Double.NEGATIVE_INFINITY)).isInfinite());
     }
 
     /**
@@ -532,7 +532,7 @@ public class GammaTest {
         final int ulps = 3;
         for (int i = 0; i < LOG_GAMMA_REF.length; i++) {
             final double[] data = LOG_GAMMA_REF[i];
-            final Decimal64 x = new Decimal64(data[0]);
+            final Binary64 x = new Binary64(data[0]);
             final double expected = data[1];
             final double actual = Gamma.logGamma(x).getReal();
             final double tol;
@@ -552,7 +552,7 @@ public class GammaTest {
 
     @Test
     public void testLogGammaPrecondition1Field() {
-        Assert.assertTrue(Gamma.logGamma(new Decimal64(0.0)).isNaN());
+        Assert.assertTrue(Gamma.logGamma(new Binary64(0.0)).isNaN());
     }
 
     @Test
@@ -562,7 +562,7 @@ public class GammaTest {
 
     @Test
     public void testLogGammaPrecondition2Field() {
-        Assert.assertTrue(Gamma.logGamma(new Decimal64(-1.0)).isNaN());
+        Assert.assertTrue(Gamma.logGamma(new Binary64(-1.0)).isNaN());
     }
 
     /**
@@ -626,7 +626,7 @@ public class GammaTest {
         final int ulps = 3;
         for (int i = 0; i < INV_GAMMA1P_M1_REF.length; i++) {
             final double[] ref = INV_GAMMA1P_M1_REF[i];
-            final Decimal64 x = new Decimal64(ref[0]);
+            final Binary64 x = new Binary64(ref[0]);
             final double expected = ref[1];
             final double actual = Gamma.invGamma1pm1(x).getReal();
             final double tol = ulps * FastMath.ulp(expected);
@@ -649,13 +649,13 @@ public class GammaTest {
     @Test(expected = MathIllegalArgumentException.class)
     public void testInvGamma1pm1Precondition1Field() {
 
-        Gamma.invGamma1pm1(new Decimal64(-0.51));
+        Gamma.invGamma1pm1(new Binary64(-0.51));
     }
 
     @Test(expected = MathIllegalArgumentException.class)
     public void testInvGamma1pm1Precondition2Field() {
 
-        Gamma.invGamma1pm1(new Decimal64(1.51));
+        Gamma.invGamma1pm1(new Binary64(1.51));
     }
 
     private static final double[][] LOG_GAMMA1P_REF = {
@@ -698,7 +698,7 @@ public class GammaTest {
         final int ulps = 3;
         for (int i = 0; i < LOG_GAMMA1P_REF.length; i++) {
             final double[] ref = LOG_GAMMA1P_REF[i];
-            final Decimal64 x = new Decimal64(ref[0]);
+            final Binary64 x = new Binary64(ref[0]);
             final double expected = ref[1];
             final double actual = Gamma.logGamma1p(x).getReal();
             final double tol = ulps * FastMath.ulp(expected);
@@ -715,7 +715,7 @@ public class GammaTest {
     @Test(expected = MathIllegalArgumentException.class)
     public void testLogGamma1pPrecondition1Field() {
 
-        Gamma.logGamma1p(new Decimal64(-0.51));
+        Gamma.logGamma1p(new Binary64(-0.51));
     }
 
     @Test(expected = MathIllegalArgumentException.class)
@@ -727,7 +727,7 @@ public class GammaTest {
     @Test(expected = MathIllegalArgumentException.class)
     public void testLogGamma1pPrecondition2Field() {
 
-        Gamma.logGamma1p(new Decimal64(1.51));
+        Gamma.logGamma1p(new Binary64(1.51));
     }
 
     /**
@@ -1244,10 +1244,10 @@ public class GammaTest {
 
         for (int i = 0; i < GAMMA_REF.length; i++) {
             final double[] ref = GAMMA_REF[i];
-            final Decimal64 x = new Decimal64(ref[0]);
+            final Binary64 x = new Binary64(ref[0]);
             final double expected = ref[1];
             final double actual = Gamma.gamma(x).getReal();
-            final Decimal64 absX = x.abs();
+            final Binary64 absX = x.abs();
             final int ulps;
             if (absX.getReal() <= 8.0) {
                 ulps = 3;
@@ -1277,7 +1277,7 @@ public class GammaTest {
     public void testGammaNegativeIntegerField() {
 
         for (int i = -100; i <= 0; i++) {
-            Assert.assertTrue(Integer.toString(i), Gamma.gamma(new Decimal64(i)).isNaN());
+            Assert.assertTrue(Integer.toString(i), Gamma.gamma(new Binary64(i)).isNaN());
         }
     }
 
@@ -1301,9 +1301,9 @@ public class GammaTest {
         // check that the gamma function properly switches sign
         // see: https://en.wikipedia.org/wiki/Gamma_function
 
-        Decimal64 previousGamma = Gamma.gamma(new Decimal64(-18.5));
-        for (Decimal64 x = new Decimal64(-19.5); x.getReal() > -25; x = x.subtract(1.0)) {
-            Decimal64 gamma = Gamma.gamma(x);
+        Binary64 previousGamma = Gamma.gamma(new Binary64(-18.5));
+        for (Binary64 x = new Binary64(-19.5); x.getReal() > -25; x = x.subtract(1.0)) {
+            Binary64 gamma = Gamma.gamma(x);
             Assert.assertEquals(  (int) FastMath.signum(previousGamma.getReal()),
                                   - (int) FastMath.signum(gamma.getReal()));
 
