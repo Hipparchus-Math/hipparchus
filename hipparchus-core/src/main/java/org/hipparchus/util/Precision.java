@@ -23,6 +23,7 @@
 package org.hipparchus.util;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
@@ -422,7 +423,7 @@ public class Precision {
      * @return the rounded value.
      */
     public static double round(double x, int scale) {
-        return round(x, scale, BigDecimal.ROUND_HALF_UP);
+        return round(x, scale, RoundingMode.HALF_UP);
     }
 
     /**
@@ -441,7 +442,7 @@ public class Precision {
      * @throws IllegalArgumentException if {@code roundingMethod} does not
      * represent a valid rounding mode.
      */
-    public static double round(double x, int scale, int roundingMethod) {
+    public static double round(double x, int scale, RoundingMode roundingMethod) {
         try {
             final double rounded = (new BigDecimal(Double.toString(x))
                    .setScale(scale, roundingMethod))
@@ -466,7 +467,7 @@ public class Precision {
      * @return the rounded value.
      */
     public static float round(float x, int scale) {
-        return round(x, scale, BigDecimal.ROUND_HALF_UP);
+        return round(x, scale, RoundingMode.HALF_UP);
     }
 
     /**
@@ -481,7 +482,7 @@ public class Precision {
      * @throws MathRuntimeException if an exact operation is required but result is not exact
      * @throws MathIllegalArgumentException if {@code roundingMethod} is not a valid rounding method.
      */
-    public static float round(float x, int scale, int roundingMethod)
+    public static float round(float x, int scale, RoundingMode roundingMethod)
         throws MathRuntimeException, MathIllegalArgumentException {
         final float sign = FastMath.copySign(1f, x);
         final float factor = (float) FastMath.pow(10.0f, scale) * sign;
@@ -502,27 +503,27 @@ public class Precision {
      */
     private static double roundUnscaled(double unscaled,
                                         double sign,
-                                        int roundingMethod)
+                                        RoundingMode roundingMethod)
         throws MathRuntimeException, MathIllegalArgumentException {
         switch (roundingMethod) {
-        case BigDecimal.ROUND_CEILING :
+        case CEILING :
             if (sign == -1) {
                 unscaled = FastMath.floor(FastMath.nextAfter(unscaled, Double.NEGATIVE_INFINITY));
             } else {
                 unscaled = FastMath.ceil(FastMath.nextAfter(unscaled, Double.POSITIVE_INFINITY));
             }
             break;
-        case BigDecimal.ROUND_DOWN :
+        case DOWN :
             unscaled = FastMath.floor(FastMath.nextAfter(unscaled, Double.NEGATIVE_INFINITY));
             break;
-        case BigDecimal.ROUND_FLOOR :
+        case FLOOR :
             if (sign == -1) {
                 unscaled = FastMath.ceil(FastMath.nextAfter(unscaled, Double.POSITIVE_INFINITY));
             } else {
                 unscaled = FastMath.floor(FastMath.nextAfter(unscaled, Double.NEGATIVE_INFINITY));
             }
             break;
-        case BigDecimal.ROUND_HALF_DOWN : {
+        case HALF_DOWN : {
             unscaled = FastMath.nextAfter(unscaled, Double.NEGATIVE_INFINITY);
             double fraction = unscaled - FastMath.floor(unscaled);
             if (fraction > 0.5) {
@@ -532,7 +533,7 @@ public class Precision {
             }
             break;
         }
-        case BigDecimal.ROUND_HALF_EVEN : {
+        case HALF_EVEN : {
             double fraction = unscaled - FastMath.floor(unscaled);
             if (fraction > 0.5) {
                 unscaled = FastMath.ceil(unscaled);
@@ -548,7 +549,7 @@ public class Precision {
             }
             break;
         }
-        case BigDecimal.ROUND_HALF_UP : {
+        case HALF_UP : {
             unscaled = FastMath.nextAfter(unscaled, Double.POSITIVE_INFINITY);
             double fraction = unscaled - FastMath.floor(unscaled);
             if (fraction >= 0.5) {
@@ -558,28 +559,20 @@ public class Precision {
             }
             break;
         }
-        case BigDecimal.ROUND_UNNECESSARY :
+        case UNNECESSARY :
             if (unscaled != FastMath.floor(unscaled)) {
                 throw new MathRuntimeException(LocalizedCoreFormats.ARITHMETIC_EXCEPTION);
             }
             break;
-        case BigDecimal.ROUND_UP :
+        case UP :
             // do not round if the discarded fraction is equal to zero
             if (unscaled != FastMath.floor(unscaled)) {
                 unscaled = FastMath.ceil(FastMath.nextAfter(unscaled, Double.POSITIVE_INFINITY));
             }
             break;
         default :
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.INVALID_ROUNDING_METHOD,
-                                                   roundingMethod,
-                                                   "ROUND_CEILING", BigDecimal.ROUND_CEILING,
-                                                   "ROUND_DOWN", BigDecimal.ROUND_DOWN,
-                                                   "ROUND_FLOOR", BigDecimal.ROUND_FLOOR,
-                                                   "ROUND_HALF_DOWN", BigDecimal.ROUND_HALF_DOWN,
-                                                   "ROUND_HALF_EVEN", BigDecimal.ROUND_HALF_EVEN,
-                                                   "ROUND_HALF_UP", BigDecimal.ROUND_HALF_UP,
-                                                   "ROUND_UNNECESSARY", BigDecimal.ROUND_UNNECESSARY,
-                                                   "ROUND_UP", BigDecimal.ROUND_UP);
+            // this should nerver happen
+            throw MathRuntimeException.createInternalError();
         }
         return unscaled;
     }

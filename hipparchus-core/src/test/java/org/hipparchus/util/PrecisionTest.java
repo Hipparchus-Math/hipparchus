@@ -13,10 +13,9 @@
  */
 package org.hipparchus.util;
 
-import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -293,7 +292,7 @@ public class PrecisionTest {
 
         // JIRA MATH-151
         Assert.assertEquals(39.25, Precision.round(39.245, 2), 0.0);
-        Assert.assertEquals(39.24, Precision.round(39.245, 2, BigDecimal.ROUND_DOWN), 0.0);
+        Assert.assertEquals(39.24, Precision.round(39.245, 2, RoundingMode.DOWN), 0.0);
         double xx = 39.0;
         xx += 245d / 1000d;
         Assert.assertEquals(39.25, Precision.round(xx, 2), 0.0);
@@ -309,82 +308,75 @@ public class PrecisionTest {
         Assert.assertEquals(30.01d, Precision.round(30.005d, 2), 0.0d);
         Assert.assertEquals(30.65d, Precision.round(30.645d, 2), 0.0d);
 
-        Assert.assertEquals(1.24, Precision.round(x, 2, BigDecimal.ROUND_CEILING), 0.0);
-        Assert.assertEquals(1.235, Precision.round(x, 3, BigDecimal.ROUND_CEILING), 0.0);
-        Assert.assertEquals(1.2346, Precision.round(x, 4, BigDecimal.ROUND_CEILING), 0.0);
-        Assert.assertEquals(-1.23, Precision.round(-x, 2, BigDecimal.ROUND_CEILING), 0.0);
-        Assert.assertEquals(-1.234, Precision.round(-x, 3, BigDecimal.ROUND_CEILING), 0.0);
-        Assert.assertEquals(-1.2345, Precision.round(-x, 4, BigDecimal.ROUND_CEILING), 0.0);
+        Assert.assertEquals(1.24, Precision.round(x, 2, RoundingMode.CEILING), 0.0);
+        Assert.assertEquals(1.235, Precision.round(x, 3, RoundingMode.CEILING), 0.0);
+        Assert.assertEquals(1.2346, Precision.round(x, 4, RoundingMode.CEILING), 0.0);
+        Assert.assertEquals(-1.23, Precision.round(-x, 2, RoundingMode.CEILING), 0.0);
+        Assert.assertEquals(-1.234, Precision.round(-x, 3, RoundingMode.CEILING), 0.0);
+        Assert.assertEquals(-1.2345, Precision.round(-x, 4, RoundingMode.CEILING), 0.0);
 
-        Assert.assertEquals(1.23, Precision.round(x, 2, BigDecimal.ROUND_DOWN), 0.0);
-        Assert.assertEquals(1.234, Precision.round(x, 3, BigDecimal.ROUND_DOWN), 0.0);
-        Assert.assertEquals(1.2345, Precision.round(x, 4, BigDecimal.ROUND_DOWN), 0.0);
-        Assert.assertEquals(-1.23, Precision.round(-x, 2, BigDecimal.ROUND_DOWN), 0.0);
-        Assert.assertEquals(-1.234, Precision.round(-x, 3, BigDecimal.ROUND_DOWN), 0.0);
-        Assert.assertEquals(-1.2345, Precision.round(-x, 4, BigDecimal.ROUND_DOWN), 0.0);
+        Assert.assertEquals(1.23, Precision.round(x, 2, RoundingMode.DOWN), 0.0);
+        Assert.assertEquals(1.234, Precision.round(x, 3, RoundingMode.DOWN), 0.0);
+        Assert.assertEquals(1.2345, Precision.round(x, 4, RoundingMode.DOWN), 0.0);
+        Assert.assertEquals(-1.23, Precision.round(-x, 2, RoundingMode.DOWN), 0.0);
+        Assert.assertEquals(-1.234, Precision.round(-x, 3, RoundingMode.DOWN), 0.0);
+        Assert.assertEquals(-1.2345, Precision.round(-x, 4, RoundingMode.DOWN), 0.0);
 
-        Assert.assertEquals(1.23, Precision.round(x, 2, BigDecimal.ROUND_FLOOR), 0.0);
-        Assert.assertEquals(1.234, Precision.round(x, 3, BigDecimal.ROUND_FLOOR), 0.0);
-        Assert.assertEquals(1.2345, Precision.round(x, 4, BigDecimal.ROUND_FLOOR), 0.0);
-        Assert.assertEquals(-1.24, Precision.round(-x, 2, BigDecimal.ROUND_FLOOR), 0.0);
-        Assert.assertEquals(-1.235, Precision.round(-x, 3, BigDecimal.ROUND_FLOOR), 0.0);
-        Assert.assertEquals(-1.2346, Precision.round(-x, 4, BigDecimal.ROUND_FLOOR), 0.0);
+        Assert.assertEquals(1.23, Precision.round(x, 2, RoundingMode.FLOOR), 0.0);
+        Assert.assertEquals(1.234, Precision.round(x, 3, RoundingMode.FLOOR), 0.0);
+        Assert.assertEquals(1.2345, Precision.round(x, 4, RoundingMode.FLOOR), 0.0);
+        Assert.assertEquals(-1.24, Precision.round(-x, 2, RoundingMode.FLOOR), 0.0);
+        Assert.assertEquals(-1.235, Precision.round(-x, 3, RoundingMode.FLOOR), 0.0);
+        Assert.assertEquals(-1.2346, Precision.round(-x, 4, RoundingMode.FLOOR), 0.0);
 
-        Assert.assertEquals(1.23, Precision.round(x, 2, BigDecimal.ROUND_HALF_DOWN), 0.0);
-        Assert.assertEquals(1.235, Precision.round(x, 3, BigDecimal.ROUND_HALF_DOWN), 0.0);
-        Assert.assertEquals(1.2346, Precision.round(x, 4, BigDecimal.ROUND_HALF_DOWN), 0.0);
-        Assert.assertEquals(-1.23, Precision.round(-x, 2, BigDecimal.ROUND_HALF_DOWN), 0.0);
-        Assert.assertEquals(-1.235, Precision.round(-x, 3, BigDecimal.ROUND_HALF_DOWN), 0.0);
-        Assert.assertEquals(-1.2346, Precision.round(-x, 4, BigDecimal.ROUND_HALF_DOWN), 0.0);
-        Assert.assertEquals(1.234, Precision.round(1.2345, 3, BigDecimal.ROUND_HALF_DOWN), 0.0);
-        Assert.assertEquals(-1.234, Precision.round(-1.2345, 3, BigDecimal.ROUND_HALF_DOWN), 0.0);
+        Assert.assertEquals(1.23, Precision.round(x, 2, RoundingMode.HALF_DOWN), 0.0);
+        Assert.assertEquals(1.235, Precision.round(x, 3, RoundingMode.HALF_DOWN), 0.0);
+        Assert.assertEquals(1.2346, Precision.round(x, 4, RoundingMode.HALF_DOWN), 0.0);
+        Assert.assertEquals(-1.23, Precision.round(-x, 2, RoundingMode.HALF_DOWN), 0.0);
+        Assert.assertEquals(-1.235, Precision.round(-x, 3, RoundingMode.HALF_DOWN), 0.0);
+        Assert.assertEquals(-1.2346, Precision.round(-x, 4, RoundingMode.HALF_DOWN), 0.0);
+        Assert.assertEquals(1.234, Precision.round(1.2345, 3, RoundingMode.HALF_DOWN), 0.0);
+        Assert.assertEquals(-1.234, Precision.round(-1.2345, 3, RoundingMode.HALF_DOWN), 0.0);
 
-        Assert.assertEquals(1.23, Precision.round(x, 2, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(1.235, Precision.round(x, 3, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(1.2346, Precision.round(x, 4, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(-1.23, Precision.round(-x, 2, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(-1.235, Precision.round(-x, 3, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(-1.2346, Precision.round(-x, 4, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(1.234, Precision.round(1.2345, 3, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(-1.234, Precision.round(-1.2345, 3, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(1.236, Precision.round(1.2355, 3, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(-1.236, Precision.round(-1.2355, 3, BigDecimal.ROUND_HALF_EVEN), 0.0);
+        Assert.assertEquals(1.23, Precision.round(x, 2, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(1.235, Precision.round(x, 3, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(1.2346, Precision.round(x, 4, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(-1.23, Precision.round(-x, 2, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(-1.235, Precision.round(-x, 3, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(-1.2346, Precision.round(-x, 4, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(1.234, Precision.round(1.2345, 3, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(-1.234, Precision.round(-1.2345, 3, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(1.236, Precision.round(1.2355, 3, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(-1.236, Precision.round(-1.2355, 3, RoundingMode.HALF_EVEN), 0.0);
 
-        Assert.assertEquals(1.23, Precision.round(x, 2, BigDecimal.ROUND_HALF_UP), 0.0);
-        Assert.assertEquals(1.235, Precision.round(x, 3, BigDecimal.ROUND_HALF_UP), 0.0);
-        Assert.assertEquals(1.2346, Precision.round(x, 4, BigDecimal.ROUND_HALF_UP), 0.0);
-        Assert.assertEquals(-1.23, Precision.round(-x, 2, BigDecimal.ROUND_HALF_UP), 0.0);
-        Assert.assertEquals(-1.235, Precision.round(-x, 3, BigDecimal.ROUND_HALF_UP), 0.0);
-        Assert.assertEquals(-1.2346, Precision.round(-x, 4, BigDecimal.ROUND_HALF_UP), 0.0);
-        Assert.assertEquals(1.235, Precision.round(1.2345, 3, BigDecimal.ROUND_HALF_UP), 0.0);
-        Assert.assertEquals(-1.235, Precision.round(-1.2345, 3, BigDecimal.ROUND_HALF_UP), 0.0);
+        Assert.assertEquals(1.23, Precision.round(x, 2, RoundingMode.HALF_UP), 0.0);
+        Assert.assertEquals(1.235, Precision.round(x, 3, RoundingMode.HALF_UP), 0.0);
+        Assert.assertEquals(1.2346, Precision.round(x, 4, RoundingMode.HALF_UP), 0.0);
+        Assert.assertEquals(-1.23, Precision.round(-x, 2, RoundingMode.HALF_UP), 0.0);
+        Assert.assertEquals(-1.235, Precision.round(-x, 3, RoundingMode.HALF_UP), 0.0);
+        Assert.assertEquals(-1.2346, Precision.round(-x, 4, RoundingMode.HALF_UP), 0.0);
+        Assert.assertEquals(1.235, Precision.round(1.2345, 3, RoundingMode.HALF_UP), 0.0);
+        Assert.assertEquals(-1.235, Precision.round(-1.2345, 3, RoundingMode.HALF_UP), 0.0);
 
-        Assert.assertEquals(-1.23, Precision.round(-1.23, 2, BigDecimal.ROUND_UNNECESSARY), 0.0);
-        Assert.assertEquals(1.23, Precision.round(1.23, 2, BigDecimal.ROUND_UNNECESSARY), 0.0);
+        Assert.assertEquals(-1.23, Precision.round(-1.23, 2, RoundingMode.UNNECESSARY), 0.0);
+        Assert.assertEquals(1.23, Precision.round(1.23, 2, RoundingMode.UNNECESSARY), 0.0);
 
         try {
-            Precision.round(1.234, 2, BigDecimal.ROUND_UNNECESSARY);
+            Precision.round(1.234, 2, RoundingMode.UNNECESSARY);
             Assert.fail();
         } catch (ArithmeticException ex) {
             // expected
         }
 
-        Assert.assertEquals(1.24, Precision.round(x, 2, BigDecimal.ROUND_UP), 0.0);
-        Assert.assertEquals(1.235, Precision.round(x, 3, BigDecimal.ROUND_UP), 0.0);
-        Assert.assertEquals(1.2346, Precision.round(x, 4, BigDecimal.ROUND_UP), 0.0);
-        Assert.assertEquals(-1.24, Precision.round(-x, 2, BigDecimal.ROUND_UP), 0.0);
-        Assert.assertEquals(-1.235, Precision.round(-x, 3, BigDecimal.ROUND_UP), 0.0);
-        Assert.assertEquals(-1.2346, Precision.round(-x, 4, BigDecimal.ROUND_UP), 0.0);
-
-        try {
-            Precision.round(1.234, 2, 1923);
-            Assert.fail();
-        } catch (IllegalArgumentException ex) {
-            // expected
-        }
+        Assert.assertEquals(1.24, Precision.round(x, 2, RoundingMode.UP), 0.0);
+        Assert.assertEquals(1.235, Precision.round(x, 3, RoundingMode.UP), 0.0);
+        Assert.assertEquals(1.2346, Precision.round(x, 4, RoundingMode.UP), 0.0);
+        Assert.assertEquals(-1.24, Precision.round(-x, 2, RoundingMode.UP), 0.0);
+        Assert.assertEquals(-1.235, Precision.round(-x, 3, RoundingMode.UP), 0.0);
+        Assert.assertEquals(-1.2346, Precision.round(-x, 4, RoundingMode.UP), 0.0);
 
         // MATH-151
-        Assert.assertEquals(39.25, Precision.round(39.245, 2, BigDecimal.ROUND_HALF_UP), 0.0);
+        Assert.assertEquals(39.25, Precision.round(39.245, 2, RoundingMode.HALF_UP), 0.0);
 
         // special values
         UnitTestUtils.assertEquals(Double.NaN, Precision.round(Double.NaN, 2), 0.0);
@@ -412,79 +404,72 @@ public class PrecisionTest {
         Assert.assertEquals(30.01f, Precision.round(30.005f, 2), 0.0f);
         Assert.assertEquals(30.65f, Precision.round(30.645f, 2), 0.0f);
 
-        Assert.assertEquals(1.24f, Precision.round(x, 2, BigDecimal.ROUND_CEILING), 0.0);
-        Assert.assertEquals(1.235f, Precision.round(x, 3, BigDecimal.ROUND_CEILING), 0.0);
-        Assert.assertEquals(1.2346f, Precision.round(x, 4, BigDecimal.ROUND_CEILING), 0.0);
-        Assert.assertEquals(-1.23f, Precision.round(-x, 2, BigDecimal.ROUND_CEILING), 0.0);
-        Assert.assertEquals(-1.234f, Precision.round(-x, 3, BigDecimal.ROUND_CEILING), 0.0);
-        Assert.assertEquals(-1.2345f, Precision.round(-x, 4, BigDecimal.ROUND_CEILING), 0.0);
+        Assert.assertEquals(1.24f, Precision.round(x, 2, RoundingMode.CEILING), 0.0);
+        Assert.assertEquals(1.235f, Precision.round(x, 3, RoundingMode.CEILING), 0.0);
+        Assert.assertEquals(1.2346f, Precision.round(x, 4, RoundingMode.CEILING), 0.0);
+        Assert.assertEquals(-1.23f, Precision.round(-x, 2, RoundingMode.CEILING), 0.0);
+        Assert.assertEquals(-1.234f, Precision.round(-x, 3, RoundingMode.CEILING), 0.0);
+        Assert.assertEquals(-1.2345f, Precision.round(-x, 4, RoundingMode.CEILING), 0.0);
 
-        Assert.assertEquals(1.23f, Precision.round(x, 2, BigDecimal.ROUND_DOWN), 0.0);
-        Assert.assertEquals(1.234f, Precision.round(x, 3, BigDecimal.ROUND_DOWN), 0.0);
-        Assert.assertEquals(1.2345f, Precision.round(x, 4, BigDecimal.ROUND_DOWN), 0.0);
-        Assert.assertEquals(-1.23f, Precision.round(-x, 2, BigDecimal.ROUND_DOWN), 0.0);
-        Assert.assertEquals(-1.234f, Precision.round(-x, 3, BigDecimal.ROUND_DOWN), 0.0);
-        Assert.assertEquals(-1.2345f, Precision.round(-x, 4, BigDecimal.ROUND_DOWN), 0.0);
+        Assert.assertEquals(1.23f, Precision.round(x, 2, RoundingMode.DOWN), 0.0);
+        Assert.assertEquals(1.234f, Precision.round(x, 3, RoundingMode.DOWN), 0.0);
+        Assert.assertEquals(1.2345f, Precision.round(x, 4, RoundingMode.DOWN), 0.0);
+        Assert.assertEquals(-1.23f, Precision.round(-x, 2, RoundingMode.DOWN), 0.0);
+        Assert.assertEquals(-1.234f, Precision.round(-x, 3, RoundingMode.DOWN), 0.0);
+        Assert.assertEquals(-1.2345f, Precision.round(-x, 4, RoundingMode.DOWN), 0.0);
 
-        Assert.assertEquals(1.23f, Precision.round(x, 2, BigDecimal.ROUND_FLOOR), 0.0);
-        Assert.assertEquals(1.234f, Precision.round(x, 3, BigDecimal.ROUND_FLOOR), 0.0);
-        Assert.assertEquals(1.2345f, Precision.round(x, 4, BigDecimal.ROUND_FLOOR), 0.0);
-        Assert.assertEquals(-1.24f, Precision.round(-x, 2, BigDecimal.ROUND_FLOOR), 0.0);
-        Assert.assertEquals(-1.235f, Precision.round(-x, 3, BigDecimal.ROUND_FLOOR), 0.0);
-        Assert.assertEquals(-1.2346f, Precision.round(-x, 4, BigDecimal.ROUND_FLOOR), 0.0);
+        Assert.assertEquals(1.23f, Precision.round(x, 2, RoundingMode.FLOOR), 0.0);
+        Assert.assertEquals(1.234f, Precision.round(x, 3, RoundingMode.FLOOR), 0.0);
+        Assert.assertEquals(1.2345f, Precision.round(x, 4, RoundingMode.FLOOR), 0.0);
+        Assert.assertEquals(-1.24f, Precision.round(-x, 2, RoundingMode.FLOOR), 0.0);
+        Assert.assertEquals(-1.235f, Precision.round(-x, 3, RoundingMode.FLOOR), 0.0);
+        Assert.assertEquals(-1.2346f, Precision.round(-x, 4, RoundingMode.FLOOR), 0.0);
 
-        Assert.assertEquals(1.23f, Precision.round(x, 2, BigDecimal.ROUND_HALF_DOWN), 0.0);
-        Assert.assertEquals(1.235f, Precision.round(x, 3, BigDecimal.ROUND_HALF_DOWN), 0.0);
-        Assert.assertEquals(1.2346f, Precision.round(x, 4, BigDecimal.ROUND_HALF_DOWN), 0.0);
-        Assert.assertEquals(-1.23f, Precision.round(-x, 2, BigDecimal.ROUND_HALF_DOWN), 0.0);
-        Assert.assertEquals(-1.235f, Precision.round(-x, 3, BigDecimal.ROUND_HALF_DOWN), 0.0);
-        Assert.assertEquals(-1.2346f, Precision.round(-x, 4, BigDecimal.ROUND_HALF_DOWN), 0.0);
-        Assert.assertEquals(1.234f, Precision.round(1.2345f, 3, BigDecimal.ROUND_HALF_DOWN), 0.0);
-        Assert.assertEquals(-1.234f, Precision.round(-1.2345f, 3, BigDecimal.ROUND_HALF_DOWN), 0.0);
+        Assert.assertEquals(1.23f, Precision.round(x, 2, RoundingMode.HALF_DOWN), 0.0);
+        Assert.assertEquals(1.235f, Precision.round(x, 3, RoundingMode.HALF_DOWN), 0.0);
+        Assert.assertEquals(1.2346f, Precision.round(x, 4, RoundingMode.HALF_DOWN), 0.0);
+        Assert.assertEquals(-1.23f, Precision.round(-x, 2, RoundingMode.HALF_DOWN), 0.0);
+        Assert.assertEquals(-1.235f, Precision.round(-x, 3, RoundingMode.HALF_DOWN), 0.0);
+        Assert.assertEquals(-1.2346f, Precision.round(-x, 4, RoundingMode.HALF_DOWN), 0.0);
+        Assert.assertEquals(1.234f, Precision.round(1.2345f, 3, RoundingMode.HALF_DOWN), 0.0);
+        Assert.assertEquals(-1.234f, Precision.round(-1.2345f, 3, RoundingMode.HALF_DOWN), 0.0);
 
-        Assert.assertEquals(1.23f, Precision.round(x, 2, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(1.235f, Precision.round(x, 3, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(1.2346f, Precision.round(x, 4, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(-1.23f, Precision.round(-x, 2, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(-1.235f, Precision.round(-x, 3, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(-1.2346f, Precision.round(-x, 4, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(1.234f, Precision.round(1.2345f, 3, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(-1.234f, Precision.round(-1.2345f, 3, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(1.236f, Precision.round(1.2355f, 3, BigDecimal.ROUND_HALF_EVEN), 0.0);
-        Assert.assertEquals(-1.236f, Precision.round(-1.2355f, 3, BigDecimal.ROUND_HALF_EVEN), 0.0);
+        Assert.assertEquals(1.23f, Precision.round(x, 2, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(1.235f, Precision.round(x, 3, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(1.2346f, Precision.round(x, 4, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(-1.23f, Precision.round(-x, 2, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(-1.235f, Precision.round(-x, 3, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(-1.2346f, Precision.round(-x, 4, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(1.234f, Precision.round(1.2345f, 3, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(-1.234f, Precision.round(-1.2345f, 3, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(1.236f, Precision.round(1.2355f, 3, RoundingMode.HALF_EVEN), 0.0);
+        Assert.assertEquals(-1.236f, Precision.round(-1.2355f, 3, RoundingMode.HALF_EVEN), 0.0);
 
-        Assert.assertEquals(1.23f, Precision.round(x, 2, BigDecimal.ROUND_HALF_UP), 0.0);
-        Assert.assertEquals(1.235f, Precision.round(x, 3, BigDecimal.ROUND_HALF_UP), 0.0);
-        Assert.assertEquals(1.2346f, Precision.round(x, 4, BigDecimal.ROUND_HALF_UP), 0.0);
-        Assert.assertEquals(-1.23f, Precision.round(-x, 2, BigDecimal.ROUND_HALF_UP), 0.0);
-        Assert.assertEquals(-1.235f, Precision.round(-x, 3, BigDecimal.ROUND_HALF_UP), 0.0);
-        Assert.assertEquals(-1.2346f, Precision.round(-x, 4, BigDecimal.ROUND_HALF_UP), 0.0);
-        Assert.assertEquals(1.235f, Precision.round(1.2345f, 3, BigDecimal.ROUND_HALF_UP), 0.0);
-        Assert.assertEquals(-1.235f, Precision.round(-1.2345f, 3, BigDecimal.ROUND_HALF_UP), 0.0);
+        Assert.assertEquals(1.23f, Precision.round(x, 2, RoundingMode.HALF_UP), 0.0);
+        Assert.assertEquals(1.235f, Precision.round(x, 3, RoundingMode.HALF_UP), 0.0);
+        Assert.assertEquals(1.2346f, Precision.round(x, 4, RoundingMode.HALF_UP), 0.0);
+        Assert.assertEquals(-1.23f, Precision.round(-x, 2, RoundingMode.HALF_UP), 0.0);
+        Assert.assertEquals(-1.235f, Precision.round(-x, 3, RoundingMode.HALF_UP), 0.0);
+        Assert.assertEquals(-1.2346f, Precision.round(-x, 4, RoundingMode.HALF_UP), 0.0);
+        Assert.assertEquals(1.235f, Precision.round(1.2345f, 3, RoundingMode.HALF_UP), 0.0);
+        Assert.assertEquals(-1.235f, Precision.round(-1.2345f, 3, RoundingMode.HALF_UP), 0.0);
 
-        Assert.assertEquals(-1.23f, Precision.round(-1.23f, 2, BigDecimal.ROUND_UNNECESSARY), 0.0);
-        Assert.assertEquals(1.23f, Precision.round(1.23f, 2, BigDecimal.ROUND_UNNECESSARY), 0.0);
+        Assert.assertEquals(-1.23f, Precision.round(-1.23f, 2, RoundingMode.UNNECESSARY), 0.0);
+        Assert.assertEquals(1.23f, Precision.round(1.23f, 2, RoundingMode.UNNECESSARY), 0.0);
 
         try {
-            Precision.round(1.234f, 2, BigDecimal.ROUND_UNNECESSARY);
+            Precision.round(1.234f, 2, RoundingMode.UNNECESSARY);
             Assert.fail();
         } catch (MathRuntimeException ex) {
             // success
         }
 
-        Assert.assertEquals(1.24f, Precision.round(x, 2, BigDecimal.ROUND_UP), 0.0);
-        Assert.assertEquals(1.235f, Precision.round(x, 3, BigDecimal.ROUND_UP), 0.0);
-        Assert.assertEquals(1.2346f, Precision.round(x, 4, BigDecimal.ROUND_UP), 0.0);
-        Assert.assertEquals(-1.24f, Precision.round(-x, 2, BigDecimal.ROUND_UP), 0.0);
-        Assert.assertEquals(-1.235f, Precision.round(-x, 3, BigDecimal.ROUND_UP), 0.0);
-        Assert.assertEquals(-1.2346f, Precision.round(-x, 4, BigDecimal.ROUND_UP), 0.0);
-
-        try {
-            Precision.round(1.234f, 2, 1923);
-            Assert.fail();
-        } catch (MathIllegalArgumentException ex) {
-            // success
-        }
+        Assert.assertEquals(1.24f, Precision.round(x, 2, RoundingMode.UP), 0.0);
+        Assert.assertEquals(1.235f, Precision.round(x, 3, RoundingMode.UP), 0.0);
+        Assert.assertEquals(1.2346f, Precision.round(x, 4, RoundingMode.UP), 0.0);
+        Assert.assertEquals(-1.24f, Precision.round(-x, 2, RoundingMode.UP), 0.0);
+        Assert.assertEquals(-1.235f, Precision.round(-x, 3, RoundingMode.UP), 0.0);
+        Assert.assertEquals(-1.2346f, Precision.round(-x, 4, RoundingMode.UP), 0.0);
 
         // special values
         UnitTestUtils.assertEquals(Float.NaN, Precision.round(Float.NaN, 2), 0.0f);
@@ -496,11 +481,11 @@ public class PrecisionTest {
         Assert.assertEquals("-0.0", Float.toString(Precision.round(-1e-10f, 0)));
 
         // MATH-1070
-        Assert.assertEquals(0.0f, Precision.round(0f, 2, BigDecimal.ROUND_UP), 0.0f);
-        Assert.assertEquals(0.05f, Precision.round(0.05f, 2, BigDecimal.ROUND_UP), 0.0f);
-        Assert.assertEquals(0.06f, Precision.round(0.051f, 2, BigDecimal.ROUND_UP), 0.0f);
-        Assert.assertEquals(0.06f, Precision.round(0.0505f, 2, BigDecimal.ROUND_UP), 0.0f);
-        Assert.assertEquals(0.06f, Precision.round(0.059f, 2, BigDecimal.ROUND_UP), 0.0f);
+        Assert.assertEquals(0.0f, Precision.round(0f, 2, RoundingMode.UP), 0.0f);
+        Assert.assertEquals(0.05f, Precision.round(0.05f, 2, RoundingMode.UP), 0.0f);
+        Assert.assertEquals(0.06f, Precision.round(0.051f, 2, RoundingMode.UP), 0.0f);
+        Assert.assertEquals(0.06f, Precision.round(0.0505f, 2, RoundingMode.UP), 0.0f);
+        Assert.assertEquals(0.06f, Precision.round(0.059f, 2, RoundingMode.UP), 0.0f);
     }
 
 

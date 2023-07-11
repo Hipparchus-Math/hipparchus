@@ -23,16 +23,14 @@ public class PairTest {
 
     @Test
     public void testAccessor() {
-        final Pair<Integer, Double> p
-            = new Pair<Integer, Double>(new Integer(1), new Double(2));
-        Assert.assertEquals(new Integer(1), p.getKey());
+        final Pair<Integer, Double> p = new Pair<>(Integer.valueOf(1), Double.valueOf(2));
+        Assert.assertEquals(Integer.valueOf(1), p.getKey());
         Assert.assertEquals(2, p.getValue().doubleValue(), Math.ulp(1d));
     }
 
     @Test
     public void testAccessor2() {
-        final Pair<Integer, Double> p
-            = new Pair<Integer, Double>(new Integer(1), new Double(2));
+        final Pair<Integer, Double> p = new Pair<>(Integer.valueOf(1), Double.valueOf(2));
 
         // Check that both APIs refer to the same data.
 
@@ -42,19 +40,19 @@ public class PairTest {
 
     @Test
     public void testEquals() {
-        Pair<Integer, Double> p1 = new Pair<Integer, Double>(null, null);
+        Pair<Integer, Double> p1 = new Pair<>(null, null);
         Assert.assertFalse(p1.equals(null));
 
-        Pair<Integer, Double> p2 = new Pair<Integer, Double>(null, null);
+        Pair<Integer, Double> p2 = new Pair<>(null, null);
         Assert.assertTrue(p1.equals(p2));
 
-        p1 = new Pair<Integer, Double>(new Integer(1), new Double(2));
+        p1 = new Pair<>(Integer.valueOf(1), Double.valueOf(2));
         Assert.assertFalse(p1.equals(p2));
 
-        p2 = new Pair<Integer, Double>(new Integer(1), new Double(2));
+        p2 = new Pair<>(Integer.valueOf(1), Double.valueOf(2));
         Assert.assertTrue(p1.equals(p2));
 
-        Pair<Integer, Float> p3 = new Pair<Integer, Float>(new Integer(1), new Float(2));
+        Pair<Integer, Float> p3 = new Pair<>(Integer.valueOf(1), Float.valueOf(2));
         Assert.assertFalse(p1.equals(p3));
     }
 
@@ -63,8 +61,8 @@ public class PairTest {
         final MyInteger m1 = new MyInteger(1);
         final MyInteger m2 = new MyInteger(1);
 
-        final Pair<MyInteger, MyInteger> p1 = new Pair<MyInteger, MyInteger>(m1, m1);
-        final Pair<MyInteger, MyInteger> p2 = new Pair<MyInteger, MyInteger>(m2, m2);
+        final Pair<MyInteger, MyInteger> p1 = new Pair<>(m1, m1);
+        final Pair<MyInteger, MyInteger> p2 = new Pair<>(m2, m2);
         // Same contents, same hash code.
         Assert.assertTrue(p1.hashCode() == p2.hashCode());
 
@@ -75,15 +73,15 @@ public class PairTest {
 
     @Test
     public void testToString() {
-        Assert.assertEquals("[null, null]", new Pair<Object, Object>(null, null).toString());
-        Assert.assertEquals("[foo, 3]", new Pair<String, Integer>("foo", 3).toString());
+        Assert.assertEquals("[null, null]", new Pair<>(null, null).toString());
+        Assert.assertEquals("[foo, 3]", new Pair<>("foo", 3).toString());
     }
 
     @Test
     public void testCreate() {
         final Pair<String, Integer> p1 = Pair.create("foo", 3);
         Assert.assertNotNull(p1);
-        final Pair<String, Integer> p2 = new Pair<String, Integer>("foo", 3);
+        final Pair<String, Integer> p2 = new Pair<>("foo", 3);
         Assert.assertEquals(p2, p1);
     }
 

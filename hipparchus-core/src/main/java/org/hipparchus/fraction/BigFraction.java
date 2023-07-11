@@ -24,6 +24,7 @@ package org.hipparchus.fraction;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -582,7 +583,7 @@ public class BigFraction
      *             mode.
      * @see BigDecimal
      */
-    public BigDecimal bigDecimalValue(final int roundingMode) {
+    public BigDecimal bigDecimalValue(final RoundingMode roundingMode) {
         return new BigDecimal(numerator).divide(new BigDecimal(denominator), roundingMode);
     }
 
@@ -601,7 +602,7 @@ public class BigFraction
      * @return the fraction as a <code>BigDecimal</code>.
      * @see BigDecimal
      */
-    public BigDecimal bigDecimalValue(final int scale, final int roundingMode) {
+    public BigDecimal bigDecimalValue(final int scale, final RoundingMode roundingMode) {
         return new BigDecimal(numerator).divide(new BigDecimal(denominator), scale, roundingMode);
     }
 

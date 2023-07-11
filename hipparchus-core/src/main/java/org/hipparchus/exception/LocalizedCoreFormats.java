@@ -251,9 +251,6 @@ public enum LocalizedCoreFormats implements Localizable {
     /** INVALID_MAX_ITERATIONS. */
     INVALID_MAX_ITERATIONS("bad value for maximum iterations number: {0}"),
 
-    /** INVALID_ROUNDING_METHOD. */
-    INVALID_ROUNDING_METHOD("invalid rounding method {0}, valid methods: {1} ({2}), {3} ({4}), {5} ({6}), {7} ({8}), {9} ({10}), {11} ({12}), {13} ({14}), {15} ({16})"),
-
     /** ITERATIONS. */
     ITERATIONS("iterations"), /* keep */
 
