@@ -21,6 +21,7 @@
  */
 package org.hipparchus.util;
 
+import org.hipparchus.exception.MathIllegalStateException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -46,5 +47,43 @@ public class ContinuedFractionTest {
 
         double gr = cf.evaluate(0.0, 10e-9);
         Assert.assertEquals(1.61803399, gr, 10e-9);
+    }
+
+    @Test(expected = MathIllegalStateException.class)
+    public void testNonConvergentContinuedFraction() {
+        ContinuedFraction cf = new ContinuedFraction() {
+
+            @Override
+            public double getA(int n, double x) {
+                return 1.0;
+            }
+
+            @Override
+            public double getB(int n, double x) {
+                return 1.0;
+            }
+
+        };
+
+        cf.evaluate(0.0, 10e-9, 10);
+    }
+
+    @Test(expected = MathIllegalStateException.class)
+    public void testInfinityDivergence() {
+        ContinuedFraction cf = new ContinuedFraction() {
+
+            @Override
+            public double getA(int n, double x) {
+                return 1. / n;
+            }
+
+            @Override
+            public double getB(int n, double x) {
+                return 1.0;
+            }
+
+        };
+
+        cf.evaluate(1);
     }
 }
