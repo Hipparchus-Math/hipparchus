@@ -195,7 +195,7 @@ public class MultivariateNormalDistribution
         // Compute and store the inverse.
         covarianceMatrixInverse = covMatDec.getSolver().getInverse();
         // Compute and store the determinant.
-        covarianceMatrixDeterminant = covMatDec.getDeterminant();
+        covarianceMatrixDeterminant = covMatDec.getDeterminant().getRealPart();
 
         // Eigenvalues of the covariance matrix.
         final double[] covMatEigenvalues = covMatDec.getRealEigenvalues();

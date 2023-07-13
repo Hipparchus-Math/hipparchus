@@ -363,10 +363,10 @@ public class EigenDecomposition {
      *
      * @return the determinant of the matrix.
      */
-    public double getDeterminant() {
-        double determinant = 1;
-        for (double lambda : realEigenvalues) {
-            determinant *= lambda;
+    public Complex getDeterminant() {
+        Complex determinant = Complex.ONE;
+        for (int i = 0; i < realEigenvalues.length; ++i) {
+            determinant = determinant.multiply(Complex.valueOf(realEigenvalues[i], imagEigenvalues[i]));
         }
         return determinant;
     }
