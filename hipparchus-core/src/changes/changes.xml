@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.0" date="TBD" description="This is a major release.">
+      <action dev="luc" type="fix" due-to="Romain Serra" issue="issues/257">
+        Made FieldPolynomialSplineFunction operational with Field not inheriting from Comparable.
+      </action>
       <action dev="luc" type="fix" issue="issues/262">
         Fixed determinant computation in eigen decomposition with complex eigenvalues.
       </action>
