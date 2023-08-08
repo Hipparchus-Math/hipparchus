@@ -24,6 +24,9 @@ package org.hipparchus.analysis.polynomials;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
+import org.hipparchus.analysis.differentiation.Gradient;
+import org.hipparchus.analysis.differentiation.GradientField;
+import org.hipparchus.analysis.interpolation.LinearInterpolator;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -220,6 +223,29 @@ public class FieldPolynomialSplineFunctionTest {
          knots = new Binary64[] {
              new Binary64(-1), new Binary64(0), new Binary64(1), new Binary64(2)
          };
+     }
+
+     @Test
+     public void testValueGradient() {
+         // issue #257
+         // Given
+         final int freeParameters = 1;
+         final GradientField field = GradientField.getField(freeParameters);
+         final Gradient zero = field.getZero();
+         final Gradient time1 = zero.add(1.0);
+         final Gradient time2 = zero.add(2.0);
+         final Gradient time3 = zero.add(4.0);
+         final Gradient x1 = zero.add(4.0);
+         final Gradient x2 = Gradient.variable(freeParameters, 0, -2.0);
+         final Gradient x3 = zero.add(0.0);
+         final Gradient[] times = new Gradient[] {time1, time2, time3};
+         final Gradient[] xs = new Gradient[] {x1, x2, x3};
+         // When
+         final FieldPolynomialSplineFunction<Gradient> spline = new LinearInterpolator().interpolate(times, xs);
+         final Gradient actualEvaluation = spline.value(zero.add(3.));
+         // Then
+         final Gradient expectedEvaluation = Gradient.variable(freeParameters, 0, 0).multiply(0.5).add(-1.0);
+         Assert.assertEquals(expectedEvaluation, actualEvaluation);
      }
 
 }
