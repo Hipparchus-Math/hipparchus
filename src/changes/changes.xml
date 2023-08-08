@@ -53,6 +53,9 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="fix" due-to="Romain Serra" issue="issues/257">
         Made FieldPolynomialSplineFunction operational with Field not inheriting from Comparable.
       </action>
+      <action dev="maxime" type="add" issue="issues/263">
+        Created a rule to forbid Python keywords in method, class, interface and enum names.
+      </action>
       <action dev="luc" type="fix" issue="issues/262">
         Fixed determinant computation in eigen decomposition with complex eigenvalues.
       </action>
