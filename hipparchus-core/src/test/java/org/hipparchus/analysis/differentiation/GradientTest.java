@@ -89,7 +89,11 @@ public class GradientTest extends CalculusFieldElementAbstractTest<Gradient> {
     @Test
     public void testHasNullDerivatives() {
         Assert.assertTrue(Gradient.constant(3, 42.).hasNullDerivatives());
+        Assert.assertTrue(Gradient.constant(3, 42.).hasNullDerivatives(1.e-20));
         Assert.assertFalse(Gradient.variable(4, 0, 42.).hasNullDerivatives());
+        Assert.assertFalse(Gradient.variable(4, 0, 42.).hasNullDerivatives(1.e-16));
+        Assert.assertFalse(new Gradient(1., 0., 2., 3.).hasNullDerivatives(1.e-16));
+        Assert.assertFalse(new Gradient(1., 0., 0., 3.).hasNullDerivatives(1.e-16));
     }
 
     @Test

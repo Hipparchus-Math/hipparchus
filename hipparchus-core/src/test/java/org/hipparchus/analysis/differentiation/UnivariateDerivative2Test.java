@@ -49,7 +49,9 @@ public class UnivariateDerivative2Test extends UnivariateDerivativeAbstractTest<
     @Test
     public void testHasNullDerivatives() {
         Assert.assertTrue(new UnivariateDerivative2(-0.5, 0., 0.).hasNullDerivatives());
+        Assert.assertTrue(new UnivariateDerivative2(-0.5, 0., 0.).hasNullDerivatives(1.e-20));
         Assert.assertFalse(new UnivariateDerivative2(-0.5, 2.5, 1.).hasNullDerivatives());
+        Assert.assertFalse(new UnivariateDerivative2(-0.5, 2.5, 1.).hasNullDerivatives(1.e-20));
         Assert.assertFalse(new UnivariateDerivative2(-0.5, 2.5, 0.).hasNullDerivatives());
         Assert.assertFalse(new UnivariateDerivative2(-0.5, 0., 1.).hasNullDerivatives());
     }

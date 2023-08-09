@@ -63,8 +63,8 @@ public abstract class UnivariateDerivative<T extends UnivariateDerivative<T>>
 
     /** {@inheritDoc}. */
     @Override
-    public boolean hasNullDerivatives() {
-        return toDerivativeStructure().hasNullDerivatives();
+    public boolean hasNullDerivatives(final double tolerance) {
+        return toDerivativeStructure().hasNullDerivatives(tolerance);
     }
 
 }

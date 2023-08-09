@@ -107,9 +107,15 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
 
     @Test
     public void testHasNullDerivatives() {
-        DSFactory factory = new DSFactory(1, 3);
+        DSFactory factory = new DSFactory(3, 3);
         Assert.assertTrue(factory.constant(42.).hasNullDerivatives());
+        Assert.assertTrue(factory.constant(42.).hasNullDerivatives(1.e-20));
         Assert.assertFalse(factory.variable(0, 42.).hasNullDerivatives());
+        Assert.assertFalse(factory.variable(0, 42.).hasNullDerivatives(1.e-16));
+        Assert.assertFalse(factory.variable(1, 42.).hasNullDerivatives());
+        Assert.assertFalse(factory.variable(1, 42.).hasNullDerivatives(1.e-16));
+        Assert.assertFalse(factory.variable(2, 42.).hasNullDerivatives());
+        Assert.assertFalse(factory.variable(2, 42.).hasNullDerivatives(1.e-16));
     }
 
     @Test

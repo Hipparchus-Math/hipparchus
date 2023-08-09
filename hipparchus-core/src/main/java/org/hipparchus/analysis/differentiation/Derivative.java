@@ -18,6 +18,7 @@ package org.hipparchus.analysis.differentiation;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.Precision;
 
 /** Interface representing both the value and the differentials of a function.
  * @param <T> the type of the field elements
@@ -65,8 +66,21 @@ public interface Derivative<T extends CalculusFieldElement<T>> extends CalculusF
         throws MathIllegalArgumentException;
 
     /** Check if all derivatives are null.
+     * <p>
+     * In practice, it checks if the sum of the absolute values of derivatives is lower than a user-defined
+     * tolerance to decide if they are "null" or not.
+     *
+     * @param tolerance tolerance on the sum of absolute values of derivatives
+     * @return true if sum of all absolute values of derivatives is lower than tolerance, false otherwise
+     */
+    boolean hasNullDerivatives(double tolerance);
+
+    /** Check if all derivatives are null.
+     * <p>
+     * Realization of method {@link #hasNullDerivatives(double)} with a tolerance of {@link Precision#SAFE_MIN}
      * @return true if all derivatives are null, false otherwise
      */
-    boolean hasNullDerivatives();
-
+    default boolean hasNullDerivatives() {
+        return hasNullDerivatives(Precision.SAFE_MIN);
+    }
 }

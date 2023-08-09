@@ -31,7 +31,6 @@ import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
-import org.hipparchus.util.Precision;
 
 /** Class representing both the value and the differentials of a function.
  * <p>This class is the workhorse of the differentiation package.</p>
@@ -1206,13 +1205,16 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
 
     /** {@inheritDoc}. */
     @Override
-    public boolean hasNullDerivatives() {
+    public boolean hasNullDerivatives(final double tolerance) {
 
         double sumDerivatives = 0.;
 
         for (int i = 1; i < data.length; i++) {
             sumDerivatives += FastMath.abs(data[i]);
+            if (sumDerivatives > tolerance) {
+                return false;
+            }
         }
-        return sumDerivatives < Precision.EPSILON;
+        return true;
     }
 }
