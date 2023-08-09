@@ -64,4 +64,9 @@ public interface Derivative<T extends CalculusFieldElement<T>> extends CalculusF
     T compose(double... f)
         throws MathIllegalArgumentException;
 
+    /** Check if all derivatives are null.
+     * @return true if all derivatives are null, false otherwise
+     */
+    boolean hasNullDerivatives();
+
 }

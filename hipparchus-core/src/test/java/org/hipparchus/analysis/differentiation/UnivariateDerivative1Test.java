@@ -46,6 +46,12 @@ public class UnivariateDerivative1Test extends UnivariateDerivativeAbstractTest<
     }
 
     @Test
+    public void testHasNullDerivatives() {
+        Assert.assertTrue(new UnivariateDerivative1(-0.5, 0.).hasNullDerivatives());
+        Assert.assertFalse(new UnivariateDerivative1(-0.5, 2.5).hasNullDerivatives());
+    }
+
+    @Test
     public void testConversion() {
         UnivariateDerivative1 udA = new UnivariateDerivative1(-0.5, 2.5);
         DerivativeStructure ds = udA.toDerivativeStructure();

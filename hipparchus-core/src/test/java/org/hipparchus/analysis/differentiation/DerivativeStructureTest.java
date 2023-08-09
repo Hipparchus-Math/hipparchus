@@ -41,8 +41,8 @@ import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.random.Well19937a;
 import org.hipparchus.util.ArithmeticUtils;
-import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.Binary64Field;
+import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.FieldSinhCosh;
@@ -103,6 +103,13 @@ public class DerivativeStructureTest extends CalculusFieldElementAbstractTest<De
             DSFactory factory = new DSFactory(3, maxOrder);
             checkF0F1(factory.constant(FastMath.PI), FastMath.PI, 0.0, 0.0, 0.0);
         }
+    }
+
+    @Test
+    public void testHasNullDerivatives() {
+        DSFactory factory = new DSFactory(1, 3);
+        Assert.assertTrue(factory.constant(42.).hasNullDerivatives());
+        Assert.assertFalse(factory.variable(0, 42.).hasNullDerivatives());
     }
 
     @Test

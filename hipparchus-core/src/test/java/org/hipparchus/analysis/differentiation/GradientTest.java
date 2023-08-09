@@ -16,9 +16,9 @@
  */
 package org.hipparchus.analysis.differentiation;
 
-import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.CalculusFieldElementAbstractTest;
+import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.FieldUnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -84,6 +84,12 @@ public class GradientTest extends CalculusFieldElementAbstractTest<Gradient> {
         for (int i = 0 ; i < g.getFreeParameters(); ++i) {
             Assert.assertEquals(i == 1 ? 1.0 : 0.0, g.getPartialDerivative(i), 1.0e-15);
         }
+    }
+
+    @Test
+    public void testHasNullDerivatives() {
+        Assert.assertTrue(Gradient.constant(3, 42.).hasNullDerivatives());
+        Assert.assertFalse(Gradient.variable(4, 0, 42.).hasNullDerivatives());
     }
 
     @Test

@@ -27,6 +27,7 @@ import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.Precision;
 import org.hipparchus.util.SinCos;
 import org.hipparchus.util.SinhCosh;
 
@@ -942,4 +943,15 @@ public class Gradient implements Derivative<Gradient>, CalculusFieldElement<Grad
         return 129 + 7 * Double.hashCode(value) - 15 * Arrays.hashCode(grad);
     }
 
+    /** {@inheritDoc}. */
+    @Override
+    public boolean hasNullDerivatives() {
+
+        double sumDerivatives = 0.;
+
+        for (int i = 0; i < grad.length; i++) {
+            sumDerivatives += FastMath.abs(grad[i]);
+        }
+        return sumDerivatives < Precision.EPSILON;
+    }
 }
