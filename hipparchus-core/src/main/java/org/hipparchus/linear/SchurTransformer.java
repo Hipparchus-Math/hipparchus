@@ -36,9 +36,8 @@ import org.hipparchus.util.Precision;
  * <p>Transformation to Schur form is often not a goal by itself, but it is an
  * intermediate step in more general decomposition algorithms like
  * {@link EigenDecomposition eigen decomposition}. This class is therefore
- * intended for internal use by the library and is not public. As a consequence
- * of this explicitly limited scope, many methods directly returns references to
- * internal arrays, not copies.</p>
+ * intended for expert use. As a consequence of this explicitly limited scope,
+ * many methods directly returns references to internal arrays, not copies.</p>
  * <p>This class is based on the method hqr2 in class EigenvalueDecomposition
  * from the <a href="http://math.nist.gov/javanumerics/jama/">JAMA</a> library.</p>
  *

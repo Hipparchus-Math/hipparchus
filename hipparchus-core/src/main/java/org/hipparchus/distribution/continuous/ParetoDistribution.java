@@ -31,10 +31,10 @@ import org.hipparchus.util.FastMath;
  * <p>
  * <strong>Parameters:</strong>
  * The probability distribution function of {@code X} is given by (for {@code x >= k}):
+ * </p>
  * <pre>
  *  α * k^α / x^(α + 1)
  * </pre>
- * <p>
  * <ul>
  * <li>{@code k} is the <em>scale</em> parameter: this is the minimum possible value of {@code X},</li>
  * <li>{@code α} is the <em>shape</em> parameter: this is the Pareto index</li>

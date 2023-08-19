@@ -83,6 +83,7 @@ public abstract class AbstractMultipleLinearRegression implements
      * <code>data</code> array containing the sequence of values (1, 2, 3, 4, 5, 6, 7, 8, 9) with
      * <code>nobs = 3</code> and <code>nvars = 2</code> creates a regression dataset with two
      * independent variables, as below:
+     * </p>
      * <pre>
      *   y   x[0]  x[1]
      *   --------------
@@ -90,17 +91,15 @@ public abstract class AbstractMultipleLinearRegression implements
      *   4     5     6
      *   7     8     9
      * </pre>
-     * </p>
      * <p>Note that there is no need to add an initial unitary column (column of 1's) when
      * specifying a model including an intercept term.  If {@link #isNoIntercept()} is <code>true</code>,
      * the X matrix will be created without an initial column of "1"s; otherwise this column will
      * be added.
      * </p>
-     * <p>Throws IllegalArgumentException if any of the following preconditions fail:
+     * <p>Throws IllegalArgumentException if any of the following preconditions fail:</p>
      * <ul><li><code>data</code> cannot be null</li>
-     * <li><code>data.length = nobs * (nvars + 1)</li>
+     * <li><code>data.length = nobs * (nvars + 1)</code></li>
      * <li><code>nobs &gt; nvars</code></li></ul>
-     * </p>
      *
      * @param data input data array
      * @param nobs number of observations (rows)
@@ -155,12 +154,17 @@ public abstract class AbstractMultipleLinearRegression implements
     /**
      * <p>Loads new x sample data, overriding any previous data.
      * </p>
+     * <p>
      * The input <code>x</code> array should have one row for each sample
      * observation, with columns corresponding to independent variables.
-     * For example, if <pre>
+     * For example, if
+     * </p>
+     * <pre>
      * <code> x = new double[][] {{1, 2}, {3, 4}, {5, 6}} </code></pre>
+     * <p>
      * then <code>setXSampleData(x) </code> results in a model with two independent
      * variables and 3 observations:
+     * </p>
      * <pre>
      *   x[0]  x[1]
      *   ----------
@@ -168,7 +172,6 @@ public abstract class AbstractMultipleLinearRegression implements
      *     3    4
      *     5    6
      * </pre>
-     * </p>
      * <p>Note that there is no need to add an initial unitary column (column of 1's) when
      * specifying a model including an intercept term.
      * </p>
@@ -199,7 +202,8 @@ public abstract class AbstractMultipleLinearRegression implements
     }
 
     /**
-     * Validates sample data.  Checks that
+     * Validates sample data.
+     * <p>Checks that</p>
      * <ul><li>Neither x nor y is null or empty;</li>
      * <li>The length (i.e. number of rows) of x equals the length of y</li>
      * <li>x has at least one more row than it has columns (i.e. there is

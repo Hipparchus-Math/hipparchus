@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.0" date="TBD" description="This is a major release.">
+      <action dev="luc" type="update" issue="issues/243">
+        Improve management of Cardan/Euler rotations close to singularity.
+      </action>
       <action dev="vincent" type="add" issue="issues/212">
         Added Blendable interface and its implementation in RealMatrix and Vector interfaces.
         Changed Vector interface parameters.

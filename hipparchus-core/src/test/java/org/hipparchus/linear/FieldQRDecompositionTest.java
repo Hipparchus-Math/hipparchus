@@ -26,8 +26,7 @@ import java.util.Random;
 
 import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.analysis.differentiation.DSFactory;
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.Gradient;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.MathArrays;
@@ -57,8 +56,8 @@ public class FieldQRDecompositionTest {
             { -4, 24, -41, },
             { -5, 34, 7, }, };
 
-    DerivativeStructure zero = new DSFactory(1, 1).variable(0, 0);
-    Field<DerivativeStructure> DSField = zero.getField();
+    Gradient zero = Gradient.variable(1, 0, 0.);
+    Field<Gradient> GradientField = zero.getField();
     private static final double entryTolerance = 10e-16;
 
     private static final double normTolerance = 10e-14;
@@ -66,67 +65,67 @@ public class FieldQRDecompositionTest {
     /**Testing if the dimensions are correct.*/
     @Test
     public void testDimensions() {
-        doTestDimensions(DSField);   
+        doTestDimensions(GradientField);
         doTestDimensions(Binary64Field.getInstance());   
     }
 
     /**Testing if is impossible to solve QR.*/
     @Test(expected=MathIllegalArgumentException.class)
     public void testQRSingular(){
-        QRSingular(DSField);
+        QRSingular(GradientField);
         QRSingular(Binary64Field.getInstance());
     }
 
     /**Testing if Q is orthogonal*/
     @Test
     public void testQOrthogonal(){
-        QOrthogonal(DSField);
+        QOrthogonal(GradientField);
         QOrthogonal(Binary64Field.getInstance());
     }
 
     /**Testing if A = Q * R*/
     @Test
     public void testAEqualQR(){
-        AEqualQR(DSField);
+        AEqualQR(GradientField);
         AEqualQR(Binary64Field.getInstance());
     }
 
     /**Testing if R is upper triangular.*/
     @Test
     public void testRUpperTriangular(){
-        RUpperTriangular(DSField);
+        RUpperTriangular(GradientField);
         RUpperTriangular(Binary64Field.getInstance());
     }
 
     /**Testing if H is trapezoidal.*/
     @Test
     public void testHTrapezoidal(){
-        HTrapezoidal(DSField);
+        HTrapezoidal(GradientField);
         HTrapezoidal(Binary64Field.getInstance());
     }
     /**Testing the values of the matrices.*/
     @Test
     public void testMatricesValues(){
-        MatricesValues(DSField);
+        MatricesValues(GradientField);
         MatricesValues(Binary64Field.getInstance());
     }
 
     /**Testing if there is an error inverting a non invertible matrix.*/
     @Test(expected=MathIllegalArgumentException.class)
     public void testNonInvertible(){
-        NonInvertible(DSField);
+        NonInvertible(GradientField);
         NonInvertible(Binary64Field.getInstance());
     }
     /**Testing to invert a tall and skinny matrix.*/
     @Test
     public void testInvertTallSkinny(){
-        InvertTallSkinny(DSField);
+        InvertTallSkinny(GradientField);
         InvertTallSkinny(Binary64Field.getInstance());
     }
     /**Testing to invert a short and wide matrix.*/
     @Test
     public void testInvertShortWide(){
-        InvertShortWide(DSField);
+        InvertShortWide(GradientField);
         InvertShortWide(Binary64Field.getInstance());
     }
 

@@ -55,7 +55,7 @@ import org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer;
  *  the objective function values at the vertices of a simplex (which is a
  *  set of n+1 points in dimension n) that is updated by the algorithms
  *  steps.
- * <p>
+ * </p>
  * <p>
  *  The simplex update procedure ({@link NelderMeadSimplex} or
  * {@link MultiDirectionalSimplex})  must be passed to the

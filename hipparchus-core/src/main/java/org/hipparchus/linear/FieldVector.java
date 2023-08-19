@@ -49,10 +49,10 @@ import org.hipparchus.exception.NullArgumentException;
  * <p>
  * Note that as almost all operations on {@link FieldElement} throw {@link
  * NullArgumentException} when operating on a null element, it is the responsibility
- * of <code>FieldVector</code> implementations to make sure no null elements
+ * of {@code FieldVector} implementations to make sure no null elements
  * are inserted into the vector. This must be done in all constructors and
  * all setters.
- * <p>
+ * </p>
  *
  * @param <T> the type of the field elements
  */

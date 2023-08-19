@@ -82,8 +82,7 @@ public final class CombinatoricsUtils {
      * Coefficient</a>, "{@code n choose k}", the number of
      * {@code k}-element subsets that can be selected from an
      * {@code n}-element set.
-     * <p>
-     * <Strong>Preconditions</strong>:
+     * <p><Strong>Preconditions</strong>:</p>
      * <ul>
      * <li> {@code 0 <= k <= n } (otherwise
      * {@code MathIllegalArgumentException} is thrown)</li>
@@ -92,7 +91,7 @@ public final class CombinatoricsUtils {
      * {@code  < Long.MAX_VALUE} is 66. If the computed value exceeds
      * {@code Long.MAX_VALUE} a {@code MathRuntimeException} is
      * thrown.</li>
-     * </ul></p>
+     * </ul>
      *
      * @param n the size of the set
      * @param k the size of the subsets to be counted
@@ -164,8 +163,7 @@ public final class CombinatoricsUtils {
      * Coefficient</a>, "{@code n choose k}", the number of
      * {@code k}-element subsets that can be selected from an
      * {@code n}-element set.
-     * <p>
-     * <Strong>Preconditions</strong>:
+     * <p>* <Strong>Preconditions</strong>:</p>
      * <ul>
      * <li> {@code 0 <= k <= n } (otherwise
      * {@code IllegalArgumentException} is thrown)</li>
@@ -173,7 +171,7 @@ public final class CombinatoricsUtils {
      * largest value of {@code n} for which all coefficients are &lt;
      * Double.MAX_VALUE is 1029. If the computed value exceeds Double.MAX_VALUE,
      * Double.POSITIVE_INFINITY is returned</li>
-     * </ul></p>
+     * </ul>
      *
      * @param n the size of the set
      * @param k the size of the subsets to be counted
@@ -213,12 +211,11 @@ public final class CombinatoricsUtils {
      * Coefficient</a>, "{@code n choose k}", the number of
      * {@code k}-element subsets that can be selected from an
      * {@code n}-element set.
-     * <p>
-     * <Strong>Preconditions</strong>:
+     * <p>* <Strong>Preconditions</strong>:</p>
      * <ul>
      * <li> {@code 0 <= k <= n } (otherwise
      * {@code MathIllegalArgumentException} is thrown)</li>
-     * </ul></p>
+     * </ul>
      *
      * @param n the size of the set
      * @param k the size of the subsets to be counted
@@ -280,8 +277,7 @@ public final class CombinatoricsUtils {
      * Returns n!. Shorthand for {@code n} <a
      * href="http://mathworld.wolfram.com/Factorial.html"> Factorial</a>, the
      * product of the numbers {@code 1,...,n}.
-     * <p>
-     * <Strong>Preconditions</strong>:
+     * <p>* <Strong>Preconditions</strong>:</p>
      * <ul>
      * <li> {@code n >= 0} (otherwise
      * {@code MathIllegalArgumentException} is thrown)</li>
@@ -290,7 +286,6 @@ public final class CombinatoricsUtils {
      * Long.MAX_VALUE} is 20. If the computed value exceeds {@code Long.MAX_VALUE}
      * an {@code MathRuntimeException } is thrown.</li>
      * </ul>
-     * </p>
      *
      * @param n argument
      * @return {@code n!}

@@ -24,6 +24,7 @@ package org.hipparchus.fraction;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -219,13 +220,11 @@ public class BigFraction
 
     /**
      * Create a fraction given the double value and maximum error allowed.
-     * <p>
-     * References:
+     * <p>* References:</p>
      * <ul>
      * <li><a href="http://mathworld.wolfram.com/ContinuedFraction.html">
      * Continued Fraction</a> equations (11) and (22)-(26)</li>
      * </ul>
-     * </p>
      *
      * @param value
      *            the double value to convert to a fraction.
@@ -256,13 +255,11 @@ public class BigFraction
 
     /**
      * Create a fraction given the double value and maximum denominator.
-     * <p>
-     * References:
+     * <p>* References:</p>
      * <ul>
      * <li><a href="http://mathworld.wolfram.com/ContinuedFraction.html">
      * Continued Fraction</a> equations (11) and (22)-(26)</li>
      * </ul>
-     * </p>
      *
      * @param value
      *            the double value to convert to a fraction.
@@ -407,7 +404,7 @@ public class BigFraction
 
     /**
      * <p>
-     * Creates a <code>BigFraction</code> instance with the 2 parts of a fraction
+     * Creates a {@code BigFraction} instance with the 2 parts of a fraction
      * Y/Z.
      * </p>
      *
@@ -471,7 +468,7 @@ public class BigFraction
      *
      * @param bg
      *            the {@link BigInteger} to add, must'nt be <code>null</code>.
-     * @return a <code>BigFraction</code> instance with the resulting values.
+     * @return a {@code BigFraction} instance with the resulting values.
      * @throws NullArgumentException
      *             if the {@link BigInteger} is <code>null</code>.
      */
@@ -496,7 +493,7 @@ public class BigFraction
      *
      * @param i
      *            the {@code integer} to add.
-     * @return a <code>BigFraction</code> instance with the resulting values.
+     * @return a {@code BigFraction} instance with the resulting values.
      */
     public BigFraction add(final int i) {
         return add(BigInteger.valueOf(i));
@@ -510,7 +507,7 @@ public class BigFraction
      *
      * @param l
      *            the {@code long} to add.
-     * @return a <code>BigFraction</code> instance with the resulting values.
+     * @return a {@code BigFraction} instance with the resulting values.
      */
     public BigFraction add(final long l) {
         return add(BigInteger.valueOf(l));
@@ -586,7 +583,7 @@ public class BigFraction
      *             mode.
      * @see BigDecimal
      */
-    public BigDecimal bigDecimalValue(final int roundingMode) {
+    public BigDecimal bigDecimalValue(final RoundingMode roundingMode) {
         return new BigDecimal(numerator).divide(new BigDecimal(denominator), roundingMode);
     }
 
@@ -605,7 +602,7 @@ public class BigFraction
      * @return the fraction as a <code>BigDecimal</code>.
      * @see BigDecimal
      */
-    public BigDecimal bigDecimalValue(final int scale, final int roundingMode) {
+    public BigDecimal bigDecimalValue(final int scale, final RoundingMode roundingMode) {
         return new BigDecimal(numerator).divide(new BigDecimal(denominator), scale, roundingMode);
     }
 
@@ -1003,7 +1000,7 @@ public class BigFraction
      * @param exponent
      *            exponent to which this {@code BigFraction} is to be
      *            raised.
-     * @return <tt>this<sup>exponent</sup></tt>.
+     * @return this<sup>exponent</sup>
      */
     public BigFraction pow(final int exponent) {
         if (exponent == 0) {
@@ -1021,13 +1018,13 @@ public class BigFraction
 
     /**
      * <p>
-     * Returns a <code>BigFraction</code> whose value is
-     * <tt>(this<sup>exponent</sup>)</tt>, returning the result in reduced form.
+     * Returns a {@code BigFraction} whose value is
+     * this<sup>exponent</sup>, returning the result in reduced form.
      * </p>
      *
      * @param exponent
-     *            exponent to which this <code>BigFraction</code> is to be raised.
-     * @return <tt>this<sup>exponent</sup></tt> as a <code>BigFraction</code>.
+     *            exponent to which this {@code BigFraction} is to be raised.
+     * @return this<sup>exponent</sup> as a {@code BigFraction}.
      */
     public BigFraction pow(final long exponent) {
         if (exponent == 0) {
@@ -1047,13 +1044,13 @@ public class BigFraction
 
     /**
      * <p>
-     * Returns a <code>BigFraction</code> whose value is
-     * <tt>(this<sup>exponent</sup>)</tt>, returning the result in reduced form.
+     * Returns a {@code BigFraction} whose value is
+     * this<sup>exponent</sup>, returning the result in reduced form.
      * </p>
      *
      * @param exponent
-     *            exponent to which this <code>BigFraction</code> is to be raised.
-     * @return <tt>this<sup>exponent</sup></tt> as a <code>BigFraction</code>.
+     *            exponent to which this {@code BigFraction} is to be raised.
+     * @return this<sup>exponent</sup> as a {@code BigFraction}.
      */
     public BigFraction pow(final BigInteger exponent) {
         if (exponent.signum() == 0) {
@@ -1075,12 +1072,12 @@ public class BigFraction
     /**
      * <p>
      * Returns a <code>double</code> whose value is
-     * <tt>(this<sup>exponent</sup>)</tt>, returning the result in reduced form.
+     * this<sup>exponent</sup>, returning the result in reduced form.
      * </p>
      *
      * @param exponent
-     *            exponent to which this <code>BigFraction</code> is to be raised.
-     * @return <tt>this<sup>exponent</sup></tt>.
+     *            exponent to which this {@code BigFraction} is to be raised.
+     * @return this<sup>exponent</sup>
      */
     public double pow(final double exponent) {
         return FastMath.pow(numerator.doubleValue(),   exponent) /
@@ -1101,10 +1098,10 @@ public class BigFraction
 
     /**
      * <p>
-     * Reduce this <code>BigFraction</code> to its lowest terms.
+     * Reduce this {@code BigFraction} to its lowest terms.
      * </p>
      *
-     * @return the reduced <code>BigFraction</code>. It doesn't change anything if
+     * @return the reduced {@code BigFraction}. It doesn't change anything if
      *         the fraction can be reduced.
      */
     public BigFraction reduce() {

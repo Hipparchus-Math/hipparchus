@@ -714,12 +714,12 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
      * <p>
      * <strong>Algorithm Description:</strong> hex strings are generated using a
      * 2-step process.
+     * </p>
      * <ol>
      * <li>{@code len / 2 + 1} binary bytes are generated using the underlying
      * Random</li>
      * <li>Each binary byte is translated into 2 hex digits</li>
      * </ol>
-     * </p>
      *
      * @param len the desired string length.
      * @return the random string.

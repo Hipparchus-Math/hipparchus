@@ -157,7 +157,7 @@ public class FieldPolynomialSplineFunction<T extends CalculusFieldElement<T>> im
     @Override
     public T value(final T v) {
         MathUtils.checkRangeInclusive(v.getReal(), knots[0].getReal(), knots[n].getReal());
-        int i = Arrays.binarySearch(knots, v);
+        int i = Arrays.binarySearch(Arrays.stream(knots).map(T::getReal).toArray(), v.getReal());
         if (i < 0) {
             i = -i - 2;
         }

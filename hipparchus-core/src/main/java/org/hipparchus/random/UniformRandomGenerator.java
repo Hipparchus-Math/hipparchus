@@ -50,8 +50,8 @@ public class UniformRandomGenerator implements NormalizedRandomGenerator {
     /**
      * Generate a random scalar with null mean and unit standard deviation.
      * <p>
-     * The number generated is uniformly distributed between -&sqrt;(3)
-     * and +&sqrt;(3).
+     * The number generated is uniformly distributed between \(-\sqrt{3}\)
+     * and \(+\sqrt{3}\).
      *
      * @return a random scalar with null mean and unit standard deviation
      */

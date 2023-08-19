@@ -34,10 +34,11 @@ import org.hipparchus.stat.descriptive.moment.SecondMoment;
  * <p>Implements ordinary least squares (OLS) to estimate the parameters of a
  * multiple linear regression model.</p>
  *
- * <p>The regression coefficients, <code>b</code>, satisfy the normal equations:
- * <pre><code> X<sup>T</sup> X b = X<sup>T</sup> y </code></pre></p>
+ * <p>The regression coefficients, <code>b</code>, satisfy the normal equations:</p>
+ * <pre><code> X<sup>T</sup> X b = X<sup>T</sup> y </code></pre>
  *
- * <p>To solve the normal equations, this implementation uses QR decomposition
+ * <p>
+ * To solve the normal equations, this implementation uses QR decomposition
  * of the <code>X</code> matrix. (See {@link QRDecomposition} for details on the
  * decomposition algorithm.) The <code>X</code> matrix, also known as the <i>design matrix,</i>
  * has rows corresponding to sample observations and columns corresponding to independent
@@ -45,12 +46,13 @@ import org.hipparchus.stat.descriptive.moment.SecondMoment;
  * {@link #isNoIntercept() isNoIntercept} is false as it is by default), the <code>X</code>
  * matrix includes an initial column identically equal to 1.  We solve the normal equations
  * as follows:
+ * </p>
  * <pre><code> X<sup>T</sup>X b = X<sup>T</sup> y
  * (QR)<sup>T</sup> (QR) b = (QR)<sup>T</sup>y
  * R<sup>T</sup> (Q<sup>T</sup>Q) R b = R<sup>T</sup> Q<sup>T</sup> y
  * R<sup>T</sup> R b = R<sup>T</sup> Q<sup>T</sup> y
  * (R<sup>T</sup>)<sup>-1</sup> R<sup>T</sup> R b = (R<sup>T</sup>)<sup>-1</sup> R<sup>T</sup> Q<sup>T</sup> y
- * R b = Q<sup>T</sup> y </code></pre></p>
+ * R b = Q<sup>T</sup> y </code></pre>
  *
  * <p>Given <code>Q</code> and <code>R</code>, the last equation is solved by back-substitution.</p>
  *
@@ -184,9 +186,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
     }
 
     /**
-     * Returns the R-Squared statistic, defined by the formula <pre>
-     * R<sup>2</sup> = 1 - SSR / SSTO
-     * </pre>
+     * Returns the R-Squared statistic, defined by the formula \(R^2 = 1 - \frac{\mathrm{SSR}}{\mathrm{SSTO}}\)
      * where SSR is the {@link #calculateResidualSumOfSquares() sum of squared residuals}
      * and SSTO is the {@link #calculateTotalSumOfSquares() total sum of squares}
      *
@@ -201,16 +201,15 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
     }
 
     /**
-     * <p>Returns the adjusted R-squared statistic, defined by the formula <pre>
-     * R<sup>2</sup><sub>adj</sub> = 1 - [SSR (n - 1)] / [SSTO (n - p)]
-     * </pre>
+     * <p>Returns the adjusted R-squared statistic, defined by the formula
+     * \(R_\mathrm{adj}^2 = 1 - \frac{\mathrm{SSR} (n - 1)}{\mathrm{SSTO} (n - p)}\)
      * where SSR is the {@link #calculateResidualSumOfSquares() sum of squared residuals},
      * SSTO is the {@link #calculateTotalSumOfSquares() total sum of squares}, n is the number
      * of observations and p is the number of parameters estimated (including the intercept).</p>
      *
-     * <p>If the regression is estimated without an intercept term, what is returned is <pre>
+     * <p>If the regression is estimated without an intercept term, what is returned is </p><pre>
      * <code> 1 - (1 - {@link #calculateRSquared()}) * (n / (n - p)) </code>
-     * </pre></p>
+     * </pre>
      *
      * <p>If there is no variance in y, i.e., SSTO = 0, NaN is returned.</p>
      *

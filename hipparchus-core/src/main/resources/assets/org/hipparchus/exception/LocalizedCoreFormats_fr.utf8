@@ -86,7 +86,6 @@ INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE = l''échantillon ne contient que {0} poi
 INSUFFICIENT_ROWS_AND_COLUMNS = données insuffisantes : seulement {0} lignes et {1} colonnes.
 INTERNAL_ERROR = erreur interne, veuillez signaler l''erreur à {0}
 INVALID_MAX_ITERATIONS = valeur invalide pour le nombre maximal d''itérations : {0}
-INVALID_ROUNDING_METHOD = méthode d''arrondi {0} invalide, méthodes valides : {1} ({2}), {3} ({4}), {5} ({6}), {7} ({8}), {9} ({10}), {11} ({12}), {13} ({14}), {15} ({16})
 ITERATIONS = itérations
 LCM_OVERFLOW_32_BITS = dépassement de capacité : le MCM de {0} et {1} vaut 2³¹
 LCM_OVERFLOW_64_BITS = dépassement de capacité : le MCM de {0} et {1} vaut 2⁶³

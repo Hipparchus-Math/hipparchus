@@ -32,7 +32,7 @@ import org.hipparchus.util.FastMath;
  *
  * <p>These methods are embedded explicit Runge-Kutta methods with two
  * sets of coefficients allowing to estimate the error, their Butcher
- * arrays are as follows :
+ * arrays are as follows :</p>
  * <pre>
  *    0  |
  *   c2  | a21
@@ -43,7 +43,6 @@ import org.hipparchus.util.FastMath;
  *       |  b1   b2  ...   bs-1  bs
  *       |  b'1  b'2 ...   b's-1 b's
  * </pre>
- * </p>
  *
  * <p>In fact, we rather use the array defined by ej = bj - b'j to
  * compute directly the error rather than computing two estimates and

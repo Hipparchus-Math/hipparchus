@@ -26,7 +26,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  *
  * <p>This interpolator allows to compute dense output inside the last
  * step computed. The interpolation equation is consistent with the
- * integration scheme :
+ * integration scheme :</p>
  * <ul>
  *   <li>Using reference point at step start:<br>
  *     y(t<sub>n</sub> + &theta; h) = y (t<sub>n</sub>)
@@ -45,9 +45,8 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  *                                          ]
  *   </li>
  * </ul>
- * </p>
  *
- * where &theta; belongs to [0 ; 1] and where y'<sub>1</sub> to y'<sub>4</sub> are the four
+ * <p>where &theta; belongs to [0 ; 1] and where y'<sub>1</sub> to y'<sub>4</sub> are the four
  * evaluations of the derivatives already computed during the
  * step.</p>
  *

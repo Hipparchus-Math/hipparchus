@@ -153,10 +153,7 @@ public class Product extends AbstractStorelessUnivariateStatistic
      *     <li>the start and length arguments do not determine a valid array</li>
      * </ul>
      * <p>
-     * Uses the formula,
-     * <pre>
-     *    weighted product = &prod;values[i]<sup>weights[i]</sup>
-     * </pre>
+     * Uses the formula \(\mathrm{weighted product} = \prod \mathrm{values}_i^{\mathrm{weights}_i}\)
      * <p>
      * that is, the weights are applied as exponents when computing the weighted product.
      *

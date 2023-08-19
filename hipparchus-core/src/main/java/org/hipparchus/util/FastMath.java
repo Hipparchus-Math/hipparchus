@@ -3575,6 +3575,7 @@ public class FastMath {
      * in the direction of another number.
      * <p>
      * The ordering is as follows (increasing):
+     * </p>
      * <ul>
      * <li>-INFINITY</li>
      * <li>-MAX_VALUE</li>
@@ -3584,17 +3585,20 @@ public class FastMath {
      * <li>+MIN_VALUE</li>
      * <li>+MAX_VALUE</li>
      * <li>+INFINITY</li>
-     * <li></li>
+     * </ul>
      * <p>
      * If arguments compare equal, then the second argument is returned.
+     * </p>
      * <p>
      * If {@code direction} is greater than {@code d},
      * the smallest machine representable number strictly greater than
      * {@code d} is returned; if less, then the largest representable number
-     * strictly less than {@code d} is returned.</p>
+     * strictly less than {@code d} is returned.
+     * </p>
      * <p>
      * If {@code d} is infinite and direction does not
-     * bring it back to finite numbers, it is returned unchanged.</p>
+     * bring it back to finite numbers, it is returned unchanged.
+     * </p>
      *
      * @param d base number
      * @param direction (the only important thing is whether
@@ -3629,8 +3633,7 @@ public class FastMath {
     /**
      * Get the next machine representable number after a number, moving
      * in the direction of another number.
-     * <p>
-     * The ordering is as follows (increasing):
+     * <p>* The ordering is as follows (increasing):</p>
      * <ul>
      * <li>-INFINITY</li>
      * <li>-MAX_VALUE</li>
@@ -3640,17 +3643,20 @@ public class FastMath {
      * <li>+MIN_VALUE</li>
      * <li>+MAX_VALUE</li>
      * <li>+INFINITY</li>
-     * <li></li>
+     * </ul>
      * <p>
      * If arguments compare equal, then the second argument is returned.
+     * </p>
      * <p>
      * If {@code direction} is greater than {@code f},
      * the smallest machine representable number strictly greater than
      * {@code f} is returned; if less, then the largest representable number
-     * strictly less than {@code f} is returned.</p>
+     * strictly less than {@code f} is returned.
+     * </p>
      * <p>
      * If {@code f} is infinite and direction does not
-     * bring it back to finite numbers, it is returned unchanged.</p>
+     * bring it back to finite numbers, it is returned unchanged.
+     * </p>
      *
      * @param f base number
      * @param direction (the only important thing is whether
@@ -3996,12 +4002,13 @@ public class FastMath {
 
     /**
      * Computes the remainder as prescribed by the IEEE 754 standard.
+     * <p>
      * The remainder value is mathematically equal to {@code x - y*n}
      * where {@code n} is the mathematical integer closest to the exact mathematical value
      * of the quotient {@code x/y}.
      * If two mathematical integers are equally close to {@code x/y} then
      * {@code n} is the integer that is even.
-     * <p>
+     * </p>
      * <ul>
      * <li>If either operand is NaN, the result is NaN.</li>
      * <li>If the result is not NaN, the sign of the result equals the sign of the dividend.</li>
@@ -5032,12 +5039,13 @@ public class FastMath {
 
     /**
      * Computes the remainder as prescribed by the IEEE 754 standard.
+     * <p>
      * The remainder value is mathematically equal to {@code x - y*n}
      * where {@code n} is the mathematical integer closest to the exact mathematical value
      * of the quotient {@code x/y}.
      * If two mathematical integers are equally close to {@code x/y} then
      * {@code n} is the integer that is even.
-     * <p>
+     * </p>
      * <ul>
      * <li>If either operand is NaN, the result is NaN.</li>
      * <li>If the result is not NaN, the sign of the result equals the sign of the dividend.</li>
@@ -5057,12 +5065,13 @@ public class FastMath {
 
     /**
      * Computes the remainder as prescribed by the IEEE 754 standard.
+     * <p>
      * The remainder value is mathematically equal to {@code x - y*n}
      * where {@code n} is the mathematical integer closest to the exact mathematical value
      * of the quotient {@code x/y}.
      * If two mathematical integers are equally close to {@code x/y} then
      * {@code n} is the integer that is even.
-     * <p>
+     * </p>
      * <ul>
      * <li>If either operand is NaN, the result is NaN.</li>
      * <li>If the result is not NaN, the sign of the result equals the sign of the dividend.</li>

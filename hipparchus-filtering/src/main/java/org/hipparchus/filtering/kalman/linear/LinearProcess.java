@@ -26,15 +26,17 @@ import org.hipparchus.filtering.kalman.Measurement;
  * of the process to be estimated
  * </p>
  * <p>
- * A linear process is governed by the equation:<br>
- *  x<sub>k</sub> = A<sub>k-1</sub> x<sub>k-1</sub> + B<sub>k-1</sub> u<sub>k-1</sub> + w<sub>k-1</sub><br>
- * where <ul>
+ * A linear process is governed by the equation:
+ * \(
+ *  x_k = A_{k-1} x_{k-1} + B_{k-1} u_{k-1} + w_{k-1}
+ * \)
+ * where</p>
+ * <ul>
  *   <li>A<sub>k-1</sub> is the state transition matrix in the absence of control,</li>
  *   <li>B<sub>k-1</sub> is the control matrix,</li>
  *   <li>u<sub>k-1</sub> is the command</li>
  *   <li>w<sub>k-1</sub> is the process noise, which has covariance matrix Q<sub>k-1</sub></li>
  * </ul>
- * </p>
  * @param <T> the type of the measurements
  * @see LinearKalmanFilter
  * @see org.hipparchus.filtering.kalman.extended.NonLinearProcess

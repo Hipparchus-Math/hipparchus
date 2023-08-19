@@ -114,10 +114,9 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /**
      * Create a new dense matrix copying entries from raw layout data.
      * <p>The input array <em>must</em> already be in raw layout.</p>
-     * <p>Calling this constructor is equivalent to call:
-     * <pre>matrix = new BlockFieldMatrix<T>(getField(), rawData.length, rawData[0].length,
-     *                                   toBlocksLayout(rawData), false);</pre>
-     * </p>
+     * <p>Calling this constructor is equivalent to call:</p>
+     * <pre>matrix = new BlockFieldMatrix&lt;T&gt;(getField(), rawData.length, rawData[0].length,
+     *                                 toBlocksLayout(rawData), false);</pre>
      *
      * @param rawData Data for the new matrix, in raw layout.
      * @throws MathIllegalArgumentException if the {@code blockData} shape is

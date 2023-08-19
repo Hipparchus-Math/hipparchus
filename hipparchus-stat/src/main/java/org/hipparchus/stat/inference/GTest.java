@@ -112,7 +112,7 @@ public class GTest {
     /**
      * Returns the <i>observed significance level</i>, or <a href=
      * "http://www.cas.lancs.ac.uk/glossary_v1.1/hyptest.html#pvalue"> p-value</a>,
-     * associated with a G-Test for goodness of fit</a> comparing the
+     * associated with a G-Test for goodness of fit comparing the
      * {@code observed} frequency counts to those in the {@code expected} array.
      *
      * <p>The number returned is the smallest significance level at which one
@@ -124,12 +124,13 @@ public class GTest {
      * in the ChiSquare distribution with degrees of freedom one less than the
      * common length of {@code expected} and {@code observed}.</p>
      *
-     * <p> <strong>Preconditions</strong>: <ul>
+     * <p> <strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>Expected counts must all be positive. </li>
      * <li>Observed counts must all be &ge; 0. </li>
      * <li>The observed and expected arrays must have the
      * same length and their common length must be at least 2.</li>
-     * </ul></p>
+     * </ul>
      *
      * <p>If any of the preconditions are not met, a
      * {@code MathIllegalArgumentException} is thrown.</p>
@@ -201,12 +202,13 @@ public class GTest {
      * <p>Returns true iff {@link #gTest(double[], long[])
      *  gTestGoodnessOfFitPValue(expected, observed)} &gt; alpha</p>
      *
-     * <p><strong>Preconditions</strong>: <ul>
+     * <p><strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>Expected counts must all be positive. </li>
      * <li>Observed counts must all be &ge; 0. </li>
      * <li>The observed and expected arrays must have the same length and their
      * common length must be at least 2.
-     * <li> {@code 0 < alpha < 0.5} </li></ul></p>
+     * <li> {@code 0 < alpha < 0.5} </li></ul>
      *
      * <p>If any of the preconditions are not met, a
      * {@code MathIllegalArgumentException} is thrown.</p>
@@ -318,12 +320,13 @@ public class GTest {
      * <p>This statistic can be used to perform a G test evaluating the null
      * hypothesis that both observed counts are independent </p>
      *
-     * <p> <strong>Preconditions</strong>: <ul>
+     * <p> <strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>Observed counts must be non-negative. </li>
      * <li>Observed counts for a specific bin must not both be zero. </li>
      * <li>Observed counts for a specific sample must not all be  0. </li>
      * <li>The arrays {@code observed1} and {@code observed2} must have
-     * the same length and their common length must be at least 2. </li></ul></p>
+     * the same length and their common length must be at least 2. </li></ul>
      *
      * <p>If any of the preconditions are not met, a
      * {@code MathIllegalArgumentException} is thrown.</p>
@@ -439,13 +442,13 @@ public class GTest {
      * perform the test is one less than the common length of the input observed
      * count arrays.</p>
      *
-     * <p><strong>Preconditions</strong>:
+     * <p><strong>Preconditions</strong>:</p>
      * <ul> <li>Observed counts must be non-negative. </li>
      * <li>Observed counts for a specific bin must not both be zero. </li>
      * <li>Observed counts for a specific sample must not all be 0. </li>
      * <li>The arrays {@code observed1} and {@code observed2} must
      * have the same length and their common length must be at least 2. </li>
-     * </ul><p>
+     * </ul>
      * <p> If any of the preconditions are not met, a
      * {@code MathIllegalArgumentException} is thrown.</p>
      *
@@ -488,13 +491,14 @@ public class GTest {
      * to perform the test is one less than the common length of the input observed
      * count arrays. </p>
      *
-     * <strong>Preconditions</strong>: <ul>
+     * <p><strong>Preconditions</strong>:</p>
+     * <ul>
      * <li>Observed counts must be non-negative. </li>
      * <li>Observed counts for a specific bin must not both be zero. </li>
      * <li>Observed counts for a specific sample must not all be 0. </li>
      * <li>The arrays {@code observed1} and {@code observed2} must
      * have the same length and their common length must be at least 2. </li>
-     * <li>{@code 0 < alpha < 0.5} </li></ul></p>
+     * <li>{@code 0 < alpha < 0.5} </li></ul>
      *
      * <p>If any of the preconditions are not met, a
      * {@code MathIllegalArgumentException} is thrown.</p>

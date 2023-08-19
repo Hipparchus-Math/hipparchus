@@ -30,7 +30,6 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * handlers can use these objects to retrieve the state vector at
  * intermediate times between the previous and the current grid points
  * (this feature is often called dense output).</p>
- * </p>
  *
  * @see org.hipparchus.ode.ODEIntegrator
  * @see ODEStepHandler

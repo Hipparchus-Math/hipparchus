@@ -34,7 +34,7 @@ import org.hipparchus.util.IterationManager;
  * href="#BARR1994">Barrett et al. (1994)</a> (figure 2.5). The linear system at
  * hand is A &middot; x = b, and the residual is r = b - A &middot; x.
  * </p>
- * <h3><a id="stopcrit">Default stopping criterion</a></h3>
+ * <p><strong>Default stopping criterion</strong></p>
  * <p>
  * A default stopping criterion is implemented. The iterations stop when || r ||
  * &le; &delta; || b ||, where b is the right-hand side vector, r the current
@@ -43,33 +43,32 @@ import org.hipparchus.util.IterationManager;
  * differ from the true residual due to rounding-off errors (see e.g. <a
  * href="#STRA2002">Strakos and Tichy, 2002</a>).
  * </p>
- * <h3>Iteration count</h3>
+ * <p><strong>Iteration count</strong></p>
  * <p>
  * In the present context, an iteration should be understood as one evaluation
  * of the matrix-vector product A &middot; x. The initialization phase therefore
  * counts as one iteration.
  * </p>
- * <h3><a id="context">Exception context</a></h3>
+ * <p><strong><a id="context">Exception context</a></strong></p>
  * <p>
  * Besides standard {@link MathIllegalArgumentException}, this class might throw
  * {@link MathIllegalArgumentException} if the linear operator or
  * the preconditioner are not positive definite.
+ * </p>
  * <ul>
  * <li>key {@code "operator"} points to the offending linear operator, say L,</li>
  * <li>key {@code "vector"} points to the offending vector, say x, such that
  * x<sup>T</sup> &middot; L &middot; x &lt; 0.</li>
  * </ul>
- * </p>
- * <h3>References</h3>
+ * <p><strong>References</strong></p>
  * <dl>
- * <dt><a id="BARR1994">Barret et al. (1994)</a></dt>
+ * <dt>Barret et al. (1994)</dt>
  * <dd>R. Barrett, M. Berry, T. F. Chan, J. Demmel, J. M. Donato, J. Dongarra,
  * V. Eijkhout, R. Pozo, C. Romine and H. Van der Vorst,
  * <a href="http://www.netlib.org/linalg/html_templates/Templates.html"><em>
  * Templates for the Solution of Linear Systems: Building Blocks for Iterative
  * Methods</em></a>, SIAM</dd>
- * <dt><a id="STRA2002">Strakos and Tichy (2002)
- * <dt>
+ * <dt>Strakos and Tichy (2002)</dt>
  * <dd>Z. Strakos and P. Tichy, <a
  * href="http://etna.mcs.kent.edu/vol.13.2002/pp56-80.dir/pp56-80.pdf">
  * <em>On error estimation in the conjugate gradient method and why it works

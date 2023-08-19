@@ -64,8 +64,8 @@ public interface EventState {
 
     /**
      * Notify the user's listener of the event. The event occurs wholly within this method
-     * call including a call to {@link ODEEventHandler#resetState(ODEStateAndDerivative)}
-     * if necessary.
+     * call including a call to {@link ODEEventHandler#resetState(ODEEventDetector,
+     * ODEStateAndDerivative)} if necessary.
      *
      * @param state the state at the time of the event. This must be at the same time as
      *              the current value of {@link #getEventTime()}.

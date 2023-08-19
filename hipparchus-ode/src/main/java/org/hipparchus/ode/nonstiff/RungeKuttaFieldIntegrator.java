@@ -40,7 +40,7 @@ import org.hipparchus.util.MathArrays;
  * integrators for Ordinary Differential Equations.
  *
  * <p>These methods are explicit Runge-Kutta methods, their Butcher
- * arrays are as follows :
+ * arrays are as follows :</p>
  * <pre>
  *    0  |
  *   c2  | a21
@@ -50,7 +50,6 @@ import org.hipparchus.util.MathArrays;
  *       |--------------------------
  *       |  b1   b2  ...   bs-1  bs
  * </pre>
- * </p>
  *
  * @see EulerFieldIntegrator
  * @see ClassicalRungeKuttaFieldIntegrator
@@ -88,6 +87,13 @@ public abstract class RungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
         this.a    = getA();
         this.b    = getB();
         this.step = step.abs();
+    }
+
+    /** Getter for the default, positive step-size assigned at constructor level.
+     * @return step
+     */
+    public T getDefaultStep() {
+        return this.step;
     }
 
     /** Create a fraction.

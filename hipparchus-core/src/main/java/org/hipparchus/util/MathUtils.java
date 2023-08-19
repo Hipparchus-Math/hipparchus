@@ -71,10 +71,10 @@ public final class MathUtils {
      *
      * @param x Value
      * @param y Value
-     * @return {@code new Double(x).equals(new Double(y))}
+     * @return {@code Double.valueOf(x).equals(Double.valueOf(y))}
      */
     public static boolean equals(double x, double y) {
-        return new Double(x).equals(new Double(y));
+        return Double.valueOf(x).equals(Double.valueOf(y));
     }
 
     /**
@@ -379,7 +379,7 @@ public final class MathUtils {
      * <li>Møller, Ole. "Quasi double-precision in floating point addition." BIT
      * 5, 37–50 (1965).</li>
      * <li>Shewchuk, Richard J. "Adaptive Precision Floating-Point Arithmetic
-     * and Fast Robust Geometric Predicates." Discrete & Computational Geometry
+     * and Fast Robust Geometric Predicates." Discrete &amp; Computational Geometry
      * 18, 305–363 (1997).</li>
      * <li><a href=
      * "https://en.wikipedia.org/wiki/2Sum">https://en.wikipedia.org/wiki/2Sum</a></li>
@@ -406,7 +406,7 @@ public final class MathUtils {
      * <li>Møller, Ole. "Quasi double-precision in floating point addition." BIT
      * 5, 37–50 (1965).</li>
      * <li>Shewchuk, Richard J. "Adaptive Precision Floating-Point Arithmetic
-     * and Fast Robust Geometric Predicates." Discrete & Computational Geometry
+     * and Fast Robust Geometric Predicates." Discrete &amp; Computational Geometry
      * 18, 305–363 (1997).</li>
      * <li><a href=
      * "https://en.wikipedia.org/wiki/2Sum">https://en.wikipedia.org/wiki/2Sum</a></li>

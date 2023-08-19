@@ -721,6 +721,14 @@ public class EigenDecompositionTest {
         }
     }
 
+    @Test
+    public void testDeterminantWithCompleEigenValues() {
+        final RealMatrix m = MatrixUtils.createRealMatrix(new double[][] { { -3, -1.5, -3 }, { 0, -1, 0 }, { 1, 0, 0 } });
+        EigenDecomposition decomposition = new EigenDecomposition(m);
+        Assert.assertEquals(-3.0, decomposition.getDeterminant().getRealPart(),      1.0e-15);
+        Assert.assertEquals( 0.0, decomposition.getDeterminant().getImaginaryPart(), 1.0e-15);
+    }
+
     /**
      * Verifies that the given EigenDecomposition has eigenvalues equivalent to
      * the targetValues, ignoring the order of the values and allowing

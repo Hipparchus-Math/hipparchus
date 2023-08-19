@@ -59,9 +59,9 @@ public interface FieldElement<T extends FieldElement<T>> {
 
     /** Compute n &times; this. Multiplication by an integer number is defined
      * as the following sum
-     * <center>
-     * n &times; this = &sum;<sub>i=1</sub><sup>n</sup> this.
-     * </center>
+     * \[
+     * n \times \mathrm{this} = \sum_{i=1}^n \mathrm{this}
+     * \]
      * @param n Number of times {@code this} must be added to itself.
      * @return A new element representing n &times; this.
      */

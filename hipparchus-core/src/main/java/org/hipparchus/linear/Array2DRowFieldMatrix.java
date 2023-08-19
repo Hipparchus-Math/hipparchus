@@ -23,7 +23,6 @@
 package org.hipparchus.linear;
 
 import java.io.Serializable;
-
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -34,11 +33,11 @@ import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
 /**
- * Implementation of FieldMatrix<T> using a {@link FieldElement}[][] array to store entries.
+ * Implementation of {@link FieldMatrix} using a {@link FieldElement}[][] array to store entries.
  * <p>
  * As specified in the {@link FieldMatrix} interface, matrix element indexing
- * is 0-based -- e.g., <code>getEntry(0, 0)</code>
- * returns the element in the first row, first column of the matrix.</li></ul>
+ * is 0-based -- e.g., {@code getEntry(0, 0)}
+ * returns the element in the first row, first column of the matrix
  * </p>
  *
  * @param <T> the type of the field elements
@@ -493,10 +492,15 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     @Override
     public T getEntry(final int row, final int column)
         throws MathIllegalArgumentException {
+      try {
+        return data[row][column];
+      } catch (IndexOutOfBoundsException e) {
+        // throw the exact cause of the exception
         checkRowIndex(row);
         checkColumnIndex(column);
-
-        return data[row][column];
+        // should never happen
+        throw e;
+      }
     }
 
     /** {@inheritDoc} */

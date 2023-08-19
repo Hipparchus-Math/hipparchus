@@ -28,6 +28,7 @@ import org.hipparchus.exception.MathIllegalStateException;
  * vector and, if any, to some parameters of the primary ODE set.
  * <p>
  * The primary set of ODE for which Jaobian matrices are requested may be:
+ * </p>
  * <ul>
  * <li>a full-fledged {@link ODEJacobiansProvider} that computes by itself
  * both the ODE and its local partial derivatives,</li>
@@ -35,7 +36,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * be completed with a finite differences configuration to compute local
  * partial derivatives (so-called internal differentiation).</li>
  * </ul>
- * </p>
  * <p>
  * As the variational equation automatically inserts {@link
  * ExpandableODE#addSecondaryEquations(SecondaryODE) secondary differential

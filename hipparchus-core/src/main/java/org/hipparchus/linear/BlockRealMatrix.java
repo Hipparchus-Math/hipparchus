@@ -109,10 +109,9 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /**
      * Create a new dense matrix copying entries from raw layout data.
      * <p>The input array <em>must</em> already be in raw layout.</p>
-     * <p>Calling this constructor is equivalent to call:
+     * <p>Calling this constructor is equivalent to call:</p>
      * <pre>matrix = new BlockRealMatrix(rawData.length, rawData[0].length,
      *                                   toBlocksLayout(rawData), false);</pre>
-     * </p>
      *
      * @param rawData data for new matrix, in raw layout
      * @throws MathIllegalArgumentException if the shape of {@code blockData} is

@@ -120,7 +120,8 @@ public interface ODEEventDetector  {
      * event {@code g(state)} would be increasing from 0 to positive values again.
      * Consistency is broken here! The solution here is to have {@code g(state) = sign
      * * h(state)}, where sign is a variable with initial value set to {@code +1}. Each
-     * time {@link #eventOccurred(ODEStateAndDerivative, boolean) eventOccurred} is called,
+     * time {@link ODEEventHandler#eventOccurred(ODEStateAndDerivative,
+     * ODEEventDetector, boolean) eventOccurred} is called,
      * {@code sign} is reset to {@code -sign}. This allows the {@code g(state)}
      * function to remain continuous (and even smooth) even across events, despite
      * {@code h(state)} is not. Basically, the event is used to <em>fold</em> {@code h(state)}
@@ -129,12 +130,12 @@ public interface ODEEventDetector  {
      *
      * <p>This method is idempotent, that is calling this multiple times with the same
      * state will result in the same value, with two exceptions. First, the definition of
-     * the g function may change when an {@link #eventOccurred(ODEStateAndDerivative,
-     * boolean) event occurs} on this handler, as in the above example. Second, the
-     * definition of the g function may change when the {@link
-     * #eventOccurred(ODEStateAndDerivative, boolean) eventOccurred} method of any other
-     * event handler in the same integrator returns {@link Action#RESET_EVENTS}, {@link
-     * Action#RESET_DERIVATIVES}, or {@link Action#RESET_STATE}.
+     * the g function may change when an {@link ODEEventHandler#eventOccurred(ODEStateAndDerivative,
+     * ODEEventDetector, boolean) event occurs} on the handler, as in the above example.
+     * Second, the definition of the g function may change when the {@link
+     * ODEEventHandler#eventOccurred(ODEStateAndDerivative, ODEEventDetector, boolean) eventOccurred}
+     * method of any other event handler in the same integrator returns {@link Action#RESET_EVENTS},
+     * {@link Action#RESET_DERIVATIVES}, or {@link Action#RESET_STATE}.
      *
      * @param state current value of the independent <i>time</i> variable, state vector
      * and derivative

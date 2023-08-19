@@ -165,6 +165,32 @@ public class ComplexEigenDecompositionTest {
                     1.0e-12);
     }
 
+    @Test
+    public void testIssue249() {
+
+        // the characteristic polynomial of this matrix is (1-λ)³,
+        // so the matrix has a single eigen value λ=1 and algebraic multiplicity 3.
+        // for this eigen value, there are only two eigen vectors: v₁ = (0, 1, 0) and v₂ = (0, 0, 1)
+        // as the geometric multiplicity is only 2
+        final RealMatrix matrix = new Array2DRowRealMatrix(new double[][] {
+            {  1.0, 0.0, 0.0 },
+            { -2.0, 1.0, 0.0 },
+            {  0.0, 0.0, 1.0 }
+        });
+
+        final ComplexEigenDecomposition ced = new OrderedComplexEigenDecomposition(matrix,
+                  ComplexEigenDecomposition.DEFAULT_EIGENVECTORS_EQUALITY,
+                  ComplexEigenDecomposition.DEFAULT_EPSILON,
+                  ComplexEigenDecomposition.DEFAULT_EPSILON_AV_VD_CHECK,
+                  (c1, c2) -> Double.compare(c2.norm(), c1.norm()));
+
+        Assert.assertEquals(3, ced.getEigenvalues().length);
+        Assert.assertEquals(1.0, ced.getEigenvector(0).dotProduct(ced.getEigenvector(0)).norm(), 1.0e-15);
+        Assert.assertEquals(1.0, ced.getEigenvector(1).dotProduct(ced.getEigenvector(1)).norm(), 1.0e-15);
+        Assert.assertEquals(0.0, ced.getEigenvector(2).dotProduct(ced.getEigenvector(2)).norm(), 1.0e-15);
+
+    }
+
     private FieldMatrix<Complex> toComplex(final RealMatrix m) {
         FieldMatrix<Complex> c = MatrixUtils.createFieldMatrix(ComplexField.getInstance(),
                                                                m.getRowDimension(),

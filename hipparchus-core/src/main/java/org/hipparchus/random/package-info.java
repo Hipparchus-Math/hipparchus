@@ -23,7 +23,7 @@
  *
  *      <p>Random number and random data generators.</p>
  *      <p>Hipparchus provides a few pseudo random number generators. The top level interface is RandomGenerator.
- *      It is implemented by three classes:
+ *      It is implemented by three classes:</p>
  *      <ul>
  *        <li>{@link org.hipparchus.random.JDKRandomGenerator JDKRandomGenerator}
  *            that extends the JDK provided generator</li>
@@ -39,9 +39,8 @@
  *              <li>{@link org.hipparchus.random.Well44497a Well44497a}</li>
  *              <li>{@link org.hipparchus.random.Well44497b Well44497b}</li>
  *            </ul>
- *          </li>
- *        </ul>
- *      </p>
+ *        </li>
+ *      </ul>
  *
  *      <p>
  *      The JDK provided generator is a simple one that can be used only for very simple needs.
@@ -104,20 +103,18 @@
  *      each double). Generation rates for other PRNG, relative to MersenneTwister:
  *      </p>
  *
- *      <p>
- *        <table border="1" align="center">
- *          <tr BGCOLOR="#CCCCFF"><td colspan="2"><font size="+2">Example of performances</font></td></tr>
- *          <tr BGCOLOR="#EEEEFF"><font size="+1"><td>Name</td><td>generation rate (relative to MersenneTwister)</td></font></tr>
- *          <tr><td>{@link org.hipparchus.random.MersenneTwister MersenneTwister}</td><td>1</td></tr>
- *          <tr><td>{@link org.hipparchus.random.JDKRandomGenerator JDKRandomGenerator}</td><td>between 0.96 and 1.16</td></tr>
- *          <tr><td>{@link org.hipparchus.random.Well512a Well512a}</td><td>between 0.85 and 0.88</td></tr>
- *          <tr><td>{@link org.hipparchus.random.Well1024a Well1024a}</td><td>between 0.63 and 0.73</td></tr>
- *          <tr><td>{@link org.hipparchus.random.Well19937a Well19937a}</td><td>between 0.70 and 0.71</td></tr>
- *          <tr><td>{@link org.hipparchus.random.Well19937c Well19937c}</td><td>between 0.57 and 0.71</td></tr>
- *          <tr><td>{@link org.hipparchus.random.Well44497a Well44497a}</td><td>between 0.69 and 0.71</td></tr>
- *          <tr><td>{@link org.hipparchus.random.Well44497b Well44497b}</td><td>between 0.65 and 0.71</td></tr>
- *        </table>
- *      </p>
+ *      <table border="1">
+ *        <caption>Example of performances</caption>
+ *        <tr><td>Name</td><td>generation rate (relative to MersenneTwister)</td></tr>
+ *        <tr><td>{@link org.hipparchus.random.MersenneTwister MersenneTwister}</td><td>1</td></tr>
+ *        <tr><td>{@link org.hipparchus.random.JDKRandomGenerator JDKRandomGenerator}</td><td>between 0.96 and 1.16</td></tr>
+ *        <tr><td>{@link org.hipparchus.random.Well512a Well512a}</td><td>between 0.85 and 0.88</td></tr>
+ *        <tr><td>{@link org.hipparchus.random.Well1024a Well1024a}</td><td>between 0.63 and 0.73</td></tr>
+ *        <tr><td>{@link org.hipparchus.random.Well19937a Well19937a}</td><td>between 0.70 and 0.71</td></tr>
+ *        <tr><td>{@link org.hipparchus.random.Well19937c Well19937c}</td><td>between 0.57 and 0.71</td></tr>
+ *        <tr><td>{@link org.hipparchus.random.Well44497a Well44497a}</td><td>between 0.69 and 0.71</td></tr>
+ *        <tr><td>{@link org.hipparchus.random.Well44497b Well44497b}</td><td>between 0.65 and 0.71</td></tr>
+ *      </table>
  *
  *      <p>
  *      So for most simulation problems, the better generators like {@link

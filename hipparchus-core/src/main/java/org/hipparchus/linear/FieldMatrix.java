@@ -27,8 +27,10 @@ import java.util.function.Function;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
+import org.hipparchus.analysis.polynomials.SmoothStepFactory;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.util.FieldBlendable;
 
 /**
  * Interface defining field-valued matrix with basic algebraic operations.
@@ -38,7 +40,7 @@ import org.hipparchus.exception.NullArgumentException;
  *
  * @param <T> the type of the field elements
  */
-public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
+public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix, FieldBlendable<FieldMatrix<T>, T> {
     /**
      * Get the type of field elements of the matrix.
      *
@@ -47,7 +49,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     Field<T> getField();
 
     /**
-     * Create a new FieldMatrix<T> of the same type as the instance with
+     * Create a new {@link FieldMatrix} of the same type as the instance with
      * the supplied row and column dimensions.
      *
      * @param rowDimension  the number of rows in the new matrix
@@ -169,6 +171,14 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      */
     FieldMatrix<T> power(int p) throws MathIllegalArgumentException;
 
+    /** {@inheritDoc} */
+    @Override
+    default FieldMatrix<T> blendArithmeticallyWith(final FieldMatrix<T> other, final T blendingValue) {
+        SmoothStepFactory.checkBetweenZeroAndOneIncluded(blendingValue.getReal());
+        return this.scalarMultiply(getField().getOne().subtract(blendingValue))
+                   .add(other.scalarMultiply(blendingValue));
+    }
+
     /**
      * Returns matrix entries as a two-dimensional array.
      *
@@ -254,6 +264,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * <p>
      * Example:<br>
      * Starting with
+     * </p>
      *
      * <pre>
      * 1  2  3  4
@@ -261,16 +272,14 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * 9  0  1  2
      * </pre>
      *
-     * and <code>subMatrix = {{3, 4} {5,6}}</code>, invoking
-     * <code>setSubMatrix(subMatrix,1,1))</code> will result in
+     * <p>and {@code subMatrix = {{3, 4} {5,6}}}, invoking
+     * {@code setSubMatrix(subMatrix,1,1))} will result in</p>
      *
      * <pre>
      * 1  2  3  4
      * 5  3  4  8
      * 9  5  6  2
      * </pre>
-     *
-     * </p>
      *
      * @param subMatrix Array containing the submatrix replacement data.
      * @param row Row coordinate of the top-left element to be replaced.

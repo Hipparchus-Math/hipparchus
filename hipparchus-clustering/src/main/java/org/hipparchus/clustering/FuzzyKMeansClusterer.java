@@ -46,19 +46,18 @@ import org.hipparchus.util.MathUtils;
  * major difference that a single data point is not uniquely assigned to a single cluster.
  * Instead, each point i has a set of weights u<sub>ij</sub> which indicate the degree of membership
  * to the cluster j.
- * <p>
- * The algorithm then tries to minimize the objective function:
- * <pre>
- * J = &#8721;<sub>i=1..C</sub>&#8721;<sub>k=1..N</sub> u<sub>ik</sub><sup>m</sup>d<sub>ik</sub><sup>2</sup>
- * </pre>
- * with d<sub>ik</sub> being the distance between data point i and the cluster center k.
- * <p>
- * The algorithm requires two parameters:
+ * <p>The algorithm then tries to minimize the objective function:
+ * \[
+ * J = \sum_{i=1}^C\sum_{k=1]{N} u_{i,k}^m d_{i,k}^2
+ * \]
+ * with \(d_{i,k}\) being the distance between data point i and the cluster center k.
+ * </p>
+ * <p>The algorithm requires two parameters:</p>
  * <ul>
  *   <li>k: the number of clusters
  *   <li>fuzziness: determines the level of cluster fuzziness, larger values lead to fuzzier clusters
  * </ul>
- * Additional, optional parameters:
+ * <p>Additional, optional parameters:</p>
  * <ul>
  *   <li>maxIterations: the maximum number of iterations
  *   <li>epsilon: the convergence criteria, default is 1e-3
@@ -66,6 +65,7 @@ import org.hipparchus.util.MathUtils;
  * <p>
  * The fuzzy variant of the K-Means algorithm is more robust with regard to the selection
  * of the initial cluster centers.
+ * </p>
  *
  * @param <T> type of the points to cluster
  */

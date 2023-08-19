@@ -24,6 +24,7 @@ package org.hipparchus.fraction;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.Locale;
 
 import org.hipparchus.exception.MathIllegalStateException;
@@ -275,7 +276,7 @@ public class BigFractionFormatTest {
         Assert.assertEquals(f1, f2);
         BigDecimal pi =
             new BigDecimal("3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068");
-        Assert.assertEquals(pi, f1.bigDecimalValue(99, BigDecimal.ROUND_HALF_EVEN));
+        Assert.assertEquals(pi, f1.bigDecimalValue(99, RoundingMode.HALF_EVEN));
     }
 
     @Test

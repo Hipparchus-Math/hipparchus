@@ -55,6 +55,11 @@ public class DormandPrince853IntegratorTest extends EmbeddedRungeKuttaIntegrator
     }
 
     @Override
+    public void testTorqueFreeMotionIssue230() {
+        doTestTorqueFreeMotionIssue230(2.9e-14, 7.8e-14);
+    }
+
+    @Override
     public void testForwardBackwardExceptions() {
         doTestForwardBackwardExceptions();
     }

@@ -26,10 +26,12 @@ CANNOT_INCREMENT_STATISTIC_CONSTRUCTED_FROM_EXTERNAL_MOMENTS = les statistiques 
 CANNOT_RETRIEVE_AT_NEGATIVE_INDEX = impossible d''extraire un élément à un index négatif ({0})
 CANNOT_SET_AT_NEGATIVE_INDEX = impossible de mettre un élément à un index négatif ({0})
 CANNOT_TRANSFORM_TO_DOUBLE = Exception de conversion dans une transformation : {0}
+CARDAN_ANGLES_SINGULARITY = singularité d''angles de Cardan
 CLASS_DOESNT_IMPLEMENT_COMPARABLE = la classe ({0}) n''implante pas l''interface Comparable
 COLUMN_INDEX_OUT_OF_RANGE = l''index de colonne {0} est hors du domaine autorisé [{1}, {2}]
 DIMENSIONS_MISMATCH_SIMPLE = {0} != {1}
 EMPTY_STRING_FOR_IMAGINARY_CHARACTER = chaîne vide pour le caractère imaginaire
+EULER_ANGLES_SINGULARITY = singularité d''angles d''Euler
 FUNCTION_NOT_DIFFERENTIABLE = la fonction n''est pas différentiable
 FUNCTION_NOT_POLYNOMIAL = la fonction n''est pas polynômiale
 INDEX_OUT_OF_RANGE = l''indice ({0}) est hors du domaine autorisé [{1}, {2}]

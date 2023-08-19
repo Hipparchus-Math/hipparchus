@@ -32,7 +32,6 @@ import org.hipparchus.util.MathUtils;
 
 /**
  * Returns the maximum of the available values.
- * <p>
  * <ul>
  * <li>The result is <code>NaN</code> iff all values are <code>NaN</code>
  * (i.e. <code>NaN</code> values have no impact on the value of the statistic).</li>
@@ -125,7 +124,7 @@ public class Max extends AbstractStorelessUnivariateStatistic
      * <p>
      * Throws <code>MathIllegalArgumentException</code> if the array is null or
      * the array index parameters are not valid.
-     * <p>
+     * </p>
      * <ul>
      * <li>The result is <code>NaN</code> iff all values are <code>NaN</code>
      * (i.e. <code>NaN</code> values have no impact on the value of the statistic).</li>

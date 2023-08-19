@@ -31,6 +31,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * <p>
  * The motivation for such an interface is well stated by
  * <a href="#BARR1994">Barrett et al. (1994)</a>:
+ * </p>
  * <blockquote>
  *  We restrict ourselves to iterative methods, which work by repeatedly
  *  improving an approximate solution until it is accurate enough. These
@@ -40,9 +41,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  *  supply a subroutine for computing y (and perhaps z) given x, which permits
  *  full exploitation of the sparsity or other special structure of A.
  * </blockquote>
- * <p>
  * <dl>
- *  <dt><a name="BARR1994">Barret et al. (1994)</a></dt>
+ *  <dt>Barret et al. (1994)</dt>
  *  <dd>
  *   R. Barrett, M. Berry, T. F. Chan, J. Demmel, J. M. Donato, J. Dongarra,
  *   V. Eijkhout, R. Pozo, C. Romine and H. Van der Vorst,

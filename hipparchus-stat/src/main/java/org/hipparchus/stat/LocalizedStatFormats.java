@@ -38,24 +38,52 @@ import org.hipparchus.exception.UTF8Control;
  */
 public enum LocalizedStatFormats implements Localizable {
 
-    // CHECKSTYLE: stop MultipleVariableDeclarations
-    // CHECKSTYLE: stop JavadocVariable
-
+    /** TIES_ARE_NOT_ALLOWED. */
     TIES_ARE_NOT_ALLOWED("Ties are not allowed."),
+
+    /** INSUFFICIENT_DATA_FOR_T_STATISTIC. */
     INSUFFICIENT_DATA_FOR_T_STATISTIC("insufficient data for t statistic, needs at least 2, got {0}"),
+
+    /** NOT_ENOUGH_DATA_REGRESSION. */
     NOT_ENOUGH_DATA_REGRESSION("the number of observations is not sufficient to conduct regression"),
+
+    /** INVALID_REGRESSION_OBSERVATION. */
     INVALID_REGRESSION_OBSERVATION("length of regressor array = {0} does not match the number of variables = {1} in the model"),
+
+    /** NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS. */
     NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS("not enough data ({0} rows) for this many predictors ({1} predictors)"),
+
+    /** NOT_SUPPORTED_NAN_STRATEGY. */
     NOT_SUPPORTED_NAN_STRATEGY("NaN strategy {0} not supported"),
+
+    /** NO_REGRESSORS. */
     NO_REGRESSORS("Regression model must include at least one regressor"),
+
+    /** COVARIANCE_MATRIX. */
     COVARIANCE_MATRIX("covariance matrix"),
+
+    /** OUT_OF_BOUNDS_QUANTILE_VALUE. */
     OUT_OF_BOUNDS_QUANTILE_VALUE("out of bounds quantile value: {0}, must be in (0, 100]"),
+
+    /** OUT_OF_BOUNDS_CONFIDENCE_LEVEL. */
     OUT_OF_BOUNDS_CONFIDENCE_LEVEL("out of bounds confidence level {0}, must be between {1} and {2}"),
+
+    /** OUT_OF_BOUND_SIGNIFICANCE_LEVEL. */
     OUT_OF_BOUND_SIGNIFICANCE_LEVEL("out of bounds significance level {0}, must be between {1} and {2}"),
+
+    /** SIGNIFICANCE_LEVEL. */
     SIGNIFICANCE_LEVEL("significance level ({0})"),
+
+    /** TOO_MANY_REGRESSORS. */
     TOO_MANY_REGRESSORS("too many regressors ({0}) specified, only {1} in the model"),
+
+    /** TWO_OR_MORE_CATEGORIES_REQUIRED. */
     TWO_OR_MORE_CATEGORIES_REQUIRED("two or more categories required, got {0}"),
+
+    /** TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED. */
     TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED("two or more values required in each category, one has {0}"),
+
+    /** ILLEGAL_STATE_PCA. */
     ILLEGAL_STATE_PCA("you must fit the PCA projection before calling {0}");
 
     /** Source English format. */

@@ -598,7 +598,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
 
     @Test
     public void testSqrtDefinition() {
-        double[] epsilon = new double[] { 5.0e-16, 5.0e-16, 2.0e-15, 5.0e-14, 2.0e-12 };
+        double[] epsilon = new double[] { 5.0e-16, 5.0e-16, 2.7e-15, 5.7e-14, 2.0e-12 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<T> factory = buildFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
@@ -1187,7 +1187,7 @@ public abstract class FieldDerivativeStructureAbstractTest<T extends CalculusFie
     @Override
     @Test
     public void testAtan2() {
-        double[] epsilon = new double[] { 5.0e-16, 3.0e-15, 2.2e-14, 1.0e-12, 8.0e-11 };
+        double[] epsilon = new double[] { 5.0e-16, 3.0e-15, 2.9e-14, 1.0e-12, 8.0e-11 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<T> factory = buildFactory(2, maxOrder);
             for (double x = -1.7; x < 2; x += 0.2) {

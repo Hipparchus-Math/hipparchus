@@ -23,6 +23,7 @@
 package org.hipparchus.stat.inference;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -568,7 +569,7 @@ public class KolmogorovSmirnovTest {
          * divides afterwards. That gives NaN quite easy. This does not (scale is the number of
          * digits):
          */
-        return pFrac.bigDecimalValue(20, BigDecimal.ROUND_HALF_UP).doubleValue();
+        return pFrac.bigDecimalValue(20, RoundingMode.HALF_UP).doubleValue();
     }
 
     /**

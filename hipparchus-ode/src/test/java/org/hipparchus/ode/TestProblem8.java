@@ -149,6 +149,10 @@ public class TestProblem8 extends TestProblemAbstract {
         this.inertiaTensor = q.multiply(d.multiplyTransposed(q));
         this.inertiaSolver = new QRDecomposer(1.0e-10).decompose(inertiaTensor);
 
+        final Vector3D m0 = new Vector3D(i1 * Vector3D.dotProduct(omega0, n1), n1,
+                                         i2 * Vector3D.dotProduct(omega0, n2), n2,
+                                         i3 * Vector3D.dotProduct(omega0, n3), n3);
+
         // sort axes in increasing moments of inertia order
         Inertia inertia = new Inertia(new InertiaAxis(i1, n1), new InertiaAxis(i2, n2), new InertiaAxis(i3, n3));
         if (inertia.getInertiaAxis1().getI() > inertia.getInertiaAxis2().getI()) {
@@ -163,9 +167,12 @@ public class TestProblem8 extends TestProblemAbstract {
 
         // in order to simplify implementation, we want the motion to be about axis 3
         // which is either the minimum or the maximum inertia axis
-        final double  o12               = omega0.getX() * omega0.getX();
-        final double  o22               = omega0.getY() * omega0.getY();
-        final double  o32               = omega0.getZ() * omega0.getZ();
+        final double  o1                = Vector3D.dotProduct(omega0, n1);
+        final double  o2                = Vector3D.dotProduct(omega0, n2);
+        final double  o3                = Vector3D.dotProduct(omega0, n3);
+        final double  o12               = o1 * o1;
+        final double  o22               = o2 * o2;
+        final double  o32               = o3 * o3;
         final double  twoE              = i1 * o12 + i2 * o22 + i3 * o32;
         final double  m2                = i1 * i1 * o12 + i2 * i2 * o22 + i3 * i3 * o32;
         final double  separatrixInertia = (twoE == 0) ? 0.0 : m2 / twoE;
@@ -187,11 +194,14 @@ public class TestProblem8 extends TestProblemAbstract {
         final double i1C = inertia.getInertiaAxis1().getI();
         final double i2C = inertia.getInertiaAxis2().getI();
         final double i3C = inertia.getInertiaAxis3().getI();
+        final double i32 = i3C - i2C;
+        final double i31 = i3C - i1C;
+        final double i21 = i2C - i1C;
 
-        // convert initial conditions to Euler angles such the M is aligned with Z in sorted computation frame
-        sortedToBody   = new Rotation(n1, n2, inertia.getInertiaAxis1().getA(), inertia.getInertiaAxis2().getA());
+        // convert initial conditions to Euler angles such the M is aligned with Z in aligned computation frame
+        sortedToBody   = new Rotation(Vector3D.PLUS_I, Vector3D.PLUS_J, inertia.getInertiaAxis1().getA(), inertia.getInertiaAxis2().getA());
         final Vector3D omega0Sorted = sortedToBody.applyInverseTo(omega0);
-        final Vector3D m0Sorted     = new Vector3D(i1C * omega0Sorted.getX(), i2C * omega0Sorted.getY(), i3C * omega0Sorted.getZ());
+        final Vector3D m0Sorted     = sortedToBody.applyInverseTo(m0);
         final double   phi0         = 0; // this angle can be set arbitrarily, so 0 is a fair value (Eq. 37.13 - 37.14)
         final double   theta0       = FastMath.acos(m0Sorted.getZ() / m0Sorted.getNorm());
         final double   psi0         = FastMath.atan2(m0Sorted.getX(), m0Sorted.getY()); // it is really atan2(x, y), not atan2(y, x) as usual!
@@ -200,10 +210,6 @@ public class TestProblem8 extends TestProblemAbstract {
         final Rotation alignedToSorted0 = new Rotation(RotationOrder.ZXZ, RotationConvention.FRAME_TRANSFORM,
                                                        phi0, theta0, psi0);
         inertToAligned = alignedToSorted0.applyInverseTo(sortedToBody.applyInverseTo(r0));
-
-        final double i32  = i3C - i2C;
-        final double i31  = i3C - i1C;
-        final double i21  = i2C - i1C;
 
         // Ω is always o1Scale * cn((t-tref) * tScale), o2Scale * sn((t-tref) * tScale), o3Scale * dn((t-tref) * tScale)
         tScale  = FastMath.copySign(FastMath.sqrt(i32 * (m2 - twoE * i1C) / (i1C * i2C * i3C)),

@@ -59,6 +59,7 @@ import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.SinCos;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -734,6 +735,53 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
     }
 
+    @Test
+    public abstract void testTorqueFreeMotionIssue230();
+
+    protected <T extends CalculusFieldElement<T>> void doTestTorqueFreeMotionIssue230(Field<T> field, double epsilonOmega, double epsilonQ) {
+
+        final T   zero        = field.getZero();
+        T i1   = zero.newInstance(3.0 / 8.0);
+        FieldVector3D<T> a1 = FieldVector3D.getPlusI(field);
+        T i2   = zero.newInstance(5.0 / 8.0);
+        FieldVector3D<T> a2 = FieldVector3D.getPlusK(field);
+        T i3   = zero.newInstance(1.0 / 2.0);
+        FieldVector3D<T> a3 = FieldVector3D.getPlusJ(field);
+        FieldVector3D<T> o0 = new FieldVector3D<>(zero.newInstance(5.0), zero.newInstance(0.0), zero.newInstance(4.0));
+        T o1   = FieldVector3D.dotProduct(o0, a1);
+        T o2   = FieldVector3D.dotProduct(o0, a2);
+        T o3   = FieldVector3D.dotProduct(o0, a3);
+        T e    = i1.multiply(o1).multiply(o1).add(i2.multiply(o2).multiply(o2)).add(i3.multiply(o3).multiply(o3)).multiply(0.5);
+        T r1   = FastMath.sqrt(e.multiply(i1).multiply(2));
+        T r3   = FastMath.sqrt(e.multiply(i3).multiply(2));
+        int n = 50;
+        for (int i = 0; i < n; ++i) {
+            SinCos sc = FastMath.sinCos(-0.5 * FastMath.PI * (i + 50) / 200);
+            FieldVector3D<T> om = new FieldVector3D<>(r1.multiply(sc.cos()).divide(i1), a1,
+                                                      r3.multiply(sc.sin()).divide(i3), a3);
+            TestFieldProblem8<T> problem = new TestFieldProblem8<>(zero.newInstance(0), zero.newInstance(20),
+                                                                   om,
+                                                                   new FieldRotation<>(zero.newInstance(0.9),
+                                                                                       zero.newInstance(0.437),
+                                                                                       zero.newInstance(0.0),
+                                                                                       zero.newInstance(0.0), true),
+                                                                   i1, a1,
+                                                                   i2, a2,
+                                                                   i3, a3);
+
+            double minStep = 1.0e-10;
+            double maxStep = problem.getFinalTime().subtract(problem.getInitialTime()).getReal();
+            double[] vecAbsoluteTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
+            double[] vecRelativeTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
+
+            EmbeddedRungeKuttaFieldIntegrator<T> integ = createIntegrator(field, minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
+            integ.addStepHandler(new TorqueFreeHandler<>(problem, epsilonOmega, epsilonQ));
+            integ.integrate(new FieldExpandableODE<>(problem), problem.getInitialState(), problem.getFinalTime().multiply(0.1));
+
+        }
+
+    }
+
     /** Generate all permutations of vector coordinates.
      * @param v vector to permute
      * @return permuted vector
@@ -926,7 +974,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             factory.variable(parY01, 4.0)
         };
         DerivativeStructure t     = factory.variable(parT, 6.0);
-        SinCos sinCos = new SinCos(omega);
+        SinCosODE sinCos = new SinCosODE(omega);
 
         EmbeddedRungeKuttaFieldIntegrator<DerivativeStructure> integrator =
                         createIntegrator(omega.getField(),
@@ -1041,7 +1089,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         return y.getPartialDerivative(orders);
     }
 
-    private static class SinCos implements FieldOrdinaryDifferentialEquation<DerivativeStructure> {
+    private static class SinCosODE implements FieldOrdinaryDifferentialEquation<DerivativeStructure> {
 
         private final DerivativeStructure omega;
         private       DerivativeStructure r;
@@ -1054,7 +1102,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         private double dAlphadY00;
         private double dAlphadY01;
 
-        protected SinCos(final DerivativeStructure omega) {
+        protected SinCosODE(final DerivativeStructure omega) {
             this.omega = omega;
         }
 

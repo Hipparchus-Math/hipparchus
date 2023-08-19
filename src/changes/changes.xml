@@ -50,6 +50,42 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.0" date="TBD" description="This is a major release.">
+      <action dev="luc" type="fix" due-to="Romain Serra" issue="issues/257">
+        Made FieldPolynomialSplineFunction operational with Field not inheriting from Comparable.
+      </action>
+      <action dev="maxime" type="add" issue="issues/263">
+        Created a rule to forbid Python keywords in method, class, interface and enum names.
+      </action>
+      <action dev="luc" type="fix" issue="issues/262">
+        Fixed determinant computation in eigen decomposition with complex eigenvalues.
+      </action>
+      <action dev="luc" type="fix" issue="issues/230">
+        Fixed wrong intermediate frame in torque-free motion model.
+      </action>
+      <action dev="luc" type="fix" due-to="Romain Serra" issue="issues/259">
+        Only remove input coefficients of FieldPolynomialFunction that satisfy isZero().
+      </action>
+      <action dev="luc" type="update" due-to="Romain Serra" issue="issues/256">
+        Improved performance for reciprocal, division and square root with
+        DerivativeStructure and FieldDerivativeStructure.
+      </action>
+      <action dev="luc" type="add" due-to="Romain Serra" issue="issues/250">
+        Added getter for default step of (Field) Runge-Kutta integrators.
+      </action>
+      <action dev="luc" type="fix" issue="issues/249">
+        Generate zero vectors in OrderedComplexEigenDecomposition when the number
+        of eigenvectors is smaller than the dimension.
+      </action>
+      <action dev="luc" type="fix" issue="issues/248">
+        Allow customization of eigen value ordering in OrderedComplexEigenDecomposition.
+      </action>
+      <action dev="vincent" type="add" issue="issues/244">
+        Added field version of Blendable interface method (implemented in FieldMatrix and FieldVector3D)
+        Added field version of smoothstep function in SmoothStepFactory
+      </action>
+      <action dev="luc" type="update" issue="issues/243">
+        Improve management of Cardan/Euler rotations close to singularity.
+      </action>
       <action dev="luc" type="add" du-to="Lucas Girodet">
         Added torque-free motion model for non-symmetrical rigid body in ODE tests,
         with analytical theoretical reference solution.

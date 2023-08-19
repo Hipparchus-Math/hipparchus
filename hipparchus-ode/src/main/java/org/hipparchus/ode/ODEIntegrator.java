@@ -84,7 +84,7 @@ public interface ODEIntegrator  {
 
     /** Remove all the event handlers that have been added to the integrator.
      * @see #addEventDetector(ODEEventDetector)
-     * @see #getEventHandlers()
+     * @see #getEventDetectors()
      * @since 3.0
      */
     void clearEventDetectors();

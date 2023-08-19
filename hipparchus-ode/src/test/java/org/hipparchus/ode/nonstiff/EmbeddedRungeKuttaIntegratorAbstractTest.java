@@ -56,6 +56,7 @@ import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.SinCos;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -654,6 +655,48 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
             integ.addStepHandler(new TorqueFreeHandler(problem, epsilonOmega, epsilonQ));
             integ.integrate(new ExpandableODE(problem), problem.getInitialState(), problem.getFinalTime());
         });
+
+    }
+
+    @Test
+    public abstract void testTorqueFreeMotionIssue230();
+
+    protected void doTestTorqueFreeMotionIssue230(double epsilonOmega, double epsilonQ) {
+
+        double i1   = 3.0 / 8.0;
+        Vector3D a1 = Vector3D.PLUS_I;
+        double i2   = 5.0 / 8.0;
+        Vector3D a2 = Vector3D.PLUS_K;
+        double i3   = 1.0 / 2.0;
+        Vector3D a3 = Vector3D.PLUS_J;
+        Vector3D o0 = new Vector3D(5.0, 0.0, 4.0);
+        double o1   = Vector3D.dotProduct(o0, a1);
+        double o2   = Vector3D.dotProduct(o0, a2);
+        double o3   = Vector3D.dotProduct(o0, a3);
+        double e    = 0.5 * (i1 * o1 * o1 + i2 * o2 * o2 + i3 * o3 * o3);
+        double r1   = FastMath.sqrt(2 * e * i1);
+        double r3   = FastMath.sqrt(2 * e * i3);
+        int n = 50;
+        for (int i = 0; i < n; ++i) {
+            SinCos sc = FastMath.sinCos(-0.5 * FastMath.PI * (i + 50) / 200);
+            Vector3D om = new Vector3D(r1 * sc.cos() / i1, a1, r3 * sc.sin() / i3, a3);
+            TestProblem8 problem = new TestProblem8(0, 20,
+                                                    om,
+                                                    new Rotation(0.9, 0.437, 0.0, 0.0, true),
+                                                    i1, a1,
+                                                    i2, a2,
+                                                    i3, a3);
+
+            double minStep = 1.0e-10;
+            double maxStep = problem.getFinalTime() - problem.getInitialTime();
+            double[] vecAbsoluteTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
+            double[] vecRelativeTolerance = { 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14, 1.0e-14 };
+
+            EmbeddedRungeKuttaIntegrator integ = createIntegrator(minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
+            integ.addStepHandler(new TorqueFreeHandler(problem, epsilonOmega, epsilonQ));
+            integ.integrate(new ExpandableODE(problem), problem.getInitialState(), problem.getFinalTime() * 0.1);
+
+        }
 
     }
 

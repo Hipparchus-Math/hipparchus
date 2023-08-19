@@ -46,17 +46,16 @@ import org.hipparchus.ode.SecondaryODE;
  * any, to some parameters of the primary ODE set.
  * <p>
  * It is intended to be packed into an {@link ExpandableODE}
- * in conjunction with a primary set of ODE, which may be:
+ * in conjunction with a primary set of ODE, which may be:</p>
  * <ul>
  * <li>a {@link FirstOrderDifferentialEquations}</li>
  * <li>a {@link MainStateJacobianProvider}</li>
  * </ul>
- * In order to compute Jacobian matrices with respect to some parameters of the
- * primary ODE set, the following parameter Jacobian providers may be set:
+ * <p>In order to compute Jacobian matrices with respect to some parameters of the
+ * primary ODE set, the following parameter Jacobian providers may be set:</p>
  * <ul>
  * <li>a {@link ParametersController}</li>
  * </ul>
- * </p>
  *
  * @see ExpandableODE
  * @see FirstOrderDifferentialEquations

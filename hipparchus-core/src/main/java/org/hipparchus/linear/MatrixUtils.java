@@ -824,6 +824,7 @@ public class MatrixUtils {
      * <p>
      * The following example shows how a simple class with a name and a real vector
      * should be written:
+     * </p>
      * <pre><code>
      * public class NamedVector implements Serializable {
      *
@@ -844,7 +845,6 @@ public class MatrixUtils {
      *
      * }
      * </code></pre>
-     * </p>
      *
      * @param vector real vector to serialize
      * @param oos stream where the real vector should be written
@@ -921,6 +921,7 @@ public class MatrixUtils {
      * <p>
      * The following example shows how a simple class with a name and a real matrix
      * should be written:
+     * </p>
      * <pre><code>
      * public class NamedMatrix implements Serializable {
      *
@@ -941,7 +942,6 @@ public class MatrixUtils {
      *
      * }
      * </code></pre>
-     * </p>
      *
      * @param matrix real matrix to serialize
      * @param oos stream where the real matrix should be written
@@ -1239,12 +1239,10 @@ public class MatrixUtils {
                     rm.getRowDimension(), rm.getColumnDimension());
         }
 
-        // Preprocessing to reduce the norm
+        // Copy input matrix
         int dim = rm.getRowDimension();
         final RealMatrix identity = MatrixUtils.createRealIdentityMatrix(dim);
-        final double preprocessScale = rm.getTrace() / dim;
         RealMatrix scaledMatrix = rm.copy();
-        scaledMatrix = scaledMatrix.subtract(identity.scalarMultiply(preprocessScale));
 
         // Select pade degree required
         final double l1Norm = rm.getNorm1();
@@ -1268,12 +1266,7 @@ public class MatrixUtils {
 
             // Scale matrix by power of 2
             final int finalSquaringCount = squaringCount;
-            scaledMatrix.walkInOptimizedOrder(new DefaultRealMatrixChangingVisitor() {
-                @Override
-                public double visit(int row, int column, double value) {
-                    return Math.scalb(value, -finalSquaringCount);
-                }
-            });
+            scaledMatrix.mapToSelf(x -> Math.scalb(x, -finalSquaringCount));
         }
 
         // Calculate U and V using Horner
@@ -1308,9 +1301,6 @@ public class MatrixUtils {
         for (int i = 0; i < squaringCount; i++) {
             result = result.multiply(result);
         }
-
-        // Undo preprocessing
-        result = result.scalarMultiply(Math.exp(preprocessScale));
 
         return result;
     }
