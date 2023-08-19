@@ -100,8 +100,8 @@ public class UnscentedKalmanFilterTest {
         forEach(estimate -> {
             for (Reference r : referenceData) {
                 if (r.sameTime(estimate.getTime())) {
-                    r.checkState(estimate.getState(), 1.0e-4);
-                    r.checkCovariance(estimate.getCovariance(), 3.0e-4);
+                    r.checkState(estimate.getState(), 1.0e-13);
+                    r.checkCovariance(estimate.getCovariance(), 1.0e-15);
                     return;
                 }
             }
@@ -155,7 +155,7 @@ public class UnscentedKalmanFilterTest {
                             { 0.00, 0.00, 0.01, 0.00 },
                             { 0.00, 0.00, 0.00, 0.10 },
                          }, "cannonball-non-zero-process-noise.txt",
-                         2.0e-4, 2.0e-2);
+                         1.0e-11, 1.0e-11);
     }
 
     private void doTestCannonball(final double[][] q, final String name,
