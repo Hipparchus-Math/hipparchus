@@ -225,7 +225,7 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
             // we cannot do anything on such a small step, don't trigger any events
             return false;
         }
-        final int n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt.getReal()) / detector.getMaxCheckInterval().getReal()));
+        final int n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt.getReal()) / detector.getMaxCheckInterval().currentInterval(s1)));
         final T   h = dt.divide(n);
 
         T ta = t0;

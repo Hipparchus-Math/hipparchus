@@ -444,7 +444,7 @@ public class EventSlopeFilterTest {
     /** State events for this unit test. */
     protected static class Event implements ODEEventDetector {
 
-        private final double                                        maxCheck;
+        private final AdaptableInterval                             maxCheck;
         private final int                                           maxIter;
         private final BracketedUnivariateSolver<UnivariateFunction> solver;
         private final boolean                                       expectDecreasing;
@@ -453,14 +453,14 @@ public class EventSlopeFilterTest {
 
         public Event(final double maxCheck, final double threshold, final int maxIter,
                      boolean expectDecreasing, boolean expectIncreasing) {
-            this.maxCheck         = maxCheck;
+            this.maxCheck         = s -> maxCheck;
             this.maxIter          = maxIter;
             this.solver           = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.expectDecreasing = expectDecreasing;
             this.expectIncreasing = expectIncreasing;
         }
 
-        public double getMaxCheckInterval() {
+        public AdaptableInterval getMaxCheckInterval() {
             return maxCheck;
         }
 
@@ -501,7 +501,7 @@ public class EventSlopeFilterTest {
     /** State events for this unit test. */
     protected static class FieldEvent<T extends CalculusFieldElement<T>> implements FieldODEEventDetector<T> {
 
-        private final T                                     maxCheck;
+        private final FieldAdaptableInterval<T>             maxCheck;
         private final int                                   maxIter;
         private final BracketedRealFieldUnivariateSolver<T> solver;
         private final boolean                               expectDecreasing;
@@ -510,7 +510,7 @@ public class EventSlopeFilterTest {
 
         public FieldEvent(final T maxCheck, final T threshold, final int maxIter,
                           boolean expectDecreasing, boolean expectIncreasing) {
-            this.maxCheck         = maxCheck;
+            this.maxCheck         = s -> maxCheck.getReal();
             this.maxIter          = maxIter;
             this.solver           = new FieldBracketingNthOrderBrentSolver<>(threshold.getField().getZero(),
                                                                             threshold,
@@ -520,7 +520,7 @@ public class EventSlopeFilterTest {
             this.expectIncreasing = expectIncreasing;
         }
 
-        public T getMaxCheckInterval() {
+        public FieldAdaptableInterval<T> getMaxCheckInterval() {
             return maxCheck;
         }
 

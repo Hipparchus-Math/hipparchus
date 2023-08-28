@@ -30,6 +30,7 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.ode.events.AbstractFieldODEDetector;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.FieldAdaptableInterval;
 import org.hipparchus.ode.events.FieldODEEventDetector;
 import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.util.MathArrays;
@@ -46,7 +47,7 @@ public class StepFieldProblem<T extends CalculusFieldElement<T>>
     private T        switchTime;
 
     public StepFieldProblem(Field<T> field,
-                            final T maxCheck, final T threshold, final int maxIter,
+                            final FieldAdaptableInterval<T> maxCheck, final T threshold, final int maxIter,
                             T rateBefore, T rateAfter, T switchTime) {
         this(field, maxCheck, maxIter,
              new FieldBracketingNthOrderBrentSolver<>(field.getZero(), threshold, field.getZero(), 5),
@@ -55,7 +56,7 @@ public class StepFieldProblem<T extends CalculusFieldElement<T>>
     }
 
     private StepFieldProblem(Field<T> field,
-                             final T maxCheck, final int maxIter,
+                             final FieldAdaptableInterval<T> maxCheck, final int maxIter,
                              final BracketedRealFieldUnivariateSolver<T> solver,
                              final FieldODEEventHandler<T> handler,
                              final T rateBefore, final T rateAfter,
@@ -68,7 +69,7 @@ public class StepFieldProblem<T extends CalculusFieldElement<T>>
         setRate(rateBefore);
     }
 
-    protected StepFieldProblem<T> create(T newMaxCheck, int newMaxIter,
+    protected StepFieldProblem<T> create(FieldAdaptableInterval<T> newMaxCheck, int newMaxIter,
                                          BracketedRealFieldUnivariateSolver<T> newSolver,
                                          FieldODEEventHandler<T> newHandler) {
         return new StepFieldProblem<>(field, newMaxCheck, newMaxIter, newSolver, newHandler,

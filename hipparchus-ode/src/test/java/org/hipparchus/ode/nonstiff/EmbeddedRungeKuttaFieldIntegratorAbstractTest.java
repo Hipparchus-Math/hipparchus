@@ -49,6 +49,7 @@ import org.hipparchus.ode.TestFieldProblem7;
 import org.hipparchus.ode.TestFieldProblem8;
 import org.hipparchus.ode.TestFieldProblemHandler;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.FieldAdaptableInterval;
 import org.hipparchus.ode.events.FieldODEEventDetector;
 import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.ode.events.FieldODEStepEndHandler;
@@ -247,7 +248,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
       TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
       integ.addStepHandler(handler);
       double convergence = 1.0e-8 * maxStep;
-      FieldODEEventDetector<T>[] functions = pb.getEventDetectors(field.getZero().newInstance(Double.POSITIVE_INFINITY),
+      FieldODEEventDetector<T>[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY,
                                                                   field.getZero().newInstance(convergence),
                                                                   1000);
       for (int l = 0; l < functions.length; ++l) {
@@ -258,7 +259,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
       for (int i = 0; i < detectors.size(); ++i) {
           Assert.assertSame(functions[i], detectors.get(i).getHandler());
-          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().getReal(), 1.0);
+          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
           Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
           Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
@@ -290,7 +291,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
       FieldODEIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
                                                             scalAbsoluteTolerance, scalRelativeTolerance);
       double convergence = 1.0e-8 * maxStep;
-      FieldODEEventDetector<T>[] functions = pb.getEventDetectors(field.getZero().newInstance(Double.POSITIVE_INFINITY),
+      FieldODEEventDetector<T>[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY,
                                                                   field.getZero().newInstance(convergence),
                                                                   1000);
       for (int l = 0; l < functions.length; ++l) {
@@ -301,7 +302,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
       for (int i = 0; i < detectors.size(); ++i) {
           Assert.assertSame(functions[i], detectors.get(i).getHandler());
-          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().getReal(), 1.0);
+          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
           Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
           Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
@@ -336,7 +337,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
       FieldODEIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
                                                             scalAbsoluteTolerance, scalRelativeTolerance);
       double convergence = 1.0e-8 * maxStep;
-      FieldODEEventDetector<T>[] functions = pb.getEventDetectors(field.getZero().newInstance(Double.POSITIVE_INFINITY),
+      FieldODEEventDetector<T>[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY,
                                                                   field.getZero().newInstance(convergence),
                                                                   1000);
       for (int l = 0; l < functions.length; ++l) {
@@ -347,7 +348,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
       for (int i = 0; i < detectors.size(); ++i) {
           Assert.assertSame(functions[i], detectors.get(i).getHandler());
-          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().getReal(), 1.0);
+          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
           Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
           Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
@@ -378,7 +379,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
       FieldODEIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
                                                             scalAbsoluteTolerance, scalRelativeTolerance);
       double convergence = 1.0e-8 * maxStep;
-      FieldODEEventDetector<T>[] functions = pb.getEventDetectors(field.getZero().newInstance(Double.POSITIVE_INFINITY),
+      FieldODEEventDetector<T>[] functions = pb.getEventDetectors(Double.POSITIVE_INFINITY,
                                                                   field.getZero().newInstance(convergence),
                                                                   1000);
       for (int l = 0; l < functions.length; ++l) {
@@ -389,7 +390,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
       for (int i = 0; i < detectors.size(); ++i) {
           Assert.assertSame(functions[i], detectors.get(i).getHandler());
-          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().getReal(), 1.0);
+          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
           Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
           Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
@@ -444,8 +445,8 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         integ.addStepHandler(handler);
 
         integ.addEventDetector(new FieldODEEventDetector<T>() {
-            public T getMaxCheckInterval() {
-                return field.getZero().newInstance(Double.POSITIVE_INFINITY);
+            public FieldAdaptableInterval<T> getMaxCheckInterval() {
+                return s -> Double.POSITIVE_INFINITY;
             }
             public int getMaxIterationCount() {
                 return 1000;
@@ -490,8 +491,8 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         integ.addStepHandler(handler);
 
         integ.addEventDetector(new FieldODEEventDetector<T>() {
-            public T getMaxCheckInterval() {
-                return field.getZero().newInstance(Double.POSITIVE_INFINITY);
+            public FieldAdaptableInterval<T> getMaxCheckInterval() {
+                return s -> Double.POSITIVE_INFINITY;
             }
             public int getMaxIterationCount() {
                 return 3;
@@ -1056,8 +1057,8 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         double convergence = 1e-6;
         fieldIntegrator.addEventDetector(new FieldODEEventDetector<Binary64>() {
             @Override
-            public Binary64 getMaxCheckInterval() {
-                return new Binary64(Double.POSITIVE_INFINITY);
+            public FieldAdaptableInterval<Binary64> getMaxCheckInterval() {
+                return s -> Double.POSITIVE_INFINITY;
             }
             @Override
             public int getMaxIterationCount() {

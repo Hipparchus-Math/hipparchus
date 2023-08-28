@@ -48,6 +48,7 @@ import org.hipparchus.ode.TestFieldProblem6;
 import org.hipparchus.ode.TestFieldProblemAbstract;
 import org.hipparchus.ode.TestFieldProblemHandler;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.FieldAdaptableInterval;
 import org.hipparchus.ode.events.FieldODEEventDetector;
 import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
@@ -159,8 +160,8 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         }
 
         integrator.addEventDetector(new FieldODEEventDetector<T>() {
-            public T getMaxCheckInterval() {
-                return field.getZero().newInstance(Double.POSITIVE_INFINITY);
+            public FieldAdaptableInterval<T> getMaxCheckInterval() {
+                return s -> Double.POSITIVE_INFINITY;
             }
             public int getMaxIterationCount() {
                 return 100;
@@ -249,7 +250,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                 RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
                 TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
                 integ.addStepHandler(handler);
-                final T maxCheck = field.getZero().newInstance(Double.POSITIVE_INFINITY);
+                final double maxCheck = Double.POSITIVE_INFINITY;
                 final T eventTol = step.multiply(1.0e-6);
                 FieldODEEventDetector<T>[] functions = pb.getEventDetectors(maxCheck, eventTol, 1000);
                 for (int l = 0; l < functions.length; ++l) {
@@ -503,7 +504,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
     protected <T extends CalculusFieldElement<T>> void doTestUnstableDerivative(Field<T> field, double epsilon) {
       final StepFieldProblem<T> stepProblem = new StepFieldProblem<T>(field,
-                                                                      field.getZero().newInstance(999.0),
+                                                                      s -> 999.0,
                                                                       field.getZero().newInstance(1.0e+12),
                                                                       1000000,
                                                                       field.getZero().newInstance(0.0),
@@ -512,7 +513,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                                               withMaxCheck(field.getZero().newInstance(1.0)).
                                               withMaxIter(1000).
                                               withThreshold(field.getZero().newInstance(1.0e-12));
-      Assert.assertEquals(1.0,     stepProblem.getMaxCheckInterval().getReal(), 1.0e-15);
+      Assert.assertEquals(1.0,     stepProblem.getMaxCheckInterval().currentInterval(null), 1.0e-15);
       Assert.assertEquals(1000,    stepProblem.getMaxIterationCount());
       Assert.assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy().getReal(), 1.0e-25);
       Assert.assertNotNull(stepProblem.getHandler());

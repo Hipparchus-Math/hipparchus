@@ -2117,7 +2117,7 @@ public class FieldCloseEventsTest {
     /** Base class to record events that occurred. */
     private static abstract class BaseDetector implements FieldODEEventDetector<Binary64> {
 
-        private final Binary64                                     maxCheck;
+        private final FieldAdaptableInterval<Binary64>             maxCheck;
         private final int                                          maxIter;
         private final BracketedRealFieldUnivariateSolver<Binary64> solver;
         protected final Action                                     action;
@@ -2127,7 +2127,7 @@ public class FieldCloseEventsTest {
 
         public BaseDetector(final double maxCheck, final double threshold, final int maxIter,
                             Action action, List<Event> events) {
-            this.maxCheck  = new Binary64(maxCheck);
+            this.maxCheck  = s -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new FieldBracketingNthOrderBrentSolver<>(new Binary64(0),
                                                                       new Binary64(threshold),
@@ -2137,7 +2137,7 @@ public class FieldCloseEventsTest {
             this.events    = events;
         }
 
-        public Binary64 getMaxCheckInterval() {
+        public FieldAdaptableInterval<Binary64> getMaxCheckInterval() {
             return maxCheck;
         }
 
@@ -2412,7 +2412,7 @@ public class FieldCloseEventsTest {
 
     private class ResetChangesSignGenerator implements FieldODEEventDetector<Binary64> {
 
-        private final Binary64                                     maxCheck;
+        private final FieldAdaptableInterval<Binary64>             maxCheck;
         private final int                                          maxIter;
         private final BracketedRealFieldUnivariateSolver<Binary64> solver;
         final double                                               y1;
@@ -2422,7 +2422,7 @@ public class FieldCloseEventsTest {
 
         public ResetChangesSignGenerator(final double y1, final double y2, final double change,
                                          final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = new Binary64(maxCheck);
+            this.maxCheck  = s -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new FieldBracketingNthOrderBrentSolver<>(new Binary64(0),
                             new Binary64(threshold),
@@ -2434,7 +2434,7 @@ public class FieldCloseEventsTest {
             this.count     = 0;
         }
 
-        public Binary64 getMaxCheckInterval() {
+        public FieldAdaptableInterval<Binary64> getMaxCheckInterval() {
             return maxCheck;
         }
 

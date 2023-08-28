@@ -26,6 +26,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.AdaptableInterval;
 import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.util.FastMath;
@@ -111,8 +112,8 @@ public class TestProblem4 extends TestProblemAbstract {
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
         }
 
-        public double getMaxCheckInterval() {
-            return maxCheck;
+        public AdaptableInterval getMaxCheckInterval() {
+            return s -> maxCheck;
         }
 
         public int getMaxIterationCount() {

@@ -64,7 +64,7 @@ public interface FieldODEEventDetector<T extends CalculusFieldElement<T>>  {
     /** Get the maximal time interval between events handler checks.
      * @return maximal time interval between events handler checks
      */
-    T getMaxCheckInterval();
+    FieldAdaptableInterval<T> getMaxCheckInterval();
 
     /** Get the upper limit in the iteration count for event localization.
      * @return upper limit in the iteration count for event localization

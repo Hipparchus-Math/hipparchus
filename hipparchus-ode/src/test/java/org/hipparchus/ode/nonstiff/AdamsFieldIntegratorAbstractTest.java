@@ -41,6 +41,7 @@ import org.hipparchus.ode.TestFieldProblem6;
 import org.hipparchus.ode.TestFieldProblemAbstract;
 import org.hipparchus.ode.TestFieldProblemHandler;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.FieldAdaptableInterval;
 import org.hipparchus.ode.events.FieldODEEventDetector;
 import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
@@ -180,8 +181,8 @@ public abstract class AdamsFieldIntegratorAbstractTest {
         FieldODEEventDetector<T> event = new FieldODEEventDetector<T>() {
 
             @Override
-            public T getMaxCheckInterval() {
-                return field.getZero().newInstance(0.5 * range);
+            public FieldAdaptableInterval<T> getMaxCheckInterval() {
+                return s -> 0.5 * range;
             }
 
             @Override
@@ -233,8 +234,8 @@ public abstract class AdamsFieldIntegratorAbstractTest {
             FieldODEEventDetector<T> event = new FieldODEEventDetector<T>() {
 
                 @Override
-                public T getMaxCheckInterval() {
-                    return field.getZero().newInstance(0.5 * range);
+                public FieldAdaptableInterval<T> getMaxCheckInterval() {
+                    return s -> 0.5 * range;
                 }
 
                 @Override

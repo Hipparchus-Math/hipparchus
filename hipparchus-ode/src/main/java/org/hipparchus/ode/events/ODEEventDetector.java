@@ -64,7 +64,7 @@ public interface ODEEventDetector  {
     /** Get the maximal time interval between events handler checks.
      * @return maximal time interval between events handler checks
      */
-    double getMaxCheckInterval();
+    AdaptableInterval getMaxCheckInterval();
 
     /** Get the upper limit in the iteration count for event localization.
      * @return upper limit in the iteration count for event localization

@@ -212,7 +212,7 @@ public class DetectorBasedEventState implements EventState {
             return false;
         }
         // number of points to check in the current step
-        final int n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt) / detector.getMaxCheckInterval()));
+        final int n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt) / detector.getMaxCheckInterval().currentInterval(s1)));
         final double h = dt / n;
 
         double ta = t0;

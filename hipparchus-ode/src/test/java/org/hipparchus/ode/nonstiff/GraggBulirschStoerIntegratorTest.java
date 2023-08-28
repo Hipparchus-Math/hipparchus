@@ -272,11 +272,11 @@ public class GraggBulirschStoerIntegratorTest {
 
     @Test
     public void testUnstableDerivative() {
-        final StepProblem stepProblem = new StepProblem(999.0, 1.0e+12, 1000000, 0.0, 1.0, 2.0).
+        final StepProblem stepProblem = new StepProblem(s -> 999.0, 1.0e+12, 1000000, 0.0, 1.0, 2.0).
                                         withMaxCheck(1.0).
                                         withMaxIter(1000).
                                         withThreshold(1.0e-12);
-        Assert.assertEquals(1.0,     stepProblem.getMaxCheckInterval(), 1.0e-15);
+        Assert.assertEquals(1.0,     stepProblem.getMaxCheckInterval().currentInterval(null), 1.0e-15);
         Assert.assertEquals(1000,    stepProblem.getMaxIterationCount());
         Assert.assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy(), 1.0e-25);
         Assert.assertNotNull(stepProblem.getHandler());

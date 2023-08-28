@@ -20,8 +20,6 @@ package org.hipparchus.ode.events;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 
 /** Base class for #@link {@link FieldODEEventDetector}.
@@ -42,7 +40,7 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
     public static final int DEFAULT_MAX_ITER = 100;
 
     /** Max check interval. */
-    private final E maxCheck;
+    private final FieldAdaptableInterval<E> maxCheck;
 
     /** Maximum number of iterations in the event time search. */
     private final int maxIter;
@@ -62,25 +60,14 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
      * @param solver root-finding algorithm to use to detect state events
      * @param handler event handler to call at event occurrences
      */
-    protected AbstractFieldODEDetector(final E maxCheck, final int maxIter,
+    protected AbstractFieldODEDetector(final FieldAdaptableInterval<E> maxCheck, final int maxIter,
                                        final BracketedRealFieldUnivariateSolver<E> solver,
                                        final FieldODEEventHandler<E> handler) {
-        checkStrictlyPositive(maxCheck);
         this.maxCheck  = maxCheck;
         this.maxIter   = maxIter;
         this.solver    = solver;
         this.handler   = handler;
         this.forward   = true;
-    }
-
-    /** Check value is strictly positive.
-     * @param value value to check
-     * @exception MathIllegalArgumentException if value is not strictly positive
-     */
-    private void checkStrictlyPositive(final E value) throws MathIllegalArgumentException {
-        if (value.getReal() <= 0.0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, value, 0.0);
-        }
     }
 
     /**
@@ -102,7 +89,7 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
 
     /** {@inheritDoc} */
     @Override
-    public E getMaxCheckInterval() {
+    public FieldAdaptableInterval<E> getMaxCheckInterval() {
         return maxCheck;
     }
 
@@ -127,6 +114,19 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
      * @return a new detector with updated configuration (the instance is not changed)
      */
     public T withMaxCheck(final E newMaxCheck) {
+        return withMaxCheck(s -> newMaxCheck.getReal());
+    }
+
+    /**
+     * Setup the maximum checking interval.
+     * <p>
+     * This will override a maximum checking interval if it has been configured previously.
+     * </p>
+     * @param newMaxCheck maximum checking interval (s)
+     * @return a new detector with updated configuration (the instance is not changed)
+     * @since 3.0
+     */
+    public T withMaxCheck(final FieldAdaptableInterval<E> newMaxCheck) {
         return create(newMaxCheck, getMaxIterationCount(), getSolver(), getHandler());
     }
 
@@ -189,13 +189,13 @@ public abstract class AbstractFieldODEDetector<T extends AbstractFieldODEDetecto
     }
 
     /** Build a new instance.
-     * @param newMaxCheck maximum checking interval (s)
+     * @param newMaxCheck maximum checking interval
      * @param newMaxIter maximum number of iterations in the event time search
      * @param newSolver root-finding algorithm to use to detect state events
      * @param newHandler event handler to call at event occurrences
      * @return a new instance of the appropriate sub-type
      */
-    protected abstract T create(E newMaxCheck, int newMaxIter,
+    protected abstract T create(FieldAdaptableInterval<E> newMaxCheck, int newMaxIter,
                                 BracketedRealFieldUnivariateSolver<E> newSolver,
                                 FieldODEEventHandler<E> newHandler);
 
