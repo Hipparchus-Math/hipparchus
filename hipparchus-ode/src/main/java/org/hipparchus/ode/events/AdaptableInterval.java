@@ -29,6 +29,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 public interface AdaptableInterval {
 
     /** Get the current value of maximal time interval between events handler checks.
+     * @param state current state
      * @return current value of maximal time interval between events handler checks
      */
     double currentInterval(ODEStateAndDerivative state);
