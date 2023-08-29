@@ -37,25 +37,25 @@ public class FieldVariableCheckInterval implements FieldOrdinaryDifferentialEqua
     @Test
     public void testFixedInterval() {
         double tZero = 7.0;
-        double width = 2.0;
-        doTest(tZero, width, s -> width / 200, 709);
+        double width = 0.25;
+        doTest(tZero, width, s -> width / 25, 710);
     }
 
     @Test
     public void testWidthAwareInterval() {
         double tZero = 7.0;
-        double width = 2.0;
+        double width = 0.25;
         doTest(tZero, width,
                s -> {
                    if (s.getTime().getReal() < tZero - 0.5 * width) {
-                       return tZero - 0.5 * width - s.getTime().getReal();
+                       return tZero - 0.25 * width - s.getTime().getReal();
                    } else if (s.getTime().getReal() > tZero + 0.5 * width) {
-                       return s.getTime().getReal() - (tZero + 0.5 * width);
+                       return s.getTime().getReal() - (tZero + 0.25 * width);
                    } else {
-                       return width / 200;
+                       return width / 25;
                    }
                },
-               15);
+               21);
     }
 
     private void doTest(final double tZero, final double width, final FieldAdaptableInterval<Binary64> checkInterval,
