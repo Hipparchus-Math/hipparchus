@@ -79,6 +79,28 @@ public class Erf {
         return x < 0 ? -ret : ret;
     }
 
+    /**
+     * Returns the error function.
+     *
+     * \[
+     * \mathrm{erf}(x) = \frac{2}{\sqrt{\pi}} \int_{t=0}^x e^{-t^2}dt
+     * \]
+     *
+     * <p>This implementation computes erf(x) using the
+     * {@link Gamma#regularizedGammaP(double, double, double, int) regularized gamma function},
+     * following <a href="http://mathworld.wolfram.com/Erf.html"> Erf</a>, equation (3)</p>
+     *
+     * <p>The value returned is always between -1 and 1 (inclusive).
+     * If {@code abs(x) > 40}, then {@code erf(x)} is indistinguishable from
+     * either 1 or -1 as a double, so the appropriate extreme value is returned.
+     * </p>
+     *
+     * @param x the value.
+     * @return the error function erf(x)
+     * @throws org.hipparchus.exception.MathIllegalStateException
+     * if the algorithm fails to converge.
+     * @see Gamma#regularizedGammaP(double, double, double, int)
+     */
     public static <T extends CalculusFieldElement<T>> T erf(T x) {
         final Field<T> field = x.getField();
         final T one = field.getOne();
@@ -311,6 +333,18 @@ public class Erf {
 
     }
 
+    /**
+     * Returns the inverse erf.
+     * <p>
+     * This implementation is described in the paper:
+     * <a href="http://people.maths.ox.ac.uk/gilesm/files/gems_erfinv.pdf">Approximating
+     * the erfinv function</a> by Mike Giles, Oxford-Man Institute of Quantitative Finance,
+     * which was published in GPU Computing Gems, volume 2, 2010.
+     * The source code is available <a href="http://gpucomputing.net/?q=node/1828">here</a>.
+     * </p>
+     * @param x the value
+     * @return t such that x = erf(t)
+     */
     public static <T extends CalculusFieldElement<T>> T erfInv(final T x) {
         final T one = x.getField().getOne();
 
