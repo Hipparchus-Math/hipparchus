@@ -29,6 +29,7 @@ import org.hipparchus.Field;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.FieldAdaptableInterval;
 import org.hipparchus.ode.events.FieldODEEventDetector;
 import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.util.FastMath;
@@ -78,7 +79,7 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
     }
 
     @Override
-    public FieldODEEventDetector<T>[] getEventDetectors(final T maxCheck, final T threshold, final int maxIter) {
+    public FieldODEEventDetector<T>[] getEventDetectors(final double maxCheck, final T threshold, final int maxIter) {
         @SuppressWarnings("unchecked")
         FieldODEEventDetector<T>[] handlers =
                         (FieldODEEventDetector<T>[]) Array.newInstance(FieldODEEventDetector.class, 2);
@@ -123,11 +124,11 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
     private static abstract class BaseDetector<T extends CalculusFieldElement<T>>
         implements FieldODEEventDetector<T>, FieldODEEventHandler<T> {
 
-        final T                                     maxCheck;
+        final double                                maxCheck;
         final int                                   maxIter;
         final BracketedRealFieldUnivariateSolver<T> solver;
 
-        protected BaseDetector(final T maxCheck, final T threshold, final int maxIter) {
+        protected BaseDetector(final double maxCheck, final T threshold, final int maxIter) {
             this.maxCheck  = maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new FieldBracketingNthOrderBrentSolver<>(threshold.getField().getZero(),
@@ -136,8 +137,8 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
                                                                       5);
         }
 
-        public T getMaxCheckInterval() {
-            return maxCheck;
+        public FieldAdaptableInterval<T> getMaxCheckInterval() {
+            return s -> maxCheck;
         }
 
         public int getMaxIterationCount() {
@@ -158,7 +159,7 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
 
         private int sign;
 
-        public Bounce(final T maxCheck, final T threshold, final int maxIter) {
+        public Bounce(final double maxCheck, final T threshold, final int maxIter) {
             super(maxCheck, threshold, maxIter);
             sign = +1;
         }
@@ -190,7 +191,7 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
 
     private static class Stop<T extends CalculusFieldElement<T>> extends BaseDetector<T> {
 
-        public Stop(final T maxCheck, final T threshold, final int maxIter) {
+        public Stop(final double maxCheck, final T threshold, final int maxIter) {
             super(maxCheck, threshold, maxIter);
         }
 

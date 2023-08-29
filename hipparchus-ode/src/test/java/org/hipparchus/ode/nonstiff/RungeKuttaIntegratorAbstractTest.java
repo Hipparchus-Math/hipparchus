@@ -50,6 +50,7 @@ import org.hipparchus.ode.TestProblem6;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.AdaptableInterval;
 import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
@@ -104,8 +105,8 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         }
 
         integrator.addEventDetector(new ODEEventDetector() {
-            public double getMaxCheckInterval() {
-                return Double.POSITIVE_INFINITY;
+            public AdaptableInterval getMaxCheckInterval() {
+                return s-> Double.POSITIVE_INFINITY;
             }
             public int getMaxIterationCount() {
                 return 100;
@@ -414,11 +415,11 @@ public abstract class RungeKuttaIntegratorAbstractTest {
     public abstract void testUnstableDerivative();
 
     protected void doTestUnstableDerivative(double epsilon) {
-        final StepProblem stepProblem = new StepProblem(999.0, 1.0e+12, 1000000, 0.0, 1.0, 2.0).
+        final StepProblem stepProblem = new StepProblem(s -> 999.0, 1.0e+12, 1000000, 0.0, 1.0, 2.0).
                         withMaxCheck(1.0).
                         withMaxIter(1000).
                         withThreshold(1.0e-12);
-        Assert.assertEquals(1.0,     stepProblem.getMaxCheckInterval(), 1.0e-15);
+        Assert.assertEquals(1.0,     stepProblem.getMaxCheckInterval().currentInterval(null), 1.0e-15);
         Assert.assertEquals(1000,    stepProblem.getMaxIterationCount());
         Assert.assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy(), 1.0e-25);
         Assert.assertNotNull(stepProblem.getHandler());

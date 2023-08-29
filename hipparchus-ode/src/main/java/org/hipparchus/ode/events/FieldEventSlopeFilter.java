@@ -118,7 +118,7 @@ public class FieldEventSlopeFilter<T extends FieldODEEventDetector<E>, E extends
      * @param filter filter to use
      */
     private FieldEventSlopeFilter(final Field<E> field,
-                                  final E maxCheck, final int maxIter,
+                                  final FieldAdaptableInterval<E> maxCheck, final int maxIter,
                                   final BracketedRealFieldUnivariateSolver<E> solver,
                                   final FieldODEEventHandler<E> handler,
                                   final T rawDetector, final FilterType filter) {
@@ -131,10 +131,10 @@ public class FieldEventSlopeFilter<T extends FieldODEEventDetector<E>, E extends
 
     /** {@inheritDoc} */
     @Override
-    protected FieldEventSlopeFilter<T, E> create(final E newMaxCheck, final int newMaxIter,
+    protected FieldEventSlopeFilter<T, E> create(final FieldAdaptableInterval<E> newMaxCheck, final int newMaxIter,
                                                  final BracketedRealFieldUnivariateSolver<E> newSolver,
                                                  final FieldODEEventHandler<E> newHandler) {
-        return new FieldEventSlopeFilter<T, E>(newMaxCheck.getField(), newMaxCheck, newMaxIter,
+        return new FieldEventSlopeFilter<T, E>(newSolver.getAbsoluteAccuracy().getField(), newMaxCheck, newMaxIter,
                                                newSolver, newHandler, rawDetector, filter);
     }
 

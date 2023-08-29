@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.0" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issues/270">
+        Max check interval in events detectors can now depend on current state.
+      </action>
       <action dev="luc" type="fix" issue="issues/230">
         Fixed wrong intermediate frame in torque-free motion model.
       </action>

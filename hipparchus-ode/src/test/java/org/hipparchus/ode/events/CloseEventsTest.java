@@ -2083,7 +2083,7 @@ public class CloseEventsTest {
     /** Base class to record events that occurred. */
     private static abstract class BaseDetector implements ODEEventDetector {
 
-        private final double                        maxCheck;
+        private final AdaptableInterval             maxCheck;
         private final int                           maxIter;
         private final BracketingNthOrderBrentSolver solver;
         protected final Action                      action;
@@ -2093,14 +2093,14 @@ public class CloseEventsTest {
 
         public BaseDetector(final double maxCheck, final double threshold, final int maxIter,
                             Action action, List<Event> events) {
-            this.maxCheck  = maxCheck;
+            this.maxCheck  = s -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.action    = action;
             this.events    = events;
         }
 
-        public double getMaxCheckInterval() {
+        public AdaptableInterval getMaxCheckInterval() {
             return maxCheck;
         }
 
@@ -2367,7 +2367,7 @@ public class CloseEventsTest {
 
     private class ResetChangesSignGenerator implements ODEEventDetector {
 
-        private final double                        maxCheck;
+        private final AdaptableInterval             maxCheck;
         private final int                           maxIter;
         private final BracketingNthOrderBrentSolver solver;
         final double                                y1;
@@ -2377,7 +2377,7 @@ public class CloseEventsTest {
 
         public ResetChangesSignGenerator(final double y1, final double y2, final double change,
                                          final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = maxCheck;
+            this.maxCheck  = s -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.y1        = y1;
@@ -2386,7 +2386,7 @@ public class CloseEventsTest {
             this.count     = 0;
         }
 
-        public double getMaxCheckInterval() {
+        public AdaptableInterval getMaxCheckInterval() {
             return maxCheck;
         }
 

@@ -124,20 +124,20 @@ public class DetectorBasedEventStateTest {
     private static class ResettingEvent implements ODEEventDetector {
 
         private static double lastTriggerTime = Double.NEGATIVE_INFINITY;
-        private final double                        maxCheck;
+        private final AdaptableInterval             maxCheck;
         private final int                           maxIter;
         private final BracketingNthOrderBrentSolver solver;
         private final double                        tEvent;
 
         public ResettingEvent(final double tEvent,
                               final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = maxCheck;
+            this.maxCheck  = s -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.tEvent    = tEvent;
         }
 
-        public double getMaxCheckInterval() {
+        public AdaptableInterval getMaxCheckInterval() {
             return maxCheck;
         }
 
@@ -217,7 +217,7 @@ public class DetectorBasedEventStateTest {
 
     private static class SecondaryStateEvent implements ODEEventDetector {
 
-        private final double                        maxCheck;
+        private final AdaptableInterval             maxCheck;
         private final int                           maxIter;
         private final BracketingNthOrderBrentSolver solver;
         private int                                 index;
@@ -225,14 +225,14 @@ public class DetectorBasedEventStateTest {
 
         public SecondaryStateEvent(final int index, final double target,
                                    final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = maxCheck;
+            this.maxCheck  = s -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.index     = index;
             this.target    = target;
         }
 
-        public double getMaxCheckInterval() {
+        public AdaptableInterval getMaxCheckInterval() {
             return maxCheck;
         }
 
@@ -282,7 +282,7 @@ public class DetectorBasedEventStateTest {
 
     private class CloseEventsGenerator implements ODEEventDetector {
 
-        private final double                        maxCheck;
+        private final AdaptableInterval             maxCheck;
         private final int                           maxIter;
         private final BracketingNthOrderBrentSolver solver;
         final double                                r1;
@@ -291,7 +291,7 @@ public class DetectorBasedEventStateTest {
 
         public CloseEventsGenerator(final double r1, final double r2,
                                     final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = maxCheck;
+            this.maxCheck  = s -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.r1        = r1;
@@ -299,7 +299,7 @@ public class DetectorBasedEventStateTest {
             this.count     = 0;
         }
 
-        public double getMaxCheckInterval() {
+        public AdaptableInterval getMaxCheckInterval() {
             return maxCheck;
         }
 

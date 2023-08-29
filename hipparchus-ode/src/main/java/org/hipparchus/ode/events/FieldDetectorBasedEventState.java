@@ -218,23 +218,26 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         forward = interpolator.isForward();
+        final FieldODEStateAndDerivative<T> s0 = interpolator.getPreviousState();
         final FieldODEStateAndDerivative<T> s1 = interpolator.getCurrentState();
         final T t1 = s1.getTime();
         final T dt = t1.subtract(t0);
         if (dt.abs().subtract(solver.getAbsoluteAccuracy()).getReal() < 0) {
             // we cannot do anything on such a small step, don't trigger any events
+            pendingEvent     = false;
+            pendingEventTime = null;
             return false;
         }
-        final int n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt.getReal()) / detector.getMaxCheckInterval().getReal()));
-        final T   h = dt.divide(n);
 
         T ta = t0;
         T ga = g0;
-        for (int i = 0; i < n; ++i) {
+        for (FieldODEStateAndDerivative<T>sb = nextCheck(s0, s1, interpolator);
+             sb != null;
+             sb = nextCheck(sb, s1, interpolator)) {
 
             // evaluate handler value at the end of the substep
-            final T tb = (i == n - 1) ? t1 : t0.add(h.multiply(i + 1));
-            final T gb = g(interpolator.getInterpolatedState(tb));
+            final T tb = sb.getTime();
+            final T gb = g(sb);
 
             // check events occurrence
             if (gb.getReal() == 0.0 || (g0Positive ^ (gb.getReal() > 0))) {
@@ -255,6 +258,29 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
         pendingEventTime = null;
         return false;
 
+    }
+
+    /** Estimate next state to check.
+     * @param done state already checked
+     * @param target target state towards which we are checking
+     * @param interpolator step interpolator for the proposed step
+     * @return intermediate state to check, or exactly {@code null}
+     * if we already have {@code done == target}
+     * @since 3.0
+     */
+    private FieldODEStateAndDerivative<T> nextCheck(final FieldODEStateAndDerivative<T> done, final FieldODEStateAndDerivative<T> target,
+                                                    final FieldODEStateInterpolator<T> interpolator) {
+        if (done == target) {
+            // we have already reached target
+            return null;
+        } else {
+            // we have to select some intermediate state
+            // attempting to split the remaining time in an integer number of checks
+            final T dt       = target.getTime().subtract(done.getTime());
+            final double maxCheck = detector.getMaxCheckInterval().currentInterval(done);
+            final int    n        = FastMath.max(1, (int) FastMath.ceil(dt.abs().divide(maxCheck).getReal()));
+            return n == 1 ? target : interpolator.getInterpolatedState(done.getTime().add(dt.divide(n)));
+        }
     }
 
     /**

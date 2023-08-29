@@ -81,7 +81,7 @@ public class ReappearingEventTest {
     /** State events for this unit test. */
     protected static class Event implements ODEEventDetector {
 
-        private final double                        maxCheck;
+        private final AdaptableInterval             maxCheck;
         private final int                           maxIter;
         private final BracketingNthOrderBrentSolver solver;
 
@@ -91,12 +91,12 @@ public class ReappearingEventTest {
          * @param maxIter maximum number of iterations in the event time search
          */
         public Event(final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = maxCheck;
+            this.maxCheck  = s -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
         }
 
-        public double getMaxCheckInterval() {
+        public AdaptableInterval getMaxCheckInterval() {
             return maxCheck;
         }
 

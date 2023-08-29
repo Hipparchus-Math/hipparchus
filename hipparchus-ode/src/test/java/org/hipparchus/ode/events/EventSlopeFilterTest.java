@@ -223,7 +223,7 @@ public class EventSlopeFilterTest {
     }
 
     private <T extends CalculusFieldElement<T>> void testHistoryField(Field<T> field, FilterType type, double t0, double t1, double refSwitch, double signEven) {
-        FieldEvent<T> onlyIncreasing = new FieldEvent<>(field.getZero().newInstance(Double.POSITIVE_INFINITY),
+        FieldEvent<T> onlyIncreasing = new FieldEvent<>(Double.POSITIVE_INFINITY,
                                                         field.getZero().newInstance(1.0e-10), 1000, false, true);
         FieldEventSlopeFilter<FieldEvent<T>, T> eventFilter = new FieldEventSlopeFilter<>(field, onlyIncreasing, type);
         eventFilter.init(buildStateAndDerivative(field, t0), field.getZero().add(t1));
@@ -289,11 +289,9 @@ public class EventSlopeFilterTest {
 
     private <T extends CalculusFieldElement<T>> void doTestIncreasingOnlyField(Field<T> field) {
         FieldODEIntegrator<T> integrator = new DormandPrince853FieldIntegrator<>(field, 1.0e-3, 100.0, 1e-7, 1e-7);
-        FieldEvent<T> allEvents = new FieldEvent<>(field.getZero().newInstance(0.1),
-                                                   field.getZero().newInstance(1.0e-7), 100, true, true);
+        FieldEvent<T> allEvents = new FieldEvent<>(0.1, field.getZero().newInstance(1.0e-7), 100, true, true);
         integrator.addEventDetector(allEvents);
-        FieldEvent<T> onlyIncreasing = new FieldEvent<>(field.getZero().newInstance(0.1),
-                                                        field.getZero().newInstance(1.0e-7), 100, false, true);
+        FieldEvent<T> onlyIncreasing = new FieldEvent<>(0.1, field.getZero().newInstance(1.0e-7), 100, false, true);
         integrator.addEventDetector(new FieldEventSlopeFilter<>(field, onlyIncreasing,
                                                                 FilterType.TRIGGER_ONLY_INCREASING_EVENTS));
         T t0   = field.getZero().add(0.5 * FastMath.PI);
@@ -338,11 +336,9 @@ public class EventSlopeFilterTest {
 
     private <T extends CalculusFieldElement<T>> void doTestDecreasingOnlyField(Field<T> field) {
         FieldODEIntegrator<T> integrator = new DormandPrince853FieldIntegrator<>(field, 1.0e-3, 100.0, 1e-7, 1e-7);
-        FieldEvent<T> allEvents = new FieldEvent<>(field.getZero().newInstance(0.1),
-                                                   field.getZero().newInstance(1.0e-7), 100, true, true);
+        FieldEvent<T> allEvents = new FieldEvent<>(0.1, field.getZero().newInstance(1.0e-7), 100, true, true);
         integrator.addEventDetector(allEvents);
-        FieldEvent<T> onlyDecreasing = new FieldEvent<>(field.getZero().newInstance(0.1),
-                                                        field.getZero().newInstance(1.0e-7), 100, true, false);
+        FieldEvent<T> onlyDecreasing = new FieldEvent<>(0.1, field.getZero().newInstance(1.0e-7), 100, true, false);
         integrator.addEventDetector(new FieldEventSlopeFilter<>(field, onlyDecreasing,
                                                                 FilterType.TRIGGER_ONLY_DECREASING_EVENTS));
         T t0   = field.getZero().add(0.5 * FastMath.PI);
@@ -364,11 +360,11 @@ public class EventSlopeFilterTest {
     public void testTwoOppositeFilters()
         throws MathIllegalArgumentException, MathIllegalStateException {
         ODEIntegrator integrator = new DormandPrince853Integrator(1.0e-3, 100.0, 1e-7, 1e-7);
-        Event allEvents = new Event(0.1, 1.0e-7, 1000, true, true);
+        Event allEvents = new Event(0.1, 1.0e-7, 100, true, true);
         integrator.addEventDetector(allEvents);
-        Event onlyIncreasing = new Event(0.1, 1.0e-7, 1000, false, true);
+        Event onlyIncreasing = new Event(0.1, 1.0e-7, 100, false, true);
         integrator.addEventDetector(new EventSlopeFilter<>(onlyIncreasing, FilterType.TRIGGER_ONLY_INCREASING_EVENTS));
-        Event onlyDecreasing = new Event(0.1, 1.0e-7, 1000, true, false);
+        Event onlyDecreasing = new Event(0.1, 1.0e-7, 100, true, false);
         integrator.addEventDetector(new EventSlopeFilter<>(onlyDecreasing, FilterType.TRIGGER_ONLY_DECREASING_EVENTS));
         double t0 = 0.5 * FastMath.PI;
         double tEnd = 5.5 * FastMath.PI;
@@ -391,15 +387,12 @@ public class EventSlopeFilterTest {
     private <T extends CalculusFieldElement<T>> void doestTwoOppositeFiltersField(Field<T> field)
         throws MathIllegalArgumentException, MathIllegalStateException {
         FieldODEIntegrator<T> integrator = new DormandPrince853FieldIntegrator<>(field, 1.0e-3, 100.0, 1e-7, 1e-7);
-        FieldEvent<T> allEvents = new FieldEvent<>(field.getZero().newInstance(0.1),
-                                                   field.getZero().newInstance(1.0e-7), 100, true, true);
+        FieldEvent<T> allEvents = new FieldEvent<>(0.1, field.getZero().newInstance(1.0e-7), 100, true, true);
         integrator.addEventDetector(allEvents);
-        FieldEvent<T> onlyIncreasing = new FieldEvent<>(field.getZero().newInstance(0.1),
-                                                        field.getZero().newInstance(1.0e-7), 100, false, true);
+        FieldEvent<T> onlyIncreasing = new FieldEvent<>(0.1, field.getZero().newInstance(1.0e-7), 100, false, true);
         integrator.addEventDetector(new FieldEventSlopeFilter<>(field, onlyIncreasing,
                                                                 FilterType.TRIGGER_ONLY_INCREASING_EVENTS));
-        FieldEvent<T> onlyDecreasing = new FieldEvent<>(field.getZero().newInstance(0.1),
-                                                        field.getZero().newInstance(1.0e-7), 100, true, false);
+        FieldEvent<T> onlyDecreasing = new FieldEvent<>(0.1, field.getZero().newInstance(1.0e-7), 100, true, false);
         integrator.addEventDetector(new FieldEventSlopeFilter<>(field, onlyDecreasing,
                                                                 FilterType.TRIGGER_ONLY_DECREASING_EVENTS));
         T t0   = field.getZero().add(0.5 * FastMath.PI);
@@ -444,7 +437,7 @@ public class EventSlopeFilterTest {
     /** State events for this unit test. */
     protected static class Event implements ODEEventDetector {
 
-        private final double                                        maxCheck;
+        private final AdaptableInterval                             maxCheck;
         private final int                                           maxIter;
         private final BracketedUnivariateSolver<UnivariateFunction> solver;
         private final boolean                                       expectDecreasing;
@@ -453,14 +446,14 @@ public class EventSlopeFilterTest {
 
         public Event(final double maxCheck, final double threshold, final int maxIter,
                      boolean expectDecreasing, boolean expectIncreasing) {
-            this.maxCheck         = maxCheck;
+            this.maxCheck         = s -> maxCheck;
             this.maxIter          = maxIter;
             this.solver           = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.expectDecreasing = expectDecreasing;
             this.expectIncreasing = expectIncreasing;
         }
 
-        public double getMaxCheckInterval() {
+        public AdaptableInterval getMaxCheckInterval() {
             return maxCheck;
         }
 
@@ -501,16 +494,16 @@ public class EventSlopeFilterTest {
     /** State events for this unit test. */
     protected static class FieldEvent<T extends CalculusFieldElement<T>> implements FieldODEEventDetector<T> {
 
-        private final T                                     maxCheck;
+        private final FieldAdaptableInterval<T>             maxCheck;
         private final int                                   maxIter;
         private final BracketedRealFieldUnivariateSolver<T> solver;
         private final boolean                               expectDecreasing;
         private final boolean                               expectIncreasing;
         private int                                         eventCount;
 
-        public FieldEvent(final T maxCheck, final T threshold, final int maxIter,
+        public FieldEvent(final double maxCheck, final T threshold, final int maxIter,
                           boolean expectDecreasing, boolean expectIncreasing) {
-            this.maxCheck         = maxCheck;
+            this.maxCheck         = s -> maxCheck;
             this.maxIter          = maxIter;
             this.solver           = new FieldBracketingNthOrderBrentSolver<>(threshold.getField().getZero(),
                                                                             threshold,
@@ -520,7 +513,7 @@ public class EventSlopeFilterTest {
             this.expectIncreasing = expectIncreasing;
         }
 
-        public T getMaxCheckInterval() {
+        public FieldAdaptableInterval<T> getMaxCheckInterval() {
             return maxCheck;
         }
 

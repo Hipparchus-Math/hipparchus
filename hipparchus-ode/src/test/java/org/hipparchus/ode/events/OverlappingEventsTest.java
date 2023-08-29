@@ -134,7 +134,7 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
     /** State events for this unit test. */
     private class Event implements ODEEventDetector {
 
-        private final double                        maxCheck;
+        private final AdaptableInterval             maxCheck;
         private final int                           maxIter;
         private final BracketingNthOrderBrentSolver solver;
         private final int                           idx;
@@ -149,14 +149,14 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
          */
         public Event(final double maxCheck, final double threshold, final int maxIter,
                      final int idx, final int eventType) {
-            this.maxCheck  = maxCheck;
+            this.maxCheck  = s -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.idx       = idx;
             this.eventType = eventType;
         }
 
-        public double getMaxCheckInterval() {
+        public AdaptableInterval getMaxCheckInterval() {
             return maxCheck;
         }
 

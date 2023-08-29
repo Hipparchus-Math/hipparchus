@@ -110,7 +110,7 @@ public class EventSlopeFilter<T extends ODEEventDetector> extends AbstractODEDet
      * @param rawDetector event detector to wrap
      * @param filter filter to use
      */
-    private EventSlopeFilter(final double maxCheck, final int maxIter,
+    private EventSlopeFilter(final AdaptableInterval maxCheck, final int maxIter,
                              final BracketedUnivariateSolver<UnivariateFunction> solver,
                              final ODEEventHandler handler,
                              final T rawDetector, final FilterType filter) {
@@ -123,7 +123,7 @@ public class EventSlopeFilter<T extends ODEEventDetector> extends AbstractODEDet
 
     /** {@inheritDoc} */
     @Override
-    protected EventSlopeFilter<T> create(final double newMaxCheck, final int newMaxIter,
+    protected EventSlopeFilter<T> create(final AdaptableInterval newMaxCheck, final int newMaxIter,
                                          final BracketedUnivariateSolver<UnivariateFunction> newSolver,
                                          final ODEEventHandler newHandler) {
         return new EventSlopeFilter<>(newMaxCheck, newMaxIter, newSolver, newHandler,

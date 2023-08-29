@@ -174,21 +174,21 @@ public class EventsScheduling {
 
     private static class SimpleDetector implements ODEEventDetector {
 
-        private final double                        maxCheck;
+        private final AdaptableInterval             maxCheck;
         private final int                           maxIter;
         private final BracketingNthOrderBrentSolver solver;
         private final double                        tEvent;
         private final ScheduleChecker               checker;
         SimpleDetector(final double tEvent, final ScheduleChecker checker,
                        final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = maxCheck;
+            this.maxCheck  = s -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.tEvent    = tEvent;
             this.checker   = checker;
         }
 
-        public double getMaxCheckInterval() {
+        public AdaptableInterval getMaxCheckInterval() {
             return maxCheck;
         }
 
@@ -216,7 +216,7 @@ public class EventsScheduling {
 
     private static class SimpleFieldDetector implements FieldODEEventDetector<Binary64> {
 
-        private final Binary64                                     maxCheck;
+        private final FieldAdaptableInterval<Binary64>             maxCheck;
         private final int                                          maxIter;
         private final BracketedRealFieldUnivariateSolver<Binary64> solver;
         private final double                                       tEvent;
@@ -224,7 +224,7 @@ public class EventsScheduling {
 
         SimpleFieldDetector(final double tEvent, final ScheduleChecker checker,
                             final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = new Binary64(maxCheck);
+            this.maxCheck  = s -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new FieldBracketingNthOrderBrentSolver<>(new Binary64(0),
                                                                       new Binary64(threshold),
@@ -234,7 +234,7 @@ public class EventsScheduling {
             this.checker   = checker;
         }
 
-        public Binary64 getMaxCheckInterval() {
+        public FieldAdaptableInterval<Binary64> getMaxCheckInterval() {
             return maxCheck;
         }
 

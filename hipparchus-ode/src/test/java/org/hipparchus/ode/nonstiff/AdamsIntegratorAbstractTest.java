@@ -38,6 +38,7 @@ import org.hipparchus.ode.TestProblem6;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.AdaptableInterval;
 import org.hipparchus.ode.events.ODEEventDetector;
 import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
@@ -166,8 +167,8 @@ public abstract class AdamsIntegratorAbstractTest {
         ODEEventDetector event = new ODEEventDetector() {
 
             @Override
-            public double getMaxCheckInterval() {
-                return 0.5 * range;
+            public AdaptableInterval getMaxCheckInterval() {
+                return s -> 0.5 * range;
             }
 
             @Override
@@ -214,8 +215,8 @@ public abstract class AdamsIntegratorAbstractTest {
             ODEEventDetector event = new ODEEventDetector() {
 
                 @Override
-                public double getMaxCheckInterval() {
-                    return 0.5 * range;
+                public AdaptableInterval getMaxCheckInterval() {
+                    return s -> 0.5 * range;
                 }
 
                 @Override

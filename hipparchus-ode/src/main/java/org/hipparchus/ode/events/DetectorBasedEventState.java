@@ -204,24 +204,26 @@ public class DetectorBasedEventState implements EventState {
             throws MathIllegalArgumentException, MathIllegalStateException {
 
         forward = interpolator.isForward();
+        final ODEStateAndDerivative s0 = interpolator.getPreviousState();
         final ODEStateAndDerivative s1 = interpolator.getCurrentState();
         final double t1 = s1.getTime();
         final double dt = t1 - t0;
         if (FastMath.abs(dt) < solver.getAbsoluteAccuracy()) {
             // we cannot do anything on such a small step, don't trigger any events
+            pendingEvent     = false;
+            pendingEventTime = Double.NaN;
             return false;
         }
-        // number of points to check in the current step
-        final int n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt) / detector.getMaxCheckInterval()));
-        final double h = dt / n;
 
         double ta = t0;
         double ga = g0;
-        for (int i = 0; i < n; ++i) {
+        for (ODEStateAndDerivative sb = nextCheck(s0, s1, interpolator);
+             sb != null;
+             sb = nextCheck(sb, s1, interpolator)) {
 
             // evaluate handler value at the end of the substep
-            final double tb = (i == n - 1) ? t1 : t0 + (i + 1) * h;
-            final double gb = g(interpolator.getInterpolatedState(tb));
+            final double tb = sb.getTime();
+            final double gb = g(sb);
 
             // check events occurrence
             if (gb == 0.0 || (g0Positive ^ (gb > 0))) {
@@ -242,6 +244,29 @@ public class DetectorBasedEventState implements EventState {
         pendingEventTime = Double.NaN;
         return false;
 
+    }
+
+    /** Estimate next state to check.
+     * @param done state already checked
+     * @param target target state towards which we are checking
+     * @param interpolator step interpolator for the proposed step
+     * @return intermediate state to check, or exactly {@code null}
+     * if we already have {@code done == target}
+     * @since 3.0
+     */
+    private ODEStateAndDerivative nextCheck(final ODEStateAndDerivative done, final ODEStateAndDerivative target,
+                                            final ODEStateInterpolator interpolator) {
+        if (done == target) {
+            // we have already reached target
+            return null;
+        } else {
+            // we have to select some intermediate state
+            // attempting to split the remaining time in an integer number of checks
+            final double dt       = target.getTime() - done.getTime();
+            final double maxCheck = detector.getMaxCheckInterval().currentInterval(done);
+            final int    n        = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt) / maxCheck));
+            return n == 1 ? target : interpolator.getInterpolatedState(done.getTime() + dt / n);
+        }
     }
 
     /**

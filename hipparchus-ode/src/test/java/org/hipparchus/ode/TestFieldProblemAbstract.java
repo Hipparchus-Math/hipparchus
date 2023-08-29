@@ -111,11 +111,11 @@ public abstract class TestFieldProblemAbstract<T extends CalculusFieldElement<T>
 
     /**
      * Get the event detectors.
-     * @param maxCheck maximum checking interval, must be strictly positive (s)
+     * @param maxCheck maximum checking interval, must be strictly positive
      * @param threshold convergence threshold (s)
      * @param maxIter maximum number of iterations in the event time search
      * @return events detectors   */
-    public FieldODEEventDetector<T>[] getEventDetectors(final T maxCheck, final T threshold, final int maxIter) {
+    public FieldODEEventDetector<T>[] getEventDetectors(final double maxCheck, final T threshold, final int maxIter) {
         @SuppressWarnings("unchecked")
         final FieldODEEventDetector<T>[] empty =
                         (FieldODEEventDetector<T>[]) Array.newInstance(FieldODEEventDetector.class, 0);
