@@ -22,7 +22,6 @@
 
 package org.hipparchus.stat.inference;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.HashSet;
