@@ -113,9 +113,14 @@
  *
  * <ol>
  *     <li> An event must be detected if the g function has changed signs for longer than
- *     maxCheck. Formally, if r is a root of g(t), g has one sign on [r-maxCheck, r) and
+ *     maxCheck(t, y(t)). Formally, if r is a root of g(t), g has one sign on [r-maxCheck, r) and
  *     the opposite sign on (r, r+maxCheck] then r must be detected. Otherwise the root
  *     may or may not be detected. </li>
+ *     <li>maxCheck(t, y(t)) is evaluated at step start and called again at the end of the
+ *     previous maxCheck; this implies that if maxCheck depends a lot on state, care must be
+ *     taken to return conservative values, i.e. it is better to return small maxCheck and hence
+ *     perform a lot of checks than missing an event because maxCheck was too large</li>
+ *     <li>maxCheck should always return positive values, even if integration is backward</li>
  *     <li> For a given tolerance, h, and root, r, the event may occur at any point on the
  *     interval [r-h, r+h]. The tolerance is the larger of the {@code convergence}
  *     parameter and the convergence settings of the root finder specified when
