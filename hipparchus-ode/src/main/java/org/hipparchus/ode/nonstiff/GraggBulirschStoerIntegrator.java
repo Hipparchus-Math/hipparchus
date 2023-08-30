@@ -569,7 +569,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
 
                 if (firstTime) {
                     hNew = initializeStep(forward, 2 * targetIter + 1, scale,
-                                          getStepStart(), equations.getMapper());
+                                          getStepStart());
                 }
 
                 newStep = false;

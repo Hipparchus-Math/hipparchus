@@ -222,7 +222,7 @@ public abstract class EmbeddedRungeKuttaIntegrator
                     for (int i = 0; i < scale.length; ++i) {
                         scale[i] = helper.getTolerance(i, FastMath.abs(y[i]));
                     }
-                    hNew = initializeStep(forward, getOrder(), scale, getStepStart(), equations.getMapper());
+                    hNew = initializeStep(forward, getOrder(), scale, getStepStart());
                     firstTime = false;
                 }
 
