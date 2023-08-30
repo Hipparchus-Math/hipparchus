@@ -37,8 +37,21 @@
  * the value of the function throughout integration range and will trigger the
  * event when its sign changes. The magnitude of the value is almost irrelevant,
  * it should however be continuous (but not necessarily smooth) for the sake of
- * root finding. The steps are shortened as needed to ensure the events occur
- * at step boundaries (even if the integrator is a fixed-step integrator).
+ * root finding.
+ * </p>
+ *
+ * <p>
+ * Events detection is based on two embedded search algorithms. A top level loop,
+ * driven by the maxCheck interval, samples the g function during integration steps
+ * to identify sign changes and therefore bracket roots. When a sign change has been
+ * detected between two successive samples, then a lower level root finding
+ * algorithm is triggered to precisely locate the root, using the provided threshold
+ * as a convergence criterion. The maxCheck interval should be large enough to avoid
+ * sampling too finely the integration step and evaluating the g function too often,
+ * but it should be small enough to still separate successive roots, otherwise some
+ * events may be missed. See below for a formal definition of the maxCheck behavior.
+ * The threshold on the other hand should generally be very small, it really corresponds
+ * to the accuracy at which events must be located.
  * </p>
  *
  * <p>
@@ -88,7 +101,8 @@
  *  }
  * </pre>
  *
- * <p>* The third case is useful mainly for monitoring purposes, a simple example is:</p>
+ * <p>
+ * The third case is useful mainly for monitoring purposes, a simple example is:</p>
  * <pre>
  *  public double g(final ODEStateAndDerivative state) {
  *  final double[] y = state.getState();
@@ -113,14 +127,16 @@
  *
  * <ol>
  *     <li> An event must be detected if the g function has changed signs for longer than
- *     maxCheck(t, y(t)). Formally, if r is a root of g(t), g has one sign on [r-maxCheck, r) and
- *     the opposite sign on (r, r+maxCheck] then r must be detected. Otherwise the root
- *     may or may not be detected. </li>
- *     <li>maxCheck(t, y(t)) is evaluated at step start and called again at the end of the
+ *     maxCheck(t, y(t)). Formally, given times t, t_e1, t_e2 such that t &lt; t_e1 &lt; t_e2,
+ *     g(t_e1) = 0, g(t_e2) = 0, and g(t_i) != 0 on the intervals {[t, t_e1&gt;, &lt;t_e1, t_e2&gt;}
+ *     (i.e. t_e1, t_e2 are the next two event times after t) then t_e1 will be detected if
+ *     maxCheck(t, y(t)) &lt; t_e2. (I.e. the max check interval must be less than the time until
+ *     the second event.)</li>
+ *     <li> MaxCheck(t, y(t)) is evaluated at step start and called again at the end of the
  *     previous maxCheck; this implies that if maxCheck depends a lot on state, care must be
  *     taken to return conservative values, i.e. it is better to return small maxCheck and hence
- *     perform a lot of checks than missing an event because maxCheck was too large</li>
- *     <li>maxCheck should always return positive values, even if integration is backward</li>
+ *     perform a lot of checks than missing an event because maxCheck was too large.</li>
+ *     <li> MaxCheck should always return positive values, even if integration is backward</li>
  *     <li> For a given tolerance, h, and root, r, the event may occur at any point on the
  *     interval [r-h, r+h]. The tolerance is the larger of the {@code convergence}
  *     parameter and the convergence settings of the root finder specified when
