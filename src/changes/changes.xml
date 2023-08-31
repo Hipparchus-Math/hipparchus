@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.0" date="TBD" description="This is a major release.">
+      <action dev="luc" type="fix" issue="issues/238">
+        Fixed internal error in RandomPercentile aggregation.
+      </action>
       <action dev="luc" type="update" issue="issues/271" due-to="Romain Serra">
         Removed unused mapper in initializeStep.
       </action>
