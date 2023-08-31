@@ -2314,8 +2314,15 @@ public class FastMathTest {
             for (int b = -100; b <= 100; ++b) {
                 if (b != 0) {
                     assertEquals(poorManFloorDiv(a, b), FastMath.floorDiv(a, b));
+                    assertEquals(poorManFloorDiv(a, b), FastMath.floorDivExact(a, b));
                 }
             }
+        }
+        try {
+            FastMath.floorDivExact(Integer.MIN_VALUE, -1);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            assertEquals(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, mre.getSpecifier());
         }
     }
 
@@ -2386,8 +2393,15 @@ public class FastMathTest {
             for (long b = -100l; b <= 100l; ++b) {
                 if (b != 0) {
                     assertEquals(poorManFloorDiv(a, b), FastMath.floorDiv(a, b));
+                    assertEquals(poorManFloorDiv(a, b), FastMath.floorDivExact(a, b));
                 }
             }
+        }
+        try {
+            FastMath.floorDivExact(Long.MIN_VALUE, -1l);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            assertEquals(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, mre.getSpecifier());
         }
     }
 

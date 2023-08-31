@@ -4350,6 +4350,29 @@ public class FastMath {
 
     }
 
+    /** Finds q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer division when
+     * a and b are same signs, but returns a different value when
+     * they are opposite (i.e. q is negative).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0 or if a == {@code Integer.MIN_VALUE} and b = -1
+     * @see #floorMod(int, int)
+     * @since 3.0
+     */
+    public static int floorDivExact(final int a, final int b) throws MathRuntimeException {
+
+        if (a == Integer.MIN_VALUE && b == -1) {
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, a, b);
+        }
+
+        return floorDiv(a, b);
+
+    }
+
     /** Finds q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code b < 0}.
      * <p>
      * This methods returns the same value as integer division when
@@ -4393,6 +4416,29 @@ public class FastMath {
             // a and b have opposite signs and division is not exact
             return (a / b) - 1l;
         }
+
+    }
+
+    /** Finds q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code b < 0}.
+     * <p>
+     * This methods returns the same value as integer division when
+     * a and b are same signs, but returns a different value when
+     * they are opposite (i.e. q is negative).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code b < 0}
+     * @exception MathRuntimeException if b == 0 or if a == {@code Long.MIN_VALUE} and b = -1
+     * @see #floorMod(long, long)
+     * @since 3.0
+     */
+    public static long floorDivExact(final long a, final long b) throws MathRuntimeException {
+
+        if (a == Long.MIN_VALUE && b == -1l) {
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, a, b);
+        }
+
+        return floorDiv(a, b);
 
     }
 
