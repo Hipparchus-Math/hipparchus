@@ -925,26 +925,20 @@ public class RandomPercentile
         }
 
         /**
-         * De-register a buffer.
+         * De-register a buffer, without clearing it.
          *
          * @param buffer Buffer to be de-registered
          * @throws IllegalStateException if the buffer is not registered
          */
         public void deRegister(Buffer buffer) {
-            List<Buffer> bufferList = registry.get(buffer.getLevel());
-            final UUID targetId = buffer.getId();
-            int i = 0;
-            boolean found = false;
-            while (i < bufferList.size() && !found) {
-                if (bufferList.get(i).getId().equals(targetId)) {
-                    bufferList.remove(i);
-                    found = true;
-                    buffer.clear();
+            final Iterator<Buffer> iterator = registry.get(buffer.getLevel()).iterator();
+            while (iterator.hasNext()) {
+                if (iterator.next().getId().equals(buffer.getId())) {
+                    iterator.remove();
+                    return;
                 }
             }
-            if (!found) {
-                throw new MathIllegalStateException(LocalizedCoreFormats.INTERNAL_ERROR);
-            }
+            throw new MathIllegalStateException(LocalizedCoreFormats.INTERNAL_ERROR);
         }
 
         /**
@@ -1009,23 +1003,18 @@ public class RandomPercentile
          */
         public void absorb(BufferMap other) {
             // Add all of other's buffers to the map - possibly exceeding cap
-            int fullCount = 0;
-            Buffer notFull = null;
+            boolean full = true;
             Iterator<Buffer> otherIterator = other.iterator();
             while (otherIterator.hasNext()) {
                 Buffer buffer = otherIterator.next();
                 if (buffer.hasCapacity()) {
-                    notFull = buffer;
-                } else {
-                    fullCount++;
+                    full = false;
                 }
                 register(buffer);
                 count++;
             }
-            // Determine how many extra buffers we now have: new + old - capacity
-            final int excess = fullCount + (notFull == null ? 0 : 1) + count - capacity;
             // Now eliminate the excess by merging
-            for (int i = 0; i < excess - 1; i++) {
+            while (count > capacity || (count == capacity && full)) {
                 mergeUp();
                 count--;
             }
@@ -1065,11 +1054,14 @@ public class RandomPercentile
             // Merge first into second and deregister first.
             // Assumes that first has level <= second (checked above).
             if (first.getLevel() == second.getLevel()) {
+                deRegister(first);
+                deRegister(second);
                 second.mergeWith(first);
+                register(second);
             } else {
+                deRegister(first);
                 first.mergeInto(second);
             }
-            deRegister(first);
         }
     }
 

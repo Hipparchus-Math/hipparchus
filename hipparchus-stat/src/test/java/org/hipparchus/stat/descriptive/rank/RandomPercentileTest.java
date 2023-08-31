@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.SplittableRandom;
 
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.RealDistribution;
@@ -199,6 +200,41 @@ public class RandomPercentileTest extends
             new double[] { 1d, 1d, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY };
         percentile = new RandomPercentile();
         assertTrue(Double.isNaN(percentile.evaluate(specialValues)));
+    }
+
+    @Test
+    public void testAggregateSmallSamplesA() {
+        doTestAggregateSmallSamples(0.5, 11.0);
+    }
+
+    @Test
+    public void testAggregateSmallSamplesB() {
+        doTestAggregateSmallSamples(0.1, 7.0);
+    }
+
+    @Test
+    public void testAggregateSmallSamplesC() {
+        doTestAggregateSmallSamples(0.01, 7.0);
+    }
+
+    private void doTestAggregateSmallSamples(double epsilon, double expected) {
+        SplittableRandom seeds = new SplittableRandom(0x218560e08c8df220l);
+
+        RandomPercentile rp1   = new RandomPercentile(epsilon, new Well19937c(seeds.nextLong()));
+        double[]         data1 = new double[] { 3, 5, -2, 7, 14, 6 };
+        for (double d : data1 ) {
+            rp1.accept(d);
+        }
+        RandomPercentile rp2   = new RandomPercentile(epsilon, new Well19937c(seeds.nextLong()));
+        double[]         data2 = new double[] { 9, 12, 15 };
+        for (double d : data2 ) {
+            rp2.accept(d);
+        }
+
+        rp1.aggregate(rp2);
+
+        assertEquals(expected, rp1.getResult(), 1.0e-10);
+
     }
 
     @Test

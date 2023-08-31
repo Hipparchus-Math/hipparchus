@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.0" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/238">
+        Fixed internal error in RandomPercentile aggregation.
+      </action>
       <action dev="luc" type="add" due-to="Paul King" issue="issues/221">
         Added Principal Component Analysis.
       </action>
