@@ -4287,6 +4287,40 @@ public class FastMath {
 
     }
 
+    /** Divide two integers, checking for overflow.
+     * @param x dividend
+     * @param y divisor
+     * @return x / y
+     * @exception MathRuntimeException if an overflow occurs
+     * @since 3.0
+     */
+    public static int divideExact(final int x, final int y) {
+        if (y == 0) {
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
+        }
+        if (y == -1 && x == Integer.MIN_VALUE) {
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, x, y);
+        }
+        return x / y;
+    }
+
+    /** Divide two long integers, checking for overflow.
+     * @param x dividend
+     * @param y divisor
+     * @return x / y
+     * @exception MathRuntimeException if an overflow occurs
+     * @since 3.0
+     */
+    public static long divideExact(final long x, final long y) {
+        if (y == 0l) {
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
+        }
+        if (y == -1l && x == Long.MIN_VALUE) {
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, x, y);
+        }
+        return x / y;
+    }
+
     /** Finds q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code  b < 0}.
      * <p>
      * This methods returns the same value as integer division when

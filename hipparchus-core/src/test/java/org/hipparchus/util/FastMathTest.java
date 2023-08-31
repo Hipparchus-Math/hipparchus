@@ -36,6 +36,7 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
 import org.hipparchus.dfp.DfpMath;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.random.MersenneTwister;
 import org.hipparchus.random.RandomGenerator;
@@ -2141,6 +2142,82 @@ public class FastMathTest {
                     }
                 } else {
                     assertEquals(bdMul, BigInteger.valueOf(FastMath.multiplyExact(a, b)));
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testDivideExactInt() {
+        int[] specialValues = new int[] {
+            Integer.MIN_VALUE, Integer.MIN_VALUE + 1, Integer.MIN_VALUE + 2,
+            Integer.MAX_VALUE, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 2,
+            -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            -1 - (Integer.MIN_VALUE / 2), 0 - (Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
+            -1 + (Integer.MAX_VALUE / 2), 0 + (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
+        };
+        for (int a : specialValues) {
+            for (int b : specialValues) {
+                if (b == 0) {
+                    try {
+                        FastMath.divideExact(a, b);
+                        fail("an exception should have been thrown " + a + b);
+                    } catch (MathRuntimeException mae) {
+                        assertEquals(LocalizedCoreFormats.ZERO_DENOMINATOR, mae.getSpecifier());
+                    }
+                } else {
+                    BigInteger bdA   = BigInteger.valueOf(a);
+                    BigInteger bdB   = BigInteger.valueOf(b);
+                    BigInteger bdDiv = bdA.divide(bdB);
+                    if (bdDiv.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) < 0 ||
+                                    bdDiv.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) > 0) {
+                        try {
+                            FastMath.divideExact(a, b);
+                            fail("an exception should have been thrown " + a + b);
+                        } catch (MathRuntimeException mae) {
+                            // expected
+                        }
+                    } else {
+                        assertEquals(bdDiv, BigInteger.valueOf(FastMath.divideExact(a, b)));
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testDivideExactLong() {
+        long[] specialValues = new long[] {
+            Long.MIN_VALUE, Long.MIN_VALUE + 1, Long.MIN_VALUE + 2,
+            Long.MAX_VALUE, Long.MAX_VALUE - 1, Long.MAX_VALUE - 2,
+            -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            -1 - (Long.MIN_VALUE / 2), 0 - (Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
+            -1 + (Long.MAX_VALUE / 2), 0 + (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
+        };
+        for (long a : specialValues) {
+            for (long b : specialValues) {
+                if (b == 0l) {
+                    try {
+                        FastMath.divideExact(a, b);
+                        fail("an exception should have been thrown " + a + b);
+                    } catch (MathRuntimeException mae) {
+                        assertEquals(LocalizedCoreFormats.ZERO_DENOMINATOR, mae.getSpecifier());
+                    }
+                } else {
+                    BigInteger bdA   = BigInteger.valueOf(a);
+                    BigInteger bdB   = BigInteger.valueOf(b);
+                    BigInteger bdDiv = bdA.divide(bdB);
+                    if (bdDiv.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) < 0 ||
+                                    bdDiv.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
+                        try {
+                            FastMath.divideExact(a, b);
+                            fail("an exception should have been thrown " + a + b);
+                        } catch (MathRuntimeException mae) {
+                            // expected
+                        }
+                    } else {
+                        assertEquals(bdDiv, BigInteger.valueOf(FastMath.divideExact(a, b)));
+                    }
                 }
             }
         }
