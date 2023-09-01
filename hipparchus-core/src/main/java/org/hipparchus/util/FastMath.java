@@ -984,6 +984,67 @@ public class FastMath {
         return nextAfter(a, Float.NEGATIVE_INFINITY);
     }
 
+    /** Clamp a value within an interval.
+     * @param value value to clamp
+     * @param inf lower bound of the clamping interval
+     * @param sup upper bound of the clamping interval
+     * @return value clamped within [inf; sup], or value if already within bounds.
+     * @since 3.0
+     */
+    public static int clamp(final int value, final int inf, final int sup) {
+        return max(inf, min(value, sup));
+    }
+
+    /** Clamp a value within an interval.
+     * @param value value to clamp
+     * @param inf lower bound of the clamping interval
+     * @param sup upper bound of the clamping interval
+     * @return value clamped within [inf; sup], or value if already within bounds.
+     * @since 3.0
+     */
+    public static long clamp(final long value, final long inf, final long sup) {
+        return max(inf, min(value, sup));
+    }
+
+    /** Clamp a value within an interval.
+     * @param value value to clamp
+     * @param inf lower bound of the clamping interval
+     * @param sup upper bound of the clamping interval
+     * @return value clamped within [inf; sup], or value if already within bounds.
+     * @since 3.0
+     */
+    public static int clamp(final long value, final int inf, final int sup) {
+        return (int) max(inf, min(value, sup));
+    }
+
+    /** Clamp a value within an interval.
+     * <p>
+     * This method assumes -0.0 is below +0.0
+     * </p>
+     * @param value value to clamp
+     * @param inf lower bound of the clamping interval
+     * @param sup upper bound of the clamping interval
+     * @return value clamped within [inf; sup], or value if already within bounds.
+     * @since 3.0
+     */
+    public static float clamp(final float value, final float inf, final float sup) {
+        return max(inf, min(value, sup));
+    }
+
+    /** Clamp a value within an interval.
+     * <p>
+     * This method assumes -0.0 is below +0.0
+     * </p>
+     * @param value value to clamp
+     * @param inf lower bound of the clamping interval
+     * @param sup upper bound of the clamping interval
+     * @return value clamped within [inf; sup], or value if already within bounds.
+     * @since 3.0
+     */
+    public static double clamp(final double value, final double inf, final double sup) {
+        return max(inf, min(value, sup));
+    }
+
     /** Returns a pseudo-random number between 0.0 and 1.0.
      * <p><b>Note:</b> this implementation currently delegates to {@link Math#random}
      * @return a random number between 0.0 and 1.0
@@ -3312,6 +3373,7 @@ public class FastMath {
      * Absolute value.
      * @param x number from which absolute value is requested
      * @return abs(x), or throws an exception for {@code Integer.MIN_VALUE}
+     * @since 2.0
      */
     public static int absExact(final int x) {
         if (x == Integer.MIN_VALUE) {
@@ -4265,6 +4327,26 @@ public class FastMath {
         // will have an extra term p that we will need to remove
         final long tobeRemoved = ((a < 0) ? b : 0) + ((b < 0) ? a : 0);
 
+        return unsignedMultiplyHigh(a, b) - tobeRemoved;
+
+    }
+
+    /** Multiply two long unsigned integers and give the 64 most significant bits of the unsigned result.
+     * <p>
+     * Beware that as Java primitive long are always considered to be signed, there are some
+     * intermediate values {@code a} and {@code b} for which {@code a * b} exceeds {@code Long.MAX_VALUE}
+     * but this method will still return 0l. This happens for example for {@code a = 2³¹} and
+     * {@code b = 2³²} as {@code a * b = 2⁶³ = Long.MAX_VALUE + 1}, so it exceeds the max value
+     * for a long, but still fits in 64 bits, so this method correctly returns 0l in this case,
+     * but multiplication result would be considered negative (and in fact equal to {@code Long.MIN_VALUE}
+     * </p>
+     * @param a first factor
+     * @param b second factor
+     * @return a * b / 2<sup>64</sup>
+     * @since 3.0
+     */
+    public static long unsignedMultiplyHigh(final long a, final long b) {
+
         // split numbers in two 32 bits parts
         final long aHigh  = a >>> 32;
         final long aLow   = a & 0xFFFFFFFFl;
@@ -4281,9 +4363,234 @@ public class FastMath {
         final long hlHigh = (hl1 >>> 32) + (hl2 >>> 32);
         final long hlLow  = (hl1 & 0xFFFFFFFFl) + (hl2 & 0xFFFFFFFFl);
         final long carry  = (hlLow + (ll >>> 32)) >>> 32;
-        final long unsignedResult = hh + hlHigh + carry;
 
-        return unsignedResult - tobeRemoved;
+        return hh + hlHigh + carry;
+
+    }
+
+    /** Divide two integers, checking for overflow.
+     * @param x dividend
+     * @param y divisor
+     * @return x / y
+     * @exception MathRuntimeException if an overflow occurs
+     * @since 3.0
+     */
+    public static int divideExact(final int x, final int y) {
+        if (y == 0) {
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
+        }
+        if (y == -1 && x == Integer.MIN_VALUE) {
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, x, y);
+        }
+        return x / y;
+    }
+
+    /** Divide two long integers, checking for overflow.
+     * @param x dividend
+     * @param y divisor
+     * @return x / y
+     * @exception MathRuntimeException if an overflow occurs
+     * @since 3.0
+     */
+    public static long divideExact(final long x, final long y) {
+        if (y == 0l) {
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
+        }
+        if (y == -1l && x == Long.MIN_VALUE) {
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, x, y);
+        }
+        return x / y;
+    }
+
+    /** Finds q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer division when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0
+     * @since 3.0
+     */
+    public static int ceilDiv(final int a, final int b) throws MathRuntimeException {
+
+        if (b == 0) {
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
+        }
+
+        final int m = a % b;
+        if ((a ^ b) < 0 || m == 0) {
+            // a and b have opposite signs, or division is exact
+            return a / b;
+        } else {
+            // a and b have same signs and division is not exact
+            return (a / b) + 1;
+        }
+
+    }
+
+    /** Finds q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer division when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0 or if a == {@code Integer.MIN_VALUE} and b = -1
+     * @since 3.0
+     */
+    public static int ceilDivExact(final int a, final int b) throws MathRuntimeException {
+
+        if (a == Integer.MIN_VALUE && b == -1) {
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, a, b);
+        }
+
+        return ceilDiv(a, b);
+
+    }
+
+    /** Finds q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer division when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0
+     * @since 3.0
+     */
+    public static long ceilDiv(final long a, final long b) throws MathRuntimeException {
+
+        if (b == 0l) {
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
+        }
+
+        final long m = a % b;
+        if ((a ^ b) < 0 || m == 0l) {
+            // a and b have opposite signs, or division is exact
+            return a / b;
+        } else {
+            // a and b have same signs and division is not exact
+            return (a / b) + 1l;
+        }
+
+    }
+
+    /** Finds q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer division when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0 or if a == {@code Long.MIN_VALUE} and b = -1
+     * @since 3.0
+     */
+    public static long ceilDivExact(final long a, final long b) throws MathRuntimeException {
+
+        if (a == Long.MIN_VALUE && b == -1l) {
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, a, b);
+        }
+
+        return ceilDiv(a, b);
+
+    }
+
+    /** Finds q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer division when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0
+     * @since 3.0
+     */
+    public static long ceilDiv(final long a, final int b) throws MathRuntimeException {
+        return ceilDiv(a, (long) b);
+    }
+
+    /** Finds r such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer modulo when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return r such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0
+     * @since 3.0
+     */
+    public static int ceilMod(final int a, final int b) throws MathRuntimeException {
+
+        if (b == 0) {
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
+        }
+
+        final int m = a % b;
+        if ((a ^ b) < 0 || m == 0) {
+            // a and b have opposite signs, or division is exact
+            return m;
+        } else {
+            // a and b have same signs and division is not exact
+            return m - b;
+        }
+
+    }
+
+    /** Finds r such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer modulo when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return r such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0
+     * @since 3.0
+     */
+    public static int ceilMod(final long a, final int b) throws MathRuntimeException {
+        return (int) ceilMod(a, (long) b);
+    }
+
+    /** Finds r such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer modulo when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return r such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0
+     * @since 3.0
+     */
+    public static long ceilMod(final long a, final long b) throws MathRuntimeException {
+
+        if (b == 0l) {
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
+        }
+
+        final long m = a % b;
+        if ((a ^ b) < 0l || m == 0l) {
+            // a and b have opposite signs, or division is exact
+            return m;
+        } else {
+            // a and b have same signs and division is not exact
+            return m - b;
+        }
 
     }
 
@@ -4307,12 +4614,35 @@ public class FastMath {
 
         final int m = a % b;
         if ((a ^ b) >= 0 || m == 0) {
-            // a an b have same sign, or division is exact
+            // a and b have same sign, or division is exact
             return a / b;
         } else {
             // a and b have opposite signs and division is not exact
             return (a / b) - 1;
         }
+
+    }
+
+    /** Finds q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer division when
+     * a and b are same signs, but returns a different value when
+     * they are opposite (i.e. q is negative).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0 or if a == {@code Integer.MIN_VALUE} and b = -1
+     * @see #floorMod(int, int)
+     * @since 3.0
+     */
+    public static int floorDivExact(final int a, final int b) throws MathRuntimeException {
+
+        if (a == Integer.MIN_VALUE && b == -1) {
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, a, b);
+        }
+
+        return floorDiv(a, b);
 
     }
 
@@ -4353,12 +4683,35 @@ public class FastMath {
 
         final long m = a % b;
         if ((a ^ b) >= 0l || m == 0l) {
-            // a an b have same sign, or division is exact
+            // a and b have same sign, or division is exact
             return a / b;
         } else {
             // a and b have opposite signs and division is not exact
             return (a / b) - 1l;
         }
+
+    }
+
+    /** Finds q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code b < 0}.
+     * <p>
+     * This methods returns the same value as integer division when
+     * a and b are same signs, but returns a different value when
+     * they are opposite (i.e. q is negative).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code b < 0}
+     * @exception MathRuntimeException if b == 0 or if a == {@code Long.MIN_VALUE} and b = -1
+     * @see #floorMod(long, long)
+     * @since 3.0
+     */
+    public static long floorDivExact(final long a, final long b) throws MathRuntimeException {
+
+        if (a == Long.MIN_VALUE && b == -1l) {
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, a, b);
+        }
+
+        return floorDiv(a, b);
 
     }
 
@@ -4382,7 +4735,7 @@ public class FastMath {
 
         final int m = a % b;
         if ((a ^ b) >= 0 || m == 0) {
-            // a an b have same sign, or division is exact
+            // a and b have same sign, or division is exact
             return m;
         } else {
             // a and b have opposite signs and division is not exact
@@ -4428,7 +4781,7 @@ public class FastMath {
 
         final long m = a % b;
         if ((a ^ b) >= 0l || m == 0l) {
-            // a an b have same sign, or division is exact
+            // a and b have same sign, or division is exact
             return m;
         } else {
             // a and b have opposite signs and division is not exact
@@ -4452,7 +4805,7 @@ public class FastMath {
         // and negative otherwise.
         final long m = Double.doubleToRawLongBits(magnitude); // don't care about NaN
         final long s = Double.doubleToRawLongBits(sign);
-        if ((m^s) >= 0) {
+        if ((m ^ s) >= 0) {
             return magnitude;
         }
         return -magnitude; // flip sign
@@ -4473,7 +4826,7 @@ public class FastMath {
         // and negative otherwise.
         final int m = Float.floatToRawIntBits(magnitude);
         final int s = Float.floatToRawIntBits(sign);
-        if ((m^s) >= 0) {
+        if ((m ^ s) >= 0) {
             return magnitude;
         }
         return -magnitude; // flip sign

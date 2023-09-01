@@ -36,6 +36,7 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
 import org.hipparchus.dfp.DfpMath;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.random.MersenneTwister;
 import org.hipparchus.random.RandomGenerator;
@@ -1382,6 +1383,58 @@ public class FastMathTest {
     }
 
     @Test
+    public void testClampInt() {
+        assertEquals( 3, FastMath.clamp(-17,  3, 4));
+        assertEquals( 4, FastMath.clamp(+17,  3, 4));
+        assertEquals( 0, FastMath.clamp(-17,  0, 4));
+        assertEquals( 0, FastMath.clamp(+17, -3, 0));
+    }
+
+    @Test
+    public void testClampLong() {
+        assertEquals( 3l, FastMath.clamp(-17l,  3l, 4l));
+        assertEquals( 4l, FastMath.clamp(+17l,  3l, 4l));
+        assertEquals( 0l, FastMath.clamp(-17l,  0l, 4l));
+        assertEquals( 0l, FastMath.clamp(+17l, -3l, 0l));
+    }
+
+    @Test
+    public void testClampLongInt() {
+        assertEquals( 3, FastMath.clamp(-17l,  3, 4));
+        assertEquals( 4, FastMath.clamp(+17l,  3, 4));
+        assertEquals( 0, FastMath.clamp(-17l,  0, 4));
+        assertEquals( 0, FastMath.clamp(+17l, -3, 0));
+    }
+
+    @Test
+    public void testClampFloat() {
+        assertEquals( 3.0f, FastMath.clamp(-17.0f, 3.0f, 4.0f), 1.0e-15f);
+        assertEquals( 4.0f, FastMath.clamp(+17.0f, 3.0f, 4.0f), 1.0e-15f);
+        assertEquals( 0.0f, FastMath.clamp(-17.0f, -0.0f, 4.0f), 1.0e-15f);
+        assertEquals(-1.0f, FastMath.copySign(1.0f, FastMath.clamp(-17.0f, -0.0f, 4.0f)), 1.0e-15f);
+        assertEquals( 0.0f, FastMath.clamp(-17.0f, +0.0f, 4.0f), 1.0e-15f);
+        assertEquals(+1.0f, FastMath.copySign(1.0f, FastMath.clamp(-17.0f, +0.0f, 4.0f)), 1.0e-15f);
+        assertEquals( 0.0f, FastMath.clamp(+17.0f, -3.0f, -0.0f), 1.0e-15f);
+        assertEquals(-1.0f, FastMath.copySign(1.0f, FastMath.clamp(+17.0f, -3.0f, -0.0f)), 1.0e-15f);
+        assertEquals( 0.0f, FastMath.clamp(+17.0f, -3.0f, +0.0f), 1.0e-15f);
+        assertEquals(+1.0f, FastMath.copySign(1.0f, FastMath.clamp(+17.0f, -3.0f, +0.0f)), 1.0e-15f);
+    }
+
+    @Test
+    public void testClampDouble() {
+        assertEquals( 3.0, FastMath.clamp(-17.0, 3.0, 4.0), 1.0e-15);
+        assertEquals( 4.0, FastMath.clamp(+17.0, 3.0, 4.0), 1.0e-15);
+        assertEquals( 0.0, FastMath.clamp(-17.0, -0.0, 4.0), 1.0e-15);
+        assertEquals(-1.0, FastMath.copySign(1.0, FastMath.clamp(-17.0, -0.0, 4.0)), 1.0e-15);
+        assertEquals( 0.0, FastMath.clamp(-17.0, +0.0, 4.0), 1.0e-15);
+        assertEquals(+1.0, FastMath.copySign(1.0, FastMath.clamp(-17.0, +0.0, 4.0)), 1.0e-15);
+        assertEquals( 0.0, FastMath.clamp(+17.0, -3.0, -0.0), 1.0e-15);
+        assertEquals(-1.0, FastMath.copySign(1.0, FastMath.clamp(+17.0, -3.0, -0.0)), 1.0e-15);
+        assertEquals( 0.0, FastMath.clamp(+17.0, -3.0, +0.0), 1.0e-15);
+        assertEquals(+1.0, FastMath.copySign(1.0, FastMath.clamp(+17.0, -3.0, +0.0)), 1.0e-15);
+    }
+
+    @Test
     public void testDoubleScalbSpecialCases() {
         assertEquals(0d,                       FastMath.scalb(0d, 1100),                0d);
         assertEquals(Double.POSITIVE_INFINITY,  FastMath.scalb(Double.POSITIVE_INFINITY, 1100), 0);
@@ -2146,6 +2199,82 @@ public class FastMathTest {
         }
     }
 
+    @Test
+    public void testDivideExactInt() {
+        int[] specialValues = new int[] {
+            Integer.MIN_VALUE, Integer.MIN_VALUE + 1, Integer.MIN_VALUE + 2,
+            Integer.MAX_VALUE, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 2,
+            -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            -1 - (Integer.MIN_VALUE / 2), 0 - (Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
+            -1 + (Integer.MAX_VALUE / 2), 0 + (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
+        };
+        for (int a : specialValues) {
+            for (int b : specialValues) {
+                if (b == 0) {
+                    try {
+                        FastMath.divideExact(a, b);
+                        fail("an exception should have been thrown " + a + b);
+                    } catch (MathRuntimeException mae) {
+                        assertEquals(LocalizedCoreFormats.ZERO_DENOMINATOR, mae.getSpecifier());
+                    }
+                } else {
+                    BigInteger bdA   = BigInteger.valueOf(a);
+                    BigInteger bdB   = BigInteger.valueOf(b);
+                    BigInteger bdDiv = bdA.divide(bdB);
+                    if (bdDiv.compareTo(BigInteger.valueOf(Integer.MIN_VALUE)) < 0 ||
+                                    bdDiv.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) > 0) {
+                        try {
+                            FastMath.divideExact(a, b);
+                            fail("an exception should have been thrown " + a + b);
+                        } catch (MathRuntimeException mae) {
+                            // expected
+                        }
+                    } else {
+                        assertEquals(bdDiv, BigInteger.valueOf(FastMath.divideExact(a, b)));
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testDivideExactLong() {
+        long[] specialValues = new long[] {
+            Long.MIN_VALUE, Long.MIN_VALUE + 1, Long.MIN_VALUE + 2,
+            Long.MAX_VALUE, Long.MAX_VALUE - 1, Long.MAX_VALUE - 2,
+            -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            -1 - (Long.MIN_VALUE / 2), 0 - (Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
+            -1 + (Long.MAX_VALUE / 2), 0 + (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
+        };
+        for (long a : specialValues) {
+            for (long b : specialValues) {
+                if (b == 0l) {
+                    try {
+                        FastMath.divideExact(a, b);
+                        fail("an exception should have been thrown " + a + b);
+                    } catch (MathRuntimeException mae) {
+                        assertEquals(LocalizedCoreFormats.ZERO_DENOMINATOR, mae.getSpecifier());
+                    }
+                } else {
+                    BigInteger bdA   = BigInteger.valueOf(a);
+                    BigInteger bdB   = BigInteger.valueOf(b);
+                    BigInteger bdDiv = bdA.divide(bdB);
+                    if (bdDiv.compareTo(BigInteger.valueOf(Long.MIN_VALUE)) < 0 ||
+                                    bdDiv.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
+                        try {
+                            FastMath.divideExact(a, b);
+                            fail("an exception should have been thrown " + a + b);
+                        } catch (MathRuntimeException mae) {
+                            // expected
+                        }
+                    } else {
+                        assertEquals(bdDiv, BigInteger.valueOf(FastMath.divideExact(a, b)));
+                    }
+                }
+            }
+        }
+    }
+
     @Test(expected=MathRuntimeException.class)
     public void testToIntExactTooLow() {
         FastMath.toIntExact(-1l + Integer.MIN_VALUE);
@@ -2222,6 +2351,183 @@ public class FastMathTest {
     }
 
     @Test
+    public void testCeilDivInt() {
+        assertEquals(+2, FastMath.ceilDiv(+4, +3));
+        assertEquals(-1, FastMath.ceilDiv(-4, +3));
+        assertEquals(-1, FastMath.ceilDiv(+4, -3));
+        assertEquals(+2, FastMath.ceilDiv(-4, -3));
+        try {
+            FastMath.ceilDiv(1, 0);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mae) {
+            // expected
+        }
+        for (int a = -100; a <= 100; ++a) {
+            for (int b = -100; b <= 100; ++b) {
+                if (b != 0) {
+                    assertEquals(poorManCeilDiv(a, b), FastMath.ceilDiv(a, b));
+                    assertEquals(poorManCeilDiv(a, b), FastMath.ceilDivExact(a, b));
+                }
+            }
+        }
+        assertEquals(Integer.MIN_VALUE, FastMath.ceilDiv(Integer.MIN_VALUE, -1));
+        try {
+            FastMath.ceilDivExact(Integer.MIN_VALUE, -1);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            assertEquals(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, mre.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testCeilDivLong() {
+        assertEquals(+2l, FastMath.ceilDiv(+4l, +3l));
+        assertEquals(-1l, FastMath.ceilDiv(-4l, +3l));
+        assertEquals(-1l, FastMath.ceilDiv(+4l, -3l));
+        assertEquals(+2l, FastMath.ceilDiv(-4l, -3l));
+        try {
+            FastMath.ceilDiv(1l, 0l);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mae) {
+            // expected
+        }
+        for (long a = -100l; a <= 100l; ++a) {
+            for (long b = -100l; b <= 100l; ++b) {
+                if (b != 0l) {
+                    assertEquals(poorManCeilDiv(a, b), FastMath.ceilDiv(a, b));
+                    assertEquals(poorManCeilDiv(a, b), FastMath.ceilDivExact(a, b));
+                }
+            }
+        }
+        assertEquals(Long.MIN_VALUE, FastMath.ceilDiv(Long.MIN_VALUE, -1l));
+        try {
+            FastMath.ceilDivExact(Long.MIN_VALUE, -1l);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            assertEquals(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, mre.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testCeilDivLongInt() {
+        assertEquals(+2l, FastMath.ceilDiv(+4l, +3));
+        assertEquals(-1l, FastMath.ceilDiv(-4l, +3));
+        assertEquals(-1l, FastMath.ceilDiv(+4l, -3));
+        assertEquals(+2l, FastMath.ceilDiv(-4l, -3));
+        try {
+            FastMath.ceilDiv(1l, 0);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mae) {
+            // expected
+        }
+        for (long a = -100l; a <= 100l; ++a) {
+            for (int b = -100; b <= 100; ++b) {
+                if (b != 0) {
+                    assertEquals(poorManCeilDiv(a, b), FastMath.ceilDiv(a, b));
+                    assertEquals(poorManCeilDiv(a, b), FastMath.ceilDivExact(a, b));
+                }
+            }
+        }
+        assertEquals(Long.MIN_VALUE, FastMath.ceilDiv(Long.MIN_VALUE, -1));
+        try {
+            FastMath.ceilDivExact(Long.MIN_VALUE, -1);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            assertEquals(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, mre.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testCeilDivModInt() {
+        RandomGenerator generator = new Well1024a(0x66c371cc6f7ebea9l);
+        for (int i = 0; i < 10000; ++i) {
+            int a = generator.nextInt();
+            int b = generator.nextInt();
+            if (b == 0) {
+                try {
+                    FastMath.floorMod(a, b);
+                    fail("an exception should have been thrown");
+                } catch (MathRuntimeException mae) {
+                    // expected
+                }
+            } else {
+                int d = FastMath.ceilDiv(a, b);
+                int m = FastMath.ceilMod(a, b);
+                assertEquals(poorManCeilDiv(a, b), d);
+                assertEquals(poorManCeilMod(a, b), m);
+                assertEquals(a, d * b + m);
+                if (b < 0) {
+                    assertTrue(m >= 0);
+                    assertTrue(-m > b);
+                } else {
+                    assertTrue(m <= 0);
+                    assertTrue(m < b);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testCeilDivModLong() {
+        RandomGenerator generator = new Well1024a(0x769c9ab4e4a9129el);
+        for (int i = 0; i < 10000; ++i) {
+            long a = generator.nextLong();
+            long b = generator.nextLong();
+            if (b == 0l) {
+                try {
+                    FastMath.floorMod(a, b);
+                    fail("an exception should have been thrown");
+                } catch (MathRuntimeException mae) {
+                    // expected
+                }
+            } else {
+                long d = FastMath.ceilDiv(a, b);
+                long m = FastMath.ceilMod(a, b);
+                assertEquals(poorManCeilDiv(a, b), d);
+                assertEquals(poorManCeilMod(a, b), m);
+                assertEquals(a, d * b + m);
+                if (b < 0l) {
+                    assertTrue(m >= 0l);
+                    assertTrue(-m > b);
+                } else {
+                    assertTrue(m <= 0l);
+                    assertTrue(m < b);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testCeilDivModLongInt() {
+        RandomGenerator generator = new Well1024a(0xd4c67ab9cd4af669l);
+        for (int i = 0; i < 10000; ++i) {
+            long a = generator.nextLong();
+            int b = generator.nextInt();
+            if (b == 0) {
+                try {
+                    FastMath.floorMod(a, b);
+                    fail("an exception should have been thrown");
+                } catch (MathRuntimeException mae) {
+                    // expected
+                }
+            } else {
+                long d = FastMath.ceilDiv(a, b);
+                int  m = FastMath.ceilMod(a, b);
+                assertEquals(poorManCeilDiv(a, b), d);
+                assertEquals(poorManCeilMod(a, b), m);
+                assertEquals(a, d * b + m);
+                if (b < 0) {
+                    assertTrue(m >= 0);
+                    assertTrue(-m > b);
+                } else {
+                    assertTrue(m <= 0);
+                    assertTrue(m < b);
+                }
+            }
+        }
+    }
+
+    @Test
     public void testFloorDivInt() {
         assertEquals(+1, FastMath.floorDiv(+4, +3));
         assertEquals(-2, FastMath.floorDiv(-4, +3));
@@ -2237,8 +2543,16 @@ public class FastMathTest {
             for (int b = -100; b <= 100; ++b) {
                 if (b != 0) {
                     assertEquals(poorManFloorDiv(a, b), FastMath.floorDiv(a, b));
+                    assertEquals(poorManFloorDiv(a, b), FastMath.floorDivExact(a, b));
                 }
             }
+        }
+        assertEquals(Integer.MIN_VALUE, FastMath.floorDiv(Integer.MIN_VALUE, -1));
+        try {
+            FastMath.floorDivExact(Integer.MIN_VALUE, -1);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            assertEquals(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, mre.getSpecifier());
         }
     }
 
@@ -2279,8 +2593,8 @@ public class FastMathTest {
             } else {
                 int d = FastMath.floorDiv(a, b);
                 int m = FastMath.floorMod(a, b);
-                assertEquals(FastMath.toIntExact(poorManFloorDiv(a, b)), d);
-                assertEquals(FastMath.toIntExact(poorManFloorMod(a, b)), m);
+                assertEquals(poorManFloorDiv(a, b), d);
+                assertEquals(poorManFloorMod(a, b), m);
                 assertEquals(a, d * b + m);
                 if (b < 0) {
                     assertTrue(m <= 0);
@@ -2309,8 +2623,16 @@ public class FastMathTest {
             for (long b = -100l; b <= 100l; ++b) {
                 if (b != 0) {
                     assertEquals(poorManFloorDiv(a, b), FastMath.floorDiv(a, b));
+                    assertEquals(poorManFloorDiv(a, b), FastMath.floorDivExact(a, b));
                 }
             }
+        }
+        assertEquals(Long.MIN_VALUE, FastMath.floorDiv(Long.MIN_VALUE, -1l));
+        try {
+            FastMath.floorDivExact(Long.MIN_VALUE, -1l);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            assertEquals(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, mre.getSpecifier());
         }
     }
 
@@ -2395,19 +2717,102 @@ public class FastMathTest {
         }
     }
 
-    private long poorManFloorDiv(long a, long b) {
+    private int poorManCeilDiv(int a, int b) {
 
         // find q0, r0 such that a = q0 b + r0
-        BigInteger q0 = BigInteger.valueOf(a / b);
-        BigInteger r0 = BigInteger.valueOf(a % b);
-        BigInteger fd = BigInteger.valueOf(Integer.MIN_VALUE);
+        BigInteger q0   = BigInteger.valueOf(a / b);
+        BigInteger r0   = BigInteger.valueOf(a % b);
+        BigInteger fd   = BigInteger.valueOf(Integer.MIN_VALUE);
         BigInteger bigB = BigInteger.valueOf(b);
 
         for (int k = -2; k < 2; ++k) {
             // find another pair q, r such that a = q b + r
             BigInteger bigK = BigInteger.valueOf(k);
-            BigInteger q = q0.subtract(bigK);
-            BigInteger r = r0.add(bigK.multiply(bigB));
+            BigInteger q    = q0.subtract(bigK);
+            BigInteger r    = r0.add(bigK.multiply(bigB));
+            if (r.abs().compareTo(bigB.abs()) < 0 &&
+                (r.intValue() == 0 || ((r.intValue() ^ b) & 0x80000000) != 0)) {
+                if (fd.compareTo(q) < 0) {
+                    fd = q;
+                }
+            }
+        }
+
+        return fd.intValue();
+
+    }
+
+    private long poorManCeilDiv(long a, long b) {
+
+        // find q0, r0 such that a = q0 b + r0
+        BigInteger q0   = BigInteger.valueOf(a / b);
+        BigInteger r0   = BigInteger.valueOf(a % b);
+        BigInteger fd   = BigInteger.valueOf(Long.MIN_VALUE);
+        BigInteger bigB = BigInteger.valueOf(b);
+
+        for (int k = -2; k < 2; ++k) {
+            // find another pair q, r such that a = q b + r
+            BigInteger bigK = BigInteger.valueOf(k);
+            BigInteger q    = q0.subtract(bigK);
+            BigInteger r    = r0.add(bigK.multiply(bigB));
+            if (r.abs().compareTo(bigB.abs()) < 0 &&
+                (r.longValue() == 0l || ((r.longValue() ^ b) & 0x8000000000000000l) != 0)) {
+                if (fd.compareTo(q) < 0) {
+                    fd = q;
+                }
+            }
+        }
+
+        return fd.longValue();
+
+    }
+
+    private long poorManCeilMod(long a, long b) {
+        return a - b * poorManCeilDiv(a, b);
+    }
+
+    private int poorManFloorDiv(int a, int b) {
+
+        // find q0, r0 such that a = q0 b + r0
+        BigInteger q0   = BigInteger.valueOf(a / b);
+        BigInteger r0   = BigInteger.valueOf(a % b);
+        BigInteger fd   = BigInteger.valueOf(Integer.MIN_VALUE);
+        BigInteger bigB = BigInteger.valueOf(b);
+
+        for (int k = -2; k < 2; ++k) {
+            // find another pair q, r such that a = q b + r
+            BigInteger bigK = BigInteger.valueOf(k);
+            BigInteger q    = q0.subtract(bigK);
+            BigInteger r    = r0.add(bigK.multiply(bigB));
+            if (r.abs().compareTo(bigB.abs()) < 0 &&
+                (r.intValue() == 0 || ((r.intValue() ^ b) & 0x80000000) == 0)) {
+                if (fd.compareTo(q) < 0) {
+                    fd = q;
+                }
+            }
+        }
+
+        return fd.intValue();
+
+    }
+
+    private int poorManFloorMod(int a, int b) {
+        return a - b * poorManFloorDiv(a, b);
+    }
+
+    private long poorManFloorDiv(long a, long b) {
+
+        // find q0, r0 such that a = q0 b + r0
+        BigInteger q0   = BigInteger.valueOf(a / b);
+        BigInteger r0   = BigInteger.valueOf(a % b);
+        BigInteger fd   = BigInteger.valueOf(Long.MIN_VALUE);
+        BigInteger bigB = BigInteger.valueOf(b);
+
+        for (int k = -2; k < 2; ++k) {
+            // find another pair q, r such that a = q b + r
+            BigInteger bigK = BigInteger.valueOf(k);
+            BigInteger q    = q0.subtract(bigK);
+            BigInteger r    = r0.add(bigK.multiply(bigB));
             if (r.abs().compareTo(bigB.abs()) < 0 &&
                 (r.longValue() == 0l || ((r.longValue() ^ b) & 0x8000000000000000l) == 0)) {
                 if (fd.compareTo(q) < 0) {
@@ -2548,6 +2953,45 @@ public class FastMathTest {
     }
 
     @Test
+    public void testUnsignedMultiplyHigh() {
+
+        // a * b = Long.MAX_VALUE (exactly), multiplication just fits in a 64 bits primitive long
+        final long a = 153092023l;
+        final long b = 60247241209l;
+        Assert.assertEquals(Long.MAX_VALUE, a * b);
+        Assert.assertEquals(0, FastMath.unsignedMultiplyHigh(a, b));
+
+        // as we just slightly exceeds Long.MAX_VALUE, there are no extra bits,
+        // but sign is nevertheless wrong because the most significant bit is set to 1
+        final long c1 = 1l << 31;
+        final long c2 = 1l << 32;
+        Assert.assertEquals(0, FastMath.unsignedMultiplyHigh(c1, c2)); // no extra bits
+        Assert.assertEquals(Long.MIN_VALUE, c1 * c2);          // but result is negative despite c1 and c2 are both positive
+
+        // some small and large integers
+        final long[] values = new long[] {
+            -1l, 0l, 1l, 10l,
+            0x100000000l, 0x200000000l, 0x400000000l, -0x100000000l, -0x200000000l, -0x400000000l,
+            ((long) Integer.MIN_VALUE) -1, ((long) Integer.MIN_VALUE), ((long) Integer.MIN_VALUE) +1,
+            ((long) Integer.MAX_VALUE) -1, ((long) Integer.MAX_VALUE), ((long) Integer.MAX_VALUE) +1,
+            Long.MIN_VALUE, Long.MAX_VALUE
+        };
+        for (final long p : values) {
+            for (long q : values) {
+                Assert.assertEquals(poorManUnsignedMultiplyHigh(p, q), FastMath.unsignedMultiplyHigh(p, q));
+            }
+        }
+
+        // random values
+        RandomGenerator random = new Well1024a(0xcf5736c8f8adf962l);
+        for (int i = 0; i < 10000000; ++i) {
+            long m = random.nextLong();
+            long n = random.nextLong();
+            Assert.assertEquals(poorManUnsignedMultiplyHigh(m, n), FastMath.unsignedMultiplyHigh(m, n));
+        }
+    }
+
+    @Test
     public void testGetExponentDouble() {
         Assert.assertEquals( 1024, FastMath.getExponent(Double.NaN));
         Assert.assertEquals( 1024, FastMath.getExponent(Double.POSITIVE_INFINITY));
@@ -2591,6 +3035,22 @@ public class FastMathTest {
         BigInteger bigQ = BigInteger.valueOf(q);
         if (q < 0) {
             bigQ = BigInteger.ONE.shiftLeft(128).add(bigQ);
+        }
+
+        return bigP.multiply(bigQ).shiftRight(64).longValue();
+
+    }
+
+    private static long poorManUnsignedMultiplyHigh(final long p, final long q) {
+
+        BigInteger bigP = BigInteger.valueOf(p);
+        if (p < 0) {
+            bigP = BigInteger.ONE.shiftLeft(64).add(bigP);
+        }
+
+        BigInteger bigQ = BigInteger.valueOf(q);
+        if (q < 0) {
+            bigQ = BigInteger.ONE.shiftLeft(64).add(bigQ);
         }
 
         return bigP.multiply(bigQ).shiftRight(64).longValue();

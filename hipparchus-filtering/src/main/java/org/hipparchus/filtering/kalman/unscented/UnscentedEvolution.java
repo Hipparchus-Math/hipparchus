@@ -39,7 +39,6 @@ public class UnscentedEvolution {
      * Constructor.
      * @param currentTime current time
      * @param currentStates state vectors at current time
-     * @param currentMeasurements estimated measurements at current time
      * @param processNoiseMatrix process noise matrix
      */
     public UnscentedEvolution(final double currentTime, final RealVector[] currentStates,
