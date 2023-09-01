@@ -4327,6 +4327,26 @@ public class FastMath {
         // will have an extra term p that we will need to remove
         final long tobeRemoved = ((a < 0) ? b : 0) + ((b < 0) ? a : 0);
 
+        return unsignedMultiplyHigh(a, b) - tobeRemoved;
+
+    }
+
+    /** Multiply two long unsigned integers and give the 64 most significant bits of the unsigned result.
+     * <p>
+     * Beware that as Java primitive long are always considered to be signed, there are some
+     * intermediate values {@code a} and {@code b} for which {@code a * b} exceeds {@code Long.MAX_VALUE}
+     * but this method will still return 0l. This happens for example for {@code a = 2³¹} and
+     * {@code b = 2³²} as {@code a * b = 2⁶³ = Long.MAX_VALUE + 1}, so it exceeds the max value
+     * for a long, but still fits in 64 bits, so this method correctly returns 0l in this case,
+     * but multiplication result would be considered negative (and in fact equal to {@code Long.MIN_VALUE}
+     * </p>
+     * @param a first factor
+     * @param b second factor
+     * @return a * b / 2<sup>64</sup>
+     * @since 3.0
+     */
+    public static long unsignedMultiplyHigh(final long a, final long b) {
+
         // split numbers in two 32 bits parts
         final long aHigh  = a >>> 32;
         final long aLow   = a & 0xFFFFFFFFl;
@@ -4343,9 +4363,8 @@ public class FastMath {
         final long hlHigh = (hl1 >>> 32) + (hl2 >>> 32);
         final long hlLow  = (hl1 & 0xFFFFFFFFl) + (hl2 & 0xFFFFFFFFl);
         final long carry  = (hlLow + (ll >>> 32)) >>> 32;
-        final long unsignedResult = hh + hlHigh + carry;
 
-        return unsignedResult - tobeRemoved;
+        return hh + hlHigh + carry;
 
     }
 

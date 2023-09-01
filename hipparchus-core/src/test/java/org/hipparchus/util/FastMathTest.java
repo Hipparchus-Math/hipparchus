@@ -2953,6 +2953,45 @@ public class FastMathTest {
     }
 
     @Test
+    public void testUnsignedMultiplyHigh() {
+
+        // a * b = Long.MAX_VALUE (exactly), multiplication just fits in a 64 bits primitive long
+        final long a = 153092023l;
+        final long b = 60247241209l;
+        Assert.assertEquals(Long.MAX_VALUE, a * b);
+        Assert.assertEquals(0, FastMath.unsignedMultiplyHigh(a, b));
+
+        // as we just slightly exceeds Long.MAX_VALUE, there are no extra bits,
+        // but sign is nevertheless wrong because the most significant bit is set to 1
+        final long c1 = 1l << 31;
+        final long c2 = 1l << 32;
+        Assert.assertEquals(0, FastMath.unsignedMultiplyHigh(c1, c2)); // no extra bits
+        Assert.assertEquals(Long.MIN_VALUE, c1 * c2);          // but result is negative despite c1 and c2 are both positive
+
+        // some small and large integers
+        final long[] values = new long[] {
+            -1l, 0l, 1l, 10l,
+            0x100000000l, 0x200000000l, 0x400000000l, -0x100000000l, -0x200000000l, -0x400000000l,
+            ((long) Integer.MIN_VALUE) -1, ((long) Integer.MIN_VALUE), ((long) Integer.MIN_VALUE) +1,
+            ((long) Integer.MAX_VALUE) -1, ((long) Integer.MAX_VALUE), ((long) Integer.MAX_VALUE) +1,
+            Long.MIN_VALUE, Long.MAX_VALUE
+        };
+        for (final long p : values) {
+            for (long q : values) {
+                Assert.assertEquals(poorManUnsignedMultiplyHigh(p, q), FastMath.unsignedMultiplyHigh(p, q));
+            }
+        }
+
+        // random values
+        RandomGenerator random = new Well1024a(0xcf5736c8f8adf962l);
+        for (int i = 0; i < 10000000; ++i) {
+            long m = random.nextLong();
+            long n = random.nextLong();
+            Assert.assertEquals(poorManUnsignedMultiplyHigh(m, n), FastMath.unsignedMultiplyHigh(m, n));
+        }
+    }
+
+    @Test
     public void testGetExponentDouble() {
         Assert.assertEquals( 1024, FastMath.getExponent(Double.NaN));
         Assert.assertEquals( 1024, FastMath.getExponent(Double.POSITIVE_INFINITY));
@@ -2996,6 +3035,22 @@ public class FastMathTest {
         BigInteger bigQ = BigInteger.valueOf(q);
         if (q < 0) {
             bigQ = BigInteger.ONE.shiftLeft(128).add(bigQ);
+        }
+
+        return bigP.multiply(bigQ).shiftRight(64).longValue();
+
+    }
+
+    private static long poorManUnsignedMultiplyHigh(final long p, final long q) {
+
+        BigInteger bigP = BigInteger.valueOf(p);
+        if (p < 0) {
+            bigP = BigInteger.ONE.shiftLeft(64).add(bigP);
+        }
+
+        BigInteger bigQ = BigInteger.valueOf(q);
+        if (q < 0) {
+            bigQ = BigInteger.ONE.shiftLeft(64).add(bigQ);
         }
 
         return bigP.multiply(bigQ).shiftRight(64).longValue();
