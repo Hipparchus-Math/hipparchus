@@ -1383,6 +1383,58 @@ public class FastMathTest {
     }
 
     @Test
+    public void testClampInt() {
+        assertEquals( 3, FastMath.clamp(-17,  3, 4));
+        assertEquals( 4, FastMath.clamp(+17,  3, 4));
+        assertEquals( 0, FastMath.clamp(-17,  0, 4));
+        assertEquals( 0, FastMath.clamp(+17, -3, 0));
+    }
+
+    @Test
+    public void testClampLong() {
+        assertEquals( 3l, FastMath.clamp(-17l,  3l, 4l));
+        assertEquals( 4l, FastMath.clamp(+17l,  3l, 4l));
+        assertEquals( 0l, FastMath.clamp(-17l,  0l, 4l));
+        assertEquals( 0l, FastMath.clamp(+17l, -3l, 0l));
+    }
+
+    @Test
+    public void testClampLongInt() {
+        assertEquals( 3, FastMath.clamp(-17l,  3, 4));
+        assertEquals( 4, FastMath.clamp(+17l,  3, 4));
+        assertEquals( 0, FastMath.clamp(-17l,  0, 4));
+        assertEquals( 0, FastMath.clamp(+17l, -3, 0));
+    }
+
+    @Test
+    public void testClampFloat() {
+        assertEquals( 3.0f, FastMath.clamp(-17.0f, 3.0f, 4.0f), 1.0e-15f);
+        assertEquals( 4.0f, FastMath.clamp(+17.0f, 3.0f, 4.0f), 1.0e-15f);
+        assertEquals( 0.0f, FastMath.clamp(-17.0f, -0.0f, 4.0f), 1.0e-15f);
+        assertEquals(-1.0f, FastMath.copySign(1.0f, FastMath.clamp(-17.0f, -0.0f, 4.0f)), 1.0e-15f);
+        assertEquals( 0.0f, FastMath.clamp(-17.0f, +0.0f, 4.0f), 1.0e-15f);
+        assertEquals(+1.0f, FastMath.copySign(1.0f, FastMath.clamp(-17.0f, +0.0f, 4.0f)), 1.0e-15f);
+        assertEquals( 0.0f, FastMath.clamp(+17.0f, -3.0f, -0.0f), 1.0e-15f);
+        assertEquals(-1.0f, FastMath.copySign(1.0f, FastMath.clamp(+17.0f, -3.0f, -0.0f)), 1.0e-15f);
+        assertEquals( 0.0f, FastMath.clamp(+17.0f, -3.0f, +0.0f), 1.0e-15f);
+        assertEquals(+1.0f, FastMath.copySign(1.0f, FastMath.clamp(+17.0f, -3.0f, +0.0f)), 1.0e-15f);
+    }
+
+    @Test
+    public void testClampDouble() {
+        assertEquals( 3.0, FastMath.clamp(-17.0, 3.0, 4.0), 1.0e-15);
+        assertEquals( 4.0, FastMath.clamp(+17.0, 3.0, 4.0), 1.0e-15);
+        assertEquals( 0.0, FastMath.clamp(-17.0, -0.0, 4.0), 1.0e-15);
+        assertEquals(-1.0, FastMath.copySign(1.0, FastMath.clamp(-17.0, -0.0, 4.0)), 1.0e-15);
+        assertEquals( 0.0, FastMath.clamp(-17.0, +0.0, 4.0), 1.0e-15);
+        assertEquals(+1.0, FastMath.copySign(1.0, FastMath.clamp(-17.0, +0.0, 4.0)), 1.0e-15);
+        assertEquals( 0.0, FastMath.clamp(+17.0, -3.0, -0.0), 1.0e-15);
+        assertEquals(-1.0, FastMath.copySign(1.0, FastMath.clamp(+17.0, -3.0, -0.0)), 1.0e-15);
+        assertEquals( 0.0, FastMath.clamp(+17.0, -3.0, +0.0), 1.0e-15);
+        assertEquals(+1.0, FastMath.copySign(1.0, FastMath.clamp(+17.0, -3.0, +0.0)), 1.0e-15);
+    }
+
+    @Test
     public void testDoubleScalbSpecialCases() {
         assertEquals(0d,                       FastMath.scalb(0d, 1100),                0d);
         assertEquals(Double.POSITIVE_INFINITY,  FastMath.scalb(Double.POSITIVE_INFINITY, 1100), 0);
@@ -2350,6 +2402,35 @@ public class FastMathTest {
         assertEquals(Long.MIN_VALUE, FastMath.ceilDiv(Long.MIN_VALUE, -1l));
         try {
             FastMath.ceilDivExact(Long.MIN_VALUE, -1l);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            assertEquals(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, mre.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testCeilDivLongInt() {
+        assertEquals(+2l, FastMath.ceilDiv(+4l, +3));
+        assertEquals(-1l, FastMath.ceilDiv(-4l, +3));
+        assertEquals(-1l, FastMath.ceilDiv(+4l, -3));
+        assertEquals(+2l, FastMath.ceilDiv(-4l, -3));
+        try {
+            FastMath.ceilDiv(1l, 0);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mae) {
+            // expected
+        }
+        for (long a = -100l; a <= 100l; ++a) {
+            for (int b = -100; b <= 100; ++b) {
+                if (b != 0) {
+                    assertEquals(poorManCeilDiv(a, b), FastMath.ceilDiv(a, b));
+                    assertEquals(poorManCeilDiv(a, b), FastMath.ceilDivExact(a, b));
+                }
+            }
+        }
+        assertEquals(Long.MIN_VALUE, FastMath.ceilDiv(Long.MIN_VALUE, -1));
+        try {
+            FastMath.ceilDivExact(Long.MIN_VALUE, -1);
             fail("an exception should have been thrown");
         } catch (MathRuntimeException mre) {
             assertEquals(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, mre.getSpecifier());

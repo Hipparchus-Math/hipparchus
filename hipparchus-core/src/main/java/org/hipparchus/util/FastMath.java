@@ -984,6 +984,67 @@ public class FastMath {
         return nextAfter(a, Float.NEGATIVE_INFINITY);
     }
 
+    /** Clamp a value within an interval.
+     * @param value value to clamp
+     * @param inf lower bound of the clamping interval
+     * @param sup upper bound of the clamping interval
+     * @return value clamped within [inf; sup], or value if already within bounds.
+     * @since 3.0
+     */
+    public static int clamp(final int value, final int inf, final int sup) {
+        return max(inf, min(value, sup));
+    }
+
+    /** Clamp a value within an interval.
+     * @param value value to clamp
+     * @param inf lower bound of the clamping interval
+     * @param sup upper bound of the clamping interval
+     * @return value clamped within [inf; sup], or value if already within bounds.
+     * @since 3.0
+     */
+    public static long clamp(final long value, final long inf, final long sup) {
+        return max(inf, min(value, sup));
+    }
+
+    /** Clamp a value within an interval.
+     * @param value value to clamp
+     * @param inf lower bound of the clamping interval
+     * @param sup upper bound of the clamping interval
+     * @return value clamped within [inf; sup], or value if already within bounds.
+     * @since 3.0
+     */
+    public static int clamp(final long value, final int inf, final int sup) {
+        return (int) max(inf, min(value, sup));
+    }
+
+    /** Clamp a value within an interval.
+     * <p>
+     * This method assumes -0.0 is below +0.0
+     * </p>
+     * @param value value to clamp
+     * @param inf lower bound of the clamping interval
+     * @param sup upper bound of the clamping interval
+     * @return value clamped within [inf; sup], or value if already within bounds.
+     * @since 3.0
+     */
+    public static float clamp(final float value, final float inf, final float sup) {
+        return max(inf, min(value, sup));
+    }
+
+    /** Clamp a value within an interval.
+     * <p>
+     * This method assumes -0.0 is below +0.0
+     * </p>
+     * @param value value to clamp
+     * @param inf lower bound of the clamping interval
+     * @param sup upper bound of the clamping interval
+     * @return value clamped within [inf; sup], or value if already within bounds.
+     * @since 3.0
+     */
+    public static double clamp(final double value, final double inf, final double sup) {
+        return max(inf, min(value, sup));
+    }
+
     /** Returns a pseudo-random number between 0.0 and 1.0.
      * <p><b>Note:</b> this implementation currently delegates to {@link Math#random}
      * @return a random number between 0.0 and 1.0
@@ -3312,6 +3373,7 @@ public class FastMath {
      * Absolute value.
      * @param x number from which absolute value is requested
      * @return abs(x), or throws an exception for {@code Integer.MIN_VALUE}
+     * @since 2.0
      */
     public static int absExact(final int x) {
         if (x == Integer.MIN_VALUE) {
@@ -4421,6 +4483,22 @@ public class FastMath {
 
         return ceilDiv(a, b);
 
+    }
+
+    /** Finds q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer division when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0
+     * @since 3.0
+     */
+    public static long ceilDiv(final long a, final int b) throws MathRuntimeException {
+        return ceilDiv(a, (long) b);
     }
 
     /** Finds r such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
