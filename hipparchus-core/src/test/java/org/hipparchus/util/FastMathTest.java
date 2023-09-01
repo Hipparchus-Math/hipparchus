@@ -2299,6 +2299,154 @@ public class FastMathTest {
     }
 
     @Test
+    public void testCeilDivInt() {
+        assertEquals(+2, FastMath.ceilDiv(+4, +3));
+        assertEquals(-1, FastMath.ceilDiv(-4, +3));
+        assertEquals(-1, FastMath.ceilDiv(+4, -3));
+        assertEquals(+2, FastMath.ceilDiv(-4, -3));
+        try {
+            FastMath.ceilDiv(1, 0);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mae) {
+            // expected
+        }
+        for (int a = -100; a <= 100; ++a) {
+            for (int b = -100; b <= 100; ++b) {
+                if (b != 0) {
+                    assertEquals(poorManCeilDiv(a, b), FastMath.ceilDiv(a, b));
+                    assertEquals(poorManCeilDiv(a, b), FastMath.ceilDivExact(a, b));
+                }
+            }
+        }
+        assertEquals(Integer.MIN_VALUE, FastMath.ceilDiv(Integer.MIN_VALUE, -1));
+        try {
+            FastMath.ceilDivExact(Integer.MIN_VALUE, -1);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            assertEquals(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, mre.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testCeilDivLong() {
+        assertEquals(+2l, FastMath.ceilDiv(+4l, +3l));
+        assertEquals(-1l, FastMath.ceilDiv(-4l, +3l));
+        assertEquals(-1l, FastMath.ceilDiv(+4l, -3l));
+        assertEquals(+2l, FastMath.ceilDiv(-4l, -3l));
+        try {
+            FastMath.ceilDiv(1l, 0l);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mae) {
+            // expected
+        }
+        for (long a = -100l; a <= 100l; ++a) {
+            for (long b = -100l; b <= 100l; ++b) {
+                if (b != 0l) {
+                    assertEquals(poorManCeilDiv(a, b), FastMath.ceilDiv(a, b));
+                    assertEquals(poorManCeilDiv(a, b), FastMath.ceilDivExact(a, b));
+                }
+            }
+        }
+        assertEquals(Long.MIN_VALUE, FastMath.ceilDiv(Long.MIN_VALUE, -1l));
+        try {
+            FastMath.ceilDivExact(Long.MIN_VALUE, -1l);
+            fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            assertEquals(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, mre.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testCeilDivModInt() {
+        RandomGenerator generator = new Well1024a(0x66c371cc6f7ebea9l);
+        for (int i = 0; i < 10000; ++i) {
+            int a = generator.nextInt();
+            int b = generator.nextInt();
+            if (b == 0) {
+                try {
+                    FastMath.floorMod(a, b);
+                    fail("an exception should have been thrown");
+                } catch (MathRuntimeException mae) {
+                    // expected
+                }
+            } else {
+                int d = FastMath.ceilDiv(a, b);
+                int m = FastMath.ceilMod(a, b);
+                assertEquals(poorManCeilDiv(a, b), d);
+                assertEquals(poorManCeilMod(a, b), m);
+                assertEquals(a, d * b + m);
+                if (b < 0) {
+                    assertTrue(m >= 0);
+                    assertTrue(-m > b);
+                } else {
+                    assertTrue(m <= 0);
+                    assertTrue(m < b);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testCeilDivModLong() {
+        RandomGenerator generator = new Well1024a(0x769c9ab4e4a9129el);
+        for (int i = 0; i < 10000; ++i) {
+            long a = generator.nextLong();
+            long b = generator.nextLong();
+            if (b == 0l) {
+                try {
+                    FastMath.floorMod(a, b);
+                    fail("an exception should have been thrown");
+                } catch (MathRuntimeException mae) {
+                    // expected
+                }
+            } else {
+                long d = FastMath.ceilDiv(a, b);
+                long m = FastMath.ceilMod(a, b);
+                assertEquals(poorManCeilDiv(a, b), d);
+                assertEquals(poorManCeilMod(a, b), m);
+                assertEquals(a, d * b + m);
+                if (b < 0l) {
+                    assertTrue(m >= 0l);
+                    assertTrue(-m > b);
+                } else {
+                    assertTrue(m <= 0l);
+                    assertTrue(m < b);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testCeilDivModLongInt() {
+        RandomGenerator generator = new Well1024a(0xd4c67ab9cd4af669l);
+        for (int i = 0; i < 10000; ++i) {
+            long a = generator.nextLong();
+            int b = generator.nextInt();
+            if (b == 0) {
+                try {
+                    FastMath.floorMod(a, b);
+                    fail("an exception should have been thrown");
+                } catch (MathRuntimeException mae) {
+                    // expected
+                }
+            } else {
+                long d = FastMath.ceilDiv(a, b);
+                int  m = FastMath.ceilMod(a, b);
+                assertEquals(poorManCeilDiv(a, b), d);
+                assertEquals(poorManCeilMod(a, b), m);
+                assertEquals(a, d * b + m);
+                if (b < 0) {
+                    assertTrue(m >= 0);
+                    assertTrue(-m > b);
+                } else {
+                    assertTrue(m <= 0);
+                    assertTrue(m < b);
+                }
+            }
+        }
+    }
+
+    @Test
     public void testFloorDivInt() {
         assertEquals(+1, FastMath.floorDiv(+4, +3));
         assertEquals(-2, FastMath.floorDiv(-4, +3));
@@ -2318,6 +2466,7 @@ public class FastMathTest {
                 }
             }
         }
+        assertEquals(Integer.MIN_VALUE, FastMath.floorDiv(Integer.MIN_VALUE, -1));
         try {
             FastMath.floorDivExact(Integer.MIN_VALUE, -1);
             fail("an exception should have been thrown");
@@ -2363,8 +2512,8 @@ public class FastMathTest {
             } else {
                 int d = FastMath.floorDiv(a, b);
                 int m = FastMath.floorMod(a, b);
-                assertEquals(FastMath.toIntExact(poorManFloorDiv(a, b)), d);
-                assertEquals(FastMath.toIntExact(poorManFloorMod(a, b)), m);
+                assertEquals(poorManFloorDiv(a, b), d);
+                assertEquals(poorManFloorMod(a, b), m);
                 assertEquals(a, d * b + m);
                 if (b < 0) {
                     assertTrue(m <= 0);
@@ -2397,6 +2546,7 @@ public class FastMathTest {
                 }
             }
         }
+        assertEquals(Long.MIN_VALUE, FastMath.floorDiv(Long.MIN_VALUE, -1l));
         try {
             FastMath.floorDivExact(Long.MIN_VALUE, -1l);
             fail("an exception should have been thrown");
@@ -2486,19 +2636,102 @@ public class FastMathTest {
         }
     }
 
-    private long poorManFloorDiv(long a, long b) {
+    private int poorManCeilDiv(int a, int b) {
 
         // find q0, r0 such that a = q0 b + r0
-        BigInteger q0 = BigInteger.valueOf(a / b);
-        BigInteger r0 = BigInteger.valueOf(a % b);
-        BigInteger fd = BigInteger.valueOf(Integer.MIN_VALUE);
+        BigInteger q0   = BigInteger.valueOf(a / b);
+        BigInteger r0   = BigInteger.valueOf(a % b);
+        BigInteger fd   = BigInteger.valueOf(Integer.MIN_VALUE);
         BigInteger bigB = BigInteger.valueOf(b);
 
         for (int k = -2; k < 2; ++k) {
             // find another pair q, r such that a = q b + r
             BigInteger bigK = BigInteger.valueOf(k);
-            BigInteger q = q0.subtract(bigK);
-            BigInteger r = r0.add(bigK.multiply(bigB));
+            BigInteger q    = q0.subtract(bigK);
+            BigInteger r    = r0.add(bigK.multiply(bigB));
+            if (r.abs().compareTo(bigB.abs()) < 0 &&
+                (r.intValue() == 0 || ((r.intValue() ^ b) & 0x80000000) != 0)) {
+                if (fd.compareTo(q) < 0) {
+                    fd = q;
+                }
+            }
+        }
+
+        return fd.intValue();
+
+    }
+
+    private long poorManCeilDiv(long a, long b) {
+
+        // find q0, r0 such that a = q0 b + r0
+        BigInteger q0   = BigInteger.valueOf(a / b);
+        BigInteger r0   = BigInteger.valueOf(a % b);
+        BigInteger fd   = BigInteger.valueOf(Long.MIN_VALUE);
+        BigInteger bigB = BigInteger.valueOf(b);
+
+        for (int k = -2; k < 2; ++k) {
+            // find another pair q, r such that a = q b + r
+            BigInteger bigK = BigInteger.valueOf(k);
+            BigInteger q    = q0.subtract(bigK);
+            BigInteger r    = r0.add(bigK.multiply(bigB));
+            if (r.abs().compareTo(bigB.abs()) < 0 &&
+                (r.longValue() == 0l || ((r.longValue() ^ b) & 0x8000000000000000l) != 0)) {
+                if (fd.compareTo(q) < 0) {
+                    fd = q;
+                }
+            }
+        }
+
+        return fd.longValue();
+
+    }
+
+    private long poorManCeilMod(long a, long b) {
+        return a - b * poorManCeilDiv(a, b);
+    }
+
+    private int poorManFloorDiv(int a, int b) {
+
+        // find q0, r0 such that a = q0 b + r0
+        BigInteger q0   = BigInteger.valueOf(a / b);
+        BigInteger r0   = BigInteger.valueOf(a % b);
+        BigInteger fd   = BigInteger.valueOf(Integer.MIN_VALUE);
+        BigInteger bigB = BigInteger.valueOf(b);
+
+        for (int k = -2; k < 2; ++k) {
+            // find another pair q, r such that a = q b + r
+            BigInteger bigK = BigInteger.valueOf(k);
+            BigInteger q    = q0.subtract(bigK);
+            BigInteger r    = r0.add(bigK.multiply(bigB));
+            if (r.abs().compareTo(bigB.abs()) < 0 &&
+                (r.intValue() == 0 || ((r.intValue() ^ b) & 0x80000000) == 0)) {
+                if (fd.compareTo(q) < 0) {
+                    fd = q;
+                }
+            }
+        }
+
+        return fd.intValue();
+
+    }
+
+    private int poorManFloorMod(int a, int b) {
+        return a - b * poorManFloorDiv(a, b);
+    }
+
+    private long poorManFloorDiv(long a, long b) {
+
+        // find q0, r0 such that a = q0 b + r0
+        BigInteger q0   = BigInteger.valueOf(a / b);
+        BigInteger r0   = BigInteger.valueOf(a % b);
+        BigInteger fd   = BigInteger.valueOf(Long.MIN_VALUE);
+        BigInteger bigB = BigInteger.valueOf(b);
+
+        for (int k = -2; k < 2; ++k) {
+            // find another pair q, r such that a = q b + r
+            BigInteger bigK = BigInteger.valueOf(k);
+            BigInteger q    = q0.subtract(bigK);
+            BigInteger r    = r0.add(bigK.multiply(bigB));
             if (r.abs().compareTo(bigB.abs()) < 0 &&
                 (r.longValue() == 0l || ((r.longValue() ^ b) & 0x8000000000000000l) == 0)) {
                 if (fd.compareTo(q) < 0) {

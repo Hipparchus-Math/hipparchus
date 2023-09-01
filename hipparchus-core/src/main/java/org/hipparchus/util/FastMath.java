@@ -4321,6 +4321,182 @@ public class FastMath {
         return x / y;
     }
 
+    /** Finds q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer division when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0
+     * @since 3.0
+     */
+    public static int ceilDiv(final int a, final int b) throws MathRuntimeException {
+
+        if (b == 0) {
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
+        }
+
+        final int m = a % b;
+        if ((a ^ b) < 0 || m == 0) {
+            // a and b have opposite signs, or division is exact
+            return a / b;
+        } else {
+            // a and b have same signs and division is not exact
+            return (a / b) + 1;
+        }
+
+    }
+
+    /** Finds q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer division when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0 or if a == {@code Integer.MIN_VALUE} and b = -1
+     * @since 3.0
+     */
+    public static int ceilDivExact(final int a, final int b) throws MathRuntimeException {
+
+        if (a == Integer.MIN_VALUE && b == -1) {
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, a, b);
+        }
+
+        return ceilDiv(a, b);
+
+    }
+
+    /** Finds q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer division when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0
+     * @since 3.0
+     */
+    public static long ceilDiv(final long a, final long b) throws MathRuntimeException {
+
+        if (b == 0l) {
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
+        }
+
+        final long m = a % b;
+        if ((a ^ b) < 0 || m == 0l) {
+            // a and b have opposite signs, or division is exact
+            return a / b;
+        } else {
+            // a and b have same signs and division is not exact
+            return (a / b) + 1l;
+        }
+
+    }
+
+    /** Finds q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer division when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return q such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0 or if a == {@code Long.MIN_VALUE} and b = -1
+     * @since 3.0
+     */
+    public static long ceilDivExact(final long a, final long b) throws MathRuntimeException {
+
+        if (a == Long.MIN_VALUE && b == -1l) {
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, a, b);
+        }
+
+        return ceilDiv(a, b);
+
+    }
+
+    /** Finds r such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer modulo when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return r such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0
+     * @since 3.0
+     */
+    public static int ceilMod(final int a, final int b) throws MathRuntimeException {
+
+        if (b == 0) {
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
+        }
+
+        final int m = a % b;
+        if ((a ^ b) < 0 || m == 0) {
+            // a and b have opposite signs, or division is exact
+            return m;
+        } else {
+            // a and b have same signs and division is not exact
+            return m - b;
+        }
+
+    }
+
+    /** Finds r such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer modulo when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return r such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0
+     * @since 3.0
+     */
+    public static int ceilMod(final long a, final int b) throws MathRuntimeException {
+        return (int) ceilMod(a, (long) b);
+    }
+
+    /** Finds r such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}.
+     * <p>
+     * This methods returns the same value as integer modulo when
+     * a and b are opposite signs, but returns a different value when
+     * they are same (i.e. q is positive).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return r such that {@code a = q b + r} with {@code b < r <= 0} if {@code b > 0} and {@code 0 <= r < b} if {@code  b < 0}
+     * @exception MathRuntimeException if b == 0
+     * @since 3.0
+     */
+    public static long ceilMod(final long a, final long b) throws MathRuntimeException {
+
+        if (b == 0l) {
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
+        }
+
+        final long m = a % b;
+        if ((a ^ b) < 0l || m == 0l) {
+            // a and b have opposite signs, or division is exact
+            return m;
+        } else {
+            // a and b have same signs and division is not exact
+            return m - b;
+        }
+
+    }
+
     /** Finds q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code  b < 0}.
      * <p>
      * This methods returns the same value as integer division when
@@ -4341,7 +4517,7 @@ public class FastMath {
 
         final int m = a % b;
         if ((a ^ b) >= 0 || m == 0) {
-            // a an b have same sign, or division is exact
+            // a and b have same sign, or division is exact
             return a / b;
         } else {
             // a and b have opposite signs and division is not exact
@@ -4410,7 +4586,7 @@ public class FastMath {
 
         final long m = a % b;
         if ((a ^ b) >= 0l || m == 0l) {
-            // a an b have same sign, or division is exact
+            // a and b have same sign, or division is exact
             return a / b;
         } else {
             // a and b have opposite signs and division is not exact
@@ -4462,7 +4638,7 @@ public class FastMath {
 
         final int m = a % b;
         if ((a ^ b) >= 0 || m == 0) {
-            // a an b have same sign, or division is exact
+            // a and b have same sign, or division is exact
             return m;
         } else {
             // a and b have opposite signs and division is not exact
@@ -4508,7 +4684,7 @@ public class FastMath {
 
         final long m = a % b;
         if ((a ^ b) >= 0l || m == 0l) {
-            // a an b have same sign, or division is exact
+            // a and b have same sign, or division is exact
             return m;
         } else {
             // a and b have opposite signs and division is not exact
@@ -4532,7 +4708,7 @@ public class FastMath {
         // and negative otherwise.
         final long m = Double.doubleToRawLongBits(magnitude); // don't care about NaN
         final long s = Double.doubleToRawLongBits(sign);
-        if ((m^s) >= 0) {
+        if ((m ^ s) >= 0) {
             return magnitude;
         }
         return -magnitude; // flip sign
@@ -4553,7 +4729,7 @@ public class FastMath {
         // and negative otherwise.
         final int m = Float.floatToRawIntBits(magnitude);
         final int s = Float.floatToRawIntBits(sign);
-        if ((m^s) >= 0) {
+        if ((m ^ s) >= 0) {
             return magnitude;
         }
         return -magnitude; // flip sign
