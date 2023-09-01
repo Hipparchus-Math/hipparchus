@@ -95,6 +95,7 @@ public class Erf {
      * either 1 or -1 as a double, so the appropriate extreme value is returned.
      * </p>
      *
+     * @param <T> type of the field elements
      * @param x the value.
      * @return the error function erf(x)
      * @throws org.hipparchus.exception.MathIllegalStateException
@@ -145,8 +146,9 @@ public class Erf {
     /**
      * Returns the complementary error function.
      *
-     * <p>erfc(x) = 2/&radic;&pi; <sub>x</sub>&int;<sup>&infin;</sup> e<sup>-t<sup>2</sup></sup>dt
-     * <br/> = 1 - {@link #erf(double) erf(x)} </p>
+     * \[
+     * erfc(x) = \frac{2}{\sqrt{\pi}} \int_x^\infty e^{-t^2}dt = 1 - erf(x)
+     * \]
      *
      * <p>This implementation computes erfc(x) using the
      * {@link Gamma#regularizedGammaQ(double, double, double, int) regularized gamma function}, following <a
@@ -342,6 +344,7 @@ public class Erf {
      * which was published in GPU Computing Gems, volume 2, 2010.
      * The source code is available <a href="http://gpucomputing.net/?q=node/1828">here</a>.
      * </p>
+     * @param <T> type of the filed elements
      * @param x the value
      * @return t such that x = erf(t)
      */
