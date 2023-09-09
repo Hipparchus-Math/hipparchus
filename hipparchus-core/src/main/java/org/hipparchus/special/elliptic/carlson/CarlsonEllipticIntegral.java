@@ -51,6 +51,14 @@ import org.hipparchus.util.FastMath;
  * They are also described in <a href="https://dlmf.nist.gov/19.36#i">section 19.36(i)</a>
  * of Digital Library of Mathematical Functions.
  * </p>
+ * <p>
+ * <em>
+ * Beware that when computing elliptic integrals in the complex plane,
+ * many issues arise due to branch cuts. See the
+ * <a href="https://www.hipparchus.org/hipparchus-core/special.html#Elliptic_functions_and_integrals">user guide</a>
+ * for a thorough explanation.
+ * </em>
+ * </p>
  * @since 2.0
  */
 public class CarlsonEllipticIntegral {

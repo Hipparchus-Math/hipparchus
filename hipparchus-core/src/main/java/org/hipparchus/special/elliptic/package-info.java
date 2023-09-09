@@ -16,6 +16,12 @@
  */
 /**
  * Implementations of elliptic functions and integrals.
+ * <p>
+ * Beware that when computing elliptic integrals in the complex plane,
+ * many issues arise due to branch cuts. See the
+ * <a href="https://www.hipparchus.org/hipparchus-core/special.html#Elliptic_functions_and_integrals">user guide</a>
+ * for a thorough explanation.
+ * </p>
  * @since 2.0
  */
 package org.hipparchus.special.elliptic;

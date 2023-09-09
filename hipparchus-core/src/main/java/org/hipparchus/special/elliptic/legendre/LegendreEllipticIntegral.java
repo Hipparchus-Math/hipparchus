@@ -35,10 +35,10 @@ import org.hipparchus.util.MathUtils;
  * </p>
  * <p>
  * <em>
- * BEWARE! Elliptic integrals for complex numbers in the incomplete case
- * are considered experimental for now, they have known issues:
- * <a href="https://github.com/Hipparchus-Math/hipparchus/issues/151">issue 151</a>
- * and <a href="https://github.com/Hipparchus-Math/hipparchus/issues/152">issue 152</a>.
+ * Beware that when computing elliptic integrals in the complex plane,
+ * many issues arise due to branch cuts. See the
+ * <a href="https://www.hipparchus.org/hipparchus-core/special.html#Elliptic_functions_and_integrals">user guide</a>
+ * for a thorough explanation.
  * </em>
  * </p>
  * <p>
