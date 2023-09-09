@@ -699,7 +699,7 @@ The code above will display the t-statistic associated with a one-sample
 t-test comparing the mean of the `observed` values against `mu`.
 
 To compare the mean of a dataset described by a
-[StatisticalSummary](../apidocs/org/hipparchus/stat/descriptive/StatisticalSummary.html)
+[StreamingStatistics](../apidocs/org/hipparchus/stat/descriptive/StreamingStatistics.html)
 to a fixed value:
 
     double[] observed ={1d, 2d, 3d};
