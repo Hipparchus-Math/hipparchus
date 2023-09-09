@@ -43,15 +43,15 @@ contains several useful functions involving the Gamma Function.
 implementation is assessed by comparison with high precision values computed
 with the [Maxima](http://maxima.sourceforge.net/) Computer Algebra System.
 
-|  Interval                 |  Values tested                                |  Average error  |  Standard deviation  |  Maximum error |
-|---------------------------|-----------------------------------------------|-----------------|----------------------|----------------|
-| \\(-5  \\lt x \\lt  -4\\) | `x[i] = i / 1024, i = -5119, ..., -4097`      | 0.49 ulps       | 0.57 ulps            | 3.0 ulps       |
-| \\(-4  \\lt x \\lt  -3\\) | `x[i] = i / 1024, i = -4095, ..., -3073`      | 0.36 ulps       | 0.51 ulps            | 2.0 ulps       |
-| \\(-3  \\lt x \\lt  -2\\) | `x[i] = i / 1024, i = -3071, ..., -2049`      | 0.41 ulps       | 0.53 ulps            | 2.0 ulps       |
-| \\(-2  \\lt x \\lt  -1\\) | `x[i] = i / 1024, i = -2047, ..., -1025`      | 0.37 ulps       | 0.50 ulps            | 2.0 ulps       |
-| \\(-1  \\lt x \\lt   0\\) | `x[i] = i / 1024, i = -1023, ..., -1`         | 0.46 ulps       | 0.54 ulps            | 2.0 ulps       |
-| \\( 0  \\lt x \\le   8\\) | `x[i] = i / 1024, i = 1, ..., 8192`           | 0.33 ulps       | 0.48 ulps            | 2.0 ulps       |
-| \\( 8  \\lt x \\le 141\\) | `x[i] = i / 64, i = 513, ..., 9024`           | 1.32 ulps       | 1.19 ulps            | 7.0 ulps       |
+|  Interval               |  Values tested                                |  Average error  |  Standard deviation  |  Maximum error |
+|-------------------------|-----------------------------------------------|-----------------|----------------------|----------------|
+| \\(-5  \lt x \lt  -4\\) | `x[i] = i / 1024, i = -5119, ..., -4097`      | 0.49 ulps       | 0.57 ulps            | 3.0 ulps       |
+| \\(-4  \lt x \lt  -3\\) | `x[i] = i / 1024, i = -4095, ..., -3073`      | 0.36 ulps       | 0.51 ulps            | 2.0 ulps       |
+| \\(-3  \lt x \lt  -2\\) | `x[i] = i / 1024, i = -3071, ..., -2049`      | 0.41 ulps       | 0.53 ulps            | 2.0 ulps       |
+| \\(-2  \lt x \lt  -1\\) | `x[i] = i / 1024, i = -2047, ..., -1025`      | 0.37 ulps       | 0.50 ulps            | 2.0 ulps       |
+| \\(-1  \lt x \lt   0\\) | `x[i] = i / 1024, i = -1023, ..., -1`         | 0.46 ulps       | 0.54 ulps            | 2.0 ulps       |
+| \\( 0  \lt x \le   8\\) | `x[i] = i / 1024, i = 1, ..., 8192`           | 0.33 ulps       | 0.48 ulps            | 2.0 ulps       |
+| \\( 8  \lt x \le 141\\) | `x[i] = i / 64, i = 513, ..., 9024`           | 1.32 ulps       | 1.19 ulps            | 7.0 ulps       |
 
 ### Log Gamma
 
@@ -64,9 +64,9 @@ with the [Maxima](http://maxima.sourceforge.net/) Computer Algebra System.
 
 |  Interval                                               |  Values tested                                |  Average error  |  Standard deviation  |  Maximum error |
 |---------------------------------------------------------|-----------------------------------------------|-----------------|----------------------|----------------|
-| \\(0    \\lt x \\le    8\\)                             | `x[i] = i / 1024, i = 1, ..., 8192`           | 0.32 ulps       | 0.50 ulps            | 4.0 ulps       |
-| \\(8    \\lt x \\le 1024\\)                             | `x[i] = i / 8, i = 65, ..., 8192`             | 0.43 ulps       | 0.53 ulps            | 3.0 ulps       |
-| \\(1024 \\lt x \\le 8192\\)                             | `x[i], i = 1025, ..., 8192`                   | 0.53 ulps       | 0.56 ulps            | 3.0 ulps       |
+| \\(0    \lt x \le    8\\)                               | `x[i] = i / 1024, i = 1, ..., 8192`           | 0.32 ulps       | 0.50 ulps            | 4.0 ulps       |
+| \\(8    \lt x \le 1024\\)                               | `x[i] = i / 8, i = 65, ..., 8192`             | 0.43 ulps       | 0.53 ulps            | 3.0 ulps       |
+| \\(1024 \lt x \le 8192\\)                               | `x[i], i = 1025, ..., 8192`                   | 0.53 ulps       | 0.56 ulps            | 3.0 ulps       |
 | \\(8933.439345993791 \le x \le 1.75555970201398e+305\\) | `x[i] = 2**(i / 8), i = 105, ..., 8112`       | 0.35 ulps       | 0.49 ulps            | 2.0 ulps       |
                                                                                                       
 ### Regularized Gamma
@@ -89,14 +89,14 @@ Beta function, log B(a, b).
 implementation is assessed by comparison with high precision values computed
 with the [Maxima](http://maxima.sourceforge.net/) Computer Algebra System.
 
-|  Interval                                            |  Values tested                                                            |  Average error  |  Standard deviation  |  Maximum error  |
-|------------------------------------------------------|---------------------------------------------------------------------------|-----------------|----------------------|-----------------|
-| \\(0  \\lt x \le   8\\)<br/>\\(0   \\lt y \le   8\\) | `x[i] = i / 32, i = 1, ..., 256`<br/>`y[j] = j / 32, j = 1, ..., 256`     |    1.80 ulps    |     81.08 ulps       | 14031.0 ulps    |
-| \\(0  \\lt x \le   8\\)<br/>\\(8   \\lt y \le  16\\) | `x[i] = i / 32, i = 1, ..., 256`<br/>`y[j] = j / 32, j = 257, ..., 512`   |    0.50 ulps    |     3.64 ulps        | 694.0 ulps      |
-| \\(0  \\lt x \le   8\\)<br/>\\(16  \\lt y \le 256\\) | `x[i] = i / 32, i = 1, ..., 256`<br/>`y[j] = j, j = 17, ..., 256`         |    1.04 ulps    |     139.32 ulps      | 34509.0 ulps    |
-| \\(8  \\lt x \le  16\\)<br/>\\(8   \\lt y \le  16\\) | `x[i] = i / 32, i = 257, ..., 512`<br/>`y[j] = j / 32, j = 257, ..., 512` |    0.35 ulps    |     0.48 ulps        | 2.0 ulps        |
-| \\(8  \\lt x \le  16\\)<br/>\\(16  \\lt y \le 256\\) | `x[i] = i / 32, i = 257, ..., 512`<br/>`y[j] = j, j = 17, ..., 256`       |    0.31 ulps    |     0.47 ulps        | 2.0 ulps        |
-| \\(16 \\lt x \le 256\\)<br/>\\(16  \\lt y \le 256\\) | `x[i] = i, i = 17, ..., 256`<br/>`y[j] = j, j = 17, ..., 256`             |    0.35 ulps    |     0.49 ulps        | 2.0 ulps        |
+|  Interval                                          |  Values tested                                                            |  Average error  |  Standard deviation  |  Maximum error  |
+|----------------------------------------------------|---------------------------------------------------------------------------|-----------------|----------------------|-----------------|
+| \\(0  \lt x \le   8\\)<br/>\\(0   \lt y \le   8\\) | `x[i] = i / 32, i = 1, ..., 256`<br/>`y[j] = j / 32, j = 1, ..., 256`     |    1.80 ulps    |     81.08 ulps       | 14031.0 ulps    |
+| \\(0  \lt x \le   8\\)<br/>\\(8   \lt y \le  16\\) | `x[i] = i / 32, i = 1, ..., 256`<br/>`y[j] = j / 32, j = 257, ..., 512`   |    0.50 ulps    |     3.64 ulps        | 694.0 ulps      |
+| \\(0  \lt x \le   8\\)<br/>\\(16  \lt y \le 256\\) | `x[i] = i / 32, i = 1, ..., 256`<br/>`y[j] = j, j = 17, ..., 256`         |    1.04 ulps    |     139.32 ulps      | 34509.0 ulps    |
+| \\(8  \lt x \le  16\\)<br/>\\(8   \lt y \le  16\\) | `x[i] = i / 32, i = 257, ..., 512`<br/>`y[j] = j / 32, j = 257, ..., 512` |    0.35 ulps    |     0.48 ulps        | 2.0 ulps        |
+| \\(8  \lt x \le  16\\)<br/>\\(16  \lt y \le 256\\) | `x[i] = i / 32, i = 257, ..., 512`<br/>`y[j] = j, j = 17, ..., 256`       |    0.31 ulps    |     0.47 ulps        | 2.0 ulps        |
+| \\(16 \lt x \le 256\\)<br/>\\(16  \lt y \le 256\\) | `x[i] = i, i = 17, ..., 256`<br/>`y[j] = j, j = 17, ..., 256`             |    0.35 ulps    |     0.49 ulps        | 2.0 ulps        |
 
 ### Regularized Beta
 
@@ -124,81 +124,81 @@ in an expression, the two other are often also needed. The inverse functions \\(
 \\(arccs(u|m)\\), \\(arcds(u|m)\\), \\(arcns(u|m)\\), \\(arcdc(u|m)\\), \\(arcnc(u|m)\\), \\(arcsc(u|m)\\), \\(arcnd(u|m)\\),
 \\(arcsd(u|m)\\), and \\(arccd(u|m)\\) are also available.
 
-`JacobiTheta` (and `FieldJacobiTheta`) computes the four Jacobi theta functions \\(\theta_1(z|\\tau)\\), \\(\theta_2(z|\\tau)\\),
-\\(\theta_3(z|\\tau)\\), and \\(\theta_4(z|\\tau)\\). The half-period ratio \\(\\tau\\) is linked to the nome `q`:
-\\(q = e^{i\\pi\\tau}\\). Here again, the four functions are computed at once and a quadruplet is returned.
+`JacobiTheta` (and `FieldJacobiTheta`) computes the four Jacobi theta functions \\(\theta_1(z|\tau)\\), \\(\theta_2(z|\tau)\\),
+\\(\theta_3(z|\tau)\\), and \\(\theta_4(z|\tau)\\). The half-period ratio \\(\tau\\) is linked to the nome `q`:
+\\(q = e^{i\pi\tau}\\). Here again, the four functions are computed at once and a quadruplet is returned.
 
 `CarlsonEllipticIntegrals` is a utility class that computes the following integrals in Carlson symmetric form,
 for both primitive double, `CalculusFieldElement`, `Complex` and `FieldComplex`:
 
-| Name               |  Definition                                                                                                                  |
-|--------------------|------------------------------------------------------------------------------------------------------------------------------|
-| \\(R_F(x,y,z)\\)   | \\(\\frac{1}{2}\\int_{0}^{\\infty}\\frac{\\mathrm{d}t}{s(t)}\\)                                                              |
-| \\(R_J(x,y,z,p)\\) | \\(\\frac{3}{2}\\int_{0}^{\\infty}\\frac{\\mathrm{d}t}{s(t)(t+p)}\\)                                                         |
-| \\(R_G(x,y,z)\\)   | \\(\frac{1}{4}\\int_{0}^{\\infty}\\frac{1}{s(t)}\\left(\\frac{x}{t+x}+\\frac{y}{t+y}+\\frac{z}{t+z}\\right)t\\mathrm{d}t \\) |
-| \\(R_D(x,y,z)\\)   | \\(R_J(x,y,z,z)\\)                                                                                                           |
-| \\(R_C(x,y)\\)     | \\(R_F(x,y,y)\\)                                                                                                             |
+| Name               |  Definition                                                                                                         |
+|--------------------|---------------------------------------------------------------------------------------------------------------------|
+| \\(R_F(x,y,z)\\)   | \\(\frac{1}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{s(t)}\\)                                                          |
+| \\(R_J(x,y,z,p)\\) | \\(\frac{3}{2}\int_{0}^{\infty}\frac{\mathrm{d}t}{s(t)(t+p)}\\)                                                     |
+| \\(R_G(x,y,z)\\)   | \\(\frac{1}{4}\int_{0}^{\infty}\frac{1}{s(t)}\left(\frac{x}{t+x}+\frac{y}{t+y}+\frac{z}{t+z}\right)t\mathrm{d}t \\) |
+| \\(R_D(x,y,z)\\)   | \\(R_J(x,y,z,z)\\)                                                                                                  |
+| \\(R_C(x,y)\\)     | \\(R_F(x,y,y)\\)                                                                                                    |
 
-where \\(s(t) = \\sqrt{t+x}\\sqrt{t+y}\\sqrt{t+z}\\).
+where \\(s(t) = \sqrt{t+x}\sqrt{t+y}\sqrt{t+z}\\).
 
 `LegendreEllipticIntegrals` is a utility class that computes the following integrals,
 for both primitive double, `CalculusFieldElement`, `Complex` and `FieldComplex`.
 (the implementation uses `CarlsonEllipticIntegrals` internally):
 
-| Name                  | Type       |  Definition                                                                                      |
-|-----------------------|------------|--------------------------------------------------------------------------------------------------|
-| \\(K(m)\\)            |  complete  | \\(\\int_0^{\\frac{\\pi}{2}} \\frac{d\\theta}{\\sqrt{1-m \\sin^2\\theta}}\\)                     |
-| \\(K'(m)\\)           |  complete  | \\(\\int_0^{\\frac{\\pi}{2}} \\frac{d\\theta}{\\sqrt{1-(1-m) \\sin^2\\theta}}\\)                 |
-| \\(E(m) \\)           |  complete  | \\(\\int_0^{\\frac{\\pi}{2}} \\sqrt{1-m \\sin^2\\theta} d\\theta\\)                              |
-| \\(D(m) \\)           |  complete  | \\(\\frac{K(m) - E(m)}{m}\\)                                                                     |
-| \\(\Pi(n, m)\\)       |  complete  | \\(\\int_0^{\\frac{\\pi}{2}} \\frac{d\\theta}{\\sqrt{1-m \\sin^2\\theta}(1-n \\sin^2\\theta)}\\) |
-| \\(F(\phi, m)\\)      | incomplete | \\(\\int_0^{\\phi} \\frac{d\\theta}{\\sqrt{1-m \\sin^2\\theta}}\\)                               |
-| \\(E(\phi, m)\\)      | incomplete | \\(\\int_0^{\\phi} \\sqrt{1-m \\sin^2\\theta} d\\theta\\)                                        |
-| \\(D(\phi, m)\\)      | incomplete | \\(\\frac{K(\\phi, m) - E(\\phi, m)}{m}\\)                                                       |
-| \\(\Pi(n, \phi, m)\\) | incomplete | \\(\\int_0^{\\phi} \\frac{d\\theta}{\\sqrt{1-m \\sin^2\\theta}(1-n \\sin^2\\theta)}\\)           |
+| Name                     | Type       |  Definition                                                                            |
+|--------------------------|------------|----------------------------------------------------------------------------------------|
+| \\(K(m)\\)               |  complete  | \\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}\\)                   |
+| \\(K'(m)\\)              |  complete  | \\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-(1-m) \sin^2\theta}}\\)               |
+| \\(E(m) \\)              |  complete  | \\(\int_0^{\frac{\pi}{2}} \sqrt{1-m \sin^2\theta} d\theta\\)                           |
+| \\(D(m) \\)              |  complete  | \\(\frac{K(m) - E(m)}{m}\\)                                                            |
+| \\(\Pi(n, m)\\)          |  complete  | \\(\int_0^{\frac{\pi}{2}} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}\\) |
+| \\(F(\varphi, m)\\)      | incomplete | \\(\int_0^{\varphi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}}\\)                         |
+| \\(E(\varphi, m)\\)      | incomplete | \\(\int_0^{\varphi} \sqrt{1-m \sin^2\theta} d\theta\\)                                 |
+| \\(D(\varphi, m)\\)      | incomplete | \\(\frac{K(\varphi, m) - E(\varphi, m)}{m}\\)                                          |
+| \\(\Pi(n, \varphi, m)\\) | incomplete | \\(\int_0^{\varphi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}\\)       |
 
 Beware that when computing elliptic integrals in the complex plane,
 many issues arise due to branch cuts. One typical example is the
-integral \\(\Pi(n, \phi, m)\\), which is defined as
+integral \\(\Pi(n, \varphi, m)\\), which is defined as
 \\[
-\int_0^{\varphi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
-\|`
-\\(\phi\\) is the amplitude, \\(n\\) is the elliptic characteristic,
+\Pi(n, \varphi, m) = \int_0^{\varphi} \frac{d\theta}{\sqrt{1-m \sin^2\theta}(1-n \sin^2\theta)}
+\\]
+\\(\varphi\\) is the amplitude, \\(n\\) is the elliptic characteristic,
 \\(m\\) is the ellipse parameter (some conventions use the elliptic
 modulus \\(k\\) such that \\(m=k^2\\) instead of the parameter
-\\(m\\), or they use the nome \\(\\)). All variables that appear in
+\\(m\\), or they use the nome \\(q\\)). All variables that appear in
 this expression may be complex.
 
 The integrand has poles corresponding to
 \\[
 \theta_m = \pm \arcsin\frac{1}{\sqrt{m}},\quad\theta_n = \pm \arcsin\frac{1}{\sqrt{n}}
-\]`
+\\]
 and their periodic repetitions due to the inverse sines.
 
 The integral is expected to be computed over the straight path from
-\\(0\\) to \\(\phi\\). With this assumption, the integral is a
+\\(0\\) to \\(\varphi\\). With this assumption, the integral is a
 single-valued function. The following picture shows the value of the
-integral for n=3.4-1.3i and m=0.2+0.6i.
+integral for \\(n=3.4-1.3i\\) and \\(m=0.2+0.6i\\).
 
 ![numerical integration](images/userguide/integral-of-the-third-kind-numerical.png)
 
-One can clearly see the pole near 0.537+0.110i as the start point of a
-ray separating a green and a purple zone. Domain coloring uses hue to
-represent phase plus periodic brightness to enhance both modulus and
-phase. The sharp green/purple transition on the right hand side shows
-there is a discontinuity when crossing this ray. There is another pole
-(less visible) near 0.785-0.909i and another ray. Drawing the integral
-on a larger range would show other rays dues to the repetitions of
-these poles.
+One can clearly see the pole near \\(0.537+0.110i\\) as the start
+point of a ray separating a green and a purple zone. Domain coloring
+uses hue to represent phase plus periodic brightness to enhance both
+modulus and phase. The sharp green/purple transition on the right hand
+side shows there is a discontinuity when crossing this ray. There is
+another pole (less visible) near \\(0.785-0.909i\\) and another
+ray. Drawing the integral on a larger range would show other rays dues
+to the repetitions of these poles.
 
 If we take care to never cross the rays cast by poles, we could in
 fact compute the integral using other paths than the straight line
-from \\(0\\) to \\(\phi\\). We could for example start parallel to the
+from \\(0\\) to \\(\varphi\\). We could for example start parallel to the
 real axis and then parallel to the imaginary axis, or any other path.
 
 If on the other hand we compute the integral using a path that crosses
 these rays (i.e. a path that goes after the poles and then bends
-upwards or downward before reaching \\(\phi\\), then we don't notice
+upwards or downward before reaching \\(\varphi\\), then we don't notice
 that we cross the rays because in fact there are no poles along the
 path, the poles are really isolated. So in this case, we compute a
 value of the integral that is finite and looks perfectly reasonable,
@@ -221,7 +221,7 @@ converge. The tiny white points on the ray cast by the first pole
 correspond to failures: the integrator exceeded its maximum number of
 iterations (despite it was huge). The lower ray is also in fact
 probably false numerically, there should be a more pronounced color
-change, here we seem to just have some darker purple which I think is
+change, here we seem to just have some darker purple which we think is
 wrong.
 
 Carlson transformations are extremely fast, but they obviously select
@@ -238,9 +238,9 @@ to its conjugate: the imaginary part changes its sign instantly. After
 the switch, the iterative algorithm continues flawlessly and
 converges. It may even converge to the same median point that it had
 before the switch, but as the intermediate values are used in the
-computation of \\(\Pi(n, \phi, m)\\) (they are not used in the
-computations of the integrals of the first kind \\(F(\phi, m)\\) and
-of the second kind \\(E(\phi, m)\\)), the final value computed for the
+computation of \\(\Pi(n, \varphi, m)\\) (they are not used in the
+computations of the integrals of the first kind \\(F(\varphi, m)\\) and
+of the second kind \\(E(\varphi, m)\\)), the final value computed for the
 integral is not the correct one. The algorithm has switched from one
 sheet of the Riemann surface to another one, and we have no way to
 know it. It is even weird as when we are in the vicinity of the ray,
@@ -254,26 +254,26 @@ reference we trust. Unfortunately, we cannot draw the same picture
 using a free account at Wolfram cloud because this computation exceeds
 the allowed time. So we just used the forms on Wolfram Alpha site and
 got values one by one... Our check was to compute the integrals with
-the end point \\(\phi\\) moving from 1.2-1.5i to 1.2+0.75i. This means
-that despite the initial point of my integral was always 0+0i, the end
-point of the integral was moving along a line parallel to the
-imaginary axis. So the first integrals were computed using a path
-slanted downwards that was below the poles and ended up in the purple
-region, whereas the last integrals were computed using a slanted path
-that was above the pole and ended up in the green region. Of course,
-there were some specific value of \\(\phi\\) that came very close to
-the pole and ended up on the singularity. The various columns of the
-table are:
+the end point \\(\varphi\\) moving from \\(1.2-1.5i\\) to
+\\(1.2+0.75i\\). This means that despite the initial point of my
+integral was always 0+0i, the end point of the integral was moving
+along a line parallel to the imaginary axis. So the first integrals
+were computed using a path slanted downwards that was below the poles
+and ended up in the purple region, whereas the last integrals were
+computed using a slanted path that was above the pole and ended up in
+the green region. Of course, there were some specific value of
+\\(\varphi\\) that came very close to the pole and ended up on the
+singularity. The various columns of the table are:
 
   1) integral end point
-  2) numerical integration using a straight path from \\(0\\) to \\(\phi\\)
+  2) numerical integration using a straight path from \\(0\\) to \\(\varphi\\)
   3) numerical integration using a path with an intermediate point at pole+i (i.e. above the pole)
   4) numerical integration using a path with an intermediate point at pole-i (i.e. below first pole, and then above second pole)
   5) numerical integration using a path with two intermediate points below both poles
   6) computation using Carlson transforms
   7) reference values from Wolfram Alpha
 
-|     \\(\phi\\)     |  straight integration  |     integration ⇗⇘     |    integration ⇘⇒     |     integration ⇘⇗     |     Carlson-based       |     WolframAlpha    |
+|     \\(\varphi\\)  |  straight integration  |     integration ⇗⇘     |    integration ⇘⇒     |     integration ⇘⇗     |     Carlson-based       |     WolframAlpha    |
 |--------------------|------------------------|------------------------|-----------------------|------------------------|-------------------------|---------------------|
 |1.2 -1.5000000000   |   0.067423 -0.689888   |  -0.473719  0.953654   |   0.141937 -0.823344  |    0.034362 -0.584955  |    0.141937 -0.823344   |   0.033512 -0.575665|
 |1.2 -1.4000000000   |   0.119416 -0.777162   |  -0.470786  0.956006   |   0.144870 -0.820991  |    0.037511 -0.583373  |    0.144870 -0.820991   |   0.036445 -0.573313|
@@ -314,17 +314,18 @@ table are:
 |1.2  0.4500000000   |  -0.057161  0.722395   |  -0.057161  0.722395   |   0.558494 -1.054603  |    0.455863 -0.841550  |   -0.672817  2.499392   |  -0.057161  0.722395|
 |1.2  0.7500000000   |  -0.037762  0.653477   |  -0.037762  0.653477   |   0.577893 -1.123520  |    0.476489 -0.915387  |   -0.653418  2.430475   |  -0.037762  0.653477|
 
-This table shows the discontinuities. We see that as \\(\phi\\) goes
-from 1.2 -1.5i to 1.2+0.75i, all method have singularities. There are
-ranges in which several agree, and ranges in which some switch to the
-wrong sheet of the Riemann surface. Comparing column 2 (straight
-integration) and column 6 (Carlson transforms), corresponds to looking in
-the first two pictures at the vertical line with real value 1.2.  We
-see that for \\(\phi=1.2+0.2467578160i\\), the straight integral failed to
-compute, and we see that below and above this value, the integral
-exhibits a discontinuity. This is correct and this is the result we
-want. For the low values of \\(\phi\\) however, the values of the numerical
-integral seem strange to us, we think it failed to converge.
+This table shows the discontinuities. We see that as \\(\varphi\\)
+goes from \\(1.2 -1.5i\\) to \\(1.2+0.75i\\), all method have
+singularities. There are ranges in which several agree, and ranges in
+which some switch to the wrong sheet of the Riemann surface. Comparing
+column 2 (straight integration) and column 6 (Carlson transforms),
+corresponds to looking in the first two pictures at the vertical line
+with real value 1.2.  We see that for \\(\varphi=1.2+0.2467578160i\\),
+the straight integral failed to compute, and we see that below and
+above this value, the integral exhibits a discontinuity. This is
+correct and this is the result we want. For the low values of
+\\(\varphi\\) however, the values of the numerical integral seem
+strange to us, we think it failed to converge.
 
 For low values, Carlson based computation is on fact quite good, but
 it fails after some time, and when it switches, it switches to some
@@ -332,7 +333,7 @@ wrong sheet that corresponds to none of the three integration paths we
 used.
 
 Surprisingly, Wolfram Alpha seems to be quite wrong in a number of
-places. Around \\(\phi=1.2+0.0852i\\), it even switches twice in a very
+places. Around \\(\varphi=1.2+0.0852i\\), it even switches twice in a very
 short interval, and then switch to the same value of the above
 integral. This means in Wolfram Alpha, the green area that should be
 above the ray extends much below.
