@@ -7,7 +7,7 @@
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+       https://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,7 +32,6 @@
   <rule ref="category/java/errorprone.xml">
 
     <exclude name="AvoidLiteralsInIfCondition"/>
-    <exclude name="BeanMembersShouldSerialize"/>
     <exclude name="AvoidFieldNameMatchingMethodName"/>
     <exclude name="NullAssignment"/>
     <exclude name="ConstructorCallsOverridableMethod"/>
@@ -164,6 +163,9 @@
 
     <exclude name="ClassWithOnlyPrivateConstructorsShouldBeFinal"/>
     <exclude name="AvoidUncheckedExceptionsInSignatures"/>
+
+    <!-- This is a library, its classes are intended to be used from outside -->
+    <exclude name="LoosePackageCoupling" />
 
     <!-- TODO: we should reactivate these rules -->
     <exclude name="ImmutableField"/>

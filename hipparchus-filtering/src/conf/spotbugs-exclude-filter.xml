@@ -7,7 +7,7 @@
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+       https://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,5 +22,60 @@
   put here to instruct findbugs it must ignore them.
 -->
 <FindBugsFilter>
+
+  <!-- the following are considered false positive, they correspond to regular object oriented design
+       SpotBugs has just become too stringent (see https://github.com/spotbugs/spotbugs/issues/1601,
+       https://github.com/spotbugs/spotbugs/issues/1771, https://github.com/spotbugs/spotbugs/issues/2083,
+       https://github.com/spotbugs/spotbugs/issues/2344, https://github.com/spotbugs/spotbugs/issues/2356,
+       https://github.com/spotbugs/spotbugs-gradle-plugin/issues/731)
+  -->
+  <Match>
+    <Class name="org.hipparchus.filtering.kalman.ProcessEstimate"/>
+    <Or>
+      <Method name="getCovariance"/>
+      <Method name="getInnovationCovariance"/>
+      <Method name="getKalmanGain"/>
+      <Method name="getMeasurementJacobian"/>
+      <Method name="getState"/>
+      <Method name="getStateTransitionMatrix"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.filtering.kalman.extended.NonLinearEvolution"/>
+    <Or>
+      <Method name="getCurrentState"/>
+      <Method name="getMeasurementJacobian"/>
+      <Method name="getProcessNoiseMatrix"/>
+      <Method name="getStateTransitionMatrix"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.filtering.kalman.linear.LinearEvolution"/>
+    <Or>
+      <Method name="getCommand"/>
+      <Method name="getControlMatrix"/>
+      <Method name="getMeasurementJacobian"/>
+      <Method name="getProcessNoiseMatrix"/>
+      <Method name="getStateTransitionMatrix"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.filtering.kalman.unscented.UnscentedEvolution"/>
+    <Method name="getProcessNoiseMatrix"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.filtering.kalman.ProcessEstimate"/>
+      <Class name="org.hipparchus.filtering.kalman.extended.NonLinearEvolution"/>
+      <Class name="org.hipparchus.filtering.kalman.linear.LinearEvolution"/>
+      <Class name="org.hipparchus.filtering.kalman.unscented.UnscentedEvolution"/>
+    </Or>
+    <Method name="&lt;init>"/>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
 
 </FindBugsFilter>

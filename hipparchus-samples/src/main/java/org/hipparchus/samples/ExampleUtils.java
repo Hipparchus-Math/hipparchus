@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -42,6 +42,7 @@ import javax.swing.SwingUtilities;
 
 public class ExampleUtils {
 
+    /** Display frame. */
     @SuppressWarnings("serial")
     public static class ExampleFrame extends JFrame {
 
@@ -58,6 +59,9 @@ public class ExampleUtils {
         }
     }
 
+    /** Display example.
+     * @param frame frame to display
+     */
     public static void showExampleFrame(final ExampleFrame frame) {
         Runnable r = new Runnable() {
             public void run() {
@@ -108,6 +112,14 @@ public class ExampleUtils {
         return image;
     }
 
+    /** Resize an image.
+     * @param originalImage original image
+     * @param width desired width
+     * @param height desired height
+     * @param type type of the create image
+     * @return resized image
+     * @throws IOException
+     */
     public static BufferedImage resizeImage(BufferedImage originalImage, int width, int height, int type) throws IOException {
         BufferedImage resizedImage = new BufferedImage(width, height, type);
         Graphics2D g = resizedImage.createGraphics();

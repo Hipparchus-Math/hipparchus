@@ -7,7 +7,7 @@
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+       https://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -101,6 +101,384 @@
     <Class name="org.hipparchus.util.FastMath$CodyWaite" />
     <Method name="&lt;init>" params="double" returns="void" />
     <Bug pattern="CNT_ROUGH_CONSTANT_VALUE" />
+  </Match>
+
+  <!-- the following are considered false positive, they correspond to regular object oriented design
+       SpotBugs has just become too stringent (see https://github.com/spotbugs/spotbugs/issues/1601,
+       https://github.com/spotbugs/spotbugs/issues/1771, https://github.com/spotbugs/spotbugs/issues/2083,
+       https://github.com/spotbugs/spotbugs/issues/2344, https://github.com/spotbugs/spotbugs/issues/2356,
+       https://github.com/spotbugs/spotbugs-gradle-plugin/issues/731)
+  -->
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.analysis.differentiation.DSFactory"/>
+      <Class name="org.hipparchus.analysis.differentiation.FDSFactory"/>
+    </Or>
+    <Method name="getCompiler"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.analysis.differentiation.DSFactory$DSField"/>
+      <Class name="org.hipparchus.analysis.differentiation.FDSFactory$DerivativeField"/>
+    </Or>
+    <Or>
+      <Method name="getZero"/>
+      <Method name="getOne"/>
+      <Method name="getPi"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.analysis.differentiation.DerivativeStructure"/>
+    <Method name="getFactory"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+    <Class name="org.hipparchus.analysis.differentiation.FieldGradient"/>
+      <Class name="org.hipparchus.analysis.differentiation.FieldUnivariateDerivative1"/>
+      <Class name="org.hipparchus.analysis.differentiation.FieldUnivariateDerivative2"/>
+    </Or>
+    <Or>
+      <Method name="getValue"/>
+      <Method name="getDerivative"/>
+      <Method name="getFirstDerivative"/>
+      <Method name="getSecondDerivative"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.analysis.differentiation.GradientField"/>
+      <Class name="org.hipparchus.analysis.differentiation.UnivariateDerivative1Field"/>
+      <Class name="org.hipparchus.analysis.differentiation.UnivariateDerivative2Field"/>
+      <Class name="org.hipparchus.analysis.differentiation.FieldGradientField"/>
+      <Class name="org.hipparchus.analysis.differentiation.FieldUnivariateDerivative1Field"/>
+      <Class name="org.hipparchus.analysis.differentiation.FieldUnivariateDerivative2Field"/>
+    </Or>
+    <Or>
+      <Method name="getZero"/>
+      <Method name="getOne"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver$Interval"/>
+    <Or>
+      <Method name="getLeftAbscissa"/>
+      <Method name="getLeftValue"/>
+      <Method name="getRightAbscissa"/>
+      <Method name="getRightValue"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver"/>
+    <Or>
+      <Method name="getAbsoluteAccuracy"/>
+      <Method name="getFunctionValueAccuracy"/>
+      <Method name="getRelativeAccuracy"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.complex.ComplexFormat"/>
+    <Or>
+      <Method name="getRealFormat"/>
+      <Method name="getImaginaryFormat"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.complex.FieldComplex"/>
+    <Or>
+      <Method name="getRealPart"/>
+      <Method name="getImaginaryPart"/>
+      <Method name="getImaginary"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.complex.FieldComplexField"/>
+    <Or>
+      <Method name="getZero"/>
+      <Method name="getOne"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.dfp.Dfp"/>
+    <Method name="getField"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.dfp.DfpField"/>
+    <Or>
+      <Method name="getZero"/>
+      <Method name="getOne"/>
+      <Method name="getTwo"/>
+      <Method name="getPi"/>
+      <Method name="getE"/>
+      <Method name="getLn10"/>
+      <Method name="getLn2"/>
+      <Method name="getLn5"/>
+      <Method name="getDegToRad"/>
+      <Method name="getRadToDeg"/>
+      <Method name="getSqr2"/>
+      <Method name="getSqr2Reciprocal"/>
+      <Method name="getSqr3"/>
+      <Method name="getSqr3Reciprocal"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.fraction.ProperBigFractionFormat"/>
+      <Class name="org.hipparchus.fraction.ProperFractionFormat"/>
+    </Or>
+    <Method name="getWholeFormat"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.linear.RealVectorFormat"/>
+      <Class name="org.hipparchus.linear.RealMatrixFormat"/>
+    </Or>
+    <Method name="getFormat"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.linear.CholeskyDecomposition"/>
+    <Or>
+      <Method name="getL"/>
+      <Method name="getLT"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.linear.ComplexEigenDecomposition"/>
+    <Or>
+      <Method name="getD"/>
+      <Method name="getV"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.linear.EigenDecomposition"/>
+    <Or>
+      <Method name="getD"/>
+      <Method name="getV"/>
+      <Method name="getVT"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.linear.RectangularCholeskyDecomposition"/>
+    <Method name="getRootMatrix"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.linear.SemiDefinitePositiveCholeskyDecomposition"/>
+    <Or>
+      <Method name="getL"/>
+      <Method name="getLT"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.linear.SingularValueDecomposition"/>
+    <Or>
+      <Method name="getS"/>
+      <Method name="getU"/>
+      <Method name="getUT"/>
+      <Method name="getV"/>
+      <Method name="getVT"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.linear.RiccatiEquationSolverImpl"/>
+    <Or>
+      <Method name="getK"/>
+      <Method name="getP"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.linear.LUDecomposition"/>
+      <Class name="org.hipparchus.linear.FieldLUDecomposition"/>
+    </Or>
+    <Or>
+      <Method name="getL"/>
+      <Method name="getP"/>
+      <Method name="getU"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.linear.QRDecomposition"/>
+      <Class name="org.hipparchus.linear.FieldQRDecomposition"/>
+    </Or>
+    <Or>
+      <Method name="getH"/>
+      <Method name="getQ"/>
+      <Method name="getQT"/>
+      <Method name="getR"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.linear.RRQRDecomposition"/>
+    <Method name="getP"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.linear.HessenbergTransformer"/>
+    <Or>
+      <Method name="getH"/>
+      <Method name="getP"/>
+      <Method name="getPT"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.linear.SchurTransformer"/>
+    <Or>
+      <Method name="getP"/>
+      <Method name="getPT"/>
+      <Method name="getT"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.linear.DefaultIterativeLinearSolverEvent"/>
+    <Or>
+      <Method name="getResidual"/>
+      <Method name="getRightHandSideVector"/>
+      <Method name="getSolution"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.linear.IterativeLinearSolver"/>
+    <Method name="getIterationManager"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.linear.OpenMapRealVector$OpenMapSparseIterator"/>
+      <Class name="org.hipparchus.linear.RealVector$SparseEntryIterator"/>
+    </Or>
+    <Method name="next"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.random.CorrelatedRandomVectorGenerator"/>
+    <Method name="getRootMatrix"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.special.elliptic.jacobi.FieldJacobiElliptic"/>
+    <Method name="getM"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.special.elliptic.jacobi.FieldCopolarC"/>
+    <Or>
+      <Method name="dc"/>
+      <Method name="nc"/>
+      <Method name="sc"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.special.elliptic.jacobi.FieldCopolarD"/>
+    <Or>
+      <Method name="cd"/>
+      <Method name="nd"/>
+      <Method name="sd"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.special.elliptic.jacobi.FieldCopolarN"/>
+    <Or>
+      <Method name="cn"/>
+      <Method name="dn"/>
+      <Method name="sn"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.special.elliptic.jacobi.FieldCopolarS"/>
+    <Or>
+      <Method name="cs"/>
+      <Method name="ds"/>
+      <Method name="ns"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.special.elliptic.jacobi.FieldJacobiTheta"/>
+    <Method name="getQ"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.special.elliptic.jacobi.Theta"/>
+      <Class name="org.hipparchus.special.elliptic.jacobi.FieldTheta"/>
+    </Or>
+    <Or>
+      <Method name="theta1"/>
+      <Method name="theta2"/>
+      <Method name="theta3"/>
+      <Method name="theta4"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.util.JulierUnscentedTransform"/>
+      <Class name="org.hipparchus.util.MerweUnscentedTransform"/>
+    </Or>
+    <Or>
+      <Method name="getWc"/>
+      <Method name="getWm"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.analysis.differentiation.FieldUnivariateDerivative1"/>
+      <Class name="org.hipparchus.analysis.differentiation.FieldUnivariateDerivative2"/>
+      <Class name="org.hipparchus.analysis.interpolation.MicrosphereProjectionInterpolator"/>
+      <Class name="org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver$Interval"/>
+      <Class name="org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver"/>
+      <Class name="org.hipparchus.complex.ComplexFormat"/>
+      <Class name="org.hipparchus.complex.FieldComplex"/>
+      <Class name="org.hipparchus.fraction.ProperBigFractionFormat"/>
+      <Class name="org.hipparchus.fraction.ProperFractionFormat"/>
+      <Class name="org.hipparchus.linear.RealMatrixFormat"/>
+      <Class name="org.hipparchus.linear.RealVectorFormat"/>
+      <Class name="org.hipparchus.linear.FieldQRDecomposer"/>
+      <Class name="org.hipparchus.linear.FieldQRDecomposition"/>
+      <Class name="org.hipparchus.linear.DefaultIterativeLinearSolverEvent"/>
+      <Class name="org.hipparchus.linear.IterativeLinearSolver"/>
+      <Class name="org.hipparchus.linear.RealVector$Entry"/>
+      <Class name="org.hipparchus.random.GaussianRandomGenerator"/>
+      <Class name="org.hipparchus.random.JDKRandomGenerator"/>
+      <Class name="org.hipparchus.random.RandomAdaptor"/>
+      <Class name="org.hipparchus.random.StableRandomGenerator"/>
+      <Class name="org.hipparchus.random.SynchronizedRandomGenerator"/>
+      <Class name="org.hipparchus.random.UniformRandomGenerator"/>
+      <Class name="org.hipparchus.random.UnitSphereRandomVectorGenerator"/>
+      <Class name="org.hipparchus.special.elliptic.jacobi.FieldJacobiTheta"/>
+    </Or>
+    <Method name="&lt;init>"/>
+    <Bug pattern="EI_EXPOSE_REP2" />
   </Match>
 
   <!-- the following expositions of internal representation are intentional and documented -->

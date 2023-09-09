@@ -7,7 +7,7 @@
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+       https://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -37,8 +37,8 @@
 
   <licenses>
     <license>
-      <name>The Apache Software License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <name>Apache License, Version 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
     </license>
   </licenses>
 
@@ -497,39 +497,36 @@
 
     <!-- Project specific plugin versions -->
 
-    <hipparchus.spotbugs-maven-plugin.version>4.2.3</hipparchus.spotbugs-maven-plugin.version>
-    <hipparchus.jacoco-maven-plugin.version>0.8.8</hipparchus.jacoco-maven-plugin.version>
-    <hipparchus.maven-assembly-plugin.version>3.3.0</hipparchus.maven-assembly-plugin.version>
-    <hipparchus.maven-bundle-plugin.version>5.1.4</hipparchus.maven-bundle-plugin.version>
-    <hipparchus.build-helper-maven-plugin>3.3.0</hipparchus.build-helper-maven-plugin>
+    <hipparchus.spotbugs-maven-plugin.version>4.7.3.4</hipparchus.spotbugs-maven-plugin.version>
+    <hipparchus.jacoco-maven-plugin.version>0.8.9</hipparchus.jacoco-maven-plugin.version>
+    <hipparchus.maven-assembly-plugin.version>3.5.0</hipparchus.maven-assembly-plugin.version>
+    <hipparchus.maven-bundle-plugin.version>5.1.8</hipparchus.maven-bundle-plugin.version>
     <hipparchus.maven-changes-plugin.version>2.12.1</hipparchus.maven-changes-plugin.version>
-    <hipparchus.maven-checkstyle-plugin.version>3.1.2</hipparchus.maven-checkstyle-plugin.version>
+    <hipparchus.maven-checkstyle-plugin.version>3.2.2</hipparchus.maven-checkstyle-plugin.version>
     <hipparchus.checkstyle.version>9.3</hipparchus.checkstyle.version>
     <hipparchus.maven-clean-plugin.version>3.2.0</hipparchus.maven-clean-plugin.version>
-    <hipparchus.maven-compiler-plugin.version>3.10.1</hipparchus.maven-compiler-plugin.version>
-    <hipparchus.maven-javadoc-plugin.version>3.3.2</hipparchus.maven-javadoc-plugin.version>
-    <hipparchus.maven-jar-plugin.version>3.2.2</hipparchus.maven-jar-plugin.version>
-    <hipparchus.maven-jxr-plugin.version>3.1.1</hipparchus.maven-jxr-plugin.version>
+    <hipparchus.maven-compiler-plugin.version>3.11.0</hipparchus.maven-compiler-plugin.version>
+    <hipparchus.maven-javadoc-plugin.version>3.5.0</hipparchus.maven-javadoc-plugin.version>
+    <hipparchus.maven-jar-plugin.version>3.3.0</hipparchus.maven-jar-plugin.version>
+    <hipparchus.maven-jxr-plugin.version>3.3.0</hipparchus.maven-jxr-plugin.version>
     <hipparchus.plantuml-maven-plugin.version>1.2</hipparchus.plantuml-maven-plugin.version>
-    <hipparchus.plantuml.version>1.2022.4</hipparchus.plantuml.version>
-    <hipparchus.maven-pmd-plugin.version>3.16.0</hipparchus.maven-pmd-plugin.version>
-    <hipparchus.maven-resources-plugin.version>3.2.0</hipparchus.maven-resources-plugin.version>
-    <hipparchus.maven-site-plugin.version>3.4</hipparchus.maven-site-plugin.version>
-    <hipparchus.maven-project-info-reports-plugin.version>2.9</hipparchus.maven-project-info-reports-plugin.version>
+    <hipparchus.plantuml.version>1.2023.6</hipparchus.plantuml.version>
+    <hipparchus.maven-pmd-plugin.version>3.20.0</hipparchus.maven-pmd-plugin.version>
+    <hipparchus.maven-resources-plugin.version>3.3.1</hipparchus.maven-resources-plugin.version>
+    <hipparchus.maven-site-plugin.version>3.12.1</hipparchus.maven-site-plugin.version>
+    <hipparchus.maven-project-info-reports-plugin.version>3.4.3</hipparchus.maven-project-info-reports-plugin.version>
     <hipparchus.maven-source-plugin.version>3.2.1</hipparchus.maven-source-plugin.version>
-    <hipparchus.maven-surefire-plugin.version>3.0.0-M5</hipparchus.maven-surefire-plugin.version>
-    <hipparchus.maven-surefire-report-plugin.version>3.0.0-M5</hipparchus.maven-surefire-report-plugin.version>
-    <hipparchus.maven-enforcer-plugin.version>3.0.0</hipparchus.maven-enforcer-plugin.version>
-    <hipparchus.nexus-staging-maven-plugin.version>1.6.12</hipparchus.nexus-staging-maven-plugin.version>
+    <hipparchus.maven-surefire-plugin.version>3.0.0-M9</hipparchus.maven-surefire-plugin.version>
+    <hipparchus.maven-surefire-report-plugin.version>3.0.0-M9</hipparchus.maven-surefire-report-plugin.version>
+    <hipparchus.maven-enforcer-plugin.version>3.3.0</hipparchus.maven-enforcer-plugin.version>
+    <hipparchus.nexus-staging-maven-plugin.version>1.6.13</hipparchus.nexus-staging-maven-plugin.version>
     <hipparchus.maven-gpg-plugin.version>3.0.1</hipparchus.maven-gpg-plugin.version>
-    <hipparchus.maven-install-plugin.version>3.0.0-M1</hipparchus.maven-install-plugin.version>
-    <hipparchus.apache-rat-plugin.version>0.13</hipparchus.apache-rat-plugin.version>
+    <hipparchus.maven-install-plugin.version>3.1.1</hipparchus.maven-install-plugin.version>
+    <hipparchus.apache-rat-plugin.version>0.15</hipparchus.apache-rat-plugin.version>
     <hipparchus.junit.version>4.13.2</hipparchus.junit.version>
     <hipparchus.hamcrest.version>2.2</hipparchus.hamcrest.version>
-    <hipparchus.reflow-velocity-tools.version>1.1.1</hipparchus.reflow-velocity-tools.version>
-    <hipparchus.velocity.version>1.7</hipparchus.velocity.version>
-    <hipparchus.mathjax.config>&lt;script type=&quot;text/x-mathjax-config&quot;&gt;MathJax.Hub.Config({ TeX: { extensions: [&quot;autoload.js&quot;]}});&lt;/script&gt;</hipparchus.mathjax.config>
-    <hipparchus.mathjax.enable>&lt;script type=&quot;text/javascript&quot; src=&quot;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML&quot;&gt;&lt;/script&gt;</hipparchus.mathjax.enable>
+    <hipparchus.reflow-velocity-tools.version>2.0.0</hipparchus.reflow-velocity-tools.version>
+    <hipparchus.mathjax.enable>&lt;script src=&quot;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&quot; id=&quot;MathJax-script&quot;&gt;&lt;/script&gt;</hipparchus.mathjax.enable>
     <!-- sonar related properties -->
     <sonar.host.url>https://sonar.orekit.org/</sonar.host.url>
   </properties>
@@ -609,9 +606,9 @@
             <additionalOptions>
               <option>--allow-script-in-comments</option>
               <option>-header</option>
-              <option>&apos;${hipparchus.mathjax.config} ${hipparchus.mathjax.enable}&apos;</option>
+              <option>&apos;${hipparchus.mathjax.enable}&apos;</option>
             </additionalOptions>
-            <bottom><![CDATA[Copyright &copy; ${project.inceptionYear}-{currentYear} <a href="http://www.c-s.fr">CS GROUP</a>. All rights reserved.]]></bottom>
+            <bottom><![CDATA[Copyright &copy; ${project.inceptionYear}-{currentYear} <a href="https://www.c-s.fr">CS GROUP</a>. All rights reserved.]]></bottom>
           </configuration>
           <executions>
             <execution>
@@ -808,14 +805,9 @@
           <version>${hipparchus.maven-site-plugin.version}</version>
           <dependencies>
             <dependency>
-              <groupId>lt.velykis.maven.skins</groupId>
+              <groupId>io.github.olamy.maven.skins</groupId>
               <artifactId>reflow-velocity-tools</artifactId>
               <version>${hipparchus.reflow-velocity-tools.version}</version>
-            </dependency>
-              <dependency>
-              <groupId>org.apache.velocity</groupId>
-              <artifactId>velocity</artifactId>
-              <version>${hipparchus.velocity.version}</version>
             </dependency>
           </dependencies>
           <configuration>
@@ -910,11 +902,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <version>${hipparchus.maven-site-plugin.version}</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>${hipparchus.maven-project-info-reports-plugin.version}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

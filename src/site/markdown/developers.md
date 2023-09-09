@@ -6,7 +6,7 @@
  (the "License"); you may not use this file except in compliance with
  the License.  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -120,10 +120,10 @@ in the git book for explanation about how to configure these settings and more.
   * Hipparchus javadoc generation supports embedded LaTeX formulas via the
     [MathJax](http://www.mathjax.org) javascript display engine. To
     embed mathematical expressions formatted in LaTeX in javadoc, simply surround
-    the expression to be formatted with either `\\(` and  `\\)` for inline
-    formulas, or `\\[` and `\\]` to have the formula appear on a separate line.
-    For example, `\\(a^2 + b^2 = c^2\\)` will render an in-line formula
-    saying that (a, b, c) is Pythagorean triplet.  Using `\\[` and `\\]` on
+    the expression to be formatted with either `\(` and  `\)` for inline
+    formulas, or `\[` and `\]` to have the formula appear on a separate line.
+    For example, `\(a^2 + b^2 = c^2\)` will render as an in-line formula
+    \\(a^2 + b^2 = c^2\\).  Using `\[` and `\]` on
     the ends will render the same formula on a separate line.  See the MathJax
     and LaTex documentation for details on how to represent formulas and
     escape special characters.
@@ -131,13 +131,16 @@ in the git book for explanation about how to configure these settings and more.
     markdown syntax. It also supports embedded LaTeX formulas via the
     [MathJax](http://www.mathjax.org) javascript display engine. To
     embed mathematical expressions formatted in LaTeX in markdown, simply surround
-    the expression to be formatted with either `\`\\(` and  `\\)\`` for inline
-    formulas, or `\`\\[` and `\\]\`` to have the formula appear on a separate line.
-    For example, `\`\\(a^2 + b^2 = c^2\\)\`` will render an in-line formula
-    saying that (a, b, c) is Pythagorean triplet.  Using `\`\\[` and `\\]\`` on
-    the ends will render the same formula on a separate line.  See the MathJax,
+    the expression to be formatted with either `\\(` and  `\\)` for inline
+    formulas, or `\\[` and `\\]` to have the formula appear on a separate line.
+    For example, `\\(a^2 + b^2 = c^2\\)` will render an in-line formula
+    \\(a^2 + b^2 = c^2\\).  Using `\\[` and `\\]` on
+    the ends will render the same formula on a separate line. See the MathJax,
     markdown and LaTex documentation for details on how to represent formulas and
-    escape special characters.
+    escape special characters. Note that as the markdown processor needs backslash
+    characters to be escaped, you have to double them (so for example in order
+    to mark the end of a matrix row with a TeX double backslash, you need to
+    type four backslashes in the markdown file)
   * Implementations _should_ use standard algorithms and references or full
     descriptions of all algorithms _should_ be provided.
   * Additions and enhancements _should_ include updates to the User Guide.

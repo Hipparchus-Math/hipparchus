@@ -7,7 +7,7 @@
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+       https://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,6 +27,53 @@
   put here to instruct findbugs it must ignore them.
 -->
 <FindBugsFilter>
+
+  <!-- the following are considered false positive, they correspond to regular object oriented design
+       SpotBugs has just become too stringent (see https://github.com/spotbugs/spotbugs/issues/1601,
+       https://github.com/spotbugs/spotbugs/issues/1771, https://github.com/spotbugs/spotbugs/issues/2083,
+       https://github.com/spotbugs/spotbugs/issues/2344, https://github.com/spotbugs/spotbugs/issues/2356,
+       https://github.com/spotbugs/spotbugs-gradle-plugin/issues/731)
+  -->
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.optim.linear.LinearConstraint"/>
+      <Class name="org.hipparchus.optim.linear.LinearObjectiveFunction"/>
+    </Or>
+    <Method name="getCoefficients"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.optim.nonlinear.scalar.noderiv.CMAESOptimizer"/>
+    <Or>
+      <Method name="getStatisticsDHistory"/>
+      <Method name="getStatisticsFitnessHistory"/>
+      <Method name="getStatisticsMeanHistory"/>
+      <Method name="getStatisticsSigmaHistory"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresBuilder"/>
+    <Or>
+      <Method name="start"/>
+      <Method name="target"/>
+      <Method name="weight"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.optim.ConvergenceCheckerAndMultiplexer"/>
+      <Class name="org.hipparchus.optim.ConvergenceCheckerOrMultiplexer"/>
+      <Class name="org.hipparchus.optim.linear.LinearConstraint"/>
+      <Class name="org.hipparchus.optim.linear.LinearObjectiveFunction"/>
+      <Class name="org.hipparchus.optim.nonlinear.scalar.noderiv.CMAESOptimizer"/>
+      <Class name="org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresBuilder"/>
+      <Class name="org.hipparchus.optim.univariate.MultiStartUnivariateOptimizer"/>
+    </Or>
+    <Method name="&lt;init>"/>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
 
   <!--  the following equality tests are part of the reference algorithms -->
   <!--  which already know about limited precision of the double numbers -->

@@ -6,7 +6,7 @@
  (the "License"); you may not use this file except in compliance with
  the License.  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,31 +16,20 @@
 -->
 # Hipparchus Forum
 
-Hipparchus has two communication channels, a forum and mailing lists.
+Hipparchus uses a forum as a communication channel. There are three categories
+in the forum:
 
-The recommended channel is the forum, as the mailing lists have recurring
-technical problems. There are three categories
-[Hipparchus annoucements](https://forum.orekit.org/c/hipparchus-announcements),
-[Hipparchus usage](https://forum.orekit.org/c/hipparchus-usage) and
-[Hipparchus development](https://forum.orekit.org/c/hipparchus-development)
-in the forum. Regular users should subscribe to the forum and configure
+  * [Hipparchus annoucements](https://forum.orekit.org/c/hipparchus-announcements)
+  * [Hipparchus usage](https://forum.orekit.org/c/hipparchus-usage)
+  * [Hipparchus development](https://forum.orekit.org/c/hipparchus-development)
+
+Regular users should subscribe to the forum and configure
 their preferences to add these categories to the "Watched" list so they are
 notified when a new message appears there.
 
-The second channel is the mailing lists. As stated above, they have
-recurring technical problems and will therefore be phased out in
-the future. Anybody can subscribe to the lists:
-
-  * users@hipparchus.org
-  * developers@hipparchus.org
-  * announce@hipparchus.org
-
-The archives of the lists are available at [https://lists.hipparchus.org/](https://lists.hipparchus.org/).
-
 Questions related to the usage of Hipparchus should be posted to the
-users forum category/mailing list. The developers forum category/mailing list
+users forum category. The developers forum category
 is for questions and discussion related to the development of Hipparchus.
 Please do not cross-post; developers are also subscribed to the users channel.
-The announcements forum category/mailing list is read-only
+The announcements forum category is read-only
 and devoted to announce important news (like new releases).
-

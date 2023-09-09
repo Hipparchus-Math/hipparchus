@@ -5,7 +5,7 @@
  * licenses this file to You under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * https://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
  * or agreed to in writing, software distributed under the License is
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the specific language
@@ -290,57 +290,57 @@ public class MathArraysTest {
 
     @Test
     public void testIsMonotonicComparable() {
-        Assert.assertFalse(MathArrays.isMonotonic(new Double[] { new Double(-15),
-                                                                 new Double(-5.5),
-                                                                 new Double(-1),
-                                                                 new Double(-1),
-                                                                 new Double(2),
-                                                                 new Double(15) },
+        Assert.assertFalse(MathArrays.isMonotonic(new Double[] { Double.valueOf(-15),
+                                                                 Double.valueOf(-5.5),
+                                                                 Double.valueOf(-1),
+                                                                 Double.valueOf(-1),
+                                                                 Double.valueOf(2),
+                                                                 Double.valueOf(15) },
                 MathArrays.OrderDirection.INCREASING, true));
-        Assert.assertTrue(MathArrays.isMonotonic(new Double[] { new Double(-15),
-                                                                new Double(-5.5),
-                                                                new Double(-1),
-                                                                new Double(0),
-                                                                new Double(2),
-                                                                new Double(15) },
+        Assert.assertTrue(MathArrays.isMonotonic(new Double[] { Double.valueOf(-15),
+                                                                Double.valueOf(-5.5),
+                                                                Double.valueOf(-1),
+                                                                Double.valueOf(0),
+                                                                Double.valueOf(2),
+                                                                Double.valueOf(15) },
                 MathArrays.OrderDirection.INCREASING, true));
-        Assert.assertFalse(MathArrays.isMonotonic(new Double[] { new Double(-15),
-                                                                 new Double(-5.5),
-                                                                 new Double(-1),
-                                                                 new Double(-2),
-                                                                 new Double(2) },
+        Assert.assertFalse(MathArrays.isMonotonic(new Double[] { Double.valueOf(-15),
+                                                                 Double.valueOf(-5.5),
+                                                                 Double.valueOf(-1),
+                                                                 Double.valueOf(-2),
+                                                                 Double.valueOf(2) },
                 MathArrays.OrderDirection.INCREASING, false));
-        Assert.assertTrue(MathArrays.isMonotonic(new Double[] { new Double(-15),
-                                                                new Double(-5.5),
-                                                                new Double(-1),
-                                                                new Double(-1),
-                                                                new Double(2) },
+        Assert.assertTrue(MathArrays.isMonotonic(new Double[] { Double.valueOf(-15),
+                                                                Double.valueOf(-5.5),
+                                                                Double.valueOf(-1),
+                                                                Double.valueOf(-1),
+                                                                Double.valueOf(2) },
                 MathArrays.OrderDirection.INCREASING, false));
-        Assert.assertFalse(MathArrays.isMonotonic(new Double[] { new Double(3),
-                                                                 new Double(3),
-                                                                 new Double(-5.5),
-                                                                 new Double(-11),
-                                                                 new Double(-27.5) },
+        Assert.assertFalse(MathArrays.isMonotonic(new Double[] { Double.valueOf(3),
+                                                                 Double.valueOf(3),
+                                                                 Double.valueOf(-5.5),
+                                                                 Double.valueOf(-11),
+                                                                 Double.valueOf(-27.5) },
                 MathArrays.OrderDirection.DECREASING, true));
-        Assert.assertTrue(MathArrays.isMonotonic(new Double[] { new Double(3),
-                                                                new Double(2),
-                                                                new Double(-5.5),
-                                                                new Double(-11),
-                                                                new Double(-27.5) },
+        Assert.assertTrue(MathArrays.isMonotonic(new Double[] { Double.valueOf(3),
+                                                                Double.valueOf(2),
+                                                                Double.valueOf(-5.5),
+                                                                Double.valueOf(-11),
+                                                                Double.valueOf(-27.5) },
                 MathArrays.OrderDirection.DECREASING, true));
-        Assert.assertFalse(MathArrays.isMonotonic(new Double[] { new Double(3),
-                                                                 new Double(-1),
-                                                                 new Double(0),
-                                                                 new Double(-5.5),
-                                                                 new Double(-11),
-                                                                 new Double(-27.5) },
+        Assert.assertFalse(MathArrays.isMonotonic(new Double[] { Double.valueOf(3),
+                                                                 Double.valueOf(-1),
+                                                                 Double.valueOf(0),
+                                                                 Double.valueOf(-5.5),
+                                                                 Double.valueOf(-11),
+                                                                 Double.valueOf(-27.5) },
                 MathArrays.OrderDirection.DECREASING, false));
-        Assert.assertTrue(MathArrays.isMonotonic(new Double[] { new Double(3),
-                                                                new Double(0),
-                                                                new Double(0),
-                                                                new Double(-5.5),
-                                                                new Double(-11),
-                                                                new Double(-27.5) },
+        Assert.assertTrue(MathArrays.isMonotonic(new Double[] { Double.valueOf(3),
+                                                                Double.valueOf(0),
+                                                                Double.valueOf(0),
+                                                                Double.valueOf(-5.5),
+                                                                Double.valueOf(-11),
+                                                                Double.valueOf(-27.5) },
                 MathArrays.OrderDirection.DECREASING, false));
     }
 

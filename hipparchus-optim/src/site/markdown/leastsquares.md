@@ -6,7 +6,7 @@
  (the "License"); you may not use this file except in compliance with
  the License.  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,10 +21,10 @@
 The least squares package fits a non-linear parametric model to a set of observed
 values by minimizing a cost function with a specific form.
 The fitting consists in finding the values
-for some parameters `\( p \)` that minimize a cost function
-$$ J = \sum_i w_i(o_i - f_i)^2 $$ where `\( w_i \)` are the weights, `\( o_i \)` are the
-observed values and `\( f_i = f_i( p ) \)` are the values computed from the model.
-The various `\( r_i = o_i - f_i \)`
+for some parameters \\( p \\) that minimize a cost function
+$$ J = \sum_i w_i(o_i - f_i)^2 $$ where \\( w_i \\) are the weights, \\( o_i \\) are the
+observed values and \\( f_i = f_i( p ) \\) are the values computed from the model.
+The various \\( r_i = o_i - f_i \\)
 terms are the residuals which quantify the deviation between the set of
 observed values and theoretical values computed from
 measurement models depending on the free parameters.
@@ -33,10 +33,10 @@ Among other properties, the non-linear least squares is the
 Maximum Likelihood Estimator (MLE) if the observations have normally
 distributed errors and the weights are set to the reciprocal of their
 variance. That is $$ o_i = N(f_i(p), \sigma) $$ and
-$$ w_i = \frac{1}{\sigma^2} $$ where `\( N(\mu, \sigma) \)` denotes a normal distribution
-with mean `\( \mu \)` and standard deviation `\( \sigma \)`. For more on non-linear least
+$$ w_i = \frac{1}{\sigma^2} $$ where \\( N(\\mu, \\sigma) \\) denotes a normal distribution
+with mean \\( \\mu \\) and standard deviation \\( \\sigma \\). For more on non-linear least
 squares, its theory, and its properties the reader is encouraged to consult a text book
-such as \[[1](#ref1)\].
+such as [1](#ref1).
 
 Two engines devoted to least-squares problems are available. The first one is
 based on the [Gauss-Newton](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/GaussNewtonOptimizer.html)
@@ -48,11 +48,11 @@ method. The second one is the
 
 In order to solve a least-squares fitting problem, the user must provide the following elements:
 
-* an implementation of the measurement model `\( f(p) \)` and its Jacobian, `\( \frac{\partial f}{\partial p} \)`. This is best done by implementing [MultivariateJacobianFunction](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/MultivariateJacobianFunction.html).
-* the observed (or target) values: `\( o \)`.
-* the start values for all parameters: `\( s \)`.
-* optionally a validator for the parameters `\( p \)`. This is an implementation of [ParameterValidator](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/ParameterValidator.html).
-* optionally weights for sample point: `\( w \)`, this defaults to 1.0 if not provided.
+* an implementation of the measurement model \\( f(p) \\) and its Jacobian, \\( \\frac{\\partial f}{\\partial p} \\). This is best done by implementing [MultivariateJacobianFunction](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/MultivariateJacobianFunction.html).
+* the observed (or target) values: \\( o \\).
+* the start values for all parameters: \\( s \\).
+* optionally a validator for the parameters \\( p \\). This is an implementation of [ParameterValidator](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/ParameterValidator.html).
+* optionally weights for sample point: \\( w \\), this defaults to 1.0 if not provided.
 * a maximum number of iterations.
 * a maximum number of model evaluations, which may be different than iterations for Levenberg-Marquardt.
 * a convergence criterion, which is an implementation of [ConvergenceChecker&lt;Evaluation&gt;](../apidocs/org/hipparchus/optim/ConvergenceChecker.html)
@@ -79,10 +79,10 @@ to one of the static `LeastSquaresFactory.create` method.
 ## Model Function
 
 The model function is used by the least squares engine to evaluate the model
-`\( f(p) \)`. It is therefore a multivariate
-function (it depends on the various `\( p_k \)`) and it is vector-valued (it has several
-components `\( f_i \)`). There must be exactly one model function `\( f_i \)` for
-each observed (or target) value `\( o_i \)`. In order for the problem to be well defined, the
+\\( f(p) \\). It is therefore a multivariate
+function (it depends on the various \\( p_k \\)) and it is vector-valued (it has several
+components \\( f_i \\)). There must be exactly one model function \\( f_i \\) for
+each observed (or target) value \\( o_i \\). In order for the problem to be well defined, the
 number of parameters must be less than the number of observations.
 Failing to ensure this may lead to the engine throwing an exception as the underlying linear
 algebra operations may encounter singular matrices. It is not unusual to have a large number
@@ -90,14 +90,14 @@ of observations (several thousands) and only a dozen parameters. There are no li
 numbers, though.
 
 As the least squares engine uses the Jacobians matrices of the model function, both
-its value and its derivatives <em>with respect to the parameters, `\( p \)`</em>,
+its value and its derivatives <em>with respect to the parameters, \\( p \\)</em>,
 must be available. There are two ways to provide this:
 
-* an implementation of the measurement model `\( f(p) \)` and its Jacobian, `\( \frac{\partial f}{\partial p} \)`. This is best done by implementing [MultivariateJacobianFunction](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/MultivariateJacobianFunction.html).
-* the observed (or target) values: `\( o \)`.
-* the start values for all parameters: `\( s \)`.
-* optionally a validator for the parameters `\( p \)`. This is an implementation of [ParameterValidator](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/ParameterValidator.html).
-* optionally weights for sample point: `\( w \)`, this defaults to 1.0 if not provided.
+* an implementation of the measurement model \\( f(p) \\) and its Jacobian, \\( \\frac{\\partial f}{\\partial p} \\). This is best done by implementing [MultivariateJacobianFunction](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/MultivariateJacobianFunction.html).
+* the observed (or target) values: \\( o \\).
+* the start values for all parameters: \\( s \\).
+* optionally a validator for the parameters \\( p \\). This is an implementation of [ParameterValidator](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/ParameterValidator.html).
+* optionally weights for sample point: \\( w \\), this defaults to 1.0 if not provided.
 * a maximum number of iterations.
 * a maximum number of model evaluations, which may be different than iterations for Levenberg-Marquardt.
 * a convergence criterion, which is an implementation of [ConvergenceChecker&lt;Evaluation&gt;](../apidocs/org/hipparchus/optim/ConvergenceChecker.html)
@@ -111,10 +111,10 @@ The `point` parameter of the `value` methods in the
 [MultivariateVectorFunction](../apidocs/org/hipparchus/analysis/MultivariateVectorFunction.html),
 [MultivariateMatrixFunction](../apidocs/org/hipparchus/analysis/MultivariateMatrixFunction.html),
 or [MultivariateJacobianFunction](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/MultivariateJacobianFunction.html)
-interfaces will contain the parameter vector `\( p \)`. The values will be the
-model values `\( f(p) \)` and the derivatives will be the derivatives of
+interfaces will contain the parameter vector \\( p \\). The values will be the
+model values \\( f(p) \\) and the derivatives will be the derivatives of
 the model values with respect to the parameters
-`\( \frac{\partial f(p)}{\partial p} \)`.
+\\( \\frac{\\partial f(p)}{\\partial p} \\).
 
 There are no requirements on how to compute value and derivatives. The
 [DerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html)
@@ -203,11 +203,11 @@ and the current evaluations of the least squares problem are provided, so the ch
 compare them and decide whether convergence has been reached or not. The predefined convergence
 checker implementations that can be useful for least squares fitting are:
 
-* an implementation of the measurement model `\( f(p) \)` and its Jacobian, `\( \frac{\partial f}{\partial p} \)`. This is best done by implementing [MultivariateJacobianFunction](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/MultivariateJacobianFunction.html).
-* the observed (or target) values: `\( o \)`.
-* the start values for all parameters: `\( s \)`.
-* optionally a validator for the parameters `\( p \)`. This is an implementation of [ParameterValidator](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/ParameterValidator.html).
-* optionally weights for sample point: `\( w \)`, this defaults to 1.0 if not provided.
+* an implementation of the measurement model \\( f(p) \\) and its Jacobian, \\( \\frac{\\partial f}{\\partial p} \\). This is best done by implementing [MultivariateJacobianFunction](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/MultivariateJacobianFunction.html).
+* the observed (or target) values: \\( o \\).
+* the start values for all parameters: \\( s \\).
+* optionally a validator for the parameters \\( p \\). This is an implementation of [ParameterValidator](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/ParameterValidator.html).
+* optionally weights for sample point: \\( w \\), this defaults to 1.0 if not provided.
 * a maximum number of iterations.
 * a maximum number of model evaluations, which may be different than iterations for Levenberg-Marquardt.
 * a convergence criterion, which is an implementation of [ConvergenceChecker&lt;Evaluation&gt;](../apidocs/org/hipparchus/optim/ConvergenceChecker.html)

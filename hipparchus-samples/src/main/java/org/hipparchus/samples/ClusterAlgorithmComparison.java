@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -65,6 +65,14 @@ import org.hipparchus.util.SinCos;
  */
 public class ClusterAlgorithmComparison {
 
+    /** Make circles patterns.
+     * @param samples number of points
+     * @param shuffle if true, shuffle points
+     * @param noise noise to add to points position
+     * @param factor reduction factor from outer to inner circle
+     * @param random generator to use
+     * @return circle patterns
+     */
     public static List<Vector2D> makeCircles(int samples, boolean shuffle, double noise, double factor, final RandomGenerator random) {
         if (factor < 0 || factor > 1) {
             throw new IllegalArgumentException();
@@ -88,6 +96,13 @@ public class ClusterAlgorithmComparison {
         return points;
     }
 
+    /** Make Moons patterns.
+     * @param samples number of points
+     * @param shuffle if true, shuffle points
+     * @param noise noise to add to points position
+     * @param random generator to use
+     * @return Moons patterns
+     */
     public static List<Vector2D> makeMoons(int samples, boolean shuffle, double noise, RandomGenerator random) {
 
         int nSamplesOut = samples / 2;
@@ -115,6 +130,16 @@ public class ClusterAlgorithmComparison {
         return points;
     }
 
+    /** Make blobs patterns.
+     * @param samples number of points
+     * @param centers number of centers
+     * @param clusterStd standard deviation of cluster
+     * @param min range min value
+     * @param max range max value
+     * @param shuffle if true, shuffle points
+     * @param random generator to use
+     * @return blobs patterns
+     */
     public static List<Vector2D> makeBlobs(int samples, int centers, double clusterStd,
                                            double min, double max, boolean shuffle, RandomGenerator random) {
 
@@ -153,7 +178,11 @@ public class ClusterAlgorithmComparison {
         return points;
     }
 
-    public static List<Vector2D> makeRandom(int samples) {
+    /** Make Sobol patterns.
+     * @param samples number of points
+     * @return Moons patterns
+     */
+    public static List<Vector2D> makeSobol(int samples) {
         SobolSequenceGenerator generator = new SobolSequenceGenerator(2);
         generator.skipTo(999999);
         List<Vector2D> points = new ArrayList<Vector2D>();
@@ -168,11 +197,24 @@ public class ClusterAlgorithmComparison {
         return points;
     }
 
+    /** Generate a random vector.
+     * @param randomGenerator random generator to use
+     * @param noise noise level
+     * @return random vector
+     */
     public static Vector2D generateNoiseVector(RandomGenerator randomGenerator, double noise) {
         final RandomDataGenerator randomDataGenerator = RandomDataGenerator.of(randomGenerator);
         return new Vector2D(randomDataGenerator.nextNormal(0, noise), randomDataGenerator.nextNormal(0, noise));
     }
 
+    /** Normolize points in a rectangular area
+     * @param input input points
+     * @param minX range min value in X
+     * @param maxX range max value in X
+     * @param minY range min value in Y
+     * @param maxY range max value in Y
+     * @return normalized points
+     */
     public static List<DoublePoint> normalize(final List<Vector2D> input, double minX, double maxX, double minY, double maxY) {
         double rangeX = maxX - minX;
         double rangeY = maxY - minY;
@@ -196,9 +238,11 @@ public class ClusterAlgorithmComparison {
         return new Vector2D(sc.cos(), sc.sin());
     }
 
+    /** Display frame. */
     @SuppressWarnings("serial")
     public static class Display extends ExampleFrame {
 
+        /** Simple consructor. */
         public Display() {
             setTitle("Hipparchus: Cluster algorithm comparison");
             setSize(800, 800);
@@ -213,7 +257,7 @@ public class ClusterAlgorithmComparison {
             datasets.add(normalize(makeCircles(nSamples, true, 0.04, 0.5, rng), -1, 1, -1, 1));
             datasets.add(normalize(makeMoons(nSamples, true, 0.04, rng), -1, 2, -1, 1));
             datasets.add(normalize(makeBlobs(nSamples, 3, 1.0, -10, 10, true, rng), -12, 12, -12, 12));
-            datasets.add(normalize(makeRandom(nSamples), -1, 1, -1, 1));
+            datasets.add(normalize(makeSobol(nSamples), -1, 1, -1, 1));
 
             List<Pair<String, Clusterer<DoublePoint>>> algorithms = new ArrayList<Pair<String, Clusterer<DoublePoint>>>();
 
@@ -251,6 +295,7 @@ public class ClusterAlgorithmComparison {
 
     }
 
+    /** Plot component. */
     @SuppressWarnings("serial")
     public static class ClusterPlot extends JComponent {
 
@@ -259,6 +304,10 @@ public class ClusterAlgorithmComparison {
         private List<? extends Cluster<DoublePoint>> clusters;
         private long duration;
 
+        /** Simple constructor.
+         * @param clusters clusters to plot
+         * @param duration duration oif the computation
+         */
         public ClusterPlot(final List<? extends Cluster<DoublePoint>> clusters, long duration) {
             this.clusters = clusters;
             this.duration = duration;
@@ -315,6 +364,9 @@ public class ClusterAlgorithmComparison {
         }
     }
 
+    /** Example entry point.
+     * @param args arguments (not used)
+     */
     public static void main(String[] args) {
         ExampleUtils.showExampleFrame(new Display());
     }

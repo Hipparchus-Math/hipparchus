@@ -6,7 +6,7 @@
  (the "License"); you may not use this file except in compliance with
  the License.  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -199,7 +199,7 @@ search for the optimal point.
 
 
 We are looking to find the best parameters [a, b, c] for the quadratic function
-`\(f(x) = a x^2 + b x + c\)`.
+\\(f(x) = a x^2 + b x + c\\).
 The data set below was generated using [a = 8, b = 10, c = 16].
 A random number between zero and one was added to each y value calculated.
 
@@ -240,7 +240,7 @@ For a quadratic which has three variables the Jacobian Matrix will have three co
 of rows will equal the number of rows in our data set, which in this case is ten.  So for example for <tt>[a = 1, b = 1, c = 1]</tt>, the Jacobian Matrix is (excluding the first column which shows the value of x):
 
 
-| x | `\(\frac{\partial{(ax^2 + bx + c)}}{\partial{a}}\)` | `\(\frac{\partial{(ax^2 + bx + c)}}{\partial{b}}\)` | `\(\frac{\partial{(ax^2 + bx + c)}}{\partial{c}}\)` |
+| x | \\(\\frac{\\partial{(ax^2 + bx + c)}}{\\partial{a}}\\) | \\(\\frac{\\partial{(ax^2 + bx + c)}}{\\partial{b}}\\) | \\(\\frac{\\partial{(ax^2 + bx + c)}}{\\partial{c}}\\) |
 | --- |
 | 1 | 1 | 1 | 1 |
 | 2 | 4 | 2 | 1 |

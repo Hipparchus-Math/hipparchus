@@ -6,7 +6,7 @@
  (the "License"); you may not use this file except in compliance with
  the License.  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -57,22 +57,17 @@ in a set of properties:
 
     <!-- Project specific plugin versions -->
 
-    <hipparchus.spotbugs-maven-plugin.version>3.1.11</hipparchus.spotbugs-maven-plugin.version>
-    <hipparchus.jacoco-maven-plugin.version>0.8.3</hipparchus.jacoco-maven-plugin.version>
-    <hipparchus.maven-assembly-plugin.version>3.1.1</hipparchus.maven-assembly-plugin.version>
+    <hipparchus.spotbugs-maven-plugin.version>4.7.3.4</hipparchus.spotbugs-maven-plugin.version>
+    <hipparchus.jacoco-maven-plugin.version>0.8.9</hipparchus.jacoco-maven-plugin.version>
+    <hipparchus.maven-assembly-plugin.version>3.5.0</hipparchus.maven-assembly-plugin.version>
     ...
 
 You can find the latest version of the plugins using the search feature at
-[http://search.maven.org/#search](http://search.maven.org/#search).
+[https://central.sonatype.com/search](https://central.sonatype.com/search).
 The properties name all follow the pattern `hipparchus.some-plugin-name.version`, the plugin
 name should be used in the web form to check for available versions.
 
-Beware that in some cases, the latest version cannot be used due to incompatibilities. For
-example, as of releases 1.0 to 1.8, the site generation was based on `reflow-maven-skin`
-and this skin was not updated for recent versions of either site plugin and velocity. Hence
-the `maven-site-plugin` version, `maven-project-info-reports-plugin` version,
-`reflow-velocity-tools` version and `velocity `version were not updated (and should probably
-remain frozen until the site skin is changed).
+Beware that in some cases, the latest version cannot be used due to incompatibilities.
 
 Beware also that some plugins use configuration files that may need update too. This is
 typically the case with `maven-checkstyle-plugin` and `maven-pmd-plugin`. The

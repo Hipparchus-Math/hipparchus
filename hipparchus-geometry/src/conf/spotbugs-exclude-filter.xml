@@ -7,7 +7,7 @@
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
 
-       http://www.apache.org/licenses/LICENSE-2.0
+       https://www.apache.org/licenses/LICENSE-2.0
 
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,6 +27,209 @@
   put here to instruct findbugs it must ignore them.
 -->
 <FindBugsFilter>
+
+  <!-- the following are considered false positive, they correspond to regular object oriented design
+       SpotBugs has just become too stringent (see https://github.com/spotbugs/spotbugs/issues/1601,
+       https://github.com/spotbugs/spotbugs/issues/1771, https://github.com/spotbugs/spotbugs/issues/2083,
+       https://github.com/spotbugs/spotbugs/issues/2344, https://github.com/spotbugs/spotbugs/issues/2356,
+       https://github.com/spotbugs/spotbugs-gradle-plugin/issues/731)
+  -->
+  <Match>
+    <Class name="org.hipparchus.geometry.VectorFormat"/>
+    <Method name="getFormat"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.euclidean.oned.OrientedPoint"/>
+    <Or>
+      <Method name="getLocation"/>
+      <Method name="project"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.euclidean.threed.FieldRotation"/>
+    <Or>
+      <Method name="getQ0"/>
+      <Method name="getQ1"/>
+      <Method name="getQ2"/>
+      <Method name="getQ3"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.euclidean.threed.FieldVector3D"/>
+    <Or>
+      <Method name="getX"/>
+      <Method name="getY"/>
+      <Method name="getZ"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.euclidean.threed.Line"/>
+    <Or>
+      <Method name="closestPoint"/>
+      <Method name="getDirection"/>
+      <Method name="getOrigin"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.euclidean.threed.Plane"/>
+    <Or>
+      <Method name="getNormal"/>
+      <Method name="getOrigin"/>
+      <Method name="getU"/>
+      <Method name="getV"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.euclidean.threed.PolyhedronsSet$BRep"/>
+    <Or>
+      <Method name="getFacets"/>
+      <Method name="getVertices"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.euclidean.threed.RotationOrder"/>
+    <Or>
+      <Method name="getA1"/>
+      <Method name="getA2"/>
+      <Method name="getA3"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.euclidean.threed.Segment"/>
+    <Or>
+      <Method name="getStart"/>
+      <Method name="getEnd"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.euclidean.threed.SphericalCoordinates"/>
+    <Method name="getCartesian"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.euclidean.twod.FieldVector2D"/>
+    <Or>
+      <Method name="getX"/>
+      <Method name="getY"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.euclidean.twod.Line"/>
+    <Method name="getReverse"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.euclidean.twod.Segment"/>
+    <Or>
+      <Method name="getStart"/>
+      <Method name="getEnd"/>
+      <Method name="getLine"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.partitioning.AbstractRegion"/>
+    <Method name="getTree"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.partitioning.BSPTree"/>
+    <Or>
+      <Method name="getParent"/>
+      <Method name="getMinus"/>
+      <Method name="getPlus"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.partitioning.BSPTree"/>
+    <Or>
+      <Method name="getParent"/>
+      <Method name="getMinus"/>
+      <Method name="getPlus"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.partitioning.BSPTree"/>
+    <Method name="insertInTree"/>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.partitioning.BoundaryAttribute"/>
+    <Method name="getSplitters"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.spherical.oned.ArcsSet$Split"/>
+    <Or>
+      <Method name="getMinus"/>
+      <Method name="getPlus"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.spherical.oned.S1Point"/>
+    <Method name="getVector"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.spherical.twod.Circle"/>
+    <Or>
+      <Method name="getPole"/>
+      <Method name="getXAxis"/>
+      <Method name="getYAxis"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.spherical.twod.Edge"/>
+    <Or>
+      <Method name="getStart"/>
+      <Method name="getEnd"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.spherical.twod.S2Point"/>
+    <Method name="getVector"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.geometry.spherical.twod.Vertex"/>
+    <Or>
+      <Method name="getIncoming"/>
+      <Method name="getOutgoing"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Or>
+      <Class name="org.hipparchus.geometry.euclidean.oned.OrientedPoint"/>
+      <Class name="org.hipparchus.geometry.euclidean.threed.FieldRotation"/>
+      <Class name="org.hipparchus.geometry.euclidean.threed.FieldVector3D"/>
+      <Class name="org.hipparchus.geometry.euclidean.threed.OutlineExtractor"/>
+      <Class name="org.hipparchus.geometry.euclidean.threed.PolyhedronsSet$BRep"/>
+      <Class name="org.hipparchus.geometry.euclidean.threed.Segment"/>
+      <Class name="org.hipparchus.geometry.euclidean.threed.SphericalCoordinates"/>
+      <Class name="org.hipparchus.geometry.euclidean.threed.SubLine"/>
+      <Class name="org.hipparchus.geometry.euclidean.twod.FieldVector2D"/>
+      <Class name="org.hipparchus.geometry.euclidean.twod.Segment"/>
+      <Class name="org.hipparchus.geometry.partitioning.BSPTree"/>
+    </Or>
+    <Method name="&lt;init>"/>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
 
   <!-- The following equality test is intentional and needed for semantic purposes -->
   <Match>

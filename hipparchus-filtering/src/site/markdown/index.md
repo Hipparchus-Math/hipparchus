@@ -6,7 +6,7 @@
  (the "License"); you may not use this file except in compliance with
  the License.  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,28 +43,28 @@ In both cases, the user-implemented process can decide if a measurement should b
 the corrected process estimate will be the same as the predicted state estimate.
 
 ## Linear processes
-Linear processes with command are governed by the evolution equation on state `\(x_k\)`:
+Linear processes with command are governed by the evolution equation on state \\(x_k\\):
 
-`\[
+\\[
   x_k = A_{k-1} x_{k-1} + B_{k-1} u_{k-1} + w_{k-1}
-\]`
+\\]
 
  where
 
-  * `\(A_{k-1}\)` is the state transition matrix in the absence of control
-  * `\(B_{k-1}\)` is the control matrix
-  * `\(u_{k-1}\)` is the command
-  * `\(w_{k-1}\)` is the process noise, which has covariance matrix `\(Q_{k-1}\)`
+  * \\(A_{k-1}\\) is the state transition matrix in the absence of control
+  * \\(B_{k-1}\\) is the control matrix
+  * \\(u_{k-1}\\) is the command
+  * \\(w_{k-1}\\) is the process noise, which has covariance matrix \\(Q_{k-1}\\)
 
-and by the measurement equation on measurement `\(z_k\)`:
-`\[
+and by the measurement equation on measurement \\(z_k\\):
+\\[
   z_k = H_k x_k + r_k
-\]`
+\\]
 
 where
 
-  * `\(H_k\)` is the measurement matrix
-  * `\(r_{k-1}\)` is the measurement noise, which has covariance matrix `\(R_k\)`
+  * \\(H_k\\) is the measurement matrix
+  * \\(r_{k-1}\\) is the measurement noise, which has covariance matrix \\(R_k\\)
 
 In order to estimate the state of a linear process, users must implement
 the [LinearProcess](../apidocs/org/hipparchus/filtering/kalman/linear/LinearProcess.html) interface
@@ -76,26 +76,26 @@ If a measurement should be ignored, a null measurement Jacobian matrix should be
 instance returned by the linear process.
 
 ## Non-linear processes
-Non-linear processes with command are governed by the evolution equation on state `\(x_k\)`:
+Non-linear processes with command are governed by the evolution equation on state \\(x_k\\):
 
-`\[
+\\[
   x_k = f(x_{k-1}) + w_{k-1}
-\]`
+\\]
 
  where
 
-  * `\(f\)` is an evolution function
-  * `\(w_{k-1}\)` is the process noise, which has covariance matrix `\(Q_{k-1}\)`
+  * \\(f\\) is an evolution function
+  * \\(w_{k-1}\\) is the process noise, which has covariance matrix \\(Q_{k-1}\\)
 
-and by the measurement equation on measurement `\(z_k\)`:
-`\[
+and by the measurement equation on measurement \\(z_k\\):
+\\[
   z_k = m(x_k) + r_k
-\]`
+\\]
 
 where
 
-  * `\(m\)` is a measurement function
-  * `\(r_{k-1}\)` is the measurement noise, which has covariance matrix `\(R_k\)`
+  * \\(m\\) is a measurement function
+  * \\(r_{k-1}\\) is the measurement noise, which has covariance matrix \\(R_k\\)
 
 In order to estimate the state of a non-linear process, users must implement
 the [NonLinearProcess](../apidocs/org/hipparchus/filtering/kalman/extended/NonLinearProcess.html) interface

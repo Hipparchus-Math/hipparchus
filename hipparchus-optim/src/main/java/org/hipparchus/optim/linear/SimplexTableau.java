@@ -6,7 +6,7 @@
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,7 +36,6 @@ import java.util.TreeSet;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
@@ -726,7 +725,15 @@ class SimplexTableau implements Serializable {
     private void writeObject(ObjectOutputStream oos)
         throws IOException {
         oos.defaultWriteObject();
-        MatrixUtils.serializeRealMatrix(tableau, oos);
+        final int n = tableau.getRowDimension();
+        final int m = tableau.getColumnDimension();
+        oos.writeInt(n);
+        oos.writeInt(m);
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                oos.writeDouble(tableau.getEntry(i, j));
+            }
+        }
     }
 
     /**
@@ -738,6 +745,20 @@ class SimplexTableau implements Serializable {
     private void readObject(ObjectInputStream ois)
       throws ClassNotFoundException, IOException {
         ois.defaultReadObject();
-        MatrixUtils.deserializeRealMatrix(this, "tableau", ois);
+
+        // read the matrix data
+        final int n = ois.readInt();
+        final int m = ois.readInt();
+        final double[][] data = new double[n][m];
+        for (int i = 0; i < n; ++i) {
+            final double[] dataI = data[i];
+            for (int j = 0; j < m; ++j) {
+                dataI[j] = ois.readDouble();
+            }
+        }
+
+        // create the instance
+        tableau = new Array2DRowRealMatrix(data, false);
+
     }
 }

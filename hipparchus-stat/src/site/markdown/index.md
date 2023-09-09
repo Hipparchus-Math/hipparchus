@@ -6,7 +6,7 @@
  (the "License"); you may not use this file except in compliance with
  the License.  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -373,8 +373,9 @@ The slope may be biased.
 [OLSMultipleLinearRegression](../apidocs/org/hipparchus/stat/regression/OLSMultipleLinearRegression.html),
 [GLSMultipleLinearRegression](../apidocs/org/hipparchus/stat/regression/GLSMultipleLinearRegression.html) and [MillerUpdatingRegression](../apidocs/org/hipparchus/stat/regression/MillerUpdatingRegression.html)
 provide least squares regression to fit the linear model:
-
-    Y = X * b + u
+\\[
+  Y = X \times b + u
+\\]
 
 where Y is an n-vector __regressand__, X is a `[n,k]` matrix whose k columns are called
 __regressors__, b is k-vector of __regression parameters__ and u is an n-vector
@@ -546,10 +547,17 @@ computes Kendall's tau rank correlation.
 
 __Implementation Notes__
 
-* Unbiased covariances are given by the formula `\(cov(X, Y) = \sum{(x_i - E(X))(y_i - E(Y))} / (n - 1)\)` where `\(E(X)\)` is the mean of X and `\(E(Y)\)` is the mean of the Y values. Non-bias-corrected estimates use n in place of `\(n - 1\)`. Whether or not covariances are bias-corrected is determined by the optional parameter, "biasCorrected," which defaults to true.
-* `PearsonsCorrelation` computes correlations defined by the formula `\(cor(X, Y) = \sum{(x_i - E(X))(y_i - E(Y))} / (n - 1)s(X)s(Y)\)` where `\(E(X)\)` and `\(E(Y)\)` are means of X and Y and `\(s(X)\)`, `\(s(Y)\)` are standard deviations.
-* `SpearmansCorrelation` applies a rank transformation to the input data and computes Pearson's correlation on the ranked data. The ranking algorithm is configurable. By default, NaturalRanking with default strategies for handling ties and NaN values is used.
-* `KendallsCorrelation` computes the association between two measured quantities. A tau test is a non-parametric hypothesis test for statistical dependence based on the tau coefficient.
+* Unbiased covariances are given by the formula \\(cov(X, Y) = \\sum{(x_i - E(X))(y_i - E(Y))} / (n - 1)\\)
+  where \\(E(X)\\) is the mean of X and \\(E(Y)\\) is the mean of the Y values. Non-bias-corrected estimates
+  use n in place of \\(n - 1\\). Whether or not covariances are bias-corrected is determined by the optional
+  parameter, `biasCorrected`, which defaults to true.
+* `PearsonsCorrelation` computes correlations defined by the formula \\(cor(X, Y) = \\sum{(x_i - E(X))(y_i - E(Y))} / (n - 1)s(X)s(Y)\\)
+  where \\(E(X)\\) and \\(E(Y)\\) are means of X and Y and \\(s(X)\\), \\(s(Y)\\) are standard deviations.
+* `SpearmansCorrelation` applies a rank transformation to the input data and computes Pearson's correlation
+  on the ranked data. The ranking algorithm is configurable. By default, NaturalRanking with default
+  strategies for handling ties and NaN values is used.
+* `KendallsCorrelation` computes the association between two measured quantities. A tau test is a non-parametric
+  hypothesis test for statistical dependence based on the tau coefficient.
 
 Examples:
 
@@ -603,8 +611,8 @@ Then the matrix of standard errors is
     correlation.getCorrelationStandardErrors();
 
 The formula used to compute the standard error is
-`\(SE_r = \sqrt{(1 - r^2) / (n - 2)}\)`<br/>
-where `\(r\)` is the estimated correlation coefficient and `\(n\)` is the number of
+\\(SE_r = \\sqrt{(1 - r^2) / (n - 2)}\\)<br/>
+where \\(r\\) is the estimated correlation coefficient and \\(n\\) is the number of
 observations in the source dataset.
 
 __p-values__ for the (2-sided) null hypotheses that elements of
@@ -613,8 +621,8 @@ a correlation matrix are zero populate the RealMatrix returned by
     correlation.getCorrelationPValues()
     
 `getCorrelationPValues().getEntry(i,j)` is the probability that a random variable
-distributed as `\(t_{n-2}\)` takes a value with absolute value greater than or equal to
-`\(|r_{ij}|\sqrt{(n - 2) / (1 - r_{ij}^2)}\)`, where `\(r_{ij}\)` is the estimated
+distributed as \\(t_{n-2}\\) takes a value with absolute value greater than or equal to
+\\(|r_{ij}|\\sqrt{(n - 2) / (1 - r_{ij}^2)}\\), where \\(r_{ij}\\) is the estimated
 correlation between the ith and jth columns of the source array or RealMatrix.
 This is sometimes referred to as the *significance* of the coefficient.
 
@@ -795,7 +803,7 @@ array of expected counts, use:
     double[] expected = {10.1, 9.8, 10.3};
     System.out.println(InferenceTestUtils.chiSquare(expected, observed));
 
-the value displayed will be `\(\sum{(expected[i] - observed[i])^2 / expected[i])}\)`
+the value displayed will be \\(\\sum{(expected[i] - observed[i])^2 / expected[i]}\\)
 
 To get the p-value associated with the null hypothesis that `observed` conforms to `expected` use:
 
@@ -941,7 +949,7 @@ to compute the D-statistic and
 
 for the p-value associated with the null hypothesis that `x` and
 `y` come from the same distribution. By default, here and above strict
-inequality is used in the null hypothesis - i.e., we evaluate `\(H_0 : D_{n,m} > d\)`.
+inequality is used in the null hypothesis - i.e., we evaluate \\(H_0 : D_{n,m} > d\\).
 To make the inequality above non-strict, add `false` as an actual parameter
 above. For large samples, this parameter makes no difference.  When the product of the sample sizes is less than 10,000, `KolmogorovSmirnnov` computes p-values exactly; otherwise the Kolmogorov approximation to the distribution of the D statistic is used. To force exact computation of the p-value (overriding the selection of estimation
 method), first compute the d-statistic and then use the `exactP` method

@@ -6,7 +6,7 @@
  (the "License"); you may not use this file except in compliance with
  the License.  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -153,10 +153,10 @@ enum parameter to specify which side of the final convergence interval should be
 selected as the root. It can be `ANY_SIDE`, `LEFT_SIDE`, `RIGHT_SIDE`,
 `BELOW_SIDE` or `ABOVE_SIDE`. Left and right are used to specify the root along
 the function parameter axis while below and above refer to the function value axis. The solve methods
-compute a value `\(c\)` such that:
+compute a value \\(c\\) such that:
 
-* `\(f(c) = 0.0\)` (see "function value accuracy")
-* `\(min \le c \le max \)` (except for the secant method, which may find a solution outside the interval)
+* \\(f(c) = 0.0\\) (see "function value accuracy")
+* \\(min \le c \le max \\) (except for the secant method, which may find a solution outside the interval)
 
 Typical usage:
 
@@ -236,7 +236,7 @@ there are only getters to retrieve their values, no setters are available.
 
 A [UnivariateInterpolator](../apidocs/org/hipparchus/analysis/interpolation/UnivariateInterpolator.html)
 is used to find a univariate real-valued function `f` which for a given set of ordered pairs
-`\((x_i,y_i)\)` yields `\(f(x_i)=y_i\)` to the
+\\((x_i,y_i)\\) yields \\(f(x_i)=y_i\\) to the
 best accuracy possible. The result is provided as an object implementing the
 [Univariate](../apidocs/org/hipparchus/analysis/UnivariateFunction.html) interface.
 It can therefore be evaluated at any point, including point not belonging to the original set.
@@ -264,7 +264,7 @@ value pairs consists of `N-1` polynomials. The function
 is continuous, smooth and can be differentiated twice.  The second
 derivative is continuous but not smooth.  The x values passed to the
 interpolator must be ordered in ascending order.  It is not valid to
-evaluate the function for values outside the range `\(x_0...x_N\)`.
+evaluate the function for values outside the range \\(x_0...x_N\\).
 
 The polynomial function returned by the Neville's algorithm is a single
 polynomial guaranteed to pass exactly through the interpolation points.
@@ -311,13 +311,13 @@ no requirements for a regular grid) and some points may provide derivatives whil
 
 A [BivariateGridInterpolator](../apidocs/org/hipparchus/analysis/interpolation/BivariateGridInterpolator.html)
 is used to find a bivariate real-valued function `f` which for a given set of tuples
-`\((x_i,y_j,f_{ij})\)`
-yields `\(f(x_i,y_j)=f_{ij}\)` to the best accuracy
+\\((x_i,y_j,f_{ij})\\)
+yields \\(f(x_i,y_j)=f_{ij}\\) to the best accuracy
 possible. The result is provided as an object implementing the
 [BivariateFunction](../apidocs/org/hipparchus/analysis/BivariateFunction.html)
 interface. It can therefore be evaluated at any point,
 including a point not belonging to the original set.
-The arrays `\(x_i\)` and `\(y_j\)` must be
+The arrays \\(x_i\\) and \\(y_j\\) must be
 sorted in increasing order in order to define a two-dimensional grid.
 
 In [bicubic interpolation](http://en.wikipedia.org/wiki/Bicubic_interpolation),
@@ -335,12 +335,12 @@ computes a
 
 A [TrivariateGridInterpolator](../apidocs/org/hipparchus/analysis/interpolation/TrivariateGridInterpolator.html)
 is used to find a trivariate real-valued function `f` which for a given set of tuples
-`\((x_i,y_j,z_k, f_{ijk})\)`
-yields `\(f(x_i,y_j,z_k)=f_{ijk}\)`
+\\((x_i,y_j,z_k, f_{ijk})\\)
+yields \\(f(x_i,y_j,z_k)=f_{ijk}\\)
 to the best accuracy possible. The result is provided as an object implementing the
 [TrivariateFunction](../apidocs/org/hipparchus/analysis/TrivariateFunction.html)
 interface. It can therefore be evaluated at any point, including a point not belonging to the original set.
-The arrays `\(x_i\)`, `\(y_j\)` and `\(z_k\)` must be sorted in
+The arrays \\(x_i\\), \\(y_j\\) and \\(z_k\\) must be sorted in
 increasing order in order to define a three-dimensional grid.
 
 In [tricubic interpolation](http://en.wikipedia.org/wiki/Tricubic_interpolation),
@@ -413,17 +413,17 @@ with zero order derivative and no free parameters.
 
 ![differentiation class diagram](images/userguide/differentiation.png)
 
-The workflow of computation of a derivatives of an expression `y=f(x)` is as follows. First we configure
+The workflow of computation of a derivatives of an expression \\(y=f(x)\\) is as follows. First we configure
 a factory with the number of free parameters and the derivation order we want to use throughout the
 computation. Then we use it to create variables (one for each of the free parameters, here only one since
-the single free parameter is `x`) and constants that will be used for the rest of the computation.
+the single free parameter is \\(x\\)) and constants that will be used for the rest of the computation.
 Variables, constants, intermediate values and final results will all be instances of <a
 href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
-DerivativeStructure</a>. We compute `y=f(x)` normally by using all these instances just as we would
-use regular numbers (apart from the fact we must write things like `a.add(b)` instead of `a + b` as
-the Java languages does not support operator overriding). At the end, we extract from `y` the value and
-the derivatives we want. As we have specified 3<sup>rd</sup> order when we built `x`, we can retrieve the
-derivatives up to 3<sup>rd</sup> order from `y`. The following example shows that:
+DerivativeStructure</a>. We compute \\(y=f(x)\\) normally by using all these instances just as we would
+use regular numbers (apart from the fact we must write things like `a.add(b)` instead of \\(a + b\\) as
+the Java languages does not support operator overriding). At the end, we extract from \\(y\\) the value and
+the derivatives we want. As we have specified \\(3^\\mathrm{rd}\\) order when we built \\(\\), we can retrieve the
+derivatives up to \\(3^\\mathrm{rd}\\) order from \\(y\\). The following example shows that:
 
     int params = 1;
     int order = 3;
@@ -437,42 +437,42 @@ derivatives up to 3<sup>rd</sup> order from `y`. The following example shows tha
     System.out.println("y''  = " + y.getPartialDerivative(2);
     System.out.println("y''' = " + y.getPartialDerivative(3);
 
-with for example this definition for the `\(f(x) = \cos(1+x)\)` function:
+with for example this definition for the \\(f(x) = \\cos(1+x)\\) function:
 
     public DerivativeStructure f(DerivativeStructure x) {
         return x.add(1).cos();
     }
 
-In fact, there are no special provisions for *variables* in the framework, so neither `x`
-nor `y` are considered to be variables per se. They are both considered to be
+In fact, there are no special provisions for *variables* in the framework, so neither \\(x\\)
+nor \\(y\\) are considered to be variables per se. They are both considered to be
 <em>functions</em> and to depend on implicit free parameters which are represented only by
-indices in the framework. The `x` instance above is there considered by the framework
-to be a function of free parameter `p0` at index 0, and as `y` is
-computed from `x` it is the result of a functions composition and is therefore also
-a function of this `p0` free parameter. The `p0` is not represented by itself,
+indices in the framework. The \\(x\\) instance above is there considered by the framework
+to be a function of free parameter \\(p_0\\) at index 0, and as \\(y\\) is
+computed from \\(x\\) it is the result of a functions composition and is therefore also
+a function of this \\(p_0\\) free parameter. The \\(p_0\\) is not represented by itself,
 it is simply defined implicitly by the 0 index above. This index is the first argument in the
-call to the `variable` factory method to create the `x` instance. What this factory method
-means is that we built `x` as a function that depends on one free parameter only, that can be
+call to the `variable` factory method to create the \\(x\\) instance. What this factory method
+means is that we built \\(x\\) as a function that depends on one free parameter only, that can be
 differentiated up to order 3 (as specified when the factory was configured), and
 which correspond to an identity function with respect to implicit free parameter number 0 (first
 factory method argument set to 0), with current value equal to 2.5 (second factory method argument set
 to 2.5). This specific factory method defines identity functions, and identity functions are the trick
 we use to represent variables (there are of course other constructors, for example to build constants
 or functions from all their derivatives if they are known beforehand). From the user point of view,
-the `x` instance can be seen as the `x` variable, but it is really the identity
+the \\(x\\) instance can be seen as the \\(x\\) variable, but it is really the identity
 function applied to free parameter number 0. As the identity function, it has the same value as its
 parameter, its first derivative is 1.0 with respect to this free parameter, and all its higher order
-derivatives are 0.0. This can be checked by calling the getValue() or getPartialDerivative() methods
-on `x`.
+derivatives are 0.0. This can be checked by calling the `getValue()` or `getPartialDerivative()` methods
+on \\(x\\).
 
-When we compute `y` from this setting, what we really do is chain `f` after the
+When we compute \\(y\\) from this setting, what we really do is chain \\(f\\) after the
 identity function, so the net result is that the derivatives are computed with respect to the indexed
 free parameters (i.e. only free parameter number 0 here since there is only one free parameter) of the
-identity function x. Going one step further, if we compute `z = g(y)`, we will also compute
-`z` as a function of the initial free parameter. The very important consequence is that
-if we call `z.getPartialDerivative(1)`, we will not get the first derivative of `g`
-with respect to `y`, but with respect to the free parameter `p0`: the derivatives
-of g and f <em>will</em> be chained together automatically, without user intervention.
+identity function \\(x\\). Going one step further, if we compute \\(z = g(y)\\), we will also compute
+\\(z\\) as a function of the initial free parameter. The very important consequence is that
+if we call `z.getPartialDerivative(1)`, we will not get the first derivative of \\(g\\)
+with respect to \\(y\\), but with respect to the free parameter \\(p_0\\): the derivatives
+of \\(g\\) and \\(f\\) <em>will</em> be chained together automatically, without user intervention.
 
 This design choice is a very classical one in many algorithmic differentiation frameworks, either
 based on operator overloading (like the one we implemented here) or based on code generation. It implies
@@ -481,17 +481,17 @@ done by setting up identity function, i.e. functions that represent the variable
 only unit first derivative.
 
 This design also allows a very interesting feature which can be explained with the following example.
-Suppose we have a two-argument function `f` and a one-argument function `g`. If
-we compute `g(f(x, y))` with `x` and `y` be two variables, we
-want to be able to compute the partial derivatives `\(\partial g / \partial x\)`, `\(\partial g / \partial y\)`,
-`\(\partial^2 g / \partial x^2\)`, `\(\partial^2 g / \partial x\partial y\)` and `\(\partial^2 g / \partial y^2\)`.
-This does make sense since we combined the two functions, and it does make sense despite `g` is a one argument
-function only. In order to do this, we simply set up `x` as an identity function of an implicit free parameter
-`p0` and `y` as an identity function of a different implicit free parameter
-`p1` and compute everything directly. In order to be able to combine everything, however,
-both `x` and `y` must be built with the appropriate dimensions, so the factory used to create them must
-have been configured to managed two parameters. The `x` instance will be created by calling the factory
-method `variable` with the first parameter set to 0, whereas the `y` instance will be created by calling
+Suppose we have a two-argument function \\(f\\) and a one-argument function \\(g\\). If
+we compute \\(g(f(x, y))\\) with \\(x\\) and \\(y\\) be two variables, we
+want to be able to compute the partial derivatives \\(\\partial g / \\partial x\\), \\(\\partial g / \\partial y\\),
+\\(\\partial^2 g / \\partial x^2\\), \\(\\partial^2 g / \\partial x\partial y\\) and \\(\\partial^2 g / \\partial y^2\\).
+This does make sense since we combined the two functions, and it does make sense despite \\(g\\) is a one argument
+function only. In order to do this, we simply set up \\(x\\) as an identity function of an implicit free parameter
+\\(p_0\\) and \\(y\\) as an identity function of a different implicit free parameter
+\\(p_1\\) and compute everything directly. In order to be able to combine everything, however,
+both \\(x\\) and \\(y\\) must be built with the appropriate dimensions, so the factory used to create them must
+have been configured to managed two parameters. The \\(x\\) instance will be created by calling the factory
+method `variable` with the first parameter set to 0, whereas the \\(y\\) instance will be created by calling
 the factory method `variable` with the first parameter set to 1, so they refer to different parameters.
 Here is how we do this (note that `getPartialDerivative` is a variable arguments method which take as
 arguments the derivation order with respect to all free parameters, i.e. the first argument is derivation
@@ -521,22 +521,22 @@ resulting derivative structure is truncated to the initial order (i.e. a derivat
 structure up to order 3 differentiated twice will still be of order 3, and the two
 highest order terms (4 and 5) will be dropped.
 
-If a function `\(f\)` is a function of `\(n\)` independent parameters `\(p_0, p_1, \ldots p_{n-1}\)`,
-then it can be computed as a `DerivativeStructure` with `\(n\)` parameters.
+If a function \\(f\\) is a function of \\(n\\) independent parameters \\(p_0, p_1, \\ldots p_{n-1}\\),
+then it can be computed as a `DerivativeStructure` with \\(n\\) parameters.
 If however, in another part of the computation the parameters are themselves
-considered to be functions of `\(m\)` more base variables `\(p_0 = p_0(q_0, q_1, \ldots q_{m-1})\)`,
-`\(p_1 = p_1(q_0, q_1, \ldots q_{m-1})\)`, … `\(p_{n-1} = p_{n-1}(q_0, q_1, \ldots q_{m-1})\)`,
+considered to be functions of \\(m\\) more base variables \\(p_0 = p_0(q_0, q_1, \\ldots q_{m-1})\\),
+\\(p_1 = p_1(q_0, q_1, \\ldots q_{m-1})\\), … \\(p_{n-1} = p_{n-1}(q_0, q_1, \\ldots q_{m-1})\\),
 then it is possible to `rebase` the initial `DerivativeStructure` by providing the intermediate
-variables `\(p_i\)` as `DerivativeStructure` with `\(m\)` parameters. The result will be
-a `DerivativeStructure` with `\(m\)` parameters representing `\(f(q_0, q_1, \ldots q_{m-1})\)`.
-When rebasing, the number of intermediate variables `\(p_i\)` provided must match the
-number `\(n\)` of parameters of the initial `DerivativeStructure`, and the
+variables \\(p_i\\) as `DerivativeStructure` with \\(m\\) parameters. The result will be
+a `DerivativeStructure` with \\(m\\) parameters representing \\(f(q_0, q_1, \\ldots q_{m-1})\\).
+When rebasing, the number of intermediate variables \\(p_i\\) provided must match the
+number \\(n\\) of parameters of the initial `DerivativeStructure`, and the
 derivation orders must all match.
 
 The `TaylorMap` class is a container that gather several `DerivativeStructure` and one
-evaluation point `\((p_0, p_1, \ldots p_{n-1})\)` to represent a vector-valued function.
+evaluation point \\((p_0, p_1, \\ldots p_{n-1})\\) to represent a vector-valued function.
 Taylor maps can be evaluated at points close to the central evaluation point by
-providing the offsets `\((\Delta p_0, \Delta p_1, \ldots \Delta p_{n-1})\)`. They can
+providing the offsets \\((\Delta p_0, \Delta p_1, \\ldots \Delta p_{n-1})\\). They can
 be composed with other Taylor maps, which corresponds to calling `rebase` on all vector
 components, provided that the number of functions of the inner map is equal to the number
 of parameters of the outer map. If a Taylor map is square (i.e. if its number of
@@ -563,7 +563,7 @@ The <a
 href="../apidocs/org/hipparchus/analysis/differentiation/UnivariateDerivative1.html">
 UnivariateDerivative1</a> class is an implementation devoted to univariate functions and
 when only first order derivative is needed. This means instances of this class only
-holds `f` and `\(\partial f / \partial x\)`. It is therefore equivalent to <a
+holds \\(f\\) and \\(\\partial f / \\partial x\\). It is therefore equivalent to <a
 href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
 DerivativeStructure</a> configured with `parameters=1` and `order=1`. It is faster,
 has a simpler API, and does not need a factory.
@@ -572,7 +572,7 @@ The <a
 href="../apidocs/org/hipparchus/analysis/differentiation/UnivariateDerivative2.html">
 UnivariateDerivative2</a> class is an implementation devoted to univariate functions and
 when only first and second order derivatives are needed. This means instances of this
-class only holds `f`, `\(\partial f / \partial x\)` and `\(\partial^2 f / \partial x^2\)`.
+class only holds \\(f\\), \\(\\partial f / \\partial x\\) and \\(\\partial^2 f / \\partial x^2\\).
 It is therefore equivalent to <a
 href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
 DerivativeStructure</a> configured with `parameters=1` and `order=2`. It is faster,
@@ -582,8 +582,8 @@ The <a
 href="../apidocs/org/hipparchus/analysis/differentiation/Gradient.html">
 Gradient</a> class is an implementation devoted to multivariate functions and
 when only first order derivatives with respect to all parameters are needed. This means
-instances of this class only holds `f`, `\(\partial f / \partial p_1\)`, `\(\partial f / \partial p_2\)`...
-`\(\partial f / \partial p_n\)`. It is therefore equivalent to <a
+instances of this class only holds \\(f\\), \\(\\partial f / \\partial p_1\\), \\(\\partial f / \\partial p_2\\)...
+\\(\\partial f / \\partial p_n\\). It is therefore equivalent to <a
 href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
 DerivativeStructure</a> configured with `parameters=n` and `order=1`. It is faster,
 has a simpler API, and does not need a factory.

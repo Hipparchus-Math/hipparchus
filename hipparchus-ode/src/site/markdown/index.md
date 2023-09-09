@@ -6,7 +6,7 @@
  (the "License"); you may not use this file except in compliance with
  the License.  You may obtain a copy of the License at
 
-      http://www.apache.org/licenses/LICENSE-2.0
+      https://www.apache.org/licenses/LICENSE-2.0
 
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,11 +18,11 @@
 ## Overview
 The ode package provides classes to solve Ordinary Differential Equations problems.
 
-This package solves Initial Value Problems of the form `\(y'=f(t,y)\)` with `\(t_0\)`
-and `\(y(t_0)=y_0\)` known. The `\(f\)` function is the
+This package solves Initial Value Problems of the form \\(y'=f(t,y)\\) with \\(t_0\\)
+and \\(y(t_0)=y_0\\) known. The \\(f\\) function is the
 [Ordinary Differential Equation](../apidocs/org/hipparchus/ode/OrdinaryDifferentialEquation.html)
-to be solved. The provided integrators compute an estimate of `\(y(t)\)` from `\(t=t_0\)`
-to `\(t=t_1\)`.
+to be solved. The provided integrators compute an estimate of \\(y(t)\\) from \\(t=t_0\\)
+to \\(t=t_1\\).
 
 All integrators provide [dense output](#Dense_Output). This means that besides computing the state vector
 at discrete times, they also provide a cheap mean to get both the state and its derivative
@@ -43,7 +43,7 @@ All integrators support setting a maximal number of evaluations of differential
 equations function. If this number is exceeded, an exception will be thrown during
 integration. This can be used to prevent infinite loops if for example error control or
 discrete events create a really large number of extremely small steps. By default, the
-maximal number of evaluation is set to `Integer.MAX_VALUE` (i.e. `\(2^{31}-1\)`
+maximal number of evaluation is set to `Integer.MAX_VALUE` (i.e. \\(2^{31}-1\\)
 or 2147483647). It is recommended to set this maximal number to a value suited to the ODE
 problem, integration range, and step size or error control settings.
 
@@ -70,16 +70,16 @@ The user should describe his problem in his own classes which should implement t
 [OrdinaryDifferentialEquation](../apidocs/org/hipparchus/ode/OrdinaryDifferentialEquation.html)
 interface (or  [FieldOrdinaryDifferentialEquation](../apidocs/org/hipparchus/ode/FieldOrdinaryDifferentialEquation.html)
 interface). The following example shows how to implement a simple two-dimensional problem using double primitives:
-`\[
-  \begin{align*}
-   y'_0 (t) &= \omega \times (c_1 - y_1 (t))\\
-   y'_1 (t) &= \omega \times (y_0 (t) - c_0)
-  \end{align*}
-\]`
+\\[
+  \\begin{cases}
+   y'_0 (t) &= \\omega \\times (c_1 - y_1 (t))\\\\
+   y'_1 (t) &= \\omega \\times (y_0 (t) - c_0)
+  \\end{cases}
+\\]
 
-with some initial state `\(y(t_0) = (y_0(t_0), y_1(t_0))\)`.
-In fact, the exact solution of this problem is that `\(y(t)\)` moves along a circle
-centered at `\(c = (c_0, c_1)\)` with constant angular rate `\(\omega\)`.
+with some initial state \\(y(t_0) = (y_0(t_0), y_1(t_0))\\).
+In fact, the exact solution of this problem is that \\(y(t)\\) moves along a circle
+centered at \\(c = (c_0, c_1)\\) with constant angular rate \\(\omega\\).
 
 
     private static class Circle1 implements OrdinaryDifferentialEquation {
@@ -114,7 +114,7 @@ The user must also set up an initial state as an [ODEState](../apidocs/org/hippa
 Then he should pass both the equations and the initial state to the integrator he prefers among all the classes that implement
 the [ODEIntegrator](../apidocs/org/hipparchus/ode/ODEIntegrator.html)
 interface (or the [FieldODEIntegrator](../apidocs/org/hipparchus/ode/FieldODEIntegrator.html)
-interface). Computing the state `\(y(16.0)\)` starting from `\(y(0.0) = (0.0, 1.0)\)` and integrating the ODE
+interface). Computing the state \\(y(16.0)\\) starting from \\(y(0.0) = (0.0, 1.0)\\) and integrating the ODE
 is done as follows (using Dormand-Prince 8(5,3) integrator as an example):
 
     ODEIntegrator                dp853        = new DormandPrince853Integrator(1.0e-8, 100.0, 1.0e-10, 1.0e-10);
@@ -196,7 +196,7 @@ automatic guess is wrong.
 ## Discrete Events Handling
 ODE problems are continuous ones. However, sometimes discrete events may be
 taken into account. The most frequent case is the stop condition of the integrator
-is not defined by the time t but by a target condition on state `\(y\)` (say `\(y[0] = 1.0\)`
+is not defined by the time t but by a target condition on state \\(y\\) (say \\(y[0] = 1.0\\)
 for example).
 
 Discrete events detection is based on switching functions. The user provides
@@ -208,7 +208,7 @@ For the sake of root finding, it should however be continuous (but not necessari
 at least in the roots vicinity. The steps are shortened as needed to ensure the events occur
 at step boundaries (even if the integrator is a fixed-step integrator).
 
-When an event is triggered (i.e. when the sign of the `g` switching function changes),
+When an event is triggered (i.e. when the sign of the \\(g\\) switching function changes),
 the event state and an indicator whether the switching function was increasing or
 decreasing at event occurrence are provided to the user. Several different options are
 available to deal with the event occurrence.
@@ -297,7 +297,7 @@ on the Nordsieck vector representation of the state.
 ## Secondary States
 In some cases, the ordinary differential equations is split into a primary
 state and some additional, secondary states. This can be done by providing
-an [ExpandableODE](../apidocs/org/hipparchus/ode/ExpandableODE.html))
+an [ExpandableODE](../apidocs/org/hipparchus/ode/ExpandableODE.html)
 instance to the integrator instead of a regular
 [Ordinary Differential Equation](../apidocs/org/hipparchus/ode/OrdinaryDifferentialEquation.html)
 and add [SecondaryODE](../apidocs/org/hipparchus/ode/SecondaryODE.html) to this expandable
@@ -312,10 +312,10 @@ If some components should be used for step size control, then they must be part 
 primary state and not added as secondary states.
 
 ## Derivatives
-In some cases, the sensitivity `\(dy/dy_0\)` of the final state with respect to the initial
-state `\(y_0\)` (often called state transition matrix) or the sensitivity `\(dy/dp_k)\)` of
-the final state with respect to some parameters `\(p_k\)` of the ODE are needed, in addition
-to the final state `\(y(t)\)` itself.
+In some cases, the sensitivity \\(dy/dy_0\\) of the final state with respect to the initial
+state \\(y_0\\) (often called state transition matrix) or the sensitivity \\(dy/dp_k\\) of
+the final state with respect to some parameters \\(p_k\\) of the ODE are needed, in addition
+to the final state \\(y(t)\\) itself.
 
 This can be computed by using [variational equations](../apidocs/org/hipparchus/ode/VariationalEquation.html)
 which automatically adds a set of secondary equations to the primary ODE and adds initial secondary
@@ -329,19 +329,19 @@ results in both cases.
 
 If for example the primary state dimension is 6 and there are 3 parameters, the compound state will be a 60
 elements array. The first 6 elements will be the primary state, the next 54 elements will be a secondary
-state containing first the `\(6 \times 6\)` Jacobian matrix of the final state with respect to the initial state, and
+state containing first the \\(6 \times 6\\) Jacobian matrix of the final state with respect to the initial state, and
 3 sets of 6 elements vectors for the Jacobian matrix of the final state with respect to the 3 parameters.
 
 The [VariationalEquation](../apidocs/org/hipparchus/ode/VariationalEquation.html) handles most of
 secondary equations and states management, as long as the local partial derivatives are provided to it.
 On both initialization of the matrices and extraction of the intermediate or final results from
 [ODEStateAndDerivative](../apidocs/org/hipparchus/ode/ODEStateAndDerivative.html) instances, the state
-transition matrix is represented as a square `\(n \times n\)` array (for a dimension `\(n\)` primary state).
+transition matrix is represented as a square \\(n \times n\\) array (for a dimension \\(n\\) primary state).
 The parameters are identified by a name (a simple user defined string) and the associated partial
-derivatives are dimension `\(n\)` arrays.
+derivatives are dimension \\(n\\) arrays.
 
-What remains of user responsibility is to provide the local Jacobians `\(df(t, y, p)/dy\)` and
-`\(df(t, y, p)/dp_k\)` corresponding the the main ODE `\(y'=f(t, y, p)\)`. There are two ways for user to
+What remains of user responsibility is to provide the local Jacobians \\(df(t, y, p)/dy\\) and
+\\(df(t, y, p)/dp_k\\) corresponding the the main ODE \\(y'=f(t, y, p)\\). There are two ways for user to
 provide theses local partial derivatives. The first way is to provide a full-fledged
 [ODEJacobiansProvider](../apidocs/org/hipparchus/ode/ODEJacobiansProvider.html) which is an
 [OrdinaryDifferentialEquation](../apidocs/org/hipparchus/ode/OrdinaryDifferentialEquation.html)
