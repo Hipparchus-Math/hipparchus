@@ -720,7 +720,7 @@ public class BigFraction
     @Override
     public double doubleValue() {
         double result = numerator.doubleValue() / denominator.doubleValue();
-        if (Double.isNaN(result)) {
+        if (Double.isInfinite(result) || Double.isNaN(result)) {
             // Numerator and/or denominator must be out of range:
             // Calculate how far to shift them to put them in range.
             int shift = FastMath.max(numerator.bitLength(),
