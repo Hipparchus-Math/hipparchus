@@ -29,9 +29,22 @@ import org.hipparchus.analysis.BivariateFunction;
  *
  */
 public class Divide implements BivariateFunction {
+
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public Divide() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /** {@inheritDoc} */
     @Override
     public double value(double x, double y) {
         return x / y;
     }
+
 }

@@ -28,6 +28,17 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 public abstract class FieldUnivariateDerivative<S extends CalculusFieldElement<S>, T extends FieldUnivariateDerivative<S, T>>
     implements FieldDerivative<S, T> {
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public FieldUnivariateDerivative() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /** {@inheritDoc} */
     @Override
     public int getFreeParameters() {

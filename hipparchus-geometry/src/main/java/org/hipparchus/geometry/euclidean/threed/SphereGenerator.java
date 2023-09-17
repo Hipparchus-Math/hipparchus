@@ -36,6 +36,17 @@ import org.hipparchus.util.FastMath;
  */
 public class SphereGenerator implements SupportBallGenerator<Euclidean3D, Vector3D> {
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public SphereGenerator() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /** {@inheritDoc} */
     @Override
     public EnclosingBall<Euclidean3D, Vector3D> ballOnSupport(final List<Vector3D> support) {

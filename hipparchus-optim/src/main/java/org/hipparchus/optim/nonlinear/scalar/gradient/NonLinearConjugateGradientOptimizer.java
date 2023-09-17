@@ -267,11 +267,24 @@ public class NonLinearConjugateGradientOptimizer
 
     /** Default identity preconditioner. */
     public static class IdentityPreconditioner implements Preconditioner {
+
+        /** Empty constructor.
+         * <p>
+         * This constructor is not strictly necessary, but it prevents spurious
+         * javadoc warnings with JDK 18 and later.
+         * </p>
+         * @since 3.0
+         */
+        public IdentityPreconditioner() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+            // nothing to do
+        }
+
         /** {@inheritDoc} */
         @Override
         public double[] precondition(double[] variables, double[] r) {
             return r.clone();
         }
+
     }
 
     // Class is not used anymore (cf. MATH-1092). However, it might

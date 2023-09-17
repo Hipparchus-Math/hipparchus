@@ -60,6 +60,17 @@ import org.hipparchus.util.MathUtils;
  */
 public class TTest {
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public TTest() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /**
      * Computes a paired, 2-sample t-statistic based on the data in the input
      * arrays.  The t-statistic returned is equivalent to what would be returned by

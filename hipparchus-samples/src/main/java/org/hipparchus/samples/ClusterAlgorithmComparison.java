@@ -65,6 +65,17 @@ import org.hipparchus.util.SinCos;
  */
 public class ClusterAlgorithmComparison {
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public ClusterAlgorithmComparison() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /** Make circles patterns.
      * @param samples number of points
      * @param shuffle if true, shuffle points

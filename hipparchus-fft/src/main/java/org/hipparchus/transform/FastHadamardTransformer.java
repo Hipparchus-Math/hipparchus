@@ -44,6 +44,17 @@ public class FastHadamardTransformer implements RealTransformer, Serializable {
     /** Serializable version identifier. */
     static final long serialVersionUID = 20120211L;
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public FastHadamardTransformer() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /**
      * {@inheritDoc}
      *

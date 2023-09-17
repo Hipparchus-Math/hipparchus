@@ -55,6 +55,17 @@ import org.hipparchus.util.Pair;
  */
 public class LowDiscrepancyGeneratorComparison {
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public LowDiscrepancyGeneratorComparison() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /** Generate points within a circle.
      * @param samples number of points
      * @param generator random generator to generate points

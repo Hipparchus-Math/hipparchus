@@ -90,6 +90,17 @@ public class ContinuousOutputModel extends DenseOutputModel {
     /** Interpolation time. */
     private double interpolatedTime;
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public ContinuousOutputModel() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /** Set the time of the interpolated point.
      * <p>This method should <strong>not</strong> be called before the
      * integration is over because some internal variables are set only

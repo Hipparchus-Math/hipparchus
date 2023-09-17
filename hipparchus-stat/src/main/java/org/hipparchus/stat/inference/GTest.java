@@ -43,6 +43,17 @@ import org.hipparchus.util.MathUtils;
  */
 public class GTest {
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public GTest() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /**
      * Computes the <a href="http://en.wikipedia.org/wiki/G-test">G statistic
      * for Goodness of Fit</a> comparing {@code observed} and {@code expected}

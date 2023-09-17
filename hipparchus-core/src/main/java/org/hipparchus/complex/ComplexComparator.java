@@ -28,6 +28,17 @@ public class ComplexComparator implements Comparator<Complex>, Serializable {
     /** Serializable UID. */
     private static final long serialVersionUID = 20171113L;
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public ComplexComparator() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /** Compare two complex numbers, using real ordering as the primary sort order and
      * imaginary ordering as the secondary sort order.
      * @param o1 first complex number

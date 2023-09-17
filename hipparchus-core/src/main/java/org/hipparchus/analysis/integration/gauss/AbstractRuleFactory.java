@@ -39,6 +39,17 @@ public abstract class AbstractRuleFactory implements RuleFactory {
     /** List of points and weights, indexed by the order of the rule. */
     private final SortedMap<Integer, Pair<double[], double[]>> pointsAndWeights = new TreeMap<>();
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public AbstractRuleFactory() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /** {@inheritDoc} */
     @Override
     public Pair<double[], double[]> getRule(int numberOfPoints)

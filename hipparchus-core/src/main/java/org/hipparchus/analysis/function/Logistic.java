@@ -103,6 +103,18 @@ public class Logistic implements UnivariateDifferentiableFunction {
      * </ul>
      */
     public static class Parametric implements ParametricUnivariateFunction {
+
+        /** Empty constructor.
+         * <p>
+         * This constructor is not strictly necessary, but it prevents spurious
+         * javadoc warnings with JDK 18 and later.
+         * </p>
+         * @since 3.0
+         */
+        public Parametric() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+            // nothing to do
+        }
+
         /**
          * Computes the value of the sigmoid at {@code x}.
          *

@@ -34,6 +34,17 @@ public class CanberraDistance implements DistanceMeasure {
     /** Serializable version identifier. */
     private static final long serialVersionUID = -6972277381587032228L;
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public CanberraDistance() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /** {@inheritDoc} */
     @Override
     public double compute(double[] a, double[] b)

@@ -59,6 +59,17 @@ import org.hipparchus.samples.ExampleUtils.ExampleFrame;
 @SuppressWarnings("serial")
 public class ImageClusteringExample {
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public ImageClusteringExample() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /** Main frame for displaying clusters. */
     public static class Display extends ExampleFrame {
 

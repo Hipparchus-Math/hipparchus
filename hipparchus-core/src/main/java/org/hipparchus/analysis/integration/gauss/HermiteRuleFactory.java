@@ -47,6 +47,17 @@ public class HermiteRuleFactory extends AbstractRuleFactory {
     /** √π. */
     private static final double SQRT_PI = 1.77245385090551602729;
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public HermiteRuleFactory() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /** {@inheritDoc} */
     @Override
     protected Pair<double[], double[]> computeRule(int numberOfPoints)

@@ -53,6 +53,17 @@ import org.hipparchus.util.MathUtils;
  */
 public class OneWayAnova {
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public OneWayAnova() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /**
      * Computes the ANOVA F-value for a collection of <code>double[]</code>
      * arrays.

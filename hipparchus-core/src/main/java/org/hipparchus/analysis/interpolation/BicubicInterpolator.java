@@ -44,6 +44,18 @@ import org.hipparchus.util.MathUtils;
  */
 public class BicubicInterpolator
     implements BivariateGridInterpolator {
+
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public BicubicInterpolator() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /**
      * {@inheritDoc}
      */

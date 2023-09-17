@@ -42,6 +42,17 @@ public class NevilleInterpolator implements UnivariateInterpolator,
     /** serializable version identifier */
     static final long serialVersionUID = 3003707660147873733L;
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public NevilleInterpolator() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /**
      * Computes an interpolating function for the data set.
      *
@@ -58,4 +69,5 @@ public class NevilleInterpolator implements UnivariateInterpolator,
         throws MathIllegalArgumentException {
         return new PolynomialFunctionLagrangeForm(x, y);
     }
+
 }

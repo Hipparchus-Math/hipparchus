@@ -31,11 +31,19 @@ import java.io.Serializable;
  *
  */
 public class WeightedObservedPoints implements Serializable {
+
     /** Serializable version id. */
     private static final long serialVersionUID = 20130813L;
 
     /** Observed points. */
-    private final List<WeightedObservedPoint> observations = new ArrayList<>();
+    private final List<WeightedObservedPoint> observations;
+
+    /** Simple constructor.
+     * @since 3.0
+     */
+    public WeightedObservedPoints() {
+        this.observations = new ArrayList();
+    }
 
     /**
      * Adds a point to the sample.

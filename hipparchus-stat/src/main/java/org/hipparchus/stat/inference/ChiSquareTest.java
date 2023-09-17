@@ -42,6 +42,17 @@ import org.hipparchus.util.MathUtils;
  */
 public class ChiSquareTest {
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public ChiSquareTest() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /**
      * Computes the <a href="http://www.itl.nist.gov/div898/handbook/eda/section3/eda35f.htm">
      * Chi-Square statistic</a> comparing <code>observed</code> and <code>expected</code>

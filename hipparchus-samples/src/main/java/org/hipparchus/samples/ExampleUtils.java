@@ -43,9 +43,31 @@ import javax.swing.SwingUtilities;
  */
 public class ExampleUtils {
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public ExampleUtils() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /** Display frame. */
     @SuppressWarnings("serial")
     public static class ExampleFrame extends JFrame {
+
+        /** Empty constructor.
+         * <p>
+         * This constructor is not strictly necessary, but it prevents spurious
+         * javadoc warnings with JDK 18 and later.
+         * </p>
+         * @since 3.0
+         */
+        public ExampleFrame() {
+            // nothing to do
+        }
 
         /**
          * Returns the main panel which should be printed by the screenshot action.

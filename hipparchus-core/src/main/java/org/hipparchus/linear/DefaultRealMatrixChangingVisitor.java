@@ -31,6 +31,18 @@ package org.hipparchus.linear;
  *
  */
 public class DefaultRealMatrixChangingVisitor implements RealMatrixChangingVisitor {
+
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public DefaultRealMatrixChangingVisitor() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /** {@inheritDoc} */
     @Override
     public void start(int rows, int columns,

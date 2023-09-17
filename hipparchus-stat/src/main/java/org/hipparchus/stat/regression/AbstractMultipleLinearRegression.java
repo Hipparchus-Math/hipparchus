@@ -48,6 +48,17 @@ public abstract class AbstractMultipleLinearRegression implements
     /** Whether or not the regression model includes an intercept.  True means no intercept. */
     private boolean noIntercept;
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public AbstractMultipleLinearRegression() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /** Get the X sample data.
      * @return the X sample data.
      */

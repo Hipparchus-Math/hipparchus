@@ -33,6 +33,17 @@ public class SolutionCallback implements OptimizationData {
     /** The SimplexTableau used by the SimplexSolver. */
     private SimplexTableau tableau;
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public SolutionCallback() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /**
      * Set the simplex tableau used during the optimization once a feasible
      * solution has been found.

@@ -32,6 +32,17 @@ import org.hipparchus.util.FastMath;
  */
 public class DiskGenerator implements SupportBallGenerator<Euclidean2D, Vector2D> {
 
+    /** Empty constructor.
+     * <p>
+     * This constructor is not strictly necessary, but it prevents spurious
+     * javadoc warnings with JDK 18 and later.
+     * </p>
+     * @since 3.0
+     */
+    public DiskGenerator() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+        // nothing to do
+    }
+
     /** {@inheritDoc} */
     @Override
     public EnclosingBall<Euclidean2D, Vector2D> ballOnSupport(final List<Vector2D> support) {
