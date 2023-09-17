@@ -75,8 +75,8 @@ public abstract class AbstractPolynomialSolver
         polynomialFunction = f;
     }
 
-    /**
-     * @return the coefficients of the polynomial function.
+    /** Get the coefficients of the polynomial function.
+     * @return the coefficients of the polynomial function
      */
     protected double[] getCoefficients() {
         return polynomialFunction.getCoefficients();

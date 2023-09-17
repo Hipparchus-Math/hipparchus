@@ -34,7 +34,7 @@ public class Power implements UnivariateDifferentiableFunction {
     /** Power. */
     private final double p;
 
-    /**
+    /** Simple constructor.
      * @param p Power.
      */
     public Power(double p) {

@@ -32,7 +32,7 @@ public class ObjectiveFunction implements OptimizationData {
     /** Function to be optimized. */
     private final MultivariateFunction function;
 
-    /**
+    /** Simple constructor.
      * @param f Function to be optimized.
      */
     public ObjectiveFunction(MultivariateFunction f) {

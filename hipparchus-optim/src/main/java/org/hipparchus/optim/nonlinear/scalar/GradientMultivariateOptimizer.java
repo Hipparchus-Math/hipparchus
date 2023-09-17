@@ -40,7 +40,7 @@ public abstract class GradientMultivariateOptimizer
      */
     private MultivariateVectorFunction gradient;
 
-    /**
+    /** Simple constructor.
      * @param checker Convergence checker.
      */
     protected GradientMultivariateOptimizer(ConvergenceChecker<PointValuePair> checker) {

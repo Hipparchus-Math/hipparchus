@@ -220,7 +220,7 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
         return FastMath.sqrt(variance.evaluate(values, mean));
     }
 
-    /**
+    /** Check if bias is corrected.
      * @return Returns the isBiasCorrected.
      */
     public boolean isBiasCorrected() {

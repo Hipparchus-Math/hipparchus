@@ -69,7 +69,7 @@ public class BicubicInterpolatingFunction
     /** Set of cubic splines patching the whole data grid */
     private final BicubicFunction[][] splines;
 
-    /**
+    /** Simple constructor.
      * @param x Sample values of the x-coordinate, in increasing order.
      * @param y Sample values of the y-coordinate, in increasing order.
      * @param f Values of the function on every grid point.

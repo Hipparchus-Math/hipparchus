@@ -219,13 +219,14 @@ public abstract class BaseAbstractFieldUnivariateIntegrator<T extends CalculusFi
         return iterations.getCount();
     }
 
-    /**
+    /** Get the lower bound.
      * @return the lower bound.
      */
     protected T getMin() {
         return min;
     }
-    /**
+
+    /** Get the upper bound.
      * @return the upper bound.
      */
     protected T getMax() {

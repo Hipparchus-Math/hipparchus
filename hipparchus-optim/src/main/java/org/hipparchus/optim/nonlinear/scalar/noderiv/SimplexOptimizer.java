@@ -94,14 +94,14 @@ public class SimplexOptimizer extends MultivariateOptimizer {
     /** Simplex update rule. */
     private AbstractSimplex simplex;
 
-    /**
+    /** Simple constructor.
      * @param checker Convergence checker.
      */
     public SimplexOptimizer(ConvergenceChecker<PointValuePair> checker) {
         super(checker);
     }
 
-    /**
+    /** Simple constructor.
      * @param rel Relative threshold.
      * @param abs Absolute threshold.
      */

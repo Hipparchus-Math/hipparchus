@@ -55,14 +55,14 @@ public class MathArrays {
      * Real-valued function that operates on an array or a part of it.
      */
     public interface Function {
-        /**
-         * Operates on an entire array.
-         *
+
+        /** Operates on an entire array.
          * @param array Array to operate on.
          * @return the result of the operation.
          */
         double evaluate(double[] array);
-        /**
+
+        /** Operates on a sub-array.
          * @param array Array to operate on.
          * @param startIndex Index of the first element to take into account.
          * @param numElements Number of elements to take into account.
@@ -71,6 +71,7 @@ public class MathArrays {
         double evaluate(double[] array,
                         int startIndex,
                         int numElements);
+
     }
 
     /**

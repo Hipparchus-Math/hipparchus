@@ -36,7 +36,7 @@ public abstract class AbstractMultivariateRealDistribution
     /** The number of dimensions or columns in the multivariate distribution. */
     private final int dimension;
 
-    /**
+    /** Simple constructor.
      * @param rng Random number generator.
      * @param n Number of dimensions.
      */

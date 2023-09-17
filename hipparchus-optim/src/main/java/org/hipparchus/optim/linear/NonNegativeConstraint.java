@@ -32,7 +32,7 @@ public class NonNegativeConstraint implements OptimizationData {
     /** Whether the variables are all positive. */
     private final boolean isRestricted;
 
-    /**
+    /** Simple constructor.
      * @param restricted If {@code true}, all the variables must be positive.
      */
     public NonNegativeConstraint(boolean restricted) {

@@ -56,22 +56,22 @@ public abstract class LinearOptimizer
         super(null); // No convergence checker.
     }
 
-    /**
-     * @return {@code true} if the variables are restricted to non-negative values.
+    /** Check if variables are restricted to non-negative values.
+     * @return {@code true} if the variables are restricted to non-negative values
      */
     protected boolean isRestrictedToNonNegative() {
         return nonNegative;
     }
 
-    /**
-     * @return the optimization type.
+    /** Get optimization type.
+     * @return the optimization type
      */
     protected LinearObjectiveFunction getFunction() {
         return function;
     }
 
-    /**
-     * @return the optimization type.
+    /** Get constraints.
+     * @return the constraints
      */
     protected Collection<LinearConstraint> getConstraints() {
         return Collections.unmodifiableCollection(linearConstraints);

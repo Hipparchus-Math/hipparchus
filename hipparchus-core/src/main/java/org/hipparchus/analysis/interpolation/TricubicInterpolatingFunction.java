@@ -120,7 +120,7 @@ public class TricubicInterpolatingFunction
     /** Set of cubic splines pacthing the whole data grid */
     private final TricubicFunction[][][] splines;
 
-    /**
+    /** Simple constructor.
      * @param x Sample values of the x-coordinate, in increasing order.
      * @param y Sample values of the y-coordinate, in increasing order.
      * @param z Sample values of the y-coordinate, in increasing order.

@@ -33,7 +33,7 @@ public class Constant implements UnivariateDifferentiableFunction {
     /** Constant. */
     private final double c;
 
-    /**
+    /** Simple constructor.
      * @param c Constant.
      */
     public Constant(double c) {

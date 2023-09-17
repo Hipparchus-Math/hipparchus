@@ -43,7 +43,7 @@ public abstract class BaseMultivariateOptimizer<P>
     /** Upper bounds. */
     private double[] upperBound;
 
-    /**
+    /** Simple constructor.
      * @param checker Convergence checker.
      */
     protected BaseMultivariateOptimizer(ConvergenceChecker<P> checker) {
@@ -110,13 +110,13 @@ public abstract class BaseMultivariateOptimizer<P>
     public double[] getStartPoint() {
         return start == null ? null : start.clone();
     }
-    /**
+    /** Get lower bounds.
      * @return the lower bounds, or {@code null} if not set.
      */
     public double[] getLowerBound() {
         return lowerBound == null ? null : lowerBound.clone();
     }
-    /**
+    /** Get upper bounds.
      * @return the upper bounds, or {@code null} if not set.
      */
     public double[] getUpperBound() {

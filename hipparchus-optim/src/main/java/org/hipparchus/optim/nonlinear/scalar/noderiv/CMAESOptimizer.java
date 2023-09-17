@@ -206,7 +206,7 @@ public class CMAESOptimizer
     /** History of D matrix. */
     private final List<RealMatrix> statisticsDHistory;
 
-    /**
+    /** Simple constructor.
      * @param maxIterations Maximal number of iterations.
      * @param stopFitness Whether to stop if objective function value is smaller than
      * {@code stopFitness}.
@@ -242,29 +242,29 @@ public class CMAESOptimizer
         this.statisticsDHistory = new ArrayList<>();
     }
 
-    /**
-     * @return History of sigma values.
+    /** Get history of sigma values.
+     * @return History of sigma values
      */
     public List<Double> getStatisticsSigmaHistory() {
         return statisticsSigmaHistory;
     }
 
-    /**
-     * @return History of mean matrix.
+    /** Get history of mean matrix.
+     * @return History of mean matrix
      */
     public List<RealMatrix> getStatisticsMeanHistory() {
         return statisticsMeanHistory;
     }
 
-    /**
-     * @return History of fitness values.
+    /** Get history of fitness values.
+     * @return History of fitness values
      */
     public List<Double> getStatisticsFitnessHistory() {
         return statisticsFitnessHistory;
     }
 
-    /**
-     * @return History of D matrix.
+    /** Get history of D matrix.
+     * @return History of D matrix
      */
     public List<RealMatrix> getStatisticsDHistory() {
         return statisticsDHistory;
@@ -285,7 +285,7 @@ public class CMAESOptimizer
         /** Sigma values. */
         private final double[] s;
 
-        /**
+        /** Simple constructor.
          * @param s Sigma values.
          * @throws MathIllegalArgumentException if any of the array entries is smaller
          * than zero.
@@ -301,8 +301,8 @@ public class CMAESOptimizer
             this.s = s.clone();
         }
 
-        /**
-         * @return the sigma values.
+        /** Get sigma values.
+         * @return the sigma values
          */
         public double[] getSigma() {
             return s.clone();
@@ -323,7 +323,7 @@ public class CMAESOptimizer
         /** Population size. */
         private final int lambda;
 
-        /**
+        /** Simple constructor.
          * @param size Population size.
          * @throws MathIllegalArgumentException if {@code size <= 0}.
          */
@@ -336,8 +336,8 @@ public class CMAESOptimizer
             lambda = size;
         }
 
-        /**
-         * @return the population size.
+        /** Get population size.
+         * @return the population size
          */
         public int getPopulationSize() {
             return lambda;

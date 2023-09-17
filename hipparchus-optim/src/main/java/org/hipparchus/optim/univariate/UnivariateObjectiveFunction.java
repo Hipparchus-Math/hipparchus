@@ -32,7 +32,7 @@ public class UnivariateObjectiveFunction implements OptimizationData {
     /** Function to be optimized. */
     private final UnivariateFunction function;
 
-    /**
+    /** Simple constructor.
      * @param f Function to be optimized.
      */
     public UnivariateObjectiveFunction(UnivariateFunction f) {

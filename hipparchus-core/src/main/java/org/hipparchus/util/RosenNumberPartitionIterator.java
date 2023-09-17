@@ -52,7 +52,7 @@ public class RosenNumberPartitionIterator implements Iterator<int[]> {
     /** Count of unique combinations. */
     private long count;
 
-    /**
+    /** Simple constructor.
      * @param n the number of elements
      * @param k divided into k parts
      */

@@ -39,8 +39,7 @@ import org.hipparchus.stat.descriptive.moment.Variance;
  */
 public class SumOfClusterVariances<T extends Clusterable> extends ClusterEvaluator<T> {
 
-    /**
-     *
+    /** Simple constructor.
      * @param measure the distance measure to use
      */
     public SumOfClusterVariances(final DistanceMeasure measure) {

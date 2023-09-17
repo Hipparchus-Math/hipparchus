@@ -197,13 +197,14 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
         return iterations.getCount();
     }
 
-    /**
+    /** Get the lower bound.
      * @return the lower bound.
      */
     protected double getMin() {
         return min;
     }
-    /**
+
+    /** Get the upper bound.
      * @return the upper bound.
      */
     protected double getMax() {

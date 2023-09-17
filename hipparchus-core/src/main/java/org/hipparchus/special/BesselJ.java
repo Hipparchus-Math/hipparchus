@@ -214,14 +214,14 @@ public class BesselJ
             nVals = n;
         }
 
-        /**
+        /** Get computed function values.
          * @return the computed function values
          */
         public double[] getVals() {
             return vals.clone();
         }
 
-        /**
+        /** Get number of valid function values.
          * @return the number of valid function values (normally the same as the
          *         length of the array returned by {@link #getnVals()})
          */

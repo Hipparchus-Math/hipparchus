@@ -37,7 +37,7 @@ public class SimpleBounds implements OptimizationData {
     /** Upper bounds. */
     private final double[] upper;
 
-    /**
+    /** Simple constructor.
      * @param lB Lower bounds.
      * @param uB Upper bounds.
      */

@@ -64,21 +64,21 @@ public class ConfidenceInterval {
         this.confidenceLevel = confidenceLevel;
     }
 
-    /**
+    /** Get lower endpoint of the interval.
      * @return the lower endpoint of the interval
      */
     public double getLowerBound() {
         return lowerBound;
     }
 
-    /**
+    /** Get upper endpoint of the interval.
      * @return the upper endpoint of the interval
      */
     public double getUpperBound() {
         return upperBound;
     }
 
-    /**
+    /** Get asserted probability that the interval contains the population parameter.
      * @return the asserted probability that the interval contains the
      *         population parameter
      */
@@ -86,7 +86,7 @@ public class ConfidenceInterval {
         return confidenceLevel;
     }
 
-    /**
+    /** Get String representation of the confidence interval.
      * @return String representation of the confidence interval
      */
     @Override

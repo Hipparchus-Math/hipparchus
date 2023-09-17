@@ -48,28 +48,28 @@ public abstract class AbstractMultipleLinearRegression implements
     /** Whether or not the regression model includes an intercept.  True means no intercept. */
     private boolean noIntercept;
 
-    /**
+    /** Get the X sample data.
      * @return the X sample data.
      */
     protected RealMatrix getX() {
         return xMatrix;
     }
 
-    /**
+    /** Get the Y sample data.
      * @return the Y sample data.
      */
     protected RealVector getY() {
         return yVector;
     }
 
-    /**
+    /** Chekc if the model has no intercept term.
      * @return true if the model has no intercept term; false otherwise
      */
     public boolean isNoIntercept() {
         return noIntercept;
     }
 
-    /**
+    /** Set intercept flag.
      * @param noIntercept true means the model is to be estimated without an intercept term
      */
     public void setNoIntercept(boolean noIntercept) {

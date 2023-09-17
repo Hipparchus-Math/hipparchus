@@ -32,7 +32,7 @@ public class InitialGuess implements OptimizationData {
     /** Initial guess. */
     private final double[] init;
 
-    /**
+    /** Simple constructor.
      * @param startPoint Initial guess.
      */
     public InitialGuess(double[] startPoint) {

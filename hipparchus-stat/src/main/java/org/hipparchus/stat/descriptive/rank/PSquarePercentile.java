@@ -287,14 +287,14 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         return pValue;
     }
 
-    /**
+    /** Get quantile estimated by this statistic.
      * @return the quantile estimated by this statistic
      */
     public double getQuantile() {
         return quantile;
     }
 
-    /**
+    /** Get maximum in the data set added to this statistic.
      * @return maximum in the data set added to this statistic
      */
     private double maximum() {
@@ -307,7 +307,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         return val;
     }
 
-    /**
+    /** Get minimum in the data set added to this statistic.
      * @return minimum in the data set added to this statistic
      */
     private double minimum() {

@@ -55,22 +55,25 @@ public class NonSymmetricMatrixException extends MathIllegalArgumentException {
         this.threshold = threshold;
     }
 
-    /**
-     * @return the row index of the entry.
+    /** Get row index of the entry.
+     * @return the row index of the entry
      */
     public int getRow() {
         return row;
     }
-    /**
-     * @return the column index of the entry.
+
+    /** Get column index of the entry.
+     * @return the column index of the entry
      */
     public int getColumn() {
         return column;
     }
-    /**
-     * @return the relative symmetry threshold.
+
+    /** Get relative symmetry threshold.
+     * @return the relative symmetry threshold
      */
     public double getThreshold() {
         return threshold;
     }
+
 }

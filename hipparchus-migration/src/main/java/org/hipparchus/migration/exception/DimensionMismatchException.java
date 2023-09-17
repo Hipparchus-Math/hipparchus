@@ -61,7 +61,7 @@ public class DimensionMismatchException extends MathIllegalNumberException {
         this(LocalizedCoreFormats.DIMENSIONS_MISMATCH, wrong, expected);
     }
 
-    /**
+    /** Get expected dimension.
      * @return the expected dimension.
      */
     public int getDimension() {

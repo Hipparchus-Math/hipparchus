@@ -212,7 +212,7 @@ public class BOBYQAOptimizer
      */
     private ArrayRealVector modelSecondDerivativesValues;
 
-    /**
+    /** Simple constructor.
      * @param numberOfInterpolationPoints Number of interpolation conditions.
      * For a problem of dimension {@code n}, its value must be in the interval
      * {@code [n+2, (n+1)(n+2)/2]}.
@@ -224,7 +224,7 @@ public class BOBYQAOptimizer
              DEFAULT_STOPPING_RADIUS);
     }
 
-    /**
+    /** Simple constructor.
      * @param numberOfInterpolationPoints Number of interpolation conditions.
      * For a problem of dimension {@code n}, its value must be in the interval
      * {@code [n+2, (n+1)(n+2)/2]}.

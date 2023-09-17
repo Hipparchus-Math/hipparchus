@@ -44,7 +44,7 @@ public class MathUnsupportedOperationException extends MathRuntimeException {
     public MathUnsupportedOperationException() {
         this(LocalizedFormats.UNSUPPORTED_OPERATION);
     }
-    /**
+    /** Simple constructor.
      * @param pattern Message pattern providing the specific context of
      * the error.
      * @param args Arguments.

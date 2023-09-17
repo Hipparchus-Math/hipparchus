@@ -97,14 +97,14 @@ public class NonMonotonicSequenceException extends MathIllegalNumberException {
         this.previous = previous;
     }
 
-    /**
-     * @return the order direction.
+    /** Get order direction.
+     * @return the order direction
      **/
     public MathArrays.OrderDirection getDirection() {
         return direction;
     }
-    /**
-     * @return {@code true} is the sequence should be strictly monotonic.
+    /** Check if sequence should be strictly monotonic.
+     * @return {@code true} is the sequence should be strictly monotonic
      **/
     public boolean getStrict() { // NOPMD - this method name is for a legacy API we cannot change
         return strict;
@@ -117,7 +117,7 @@ public class NonMonotonicSequenceException extends MathIllegalNumberException {
     public int getIndex() {
         return index;
     }
-    /**
+    /** Get previous value.
      * @return the previous value.
      */
     public Number getPrevious() {

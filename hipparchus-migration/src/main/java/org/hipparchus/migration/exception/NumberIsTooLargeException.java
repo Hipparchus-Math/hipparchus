@@ -75,15 +75,15 @@ public class NumberIsTooLargeException extends MathIllegalNumberException {
         this.boundIsAllowed = boundIsAllowed;
     }
 
-    /**
-     * @return {@code true} if the maximum is included in the allowed range.
+    /** Check if the maximum is included in the allowed range.
+     * @return {@code true} if the maximum is included in the allowed range
      */
     public boolean getBoundIsAllowed() { // NOPMD - this method name is for a legacy API we cannot change
         return boundIsAllowed;
     }
 
-    /**
-     * @return the maximum.
+    /** Get the maximum.
+     * @return the maximum
      */
     public Number getMax() {
         return max;

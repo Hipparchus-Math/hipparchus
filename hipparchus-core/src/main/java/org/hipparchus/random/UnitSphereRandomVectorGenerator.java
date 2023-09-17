@@ -36,7 +36,7 @@ public class UnitSphereRandomVectorGenerator
     /** Space dimension. */
     private final int dimension;
 
-    /**
+    /** Simple constructor.
      * @param dimension Space dimension.
      * @param rand RNG for the individual components of the vectors.
      */

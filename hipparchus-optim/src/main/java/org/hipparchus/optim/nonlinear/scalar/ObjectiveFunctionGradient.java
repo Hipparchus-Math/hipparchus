@@ -32,7 +32,7 @@ public class ObjectiveFunctionGradient implements OptimizationData {
     /** Function to be optimized. */
     private final MultivariateVectorFunction gradient;
 
-    /**
+    /** Simple constructor.
      * @param g Gradient of the function to be optimized.
      */
     public ObjectiveFunctionGradient(MultivariateVectorFunction g) {

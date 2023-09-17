@@ -43,14 +43,14 @@ public abstract class BaseOptimizer<P> {
     /** Convergence checker. */
     private final ConvergenceChecker<P> checker;
 
-    /**
+    /** Simple constructor.
      * @param checker Convergence checker.
      */
     protected BaseOptimizer(ConvergenceChecker<P> checker) {
         this(checker, 0, Integer.MAX_VALUE);
     }
 
-    /**
+    /** Simple constructor.
      * @param checker Convergence checker.
      * @param maxEval Maximum number of objective function evaluations.
      * @param maxIter Maximum number of algorithm iterations.

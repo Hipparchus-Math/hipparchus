@@ -34,7 +34,7 @@ public class ModelSpecificationException extends MathIllegalArgumentException {
     /** Serializable version Id. */
     private static final long serialVersionUID = 4206514456095401070L;
 
-    /**
+    /** Simple constructor.
      * @param pattern message pattern describing the specification error.
      *
      * @param args arguments.

@@ -50,14 +50,14 @@ public abstract class AbstractConvergenceChecker<P>
         this.absoluteThreshold = absoluteThreshold;
     }
 
-    /**
+    /** Get relative threshold.
      * @return the relative threshold.
      */
     public double getRelativeThreshold() {
         return relativeThreshold;
     }
 
-    /**
+    /** Get absolute threshold.
      * @return the absolute threshold.
      */
     public double getAbsoluteThreshold() {

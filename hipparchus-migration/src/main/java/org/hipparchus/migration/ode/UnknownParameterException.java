@@ -48,8 +48,8 @@ public class UnknownParameterException extends MathIllegalArgumentException {
         this.name = name;
     }
 
-    /**
-     * @return the name of the unknown parameter.
+    /** Get name of the unknown parameter.
+     * @return the name of the unknown parameter
      */
     public String getName() {
         return name;

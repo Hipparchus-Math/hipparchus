@@ -168,7 +168,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
         this.qrRankingThreshold = qrRankingThreshold;
     }
 
-    /**
+    /** Build new instance with initial step bound factor.
      * @param newInitialStepBoundFactor Positive input variable used in
      * determining the initial step bound. This bound is set to the
      * product of initialStepBoundFactor and the euclidean norm of
@@ -187,7 +187,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                 qrRankingThreshold);
     }
 
-    /**
+    /** Build new instance with cost relative tolerance.
      * @param newCostRelativeTolerance Desired relative error in the sum of squares.
      * @return a new instance.
      */
@@ -200,7 +200,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                 qrRankingThreshold);
     }
 
-    /**
+    /** Build new instance with parameter relative tolerance.
      * @param newParRelativeTolerance Desired relative error in the approximate solution
      * parameters.
      * @return a new instance.
@@ -214,9 +214,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                 qrRankingThreshold);
     }
 
-    /**
-     * Modifies the given parameter.
-     *
+    /** Build new instance with ortho tolerance.
      * @param newOrthoTolerance Desired max cosine on the orthogonality between
      * the function vector and the columns of the Jacobian.
      * @return a new instance.
@@ -230,7 +228,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                 qrRankingThreshold);
     }
 
-    /**
+    /** Build new instance with ranking threshold.
      * @param newQRRankingThreshold Desired threshold for QR ranking.
      * If the squared norm of a column vector is smaller or equal to this
      * threshold during QR decomposition, it is considered to be a zero vector

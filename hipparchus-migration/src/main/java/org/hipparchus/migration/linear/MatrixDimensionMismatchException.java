@@ -51,26 +51,26 @@ public class MatrixDimensionMismatchException
               new Integer[] { expectedRowDim, expectedColDim });
     }
 
-    /**
-     * @return the expected row dimension.
+    /** Get wrong row dimension.
+     * @return the wrong row dimension
      */
     public int getWrongRowDimension() {
         return getWrongDimension(0);
     }
-    /**
-     * @return the expected row dimension.
+    /** Get expected row dimension.
+     * @return the expected row dimension
      */
     public int getExpectedRowDimension() {
         return getExpectedDimension(0);
     }
-    /**
-     * @return the wrong column dimension.
+    /** Get wrong column dimension.
+     * @return the wrong column dimension
      */
     public int getWrongColumnDimension() {
         return getWrongDimension(1);
     }
-    /**
-     * @return the expected column dimension.
+    /** Get expected column dimension.
+     * @return the expected column dimension
      */
     public int getExpectedColumnDimension() {
         return getExpectedDimension(1);

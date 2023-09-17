@@ -76,15 +76,15 @@ public class NumberIsTooSmallException extends MathIllegalNumberException {
         this.boundIsAllowed = boundIsAllowed;
     }
 
-    /**
-     * @return {@code true} if the minimum is included in the allowed range.
+    /** Check if the minimum is included in the allowed range.
+     * @return {@code true} if the minimum is included in the allowed range
      */
     public boolean getBoundIsAllowed() { // NOPMD - this method name is for a legacy API we cannot change
         return boundIsAllowed;
     }
 
-    /**
-     * @return the minimum.
+    /** Get minimum.
+     * @return the minimum
      */
     public Number getMin() {
         return min;

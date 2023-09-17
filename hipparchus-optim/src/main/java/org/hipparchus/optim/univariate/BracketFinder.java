@@ -219,38 +219,37 @@ public class BracketFinder {
         }
     }
 
-    /**
-     * @return the number of evaluations.
+    /** Get maximum number of evaluations.
+     * @return the maximum number of evaluations
      */
     public int getMaxEvaluations() {
         return maxEvaluations;
     }
 
-    /**
-     * @return the number of evaluations.
+    /** Get number of evaluations.
+     * @return the number of evaluations
      */
     public int getEvaluations() {
         return evaluations;
     }
 
-    /**
-     * @return the lower bound of the bracket.
+    /** Get lower bound of the bracket.
+     * @return the lower bound of the bracket
      * @see #getFLo()
      */
     public double getLo() {
         return lo;
     }
 
-    /**
-     * Get function value at {@link #getLo()}.
+    /** Get function value at {@link #getLo()}.
      * @return function value at {@link #getLo()}
      */
     public double getFLo() {
         return fLo;
     }
 
-    /**
-     * @return the higher bound of the bracket.
+    /** Get higher bound of the bracket.
+     * @return the higher bound of the bracket
      * @see #getFHi()
      */
     public double getHi() {
@@ -265,16 +264,15 @@ public class BracketFinder {
         return fHi;
     }
 
-    /**
-     * @return a point in the middle of the bracket.
+    /** Get a point in the middle of the bracket.
+     * @return a point in the middle of the bracket
      * @see #getFMid()
      */
     public double getMid() {
         return mid;
     }
 
-    /**
-     * Get function value at {@link #getMid()}.
+    /** Get function value at {@link #getMid()}.
      * @return function value at {@link #getMid()}
      */
     public double getFMid() {
@@ -290,7 +288,7 @@ public class BracketFinder {
         /** Counter. */
         private final Incrementor inc;
 
-        /**
+        /** Simple constructor.
          * @param func Function.
          */
         FunctionEvaluator(UnivariateFunction func) {
@@ -299,7 +297,7 @@ public class BracketFinder {
             evaluations = 0;
         }
 
-        /**
+        /** Evaluate function.
          * @param x Argument.
          * @return {@code f(x)}
          * @throws org.hipparchus.exception.MathIllegalStateException if the maximal number of evaluations is

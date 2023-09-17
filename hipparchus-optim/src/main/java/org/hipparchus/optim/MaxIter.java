@@ -32,7 +32,7 @@ public class MaxIter implements OptimizationData {
     /** Allowed number of evalutations. */
     private final int max;
 
-    /**
+    /** Simple constructor.
      * @param max Allowed number of iterations.
      * @throws MathIllegalArgumentException if {@code max <= 0}.
      */

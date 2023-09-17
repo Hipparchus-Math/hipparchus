@@ -96,7 +96,7 @@ public class FieldGaussIntegrator<T extends CalculusFieldElement<T>> {
         return s;
     }
 
-    /**
+    /** Get order of the integration rule.
      * @return the order of the integration rule (the number of integration
      * points).
      */

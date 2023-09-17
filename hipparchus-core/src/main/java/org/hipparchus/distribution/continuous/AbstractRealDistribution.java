@@ -48,7 +48,7 @@ public abstract class AbstractRealDistribution
     /** Inverse cumulative probability accuracy. */
     private final double solverAbsoluteAccuracy;
 
-    /**
+    /** Simple constructor.
      * @param solverAbsoluteAccuracy the absolute accuracy to use when
      * computing the inverse cumulative probability.
      */

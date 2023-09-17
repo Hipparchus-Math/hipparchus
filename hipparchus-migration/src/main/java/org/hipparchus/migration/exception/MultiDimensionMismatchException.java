@@ -67,27 +67,27 @@ public class MultiDimensionMismatchException extends MathIllegalArgumentExceptio
         this.expected = expected.clone();
     }
 
-    /**
-     * @return an array containing the wrong dimensions.
+    /** Get array containing the wrong dimensions.
+     * @return an array containing the wrong dimensions
      */
     public Integer[] getWrongDimensions() {
         return wrong.clone();
     }
-    /**
-     * @return an array containing the expected dimensions.
+    /** Get array containing the expected dimensions.
+     * @return an array containing the expected dimensions
      */
     public Integer[] getExpectedDimensions() {
         return expected.clone();
     }
 
-    /**
+    /** Get wrong dimension at index.
      * @param index Dimension index.
      * @return the wrong dimension stored at {@code index}.
      */
     public int getWrongDimension(int index) {
         return wrong[index].intValue();
     }
-    /**
+    /** Get expected dimension at index.
      * @param index Dimension index.
      * @return the expected dimension stored at {@code index}.
      */

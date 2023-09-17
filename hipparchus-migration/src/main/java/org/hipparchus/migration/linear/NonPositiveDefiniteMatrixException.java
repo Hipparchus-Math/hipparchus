@@ -53,22 +53,25 @@ public class NonPositiveDefiniteMatrixException
 
     }
 
-    /**
-     * @return the row index.
+    /** Get row index.
+     * @return the row index
      */
     public int getRow() {
         return index;
     }
-    /**
-     * @return the column index.
+
+    /** Get column index.
+     * @return the column index
      */
     public int getColumn() {
         return index;
     }
-    /**
-     * @return the absolute positivity threshold.
+
+    /** Get absolute positivity threshold.
+     * @return the absolute positivity threshold
      */
     public double getThreshold() {
         return threshold;
     }
+
 }

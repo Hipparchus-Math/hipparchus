@@ -50,7 +50,7 @@ public class Logistic implements UnivariateDifferentiableFunction {
     /** Abscissa of maximum growth. */
     private final double m;
 
-    /**
+    /** Simple constructor.
      * @param k If {@code b > 0}, value of the function for x going towards +&infin;.
      * If {@code b < 0}, value of the function for x going towards -&infin;.
      * @param m Abscissa of maximum growth.

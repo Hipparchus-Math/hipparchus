@@ -99,7 +99,7 @@ public class GaussIntegrator {
         return s;
     }
 
-    /**
+    /** Get the order of the integration rule.
      * @return the order of the integration rule (the number of integration
      * points).
      */

@@ -536,7 +536,7 @@ public class Variance extends AbstractStorelessUnivariateStatistic
         return evaluate(values, weights, mean, 0, values.length);
     }
 
-    /**
+    /** Check if bias is corrected.
      * @return Returns the isBiasCorrected.
      */
     public boolean isBiasCorrected() {

@@ -61,8 +61,8 @@ public class MaxCountExceededException extends MathIllegalStateException {
         this.max = max;
     }
 
-    /**
-     * @return the maximum number of evaluations.
+    /** Get maximum number of evaluations.
+     * @return the maximum number of evaluations
      */
     public Number getMax() {
         return max;

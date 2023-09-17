@@ -32,7 +32,7 @@ public class MathIllegalArgumentException extends MathRuntimeException {
     /** Serializable version Id. */
     private static final long serialVersionUID = -6024911025449780478L;
 
-    /**
+    /** Simple constructor.
      * @param pattern Message pattern explaining the cause of the error.
      * @param args Arguments.
      */

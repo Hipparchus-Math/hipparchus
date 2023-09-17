@@ -45,7 +45,7 @@ public abstract class UnivariateOptimizer
     /** Upper bound. */
     private double max;
 
-    /**
+    /** Simple constructor.
      * @param checker Convergence checker.
      */
     protected UnivariateOptimizer(ConvergenceChecker<UnivariatePointValuePair> checker) {
@@ -74,8 +74,8 @@ public abstract class UnivariateOptimizer
         return super.optimize(optData);
     }
 
-    /**
-     * @return the optimization type.
+    /** Get optimization type.
+     * @return the optimization type
      */
     public GoalType getGoalType() {
         return goal;
@@ -119,20 +119,20 @@ public abstract class UnivariateOptimizer
         }
     }
 
-    /**
-     * @return the initial guess.
+    /** Get initial guess.
+     * @return the initial guess
      */
     public double getStartValue() {
         return start;
     }
-    /**
-     * @return the lower bounds.
+    /** Get lower bounds.
+     * @return the lower bounds
      */
     public double getMin() {
         return min;
     }
-    /**
-     * @return the upper bounds.
+    /** Get upper bounds.
+     * @return the upper bounds
      */
     public double getMax() {
         return max;

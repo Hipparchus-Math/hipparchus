@@ -54,7 +54,7 @@ public class LinearObjectiveFunction
     /** Constant term of the linear equation. */
     private final double constantTerm;
 
-    /**
+    /** Simple constructor.
      * @param coefficients Coefficients for the linear equation being optimized.
      * @param constantTerm Constant term of the linear equation.
      */
@@ -62,7 +62,7 @@ public class LinearObjectiveFunction
         this(new ArrayRealVector(coefficients), constantTerm);
     }
 
-    /**
+    /** Simple constructor.
      * @param coefficients Coefficients for the linear equation being optimized.
      * @param constantTerm Constant term of the linear equation.
      */

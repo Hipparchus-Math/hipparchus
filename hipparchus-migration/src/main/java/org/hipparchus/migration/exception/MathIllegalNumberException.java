@@ -58,8 +58,8 @@ public class MathIllegalNumberException extends MathIllegalArgumentException {
         argument = wrong;
     }
 
-    /**
-     * @return the requested value.
+    /** Get argument.
+     * @return argument
      */
     public Number getArgument() {
         return argument;

@@ -32,7 +32,7 @@ public class MaxEval implements OptimizationData {
     /** Allowed number of evalutations. */
     private final int max;
 
-    /**
+    /** Simple constructor.
      * @param max Allowed number of evalutations.
      * @throws MathIllegalArgumentException if {@code max <= 0}.
      */

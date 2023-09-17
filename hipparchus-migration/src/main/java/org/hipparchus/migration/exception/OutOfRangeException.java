@@ -69,16 +69,18 @@ public class OutOfRangeException extends MathIllegalNumberException {
         this.hi = hi;
     }
 
-    /**
-     * @return the lower bound.
+    /** Get lower bound.
+     * @return the lower bound
      */
     public Number getLo() {
         return lo;
     }
-    /**
-     * @return the higher bound.
+
+    /** Get higher bound.
+     * @return the higher bound
      */
     public Number getHi() {
         return hi;
     }
+
 }

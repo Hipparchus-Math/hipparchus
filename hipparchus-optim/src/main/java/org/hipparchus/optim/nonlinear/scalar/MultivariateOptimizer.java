@@ -39,7 +39,7 @@ public abstract class MultivariateOptimizer
     /** Type of optimization. */
     private GoalType goal;
 
-    /**
+    /** Simple constructor.
      * @param checker Convergence checker.
      */
     protected MultivariateOptimizer(ConvergenceChecker<PointValuePair> checker) {
@@ -97,7 +97,7 @@ public abstract class MultivariateOptimizer
         }
     }
 
-    /**
+    /** Get optimization type.
      * @return the optimization type.
      */
     public GoalType getGoalType() {

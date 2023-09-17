@@ -40,7 +40,7 @@ public class SearchInterval implements OptimizationData {
     /** Start value. */
     private final double start;
 
-    /**
+    /** Simple constructor.
      * @param lo Lower bound.
      * @param hi Upper bound.
      * @param init Start value.
@@ -62,7 +62,7 @@ public class SearchInterval implements OptimizationData {
         start = init;
     }
 
-    /**
+    /** Simple constructor.
      * @param lo Lower bound.
      * @param hi Upper bound.
      * @throws MathIllegalArgumentException if {@code lo >= hi}.

@@ -108,20 +108,20 @@ public abstract class BaseAbstractUnivariateSolver<F extends UnivariateFunction>
     public int getEvaluations() {
         return evaluations.getCount();
     }
-    /**
-     * @return the lower end of the search interval.
+    /** Get lower end of the search interval.
+     * @return the lower end of the search interval
      */
     public double getMin() {
         return searchMin;
     }
-    /**
-     * @return the higher end of the search interval.
+    /** Get higher end of the search interval.
+     * @return the higher end of the search interval
      */
     public double getMax() {
         return searchMax;
     }
-    /**
-     * @return the initial guess.
+    /** Get initial guess.
+     * @return the initial guess
      */
     public double getStartValue() {
         return searchStart;

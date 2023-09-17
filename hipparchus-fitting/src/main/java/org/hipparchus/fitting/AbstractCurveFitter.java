@@ -98,7 +98,7 @@ public abstract class AbstractCurveFitter {
         /** Observations. */
         private final double[] points;
 
-        /**
+        /** Simple constructor.
          * @param f function to fit.
          * @param observations Observations.
          */
@@ -114,8 +114,8 @@ public abstract class AbstractCurveFitter {
             }
         }
 
-        /**
-         * @return the model function values.
+        /** Get model function value.
+         * @return the model function value
          */
         public MultivariateVectorFunction getModelFunction() {
             return new MultivariateVectorFunction() {
@@ -133,8 +133,8 @@ public abstract class AbstractCurveFitter {
             };
         }
 
-        /**
-         * @return the model function Jacobian.
+        /** Get model function Jacobian.
+         * @return the model function Jacobian
          */
         public MultivariateMatrixFunction getModelFunctionJacobian() {
             return new MultivariateMatrixFunction() {
