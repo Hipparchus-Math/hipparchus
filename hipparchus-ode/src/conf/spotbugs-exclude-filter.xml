@@ -107,6 +107,11 @@
     <Bug pattern="EI_EXPOSE_REP2" />
   </Match>
   <Match>
+    <Class name="org.hipparchus.ode.nonstiff.RungeKuttaFieldIntegrator"/>
+    <Method name="getDefaultStep"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
     <Class name="org.hipparchus.ode.nonstiff.EmbeddedRungeKuttaFieldIntegrator"/>
     <Or>
       <Method name="getMaxGrowth"/>
