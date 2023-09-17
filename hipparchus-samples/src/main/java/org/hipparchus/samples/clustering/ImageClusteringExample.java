@@ -33,6 +33,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,7 +70,7 @@ public class ImageClusteringExample {
 
         private JSpinner clusterSizeSpinner;
 
-        public Display() throws Exception {
+        public Display() throws IOException {
             setTitle("Hipparchus: Image Clustering Example");
             setSize(900, 350);
 
@@ -202,7 +203,7 @@ public class ImageClusteringExample {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
         ExampleUtils.showExampleFrame(new Display());
     }
 
