@@ -37,6 +37,8 @@ import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.RyuDouble;
 
+/** Program plotting complex functions with domain coloring.
+ */
 public class GnuplotComplexPlotter {
 
     /** Elliptic integrals characteristic. */

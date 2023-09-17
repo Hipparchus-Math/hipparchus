@@ -55,6 +55,11 @@ import org.hipparchus.util.Pair;
  */
 public class LowDiscrepancyGeneratorComparison {
 
+    /** Generate points within a circle.
+     * @param samples number of points
+     * @param generator random generator to generate points
+     * @return generated points
+     */
     public static List<Vector2D> makeCircle(int samples, final RandomVectorGenerator generator) {
         List<Vector2D> points = new ArrayList<Vector2D>();
         for (double i = 0; i < samples; i++) {
@@ -69,8 +74,7 @@ public class LowDiscrepancyGeneratorComparison {
         // now test if the sample is within the unit circle
         List<Vector2D> circlePoints = new ArrayList<Vector2D>();
         for (Vector2D p : points) {
-            double criteria = FastMath.pow(p.getX(), 2) + FastMath.pow(p.getY(), 2);
-            if (criteria < 1.0) {
+            if (p.getNorm() < 1.0) {
                 circlePoints.add(p);
             }
         }
@@ -78,6 +82,11 @@ public class LowDiscrepancyGeneratorComparison {
         return circlePoints;
     }
 
+    /** Generate points.
+     * @param samples number of points
+     * @param generator random generator to generate points
+     * @return generated points
+     */
     public static List<Vector2D> makeRandom(int samples, RandomVectorGenerator generator) {
         List<Vector2D> points = new ArrayList<Vector2D>();
         for (double i = 0; i < samples; i++) {
@@ -89,6 +98,10 @@ public class LowDiscrepancyGeneratorComparison {
         return normalize(points);
     }
 
+    /** Normalize points.
+     * @param input input points
+     * @return normalized points in the [-1, 1 ] range
+     */
     public static List<Vector2D> normalize(final List<Vector2D> input) {
         // find the mininum and maximum x value in the dataset
         double minX = Double.MAX_VALUE;
@@ -122,9 +135,12 @@ public class LowDiscrepancyGeneratorComparison {
         return points;
     }
 
+    /** Main frame for displaying low discrepancy points. */
     @SuppressWarnings("serial")
     public static class Display extends ExampleFrame {
 
+        /** Simple constructor.
+         */
         public Display() {
             setTitle("Hipparchus: Pseudo/Quasi-random examples");
             setSize(800, 800);
@@ -207,17 +223,23 @@ public class LowDiscrepancyGeneratorComparison {
         }
     }
 
+    /** Plotting component. */
     @SuppressWarnings("serial")
     public static class Plot extends JComponent {
 
         private static double PAD = 10;
 
+        /** Points to plot. */
         private List<Vector2D> points;
 
+        /** Simple constructor.
+         * @param points points to plot
+         */
         public Plot(final List<Vector2D> points) {
             this.points = points;
         }
 
+        /** {@inheritDoc} */
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -240,11 +262,18 @@ public class LowDiscrepancyGeneratorComparison {
             }
         }
 
+        /** {@inheritDoc} */
         @Override
         public Dimension getPreferredSize() {
             return new Dimension(140, 140);
         }
 
+        /** Transform a point.
+         * @param point initial point
+         * @param width plot width
+         * @param height plot height
+         * @return transformed point
+         */
         private Vector2D transform(Vector2D point, int width, int height) {
             double[] arr = point.toArray();
             return new Vector2D(new double[] { PAD + (arr[0] + 1) / 2.0 * (width - 2 * PAD),
@@ -252,6 +281,9 @@ public class LowDiscrepancyGeneratorComparison {
         }
     }
 
+    /** Program entry point.
+     * @param args program arguments (unused here)
+     */
     public static void main(String[] args) {
         ExampleUtils.showExampleFrame(new Display());
     }

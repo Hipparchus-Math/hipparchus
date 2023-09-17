@@ -39,6 +39,8 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+/** Graphics utilities for examples.
+ */
 public class ExampleUtils {
 
     /** Display frame. */

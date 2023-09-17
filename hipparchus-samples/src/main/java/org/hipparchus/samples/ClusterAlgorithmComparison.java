@@ -301,12 +301,15 @@ public class ClusterAlgorithmComparison {
 
         private static double PAD = 10;
 
+        /** Clusters. */
         private List<? extends Cluster<DoublePoint>> clusters;
+
+        /** Duration of the computation. */
         private long duration;
 
         /** Simple constructor.
          * @param clusters clusters to plot
-         * @param duration duration oif the computation
+         * @param duration duration of the computation
          */
         public ClusterPlot(final List<? extends Cluster<DoublePoint>> clusters, long duration) {
             this.clusters = clusters;

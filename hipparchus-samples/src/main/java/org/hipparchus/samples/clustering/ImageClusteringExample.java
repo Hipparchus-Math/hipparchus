@@ -59,17 +59,27 @@ import org.hipparchus.samples.ExampleUtils.ExampleFrame;
 @SuppressWarnings("serial")
 public class ImageClusteringExample {
 
+    /** Main frame for displaying clusters. */
     public static class Display extends ExampleFrame {
 
+        /** Reference image. */
         private BufferedImage referenceImage;
+
+        /** Cluster image. */
         private BufferedImage clusterImage;
 
+        /** Reference raster. */
         private Raster referenceRaster;
 
+        /** Painter for the clusters. */
         private ImagePainter painter;
 
+        /** Spinner. */
         private JSpinner clusterSizeSpinner;
 
+        /** Simple constructor.
+         * @throws IOException if image cannot be created
+         */
         public Display() throws IOException {
             setTitle("Hipparchus: Image Clustering Example");
             setSize(900, 350);
@@ -127,6 +137,8 @@ public class ImageClusteringExample {
             });
         }
 
+        /** Display clusters.
+         */
         private void clusterImage() {
             List<PixelClusterable> pixels = new ArrayList<PixelClusterable>();
             for (int row = 0; row < referenceImage.getHeight(); row++) {
@@ -151,18 +163,29 @@ public class ImageClusteringExample {
             Display.this.repaint();
         }
 
+        /** Container for one pixel that can be used in clusters. */
         private class PixelClusterable implements Clusterable {
 
+            /** Abscissa. */
             private final int x;
+
+            /** Ordinate. */
             private final int y;
+
+            /** Color. */
             private double[] color;
 
+            /** Simple constructor.
+             * @param x abscissa
+             * @param y ordinate
+             */
             public PixelClusterable(int x, int y) {
                 this.x = x;
                 this.y = y;
                 this.color = null;
             }
 
+            /** {@inheritDoc} */
             @Override
             public double[] getPoint() {
                 if (color == null) {
@@ -173,36 +196,56 @@ public class ImageClusteringExample {
 
         }
 
+        /** Painter for clusters. */
         private class ImagePainter extends Component {
 
+            /** Width. */
             private int width;
+
+            /** Height. */
             private int height;
 
+            /** Simple constructor.
+             * @param width width
+             * @param height height
+             */
             public ImagePainter(int width, int height) {
                 this.width = width;
                 this.height = height;
             }
 
+            /** {@inheritDoc} */
+            @Override
             public Dimension getPreferredSize() {
                 return new Dimension(width, height);
             }
 
+            /** {@inheritDoc} */
             @Override
             public Dimension getMinimumSize() {
                 return getPreferredSize();
             }
 
+            /** {@inheritDoc} */
             @Override
             public Dimension getMaximumSize() {
                 return getPreferredSize();
             }
 
+            /** {@inheritDoc} */
+            @Override
             public void paint(Graphics g) {
                 g.drawImage(clusterImage, 0, 0, this);
             }
+
         }
+
     }
 
+    /** Program entry point.
+     * @param args program arguments (unused here)
+     * @throws IOException if display frame cannot be created.
+     */
     public static void main(String[] args) throws IOException {
         ExampleUtils.showExampleFrame(new Display());
     }
