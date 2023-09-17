@@ -110,7 +110,7 @@ abstract class BaseRandomGenerator implements RandomGenerator {
 
     /**
      * Clears the cache used by the default implementation of
-     * {@link #nextGaussian}.
+     * {@link #nextGaussian()}.
      */
     protected void clearCache() {
         nextGaussian = Double.NaN;
