@@ -169,7 +169,7 @@ public class Fraction
                 }
                 return Precision.equals(s.getFractionValue(), value, 1);
             });
-        } catch (MathIllegalStateException e) { // ignore overflows and just take the last valid result
+        } catch (MathIllegalStateException e) { // NOPMD - ignore overflows and just take the last valid result
         }
         if (lastValid[0] != null) {
             this.numerator   = (int) lastValid[0].getNumerator();
@@ -239,7 +239,7 @@ public class Fraction
          * @param denominator the denominator
          * @return if this convergence test is satisfied
          */
-        boolean test(int numerator, int denominator);
+        boolean test(int numerator, int denominator); // NOPMD - this is not a Junit test, PMD false positive here
     }
 
     /** Generate a {@link Stream stream} of convergents from a real number.

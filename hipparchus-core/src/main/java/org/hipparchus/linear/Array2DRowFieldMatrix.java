@@ -148,7 +148,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      * @throws NullArgumentException if {@code d} is {@code null}.
      * @see #Array2DRowFieldMatrix(FieldElement[][])
      */
-    public Array2DRowFieldMatrix(final Field<T> field, final T[][] d, final boolean copyArray) // NOPMD - array copy is taken care of by parameter
+    public Array2DRowFieldMatrix(final Field<T> field, final T[][] d, final boolean copyArray)
         throws MathIllegalArgumentException, NullArgumentException {
         super(field);
         if (copyArray) {
@@ -169,7 +169,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
                                                            nCols, d[r].length);
                 }
             }
-            data = d;
+            data = d; // NOPMD - array copy is taken care of by parameter
         }
     }
 

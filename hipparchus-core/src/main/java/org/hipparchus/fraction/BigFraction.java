@@ -355,7 +355,7 @@ public class BigFraction
          * @param denominator the denominator
          * @return if this convergence test is satisfied
          */
-        boolean test(long numerator, long denominator);
+        boolean test(long numerator, long denominator); // NOPMD - this is not a Junit test, PMD false positive here
     }
 
     /** Generate a {@link Stream stream} of convergents from a real number.

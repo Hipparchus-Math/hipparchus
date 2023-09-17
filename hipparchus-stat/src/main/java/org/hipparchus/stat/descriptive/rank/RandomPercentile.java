@@ -881,7 +881,7 @@ public class RandomPercentile
             mergeCandidates.remove(0);
             mergeCandidates.remove(0);
             // If these are the last level-l buffers, remove the empty list
-            if (registry.get(l).size() == 0) {
+            if (registry.get(l).isEmpty()) {
                 registry.remove(l);
             }
             // Merge the buffers

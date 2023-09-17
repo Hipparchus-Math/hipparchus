@@ -573,7 +573,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               return new double[] {
                   FastMath.atan2(-(v1.getY()), v1.getZ()),
-                  safeAsin(v2, v2::getZ, v2::getX, v2::getY),
+                  safeAsin(v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(-(v2.getY()), v2.getX())
               };
 
@@ -588,7 +588,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               return new double[] {
                   FastMath.atan2(v1.getZ(), v1.getY()),
-                 -safeAsin(v2, v2::getY, v2::getZ, v2::getX),
+                 -safeAsin(v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(v2.getZ(), v2.getX())
               };
 
@@ -603,7 +603,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               return new double[] {
                   FastMath.atan2(v1.getX(), v1.getZ()),
-                 -safeAsin(v2, v2::getZ, v2::getX, v2::getY),
+                 -safeAsin(v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(v2.getX(), v2.getY())
               };
 
@@ -618,7 +618,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               return new double[] {
                   FastMath.atan2(-(v1.getZ()), v1.getX()),
-                  safeAsin(v2, v2::getX, v2::getY, v2::getZ),
+                  safeAsin(v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(-(v2.getZ()), v2.getY())
               };
 
@@ -633,7 +633,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               return new double[] {
                   FastMath.atan2(-(v1.getX()), v1.getY()),
-                  safeAsin(v2, v2::getY, v2::getZ, v2::getX),
+                  safeAsin(v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(-(v2.getX()), v2.getZ())
               };
 
@@ -648,7 +648,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               return new double[] {
                   FastMath.atan2(v1.getY(), v1.getX()),
-                 -safeAsin(v2, v2::getX, v2::getY, v2::getZ),
+                 -safeAsin(v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(v2.getY(), v2.getZ())
               };
 
@@ -663,7 +663,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               return new double[] {
                   FastMath.atan2(v1.getY(), -v1.getZ()),
-                  safeAcos(v2, v2::getX, v2::getY, v2::getZ),
+                  safeAcos(v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(v2.getY(), v2.getZ())
               };
 
@@ -678,7 +678,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               return new double[] {
                   FastMath.atan2(v1.getZ(), v1.getY()),
-                  safeAcos(v2, v2::getX, v2::getY, v2::getZ),
+                  safeAcos(v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(v2.getZ(), -v2.getY())
               };
 
@@ -693,7 +693,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               return new double[] {
                   FastMath.atan2(v1.getX(), v1.getZ()),
-                  safeAcos(v2, v2::getY, v2::getZ, v2::getX),
+                  safeAcos(v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(v2.getX(), -v2.getZ())
               };
 
@@ -708,7 +708,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               return new double[] {
                   FastMath.atan2(v1.getZ(), -v1.getX()),
-                  safeAcos(v2, v2::getY, v2::getZ, v2::getX),
+                  safeAcos(v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(v2.getZ(), v2.getX())
               };
 
@@ -723,7 +723,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               return new double[] {
                   FastMath.atan2(v1.getX(), -v1.getY()),
-                  safeAcos(v2, v2::getZ, v2::getX, v2::getY),
+                  safeAcos(v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(v2.getX(), v2.getY())
               };
 
@@ -738,7 +738,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               return new double[] {
                   FastMath.atan2(v1.getY(), v1.getX()),
-                  safeAcos(v2, v2::getZ, v2::getX, v2::getY),
+                  safeAcos(v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(v2.getY(), -v2.getX())
               };
 
@@ -755,7 +755,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               return new double[] {
                   FastMath.atan2(-v2.getY(), v2.getZ()),
-                  safeAsin(v2, v2::getX, v2::getY, v2::getZ),
+                  safeAsin(v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(-v1.getY(), v1.getX())
               };
 
@@ -770,7 +770,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               return new double[] {
                   FastMath.atan2(v2.getZ(), v2.getY()),
-                 -safeAsin(v2, v2::getX, v2::getY, v2::getZ),
+                 -safeAsin(v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(v1.getZ(), v1.getX())
               };
 
@@ -785,7 +785,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               return new double[] {
                   FastMath.atan2(v2.getX(), v2.getZ()),
-                 -safeAsin(v2, v2::getY, v2::getZ, v2::getX),
+                 -safeAsin(v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(v1.getX(), v1.getY())
               };
 
@@ -800,7 +800,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               return new double[] {
                   FastMath.atan2(-v2.getZ(), v2.getX()),
-                  safeAsin(v2, v2::getY, v2::getZ, v2::getX),
+                  safeAsin(v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(-v1.getZ(), v1.getY())
               };
 
@@ -815,7 +815,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               return new double[] {
                   FastMath.atan2(-v2.getX(), v2.getY()),
-                  safeAsin(v2, v2::getZ, v2::getX, v2::getY),
+                  safeAsin(v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(-v1.getX(), v1.getZ())
               };
 
@@ -830,7 +830,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               return new double[] {
                   FastMath.atan2(v2.getY(), v2.getX()),
-                 -safeAsin(v2, v2::getZ, v2::getX, v2::getY),
+                 -safeAsin(v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(v1.getY(), v1.getZ())
               };
 
@@ -845,7 +845,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               return new double[] {
                   FastMath.atan2(v2.getY(), -v2.getZ()),
-                  safeAcos(v2, v2::getX, v2::getY, v2::getZ),
+                  safeAcos(v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(v1.getY(), v1.getZ())
               };
 
@@ -860,7 +860,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               return new double[] {
                   FastMath.atan2(v2.getZ(), v2.getY()),
-                  safeAcos(v2, v2::getX, v2::getY, v2::getZ),
+                  safeAcos(v2::getX, v2::getY, v2::getZ),
                   FastMath.atan2(v1.getZ(), -v1.getY())
               };
 
@@ -875,7 +875,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               return new double[] {
                   FastMath.atan2(v2.getX(), v2.getZ()),
-                  safeAcos(v2, v2::getY, v2::getZ, v2::getX),
+                  safeAcos(v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(v1.getX(), -v1.getZ())
               };
 
@@ -890,7 +890,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               return new double[] {
                   FastMath.atan2(v2.getZ(), -v2.getX()),
-                  safeAcos(v2, v2::getY, v2::getZ, v2::getX),
+                  safeAcos(v2::getY, v2::getZ, v2::getX),
                   FastMath.atan2(v1.getZ(), v1.getX())
               };
 
@@ -905,7 +905,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               return new double[] {
                   FastMath.atan2(v2.getX(), -v2.getY()),
-                  safeAcos(v2, v2::getZ, v2::getX, v2::getY),
+                  safeAcos(v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(v1.getX(), v1.getY())
               };
 
@@ -920,7 +920,7 @@ public class Rotation implements Serializable {
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               return new double[] {
                   FastMath.atan2(v2.getY(), v2.getX()),
-                  safeAcos(v2, v2::getZ, v2::getX, v2::getY),
+                  safeAcos(v2::getZ, v2::getX, v2::getY),
                   FastMath.atan2(v1.getY(), -v1.getX())
               };
 
@@ -930,15 +930,13 @@ public class Rotation implements Serializable {
   }
 
   /** Safe computation of acos(some vector coordinate) working around singularities.
-   * @param v vector
    * @param cosGetter getter for the cosine coordinate
    * @param sin1Getter getter for one of the sine coordinates
    * @param sin2Getter getter for the other sine coordinate
    * @param acos of the coordinate
    * @since 3.0
    */
-  private double safeAcos(final Vector3D v,
-                          final DoubleSupplier cosGetter,
+  private double safeAcos(final DoubleSupplier cosGetter,
                           final DoubleSupplier sin1Getter,
                           final DoubleSupplier sin2Getter) {
       final double cos = cosGetter.getAsDouble();
@@ -956,15 +954,13 @@ public class Rotation implements Serializable {
   }
 
   /** Safe computation of asin(some vector coordinate) working around singularities.
-   * @param v vector
    * @param sinGetter getter for the sine coordinate
    * @param cos1Getter getter for one of the cosine coordinates
    * @param cos2Getter getter for the other cosine coordinate
    * @param acos of the coordinate
    * @since 3.0
    */
-  private double safeAsin(final Vector3D v,
-                          final DoubleSupplier sinGetter,
+  private double safeAsin(final DoubleSupplier sinGetter,
                           final DoubleSupplier cos1Getter,
                           final DoubleSupplier cos2Getter) {
       final double sin = sinGetter.getAsDouble();

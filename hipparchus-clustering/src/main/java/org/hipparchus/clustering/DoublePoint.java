@@ -43,8 +43,8 @@ public class DoublePoint implements Clusterable, Serializable {
      *
      * @param point the n-dimensional point in double space
      */
-    public DoublePoint(final double[] point) { // NOPMD - storage of array reference is intentional and documented here
-        this.point = point;
+    public DoublePoint(final double[] point) {
+        this.point = point; // NOPMD - storage of array reference is intentional and documented here
     }
 
     /**

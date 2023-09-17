@@ -35,7 +35,7 @@ import org.hipparchus.util.MathUtils;
  *
  * @see <a href="http://en.wikipedia.org/wiki/Binomial_test">Binomial test (Wikipedia)</a>
  */
-public class BinomialTest {
+public class BinomialTest { // NOPMD - this is not a Junit test class, PMD false positive here
 
     /** Empty constructor.
      * <p>

@@ -166,7 +166,7 @@ public class LinearObjectiveFunction
             // create the instance
             ArrayRealVector vector = new ArrayRealVector(data, false);
             final java.lang.reflect.Field f = getClass().getDeclaredField("coefficients");
-            f.setAccessible(true);
+            f.setAccessible(true); // NOPMD
             f.set(this, vector);
         } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
             IOException ioe = new IOException();

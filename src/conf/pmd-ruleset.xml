@@ -155,6 +155,7 @@
     <exclude name="DataClass"/>
 
     <!-- Lots of reference algorithms have a high complexity -->
+    <exclude name="CognitiveComplexity"/>
     <exclude name="CyclomaticComplexity"/>
     <exclude name="NPathComplexity"/>
     <exclude name="NcssCount"/>

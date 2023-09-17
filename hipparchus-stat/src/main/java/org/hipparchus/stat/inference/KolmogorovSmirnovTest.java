@@ -109,7 +109,7 @@ import org.hipparchus.util.MathUtils;
  * Note that [1] contains an error in computing h, refer to <a
  * href="https://issues.apache.org/jira/browse/MATH-437">MATH-437</a> for details.
  */
-public class KolmogorovSmirnovTest {
+public class KolmogorovSmirnovTest { // NOPMD - this is not a Junit test class, PMD false positive here
 
     /**
      * Bound on the number of partial sums in {@link #ksSum(double, double, int)}

@@ -98,7 +98,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
      * @throws NullArgumentException if {@code d} is {@code null}.
      * @see #Array2DRowRealMatrix(double[][])
      */
-    public Array2DRowRealMatrix(final double[][] d, final boolean copyArray) // NOPMD - array copy is taken care of by parameter
+    public Array2DRowRealMatrix(final double[][] d, final boolean copyArray)
         throws MathIllegalArgumentException,
         NullArgumentException {
         if (copyArray) {
@@ -121,7 +121,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
                                                            d[r].length, nCols);
                 }
             }
-            data = d;
+            data = d; // NOPMD - array copy is taken care of by parameter
         }
     }
 

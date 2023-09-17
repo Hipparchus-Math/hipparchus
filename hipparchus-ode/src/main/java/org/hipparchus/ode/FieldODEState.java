@@ -89,7 +89,7 @@ public class FieldODEState<T extends CalculusFieldElement<T>> {
 
         // special handling of null arrays
         if (original == null) {
-            return null;
+            return null; // NOPMD
         }
 
         // allocate the array

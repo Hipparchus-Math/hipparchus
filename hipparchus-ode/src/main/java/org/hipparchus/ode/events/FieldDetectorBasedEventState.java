@@ -147,6 +147,7 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
      * @param t target time for the integration
      *
      */
+    @Override
     public void init(final FieldODEStateAndDerivative<T> s0, final T t) {
         detector.init(s0, t);
         lastT = t.getField().getZero().newInstance(Double.NEGATIVE_INFINITY);
@@ -214,6 +215,7 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
      * the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if the event cannot be bracketed
      */
+    @Override
     public boolean evaluateStep(final FieldODEStateInterpolator<T> interpolator)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
@@ -382,7 +384,7 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
                         afterRootT = interval.getRightAbscissa();
                         afterRootG = interval.getRightValue();
                         // CHECKSTYLE: stop IllegalCatch check
-                    } catch (RuntimeException e) {
+                    } catch (RuntimeException e) { // NOPMD
                         // CHECKSTYLE: resume IllegalCatch check
                         throw new MathIllegalStateException(e, LocalizedODEFormats.FIND_ROOT,
                                                             detector, loopT.getReal(), loopG.getReal(),
@@ -398,7 +400,7 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
                         afterRootT = interval.getLeftAbscissa();
                         afterRootG = interval.getLeftValue();
                         // CHECKSTYLE: stop IllegalCatch check
-                    } catch (RuntimeException e) {
+                    } catch (RuntimeException e) { // NOPMD
                         // CHECKSTYLE: resume IllegalCatch check
                         throw new MathIllegalStateException(e, LocalizedODEFormats.FIND_ROOT,
                                                             detector, tb.getReal(), gb.getReal(),
@@ -508,6 +510,7 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
      * This guarantees the integration will stop on or after the root, so that integration
      * may be restarted safely.
      */
+    @Override
     public FieldEventOccurrence<T> doEvent(final FieldODEStateAndDerivative<T> state) {
         // check event is pending and is at the same time
         check(pendingEvent);
@@ -616,6 +619,7 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
      * @return occurrence time of the event triggered in the current
      * step or infinity if no events are triggered
      */
+    @Override
     public T getEventTime() {
         return pendingEvent ?
                pendingEventTime :

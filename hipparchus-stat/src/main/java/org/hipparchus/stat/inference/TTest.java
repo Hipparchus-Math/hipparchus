@@ -58,7 +58,7 @@ import org.hipparchus.util.MathUtils;
  * Uses Hipparchus {@link org.hipparchus.distribution.continuous.TDistribution}
  * implementation to estimate exact p-values.
  */
-public class TTest {
+public class TTest { // NOPMD - this is not a Junit test class, PMD false positive here
 
     /** Empty constructor.
      * <p>

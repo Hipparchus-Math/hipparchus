@@ -252,7 +252,7 @@ public abstract class VectorFormat<S extends Space, V extends Vector<S,V>> {
         // parse prefix
         CompositeFormat.parseAndIgnoreWhitespace(source, pos);
         if (!CompositeFormat.parseFixedstring(source, trimmedPrefix, pos)) {
-            return null;
+            return null; // NOPMD
         }
 
         for (int i = 0; i < dimension; ++i) {
@@ -262,7 +262,7 @@ public abstract class VectorFormat<S extends Space, V extends Vector<S,V>> {
 
             // parse separator
             if (i > 0 && !CompositeFormat.parseFixedstring(source, trimmedSeparator, pos)) {
-                return null;
+                return null; // NOPMD
             }
 
             // skip whitespace
@@ -274,7 +274,7 @@ public abstract class VectorFormat<S extends Space, V extends Vector<S,V>> {
                 // invalid coordinate
                 // set index back to initial, error index should already be set
                 pos.setIndex(initialIndex);
-                return null;
+                return null; // NOPMD
             }
 
             // store coordinate
@@ -285,7 +285,7 @@ public abstract class VectorFormat<S extends Space, V extends Vector<S,V>> {
         // parse suffix
         CompositeFormat.parseAndIgnoreWhitespace(source, pos);
         if (!CompositeFormat.parseFixedstring(source, trimmedSuffix, pos)) {
-            return null;
+            return null; // NOPMD
         }
 
         return coordinates;

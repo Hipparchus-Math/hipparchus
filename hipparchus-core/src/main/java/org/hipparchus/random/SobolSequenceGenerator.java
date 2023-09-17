@@ -183,10 +183,9 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
         }
 
         final Charset charset = Charset.forName(FILE_CHARSET);
-        final BufferedReader reader = new BufferedReader(new InputStreamReader(is, charset));
         int dim = -1;
 
-        try {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, charset))) {
             // ignore first line
             reader.readLine();
 
@@ -215,8 +214,6 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
                 }
                 lineNumber++;
             }
-        } finally {
-            reader.close();
         }
 
         return dim;

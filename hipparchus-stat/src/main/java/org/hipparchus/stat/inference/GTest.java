@@ -41,7 +41,7 @@ import org.hipparchus.util.MathUtils;
  * but provided by one sample, or when the hypothesis under test is that the two
  * samples come from the same underlying distribution.
  */
-public class GTest {
+public class GTest { // NOPMD - this is not a Junit test class, PMD false positive here
 
     /** Empty constructor.
      * <p>

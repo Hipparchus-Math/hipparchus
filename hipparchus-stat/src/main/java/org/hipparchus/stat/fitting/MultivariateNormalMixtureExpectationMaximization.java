@@ -392,9 +392,9 @@ public class MultivariateNormalMixtureExpectationMaximization {
          * Create a data row.
          * @param data Data to use for the row, a reference to the data is stored
          */
-        DataRow(final double[] data) { // NOPMD - storing a reference to the array is intentional and documented here
+        DataRow(final double[] data) {
             // Store reference.
-            row = data;
+            row = data; // NOPMD - storing a reference to the array is intentional and documented here
             // Compute mean.
             mean = 0d;
             for (int i = 0; i < data.length; i++) {

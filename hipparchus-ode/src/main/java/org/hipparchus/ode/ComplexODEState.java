@@ -88,7 +88,7 @@ public class ComplexODEState implements Serializable {
 
         // special handling of null arrays
         if (original == null) {
-            return null;
+            return null; // NOPMD
         }
 
         // allocate the array

@@ -372,10 +372,10 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
          * @param in double[] array holding the data, a reference to the array will be stored
          * @throws NullArgumentException if in is null
          */
-        ArrayDataAdapter(double[] in) throws NullArgumentException { // NOPMD - storing a reference to the array is intentional and documented here
+        ArrayDataAdapter(double[] in) throws NullArgumentException {
             super();
             MathUtils.checkNotNull(in);
-            inputArray = in;
+            inputArray = in; // NOPMD - storing a reference to the array is intentional and documented here
         }
 
         /** {@inheritDoc} */

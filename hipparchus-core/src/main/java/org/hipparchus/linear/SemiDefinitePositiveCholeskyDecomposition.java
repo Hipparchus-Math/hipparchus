@@ -40,8 +40,6 @@ public class SemiDefinitePositiveCholeskyDecomposition {
 
     /** Default threshold below which elements are not considered positive. */
     public static final double POSITIVITY_THRESHOLD = 1.0e-15;
-    /** Row-oriented storage for L<sup>T</sup> matrix data. */
-    private final double[][] lTData;
     /** Cached value of L. */
     private RealMatrix cachedL;
     /** Cached value of LT. */
@@ -72,7 +70,7 @@ public class SemiDefinitePositiveCholeskyDecomposition {
         }
 
         final int order = matrix.getRowDimension();
-        lTData   = matrix.getData();
+        final double[][] lTData = matrix.getData();
         cachedL  = MatrixUtils.createRealMatrix(lTData);
         int def  = 1;
 

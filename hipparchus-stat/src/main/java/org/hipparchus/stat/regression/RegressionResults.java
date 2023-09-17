@@ -95,7 +95,7 @@ public class RegressionResults implements Serializable {
      * are copied and the RegressionResults become mutable
      */
     public RegressionResults(
-            final double[] parameters, final double[][] varcov, // NOPMD - storing a reference to the array is controlled by a user-supplied parameter
+            final double[] parameters, final double[][] varcov,
             final boolean isSymmetricCompressed,
             final long nobs, final int rank,
             final double sumy, final double sumysq, final double sse,
@@ -108,8 +108,8 @@ public class RegressionResults implements Serializable {
                 this.varCovData[i] = varcov[i].clone();
             }
         } else {
-            this.parameters = parameters;
-            this.varCovData = varcov;
+            this.parameters = parameters; // NOPMD - storing a reference to the array is controlled by a user-supplied parameter
+            this.varCovData = varcov; // NOPMD - storing a reference to the array is controlled by a user-supplied parameter
         }
         this.isSymmetricVCD = isSymmetricCompressed;
         this.nobs = nobs;
@@ -171,7 +171,7 @@ public class RegressionResults implements Serializable {
      */
     public double[] getParameterEstimates() {
         if (this.parameters == null) {
-            return null;
+            return null; // NOPMD
         }
         return parameters.clone();
     }
@@ -211,7 +211,7 @@ public class RegressionResults implements Serializable {
      */
     public double[] getStdErrorOfEstimates() {
         if (parameters == null) {
-            return null;
+            return null; // NOPMD
         }
         double[] se = new double[this.parameters.length];
         for (int i = 0; i < this.parameters.length; i++) {

@@ -70,7 +70,7 @@ class ConvergentsIterator {
                 this.q1 = FastMath.addExact(Math.multiplyExact(a1, q1), q0);
                 this.r1 = 1.0 / (r1 - a1);
             } catch (ArithmeticException e) { // unlike the name implies FastMath's multiplyExact() is slower
-                throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, r1, p1, q1);
+                throw new MathIllegalStateException(e, LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, r1, p1, q1);
             }
         }
 

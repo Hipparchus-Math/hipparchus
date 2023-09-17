@@ -43,7 +43,7 @@ import org.hipparchus.util.MathArrays;
  * the R implementation of wilcox.test and corresponds to the "wilcox"
  * zero_method configurable in scipy.stats.wilcoxon.
  */
-public class WilcoxonSignedRankTest {
+public class WilcoxonSignedRankTest { // NOPMD - this is not a Junit test class, PMD false positive here
 
     /** Ranking algorithm. */
     private final NaturalRanking naturalRanking;

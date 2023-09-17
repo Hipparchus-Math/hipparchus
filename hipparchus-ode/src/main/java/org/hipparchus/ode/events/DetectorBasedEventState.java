@@ -367,7 +367,7 @@ public class DetectorBasedEventState implements EventState {
                         afterRootT = interval.getRightAbscissa();
                         afterRootG = interval.getRightValue();
                         // CHECKSTYLE: stop IllegalCatch check
-                    } catch (RuntimeException e) {
+                    } catch (RuntimeException e) { // NOPMD
                         // CHECKSTYLE: resume IllegalCatch check
                         throw new MathIllegalStateException(e, LocalizedODEFormats.FIND_ROOT,
                                                             detector, loopT, loopG, tb, gb, lastT, lastG);
@@ -381,7 +381,7 @@ public class DetectorBasedEventState implements EventState {
                         afterRootT = interval.getLeftAbscissa();
                         afterRootG = interval.getLeftValue();
                         // CHECKSTYLE: stop IllegalCatch check
-                    } catch (RuntimeException e) {
+                    } catch (RuntimeException e) { // NOPMD
                         // CHECKSTYLE: resume IllegalCatch check
                         throw new MathIllegalStateException(e, LocalizedODEFormats.FIND_ROOT,
                                                             detector, tb, gb, loopT, loopG, lastT, lastG);

@@ -515,7 +515,7 @@ public class DSCompiler {
 
                 if (order == 0) {
                     // at order 0, the rebaser just copies the function value
-                    final MultivariateCompositionMapper[][] rebaser  = new MultivariateCompositionMapper[][] {
+                    final MultivariateCompositionMapper[][] rebaser  = {
                         { new MultivariateCompositionMapper(1, 0, new int[0]) }
                     };
                     rebaseIndirection.set(m, rebaser);

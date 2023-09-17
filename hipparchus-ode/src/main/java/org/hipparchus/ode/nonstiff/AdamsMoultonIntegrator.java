@@ -286,10 +286,10 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
          * @param scaled current scaled first derivative
          * @param state state to correct (will be overwritten after visit)
          */
-        Corrector(final double[] previous, final double[] scaled, final double[] state) { // NOPMD - array reference storage is intentional and documented here
-            this.previous = previous;
-            this.scaled   = scaled;
-            this.after    = state;
+        Corrector(final double[] previous, final double[] scaled, final double[] state) {
+            this.previous = previous; // NOPMD - array reference storage is intentional and documented here
+            this.scaled   = scaled;   // NOPMD - array reference storage is intentional and documented here
+            this.after    = state;    // NOPMD - array reference storage is intentional and documented here
             this.before   = state.clone();
         }
 

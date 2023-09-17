@@ -166,7 +166,7 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
                                       final double tolerance) {
         if ((xMin >= xMax - tolerance) || (yMin >= yMax - tolerance)) {
             // too thin box, build an empty polygons set
-            return null;
+            return null; // NOPMD
         }
         final Vector2D minMin = new Vector2D(xMin, yMin);
         final Vector2D minMax = new Vector2D(xMin, yMax);
@@ -860,7 +860,7 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
 
         if (loop.size() == 2 && loop.get(0).getStart() != null) {
             // this is a degenerated infinitely thin closed loop, we simply ignore it
-            return null;
+            return null; // NOPMD
         } else {
             return loop;
         }

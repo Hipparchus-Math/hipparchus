@@ -425,7 +425,7 @@ public class JacobianMatrices {
                 // Lazy initialization
                 Constructor<ParameterConfiguration> configCtr =
                                 ParameterConfiguration.class.getDeclaredConstructor(String.class, Double.TYPE);
-                configCtr.setAccessible(true);
+                configCtr.setAccessible(true); // NOPMD
                 @SuppressWarnings("unchecked")
                 Constructor<NamedParameterJacobianProvider> providerCtr =
                 (Constructor<NamedParameterJacobianProvider>)
@@ -433,7 +433,7 @@ public class JacobianMatrices {
                                                                                                     double[].class,
                                                                                                     ParametersController.class,
                                                                                                     ParameterConfiguration[].class);
-                providerCtr.setAccessible(true);
+                providerCtr.setAccessible(true); // NOPMD
                 if (dirtyParameter && (paramDim != 0)) {
                     ParameterConfiguration [] immutable = new ParameterConfiguration[selectedParameters.length];
                     for (int i = 0; i < selectedParameters.length; ++i) {

@@ -579,18 +579,18 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
          * @param jacNorm Norms of the columns of the jacobian matrix.
          * @param beta Coefficients of the Householder transforms vectors.
          */
-        InternalData(double[][] weightedJacobian, // NOPMD - staring array references is intentional and documented here
-                     int[] permutation,           // NOPMD - staring array references is intentional and documented here
+        InternalData(double[][] weightedJacobian,
+                     int[] permutation,
                      int rank,
-                     double[] diagR,              // NOPMD - staring array references is intentional and documented here
-                     double[] jacNorm,            // NOPMD - staring array references is intentional and documented here
-                     double[] beta) {             // NOPMD - staring array references is intentional and documented here
-            this.weightedJacobian = weightedJacobian;
-            this.permutation = permutation;
+                     double[] diagR,
+                     double[] jacNorm,
+                     double[] beta) {
+            this.weightedJacobian = weightedJacobian; // NOPMD - staring array references is intentional and documented here
+            this.permutation = permutation;           // NOPMD - staring array references is intentional and documented here
             this.rank = rank;
-            this.diagR = diagR;
-            this.jacNorm = jacNorm;
-            this.beta = beta;
+            this.diagR = diagR;                       // NOPMD - staring array references is intentional and documented here
+            this.jacNorm = jacNorm;                   // NOPMD - staring array references is intentional and documented here
+            this.beta = beta;                         // NOPMD - staring array references is intentional and documented here
         }
     }
 

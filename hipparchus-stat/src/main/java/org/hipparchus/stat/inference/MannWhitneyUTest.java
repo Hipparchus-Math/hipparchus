@@ -53,7 +53,7 @@ import org.hipparchus.util.Precision;
  * false). The minimum of the W value returned by R for wilcox.test(x, y...) and
  * wilcox.test(y, x...) should equal mannWhitneyU(x, y...).
  */
-public class MannWhitneyUTest {
+public class MannWhitneyUTest { // NOPMD - this is not a Junit test class, PMD false positive here
 
     /**
      * If the combined dataset contains no more values than this, test defaults to
