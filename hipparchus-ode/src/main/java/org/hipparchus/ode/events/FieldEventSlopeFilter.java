@@ -113,6 +113,7 @@ public class FieldEventSlopeFilter<T extends FieldODEEventDetector<E>, E extends
      * @param field field to which array elements belong
      * @param maxCheck maximum checking interval (s)
      * @param maxIter maximum number of iterations in the event time search
+     * @param solver solver to user for locating event
      * @param handler event handler to call at event occurrences
      * @param rawDetector event detector to wrap
      * @param filter filter to use
