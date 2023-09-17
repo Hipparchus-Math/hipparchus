@@ -29,7 +29,6 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -118,9 +117,8 @@ public class ExampleUtils {
      * @param height desired height
      * @param type type of the create image
      * @return resized image
-     * @throws IOException
      */
-    public static BufferedImage resizeImage(BufferedImage originalImage, int width, int height, int type) throws IOException {
+    public static BufferedImage resizeImage(BufferedImage originalImage, int width, int height, int type) {
         BufferedImage resizedImage = new BufferedImage(width, height, type);
         Graphics2D g = resizedImage.createGraphics();
         g.drawImage(originalImage, 0, 0, width, height, null);
