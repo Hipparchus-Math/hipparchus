@@ -43,8 +43,8 @@ public class EigenSolverTest {
     public void testNonInvertible() {
         Random r = new Random(9994100315209l);
         RealMatrix m =
-            EigenDecompositionTest.createTestMatrix(r, new double[] { 1.0, 0.0, -1.0, -2.0, -3.0 });
-        DecompositionSolver es = new EigenDecomposition(m).getSolver();
+            EigenDecompositionSymmetricTest.createTestMatrix(r, new double[] { 1.0, 0.0, -1.0, -2.0, -3.0 });
+        DecompositionSolver es = new EigenDecompositionSymmetric(m).getSolver();
         Assert.assertFalse(es.isNonSingular());
         try {
             es.getInverse();
@@ -59,8 +59,8 @@ public class EigenSolverTest {
     public void testInvertible() {
         Random r = new Random(9994100315209l);
         RealMatrix m =
-            EigenDecompositionTest.createTestMatrix(r, new double[] { 1.0, 0.5, -1.0, -2.0, -3.0 });
-        DecompositionSolver es = new EigenDecomposition(m).getSolver();
+            EigenDecompositionSymmetricTest.createTestMatrix(r, new double[] { 1.0, 0.5, -1.0, -2.0, -3.0 });
+        DecompositionSolver es = new EigenDecompositionSymmetric(m).getSolver();
         Assert.assertTrue(es.isNonSingular());
         RealMatrix inverse = es.getInverse();
         RealMatrix error =
@@ -82,7 +82,7 @@ public class EigenSolverTest {
         });
         m = m.scalarMultiply(tiny);
 
-        final EigenDecomposition ed = new EigenDecomposition(m);
+        final EigenDecompositionSymmetric ed = new EigenDecompositionSymmetric(m);
         RealMatrix inv = ed.getSolver().getInverse();
 
         final RealMatrix id = m.multiply(inv);
@@ -99,27 +99,16 @@ public class EigenSolverTest {
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testNonInvertibleMath1045() {
-        EigenDecomposition eigen =
-            new EigenDecomposition(MatrixUtils.createRealMatrix(bigSingular));
+        EigenDecompositionSymmetric eigen =
+            new EigenDecompositionSymmetric(MatrixUtils.createRealMatrix(bigSingular));
         eigen.getSolver().getInverse();
     }
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testZeroMatrix() {
-        EigenDecomposition eigen =
-            new EigenDecomposition(MatrixUtils.createRealMatrix(new double[][] {{0}}));
+        EigenDecompositionSymmetric eigen =
+            new EigenDecompositionSymmetric(MatrixUtils.createRealMatrix(new double[][] {{0}}));
         eigen.getSolver().getInverse();
-    }
-
-    @Test
-    public void testIsNonSingularTinyOutOfOrderEigenvalue() {
-        final EigenDecomposition eigen
-            = new EigenDecomposition(MatrixUtils.createRealMatrix(new double[][] {
-                        { 1e-13, 0 },
-                        { 1,     1 },
-                    }));
-        Assert.assertFalse("Singular matrix not detected",
-                           eigen.getSolver().isNonSingular());
     }
 
     /** test solve dimension errors */
@@ -128,9 +117,9 @@ public class EigenSolverTest {
         final double[] refValues = new double[] {
             2.003, 2.002, 2.001, 1.001, 1.000, 0.001
         };
-        final RealMatrix matrix = EigenDecompositionTest.createTestMatrix(new Random(35992629946426l), refValues);
+        final RealMatrix matrix = EigenDecompositionSymmetricTest.createTestMatrix(new Random(35992629946426l), refValues);
 
-        DecompositionSolver es = new EigenDecomposition(matrix).getSolver();
+        DecompositionSolver es = new EigenDecompositionSymmetric(matrix).getSolver();
         RealMatrix b = MatrixUtils.createRealMatrix(new double[2][2]);
         try {
             es.solve(b);
@@ -163,7 +152,7 @@ public class EigenSolverTest {
                 { 40,  2, 21,  9, 51, 19 },
                 { 14, -1,  8,  0, 19, 14 }
         });
-        DecompositionSolver es = new EigenDecomposition(m).getSolver();
+        DecompositionSolver es = new EigenDecompositionSymmetric(m).getSolver();
         RealMatrix b = MatrixUtils.createRealMatrix(new double[][] {
                 { 1561, 269, 188 },
                 {   69, -21,  70 },

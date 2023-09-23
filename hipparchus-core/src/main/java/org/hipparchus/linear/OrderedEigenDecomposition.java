@@ -17,9 +17,13 @@
 package org.hipparchus.linear;
 
 import java.util.TreeSet;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexComparator;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 
 /**
  * Given a matrix A, it computes an eigen decomposition A = VDV^{T}.
@@ -28,7 +32,7 @@ import org.hipparchus.complex.ComplexComparator;
  * order.
  *
  */
-public class OrderedEigenDecomposition extends EigenDecomposition {
+public class OrderedEigenDecomposition extends EigenDecompositionNonSymmetric {
 
     /**
      * Constructor using the EigenDecomposition as starting point for ordering.
@@ -36,42 +40,61 @@ public class OrderedEigenDecomposition extends EigenDecomposition {
      * @param matrix matrix to decompose
      */
     public OrderedEigenDecomposition(final RealMatrix matrix) {
-        super(matrix);
+        this(matrix, DEFAULT_EPSILON, new ComplexComparator());
+    }
+
+    /**
+     * Calculates the eigen decomposition of the given real matrix.
+     * <p>
+     * Supports decomposition of a general matrix since 3.1.
+     *
+     * @param matrix Matrix to decompose.
+     * @param epsilon Epsilon used for internal tests (e.g. is singular, eigenvalue ratio, etc.)
+     * @throws MathIllegalStateException if the algorithm fails to converge.
+     * @param eigenValuesComparator comparator for sorting eigen values
+     * @throws MathRuntimeException if the decomposition of a general matrix
+     * results in a matrix with zero norm
+     * @since 3.0
+     */
+    public OrderedEigenDecomposition(final RealMatrix matrix, final double epsilon,
+                                     final Comparator<Complex> eigenValuesComparator) {
+        super(matrix, epsilon);
 
         final RealMatrix D = this.getD();
         final RealMatrix V = this.getV();
+        final RealMatrix newD = new Array2DRowRealMatrix(D.getData(), true);
+        final RealMatrix newV = new Array2DRowRealMatrix(V.getData(), true);
 
         // getting eigen values
-        TreeSet<Complex> eigenValues = new TreeSet<>(new ComplexComparator());
+        TreeSet<Complex> eigenValues = new TreeSet<>(eigenValuesComparator);
+        IndexedEigenvalue[] newEigenValues = new IndexedEigenvalue[newD.getRowDimension()];
         for (int ij = 0; ij < matrix.getRowDimension(); ij++) {
-            eigenValues.add(new Complex(getRealEigenvalue(ij),
-                                        getImagEigenvalue(ij)));
+            newEigenValues[ij] = new IndexedEigenvalue(ij, getEigenvalue(ij));
+            eigenValues.add(getEigenvalue(ij));
         }
 
         // ordering
+        Arrays.sort(newEigenValues, (v1, v2) -> eigenValuesComparator.compare(v1.getEigenvalue(), v2.getEigenvalue()));
         for (int ij = 0; ij < matrix.getRowDimension() - 1; ij++) {
+            final IndexedEigenvalue eij = newEigenValues[ij];
             final Complex eigValue = eigenValues.pollFirst();
             int currentIndex;
             // searching the current index
             for (currentIndex = ij; currentIndex < matrix.getRowDimension(); currentIndex++) {
                 Complex compCurrent;
                 if (currentIndex == 0) {
-                    compCurrent = new Complex(D.getEntry(currentIndex,
-                                                         currentIndex), D.getEntry(currentIndex + 1,
-                                                                                   currentIndex));
+                    compCurrent = new Complex(D.getEntry(currentIndex,     currentIndex),
+                                              D.getEntry(currentIndex + 1, currentIndex));
                 } else if (currentIndex + 1 == matrix.getRowDimension()) {
-                    compCurrent = new Complex(D.getEntry(currentIndex,
-                                                         currentIndex), D.getEntry(currentIndex - 1,
-                                                                                   currentIndex));
+                    compCurrent = new Complex(D.getEntry(currentIndex,     currentIndex),
+                                              D.getEntry(currentIndex - 1, currentIndex));
                 } else {
                     if (D.getEntry(currentIndex - 1, currentIndex) != 0) {
-                        compCurrent = new Complex(D.getEntry(currentIndex,
-                                                             currentIndex), D.getEntry(currentIndex - 1,
-                                                                                       currentIndex));
+                        compCurrent = new Complex(D.getEntry(currentIndex,     currentIndex),
+                                                  D.getEntry(currentIndex - 1, currentIndex));
                     } else {
-                        compCurrent = new Complex(D.getEntry(currentIndex,
-                                                             currentIndex), D.getEntry(currentIndex + 1,
-                                                                                       currentIndex));
+                        compCurrent = new Complex(D.getEntry(currentIndex,     currentIndex),
+                                                  D.getEntry(currentIndex + 1, currentIndex));
 
                     }
 
@@ -82,8 +105,10 @@ public class OrderedEigenDecomposition extends EigenDecomposition {
                 }
             }
 
-            if (ij == currentIndex) {
-                continue;
+            if (ij == eij.getIndex()) {
+                if (ij == currentIndex) {
+                    continue;
+                }
             }
 
             // exchanging D
@@ -100,6 +125,19 @@ public class OrderedEigenDecomposition extends EigenDecomposition {
 
                 }
             }
+            Complex newPreviousValue;
+            if (ij == 0) {
+                newPreviousValue = new Complex(newD.getEntry(ij, ij), newD.getEntry(ij + 1, ij));
+            } else if (ij + 1 == matrix.getRowDimension()) {
+                newPreviousValue = new Complex(newD.getEntry(ij, ij), newD.getEntry(ij - 1, ij));
+            } else {
+                if (newD.getEntry(ij - 1, ij) != 0) {
+                    newPreviousValue = new Complex(newD.getEntry(ij, ij), newD.getEntry(ij - 1, ij));
+                } else {
+                    newPreviousValue = new Complex(newD.getEntry(ij, ij), newD.getEntry(ij + 1, ij));
+
+                }
+            }
             // moved eigenvalue
             D.setEntry(ij, ij, eigValue.getReal());
             if (ij == 0) {
@@ -113,6 +151,20 @@ public class OrderedEigenDecomposition extends EigenDecomposition {
                 } else {
                     D.setEntry(ij + 1, ij, eigValue.getImaginary());
                     D.setEntry(ij - 1, ij, 0);
+                }
+            }
+            newD.setEntry(ij, ij, eij.getEigenvalue().getReal());
+            if (ij == 0) {
+                newD.setEntry(ij + 1, ij, eij.getEigenvalue().getImaginary());
+            } else if ((ij + 1) == matrix.getRowDimension()) {
+                newD.setEntry(ij - 1, ij, eij.getEigenvalue().getImaginary());
+            } else {
+                if (eij.getEigenvalue().getImaginary() > 0) {
+                    newD.setEntry(ij - 1, ij, eij.getEigenvalue().getImaginary());
+                    newD.setEntry(ij + 1, ij, 0);
+                } else {
+                    newD.setEntry(ij + 1, ij, eij.getEigenvalue().getImaginary());
+                    newD.setEntry(ij - 1, ij, 0);
                 }
             }
             // previous eigen value
@@ -134,18 +186,43 @@ public class OrderedEigenDecomposition extends EigenDecomposition {
                     D.setEntry(currentIndex - 1, currentIndex, 0);
                 }
             }
+            newD.setEntry(eij.getIndex(), eij.getIndex(), newPreviousValue.getReal());
+            if (eij.getIndex() == 0) {
+                newD.setEntry(eij.getIndex() + 1, eij.getIndex(),
+                              newPreviousValue.getImaginary());
+            } else if ((eij.getIndex() + 1) == matrix.getRowDimension()) {
+                newD.setEntry(eij.getIndex() - 1, eij.getIndex(),
+                              newPreviousValue.getImaginary());
+            } else {
+                if (newPreviousValue.getImaginary() > 0) {
+                    newD.setEntry(eij.getIndex() - 1, eij.getIndex(),
+                                  newPreviousValue.getImaginary());
+                    newD.setEntry(eij.getIndex() + 1, eij.getIndex(), 0);
+                } else {
+                    newD.setEntry(eij.getIndex() + 1, eij.getIndex(),
+                                  newPreviousValue.getImaginary());
+                    newD.setEntry(eij.getIndex() - 1, eij.getIndex(), 0);
+                }
+            }
 
             // exchanging V
             final double[] previousColumnV = V.getColumn(ij);
             V.setColumn(ij, V.getColumn(currentIndex));
             V.setColumn(currentIndex, previousColumnV);
+            final double[] newPreviousColumnV = newV.getColumn(ij);
+            newV.setColumn(ij, newV.getColumn(eij.getIndex()));
+            newV.setColumn(eij.getIndex(), newPreviousColumnV);
+
+//            // exchanging eigenvalue
+//            for (int k = ij + 1; k < matrix.getRowDimension(); ++k) {
+//                if (eigenValues[k].getIndex() == ij) {
+//                    eigenValues[k].setIndex(eij.getIndex());
+//                    break;
+//                }
+//            }
+ 
         }
 
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public RealMatrix getVT() {
-        return getV().transpose();
-    }
 }

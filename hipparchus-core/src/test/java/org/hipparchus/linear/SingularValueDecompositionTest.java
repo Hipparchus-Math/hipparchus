@@ -321,10 +321,10 @@ public class SingularValueDecompositionTest {
 
     private RealMatrix createTestMatrix(final Random r, final int rows, final int columns,
                                         final double[] singularValues) {
-        final RealMatrix u = EigenDecompositionTest.createOrthogonalMatrix(r, rows);
+        final RealMatrix u = EigenDecompositionSymmetricTest.createOrthogonalMatrix(r, rows);
         final RealMatrix d = new Array2DRowRealMatrix(rows, columns);
         d.setSubMatrix(MatrixUtils.createRealDiagonalMatrix(singularValues).getData(), 0, 0);
-        final RealMatrix v = EigenDecompositionTest.createOrthogonalMatrix(r, columns);
+        final RealMatrix v = EigenDecompositionSymmetricTest.createOrthogonalMatrix(r, columns);
         return u.multiply(d).multiply(v);
     }
 
