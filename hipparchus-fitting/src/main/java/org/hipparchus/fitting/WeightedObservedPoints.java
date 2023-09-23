@@ -42,7 +42,7 @@ public class WeightedObservedPoints implements Serializable {
      * @since 3.0
      */
     public WeightedObservedPoints() {
-        this.observations = new ArrayList();
+        this.observations = new ArrayList<>();
     }
 
     /**
