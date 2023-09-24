@@ -35,7 +35,7 @@ import org.hipparchus.util.Precision;
  * matrix. Both P and T are m &times; m matrices.</p>
  * <p>Transformation to Schur form is often not a goal by itself, but it is an
  * intermediate step in more general decomposition algorithms like
- * {@link EigenDecomposition eigen decomposition}. This class is therefore
+ * {@link EigenDecompositionSymmetric eigen decomposition}. This class is therefore
  * intended for expert use. As a consequence of this explicitly limited scope,
  * many methods directly returns references to internal arrays, not copies.</p>
  * <p>This class is based on the method hqr2 in class EigenvalueDecomposition
@@ -60,8 +60,8 @@ public class SchurTransformer {
     /** Cached value of PT. */
     private RealMatrix cachedPt;
 
-    /** Epsilon criteria taken from JAMA code (originally was 2^-52). */
-    private final double epsilon = Precision.EPSILON;
+    /** Epsilon criteria. */
+    private final double epsilon;
 
     /**
      * Build the transformation to Schur form of a general real matrix.
@@ -70,10 +70,24 @@ public class SchurTransformer {
      * @throws MathIllegalArgumentException if the matrix is not square
      */
     public SchurTransformer(final RealMatrix matrix) {
+        /** Epsilon criteria taken from JAMA code (originally was 2^-52). */
+        this(matrix, Precision.EPSILON);
+    }
+
+    /**
+     * Build the transformation to Schur form of a general real matrix.
+     *
+     * @param matrix matrix to transform
+     * @param epsilon convergence criteria
+     * @throws MathIllegalArgumentException if the matrix is not square
+     * @since 3.0
+     */
+    public SchurTransformer(final RealMatrix matrix, final double epsilon) {
         if (!matrix.isSquare()) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());
         }
+        this.epsilon = epsilon;
 
         HessenbergTransformer transformer = new HessenbergTransformer(matrix);
         matrixT = transformer.getH().getData();
@@ -215,7 +229,7 @@ public class SchurTransformer {
                 final double[] hVec = new double[3];
 
                 final int im = initQRStep(il, iu, shift, hVec);
-                performDoubleQRStep(il, im, iu, shift, hVec);
+                performDoubleQRStep(il, im, iu, shift, hVec, norm);
             }
         }
     }
@@ -352,9 +366,11 @@ public class SchurTransformer {
      * @param iu the current eigenvalue index
      * @param shift shift information holder
      * @param hVec the initial houseHolder vector
+     * @param norm matrix norm
      */
     private void performDoubleQRStep(final int il, final int im, final int iu,
-                                     final ShiftInfo shift, final double[] hVec) {
+                                     final ShiftInfo shift, final double[] hVec,
+                                     final double norm) {
 
         final int n = matrixT.length;
         double p = hVec[0];
@@ -368,7 +384,7 @@ public class SchurTransformer {
                 q = matrixT[k + 1][k - 1];
                 r = notlast ? matrixT[k + 2][k - 1] : 0.0;
                 shift.x = FastMath.abs(p) + FastMath.abs(q) + FastMath.abs(r);
-                if (Precision.equals(shift.x, 0.0, epsilon)) {
+                if (Precision.equals(shift.x, 0.0, epsilon * norm)) {
                     continue;
                 }
                 p /= shift.x;

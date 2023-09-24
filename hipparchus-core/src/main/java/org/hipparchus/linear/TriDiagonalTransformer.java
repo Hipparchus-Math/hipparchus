@@ -38,7 +38,7 @@ import org.hipparchus.util.FastMath;
  * diagonal is not accessed at all.</p>
  * <p>Transformation to tridiagonal shape is often not a goal by itself, but it is
  * an intermediate step in more general decomposition algorithms like {@link
- * EigenDecomposition eigen decomposition}. This class is therefore intended for internal
+ * EigenDecompositionSymmetric eigen decomposition}. This class is therefore intended for internal
  * use by the library and is not public. As a consequence of this explicitly limited scope,
  * many methods directly returns references to internal arrays, not copies.</p>
  */

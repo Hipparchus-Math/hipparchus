@@ -861,7 +861,7 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * @param cosGetter getter for the cosine coordinate
      * @param sin1Getter getter for one of the sine coordinates
      * @param sin2Getter getter for the other sine coordinate
-     * @param acos of the coordinate
+     * @return acos of the coordinate
      * @since 3.0
      */
     private T safeAcos(final Supplier<T> cosGetter,
@@ -885,7 +885,7 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * @param sinGetter getter for the sine coordinate
      * @param cos1Getter getter for one of the cosine coordinates
      * @param cos2Getter getter for the other cosine coordinate
-     * @param acos of the coordinate
+     * @return acos of the coordinate
      * @since 3.0
      */
     private T safeAsin(final Supplier<T> sinGetter,

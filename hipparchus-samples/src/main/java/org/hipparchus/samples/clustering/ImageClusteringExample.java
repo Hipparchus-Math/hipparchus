@@ -190,7 +190,7 @@ public class ImageClusteringExample {
              * @param x abscissa
              * @param y ordinate
              */
-            public PixelClusterable(int x, int y) {
+            PixelClusterable(int x, int y) {
                 this.x = x;
                 this.y = y;
                 this.color = null;
@@ -220,7 +220,7 @@ public class ImageClusteringExample {
              * @param width width
              * @param height height
              */
-            public ImagePainter(int width, int height) {
+            ImagePainter(int width, int height) {
                 this.width = width;
                 this.height = height;
             }

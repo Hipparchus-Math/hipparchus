@@ -27,7 +27,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.DiagonalMatrix;
-import org.hipparchus.linear.EigenDecomposition;
+import org.hipparchus.linear.EigenDecompositionSymmetric;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.AbstractOptimizationProblem;
@@ -285,7 +285,7 @@ public class LeastSquaresFactory {
             }
             return sqrtM;
         } else {
-            final EigenDecomposition dec = new EigenDecomposition(m);
+            final EigenDecompositionSymmetric dec = new EigenDecompositionSymmetric(m);
             return dec.getSquareRoot();
         }
     }

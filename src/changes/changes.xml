@@ -50,6 +50,15 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.0" date="TBD" description="This is a major release.">
+      <action dev="luc" type="fix" issue="issues/253">
+        Fixed eigenvalues/eigenvectors sorting in EigenDecompositionSymmetric.
+      </action>
+      <action dev="luc" type="update">
+        Replaced EigenDecomposition by EigenDecompositionSymmetric and EigenDecompositionNonSymmetric.
+      </action>
+      <action dev="luc" type="update">
+        Removed OrderedEigenDecomposition.
+      </action>
       <action dev="luc" type="fix" issue="issues/273">
         Added a protection against out of range BigFraction.
       </action>

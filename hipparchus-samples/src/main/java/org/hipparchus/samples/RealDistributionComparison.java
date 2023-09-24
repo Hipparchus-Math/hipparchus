@@ -51,6 +51,7 @@ import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.distribution.continuous.ParetoDistribution;
 import org.hipparchus.distribution.continuous.TDistribution;
 import org.hipparchus.distribution.continuous.WeibullDistribution;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.samples.ExampleUtils.ExampleFrame;
 import org.hipparchus.util.FastMath;
 
@@ -67,14 +68,13 @@ import com.xeiam.xchart.XChartPanel;
  */
 public class RealDistributionComparison {
 
+    /** Arial font. */
+    private static final String ARIAL = "Arial";
+
     /** Empty constructor.
-     * <p>
-     * This constructor is not strictly necessary, but it prevents spurious
-     * javadoc warnings with JDK 18 and later.
-     * </p>
      * @since 3.0
      */
-    public RealDistributionComparison() { // NOPMD - unnecessary constructor added intentionally to make javadoc happy
+    private RealDistributionComparison() {
         // nothing to do
     }
 
@@ -98,7 +98,7 @@ public class RealDistributionComparison {
                     xData.add(x);
                     yData.add(density);
                 }
-            } catch (Exception e) {
+            } catch (MathRuntimeException e) {
                 // ignore
                 // some distributions may reject certain values depending on the parameter settings
             }
@@ -148,13 +148,13 @@ public class RealDistributionComparison {
         // Customize Chart
         chart.setChartTitle(title);
         chart.getStyleManager().setChartTitleVisible(true);
-        chart.getStyleManager().setChartTitleFont(new Font("Arial", Font.PLAIN, 10));
+        chart.getStyleManager().setChartTitleFont(new Font(ARIAL, Font.PLAIN, 10));
         chart.getStyleManager().setLegendPosition(position);
         chart.getStyleManager().setLegendVisible(true);
-        chart.getStyleManager().setLegendFont(new Font("Arial", Font.PLAIN, 10));
+        chart.getStyleManager().setLegendFont(new Font(ARIAL, Font.PLAIN, 10));
         chart.getStyleManager().setLegendPadding(6);
         chart.getStyleManager().setLegendSeriesLineLength(6);
-        chart.getStyleManager().setAxisTickLabelsFont(new Font("Arial", Font.PLAIN, 9));
+        chart.getStyleManager().setAxisTickLabelsFont(new Font(ARIAL, Font.PLAIN, 9));
 
         chart.getStyleManager().setXAxisMin(minX);
         chart.getStyleManager().setXAxisMax(maxX);

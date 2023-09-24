@@ -24,7 +24,7 @@ package org.hipparchus.distribution.multivariate;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.hipparchus.linear.EigenDecomposition;
+import org.hipparchus.linear.EigenDecompositionSymmetric;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -190,15 +190,16 @@ public class MultivariateNormalDistribution
         covarianceMatrix = new Array2DRowRealMatrix(covariances);
 
         // Covariance matrix eigen decomposition.
-        final EigenDecomposition covMatDec = new EigenDecomposition(covarianceMatrix, singularMatrixCheckTolerance);
+        final EigenDecompositionSymmetric covMatDec =
+                        new EigenDecompositionSymmetric(covarianceMatrix, singularMatrixCheckTolerance, true);
 
         // Compute and store the inverse.
         covarianceMatrixInverse = covMatDec.getSolver().getInverse();
         // Compute and store the determinant.
-        covarianceMatrixDeterminant = covMatDec.getDeterminant().getRealPart();
+        covarianceMatrixDeterminant = covMatDec.getDeterminant();
 
         // Eigenvalues of the covariance matrix.
-        final double[] covMatEigenvalues = covMatDec.getRealEigenvalues();
+        final double[] covMatEigenvalues = covMatDec.getEigenvalues();
 
         for (int i = 0; i < covMatEigenvalues.length; i++) {
             if (covMatEigenvalues[i] < 0) {

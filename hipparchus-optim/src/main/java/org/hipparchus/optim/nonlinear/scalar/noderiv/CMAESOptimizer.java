@@ -30,7 +30,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.hipparchus.linear.EigenDecomposition;
+import org.hipparchus.linear.EigenDecompositionSymmetric;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.optim.ConvergenceChecker;
@@ -687,7 +687,7 @@ public class CMAESOptimizer
         oldFac += 1 - ccov1Sep - ccovmuSep;
         diagC = diagC.scalarMultiply(oldFac) // regard old matrix
             .add(square(pc).scalarMultiply(ccov1Sep)) // plus rank one update
-            .add((times(diagC, square(bestArz).multiply(weights))) // plus rank mu update
+            .add(times(diagC, square(bestArz).multiply(weights)) // plus rank mu update
                  .scalarMultiply(ccovmuSep));
         diagD = sqrt(diagC); // replaces eig(C)
         if (diagonalOnly > 1 &&
@@ -783,7 +783,7 @@ public class CMAESOptimizer
             // to achieve O(N^2)
             C = triu(C, 0).add(triu(C, 1).transpose());
             // enforce symmetry to prevent complex numbers
-            final EigenDecomposition eig = new EigenDecomposition(C);
+            final EigenDecompositionSymmetric eig = new EigenDecompositionSymmetric(C);
             B = eig.getV(); // eigen decomposition, B==normalized eigenvectors
             D = eig.getD();
             diagD = diag(D);

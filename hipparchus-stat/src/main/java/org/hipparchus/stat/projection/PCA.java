@@ -17,7 +17,7 @@
 package org.hipparchus.stat.projection;
 
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.linear.EigenDecomposition;
+import org.hipparchus.linear.EigenDecompositionSymmetric;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.stat.LocalizedStatFormats;
@@ -201,8 +201,8 @@ public class PCA {
      */
     private void calculatePrincipalComponents(RealMatrix normalizedM) {
         RealMatrix covarianceM = new Covariance(normalizedM).getCovarianceMatrix();
-        EigenDecomposition decomposition = new EigenDecomposition(covarianceM);
-        eigenValues = decomposition.getRealEigenvalues();
+        EigenDecompositionSymmetric decomposition = new EigenDecompositionSymmetric(covarianceM);
+        eigenValues = decomposition.getEigenvalues();
         principalComponents = MatrixUtils.createRealMatrix(eigenValues.length, numC);
         for (int c = 0; c < numC; c++) {
             for (int f = 0; f < eigenValues.length; f++) {

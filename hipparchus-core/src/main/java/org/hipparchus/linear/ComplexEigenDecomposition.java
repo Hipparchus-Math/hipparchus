@@ -30,7 +30,7 @@ import org.hipparchus.util.Precision;
  * Given a matrix A, it computes a complex eigen decomposition AV = VD.
  *
  * <p>
- * Complex Eigen Decomposition differs from the {@link EigenDecomposition} since it
+ * Complex Eigen Decomposition differs from the {@link EigenDecompositionSymmetric} since it
  * computes the eigen vectors as complex eigen vectors (if applicable).
  * </p>
  *

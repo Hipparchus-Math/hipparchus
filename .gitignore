@@ -16,3 +16,6 @@ target
 *~
 /.externalToolBuilders/
 /maven-eclipse.xml
+hs_err_pid*.log
+replay_pid*.log
+
