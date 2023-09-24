@@ -80,11 +80,6 @@ public class EigenDecompositionSymmetric {
     private double[] main;
     /** Secondary diagonal of the tridiagonal matrix. */
     private double[] secondary;
-    /**
-     * Transformer to tridiagonal (may be null if matrix is already
-     * tridiagonal).
-     */
-    private TriDiagonalTransformer transformer;
     /** Eigenvalues. */
     private double[] eigenvalues;
     /** Eigenvectors. */
@@ -92,7 +87,7 @@ public class EigenDecompositionSymmetric {
     /** Cached value of V. */
     private RealMatrix cachedV;
     /** Cached value of D. */
-    private RealMatrix cachedD;
+    private DiagonalMatrix cachedD;
     /** Cached value of Vt. */
     private RealMatrix cachedVt;
 
@@ -120,10 +115,17 @@ public class EigenDecompositionSymmetric {
      */
     public EigenDecompositionSymmetric(final RealMatrix matrix, double epsilon)
         throws MathRuntimeException {
+
         this.epsilon = epsilon;
         MatrixUtils.checkSymmetric(matrix, epsilon);
-        transformToTridiagonal(matrix);
+
+        // transform the matrix to tridiagonal
+        final TriDiagonalTransformer transformer = new TriDiagonalTransformer(matrix);
+        main      = transformer.getMainDiagonalRef();
+        secondary = transformer.getSecondaryDiagonalRef();
+
         findEigenVectors(transformer.getQ().getData());
+
     }
 
     /**
@@ -152,7 +154,6 @@ public class EigenDecompositionSymmetric {
         this.epsilon = epsilon;
         this.main      = main.clone();
         this.secondary = secondary.clone();
-        transformer    = null;
         final int size = main.length;
         final double[][] z = new double[size][size];
         for (int i = 0; i < size; i++) {
@@ -191,14 +192,11 @@ public class EigenDecompositionSymmetric {
      *
      * @see #getEigenvalues()
       */
-    public RealMatrix getD() {
+    public DiagonalMatrix getD() {
 
         if (cachedD == null) {
             // cache the matrix for subsequent calls
-            cachedD = MatrixUtils.createRealMatrix(eigenvalues.length, eigenvalues.length);
-            for (int i = 0; i < eigenvalues.length; ++i) {
-                cachedD.setEntry(i, i, eigenvalues[i]);
-            }
+            cachedD = new DiagonalMatrix(eigenvalues);
         }
 
         return cachedD;
@@ -471,18 +469,6 @@ public class EigenDecompositionSymmetric {
             return eigenvalues.length;
         }
 
-    }
-
-    /**
-     * Transforms the matrix to tridiagonal form.
-     *
-     * @param matrix Matrix to transform.
-     */
-    private void transformToTridiagonal(final RealMatrix matrix) {
-        // transform the matrix to tridiagonal
-        transformer = new TriDiagonalTransformer(matrix);
-        main = transformer.getMainDiagonalRef();
-        secondary = transformer.getSecondaryDiagonalRef();
     }
 
     /**

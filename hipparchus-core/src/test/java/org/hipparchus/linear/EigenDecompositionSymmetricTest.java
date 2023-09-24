@@ -334,9 +334,9 @@ public class EigenDecompositionSymmetricTest {
         EigenDecompositionSymmetric ed;
         ed = new EigenDecompositionSymmetric(symmetric);
 
-        RealMatrix d = ed.getD();
-        RealMatrix v = ed.getV();
-        RealMatrix vT = ed.getVT();
+        DiagonalMatrix d  = ed.getD();
+        RealMatrix     v  = ed.getV();
+        RealMatrix     vT = ed.getVT();
 
         double norm = v.multiply(d).multiply(vT).subtract(symmetric).getNorm1();
         Assert.assertEquals(0, norm, 6.0e-13);
@@ -422,9 +422,9 @@ public class EigenDecompositionSymmetricTest {
     public void testAEqualVDVt() {
         EigenDecompositionSymmetric ed;
         ed = new EigenDecompositionSymmetric(matrix);
-        RealMatrix v  = ed.getV();
-        RealMatrix d  = ed.getD();
-        RealMatrix vT = ed.getVT();
+        RealMatrix     v  = ed.getV();
+        DiagonalMatrix d  = ed.getD();
+        RealMatrix     vT = ed.getVT();
         double norm = v.multiply(d).multiply(vT).subtract(matrix).getNorm1();
         Assert.assertEquals(0, norm, 6.0e-13);
     }
