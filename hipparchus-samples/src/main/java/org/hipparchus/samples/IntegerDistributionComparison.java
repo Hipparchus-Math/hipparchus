@@ -46,6 +46,7 @@ import org.hipparchus.distribution.discrete.PascalDistribution;
 import org.hipparchus.distribution.discrete.PoissonDistribution;
 import org.hipparchus.distribution.discrete.UniformIntegerDistribution;
 import org.hipparchus.distribution.discrete.ZipfDistribution;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.samples.ExampleUtils.ExampleFrame;
 
 import com.xeiam.xchart.Chart;
@@ -90,7 +91,7 @@ public class IntegerDistributionComparison {
                     xData.add(x);
                     yData.add(probability);
                 }
-            } catch (Exception e) {
+            } catch (MathRuntimeException e) {
                 // ignore
                 // some distributions may reject certain values depending on the parameter settings
             }

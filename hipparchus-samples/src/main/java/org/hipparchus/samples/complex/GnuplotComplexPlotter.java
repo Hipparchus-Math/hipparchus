@@ -242,7 +242,7 @@ public class GnuplotComplexPlotter {
                            " [--m mRe mIm] [--n nRe nIm] [--maxeval maxEval]" +
                            " --function {id|sn|cn|dn|cs|...|sin|cos|...} [--function ...]");
         System.exit(status);
-        
+
     }
 
     /** Plot the function.
@@ -310,88 +310,182 @@ public class GnuplotComplexPlotter {
     }
 
     /** Interface for evaluating complex functions. */
-    private static interface Evaluator {
+    private interface Evaluator {
 
         /** Evaluate complex function.
          * @param plotter associated plotter
          * @param z free variable
+         * @return value of the complex function
          */
         Complex value(GnuplotComplexPlotter plotter, Complex z);
 
     }
 
     /** Predefined complex functions for plotting. */
-    private static enum Predefined {
+    private enum Predefined {
 
+        /** id. */
         id((plotter, z)             -> z),
+
+        /** sn. */
         sn((plotter, z)             -> plotter.jacobi.valuesN(z).sn()),
+
+        /** cn. */
         cn((plotter, z)             -> plotter.jacobi.valuesN(z).cn()),
+
+        /** dn. */
         dn((plotter, z)             -> plotter.jacobi.valuesN(z).dn()),
+
+        /** cs. */
         cs((plotter, z)             -> plotter.jacobi.valuesS(z).cs()),
+
+        /** ds. */
         ds((plotter, z)             -> plotter.jacobi.valuesS(z).ds()),
+
+        /** ns. */
         ns((plotter, z)             -> plotter.jacobi.valuesS(z).ns()),
+
+        /** dc. */
         dc((plotter, z)             -> plotter.jacobi.valuesC(z).dc()),
+
+        /** nc. */
         nc((plotter, z)             -> plotter.jacobi.valuesC(z).nc()),
+
+        /** sc. */
         sc((plotter, z)             -> plotter.jacobi.valuesC(z).sc()),
+
+        /** nd. */
         nd((plotter, z)             -> plotter.jacobi.valuesD(z).nd()),
+
+        /** sd. */
         sd((plotter, z)             -> plotter.jacobi.valuesD(z).sd()),
+
+        /** cd. */
         cd((plotter, z)             -> plotter.jacobi.valuesD(z).cd()),
+
+        /** arcsn. */
         arcsn((plotter, z)          -> plotter.jacobi.arcsn(z)),
+
+        /** arccn. */
         arccn((plotter, z)          -> plotter.jacobi.arccn(z)),
+
+        /** arcdn. */
         arcdn((plotter, z)          -> plotter.jacobi.arcdn(z)),
+
+        /** arccs. */
         arccs((plotter, z)          -> plotter.jacobi.arccs(z)),
+
+        /** arcds. */
         arcds((plotter, z)          -> plotter.jacobi.arcds(z)),
+
+        /** arcns. */
         arcns((plotter, z)          -> plotter.jacobi.arcns(z)),
+
+        /** arcdc. */
         arcdc((plotter, z)          -> plotter.jacobi.arcdc(z)),
+
+        /** arcnc. */
         arcnc((plotter, z)          -> plotter.jacobi.arcnc(z)),
+
+        /** arcsc. */
         arcsc((plotter, z)          -> plotter.jacobi.arcsc(z)),
+
+        /** arcnd. */
         arcnd((plotter, z)          -> plotter.jacobi.arcnd(z)),
+
+        /** arcsd. */
         arcsd((plotter, z)          -> plotter.jacobi.arcsd(z)),
+
+        /** arccd. */
         arccd((plotter, z)          -> plotter.jacobi.arccd(z)),
+
+        /** K. */
         K((plotter, z)              -> LegendreEllipticIntegral.bigK(z)),
+
+        /** KPrime. */
         KPrime((plotter, z)         -> LegendreEllipticIntegral.bigKPrime(z)),
+
+        /** Fzm. */
         Fzm((plotter, z)            -> LegendreEllipticIntegral.bigF(z, plotter.m)),
+
+        /** integratedFzm. */
         integratedFzm((plotter, z)  -> LegendreEllipticIntegral.bigF(z, plotter.m, plotter.integrator, plotter.maxEval)),
+
+        /** E. */
         E((plotter, z)              -> LegendreEllipticIntegral.bigE(z)),
+
+        /** Ezm. */
         Ezm((plotter, z)            -> LegendreEllipticIntegral.bigE(z, plotter.m)),
+
+        /** integratedEzm. */
         integratedEzm((plotter, z)  -> LegendreEllipticIntegral.bigE(z, plotter.m, plotter.integrator, plotter.maxEval)),
+
+        /** Pi. */
         Pi((plotter, z)             -> LegendreEllipticIntegral.bigPi(plotter.n, z)),
+
+        /** Pizm. */
         Pizm((plotter, z)           -> LegendreEllipticIntegral.bigPi(plotter.n, z, plotter.m)),
+
+        /** integratedPizm. */
         integratedPizm((plotter, z) -> LegendreEllipticIntegral.bigPi(plotter.n, z, plotter.m, plotter.integrator, plotter.maxEval)),
+
+        /** sin. */
         sin((plotter, z)            -> FastMath.sin(z)),
+
+        /** cos. */
         cos((plotter, z)            -> FastMath.cos(z)),
+
+        /** tan. */
         tan((plotter, z)            -> FastMath.tan(z)),
+
+        /** asin. */
         asin((plotter, z)           -> FastMath.asin(z)),
+
+        /** acos. */
         acos((plotter, z)           -> FastMath.acos(z)),
+
+        /** atan. */
         atan((plotter, z)           -> FastMath.atan(z)),
+
+        /** sinh. */
         sinh((plotter, z)           -> FastMath.sinh(z)),
+
+        /** cosh. */
         cosh((plotter, z)           -> FastMath.cosh(z)),
+
+        /** tanh. */
         tanh((plotter, z)           -> FastMath.tanh(z)),
+
+        /** asinh. */
         asinh((plotter, z)          -> FastMath.asinh(z)),
+
+        /** acosh. */
         acosh((plotter, z)          -> FastMath.acosh(z)),
+
+        /** atanh. */
         atanh((plotter, z)          -> FastMath.atanh(z));
-        
+
         /** Function evaluator. */
         private final Evaluator evaluator;
 
         /** Simple constructor.
          * @param evaluator function evaluator
          */
-        private Predefined(final Evaluator evaluator) {
+        Predefined(final Evaluator evaluator) {
             this.evaluator = evaluator;
         }
 
         /** Get plot title.
-         * @param m elliptic parameter
+         * @param ep elliptic parameter
          * @return plot title
          */
-        public String title(final Complex m) {
+        public String title(final Complex ep) {
             if (name().endsWith("zm")) {
                 return name().substring(0, name().length() - 2) +
                        "(z, m = " +
-                       RyuDouble.doubleToString(m.getRealPart()) +
-                       (m.getImaginary() >= 0 ? " + " : " - ") +
-                       RyuDouble.doubleToString(FastMath.abs(m.getImaginaryPart())) +
+                       RyuDouble.doubleToString(ep.getRealPart()) +
+                       (ep.getImaginary() >= 0 ? " + " : " - ") +
+                       RyuDouble.doubleToString(FastMath.abs(ep.getImaginaryPart())) +
                        "i)";
             } else {
                 return name() + "(z)";

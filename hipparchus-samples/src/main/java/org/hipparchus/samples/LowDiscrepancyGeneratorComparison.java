@@ -37,6 +37,8 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.random.HaltonSequenceGenerator;
 import org.hipparchus.random.JDKRandomGenerator;
@@ -122,7 +124,8 @@ public class LowDiscrepancyGeneratorComparison {
             maxX = FastMath.max(maxX, p.getX());
         }
 
-        double minY, maxY;
+        double minY;
+        double maxY;
 
         // use the minimum to detect if we either have input values in the range [0, 1] or [-sqrt(3), sqrt(3)]
         if (FastMath.abs(minX) < 0.1) {
@@ -224,6 +227,8 @@ public class LowDiscrepancyGeneratorComparison {
                         case 3:
                             points = makeCircle(samples, pair.getValue());
                             break;
+                        default:
+                            throw new MathIllegalArgumentException(LocalizedCoreFormats.INTERNAL_ERROR);
                     }
                     add(new Plot(points), c);
                     c.gridx++;
@@ -238,6 +243,7 @@ public class LowDiscrepancyGeneratorComparison {
     @SuppressWarnings("serial")
     public static class Plot extends JComponent {
 
+        /** Padding. */
         private static double PAD = 10;
 
         /** Points to plot. */

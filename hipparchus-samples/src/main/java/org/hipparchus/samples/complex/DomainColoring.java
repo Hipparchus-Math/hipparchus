@@ -58,11 +58,11 @@ public abstract class DomainColoring {
     public double saturation(Complex z) {
         return saturation;
     }
-    
+
     /** Get value for a complex value.
      * @param z complex value
      * @return value
      */
     protected abstract double value(Complex z);
-    
+
 }

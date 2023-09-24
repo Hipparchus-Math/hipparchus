@@ -29,6 +29,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -99,7 +100,7 @@ public class ExampleUtils {
                           try {
                               // write the image as a PNG
                               ImageIO.write(img, "png", file);
-                          } catch (Exception e) {
+                          } catch (IOException e) {
                               e.printStackTrace();
                           }
                         }

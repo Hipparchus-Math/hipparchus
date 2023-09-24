@@ -310,6 +310,7 @@ public class ClusterAlgorithmComparison {
     @SuppressWarnings("serial")
     public static class ClusterPlot extends JComponent {
 
+        /** Padding. */
         private static double PAD = 10;
 
         /** Clusters. */

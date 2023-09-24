@@ -933,7 +933,7 @@ public class Rotation implements Serializable {
    * @param cosGetter getter for the cosine coordinate
    * @param sin1Getter getter for one of the sine coordinates
    * @param sin2Getter getter for the other sine coordinate
-   * @param acos of the coordinate
+   * @return acos of the coordinate
    * @since 3.0
    */
   private double safeAcos(final DoubleSupplier cosGetter,
@@ -957,7 +957,7 @@ public class Rotation implements Serializable {
    * @param sinGetter getter for the sine coordinate
    * @param cos1Getter getter for one of the cosine coordinates
    * @param cos2Getter getter for the other cosine coordinate
-   * @param acos of the coordinate
+   * @return acos of the coordinate
    * @since 3.0
    */
   private double safeAsin(final DoubleSupplier sinGetter,
