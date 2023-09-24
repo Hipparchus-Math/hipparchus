@@ -291,7 +291,7 @@ public class EigenDecompositionSymmetricTest {
             { 23473.684554963584, 4273.093076392109 },
             { 4273.093076392048,  4462.13956661408  }
         });
-        EigenDecompositionSymmetric ed = new EigenDecompositionSymmetric(m, 1.0e-13);
+        EigenDecompositionSymmetric ed = new EigenDecompositionSymmetric(m, 1.0e-13, true);
         Assert.assertEquals(0.0,
                             ed.getV().multiply(ed.getD()).multiply(ed.getVT()).subtract(m).getNorm1(),
                             1.0e-10);
@@ -545,7 +545,7 @@ public class EigenDecompositionSymmetricTest {
         Assert.assertFalse(defaultEd.getSolver().isNonSingular());
 
         final double customEpsilon = 1e-20;
-        final EigenDecompositionSymmetric customEd = new EigenDecompositionSymmetric(matrix, customEpsilon);
+        final EigenDecompositionSymmetric customEd = new EigenDecompositionSymmetric(matrix, customEpsilon, false);
         Assert.assertTrue(customEd.getSolver().isNonSingular());
         Assert.assertEquals(customEpsilon, customEd.getEpsilon(), 1.0e-25);
     }
@@ -568,13 +568,38 @@ public class EigenDecompositionSymmetricTest {
         }
     }
 
+    @Test
+    public void testIncreasingOrder() {
+
+        final RealMatrix m = MatrixUtils.createRealMatrix(new double[][] {
+            { 81.0, 63.0, 55.0, 49.0, 0.0, 0.0},
+            { 63.0, 82.0, 80.0, 69.0, 0.0, 0.0},
+            { 55.0, 80.0, 92.0, 75.0, 0.0, 0.0},
+            { 49.0, 69.0, 75.0, 73.0, 0.0, 0.0},
+            {  0.0,  0.0,  0.0,  0.0, 0.0, 0.0},
+            {  0.0,  0.0,  0.0,  0.0, 0.0, 0.0}
+        });
+
+        EigenDecompositionSymmetric ed = new EigenDecompositionSymmetric(m,
+                                                                         EigenDecompositionSymmetric.DEFAULT_EPSILON,
+                                                                         false);
+
+        Assert.assertEquals(  0.0,               ed.getD().getEntry(0, 0), 1.0e-14);
+        Assert.assertEquals(  0.0,               ed.getD().getEntry(1, 1), 1.0e-14);
+        Assert.assertEquals(  4.793253233672134, ed.getD().getEntry(2, 2), 1.0e-14);
+        Assert.assertEquals(  7.429392849462756, ed.getD().getEntry(3, 3), 1.0e-14);
+        Assert.assertEquals( 36.43053556404571,  ed.getD().getEntry(4, 4), 1.0e-14);
+        Assert.assertEquals(279.34681835281935,  ed.getD().getEntry(5, 5), 1.0e-14);
+
+    }
+
     /**
      * Verifies that the given EigenDecomposition has eigenvalues equivalent to
      * the targetValues, ignoring the order of the values and allowing
      * values to differ by tolerance.
      */
     protected void checkEigenValues(double[] targetValues,
-            EigenDecompositionSymmetric ed, double tolerance) {
+                                    EigenDecompositionSymmetric ed, double tolerance) {
         double[] observed = ed.getEigenvalues();
         for (int i = 0; i < observed.length; i++) {
             Assert.assertTrue(isIncludedValue(observed[i], targetValues, tolerance));
@@ -588,7 +613,7 @@ public class EigenDecompositionSymmetricTest {
      * searchArray.
      */
     private boolean isIncludedValue(double value, double[] searchArray,
-            double tolerance) {
+                                    double tolerance) {
        boolean found = false;
        int i = 0;
        while (!found && i < searchArray.length) {
@@ -606,7 +631,7 @@ public class EigenDecompositionSymmetricTest {
      * used to find vectors in one-dimensional eigenspaces.
      */
     protected void checkEigenVector(double[] eigenVector,
-            EigenDecompositionSymmetric ed, double tolerance) {
+                                    EigenDecompositionSymmetric ed, double tolerance) {
         Assert.assertTrue(isIncludedColumn(eigenVector, ed.getV(), tolerance));
     }
 
@@ -615,7 +640,7 @@ public class EigenDecompositionSymmetricTest {
      * in searchMatrix (modulo tolerance)
      */
     private boolean isIncludedColumn(double[] column, RealMatrix searchMatrix,
-            double tolerance) {
+                                     double tolerance) {
         boolean found = false;
         int i = 0;
         while (!found && i < searchMatrix.getColumnDimension()) {

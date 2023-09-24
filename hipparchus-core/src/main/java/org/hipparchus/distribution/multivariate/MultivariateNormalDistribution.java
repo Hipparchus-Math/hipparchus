@@ -190,7 +190,8 @@ public class MultivariateNormalDistribution
         covarianceMatrix = new Array2DRowRealMatrix(covariances);
 
         // Covariance matrix eigen decomposition.
-        final EigenDecompositionSymmetric covMatDec = new EigenDecompositionSymmetric(covarianceMatrix, singularMatrixCheckTolerance);
+        final EigenDecompositionSymmetric covMatDec =
+                        new EigenDecompositionSymmetric(covarianceMatrix, singularMatrixCheckTolerance, true);
 
         // Compute and store the inverse.
         covarianceMatrixInverse = covMatDec.getSolver().getInverse();

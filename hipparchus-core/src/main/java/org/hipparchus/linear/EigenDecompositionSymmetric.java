@@ -70,36 +70,44 @@ import org.hipparchus.util.Precision;
  * @see <a href="http://en.wikipedia.org/wiki/Eigendecomposition_of_a_matrix">Wikipedia</a>
  */
 public class EigenDecompositionSymmetric {
+
     /** Default epsilon value to use for internal epsilon **/
     public static final double DEFAULT_EPSILON = 1e-12;
+
     /** Maximum number of iterations accepted in the implicit QL transformation */
     private static final byte MAX_ITER = 30;
+
     /** Internally used epsilon criteria. */
     private final double epsilon;
-    /** Main diagonal of the tridiagonal matrix. */
-    private double[] main;
-    /** Secondary diagonal of the tridiagonal matrix. */
-    private double[] secondary;
+
     /** Eigenvalues. */
     private double[] eigenvalues;
+
     /** Eigenvectors. */
     private ArrayRealVector[] eigenvectors;
+
     /** Cached value of V. */
     private RealMatrix cachedV;
+
     /** Cached value of D. */
     private DiagonalMatrix cachedD;
+
     /** Cached value of Vt. */
     private RealMatrix cachedVt;
 
     /**
      * Calculates the eigen decomposition of the given symmetric real matrix.
+     * <p>
+     * This constructor uses the {@link #DEFAULT_EPSILON default epsilon} and
+     * decreasing order for eigenvalues.
+     * </p>
      * @param matrix Matrix to decompose.
      * @throws MathIllegalStateException if the algorithm fails to converge.
      * @throws MathRuntimeException if the decomposition of a general matrix
      * results in a matrix with zero norm
      */
     public EigenDecompositionSymmetric(final RealMatrix matrix) {
-        this(matrix, DEFAULT_EPSILON);
+        this(matrix, DEFAULT_EPSILON, true);
     }
 
     /**
@@ -109,11 +117,14 @@ public class EigenDecompositionSymmetric {
      *
      * @param matrix Matrix to decompose.
      * @param epsilon Epsilon used for internal tests (e.g. is singular, eigenvalue ratio, etc.)
+     * @param decreasing if true, eigenvalues will be sorted in decreasing order
      * @throws MathIllegalStateException if the algorithm fails to converge.
      * @throws MathRuntimeException if the decomposition of a general matrix
      * results in a matrix with zero norm
+     * @since 3.0
      */
-    public EigenDecompositionSymmetric(final RealMatrix matrix, double epsilon)
+    public EigenDecompositionSymmetric(final RealMatrix matrix,
+                                       final double epsilon, final boolean decreasing)
         throws MathRuntimeException {
 
         this.epsilon = epsilon;
@@ -121,25 +132,30 @@ public class EigenDecompositionSymmetric {
 
         // transform the matrix to tridiagonal
         final TriDiagonalTransformer transformer = new TriDiagonalTransformer(matrix);
-        main      = transformer.getMainDiagonalRef();
-        secondary = transformer.getSecondaryDiagonalRef();
 
-        findEigenVectors(transformer.getQ().getData());
+        findEigenVectors(transformer.getMainDiagonalRef(),
+                         transformer.getSecondaryDiagonalRef(),
+                         transformer.getQ().getData(),
+                         decreasing);
 
     }
 
     /**
-     * Calculates the eigen decomposition of the symmetric tridiagonal
-     * matrix.  The Householder matrix is assumed to be the identity matrix.
-     *
+     * Calculates the eigen decomposition of the symmetric tridiagonal matrix.
+     * <p>
+     * The Householder matrix is assumed to be the identity matrix.
+     * </p>
+     * <p>
+     * This constructor uses the {@link #DEFAULT_EPSILON default epsilon} and
+     * decreasing order for eigenvalues.
+     * </p>
      * @param main Main diagonal of the symmetric tridiagonal form.
      * @param secondary Secondary of the tridiagonal form.
      * @throws MathIllegalStateException if the algorithm fails to converge.
      */
     public EigenDecompositionSymmetric(final double[] main, final double[] secondary) {
-        this(main, secondary, DEFAULT_EPSILON);
+        this(main, secondary, DEFAULT_EPSILON, true);
     }
-
 
     /**
      * Calculates the eigen decomposition of the symmetric tridiagonal
@@ -148,18 +164,19 @@ public class EigenDecompositionSymmetric {
      * @param main Main diagonal of the symmetric tridiagonal form.
      * @param secondary Secondary of the tridiagonal form.
      * @param epsilon Epsilon used for internal tests (e.g. is singular, eigenvalue ratio, etc.)
+     * @param decreasing if true, eigenvalues will be sorted in decreasing order
      * @throws MathIllegalStateException if the algorithm fails to converge.
+     * @since 3.0
      */
-    public EigenDecompositionSymmetric(final double[] main, final double[] secondary, double epsilon) {
+    public EigenDecompositionSymmetric(final double[] main, final double[] secondary,
+                                       final double epsilon, final boolean decreasing) {
         this.epsilon = epsilon;
-        this.main      = main.clone();
-        this.secondary = secondary.clone();
         final int size = main.length;
         final double[][] z = new double[size][size];
         for (int i = 0; i < size; i++) {
             z[i][i] = 1.0;
         }
-        findEigenVectors(z);
+        findEigenVectors(main.clone(), secondary.clone(), z, decreasing);
     }
 
     /**
@@ -473,11 +490,14 @@ public class EigenDecompositionSymmetric {
 
     /**
      * Find eigenvalues and eigenvectors (Dubrulle et al., 1971)
-     *
+     * @param main main diagonal of the tridiagonal matrix
+     * @param secondary secondary diagonal of the tridiagonal matrix
      * @param householderMatrix Householder matrix of the transformation
+     * @param decreasing if true, eigenvalues will be sorted in decreasing order
      * to tridiagonal form.
      */
-    private void findEigenVectors(final double[][] householderMatrix) {
+    private void findEigenVectors(final double[] main, final double[] secondary,
+                                  final double[][] householderMatrix, final boolean decreasing) {
         final double[][]z = householderMatrix.clone();
         final int n = main.length;
         eigenvalues = new double[n];
@@ -581,12 +601,12 @@ public class EigenDecompositionSymmetric {
             } while (m != j);
         }
 
-        //Sort the eigen values (and vectors) in increase order
+        // Sort the eigen values (and vectors) in desired order
         for (int i = 0; i < n; i++) {
             int k = i;
             double p = eigenvalues[i];
             for (int j = i + 1; j < n; j++) {
-                if (eigenvalues[j] > p) {
+                if (eigenvalues[j] > p == decreasing) {
                     k = j;
                     p = eigenvalues[j];
                 }
@@ -606,7 +626,7 @@ public class EigenDecompositionSymmetric {
         maxAbsoluteValue = 0;
         for (int i = 0; i < n; i++) {
             if (FastMath.abs(eigenvalues[i]) > maxAbsoluteValue) {
-                maxAbsoluteValue=FastMath.abs(eigenvalues[i]);
+                maxAbsoluteValue = FastMath.abs(eigenvalues[i]);
             }
         }
         // Make null any eigen value too small to be significant
