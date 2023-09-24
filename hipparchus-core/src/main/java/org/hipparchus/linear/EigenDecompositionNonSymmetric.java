@@ -136,7 +136,7 @@ public class EigenDecompositionNonSymmetric {
             cachedV = MatrixUtils.createRealMatrix(m, m);
             for (int k = 0; k < m; ++k) {
                 final FieldVector<Complex> ek = eigenvectors.get(k);
-                if (k == m - 1 || eigenvalues[k].getImaginaryPart() <= 0) {
+                if (eigenvalues[k].getImaginaryPart() >= 0) {
                     // either it is a real eigenvalue, or it is the first of two conjugate eigenvalues,
                     // we pick up the real part of the eigenvector
                     for (int l = 0; l < m; ++l) {
@@ -146,7 +146,7 @@ public class EigenDecompositionNonSymmetric {
                     // second of two conjugate eigenvalues,
                     // we pick up the imaginary part of the eigenvector
                     for (int l = 0; l < m; ++l) {
-                        cachedV.setEntry(l, k, ek.getEntry(l).getImaginaryPart());
+                        cachedV.setEntry(l, k, -ek.getEntry(l).getImaginaryPart());
                     }
                 }
             }
@@ -268,7 +268,7 @@ public class EigenDecompositionNonSymmetric {
      * @return the {@link SchurTransformer Schur transform} for this matrix
      */
     private SchurTransformer transformToSchur(final RealMatrix matrix) {
-        final SchurTransformer schurTransform = new SchurTransformer(matrix);
+        final SchurTransformer schurTransform = new SchurTransformer(matrix, epsilon);
         final double[][] matT = schurTransform.getT().getData();
         final double norm = matrix.getNorm1();
 
@@ -327,7 +327,7 @@ public class EigenDecompositionNonSymmetric {
         }
 
         // we can not handle a matrix with zero norm
-        if (Precision.equals(norm, 0.0, epsilon)) {
+        if (norm == 0.0) {
            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NORM);
         }
 
@@ -483,11 +483,11 @@ public class EigenDecompositionNonSymmetric {
             FieldVector<Complex> ei = new ArrayFieldVector<>(ComplexField.getInstance(), n);
             for (int j = 0; j < n; j++) {
                 if (Precision.compareTo(eigenvalues[i].getImaginaryPart(), 0.0, epsilon) > 0) {
-                    ei.setEntry(i, new Complex(matrixP[j][i], +matrixP[j][i + 1]));
+                    ei.setEntry(j, new Complex(matrixP[j][i], +matrixP[j][i + 1]));
                 } else if (Precision.compareTo(eigenvalues[i].getImaginaryPart(), 0.0, epsilon) < 0) {
-                    ei.setEntry(i, new Complex(matrixP[j][i - 1], -matrixP[j][i]));
+                    ei.setEntry(j, new Complex(matrixP[j][i - 1], -matrixP[j][i]));
                 } else {
-                    ei.setEntry(i, new Complex(matrixP[j][i]));
+                    ei.setEntry(j, new Complex(matrixP[j][i]));
                 }
             }
             eigenvectors.add(ei);

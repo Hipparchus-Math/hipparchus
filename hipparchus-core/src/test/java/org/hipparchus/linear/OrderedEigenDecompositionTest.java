@@ -94,35 +94,22 @@ public class OrderedEigenDecompositionTest {
         // checking definition of the decomposition A = V*D*inv(V)
         UnitTestUtils.assertEquals("A", A, ordEig.getV().multiply(ordEig.getD()).multiply(MatrixUtils.inverse(ordEig.getV())), 1.0e-15);
 
-        // as the eigenvalues are complex, one need to combine two columns to get one complex eigenvector
-        Complex l1 = new Complex(ordEig.getD().getEntry(0, 0), ordEig.getD().getEntry(1, 0));
-        Complex l2 = new Complex(ordEig.getD().getEntry(1, 1), ordEig.getD().getEntry(0, 1));
-        Assert.assertTrue(l1.add(l2).isReal());
-        FieldVector<Complex> v1 = new ArrayFieldVector<>(new Complex[] {
-            new Complex(ordEig.getV().getEntry(0, 0), -ordEig.getV().getEntry(0, 1)),
-            new Complex(ordEig.getV().getEntry(1, 0), -ordEig.getV().getEntry(1, 1))
-        });
-        FieldVector<Complex> v2 = new ArrayFieldVector<>(new Complex[] {
-            new Complex(ordEig.getV().getEntry(0, 0), ordEig.getV().getEntry(0, 1)),
-            new Complex(ordEig.getV().getEntry(1, 0), ordEig.getV().getEntry(1, 1))
-        });
+        // checking A*V = D*V
         FieldMatrix<Complex> ac = new Array2DRowFieldMatrix<>(ComplexField.getInstance(), 2, 2);
         for (int i = 0; i < ac.getRowDimension(); ++i) {
             for (int j = 0; j < ac.getColumnDimension(); ++j) {
                 ac.setEntry(i, j, new Complex(A.getEntry(i, j)));
             }
         }
-        System.out.println(l1);
-        System.out.println(v1);
-        System.out.println(ac.operate(v1));
-        System.out.println(v1.mapMultiply(l1));
-        System.out.println(v1.mapMultiply(l1).subtract(ac.operate(v1)));
-        System.out.println();
-        System.out.println(l2);
-        System.out.println(v2);
-        System.out.println(ac.operate(v2));
-        System.out.println(v2.mapMultiply(l2));
-        System.out.println(v2.mapMultiply(l2).subtract(ac.operate(v2)));
+        for (int i = 0; i < ordEig.getEigenvalues().length; ++i) {
+        	final Complex              li  = ordEig.getEigenvalue(i);
+        	final FieldVector<Complex> ei  = ordEig.getEigenvector(i);
+        	final FieldVector<Complex> aei = ac.operate(ei);
+        	for (int j = 0; j < ei.getDimension(); ++j) {
+        		Assert.assertEquals(aei.getEntry(j).getRealPart(),      li.multiply(ei.getEntry(j)).getRealPart(),      1.0e-10);
+        		Assert.assertEquals(aei.getEntry(j).getImaginaryPart(), li.multiply(ei.getEntry(j)).getImaginaryPart(), 1.0e-10);
+        	}
+        }
 
     }
 
@@ -161,6 +148,23 @@ public class OrderedEigenDecompositionTest {
                                   ordEig.getV().multiply(ordEig.getD()).multiply(MatrixUtils.inverse(ordEig.getV())),
                                   8.0e-15);
 
+       // checking A*V = D*V
+       FieldMatrix<Complex> ac = new Array2DRowFieldMatrix<>(ComplexField.getInstance(), 3, 3);
+       for (int i = 0; i < ac.getRowDimension(); ++i) {
+           for (int j = 0; j < ac.getColumnDimension(); ++j) {
+               ac.setEntry(i, j, new Complex(A.getEntry(i, j)));
+           }
+       }
+       for (int i = 0; i < ordEig.getEigenvalues().length; ++i) {
+       	final Complex              li  = ordEig.getEigenvalue(i);
+       	final FieldVector<Complex> ei  = ordEig.getEigenvector(i);
+       	final FieldVector<Complex> aei = ac.operate(ei);
+       	for (int j = 0; j < ei.getDimension(); ++j) {
+       		Assert.assertEquals(aei.getEntry(j).getRealPart(),      li.multiply(ei.getEntry(j)).getRealPart(),      1.0e-10);
+       		Assert.assertEquals(aei.getEntry(j).getImaginaryPart(), li.multiply(ei.getEntry(j)).getImaginaryPart(), 1.0e-10);
+       	}
+       }
+
    }
 
    /**
@@ -198,6 +202,24 @@ public class OrderedEigenDecompositionTest {
       UnitTestUtils.assertEquals("A", A,
                                  ordEig.getV().multiply(ordEig.getD()).multiply(MatrixUtils.inverse(ordEig.getV())),
                                  7.0e-15);
+
+      // checking A*V = D*V
+      FieldMatrix<Complex> ac = new Array2DRowFieldMatrix<>(ComplexField.getInstance(), 3, 3);
+      for (int i = 0; i < ac.getRowDimension(); ++i) {
+          for (int j = 0; j < ac.getColumnDimension(); ++j) {
+              ac.setEntry(i, j, new Complex(A.getEntry(i, j)));
+          }
+      }
+
+      for (int i = 0; i < ordEig.getEigenvalues().length; ++i) {
+      	final Complex              li  = ordEig.getEigenvalue(i);
+      	final FieldVector<Complex> ei  = ordEig.getEigenvector(i);
+      	final FieldVector<Complex> aei = ac.operate(ei);
+      	for (int j = 0; j < ei.getDimension(); ++j) {
+      		Assert.assertEquals(aei.getEntry(j).getRealPart(),      li.multiply(ei.getEntry(j)).getRealPart(),      1.0e-10);
+      		Assert.assertEquals(aei.getEntry(j).getImaginaryPart(), li.multiply(ei.getEntry(j)).getImaginaryPart(), 1.0e-10);
+      	}
+      }
 
   }
 

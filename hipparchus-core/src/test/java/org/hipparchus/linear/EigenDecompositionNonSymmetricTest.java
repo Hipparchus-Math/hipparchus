@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 import org.hipparchus.complex.Complex;
+import org.hipparchus.complex.ComplexComparator;
 import org.hipparchus.complex.ComplexField;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.random.RandomGenerator;
@@ -178,11 +179,10 @@ public class EigenDecompositionNonSymmetricTest {
      */
     private void checkNonSymmetricMatrix(final RealMatrix m) {
         try {
-            EigenDecompositionNonSymmetric ed = new EigenDecompositionNonSymmetric(m);
+            EigenDecompositionNonSymmetric ed = new EigenDecompositionNonSymmetric(m, 1.0e-15);
 
             RealMatrix d = ed.getD();
             RealMatrix v = ed.getV();
-            //RealMatrix vT = ed.getVT();
 
             RealMatrix x = m.multiply(v);
             RealMatrix y = v.multiply(d);
@@ -224,7 +224,7 @@ public class EigenDecompositionNonSymmetricTest {
 
     /** test A = VDV⁻¹ */
     @Test
-    public void testAEqualVDVt() {
+    public void testAEqualVDVInv() {
         EigenDecompositionNonSymmetric ed = new EigenDecompositionNonSymmetric(matrix);
         RealMatrix v  = ed.getV();
         RealMatrix d  = ed.getD();
@@ -281,9 +281,10 @@ public class EigenDecompositionNonSymmetricTest {
         Arrays.sort(bigValues);
         EigenDecompositionNonSymmetric ed = new EigenDecompositionNonSymmetric(createTestMatrix(r, bigValues));
         Complex[] eigenValues = ed.getEigenvalues();
+        Arrays.sort(eigenValues, new ComplexComparator());
         Assert.assertEquals(bigValues.length, eigenValues.length);
         for (int i = 0; i < bigValues.length; ++i) {
-            Assert.assertEquals(bigValues[bigValues.length - i - 1], eigenValues[i].getRealPart(), 2.0e-14);
+            Assert.assertEquals(bigValues[i], eigenValues[i].getRealPart(), 2.0e-14);
         }
     }
 
@@ -293,7 +294,7 @@ public class EigenDecompositionNonSymmetricTest {
      */
     @Test
     public void testTinyValues() {
-        final double tiny = 1e-100;
+        final double tiny = 1.0e-100;
         RealMatrix distinct = MatrixUtils.createRealMatrix(new double[][] {
                 {3, 1, -4},
                 {1, 3, -4},
@@ -301,7 +302,7 @@ public class EigenDecompositionNonSymmetricTest {
         });
         distinct = distinct.scalarMultiply(tiny);
 
-        final EigenDecompositionNonSymmetric ed = new EigenDecompositionNonSymmetric(distinct, tiny);
+        final EigenDecompositionNonSymmetric ed = new EigenDecompositionNonSymmetric(distinct);
         checkEigenValues(new Complex[] { new Complex(2).multiply(tiny), new Complex(0).multiply(tiny), new Complex(12).multiply(tiny) },
                          ed, 1e-12 * tiny);
         checkEigenVector(new Complex[] { new Complex( 1), new Complex(-1), new Complex(0) }, ed, 1e-12);
@@ -389,7 +390,7 @@ public class EigenDecompositionNonSymmetricTest {
     @Before
     public void setUp() {
         double[] real = {
-            2.003, 2.002, 2.001, 1.001, 1.000, 0.001
+        		0.001, 1.000, 1.001, 2.001, 2.002, 2.003
         };
         refValues = new Complex[real.length];
         for (int i = 0; i < refValues.length; ++i) {

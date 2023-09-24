@@ -220,7 +220,7 @@ public class OrderedEigenDecomposition extends EigenDecompositionNonSymmetric {
 //                    break;
 //                }
 //            }
- 
+
         }
 
     }
