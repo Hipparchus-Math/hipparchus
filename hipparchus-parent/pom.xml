@@ -499,7 +499,7 @@
 
     <hipparchus.spotbugs-maven-plugin.version>4.7.3.4</hipparchus.spotbugs-maven-plugin.version>
     <hipparchus.jacoco-maven-plugin.version>0.8.9</hipparchus.jacoco-maven-plugin.version>
-    <hipparchus.maven-assembly-plugin.version>3.5.0</hipparchus.maven-assembly-plugin.version>
+    <hipparchus.maven-assembly-plugin.version>3.6.0</hipparchus.maven-assembly-plugin.version>
     <hipparchus.maven-bundle-plugin.version>5.1.8</hipparchus.maven-bundle-plugin.version>
     <hipparchus.maven-changes-plugin.version>2.12.1</hipparchus.maven-changes-plugin.version>
     <hipparchus.maven-checkstyle-plugin.version>3.2.2</hipparchus.maven-checkstyle-plugin.version>
