@@ -50,6 +50,11 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.0" date="TBD" description="This is a major release.">
+      <action dev="luc" type="fix" issue="issues/274">
+        Complex now implements Comparable, using real part as primary sort order
+        and imaginary part as secondary sort order (similar to what ComplexComparator
+        already did).
+      </action>
       <action dev="luc" type="fix" issue="issues/253">
         Fixed eigenvalues/eigenvectors sorting in EigenDecompositionSymmetric.
       </action>

@@ -62,7 +62,7 @@ import org.hipparchus.util.SinhCosh;
  * conforms with IEEE-754 while this class conforms with the standard behavior
  * for Java object types.
  */
-public class Complex implements CalculusFieldElement<Complex>, Serializable  {
+public class Complex implements CalculusFieldElement<Complex>, Comparable<Complex>, Serializable  {
     /** The square root of -1. A number representing "0.0 + 1.0i". */
     public static final Complex I = new Complex(0.0, 1.0);
     /** The square root of -1. A number representing "0.0 - 1.0i".
@@ -1868,6 +1868,23 @@ public class Complex implements CalculusFieldElement<Complex>, Serializable  {
     @Override
     public Complex toRadians() {
         return createComplex(FastMath.toRadians(getRealPart()), FastMath.toRadians(getImaginaryPart()));
+    }
+
+    /** {@inheritDoc}
+     * <p>
+     * Comparison us performed using real ordering as the primary sort order and
+     * imaginary ordering as the secondary sort order.
+     * </p>
+     * @since 3.0
+     */
+    @Override
+    public int compareTo(final Complex o) {
+        final int cR = Double.compare(getReal(), o.getReal());
+        if (cR == 0) {
+            return Double.compare(getImaginary(),o.getImaginary());
+        } else {
+            return cR;
+        }
     }
 
 }

@@ -52,13 +52,8 @@ public class ComplexComparator implements Comparator<Complex>, Serializable {
             return o2 == null ? 0 : -1;
         } else if (o2 == null) {
             return 1;
-        }
-
-        final int cR = Double.compare(o1.getReal(), o2.getReal());
-        if (cR == 0) {
-            return Double.compare(o1.getImaginary(),o2.getImaginary());
         } else {
-            return cR;
+            return o1.compareTo(o2);
         }
     }
 
