@@ -18,7 +18,6 @@ package org.hipparchus.analysis.differentiation;
 
 import java.io.Serializable;
 
-import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
@@ -27,7 +26,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * @since 1.7
  */
 public abstract class UnivariateDerivative<T extends UnivariateDerivative<T>>
-    implements Derivative<T>, CalculusFieldElement<T>, Serializable {
+    implements Derivative<T>, Serializable, Comparable<T> {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20200519L;

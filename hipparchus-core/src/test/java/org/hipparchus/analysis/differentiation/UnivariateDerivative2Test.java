@@ -107,6 +107,42 @@ public class UnivariateDerivative2Test extends UnivariateDerivativeAbstractTest<
     }
 
     @Test
+    public void testComparableFirstTerm() {
+        // GIVEN
+        final UnivariateDerivative2 ud2a = new UnivariateDerivative2(12, -34, 25);
+        final UnivariateDerivative2 ud2b = new UnivariateDerivative2(2, 0, 25);
+        // WHEN
+        final int actualComparison = ud2a.compareTo(ud2b);
+        // THEN
+        final int expectedComparison = 1;
+        Assert.assertEquals(expectedComparison, actualComparison);
+    }
+
+    @Test
+    public void testComparableSecondTerm() {
+        // GIVEN
+        final UnivariateDerivative2 ud2a = new UnivariateDerivative2(12, -34, 25);
+        final UnivariateDerivative2 ud2b = new UnivariateDerivative2(12, 0, 25);
+        // WHEN
+        final int actualComparison = ud2a.compareTo(ud2b);
+        // THEN
+        final int expectedComparison = -1;
+        Assert.assertEquals(expectedComparison, actualComparison);
+    }
+
+    @Test
+    public void testComparableThirdTerm() {
+        // GIVEN
+        final UnivariateDerivative2 ud2a = new UnivariateDerivative2(12, -34, 25);
+        final UnivariateDerivative2 ud2b = new UnivariateDerivative2(12, -34, 25);
+        // WHEN
+        final int actualComparison = ud2a.compareTo(ud2b);
+        // THEN
+        final int expectedComparison = 0;
+        Assert.assertEquals(expectedComparison, actualComparison);
+    }
+
+    @Test
     public void testRunTimeClass() {
         Field<UnivariateDerivative2> field = build(0.0).getField();
         Assert.assertEquals(UnivariateDerivative2.class, field.getRuntimeClass());

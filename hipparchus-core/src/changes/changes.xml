@@ -35,7 +35,7 @@ The <action> type attribute can be add,update,fix,remove.
 -->
 
 <!-- NOTE:
-The description attribute entries below are specially formatted 
+The description attribute entries below are specially formatted
 so as to improve the layout of the generated text release notes.
 
 The parsing process removes all line feeds, replacing them with a single space.
@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.0" date="TBD" description="This is a major release.">
+      <action dev="serrof" type="fix" issue="issues/275">
+        UnivariateDerivative now implements Comparable.
+      </action>
       <action dev="luc" type="fix" issue="issues/274">
         Complex now implements Comparable, using real part as primary sort order
         and imaginary part as secondary sort order (similar to what ComplexComparator
@@ -453,7 +456,7 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
       <action dev="luc" type="fix" issue="issues/35" >
         Added FieldUnivariateVectorFunction and FieldUnivariateMatrixFunction interfaces,
-        as well as RealFieldUnivariateVectorFunction and RealFieldUnivariateMatrixFunction 
+        as well as RealFieldUnivariateVectorFunction and RealFieldUnivariateMatrixFunction
         Github: fixes #35.
       </action>
       <action dev="luc" type="fix" issue="issues/34" >
@@ -560,7 +563,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         the random package into stat.fitting and dropped ValueServer.
       </action>
       <action dev="psteitz" type="update">
-        Moved sampling (random deviate generation) from distribution implementations 
+        Moved sampling (random deviate generation) from distribution implementations
         to RandomDataGenerator in the random package.
       </action>
       <action dev="tn" type="fix">
@@ -651,7 +654,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         "Frequency" class now uses generics. For similar functionality as previous
         class wrt integer numbers, use "LongFrequency" which supports adding
         different integer number types (e.g. int, long, short) to the same
-        "LongFrequency" instance. 
+        "LongFrequency" instance.
       </action>
       <action dev="luc" type="update">
         Simplified exception hierarchy.
