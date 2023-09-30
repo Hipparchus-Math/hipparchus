@@ -758,4 +758,21 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
         return 453 - 19 * Double.hashCode(f0) + 37 * Double.hashCode(f1);
     }
 
+    /** {@inheritDoc}
+     * <p>
+     * Comparison performed considering that derivatives are intrinsically linked to monomials in the corresponding
+     * Taylor expansion and that the higher the degree, the smaller the term.
+     * </p>
+     * @since 3.0
+     */
+    @Override
+    public int compareTo(final UnivariateDerivative1 o) {
+        final int cF0 = Double.compare(f0, o.getReal());
+        if (cF0 == 0) {
+            return Double.compare(f1, o.getFirstDerivative());
+        } else {
+            return cF0;
+        }
+    }
+
 }

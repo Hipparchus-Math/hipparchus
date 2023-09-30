@@ -102,6 +102,31 @@ public class UnivariateDerivative1Test extends UnivariateDerivativeAbstractTest<
         Assert.assertNotEquals(ud1, new UnivariateDerivative1(21, -43));
     }
 
+
+    @Test
+    public void testComparableFirstTerm() {
+        // GIVEN
+        final UnivariateDerivative1 ud1a = new UnivariateDerivative1(12, -34);
+        final UnivariateDerivative1 ud1b = new UnivariateDerivative1(2, 0);
+        // WHEN
+        final int actualComparison = ud1a.compareTo(ud1b);
+        // THEN
+        final int expectedComparison = 1;
+        Assert.assertEquals(expectedComparison, actualComparison);
+    }
+
+    @Test
+    public void testComparableSecondTerm() {
+        // GIVEN
+        final UnivariateDerivative1 ud1a = new UnivariateDerivative1(12, -34);
+        final UnivariateDerivative1 ud1b = new UnivariateDerivative1(12, 0);
+        // WHEN
+        final int actualComparison = ud1a.compareTo(ud1b);
+        // THEN
+        final int expectedComparison = -1;
+        Assert.assertEquals(expectedComparison, actualComparison);
+    }
+
     @Test
     public void testRunTimeClass() {
         Field<UnivariateDerivative1> field = build(0.0).getField();
