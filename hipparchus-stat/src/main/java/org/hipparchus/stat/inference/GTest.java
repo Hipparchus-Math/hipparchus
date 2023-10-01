@@ -288,8 +288,8 @@ public class GTest { // NOPMD - this is not a Junit test class, PMD false positi
     /**
      * Calculates the <a href="http://en.wikipedia.org/wiki/Entropy_%28information_theory%29">
      * Shannon entropy</a> for a vector.  The values of {@code k} are taken to be
-     * incidence counts of the values of a random variable. What is returned is <br/>
-     * &sum;p<sub>i</sub>log(p<sub>i</sub><br/>
+     * incidence counts of the values of a random variable. What is returned is <br>
+     * &sum;p<sub>i</sub>log(p<sub>i</sub><br>
      * where p<sub>i</sub> = k[i] / (sum of elements in k)
      *
      * @param k Vector (for ex. Row Sums of a trials)
@@ -323,8 +323,8 @@ public class GTest { // NOPMD - this is not a Junit test class, PMD false positi
      * <p> where {@code H} is the
      * <a href="http://en.wikipedia.org/wiki/Entropy_%28information_theory%29">
      * Shannon Entropy</a> of the random variable formed by viewing the elements
-     * of the argument array as incidence counts; <br/>
-     * {@code k} is a matrix with rows {@code [observed1, observed2]}; <br/>
+     * of the argument array as incidence counts; <br>
+     * {@code k} is a matrix with rows {@code [observed1, observed2]}; <br>
      * {@code rowSums, colSums} are the row/col sums of {@code k}; <br>
      * and {@code totalSum} is the overall sum of all entries in {@code k}.</p>
      *
@@ -407,7 +407,7 @@ public class GTest { // NOPMD - this is not a Junit test class, PMD false positi
      *
      * <p>{@code (sgn) sqrt(gValueDataSetsComparison({k11, k12}, {k21, k22})}</p>
      *
-     * <p>where {@code sgn} is -1 if {@code k11 / (k11 + k12) < k21 / (k21 + k22))};<br/>
+     * <p>where {@code sgn} is -1 if {@code k11 / (k11 + k12) < k21 / (k21 + k22))};<br>
      * 1 otherwise.</p>
      *
      * <p>Signed root LLR has two advantages over the basic LLR: a) it is positive

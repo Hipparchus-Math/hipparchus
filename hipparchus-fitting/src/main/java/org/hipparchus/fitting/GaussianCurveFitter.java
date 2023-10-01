@@ -40,7 +40,7 @@ import org.hipparchus.util.MathUtils;
  * Fits points to a {@link
  * org.hipparchus.analysis.function.Gaussian.Parametric Gaussian}
  * function.
- * <br/>
+ * <br>
  * The {@link #withStartPoint(double[]) initial guess values} must be passed
  * in the following order:
  * <ul>

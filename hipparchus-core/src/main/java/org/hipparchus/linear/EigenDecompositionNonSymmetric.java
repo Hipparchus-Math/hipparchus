@@ -60,10 +60,11 @@ import org.hipparchus.util.Precision;
  * the real eigenvalues in 1-by-1 blocks and any complex eigenvalues, \(\lambda \pm i \mu\),
  * in 2-by-2 blocks:
  * </p>
+ * <p>
  * \[
  *   \begin{bmatrix}
- *    \lambda & \mu\\
- *    -\mu    & \lambda
+ *    \lambda &amp; \mu\\
+ *    -\mu    &amp; \lambda
  *   \end{bmatrix}
  * \]
  * </p>
@@ -164,9 +165,6 @@ public class EigenDecompositionNonSymmetric {
      * 2x2 blocks { {real +imaginary}, {-imaginary, real} }.
      *
      * @return the D matrix.
-     *
-     * @see #getRealEigenvalues()
-     * @see #getImagEigenvalues()
      */
     public RealMatrix getD() {
 

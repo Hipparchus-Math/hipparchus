@@ -221,7 +221,7 @@ public class SmoothStepFactory {
      * It is used to do a smooth transition between the "left edge" and the "right edge" with left edge assumed to be smaller
      * than right edge.
      * <p>
-     * By definition, for order n > 1 and input x, a smoothstep function respects at least the following properties :
+     * By definition, for order n greater than 1 and input x, a smoothstep function respects at least the following properties :
      * <ul>
      *     <li>f(x &lt;= leftEdge) = 0 and f(x &gt;= rightEdge) = 1</li>
      *     <li>f'(leftEdge) = f'(rightEdge) = 0</li>
@@ -427,7 +427,7 @@ public class SmoothStepFactory {
      * It is used to do a smooth transition between the "left edge" and the "right edge" with left edge assumed to be smaller
      * than right edge.
      * <p>
-     * By definition, for order n > 1 and input x, a smoothstep function respects at least the following properties :
+     * By definition, for order n greater than 1 and input x, a smoothstep function respects at least the following properties :
      * <ul>
      *     <li>f(x &lt;= leftEdge) = 0 and f(x &gt;= rightEdge) = 1</li>
      *     <li>f'(leftEdge) = f'(rightEdge) = 0</li>

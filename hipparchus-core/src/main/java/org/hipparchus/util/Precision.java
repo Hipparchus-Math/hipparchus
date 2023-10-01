@@ -47,7 +47,7 @@ public class Precision {
 
     /**
      * Safe minimum, such that {@code 1 / SAFE_MIN} does not overflow.
-     * <br/>
+     * <br>
      * In IEEE 754 arithmetic, this is also the smallest normalized
      * number 2<sup>-1022</sup>.
      */

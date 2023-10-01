@@ -4015,7 +4015,7 @@ public class FastMath {
 
     /**
      * Returns the hypotenuse of a triangle with sides {@code x} and {@code y}
-     * - sqrt(<i>x</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)<br/>
+     * - sqrt(<i>x</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)<br>
      * avoiding intermediate overflow or underflow.
      *
      * <ul>
@@ -5372,7 +5372,7 @@ public class FastMath {
 
     /**
      * Returns the hypotenuse of a triangle with sides {@code x} and {@code y}
-     * - sqrt(<i>x</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)<br/>
+     * - sqrt(<i>x</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)<br>
      * avoiding intermediate overflow or underflow.
      *
      * <ul>

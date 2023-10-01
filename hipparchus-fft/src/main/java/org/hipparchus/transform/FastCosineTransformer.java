@@ -55,7 +55,7 @@ import org.hipparchus.util.SinCos;
  * data set x<sub>0</sub>, &hellip;, x<sub>N-1</sub> is equal to <em>half</em>
  * of the N first elements of the DFT of the extended data set
  * x<sub>0</sub><sup>&#35;</sup>, &hellip;, x<sub>2N-3</sub><sup>&#35;</sup>
- * <br/>
+ * <br>
  * y<sub>n</sub> = (1 / 2) &sum;<sub>k=0</sub><sup>2N-3</sup>
  * x<sub>k</sub><sup>&#35;</sup> exp[-2&pi;i nk / (2N - 2)]
  * &nbsp;&nbsp;&nbsp;&nbsp;k = 0, &hellip;, N-1.

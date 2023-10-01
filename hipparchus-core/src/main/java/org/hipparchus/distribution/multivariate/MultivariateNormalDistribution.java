@@ -59,8 +59,7 @@ public class MultivariateNormalDistribution
 
     /**
      * Creates a multivariate normal distribution with the given mean vector and
-     * covariance matrix.
-     * <br/>
+     * covariance matrix.<br>
      * The number of dimensions is equal to the length of the mean vector
      * and to the number of rows and columns of the covariance matrix.
      * It is frequently written as "p" in formulae.
@@ -89,8 +88,7 @@ public class MultivariateNormalDistribution
 
     /**
      * Creates a multivariate normal distribution with the given mean vector and
-     * covariance matrix.
-     * <br/>
+     * covariance matrix.<br>
      * The number of dimensions is equal to the length of the mean vector
      * and to the number of rows and columns of the covariance matrix.
      * It is frequently written as "p" in formulae.
@@ -123,7 +121,7 @@ public class MultivariateNormalDistribution
     /**
      * Creates a multivariate normal distribution with the given mean vector and
      * covariance matrix.
-     * <br/>
+     * <br>
      * The number of dimensions is equal to the length of the mean vector
      * and to the number of rows and columns of the covariance matrix.
      * It is frequently written as "p" in formulae.
@@ -147,7 +145,7 @@ public class MultivariateNormalDistribution
     /**
      * Creates a multivariate normal distribution with the given mean vector and
      * covariance matrix.
-     * <br/>
+     * <br>
      * The number of dimensions is equal to the length of the mean vector
      * and to the number of rows and columns of the covariance matrix.
      * It is frequently written as "p" in formulae.

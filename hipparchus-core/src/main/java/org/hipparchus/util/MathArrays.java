@@ -1026,7 +1026,7 @@ public class MathArrays {
      * <code>a<sub>i</sub> b<sub>i</sub></code> to high accuracy.
      * It does so by using specific multiplication and addition algorithms to
      * preserve accuracy and reduce cancellation effects.
-     * <br/>
+     * <br>
      * It is based on the 2005 paper
      * <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.2.1547">
      * Accurate Sum and Dot Product</a> by Takeshi Ogita, Siegfried M. Rump,
