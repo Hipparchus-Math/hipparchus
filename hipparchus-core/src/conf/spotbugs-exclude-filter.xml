@@ -61,11 +61,6 @@
     </Or>
     <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
   </Match>
-  <Match>
-    <Class name="org.hipparchus.linear.EigenDecomposition" />
-    <Method name="findEigenVectors" params="double[][]" returns="void" />
-    <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
-  </Match>
 
   <!-- The following equality test is intentional and needed for rounding purposes -->
   <Match>
@@ -265,7 +260,16 @@
     <Bug pattern="EI_EXPOSE_REP" />
   </Match>
   <Match>
-    <Class name="org.hipparchus.linear.EigenDecomposition"/>
+    <Class name="org.hipparchus.linear.EigenDecompositionSymmetric"/>
+    <Or>
+      <Method name="getD"/>
+      <Method name="getV"/>
+      <Method name="getVT"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.linear.EigenDecompositionNonSymmetric"/>
     <Or>
       <Method name="getD"/>
       <Method name="getV"/>
