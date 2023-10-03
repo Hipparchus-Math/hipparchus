@@ -26,7 +26,6 @@ import java.util.function.DoubleConsumer;
 
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
 import org.hipparchus.stat.descriptive.moment.Mean;
 import org.hipparchus.stat.descriptive.moment.SecondMoment;
