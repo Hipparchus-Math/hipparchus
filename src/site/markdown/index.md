@@ -66,13 +66,16 @@ at fork time.
 
  ---
 
-## 2.3 Release is out!
+## 3.0 Release is out!
 
-Hipparchus 2.3 is now available for download from the [Hipparchus download page](downloads.html) or on
-Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 2.3 release are:
+Hipparchus 3.0 is now available for download from the [Hipparchus download page](downloads.html) or on
+Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 3.0 release are:
 
-   * Allowing configuration of RandomPercentile in StreamingStatistics.
-   * Added new signature for SequentialGaussNewtonOptimizer.withAPrioriData allowing to define the Cholesky decomposition thresholds.
-   * Changed HessenbergTransformer visibility to public.
-   * Changed SchurTransformer visibility to public.
-   * Fixed wrong negation of point on the 2-sphere.
+   * Field version of Erf and Gamma classes.
+   * A new Blendable interface for data blending
+   * Torque-free motion model for non-symmetrical rigid body
+   * A SmoothStepFactory which allow for quick creation of common and generic smoothstep function.
+   * Replacement of EigenDecomposition by EigenDecompositionSymmetric and EigenDecompositionNonSymmetric.
+   * Separation of {Field}ODEEventDetector and {Field}ODEEventHandler.
+   * Improved compatibility with recent JDK.
+   * Many bug fixes in FastMath, polynomial functions, eigen decomposition, etc. 

@@ -33,14 +33,14 @@ import org.hipparchus.linear.RealMatrix;
  * {@link MultivariateVectorFunction vectorial objective functions} to
  * {@link MultivariateFunction scalar objective functions}
  * when the goal is to minimize them.
- * <br/>
+ * <br>
  * This class is mostly used when the vectorial objective function represents
  * a theoretical result computed from a point set applied to a model and
  * the models point must be adjusted to fit the theoretical result to some
  * reference observations. The observations may be obtained for example from
  * physical measurements whether the model is built from theoretical
  * considerations.
- * <br/>
+ * <br>
  * This class computes a possibly weighted squared sum of the residuals, which is
  * a scalar value. The residuals are the difference between the theoretical model
  * (i.e. the output of the vectorial objective function) and the observations. The
@@ -49,7 +49,7 @@ import org.hipparchus.linear.RealMatrix;
  * to perform a least square estimation. There are other ways to do this without using
  * this converter, as some optimization algorithms directly support vectorial objective
  * functions.
- * <br/>
+ * <br>
  * This class support combination of residuals with or without weights and correlations.
   *
  * @see MultivariateFunction

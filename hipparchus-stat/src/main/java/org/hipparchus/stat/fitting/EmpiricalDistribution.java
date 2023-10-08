@@ -503,7 +503,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * <p>Returns a fresh copy of the array of upper bounds for the bins.
-     * Bins are: <br/>
+     * Bins are: <br>
      * [min,upperBounds[0]],(upperBounds[0],upperBounds[1]],...,
      *  (upperBounds[binCount-2], upperBounds[binCount-1] = max].</p>
      *
@@ -630,14 +630,14 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * <li>Find the smallest i such that the sum of the masses of the bins
      *  through i is at least p.</li>
      * <li>
-     *   Let K be the within-bin kernel distribution for bin i.<br/>
-     *   Let K(B) be the mass of B under K. <br/>
+     *   Let K be the within-bin kernel distribution for bin i.<br>
+     *   Let K(B) be the mass of B under K. <br>
      *   Let K(B-) be K evaluated at the lower endpoint of B (the combined
-     *   mass of the bins below B under K).<br/>
-     *   Let P(B) be the probability of bin i.<br/>
-     *   Let P(B-) be the sum of the bin masses below bin i. <br/>
-     *   Let pCrit = p - P(B-)<br/>
-     * <li>Return the inverse of K evaluated at <br/>
+     *   mass of the bins below B under K).<br>
+     *   Let P(B) be the probability of bin i.<br>
+     *   Let P(B-) be the sum of the bin masses below bin i. <br>
+     *   Let pCrit = p - P(B-)<br>
+     * <li>Return the inverse of K evaluated at <br>
      *    K(B-) + pCrit * K(B) / P(B) </li>
      *  </ol>
      *

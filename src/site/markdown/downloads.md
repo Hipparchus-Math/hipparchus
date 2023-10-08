@@ -42,6 +42,16 @@ Maven's internal mechanism will automatically download any internal dependencies
 
 ---
 
+|     package       | link                                                              | hash | signature |
+|-------------------|-------------------------------------------------------------------|------|-----------|
+|  source (zip)     | [hipparchus-3.0-src.zip](downloads/hipparchus-3.0-src.zip)         | [md5](downloads/hipparchus-3.0-src.zip.md5)| [sig](downloads/hipparchus-3.0-src.zip.asc)|
+|  source (tar.bz2) | [hipparchus-3.0-src.tar.bz2](downloads/hipparchus-3.0-src.tar.bz2) | [md5](downloads/hipparchus-3.0-src.tar.bz2.md5) | [sig](downloads/hipparchus-3.0-src.tar.bz2.asc)|
+|  binary (zip)     | [hipparchus-3.0-bin.zip](downloads/hipparchus-3.0-bin.zip)         | [md5](downloads/hipparchus-3.0-bin.zip.md5) | [sig](downloads/hipparchus-3.0-bin.zip.asc)|
+|  binary (tar.bz2) | [hipparchus-3.0-bin.tar.bz2](downloads/hipparchus-3.0-bin.tar.bz2) | [md5](downloads/hipparchus-3.0-bin.tar.bz2.md5) | [sig](downloads/hipparchus-3.0-bin.tar.bz2.asc)
+version 3.0 downloads (release date: 2023-10-08)
+
+---
+
 |     package       |                                  link                                                     | hash | signature |
 |-------------------|-------------------------------------------------------------------------------------------|------|-----------|
 |  source (zip)     | [hipparchus-2.3-src.zip](downloads/hipparchus-2.3-src.zip) | [md5](downloads/hipparchus-2.3-src.zip.md5)| [sig](downloads/hipparchus-2.3-src.zip.asc)|

@@ -26,7 +26,6 @@ import java.util.function.DoubleConsumer;
 
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
 import org.hipparchus.stat.descriptive.moment.Mean;
 import org.hipparchus.stat.descriptive.moment.SecondMoment;
@@ -105,20 +104,6 @@ public class StreamingStatistics
      */
     public StreamingStatistics() {
        this(Double.NaN, null);
-    }
-
-    /**
-     * Construct a new StreamingStatistics instance, maintaining all statistics
-     * other than percentiles and with/without percentiles per the argument.
-     *
-     * @param computePercentiles whether or not percentiles are maintained
-     * @deprecated as of 2.3, replaced by {@link #StreamingStatistics(double, RandomGenerator)}
-     */
-    @Deprecated
-    public StreamingStatistics(boolean computePercentiles) {
-       this(true, true, true, true,
-            computePercentiles ? RandomPercentile.DEFAULT_EPSILON : Double.NaN,
-            computePercentiles ? new Well19937c() : null);
     }
 
     /**
@@ -605,24 +590,6 @@ public class StreamingStatistics
          */
         public StreamingStatisticsBuilder sumOfSquares(boolean arg) {
             this.computeSumOfSquares = arg;
-            return this;
-        }
-
-        /**
-         * Sets the computePercentiles setting of the factory.
-         *
-         * @param arg whether or not instances created using {@link #build()} will
-         * compute percentiles, using default parameters for {@link RandomPercentile}
-         * @return a factory with the given computePercentiles property set
-         * @deprecated as of 2.3, replaced by {@link #percentiles(double, RandomGenerator)}
-         */
-        @Deprecated
-        public StreamingStatisticsBuilder percentiles(boolean arg) {
-            if (arg) {
-                percentiles(RandomPercentile.DEFAULT_EPSILON, new Well19937c());
-            } else {
-                percentiles(Double.NaN, null);
-            }
             return this;
         }
 

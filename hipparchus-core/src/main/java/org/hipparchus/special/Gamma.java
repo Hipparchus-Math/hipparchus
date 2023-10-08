@@ -678,7 +678,7 @@ public class Gamma {
      * @param x Argument.
      * @return digamma(x) to within 10-8 relative or absolute error whichever is smaller.
      * @see <a href="http://en.wikipedia.org/wiki/Digamma_function">Digamma</a>
-     * @see <a href="http://www.uv.es/~bernardo/1976AppStatist.pdf">Bernardo&apos;s original article </a>
+     * @see <a href="http://www.uv.es/~bernardo/1976AppStatist.pdf">Bernardo&#39;s original article </a>
      */
     public static double digamma(double x) {
         if (Double.isNaN(x) || Double.isInfinite(x)) {
@@ -721,7 +721,7 @@ public class Gamma {
      * @param <T> Type of the field elements.
      * @return digamma(x) to within 10-8 relative or absolute error whichever is smaller.
      * @see <a href="http://en.wikipedia.org/wiki/Digamma_function">Digamma</a>
-     * @see <a href="http://www.uv.es/~bernardo/1976AppStatist.pdf">Bernardo&apos;s original article </a>
+     * @see <a href="http://www.uv.es/~bernardo/1976AppStatist.pdf">Bernardo&#39;s original article </a>
      */
     public static <T extends CalculusFieldElement<T>> T digamma(T x) {
         if (x.isNaN() || x.isInfinite()) {

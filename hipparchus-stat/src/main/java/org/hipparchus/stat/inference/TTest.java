@@ -78,7 +78,7 @@ public class TTest { // NOPMD - this is not a Junit test class, PMD false positi
      * <code>mu = 0</code> and the sample array consisting of the (signed)
      * differences between corresponding entries in <code>sample1</code> and
      * <code>sample2.</code>
-     * <p>* <strong>Preconditions</strong>:/p>
+     * <p>* <strong>Preconditions</strong>:</p>
      * <ul>
      * <li>The input arrays must have the same length and their common length
      * must be at least 2.

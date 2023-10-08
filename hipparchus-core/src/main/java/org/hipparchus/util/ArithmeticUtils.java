@@ -74,7 +74,7 @@ public final class ArithmeticUtils {
      * numbers, using a modified version of the "binary gcd" method.
      * See Knuth 4.5.2 algorithm B.
      * The algorithm is due to Josef Stein (1961).
-     * <br/>
+     * <br>
      * Special cases:
      * <ul>
      *  <li>The invocations

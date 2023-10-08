@@ -226,9 +226,8 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * <p>If the angular separation between u<sub>1</sub> and u<sub>2</sub> is
      * not the same as the angular separation between v<sub>1</sub> and
      * v<sub>2</sub>, then a corrected v'<sub>2</sub> will be used rather than
-     * v<sub>2</sub>, the corrected vector will be in the (&pm;v<sub>1</sub>,
+     * v<sub>2</sub>, the corrected vector will be in the (±v<sub>1</sub>,
      * +v<sub>2</sub>) half-plane.</p>
-
      * @param u1 first vector of the origin pair
      * @param u2 second vector of the origin pair
      * @param v1 desired image of u1 by the rotation

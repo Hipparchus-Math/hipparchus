@@ -171,7 +171,7 @@ public class FastHadamardTransformer implements RealTransformer, Serializable {
      * <p>How it works</p>
      * <ol>
      * <li>Construct a matrix with {@code N} rows and {@code n + 1} columns,
-     * {@code hadm[n+1][N]}.<br/>
+     * {@code hadm[n+1][N]}.<br>
      * <em>(If I use [x][y] it always means [row-offset][column-offset] of a
      * Matrix with n rows and m columns. Its entries go from M[0][0]
      * to M[n][N])</em></li>
@@ -212,8 +212,8 @@ public class FastHadamardTransformer implements RealTransformer, Serializable {
      *     <th>0</th>
      *     <td>x<sub>0</sub></td>
      *     <td colspan="5" rowspan="5" >
-     *         &uarr;<br/>
-     *         &larr; D<sub>top</sub> &rarr;<br/>
+     *         &uarr;<br>
+     *         &larr; D<sub>top</sub> &rarr;<br>
      *         &darr;
      *     </td>
      * </tr>
@@ -225,8 +225,8 @@ public class FastHadamardTransformer implements RealTransformer, Serializable {
      *     <th>N / 2</th>
      *     <td>x<sub>N/2</sub></td>
      *     <td colspan="5" rowspan="5" >
-     *         &uarr;<br/>
-     *         &larr; D<sub>bottom</sub> &rarr;<br/>
+     *         &uarr;<br>
+     *         &larr; D<sub>bottom</sub> &rarr;<br>
      *         &darr;
      *     </td>
      * </tr>

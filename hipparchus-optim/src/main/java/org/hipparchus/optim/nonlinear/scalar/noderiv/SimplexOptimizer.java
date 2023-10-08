@@ -84,7 +84,7 @@ import org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer;
  *  MultivariateFunctionMappingAdapter} or
  *  {@link org.hipparchus.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapter
  *  MultivariateFunctionPenaltyAdapter}.
- *  <br/>
+ *  <br>
  *  The call to {@link #optimize(OptimizationData[]) optimize} will throw
  *  {@link MathRuntimeException} if bounds are passed to it.
  * </p>

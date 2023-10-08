@@ -49,7 +49,40 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
-    <release version="3.0" date="TBD" description="This is a major release.">
+    <release version="3.0" date="2023-10-08" description="This is a major release.">
+      <action dev="luc" type="fix" issue="issues/238">
+        Fixed internal error in RandomPercentile aggregation.
+      </action>
+      <action dev="luc" type="add" due-to="Paul King" issue="issues/221">
+        Added Principal Component Analysis.
+      </action>
+      <action dev="luc" type="update" issue="issues/271" due-to="Romain Serra">
+        Removed unused mapper in initializeStep.
+      </action>
+      <action dev="luc" type="add" issue="issues/270">
+        Max check interval in events detectors can now depend on current state.
+      </action>
+      <action dev="luc" type="fix" issue="issues/230">
+        Fixed wrong intermediate frame in torque-free motion model.
+      </action>
+      <action dev="luc" type="add" due-to="Lucas Girodet">
+        Added torque-free motion model for non-symmetrical rigid body in ODE tests,
+        with analytical theoretical reference solution.
+      </action>
+      <action dev="luc" type="update" issue="issues/223">
+        Separated {Field}ODEEventDetector and {Field}ODEEventHandler.
+      </action>
+      <action dev="luc" type="update" issue="issues/220">
+        Added reset state and stop integration capability at end of step for ODE integrators.
+      </action>
+      <action dev="luc" type="update" issue="issues/243">
+        Improve management of Cardan/Euler rotations close to singularity.
+      </action>
+      <action dev="vincent" type="add" issue="issues/212">
+        Added Blendable interface and its implementation in RealMatrix and Vector interfaces.
+        Changed Vector interface parameters.
+        Added SmoothStepFactory which allow for quick creation of common and generic smoothstep function.
+      </action>
       <action dev="serrof" type="fix" issue="issues/275">
         UnivariateDerivative now implements Comparable.
       </action>
@@ -73,26 +106,11 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="fix" issue="issues/272">
         Fixed compatibility with recent JDK.
       </action>
-      <action dev="luc" type="fix" issue="issues/238">
-        Fixed internal error in RandomPercentile aggregation.
-      </action>
-      <action dev="luc" type="update" issue="issues/271" due-to="Romain Serra">
-        Removed unused mapper in initializeStep.
-      </action>
-      <action dev="luc" type="add" issue="issues/270">
-        Max check interval in events detectors can now depend on current state.
-      </action>
       <action dev="luc" type="fix" due-to="Romain Serra" issue="issues/257">
         Made FieldPolynomialSplineFunction operational with Field not inheriting from Comparable.
       </action>
-      <action dev="maxime" type="add" issue="issues/263">
-        Created a rule to forbid Python keywords in method, class, interface and enum names.
-      </action>
       <action dev="luc" type="fix" issue="issues/262">
         Fixed determinant computation in eigen decomposition with complex eigenvalues.
-      </action>
-      <action dev="luc" type="fix" issue="issues/230">
-        Fixed wrong intermediate frame in torque-free motion model.
       </action>
       <action dev="luc" type="fix" due-to="Romain Serra" issue="issues/259">
         Only remove input coefficients of FieldPolynomialFunction that satisfy isZero().
@@ -101,9 +119,6 @@ If the output is not quite correct, check for invisible trailing spaces!
         Improved performance for reciprocal, division and square root with
         DerivativeStructure and FieldDerivativeStructure.
       </action>
-      <action dev="luc" type="add" due-to="Romain Serra" issue="issues/250">
-        Added getter for default step of (Field) Runge-Kutta integrators.
-      </action>
       <action dev="luc" type="fix" issue="issues/249">
         Generate zero vectors in OrderedComplexEigenDecomposition when the number
         of eigenvectors is smaller than the dimension.
@@ -111,36 +126,17 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="fix" issue="issues/248">
         Allow customization of eigen value ordering in OrderedComplexEigenDecomposition.
       </action>
-      <action dev="vincent" type="add" issue="issues/244">
-        Added field version of Blendable interface method (implemented in FieldMatrix and FieldVector3D)
-        Added field version of smoothstep function in SmoothStepFactory
-      </action>
-      <action dev="luc" type="update" issue="issues/243">
-        Improve management of Cardan/Euler rotations close to singularity.
-      </action>
-      <action dev="luc" type="add" du-to="Lucas Girodet">
-        Added torque-free motion model for non-symmetrical rigid body in ODE tests,
-        with analytical theoretical reference solution.
-      </action>
-      <action dev="luc" type="update" issue="issues/223">
-        Separated {Field}ODEEventDetector and {Field}ODEEventHandler.
-      </action>
-      <action dev="luc" type="update" issue="issues/220">
-        Added reset state and stop integration capability at end of step for ODE integrators.
-      </action>
       <action dev="luc" type="fix" issue="issues/228">
         Fixed FastMath.expm1(x) for huge values of x.
       </action>
       <action dev="luc" type="update" issue="issues/227">
         Renamed Decimal64{Field} into Binary64{Field}.
       </action>
-      <action dev="luc" type="add" due-to="Paul King" issue="issues/221">
-        Added Principal Component Analysis.
+      <action dev="luc" type="update" issue="issues/223">
+        Separated {Field}ODEEventDetector and {Field}ODEEventHandler.
       </action>
-      <action dev="vincent" type="add" issue="issues/212">
-        Added Blendable interface and its implementation in RealMatrix and Vector interfaces.
-        Changed Vector interface parameters.
-        Added SmoothStepFactory which allow for quick creation of common and generic smoothstep function.
+      <action dev="vcucchie" type="add" issue="issues/218">
+        Fieldified Erf and Gamma classes and added FieldContinuedFraction.
       </action>
     </release>
     <release version="2.3" date="2022-10-05" description="This is a maintenance release.">

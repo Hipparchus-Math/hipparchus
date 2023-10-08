@@ -49,6 +49,12 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Samples Release Notes</title>
   </properties>
   <body>
+    <release version="3.0" date="2023-10-08" description="This is a major release.">
+      <action dev="bryan" type="update">
+        No changes directly in this module. However, lower level Hipparchus modules did change,
+        hence a new release was needed.
+      </action>
+    </release>
     <release version="2.3" date="2022-10-05" description="This is a maintenance release.">
       <action dev="luc" type="update">
         No changes directly in this module. However, lower level Hipparchus modules did change,

@@ -39,7 +39,7 @@ import org.hipparchus.util.SinCos;
  * Fits points to a {@link
  * org.hipparchus.analysis.function.HarmonicOscillator.Parametric harmonic oscillator}
  * function.
- * <br/>
+ * <br>
  * The {@link #withStartPoint(double[]) initial guess values} must be passed
  * in the following order:
  * <ul>

@@ -1,23 +1,58 @@
 
-              Hipparchus 2.3 RELEASE NOTES
+              Hipparchus 3.0 RELEASE NOTES
 
-The Hipparchus team is pleased to announce the release of hipparchus-2.3
+The Hipparchus team is pleased to announce the release of hipparchus-3.0
 
 The Hipparchus library is a library of mathematical components. It started as a fork of Apache Commons Math.
+
+This is a major release.
 
 Changes in this version include:
 
 New features:
-o issues/205:  Added new signature for SequentialGaussNewtonOptimizer#withAPrioriData allowing
-               to define the Cholesky decomposition thresholds. 
-o issues/204:  Changed HessenbergTransformer visibility to public. 
-o issues/204:  Changed SchurTransformer visibility to public. 
+o issues/221:  Added Principal Component Analysis. Thanks to Paul King. 
+o issues/270:  Max check interval in events detectors can now depend on current state. 
+o              Added torque-free motion model for non-symmetrical rigid body in ODE tests,
+               with analytical theoretical reference solution. Thanks to Lucas Girodet.
+o issues/212:  Added Blendable interface and its implementation in RealMatrix and Vector interfaces.
+               Changed Vector interface parameters.
+               Added SmoothStepFactory which allow for quick creation of common and generic smoothstep function.
+o issues/218:  Fieldified Erf and Gamma classes and added FieldContinuedFraction. 
 
 Fixed Bugs:
-o issues/208:  Fixed wrong negation of point on the 2-sphere. 
-o issues/207:  Allow configuration of RandomPercentile in StreamingStatistics. 
+o issues/238:  Fixed internal error in RandomPercentile aggregation. 
+o issues/230:  Fixed wrong intermediate frame in torque-free motion model. 
+o issues/275:  UnivariateDerivative now implements Comparable. 
+o issues/274:  Complex now implements Comparable, using real part as primary sort order
+               and imaginary part as secondary sort order (similar to what ComplexComparator
+               already did).
+o issues/253:  Fixed eigenvalues/eigenvectors sorting in EigenDecompositionSymmetric. 
+o issues/273:  Added a protection against out of range BigFraction. 
+o issues/272:  Fixed compatibility with recent JDK. 
+o issues/257:  Made FieldPolynomialSplineFunction operational with Field not inheriting from Comparable. Thanks to Romain Serra. 
+o issues/262:  Fixed determinant computation in eigen decomposition with complex eigenvalues. 
+o issues/259:  Only remove input coefficients of FieldPolynomialFunction that satisfy isZero(). Thanks to Romain Serra. 
+o issues/249:  Generate zero vectors in OrderedComplexEigenDecomposition when the number
+               of eigenvectors is smaller than the dimension.
+o issues/248:  Allow customization of eigen value ordering in OrderedComplexEigenDecomposition. 
+o issues/228:  Fixed FastMath.expm1(x) for huge values of x. 
+
+Changes:
+o issues/271:  Removed unused mapper in initializeStep. Thanks to Romain Serra. 
+o issues/223:  Separated {Field}ODEEventDetector and {Field}ODEEventHandler. 
+o issues/220:  Added reset state and stop integration capability at end of step for ODE integrators. 
+o issues/243:  Improve management of Cardan/Euler rotations close to singularity. 
+o              Replaced EigenDecomposition by EigenDecompositionSymmetric and EigenDecompositionNonSymmetric.
+o              Removed OrderedEigenDecomposition.
+o issues/256:  Improved performance for reciprocal, division and square root with
+               DerivativeStructure and FieldDerivativeStructure. Thanks to Romain Serra.
+o issues/227:  Renamed Decimal64{Field} into Binary64{Field}. 
+o issues/223:  Separated {Field}ODEEventDetector and {Field}ODEEventHandler. 
+
 
 For complete information on Hipparchus, including instructions on how to submit bug reports,
 patches, or suggestions for improvement, see the Hipparchus website:
 
 https://www.hipparchus.org/
+
+

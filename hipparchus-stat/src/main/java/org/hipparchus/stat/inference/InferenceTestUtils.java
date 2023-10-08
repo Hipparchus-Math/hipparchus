@@ -1542,8 +1542,8 @@ public class InferenceTestUtils  {
      * <p> where {@code H} is the
      * <a href="http://en.wikipedia.org/wiki/Entropy_%28information_theory%29">
      * Shannon Entropy</a> of the random variable formed by viewing the elements
-     * of the argument array as incidence counts; <br/>
-     * {@code k} is a matrix with rows {@code [observed1, observed2]}; <br/>
+     * of the argument array as incidence counts; <br>
+     * {@code k} is a matrix with rows {@code [observed1, observed2]}; <br>
      * {@code rowSums, colSums} are the row/col sums of {@code k}; <br>
      * and {@code totalSum} is the overall sum of all entries in {@code k}.</p>
      *
@@ -1590,7 +1590,7 @@ public class InferenceTestUtils  {
      *
      * <p>{@code (sgn) sqrt(gValueDataSetsComparison({k11, k12}, {k21, k22})}</p>
      *
-     * <p>where {@code sgn} is -1 if {@code k11 / (k11 + k12) < k21 / (k21 + k22))};<br/>
+     * <p>where {@code sgn} is -1 if {@code k11 / (k11 + k12) < k21 / (k21 + k22))};<br>
      * 1 otherwise.</p>
      *
      * <p>Signed root LLR has two advantages over the basic LLR: a) it is positive

@@ -40,7 +40,7 @@ Alternatively you can pull it from the central Maven repositories using `pom.xml
 ```xml
 <properties>
   <!-- change the Hipparchus version number to the one suiting your needs -->
-  <myprojectname.hipparchus.version>2.3</myprojectname.hipparchus.version>
+  <myprojectname.hipparchus.version>3.0</myprojectname.hipparchus.version>
 </properties>
 
 <dependency>
