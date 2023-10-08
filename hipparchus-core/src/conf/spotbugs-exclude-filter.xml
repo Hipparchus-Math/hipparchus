@@ -273,7 +273,7 @@
     <Or>
       <Method name="getD"/>
       <Method name="getV"/>
-      <Method name="getVT"/>
+      <Method name="getVInv"/>
     </Or>
     <Bug pattern="EI_EXPOSE_REP" />
   </Match>
