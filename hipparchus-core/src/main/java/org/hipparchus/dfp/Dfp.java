@@ -1852,6 +1852,12 @@ public class Dfp implements CalculusFieldElement<Dfp> {
         return result;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Dfp square() {
+        return multiply(this);
+    }
+
     /** Divide this by divisor.
      * @param divisor divisor
      * @return quotient of this by divisor
@@ -2950,7 +2956,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
         throws MathIllegalArgumentException {
 
         // compute r = sqrt(x^2+y^2)
-        final Dfp r = x.multiply(x).add(multiply(this)).sqrt();
+        final Dfp r = x.square().add(multiply(this)).sqrt();
         if (r.isZero()) {
             // special cases handling
             if (x.sign >= 0) {
@@ -3012,14 +3018,14 @@ public class Dfp implements CalculusFieldElement<Dfp> {
      */
     @Override
     public Dfp acosh() {
-        return multiply(this).subtract(getOne()).sqrt().add(this).log();
+        return square().subtract(getOne()).sqrt().add(this).log();
     }
 
     /** {@inheritDoc}
      */
     @Override
     public Dfp asinh() {
-        return multiply(this).add(getOne()).sqrt().add(this).log();
+        return square().add(getOne()).sqrt().add(this).log();
     }
 
     /** {@inheritDoc}

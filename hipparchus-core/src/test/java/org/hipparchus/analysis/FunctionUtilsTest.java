@@ -386,7 +386,7 @@ public class FunctionUtilsTest {
 
             @Override
             public <T extends Derivative<T>> T value(T x) {
-                return x.multiply(x);
+                return x.square();
             }
 
         };
@@ -420,8 +420,8 @@ public class FunctionUtilsTest {
             public DerivativeStructure value(DerivativeStructure[] point) {
                 DerivativeStructure x  = point[0];
                 DerivativeStructure y  = point[1];
-                DerivativeStructure x2 = x.multiply(x);
-                DerivativeStructure y2 = y.multiply(y);
+                DerivativeStructure x2 = x.square();
+                DerivativeStructure y2 = y.square();
                 DerivativeStructure xy = x.multiply(y);
                 return x2.multiply(a).add(y2.multiply(b)).add(xy.multiply(c));
             }

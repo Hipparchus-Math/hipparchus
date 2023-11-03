@@ -220,6 +220,12 @@ public class FieldTuple<T extends CalculusFieldElement<T>> implements CalculusFi
 
     /** {@inheritDoc} */
     @Override
+    public FieldTuple<T> square() {
+        return multiply(this);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public FieldTuple<T> divide(final double a) {
         final FieldTuple<T> result = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
         for (int i = 0; i < values.length; ++i) {

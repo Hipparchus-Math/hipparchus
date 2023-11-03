@@ -74,6 +74,12 @@ public interface FieldElement<T extends FieldElement<T>> {
      */
     T multiply(T a) throws NullArgumentException;
 
+    /** Compute this &times; this.
+     * @return a new element representing this &times; this
+     * @since 3.1
+     */
+    T square() throws NullArgumentException;
+
     /** Compute this &divide; a.
      * @param a element to divide by
      * @return a new element representing this &divide; a

@@ -465,7 +465,7 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements FieldBl
      */
     public T getNorm() {
         // there are no cancellation problems here, so we use the straightforward formula
-        return x.multiply(x).add(y.multiply(y)).add(z.multiply(z)).sqrt();
+        return x.square().add(y.square()).add(z.square()).sqrt();
     }
 
     /** Get the square of the norm for the vector.
@@ -473,7 +473,7 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements FieldBl
      */
     public T getNormSq() {
         // there are no cancellation problems here, so we use the straightforward formula
-        return x.multiply(x).add(y.multiply(y)).add(z.multiply(z));
+        return x.square().add(y.square()).add(z.square());
     }
 
     /** Get the L<sub>&infin;</sub> norm for the vector.
@@ -647,13 +647,13 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements FieldBl
         }
 
         if (FastMath.abs(x.getReal()) <= threshold) {
-            final T inverse  = y.multiply(y).add(z.multiply(z)).sqrt().reciprocal();
+            final T inverse  = y.square().add(z.square()).sqrt().reciprocal();
             return new FieldVector3D<T>(inverse.getField().getZero(), inverse.multiply(z), inverse.multiply(y).negate());
         } else if (FastMath.abs(y.getReal()) <= threshold) {
-            final T inverse  = x.multiply(x).add(z.multiply(z)).sqrt().reciprocal();
+            final T inverse  = x.square().add(z.square()).sqrt().reciprocal();
             return new FieldVector3D<T>(inverse.multiply(z).negate(), inverse.getField().getZero(), inverse.multiply(x));
         } else {
-            final T inverse  = x.multiply(x).add(y.multiply(y)).sqrt().reciprocal();
+            final T inverse  = x.square().add(y.square()).sqrt().reciprocal();
             return new FieldVector3D<T>(inverse.multiply(y), inverse.multiply(x).negate(), inverse.getField().getZero());
         }
 

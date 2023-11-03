@@ -389,7 +389,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
      */
     public T getNorm() {
         // there are no cancellation problems here, so we use the straightforward formula
-        return x.multiply(x).add(y.multiply(y)).sqrt();
+        return x.square().add(y.square()).sqrt();
     }
 
     /** Get the square of the norm for the vector.
@@ -397,7 +397,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
      */
     public T getNormSq() {
         // there are no cancellation problems here, so we use the straightforward formula
-        return x.multiply(x).add(y.multiply(y));
+        return x.square().add(y.square());
     }
 
     /** Get the L<sub>&infin;</sub> norm for the vector.

@@ -736,7 +736,7 @@ public class Gamma {
 
         if (x.getReal() >= C_LIMIT) {
             // use method 8 (accurate to O(1/x^8))
-            T inv = x.multiply(x).reciprocal();
+            T inv = x.square().reciprocal();
             //            1       1        1         1         1         5           691         1
             // log(x) -  --- - ------ + ------- - ------- + ------- - ------- +  ---------- - -------
             //           2 x   12 x^2   120 x^4   252 x^6   240 x^8   660 x^10   32760 x^12   12 x^14
@@ -809,12 +809,12 @@ public class Gamma {
         if (x.getReal() > 0 && x.getReal() <= S_LIMIT) {
             // use method 5 from Bernardo AS103
             // accurate to O(x)
-            return x.multiply(x).reciprocal();
+            return x.square().reciprocal();
         }
 
         if (x.getReal() >= C_LIMIT) {
             // use method 4 (accurate to O(1/x^8)
-            T inv    = x.multiply(x).reciprocal();
+            T inv    = x.square().reciprocal();
             T invCub = inv.multiply(x.reciprocal());
             //  1    1      1       1       1      1         5        691        7
             //  - + ---- + ---- - ----- + ----- + ----- + ------- - -------- + ------
@@ -836,7 +836,7 @@ public class Gamma {
                                        .add(1.0 / 6)));
         }
 
-        return trigamma(x.add(1.)).add(x.multiply(x).reciprocal());
+        return trigamma(x.add(1.)).add(x.square().reciprocal());
     }
 
     /**

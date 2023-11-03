@@ -448,7 +448,7 @@ public class ErfTest {
     public void testErfInvField() {
         for (Binary64 x = new Binary64(-5.9); x.getReal() < 5.9; x = x.add(0.01)) {
             final Binary64 y = Erf.erf(x);
-            final Binary64 dydx = x.multiply(x).negate().exp().multiply(2/FastMath.sqrt(FastMath.PI));
+            final Binary64 dydx = x.square().negate().exp().multiply(2/FastMath.sqrt(FastMath.PI));
             Assert.assertEquals(x.getReal(), Erf.erfInv(y).getReal(), 1.0e-15 / dydx.getReal());
         }
     }
@@ -494,7 +494,7 @@ public class ErfTest {
     public void testErfcInvField() {
         for (Binary64 x = new Binary64(-5.85); x.getReal() < 5.9; x = x.add(0.01)) {
             final Binary64 y = Erf.erfc(x);
-            final Binary64 dydxAbs = x.multiply(x).negate().exp().multiply(2/FastMath.sqrt(FastMath.PI));
+            final Binary64 dydxAbs = x.square().negate().exp().multiply(2/FastMath.sqrt(FastMath.PI));
             Assert.assertEquals(x.getReal(), Erf.erfcInv(y).getReal(), 1.0e-15 / dydxAbs.getReal());
         }
     }

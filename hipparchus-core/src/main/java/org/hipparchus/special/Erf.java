@@ -109,7 +109,7 @@ public class Erf {
         if (FastMath.abs(x.getReal()) > 40) {
             return x.getReal() > 0 ? one : one.negate();
         }
-        final T ret = Gamma.regularizedGammaP(one.multiply(0.5), x.multiply(x), 1.0e-15, 10000);
+        final T ret = Gamma.regularizedGammaP(one.multiply(0.5), x.square(), 1.0e-15, 10000);
         return x.getReal() < 0 ? ret.negate() : ret;
     }
 
@@ -176,7 +176,7 @@ public class Erf {
         if (FastMath.abs(x.getReal()) > 40) {
             return x.getReal() > 0 ? zero : one.multiply(2.);
         }
-        final T ret = Gamma.regularizedGammaQ(one.multiply(0.5), x.multiply(x), 1.0e-15, 10000);
+        final T ret = Gamma.regularizedGammaQ(one.multiply(0.5), x.square(), 1.0e-15, 10000);
         return x.getReal() < 0 ? ret.negate().add(2.) : ret;
     }
 

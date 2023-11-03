@@ -32,6 +32,7 @@ import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.exception.NullArgumentException;
 
 /**
  * Arbitrary precision decimal number.
@@ -290,6 +291,12 @@ public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Seri
     @Override
     public BigReal multiply(final int n) {
         return new BigReal(d.multiply(new BigDecimal(n)));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public BigReal square() throws NullArgumentException {
+        return multiply(this);
     }
 
     /** {@inheritDoc} */

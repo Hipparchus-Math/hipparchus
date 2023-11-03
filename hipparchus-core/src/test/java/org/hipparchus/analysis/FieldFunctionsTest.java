@@ -68,13 +68,13 @@ public class FieldFunctionsTest {
                 T[] y = MathArrays.buildArray(x.getField(), 3);
                 y[0] = x.add(1);
                 y[1] = x.multiply(2);
-                y[2] = x.multiply(x);
+                y[2] = x.square();
                 return y;
             }
         };
         CalculusFieldUnivariateVectorFunction<Binary64> f1Converted = f1.toCalculusFieldUnivariateVectorFunction(Binary64Field.getInstance());
         CalculusFieldUnivariateVectorFunction<Binary64> f2 = x -> new Binary64[] {
-            x.add(1), x.multiply(2), x.multiply(x)
+            x.add(1), x.multiply(2), x.square()
         };
 
         for (double x = 0; x < 1; x += 0.01) {
@@ -120,7 +120,7 @@ public class FieldFunctionsTest {
                 T[][] y = MathArrays.buildArray(x.getField(), 2, 2);
                 y[0][0] = x.add(1);
                 y[0][1] = x.multiply(2);
-                y[1][0] = x.multiply(x);
+                y[1][0] = x.square();
                 y[1][1] = x.sin();
                 return y;
             }
@@ -128,7 +128,7 @@ public class FieldFunctionsTest {
         CalculusFieldUnivariateMatrixFunction<Binary64> f1Converted = f1.toCalculusFieldUnivariateMatrixFunction(Binary64Field.getInstance());
         CalculusFieldUnivariateMatrixFunction<Binary64> f2 = x -> new Binary64[][] {
             { x.add(1), x.multiply(2) },
-            { x.multiply(x), x.sin() }
+            { x.square(), x.sin() }
         };
 
         for (double x = 0; x < 1; x += 0.01) {

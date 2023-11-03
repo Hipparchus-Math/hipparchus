@@ -78,7 +78,7 @@ public class FieldHermiteRuleFactory<T extends CalculusFieldElement<T>> extends 
         final Hermite<T> hm1 = new Hermite<>(field, numberOfPoints - 1);
         for (int i = 0; i < numberOfPoints; i++) {
             final T y = hm1.hNhNm1(points[i])[0];
-            weights[i] = sqrtPi.divide(y.multiply(y).multiply(numberOfPoints));
+            weights[i] = sqrtPi.divide(y.square().multiply(numberOfPoints));
         }
 
         return new Pair<>(points, weights);

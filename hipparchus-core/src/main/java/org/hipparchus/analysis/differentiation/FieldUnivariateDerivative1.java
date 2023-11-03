@@ -218,6 +218,12 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
                                                 a.f0.linearCombination(f1, a.f0, f0, a.f1));
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldUnivariateDerivative1<T> square() {
+        return multiply(this);
+    }
+
     /** '&divide;' operator.
      * @param a right hand side parameter of the operator
      * @return this&divide;a
@@ -441,7 +447,7 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
     @Override
     public FieldUnivariateDerivative1<T> cbrt() {
         final T c = FastMath.cbrt(f0);
-        return compose(c, c.multiply(c).multiply(3).reciprocal());
+        return compose(c, c.square().multiply(3).reciprocal());
     }
 
     /** {@inheritDoc} */

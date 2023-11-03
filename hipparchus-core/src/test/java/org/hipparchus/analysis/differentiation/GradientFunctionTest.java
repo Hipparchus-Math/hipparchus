@@ -75,7 +75,7 @@ public class GradientFunctionTest {
             throws MathIllegalArgumentException {
             DerivativeStructure d2 = point[0].getField().getZero();
             for (DerivativeStructure x : point) {
-                d2 = d2.add(x.multiply(x));
+                d2 = d2.add(x.square());
             }
             return d2.sqrt();
         }

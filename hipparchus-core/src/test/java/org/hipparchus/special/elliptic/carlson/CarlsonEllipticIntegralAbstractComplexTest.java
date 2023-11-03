@@ -133,7 +133,7 @@ public abstract class CarlsonEllipticIntegralAbstractComplexTest<T extends Calcu
         for (int i = 0; i < 10000; ++i) {
             T x      = buildComplex(random.nextDouble() * 3);
             T lambda = buildComplex(random.nextDouble() * 6 - 3, random.nextDouble() * 3);
-            T mu     = x.multiply(x).divide(lambda);
+            T mu     = x.square().divide(lambda);
             T rcL    = rC(lambda,          x.add(lambda));
             T rcM    = rC(mu,              x.add(mu));
             T rc0    = rC(buildComplex(0), x);

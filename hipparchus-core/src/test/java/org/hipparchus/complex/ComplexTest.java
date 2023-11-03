@@ -404,7 +404,7 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
         Assert.assertTrue(Double.isNaN(w.getImaginary()));
 
         z = new Complex(1, neginf);
-        Assert.assertSame(Complex.INF, z.multiply(z));
+        Assert.assertSame(Complex.INF, z.square());
     }
 
     @Test
@@ -1467,7 +1467,7 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
     @Test
     public void testCbrtComplex() {
         Complex z = new Complex(15, 2);
-        UnitTestUtils.assertEquals(z, z.multiply(z).multiply(z).cbrt(), 1.0e-14);
+        UnitTestUtils.assertEquals(z, z.square().multiply(z).cbrt(), 1.0e-14);
         Complex branchCutPlus = new Complex(-8.0, +0.0);
         Complex cbrtPlus = branchCutPlus.cbrt();
         UnitTestUtils.assertEquals(branchCutPlus, cbrtPlus.multiply(cbrtPlus).multiply(cbrtPlus), 1.0e-14);
@@ -1504,7 +1504,7 @@ public class ComplexTest extends CalculusFieldElementAbstractTest<Complex> {
     @Test
     public void testRootNComplex() {
         Complex z = new Complex(15, 2);
-        UnitTestUtils.assertEquals(z, z.multiply(z).multiply(z).rootN(3), 1.0e-14);
+        UnitTestUtils.assertEquals(z, z.square().multiply(z).rootN(3), 1.0e-14);
         Complex branchCutPlus = new Complex(-8.0, +0.0);
         Complex cbrtPlus = branchCutPlus.rootN(3);
         UnitTestUtils.assertEquals(branchCutPlus, cbrtPlus.multiply(cbrtPlus).multiply(cbrtPlus), 1.0e-14);

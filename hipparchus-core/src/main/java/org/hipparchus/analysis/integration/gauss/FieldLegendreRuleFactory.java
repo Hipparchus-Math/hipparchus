@@ -70,7 +70,7 @@ public class FieldLegendreRuleFactory<T extends CalculusFieldElement<T>> extends
             final T c = points[i];
             final T[] pKpKm1 = p.pNpNm1(c);
             final T d = pKpKm1[1].subtract(c.multiply(pKpKm1[0])).multiply(numberOfPoints);
-            weights[i] = c.multiply(c).subtract(1).multiply(-2).divide(d.multiply(d));
+            weights[i] = c.square().subtract(1).multiply(-2).divide(d.multiply(d));
 
             // symmetrical point
             final int idx = numberOfPoints - i - 1;

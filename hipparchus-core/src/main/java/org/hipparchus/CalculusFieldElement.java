@@ -137,6 +137,12 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      */
     T rootN(int n);
 
+    /** {@inheritDoc} */
+    @Override
+    default T square() {
+        return pow(2);
+    }
+
     /** Power operation.
      * @param p power to apply
      * @return this<sup>p</sup>

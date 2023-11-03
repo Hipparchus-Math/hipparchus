@@ -108,7 +108,7 @@ public abstract class FieldUnivariateDerivative2AbstractTest<T extends CalculusF
     @Test
     public void testGetDerivative() {
         FieldUnivariateDerivative2<T> x  = build(3.0);
-        FieldUnivariateDerivative2<T> ud = x.multiply(x);
+        FieldUnivariateDerivative2<T> ud = x.square();
         try {
             ud.getDerivative(-1);
             Assert.fail("an exception should have been thrown");

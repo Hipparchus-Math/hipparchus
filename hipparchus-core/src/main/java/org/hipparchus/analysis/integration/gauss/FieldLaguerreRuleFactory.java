@@ -57,7 +57,7 @@ public class FieldLaguerreRuleFactory<T extends CalculusFieldElement<T>> extends
         final Laguerre<T> laguerreN1 = new Laguerre<>(n1);
         for (int i = 0; i < numberOfPoints; i++) {
             final T y = laguerreN1.value(points[i]);
-            weights[i] = points[i].divide(y.multiply(y).multiply(n1Squared));
+            weights[i] = points[i].divide(y.square().multiply(n1Squared));
         }
 
         return new Pair<>(points, weights);
