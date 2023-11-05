@@ -95,7 +95,7 @@ public class CarlsonEllipticIntegralFieldTest {
         for (int i = 0; i < 10000; ++i) {
             Binary64 x      = build(random.nextDouble() * 3);
             Binary64 lambda = build(random.nextDouble() * 3);
-            Binary64 mu     = x.multiply(x).divide(lambda);
+            Binary64 mu     = x.square().divide(lambda);
             Binary64 rcL    = CarlsonEllipticIntegral.rC(lambda,         x.add(lambda));
             Binary64 rcM    = CarlsonEllipticIntegral.rC(mu,             x.add(mu));
             Binary64 rc0    = CarlsonEllipticIntegral.rC(Binary64.ZERO, x);

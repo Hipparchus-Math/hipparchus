@@ -282,7 +282,7 @@ public class FieldDerivativeStructureComplexTest extends FieldDerivativeStructur
     @Test
     public void testCbrtComplex() {
         Complex z = new Complex(15, 2);
-        UnitTestUtils.assertEquals(z, z.multiply(z).multiply(z).cbrt(), 1.0e-14);
+        UnitTestUtils.assertEquals(z, z.square().multiply(z).cbrt(), 1.0e-14);
         Complex branchCutPlus = new Complex(-8.0, +0.0);
         Complex cbrtPlus = branchCutPlus.cbrt();
         UnitTestUtils.assertEquals(branchCutPlus, cbrtPlus.multiply(cbrtPlus).multiply(cbrtPlus), 1.0e-14);

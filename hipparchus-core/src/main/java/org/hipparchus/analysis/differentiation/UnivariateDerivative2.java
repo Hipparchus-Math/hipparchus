@@ -203,6 +203,12 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
+    public UnivariateDerivative2 square() {
+        return new UnivariateDerivative2(f0 * f0, 2 * f0 * f1, 2 * (f0 * f2 + f1 * f1));
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public UnivariateDerivative2 divide(final double a) {
         final double inv1 = 1.0 / a;
         return new UnivariateDerivative2(f0 * inv1, f1 * inv1, f2 * inv1);

@@ -656,6 +656,12 @@ public class Complex implements CalculusFieldElement<Complex>, Comparable<Comple
         return createComplex(imaginary, -real);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Complex square() {
+        return multiply(this);
+    }
+
     /**
      * Returns a {@code Complex} whose value is {@code (-this)}.
      * Returns {@code NaN} if either real or imaginary
@@ -1164,7 +1170,7 @@ public class Complex implements CalculusFieldElement<Complex>, Comparable<Comple
     public Complex atan2(Complex x) {
 
         // compute r = sqrt(x^2+y^2)
-        final Complex r = x.multiply(x).add(multiply(this)).sqrt();
+        final Complex r = x.square().add(multiply(this)).sqrt();
 
         if (FastMath.copySign(1.0, x.real) >= 0) {
             // compute atan2(y, x) = 2 atan(y / (r + x))
@@ -1328,7 +1334,7 @@ public class Complex implements CalculusFieldElement<Complex>, Comparable<Comple
      * square root</a> of <code>1 - this<sup>2</sup></code> for this complex
      * number.
      * Computes the result directly as
-     * {@code sqrt(ONE.subtract(z.multiply(z)))}.
+     * {@code sqrt(ONE.subtract(z.square()))}.
      * <p>
      * Returns {@link Complex#NaN} if either real or imaginary part of the
      * input argument is {@code NaN}.
@@ -1339,7 +1345,7 @@ public class Complex implements CalculusFieldElement<Complex>, Comparable<Comple
      * @return the square root of <code>1 - this<sup>2</sup></code>.
      */
     public Complex sqrt1z() {
-        final Complex t2 = this.multiply(this);
+        final Complex t2 = this.square();
         return createComplex(1 - t2.real, -t2.imaginary).sqrt();
     }
 
@@ -1647,7 +1653,7 @@ public class Complex implements CalculusFieldElement<Complex>, Comparable<Comple
         } else if (isNaN() || y.isNaN()) {
             return NaN;
         } else {
-            return multiply(this).add(y.multiply(y)).sqrt();
+            return square().add(y.square()).sqrt();
         }
     }
 

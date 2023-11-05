@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
+    <release version="3.1" date="TBD" description="TBD.">
+      <action dev="serrof" type="add" issue="issues/280">
+        Add square method to FieldElement.
+      </action>
+    </release>
     <release version="3.0" date="2023-10-08" description="This is a major release.">
       <action dev="serrof" type="fix" issue="issues/275">
         UnivariateDerivative now implements Comparable.

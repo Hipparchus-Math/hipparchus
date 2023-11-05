@@ -250,6 +250,12 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
         return result;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public DerivativeStructure square() {
+        return multiply(this);
+    }
+
     /** {@inheritDoc}
      */
     @Override

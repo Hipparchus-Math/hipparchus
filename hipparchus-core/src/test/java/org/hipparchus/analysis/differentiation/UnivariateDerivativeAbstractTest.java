@@ -69,7 +69,7 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
     @Test
     public void testGetDerivative() {
         T x  = build(3.0);
-        T ud = x.multiply(x);
+        T ud = x.square();
         try {
             ud.getDerivative(-1);
             Assert.fail("an exception should have been thrown");

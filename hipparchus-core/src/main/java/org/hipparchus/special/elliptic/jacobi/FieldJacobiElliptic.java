@@ -356,7 +356,7 @@ public abstract class FieldJacobiElliptic<T extends CalculusFieldElement<T>> {
     private T arcps(final T x, final T deltaQP, final T deltaRP) {
         // see equation 19.25.32 in Digital Library of Mathematical Functions
         // https://dlmf.nist.gov/19.25.E32
-        final T x2       = x.multiply(x);
+        final T x2       = x.square();
         final T rf       = CarlsonEllipticIntegral.rF(x2, x2.add(deltaQP), x2.add(deltaRP));
         return FastMath.copySign(1.0, rf.getReal()) * FastMath.copySign(1.0, x.getReal()) < 0 ?
                rf.negate() : rf;
@@ -375,7 +375,7 @@ public abstract class FieldJacobiElliptic<T extends CalculusFieldElement<T>> {
     private T arcsp(final T x, final T deltaQP, final T deltaRP) {
         // see equation 19.25.33 in Digital Library of Mathematical Functions
         // https://dlmf.nist.gov/19.25.E33
-        final T x2       = x.multiply(x);
+        final T x2       = x.square();
         return x.multiply(CarlsonEllipticIntegral.rF(x.getField().getOne(),
                                                      deltaQP.multiply(x2).add(1),
                                                      deltaRP.multiply(x2).add(1)));
@@ -394,7 +394,7 @@ public abstract class FieldJacobiElliptic<T extends CalculusFieldElement<T>> {
     private T arcpq(final T x, final T deltaQP, final T deltaRQ) {
         // see equation 19.25.34 in Digital Library of Mathematical Functions
         // https://dlmf.nist.gov/19.25.E34
-        final T x2       = x.multiply(x);
+        final T x2       = x.square();
         final T w        = x2.subtract(1).negate().divide(deltaQP);
         final T rf       = CarlsonEllipticIntegral.rF(x2, x.getField().getOne(), deltaRQ.multiply(w).add(1));
         final T positive = w.sqrt().multiply(rf);
@@ -420,7 +420,7 @@ public abstract class FieldJacobiElliptic<T extends CalculusFieldElement<T>> {
     private T arcpqNoDivision(final T x, final T deltaQP, final T deltaRQ) {
         // see equation 19.25.34 in Digital Library of Mathematical Functions
         // https://dlmf.nist.gov/19.25.E34
-        final T x2       = x.multiply(x);
+        final T x2       = x.square();
         final T wDeltaQP = x2.subtract(1).negate();
         final T rf       = CarlsonEllipticIntegral.rF(x2.multiply(deltaQP), deltaQP, deltaRQ.multiply(wDeltaQP).add(deltaQP));
         final T positive = wDeltaQP.sqrt().multiply(rf);

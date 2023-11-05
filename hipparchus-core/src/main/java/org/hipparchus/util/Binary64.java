@@ -131,6 +131,11 @@ public class Binary64 extends Number implements CalculusFieldElement<Binary64>, 
         return new Binary64(-this.value);
     }
 
+    @Override
+    public Binary64 square() {
+        return multiply(this);
+    }
+
     /**
      * {@inheritDoc}
      *

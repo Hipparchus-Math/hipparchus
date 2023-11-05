@@ -19,7 +19,6 @@ package org.hipparchus.analysis.differentiation;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
@@ -54,7 +53,7 @@ import org.hipparchus.util.SinhCosh;
  * @see FieldGradient
  * @since 1.7
  */
-public class Gradient implements Derivative<Gradient>, CalculusFieldElement<Gradient>, Serializable {
+public class Gradient implements Derivative<Gradient>, Serializable {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20200520L;
@@ -270,6 +269,16 @@ public class Gradient implements Derivative<Gradient>, CalculusFieldElement<Grad
         final Gradient result = newInstance(value * a.value);
         for (int i = 0; i < grad.length; ++i) {
             result.grad[i] = grad[i] * a.value + value * a.grad[i];
+        }
+        return result;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Gradient square() {
+        final Gradient result = newInstance(value * value);
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = 2 * grad[i] * value;
         }
         return result;
     }

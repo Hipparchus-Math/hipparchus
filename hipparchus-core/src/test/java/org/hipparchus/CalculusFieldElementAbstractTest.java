@@ -102,6 +102,13 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     }
 
     @Test
+    public void testSquare() {
+        for (double x = -3; x < 3; x += 0.2) {
+            checkRelative(x * x, build(x).square());
+        }
+    }
+
+    @Test
     public void testDivideField() {
         for (double x = -3; x < 3; x += 0.2) {
             for (double y = -3; y < 3; y += 0.2) {

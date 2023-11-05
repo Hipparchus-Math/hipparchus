@@ -747,6 +747,11 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
         return createComplex(imaginary, real.negate());
     }
 
+    @Override
+    public FieldComplex<T> square() {
+        return multiply(this);
+    }
+
     /**
      * Returns a {@code Complex} whose value is {@code (-this)}.
      * Returns {@code NaN} if either real or imaginary
@@ -1296,7 +1301,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
     public FieldComplex<T> atan2(FieldComplex<T> x) {
 
         // compute r = sqrt(x^2+y^2)
-        final FieldComplex<T> r = x.multiply(x).add(multiply(this)).sqrt();
+        final FieldComplex<T> r = x.square().add(multiply(this)).sqrt();
 
         if (x.real.getReal() >= 0) {
             // compute atan2(y, x) = 2 atan(y / (r + x))
@@ -1457,7 +1462,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * square root</a> of <code>1 - this<sup>2</sup></code> for this complex
      * number.
      * Computes the result directly as
-     * {@code sqrt(ONE.subtract(z.multiply(z)))}.
+     * {@code sqrt(ONE.subtract(z.square()))}.
      * <p>
      * Returns {@link #getNaN(Field)} if either real or imaginary part of the
      * input argument is {@code NaN}.
@@ -1468,7 +1473,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
      * @return the square root of <code>1 - this<sup>2</sup></code>.
      */
     public FieldComplex<T> sqrt1z() {
-        final FieldComplex<T> t2 = this.multiply(this);
+        final FieldComplex<T> t2 = this.square();
         return createComplex(getPartsField().getOne().subtract(t2.real), t2.imaginary.negate()).sqrt();
     }
 
@@ -1766,7 +1771,7 @@ public class FieldComplex<T extends CalculusFieldElement<T>> implements Calculus
         } else if (isNaN() || y.isNaN()) {
             return getNaN(getPartsField());
         } else {
-            return multiply(this).add(y.multiply(y)).sqrt();
+            return square().add(y.square()).sqrt();
         }
     }
 

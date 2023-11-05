@@ -144,7 +144,7 @@ public class FieldQRDecomposition<T extends CalculusFieldElement<T>> {
         T xNormSqr = zero;
         for (int row = minor; row < qrtMinor.length; row++) {
             final T c = qrtMinor[row];
-            xNormSqr = xNormSqr.add(c.multiply(c));
+            xNormSqr = xNormSqr.add(c.square());
         }
         final T a = (qrtMinor[minor].getReal() > 0) ? xNormSqr.sqrt().negate() : xNormSqr.sqrt();
         rDiag[minor] = a;

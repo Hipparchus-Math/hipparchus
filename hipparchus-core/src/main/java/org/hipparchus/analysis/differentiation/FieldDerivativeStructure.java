@@ -258,6 +258,12 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
         return result;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldDerivativeStructure<T> square() {
+        return multiply(this);
+    }
+
     /** '&divide;' operator.
      * @param a right hand side parameter of the operator
      * @return this&divide;a

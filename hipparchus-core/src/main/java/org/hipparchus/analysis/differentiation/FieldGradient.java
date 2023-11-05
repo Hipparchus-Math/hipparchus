@@ -330,6 +330,16 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
         return result;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldGradient<T> square() {
+        final FieldGradient<T> result = newInstance(value.square());
+        for (int i = 0; i < grad.length; ++i) {
+            result.grad[i] = grad[i].multiply(value).multiply(2);
+        }
+        return result;
+    }
+
     /** '&divide;' operator.
      * @param a right hand side parameter of the operator
      * @return this&divide;a
@@ -580,7 +590,7 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
     @Override
     public FieldGradient<T> cbrt() {
         final T c = FastMath.cbrt(value);
-        return compose(c, c.multiply(c).multiply(3).reciprocal());
+        return compose(c, c.square().multiply(3).reciprocal());
     }
 
     /** {@inheritDoc} */
@@ -721,25 +731,25 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> acos() {
-        return compose(FastMath.acos(value), value.multiply(value).negate().add(1).sqrt().reciprocal().negate());
+        return compose(FastMath.acos(value), value.square().negate().add(1).sqrt().reciprocal().negate());
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> asin() {
-        return compose(FastMath.asin(value), value.multiply(value).negate().add(1).sqrt().reciprocal());
+        return compose(FastMath.asin(value), value.square().negate().add(1).sqrt().reciprocal());
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> atan() {
-        return compose(FastMath.atan(value), value.multiply(value).add(1).reciprocal());
+        return compose(FastMath.atan(value), value.square().add(1).reciprocal());
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> atan2(final FieldGradient<T> x) {
-        final T inv = value.multiply(value).add(x.value.multiply(x.value)).reciprocal();
+        final T inv = value.square().add(x.value.multiply(x.value)).reciprocal();
         final FieldGradient<T> result = newInstance(FastMath.atan2(value, x.value));
         final T xValueInv = x.value.multiply(inv);
         final T mValueInv = value.negate().multiply(inv);
@@ -784,19 +794,19 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> acosh() {
-        return compose(FastMath.acosh(value), value.multiply(value).subtract(1).sqrt().reciprocal());
+        return compose(FastMath.acosh(value), value.square().subtract(1).sqrt().reciprocal());
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> asinh() {
-        return compose(FastMath.asinh(value), value.multiply(value).add(1).sqrt().reciprocal());
+        return compose(FastMath.asinh(value), value.square().add(1).sqrt().reciprocal());
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldGradient<T> atanh() {
-        return compose(FastMath.atanh(value), value.multiply(value).negate().add(1).reciprocal());
+        return compose(FastMath.atanh(value), value.square().negate().add(1).reciprocal());
     }
 
     /** {@inheritDoc} */

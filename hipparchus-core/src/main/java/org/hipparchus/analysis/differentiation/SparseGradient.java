@@ -283,6 +283,12 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
 
     /** {@inheritDoc} */
     @Override
+    public SparseGradient square() {
+        return multiply(this);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public SparseGradient divide(final SparseGradient a) {
         final SparseGradient out = new SparseGradient(value / a.value, Collections.<Integer, Double> emptyMap());
 
@@ -698,7 +704,7 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
     public SparseGradient atan2(final SparseGradient x) {
 
         // compute r = sqrt(x^2+y^2)
-        final SparseGradient r = multiply(this).add(x.multiply(x)).sqrt();
+        final SparseGradient r = square().add(x.square()).sqrt();
 
         final SparseGradient a;
         if (x.value >= 0) {

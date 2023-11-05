@@ -677,7 +677,7 @@ public class DfpMath {
 
         Dfp c = a[0].add(a[1]);
         Dfp y = c;
-        c = c.multiply(c);
+        c = c.square();
         Dfp x = y;
         Dfp fact = a[0].getOne();
         Dfp py = new Dfp(y);
@@ -710,7 +710,7 @@ public class DfpMath {
         Dfp x = one;
         Dfp y = one;
         Dfp c = a[0].add(a[1]);
-        c = c.multiply(c);
+        c = c.square();
 
         Dfp fact = one;
         Dfp py = new Dfp(y);
@@ -940,7 +940,7 @@ public class DfpMath {
      * @return asin(a)
      */
     public static Dfp asin(final Dfp a) {
-        return atan(a.divide(a.getOne().subtract(a.multiply(a)).sqrt()));
+        return atan(a.divide(a.getOne().subtract(a.square()).sqrt()));
     }
 
     /** computes the arc-cosine of the argument.
@@ -957,7 +957,7 @@ public class DfpMath {
 
         a = Dfp.copysign(a, a.getOne());  // absolute value
 
-        result = atan(a.getOne().subtract(a.multiply(a)).sqrt().divide(a));
+        result = atan(a.getOne().subtract(a.square()).sqrt().divide(a));
 
         if (negative) {
             result = a.getField().getPi().subtract(result);

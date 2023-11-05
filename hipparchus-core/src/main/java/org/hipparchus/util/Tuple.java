@@ -138,6 +138,12 @@ public class Tuple implements CalculusFieldElement<Tuple> {
 
     /** {@inheritDoc} */
     @Override
+    public Tuple square() {
+        return multiply(this);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public Tuple divide(final Tuple a) {
         final Tuple result = new Tuple(field, new double[values.length]);
         for (int i = 0; i < values.length; ++i) {

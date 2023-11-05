@@ -179,8 +179,8 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
 
         // Function values
         BivariateFunction f = (x, y) -> 2 * x * x - 3 * y * y + 4 * x * y - 5;
-        CalculusFieldBivariateFunction<Binary64> fT = (x, y) -> x.multiply(x).multiply(2).
-                                                             subtract(y.multiply(y).multiply(3)).
+        CalculusFieldBivariateFunction<Binary64> fT = (x, y) -> x.square().multiply(2).
+                                                             subtract(y.square().multiply(3)).
                                                              add(x.multiply(y).multiply(4)).
                                                              subtract(5);
 

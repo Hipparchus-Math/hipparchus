@@ -2508,7 +2508,7 @@ public class DSCompiler {
             // as per polynomial parity, we can store coefficients of both P_(n-1) and P_n in the same array
             final T[] p = MathArrays.buildArray(field, order);
             p[0] = field.getOne().negate();
-            final T x2    = x.multiply(x);
+            final T x2    = x.square();
             final T f     = x2.subtract(1).negate().reciprocal();
             T coeff = f.sqrt();
             function[1] = coeff.multiply(p[0]);
@@ -2625,7 +2625,7 @@ public class DSCompiler {
             // as per polynomial parity, we can store coefficients of both P_(n-1) and P_n in the same array
             final T[] p = MathArrays.buildArray(field, order);
             p[0] = field.getOne();
-            final T x2    = x.multiply(x);
+            final T x2    = x.square();
             final T f     = x2.subtract(1).negate().reciprocal();
             T coeff = f.sqrt();
             function[1] = coeff.multiply(p[0]);
@@ -2742,7 +2742,7 @@ public class DSCompiler {
             // as per polynomial parity, we can store coefficients of both Q_(n-1) and Q_n in the same array
             final T[] q = MathArrays.buildArray(field, order);
             q[0] = field.getOne();
-            final T x2    = x.multiply(x);
+            final T x2    = x.square();
             final T f     = x2.add(1).reciprocal();
             T coeff = f;
             function[1] = coeff.multiply(q[0]);
@@ -3261,7 +3261,7 @@ public class DSCompiler {
             // as per polynomial parity, we can store coefficients of both P_(n-1) and P_n in the same array
             final T[] p = MathArrays.buildArray(field, order);
             p[0] = field.getOne();
-            final T x2  = x.multiply(x);
+            final T x2  = x.square();
             final T f   = x2.subtract(1).reciprocal();
             T coeff = f.sqrt();
             function[1] = coeff.multiply(p[0]);
@@ -3378,7 +3378,7 @@ public class DSCompiler {
             // as per polynomial parity, we can store coefficients of both P_(n-1) and P_n in the same array
             final T[] p = MathArrays.buildArray(field, order);
             p[0] = field.getOne();
-            final T x2    = x.multiply(x);
+            final T x2    = x.square();
             final T f     = x2.add(1).reciprocal();
             T coeff = f.sqrt();
             function[1] = coeff.multiply(p[0]);
@@ -3495,7 +3495,7 @@ public class DSCompiler {
             // as per polynomial parity, we can store coefficients of both Q_(n-1) and Q_n in the same array
             final T[] q = MathArrays.buildArray(field, order);
             q[0] = field.getOne();
-            final T x2 = x.multiply(x);
+            final T x2 = x.square();
             final T f  =x2.subtract(1).negate().reciprocal();
             T coeff = f;
             function[1] = coeff.multiply(q[0]);

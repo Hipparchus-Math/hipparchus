@@ -429,7 +429,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
         Assert.assertTrue(w.getImaginaryPart().isNaN());
 
         z = build(1, Double.NEGATIVE_INFINITY);
-        UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), z.multiply(z));
+        UnitTestUtils.assertSame(FieldComplex.getInf(Binary64Field.getInstance()), z.square());
     }
 
     @Test
@@ -1554,7 +1554,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     @Test
     public void testCbrtComplex() {
         FieldComplex<Binary64> z = build(15, 2);
-        UnitTestUtils.assertEquals(z, z.multiply(z).multiply(z).cbrt(), 1.0e-14);
+        UnitTestUtils.assertEquals(z, z.square().multiply(z).cbrt(), 1.0e-14);
         FieldComplex<Binary64> branchCutPlus = build(-8.0, +0.0);
         FieldComplex<Binary64> cbrtPlus = branchCutPlus.cbrt();
         UnitTestUtils.assertEquals(branchCutPlus, cbrtPlus.multiply(cbrtPlus).multiply(cbrtPlus), 1.0e-14);
@@ -1591,7 +1591,7 @@ public class FieldComplexTest extends CalculusFieldElementAbstractTest<FieldComp
     @Test
     public void testRootNComplex() {
         FieldComplex<Binary64> z = build(15, 2);
-        UnitTestUtils.assertEquals(z, z.multiply(z).multiply(z).rootN(3), 1.0e-14);
+        UnitTestUtils.assertEquals(z, z.square().multiply(z).rootN(3), 1.0e-14);
         FieldComplex<Binary64> branchCutPlus = build(-8.0, +0.0);
         FieldComplex<Binary64> cbrtPlus = branchCutPlus.rootN(3);
         UnitTestUtils.assertEquals(branchCutPlus, cbrtPlus.multiply(cbrtPlus).multiply(cbrtPlus), 1.0e-14);

@@ -231,7 +231,7 @@ public class FieldHermiteInterpolatorTest {
                                     new BigFraction[] { new BigFraction(56) });
         for (BigFraction x = new BigFraction(-1); x.doubleValue() <= 1.0; x = x.add(new BigFraction(1, 8))) {
             BigFraction y = interpolator.value(x)[0];
-            BigFraction x2 = x.multiply(x);
+            BigFraction x2 = x.square();
             BigFraction x4 = x2.multiply(x2);
             BigFraction x8 = x4.multiply(x4);
             Assert.assertEquals(x8.add(new BigFraction(1)), y);

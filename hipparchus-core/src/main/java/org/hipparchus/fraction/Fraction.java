@@ -31,6 +31,7 @@ import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.fraction.ConvergentsIterator.ConvergenceStep;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
@@ -612,6 +613,12 @@ public class Fraction
     @Override
     public Fraction multiply(final int i) {
         return multiply(new Fraction(i));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Fraction square() throws NullArgumentException {
+        return multiply(this);
     }
 
     /**
