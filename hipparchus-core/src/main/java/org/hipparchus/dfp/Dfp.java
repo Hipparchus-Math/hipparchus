@@ -2689,34 +2689,6 @@ public class Dfp implements CalculusFieldElement<Dfp> {
     /** {@inheritDoc}
      */
     @Override
-    public Dfp add(final double a) {
-        return add(newInstance(a));
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public Dfp subtract(final double a) {
-        return subtract(newInstance(a));
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public Dfp multiply(final double a) {
-        return multiply(newInstance(a));
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public Dfp divide(final double a) {
-        return divide(newInstance(a));
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
     public Dfp remainder(final double a) {
         return remainder(newInstance(a));
     }
@@ -2831,13 +2803,6 @@ public class Dfp implements CalculusFieldElement<Dfp> {
     /** {@inheritDoc}
      */
     @Override
-    public Dfp cbrt() {
-        return rootN(3);
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
     public Dfp rootN(final int n) {
         return (sign >= 0) ?
                DfpMath.pow(this, getOne().divide(n)) :
@@ -2912,13 +2877,6 @@ public class Dfp implements CalculusFieldElement<Dfp> {
     @Override
     public Dfp sin() {
         return DfpMath.sin(this);
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public FieldSinCos<Dfp> sinCos() {
-        return new FieldSinCos<>(DfpMath.sin(this), DfpMath.cos(this));
     }
 
     /** {@inheritDoc}

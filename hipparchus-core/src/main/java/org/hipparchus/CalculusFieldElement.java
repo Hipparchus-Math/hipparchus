@@ -25,6 +25,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.FieldSinhCosh;
+import org.hipparchus.util.MathArrays;
 
 /**
  * Interface representing a <a href="http://mathworld.wolfram.com/Field.html">field</a>
@@ -42,7 +43,9 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @return Archimedes constant π
      * @since 2.0
      */
-    T getPi();
+    default T getPi() {
+        return newInstance(FastMath.PI);
+    }
 
     /** Create an instance corresponding to a constant real value.
      * @param value constant real value
@@ -54,25 +57,45 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @param a right hand side parameter of the operator
      * @return this+a
      */
-    T add(double a);
+    default T add(double a) {
+        return add(newInstance(a));
+    }
 
     /** '-' operator.
      * @param a right hand side parameter of the operator
      * @return this-a
      */
-    T subtract(double a);
+    default T subtract(double a) {
+        return subtract(newInstance(a));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T subtract(T a) {
+        return add(a.negate());
+    }
 
     /** '&times;' operator.
      * @param a right hand side parameter of the operator
      * @return this&times;a
      */
-    T multiply(double a);
+    default T multiply(double a) {
+        return multiply(newInstance(a));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T multiply(int n) {
+        return multiply((double) n);
+    }
 
     /** '&divide;' operator.
      * @param a right hand side parameter of the operator
      * @return this&divide;a
      */
-    T divide(double a);
+    default T divide(double a) {
+        return divide(newInstance(a));
+    }
 
     /**
      * Return the exponent of the instance, removing the bias.
@@ -119,23 +142,31 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
 
     /** {@inheritDoc} */
     @Override
-    T reciprocal();
+    default T divide(T a) {
+        return multiply(a.reciprocal());
+    }
 
     /** Square root.
      * @return square root of the instance
      */
-    T sqrt();
+    default T sqrt() {
+        return rootN(2);
+    }
 
     /** Cubic root.
      * @return cubic root of the instance
      */
-    T cbrt();
+    default T cbrt() {
+        return rootN(3);
+    }
 
     /** N<sup>th</sup> root.
      * @param n order of the root
      * @return n<sup>th</sup> root of the instance
      */
-    T rootN(int n);
+    default T rootN(int n) {
+        return pow(1. / n);
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -147,13 +178,17 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @param p power to apply
      * @return this<sup>p</sup>
      */
-    T pow(double p);
+    default T pow(double p) {
+        return pow(newInstance(p));
+    }
 
     /** Integer power operation.
      * @param n power to apply
      * @return this<sup>n</sup>
      */
-    T pow(int n);
+    default T pow(int n) {
+        return pow((double) n);
+    }
 
     /** Power operation.
      * @param e exponent
@@ -202,12 +237,16 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @return [sin(this), cos(this)]
      * @since 1.4
      */
-    FieldSinCos<T> sinCos();
+    default FieldSinCos<T> sinCos() {
+        return new FieldSinCos<>(sin(), cos());
+    }
 
     /** Tangent operation.
      * @return tan(this)
      */
-    T tan();
+    default T tan() {
+        return sin().divide(cos());
+    }
 
     /** Arc cosine operation.
      * @return acos(this)
@@ -255,16 +294,20 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      */
     T sinh();
 
-    /** Combined hyperbolic sine and sosine operation.
+    /** Combined hyperbolic sine and cosine operation.
      * @return [sinh(this), cosh(this)]
      * @since 2.0
      */
-    FieldSinhCosh<T> sinhCosh();
+    default FieldSinhCosh<T> sinhCosh() {
+        return new FieldSinhCosh<>(sinh(), cosh());
+    }
 
     /** Hyperbolic tangent operation.
      * @return tanh(this)
      */
-    T tanh();
+    default T tanh() {
+        return sinh().divide(cosh());
+    }
 
     /** Inverse hyperbolic cosine operation.
      * @return acosh(this)
@@ -284,12 +327,16 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
     /** Convert radians to degrees, with error of less than 0.5 ULP
      *  @return instance converted into degrees
      */
-    T toDegrees();
+    default T toDegrees() {
+        return multiply(FastMath.toDegrees(1.));
+    }
 
     /** Convert degrees to radians, with error of less than 0.5 ULP
      *  @return instance converted into radians
      */
-    T toRadians();
+    default T toRadians() {
+        return multiply(FastMath.toRadians(1.));
+    }
 
     /**
      * Compute a linear combination.
@@ -308,8 +355,13 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @return <code>&Sigma;<sub>i</sub> a<sub>i</sub> b<sub>i</sub></code>.
      * @throws MathIllegalArgumentException if arrays dimensions don't match
      */
-    T linearCombination(double[] a, T[] b)
-        throws MathIllegalArgumentException;
+    default T linearCombination(double[] a, T[] b) throws MathIllegalArgumentException {
+        final T[] newInstances = MathArrays.buildArray(getField(), a.length);
+        for (int i = 0; i < a.length; i++) {
+            newInstances[i] = newInstance(a[i]);
+        }
+        return linearCombination(newInstances, b);
+    }
 
     /**
      * Compute a linear combination.
@@ -335,7 +387,9 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @see #linearCombination(double, FieldElement, double, FieldElement, double, FieldElement)
      * @see #linearCombination(double, FieldElement, double, FieldElement, double, FieldElement, double, FieldElement)
      */
-    T linearCombination(double a1, T b1, double a2, T b2);
+    default T linearCombination(double a1, T b1, double a2, T b2) {
+        return linearCombination(newInstance(a1), b1, newInstance(a2), b2);
+    }
 
     /**
      * Compute a linear combination.
@@ -365,7 +419,9 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @see #linearCombination(double, FieldElement, double, FieldElement)
      * @see #linearCombination(double, FieldElement, double, FieldElement, double, FieldElement, double, FieldElement)
      */
-    T linearCombination(double a1, T b1, double a2, T b2, double a3, T b3);
+    default T linearCombination(double a1, T b1, double a2, T b2, double a3, T b3) {
+        return linearCombination(newInstance(a1), b1, newInstance(a2), b2, newInstance(a3), b3);
+    }
 
     /**
      * Compute a linear combination.
@@ -401,7 +457,10 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @see #linearCombination(double, FieldElement, double, FieldElement)
      * @see #linearCombination(double, FieldElement, double, FieldElement, double, FieldElement)
      */
-    T linearCombination(double a1, T b1, double a2, T b2, double a3, T b3, double a4, T b4);
+    default T linearCombination(double a1, T b1, double a2, T b2, double a3, T b3, double a4, T b4) {
+        return linearCombination(newInstance(a1), b1, newInstance(a2), b2, newInstance(a3), b3,
+                newInstance(a4), b4);
+    }
 
     /** Get the smallest whole number larger than instance.
      * @return ceil(this)
@@ -454,7 +513,9 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @param sign the sign for the returned value
      * @return the instance with the same sign as the {@code sign} argument
      */
-    T copySign(double sign);
+    default T copySign(double sign) {
+        return copySign(newInstance(sign));
+    }
 
     /**
      * Check if the instance is infinite.
@@ -490,9 +551,6 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
     }
 
     /** absolute value.
-     * <p>
-     * Just another name for {@link #norm()}
-     * </p>
      * @return abs(this)
      */
     T abs();

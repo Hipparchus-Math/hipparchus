@@ -18,12 +18,19 @@ package org.hipparchus.analysis.differentiation;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.FastMath;
 
 /** Interface representing both the value and the differentials of a function.
  * @param <T> the type of the field elements
  * @since 1.7
  */
 public interface Derivative<T extends CalculusFieldElement<T>> extends CalculusFieldElement<T> {
+
+    /** {@inheritDoc} */
+    @Override
+    default double getReal() {
+        return getValue();
+    }
 
     /** Get the number of free parameters.
      * @return number of free parameters
@@ -64,4 +71,69 @@ public interface Derivative<T extends CalculusFieldElement<T>> extends CalculusF
     T compose(double... f)
         throws MathIllegalArgumentException;
 
+    /** {@inheritDoc} */
+    @Override
+    default T log10() {
+        return log().divide(FastMath.log(10.));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T pow(T e) {
+        return log().multiply(e).exp();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T cosh() {
+        return (exp().add(negate().exp())).divide(2);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T sinh() {
+        return (exp().subtract(negate().exp())).divide(2);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T acos() {
+        return asin().negate().add(getPi().divide(2));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T ceil() {
+        return newInstance(FastMath.ceil(getValue()));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T floor() {
+        return newInstance(FastMath.floor(getValue()));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T rint() {
+        return newInstance(FastMath.rint(getValue()));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T ulp() {
+        return newInstance(FastMath.ulp(getValue()));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T sign() {
+        return newInstance(FastMath.signum(getValue()));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default int getExponent() {
+        return FastMath.getExponent(getValue());
+    }
 }

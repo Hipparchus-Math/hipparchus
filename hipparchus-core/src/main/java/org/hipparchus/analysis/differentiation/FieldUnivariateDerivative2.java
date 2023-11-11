@@ -97,8 +97,9 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public double getReal() {
-        return getValue().getReal();
+    public FieldUnivariateDerivative2<T> newInstance(final T value) {
+        final T zero = f0.getField().getZero();
+        return new FieldUnivariateDerivative2<>(value, zero, zero);
     }
 
     /** Get the value part of the univariate derivative.
@@ -318,34 +319,6 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
         }
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative2<T> ceil() {
-        final T zero = f0.getField().getZero();
-        return new FieldUnivariateDerivative2<>(FastMath.ceil(f0), zero, zero);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative2<T> floor() {
-        final T zero = f0.getField().getZero();
-        return new FieldUnivariateDerivative2<>(FastMath.floor(f0), zero, zero);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative2<T> rint() {
-        final T zero = f0.getField().getZero();
-        return new FieldUnivariateDerivative2<>(FastMath.rint(f0), zero, zero);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative2<T> sign() {
-        final T zero = f0.getField().getZero();
-        return new FieldUnivariateDerivative2<>(FastMath.sign(f0), zero, zero);
-    }
-
     /**
      * Returns the instance with the sign of the argument.
      * A NaN {@code sign} argument is treated as positive.
@@ -386,28 +359,10 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public int getExponent() {
-        return FastMath.getExponent(f0.getReal());
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public FieldUnivariateDerivative2<T> scalb(final int n) {
         return new FieldUnivariateDerivative2<>(FastMath.scalb(f0, n),
                                                 FastMath.scalb(f1, n),
                                                 FastMath.scalb(f2, n));
-    }
-
-    /** {@inheritDoc}
-     * <p>
-     * The {@code ulp} function is a step function, hence all its derivatives are 0.
-     * </p>
-     * @since 2.0
-     */
-    @Override
-    public FieldUnivariateDerivative2<T> ulp() {
-        final T zero = getValueField().getZero();
-        return new FieldUnivariateDerivative2<>(FastMath.ulp(f0), zero, zero);
     }
 
     /** {@inheritDoc} */
@@ -427,10 +382,10 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
             final int expX = getExponent();
             final int expY = y.getExponent();
             if (expX > expY + 27) {
-                // y is neglectible with respect to x
+                // y is negligible with respect to x
                 return abs();
             } else if (expY > expX + 27) {
-                // x is neglectible with respect to y
+                // x is negligible with respect to y
                 return y.abs();
             } else {
 
@@ -557,12 +512,6 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
             final T f0N   = f0Nm1.multiply(f0);
             return compose(f0N, f0Nm1.multiply(n), f0Nm2.multiply(n * (n - 1)));
         }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative2<T> pow(final FieldUnivariateDerivative2<T> e) {
-        return log().multiply(e).exp();
     }
 
     /** {@inheritDoc} */

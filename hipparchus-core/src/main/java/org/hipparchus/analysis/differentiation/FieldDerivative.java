@@ -18,13 +18,15 @@ package org.hipparchus.analysis.differentiation;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.FastMath;
 
 /** Interface representing both the value and the differentials of a function.
  * @param <S> the type of the field elements
  * @param <T> the type of the function derivative
  * @since 1.7
  */
-public interface FieldDerivative<S extends CalculusFieldElement<S>, T extends FieldDerivative<S, T>> extends CalculusFieldElement<T> {
+public interface FieldDerivative<S extends CalculusFieldElement<S>, T extends FieldDerivative<S, T>>
+        extends CalculusFieldElement<T> {
 
     /** Get the number of free parameters.
      * @return number of free parameters
@@ -53,5 +55,91 @@ public interface FieldDerivative<S extends CalculusFieldElement<S>, T extends Fi
      */
     S getPartialDerivative(int ... orders)
         throws MathIllegalArgumentException;
+
+    /** {@inheritDoc} */
+    @Override
+    default double getReal() {
+        return getValue().getReal();
+    }
+
+    /** Create an instance corresponding to a constant Field value.
+     * <p>
+     * This default implementation is there so that no API gets broken
+     * by the next release, which is not a major one. Inheritors should
+     * probably overwrite it.
+     * </p>
+     * @param value constant value
+     * @return instance corresponding to a constant Field value
+     * @since 3.1
+     */
+    default T newInstance(S value) {
+        return newInstance(value.getReal());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T log10() {
+        return log().divide(FastMath.log(10.));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T pow(T e) {
+        return log().multiply(e).exp();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T cosh() {
+        return (exp().add(negate().exp())).divide(2);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T sinh() {
+        return (exp().subtract(negate().exp())).divide(2);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T acos() {
+        return asin().negate().add(getPi().divide(2));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T ceil() {
+        return newInstance(getValue().ceil());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T floor() {
+        return newInstance(getValue().floor());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T rint() {
+        return newInstance(getValue().rint());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T ulp() {
+        return newInstance(getValue().ulp());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T sign() {
+        return newInstance(getValue().sign());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default int getExponent() {
+        return FastMath.getExponent(getValue().getReal());
+    }
 
 }

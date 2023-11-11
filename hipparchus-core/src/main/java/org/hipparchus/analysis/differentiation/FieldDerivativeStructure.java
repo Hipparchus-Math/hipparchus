@@ -68,6 +68,12 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
         return factory.constant(value);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldDerivativeStructure<T> newInstance(final T value) {
+        return factory.constant(value);
+    }
+
     /** Get the factory that built the instance.
      * @return factory that built the instance
      */
@@ -85,13 +91,6 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
     /** {@inheritDoc} */
     public int getOrder() {
         return getFactory().getCompiler().getOrder();
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public double getReal() {
-        return data[0].getReal();
     }
 
     /** Set a derivative component.
@@ -226,12 +225,6 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
             ds.data[i] = data[i].multiply(a);
         }
         return ds;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldDerivativeStructure<T> multiply(final int n) {
-        return multiply((double) n);
     }
 
     /** {@inheritDoc}
@@ -480,10 +473,10 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
             final int expX = getExponent();
             final int expY = y.getExponent();
             if (expX > expY + 27) {
-                // y is neglectible with respect to x
+                // y is negligible with respect to x
                 return abs();
             } else if (expY > expX + 27) {
-                // x is neglectible with respect to y
+                // x is negligible with respect to y
                 return y.abs();
             } else {
 
@@ -579,13 +572,6 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
         final FieldDerivativeStructure<T> result = factory.build();
         factory.getCompiler().sqrt(data, 0, result.data, 0);
         return result;
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public FieldDerivativeStructure<T> cbrt() {
-        return rootN(3);
     }
 
     /** {@inheritDoc}

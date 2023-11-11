@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.1" date="TBD" description="TBD.">
+      <action dev="serrof" type="add" issue="issues/281">
+        Add default implementations in CalculusFieldElement and inheritors.
+      </action>
       <action dev="serrof" type="add" issue="issues/280">
         Add square method to FieldElement.
       </action>

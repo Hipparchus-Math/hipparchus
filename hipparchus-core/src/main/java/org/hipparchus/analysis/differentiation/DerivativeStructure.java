@@ -146,13 +146,6 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
         return data[index];
     }
 
-    /** {@inheritDoc}
-     */
-    @Override
-    public double getReal() {
-        return data[0];
-    }
-
     /** Get the value part of the derivative structure.
      * @return value part of the derivative structure
      * @see #getPartialDerivative(int...)
@@ -218,12 +211,6 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
         final DerivativeStructure ds = factory.build();
         factory.getCompiler().subtract(data, 0, a.data, 0, ds.data, 0);
         return ds;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public DerivativeStructure multiply(final int n) {
-        return multiply((double) n);
     }
 
     /** {@inheritDoc}
@@ -377,19 +364,6 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
         return negate(); // flip sign
     }
 
-    /**
-     * Return the exponent of the instance value, removing the bias.
-     * <p>
-     * For double numbers of the form 2<sup>x</sup>, the unbiased
-     * exponent is exactly x.
-     * </p>
-     * @return exponent for instance in IEEE754 representation, without bias
-     */
-    @Override
-    public int getExponent() {
-        return FastMath.getExponent(data[0]);
-    }
-
     /** {@inheritDoc}
      */
     @Override
@@ -433,10 +407,10 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
             final int expX = getExponent();
             final int expY = y.getExponent();
             if (expX > expY + 27) {
-                // y is neglectible with respect to x
+                // y is negligible with respect to x
                 return abs();
             } else if (expY > expX + 27) {
-                // x is neglectible with respect to y
+                // x is negligible with respect to y
                 return y.abs();
             } else {
 
@@ -513,13 +487,6 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
         final DerivativeStructure result = factory.build();
         factory.getCompiler().sqrt(data, 0, result.data, 0);
         return result;
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public DerivativeStructure cbrt() {
-        return rootN(3);
     }
 
     /** {@inheritDoc}
