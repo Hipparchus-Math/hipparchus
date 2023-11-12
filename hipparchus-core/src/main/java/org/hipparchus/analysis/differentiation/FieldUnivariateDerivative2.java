@@ -428,7 +428,7 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     public FieldUnivariateDerivative2<T> compose(final T g0, final T g1, final T g2) {
         return new FieldUnivariateDerivative2<>(g0,
                                                 g1.multiply(f1),
-                                                f0.linearCombination(g1, f2, g2, f1.multiply(f1)));
+                                                f0.linearCombination(g1, f2, g2, f1.square()));
     }
 
     /** {@inheritDoc} */
@@ -437,7 +437,7 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
         final T s0 = FastMath.sqrt(f0);
         final T s0twice = s0.multiply(2);
         final T s1 = f1.divide(s0twice);
-        final T s2 = (f2.subtract(s1.multiply(s1).multiply(2))).divide(s0twice);
+        final T s2 = (f2.subtract(s1.square().multiply(2))).divide(s0twice);
         return new FieldUnivariateDerivative2<>(s0, s1, s2);
     }
 
@@ -586,7 +586,7 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative2<T> acos() {
-        final T inv = f0.multiply(f0).negate().add(1).reciprocal();
+        final T inv = f0.square().negate().add(1).reciprocal();
         final T mS  = inv.sqrt().negate();
         return compose(FastMath.acos(f0), mS, mS.multiply(f0).multiply(inv));
     }
@@ -594,7 +594,7 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative2<T> asin() {
-        final T inv = f0.multiply(f0).negate().add(1).reciprocal();
+        final T inv = f0.square().negate().add(1).reciprocal();
         final T s   = inv.sqrt();
         return compose(FastMath.asin(f0), s, s.multiply(f0).multiply(inv));
     }
@@ -602,7 +602,7 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative2<T> atan() {
-        final T inv = f0.multiply(f0).add(1).reciprocal();
+        final T inv = f0.square().add(1).reciprocal();
         return compose(FastMath.atan(f0), inv, f0.multiply(-2).multiply(inv).multiply(inv));
     }
 
@@ -611,7 +611,7 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     public FieldUnivariateDerivative2<T> atan2(final FieldUnivariateDerivative2<T> x) {
         final T x2    = x.f0.multiply(x.f0);
         final T f02   = f0.add(f0);
-        final T inv   = f0.multiply(f0).add(x2).reciprocal();
+        final T inv   = f0.square().add(x2).reciprocal();
         final T atan0 = FastMath.atan2(f0, x.f0);
         final T atan1 = f0.linearCombination(x.f0, f1, x.f1.negate(), f0).multiply(inv);
         final T c     = f0.linearCombination(f2, x2,
@@ -658,7 +658,7 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative2<T> acosh() {
-        final T inv = f0.multiply(f0).subtract(1).reciprocal();
+        final T inv = f0.square().subtract(1).reciprocal();
         final T s   = inv.sqrt();
         return compose(FastMath.acosh(f0), s, f0.negate().multiply(s).multiply(inv));
     }
@@ -666,7 +666,7 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative2<T> asinh() {
-        final T inv = f0.multiply(f0).add(1).reciprocal();
+        final T inv = f0.square().add(1).reciprocal();
         final T s   = inv.sqrt();
         return compose(FastMath.asinh(f0), s, f0.negate().multiply(s).multiply(inv));
     }
@@ -674,7 +674,7 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative2<T> atanh() {
-        final T inv = f0.multiply(f0).negate().add(1).reciprocal();
+        final T inv = f0.square().negate().add(1).reciprocal();
         return compose(FastMath.atanh(f0), inv, f0.add(f0).multiply(inv).multiply(inv));
     }
 

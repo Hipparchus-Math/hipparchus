@@ -531,25 +531,25 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative1<T> acos() {
-        return compose(FastMath.acos(f0), f0.multiply(f0).negate().add(1).sqrt().reciprocal().negate());
+        return compose(FastMath.acos(f0), f0.square().negate().add(1).sqrt().reciprocal().negate());
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative1<T> asin() {
-        return compose(FastMath.asin(f0), f0.multiply(f0).negate().add(1).sqrt().reciprocal());
+        return compose(FastMath.asin(f0), f0.square().negate().add(1).sqrt().reciprocal());
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative1<T> atan() {
-        return compose(FastMath.atan(f0), f0.multiply(f0).add(1).reciprocal());
+        return compose(FastMath.atan(f0), f0.square().add(1).reciprocal());
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative1<T> atan2(final FieldUnivariateDerivative1<T> x) {
-        final T inv = f0.multiply(f0).add(x.f0.multiply(x.f0)).reciprocal();
+        final T inv = f0.square().add(x.f0.multiply(x.f0)).reciprocal();
         return new FieldUnivariateDerivative1<>(FastMath.atan2(f0, x.f0),
                                                 f0.linearCombination(x.f0, f1, x.f1.negate(), f0).multiply(inv));
     }
@@ -584,19 +584,19 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative1<T> acosh() {
-        return compose(FastMath.acosh(f0), f0.multiply(f0).subtract(1).sqrt().reciprocal());
+        return compose(FastMath.acosh(f0), f0.square().subtract(1).sqrt().reciprocal());
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative1<T> asinh() {
-        return compose(FastMath.asinh(f0), f0.multiply(f0).add(1).sqrt().reciprocal());
+        return compose(FastMath.asinh(f0), f0.square().add(1).sqrt().reciprocal());
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative1<T> atanh() {
-        return compose(FastMath.atanh(f0), f0.multiply(f0).negate().add(1).reciprocal());
+        return compose(FastMath.atanh(f0), f0.square().negate().add(1).reciprocal());
     }
 
     /** {@inheritDoc} */

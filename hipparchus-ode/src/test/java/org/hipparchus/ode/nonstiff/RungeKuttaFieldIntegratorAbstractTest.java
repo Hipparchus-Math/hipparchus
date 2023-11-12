@@ -408,7 +408,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
             T[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
             T dx = current.getPrimaryState()[0].subtract(theoreticalY[0]);
             T dy = current.getPrimaryState()[1].subtract(theoreticalY[1]);
-            T error = dx.multiply(dx).add(dy.multiply(dy));
+            T error = dx.square().add(dy.square());
             if (error.subtract(maxError).getReal() > 0) {
                 maxError = error;
             }
@@ -465,7 +465,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         T[] yth = pb.computeTheoreticalState(t);
         T dx = y[0].subtract(yth[0]);
         T dy = y[1].subtract(yth[1]);
-        T error = dx.multiply(dx).add(dy.multiply(dy));
+        T error = dx.square().add(dy.square());
         Assert.assertEquals(0.0, error.getReal(), epsilon);
     }
 

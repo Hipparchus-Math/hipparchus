@@ -240,7 +240,7 @@ public class DfpMath {
             do {
                 prevr = new Dfp(r);
                 prevtrial = trial;
-                r = r.multiply(r);
+                r = r.square();
                 trial *= 2;
             } while (a>trial);
 
