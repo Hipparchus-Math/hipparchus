@@ -1211,7 +1211,7 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * using vector operator convention
      */
     private FieldRotation<T> composeInternal(final FieldRotation<T> r) {
-        return new FieldRotation<T>(r.q0.square().subtract(r.q1.square().add(r.q2.square()).add(r.q3.square())),
+        return new FieldRotation<T>(r.q0.multiply(q0).subtract(r.q1.multiply(q1)).add(r.q2.multiply(q2)).add(r.q3.multiply(q3))),
                                     r.q1.multiply(q0).add(r.q0.multiply(q1)).add(r.q2.multiply(q3).subtract(r.q3.multiply(q2))),
                                     r.q2.multiply(q0).add(r.q0.multiply(q2)).add(r.q3.multiply(q1).subtract(r.q1.multiply(q3))),
                                     r.q3.multiply(q0).add(r.q0.multiply(q3)).add(r.q1.multiply(q2).subtract(r.q2.multiply(q1))),
@@ -1344,7 +1344,7 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * of the instance using vector operator convention
      */
     private FieldRotation<T> composeInverseInternal(FieldRotation<T> r) {
-        return new FieldRotation<T>(r.q0.square().add(r.q1.square().add(r.q2.square()).add(r.q3.square())).negate(),
+        return new FieldRotation<T>(r.q0.multiply(q0).add(r.q1.multiply(q1)).add(r.q2.multiply(q2)).add(r.q3.multiply(q3)).negate(),
                                     r.q0.multiply(q1).add(r.q2.multiply(q3).subtract(r.q3.multiply(q2))).subtract(r.q1.multiply(q0)),
                                     r.q0.multiply(q2).add(r.q3.multiply(q1).subtract(r.q1.multiply(q3))).subtract(r.q2.multiply(q0)),
                                     r.q0.multiply(q3).add(r.q1.multiply(q2).subtract(r.q2.multiply(q1))).subtract(r.q3.multiply(q0)),
