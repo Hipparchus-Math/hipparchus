@@ -26,17 +26,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.FieldSinCos;
-import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
-import org.hipparchus.util.SinCos;
-import org.hipparchus.util.SinhCosh;
 
 /**
  * First derivative computation with large number of variables.
@@ -49,7 +44,7 @@ import org.hipparchus.util.SinhCosh;
  * </p>
  *
  */
-public class SparseGradient implements CalculusFieldElement<SparseGradient>, Serializable {
+public class SparseGradient implements Derivative1<SparseGradient>, Serializable {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20131025L;
@@ -94,8 +89,26 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
 
     /** {@inheritDoc} */
     @Override
+    public int getFreeParameters() {
+        return derivatives.size();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public double getPartialDerivative(int... orders) throws MathIllegalArgumentException {
+        return getDerivative(orders[0]);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public SparseGradient newInstance(final double v) {
         return createConstant(v);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public SparseGradient withValue(final double value) {
+        return new SparseGradient(value, derivatives);
     }
 
     /** Factory method creating a constant.
@@ -119,8 +132,9 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
      * Find the number of variables.
      * @return number of variables
      */
+    @Deprecated
     public int numVars() {
-        return derivatives.size();
+        return getFreeParameters();
     }
 
     /**
@@ -139,12 +153,6 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
      * @return value of the function.
      */
     public double getValue() {
-        return value;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public double getReal() {
         return value;
     }
 
@@ -192,12 +200,6 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
 
     /** {@inheritDoc} */
     @Override
-    public SparseGradient add(final double c) {
-        return new SparseGradient(value + c, derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public SparseGradient subtract(final SparseGradient a) {
         final SparseGradient out = new SparseGradient(value - a.value, derivatives);
         for (Map.Entry<Integer, Double> entry : a.derivatives.entrySet()) {
@@ -210,12 +212,6 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
             }
         }
         return out;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient subtract(double c) {
-        return new SparseGradient(value - c, derivatives);
     }
 
     /** {@inheritDoc} */
@@ -279,12 +275,6 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
     @Override
     public SparseGradient multiply(final int n) {
         return new SparseGradient(value * n, n, derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient square() {
-        return multiply(this);
     }
 
     /** {@inheritDoc} */
@@ -422,30 +412,6 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
 
     /** {@inheritDoc} */
     @Override
-    public SparseGradient ceil() {
-        return createConstant(FastMath.ceil(value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient floor() {
-        return createConstant(FastMath.floor(value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient rint() {
-        return createConstant(FastMath.rint(value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient sign() {
-        return createConstant(FastMath.signum(value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public SparseGradient copySign(final SparseGradient sign) {
         final long m = Double.doubleToLongBits(value);
         final long s = Double.doubleToLongBits(sign.value);
@@ -474,17 +440,6 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
             out.derivatives.put(entry.getKey(), FastMath.scalb(entry.getValue(), n));
         }
         return out;
-    }
-
-    /** {@inheritDoc}
-     * <p>
-     * The {@code ulp} function is a step function, hence all its derivatives are 0.
-     * </p>
-     * @since 2.0
-     */
-    @Override
-    public SparseGradient ulp() {
-        return newInstance(FastMath.ulp(value));
     }
 
     /** {@inheritDoc} */
@@ -545,35 +500,9 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
 
     /** {@inheritDoc} */
     @Override
-    public SparseGradient reciprocal() {
-        return new SparseGradient(1.0 / value, -1.0 / (value * value), derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public SparseGradient sqrt() {
         final double sqrt = FastMath.sqrt(value);
         return new SparseGradient(sqrt, 0.5 / sqrt, derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient cbrt() {
-        final double cbrt = FastMath.cbrt(value);
-        return new SparseGradient(cbrt, 1.0 / (3 * cbrt * cbrt), derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient rootN(final int n) {
-        if (n == 2) {
-            return sqrt();
-        } else if (n == 3) {
-            return cbrt();
-        } else {
-            final double root = FastMath.pow(value, 1.0 / n);
-            return new SparseGradient(root, 1.0 / (n * FastMath.pow(root, n - 1)), derivatives);
-        }
     }
 
     /** {@inheritDoc} */
@@ -591,12 +520,6 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
             final double valueNm1 = FastMath.pow(value,  n - 1);
             return new SparseGradient(value * valueNm1, n * valueNm1, derivatives);
         }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient pow(final SparseGradient e) {
-        return log().multiply(e).exp();
     }
 
     /** Compute a<sup>x</sup> where a is a double and x a {@link SparseGradient}
@@ -617,86 +540,6 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
             final double ax = FastMath.pow(a, x.value);
             return new SparseGradient(ax, ax * FastMath.log(a), x.derivatives);
         }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient exp() {
-        final double e = FastMath.exp(value);
-        return new SparseGradient(e, e, derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient expm1() {
-        return new SparseGradient(FastMath.expm1(value), FastMath.exp(value), derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient log() {
-        return new SparseGradient(FastMath.log(value), 1.0 / value, derivatives);
-    }
-
-    /** Base 10 logarithm.
-     * @return base 10 logarithm of the instance
-     */
-    @Override
-    public SparseGradient log10() {
-        return new SparseGradient(FastMath.log10(value), 1.0 / (FastMath.log(10.0) * value), derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient log1p() {
-        return new SparseGradient(FastMath.log1p(value), 1.0 / (1.0 + value), derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient cos() {
-        final SinCos sc = FastMath.sinCos(value);
-        return new SparseGradient(sc.cos(), -sc.sin(), derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient sin() {
-        final SinCos sc = FastMath.sinCos(value);
-        return new SparseGradient(sc.sin(), sc.cos(), derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldSinCos<SparseGradient> sinCos() {
-        final SinCos sc = FastMath.sinCos(value);
-        return new FieldSinCos<>(new SparseGradient(sc.sin(),  sc.cos(), derivatives),
-                                 new SparseGradient(sc.cos(), -sc.sin(), derivatives));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient tan() {
-        final double t = FastMath.tan(value);
-        return new SparseGradient(t, 1 + t * t, derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient acos() {
-        return new SparseGradient(FastMath.acos(value), -1.0 / FastMath.sqrt(1 - value * value), derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient asin() {
-        return new SparseGradient(FastMath.asin(value), 1.0 / FastMath.sqrt(1 - value * value), derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient atan() {
-        return new SparseGradient(FastMath.atan(value), 1.0 / (1 + value * value), derivatives);
     }
 
     /** {@inheritDoc} */
@@ -738,51 +581,6 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
 
     /** {@inheritDoc} */
     @Override
-    public SparseGradient cosh() {
-        return new SparseGradient(FastMath.cosh(value), FastMath.sinh(value), derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient sinh() {
-        return new SparseGradient(FastMath.sinh(value), FastMath.cosh(value), derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldSinhCosh<SparseGradient> sinhCosh() {
-        final SinhCosh sch = FastMath.sinhCosh(value);
-        return new FieldSinhCosh<>(new SparseGradient(sch.sinh(), sch.cosh(), derivatives),
-                                   new SparseGradient(sch.cosh(), sch.sinh(), derivatives));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient tanh() {
-        final double t = FastMath.tanh(value);
-        return new SparseGradient(t, 1 - t * t, derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient acosh() {
-        return new SparseGradient(FastMath.acosh(value), 1.0 / FastMath.sqrt(value * value - 1.0), derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient asinh() {
-        return new SparseGradient(FastMath.asinh(value), 1.0 / FastMath.sqrt(value * value + 1.0), derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public SparseGradient atanh() {
-        return new SparseGradient(FastMath.atanh(value), 1.0 / (1.0 - value * value), derivatives);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public SparseGradient toDegrees() {
         return new SparseGradient(FastMath.toDegrees(value), FastMath.toDegrees(1.0), derivatives);
     }
@@ -815,7 +613,13 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
      */
     public SparseGradient compose(final double... f) {
         MathUtils.checkDimension(f.length, 2);
-        return new SparseGradient(f[0], f[1], derivatives);
+        return compose(f[0], f[1]);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public SparseGradient compose(final double f0, final double f1) {
+        return new SparseGradient(f0, f1, derivatives);
     }
 
     /** {@inheritDoc} */
@@ -824,7 +628,7 @@ public class SparseGradient implements CalculusFieldElement<SparseGradient>, Ser
                                             final SparseGradient[] b)
         throws MathIllegalArgumentException {
 
-        // compute a simple value, with all partial derivatives
+        // compute a simple value, with all l derivatives
         SparseGradient out = a[0].getField().getZero();
         for (int i = 0; i < a.length; ++i) {
             out = out.add(a[i].multiply(b[i]));

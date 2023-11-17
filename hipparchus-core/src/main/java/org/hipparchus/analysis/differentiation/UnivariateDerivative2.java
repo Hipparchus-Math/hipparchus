@@ -100,6 +100,11 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
         return new UnivariateDerivative2(value, 0.0, 0.0);
     }
 
+    @Override
+    public UnivariateDerivative2 withValue(final double value) {
+        return new UnivariateDerivative2(value, f1, f2);
+    }
+
     /** {@inheritDoc} */
     @Override
     public double getValue() {
@@ -153,20 +158,8 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
-    public UnivariateDerivative2 add(final double a) {
-        return new UnivariateDerivative2(f0 + a, f1, f2);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public UnivariateDerivative2 add(final UnivariateDerivative2 a) {
         return new UnivariateDerivative2(f0 + a.f0, f1 + a.f1, f2 + a.f2);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative2 subtract(final double a) {
-        return new UnivariateDerivative2(f0 - a, f1, f2);
     }
 
     /** {@inheritDoc} */
@@ -220,12 +213,6 @@ public class UnivariateDerivative2 extends UnivariateDerivative<UnivariateDeriva
                                                                       -2 * f1, a.f0 * a.f1,
                                                                        2 * f0, a.f1 * a.f1,
                                                                        -f0, a.f0 * a.f2) * inv3);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative2 remainder(final double a) {
-        return new UnivariateDerivative2(FastMath.IEEEremainder(f0, a), f1, f2);
     }
 
     /** {@inheritDoc} */

@@ -19,12 +19,8 @@ package org.hipparchus.analysis.differentiation;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.FieldSinCos;
-import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
-import org.hipparchus.util.SinCos;
-import org.hipparchus.util.SinhCosh;
 
 /** Class representing both the value and the differentials of a function.
  * <p>This class is a stripped-down version of {@link DerivativeStructure}
@@ -51,7 +47,8 @@ import org.hipparchus.util.SinhCosh;
  * @see FieldGradient
  * @since 1.7
  */
-public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDerivative1> {
+public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDerivative1>
+        implements Derivative1<UnivariateDerivative1> {
 
     /** The constant value of π as a {@code UnivariateDerivative1}.
      * @since 2.0
@@ -96,6 +93,12 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
+    public UnivariateDerivative1 withValue(final double value) {
+        return new UnivariateDerivative1(value, f1);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public double getValue() {
         return f0;
     }
@@ -111,12 +114,6 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
             default :
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, n);
         }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public int getOrder() {
-        return 1;
     }
 
     /** Get the first derivative.
@@ -135,20 +132,8 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
-    public UnivariateDerivative1 add(final double a) {
-        return new UnivariateDerivative1(f0 + a, f1);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public UnivariateDerivative1 add(final UnivariateDerivative1 a) {
         return new UnivariateDerivative1(f0 + a.f0, f1 + a.f1);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 subtract(final double a) {
-        return new UnivariateDerivative1(f0 - a, f1);
     }
 
     /** {@inheritDoc} */
@@ -178,12 +163,6 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
-    public UnivariateDerivative1 square() {
-        return new UnivariateDerivative1(f0 * f0, 2 * f0 * f1);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public UnivariateDerivative1 divide(final double a) {
         final double inv1 = 1.0 / a;
         return new UnivariateDerivative1(f0 * inv1, f1 * inv1);
@@ -196,12 +175,6 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
         final double inv2 = inv1 * inv1;
         return new UnivariateDerivative1(f0 * inv1,
                                          MathArrays.linearCombination(f1, a.f0, -f0, a.f1) * inv2);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 remainder(final double a) {
-        return new UnivariateDerivative1(FastMath.IEEEremainder(f0, a), f1);
     }
 
     /** {@inheritDoc} */
@@ -302,44 +275,15 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
-    public UnivariateDerivative1 reciprocal() {
-        final double inv1 = 1.0 / f0;
-        final double inv2 = inv1 * inv1;
-        return new UnivariateDerivative1(inv1, -f1 * inv2);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public UnivariateDerivative1 compose(final double... f) {
         MathUtils.checkDimension(f.length, getOrder() + 1);
-        return new UnivariateDerivative1(f[0], f[1] * f1);
+        return compose(f[0], f[1]);
     }
 
     /** {@inheritDoc} */
     @Override
-    public UnivariateDerivative1 sqrt() {
-        final double s = FastMath.sqrt(f0);
-        return compose(s, 1 / (2 * s));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 cbrt() {
-        final double c = FastMath.cbrt(f0);
-        return compose(c, 1 / (3 * c * c));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 rootN(final int n) {
-        if (n == 2) {
-            return sqrt();
-        } else if (n == 3) {
-            return cbrt();
-        } else {
-            final double r = FastMath.pow(f0, 1.0 / n);
-            return compose(r, 1 / (n * FastMath.pow(r, n - 1)));
-        }
+    public UnivariateDerivative1 compose(final double f0, final double f1) {
+        return new UnivariateDerivative1(f0, this.f1 * f1);
     }
 
     /** {@inheritDoc} */
@@ -386,135 +330,10 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
-    public UnivariateDerivative1 exp() {
-        final double exp = FastMath.exp(f0);
-        return compose(exp, exp);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 expm1() {
-        final double exp   = FastMath.exp(f0);
-        final double expM1 = FastMath.expm1(f0);
-        return compose(expM1, exp);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 log() {
-        return compose(FastMath.log(f0), 1 / f0);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 log1p() {
-        return compose(FastMath.log1p(f0), 1 / (1 + f0));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 log10() {
-        return compose(FastMath.log10(f0), 1 / (f0 * FastMath.log(10.0)));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 cos() {
-        final SinCos sinCos = FastMath.sinCos(f0);
-        return compose(sinCos.cos(), -sinCos.sin());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 sin() {
-        final SinCos sinCos = FastMath.sinCos(f0);
-        return compose(sinCos.sin(), sinCos.cos());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldSinCos<UnivariateDerivative1> sinCos() {
-        final SinCos sinCos = FastMath.sinCos(f0);
-        return new FieldSinCos<>(new UnivariateDerivative1(sinCos.sin(),  f1 * sinCos.cos()),
-                                 new UnivariateDerivative1(sinCos.cos(), -f1 * sinCos.sin()));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 tan() {
-        final double tan = FastMath.tan(f0);
-        return compose(tan, 1 + tan * tan);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 acos() {
-        return compose(FastMath.acos(f0), -1 / FastMath.sqrt(1 - f0 * f0));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 asin() {
-        return compose(FastMath.asin(f0), 1 / FastMath.sqrt(1 - f0 * f0));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 atan() {
-        return compose(FastMath.atan(f0), 1 / (1 + f0 * f0));
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public UnivariateDerivative1 atan2(final UnivariateDerivative1 x) {
         final double inv = 1.0 / (f0 * f0 + x.f0 * x.f0);
         return new UnivariateDerivative1(FastMath.atan2(f0, x.f0),
                                          MathArrays.linearCombination(x.f0, f1, -x.f1, f0) * inv);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 cosh() {
-        return compose(FastMath.cosh(f0), FastMath.sinh(f0));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 sinh() {
-        return compose(FastMath.sinh(f0), FastMath.cosh(f0));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldSinhCosh<UnivariateDerivative1> sinhCosh() {
-        final SinhCosh sinhCosh = FastMath.sinhCosh(f0);
-        return new FieldSinhCosh<>(new UnivariateDerivative1(sinhCosh.sinh(), f1 * sinhCosh.cosh()),
-                                   new UnivariateDerivative1(sinhCosh.cosh(), f1 * sinhCosh.sinh()));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 tanh() {
-        final double tanh = FastMath.tanh(f0);
-        return compose(tanh, 1 - tanh * tanh);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 acosh() {
-        return compose(FastMath.acosh(f0), 1 / FastMath.sqrt(f0 * f0 - 1));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 asinh() {
-        return compose(FastMath.asinh(f0), 1 / FastMath.sqrt(f0 * f0 + 1));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 atanh() {
-        return compose(FastMath.atanh(f0), 1 / (1 - f0 * f0));
     }
 
     /** {@inheritDoc} */

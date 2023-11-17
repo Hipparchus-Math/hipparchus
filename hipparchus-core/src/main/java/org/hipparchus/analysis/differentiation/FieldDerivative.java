@@ -23,20 +23,11 @@ import org.hipparchus.util.FastMath;
 /** Interface representing both the value and the differentials of a function.
  * @param <S> the type of the field elements
  * @param <T> the type of the function derivative
+ * @see Derivative
  * @since 1.7
  */
 public interface FieldDerivative<S extends CalculusFieldElement<S>, T extends FieldDerivative<S, T>>
-        extends CalculusFieldElement<T> {
-
-    /** Get the number of free parameters.
-     * @return number of free parameters
-     */
-    int getFreeParameters();
-
-    /** Get the derivation order.
-     * @return derivation order
-     */
-    int getOrder();
+        extends CalculusFieldElement<T>, DifferentialAlgebra {
 
     /** Get the value part of the function.
      * @return value part of the value of the function
@@ -65,8 +56,8 @@ public interface FieldDerivative<S extends CalculusFieldElement<S>, T extends Fi
     /** Create an instance corresponding to a constant Field value.
      * <p>
      * This default implementation is there so that no API gets broken
-     * by the next release, which is not a major one. Inheritors should
-     * probably overwrite it.
+     * by the next release, which is not a major one. Custom inheritors
+     * should probably overwrite it.
      * </p>
      * @param value constant value
      * @return instance corresponding to a constant Field value
@@ -74,6 +65,39 @@ public interface FieldDerivative<S extends CalculusFieldElement<S>, T extends Fi
      */
     default T newInstance(S value) {
         return newInstance(value.getReal());
+    }
+
+    /** Create a new object with new value (zeroth-order derivative, as passed as input)
+     * and same derivatives of order one and above.
+     * <p>
+     * This default implementation is there so that no API gets broken
+     * by the next release, which is not a major one. Custom inheritors
+     * should probably overwrite it.
+     * </p>
+     * @param value zeroth-order derivative of new represented function
+     * @return new object with changed value
+     * @since 3.1
+     */
+    default T withValue(S value) {
+        return add(newInstance(value.subtract(getValue())));
+    }
+
+    /** '+' operator.
+     * @param a right hand side parameter of the operator
+     * @return this+a
+     * @since 3.1
+     */
+    default T add(S a) {
+        return withValue(getValue().add(a));
+    }
+
+    /** '-' operator.
+     * @param a right hand side parameter of the operator
+     * @return this-a
+     * @since 3.1
+     */
+    default T subtract(S a) {
+        return withValue(getValue().subtract(a));
     }
 
     /** {@inheritDoc} */
@@ -139,7 +163,7 @@ public interface FieldDerivative<S extends CalculusFieldElement<S>, T extends Fi
     /** {@inheritDoc} */
     @Override
     default int getExponent() {
-        return FastMath.getExponent(getValue().getReal());
+        return getValue().getExponent();
     }
 
 }

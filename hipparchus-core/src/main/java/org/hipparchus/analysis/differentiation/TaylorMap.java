@@ -31,7 +31,7 @@ import org.hipparchus.util.MathUtils;
  * </p>
  * @since 2.2
  */
-public class TaylorMap {
+public class TaylorMap implements DifferentialAlgebra {
 
     /** Evaluation point. */
     private final double[] point;
@@ -90,11 +90,24 @@ public class TaylorMap {
         this.functions = new DerivativeStructure[nbFunctions];
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public int getFreeParameters() {
+        return point.length;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getOrder() {
+        return functions[0].getOrder();
+    }
+
     /** Get the number of parameters of the map.
      * @return number of parameters of the map
      */
+    @Deprecated
     public int getNbParameters() {
-        return point.length;
+        return getFreeParameters();
     }
 
     /** Get the number of functions of the map.
@@ -150,7 +163,7 @@ public class TaylorMap {
     public TaylorMap compose(final TaylorMap other) {
 
         // safety check
-        MathUtils.checkDimension(getNbParameters(), other.getNbFunctions());
+        MathUtils.checkDimension(getFreeParameters(), other.getNbFunctions());
 
         final DerivativeStructure[] composed = new DerivativeStructure[functions.length];
         for (int i = 0; i < functions.length; ++i) {

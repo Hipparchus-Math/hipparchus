@@ -102,6 +102,12 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
         return new FieldUnivariateDerivative2<>(value, zero, zero);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldUnivariateDerivative2<T> withValue(final T value) {
+        return new FieldUnivariateDerivative2<>(value, f1, f2);
+    }
+
     /** Get the value part of the univariate derivative.
      * @return value part of the univariate derivative
      */
@@ -169,14 +175,6 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
         return getField().getConversionFactory().build(f0, f1, f2);
     }
 
-    /** '+' operator.
-     * @param a right hand side parameter of the operator
-     * @return this+a
-     */
-    public FieldUnivariateDerivative2<T> add(final T a) {
-        return new FieldUnivariateDerivative2<>(f0.add(a), f1, f2);
-    }
-
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative2<T> add(final double a) {
@@ -187,14 +185,6 @@ public class FieldUnivariateDerivative2<T extends CalculusFieldElement<T>>
     @Override
     public FieldUnivariateDerivative2<T> add(final FieldUnivariateDerivative2<T> a) {
         return new FieldUnivariateDerivative2<>(f0.add(a.f0), f1.add(a.f1), f2.add(a.f2));
-    }
-
-    /** '-' operator.
-     * @param a right hand side parameter of the operator
-     * @return this-a
-     */
-    public FieldUnivariateDerivative2<T> subtract(final T a) {
-        return new FieldUnivariateDerivative2<>(f0.subtract(a), f1, f2);
     }
 
     /** {@inheritDoc} */

@@ -53,7 +53,7 @@ import org.hipparchus.util.SinhCosh;
  * @see FieldGradient
  * @since 1.7
  */
-public class Gradient implements Derivative<Gradient>, Serializable {
+public class Gradient implements Derivative1<Gradient>, Serializable {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20200520L;
@@ -125,6 +125,12 @@ public class Gradient implements Derivative<Gradient>, Serializable {
         return new Gradient(c, new double[grad.length]);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public Gradient withValue(final double value) {
+        return new Gradient(value, grad);
+    }
+
     /** Get the value part of the function.
      * @return value part of the value of the function
      */
@@ -149,19 +155,13 @@ public class Gradient implements Derivative<Gradient>, Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public int getOrder() {
-        return 1;
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public double getPartialDerivative(final int ... orders)
-        throws MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
 
         // check the number of components
         if (orders.length != grad.length) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   orders.length, grad.length);
+                    orders.length, grad.length);
         }
 
         // check that either all derivation orders are set to 0,
@@ -170,8 +170,8 @@ public class Gradient implements Derivative<Gradient>, Serializable {
         for (int i = 0; i < orders.length; ++i) {
             if (orders[i] != 0) {
                 if (selected >= 0 || orders[i] != 1) {
-                     throw new MathIllegalArgumentException(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED,
-                                                           orders[i]);
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED,
+                            orders[i]);
                 }
                 // found the component set to derivation order 1
                 selected = i;
@@ -207,24 +207,12 @@ public class Gradient implements Derivative<Gradient>, Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public Gradient add(final double a) {
-        return new Gradient(value + a, grad);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public Gradient add(final Gradient a) {
         final Gradient result = newInstance(value + a.value);
         for (int i = 0; i < grad.length; ++i) {
             result.grad[i] = grad[i] + a.grad[i];
         }
         return result;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient subtract(final double a) {
-        return new Gradient(value - a, grad);
     }
 
     /** {@inheritDoc} */
@@ -269,16 +257,6 @@ public class Gradient implements Derivative<Gradient>, Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public Gradient square() {
-        final Gradient result = newInstance(value * value);
-        for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = 2 * grad[i] * value;
-        }
-        return result;
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public Gradient divide(final double a) {
         final Gradient result = newInstance(value / a);
         for (int i = 0; i < grad.length; ++i) {
@@ -297,12 +275,6 @@ public class Gradient implements Derivative<Gradient>, Serializable {
             result.grad[i] = (grad[i] * a.value - value * a.grad[i]) * inv2;
         }
         return result;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient remainder(final double a) {
-        return new Gradient(FastMath.IEEEremainder(value, a), grad);
     }
 
     /** {@inheritDoc} */
@@ -415,52 +387,19 @@ public class Gradient implements Derivative<Gradient>, Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public Gradient reciprocal() {
-        final double inv1 = 1.0 / value;
-        final double inv2 = inv1 * inv1;
-        final Gradient result = newInstance(inv1);
-        for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = -grad[i] * inv2;
-        }
-        return result;
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public Gradient compose(final double... f) {
-       MathUtils.checkDimension(f.length, getOrder() + 1);
-       final Gradient result = newInstance(f[0]);
+        MathUtils.checkDimension(f.length, getOrder() + 1);
+        return compose(f[0], f[1]);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Gradient compose(final double f0, final double f1) {
+        final Gradient result = newInstance(f0);
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = f[1] * grad[i];
+            result.grad[i] = f1 * grad[i];
         }
         return result;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient sqrt() {
-        final double s = FastMath.sqrt(value);
-        return compose(s, 1 / (2 * s));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient cbrt() {
-        final double c = FastMath.cbrt(value);
-        return compose(c, 1 / (3 * c * c));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient rootN(final int n) {
-        if (n == 2) {
-            return sqrt();
-        } else if (n == 3) {
-            return cbrt();
-        } else {
-            final double r = FastMath.pow(value, 1.0 / n);
-            return compose(r, 1 / (n * FastMath.pow(r, n - 1)));
-        }
     }
 
     /** {@inheritDoc} */
@@ -512,53 +451,6 @@ public class Gradient implements Derivative<Gradient>, Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public Gradient exp() {
-        final double exp = FastMath.exp(value);
-        return compose(exp, exp);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient expm1() {
-        final double exp   = FastMath.exp(value);
-        final double expM1 = FastMath.expm1(value);
-        return compose(expM1, exp);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient log() {
-        return compose(FastMath.log(value), 1 / value);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient log1p() {
-        return compose(FastMath.log1p(value), 1 / (1 + value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient log10() {
-        return compose(FastMath.log10(value), 1 / (value * FastMath.log(10.0)));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient cos() {
-        final SinCos sinCos = FastMath.sinCos(value);
-        return compose(sinCos.cos(), -sinCos.sin());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient sin() {
-        final SinCos sinCos = FastMath.sinCos(value);
-        return compose(sinCos.sin(), sinCos.cos());
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public FieldSinCos<Gradient> sinCos() {
         final SinCos sinCos = FastMath.sinCos(value);
         final Gradient sin = newInstance(sinCos.sin());
@@ -568,31 +460,6 @@ public class Gradient implements Derivative<Gradient>, Serializable {
             cos.grad[i] =  -grad[i] * sinCos.sin();
         }
         return new FieldSinCos<>(sin, cos);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient tan() {
-        final double tan = FastMath.tan(value);
-        return compose(tan, 1 + tan * tan);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient acos() {
-        return compose(FastMath.acos(value), -1 / FastMath.sqrt(1 - value * value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient asin() {
-        return compose(FastMath.asin(value), 1 / FastMath.sqrt(1 - value * value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient atan() {
-        return compose(FastMath.atan(value), 1 / (1 + value * value));
     }
 
     /** {@inheritDoc} */
@@ -608,18 +475,6 @@ public class Gradient implements Derivative<Gradient>, Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public Gradient cosh() {
-        return compose(FastMath.cosh(value), FastMath.sinh(value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient sinh() {
-        return compose(FastMath.sinh(value), FastMath.cosh(value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public FieldSinhCosh<Gradient> sinhCosh() {
         final SinhCosh sinhCosh = FastMath.sinhCosh(value);
         final Gradient sinh = newInstance(sinhCosh.sinh());
@@ -629,31 +484,6 @@ public class Gradient implements Derivative<Gradient>, Serializable {
             cosh.grad[i] = grad[i] * sinhCosh.sinh();
         }
         return new FieldSinhCosh<>(sinh, cosh);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient tanh() {
-        final double tanh = FastMath.tanh(value);
-        return compose(tanh, 1 - tanh * tanh);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient acosh() {
-        return compose(FastMath.acosh(value), 1 / FastMath.sqrt(value * value - 1));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient asinh() {
-        return compose(FastMath.asinh(value), 1 / FastMath.sqrt(value * value + 1));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient atanh() {
-        return compose(FastMath.atanh(value), 1 / (1 - value * value));
     }
 
     /** {@inheritDoc} */
@@ -747,12 +577,12 @@ public class Gradient implements Derivative<Gradient>, Serializable {
     public Gradient linearCombination(final Gradient a1, final Gradient b1,
                                       final Gradient a2, final Gradient b2) {
         final Gradient result = newInstance(MathArrays.linearCombination(a1.value, b1.value,
-                                                                         a2.value, b2.value));
+                a2.value, b2.value));
         for (int i = 0; i < b1.grad.length; ++i) {
             result.grad[i] = MathArrays.linearCombination(a1.value,       b1.grad[i],
-                                                              a1.grad[i], b1.value,
-                                                              a2.value,       b2.grad[i],
-                                                              a2.grad[i], b2.value);
+                    a1.grad[i], b1.value,
+                    a2.value,       b2.grad[i],
+                    a2.grad[i], b2.value);
         }
         return result;
     }
@@ -760,12 +590,12 @@ public class Gradient implements Derivative<Gradient>, Serializable {
     /** {@inheritDoc} */
     @Override
     public Gradient linearCombination(final double a1, final Gradient b1,
-                                                   final double a2, final Gradient b2) {
+                                      final double a2, final Gradient b2) {
         final Gradient result = newInstance(MathArrays.linearCombination(a1, b1.value,
-                                                                         a2, b2.value));
+                a2, b2.value));
         for (int i = 0; i < b1.grad.length; ++i) {
             result.grad[i] = MathArrays.linearCombination(a1, b1.grad[i],
-                                                              a2, b2.grad[i]);
+                    a2, b2.grad[i]);
         }
         return result;
     }
@@ -776,14 +606,14 @@ public class Gradient implements Derivative<Gradient>, Serializable {
                                       final Gradient a2, final Gradient b2,
                                       final Gradient a3, final Gradient b3) {
         final double[] a = {
-            a1.value, 0, a2.value, 0, a3.value, 0
+                a1.value, 0, a2.value, 0, a3.value, 0
         };
         final double[] b = {
-            0, b1.value, 0, b2.value, 0, b3.value
+                0, b1.value, 0, b2.value, 0, b3.value
         };
         final Gradient result = newInstance(MathArrays.linearCombination(a1.value, b1.value,
-                                                                         a2.value, b2.value,
-                                                                         a3.value, b3.value));
+                a2.value, b2.value,
+                a3.value, b3.value));
         for (int i = 0; i < b1.grad.length; ++i) {
             a[1] = a1.grad[i];
             a[3] = a2.grad[i];
@@ -802,12 +632,12 @@ public class Gradient implements Derivative<Gradient>, Serializable {
                                       final double a2, final Gradient b2,
                                       final double a3, final Gradient b3) {
         final Gradient result = newInstance(MathArrays.linearCombination(a1, b1.value,
-                                                                         a2, b2.value,
-                                                                         a3, b3.value));
+                a2, b2.value,
+                a3, b3.value));
         for (int i = 0; i < b1.grad.length; ++i) {
             result.grad[i] = MathArrays.linearCombination(a1, b1.grad[i],
-                                                              a2, b2.grad[i],
-                                                              a3, b3.grad[i]);
+                    a2, b2.grad[i],
+                    a3, b3.grad[i]);
         }
         return result;
     }
@@ -819,15 +649,15 @@ public class Gradient implements Derivative<Gradient>, Serializable {
                                       final Gradient a3, final Gradient b3,
                                       final Gradient a4, final Gradient b4) {
         final double[] a = {
-            a1.value, 0, a2.value, 0, a3.value, 0, a4.value, 0
+                a1.value, 0, a2.value, 0, a3.value, 0, a4.value, 0
         };
         final double[] b = {
-            0, b1.value, 0, b2.value, 0, b3.value, 0, b4.value
+                0, b1.value, 0, b2.value, 0, b3.value, 0, b4.value
         };
         final Gradient result = newInstance(MathArrays.linearCombination(a1.value, b1.value,
-                                                                         a2.value, b2.value,
-                                                                         a3.value, b3.value,
-                                                                         a4.value, b4.value));
+                a2.value, b2.value,
+                a3.value, b3.value,
+                a4.value, b4.value));
         for (int i = 0; i < b1.grad.length; ++i) {
             a[1] = a1.grad[i];
             a[3] = a2.grad[i];
@@ -849,14 +679,14 @@ public class Gradient implements Derivative<Gradient>, Serializable {
                                       final double a3, final Gradient b3,
                                       final double a4, final Gradient b4) {
         final Gradient result = newInstance(MathArrays.linearCombination(a1, b1.value,
-                                                                         a2, b2.value,
-                                                                         a3, b3.value,
-                                                                         a4, b4.value));
+                a2, b2.value,
+                a3, b3.value,
+                a4, b4.value));
         for (int i = 0; i < b1.grad.length; ++i) {
             result.grad[i] = MathArrays.linearCombination(a1, b1.grad[i],
-                                                              a2, b2.grad[i],
-                                                              a3, b3.grad[i],
-                                                              a4, b4.grad[i]);
+                    a2, b2.grad[i],
+                    a3, b3.grad[i],
+                    a4, b4.grad[i]);
         }
         return result;
     }

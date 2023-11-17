@@ -24,7 +24,7 @@ import org.hipparchus.util.FastMath;
  * @param <T> the type of the field elements
  * @since 1.7
  */
-public interface Derivative<T extends CalculusFieldElement<T>> extends CalculusFieldElement<T> {
+public interface Derivative<T extends CalculusFieldElement<T>> extends CalculusFieldElement<T>, DifferentialAlgebra {
 
     /** {@inheritDoc} */
     @Override
@@ -32,20 +32,25 @@ public interface Derivative<T extends CalculusFieldElement<T>> extends CalculusF
         return getValue();
     }
 
-    /** Get the number of free parameters.
-     * @return number of free parameters
-     */
-    int getFreeParameters();
-
-    /** Get the derivation order.
-     * @return derivation order
-     */
-    int getOrder();
-
     /** Get the value part of the function.
      * @return value part of the value of the function
      */
     double getValue();
+
+    /** Create a new object with new value (zeroth-order derivative, as passed as input)
+     * and same derivatives of order one and above.
+     * <p>
+     * This default implementation is there so that no API gets broken
+     * by the next release, which is not a major one. Custom inheritors
+     * should probably overwrite it.
+     * </p>
+     * @param value zeroth-order derivative of new represented function
+     * @return new object with changed value
+     * @since 3.1
+     */
+    default T withValue(double value) {
+        return add(newInstance(value - getValue()));
+    }
 
     /** Get a partial derivative.
      * @param orders derivation orders with respect to each variable (if all orders are 0,
@@ -59,6 +64,18 @@ public interface Derivative<T extends CalculusFieldElement<T>> extends CalculusF
      */
     double getPartialDerivative(int ... orders)
         throws MathIllegalArgumentException;
+
+    /** {@inheritDoc} */
+    @Override
+    default T add(double a) {
+        return withValue(getValue() + a);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T subtract(double a) {
+        return withValue(getValue() - a);
+    }
 
     /** Compute composition of the instance by a univariate function.
      * @param f array of value and derivatives of the function at
@@ -103,37 +120,13 @@ public interface Derivative<T extends CalculusFieldElement<T>> extends CalculusF
 
     /** {@inheritDoc} */
     @Override
-    default T ceil() {
-        return newInstance(FastMath.ceil(getValue()));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    default T floor() {
-        return newInstance(FastMath.floor(getValue()));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    default T rint() {
-        return newInstance(FastMath.rint(getValue()));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    default T ulp() {
-        return newInstance(FastMath.ulp(getValue()));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    default T sign() {
-        return newInstance(FastMath.signum(getValue()));
-    }
-
-    /** {@inheritDoc} */
-    @Override
     default int getExponent() {
         return FastMath.getExponent(getValue());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    default T remainder(double a) {
+        return withValue(FastMath.IEEEremainder(getValue(), a));
     }
 }
