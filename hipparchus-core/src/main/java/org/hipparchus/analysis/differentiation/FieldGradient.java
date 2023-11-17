@@ -137,26 +137,10 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
         return newInstance(getValueField().getZero().newInstance(c));
     }
 
-    /** Create an instance corresponding to a constant real value.
-     * <p>
-     * The default implementation creates the instance by adding
-     * the value to {@code getField().getZero()}. This is not optimal
-     * and does not work when called with a negative zero as the
-     * sign of zero is lost with the addition. The default implementation
-     * should therefore be overridden in concrete classes. The default
-     * implementation will be removed at the next major version.
-     * </p>
-     * @param c constant real value
-     * @return instance corresponding to a constant real value
-     */
-    public FieldGradient<T> newInstance(final T c) {
-        return new FieldGradient<>(c, MathArrays.buildArray(value.getField(), grad.length));
-    }
-
     /** {@inheritDoc} */
     @Override
-    public double getReal() {
-        return getValue().getReal();
+    public FieldGradient<T> newInstance(final T c) {
+        return new FieldGradient<>(c, MathArrays.buildArray(value.getField(), grad.length));
     }
 
     /** Get the value part of the function.
@@ -426,30 +410,6 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
         }
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public FieldGradient<T> ceil() {
-        return newInstance(FastMath.ceil(value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldGradient<T> floor() {
-        return newInstance(FastMath.floor(value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldGradient<T> rint() {
-        return newInstance(FastMath.rint(value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldGradient<T> sign() {
-        return newInstance(FastMath.sign(value));
-    }
-
     /**
      * Returns the instance with the sign of the argument.
      * A NaN {@code sign} argument is treated as positive.
@@ -490,29 +450,12 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
 
     /** {@inheritDoc} */
     @Override
-    public int getExponent() {
-        return FastMath.getExponent(value.getReal());
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public FieldGradient<T> scalb(final int n) {
         final FieldGradient<T> result = newInstance(FastMath.scalb(value, n));
         for (int i = 0; i < grad.length; ++i) {
             result.grad[i] = FastMath.scalb(grad[i], n);
         }
         return result;
-    }
-
-    /** {@inheritDoc}
-     * <p>
-     * The {@code ulp} function is a step function, hence all its derivatives are 0.
-     * </p>
-     * @since 2.0
-     */
-    @Override
-    public FieldGradient<T> ulp() {
-        return newInstance(FastMath.ulp(value));
     }
 
     /** {@inheritDoc} */
@@ -528,10 +471,10 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
             final int expX = getExponent();
             final int expY = y.getExponent();
             if (expX > expY + 27) {
-                // y is neglectible with respect to x
+                // y is negligible with respect to x
                 return abs();
             } else if (expY > expX + 27) {
-                // x is neglectible with respect to y
+                // x is negligible with respect to y
                 return y.abs();
             } else {
 
@@ -652,12 +595,6 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
             final T f0Nm1 = FastMath.pow(value, n - 1);
             return compose(f0Nm1.multiply(value), f0Nm1.multiply(n));
         }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldGradient<T> pow(final FieldGradient<T> e) {
-        return log().multiply(e).exp();
     }
 
     /** {@inheritDoc} */

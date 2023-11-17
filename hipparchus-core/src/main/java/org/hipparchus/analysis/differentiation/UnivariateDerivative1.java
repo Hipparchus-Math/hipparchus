@@ -96,12 +96,6 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
-    public double getReal() {
-        return getValue();
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public double getValue() {
         return f0;
     }
@@ -241,30 +235,6 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
-    public UnivariateDerivative1 ceil() {
-        return new UnivariateDerivative1(FastMath.ceil(f0), 0.0);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 floor() {
-        return new UnivariateDerivative1(FastMath.floor(f0), 0.0);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 rint() {
-        return new UnivariateDerivative1(FastMath.rint(f0), 0.0);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 sign() {
-        return new UnivariateDerivative1(FastMath.signum(f0), 0.0);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public UnivariateDerivative1 copySign(final UnivariateDerivative1 sign) {
         long m = Double.doubleToLongBits(f0);
         long s = Double.doubleToLongBits(sign.f0);
@@ -287,25 +257,8 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
-    public int getExponent() {
-        return FastMath.getExponent(f0);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public UnivariateDerivative1 scalb(final int n) {
         return new UnivariateDerivative1(FastMath.scalb(f0, n), FastMath.scalb(f1, n));
-    }
-
-    /** {@inheritDoc}
-     * <p>
-     * The {@code ulp} function is a step function, hence all its derivatives are 0.
-     * </p>
-     * @since 2.0
-     */
-    @Override
-    public UnivariateDerivative1 ulp() {
-        return new UnivariateDerivative1(FastMath.ulp(f0), 0.0);
     }
 
     /** {@inheritDoc} */
@@ -321,10 +274,10 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
             final int expX = getExponent();
             final int expY = y.getExponent();
             if (expX > expY + 27) {
-                // y is neglectible with respect to x
+                // y is negligible with respect to x
                 return abs();
             } else if (expY > expX + 27) {
-                // x is neglectible with respect to y
+                // x is negligible with respect to y
                 return y.abs();
             } else {
 
@@ -429,12 +382,6 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
             final double f0Nm1 = FastMath.pow(f0, n - 1);
             return compose(f0Nm1 * f0, n * f0Nm1);
         }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public UnivariateDerivative1 pow(final UnivariateDerivative1 e) {
-        return log().multiply(e).exp();
     }
 
     /** {@inheritDoc} */

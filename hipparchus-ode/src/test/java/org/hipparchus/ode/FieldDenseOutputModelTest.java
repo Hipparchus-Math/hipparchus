@@ -84,7 +84,7 @@ public class FieldDenseOutputModelTest {
             T[] theoreticalYDot  = pb.doComputeDerivatives(time, theoreticalY);
             T dx = interpolated.getPrimaryState()[0].subtract(theoreticalY[0]);
             T dy = interpolated.getPrimaryState()[1].subtract(theoreticalY[1]);
-            T error = dx.multiply(dx).add(dy.multiply(dy));
+            T error = dx.square().add(dy.square());
             maxError = MathUtils.max(maxError, error);
             T dxDot = interpolated.getPrimaryDerivative()[0].subtract(theoreticalYDot[0]);
             T dyDot = interpolated.getPrimaryDerivative()[1].subtract(theoreticalYDot[1]);

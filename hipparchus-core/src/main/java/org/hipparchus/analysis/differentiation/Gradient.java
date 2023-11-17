@@ -125,12 +125,6 @@ public class Gradient implements Derivative<Gradient>, Serializable {
         return new Gradient(c, new double[grad.length]);
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public double getReal() {
-        return getValue();
-    }
-
     /** Get the value part of the function.
      * @return value part of the value of the function
      */
@@ -350,30 +344,6 @@ public class Gradient implements Derivative<Gradient>, Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public Gradient ceil() {
-        return newInstance(FastMath.ceil(value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient floor() {
-        return newInstance(FastMath.floor(value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient rint() {
-        return newInstance(FastMath.rint(value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient sign() {
-        return newInstance(FastMath.signum(value));
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public Gradient copySign(final Gradient sign) {
         long m = Double.doubleToLongBits(value);
         long s = Double.doubleToLongBits(sign.value);
@@ -396,29 +366,12 @@ public class Gradient implements Derivative<Gradient>, Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public int getExponent() {
-        return FastMath.getExponent(value);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public Gradient scalb(final int n) {
         final Gradient result = newInstance(FastMath.scalb(value, n));
         for (int i = 0; i < grad.length; ++i) {
             result.grad[i] = FastMath.scalb(grad[i], n);
         }
         return result;
-    }
-
-    /** {@inheritDoc}
-     * <p>
-     * The {@code ulp} function is a step function, hence all its derivatives are 0.
-     * </p>
-     * @since 2.0
-     */
-    @Override
-    public Gradient ulp() {
-        return newInstance(FastMath.ulp(value));
     }
 
     /** {@inheritDoc} */
@@ -434,10 +387,10 @@ public class Gradient implements Derivative<Gradient>, Serializable {
             final int expX = getExponent();
             final int expY = y.getExponent();
             if (expX > expY + 27) {
-                // y is neglectible with respect to x
+                // y is negligible with respect to x
                 return abs();
             } else if (expY > expX + 27) {
-                // x is neglectible with respect to y
+                // x is negligible with respect to y
                 return y.abs();
             } else {
 
@@ -555,12 +508,6 @@ public class Gradient implements Derivative<Gradient>, Serializable {
             final double valueNm1 = FastMath.pow(value, n - 1);
             return compose(valueNm1 * value, n * valueNm1);
         }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient pow(final Gradient e) {
-        return log().multiply(e).exp();
     }
 
     /** {@inheritDoc} */
@@ -912,12 +859,6 @@ public class Gradient implements Derivative<Gradient>, Serializable {
                                                               a4, b4.grad[i]);
         }
         return result;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public Gradient getPi() {
-        return new Gradient(FastMath.PI, getFreeParameters());
     }
 
     /** Test for the equality of two univariate derivatives.

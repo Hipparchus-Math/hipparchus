@@ -747,7 +747,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
     public T distance(final FieldVector2D<T> v) {
         final T dx = v.x.subtract(x);
         final T dy = v.y.subtract(y);
-        return dx.multiply(dx).add(dy.multiply(dy)).sqrt();
+        return dx.square().add(dy.square()).sqrt();
     }
 
     /** Compute the distance between the instance and another vector according to the L<sub>2</sub> norm.
@@ -760,7 +760,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
     public T distance(final Vector2D v) {
         final T dx = x.subtract(v.getX());
         final T dy = y.subtract(v.getY());
-        return dx.multiply(dx).add(dy.multiply(dy)).sqrt();
+        return dx.square().add(dy.square()).sqrt();
     }
 
     /** Compute the distance between the instance and another vector according to the L<sub>&infin;</sub> norm.
@@ -799,7 +799,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
     public T distanceSq(final FieldVector2D<T> v) {
         final T dx = v.x.subtract(x);
         final T dy = v.y.subtract(y);
-        return dx.multiply(dx).add(dy.multiply(dy));
+        return dx.square().add(dy.square());
     }
 
     /** Compute the square of the distance between the instance and another vector.
@@ -812,7 +812,7 @@ public class FieldVector2D<T extends CalculusFieldElement<T>> {
     public T distanceSq(final Vector2D v) {
         final T dx = x.subtract(v.getX());
         final T dy = y.subtract(v.getY());
-        return dx.multiply(dx).add(dy.multiply(dy));
+        return dx.square().add(dy.square());
     }
 
 

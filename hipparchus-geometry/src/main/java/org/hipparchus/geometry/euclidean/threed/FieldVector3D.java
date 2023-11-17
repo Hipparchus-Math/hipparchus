@@ -930,7 +930,7 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements FieldBl
         final T dx = v.x.subtract(x);
         final T dy = v.y.subtract(y);
         final T dz = v.z.subtract(z);
-        return dx.multiply(dx).add(dy.multiply(dy)).add(dz.multiply(dz)).sqrt();
+        return dx.square().add(dy.square()).add(dz.square()).sqrt();
     }
 
     /** Compute the distance between the instance and another vector according to the L<sub>2</sub> norm.
@@ -944,7 +944,7 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements FieldBl
         final T dx = x.subtract(v.getX());
         final T dy = y.subtract(v.getY());
         final T dz = z.subtract(v.getZ());
-        return dx.multiply(dx).add(dy.multiply(dy)).add(dz.multiply(dz)).sqrt();
+        return dx.square().add(dy.square()).add(dz.square()).sqrt();
     }
 
     /** Compute the distance between the instance and another vector according to the L<sub>&infin;</sub> norm.
@@ -1010,7 +1010,7 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements FieldBl
         final T dx = v.x.subtract(x);
         final T dy = v.y.subtract(y);
         final T dz = v.z.subtract(z);
-        return dx.multiply(dx).add(dy.multiply(dy)).add(dz.multiply(dz));
+        return dx.square().add(dy.square()).add(dz.square());
     }
 
     /** Compute the square of the distance between the instance and another vector.
@@ -1024,7 +1024,7 @@ public class FieldVector3D<T extends CalculusFieldElement<T>> implements FieldBl
         final T dx = x.subtract(v.getX());
         final T dy = y.subtract(v.getY());
         final T dz = z.subtract(v.getZ());
-        return dx.multiply(dx).add(dy.multiply(dy)).add(dz.multiply(dz));
+        return dx.square().add(dy.square()).add(dz.square());
     }
 
     /** Compute the dot-product of two vectors.
