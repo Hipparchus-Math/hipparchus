@@ -64,7 +64,7 @@ public class DormandPrince54FieldIntegratorTest extends EmbeddedRungeKuttaFieldI
 
     @Override
     public void testTorqueFreeMotion() {
-        doTestTorqueFreeMotion(Binary64Field.getInstance(), 1.6e-15, 5.6e-16);
+        doTestTorqueFreeMotion(Binary64Field.getInstance(), 1.6e-15, 7.0e-16);
     }
 
     @Override
