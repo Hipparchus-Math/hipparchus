@@ -267,6 +267,66 @@ public class CalculusFieldElementTest {
     }
 
     @Test
+    public void testSign() {
+        // GIVEN
+        final double value = 3.6;
+        final TestCalculusFieldElement testElement = new TestCalculusFieldElement(value);
+        // WHEN
+        final TestCalculusFieldElement actualOperation = testElement.sign();
+        // THEN
+        final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.signum(value));
+        Assert.assertEquals(expectedOperation, actualOperation);
+    }
+
+    @Test
+    public void testUlp() {
+        // GIVEN
+        final double value = 3.6;
+        final TestCalculusFieldElement testElement = new TestCalculusFieldElement(value);
+        // WHEN
+        final TestCalculusFieldElement actualOperation = testElement.ulp();
+        // THEN
+        final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.ulp(value));
+        Assert.assertEquals(expectedOperation, actualOperation);
+    }
+
+    @Test
+    public void testFloor() {
+        // GIVEN
+        final double value = 3.6;
+        final TestCalculusFieldElement testElement = new TestCalculusFieldElement(value);
+        // WHEN
+        final TestCalculusFieldElement actualOperation = testElement.floor();
+        // THEN
+        final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.floor(value));
+        Assert.assertEquals(expectedOperation, actualOperation);
+    }
+
+    @Test
+    public void testCeil() {
+        // GIVEN
+        final double value = 3.6;
+        final TestCalculusFieldElement testElement = new TestCalculusFieldElement(value);
+        // WHEN
+        final TestCalculusFieldElement actualOperation = testElement.ceil();
+        // THEN
+        final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.ceil(value));
+        Assert.assertEquals(expectedOperation, actualOperation);
+    }
+
+    @Test
+    public void testRint() {
+        // GIVEN
+        final double value = 3.6;
+        final TestCalculusFieldElement testElement = new TestCalculusFieldElement(value);
+        // WHEN
+        final TestCalculusFieldElement actualOperation = testElement.rint();
+        // THEN
+        final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.rint(value));
+        Assert.assertEquals(expectedOperation, actualOperation);
+    }
+
+    @Test
     public void testToDegrees() {
         // GIVEN
         final double value = 3.;
@@ -385,7 +445,7 @@ public class CalculusFieldElementTest {
 
         @Override
         public TestCalculusFieldElement ulp() {
-            return null;
+            return new TestCalculusFieldElement(FastMath.ulp(value));
         }
 
         @Override
@@ -501,17 +561,17 @@ public class CalculusFieldElementTest {
 
         @Override
         public TestCalculusFieldElement ceil() {
-            return null;
+            return new TestCalculusFieldElement(FastMath.ceil(value));
         }
 
         @Override
         public TestCalculusFieldElement floor() {
-            return null;
+            return new TestCalculusFieldElement(FastMath.floor(value));
         }
 
         @Override
         public TestCalculusFieldElement rint() {
-            return null;
+            return new TestCalculusFieldElement(FastMath.rint(value));
         }
 
         @Override
@@ -526,7 +586,7 @@ public class CalculusFieldElementTest {
 
         @Override
         public TestCalculusFieldElement sign() {
-            return null;
+            return new TestCalculusFieldElement(FastMath.signum(value));
         }
 
         @Override

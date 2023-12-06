@@ -74,6 +74,15 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
         return factory.constant(value);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldDerivativeStructure<T> withValue(final T value) {
+        final FieldDerivativeStructure<T> ds = factory.build();
+        System.arraycopy(data, 1, ds.data, 1, data.length - 1);
+        ds.data[0] = value;
+        return ds;
+    }
+
     /** Get the factory that built the instance.
      * @return factory that built the instance
      */
@@ -147,17 +156,6 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
         return data.clone();
     }
 
-    /** '+' operator.
-     * @param a right hand side parameter of the operator
-     * @return this+a
-     */
-    public FieldDerivativeStructure<T> add(T a) {
-        final FieldDerivativeStructure<T> ds = factory.build();
-        System.arraycopy(data, 0, ds.data, 0, data.length);
-        ds.data[0] = ds.data[0].add(a);
-        return ds;
-    }
-
     /** {@inheritDoc}
      */
     @Override
@@ -178,17 +176,6 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
         factory.checkCompatibility(a.factory);
         final FieldDerivativeStructure<T> ds = factory.build();
         factory.getCompiler().add(data, 0, a.data, 0, ds.data, 0);
-        return ds;
-    }
-
-    /** '-' operator.
-     * @param a right hand side parameter of the operator
-     * @return this-a
-     */
-    public FieldDerivativeStructure<T> subtract(final T a) {
-        final FieldDerivativeStructure<T> ds = factory.build();
-        System.arraycopy(data, 0, ds.data, 0, data.length);
-        ds.data[0] = ds.data[0].subtract(a);
         return ds;
     }
 
@@ -349,34 +336,6 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
         }
     }
 
-    /** {@inheritDoc}
-     */
-    @Override
-    public FieldDerivativeStructure<T> ceil() {
-        return factory.constant(data[0].ceil());
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public FieldDerivativeStructure<T> floor() {
-        return factory.constant(data[0].floor());
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public FieldDerivativeStructure<T> rint() {
-        return factory.constant(data[0].rint());
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public FieldDerivativeStructure<T> sign() {
-        return factory.constant(data[0].sign());
-    }
-
     /**
      * Returns the instance with the sign of the argument.
      * A NaN {@code sign} argument is treated as positive.
@@ -417,19 +376,6 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
         return negate(); // flip sign
     }
 
-    /**
-     * Return the exponent of the instance value, removing the bias.
-     * <p>
-     * For double numbers of the form 2<sup>x</sup>, the unbiased
-     * exponent is exactly x.
-     * </p>
-     * @return exponent for instance in IEEE754 representation, without bias
-     */
-    @Override
-    public int getExponent() {
-        return data[0].getExponent();
-    }
-
     /** {@inheritDoc}
      */
     @Override
@@ -438,19 +384,6 @@ public class FieldDerivativeStructure<T extends CalculusFieldElement<T>>
         for (int i = 0; i < ds.data.length; ++i) {
             ds.data[i] = data[i].scalb(n);
         }
-        return ds;
-    }
-
-    /** {@inheritDoc}
-     * <p>
-     * The {@code ulp} function is a step function, hence all its derivatives are 0.
-     * </p>
-     * @since 2.0
-     */
-    @Override
-    public FieldDerivativeStructure<T> ulp() {
-        final FieldDerivativeStructure<T> ds = factory.build();
-        ds.data[0] = FastMath.ulp(data[0]);
         return ds;
     }
 

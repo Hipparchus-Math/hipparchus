@@ -295,12 +295,6 @@ public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Seri
 
     /** {@inheritDoc} */
     @Override
-    public BigReal square() throws NullArgumentException {
-        return multiply(this);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public int compareTo(BigReal a) {
         return d.compareTo(a.d);
     }

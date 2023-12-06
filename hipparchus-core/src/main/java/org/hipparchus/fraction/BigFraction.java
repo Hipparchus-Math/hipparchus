@@ -966,11 +966,6 @@ public class BigFraction
                                denominator.multiply(fraction.denominator));
     }
 
-    @Override
-    public BigFraction square() throws NullArgumentException {
-        return multiply(this);
-    }
-
     /**
      * <p>
      * Return the additive inverse of this fraction, returning the result in

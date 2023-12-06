@@ -121,7 +121,9 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * @return ulp(this)
      * @since 2.0
      */
-    T ulp();
+    default T ulp() {
+        return newInstance(FastMath.ulp(getReal()));
+    }
 
     /**
      * Returns the hypotenuse of a triangle with sides {@code this} and {@code y}
@@ -168,8 +170,10 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
         return pow(1. / n);
     }
 
-    /** {@inheritDoc} */
-    @Override
+    /** Compute this &times; this.
+     * @return a new element representing this &times; this
+     * @since 3.1
+     */
     default T square() {
         return pow(2);
     }
@@ -465,17 +469,23 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
     /** Get the smallest whole number larger than instance.
      * @return ceil(this)
      */
-    T ceil();
+    default T ceil() {
+        return newInstance(FastMath.ceil(getReal()));
+    }
 
     /** Get the largest whole number smaller than instance.
      * @return floor(this)
      */
-    T floor();
+    default T floor() {
+        return newInstance(FastMath.floor(getReal()));
+    }
 
     /** Get the whole number that is the nearest to the instance, or the even one if x is exactly half way between two integers.
      * @return a double number r such that r is an integer r - 0.5 &le; this &le; r + 0.5
      */
-    T rint();
+    default T rint() {
+        return newInstance(FastMath.rint(getReal()));
+    }
 
     /** IEEE remainder operator.
      * @param a right hand side parameter of the operator
@@ -495,7 +505,9 @@ public interface CalculusFieldElement<T extends FieldElement<T>> extends FieldEl
      * with special handling for 0 and NaN)
      * @return -1.0, -0.0, +0.0, +1.0 or NaN depending on sign of a
      */
-    T sign();
+    default T sign() {
+        return newInstance(FastMath.signum(getReal()));
+    }
 
     /**
      * Returns the instance with the sign of the argument.

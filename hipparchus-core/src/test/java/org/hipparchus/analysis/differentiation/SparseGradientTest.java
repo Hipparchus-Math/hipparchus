@@ -49,7 +49,7 @@ public class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseG
         double c = 1.0;
         SparseGradient grad = SparseGradient.createConstant(c);
         Assert.assertEquals(c, grad.getValue(), 1.0e-15); // returns the value
-        Assert.assertEquals(0, grad.numVars(), 1.0e-15); // has no variables
+        Assert.assertEquals(0, grad.getFreeParameters(), 1.0e-15); // has no variables
     }
 
     @Test
@@ -58,7 +58,7 @@ public class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseG
         int id = 0;
         SparseGradient grad = SparseGradient.createVariable(id, v);
         Assert.assertEquals(v, grad.getValue(), 1.0e-15); // returns the value
-        Assert.assertEquals(1, grad.numVars(), 1.0e-15); // has one variable
+        Assert.assertEquals(1, grad.getFreeParameters(), 1.0e-15); // has one variable
         Assert.assertEquals(1.0, grad.getDerivative(id), 1.0e-15); // derivative wr.t itself is 1
     }
 
@@ -73,7 +73,7 @@ public class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseG
         final SparseGradient sum = var1.add(var2);
 
         Assert.assertEquals(v1 + v2, sum.getValue(), 1.0e-15); // returns the value
-        Assert.assertEquals(2, sum.numVars());
+        Assert.assertEquals(2, sum.getFreeParameters());
         Assert.assertEquals(1.0, sum.getDerivative(id1), 1.0e-15);
         Assert.assertEquals(1.0, sum.getDerivative(id2), 1.0e-15);
     }
@@ -89,7 +89,7 @@ public class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseG
         final SparseGradient sum = var1.subtract(var2);
 
         Assert.assertEquals(v1 - v2, sum.getValue(), 1.0e-15); // returns the value
-        Assert.assertEquals(2, sum.numVars());
+        Assert.assertEquals(2, sum.getFreeParameters());
         Assert.assertEquals(1.0, sum.getDerivative(id1), 1.0e-15);
         Assert.assertEquals(-1.0, sum.getDerivative(id2), 1.0e-15);
     }
@@ -104,7 +104,7 @@ public class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseG
         final SparseGradient var2 = SparseGradient.createVariable(id2, v2);
         final SparseGradient out = var1.divide(var2);
         Assert.assertEquals(v1 / v2, out.getValue(), 1.0e-15); // returns the value
-        Assert.assertEquals(2, out.numVars());
+        Assert.assertEquals(2, out.getFreeParameters());
         Assert.assertEquals(1 / v2, out.getDerivative(id1), 1.0e-15);
         Assert.assertEquals(-1 / (v2 * v2), out.getDerivative(id2), 1.0e-15);
     }
@@ -121,7 +121,7 @@ public class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseG
         final SparseGradient unit2 = SparseGradient.createVariable(id2, v2).multiply(var1);
         final SparseGradient sum = unit1.add(unit2);
         Assert.assertEquals(v1 * c1 + v2 * v1, sum.getValue(), 1.0e-15); // returns the value
-        Assert.assertEquals(2, sum.numVars());
+        Assert.assertEquals(2, sum.getFreeParameters());
         Assert.assertEquals(c1 + v2, sum.getDerivative(id1), 1.0e-15);
         Assert.assertEquals(v1, sum.getDerivative(id2), 1.0e-15);
     }
@@ -139,7 +139,7 @@ public class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseG
         mult.multiplyInPlace(var1);
         sum.addInPlace(mult);
         Assert.assertEquals(v1 * c1 + v2 * v1, sum.getValue(), 1.0e-15); // returns the value
-        Assert.assertEquals(2, sum.numVars());
+        Assert.assertEquals(2, sum.getFreeParameters());
         Assert.assertEquals(c1 + v2, sum.getDerivative(id1), 1.0e-15);
         Assert.assertEquals(v1, sum.getDerivative(id2), 1.0e-15);
     }
@@ -1127,7 +1127,7 @@ public class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseG
     @Test
     public void testZero() {
         SparseGradient zero = SparseGradient.createVariable(0, 17.0).getField().getZero();
-        Assert.assertEquals(0, zero.numVars());
+        Assert.assertEquals(0, zero.getFreeParameters());
         Assert.assertEquals(0.0, zero.getValue(), 1.0e-15);
         Assert.assertEquals(0.0, zero.getDerivative(0), 1.0e-15);
     }
@@ -1135,7 +1135,7 @@ public class SparseGradientTest extends CalculusFieldElementAbstractTest<SparseG
     @Test
     public void testOne() {
         SparseGradient one = SparseGradient.createVariable(0, 17.0).getField().getOne();
-        Assert.assertEquals(0, one.numVars());
+        Assert.assertEquals(0, one.getFreeParameters());
         Assert.assertEquals(1.0, one.getValue(), 1.0e-15);
         Assert.assertEquals(0.0, one.getDerivative(0), 1.0e-15);
     }

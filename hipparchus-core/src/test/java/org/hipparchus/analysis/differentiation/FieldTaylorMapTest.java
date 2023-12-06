@@ -199,7 +199,7 @@ public class FieldTaylorMapTest {
             functions[i] = factory.constant(0);
         }
         Assert.assertEquals(nbParameters,
-                            new FieldTaylorMap<>(MathArrays.buildArray(field, nbParameters), functions).getNbParameters());
+                            new FieldTaylorMap<>(MathArrays.buildArray(field, nbParameters), functions).getFreeParameters());
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNbFunctions(final Field<T> field) {
@@ -365,7 +365,7 @@ public class FieldTaylorMapTest {
         f[1] = p1;
         f[2] = p0.add(p1);
         final FieldTaylorMap<T> nonSquare = new FieldTaylorMap<>(p, f);
-        Assert.assertEquals(2, nonSquare.getNbParameters());
+        Assert.assertEquals(2, nonSquare.getFreeParameters());
         Assert.assertEquals(3, nonSquare.getNbFunctions());
         try {
             nonSquare.invert(new FieldQRDecomposer<>(field.getZero().newInstance(1.0e-10)));

@@ -615,12 +615,6 @@ public class Fraction
         return multiply(new Fraction(i));
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public Fraction square() throws NullArgumentException {
-        return multiply(this);
-    }
-
     /**
      * Divide the value of this fraction by another.
      *

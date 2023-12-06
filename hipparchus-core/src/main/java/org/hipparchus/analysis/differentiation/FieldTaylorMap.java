@@ -37,7 +37,7 @@ import org.hipparchus.util.MathUtils;
  * @param <T> the type of the function parameters and value
  * @since 2.2
  */
-public class FieldTaylorMap<T extends CalculusFieldElement<T>> {
+public class FieldTaylorMap<T extends CalculusFieldElement<T>> implements DifferentialAlgebra {
 
     /** Evaluation point. */
     private final T[] point;
@@ -99,11 +99,24 @@ public class FieldTaylorMap<T extends CalculusFieldElement<T>> {
         this.functions = (FieldDerivativeStructure<T>[]) Array.newInstance(FieldDerivativeStructure.class, nbFunctions);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public int getFreeParameters() {
+        return point.length;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getOrder() {
+        return functions[0].getOrder();
+    }
+
     /** Get the number of parameters of the map.
      * @return number of parameters of the map
      */
+    @Deprecated
     public int getNbParameters() {
-        return point.length;
+        return getFreeParameters();
     }
 
     /** Get the number of functions of the map.
@@ -172,7 +185,7 @@ public class FieldTaylorMap<T extends CalculusFieldElement<T>> {
     public FieldTaylorMap<T> compose(final FieldTaylorMap<T> other) {
 
         // safety check
-        MathUtils.checkDimension(getNbParameters(), other.getNbFunctions());
+        MathUtils.checkDimension(getFreeParameters(), other.getNbFunctions());
 
         @SuppressWarnings("unchecked")
         final FieldDerivativeStructure<T>[] composed = (FieldDerivativeStructure<T>[]) Array.newInstance(FieldDerivativeStructure.class,

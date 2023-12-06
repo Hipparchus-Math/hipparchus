@@ -49,12 +49,15 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
-    <release version="3.1" date="TBD" description="TBD.">
+    <release version="3.1" date="TBD" description="TBD.">$
+      <action dev="serrof" type="update" issue="issues/286">
+        Rework interfaces for Derivative and FieldDerivative.
+      </action>
       <action dev="serrof" type="add" issue="issues/281">
         Add default implementations in CalculusFieldElement and inheritors.
       </action>
       <action dev="serrof" type="add" issue="issues/280">
-        Add square method to FieldElement.
+        Add square method to CalculusFieldElement.
       </action>
     </release>
     <release version="3.0" date="2023-10-08" description="This is a major release.">

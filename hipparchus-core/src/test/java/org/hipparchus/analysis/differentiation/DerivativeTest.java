@@ -40,6 +40,32 @@ public class DerivativeTest {
     }
 
     @Test
+    public void testAddDouble() {
+        // GIVEN
+        final double value = 0.5;
+        final TestDerivative testDerivative = new TestDerivative(value);
+        final double scalar = 2.;
+        // WHEN
+        final TestDerivative actualOperation = testDerivative.add(scalar);
+        // THEN
+        final TestDerivative expectedOperation = new TestDerivative(value + scalar);
+        Assert.assertEquals(expectedOperation.getValue(), actualOperation.getValue(), TOLERANCE);
+    }
+
+    @Test
+    public void testSubtractDouble() {
+        // GIVEN
+        final double value = 0.5;
+        final TestDerivative testDerivative = new TestDerivative(value);
+        final double scalar = 2.;
+        // WHEN
+        final TestDerivative actualOperation = testDerivative.subtract(scalar);
+        // THEN
+        final TestDerivative expectedOperation = new TestDerivative(value - scalar);
+        Assert.assertEquals(expectedOperation.getValue(), actualOperation.getValue(), TOLERANCE);
+    }
+
+    @Test
     public void testLog10() {
         // GIVEN
         final double value = 0.5;
@@ -98,54 +124,6 @@ public class DerivativeTest {
         final TestDerivative actualOperation = testDerivative.acos();
         // THEN
         final TestDerivative expectedOperation = new TestDerivative(FastMath.acos(value));
-        Assert.assertEquals(expectedOperation.getValue(), actualOperation.getValue(), TOLERANCE);
-    }
-
-    @Test
-    public void testFloor() {
-        // GIVEN
-        final double value = 0.5;
-        final TestDerivative testDerivative = new TestDerivative(value);
-        // WHEN
-        final TestDerivative actualOperation = testDerivative.floor();
-        // THEN
-        final TestDerivative expectedOperation = new TestDerivative(FastMath.floor(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
-    }
-
-    @Test
-    public void testCeil() {
-        // GIVEN
-        final double value = 0.5;
-        final TestDerivative testDerivative = new TestDerivative(value);
-        // WHEN
-        final TestDerivative actualOperation = testDerivative.ceil();
-        // THEN
-        final TestDerivative expectedOperation = new TestDerivative(FastMath.ceil(value));
-        Assert.assertEquals(expectedOperation.getValue(), actualOperation.getValue(), TOLERANCE);
-    }
-
-    @Test
-    public void testRint() {
-        // GIVEN
-        final double value = 0.5;
-        final TestDerivative testDerivative = new TestDerivative(value);
-        // WHEN
-        final TestDerivative actualOperation = testDerivative.rint();
-        // THEN
-        final TestDerivative expectedOperation = new TestDerivative(FastMath.rint(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
-    }
-
-    @Test
-    public void testSign() {
-        // GIVEN
-        final double value = 0.5;
-        final TestDerivative testDerivative = new TestDerivative(value);
-        // WHEN
-        final TestDerivative actualOperation = testDerivative.sign();
-        // THEN
-        final TestDerivative expectedOperation = new TestDerivative(FastMath.signum(value));
         Assert.assertEquals(expectedOperation.getValue(), actualOperation.getValue(), TOLERANCE);
     }
 
@@ -251,11 +229,6 @@ public class DerivativeTest {
         @Override
         public TestDerivative linearCombination(TestDerivative a1, TestDerivative b1, TestDerivative a2, TestDerivative b2,
                                                 TestDerivative a3, TestDerivative b3, TestDerivative a4, TestDerivative b4) {
-            return null;
-        }
-
-        @Override
-        public TestDerivative remainder(double a) {
             return null;
         }
 

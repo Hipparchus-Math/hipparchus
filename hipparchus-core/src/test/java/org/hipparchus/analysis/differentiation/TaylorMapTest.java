@@ -120,7 +120,7 @@ public class TaylorMapTest {
             functions[i] = factory.constant(0);
         }
         Assert.assertEquals(nbParameters,
-                            new TaylorMap(new double[nbParameters], functions).getNbParameters());
+                            new TaylorMap(new double[nbParameters], functions).getFreeParameters());
     }
 
     @Test
@@ -258,7 +258,7 @@ public class TaylorMapTest {
         final DerivativeStructure p1        = factory.variable(1, -3.0);
         final TaylorMap           nonSquare = new TaylorMap(new double[] { p0.getValue(), p1.getValue() },
                                                             new DerivativeStructure[] { p0, p1, p0.add(p1) });
-        Assert.assertEquals(2, nonSquare.getNbParameters());
+        Assert.assertEquals(2, nonSquare.getFreeParameters());
         Assert.assertEquals(3, nonSquare.getNbFunctions());
         try {
             nonSquare.invert(new QRDecomposer(1.0e-10));

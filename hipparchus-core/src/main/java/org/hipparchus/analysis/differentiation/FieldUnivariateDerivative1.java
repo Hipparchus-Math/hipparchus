@@ -21,8 +21,6 @@ import org.hipparchus.Field;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.FieldSinCos;
-import org.hipparchus.util.FieldSinhCosh;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -53,7 +51,8 @@ import org.hipparchus.util.MathUtils;
  * @since 1.7
  */
 public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
-    extends FieldUnivariateDerivative<T, FieldUnivariateDerivative1<T>> {
+    extends FieldUnivariateDerivative<T, FieldUnivariateDerivative1<T>>
+        implements FieldDerivative1<T, FieldUnivariateDerivative1<T>> {
 
     /** Value of the function. */
     private final T f0;
@@ -96,6 +95,12 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
         return new FieldUnivariateDerivative1<>(value, zero);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public FieldUnivariateDerivative1<T> withValue(final T value) {
+        return new FieldUnivariateDerivative1<>(value, f1);
+    }
+
     /** Get the value part of the univariate derivative.
      * @return value part of the univariate derivative
      */
@@ -121,14 +126,6 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
         }
     }
 
-    /** Get the derivation order.
-     * @return derivation order
-     */
-    @Override
-    public int getOrder() {
-        return 1;
-    }
-
     /** Get the first derivative.
      * @return first derivative
      * @see #getValue()
@@ -152,14 +149,6 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
         return getField().getConversionFactory().build(f0, f1);
     }
 
-    /** '+' operator.
-     * @param a right hand side parameter of the operator
-     * @return this+a
-     */
-    public FieldUnivariateDerivative1<T> add(final T a) {
-        return new FieldUnivariateDerivative1<>(f0.add(a), f1);
-    }
-
     /** {@inheritDoc} */
     @Override
     public FieldUnivariateDerivative1<T> add(final double a) {
@@ -170,14 +159,6 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
     @Override
     public FieldUnivariateDerivative1<T> add(final FieldUnivariateDerivative1<T> a) {
         return new FieldUnivariateDerivative1<>(f0.add(a.f0), f1.add(a.f1));
-    }
-
-    /** '-' operator.
-     * @param a right hand side parameter of the operator
-     * @return this-a
-     */
-    public FieldUnivariateDerivative1<T> subtract(final T a) {
-        return new FieldUnivariateDerivative1<>(f0.subtract(a), f1);
     }
 
     /** {@inheritDoc} */
@@ -217,12 +198,6 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
     public FieldUnivariateDerivative1<T> multiply(final FieldUnivariateDerivative1<T> a) {
         return new FieldUnivariateDerivative1<>(f0.multiply(a.f0),
                                                 a.f0.linearCombination(f1, a.f0, f0, a.f1));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> square() {
-        return multiply(this);
     }
 
     /** '&divide;' operator.
@@ -379,14 +354,6 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
         }
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> reciprocal() {
-        final T inv1 = f0.reciprocal();
-        final T inv2 = inv1.multiply(inv1);
-        return new FieldUnivariateDerivative1<>(inv1, f1.negate().multiply(inv2));
-    }
-
     /** Compute composition of the instance by a function.
      * @param g0 value of the function at the current point (i.e. at {@code g(getValue())})
      * @param g1 first derivative of the function at the current point (i.e. at {@code g'(getValue())})
@@ -394,20 +361,6 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
      */
     public FieldUnivariateDerivative1<T> compose(final T g0, final T g1) {
         return new FieldUnivariateDerivative1<>(g0, g1.multiply(f1));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> sqrt() {
-        final T s = FastMath.sqrt(f0);
-        return compose(s, s.add(s).reciprocal());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> cbrt() {
-        final T c = FastMath.cbrt(f0);
-        return compose(c, c.square().multiply(3).reciprocal());
     }
 
     /** {@inheritDoc} */
@@ -468,135 +421,10 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public FieldUnivariateDerivative1<T> exp() {
-        final T exp = FastMath.exp(f0);
-        return compose(exp, exp);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> expm1() {
-        final T exp   = FastMath.exp(f0);
-        final T expM1 = FastMath.expm1(f0);
-        return compose(expM1, exp);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> log() {
-        return compose(FastMath.log(f0), f0.reciprocal());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> log1p() {
-        return compose(FastMath.log1p(f0), f0.add(1).reciprocal());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> log10() {
-        return compose(FastMath.log10(f0), f0.multiply(FastMath.log(10.0)).reciprocal());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> cos() {
-        final FieldSinCos<T> sinCos = FastMath.sinCos(f0);
-        return compose(sinCos.cos(), sinCos.sin().negate());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> sin() {
-        final FieldSinCos<T> sinCos = FastMath.sinCos(f0);
-        return compose(sinCos.sin(), sinCos.cos());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldSinCos<FieldUnivariateDerivative1<T>> sinCos() {
-        final FieldSinCos<T> sinCos = FastMath.sinCos(f0);
-        return new FieldSinCos<>(new FieldUnivariateDerivative1<>(sinCos.sin(), f1.multiply(sinCos.cos())),
-                                 new FieldUnivariateDerivative1<>(sinCos.cos(), f1.multiply(sinCos.sin()).negate()));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> tan() {
-        final T tan = FastMath.tan(f0);
-        return compose(tan, tan.multiply(tan).add(1));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> acos() {
-        return compose(FastMath.acos(f0), f0.square().negate().add(1).sqrt().reciprocal().negate());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> asin() {
-        return compose(FastMath.asin(f0), f0.square().negate().add(1).sqrt().reciprocal());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> atan() {
-        return compose(FastMath.atan(f0), f0.square().add(1).reciprocal());
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public FieldUnivariateDerivative1<T> atan2(final FieldUnivariateDerivative1<T> x) {
         final T inv = f0.square().add(x.f0.multiply(x.f0)).reciprocal();
         return new FieldUnivariateDerivative1<>(FastMath.atan2(f0, x.f0),
                                                 f0.linearCombination(x.f0, f1, x.f1.negate(), f0).multiply(inv));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> cosh() {
-        return compose(FastMath.cosh(f0), FastMath.sinh(f0));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> sinh() {
-        return compose(FastMath.sinh(f0), FastMath.cosh(f0));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldSinhCosh<FieldUnivariateDerivative1<T>> sinhCosh() {
-        final FieldSinhCosh<T> sinhCosh = FastMath.sinhCosh(f0);
-        return new FieldSinhCosh<>(new FieldUnivariateDerivative1<>(sinhCosh.sinh(), f1.multiply(sinhCosh.cosh())),
-                                   new FieldUnivariateDerivative1<>(sinhCosh.cosh(), f1.multiply(sinhCosh.sinh())));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> tanh() {
-        final T tanh = FastMath.tanh(f0);
-        return compose(tanh, tanh.multiply(tanh).negate().add(1));
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> acosh() {
-        return compose(FastMath.acosh(f0), f0.square().subtract(1).sqrt().reciprocal());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> asinh() {
-        return compose(FastMath.asinh(f0), f0.square().add(1).sqrt().reciprocal());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldUnivariateDerivative1<T> atanh() {
-        return compose(FastMath.atanh(f0), f0.square().negate().add(1).reciprocal());
     }
 
     /** {@inheritDoc} */

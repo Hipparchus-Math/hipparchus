@@ -97,6 +97,15 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
         return factory.constant(value);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public DerivativeStructure withValue(final double value) {
+        final DerivativeStructure ds = factory.build();
+        System.arraycopy(data, 1, ds.data, 1, data.length - 1);
+        ds.data[0] = value;
+        return ds;
+    }
+
     /** Get the factory that built the instance.
      * @return factory that built the instance
      */
@@ -104,14 +113,14 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
         return factory;
     }
 
-    @Override
     /** {@inheritDoc} */
+    @Override
     public int getFreeParameters() {
         return getFactory().getCompiler().getFreeParameters();
     }
 
-    @Override
     /** {@inheritDoc} */
+    @Override
     public int getOrder() {
         return getFactory().getCompiler().getOrder();
     }
@@ -171,16 +180,6 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
     }
 
     /** {@inheritDoc}
-     */
-    @Override
-    public DerivativeStructure add(final double a) {
-        final DerivativeStructure ds = factory.build();
-        System.arraycopy(data, 0, ds.data, 0, data.length);
-        ds.data[0] += a;
-        return ds;
-    }
-
-    /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
      */
@@ -191,13 +190,6 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
         final DerivativeStructure ds = factory.build();
         factory.getCompiler().add(data, 0, a.data, 0, ds.data, 0);
         return ds;
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public DerivativeStructure subtract(final double a) {
-        return add(-a);
     }
 
     /** {@inheritDoc}
@@ -268,15 +260,6 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
         return result;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public DerivativeStructure remainder(final double a) {
-        final DerivativeStructure ds = factory.build();
-        System.arraycopy(data, 0, ds.data, 0, data.length);
-        ds.data[0] = FastMath.IEEEremainder(ds.data[0], a);
-        return ds;
-    }
-
     /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
@@ -315,34 +298,6 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
     /** {@inheritDoc}
      */
     @Override
-    public DerivativeStructure ceil() {
-        return factory.constant(FastMath.ceil(data[0]));
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public DerivativeStructure floor() {
-        return factory.constant(FastMath.floor(data[0]));
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public DerivativeStructure rint() {
-        return factory.constant(FastMath.rint(data[0]));
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
-    public DerivativeStructure sign() {
-        return factory.constant(FastMath.signum(data[0]));
-    }
-
-    /** {@inheritDoc}
-     */
-    @Override
     public DerivativeStructure copySign(final DerivativeStructure sign) {
         long m = Double.doubleToLongBits(data[0]);
         long s = Double.doubleToLongBits(sign.data[0]);
@@ -372,19 +327,6 @@ public class DerivativeStructure implements Derivative<DerivativeStructure>, Ser
         for (int i = 0; i < ds.data.length; ++i) {
             ds.data[i] = FastMath.scalb(data[i], n);
         }
-        return ds;
-    }
-
-    /** {@inheritDoc}
-     * <p>
-     * The {@code ulp} function is a step function, hence all its derivatives are 0.
-     * </p>
-     * @since 2.0
-     */
-    @Override
-    public DerivativeStructure ulp() {
-        final DerivativeStructure ds = factory.build();
-        ds.data[0] = FastMath.ulp(data[0]);
         return ds;
     }
 
