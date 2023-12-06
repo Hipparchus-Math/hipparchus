@@ -110,7 +110,7 @@ public class DormandPrince853FieldIntegrator<T extends CalculusFieldElement<T>>
     @Override
     public T[] getC() {
 
-        final T sqrt6 = getField().getOne().multiply(6).sqrt();
+        final T sqrt6 = getField().getOne().newInstance(6).sqrt();
 
         final T[] c = MathArrays.buildArray(getField(), 15);
         c[ 0] = sqrt6.add(-6).divide(-67.5);
@@ -137,7 +137,7 @@ public class DormandPrince853FieldIntegrator<T extends CalculusFieldElement<T>>
     @Override
     public T[][] getA() {
 
-        final T sqrt6 = getField().getOne().multiply(6).sqrt();
+        final T sqrt6 = getField().getOne().newInstance(6).sqrt();
 
         final T[][] a = MathArrays.buildArray(getField(), 15, -1);
         for (int i = 0; i < a.length; ++i) {

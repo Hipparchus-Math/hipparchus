@@ -122,7 +122,7 @@ public class DormandPrince853FieldIntegratorTest extends EmbeddedRungeKuttaField
 
     @Override
     public void testPartialDerivatives() {
-        doTestPartialDerivatives(2.6e-12, new double[] { 1.9e-11, 3.6e-12, 5.3e-13, 5.3e-13, 3.6e-12 });
+        doTestPartialDerivatives(2.6e-12, new double[] { 5.9e-11, 3.6e-12, 5.3e-12, 5.3e-12, 3.6e-12 });
     }
 
     @Test

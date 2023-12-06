@@ -109,7 +109,7 @@ public class Erf {
         if (FastMath.abs(x.getReal()) > 40) {
             return x.getReal() > 0 ? one : one.negate();
         }
-        final T ret = Gamma.regularizedGammaP(one.multiply(0.5), x.square(), 1.0e-15, 10000);
+        final T ret = Gamma.regularizedGammaP(one.newInstance(0.5), x.square(), 1.0e-15, 10000);
         return x.getReal() < 0 ? ret.negate() : ret;
     }
 
@@ -174,9 +174,9 @@ public class Erf {
         final T        one   = field.getOne();
 
         if (FastMath.abs(x.getReal()) > 40) {
-            return x.getReal() > 0 ? zero : one.multiply(2.);
+            return x.getReal() > 0 ? zero : one.newInstance(2.);
         }
-        final T ret = Gamma.regularizedGammaQ(one.multiply(0.5), x.square(), 1.0e-15, 10000);
+        final T ret = Gamma.regularizedGammaQ(one.newInstance(0.5), x.square(), 1.0e-15, 10000);
         return x.getReal() < 0 ? ret.negate().add(2.) : ret;
     }
 
@@ -360,7 +360,7 @@ public class Erf {
 
         if (w.getReal() < 6.25) {
             w = w.subtract(3.125);
-            p = one.multiply(-3.6444120640178196996e-21);
+            p = one.newInstance(-3.6444120640178196996e-21);
             p = p.multiply(w).add(-1.685059138182016589e-19);
             p = p.multiply(w).add(1.2858480715256400167e-18);
             p = p.multiply(w).add(1.115787767802518096e-17);
@@ -386,7 +386,7 @@ public class Erf {
         }
         else if (w.getReal() < 16.0) {
             w = w.sqrt().subtract(3.25);
-            p = one.multiply(2.2137376921775787049e-09);
+            p = one.newInstance(2.2137376921775787049e-09);
             p = p.multiply(w).add(9.0756561938885390979e-08);
             p = p.multiply(w).add(-2.7517406297064545428e-07);
             p = p.multiply(w).add(1.8239629214389227755e-08);
@@ -408,7 +408,7 @@ public class Erf {
         }
         else if (!w.isInfinite()) {
             w = w.sqrt().subtract(5.0);
-            p = one.multiply(-2.7109920616438573243e-11);
+            p = one.newInstance(-2.7109920616438573243e-11);
             p = p.multiply(w).add(-2.5556418169965252055e-10);
             p = p.multiply(w).add(1.5076572693500548083e-09);
             p = p.multiply(w).add(-3.7894654401267369937e-09);

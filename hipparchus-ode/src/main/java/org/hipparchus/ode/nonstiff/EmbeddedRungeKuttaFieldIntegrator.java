@@ -171,7 +171,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
      * @return p/q computed in the instance field
      */
     protected T fraction(final int p, final int q) {
-        return getField().getOne().multiply(p).divide(q);
+        return getField().getOne().newInstance(((double) p) / q);
     }
 
     /** Create a fraction.
@@ -180,7 +180,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
      * @return p/q computed in the instance field
      */
     protected T fraction(final double p, final double q) {
-        return getField().getOne().multiply(p).divide(q);
+        return getField().getOne().newInstance(p / q);
     }
 
     /** Create an interpolator.

@@ -102,7 +102,7 @@ public abstract class RungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
      * @return p/q computed in the instance field
      */
     protected T fraction(final int p, final int q) {
-        return getField().getZero().add(p).divide(q);
+        return getField().getZero().newInstance(((double) p) / q);
     }
 
     /** Create an interpolator.

@@ -68,7 +68,7 @@ public class ClassicalRungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
     @Override
     public T[] getC() {
         final T[] c = MathArrays.buildArray(getField(), 3);
-        c[0] = getField().getOne().multiply(0.5);
+        c[0] = getField().getOne().newInstance(0.5);
         c[1] = c[0];
         c[2] = getField().getOne();
         return c;
