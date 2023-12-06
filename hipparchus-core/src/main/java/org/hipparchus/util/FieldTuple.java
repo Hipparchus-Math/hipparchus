@@ -55,10 +55,7 @@ public class FieldTuple<T extends CalculusFieldElement<T>> implements CalculusFi
     /** {@inheritDoc} */
     @Override
     public FieldTuple<T> newInstance(final double value) {
-        @SuppressWarnings("unchecked")
-        final FieldTuple<T> t = new FieldTuple<>(field, (T[]) MathArrays.buildArray(field, values.length));
-        Arrays.fill(t.values, value);
-        return t;
+        return field.getZero().add(value);
     }
 
     /** Get the dimension of the tuple.
