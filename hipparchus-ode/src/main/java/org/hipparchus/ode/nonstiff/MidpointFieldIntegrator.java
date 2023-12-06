@@ -65,7 +65,7 @@ public class MidpointFieldIntegrator<T extends CalculusFieldElement<T>> extends 
     @Override
     public T[] getC() {
         final T[] c = MathArrays.buildArray(getField(), 1);
-        c[0] = getField().getOne().multiply(0.5);
+        c[0] = getField().getOne().newInstance(0.5);
         return c;
     }
 

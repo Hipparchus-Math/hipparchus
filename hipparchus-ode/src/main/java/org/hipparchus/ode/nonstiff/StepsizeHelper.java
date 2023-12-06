@@ -214,9 +214,9 @@ public class StepsizeHelper {
         }
 
         if (filteredH.subtract(maxStep).getReal() > 0) {
-            filteredH = h.getField().getZero().add(maxStep);
+            filteredH = h.getField().getZero().newInstance(maxStep);
         } else if (filteredH.add(maxStep).getReal() < 0) {
-            filteredH = h.getField().getZero().add(-maxStep);
+            filteredH = h.getField().getZero().newInstance(-maxStep);
         }
 
         return filteredH;

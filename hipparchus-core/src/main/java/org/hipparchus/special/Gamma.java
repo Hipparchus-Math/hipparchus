@@ -1017,31 +1017,31 @@ public class Gamma {
         final T ret;
         final T t = x.getReal() <= 0.5 ? x : x.subtract(1);
         if (t.getReal() < 0.0) {
-            final T a = one.multiply(INV_GAMMA1P_M1_A0).add(t.multiply(INV_GAMMA1P_M1_A1));
-            T       b = one.multiply(INV_GAMMA1P_M1_B8);
-            b = one.multiply(INV_GAMMA1P_M1_B7).add(t.multiply(b));
-            b = one.multiply(INV_GAMMA1P_M1_B6).add(t.multiply(b));
-            b = one.multiply(INV_GAMMA1P_M1_B5).add(t.multiply(b));
-            b = one.multiply(INV_GAMMA1P_M1_B4).add(t.multiply(b));
-            b = one.multiply(INV_GAMMA1P_M1_B3).add(t.multiply(b));
-            b = one.multiply(INV_GAMMA1P_M1_B2).add(t.multiply(b));
-            b = one.multiply(INV_GAMMA1P_M1_B1).add(t.multiply(b));
-            b = one.add(t.multiply(b));
+            final T a = one.newInstance(INV_GAMMA1P_M1_A0).add(t.multiply(INV_GAMMA1P_M1_A1));
+            T       b = one.newInstance(INV_GAMMA1P_M1_B8);
+            b = t.multiply(b).add(INV_GAMMA1P_M1_B7);
+            b = t.multiply(b).add(INV_GAMMA1P_M1_B6);
+            b = t.multiply(b).add(INV_GAMMA1P_M1_B5);
+            b = t.multiply(b).add(INV_GAMMA1P_M1_B4);
+            b = t.multiply(b).add(INV_GAMMA1P_M1_B3);
+            b = t.multiply(b).add(INV_GAMMA1P_M1_B2);
+            b = t.multiply(b).add(INV_GAMMA1P_M1_B1);
+            b = t.multiply(b).add(1.);
 
-            T c = one.multiply(INV_GAMMA1P_M1_C13).add(t.multiply(a.divide(b)));
-            c = one.multiply(INV_GAMMA1P_M1_C12).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C11).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C10).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C9).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C8).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C7).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C6).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C5).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C4).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C3).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C2).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C1).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C).add(t.multiply(c));
+            T c = one.newInstance(INV_GAMMA1P_M1_C13).add(t.multiply(a.divide(b)));
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C12);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C11);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C10);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C9);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C8);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C7);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C6);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C5);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C4);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C3);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C2);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C1);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C);
             if (x.getReal() > 0.5) {
                 ret = t.multiply(c).divide(x);
             }
@@ -1050,34 +1050,34 @@ public class Gamma {
             }
         }
         else {
-            T p = one.multiply(INV_GAMMA1P_M1_P6);
-            p = one.multiply(INV_GAMMA1P_M1_P5).add(t.multiply(p));
-            p = one.multiply(INV_GAMMA1P_M1_P4).add(t.multiply(p));
-            p = one.multiply(INV_GAMMA1P_M1_P3).add(t.multiply(p));
-            p = one.multiply(INV_GAMMA1P_M1_P2).add(t.multiply(p));
-            p = one.multiply(INV_GAMMA1P_M1_P1).add(t.multiply(p));
-            p = one.multiply(INV_GAMMA1P_M1_P0).add(t.multiply(p));
+            T p = one.newInstance(INV_GAMMA1P_M1_P6);
+            p = t.multiply(p).add(INV_GAMMA1P_M1_P5);
+            p = t.multiply(p).add(INV_GAMMA1P_M1_P4);
+            p = t.multiply(p).add(INV_GAMMA1P_M1_P3);
+            p = t.multiply(p).add(INV_GAMMA1P_M1_P2);
+            p = t.multiply(p).add(INV_GAMMA1P_M1_P1);
+            p = t.multiply(p).add(INV_GAMMA1P_M1_P0);
 
-            T q = one.multiply(INV_GAMMA1P_M1_Q4);
-            q = one.multiply(INV_GAMMA1P_M1_Q3).add(t.multiply(q));
-            q = one.multiply(INV_GAMMA1P_M1_Q2).add(t.multiply(q));
-            q = one.multiply(INV_GAMMA1P_M1_Q1).add(t.multiply(q));
-            q = one.add(t.multiply(q));
+            T q = one.newInstance(INV_GAMMA1P_M1_Q4);
+            q = t.multiply(q).add(INV_GAMMA1P_M1_Q3);
+            q = t.multiply(q).add(INV_GAMMA1P_M1_Q2);
+            q = t.multiply(q).add(INV_GAMMA1P_M1_Q1);
+            q = t.multiply(q).add(1.);
 
-            T c = one.multiply(INV_GAMMA1P_M1_C13).add(t.multiply(p.divide(q)));
-            c = one.multiply(INV_GAMMA1P_M1_C12).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C11).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C10).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C9).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C8).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C7).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C6).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C5).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C4).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C3).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C2).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C1).add(t.multiply(c));
-            c = one.multiply(INV_GAMMA1P_M1_C0).add(t.multiply(c));
+            T c = one.newInstance(INV_GAMMA1P_M1_C13).add(t.multiply(p.divide(q)));
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C12);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C11);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C10);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C9);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C8);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C7);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C6);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C5);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C4);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C3);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C2);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C1);
+            c = t.multiply(c).add(INV_GAMMA1P_M1_C0);
 
             if (x.getReal() > 0.5) {
                 ret = t.divide(x).multiply(c.subtract(1));

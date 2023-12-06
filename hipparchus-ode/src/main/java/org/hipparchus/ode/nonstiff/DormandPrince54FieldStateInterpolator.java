@@ -97,17 +97,17 @@ class DormandPrince54FieldStateInterpolator<T extends CalculusFieldElement<T>>
               globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
               mapper);
         final T one = field.getOne();
-        a70 = one.multiply(   35.0).divide( 384.0);
-        a72 = one.multiply(  500.0).divide(1113.0);
-        a73 = one.multiply(  125.0).divide( 192.0);
-        a74 = one.multiply(-2187.0).divide(6784.0);
-        a75 = one.multiply(   11.0).divide(  84.0);
-        d0  = one.multiply(-12715105075.0).divide( 11282082432.0);
-        d2  = one.multiply( 87487479700.0).divide( 32700410799.0);
-        d3  = one.multiply(-10690763975.0).divide(  1880347072.0);
-        d4  = one.multiply(701980252875.0).divide(199316789632.0);
-        d5  = one.multiply( -1453857185.0).divide(   822651844.0);
-        d6  = one.multiply(    69997945.0).divide(    29380423.0);
+        a70 = one.newInstance(   35.0 /  384.0);
+        a72 = one.newInstance(  500.0 / 1113.0);
+        a73 = one.newInstance(  125.0 /  192.0);
+        a74 = one.newInstance(-2187.0 / 6784.0);
+        a75 = one.newInstance(   11.0 /   84.0);
+        d0  = one.newInstance(-12715105075.0 /  11282082432.0);
+        d2  = one.newInstance( 87487479700.0 /  32700410799.0);
+        d3  = one.newInstance(-10690763975.0 /   1880347072.0);
+        d4  = one.newInstance(701980252875.0 / 199316789632.0);
+        d5  = one.newInstance( -1453857185.0 /    822651844.0);
+        d6  = one.newInstance(    69997945.0 /     29380423.0);
     }
 
     /** {@inheritDoc} */

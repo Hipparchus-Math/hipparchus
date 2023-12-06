@@ -176,7 +176,7 @@ public class SmoothStepFactory {
         final T one = field.getOne();
         int     n   = N;
         for (int i = twoNPlusOne; i > N; i--) {
-            coefficients[i] = one.multiply(pascalTriangle(-N - 1, n) * pascalTriangle(2 * N + 1, N - n));
+            coefficients[i] = one.newInstance(pascalTriangle(-N - 1, n) * pascalTriangle(2 * N + 1, N - n));
             n--;
         }
 
@@ -541,10 +541,10 @@ public class SmoothStepFactory {
          */
         protected T clampInput(final double leftEdge, final double rightEdge, final T x) {
             if (x.getReal() <= leftEdge) {
-                return x.getField().getOne().multiply(leftEdge);
+                return x.getField().getOne().newInstance(leftEdge);
             }
             if (x.getReal() >= rightEdge) {
-                return x.getField().getOne().multiply(rightEdge);
+                return x.getField().getOne().newInstance(rightEdge);
             }
             return x;
         }
@@ -638,10 +638,10 @@ public class SmoothStepFactory {
             final T        one   = field.getOne();
 
             if (xNormalized >= 0 && xNormalized <= 0.5) {
-                return one.multiply(2. * xNormalized * xNormalized);
+                return one.newInstance(2. * xNormalized * xNormalized);
             }
             else {
-                return one.multiply(4. * xNormalized - 2. * xNormalized * xNormalized - 1.);
+                return one.newInstance(4. * xNormalized - 2. * xNormalized * xNormalized - 1.);
             }
         }
 
