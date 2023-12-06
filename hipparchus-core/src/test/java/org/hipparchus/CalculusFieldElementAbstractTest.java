@@ -39,6 +39,17 @@ public abstract class CalculusFieldElementAbstractTest<T extends CalculusFieldEl
     protected abstract T build(double x);
 
     @Test
+    public void testNewInstance() {
+        // GIVEN
+        final double realZero = 0.;
+        final T expectedZero = build(realZero);
+        // WHEN
+        final T actualZero = expectedZero.newInstance(realZero);
+        // THEN
+        Assert.assertEquals(expectedZero.getReal(), actualZero.getReal(), 0.);
+    }
+
+    @Test
     public void testAddField() {
         for (double x = -3; x < 3; x += 0.2) {
             for (double y = -3; y < 3; y += 0.2) {

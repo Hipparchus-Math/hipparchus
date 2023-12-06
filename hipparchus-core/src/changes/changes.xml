@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.1" date="TBD" description="TBD.">$
+      <action dev="serrof" type="fix" issue="issues/291">
+        Fix broken newInstance method for FieldTuple.
+      </action>
       <action dev="serrof" type="update" issue="issues/286">
         Rework interfaces for Derivative and FieldDerivative.
       </action>
