@@ -784,6 +784,58 @@ public class BigFraction
     }
 
     /**
+     * {@link java.math.BigInteger} number least common multiple.
+     * 
+     * @param i0
+     * @param i1
+     * @return
+     */
+    private static BigInteger lcm(final BigInteger i0, final BigInteger i1) {
+      if (i0.signum() == 0 && i1.signum() == 0) {
+        return BigInteger.ZERO;
+      }
+      BigInteger a = i0.abs();
+      BigInteger b = i1.abs();
+      BigInteger gcd = i0.gcd(b);
+      BigInteger lcm = (a.multiply(b)).divide(gcd);
+      return lcm;
+    }
+
+    /**
+     * Rational number greatest common divisor.
+     * 
+     * @param S BigRational.
+     * @return gcd(this,S).
+     */
+    public BigFraction gcd(BigFraction S) {
+      if (S.isZero()) {
+        return this;
+      }
+      if (this.isZero()) {
+        return S;
+      }
+      BigInteger p = numerator.gcd(S.numerator);
+      BigInteger q = lcm(denominator, S.denominator);
+      return new BigFraction(p, q);
+    }
+
+    /**
+     * Rational number least common multiple.
+     * 
+     * @param S BigRational.
+     * @return lcm(this,S).
+     */
+    public BigFraction lcm(BigFraction S) {
+      if (S.isZero()) {
+        return ZERO;
+      }
+      if (this.isZero()) {
+        return ZERO;
+      }
+      return new BigFraction(lcm(numerator, S.numerator), denominator.gcd(S.denominator));
+    }
+    
+    /**
      * <p>
      * Access the denominator as a <code>BigInteger</code>.
      * </p>

@@ -603,6 +603,40 @@ public class BigFractionTest {
     }
 
     @Test
+    public void testGCD() {
+      BigFraction first = new BigFraction(1, 3);
+      BigFraction second = new BigFraction(2, 5);
+      BigFraction third = new BigFraction(3, 7);
+      BigFraction gcd1 = first.gcd(second);
+      Assert.assertTrue(gcd1.equals(BigFraction.getReducedFraction(1, 15)));
+      BigFraction gcd2 = gcd1.gcd(third);
+      Assert.assertTrue(gcd2.equals(BigFraction.getReducedFraction(1, 105)));
+
+      // example from https://math.stackexchange.com/a/151089
+      BigFraction x = new BigFraction(3, 7);
+      BigFraction y = new BigFraction(12, 22);
+      BigFraction gcd = x.gcd(y);
+      Assert.assertTrue(gcd.equals(BigFraction.getReducedFraction(3, 77)));
+
+      x = new BigFraction(13, 6);
+      y = new BigFraction(3, 4);
+      gcd = x.gcd(y);
+      Assert.assertTrue(gcd.equals(BigFraction.getReducedFraction(1, 12)));
+
+    }
+
+    @Test
+    public void testLCM() {
+      BigFraction first = new BigFraction(1, 3);
+      BigFraction second = new BigFraction(2, 5);
+      BigFraction third = new BigFraction(3, 7);
+      BigFraction lcm1 = first.lcm(second);
+      Assert.assertTrue(lcm1.equals(BigFraction.getReducedFraction(2, 1)));
+      BigFraction lcm2 = lcm1.lcm(third);
+      Assert.assertTrue(lcm2.equals(BigFraction.getReducedFraction(6, 1)));
+    }
+    
+    @Test
     public void testGetReducedFraction() {
         BigFraction threeFourths = new BigFraction(3, 4);
         Assert.assertTrue(threeFourths.equals(BigFraction.getReducedFraction(6, 8)));
