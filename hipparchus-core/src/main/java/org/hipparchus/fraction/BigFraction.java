@@ -785,10 +785,11 @@ public class BigFraction
 
     /**
      * {@link java.math.BigInteger} number least common multiple.
-     * 
-     * @param i0
-     * @param i1
-     * @return
+     *
+     * @param i0 first number
+     * @param i1 second number
+     * @return Least Common Multiple of both numbers
+     * @since 3.1
      */
     private static BigInteger lcm(final BigInteger i0, final BigInteger i1) {
       if (i0.signum() == 0 && i1.signum() == 0) {
@@ -803,38 +804,40 @@ public class BigFraction
 
     /**
      * Rational number greatest common divisor.
-     * 
-     * @param S BigRational.
-     * @return gcd(this,S).
+     *
+     * @param s fraction.
+     * @return gcd(this, s).
+     * @since 3.1
      */
-    public BigFraction gcd(BigFraction S) {
-      if (S.isZero()) {
+    public BigFraction gcd(BigFraction s) {
+      if (s.isZero()) {
         return this;
       }
       if (this.isZero()) {
-        return S;
+        return s;
       }
-      BigInteger p = numerator.gcd(S.numerator);
-      BigInteger q = lcm(denominator, S.denominator);
+      BigInteger p = numerator.gcd(s.numerator);
+      BigInteger q = lcm(denominator, s.denominator);
       return new BigFraction(p, q);
     }
 
     /**
      * Rational number least common multiple.
-     * 
-     * @param S BigRational.
-     * @return lcm(this,S).
+     *
+     * @param s fraction.
+     * @return lcm(this, s).
+     * @since 3.1
      */
-    public BigFraction lcm(BigFraction S) {
-      if (S.isZero()) {
+    public BigFraction lcm(BigFraction s) {
+      if (s.isZero()) {
         return ZERO;
       }
       if (this.isZero()) {
         return ZERO;
       }
-      return new BigFraction(lcm(numerator, S.numerator), denominator.gcd(S.denominator));
+      return new BigFraction(lcm(numerator, s.numerator), denominator.gcd(s.denominator));
     }
-    
+
     /**
      * <p>
      * Access the denominator as a <code>BigInteger</code>.
