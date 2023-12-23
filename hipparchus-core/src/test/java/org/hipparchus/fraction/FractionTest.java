@@ -611,6 +611,40 @@ public class FractionTest {
     }
 
     @Test
+    public void testGCD() {
+      Fraction first = new Fraction(1, 3);
+      Fraction second = new Fraction(2, 5);
+      Fraction third = new Fraction(3, 7);
+      Fraction gcd1 = first.gcd(second);
+      Assert.assertTrue(gcd1.equals(Fraction.getReducedFraction(1, 15)));
+      Fraction gcd2 = gcd1.gcd(third);
+      Assert.assertTrue(gcd2.equals(Fraction.getReducedFraction(1, 105)));
+
+      // example from https://math.stackexchange.com/a/151089
+      Fraction x = new Fraction(3, 7);
+      Fraction y = new Fraction(12, 22);
+      Fraction gcd = x.gcd(y);
+      Assert.assertTrue(gcd.equals(Fraction.getReducedFraction(3, 77)));
+
+      x = new Fraction(13, 6);
+      y = new Fraction(3, 4);
+      gcd = x.gcd(y);
+      Assert.assertTrue(gcd.equals(Fraction.getReducedFraction(1, 12)));
+
+    }
+
+    @Test
+    public void testLCM() {
+      Fraction first = new Fraction(1, 3);
+      Fraction second = new Fraction(2, 5);
+      Fraction third = new Fraction(3, 7);
+      Fraction lcm1 = first.lcm(second);
+      Assert.assertTrue(lcm1.equals(Fraction.getReducedFraction(2, 1)));
+      Fraction lcm2 = lcm1.lcm(third);
+      Assert.assertTrue(lcm2.equals(Fraction.getReducedFraction(6, 1)));
+    }
+    
+    @Test
     public void testGetReducedFraction() {
         Fraction threeFourths = new Fraction(3, 4);
         Assert.assertTrue(threeFourths.equals(Fraction.getReducedFraction(6, 8)));

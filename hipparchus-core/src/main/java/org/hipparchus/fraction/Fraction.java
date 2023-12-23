@@ -31,7 +31,6 @@ import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.fraction.ConvergentsIterator.ConvergenceStep;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
@@ -408,6 +407,43 @@ public class Fraction
     @Override
     public float floatValue() {
         return (float)doubleValue();
+    }
+
+    /**
+     * Rational number greatest common divisor.
+     *
+     * @param s fraction.
+     * @return gcd(this, s).
+     * @since 3.1
+     */
+    public Fraction gcd(Fraction s) {
+      if (s.isZero()) {
+        return this;
+      }
+      if (this.isZero()) {
+        return s;
+      }
+      int p = ArithmeticUtils.gcd(numerator, s.numerator);
+      int q = ArithmeticUtils.lcm(denominator, s.denominator);
+      return new Fraction(p, q);
+    }
+
+    /**
+     * Rational number least common multiple.
+     *
+     * @param s fraction.
+     * @return lcm(this, s).
+     * @since 3.1
+     */
+    public Fraction lcm(Fraction s) {
+      if (s.isZero()) {
+        return ZERO;
+      }
+      if (this.isZero()) {
+        return ZERO;
+      }
+      return new Fraction(ArithmeticUtils.lcm(numerator, s.numerator),
+                          ArithmeticUtils.gcd(denominator, s.denominator));
     }
 
     /**
