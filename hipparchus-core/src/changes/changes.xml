@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.1" date="TBD" description="TBD.">$
+      <action dev="luc" type="fix" due-to="Axel Kramer" issue="issues/294">
+        Added GCD and LCM to {Big}Fraction.
+      </action>
       <action dev="serrof" type="fix" issue="issues/291">
         Fix broken newInstance method for FieldTuple.
       </action>
