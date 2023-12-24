@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.1" date="TBD" description="TBD.">
+      <action dev="luc" type="add" due-to="Francesco Rocca" issue="issues/296">
+        Added constrained optimization.
+      </action>
       <action dev="serrof" type="update" issue="issues/288">
         Replace uses of scalar multiplication on Field one.
       </action>
