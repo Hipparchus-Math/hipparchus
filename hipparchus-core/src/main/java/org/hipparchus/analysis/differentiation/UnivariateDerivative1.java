@@ -282,8 +282,8 @@ public class UnivariateDerivative1 extends UnivariateDerivative<UnivariateDeriva
 
     /** {@inheritDoc} */
     @Override
-    public UnivariateDerivative1 compose(final double f0, final double f1) {
-        return new UnivariateDerivative1(f0, this.f1 * f1);
+    public UnivariateDerivative1 compose(final double ff0, final double ff1) {
+        return new UnivariateDerivative1(ff0, this.f1 * ff1);
     }
 
     /** {@inheritDoc} */

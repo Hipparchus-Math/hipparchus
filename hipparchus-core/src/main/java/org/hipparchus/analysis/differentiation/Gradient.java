@@ -127,8 +127,8 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public Gradient withValue(final double value) {
-        return new Gradient(value, grad);
+    public Gradient withValue(final double v) {
+        return new Gradient(v, grad);
     }
 
     /** Get the value part of the function.

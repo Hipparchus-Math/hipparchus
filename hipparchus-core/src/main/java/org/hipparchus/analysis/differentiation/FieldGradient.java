@@ -145,8 +145,8 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
 
     /** {@inheritDoc} */
     @Override
-    public FieldGradient<T> withValue(final T value) {
-        return new FieldGradient<>(value, grad);
+    public FieldGradient<T> withValue(final T v) {
+        return new FieldGradient<>(v, grad);
     }
 
     /** Get the value part of the function.

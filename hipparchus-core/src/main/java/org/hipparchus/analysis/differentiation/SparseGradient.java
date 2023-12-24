@@ -107,8 +107,8 @@ public class SparseGradient implements Derivative1<SparseGradient>, Serializable
 
     /** {@inheritDoc} */
     @Override
-    public SparseGradient withValue(final double value) {
-        return new SparseGradient(value, derivatives);
+    public SparseGradient withValue(final double v) {
+        return new SparseGradient(v, derivatives);
     }
 
     /** Factory method creating a constant.
