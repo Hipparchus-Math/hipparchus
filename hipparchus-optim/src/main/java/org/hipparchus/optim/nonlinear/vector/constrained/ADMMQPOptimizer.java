@@ -31,6 +31,7 @@ import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -44,7 +45,7 @@ import org.hipparchus.util.MathUtils;
  * <br/>
  * lb<=C * X<=ub
  * <br/>
- *Algorithm form parer:"An Operator Splitting Solver for Quadratic Programs(Bartolomeo Stellato, Goran Banjac, Paul Goulart, Alberto Bemporad, Stephen Boyd,February 13 2020)"
+ * Algorithm based on paper:"An Operator Splitting Solver for Quadratic Programs(Bartolomeo Stellato, Goran Banjac, Paul Goulart, Alberto Bemporad, Stephen Boyd,February 13 2020)"
  * @since 3.1
  */
 
@@ -330,7 +331,7 @@ public class ADMMQPOptimizer extends QPOptimizer {
             }
         }
         for (int i = 0; i < me + mi; i++) {
-            // ystar.setEntry(i,Math.abs(ystar.getEntry(i)));
+            // ystar.setEntry(i,FastMath.abs(ystar.getEntry(i)));
             ystar.setEntry(i,-ystar.getEntry(i));
         }
 
@@ -413,8 +414,8 @@ public class ADMMQPOptimizer extends QPOptimizer {
 
    private double rhoEstimation(double rp,double rd,double rpMax,double rdMax) {
        // Return rho estimate
-       double rhoEstimate = rho * Math.sqrt((rp * rdMax)/(rd * rpMax));
-       rhoEstimate = Math.min(Math.max(rhoEstimate, rho_min),rho_max);
+       double rhoEstimate = rho * FastMath.sqrt((rp * rdMax)/(rd * rpMax));
+       rhoEstimate = FastMath.min(FastMath.max(rhoEstimate, rho_min),rho_max);
        return rhoEstimate;
    }// Constrain
 

@@ -29,7 +29,6 @@ public class LinearEqualityConstraint extends EqualityConstraint implements Opti
 
     public final RealMatrix A;
 
-
     /**
      * Construct a set of linear equality constraints Ax = b. Represents
      * equations A[i].x = b[i], for each row of A.
@@ -38,11 +37,8 @@ public class LinearEqualityConstraint extends EqualityConstraint implements Opti
      * @param b the vector of constants
      */
     public LinearEqualityConstraint(final RealMatrix A, final RealVector b) {
-
+        super(b);
         this.A = A;
-        LB = b;
-
-
     }
 
     /**
@@ -62,18 +58,13 @@ public class LinearEqualityConstraint extends EqualityConstraint implements Opti
     }
 
     @Override
-    public RealVector value(RealVector x) {
+    public RealVector value(final RealVector x) {
         return A.operate(x);
     }
 
     @Override
-    public RealMatrix jacobian(RealVector x) {
+    public RealMatrix jacobian(final RealVector x) {
         return A.copy();
-    }
-
-    @Override
-    public int dimY() {
-        return this.A.getRowDimension();
     }
 
 }

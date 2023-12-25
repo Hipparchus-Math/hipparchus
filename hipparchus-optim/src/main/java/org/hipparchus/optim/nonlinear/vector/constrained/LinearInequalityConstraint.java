@@ -16,59 +16,53 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
-import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.hipparchus.linear.ArrayRealVector;
+import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.OptimizationData;
+import org.hipparchus.util.MathUtils;
 
-/** Set of linear inequality constraints expressed as Ax>b.
+/** Set of linear inequality constraints expressed as \( A x \gt B\).
  * @since 3.1
  */
 public class LinearInequalityConstraint extends InequalityConstraint implements OptimizationData {
-    /** The corresponding set of individual linear constraint functions */
-//    public final LinearFunction[] lcf;
-    public final RealMatrix A;
+
+    /** Corresponding set of individual linear constraint functions. */
+    private final RealMatrix a;
 
     /**
-     * Construct a set of linear inequality constraints from Ax &lt; B
-     * @param A A matrix linear coefficient vectors
+     * Construct a set of linear inequality constraints from \( A x \gt B\).
+     * @param a A matrix linear coefficient vectors
      * @param b A vector of constants
      */
-    public LinearInequalityConstraint(final RealMatrix A, final RealVector b) {
-
-        this.A = A;
-        this.LB = b;
-        this.UB = new ArrayRealVector(b.getDimension(),Double.POSITIVE_INFINITY);
-
+    public LinearInequalityConstraint(final RealMatrix a, final RealVector b) {
+        super(b);
+        MathUtils.checkDimension(b.getDimension(), a.getRowDimension());
+        this.a = a;
     }
 
     /**
-     * Construct a set of linear inequality constraints from Ax &lt; B
-     * @param A A matrix linear coefficient vectors
+     * Construct a set of linear inequality constraints from Ax &gt; B
+     * @param a A matrix linear coefficient vectors
      * @param b A vector of constants
      */
-    public LinearInequalityConstraint(final double[][] A, final double[] b) {
-        this(new Array2DRowRealMatrix(A), new ArrayRealVector(b));
+    public LinearInequalityConstraint(final double[][] a, final double[] b) {
+        this(MatrixUtils.createRealMatrix(a), MatrixUtils.createRealVector(b));
     }
 
      @Override
     public int dim() {
-        return A.getColumnDimension();
+        return a.getColumnDimension();
     }
 
     @Override
     public RealVector value(RealVector x) {
-        return A.operate(x);
+        return a.operate(x);
     }
 
     @Override
     public RealMatrix jacobian(RealVector x) {
-        return A.copy();
+        return a.copy();
     }
 
-    @Override
-    public int dimY() {
-       return this.A.getRowDimension();
-    }
 }

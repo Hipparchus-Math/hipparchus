@@ -40,7 +40,7 @@ import org.hipparchus.util.MathUtils;
  * <br/>
  * h(x)>=b2
  * <br/>
- * Algorithm based on parer:"Some Theoretical properties of an augmented lagrangiane merit function
+ * Algorithm based on paper:"Some Theoretical properties of an augmented lagrangiane merit function
  * (Gill,Murray,Sauders,Wriht,April 1986)"
  * @since 3.1
  */
@@ -204,10 +204,10 @@ public class SQPOptimizerGM extends ConstraintOptimizer {
         constraintJacob = computeJacobianConstraint(x);
 
          if (this.eqConstraint != null) {
-            maxGrad = Math.max(maxGrad, equalityEval.getLInfNorm());
+            maxGrad = FastMath.max(maxGrad, equalityEval.getLInfNorm());
         }
         if (this.iqConstraint != null) {
-            maxGrad = Math.max(maxGrad, inequalityEval.getLInfNorm());
+            maxGrad = FastMath.max(maxGrad, inequalityEval.getLInfNorm());
         }
 
           if (useFunHessian == false) {
@@ -277,7 +277,7 @@ public class SQPOptimizerGM extends ConstraintOptimizer {
            while(!(penaltyGradient<=-0.5 * p.dotProduct(hessian.operate(p))))
             {
 
-                 rho = Math.max(rhoSegnato,2.0 * rho);
+                 rho = FastMath.max(rhoSegnato,2.0 * rho);
 
                 penaltyGradient = penaltyFunctionGrad(p, y,s,e,qe, q,rho);
             }
@@ -305,10 +305,10 @@ public class SQPOptimizerGM extends ConstraintOptimizer {
                     double alfaStar = -0.5 * alfa * alfa *  penaltyGradient/ (-alfa *  penaltyGradient + alfaPenalty - currentPenalty);
 //
 
-                   alfa =  Math.max(this.b * alfa, Math.min(1.0,alfaStar));
+                   alfa =  FastMath.max(this.b * alfa, FastMath.min(1.0,alfaStar));
                  // alfa = alfa * 0.5;
-                    // alfa = Math.min(1.0, Math.max(this.b * alfa, alfaStar));
-                   // alfa = Math.max(this.b * alfa, alfaStar);
+                    // alfa = FastMath.min(1.0, FastMath.max(this.b * alfa, alfaStar));
+                   // alfa = FastMath.max(this.b * alfa, alfaStar);
                     alfaEval = this.obj.value(x.add(p.mapMultiply(alfa)));
                     if (se != null) {
                         seq = se.add(qe.mapMultiply(alfa));
@@ -331,7 +331,7 @@ public class SQPOptimizerGM extends ConstraintOptimizer {
                     break;
                 }
             } else {
-                if (alfa * p.getNorm() <Math.sqrt(epsilon) * (1 + x.getNorm()))
+                if (alfa * p.getNorm() <FastMath.sqrt(epsilon) * (1 + x.getNorm()))
                 {
 //                    x = x.add(dx.mapMultiply(alfa));
 //                    y = y.add((dy.subtract(y)).mapMultiply(alfa));
@@ -760,7 +760,7 @@ public class SQPOptimizerGM extends ConstraintOptimizer {
             RealVector g = this.eqConstraint.value(x).subtract(eqConstraint.getLowerBound());
             for (int i = 0; i < g.getDimension(); i++) {
 
-                partial += Math.abs(g.getEntry(i));
+                partial += FastMath.abs(g.getEntry(i));
             }
         }
 
@@ -770,7 +770,7 @@ public class SQPOptimizerGM extends ConstraintOptimizer {
 
             for (int i = 0; i < g.getDimension(); i++) {
 
-                partial += Math.abs(Math.min(g.getEntry(i), 0));
+                partial += FastMath.abs(FastMath.min(g.getEntry(i), 0));
             }
 
         }

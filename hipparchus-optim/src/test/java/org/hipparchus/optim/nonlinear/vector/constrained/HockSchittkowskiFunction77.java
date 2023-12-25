@@ -58,9 +58,6 @@ public class HockSchittkowskiFunction77 extends TwiceDifferentiableFunction {
     @Override
     public RealMatrix hessian(RealVector x) {
         RealMatrix h=new Array2DRowRealMatrix(x.getDimension(),x.getDimension());
-        double x1 = x.getEntry(0);
-        double x2 = x.getEntry(1);
-        double x3 = x.getEntry(2);
         double x4 = x.getEntry(3);
         double x5 = x.getEntry(4);
         h.setEntry(0,0, 4.0);

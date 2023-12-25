@@ -19,8 +19,7 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 /** Quadratic programming Optimizater.
  * @since 3.1
  */
-public class QPOptimizer extends ConstraintOptimizer
-{
+public class QPOptimizer extends ConstraintOptimizer {
 
     @Override
     protected LagrangeSolution doOptimize() {

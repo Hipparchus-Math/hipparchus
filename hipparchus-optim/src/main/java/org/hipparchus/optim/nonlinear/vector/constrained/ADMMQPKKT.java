@@ -22,6 +22,7 @@ import org.hipparchus.linear.EigenDecompositionSymmetric;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
+import org.hipparchus.util.FastMath;
 
 /** Alternative Direction Method of Multipliers Solver
  * @since 3.1
@@ -149,7 +150,7 @@ public class ADMMQPKKT extends KKTSolver<ADMMQPSolution, RealMatrix, RealVector>
 
         //PROJECT ZPARTIAL AND UPDATE Z
         for (int j = 0; j < previousSol[2].getDimension(); j++) {
-            previousSol[2].setEntry(j, Math.min(Math.max(zpartial.getEntry(j), lb.getEntry(j)), ub.getEntry(j)));
+            previousSol[2].setEntry(j, FastMath.min(FastMath.max(zpartial.getEntry(j), lb.getEntry(j)), ub.getEntry(j)));
         }
 
         //UPDATE Y

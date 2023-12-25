@@ -18,16 +18,19 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
+import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 
 public class HockSchittkowskiConstraintEquality78 extends EqualityConstraint {
 
-//    public HockSchittkowskiCostraintEquality78() {
-//
-//    }
+    public HockSchittkowskiConstraintEquality78() {
+        super(MatrixUtils.createRealVector(new double[] {
+            10, 0, -1
+        }));
+    }
 
-     @Override
+    @Override
     public RealVector value(RealVector x) {
         double x1 = x.getEntry(0);
         double x2 = x.getEntry(1);
@@ -36,73 +39,48 @@ public class HockSchittkowskiConstraintEquality78 extends EqualityConstraint {
         double x5 = x.getEntry(4);
         // x[1]^2+x[2]^2+x[3]^2+x[4]^2+x[5]^2 = 10
         //x[2]*x[3] - 5*x[4]*x[5] = 0
-       //x[1]^3 + x[2]^3 = -1
+        //x[1]^3 + x[2]^3 = -1
         RealVector a=new ArrayRealVector(3);
         a.setEntry(0,(x1*x1)+(x2*x2)+(x3*x3)+(x4*x4)+x5*x5);
-         a.setEntry(1,x2*x3-5.0*x4*x5);
-          a.setEntry(2,x1*x1*x1+x2*x2*x2);
+        a.setEntry(1,x2*x3-5.0*x4*x5);
+        a.setEntry(2,x1*x1*x1+x2*x2*x2);
 
-
-
-         return a;
-    }
-
-     @Override
-    public RealMatrix jacobian(RealVector x) {
-      double x1 = x.getEntry(0);
-      double x2 = x.getEntry(1);
-      double x3 = x.getEntry(2);
-      double x4 = x.getEntry(3);
-      double x5 = x.getEntry(4);
-      RealMatrix a= new Array2DRowRealMatrix(3,5);
-
-      a.setEntry(0,0,2.0*x1);
-      a.setEntry(0,1,2.0*x2);
-      a.setEntry(0,2,2.0*x3);
-      a.setEntry(0,3,2.0*x4);
-      a.setEntry(0,4,2.0*x5);
-
-       a.setEntry(1,0,0.0);
-       a.setEntry(1,1,x3);
-       a.setEntry(1,2,x2);
-       a.setEntry(1,3,-5.0*x5);
-        a.setEntry(1,4,-5.0*x4);
-
-          a.setEntry(2,0,3.0*x1*x1);
-          a.setEntry(2,1,3.0*x2*x2);
 
 
         return a;
     }
+
     @Override
-      public RealVector getLowerBound()
-    {   RealVector lb=new ArrayRealVector(3);
-        lb.setEntry(0,10);
-        lb.setEntry(1,0);
-        lb.setEntry(2,-1);
+    public RealMatrix jacobian(RealVector x) {
+        double x1 = x.getEntry(0);
+        double x2 = x.getEntry(1);
+        double x3 = x.getEntry(2);
+        double x4 = x.getEntry(3);
+        double x5 = x.getEntry(4);
+        RealMatrix a= new Array2DRowRealMatrix(3,5);
 
-        return lb;
+        a.setEntry(0,0,2.0*x1);
+        a.setEntry(0,1,2.0*x2);
+        a.setEntry(0,2,2.0*x3);
+        a.setEntry(0,3,2.0*x4);
+        a.setEntry(0,4,2.0*x5);
+
+        a.setEntry(1,0,0.0);
+        a.setEntry(1,1,x3);
+        a.setEntry(1,2,x2);
+        a.setEntry(1,3,-5.0*x5);
+        a.setEntry(1,4,-5.0*x4);
+
+        a.setEntry(2,0,3.0*x1*x1);
+        a.setEntry(2,1,3.0*x2*x2);
+
+
+        return a;
     }
 
-    /**
- * Return Upper Bound .
- * @return Upper Bound Vector
- */
-      @Override
-     public RealVector getUpperBound()
-    {   RealVector lb=new ArrayRealVector(3);
-        lb.setEntry(0,10);
-        lb.setEntry(1,0);
-        lb.setEntry(2,-1);
-        return lb;
+    @Override
+    public int dim(){
+        return 5;
     }
 
-      @Override
-     public int dimY(){
-         return 3;
-     }
-      @Override
-     public int dim(){
-         return 5;
-     }
 }

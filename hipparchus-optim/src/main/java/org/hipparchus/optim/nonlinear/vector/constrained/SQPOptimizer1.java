@@ -29,6 +29,7 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -40,7 +41,7 @@ import org.hipparchus.util.MathUtils;
  * <br/>
  * h(x)>=b2
  * <br/>
- * Algorithm based on parer:"On the convergence of a sequential quadratic
+ * Algorithm based on paper:"On the convergence of a sequential quadratic
  * programming method(Klaus Shittkowki,January 1982)"
  * @since 3.1
  */
@@ -178,10 +179,10 @@ public class SQPOptimizer1 extends ConstraintOptimizer {
 
         RealMatrix currentH = null;
         if (this.eqConstraint != null) {
-            maxGrad = Math.max(maxGrad, this.eqConstraint.value(x).getLInfNorm());
+            maxGrad = FastMath.max(maxGrad, this.eqConstraint.value(x).getLInfNorm());
         }
         if (this.iqConstraint != null) {
-            maxGrad = Math.max(maxGrad, this.iqConstraint.value(x).getLInfNorm());
+            maxGrad = FastMath.max(maxGrad, this.iqConstraint.value(x).getLInfNorm());
         }
         if (useFunHessian == false) {
             currentH = MatrixUtils.createRealIdentityMatrix(x.getDimension()).scalarMultiply(maxGrad);
@@ -266,8 +267,8 @@ public class SQPOptimizer1 extends ConstraintOptimizer {
                 double alfaStar = -0.5 * alfa * alfa * currentPenaltyGrad / (-alfa * currentPenaltyGrad + alfaPenalty - currentPenalty);
 
 
-                 alfa =  Math.max(this.b * alfa, Math.min(1.0,alfaStar));
-                //alfa = Math.min(1.0, Math.max(this.b * alfa, alfaStar));
+                 alfa =  FastMath.max(this.b * alfa, FastMath.min(1.0,alfaStar));
+                //alfa = FastMath.min(1.0, FastMath.max(this.b * alfa, alfaStar));
                 alfaF = this.obj.value(x.add(dx.mapMultiply(alfa)));
                 alfaPenalty = penaltyFunction(alfaF, x.add(dx.mapMultiply(alfa)), y.add((dy.subtract(y)).mapMultiply(alfa)), r,y.add((dy.subtract(y)).mapMultiply(alfa)));
                 search = search + 1;
@@ -313,9 +314,9 @@ public class SQPOptimizer1 extends ConstraintOptimizer {
                     double alfaStar = -0.5 * alfa * alfa * currentPenaltyGrad / (-alfa * currentPenaltyGrad + alfaPenalty - currentPenalty);
 
 
-                    alfa =  Math.max(this.b * alfa, Math.min(1.0,alfaStar));
-                    // alfa = Math.min(1.0, Math.max(this.b * alfa, alfaStar));
-                   // alfa = Math.max(this.b * alfa, alfaStar);
+                    alfa =  FastMath.max(this.b * alfa, FastMath.min(1.0,alfaStar));
+                    // alfa = FastMath.min(1.0, FastMath.max(this.b * alfa, alfaStar));
+                   // alfa = FastMath.max(this.b * alfa, alfaStar);
                     alfaF = this.obj.value(x.add(dx.mapMultiply(alfa)));
                     alfaPenalty = penaltyFunction(alfaF, x.add(dx.mapMultiply(alfa)), y.add((dy.subtract(y)).mapMultiply(alfa)), r, y.add((dy.subtract(y)).mapMultiply(alfa)));
                     search = search + 1;
@@ -637,8 +638,8 @@ public class SQPOptimizer1 extends ConstraintOptimizer {
         for (int i = 0; i < sigma.getDimension(); i++) {
             double appoggio = 0;
             // if (r.getEntry(i)>epsilon)
-            appoggio = ((this.iterations.getCount()) / (Math.sqrt(r.getEntry(i))));
-            sigma.setEntry(i, Math.min(1.0, appoggio));
+            appoggio = ((this.iterations.getCount()) / (FastMath.sqrt(r.getEntry(i))));
+            sigma.setEntry(i, FastMath.min(1.0, appoggio));
         }
 
         int me = 0;
@@ -665,7 +666,7 @@ public class SQPOptimizer1 extends ConstraintOptimizer {
             for (int i = 0; i < me; i++) {
 
                 // if (g.getEntry(i)<=epsilon || ye.getEntry(i)>0 )
-                r1.setEntry(i, Math.max(sigmar.getEntry(i), numeratore.getEntry(i) / denominatore));
+                r1.setEntry(i, FastMath.max(sigmar.getEntry(i), numeratore.getEntry(i) / denominatore));
 
             }
         }
@@ -674,7 +675,7 @@ public class SQPOptimizer1 extends ConstraintOptimizer {
             RealVector g = iqConstraint.value(x).subtract(iqConstraint.getLowerBound());
             for (int i = 0; i < mi; i++) {
                 //if (g.getEntry(i)<=epsilon || yi.getEntry(i)>0 )
-                r1.setEntry(me + i, Math.max(sigmar.getEntry(me + i), numeratore.getEntry(me + i) / denominatore));
+                r1.setEntry(me + i, FastMath.max(sigmar.getEntry(me + i), numeratore.getEntry(me + i) / denominatore));
 
             }
         }
@@ -684,11 +685,11 @@ public class SQPOptimizer1 extends ConstraintOptimizer {
     }
 
     private double updateRho(RealVector dx, RealVector dy, RealMatrix H, RealMatrix jacobianG, double additionalVariable, double rho) {
-        double num = 10.0 * Math.pow(dy.dotProduct(jacobianG.operate(dx)), 2);
+        double num = 10.0 * FastMath.pow(dy.dotProduct(jacobianG.operate(dx)), 2);
        double den = (1.0 - additionalVariable) * (1.0 - additionalVariable) * dx.dotProduct(H.operate(dx));
         //double den = (1.0 - additionalVariable) * dx.dotProduct(H.operate(dx));
 
-        return Math.max(10.0, num / den);
+        return FastMath.max(10.0, num / den);
     }
 
     private LagrangeSolution solveQP(RealMatrix H, RealVector g, RealVector x, RealVector y, double rho) {
@@ -914,7 +915,7 @@ public class SQPOptimizer1 extends ConstraintOptimizer {
             RealVector g = this.eqConstraint.value(x).subtract(eqConstraint.getLowerBound());
             for (int i = 0; i < g.getDimension(); i++) {
 
-                partial += Math.abs(g.getEntry(i));
+                partial += FastMath.abs(g.getEntry(i));
             }
         }
 
@@ -924,7 +925,7 @@ public class SQPOptimizer1 extends ConstraintOptimizer {
 
             for (int i = 0; i < g.getDimension(); i++) {
 
-                partial += Math.abs(Math.min(g.getEntry(i), 0));
+                partial += FastMath.abs(FastMath.min(g.getEntry(i), 0));
             }
 
         }

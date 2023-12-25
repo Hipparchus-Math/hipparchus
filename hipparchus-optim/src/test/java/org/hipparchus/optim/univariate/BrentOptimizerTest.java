@@ -46,16 +46,16 @@ public final class BrentOptimizerTest {
     public void testSinMin() {
         UnivariateFunction f = new Sin();
         UnivariateOptimizer optimizer = new BrentOptimizer(1e-10, 1e-14);
-        Assert.assertEquals(3 * Math.PI / 2, optimizer.optimize(new MaxEval(200),
-                                                                new UnivariateObjectiveFunction(f),
-                                                                GoalType.MINIMIZE,
-                                                                new SearchInterval(4, 5)).getPoint(), 1e-8);
+        Assert.assertEquals(3 * FastMath.PI / 2, optimizer.optimize(new MaxEval(200),
+                                                                    new UnivariateObjectiveFunction(f),
+                                                                    GoalType.MINIMIZE,
+                                                                    new SearchInterval(4, 5)).getPoint(), 1e-8);
         Assert.assertTrue(optimizer.getEvaluations() <= 50);
         Assert.assertEquals(200, optimizer.getMaxEvaluations());
-        Assert.assertEquals(3 * Math.PI / 2, optimizer.optimize(new MaxEval(200),
-                                                                new UnivariateObjectiveFunction(f),
-                                                                GoalType.MINIMIZE,
-                                                                new SearchInterval(1, 5)).getPoint(), 1e-8);
+        Assert.assertEquals(3 * FastMath.PI / 2, optimizer.optimize(new MaxEval(200),
+                                                                    new UnivariateObjectiveFunction(f),
+                                                                    GoalType.MINIMIZE,
+                                                                    new SearchInterval(1, 5)).getPoint(), 1e-8);
         Assert.assertTrue(optimizer.getEvaluations() <= 100);
         Assert.assertTrue(optimizer.getEvaluations() >= 15);
         try {
@@ -81,7 +81,7 @@ public final class BrentOptimizerTest {
                                                                    new UnivariateObjectiveFunction(f),
                                                                    GoalType.MINIMIZE,
                                                                    new SearchInterval(4, 5));
-        Assert.assertEquals(3 * Math.PI / 2, result.getPoint(), 1e-3);
+        Assert.assertEquals(3 * FastMath.PI / 2, result.getPoint(), 1e-3);
     }
 
     @Test
@@ -204,14 +204,14 @@ public final class BrentOptimizerTest {
         double result = optimizer.optimize(new MaxEval(50),
                                            new UnivariateObjectiveFunction(f),
                                            GoalType.MINIMIZE,
-                                           new SearchInterval(3 * Math.PI / 2, 5)).getPoint();
-        Assert.assertEquals(3 * Math.PI / 2, result, 1e-6);
+                                           new SearchInterval(3 * FastMath.PI / 2, 5)).getPoint();
+        Assert.assertEquals(3 * FastMath.PI / 2, result, 1e-6);
 
         result = optimizer.optimize(new MaxEval(50),
                                     new UnivariateObjectiveFunction(f),
                                     GoalType.MINIMIZE,
-                                    new SearchInterval(4, 3 * Math.PI / 2)).getPoint();
-        Assert.assertEquals(3 * Math.PI / 2, result, 1e-6);
+                                    new SearchInterval(4, 3 * FastMath.PI / 2)).getPoint();
+        Assert.assertEquals(3 * FastMath.PI / 2, result, 1e-6);
     }
 
     @Test
@@ -245,7 +245,7 @@ public final class BrentOptimizerTest {
      */
     @Test
     public void testKeepInitIfBest() {
-        final double minSin = 3 * Math.PI / 2;
+        final double minSin = 3 * FastMath.PI / 2;
         final double offset = 1e-8;
         final double delta = 1e-7;
         final UnivariateFunction f1 = new Sin();
@@ -283,7 +283,7 @@ public final class BrentOptimizerTest {
      */
     @Test
     public void testMath855() {
-        final double minSin = 3 * Math.PI / 2;
+        final double minSin = 3 * FastMath.PI / 2;
         final double offset = 1e-8;
         final double delta = 1e-7;
         final UnivariateFunction f1 = new Sin();

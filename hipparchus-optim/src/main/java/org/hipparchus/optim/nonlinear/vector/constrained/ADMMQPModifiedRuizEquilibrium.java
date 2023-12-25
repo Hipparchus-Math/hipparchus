@@ -20,6 +20,7 @@ import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
+import org.hipparchus.util.FastMath;
 
 public class ADMMQPModifiedRuizEquilibrium {
     private double MIN_SCALING = 1.0e6; ///< minimum scaling value
@@ -83,12 +84,12 @@ public class ADMMQPModifiedRuizEquilibrium {
 
             for (int i = 0; i < gammaD.getDimension(); i++) {
 
-                gammaD.setEntry(i, 1.0 /Math.sqrt(gammaD.getEntry(i)));
+                gammaD.setEntry(i, 1.0 / FastMath.sqrt(gammaD.getEntry(i)));
 
             }
             for (int i = 0; i < gammaE.getDimension(); i++) {
 
-              gammaE.setEntry(i, 1.0 /Math.sqrt(gammaE.getEntry(i)));
+              gammaE.setEntry(i, 1.0 / FastMath.sqrt(gammaE.getEntry(i)));
             }
 
 
@@ -116,7 +117,7 @@ public class ADMMQPModifiedRuizEquilibrium {
 //            }
             double qnorm = q1.getLInfNorm();
             double lbnorm = lb1.getLInfNorm();
-            double qnorm1 = Math.max(qnorm,lbnorm);
+            double qnorm1 = FastMath.max(qnorm,lbnorm);
             if (qnorm==0) {
                 qnorm = 1.0;
             }
@@ -126,7 +127,7 @@ public class ADMMQPModifiedRuizEquilibrium {
                 mean+=H1norm.getEntry(i) / H1norm.getDimension();
             }
 
-            lambda = 1.0/limit_scaling(new ArrayRealVector(1,Math.max(mean, qnorm))).getEntry(0);
+            lambda = 1.0/limit_scaling(new ArrayRealVector(1,FastMath.max(mean, qnorm))).getEntry(0);
 
             H1 = H1.copy().scalarMultiply(lambda);
            // A1 = A1.copy().scalarMultiply(lambda);

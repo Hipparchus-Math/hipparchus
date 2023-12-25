@@ -42,10 +42,6 @@ public class HockSchittkowskiFunction72 extends TwiceDifferentiableFunction {
     @Override
     public RealVector gradient(RealVector x) {
         RealVector grad=new ArrayRealVector(x.getDimension());
-        double x1 = x.getEntry(0);
-        double x2 = x.getEntry(1);
-        double x3 = x.getEntry(2);
-        double x4 = x.getEntry(3);
 
         grad.setEntry(0,1.0);
         grad.setEntry(1,1.0);
@@ -58,10 +54,6 @@ public class HockSchittkowskiFunction72 extends TwiceDifferentiableFunction {
     @Override
     public RealMatrix hessian(RealVector x) {
         RealMatrix h=new Array2DRowRealMatrix(x.getDimension(),x.getDimension());
-        double x1 = x.getEntry(0);
-        double x2 = x.getEntry(1);
-        double x3 = x.getEntry(2);
-        double x4 = x.getEntry(3);
 
         h.setEntry(0,0, 0);
         h.setEntry(0,1, 0);
