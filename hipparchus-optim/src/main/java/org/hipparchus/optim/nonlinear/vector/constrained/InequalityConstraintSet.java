@@ -18,18 +18,21 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
 import org.hipparchus.optim.OptimizationData;
 
 public class InequalityConstraintSet implements OptimizationData {
-    public final ArrayList<TwiceDifferentiableFunction> constraints =
-        new ArrayList<TwiceDifferentiableFunction>();
+
+    /** Constraints. */
+    private final List<TwiceDifferentiableFunction> constraints;
 
     /**
      * Construct an inequality constraint set from a Collection of convex constraint functions
      * @param constraints the Collection of constraint functions to apply
      */
     public InequalityConstraintSet(Collection<TwiceDifferentiableFunction> constraints) {
-        this.constraints.addAll(constraints);
+        this.constraints = new ArrayList<>(constraints);
     }
 
     /**
@@ -38,6 +41,7 @@ public class InequalityConstraintSet implements OptimizationData {
      * @param constraints the list of constraint functions to apply
      */
     public InequalityConstraintSet(TwiceDifferentiableFunction... constraints) {
+        this.constraints = new ArrayList<>(constraints.length);
         for (TwiceDifferentiableFunction f: constraints) {
             this.constraints.add(f);
         }

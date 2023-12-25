@@ -74,10 +74,4 @@ public class LinearBoundedConstraint extends BoundedConstraint implements Optimi
         return a.copy();
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public int dimY() {
-        return a.getRowDimension();
-    }
-
 }

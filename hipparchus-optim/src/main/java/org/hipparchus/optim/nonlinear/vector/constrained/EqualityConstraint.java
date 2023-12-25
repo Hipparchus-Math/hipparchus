@@ -21,34 +21,13 @@ import org.hipparchus.linear.RealVector;
 /**  Equality Constraint.
  * @since 3.1
  */
-public abstract class EqualityConstraint implements Constraint {
+public abstract class EqualityConstraint extends BoundedConstraint {
 
-    RealVector LB;
-
-
-     public EqualityConstraint()
-    {
-
-    }
-
-
-
- /**
- * Return Lower Bound .
- * @@return Lower Bound Vector
- */
-    public RealVector getLowerBound()
-    {
-        return LB;
-    }
-
-    /**
- * Return Upper Bound .
- * @return Upper Bound Vector
- */
-     public RealVector getUpperBound()
-    {
-        return LB;
-    }
+    /** Simple constructor.
+     * @param value equality value
+     */
+     public EqualityConstraint(final RealVector value) {
+         super(value, value);
+     }
 
 }

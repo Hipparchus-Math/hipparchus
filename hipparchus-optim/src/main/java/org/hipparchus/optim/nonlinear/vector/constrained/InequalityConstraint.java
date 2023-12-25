@@ -18,37 +18,16 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.linear.RealVector;
 
-/** Inequality Constraint.
+/** Inequality Constraint with lower bound only: \(l \le f(x)\).
  * @since 3.1
  */
-public abstract class InequalityConstraint implements Constraint {
+public abstract class InequalityConstraint extends BoundedConstraint {
 
-    RealVector LB;
-    RealVector UB;
-
-     public InequalityConstraint()
-    {
-
-    }
-
-
-
- /**
- * Return Lower Bound .
- * @@return Lower Bound Vector
- */
-    public RealVector getLowerBound()
-    {
-        return LB;
-    }
-
-    /**
- * Return Upper Bound .
- * @return Upper Bound Vector
- */
-     public RealVector getUpperBound()
-    {
-        return UB;
-    }
+    /** Simple constructor.
+     * @param lower lower bound
+     */
+     public InequalityConstraint(final RealVector lower) {
+         super(lower, null);
+     }
 
 }

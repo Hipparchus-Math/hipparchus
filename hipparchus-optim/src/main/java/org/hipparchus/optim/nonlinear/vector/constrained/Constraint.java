@@ -24,14 +24,26 @@ import org.hipparchus.optim.OptimizationData;
  */
 public interface Constraint extends VectorDifferentiableFunction, OptimizationData {
 
-    /** Get Lower Bound.
-     * @return Lower Bound Vector
+    /** Get Lower Bound for {@link #value(RealVector) value(x)}.
+     * @return Lower Bound for {@link #value(RealVector) value(x)}
      */
     RealVector getLowerBound();
 
-    /** Get Upper Bound.
-     * @return Upper Bound Vector
+    /** Get Upper Bound for {@link #value(RealVector) value(x)}.
+     * @return Upper Bound for {@link #value(RealVector) value(x)}
      */
     RealVector getUpperBound();
+
+    /** Check how much a point overshoots the constraint.
+     * <p>
+     * The overshoots is zero if the point fulfills the constraint, and
+     * positive if the {@link #value(RealVector) value} of the constraint
+     * is on the wrong side of {@link #getLowerBound() lower} or {@link
+     * #getUpperBound() upper} boundaries.
+     * </p>
+     * @param x test point
+     * @return L¹-norm of constraint overshoot
+     */
+    double overshoot(RealVector x);
 
 }
