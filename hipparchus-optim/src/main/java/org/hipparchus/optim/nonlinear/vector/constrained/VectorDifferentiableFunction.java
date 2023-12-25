@@ -26,26 +26,21 @@ import org.hipparchus.linear.RealVector;
 /** A MultivariateFunction that also has a defined gradient and Hessian.
  * @since 3.1
  */
-public abstract class VectorDifferentiableFunction implements MultivariateVectorFunction {
-
-
-
+public interface VectorDifferentiableFunction extends MultivariateVectorFunction {
 
     /**
      * Returns the dimensionality of the function domain.
      * If dim() returns (n) then this function expects an n-vector as its input.
      * @return the expected dimension of the function's domain
      */
-    public abstract int dim();
+    int dim();
 
      /**
      * Returns the dimensionality of the function eval.
      *
      * @return the expected dimension of the function's eval
      */
-    public abstract int dimY();
-
-
+    int dimY();
 
     /**
      * Returns the value of this function at (x)
@@ -53,7 +48,17 @@ public abstract class VectorDifferentiableFunction implements MultivariateVector
      * @param x a point to evaluate this function at.
      * @return the value of this function at (x)
      */
-    public abstract RealVector value(final RealVector x);
+    RealVector value(RealVector x);
+
+    /**
+     * Returns the value of this function at (x)
+     *
+     * @param x a point to evaluate this function at.
+     * @return the value of this function at (x)
+     */
+    default double[] value(final double[] x) {
+        return value(new ArrayRealVector(x, false)).toArray();
+    }
 
     /**
      * Returns the gradient of this function at (x)
@@ -61,16 +66,16 @@ public abstract class VectorDifferentiableFunction implements MultivariateVector
      * @param x a point to evaluate this gradient at
      * @return the gradient of this function at (x)
      */
-    public abstract RealMatrix jacobian(final RealVector x);
+    RealMatrix jacobian(RealVector x);
 
-
-    public double[] value(final double[] x) {
-        return value(new ArrayRealVector(x, false)).toArray();
-    }
-
-    public RealMatrix gradient(final double[] x) {
+    /**
+     * Returns the gradient of this function at (x)
+     *
+     * @param x a point to evaluate this gradient at
+     * @return the gradient of this function at (x)
+     */
+    default RealMatrix gradient(final double[] x) {
         return jacobian(new ArrayRealVector(x, false));
     }
-
 
 }

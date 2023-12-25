@@ -18,38 +18,39 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.linear.RealVector;
 
-/** Abstract Constraint.
+/** Constraint with lower and upper bounds.
  * @since 3.1
  */
-public abstract class BoundedConstraint extends Constraint {
+public abstract class BoundedConstraint implements Constraint {
 
-    RealVector LB;
-    RealVector UB;
+    /** Lower bound. */
+    private final RealVector lower;
+
+    /** Upper bound. */
+    private final RealVector upper;
 
 
-     public BoundedConstraint()
-    {
-
+    /** Simple constructor.
+     * @param lower lower bound
+     * @param upper upper bound
+     */
+     public BoundedConstraint(final RealVector lower, final RealVector upper) {
+         this.lower = lower;
+         this.upper = upper;
     }
 
+     /** {@inheritDoc} */
+     @Override
+     public RealVector getLowerBound() {
+         return lower;
+     }
 
-
- /**
- * Return Lower Bound .
- * @return Lower Bound Vector
- */
-    public RealVector getLowerBound()
-    {
-        return LB;
-    }
-
-    /**
- * Return Upper Bound .
- * @return Upper Bound Vector
- */
-     public RealVector getUpperBound()
-    {
-        return UB;
-    }
+     /**
+      * Return Upper Bound .
+      * @return Upper Bound Vector
+      */
+     public RealVector getUpperBound() {
+         return upper;
+     }
 
 }

@@ -21,7 +21,7 @@ import org.hipparchus.linear.RealVector;
 /** Inequality Constraint.
  * @since 3.1
  */
-public abstract class InequalityConstraint extends Constraint {
+public abstract class InequalityConstraint implements Constraint {
 
     RealVector LB;
     RealVector UB;

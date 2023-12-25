@@ -19,41 +19,19 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.OptimizationData;
 
-/** Abstract Constraint.
+/** Generic constraint.
  * @since 3.1
  */
-public abstract class Constraint extends VectorDifferentiableFunction implements OptimizationData {
+public interface Constraint extends VectorDifferentiableFunction, OptimizationData {
 
-//    private  RealVector LB;
-//    private  RealVector UB;
+    /** Get Lower Bound.
+     * @return Lower Bound Vector
+     */
+    RealVector getLowerBound();
 
-     public Constraint()
-    {
-
-    }
-
-//    public Constraint(RealVector LB,RealVector UB)
-//    {
-////        this.LB = LB.copy();
-////        this.UB = UB.copy();
-//    }
-
- /**
- * Return Lower Bound .
- * @@return Lower Bound Vector
- */
-    public abstract RealVector getLowerBound();
-//    {
-//        return LB;
-//    }
-
-    /**
- * Return Upper Bound .
- * @return Upper Bound Vector
- */
-     public abstract RealVector getUpperBound();
-//    {
-//        return UB;
-//    }
+    /** Get Upper Bound.
+     * @return Upper Bound Vector
+     */
+    RealVector getUpperBound();
 
 }

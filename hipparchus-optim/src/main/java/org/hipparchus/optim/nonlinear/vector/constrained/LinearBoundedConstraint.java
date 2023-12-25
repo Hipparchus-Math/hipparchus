@@ -27,58 +27,57 @@ import org.hipparchus.optim.OptimizationData;
  * @since 3.1
  */
 public class LinearBoundedConstraint extends BoundedConstraint implements OptimizationData {
-    /** The corresponding set of individual linear constraint functions */
-//    public final LinearFunction[] lcf;
-    private final RealMatrix A;
-//    public final RealVector UB;
-//    public final RealVector LB;
-    /**
-     * Construct a set of linear inequality constraints from Ax &lt; B
-     * @param A A matrix linear coefficient vectors
-     * @param b A vector of constants
+
+    /** The corresponding set of individual linear constraint functions. */
+    private final RealMatrix a;
+
+    /** Construct a set of linear inequality constraints from Ax &lt; B
+     * @param a A matrix linear coefficient vectors
+     * @param lower lower bound
+     * @param upper upper bound
      */
-    public LinearBoundedConstraint(RealMatrix A, final RealVector LB,final RealVector UB) {
-
-        this.A = A.copy();
-        this.LB = LB;
-         this.UB = UB;
-
+    public LinearBoundedConstraint(final RealMatrix a, final RealVector lower, final RealVector upper) {
+        super(lower, upper);
+        this.a = a;
     }
 
-    /**
-     * Construct a set of linear inequality constraints from Ub>=Ax>=Lb.
-     * @param A A matrix linear coefficient vectors
-     * @param LB A vector of constants
-     * @param UB A vector of constants
+    /** Construct a set of linear inequality constraints from Ax &lt; B
+     * @param a A matrix linear coefficient vectors
+     * @param lower lower bound
+     * @param upper upper bound
      */
-    public LinearBoundedConstraint(final double[][] A,final double[] LB,final double[] UB) {
-        this(new Array2DRowRealMatrix(A), new ArrayRealVector(LB),new ArrayRealVector(UB));
+    public LinearBoundedConstraint(final double[][] a, final double[] lower, final double[] upper) {
+        this(new Array2DRowRealMatrix(a), new ArrayRealVector(lower), new ArrayRealVector(upper));
     }
 
-
-
+    /** {@inheritDoc} */
     @Override
-    public double[] value(double[] x) throws IllegalArgumentException {
-        return this.A.operate(x);
+    public double[] value(final double[] x) {
+        return this.a.operate(x);
     }
 
+    /** {@inheritDoc} */
     @Override
     public int dim() {
-        return A.getColumnDimension();
+        return a.getColumnDimension();
     }
 
+    /** {@inheritDoc} */
     @Override
-    public RealVector value(RealVector x) {
-       return A.operate(x);
+    public RealVector value(final RealVector x) {
+        return a.operate(x);
     }
 
+    /** {@inheritDoc} */
     @Override
-    public RealMatrix jacobian(RealVector x) {
-       return A.copy();
+    public RealMatrix jacobian(final RealVector x) {
+        return a.copy();
     }
 
+    /** {@inheritDoc} */
     @Override
     public int dimY() {
-       return A.getRowDimension();
+        return a.getRowDimension();
     }
+
 }
