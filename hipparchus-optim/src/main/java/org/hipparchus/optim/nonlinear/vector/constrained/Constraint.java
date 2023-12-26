@@ -41,9 +41,9 @@ public interface Constraint extends VectorDifferentiableFunction, OptimizationDa
      * is on the wrong side of {@link #getLowerBound() lower} or {@link
      * #getUpperBound() upper} boundaries.
      * </p>
-     * @param x test point
+     * @param y constraint value (y = {@link #value(RealVector) value}(x))
      * @return L¹-norm of constraint overshoot
      */
-    double overshoot(RealVector x);
+    double overshoot(RealVector y);
 
 }

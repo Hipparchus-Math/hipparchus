@@ -370,10 +370,10 @@ public class SQPOptimizer2 extends ConstraintOptimizer {
          if (notMonotone==false)
            {
 
-            RealVector old1 = LagrangianeGradX(oldGrad, x, y.add((dy.subtract(y)).mapMultiply(alfa)));
-            RealVector new1 = LagrangianeGradX(functionGradient, x.add(dx.mapMultiply(alfa)), y.add((dy.subtract(y)).mapMultiply(alfa)));
-//                RealVector old1 = LagrangianeGradX(oldGrad, x, y);
-//                RealVector new1 = LagrangianeGradX(currentGrad, x.add(dx.mapMultiply(alfa)), y);
+            RealVector old1 = lagrangianGradX(oldGrad, x, y.add((dy.subtract(y)).mapMultiply(alfa)));
+            RealVector new1 = lagrangianGradX(functionGradient, x.add(dx.mapMultiply(alfa)), y.add((dy.subtract(y)).mapMultiply(alfa)));
+//                RealVector old1 = lagrangianGradX(oldGrad, x, y);
+//                RealVector new1 = lagrangianGradX(currentGrad, x.add(dx.mapMultiply(alfa)), y);
 //                RealVector old2 = penaltyFunctionGradX(oldGrad,x,y,r);
 //                RealVector new2 = penaltyFunctionGradX(currentGrad,x.add(dx.mapMultiply(alfa)),y.add((dy.subtract(y)).mapMultiply(alfa)),r);
             hessian = BFGSFormula(hessian, dx, alfa, new1, old1);
@@ -407,18 +407,6 @@ public class SQPOptimizer2 extends ConstraintOptimizer {
 
 
 //       \
-
-
-
-
-        double constraintCheck = constraintCheck(x);
-
-        double dlagrange = LagrangianeGradX(functionGradient, x, y).getNorm();
-
-
-
-
-
 
         return new LagrangeSolution(x, y, functionEval);
     }
@@ -517,7 +505,7 @@ public class SQPOptimizer2 extends ConstraintOptimizer {
         return partial;
     }
 
-    private RealVector LagrangianeGradX(RealVector currentGrad, RealVector x, RealVector y) {
+    private RealVector lagrangianGradX(RealVector currentGrad, RealVector x, RealVector y) {
 
         int me = 0;
         int mi = 0;
@@ -946,37 +934,6 @@ public class SQPOptimizer2 extends ConstraintOptimizer {
 //        }
 //        else return oldH;
 
-    }
-
-    private double constraintCheck(RealVector x) {
-        // the set of constraints is the same as the previous one but they must be evaluated with the increment
-
-        int me = 0;
-        int mi = 0;
-        double partial = 0;
-
-        if (eqConstraint != null) {
-            me = eqConstraint.dimY();
-
-            RealVector g = equalityEval.subtract(eqConstraint.getLowerBound());
-            for (int i = 0; i < g.getDimension(); i++) {
-
-                partial += FastMath.abs(g.getEntry(i));
-            }
-        }
-
-        if (iqConstraint != null) {
-
-            RealVector g = inequalityEval.subtract(iqConstraint.getLowerBound());
-
-            for (int i = 0; i < g.getDimension(); i++) {
-
-                partial += FastMath.abs(FastMath.min(g.getEntry(i), 0));
-            }
-
-        }
-
-        return partial;
     }
 
 }

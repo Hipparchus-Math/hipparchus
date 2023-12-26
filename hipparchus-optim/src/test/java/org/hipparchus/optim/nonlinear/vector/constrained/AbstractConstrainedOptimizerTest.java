@@ -77,7 +77,7 @@ public abstract class AbstractConstrainedOptimizerTest {
             plusShift.addToEntry(i, 2 * solutionTolerance);
             boolean plusIsFeasible = true;
             for (final Constraint constraint : constraints) {
-                plusIsFeasible &= constraint.overshoot(plusShift) <= 0;
+                plusIsFeasible &= constraint.overshoot(constraint.value(plusShift)) <= 0;
             }
             if (plusIsFeasible) {
                 // the plusShift point fulfills all constraints,
@@ -89,7 +89,7 @@ public abstract class AbstractConstrainedOptimizerTest {
             minusShift.addToEntry(i, -2 * solutionTolerance);
             boolean minusIsFeasible = true;
             for (final Constraint constraint : constraints) {
-                minusIsFeasible &= constraint.overshoot(minusShift) <= 0;
+                minusIsFeasible &= constraint.overshoot(constraint.value(minusShift)) <= 0;
             }
             if (minusIsFeasible) {
                 // the minusShift point fulfills all constraints,

@@ -27,61 +27,109 @@ import org.hipparchus.util.FastMath;
  */
 public class ADMMQPConvergenceChecker implements ConvergenceChecker<LagrangeSolution>, OptimizationData  {
 
-    private  RealMatrix H;
-    private  RealMatrix A;
-    private  RealVector q;
-    private  double epsAbs;
-    private  double epsRel;
-    private  boolean coverged = false;
-     ADMMQPConvergenceChecker(RealMatrix H,RealMatrix A,RealVector q,double epsAbs,double epsRel)
-     {
-       this.H = H;
-       this.A = A;
-       this.q = q;
-       this.epsAbs = epsAbs;
-       this.epsRel = epsRel;
-     }
+    /** Quadratic term matrix. */
+    private  final RealMatrix h;
 
+    /** Constraint coefficients matrix. */
+    private  final RealMatrix a;
 
+    /** Linear term matrix. */
+    private  final RealVector q;
+
+    /** Absolute tolerance for convergence. */
+    private  final double epsAbs;
+
+    /** Relative tolerance for convergence. */
+    private  final double epsRel;
+
+    /** Convergence indicator. */
+    private  boolean converged;
+
+    /** Simple constructor.
+     * @param h quadratic term matrix
+     * @param a constraint coefficients matrix
+     * @param q linear term matrix
+     * @param epsAbs
+     * @param epsRel
+     */
+    ADMMQPConvergenceChecker(final RealMatrix h, final RealMatrix a, final RealVector q,
+                             final double epsAbs, final double epsRel) {
+        this.h         = h;
+        this.a         = a;
+        this.q         = q;
+        this.epsAbs    = epsAbs;
+        this.epsRel    = epsRel;
+        this.converged = false;
+    }
+
+    /** {@inheritDoc} */
     @Override
-    public boolean converged(int i, LagrangeSolution previous, LagrangeSolution current) {
-        return this.coverged;
+    public boolean converged(final int i, final LagrangeSolution previous, final LagrangeSolution current) {
+        return converged;
     }
 
-    //TO AVOID DOUBLE CALCULATION
-    public boolean converged(int iteration,double rp,double rd,double maxPrimal,double maxDual)
-    {   boolean result = false;
+    /** Evaluate convergence.
+     * @param rp primal residual
+     * @param rd dual residual
+     * @param maxPrimal primal vectors max
+     * @param maxDual dual vectors max
+     * @return true of convergence has been reached
+     */
+    public boolean converged(final double rp, final double rd, final double maxPrimal, final double maxDual) {
+        boolean result = false;
 
-
-        //if (rp<=epsPrimalDual(maxPrimal))
-       if (rp<=epsPrimalDual(maxPrimal) && rd<=epsPrimalDual(maxDual))
-       {     result = true;
-         this.coverged = true;
-       }
-         return result;
+        if (rp <= epsPrimalDual(maxPrimal) && rd <= epsPrimalDual(maxDual)) {
+            result = true;
+            converged = true;
+        }
+        return result;
     }
 
-     public double residualPrime(RealVector x, RealVector z) {
-        return ((A.operate(x)).subtract(z)).getLInfNorm();
+    /** Compute primal residual.
+     * @param x primal problem solution
+     * @param z auxiliary variable
+     * @return primal residual
+     */
+    public double residualPrime(final RealVector x, final RealVector z) {
+        return a.operate(x).subtract(z).getLInfNorm();
     }
 
-     public double residualDual(RealVector x, RealVector y) {
-
-       return (q.add(A.transpose().operate(y)).add(H.operate(x))).getLInfNorm();
+    /** Compute dual residual.
+     * @param x primal problem solution
+     * @param y dual problem solution
+     * @return dual residual
+     */
+    public double residualDual(final RealVector x, final RealVector y) {
+        return q.add(a.transpose().operate(y)).add(h.operate(x)).getLInfNorm();
     }
 
-    public double maxPrimal(RealVector x, RealVector z) {
-       return FastMath.max((A.operate(x)).getLInfNorm(),z.getLInfNorm());
+    /** Compute primal vectors max.
+     * @param x primal problem solution
+     * @param z auxiliary variable
+     * @return primal vectors max
+     */
+    public double maxPrimal(final RealVector x, final RealVector z) {
+        return FastMath.max(a.operate(x).getLInfNorm(), z.getLInfNorm());
     }
 
-    public double maxDual(RealVector x, RealVector y) {
-
-        return FastMath.max(FastMath.max((H.operate(x)).getLInfNorm(),(A.transpose().operate(y)).getLInfNorm()),q.getLInfNorm());
+    /** Compute dual vectors max.
+     * @param x primal problem solution
+     * @param y dual problem solution
+     * @return dual vectors max
+     */
+    public double maxDual(final RealVector x, final RealVector y) {
+        return FastMath.max(FastMath.max(h.operate(x).getLInfNorm(),
+                                         a.transpose().operate(y).getLInfNorm()),
+                            q.getLInfNorm());
     }
 
-    private double epsPrimalDual(double maxPrimalDual) {
+    /** Combine absolute and relative tolerances.
+     * @param maxPrimalDual either {@link #maxPrimal(RealVector, RealVector)}
+     * or {@link #maxDual(RealVector, RealVector)}
+     * @return global tolerance
+     */
+    private double epsPrimalDual(final double maxPrimalDual) {
         return epsAbs + epsRel * maxPrimalDual;
     }
-
 
 }

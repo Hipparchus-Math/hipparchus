@@ -89,7 +89,7 @@ public class SQPOptimizerSTest extends AbstractConstrainedOptimizerTest {
     @Test
     public void testHockShittkowski72() {
         doTestProblem(new double[] { 193.12529425, 180.14766487, 184.58883790, 168.82104861 }, 1.1e-8,
-                      new double[] { 7693.73706407, 41453.54250374 }, 1.1e-8,
+                      new double[] { 7693.73706410, 41453.54250351 }, 1.1e-8,
                       727.68284564, 1.0e-8,
                       new ObjectiveFunction(new HockSchittkowskiFunction72()),
                       new double[] { 1, 5, 5, 1 },

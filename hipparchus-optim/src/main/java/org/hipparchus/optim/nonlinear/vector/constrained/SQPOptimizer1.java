@@ -342,13 +342,12 @@ public class SQPOptimizer1 extends ConstraintOptimizer {
                 resetHessian = true;
             }
 
-         if (notMonotone==false)
-           {
-            RealVector correct = LagrangianeCorrectiveGradX(x,((dy.subtract(y))));
-            RealVector old1 = LagrangianeGradX(oldGrad, x, y.add((dy.subtract(y)).mapMultiply(alfa)));
-            RealVector new1 = LagrangianeGradX(currentGrad, x.add(dx.mapMultiply(alfa)), y.add((dy.subtract(y)).mapMultiply(alfa)));
-//                RealVector old1 = LagrangianeGradX(oldGrad, x, y);
-//                RealVector new1 = LagrangianeGradX(currentGrad, x.add(dx.mapMultiply(alfa)), y);
+         if (!notMonotone) {
+            RealVector correct = lagrangianCorrectiveGradX(x,((dy.subtract(y))));
+            RealVector old1 = LagrangianGradX(oldGrad, x, y.add((dy.subtract(y)).mapMultiply(alfa)));
+            RealVector new1 = LagrangianGradX(currentGrad, x.add(dx.mapMultiply(alfa)), y.add((dy.subtract(y)).mapMultiply(alfa)));
+//                RealVector old1 = lagrangianGradX(oldGrad, x, y);
+//                RealVector new1 = lagrangianGradX(currentGrad, x.add(dx.mapMultiply(alfa)), y);
 //                RealVector old2 = penaltyFunctionGradX(oldGrad,x,y,r);
 //                RealVector new2 = penaltyFunctionGradX(currentGrad,x.add(dx.mapMultiply(alfa)),y.add((dy.subtract(y)).mapMultiply(alfa)),r);
             currentH = BFGSFormula(currentH, dx, alfa, new1, old1);
@@ -372,14 +371,6 @@ public class SQPOptimizer1 extends ConstraintOptimizer {
        x = x.add(dx.mapMultiply(alfa));
         y = y.add((dy.subtract(y)).mapMultiply(alfa));
         currentGrad = this.obj.gradient(x);
-        double constraintCheck = constraintCheck(x);
-
-        double dlagrange = LagrangianeGradX(currentGrad, x, y).getNorm();
-
-
-
-
-
 
         return new LagrangeSolution(x, y, currentF);
     }
@@ -439,8 +430,8 @@ public class SQPOptimizer1 extends ConstraintOptimizer {
             RealVector dye = dy.getSubVector(0, me);
             RealVector ge = this.eqConstraint.value(x).subtract(eqConstraint.getLowerBound());
             RealMatrix jacob = this.eqConstraint.jacobian(x);
-            RealVector firstTerm = (jacob.transpose().operate(ye));
-            RealVector secondTerm = (jacob.transpose().operate(ge.ebeMultiply(re)));
+            RealVector firstTerm = jacob.transpose().operate(ye);
+            RealVector secondTerm = jacob.transpose().operate(ge.ebeMultiply(re));
 //partial -= firstTerm.dotProduct(dx) - secondTerm.dotProduct(dx) + g.dotProduct(dye);
             partial -= firstTerm.dotProduct(dx) - secondTerm.dotProduct(dx) + ge.dotProduct(dye.subtract(ye));
         }
@@ -478,7 +469,7 @@ public class SQPOptimizer1 extends ConstraintOptimizer {
         return partial;
     }
 
-    private RealVector LagrangianeGradX(RealVector currentGrad, RealVector x, RealVector y) {
+    private RealVector LagrangianGradX(RealVector currentGrad, RealVector x, RealVector y) {
 
         int me = 0;
         int mi = 0;
@@ -510,7 +501,7 @@ public class SQPOptimizer1 extends ConstraintOptimizer {
     }
 
 
-     private RealVector LagrangianeCorrectiveGradX(RealVector xk, RealVector dy) {
+     private RealVector lagrangianCorrectiveGradX(RealVector xk, RealVector dy) {
 
         int me = 0;
         int mi = 0;
@@ -900,37 +891,6 @@ public class SQPOptimizer1 extends ConstraintOptimizer {
 //        }
 //        else return oldH;
 
-    }
-
-    private double constraintCheck(RealVector x) {
-        // the set of constraints is the same as the previous one but they must be evaluated with the increment
-
-        int me = 0;
-        int mi = 0;
-        double partial = 0;
-
-        if (eqConstraint != null) {
-            me = eqConstraint.dimY();
-
-            RealVector g = this.eqConstraint.value(x).subtract(eqConstraint.getLowerBound());
-            for (int i = 0; i < g.getDimension(); i++) {
-
-                partial += FastMath.abs(g.getEntry(i));
-            }
-        }
-
-        if (iqConstraint != null) {
-
-            RealVector g = this.iqConstraint.value(x).subtract(iqConstraint.getLowerBound());
-
-            for (int i = 0; i < g.getDimension(); i++) {
-
-                partial += FastMath.abs(FastMath.min(g.getEntry(i), 0));
-            }
-
-        }
-
-        return partial;
     }
 
 }

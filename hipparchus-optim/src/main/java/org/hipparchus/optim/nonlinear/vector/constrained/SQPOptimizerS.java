@@ -251,25 +251,8 @@ public class SQPOptimizerS extends ConstraintOptimizer {
                 r = updateRj(hessian, x, y, dx, dy, r, sigma);
             }
 
-//            if (convCriteria == 0) {
-//                if (dx.mapMultiply(alfa).dotProduct(hessian.operate(dx.mapMultiply(alfa))) < epsilon * epsilon)
-//                {
-////                    x = x.add(dx.mapMultiply(alfa));
-////                    y = y.add((dy.subtract(y)).mapMultiply(alfa));
-//                    break;
-//                }
-//            } else {
-//                if (alfa * dx.getNorm() <epsilon * (1 + x.getNorm()))
-//                {
-////                    x = x.add(dx.mapMultiply(alfa));
-////                    y = y.add((dy.subtract(y)).mapMultiply(alfa));
-//                    break;
-//                }
-//
-//            }
             currentPenaltyGrad = penaltyFunctionGrad(functionGradient, dx, dy, x, y, r);
             int search = 0;
-//          if (currentPenaltyGrad >epsilon) search = maxLineSearchIteration;
 
             rho = updateRho(dx, dy, hessian, constraintJacob, sigma, rho);
 
@@ -347,7 +330,7 @@ public class SQPOptimizerS extends ConstraintOptimizer {
             RealVector oldGradient = functionGradient;
             RealMatrix oldJacob = constraintJacob;
             // RealVector old1 = penaltyFunctionGradX(oldGradient,x, y.add((dy.subtract(y)).mapMultiply(alfa)),r);
-            RealVector old1 = LagrangianGradX(oldGradient, oldJacob, x, y.add((dy.subtract(y)).mapMultiply(alfa)), rho);
+            RealVector old1 = lagrangianGradX(oldGradient, oldJacob, x, y.add((dy.subtract(y)).mapMultiply(alfa)), rho);
             functionEval = alfaF;
             functionGradient = this.obj.gradient(x.add(dx.mapMultiply(alfa)));
             if (this.eqConstraint != null) {
@@ -361,7 +344,7 @@ public class SQPOptimizerS extends ConstraintOptimizer {
 
             constraintJacob = computeJacobianConstraint(x.add(dx.mapMultiply(alfa)));
             // RealVector new1 = penaltyFunctionGradX(functionGradient,x.add(dx.mapMultiply(alfa)), y.add((dy.subtract(y)).mapMultiply(alfa)),r);
-            RealVector new1 = LagrangianGradX(functionGradient, constraintJacob, x.add(dx.mapMultiply(alfa)), y.add((dy.subtract(y)).mapMultiply(alfa)), rho);
+            RealVector new1 = lagrangianGradX(functionGradient, constraintJacob, x.add(dx.mapMultiply(alfa)), y.add((dy.subtract(y)).mapMultiply(alfa)), rho);
 
             boolean resetHessian = false;
             if (failedSearch == 2) {
@@ -401,7 +384,7 @@ public class SQPOptimizerS extends ConstraintOptimizer {
 //       \
         double constraintCheck = constraintCheck(x);
 
-        double dlagrange = LagrangianGradX(functionGradient, constraintJacob, x, y, rho).getNorm();
+        double dlagrange = lagrangianGradX(functionGradient, constraintJacob, x, y, rho).getNorm();
 
 
 
@@ -506,7 +489,7 @@ public class SQPOptimizerS extends ConstraintOptimizer {
         return partial;
     }
 
-    private RealVector LagrangianGradX(RealVector currentGrad, RealMatrix jacobConstraint, RealVector x, RealVector y, double rho) {
+    private RealVector lagrangianGradX(RealVector currentGrad, RealMatrix jacobConstraint, RealVector x, RealVector y, double rho) {
 
         int me = 0;
         int mi = 0;
@@ -938,29 +921,14 @@ public class SQPOptimizerS extends ConstraintOptimizer {
     private double constraintCheck(RealVector x) {
         // the set of constraints is the same as the previous one but they must be evaluated with the increment
 
-        int me = 0;
-        int mi = 0;
         double partial = 0;
 
         if (eqConstraint != null) {
-            me = eqConstraint.dimY();
-
-            RealVector g = equalityEval.subtract(eqConstraint.getLowerBound());
-            for (int i = 0; i < g.getDimension(); i++) {
-
-                partial += FastMath.abs(g.getEntry(i));
-            }
+            partial += eqConstraint.overshoot(equalityEval);
         }
 
         if (iqConstraint != null) {
-
-            RealVector g = inequalityEval.subtract(iqConstraint.getLowerBound());
-
-            for (int i = 0; i < g.getDimension(); i++) {
-
-                partial += FastMath.abs(FastMath.min(g.getEntry(i), 0));
-            }
-
+            partial += iqConstraint.overshoot(inequalityEval);
         }
 
         return partial;

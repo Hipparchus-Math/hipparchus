@@ -31,7 +31,7 @@ import org.hipparchus.util.FastMath;
  * @since 3.1
  */
 
-public class ADMMQPKKT1 extends KKTSolver<ADMMQPSolution, RealMatrix, RealVector> {
+public class ADMMQPKKT1 implements KarushKuhnTuckerSolver<ADMMQPSolution> {
 
     private DecompositionSolver dsX;
     private RealMatrix H;
@@ -75,18 +75,6 @@ public class ADMMQPKKT1 extends KKTSolver<ADMMQPSolution, RealMatrix, RealVector
 
     }
 
-    @Override
-    public RealMatrix getKKTMatrix(RealMatrix H, RealMatrix A, RealMatrix R) {
-
-        RealMatrix KKT = MatrixUtils.createRealMatrix(H.getRowDimension() + A.getRowDimension(), H.getRowDimension() + A.getRowDimension());
-        KKT.setSubMatrix(H.getData(), 0, 0);
-        KKT.setSubMatrix(A.getData(), H.getRowDimension(), 0);
-        KKT.setSubMatrix(A.transpose().getData(), 0, H.getColumnDimension());
-        KKT.setSubMatrix(R.getData(), H.getRowDimension(), H.getColumnDimension());
-        return KKT;
-    }
-
-
     public void updateSigmaRho(double sigma, int me, double rho) {
         this.sigma = sigma;
         this.H = H.add(MatrixUtils.createRealIdentityMatrix(H.getColumnDimension()).scalarMultiply(sigma));
@@ -105,7 +93,8 @@ public class ADMMQPKKT1 extends KKTSolver<ADMMQPSolution, RealMatrix, RealVector
     }
 
 
-    public void initialize(RealMatrix H, RealMatrix A, RealVector q, int me, RealVector lb, RealVector ub, double rho, double sigma, double alfa) {
+    public void initialize(RealMatrix H, RealMatrix A, RealVector q, int me, RealVector lb, RealVector ub,
+                           double rho, double sigma, double alfa) {
         this.lb = lb;
         this.ub = ub;
         this.rho = rho;

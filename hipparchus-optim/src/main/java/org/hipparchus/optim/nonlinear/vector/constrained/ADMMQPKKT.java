@@ -28,7 +28,7 @@ import org.hipparchus.util.FastMath;
  * @since 3.1
  */
 
-public class ADMMQPKKT extends KKTSolver<ADMMQPSolution, RealMatrix, RealVector> {
+public class ADMMQPKKT implements KarushKuhnTuckerSolver<ADMMQPSolution> {
 
     private DecompositionSolver dsX;
     private RealMatrix H;
@@ -47,13 +47,7 @@ public class ADMMQPKKT extends KKTSolver<ADMMQPSolution, RealMatrix, RealVector>
         this.A = A.copy();
         this.R = R.copy();
         this.sigma = sigma;
-      //  dsX=(new SingularValueDecomposition(H.add(A.transpose().multiply(R.multiply(A))))).getSolver();
-       // dsX=(new CholeskyDecomposition(H.add(A.transpose().multiply(R.multiply(A))))).getSolver();
         dsX=(new EigenDecompositionSymmetric(H.add(A.transpose().multiply(R.multiply(A))))).getSolver();
-    }
-
-    ADMMQPKKT() {
-
     }
 
     @Override
@@ -65,25 +59,10 @@ public class ADMMQPKKT extends KKTSolver<ADMMQPSolution, RealMatrix, RealVector>
 
     }
 
-    @Override
-    public RealMatrix getKKTMatrix(RealMatrix H, RealMatrix A, RealMatrix R) {
-
-        RealMatrix KKT = MatrixUtils.createRealMatrix(H.getRowDimension() + A.getRowDimension(), H.getRowDimension() + A.getRowDimension());
-        KKT.setSubMatrix(H.getData(), 0, 0);
-        KKT.setSubMatrix(A.getData(), H.getRowDimension(), 0);
-        KKT.setSubMatrix(A.transpose().getData(), 0, H.getColumnDimension());
-        KKT.setSubMatrix(R.getData(), H.getRowDimension(), H.getColumnDimension());
-        return KKT;
-    }
-
-
     public void updateSigmaRho(double sigma, int me, double rho) {
         this.sigma = sigma;
         this.H = H.add(MatrixUtils.createRealIdentityMatrix(H.getColumnDimension()).scalarMultiply(sigma));
         createPenaltyMatrix(me, rho);
-        // dsX=(new CholeskyDecomposition(H.add(A.transpose().multiply(R.multiply(A))))).getSolver();
-       //dsX=(new SingularValueDecomposition(H.add(A.transpose().multiply(R.multiply(A))))).getSolver();
-         //dsX=(new CholeskyDecomposition(H.add(A.transpose().multiply(R.multiply(A))))).getSolver();
        dsX=(new EigenDecompositionSymmetric(H.add(A.transpose().multiply(R.multiply(A))))).getSolver();
 
     }
@@ -100,10 +79,6 @@ public class ADMMQPKKT extends KKTSolver<ADMMQPSolution, RealMatrix, RealVector>
         this.q = q.copy();
         createPenaltyMatrix(me, rho);
 
-
-     //dsX=(new QRDecomposition(H.add(A.transpose().multiply(R.multiply(A))))).getSolver();
-   //  dsX=(new SingularValueDecomposition(H.add(A.transpose().multiply(R.multiply(A))))).getSolver();
-    //    dsX=(new CholeskyDecomposition(H.add(A.transpose().multiply(R.multiply(A))))).getSolver();
         dsX=(new EigenDecompositionSymmetric(H.add(A.transpose().multiply(R.multiply(A))))).getSolver();
     }
 

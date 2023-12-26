@@ -84,8 +84,7 @@ public abstract class BoundedConstraint implements Constraint {
 
      /** {@inheritDoc} */
      @Override
-     public double overshoot(final RealVector x) {
-         final RealVector y = value(x);
+     public double overshoot(final RealVector y) {
 
          double overshoot = 0;
          for (int i = 0; i < y.getDimension(); ++i) {

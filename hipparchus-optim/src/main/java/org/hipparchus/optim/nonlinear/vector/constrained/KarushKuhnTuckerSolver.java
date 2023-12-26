@@ -16,42 +16,32 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
+import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.OptimizationData;
-/**
- * Karush–Kuhn–Tucker Solver.
- *<br/>
+/** Karush–Kuhn–Tucker Solver.
+ *<p>
  * Solve Equation:
- *<br/>
-* |H AT|=B1
-* <br/>
-* |A  R|=B2
+ * </p>
+ * \[\begin{align}
+ *  |H A^{T}| &amp; = B_1\\
+ *  |A  R|    &amp; = B_2
+ * \end{align}\]
+ * @param <T> type of the solution
  * @since 3.1
-*/
- public abstract class KKTSolver<P, M, V> implements OptimizationData {
+ */
+ public interface KarushKuhnTuckerSolver<T> extends OptimizationData {
 
-    /**
-    *Solve KKT equation from given right hand value.
-    *@param B1 first right hand vector
-    *@param B2 second right hand vector
-    *@return Tuple with the solution x,Lambda,value
-    *
-    */
-    public abstract P solve(V B1, V B2);
+     /** Solve Karush–Kuhn–Tucker equation from given right hand value.
+      * @param b1 first right hand vector
+      * @param b2 second right hand vector
+      * @return Tuple with the solution x,Lambda,value
+      */
+     T solve(RealVector b1, RealVector b2);
 
-     /**
-    *Return KKT Matrix.
-    *@param H Hessian MAtrix
-    *@param A Constraint Matrix
-    *@param R Wheight Matrix
-    *@return M KKT MAtrix
-    */
-    public abstract M getKKTMatrix(M H, M A, M R);
-
-    /**
-    *Iterate KKT equation from given list of Vector
-    *@param V list of Vector
-    *@return P Tuple with the solution x,Lambda,value
-    */
-    public abstract P iterate(V... b);
+     /** Iterate Karush–Kuhn–Tucker equation from given list of Vector
+      * @param b list of vectors
+      * @return Tuple with the solution x,Lambda,value
+      */
+     T iterate(RealVector... b);
 
 }

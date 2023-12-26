@@ -403,7 +403,7 @@ public class SQPOptimizer extends ConstraintOptimizer {
         return partial;
     }
 
-    private RealVector LagrangianeGradX(RealVector currentGrad, RealVector x, RealVector y) {
+    private RealVector lagrangianGradX(RealVector currentGrad, RealVector x, RealVector y) {
 
         int me = 0;
         int mi = 0;

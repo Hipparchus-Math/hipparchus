@@ -49,7 +49,7 @@ public class ADMMQPModifiedRuizEquilibrium {
     public void normalize(double epsilon, int maxIteration) {
 
         int iteration = 0;
-        double c = 1.0;
+        this.c = 1.0;
         RealVector gamma = new ArrayRealVector(H.getRowDimension() + A.getRowDimension());
         RealVector gammaD = new ArrayRealVector(H.getRowDimension());
         RealVector gammaE = new ArrayRealVector(A.getRowDimension());
@@ -59,8 +59,8 @@ public class ADMMQPModifiedRuizEquilibrium {
         RealMatrix H1 = H.copy();
         RealMatrix A1 = A.copy();
         RealVector lb1 = lb.copy();
-        RealMatrix D = null;
-        RealMatrix E = null;
+        RealMatrix diagD = null;
+        RealMatrix diagE = null;
         RealMatrix SD = MatrixUtils.createRealIdentityMatrix(H.getRowDimension());
         RealMatrix SE = MatrixUtils.createRealIdentityMatrix(A.getRowDimension());
         RealVector H1norm = new ArrayRealVector(H1.getColumnDimension());
@@ -94,15 +94,15 @@ public class ADMMQPModifiedRuizEquilibrium {
 
 
 
-            D = MatrixUtils.createRealDiagonalMatrix(gammaD.toArray());
-            E = MatrixUtils.createRealDiagonalMatrix(gammaE.toArray());
+            diagD = MatrixUtils.createRealDiagonalMatrix(gammaD.toArray());
+            diagE = MatrixUtils.createRealDiagonalMatrix(gammaE.toArray());
 
 
 
-            H1 = D.multiply(H1.copy()).multiply(D.copy());
-            q1 = D.operate(q1.copy());
-            A1 = E.multiply(A1.copy()).multiply(D.copy());
-            lb1 = E.operate(lb1.copy());
+            H1 = diagD.multiply(H1.copy()).multiply(diagD.copy());
+            q1 = diagD.operate(q1.copy());
+            A1 = diagE.multiply(A1.copy()).multiply(diagD.copy());
+            lb1 = diagE.operate(lb1.copy());
 
             //
             for (int i = 0; i < H1.getRowDimension(); i++) {
@@ -132,50 +132,42 @@ public class ADMMQPModifiedRuizEquilibrium {
             H1 = H1.copy().scalarMultiply(lambda);
            // A1 = A1.copy().scalarMultiply(lambda);
             q1 = q1.copy().mapMultiply(lambda);
-            c = lambda * c;
+            c *= lambda;
             gamma = new ArrayRealVector(gammaD.toArray(), gammaE.toArray());
-            SD = D.multiply(SD.copy());
-            SE = E.multiply(SE.copy());
+            SD = diagD.multiply(SD.copy());
+            SE = diagE.multiply(SE.copy());
             iteration += 1;
         }
-        this.E = SE.copy();
-        this.D = SD.copy();
-        this.c = c;
+        this.E    = SE.copy();
+        this.D    = SD.copy();
         this.Einv = MatrixUtils.inverse(SE);
         this.Dinv = MatrixUtils.inverse(SD);
         this.cinv = 1.0 / c;
 
-
-
-
     }
 
     public RealMatrix getScaledH() {
-
-
         return (D.multiply(H).multiply(D)).scalarMultiply(c);
     }
 
     public RealMatrix getScaledA() {
-
         return E.multiply(A).multiply(D);
     }
 
     public RealVector getScaledq() {
-
         return (D.operate(q.mapMultiply(c)));
     }
 
     public RealVector getScaledLUb(RealVector lb1) {
-        RealVector lb = new ArrayRealVector(lb1.getDimension());
+        RealVector scaledLUb = new ArrayRealVector(lb1.getDimension());
         for (int i = 0; i < lb1.getDimension(); i++) {
             if (lb1.getEntry(i) != Double.POSITIVE_INFINITY) {
-                lb.setEntry(i, E.getEntry(i, i) * lb1.getEntry(i));
+                scaledLUb.setEntry(i, E.getEntry(i, i) * lb1.getEntry(i));
             } else {
-                lb.setEntry(i, Double.POSITIVE_INFINITY);
+                scaledLUb.setEntry(i, Double.POSITIVE_INFINITY);
             }
         }
-        return lb;
+        return scaledLUb;
     }
 
     public RealVector unscaleX(RealVector x) {
