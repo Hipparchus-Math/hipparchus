@@ -40,7 +40,7 @@ public abstract class TwiceDifferentiableFunction implements MultivariateFunctio
      * @param x a point to evaluate this function at.
      * @return the value of this function at (x)
      */
-    public abstract double value(final RealVector x);
+    public abstract double value(RealVector x);
 
     /**
      * Returns the gradient of this function at (x)
@@ -48,7 +48,7 @@ public abstract class TwiceDifferentiableFunction implements MultivariateFunctio
      * @param x a point to evaluate this gradient at
      * @return the gradient of this function at (x)
      */
-    public abstract RealVector gradient(final RealVector x);
+    public abstract RealVector gradient(RealVector x);
 
     /**
      * The Hessian of this function at (x)
@@ -56,7 +56,7 @@ public abstract class TwiceDifferentiableFunction implements MultivariateFunctio
      * @param x a point to evaluate this Hessian at
      * @return the Hessian of this function at (x)
      */
-    public abstract RealMatrix hessian(final RealVector x);
+    public abstract RealMatrix hessian(RealVector x);
 
     /**
      * Returns the value of this function at (x)

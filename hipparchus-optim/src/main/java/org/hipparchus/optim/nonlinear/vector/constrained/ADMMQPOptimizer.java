@@ -65,7 +65,7 @@ public class ADMMQPOptimizer extends QPOptimizer {
     private QuadraticFunction function;
 
     /** Problem solver. */
-    private ADMMQPKKT1 solver;
+    private ADMMQPKKT solver;
 
     /** Problem convergence checker. */
     private ADMMQPConvergenceChecker checker;
@@ -83,7 +83,7 @@ public class ADMMQPOptimizer extends QPOptimizer {
      */
     public ADMMQPOptimizer() {
         settings   = new ADMMQPOption();
-        solver     = new ADMMQPKKT1();
+        solver     = new ADMMQPKKT();
         converged  = false;
         rho        = 0.1;
     }
@@ -215,7 +215,7 @@ public class ADMMQPOptimizer extends QPOptimizer {
             x = new ArrayRealVector(function.dim());
         }
 
-        ADMMQPModifiedRuizEquilibrium dec = new ADMMQPModifiedRuizEquilibrium(H, A,q,lb,ub);
+        ADMMQPModifiedRuizEquilibrium dec = new ADMMQPModifiedRuizEquilibrium(H, A,q);
 
         if (settings.getScaling()) {
            //

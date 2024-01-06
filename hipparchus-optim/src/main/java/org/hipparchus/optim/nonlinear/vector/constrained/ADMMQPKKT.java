@@ -17,14 +17,17 @@
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 
+import org.hipparchus.linear.Array2DRowRealMatrix;
+import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.DecompositionSolver;
 import org.hipparchus.linear.EigenDecompositionSymmetric;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
+import org.hipparchus.linear.SingularValueDecomposition;
 import org.hipparchus.util.FastMath;
 
-/** Alternative Direction Method of Multipliers Solver
+/** Alternative Direction Method of Multipliers Solver.
  * @since 3.1
  */
 
@@ -39,47 +42,60 @@ public class ADMMQPKKT implements KarushKuhnTuckerSolver<ADMMQPSolution> {
     private RealMatrix Rinv;
     private RealVector lb;
     private RealVector ub;
-    private double rho;
     private double alfa;
+    private Array2DRowRealMatrix M;
 
     public ADMMQPKKT(RealMatrix H, RealMatrix A, RealMatrix R, double sigma) {
         this.H = H.add(MatrixUtils.createRealIdentityMatrix(H.getColumnDimension()).scalarMultiply(sigma));
         this.A = A.copy();
         this.R = R.copy();
         this.sigma = sigma;
-        dsX=(new EigenDecompositionSymmetric(H.add(A.transpose().multiply(R.multiply(A))))).getSolver();
+        M = new Array2DRowRealMatrix(H.getRowDimension()+A.transpose().getRowDimension(),H.getRowDimension()+A.getRowDimension());
+        M.setSubMatrix(H.getData(),0,0);
+        M.setSubMatrix(A.getData(),H.getRowDimension(),0);
+        M.setSubMatrix(A.transpose().getData(),0,H.getRowDimension());
+        M.setSubMatrix(MatrixUtils.inverse(R).scalarMultiply(-1.0).getData(),H.getRowDimension(),H.getRowDimension());
+        dsX=(new SingularValueDecomposition(H.add(A.transpose().multiply(R.multiply(A))))).getSolver();
+    }
+
+    ADMMQPKKT() {
     }
 
     @Override
     public ADMMQPSolution solve(RealVector b1, final RealVector b2) {
-
-        RealVector z1 = dsX.solve(b1.add((A.transpose().operate(R.operate(b2)))));
-        RealVector z2 = R.operate((A.operate(z1)).subtract(b2));
-        return new ADMMQPSolution(z1, z2);
-
+        RealVector z = dsX.solve(new ArrayRealVector((ArrayRealVector) b1,b2));
+        return new ADMMQPSolution(z.getSubVector(0,b1.getDimension()), z.getSubVector(b1.getDimension(), b2.getDimension()));
     }
 
     public void updateSigmaRho(double sigma, int me, double rho) {
         this.sigma = sigma;
         this.H = H.add(MatrixUtils.createRealIdentityMatrix(H.getColumnDimension()).scalarMultiply(sigma));
         createPenaltyMatrix(me, rho);
-       dsX=(new EigenDecompositionSymmetric(H.add(A.transpose().multiply(R.multiply(A))))).getSolver();
-
+        M = new Array2DRowRealMatrix(H.getRowDimension()+A.getRowDimension(),H.getRowDimension()+A.getRowDimension());
+        M.setSubMatrix(H.getData(),0,0);
+        M.setSubMatrix(A.getData(),H.getRowDimension(),0);
+        M.setSubMatrix(A.transpose().getData(),0,H.getRowDimension());
+        M.setSubMatrix(Rinv.scalarMultiply(-1.0).getData(),H.getRowDimension(),H.getRowDimension());
+        dsX=(new EigenDecompositionSymmetric(M)).getSolver();
     }
 
-
-    public void initialize(RealMatrix H, RealMatrix A, RealVector q, int me, RealVector lb, RealVector ub, double rho, double sigma, double alfa) {
+    public void initialize(RealMatrix H, RealMatrix A, RealVector q, int me, RealVector lb, RealVector ub,
+                           double rho, double sigma, double alfa) {
         this.lb = lb;
         this.ub = ub;
-        this.rho = rho;
         this.alfa = alfa;
-         this.sigma = sigma;
+        this.sigma = sigma;
         this.H = H.add(MatrixUtils.createRealIdentityMatrix(H.getColumnDimension()).scalarMultiply(sigma));
         this.A = A.copy();
         this.q = q.copy();
         createPenaltyMatrix(me, rho);
 
-        dsX=(new EigenDecompositionSymmetric(H.add(A.transpose().multiply(R.multiply(A))))).getSolver();
+        M = new Array2DRowRealMatrix(H.getRowDimension()+A.getRowDimension(),H.getRowDimension()+A.getRowDimension());
+        M.setSubMatrix(H.getData(),0,0);
+        M.setSubMatrix(A.getData(),H.getRowDimension(),0);
+        M.setSubMatrix(A.transpose().getData(),0,H.getRowDimension());
+        M.setSubMatrix(Rinv.scalarMultiply(-1.0).getData(),H.getRowDimension(),H.getRowDimension());
+        dsX = new EigenDecompositionSymmetric(M).getSolver();
     }
 
 

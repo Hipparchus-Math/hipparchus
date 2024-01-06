@@ -27,44 +27,52 @@ import org.hipparchus.optim.OptimizationData;
  */
 public class LinearEqualityConstraint extends EqualityConstraint implements OptimizationData {
 
-    public final RealMatrix A;
+    /** Matrix of linear weights. */
+    private final RealMatrix a;
 
     /**
-     * Construct a set of linear equality constraints Ax = b. Represents
-     * equations A[i].x = b[i], for each row of A.
+     * Construct a set of linear equality constraints ax = b. Represents
+     * equations a[i].x = b[i], for each row of a.
      *
-     * @param A the matrix of linear weights
+     * @param a the matrix of linear weights
      * @param b the vector of constants
      */
-    public LinearEqualityConstraint(final RealMatrix A, final RealVector b) {
+    public LinearEqualityConstraint(final RealMatrix a, final RealVector b) {
         super(b);
-        this.A = A;
+        this.a = a;
     }
 
     /**
-     * Construct a set of linear equality constraints Ax = b. Represents
-     * equations A[i].x = b[i], for each row of A.
+     * Construct a set of linear equality constraints ax = b. Represents
+     * equations a[i].x = b[i], for each row of a.
      *
-     * @param A the matrix of linear weights
+     * @param a the matrix of linear weights
      * @param b the vector of constants
      */
-    public LinearEqualityConstraint(final double[][] A, final double[] b) {
-        this(new Array2DRowRealMatrix(A), new ArrayRealVector(b));
+    public LinearEqualityConstraint(final double[][] a, final double[] b) {
+        this(new Array2DRowRealMatrix(a), new ArrayRealVector(b));
+    }
+
+    /** Get the matrix of linear weights.
+     * @return matrix of linear weights
+     */
+    public RealMatrix getA() {
+        return a;
     }
 
     @Override
     public int dim() {
-        return A.getColumnDimension();
+        return a.getColumnDimension();
     }
 
     @Override
     public RealVector value(final RealVector x) {
-        return A.operate(x);
+        return a.operate(x);
     }
 
     @Override
     public RealMatrix jacobian(final RealVector x) {
-        return A.copy();
+        return a.copy();
     }
 
 }

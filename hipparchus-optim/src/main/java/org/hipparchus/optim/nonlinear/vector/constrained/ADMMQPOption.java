@@ -95,6 +95,8 @@ public class ADMMQPOption implements OptimizationData {
     /** Value for Iteration of polishing Algorithm. */
     private int polishingIteration;
 
+    /** Simple constructor.
+     */
     public ADMMQPOption() {
         eps                = ADMMQPOption.DEFAULT_EPS;
         epsInfeasible      = ADMMQPOption.DEFAULT_EPS_INFEASIBLE;

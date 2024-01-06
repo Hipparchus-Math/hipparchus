@@ -24,83 +24,94 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.MathUtils;
 
-/**
- * Given A, b, c, implements 0.5*(x^T)A(x) + b.x + c;
- * The gradient is A(x) + b, and the Hessian is A
+/** Given h, c, d, implements 0.5*(x^T)h(x) + c.x + d.
+ * The gradient is h(x) + c, and the Hessian is h
  * @since 3.1
  */
 public class QuadraticFunction extends TwiceDifferentiableFunction {
-    private final RealMatrix A;
-    private final RealVector b;
-    private final double c;
+
+    /** Square matrix of weights for quadratic terms. */
+    private final RealMatrix h;
+
+    /** Vector of weights for linear terms. */
+    private final RealVector c;
+
+    /** Constant term. */
+    private final double d;
+
+    /** Dimension of the vector. */
     private final int n;
 
-    /**
-     * Construct quadratic function 0.5*(x^T)A(x) + b.x + c
-     *
-     * @param A square matrix of weights for quadratic terms.
+    /** Construct quadratic function 0.5*(x^T)h(x) + c.x + d.
+     * @param h square matrix of weights for quadratic terms.
      * Typically expected to be positive definite or positive semi-definite.
-     * @param b vector of weights for linear terms.
-     * @param c a constant
+     * @param c vector of weights for linear terms.
+     * @param d constant term
      */
-    public QuadraticFunction(RealMatrix A, RealVector b, double c) {
-        int d = b.getDimension();
-        if (d < 1) {
+    public QuadraticFunction(RealMatrix h, RealVector c, double d) {
+        this.n = c.getDimension();
+        if (n < 1) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_DIMENSION, d, 1);
         }
-        MathUtils.checkDimension(A.getRowDimension(), d);
-       // MatrixUtils.checkSymmetric(A, 1e-6);
-        this.A = A.copy();
-        this.b = b.copy();
-        this.c = c;
-        this.n = d;
-    }
+        MathUtils.checkDimension(h.getRowDimension(), n);
+        this.h = h.copy();
+        this.c = c.copy();
+        this.d = d;
+   }
 
-    /**
-     * Construct quadratic function 0.5*(x^T)A(x) + b.x + c
-     *
-     * @param A square matrix of weights for quadratic terms.
+    /** Construct quadratic function 0.5*(x^T)h(x) + c.x + d.
+     * @param h square matrix of weights for quadratic terms.
      * Typically expected to be positive definite or positive semi-definite.
-     * @param b vector of weights for linear terms.
-     * @param c a constant
+     * @param c vector of weights for linear terms.
+     * @param d constant term
      */
-    public QuadraticFunction(double[][] A, double[] b, double c) {
-        this(new Array2DRowRealMatrix(A), new ArrayRealVector(b), c);
+    public QuadraticFunction(double[][] h, double[] c, double d) {
+        this(new Array2DRowRealMatrix(h), new ArrayRealVector(c), d);
     }
 
-    public RealMatrix getH()
-    {
-        return this.A;
-    }
-     public RealVector getC()
-    {
-        return this.b;
+    /** Get square matrix of weights for quadratic terms.
+     * @return square matrix of weights for quadratic terms
+     */
+    public RealMatrix getH() {
+        return this.h;
     }
 
-      public double getD()
-    {
+    /** Get vector of weights for linear terms.
+     * @return vector of weights for linear terms
+     */
+    public RealVector getC() {
         return this.c;
     }
-    @Override
-    public int dim() { return n; }
 
+    /** Get constant term.
+     * @return constant term
+     */
+    public double getD() {
+        return d;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int dim() {
+        return n;
+    }
+
+    /** {@inheritDoc} */
     @Override
     public double value(final RealVector x) {
-        double v = 0.5 * (A.operate(x)).dotProduct(x);
-        v += b.dotProduct(x);
-        v += c;
-        return v;
+        return 0.5 * h.operate(x).dotProduct(x) + c.dotProduct(x) + d;
     }
 
+    /** {@inheritDoc} */
     @Override
     public RealVector gradient(final RealVector x) {
-        return (A.operate(x)).add(b);
+        return h.operate(x).add(c);
     }
 
+    /** {@inheritDoc} */
     @Override
     public RealMatrix hessian(final RealVector x) {
-        return A.copy();
+        return h.copy();
     }
-
 
 }

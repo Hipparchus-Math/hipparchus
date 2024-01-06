@@ -23,34 +23,36 @@ import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.FastMath;
 
 public class ADMMQPModifiedRuizEquilibrium {
-    private double MIN_SCALING = 1.0e6; ///< minimum scaling value
-    private double MAX_SCALING = 1.0e+6; ///< maximum scaling value
-    final RealMatrix H;
-    final RealMatrix A;
-    final RealVector q;
-    final RealVector lb;
-    final RealVector ub;
 
-    public RealMatrix D;
-    public RealMatrix E;
-    public double c;
-    public RealMatrix Dinv;
-    public RealMatrix Einv;
-    public double cinv;
+    /** Minimum scaling value. */
+    private static final double MIN_SCALING = 1.0e6;
 
-    public ADMMQPModifiedRuizEquilibrium(RealMatrix H, RealMatrix A, RealVector q, RealVector lb, RealVector ub) {
+    /** Maximum scaling value. */
+    private static final double MAX_SCALING = 1.0e+6;
+
+    /** Square matrix of weights for quadratic terms. */
+    private final RealMatrix H;
+
+    private final RealMatrix A;
+    private final RealVector q;
+
+    private RealMatrix D;
+    private RealMatrix E;
+    private double c;
+    private RealMatrix Dinv;
+    private RealMatrix Einv;
+    private double cinv;
+
+    public ADMMQPModifiedRuizEquilibrium(RealMatrix H, RealMatrix A, RealVector q) {
         this.H  = H;
         this.A  = A;
         this.q  = q;
-        this.lb = lb;
-        this.ub = ub;
     }
 
     public void normalize(double epsilon, int maxIteration) {
 
         int iteration = 0;
         this.c = 1.0;
-        RealVector gamma = new ArrayRealVector(H.getRowDimension() + A.getRowDimension());
         RealVector gammaD = new ArrayRealVector(H.getRowDimension());
         RealVector gammaE = new ArrayRealVector(A.getRowDimension());
 
@@ -58,7 +60,6 @@ public class ADMMQPModifiedRuizEquilibrium {
         RealVector q1 = q.copy();
         RealMatrix H1 = H.copy();
         RealMatrix A1 = A.copy();
-        RealVector lb1 = lb.copy();
         RealMatrix diagD = null;
         RealMatrix diagE = null;
         RealMatrix SD = MatrixUtils.createRealIdentityMatrix(H.getRowDimension());
@@ -70,70 +71,50 @@ public class ADMMQPModifiedRuizEquilibrium {
             for (int i = 0; i < H1.getColumnDimension(); i++) {
                 double norma = (new ArrayRealVector(H1.getColumn(i), A1.getColumn(i))).getLInfNorm();
                 gammaD.setEntry(i, norma);
-
             }
-
 
             for (int i = 0; i < A1.getRowDimension(); i++) {
                 double norma = A1.getRowVector(i).getLInfNorm();
                 gammaE.setEntry(i, norma);
             }
 
-            gammaD = limit_scaling(gammaD);
-            gammaE = limit_scaling(gammaE);
+            gammaD = limitScaling(gammaD);
+            gammaE = limitScaling(gammaE);
 
             for (int i = 0; i < gammaD.getDimension(); i++) {
-
                 gammaD.setEntry(i, 1.0 / FastMath.sqrt(gammaD.getEntry(i)));
-
             }
+
             for (int i = 0; i < gammaE.getDimension(); i++) {
-
-              gammaE.setEntry(i, 1.0 / FastMath.sqrt(gammaE.getEntry(i)));
+                gammaE.setEntry(i, 1.0 / FastMath.sqrt(gammaE.getEntry(i)));
             }
-
-
 
             diagD = MatrixUtils.createRealDiagonalMatrix(gammaD.toArray());
             diagE = MatrixUtils.createRealDiagonalMatrix(gammaE.toArray());
 
-
-
             H1 = diagD.multiply(H1.copy()).multiply(diagD.copy());
             q1 = diagD.operate(q1.copy());
             A1 = diagE.multiply(A1.copy()).multiply(diagD.copy());
-            lb1 = diagE.operate(lb1.copy());
 
-            //
             for (int i = 0; i < H1.getRowDimension(); i++) {
-              //  double norma = H1.getColumnVector(i).getLInfNorm();
                 double norma = (new ArrayRealVector(H1.getRow(i))).getLInfNorm();
                 H1norm.setEntry(i, norma);
             }
-//            for (int i = 0; i < H1.getColumnDimension(); i++) {
-//              //  double norma = H1.getColumnVector(i).getLInfNorm();
-//                double norma = (new ArrayRealVector(H1.getColumn(i),A1.getColumn(i))).getLInfNorm();
-//                H1norm.setEntry(i, norma);
-//            }
             double qnorm = q1.getLInfNorm();
-            double lbnorm = lb1.getLInfNorm();
-            double qnorm1 = FastMath.max(qnorm,lbnorm);
-            if (qnorm==0) {
+            if (qnorm == 0) {
                 qnorm = 1.0;
             }
-            qnorm = limit_scaling(new ArrayRealVector(1,qnorm)).getEntry(0);
+            qnorm = limitScaling(new ArrayRealVector(1, qnorm)).getEntry(0);
             double mean = 0;
-            for (int i = 0;i<H1norm.getDimension();i++) {
+            for (int i = 0; i < H1norm.getDimension(); i++) {
                 mean+=H1norm.getEntry(i) / H1norm.getDimension();
             }
 
-            lambda = 1.0/limit_scaling(new ArrayRealVector(1,FastMath.max(mean, qnorm))).getEntry(0);
+            lambda = 1.0 / limitScaling(new ArrayRealVector(1, FastMath.max(mean, qnorm))).getEntry(0);
 
             H1 = H1.copy().scalarMultiply(lambda);
-           // A1 = A1.copy().scalarMultiply(lambda);
             q1 = q1.copy().mapMultiply(lambda);
             c *= lambda;
-            gamma = new ArrayRealVector(gammaD.toArray(), gammaE.toArray());
             SD = diagD.multiply(SD.copy());
             SE = diagE.multiply(SE.copy());
             iteration += 1;
@@ -147,7 +128,7 @@ public class ADMMQPModifiedRuizEquilibrium {
     }
 
     public RealMatrix getScaledH() {
-        return (D.multiply(H).multiply(D)).scalarMultiply(c);
+        return D.multiply(H).multiply(D).scalarMultiply(c);
     }
 
     public RealMatrix getScaledA() {
@@ -155,7 +136,7 @@ public class ADMMQPModifiedRuizEquilibrium {
     }
 
     public RealVector getScaledq() {
-        return (D.operate(q.mapMultiply(c)));
+        return D.operate(q.mapMultiply(c));
     }
 
     public RealVector getScaledLUb(RealVector lb1) {
@@ -175,8 +156,7 @@ public class ADMMQPModifiedRuizEquilibrium {
     }
 
     public RealVector unscaleY(RealVector y) {
-
-        return (E.operate(y)).mapMultiply(cinv);
+        return E.operate(y).mapMultiply(cinv);
     }
 
     public RealVector unscaleZ(RealVector z) {
@@ -187,16 +167,16 @@ public class ADMMQPModifiedRuizEquilibrium {
         return Dinv.operate(x);
     }
 
-    private RealVector limit_scaling(RealVector v) {
+    private RealVector limitScaling(RealVector v) {
 
         RealVector result = new ArrayRealVector(v.getDimension());
-        for (int i = 0; i <v.getDimension() ; i++) {
-
-
+        for (int i = 0; i < v.getDimension(); i++) {
             result.setEntry(i,  v.getEntry(i) < MIN_SCALING ? 1.0 : v.getEntry(i));
             result.setEntry(i,  v.getEntry(i) > MAX_SCALING ? MAX_SCALING : v.getEntry(i));
-
         }
+
         return result;
+
     }
+
 }
