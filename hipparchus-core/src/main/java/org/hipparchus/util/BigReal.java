@@ -32,7 +32,6 @@ import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NullArgumentException;
 
 /**
  * Arbitrary precision decimal number.
