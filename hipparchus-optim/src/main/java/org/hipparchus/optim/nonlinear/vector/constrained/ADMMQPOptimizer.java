@@ -26,6 +26,7 @@ import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.ConvergenceChecker;
+import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.FastMath;
@@ -135,9 +136,9 @@ public class ADMMQPOptimizer extends QPOptimizer {
         if (eqConstraint != null) {
             int nDual = eqConstraint.dimY();
             if (nDual >= n) {
-                throw new IllegalArgumentException("Rank of constraints must be < domain dimension");
+                throw new MathIllegalArgumentException(LocalizedOptimFormats.CONSTRAINTS_RANK, nDual, n);
             }
-            int nTest = eqConstraint.A.getColumnDimension();
+            int nTest = eqConstraint.getA().getColumnDimension();
             if (nDual == 0) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NOT_ALLOWED);
             }

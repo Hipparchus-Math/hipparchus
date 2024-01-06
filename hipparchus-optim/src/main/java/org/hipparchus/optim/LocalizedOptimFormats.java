@@ -75,7 +75,10 @@ public enum LocalizedOptimFormats implements Localizable {
     UNABLE_TO_SOLVE_SINGULAR_PROBLEM("unable to solve: singular problem"),
 
     /** UNBOUNDED_SOLUTION. */
-    UNBOUNDED_SOLUTION("unbounded solution");
+    UNBOUNDED_SOLUTION("unbounded solution"),
+
+    /** CONSTRAINTS_RANK. */
+    CONSTRAINTS_RANK("rank of constraints must be lesser than domain dimension, but {0} >= {1}");
 
     /** Source English format. */
     private final String sourceFormat;

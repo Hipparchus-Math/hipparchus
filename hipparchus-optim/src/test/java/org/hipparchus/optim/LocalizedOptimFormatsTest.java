@@ -32,7 +32,7 @@ public class LocalizedOptimFormatsTest extends LocalizedFormatsAbstractTest {
 
     @Override
     protected int getExpectedNumber() {
-        return 11;
+        return 12;
     }
 
 }

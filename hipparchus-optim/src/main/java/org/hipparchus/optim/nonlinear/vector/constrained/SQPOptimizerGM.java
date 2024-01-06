@@ -26,6 +26,7 @@ import org.hipparchus.linear.EigenDecompositionSymmetric;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
+import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.FastMath;
@@ -134,7 +135,7 @@ public class SQPOptimizerGM extends ConstraintOptimizer {
         if (eqConstraint != null) {
             int nDual = eqConstraint.dimY();
             if (nDual >= n) {
-                throw new IllegalArgumentException("Rank of constraints must be < domain dimension");
+                throw new MathIllegalArgumentException(LocalizedOptimFormats.CONSTRAINTS_RANK, nDual, n);
             }
             int nTest = eqConstraint.dim();
             if (nDual == 0) {
