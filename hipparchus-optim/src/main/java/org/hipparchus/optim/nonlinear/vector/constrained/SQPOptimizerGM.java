@@ -57,16 +57,22 @@ public class SQPOptimizerGM extends ConstraintOptimizer {
     /** Inequality constraint (may be null). */
     private InequalityConstraint iqConstraint;
 
+    /** Jacobian constraint. */
     private RealMatrix constraintJacob;
 
+    /** Value of the equality constraint. */
     private RealVector equalityEval;
 
+    /** Value of the inequality constraint. */
     private RealVector inequalityEval;
 
+    /** Value of the objective function. */
     private double functionEval;
 
+    /** Gradient of the objective function. */
     private RealVector functionGradient;
 
+    /** Hessian of the objective function. */
     private RealMatrix hessian;
 
     /** Simple constructor.

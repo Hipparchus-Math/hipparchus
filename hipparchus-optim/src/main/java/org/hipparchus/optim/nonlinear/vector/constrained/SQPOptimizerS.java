@@ -63,28 +63,28 @@ public class SQPOptimizerS extends ConstraintOptimizer {
     /** Inequality constraint (may be null). */
     private InequalityConstraint iqConstraint;
 
-    private BoundedConstraint bqConstraint;
-
+    /** Jacobian constraint. */
     private RealMatrix constraintJacob;
 
+    /** Value of the equality constraint. */
     private RealVector equalityEval;
 
+    /** Value of the inequality constraint. */
     private RealVector inequalityEval;
 
+    /** Value of the objective function. */
     private double functionEval;
 
+    /** Gradient of the objective function. */
     private RealVector functionGradient;
 
+    /** Hessian of the objective function. */
     private RealMatrix hessian;
-
-    /** QP solver. */
-    QPOptimizer qpSolver;
 
     /** Simple constructor.
      */
     public SQPOptimizerS() {
         settings = new SQPOption();
-        qpSolver = new ADMMQPOptimizer();
     }
 
     @Override
@@ -109,17 +109,6 @@ public class SQPOptimizerS extends ConstraintOptimizer {
             if (data instanceof InequalityConstraint) {
                 iqConstraint = (InequalityConstraint) data;
                 continue;
-            }
-
-            if (data instanceof BoundedConstraint) {
-                bqConstraint = (BoundedConstraint) data;
-                continue;
-            }
-
-            if (data instanceof QPOptimizer) {
-                qpSolver = (QPOptimizer) data;
-                continue;
-
             }
 
             if (data instanceof SQPOption) {
@@ -587,7 +576,7 @@ public class SQPOptimizerS extends ConstraintOptimizer {
         for (int i = 0; i < sigma.getDimension(); i++) {
             double appoggio = 0;
             // if (r.getEntry(i)>epsilon)
-            appoggio = ((this.iterations.getCount()) / (FastMath.sqrt(r.getEntry(i))));
+            appoggio = iterations.getCount() / FastMath.sqrt(r.getEntry(i));
             sigma.setEntry(i, FastMath.min(1.0, appoggio));
         }
 

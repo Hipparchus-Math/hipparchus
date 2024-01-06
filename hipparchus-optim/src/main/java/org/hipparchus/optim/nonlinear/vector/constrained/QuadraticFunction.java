@@ -24,17 +24,17 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.MathUtils;
 
-/** Given h, c, d, implements 0.5*(x^T)h(x) + c.x + d.
- * The gradient is h(x) + c, and the Hessian is h
+/** Given h, c, d, implements \(\frac{1}{2}x^T P X + Q^T x + d\).
+ * The gradient is P x + Q^T, and the Hessian is P
  * @since 3.1
  */
 public class QuadraticFunction extends TwiceDifferentiableFunction {
 
     /** Square matrix of weights for quadratic terms. */
-    private final RealMatrix h;
+    private final RealMatrix p;
 
     /** Vector of weights for linear terms. */
-    private final RealVector c;
+    private final RealVector q;
 
     /** Constant term. */
     private final double d;
@@ -42,24 +42,24 @@ public class QuadraticFunction extends TwiceDifferentiableFunction {
     /** Dimension of the vector. */
     private final int n;
 
-    /** Construct quadratic function 0.5*(x^T)h(x) + c.x + d.
-     * @param h square matrix of weights for quadratic terms.
+    /** Construct quadratic function \(\frac{1}{2}x^T P X + Q^T x + d\).
+     * @param p square matrix of weights for quadratic terms.
      * Typically expected to be positive definite or positive semi-definite.
-     * @param c vector of weights for linear terms.
+     * @param q vector of weights for linear terms.
      * @param d constant term
      */
-    public QuadraticFunction(RealMatrix h, RealVector c, double d) {
-        this.n = c.getDimension();
+    public QuadraticFunction(RealMatrix p, RealVector q, double d) {
+        this.n = q.getDimension();
         if (n < 1) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_DIMENSION, d, 1);
         }
-        MathUtils.checkDimension(h.getRowDimension(), n);
-        this.h = h.copy();
-        this.c = c.copy();
+        MathUtils.checkDimension(p.getRowDimension(), n);
+        this.p = p.copy();
+        this.q = q.copy();
         this.d = d;
    }
 
-    /** Construct quadratic function 0.5*(x^T)h(x) + c.x + d.
+    /** Construct quadratic function \(\frac{1}{2}x^T P X + Q^T x + d\).
      * @param h square matrix of weights for quadratic terms.
      * Typically expected to be positive definite or positive semi-definite.
      * @param c vector of weights for linear terms.
@@ -72,15 +72,15 @@ public class QuadraticFunction extends TwiceDifferentiableFunction {
     /** Get square matrix of weights for quadratic terms.
      * @return square matrix of weights for quadratic terms
      */
-    public RealMatrix getH() {
-        return this.h;
+    public RealMatrix getP() {
+        return this.p;
     }
 
     /** Get vector of weights for linear terms.
      * @return vector of weights for linear terms
      */
-    public RealVector getC() {
-        return this.c;
+    public RealVector getQ() {
+        return this.q;
     }
 
     /** Get constant term.
@@ -99,19 +99,19 @@ public class QuadraticFunction extends TwiceDifferentiableFunction {
     /** {@inheritDoc} */
     @Override
     public double value(final RealVector x) {
-        return 0.5 * h.operate(x).dotProduct(x) + c.dotProduct(x) + d;
+        return 0.5 * p.operate(x).dotProduct(x) + q.dotProduct(x) + d;
     }
 
     /** {@inheritDoc} */
     @Override
     public RealVector gradient(final RealVector x) {
-        return h.operate(x).add(c);
+        return p.operate(x).add(q);
     }
 
     /** {@inheritDoc} */
     @Override
     public RealMatrix hessian(final RealVector x) {
-        return h.copy();
+        return p.copy();
     }
 
 }

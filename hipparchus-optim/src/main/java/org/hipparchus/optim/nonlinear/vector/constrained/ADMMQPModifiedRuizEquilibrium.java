@@ -33,14 +33,28 @@ public class ADMMQPModifiedRuizEquilibrium {
     /** Square matrix of weights for quadratic terms. */
     private final RealMatrix H;
 
-    private final RealMatrix A;
+    /** Vector of weights for linear terms. */
     private final RealVector q;
 
+    /** constraints coefficients matrix. */
+    private final RealMatrix A;
+
+    /** TBC. */
     private RealMatrix D;
+
+    /** TBC. */
     private RealMatrix E;
+
+    /** TBC. */
     private double c;
+
+    /** Inverse of D. */
     private RealMatrix Dinv;
+
+    /** Inverse of E. */
     private RealMatrix Einv;
+
+    /** Inverse of c. */
     private double cinv;
 
     public ADMMQPModifiedRuizEquilibrium(RealMatrix H, RealMatrix A, RealVector q) {

@@ -160,9 +160,9 @@ public class ADMMQPOptimizer extends QPOptimizer {
 
 
        //QUADRATIC TERM
-        RealMatrix H = function.getH();
+        RealMatrix H = function.getP();
        //GRADIENT
-        RealVector q = function.getC();
+        RealVector q = function.getQ();
 
 
        //EQUALITY CONSTRAINT
