@@ -60,7 +60,29 @@ import com.xeiam.xchart.XChartPanel;
 /**
  * Displays pdf/cdf for integer distributions.
  */
+//CHECKSTYLE: stop HideUtilityClassConstructor
 public class IntegerDistributionComparison {
+
+    /** Arial font. */
+    private static final String ARIAL = "Arial";
+
+    /** p=0.2. */
+    private static final String P02 = "p=0.2";
+
+    /** p=0.3. */
+    private static final String P03 = "p=0.3";
+
+    /** p=0.5. */
+    private static final String P05 = "p=0.5";
+
+    /** p=0.7. */
+    private static final String P07 = "p=0.7";
+
+    /** p=0.75. */
+    private static final String P075 = "p=0.75";
+
+    /** p=0.8. */
+    private static final String P08 = "p=0.8";
 
     /** Empty constructor.
      * <p>
@@ -140,13 +162,13 @@ public class IntegerDistributionComparison {
         // Customize Chart
         chart.setChartTitle(title);
         chart.getStyleManager().setChartTitleVisible(true);
-        chart.getStyleManager().setChartTitleFont(new Font("Arial", Font.PLAIN, 10));
+        chart.getStyleManager().setChartTitleFont(new Font(ARIAL, Font.PLAIN, 10));
         chart.getStyleManager().setLegendPosition(position);
         chart.getStyleManager().setLegendVisible(true);
-        chart.getStyleManager().setLegendFont(new Font("Arial", Font.PLAIN, 10));
+        chart.getStyleManager().setLegendFont(new Font(ARIAL, Font.PLAIN, 10));
         chart.getStyleManager().setLegendPadding(6);
         chart.getStyleManager().setLegendSeriesLineLength(6);
-        chart.getStyleManager().setAxisTickLabelsFont(new Font("Arial", Font.PLAIN, 9));
+        chart.getStyleManager().setAxisTickLabelsFont(new Font(ARIAL, Font.PLAIN, 9));
 
         chart.getStyleManager().setXAxisMin(minX);
         chart.getStyleManager().setXAxisMax(maxX);
@@ -223,7 +245,7 @@ public class IntegerDistributionComparison {
 
             c.gridx++;
             comp = createComponent("Geometric", 0, 10,
-                                   new String[] { "p=0.2", "p=0.5", "p=0.8" },
+                                   new String[] { P02, P05, P08 },
                                    new GeometricDistribution(0.2),
                                    new GeometricDistribution(0.5),
                                    new GeometricDistribution(0.8));
@@ -231,7 +253,7 @@ public class IntegerDistributionComparison {
 
             c.gridx++;
             comp = createComponent("Hypergeometric", 0, 10,
-                                   new String[] { "p=0.3", "p=0.5", "p=0.75" },
+                                   new String[] { P03, P05, P075 },
                                    new HypergeometricDistribution(100, 6, 20),
                                    new HypergeometricDistribution(100, 10, 20),
                                    new HypergeometricDistribution(100, 15, 20));
@@ -239,7 +261,7 @@ public class IntegerDistributionComparison {
 
             c.gridx++;
             comp = createComponent("Pascal", 0, 50,
-                                   new String[] { "p=0.3", "p=0.5", "p=0.7" },
+                                   new String[] { P03, P05, P07 },
                                    new PascalDistribution(10, 0.3),
                                    new PascalDistribution(10, 0.5),
                                    new PascalDistribution(10, 0.7));

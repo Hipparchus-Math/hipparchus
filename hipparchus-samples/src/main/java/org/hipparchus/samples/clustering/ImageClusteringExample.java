@@ -56,6 +56,7 @@ import org.hipparchus.samples.ExampleUtils.ExampleFrame;
 /**
  * This example shows how clustering can be applied to images.
  */
+//CHECKSTYLE: stop HideUtilityClassConstructor
 @SuppressWarnings("serial")
 public class ImageClusteringExample {
 
