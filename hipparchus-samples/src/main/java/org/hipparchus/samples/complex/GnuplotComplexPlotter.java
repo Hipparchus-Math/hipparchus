@@ -41,6 +41,12 @@ import org.hipparchus.util.RyuDouble;
  */
 public class GnuplotComplexPlotter {
 
+    /** PNG suffix. */
+    private static final String PNG = ".png";
+
+    /** End Of Line. */
+    private static final String EOL = "%n";
+
     /** Elliptic integrals characteristic. */
     private Complex n;
 
@@ -93,7 +99,7 @@ public class GnuplotComplexPlotter {
     private int maxEval;
 
     /** Integrator for numerically integrated elliptical integrals. */
-    final ComplexUnivariateIntegrator integrator;
+    private final ComplexUnivariateIntegrator integrator;
 
     /** Default constructor.
      */
@@ -203,7 +209,7 @@ public class GnuplotComplexPlotter {
                             for (final Predefined predefined : Predefined.values()) {
                                 System.err.format(Locale.US, " %s", predefined.name());
                             }
-                            System.err.format(Locale.US, "%n");
+                            System.err.format(Locale.US, EOL);
                             System.exit(1);
                         }
                         break;
@@ -260,7 +266,7 @@ public class GnuplotComplexPlotter {
                     out.format(Locale.US, "set terminal qt size %d, %d title 'complex plotter'%n", width, height);
                 } else {
                     out.format(Locale.US, "set terminal pngcairo size %d, %d%n", width, height);
-                    out.format(Locale.US, "set output '%s'%n", new File(output, predefined.name() + ".png").getAbsolutePath());
+                    out.format(Locale.US, "set output '%s'%n", new File(output, predefined.name() + PNG).getAbsolutePath());
                 }
                 out.format(Locale.US, "set xrange [%f : %f]%n", xMin, xMax);
                 out.format(Locale.US, "set yrange [%f : %f]%n", yMin, yMax);
@@ -289,7 +295,7 @@ public class GnuplotComplexPlotter {
                                    z.getRealPart(), z.getImaginaryPart(), fz.norm(),
                                    coloring.hue(fz), coloring.saturation(fz), coloring.value(fz));
                     }
-                    out.format(Locale.US, "%n");
+                    out.format(Locale.US, EOL);
                 }
                 out.format(Locale.US, "EOD%n");
                 if (use3D) {
@@ -303,7 +309,7 @@ public class GnuplotComplexPlotter {
                     out.format(Locale.US, "pause mouse close%n");
                 } else {
                     System.out.format(Locale.US, "output written to %s%n",
-                                      new File(output, predefined.name() + ".png").getAbsolutePath());
+                                      new File(output, predefined.name() + PNG).getAbsolutePath());
                 }
             }
         }

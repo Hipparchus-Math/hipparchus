@@ -55,6 +55,7 @@ import org.hipparchus.util.Pair;
 /**
  * Plots 2D samples drawn from various pseudo / quasi-random generators.
  */
+// CHECKSTYLE: stop HideUtilityClassConstructor
 public class LowDiscrepancyGeneratorComparison {
 
     /** Empty constructor.
@@ -168,7 +169,7 @@ public class LowDiscrepancyGeneratorComparison {
                     new UncorrelatedRandomVectorGenerator(2, new UniformRandomGenerator(new JDKRandomGenerator()))));
             generators.add(new Pair<String, RandomVectorGenerator>("Independent\nRandom(MT)", new RandomVectorGenerator() {
 
-                RandomGenerator[] rngs = new RandomGenerator[] {
+                private final RandomGenerator[] rngs = new RandomGenerator[] {
                     new MersenneTwister(0),
                     new MersenneTwister(1)
                 };

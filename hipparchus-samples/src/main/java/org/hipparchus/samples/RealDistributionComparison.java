@@ -71,6 +71,18 @@ public class RealDistributionComparison {
     /** Arial font. */
     private static final String ARIAL = "Arial";
 
+    /** Mu 0, sigma 1. */
+    private static final String MU_0_SIGMA_02 = "μ=0,σ\u00B2=0.2";
+
+    /** Mu 0, sigma 1. */
+    private static final String MU_0_SIGMA_1 = "μ=0,σ\u00B2=1";
+
+    /** Mu 0, sigma 1. */
+    private static final String MU_0_SIGMA_5 = "μ=0,σ\u00B2=5";
+
+    /** Mu 0, sigma 1. */
+    private static final String MU_M2_SIGMA_05 = "μ=-2,σ\u00B2=0.5";
+
     /** Empty constructor.
      * @since 3.0
      */
@@ -222,7 +234,7 @@ public class RealDistributionComparison {
             JComponent comp = null;
 
             comp = createComponent("Normal", -5, 5,
-                                   new String[] { "μ=0,σ\u00B2=0.2", "μ=0,σ\u00B2=1", "μ=0,σ\u00B2=5", "μ=-2,σ\u00B2=0.5" },
+                                   new String[] { MU_0_SIGMA_02, MU_0_SIGMA_1, MU_0_SIGMA_5, MU_M2_SIGMA_05 },
                                    new NormalDistribution(0, FastMath.sqrt(0.2)),
                                    new NormalDistribution(),
                                    new NormalDistribution(0, FastMath.sqrt(5)),
@@ -301,7 +313,7 @@ public class RealDistributionComparison {
             c.gridy++;
             c.gridx = 0;
             comp = createComponent("Log-Normal", 0, 3,
-                                   new String[] { "μ=0,σ\u00B2=10", "μ=0,σ\u00B2=1.5", "μ=0,σ\u00B2=1", "μ=0,σ\u00B2=0.5", "μ=0,σ\u00B2=0.25", "μ=0,σ\u00B2=0.125" },
+                                   new String[] { "μ=0,σ\u00B2=10", "μ=0,σ\u00B2=1.5", MU_0_SIGMA_1, "μ=0,σ\u00B2=0.5", "μ=0,σ\u00B2=0.25", "μ=0,σ\u00B2=0.125" },
                                    new LogNormalDistribution(0, 10),
                                    new LogNormalDistribution(0, 1.5),
                                    new LogNormalDistribution(0, 1),

@@ -63,6 +63,7 @@ import org.hipparchus.util.SinCos;
  * Based on
  * <a href="http://scikit-learn.org/stable/auto_examples/cluster/plot_cluster_comparison.html">scikit learn</a>.
  */
+//CHECKSTYLE: stop HideUtilityClassConstructor
 public class ClusterAlgorithmComparison {
 
     /** Empty constructor.

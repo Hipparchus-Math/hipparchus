@@ -1,8 +1,8 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Hipparchus project under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -14,25 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.hipparchus.optim.nonlinear.vector.constrained;
 
-/*
- * This is not the original file distributed by the Apache Software Foundation
- * It has been modified by the Hipparchus project
+import org.hipparchus.linear.RealVector;
+
+/** Inequality Constraint with lower bound only: \(l \le f(x)\).
+ * @since 3.1
  */
-package org.hipparchus.optim;
+public abstract class InequalityConstraint extends BoundedConstraint {
 
-import org.hipparchus.exception.LocalizedFormatsAbstractTest;
-
-public class LocalizedOptimFormatsTest extends LocalizedFormatsAbstractTest {
-
-    @Override
-    protected Class<LocalizedOptimFormats> getFormatsClass() {
-        return LocalizedOptimFormats.class;
-    }
-
-    @Override
-    protected int getExpectedNumber() {
-        return 12;
-    }
+    /** Simple constructor.
+     * @param lower lower bound
+     */
+     public InequalityConstraint(final RealVector lower) {
+         super(lower, null);
+     }
 
 }

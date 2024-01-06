@@ -76,7 +76,7 @@ public class BrentOptimizer extends UnivariateOptimizer {
      * @param checker Additional, user-defined, convergence checking
      * procedure.
      * @throws MathIllegalArgumentException if {@code abs <= 0}.
-     * @throws MathIllegalArgumentException if {@code rel < 2 * Math.ulp(1d)}.
+     * @throws MathIllegalArgumentException if {@code rel < 2 * FastMath.ulp(1d)}.
      */
     public BrentOptimizer(double rel,
                           double abs,
@@ -108,7 +108,7 @@ public class BrentOptimizer extends UnivariateOptimizer {
      * @param rel Relative threshold.
      * @param abs Absolute threshold.
      * @throws MathIllegalArgumentException if {@code abs <= 0}.
-     * @throws MathIllegalArgumentException if {@code rel < 2 * Math.ulp(1d)}.
+     * @throws MathIllegalArgumentException if {@code rel < 2 * FastMath.ulp(1d)}.
      */
     public BrentOptimizer(double rel,
                           double abs) {

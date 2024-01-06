@@ -222,7 +222,7 @@ public class PowellOptimizerTest {
                         GoalType goal,
                         double fTol,
                         double pointTol) {
-        final PowellOptimizer optim = new PowellOptimizer(fTol, Math.ulp(1d));
+        final PowellOptimizer optim = new PowellOptimizer(fTol, FastMath.ulp(1d));
 
         final PointValuePair result = optim.optimize(new MaxEval(1000),
                                                      new ObjectiveFunction(func),
@@ -254,8 +254,8 @@ public class PowellOptimizerTest {
                         double fTol,
                         double fLineTol,
                         double pointTol) {
-        final PowellOptimizer optim = new PowellOptimizer(fTol, Math.ulp(1d),
-                                                          fLineTol, Math.ulp(1d));
+        final PowellOptimizer optim = new PowellOptimizer(fTol, FastMath.ulp(1d),
+                                                          fLineTol, FastMath.ulp(1d));
 
         final PointValuePair result = optim.optimize(new MaxEval(1000),
                                                      new ObjectiveFunction(func),

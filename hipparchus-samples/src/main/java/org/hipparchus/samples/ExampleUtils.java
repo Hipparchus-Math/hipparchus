@@ -42,6 +42,7 @@ import javax.swing.SwingUtilities;
 
 /** Graphics utilities for examples.
  */
+//CHECKSTYLE: stop HideUtilityClassConstructor
 public class ExampleUtils {
 
     /** Empty constructor.

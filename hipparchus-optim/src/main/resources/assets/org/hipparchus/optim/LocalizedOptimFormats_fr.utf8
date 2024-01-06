@@ -27,3 +27,4 @@ TRUST_REGION_STEP_FAILED = l''étape de la région de confiance n''a pas réduit
 UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN = impossible de calculer la factorisation Q.R de la matrice jacobienne {0}x{1}
 UNABLE_TO_SOLVE_SINGULAR_PROBLEM = résolution impossible : problème singulier
 UNBOUNDED_SOLUTION = solution non bornée
+CONSTRAINTS_RANK = le rang des contraintes doit être inférieur à la dimension du domaine, mais {0} >= {1}

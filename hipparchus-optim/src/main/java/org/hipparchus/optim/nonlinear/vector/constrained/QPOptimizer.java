@@ -1,8 +1,8 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Hipparchus project under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -14,25 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.hipparchus.optim.nonlinear.vector.constrained;
 
-/*
- * This is not the original file distributed by the Apache Software Foundation
- * It has been modified by the Hipparchus project
+/** Quadratic programming Optimizater.
+ * @since 3.1
  */
-package org.hipparchus.optim;
-
-import org.hipparchus.exception.LocalizedFormatsAbstractTest;
-
-public class LocalizedOptimFormatsTest extends LocalizedFormatsAbstractTest {
+public class QPOptimizer extends ConstraintOptimizer {
 
     @Override
-    protected Class<LocalizedOptimFormats> getFormatsClass() {
-        return LocalizedOptimFormats.class;
-    }
-
-    @Override
-    protected int getExpectedNumber() {
-        return 12;
+    protected LagrangeSolution doOptimize() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
