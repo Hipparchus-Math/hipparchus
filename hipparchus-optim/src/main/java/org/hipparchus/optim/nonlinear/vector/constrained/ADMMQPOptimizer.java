@@ -335,14 +335,12 @@ public class ADMMQPOptimizer extends QPOptimizer {
 
         List<double[]> Aentry    = new ArrayList<>();
         List<Double>  lubEntry   = new ArrayList<>();
-        List<Double>  yEntry     = new ArrayList<>();
-        List<Integer> indexBound = new ArrayList<>();
+        List<Double>  yEntry     = new ArrayList<>(); 
 
         // FIND ACTIVE ON LOWER BAND
         for (int j = 0; j < A.getRowDimension(); j++) {
             if (z.getEntry(j) - lb.getEntry(j) < -y.getEntry(j)) {  // lower-active
 
-                indexBound.add(j);
                 Aentry.add(A.getRow(j));
                 lubEntry.add(lb.getEntry(j));
                 yEntry.add(y.getEntry(j));
@@ -356,7 +354,6 @@ public class ADMMQPOptimizer extends QPOptimizer {
                 Aentry.add(A.getRow(j));
                 lubEntry.add(ub.getEntry(j));
                 yEntry.add(y.getEntry(j));
-                indexBound.add(j);
 
             }
 
