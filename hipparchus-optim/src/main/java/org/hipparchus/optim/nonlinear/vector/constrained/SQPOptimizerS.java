@@ -159,9 +159,6 @@ public class SQPOptimizerS extends ConstraintOptimizer {
         }
 
         RealVector y = new ArrayRealVector(me + mi, 0.0);
-        RealVector dx = new ArrayRealVector(x.getDimension());
-        RealVector dy = new ArrayRealVector(y.getDimension());
-
         RealVector r = new ArrayRealVector(me + mi, 1.0);
         ArrayList<Double> oldPenalty = new ArrayList<Double>();
         //INITIAL VALUES
@@ -217,6 +214,7 @@ public class SQPOptimizerS extends ConstraintOptimizer {
 
             }
             //IF SIGMA>SIGMA TRESHOLD ASSIGN DIRECTION FROM PENALTY GRADIENT
+            RealVector dx, dy;
             if (qpLoop == settings.getQpMaxLoop()) {
 
                 dx = (MatrixUtils.inverse(hessian).operate(penaltyFunctionGradX(functionGradient, x, y, r))).mapMultiply(-1.0);
