@@ -25,7 +25,7 @@ import org.hipparchus.util.FastMath;
 public class ADMMQPModifiedRuizEquilibrium {
 
     /** Minimum scaling value. */
-    private static final double MIN_SCALING = 1.0e6;
+    private static final double MIN_SCALING = 1.0e-6;
 
     /** Maximum scaling value. */
     private static final double MAX_SCALING = 1.0e+6;
