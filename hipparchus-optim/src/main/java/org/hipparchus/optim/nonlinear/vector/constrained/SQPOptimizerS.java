@@ -211,7 +211,8 @@ public class SQPOptimizerS extends ConstraintOptimizer {
 
             }
             //IF SIGMA>SIGMA TRESHOLD ASSIGN DIRECTION FROM PENALTY GRADIENT
-            RealVector dx, dy;
+            final RealVector dx;
+            final RealVector dy;
             if (qpLoop == settings.getQpMaxLoop()) {
 
                 dx = (MatrixUtils.inverse(hessian).operate(penaltyFunctionGradX(functionGradient, x, y, r))).mapMultiply(-1.0);
@@ -410,8 +411,8 @@ public class SQPOptimizerS extends ConstraintOptimizer {
             RealVector dye = dy.getSubVector(0, me);
             RealVector ge = this.eqConstraint.value(x).subtract(eqConstraint.getLowerBound());
             RealMatrix jacob = this.eqConstraint.jacobian(x);
-            RealVector firstTerm = (jacob.transpose().operate(ye));
-            RealVector secondTerm = (jacob.transpose().operate(ge.ebeMultiply(re)));
+            RealVector firstTerm = jacob.transpose().operate(ye);
+            RealVector secondTerm = jacob.transpose().operate(ge.ebeMultiply(re));
 //partial -= firstTerm.dotProduct(dx) - secondTerm.dotProduct(dx) + g.dotProduct(dye);
             partial += -firstTerm.dotProduct(dx) + secondTerm.dotProduct(dx) - ge.dotProduct(dye.subtract(ye));
         }
@@ -439,10 +440,10 @@ public class SQPOptimizerS extends ConstraintOptimizer {
                 }
 
             }
-            RealVector firstTerm = (jacob.transpose().operate(yi.ebeMultiply(mask)));
-            RealVector secondTerm = (jacob.transpose().operate(gi.ebeMultiply(ri.ebeMultiply(mask))));
+            RealVector firstTerm = jacob.transpose().operate(yi.ebeMultiply(mask));
+            RealVector secondTerm = jacob.transpose().operate(gi.ebeMultiply(ri.ebeMultiply(mask)));
 
-            partial -= firstTerm.dotProduct(dx) - secondTerm.dotProduct(dx) + (gi.ebeMultiply(mask)).dotProduct((dyi.subtract(yi))) + viri.dotProduct(dyi.subtract(yi));
+            partial -= firstTerm.dotProduct(dx) - secondTerm.dotProduct(dx) + (gi.ebeMultiply(mask)).dotProduct(dyi.subtract(yi)) + viri.dotProduct(dyi.subtract(yi));
             // partial -= firstTerm.dotProduct(dx) - secondTerm.dotProduct(dx) + g.dotProduct(dyi.ebeMultiply(mask));
         }
 
@@ -460,7 +461,7 @@ public class SQPOptimizerS extends ConstraintOptimizer {
             RealVector ye = y.getSubVector(0, me);
             RealMatrix jacobe = jacobConstraint.getSubMatrix(0, me - 1, 0, x.getDimension() - 1);
 
-            RealVector firstTerm = (jacobe.transpose().operate(ye));
+            RealVector firstTerm = jacobe.transpose().operate(ye);
 
             // partial = partial.subtract(firstTerm).add(jacobe.transpose().operate(ge).mapMultiply(rho));
             partial = partial.subtract(firstTerm);
@@ -472,7 +473,7 @@ public class SQPOptimizerS extends ConstraintOptimizer {
             RealVector yi = y.getSubVector(me, mi);
             RealMatrix jacobi = jacobConstraint.getSubMatrix(me, me + mi - 1, 0, x.getDimension() - 1);
 
-            RealVector firstTerm = (jacobi.transpose().operate(yi));
+            RealVector firstTerm = jacobi.transpose().operate(yi);
 
             partial = partial.subtract(firstTerm);
         }
@@ -492,8 +493,8 @@ public class SQPOptimizerS extends ConstraintOptimizer {
             RealVector ge = this.eqConstraint.value(x).subtract(eqConstraint.getLowerBound());
             RealMatrix jacob = this.eqConstraint.jacobian(x);
 
-            RealVector firstTerm = (jacob.transpose().operate(ye));
-            RealVector secondTerm = (jacob.transpose().operate(ge.ebeMultiply(re)));
+            RealVector firstTerm = jacob.transpose().operate(ye);
+            RealVector secondTerm = jacob.transpose().operate(ge.ebeMultiply(re));
 
             partial = partial.subtract(firstTerm.subtract(secondTerm));
         }
@@ -517,8 +518,8 @@ public class SQPOptimizerS extends ConstraintOptimizer {
                 }
 
             }
-            RealVector firstTerm = (jacob.transpose().operate(yi.ebeMultiply(mask)));
-            RealVector secondTerm = (jacob.transpose().operate(gi.ebeMultiply(ri.ebeMultiply(mask))));
+            RealVector firstTerm = jacob.transpose().operate(yi.ebeMultiply(mask));
+            RealVector secondTerm = jacob.transpose().operate(gi.ebeMultiply(ri.ebeMultiply(mask)));
             partial = partial.subtract(firstTerm.subtract(secondTerm));
         }
 

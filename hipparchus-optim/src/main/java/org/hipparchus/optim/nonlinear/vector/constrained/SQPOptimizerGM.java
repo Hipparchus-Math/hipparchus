@@ -420,7 +420,7 @@ public class SQPOptimizerGM extends ConstraintOptimizer {
             RealVector ye = y.getSubVector(0, me);
             RealMatrix jacobe = jacobConstraint.getSubMatrix(0, me-1,0,x.getDimension()-1);
 
-            RealVector firstTerm = (jacobe.transpose().operate(ye));
+            RealVector firstTerm = jacobe.transpose().operate(ye);
 
            // partial = partial.subtract(firstTerm).add(jacobe.transpose().operate(ge).mapMultiply(rho));
             partial = partial.subtract(firstTerm);
@@ -432,7 +432,7 @@ public class SQPOptimizerGM extends ConstraintOptimizer {
             RealVector yi = y.getSubVector(me, mi);
            RealMatrix jacobi = jacobConstraint.getSubMatrix(me,me + mi-1,0,x.getDimension()-1);
 
-            RealVector firstTerm = (jacobi.transpose().operate(yi));
+            RealVector firstTerm = jacobi.transpose().operate(yi);
 
            // partial = partial.subtract(firstTerm).add(jacobi.transpose().operate(gi).mapMultiply(rho));;
              partial = partial.subtract(firstTerm);
@@ -539,8 +539,7 @@ public class SQPOptimizerGM extends ConstraintOptimizer {
         RealMatrix oldH1 = oldH;
         RealVector y1 = newGrad.subtract(oldGrad);
         RealVector s = dx.mapMultiply(alfa);
-//        if (s.dotProduct(y1)>=0)
-//        {
+
         double theta = 1.0;
         if (s.dotProduct(y1) <= 0.2 * s.dotProduct(oldH.operate(s))) {
             theta = 0.8 * s.dotProduct(oldH.operate(s)) / (s.dotProduct(oldH.operate(s)) - s.dotProduct(y1));
@@ -557,13 +556,13 @@ public class SQPOptimizerGM extends ConstraintOptimizer {
         double min = new ArrayRealVector(dsX.getEigenvalues()).getMinValue();
         if (new ArrayRealVector(dsX.getEigenvalues()).getMinValue() < 0) {
 
-            RealMatrix diag = dsX.getD().add(MatrixUtils.createRealIdentityMatrix(dx.getDimension()).scalarMultiply((-1.0 * min + settings.getEps())));
+            RealMatrix diag = dsX.getD().
+                              add(MatrixUtils.createRealIdentityMatrix(dx.getDimension()).
+                                  scalarMultiply(settings.getEps() - min));
             Hnew = dsX.getV().multiply(diag.multiply(dsX.getVT()));
 
         }
         return Hnew;
-//        }
-//        else return oldH;
 
     }
 

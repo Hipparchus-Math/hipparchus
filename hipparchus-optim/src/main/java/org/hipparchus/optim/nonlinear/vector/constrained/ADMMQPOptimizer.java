@@ -332,7 +332,7 @@ public class ADMMQPOptimizer extends QPOptimizer {
 
         List<double[]> Aentry    = new ArrayList<>();
         List<Double>  lubEntry   = new ArrayList<>();
-        List<Double>  yEntry     = new ArrayList<>(); 
+        List<Double>  yEntry     = new ArrayList<>();
 
         // FIND ACTIVE ON LOWER BAND
         for (int j = 0; j < A.getRowDimension(); j++) {

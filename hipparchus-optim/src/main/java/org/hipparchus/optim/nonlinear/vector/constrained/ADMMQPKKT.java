@@ -167,7 +167,7 @@ public class ADMMQPKKT implements KarushKuhnTuckerSolver<ADMMQPSolution> {
         //UPDATE ZTILDE
         RealVector ztilde = zold.add(Rinv.operate(vtilde.subtract(yold)));
         //UPDATE X
-        previousSol[0] = xtilde.mapMultiply(alpha).add((xold.mapMultiply(onealfa)));
+        previousSol[0] = xtilde.mapMultiply(alpha).add(xold.mapMultiply(onealfa));
 
         //UPDATE Z PARTIAL
         RealVector zpartial = ztilde.mapMultiply(alpha).add(zold.mapMultiply(onealfa)).add(Rinv.operate(yold));
