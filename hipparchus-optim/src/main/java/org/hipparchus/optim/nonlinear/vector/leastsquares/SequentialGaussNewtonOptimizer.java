@@ -46,7 +46,7 @@ public class SequentialGaussNewtonOptimizer implements LeastSquaresOptimizer {
     /**
      * The singularity threshold for matrix decompositions. Determines when a
      * {@link MathIllegalStateException} is thrown. The current value was the
-     * default value for {@link LUDecomposition}.
+     * default value for {@link org.hipparchus.linear.LUDecomposition}.
      */
     private static final double SINGULARITY_THRESHOLD = 1e-11;
 

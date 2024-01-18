@@ -48,7 +48,7 @@ public final class LaguerreSolverTest {
         double min, max, expected, result, tolerance;
 
         // p(x) = 4x - 1
-        double coefficients[] = { -1.0, 4.0 };
+        double[] coefficients = { -1.0, 4.0 };
         PolynomialFunction f = new PolynomialFunction(coefficients);
         LaguerreSolver solver = new LaguerreSolver();
 
@@ -67,7 +67,7 @@ public final class LaguerreSolverTest {
         double min, max, expected, result, tolerance;
 
         // p(x) = 2x^2 + 5x - 3 = (x+3)(2x-1)
-        double coefficients[] = { -3.0, 5.0, 2.0 };
+        double[] coefficients = { -3.0, 5.0, 2.0 };
         PolynomialFunction f = new PolynomialFunction(coefficients);
         LaguerreSolver solver = new LaguerreSolver();
 
@@ -92,7 +92,7 @@ public final class LaguerreSolverTest {
         double min, max, expected, result, tolerance;
 
         // p(x) = x^5 - x^4 - 12x^3 + x^2 - x - 12 = (x+1)(x+3)(x-4)(x^2-x+1)
-        double coefficients[] = { -12.0, -1.0, 1.0, -12.0, -1.0, 1.0 };
+        double[] coefficients = { -12.0, -1.0, 1.0, -12.0, -1.0, 1.0 };
         PolynomialFunction f = new PolynomialFunction(coefficients);
         LaguerreSolver solver = new LaguerreSolver();
 
@@ -142,7 +142,7 @@ public final class LaguerreSolverTest {
      */
     @Test
     public void testParameters() {
-        double coefficients[] = { -3.0, 5.0, 2.0 };
+        double[] coefficients = { -3.0, 5.0, 2.0 };
         PolynomialFunction f = new PolynomialFunction(coefficients);
         LaguerreSolver solver = new LaguerreSolver();
 

@@ -318,8 +318,8 @@ public final class MatrixUtilsTest {
         Assert.assertEquals(0.0, converted.subtract(reference).getNorm1(), 0.0);
     }
 
-    public static final Fraction[][] asFraction(double[][] data) {
-        Fraction d[][] = new Fraction[data.length][];
+    public static Fraction[][] asFraction(double[][] data) {
+        Fraction[][] d = new Fraction[data.length][];
         try {
             for (int i = 0; i < data.length; ++i) {
                 double[] dataI = data[i];
@@ -335,8 +335,8 @@ public final class MatrixUtilsTest {
         return d;
     }
 
-    public static final Fraction[] asFraction(double[] data) {
-        Fraction d[] = new Fraction[data.length];
+    public static Fraction[] asFraction(double[] data) {
+        Fraction[] d = new Fraction[data.length];
         try {
             for (int i = 0; i < data.length; ++i) {
                 d[i] = new Fraction(data[i]);

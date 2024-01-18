@@ -35,7 +35,7 @@ class FastMathCalc {
     private static final long HEX_40000000 = 0x40000000L; // 1073741824L
 
     /** Factorial table, for Taylor series expansions. 0!, 1!, 2!, ... 19! */
-    private static final double FACT[] = {
+    private static final double[] FACT = {
         +1.0d,                        // 0
         +1.0d,                        // 1
         +2.0d,                        // 2
@@ -59,7 +59,7 @@ class FastMathCalc {
         };
 
     /** Coefficients for slowLog. */
-    private static final double LN_SPLIT_COEF[][] = {
+    private static final double[][] LN_SPLIT_COEF = {
         {2.0, 0.0},
         {0.6666666269302368, 3.9736429850260626E-8},
         {0.3999999761581421, 2.3841857910019882E-8},
@@ -103,7 +103,7 @@ class FastMathCalc {
     private static void buildSinCosTables(double[] SINE_TABLE_A, double[] SINE_TABLE_B,
                                           double[] COSINE_TABLE_A, double[] COSINE_TABLE_B,
                                           int SINE_TABLE_LEN, double[] TANGENT_TABLE_A, double[] TANGENT_TABLE_B) {
-        final double result[] = new double[2];
+        final double[] result = new double[2];
 
         /* Use taylor series for 0 <= x <= 6/8 */
         for (int i = 0; i < 7; i++) {
@@ -120,11 +120,11 @@ class FastMathCalc {
 
         /* Use angle addition formula to complete table to 13/8, just beyond pi/2 */
         for (int i = 7; i < SINE_TABLE_LEN; i++) {
-            double xs[] = new double[2];
-            double ys[] = new double[2];
-            double as[] = new double[2];
-            double bs[] = new double[2];
-            double temps[] = new double[2];
+            double[] xs = new double[2];
+            double[] ys = new double[2];
+            double[] as = new double[2];
+            double[] bs = new double[2];
+            double[] temps = new double[2];
 
             if ( (i & 1) == 0) {
                 // Even, use double angle
@@ -176,9 +176,9 @@ class FastMathCalc {
 
         /* Compute tangent = sine/cosine */
         for (int i = 0; i < SINE_TABLE_LEN; i++) {
-            double xs[] = new double[2];
-            double ys[] = new double[2];
-            double as[] = new double[2];
+            double[] xs = new double[2];
+            double[] ys = new double[2];
+            double[] as = new double[2];
 
             as[0] = COSINE_TABLE_A[i];
             as[1] = COSINE_TABLE_B[i];
@@ -204,12 +204,12 @@ class FastMathCalc {
      * (may be null)
      * @return cos(x)
      */
-    static double slowCos(final double x, final double result[]) {
+    static double slowCos(final double x, final double[] result) {
 
-        final double xs[] = new double[2];
-        final double ys[] = new double[2];
-        final double facts[] = new double[2];
-        final double as[] = new double[2];
+        final double[] xs = new double[2];
+        final double[] ys = new double[2];
+        final double[] facts = new double[2];
+        final double[] as = new double[2];
         split(x, xs);
         ys[0] = ys[1] = 0.0;
 
@@ -249,11 +249,11 @@ class FastMathCalc {
      * (may be null)
      * @return sin(x)
      */
-    static double slowSin(final double x, final double result[]) {
-        final double xs[] = new double[2];
-        final double ys[] = new double[2];
-        final double facts[] = new double[2];
-        final double as[] = new double[2];
+    static double slowSin(final double x, final double[] result) {
+        final double[] xs = new double[2];
+        final double[] ys = new double[2];
+        final double[] facts = new double[2];
+        final double[] as = new double[2];
         split(x, xs);
         ys[0] = ys[1] = 0.0;
 
@@ -293,11 +293,11 @@ class FastMathCalc {
      *  for extra precision (i.e. exp(x) = result[0] + result[1]
      *  @return exp(x)
      */
-    static double slowexp(final double x, final double result[]) {
-        final double xs[] = new double[2];
-        final double ys[] = new double[2];
-        final double facts[] = new double[2];
-        final double as[] = new double[2];
+    static double slowexp(final double x, final double[] result) {
+        final double[] xs = new double[2];
+        final double[] ys = new double[2];
+        final double[] facts = new double[2];
+        final double[] as = new double[2];
         split(x, xs);
         ys[0] = ys[1] = 0.0;
 
@@ -327,7 +327,7 @@ class FastMathCalc {
      * @param d number to split
      * @param split placeholder where to place the result
      */
-    private static void split(final double d, final double split[]) {
+    private static void split(final double d, final double[] split) {
         if (d < 8e298 && d > -8e298) {
             final double a = d * HEX_40000000;
             split[0] = (d + a) - a;
@@ -343,7 +343,7 @@ class FastMathCalc {
      * @param a input/out array containing the split, changed
      * on output
      */
-    private static void resplit(final double a[]) {
+    private static void resplit(final double[] a) {
         final double c = a[0] + a[1];
         final double d = -(c - a[0] - a[1]);
 
@@ -363,7 +363,7 @@ class FastMathCalc {
      * @param b second term of multiplication
      * @param ans placeholder where to put the result
      */
-    private static void splitMult(double a[], double b[], double ans[]) {
+    private static void splitMult(double[] a, double[] b, double[] ans) {
         ans[0] = a[0] * b[0];
         ans[1] = a[0] * b[1] + a[1] * b[0] + a[1] * b[1];
 
@@ -376,7 +376,7 @@ class FastMathCalc {
      * @param b second term of addition
      * @param ans placeholder where to put the result
      */
-    private static void splitAdd(final double a[], final double b[], final double ans[]) {
+    private static void splitAdd(final double[] a, final double[] b, final double[] ans) {
         ans[0] = a[0] + b[0];
         ans[1] = a[1] + b[1];
 
@@ -401,7 +401,7 @@ class FastMathCalc {
      *  @param in initial number, in split form
      *  @param result placeholder where to put the result
      */
-    static void splitReciprocal(final double in[], final double result[]) {
+    static void splitReciprocal(final double[] in, final double[] result) {
         final double b = 1.0/4194304.0;
         final double a = 1.0 - b;
 
@@ -436,10 +436,10 @@ class FastMathCalc {
      * @param b second term of the multiplication
      * @param result placeholder where to put the result
      */
-    private static void quadMult(final double a[], final double b[], final double result[]) {
-        final double xs[] = new double[2];
-        final double ys[] = new double[2];
-        final double zs[] = new double[2];
+    private static void quadMult(final double[] a, final double[] b, final double[] result) {
+        final double[] xs = new double[2];
+        final double[] ys = new double[2];
+        final double[] zs = new double[2];
 
         /* a[0] * b[0] */
         split(a[0], xs);
@@ -490,11 +490,11 @@ class FastMathCalc {
      * @param result placeholder where to put the result in extended precision
      * @return exp(p) in standard precision (equal to result[0] + result[1])
      */
-    static double expint(int p, final double result[]) {
+    static double expint(int p, final double[] result) {
         //double x = M_E;
-        final double xs[] = new double[2];
-        final double as[] = new double[2];
-        final double ys[] = new double[2];
+        final double[] xs = new double[2];
+        final double[] as = new double[2];
+        final double[] ys = new double[2];
         //split(x, xs);
         //xs[1] = (double)(2.7182818284590452353602874713526625L - xs[0]);
         //xs[0] = 2.71827697753906250000;
@@ -549,10 +549,10 @@ class FastMathCalc {
      * @return log(xi)
      */
     static double[] slowLog(double xi) {
-        double x[] = new double[2];
-        double x2[] = new double[2];
-        double y[] = new double[2];
-        double a[] = new double[2];
+        double[] x = new double[2];
+        double[] x2 = new double[2];
+        double[] y = new double[2];
+        double[] a = new double[2];
 
         split(xi, x);
 
@@ -640,7 +640,7 @@ class FastMathCalc {
         if (d != d) {
             return "Double.NaN,";
         } else {
-            return ((d >= 0) ? "+" : "") + Double.toString(d) + "d,";
+            return ((d >= 0) ? "+" : "") + d + "d,";
         }
     }
 

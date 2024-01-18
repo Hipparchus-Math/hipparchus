@@ -676,7 +676,7 @@ public class PSquarePercentileTest extends
               VERY_LARGE = 10000000;
 
     private void doDistributionTest(RealDistribution distribution) {
-        double data[];
+        double[] data;
 
 //        data = distribution.sample(VERY_LARGE);
 //        doCalculatePercentile(50, data, 0.0001);

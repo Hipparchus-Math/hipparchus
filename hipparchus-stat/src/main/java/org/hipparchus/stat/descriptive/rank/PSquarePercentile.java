@@ -344,12 +344,6 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         private final Marker[] markerArray;
 
         /**
-         * Kth cell belonging to [1-5] of the markerArray. No need for
-         * this to be serialized
-         */
-        private transient int k = -1;
-
-        /**
          * Constructor
          *
          * @param theMarkerArray marker array to be used, a reference to the array will be stored
@@ -475,7 +469,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          *         sample fits
          */
         private int findCellAndUpdateMinMax(final double observation) {
-            k = -1;
+            int k = -1;
             if (observation < height(1)) {
                 markerArray[1].markerHeight = observation;
                 k = 1;

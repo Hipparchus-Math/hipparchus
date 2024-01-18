@@ -33,9 +33,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class SynchronizedRandomGeneratorTest {
-    private final int numberOfThreads = 5;
-    private final int numberOfGenerators = 5;
-    private final int numberOfSamples = 100000;
 
     @Test
     public void testAdapter() {
@@ -72,11 +69,15 @@ public class SynchronizedRandomGeneratorTest {
     @Test
     public void testMath899Sync() throws Throwable {
         try {
+            final int numberOfThreads = 5;
+            final int numberOfGenerators = 5;
+            final int numberOfSamples = 100000;
             // Running the test several times in order to decrease the
             // probability that a non-thread-safe code did not trigger
             // a concurrency problem.
             for (int i = 0; i < 10; i++) {
-                doTestMath899(true, numberOfThreads, numberOfGenerators, numberOfSamples);
+                doTestMath899(true, numberOfThreads, numberOfGenerators,
+                              numberOfSamples);
             }
         } catch (InterruptedException e) {
             Assert.fail(e.getMessage());

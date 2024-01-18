@@ -126,10 +126,10 @@ public class PiecewiseBicubicSplineInterpolatingFunction
         final int i = searchIndex(x, xval, offset, count);
         final int j = searchIndex(y, yval, offset, count);
 
-        final double xArray[] = new double[count];
-        final double yArray[] = new double[count];
-        final double zArray[] = new double[count];
-        final double interpArray[] = new double[count];
+        final double[] xArray = new double[count];
+        final double[] yArray = new double[count];
+        final double[] zArray = new double[count];
+        final double[] interpArray = new double[count];
 
         for (int index = 0; index < count; index++) {
             xArray[index] = xval[i + index];
@@ -163,10 +163,10 @@ public class PiecewiseBicubicSplineInterpolatingFunction
         final int i = searchIndex(x.getReal(), xval, offset, count);
         final int j = searchIndex(y.getReal(), yval, offset, count);
 
-        final double xArray[] = new double[count];
-        final T yArray[]      = MathArrays.buildArray(x.getField(), count);
-        final double zArray[] = new double[count];
-        final T interpArray[] = MathArrays.buildArray(x.getField(), count);
+        final double[] xArray = new double[count];
+        final T[] yArray = MathArrays.buildArray(x.getField(), count);
+        final double[] zArray = new double[count];
+        final T[] interpArray = MathArrays.buildArray(x.getField(), count);
 
         final T zero = x.getField().getZero();
         for (int index = 0; index < count; index++) {
@@ -197,14 +197,7 @@ public class PiecewiseBicubicSplineInterpolatingFunction
      */
     public boolean isValidPoint(double x,
                                 double y) {
-        if (x < xval[0] ||
-            x > xval[xval.length - 1] ||
-            y < yval[0] ||
-            y > yval[yval.length - 1]) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(x < xval[0]) && !(x > xval[xval.length - 1]) && !(y < yval[0]) && !(y > yval[yval.length - 1]);
     }
 
     /**

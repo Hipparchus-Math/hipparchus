@@ -69,7 +69,7 @@ public class FieldPolynomialSplineFunction<T extends CalculusFieldElement<T>> im
      * Spline segment interval delimiters (knots).
      * Size is n + 1 for n segments.
      */
-    private final T knots[];
+    private final T[] knots;
 
     /**
      * The polynomial functions that make up the spline.  The first element
@@ -78,7 +78,7 @@ public class FieldPolynomialSplineFunction<T extends CalculusFieldElement<T>> im
      * evaluating these functions at {@code (x - knot[i])} where i is the
      * knot segment to which x belongs.
      */
-    private final FieldPolynomialFunction<T> polynomials[];
+    private final FieldPolynomialFunction<T>[] polynomials;
 
     /**
      * Number of spline segments. It is equal to the number of polynomials and
@@ -102,7 +102,7 @@ public class FieldPolynomialSplineFunction<T extends CalculusFieldElement<T>> im
      *
      */
     @SuppressWarnings("unchecked")
-    public FieldPolynomialSplineFunction(final T knots[], final FieldPolynomialFunction<T> polynomials[])
+    public FieldPolynomialSplineFunction(final T[] knots, final FieldPolynomialFunction<T>[] polynomials)
         throws MathIllegalArgumentException, NullArgumentException {
         if (knots == null ||
             polynomials == null) {
@@ -223,7 +223,7 @@ public class FieldPolynomialSplineFunction<T extends CalculusFieldElement<T>> im
      */
     @SuppressWarnings("unchecked")
     public FieldPolynomialSplineFunction<T> polynomialSplineDerivative() {
-        FieldPolynomialFunction<T> derivativePolynomials[] =
+        FieldPolynomialFunction<T>[] derivativePolynomials =
                         (FieldPolynomialFunction<T>[]) Array.newInstance(FieldPolynomialFunction.class, n);
         for (int i = 0; i < n; i++) {
             derivativePolynomials[i] = polynomials[i].polynomialDerivative();

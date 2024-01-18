@@ -113,8 +113,8 @@ public class FieldRombergIntegrator<T extends CalculusFieldElement<T>> extends B
         throws MathIllegalStateException {
 
         final int m = iterations.getMaximalCount() + 1;
-        T previousRow[] = MathArrays.buildArray(getField(), m);
-        T currentRow[]  = MathArrays.buildArray(getField(), m);
+        T[] previousRow = MathArrays.buildArray(getField(), m);
+        T[] currentRow = MathArrays.buildArray(getField(), m);
 
         FieldTrapezoidIntegrator<T> qtrap = new FieldTrapezoidIntegrator<>(getField());
         currentRow[0] = qtrap.stage(this, 0);

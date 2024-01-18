@@ -41,7 +41,8 @@ import org.hipparchus.util.Precision;
  * Series C (Applied Statistics), Vol. 41, No. 2
  * (1992), pp. 458-478
  * Published by: Blackwell Publishing for the Royal Statistical Society
- * Stable URL: http://www.jstor.org/stable/2347583 </pre>
+ * Stable URL: <a href="https://www.jstor.org/stable/2347583">Algorithm AS 274:
+ * Least Squares Routines to Supplement Those of Gentleman</a> </pre>
  *
  * <p>This method for multiple regression forms the solution to the OLS problem
  * by updating the QR decomposition as described by Gentleman.</p>

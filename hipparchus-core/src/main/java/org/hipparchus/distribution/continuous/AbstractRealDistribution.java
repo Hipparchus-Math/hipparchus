@@ -73,7 +73,6 @@ public abstract class AbstractRealDistribution
      * takes a value between {@code x0} and {@code x1}, excluding the lower
      * and including the upper endpoint.
      * @throws MathIllegalArgumentException if {@code x0 > x1}.
-     *
      * The default implementation uses the identity
      * {@code P(x0 < X <= x1) = P(X <= x1) - P(X <= x0)}
      */

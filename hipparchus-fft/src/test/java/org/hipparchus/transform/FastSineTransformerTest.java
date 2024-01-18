@@ -215,10 +215,11 @@ public final class FastSineTransformerTest extends RealTransformerAbstractTest {
     public void testAdHocData() {
         FastSineTransformer transformer;
         transformer = new FastSineTransformer(DstNormalization.STANDARD_DST_I);
-        double result[], tolerance = 1E-12;
+        double[] result;
+        double tolerance = 1E-12;
 
-        double x[] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0 };
-        double y[] = { 0.0, 20.1093579685034, -9.65685424949238,
+        double[] x = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0 };
+        double[] y = { 0.0, 20.1093579685034, -9.65685424949238,
                        5.98642305066196, -4.0, 2.67271455167720,
                       -1.65685424949238, 0.795649469518633 };
 
@@ -254,7 +255,11 @@ public final class FastSineTransformerTest extends RealTransformerAbstractTest {
         UnivariateFunction f = new Sin();
         FastSineTransformer transformer;
         transformer = new FastSineTransformer(DstNormalization.STANDARD_DST_I);
-        double min, max, result[], tolerance = 1E-12; int N = 1 << 8;
+        double min;
+        double max;
+        double[] result;
+        double tolerance = 1E-12;
+        int N = 1 << 8;
 
         min = 0.0; max = 2.0 * FastMath.PI;
         result = transformer.transform(f, min, max, N, TransformType.FORWARD);

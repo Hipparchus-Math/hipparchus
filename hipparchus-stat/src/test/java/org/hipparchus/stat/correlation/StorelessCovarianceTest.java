@@ -146,7 +146,7 @@ public class StorelessCovarianceTest {
      * pp. 819-841.
      *
      * Data are from NIST:
-     * http://www.itl.nist.gov/div898/strd/lls/data/LINKS/DATA/Longley.dat
+     * <a href="https://www.itl.nist.gov/div898/strd/lls/data/LINKS/DATA/Longley.dat">Longley dataset</a>
      */
     @Test
     public void testLonglyByRow() {

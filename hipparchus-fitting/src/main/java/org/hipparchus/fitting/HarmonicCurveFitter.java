@@ -267,7 +267,7 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
             final WeightedObservedPoint[] sorted
                 = sortObservations(observations).toArray(new WeightedObservedPoint[0]);
 
-            final double aOmega[] = guessAOmega(sorted);
+            final double[] aOmega = guessAOmega(sorted);
             a = aOmega[0];
             omega = aOmega[1];
 

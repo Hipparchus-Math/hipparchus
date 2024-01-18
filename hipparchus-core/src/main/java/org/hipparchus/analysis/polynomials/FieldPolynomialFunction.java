@@ -42,7 +42,7 @@ public class FieldPolynomialFunction<T extends CalculusFieldElement<T>> implemen
      * coefficients[0] is the constant term and coefficients[n] is the
      * coefficient of x^n where n is the degree of the polynomial.
      */
-    private final T coefficients[];
+    private final T[] coefficients;
 
     /**
      * Construct a polynomial with the given coefficients.  The first element
@@ -58,7 +58,7 @@ public class FieldPolynomialFunction<T extends CalculusFieldElement<T>> implemen
      * @throws NullArgumentException if {@code c} is {@code null}.
      * @throws MathIllegalArgumentException if {@code c} is empty.
      */
-    public FieldPolynomialFunction(final T c[])
+    public FieldPolynomialFunction(final T[] c)
         throws MathIllegalArgumentException, NullArgumentException {
         super();
         MathUtils.checkNotNull(c);

@@ -87,7 +87,7 @@ public class SplineInterpolator implements UnivariateInterpolator, FieldUnivaria
      * than 3.
      */
     @Override
-    public PolynomialSplineFunction interpolate(double x[], double y[])
+    public PolynomialSplineFunction interpolate(double[] x, double[] y)
         throws MathIllegalArgumentException {
 
         MathUtils.checkNotNull(x);
@@ -104,13 +104,13 @@ public class SplineInterpolator implements UnivariateInterpolator, FieldUnivaria
         MathArrays.checkOrder(x);
 
         // Differences between knot points
-        final double h[] = new double[n];
+        final double[] h = new double[n];
         for (int i = 0; i < n; i++) {
             h[i] = x[i + 1] - x[i];
         }
 
-        final double mu[] = new double[n];
-        final double z[] = new double[n + 1];
+        final double[] mu = new double[n];
+        final double[] z = new double[n + 1];
         mu[0] = 0d;
         z[0] = 0d;
         double g;
@@ -122,9 +122,9 @@ public class SplineInterpolator implements UnivariateInterpolator, FieldUnivaria
         }
 
         // cubic spline coefficients --  b is linear, c quadratic, d is cubic (original y's are constants)
-        final double b[] = new double[n];
-        final double c[] = new double[n + 1];
-        final double d[] = new double[n];
+        final double[] b = new double[n];
+        final double[] c = new double[n + 1];
+        final double[] d = new double[n];
 
         z[n] = 0d;
         c[n] = 0d;
@@ -135,8 +135,8 @@ public class SplineInterpolator implements UnivariateInterpolator, FieldUnivaria
             d[j] = (c[j + 1] - c[j]) / (3d * h[j]);
         }
 
-        final PolynomialFunction polynomials[] = new PolynomialFunction[n];
-        final double coefficients[] = new double[4];
+        final PolynomialFunction[] polynomials = new PolynomialFunction[n];
+        final double[] coefficients = new double[4];
         for (int i = 0; i < n; i++) {
             coefficients[0] = y[i];
             coefficients[1] = b[i];
@@ -163,7 +163,8 @@ public class SplineInterpolator implements UnivariateInterpolator, FieldUnivaria
      * @since 1.5
      */
     @Override
-    public <T extends CalculusFieldElement<T>> FieldPolynomialSplineFunction<T> interpolate(T x[], T y[])
+    public <T extends CalculusFieldElement<T>> FieldPolynomialSplineFunction<T> interpolate(
+                    T[] x, T[] y)
         throws MathIllegalArgumentException {
 
         MathUtils.checkNotNull(x);
@@ -181,13 +182,13 @@ public class SplineInterpolator implements UnivariateInterpolator, FieldUnivaria
 
         // Differences between knot points
         final Field<T> field = x[0].getField();
-        final T h[] = MathArrays.buildArray(field, n);
+        final T[] h = MathArrays.buildArray(field, n);
         for (int i = 0; i < n; i++) {
             h[i] = x[i + 1].subtract(x[i]);
         }
 
-        final T mu[] = MathArrays.buildArray(field, n);
-        final T z[]  = MathArrays.buildArray(field, n + 1);
+        final T[] mu = MathArrays.buildArray(field, n);
+        final T[] z = MathArrays.buildArray(field, n + 1);
         mu[0] = field.getZero();
         z[0]  = field.getZero();
         for (int i = 1; i < n; i++) {
@@ -203,9 +204,9 @@ public class SplineInterpolator implements UnivariateInterpolator, FieldUnivaria
         }
 
         // cubic spline coefficients --  b is linear, c quadratic, d is cubic (original y's are constants)
-        final T b[] = MathArrays.buildArray(field, n);
-        final T c[] = MathArrays.buildArray(field, n + 1);
-        final T d[] = MathArrays.buildArray(field, n);
+        final T[] b = MathArrays.buildArray(field, n);
+        final T[] c = MathArrays.buildArray(field, n + 1);
+        final T[] d = MathArrays.buildArray(field, n);
 
         z[n] = field.getZero();
         c[n] = field.getZero();
@@ -218,9 +219,9 @@ public class SplineInterpolator implements UnivariateInterpolator, FieldUnivaria
         }
 
         @SuppressWarnings("unchecked")
-        final FieldPolynomialFunction<T> polynomials[] =
+        final FieldPolynomialFunction<T>[] polynomials =
                         (FieldPolynomialFunction<T>[]) Array.newInstance(FieldPolynomialFunction.class, n);
-        final T coefficients[] = MathArrays.buildArray(field, 4);
+        final T[] coefficients = MathArrays.buildArray(field, 4);
         for (int i = 0; i < n; i++) {
             coefficients[0] = y[i];
             coefficients[1] = b[i];

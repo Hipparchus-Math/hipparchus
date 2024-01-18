@@ -54,7 +54,6 @@ import org.hipparchus.util.FastMath;
  * This problem solves the full motion (rotation rate and rotation), whereas
  * {@code TestProblem7} only solves the rotation rate part.
  * </p>
- * @param <T> the type of the field elements
  */
 public class TestProblem8 extends TestProblemAbstract {
 

@@ -15,6 +15,7 @@ package org.hipparchus.util;
 
 import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -371,7 +372,7 @@ public final class MathUtilsTest {
     }
 
     /**
-     * Tests {@link TwoSum#twoSum(double, double)}.
+     * Tests {@link MathUtils#twoSum(double, double)}.
      */
     @Test
     public void testTwoSum() {
@@ -413,7 +414,7 @@ public final class MathUtilsTest {
     }
 
     /**
-     * Tests {@link TwoSum#twoSum(CalculusFieldElement, CalculusFieldElement)}.
+     * Tests {@link MathUtils#twoSum(FieldElement, FieldElement)}.
      */
     @Test
     public void testTwoSumField() {

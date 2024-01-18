@@ -54,7 +54,12 @@ public final class DividedDifferenceInterpolatorTest {
     public void testSinFunction() {
         UnivariateFunction f = new Sin();
         UnivariateInterpolator interpolator = new DividedDifferenceInterpolator();
-        double x[], y[], z, expected, result, tolerance;
+        double[] x;
+        double[] y;
+        double z;
+        double expected;
+        double result;
+        double tolerance;
 
         // 6 interpolating points on interval [0, 2*PI]
         int n = 6;
@@ -86,7 +91,12 @@ public final class DividedDifferenceInterpolatorTest {
     public void testExpm1Function() {
         UnivariateFunction f = new Expm1();
         UnivariateInterpolator interpolator = new DividedDifferenceInterpolator();
-        double x[], y[], z, expected, result, tolerance;
+        double[] x;
+        double[] y;
+        double z;
+        double expected;
+        double result;
+        double tolerance;
 
         // 5 interpolating points on interval [-1, 1]
         int n = 5;
@@ -122,8 +132,8 @@ public final class DividedDifferenceInterpolatorTest {
 
         try {
             // bad abscissas array
-            double x[] = { 1.0, 2.0, 2.0, 4.0 };
-            double y[] = { 0.0, 4.0, 4.0, 2.5 };
+            double[] x = { 1.0, 2.0, 2.0, 4.0 };
+            double[] y = { 0.0, 4.0, 4.0, 2.5 };
             UnivariateFunction p = interpolator.interpolate(x, y);
             p.value(0.0);
             Assert.fail("Expecting MathIllegalArgumentException - bad abscissas array");
@@ -135,7 +145,7 @@ public final class DividedDifferenceInterpolatorTest {
     /**
      * Returns the partial error term (z-x[0])(z-x[1])...(z-x[n-1])/n!
      */
-    protected double partialerror(double x[], double z) throws
+    protected double partialerror(double[] x, double z) throws
         IllegalArgumentException {
 
         if (x.length < 1) {

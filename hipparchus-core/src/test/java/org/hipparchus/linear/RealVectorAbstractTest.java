@@ -1932,7 +1932,7 @@ public abstract class RealVectorAbstractTest {
         private static final long serialVersionUID = 20120706L;
 
         /** Entries of the vector. */
-        protected double data[];
+        protected double[] data;
 
         public RealVectorTestImpl(double[] d) {
             data = d.clone();

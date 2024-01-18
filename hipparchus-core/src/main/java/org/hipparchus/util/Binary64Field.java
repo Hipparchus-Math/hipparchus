@@ -45,7 +45,7 @@ public class Binary64Field implements Field<Binary64>, Serializable {
      *
      * @return the unique instance of this class
      */
-    public static final Binary64Field getInstance() {
+    public static Binary64Field getInstance() {
         return LazyHolder.INSTANCE;
     }
 

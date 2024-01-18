@@ -48,10 +48,6 @@ public class DescriptiveStatisticsTest {
 
     private final double[] testArray = new double[] { 1, 2, 2, 3 };
 
-    private final double one = 1;
-    private final float twoF = 2;
-    private final long twoL = 2;
-    private final int three = 3;
     private final double mean = 2;
     private final double sumSq = 18;
     private final double sum = 8;
@@ -72,9 +68,13 @@ public class DescriptiveStatisticsTest {
     public void testStats() {
         DescriptiveStatistics u = createDescriptiveStatistics();
         assertEquals("total count", 0, u.getN(), tolerance);
+        double one = 1;
         u.addValue(one);
+        float twoF = 2;
         u.addValue(twoF);
+        long twoL = 2;
         u.addValue(twoL);
+        int three = 3;
         u.addValue(three);
         assertEquals("N", n, u.getN(), tolerance);
         assertEquals("sum", sum, u.getSum(), tolerance);

@@ -690,7 +690,7 @@ public class RandomPercentileTest extends
               VERY_LARGE = 10000000;
 
     private void doDistributionTest(RealDistribution distribution) {
-        double data[];
+        double[] data;
 
         final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(100);
         data = randomDataGenerator.nextDeviates(distribution, LARGE);

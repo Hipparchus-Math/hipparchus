@@ -57,10 +57,10 @@ public class MannWhitneyUTestTest {
         /*
          * Target values computed using R version 3.4.4.
          */
-        final double x[] = {
+        final double[] x = {
             19, 22, 16, 29, 24
         };
-        final double y[] = {
+        final double[] y = {
             20, 11, 17, 12
         };
 
@@ -76,10 +76,10 @@ public class MannWhitneyUTestTest {
         /*
          * Target values computed using R version 3.4.4.
          */
-        final double x[] = {
+        final double[] x = {
             1, 2, 3, 4, 5
         };
-        final double y[] = {
+        final double[] y = {
             6, 7, 8, 9, 10, 11
         };
         Assert.assertEquals(0, testStatistic.mannWhitneyU(x, y), 1e-10);
@@ -161,10 +161,10 @@ public class MannWhitneyUTestTest {
         /**
          * Expected values computed using R 3.4.4
          */
-        final double x[] = {
+        final double[] x = {
             11, 22, 19, 22.3, 16, 29, 24, 5.2, 7, 3, 44, 72, 43, 18, 65
         };
-        final double y[] = {
+        final double[] y = {
             15, 32, 38, 5, 6, 29.1, 31, 73, 88, 70, 50, 60, 93, 112, 190
         };
 
@@ -183,11 +183,11 @@ public class MannWhitneyUTestTest {
         /**
          * Expected values computed using R 3.4.4
          */
-        final double x[] = {
+        final double[] x = {
             11, 22, 19, 22.3, 16, 29, 24, 5.2, 7, 3, 44, 72, 43, 18, 65, 69, 71,
             115, 117, 119, 121, 123, 124, 125, 126, 127
         };
-        final double y[] = {
+        final double[] y = {
             15, 32, 38, 5, 6, 29.1, 31, 73, 88, 70, 50, 60, 93, 112, 190, 200,
             201, 202, 203, 204, 205, 207, 209, 210, 212
         };
@@ -207,10 +207,10 @@ public class MannWhitneyUTestTest {
         /**
          * Expected values computed using R 3.4.4
          */
-        final double x[] = {
+        final double[] x = {
             0, 2, 4, 6, 8, 10, 12, 14, 16, 18
         };
-        final double y[] = {
+        final double[] y = {
             1, 3, 5, 7, 9, 11, 13, 15, 17, 19
         };
         Assert.assertEquals(45, testStatistic.mannWhitneyU(x, y), 1e-10);
@@ -226,11 +226,11 @@ public class MannWhitneyUTestTest {
         /**
          * Expected values computed using R 3.4.4
          */
-        final double x[] = {
+        final double[] x = {
             0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34,
             36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60
         };
-        final double y[] = {
+        final double[] y = {
             1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 33, 35,
             37, 39, 43, 45, 49, 51, 55, 61, 63, 65, 67, 69
         };
@@ -246,10 +246,10 @@ public class MannWhitneyUTestTest {
         /**
          * Expected values computed using R 3.4.4
          */
-        final double x[] = {
+        final double[] x = {
             1,2
         };
-        final double y[] = {
+        final double[] y = {
             1.5, 2.5
         };
         Assert.assertEquals(1, testStatistic.mannWhitneyU(x, y), 1e-10);
@@ -262,10 +262,10 @@ public class MannWhitneyUTestTest {
 
     @Test
     public void testExactDegenerate() {
-        final double x[] = {
+        final double[] x = {
             1
         };
-        final double y[] = {
+        final double[] y = {
             1.5
         };
         Assert.assertEquals(0, testStatistic.mannWhitneyU(x, y), 1e-10);
@@ -280,10 +280,10 @@ public class MannWhitneyUTestTest {
         /**
          * Expected values computed using R 3.4.4
          */
-        final double x[] = {
+        final double[] x = {
             0, 2, 4, 6, 8, 10, 12, 14, 16, 18
         };
-        final double y[] = {
+        final double[] y = {
             1, 3, 5, 7, 8, 10, 10, 13, 15, 17, 19
         };
         try {
@@ -302,10 +302,10 @@ public class MannWhitneyUTestTest {
         /**
          * Expected values computed using R 3.4.4
          */
-        final double x[] = {
+        final double[] x = {
             2, 3, 7, 11, 23, 45, 48, 55, 70, 81, 92, 95, 97, 100, 110, 123, 125
         };
-        final double y[] = {
+        final double[] y = {
             3.5, 4, 8, 12, 25, 46, 49, 56, 70, 81, 92, 95, 97, 97, 100, 112,
             125, 127
         };
@@ -325,10 +325,10 @@ public class MannWhitneyUTestTest {
         /**
          * Expected values computed using R 3.4.4
          */
-        final double x[] = {
+        final double[] x = {
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10
         };
-        final double y[] = {
+        final double[] y = {
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10
         };
         try {
@@ -344,10 +344,10 @@ public class MannWhitneyUTestTest {
 
     @Test(expected = MathIllegalArgumentException.class)
     public void testExactThrowsOnTies() {
-        final double x[] = {
+        final double[] x = {
             1, 5, 7
         };
-        final double y[] = {
+        final double[] y = {
             2, 3, 1
         };
         testStatistic.mannWhitneyUTest(x, y, true);

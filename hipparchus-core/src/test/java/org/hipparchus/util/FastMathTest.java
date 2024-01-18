@@ -57,7 +57,7 @@ public class FastMathTest {
     @Before
     public void setUp() {
         field = new DfpField(40);
-        generator = new MersenneTwister(6176597458463500194l);
+        generator = new MersenneTwister(6176597458463500194L);
     }
 
     @Test
@@ -467,7 +467,7 @@ public class FastMathTest {
     @Test(timeout=20000L)
     public void testPowAllSpecialCases() {
         final double EXACT = -1.0;
-        final double DOUBLES[] = new double[]
+        final double[] DOUBLES = new double[]
             {
                 Double.NEGATIVE_INFINITY, -0.0, Double.NaN, 0.0, Double.POSITIVE_INFINITY,
                 Long.MIN_VALUE, Integer.MIN_VALUE, Short.MIN_VALUE, Byte.MIN_VALUE,
@@ -769,7 +769,7 @@ public class FastMathTest {
 
     @Test
     public void testSinCosRandom() {
-        final RandomGenerator random = new Well19937a(0xf67ff538323a55eal);
+        final RandomGenerator random = new Well19937a(0xf67ff538323a55eaL);
         for (int i = 0; i < 1000000; ++i) {
             doTestSinCos(1000000.0 * (2.0 * random.nextDouble() - 1.0));
         }
@@ -783,7 +783,7 @@ public class FastMathTest {
 
     @Test
     public void testSinCosSum() {
-        final RandomGenerator random = new Well19937a(0x4aab62a42c9eb940l);
+        final RandomGenerator random = new Well19937a(0x4aab62a42c9eb940L);
         for (int i = 0; i < 1000000; ++i) {
             final double alpha = 10.0 * (2.0 * random.nextDouble() - 1.0);
             final double beta  = 10.0 * (2.0 * random.nextDouble() - 1.0);
@@ -798,7 +798,7 @@ public class FastMathTest {
 
     @Test
     public void testSinCosdifference() {
-        final RandomGenerator random = new Well19937a(0x589aaf49471b03d5l);
+        final RandomGenerator random = new Well19937a(0x589aaf49471b03d5L);
         for (int i = 0; i < 1000000; ++i) {
             final double alpha = 10.0 * (2.0 * random.nextDouble() - 1.0);
             final double beta  = 10.0 * (2.0 * random.nextDouble() - 1.0);
@@ -1098,7 +1098,7 @@ public class FastMathTest {
 
     @Test
     public void testSinhCoshRandom() {
-        final RandomGenerator random = new Well19937a(0xa7babe18705d756fl);
+        final RandomGenerator random = new Well19937a(0xa7babe18705d756fL);
         for (int i = 0; i < 1000000; ++i) {
             doTestSinhCosh(1000.0 * (2.0 * random.nextDouble() - 1.0));
         }
@@ -1112,7 +1112,7 @@ public class FastMathTest {
 
     @Test
     public void testSinhCoshSum() {
-        final RandomGenerator random = new Well19937a(0x11cf5123446bc9ffl);
+        final RandomGenerator random = new Well19937a(0x11cf5123446bc9ffL);
         for (int i = 0; i < 1000000; ++i) {
             final double alpha = 2.0 * (2.0 * random.nextDouble() - 1.0);
             final double beta  = 2.0 * (2.0 * random.nextDouble() - 1.0);
@@ -1129,7 +1129,7 @@ public class FastMathTest {
 
     @Test
     public void testSinhCoshdifference() {
-        final RandomGenerator random = new Well19937a(0x219fd680c53974bbl);
+        final RandomGenerator random = new Well19937a(0x219fd680c53974bbL);
         for (int i = 0; i < 1000000; ++i) {
             final double alpha = 2.0 * (2.0 * random.nextDouble() - 1.0);
             final double beta  = 2.0 * (2.0 * random.nextDouble() - 1.0);
@@ -1392,18 +1392,18 @@ public class FastMathTest {
 
     @Test
     public void testClampLong() {
-        assertEquals( 3l, FastMath.clamp(-17l,  3l, 4l));
-        assertEquals( 4l, FastMath.clamp(+17l,  3l, 4l));
-        assertEquals( 0l, FastMath.clamp(-17l,  0l, 4l));
-        assertEquals( 0l, FastMath.clamp(+17l, -3l, 0l));
+        assertEquals(3L, FastMath.clamp(-17L, 3L, 4L));
+        assertEquals(4L, FastMath.clamp(+17L, 3L, 4L));
+        assertEquals(0L, FastMath.clamp(-17L, 0L, 4L));
+        assertEquals(0L, FastMath.clamp(+17L, -3L, 0L));
     }
 
     @Test
     public void testClampLongInt() {
-        assertEquals( 3, FastMath.clamp(-17l,  3, 4));
-        assertEquals( 4, FastMath.clamp(+17l,  3, 4));
-        assertEquals( 0, FastMath.clamp(-17l,  0, 4));
-        assertEquals( 0, FastMath.clamp(+17l, -3, 0));
+        assertEquals( 3, FastMath.clamp(-17L, 3, 4));
+        assertEquals( 4, FastMath.clamp(+17L, 3, 4));
+        assertEquals( 0, FastMath.clamp(-17L, 0, 4));
+        assertEquals( 0, FastMath.clamp(+17L, -3, 0));
     }
 
     @Test
@@ -1461,16 +1461,16 @@ public class FastMathTest {
         assertEquals(Double.POSITIVE_INFINITY, FastMath.scalb( 1.1102230246251565E-16,  2147483647), 0D);
         assertEquals(Double.NEGATIVE_INFINITY, FastMath.scalb(-2.2250738585072014E-308, 2147483647), 0D);
         assertEquals(Double.POSITIVE_INFINITY, FastMath.scalb( 2.2250738585072014E-308, 2147483647), 0D);
-        assertEquals(0l, Double.doubleToRawLongBits(FastMath.scalb(4.0, -2099)));
-        assertEquals(1l << 63, Double.doubleToRawLongBits(FastMath.scalb(-4.0, -2099)));
-        assertEquals(0l, Double.doubleToRawLongBits(FastMath.scalb(0.0, 12)));
-        assertEquals(1l << 63, Double.doubleToRawLongBits(FastMath.scalb(-0.0, 12)));
+        assertEquals(0L, Double.doubleToRawLongBits(FastMath.scalb(4.0, -2099)));
+        assertEquals(1L << 63, Double.doubleToRawLongBits(FastMath.scalb(-4.0, -2099)));
+        assertEquals(0L, Double.doubleToRawLongBits(FastMath.scalb(0.0, 12)));
+        assertEquals(1L << 63, Double.doubleToRawLongBits(FastMath.scalb(-0.0, 12)));
         assertTrue(Double.isNaN(FastMath.scalb(Double.NaN, 12)));
         assertEquals(Double.POSITIVE_INFINITY, FastMath.scalb(Double.POSITIVE_INFINITY, 12), 1.0);
         assertEquals(Double.NEGATIVE_INFINITY, FastMath.scalb(Double.NEGATIVE_INFINITY, 12), 1.0);
         assertEquals(0x1.2345p-1022, FastMath.scalb(0x1.2345p28, -1050), 0x1.0p-1070);
-        assertEquals(0l,       Double.doubleToRawLongBits(FastMath.scalb( 0x1.2345p28, -1104)));
-        assertEquals(1l << 63, Double.doubleToRawLongBits(FastMath.scalb(-0x1.2345p28, -1104)));
+        assertEquals(0L, Double.doubleToRawLongBits(FastMath.scalb(0x1.2345p28, -1104)));
+        assertEquals(1L << 63, Double.doubleToRawLongBits(FastMath.scalb(-0x1.2345p28, -1104)));
         assertEquals(0x1.2345p27, FastMath.scalb(0x1.2345p-1023, 1050), 0x1.0p-25);
         assertEquals(Double.POSITIVE_INFINITY, FastMath.scalb( 0x1.2345p-1023, 2047), 1.0);
         assertEquals(Double.NEGATIVE_INFINITY, FastMath.scalb(-0x1.2345p-1023, 2047), 1.0);
@@ -1498,7 +1498,7 @@ public class FastMathTest {
         assertEquals(Float.POSITIVE_INFINITY,  FastMath.scalb(3.4028235E38f,  2147483647), 0F);
         assertEquals(Float.NEGATIVE_INFINITY,  FastMath.scalb(-3.4028235E38f, 2147483647), 0F);
         assertEquals(0, Float.floatToRawIntBits(FastMath.scalb(4.0f, -278)));
-        assertEquals(1 << 63, Float.floatToRawIntBits(FastMath.scalb(-4.0f, -278)));
+        assertEquals(1 << 31, Float.floatToRawIntBits(FastMath.scalb(-4.0f, -278)));
         assertEquals(0, Float.floatToRawIntBits(FastMath.scalb(0.0f, 12)));
         assertEquals(1 << 31, Float.floatToRawIntBits(FastMath.scalb(-0.0f, 12)));
         assertTrue(Float.isNaN(FastMath.scalb(Float.NaN, 12)));
@@ -1719,7 +1719,7 @@ public class FastMathTest {
     @Test(timeout=5000L)
     public void testIntPowSpecialCases() {
         final double EXACT = -1.0;
-        final double DOUBLES[] = new double[]
+        final double[] DOUBLES = new double[]
             {
                 Double.NEGATIVE_INFINITY, -0.0, Double.NaN, 0.0, Double.POSITIVE_INFINITY,
                 Long.MIN_VALUE, Integer.MIN_VALUE, Short.MIN_VALUE, Byte.MIN_VALUE,
@@ -1732,7 +1732,8 @@ public class FastMathTest {
                 -0.5, -0.1, -0.2, -0.8, -1.1, -1.2, -1.5, -1.8, -1.0, -2.0, -3.0, -4.0, -5.0, -6.0, -7.0, -8.0, -9.0, -1.3, -2.2, -2.5, -2.8, -33.0, -33.1, -33.5, -33.8, -10.0, -300.0, -400.0, -500.0
             };
 
-        final long INTS[] = new long[]{Long.MAX_VALUE, Long.MAX_VALUE - 1, Long.MIN_VALUE, Long.MIN_VALUE + 1, Long.MIN_VALUE + 2, Integer.MAX_VALUE, Integer.MAX_VALUE - 1, Integer.MIN_VALUE, Integer.MIN_VALUE + 1, Integer.MIN_VALUE + 2, 0, 1, 2, 3, 5, 8, 10, 20, 100, 300, 500, -1, -2, -3, -5, -8, -10, -20, -100, -300, -500};
+        final long[]
+                        INTS = new long[]{Long.MAX_VALUE, Long.MAX_VALUE - 1, Long.MIN_VALUE, Long.MIN_VALUE + 1, Long.MIN_VALUE + 2, Integer.MAX_VALUE, Integer.MAX_VALUE - 1, Integer.MIN_VALUE, Integer.MIN_VALUE + 1, Integer.MIN_VALUE + 2, 0, 1, 2, 3, 5, 8, 10, 20, 100, 300, 500, -1, -2, -3, -5, -8, -10, -20, -100, -300, -500};
         // Special cases from Math.pow javadoc:
         // If the second argument is positive or negative zero, then the result is 1.0.
         for (double d : DOUBLES) {
@@ -1787,12 +1788,12 @@ public class FastMathTest {
         // Note: Long.MAX_VALUE isn't actually an infinity, so its parity affects the sign of resulting zero.
         for (double d : DOUBLES) {
             if (Math.abs(d) > 1.0) {
-                assertTrue(FastMath.pow(d, Long.MIN_VALUE + 1L) == 0.0);
+                assertEquals(0.0, FastMath.pow(d, Long.MIN_VALUE + 1L), 0.0);
             }
         }
         for (double d : DOUBLES) {
             if (Math.abs(d) < 1.0) {
-                assertTrue(FastMath.pow(d, Long.MAX_VALUE) == 0.0);
+                assertEquals(0.0, FastMath.pow(d, Long.MAX_VALUE), 0.0);
             }
         }
         // If the absolute value of the first argument equals 1 and the second argument is infinite, then the result is NaN. <- Impossible with int.
@@ -1890,8 +1891,8 @@ public class FastMathTest {
             Integer.MIN_VALUE, Integer.MIN_VALUE + 1, Integer.MIN_VALUE + 2,
             Integer.MAX_VALUE, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 2,
             -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            -1 - (Integer.MIN_VALUE / 2), 0 - (Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
-            -1 + (Integer.MAX_VALUE / 2), 0 + (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
+            -1 - (Integer.MIN_VALUE / 2), -(Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
+            -1 + (Integer.MAX_VALUE / 2), (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
         };
         for (int a : specialValues) {
             BigInteger bdA   = BigInteger.valueOf(a);
@@ -1916,8 +1917,8 @@ public class FastMathTest {
             Long.MIN_VALUE, Long.MIN_VALUE + 1, Long.MIN_VALUE + 2,
             Long.MAX_VALUE, Long.MAX_VALUE - 1, Long.MAX_VALUE - 2,
             -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            -1 - (Long.MIN_VALUE / 2), 0 - (Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
-            -1 + (Long.MAX_VALUE / 2), 0 + (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
+            -1 - (Long.MIN_VALUE / 2), -(Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
+            -1 + (Long.MAX_VALUE / 2), (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
         };
         for (long a : specialValues) {
             BigInteger bdA   = BigInteger.valueOf(a);
@@ -1942,8 +1943,8 @@ public class FastMathTest {
             Integer.MIN_VALUE, Integer.MIN_VALUE + 1, Integer.MIN_VALUE + 2,
             Integer.MAX_VALUE, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 2,
             -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            -1 - (Integer.MIN_VALUE / 2), 0 - (Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
-            -1 + (Integer.MAX_VALUE / 2), 0 + (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
+            -1 - (Integer.MIN_VALUE / 2), -(Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
+            -1 + (Integer.MAX_VALUE / 2), (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
         };
         for (int a : specialValues) {
             BigInteger bdA   = BigInteger.valueOf(a);
@@ -1968,8 +1969,8 @@ public class FastMathTest {
             Long.MIN_VALUE, Long.MIN_VALUE + 1, Long.MIN_VALUE + 2,
             Long.MAX_VALUE, Long.MAX_VALUE - 1, Long.MAX_VALUE - 2,
             -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            -1 - (Long.MIN_VALUE / 2), 0 - (Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
-            -1 + (Long.MAX_VALUE / 2), 0 + (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
+            -1 - (Long.MIN_VALUE / 2), -(Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
+            -1 + (Long.MAX_VALUE / 2), (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
         };
         for (long a : specialValues) {
             BigInteger bdA   = BigInteger.valueOf(a);
@@ -1994,8 +1995,8 @@ public class FastMathTest {
             Integer.MIN_VALUE, Integer.MIN_VALUE + 1, Integer.MIN_VALUE + 2,
             Integer.MAX_VALUE, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 2,
             -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            -1 - (Integer.MIN_VALUE / 2), 0 - (Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
-            -1 + (Integer.MAX_VALUE / 2), 0 + (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
+            -1 - (Integer.MIN_VALUE / 2), -(Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
+            -1 + (Integer.MAX_VALUE / 2), (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
         };
         for (int a : specialValues) {
             for (int b : specialValues) {
@@ -2023,8 +2024,8 @@ public class FastMathTest {
             Long.MIN_VALUE, Long.MIN_VALUE + 1, Long.MIN_VALUE + 2,
             Long.MAX_VALUE, Long.MAX_VALUE - 1, Long.MAX_VALUE - 2,
             -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            -1 - (Long.MIN_VALUE / 2), 0 - (Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
-            -1 + (Long.MAX_VALUE / 2), 0 + (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
+            -1 - (Long.MIN_VALUE / 2), -(Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
+            -1 + (Long.MAX_VALUE / 2), (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
         };
         for (long a : specialValues) {
             for (long b : specialValues) {
@@ -2052,8 +2053,8 @@ public class FastMathTest {
             Integer.MIN_VALUE, Integer.MIN_VALUE + 1, Integer.MIN_VALUE + 2,
             Integer.MAX_VALUE, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 2,
             -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            -1 - (Integer.MIN_VALUE / 2), 0 - (Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
-            -1 + (Integer.MAX_VALUE / 2), 0 + (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
+            -1 - (Integer.MIN_VALUE / 2), -(Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
+            -1 + (Integer.MAX_VALUE / 2), (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
         };
         for (int a : specialValues) {
             for (int b : specialValues) {
@@ -2081,8 +2082,8 @@ public class FastMathTest {
             Long.MIN_VALUE, Long.MIN_VALUE + 1, Long.MIN_VALUE + 2,
             Long.MAX_VALUE, Long.MAX_VALUE - 1, Long.MAX_VALUE - 2,
             -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            -1 - (Long.MIN_VALUE / 2), 0 - (Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
-            -1 + (Long.MAX_VALUE / 2), 0 + (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
+            -1 - (Long.MIN_VALUE / 2), -(Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
+            -1 + (Long.MAX_VALUE / 2), (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
         };
         for (long a : specialValues) {
             for (long b : specialValues) {
@@ -2110,8 +2111,8 @@ public class FastMathTest {
             Integer.MIN_VALUE, Integer.MIN_VALUE + 1, Integer.MIN_VALUE + 2,
             Integer.MAX_VALUE, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 2,
             -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            -1 - (Integer.MIN_VALUE / 2), 0 - (Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
-            -1 + (Integer.MAX_VALUE / 2), 0 + (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
+            -1 - (Integer.MIN_VALUE / 2), -(Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
+            -1 + (Integer.MAX_VALUE / 2), (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
         };
         for (int a : specialValues) {
             for (int b : specialValues) {
@@ -2140,15 +2141,15 @@ public class FastMathTest {
             Long.MIN_VALUE, Long.MIN_VALUE + 1, Long.MIN_VALUE + 2,
             Long.MAX_VALUE, Long.MAX_VALUE - 1, Long.MAX_VALUE - 2,
             -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            -1 - (Long.MIN_VALUE / 2), 0 - (Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
-            -1 + (Long.MAX_VALUE / 2), 0 + (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
+            -1 - (Long.MIN_VALUE / 2), -(Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
+            -1 + (Long.MAX_VALUE / 2), (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
         };
         int[] specialValuesI = new int[] {
             Integer.MIN_VALUE, Integer.MIN_VALUE + 1, Integer.MIN_VALUE + 2,
             Integer.MAX_VALUE, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 2,
             -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            -1 - (Integer.MIN_VALUE / 2), 0 - (Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
-            -1 + (Integer.MAX_VALUE / 2), 0 + (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
+            -1 - (Integer.MIN_VALUE / 2), -(Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
+            -1 + (Integer.MAX_VALUE / 2), (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
         };
         for (long a : specialValuesL) {
             for (int b : specialValuesI) {
@@ -2176,8 +2177,8 @@ public class FastMathTest {
             Long.MIN_VALUE, Long.MIN_VALUE + 1, Long.MIN_VALUE + 2,
             Long.MAX_VALUE, Long.MAX_VALUE - 1, Long.MAX_VALUE - 2,
             -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            -1 - (Long.MIN_VALUE / 2), 0 - (Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
-            -1 + (Long.MAX_VALUE / 2), 0 + (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
+            -1 - (Long.MIN_VALUE / 2), -(Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
+            -1 + (Long.MAX_VALUE / 2), (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
         };
         for (long a : specialValues) {
             for (long b : specialValues) {
@@ -2205,8 +2206,8 @@ public class FastMathTest {
             Integer.MIN_VALUE, Integer.MIN_VALUE + 1, Integer.MIN_VALUE + 2,
             Integer.MAX_VALUE, Integer.MAX_VALUE - 1, Integer.MAX_VALUE - 2,
             -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            -1 - (Integer.MIN_VALUE / 2), 0 - (Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
-            -1 + (Integer.MAX_VALUE / 2), 0 + (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
+            -1 - (Integer.MIN_VALUE / 2), -(Integer.MIN_VALUE / 2), 1 - (Integer.MIN_VALUE / 2),
+            -1 + (Integer.MAX_VALUE / 2), (Integer.MAX_VALUE / 2), 1 + (Integer.MAX_VALUE / 2),
         };
         for (int a : specialValues) {
             for (int b : specialValues) {
@@ -2243,12 +2244,12 @@ public class FastMathTest {
             Long.MIN_VALUE, Long.MIN_VALUE + 1, Long.MIN_VALUE + 2,
             Long.MAX_VALUE, Long.MAX_VALUE - 1, Long.MAX_VALUE - 2,
             -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-            -1 - (Long.MIN_VALUE / 2), 0 - (Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
-            -1 + (Long.MAX_VALUE / 2), 0 + (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
+            -1 - (Long.MIN_VALUE / 2), -(Long.MIN_VALUE / 2), 1 - (Long.MIN_VALUE / 2),
+            -1 + (Long.MAX_VALUE / 2), (Long.MAX_VALUE / 2), 1 + (Long.MAX_VALUE / 2),
         };
         for (long a : specialValues) {
             for (long b : specialValues) {
-                if (b == 0l) {
+                if (b == 0L) {
                     try {
                         FastMath.divideExact(a, b);
                         fail("an exception should have been thrown " + a + b);
@@ -2277,12 +2278,12 @@ public class FastMathTest {
 
     @Test(expected=MathRuntimeException.class)
     public void testToIntExactTooLow() {
-        FastMath.toIntExact(-1l + Integer.MIN_VALUE);
+        FastMath.toIntExact(-1L + Integer.MIN_VALUE);
     }
 
     @Test(expected=MathRuntimeException.class)
     public void testToIntExactTooHigh() {
-        FastMath.toIntExact(+1l + Integer.MAX_VALUE);
+        FastMath.toIntExact(+1L + Integer.MAX_VALUE);
     }
 
     @Test
@@ -2301,8 +2302,8 @@ public class FastMathTest {
 
     @Test
     public void testAbsExactLong() {
-        Assert.assertEquals(12l, FastMath.absExact(+12l));
-        Assert.assertEquals(12l, FastMath.absExact(-12l));
+        Assert.assertEquals(12L, FastMath.absExact(+12L));
+        Assert.assertEquals(12L, FastMath.absExact(-12L));
         Assert.assertEquals(Long.MAX_VALUE, FastMath.absExact(Long.MAX_VALUE));
         Assert.assertEquals(Long.MAX_VALUE, FastMath.absExact(-Long.MAX_VALUE));
         try {
@@ -2329,8 +2330,8 @@ public class FastMathTest {
 
     @Test
     public void testNegateExactLong() {
-        Assert.assertEquals(-12l, FastMath.negateExact(+12l));
-        Assert.assertEquals(12l, FastMath.negateExact(-12l));
+        Assert.assertEquals(-12L, FastMath.negateExact(+12L));
+        Assert.assertEquals(12L, FastMath.negateExact(-12L));
         Assert.assertEquals(-Long.MAX_VALUE, FastMath.negateExact(Long.MAX_VALUE));
         Assert.assertEquals(Long.MAX_VALUE, FastMath.negateExact(-Long.MAX_VALUE));
         try {
@@ -2344,10 +2345,12 @@ public class FastMathTest {
     @Test
     public void testToIntExact() {
         for (int n = -1000; n < 1000; ++n) {
-            assertEquals(n, FastMath.toIntExact(0l + n));
+            assertEquals(n, FastMath.toIntExact((long) n));
         }
-        assertEquals(Integer.MIN_VALUE, FastMath.toIntExact(0l + Integer.MIN_VALUE));
-        assertEquals(Integer.MAX_VALUE, FastMath.toIntExact(0l + Integer.MAX_VALUE));
+        assertEquals(Integer.MIN_VALUE, FastMath.toIntExact(
+                        (long) Integer.MIN_VALUE));
+        assertEquals(Integer.MAX_VALUE, FastMath.toIntExact(
+                        (long) Integer.MAX_VALUE));
     }
 
     @Test
@@ -2381,27 +2384,27 @@ public class FastMathTest {
 
     @Test
     public void testCeilDivLong() {
-        assertEquals(+2l, FastMath.ceilDiv(+4l, +3l));
-        assertEquals(-1l, FastMath.ceilDiv(-4l, +3l));
-        assertEquals(-1l, FastMath.ceilDiv(+4l, -3l));
-        assertEquals(+2l, FastMath.ceilDiv(-4l, -3l));
+        assertEquals(+2L, FastMath.ceilDiv(+4L, +3L));
+        assertEquals(-1L, FastMath.ceilDiv(-4L, +3L));
+        assertEquals(-1L, FastMath.ceilDiv(+4L, -3L));
+        assertEquals(+2L, FastMath.ceilDiv(-4L, -3L));
         try {
-            FastMath.ceilDiv(1l, 0l);
+            FastMath.ceilDiv(1L, 0L);
             fail("an exception should have been thrown");
         } catch (MathRuntimeException mae) {
             // expected
         }
-        for (long a = -100l; a <= 100l; ++a) {
-            for (long b = -100l; b <= 100l; ++b) {
-                if (b != 0l) {
+        for (long a = -100L; a <= 100L; ++a) {
+            for (long b = -100L; b <= 100L; ++b) {
+                if (b != 0L) {
                     assertEquals(poorManCeilDiv(a, b), FastMath.ceilDiv(a, b));
                     assertEquals(poorManCeilDiv(a, b), FastMath.ceilDivExact(a, b));
                 }
             }
         }
-        assertEquals(Long.MIN_VALUE, FastMath.ceilDiv(Long.MIN_VALUE, -1l));
+        assertEquals(Long.MIN_VALUE, FastMath.ceilDiv(Long.MIN_VALUE, -1L));
         try {
-            FastMath.ceilDivExact(Long.MIN_VALUE, -1l);
+            FastMath.ceilDivExact(Long.MIN_VALUE, -1L);
             fail("an exception should have been thrown");
         } catch (MathRuntimeException mre) {
             assertEquals(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, mre.getSpecifier());
@@ -2410,17 +2413,17 @@ public class FastMathTest {
 
     @Test
     public void testCeilDivLongInt() {
-        assertEquals(+2l, FastMath.ceilDiv(+4l, +3));
-        assertEquals(-1l, FastMath.ceilDiv(-4l, +3));
-        assertEquals(-1l, FastMath.ceilDiv(+4l, -3));
-        assertEquals(+2l, FastMath.ceilDiv(-4l, -3));
+        assertEquals(+2L, FastMath.ceilDiv(+4L, +3));
+        assertEquals(-1L, FastMath.ceilDiv(-4L, +3));
+        assertEquals(-1L, FastMath.ceilDiv(+4L, -3));
+        assertEquals(+2L, FastMath.ceilDiv(-4L, -3));
         try {
-            FastMath.ceilDiv(1l, 0);
+            FastMath.ceilDiv(1L, 0);
             fail("an exception should have been thrown");
         } catch (MathRuntimeException mae) {
             // expected
         }
-        for (long a = -100l; a <= 100l; ++a) {
+        for (long a = -100L; a <= 100L; ++a) {
             for (int b = -100; b <= 100; ++b) {
                 if (b != 0) {
                     assertEquals(poorManCeilDiv(a, b), FastMath.ceilDiv(a, b));
@@ -2439,7 +2442,7 @@ public class FastMathTest {
 
     @Test
     public void testCeilDivModInt() {
-        RandomGenerator generator = new Well1024a(0x66c371cc6f7ebea9l);
+        RandomGenerator generator = new Well1024a(0x66c371cc6f7ebea9L);
         for (int i = 0; i < 10000; ++i) {
             int a = generator.nextInt();
             int b = generator.nextInt();
@@ -2455,7 +2458,7 @@ public class FastMathTest {
                 int m = FastMath.ceilMod(a, b);
                 assertEquals(poorManCeilDiv(a, b), d);
                 assertEquals(poorManCeilMod(a, b), m);
-                assertEquals(a, d * b + m);
+                assertEquals(a, (long) d * b + m);
                 if (b < 0) {
                     assertTrue(m >= 0);
                     assertTrue(-m > b);
@@ -2469,11 +2472,11 @@ public class FastMathTest {
 
     @Test
     public void testCeilDivModLong() {
-        RandomGenerator generator = new Well1024a(0x769c9ab4e4a9129el);
+        RandomGenerator generator = new Well1024a(0x769c9ab4e4a9129eL);
         for (int i = 0; i < 10000; ++i) {
             long a = generator.nextLong();
             long b = generator.nextLong();
-            if (b == 0l) {
+            if (b == 0L) {
                 try {
                     FastMath.floorMod(a, b);
                     fail("an exception should have been thrown");
@@ -2486,11 +2489,11 @@ public class FastMathTest {
                 assertEquals(poorManCeilDiv(a, b), d);
                 assertEquals(poorManCeilMod(a, b), m);
                 assertEquals(a, d * b + m);
-                if (b < 0l) {
-                    assertTrue(m >= 0l);
+                if (b < 0L) {
+                    assertTrue(m >= 0L);
                     assertTrue(-m > b);
                 } else {
-                    assertTrue(m <= 0l);
+                    assertTrue(m <= 0L);
                     assertTrue(m < b);
                 }
             }
@@ -2499,7 +2502,7 @@ public class FastMathTest {
 
     @Test
     public void testCeilDivModLongInt() {
-        RandomGenerator generator = new Well1024a(0xd4c67ab9cd4af669l);
+        RandomGenerator generator = new Well1024a(0xd4c67ab9cd4af669L);
         for (int i = 0; i < 10000; ++i) {
             long a = generator.nextLong();
             int b = generator.nextInt();
@@ -2579,7 +2582,7 @@ public class FastMathTest {
 
     @Test
     public void testFloorDivModInt() {
-        RandomGenerator generator = new Well1024a(0x7ccab45edeaab90al);
+        RandomGenerator generator = new Well1024a(0x7ccab45edeaab90aL);
         for (int i = 0; i < 10000; ++i) {
             int a = generator.nextInt();
             int b = generator.nextInt();
@@ -2595,7 +2598,7 @@ public class FastMathTest {
                 int m = FastMath.floorMod(a, b);
                 assertEquals(poorManFloorDiv(a, b), d);
                 assertEquals(poorManFloorMod(a, b), m);
-                assertEquals(a, d * b + m);
+                assertEquals(a, (long) d * b + m);
                 if (b < 0) {
                     assertTrue(m <= 0);
                     assertTrue(-m < -b);
@@ -2609,27 +2612,27 @@ public class FastMathTest {
 
     @Test
     public void testFloorDivLong() {
-        assertEquals(+1l, FastMath.floorDiv(+4l, +3l));
-        assertEquals(-2l, FastMath.floorDiv(-4l, +3l));
-        assertEquals(-2l, FastMath.floorDiv(+4l, -3l));
-        assertEquals(+1l, FastMath.floorDiv(-4l, -3l));
+        assertEquals(+1L, FastMath.floorDiv(+4L, +3L));
+        assertEquals(-2L, FastMath.floorDiv(-4L, +3L));
+        assertEquals(-2L, FastMath.floorDiv(+4L, -3L));
+        assertEquals(+1L, FastMath.floorDiv(-4L, -3L));
         try {
-            FastMath.floorDiv(1l, 0l);
+            FastMath.floorDiv(1L, 0L);
             fail("an exception should have been thrown");
         } catch (MathRuntimeException mae) {
             // expected
         }
-        for (long a = -100l; a <= 100l; ++a) {
-            for (long b = -100l; b <= 100l; ++b) {
+        for (long a = -100L; a <= 100L; ++a) {
+            for (long b = -100L; b <= 100L; ++b) {
                 if (b != 0) {
                     assertEquals(poorManFloorDiv(a, b), FastMath.floorDiv(a, b));
                     assertEquals(poorManFloorDiv(a, b), FastMath.floorDivExact(a, b));
                 }
             }
         }
-        assertEquals(Long.MIN_VALUE, FastMath.floorDiv(Long.MIN_VALUE, -1l));
+        assertEquals(Long.MIN_VALUE, FastMath.floorDiv(Long.MIN_VALUE, -1L));
         try {
-            FastMath.floorDivExact(Long.MIN_VALUE, -1l);
+            FastMath.floorDivExact(Long.MIN_VALUE, -1L);
             fail("an exception should have been thrown");
         } catch (MathRuntimeException mre) {
             assertEquals(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, mre.getSpecifier());
@@ -2638,18 +2641,18 @@ public class FastMathTest {
 
     @Test
     public void testFloorModLong() {
-        assertEquals(+1l, FastMath.floorMod(+4l, +3l));
-        assertEquals(+2l, FastMath.floorMod(-4l, +3l));
-        assertEquals(-2l, FastMath.floorMod(+4l, -3l));
-        assertEquals(-1l, FastMath.floorMod(-4l, -3l));
+        assertEquals(+1L, FastMath.floorMod(+4L, +3L));
+        assertEquals(+2L, FastMath.floorMod(-4L, +3L));
+        assertEquals(-2L, FastMath.floorMod(+4L, -3L));
+        assertEquals(-1L, FastMath.floorMod(-4L, -3L));
         try {
-            FastMath.floorMod(1l, 0l);
+            FastMath.floorMod(1L, 0L);
             fail("an exception should have been thrown");
         } catch (MathRuntimeException mae) {
             // expected
         }
-        for (long a = -100l; a <= 100l; ++a) {
-            for (long b = -100l; b <= 100l; ++b) {
+        for (long a = -100L; a <= 100L; ++a) {
+            for (long b = -100L; b <= 100L; ++b) {
                 if (b != 0) {
                     assertEquals(poorManFloorMod(a, b), FastMath.floorMod(a, b));
                 }
@@ -2659,7 +2662,7 @@ public class FastMathTest {
 
     @Test
     public void testFloorDivModLong() {
-        RandomGenerator generator = new Well1024a(0xb87b9bc14c96ccd5l);
+        RandomGenerator generator = new Well1024a(0xb87b9bc14c96ccd5L);
         for (int i = 0; i < 10000; ++i) {
             long a = generator.nextLong();
             long b = generator.nextLong();
@@ -2689,9 +2692,9 @@ public class FastMathTest {
 
     @Test
     public void testFloorDivModLongInt() {
-        RandomGenerator generator = new Well1024a(0xe03b6a1800d92fa7l);
+        RandomGenerator generator = new Well1024a(0xe03b6a1800d92fa7L);
         for (int i = 0; i < 10000; ++i) {
-            long a = (long) generator.nextInt();
+            long a = generator.nextInt();
             int b = generator.nextInt();
             if (b == 0) {
                 try {
@@ -2756,7 +2759,7 @@ public class FastMathTest {
             BigInteger q    = q0.subtract(bigK);
             BigInteger r    = r0.add(bigK.multiply(bigB));
             if (r.abs().compareTo(bigB.abs()) < 0 &&
-                (r.longValue() == 0l || ((r.longValue() ^ b) & 0x8000000000000000l) != 0)) {
+                (r.longValue() == 0L || ((r.longValue() ^ b) & 0x8000000000000000L) != 0)) {
                 if (fd.compareTo(q) < 0) {
                     fd = q;
                 }
@@ -2814,7 +2817,7 @@ public class FastMathTest {
             BigInteger q    = q0.subtract(bigK);
             BigInteger r    = r0.add(bigK.multiply(bigB));
             if (r.abs().compareTo(bigB.abs()) < 0 &&
-                (r.longValue() == 0l || ((r.longValue() ^ b) & 0x8000000000000000l) == 0)) {
+                (r.longValue() == 0L || ((r.longValue() ^ b) & 0x8000000000000000L) == 0)) {
                 if (fd.compareTo(q) < 0) {
                     fd = q;
                 }
@@ -2830,7 +2833,7 @@ public class FastMathTest {
     }
 
     /**
-     * http://bugs.java.com/bugdatabase/view_bug.do?bug_id=6430675
+     * <a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=6430675">bug JDK-6430675</a>
      */
     @Test
     public void testRoundDown() {
@@ -2840,9 +2843,9 @@ public class FastMathTest {
 
         x = 4503599627370497.0; // x = Math.pow(2, 52) + 1;
         assertEquals("4503599627370497", new BigDecimal(x).toString());
-        assertTrue(x == Math.rint(x));
-        assertTrue(x == FastMath.round(x));
-        assertTrue(x == Math.round(x));
+        assertEquals(x, Math.rint(x), 0.0);
+        assertEquals(x, FastMath.round(x), 0.0);
+        assertEquals(x, Math.round(x), 0.0);
     }
 
     @Test
@@ -2917,22 +2920,21 @@ public class FastMathTest {
     public void testMultiplyHigh() {
 
         // a * b = Long.MAX_VALUE (exactly), multiplication just fits in a 64 bits primitive long
-        final long a = 153092023l;
-        final long b = 60247241209l;
+        final long a = 153092023L;
+        final long b = 60247241209L;
         Assert.assertEquals(Long.MAX_VALUE, a * b);
         Assert.assertEquals(0, FastMath.multiplyHigh(a, b));
 
         // as we just slightly exceeds Long.MAX_VALUE, there are no extra bits,
         // but sign is nevertheless wrong because the most significant bit is set to 1
-        final long c1 = 1l << 31;
-        final long c2 = 1l << 32;
+        final long c1 = 1L << 31;
+        final long c2 = 1L << 32;
         Assert.assertEquals(0, FastMath.multiplyHigh(c1, c2)); // no extra bits
         Assert.assertEquals(Long.MIN_VALUE, c1 * c2);          // but result is negative despite c1 and c2 are both positive
 
         // some small and large integers
         final long[] values = new long[] {
-            -1l, 0l, 1l, 10l,
-            0x100000000l, 0x200000000l, 0x400000000l, -0x100000000l, -0x200000000l, -0x400000000l,
+            -1L, 0L, 1L, 10L, 0x100000000L, 0x200000000L, 0x400000000L, -0x100000000L, -0x200000000L, -0x400000000L,
             ((long) Integer.MIN_VALUE) -1, ((long) Integer.MIN_VALUE), ((long) Integer.MIN_VALUE) +1,
             ((long) Integer.MAX_VALUE) -1, ((long) Integer.MAX_VALUE), ((long) Integer.MAX_VALUE) +1,
             Long.MIN_VALUE, Long.MAX_VALUE
@@ -2944,7 +2946,7 @@ public class FastMathTest {
         }
 
         // random values
-        RandomGenerator random = new Well1024a(0x082a2316178e5e9el);
+        RandomGenerator random = new Well1024a(0x082a2316178e5e9eL);
         for (int i = 0; i < 10000000; ++i) {
             long m = random.nextLong();
             long n = random.nextLong();
@@ -2956,22 +2958,21 @@ public class FastMathTest {
     public void testUnsignedMultiplyHigh() {
 
         // a * b = Long.MAX_VALUE (exactly), multiplication just fits in a 64 bits primitive long
-        final long a = 153092023l;
-        final long b = 60247241209l;
+        final long a = 153092023L;
+        final long b = 60247241209L;
         Assert.assertEquals(Long.MAX_VALUE, a * b);
         Assert.assertEquals(0, FastMath.unsignedMultiplyHigh(a, b));
 
         // as we just slightly exceeds Long.MAX_VALUE, there are no extra bits,
         // but sign is nevertheless wrong because the most significant bit is set to 1
-        final long c1 = 1l << 31;
-        final long c2 = 1l << 32;
+        final long c1 = 1L << 31;
+        final long c2 = 1L << 32;
         Assert.assertEquals(0, FastMath.unsignedMultiplyHigh(c1, c2)); // no extra bits
         Assert.assertEquals(Long.MIN_VALUE, c1 * c2);          // but result is negative despite c1 and c2 are both positive
 
         // some small and large integers
         final long[] values = new long[] {
-            -1l, 0l, 1l, 10l,
-            0x100000000l, 0x200000000l, 0x400000000l, -0x100000000l, -0x200000000l, -0x400000000l,
+            -1L, 0L, 1L, 10L, 0x100000000L, 0x200000000L, 0x400000000L, -0x100000000L, -0x200000000L, -0x400000000L,
             ((long) Integer.MIN_VALUE) -1, ((long) Integer.MIN_VALUE), ((long) Integer.MIN_VALUE) +1,
             ((long) Integer.MAX_VALUE) -1, ((long) Integer.MAX_VALUE), ((long) Integer.MAX_VALUE) +1,
             Long.MIN_VALUE, Long.MAX_VALUE
@@ -2983,7 +2984,7 @@ public class FastMathTest {
         }
 
         // random values
-        RandomGenerator random = new Well1024a(0xcf5736c8f8adf962l);
+        RandomGenerator random = new Well1024a(0xcf5736c8f8adf962L);
         for (int i = 0; i < 10000000; ++i) {
             long m = random.nextLong();
             long n = random.nextLong();

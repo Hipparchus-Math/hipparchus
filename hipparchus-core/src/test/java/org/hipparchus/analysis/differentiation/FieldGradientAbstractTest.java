@@ -29,7 +29,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test for class {@link FieldGradiant}.
+ * Test for class {@link FieldGradient}.
  */
 public abstract class FieldGradientAbstractTest<T extends CalculusFieldElement<T>>
     extends CalculusFieldElementAbstractTest<FieldGradient<T>> {

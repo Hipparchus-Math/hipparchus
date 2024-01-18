@@ -40,6 +40,6 @@ public interface UnivariateInterpolator {
      * algorithm.
      * @throws MathIllegalArgumentException if arrays lengthes do not match
      */
-    UnivariateFunction interpolate(double xval[], double yval[])
+    UnivariateFunction interpolate(double[] xval, double[] yval)
         throws MathIllegalArgumentException;
 }

@@ -581,7 +581,7 @@ public class DfpField implements Field<Dfp> {
      * @return an array of two {@link Dfp Dfp} instances which sum equals a
      */
     private Dfp[] split(final String a) {
-      Dfp result[] = new Dfp[2];
+      Dfp[] result = new Dfp[2];
       boolean leading = true;
       int sp = 0;
       int sig = 0;

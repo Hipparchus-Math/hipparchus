@@ -61,7 +61,7 @@ class StraightLineProblem {
     }
 
     /**
-     * @return the list of x-coordinates.
+     * @return the array of x-coordinates.
      */
     public double[] x() {
         final double[] v = new double[points.size()];
@@ -74,7 +74,7 @@ class StraightLineProblem {
     }
 
     /**
-     * @return the list of y-coordinates.
+     * @return the array of y-coordinates.
      */
     public double[] y() {
         final double[] v = new double[points.size()];

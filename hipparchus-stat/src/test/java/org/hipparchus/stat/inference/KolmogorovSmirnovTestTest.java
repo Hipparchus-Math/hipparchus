@@ -180,8 +180,8 @@ public class KolmogorovSmirnovTestTest {
     /**
      * Checks D and exact p against expected values.
      *
-     * @param first test sample
-     * @param second test sample
+     * @param sample1 test sample
+     * @param sample2 test sample
      * @param expectedD expected D value
      * @param expectedP expected P value
      */
@@ -288,7 +288,7 @@ public class KolmogorovSmirnovTestTest {
         final double[] c = {
             1.22, 1.36, 1.48, 1.63, 1.73, 1.95
         };
-        final int k[] = {
+        final int[] k = {
             60, 100, 500
         };
         double n;
@@ -308,11 +308,11 @@ public class KolmogorovSmirnovTestTest {
     @Test
     public void testPelzGoodApproximation() {
         KolmogorovSmirnovTest ksTest = new KolmogorovSmirnovTest();
-        final double d[] = {0.15, 0.20, 0.25, 0.3, 0.35, 0.4};
-        final int n[] = {141, 150, 180, 220, 1000};
+        final double[] d = {0.15, 0.20, 0.25, 0.3, 0.35, 0.4};
+        final int[] n = {141, 150, 180, 220, 1000};
         // Reference values computed using the Pelz method from
         // http://simul.iro.umontreal.ca/ksdir/KolmogorovSmirnovDist.java
-        final double ref[] = {
+        final double[] ref = {
             0.9968940168727819, 0.9979326624184857, 0.9994677598604506, 0.9999128354780209, 0.9999999999998661,
             0.9999797514476236, 0.9999902122242081, 0.9999991327060908, 0.9999999657681911, 0.9999999999977929,
             0.9999999706444976, 0.9999999906571532, 0.9999999997949596, 0.999999999998745, 0.9999999999993876,
@@ -650,7 +650,7 @@ public class KolmogorovSmirnovTestTest {
      * <p>
      * Computes \(P(D_{n,m} > d)\) if {@code strict} is {@code true}; otherwise
      * \(P(D_{n,m} \ge d)\), where \(D_{n,m}\) is the 2-sample Kolmogorov-Smirnov
-     * statistic. See {@link #kolmogorovSmirnovStatistic(double[], double[])} for
+     * statistic. See {@code KolmogorovSmirnovStatistic} for
      * the definition of \(D_{n,m}\).
      * <p>
      * The returned probability is exact, obtained by enumerating all partitions of
@@ -660,8 +660,8 @@ public class KolmogorovSmirnovTestTest {
      * <p>
      * <strong>USAGE NOTE</strong>: Since this method enumerates all combinations in
      * \({m+n} \choose {n}\), it is very slow if called for large {@code m, n}. For
-     * this reason, {@link #kolmogorovSmirnovTest(double[], double[])} uses this
-     * only for {@code m * n < } {@value #SMALL_SAMPLE_PRODUCT}.
+     * this reason, {@code KolmogorovSmirnovTest)} uses this
+     * only for {@code m * n < } {@code SMALL_SAMPLE_PRODUCT}.
      *
      * @param d      D-statistic value
      * @param n      first sample size

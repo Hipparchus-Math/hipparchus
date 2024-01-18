@@ -37,6 +37,6 @@ public interface FieldUnivariateInterpolator {
      * algorithm.
      * @throws MathIllegalArgumentException if arrays lengthes do not match
      */
-    <T extends CalculusFieldElement<T>> CalculusFieldUnivariateFunction<T> interpolate(T xval[], T yval[])
+    <T extends CalculusFieldElement<T>> CalculusFieldUnivariateFunction<T> interpolate(T[] xval, T[] yval)
         throws MathIllegalArgumentException;
 }

@@ -66,7 +66,7 @@ public class DividedDifferenceInterpolator
      * strictly increasing order.
      */
     @Override
-    public PolynomialFunctionNewtonForm interpolate(double x[], double y[])
+    public PolynomialFunctionNewtonForm interpolate(double[] x, double[] y)
         throws MathIllegalArgumentException {
         /**
          * a[] and c[] are defined in the general formula of Newton form:
@@ -109,7 +109,7 @@ public class DividedDifferenceInterpolator
      * @throws MathIllegalArgumentException
      * if {@code x} is not sorted in strictly increasing order.
      */
-    protected static double[] computeDividedDifference(final double x[], final double y[])
+    protected static double[] computeDividedDifference(final double[] x, final double[] y)
         throws MathIllegalArgumentException {
         PolynomialFunctionLagrangeForm.verifyInterpolationArray(x, y, true);
 

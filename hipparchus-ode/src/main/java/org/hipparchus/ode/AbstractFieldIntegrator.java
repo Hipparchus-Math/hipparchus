@@ -54,7 +54,7 @@ import org.hipparchus.util.Incrementor;
 public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>> implements FieldODEIntegrator<T> {
 
     /** Step handler. */
-    private List<FieldODEStepHandler<T>> stepHandlers;
+    private final List<FieldODEStepHandler<T>> stepHandlers;
 
     /** Current step start. */
     private FieldODEStateAndDerivative<T> stepStart;
@@ -72,10 +72,10 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
     private final Field<T> field;
 
     /** Events states. */
-    private List<FieldDetectorBasedEventState<T>> detectorBasedEventsStates;
+    private final List<FieldDetectorBasedEventState<T>> detectorBasedEventsStates;
 
     /** Events states related to step end. */
-    private List<FieldStepEndEventState<T>> stepEndEventsStates;
+    private final List<FieldStepEndEventState<T>> stepEndEventsStates;
 
     /** Initialization indicator of events states. */
     private boolean statesInitialized;

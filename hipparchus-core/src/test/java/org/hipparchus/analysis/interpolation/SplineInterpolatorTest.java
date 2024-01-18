@@ -47,7 +47,7 @@ public class SplineInterpolatorTest extends UnivariateInterpolatorAbstractTest {
     public void testInterpolateSin() {
         double sineCoefficientTolerance = 1e-6;
         double sineInterpolationTolerance = 0.0043;
-        double x[] =
+        double[] x =
             {
                 0.0,
                 FastMath.PI / 6d,
@@ -58,7 +58,7 @@ public class SplineInterpolatorTest extends UnivariateInterpolatorAbstractTest {
                 3d * FastMath.PI / 2d,
                 11d * FastMath.PI / 6d,
                 2.d * FastMath.PI };
-        double y[] = { 0d, 0.5d, 1d, 0.5d, 0d, -0.5d, -1d, -0.5d, 0d };
+        double[] y = { 0d, 0.5d, 1d, 0.5d, 0d, -0.5d, -1d, -0.5d, 0d };
         UnivariateInterpolator i = buildDoubleInterpolator();
         UnivariateFunction f = i.interpolate(x, y);
         verifyInterpolation(f, x, y);
@@ -73,8 +73,8 @@ public class SplineInterpolatorTest extends UnivariateInterpolatorAbstractTest {
          *     splinecoef <- eval(expression(z), envir = environment(g))
          *     print(splinecoef)
          */
-        PolynomialFunction polynomials[] = ((PolynomialSplineFunction) f).getPolynomials();
-        double target[] = {y[0], 1.002676d, 0d, -0.17415829d};
+        PolynomialFunction[] polynomials = ((PolynomialSplineFunction) f).getPolynomials();
+        double[] target = {y[0], 1.002676d, 0d, -0.17415829d};
         UnitTestUtils.assertEquals(polynomials[0].getCoefficients(), target, sineCoefficientTolerance);
         target = new double[]{y[1], 8.594367e-01, -2.735672e-01, -0.08707914};
         UnitTestUtils.assertEquals(polynomials[1].getCoefficients(), target, sineCoefficientTolerance);
@@ -100,9 +100,9 @@ public class SplineInterpolatorTest extends UnivariateInterpolatorAbstractTest {
      * Verifies that interpolating polynomials satisfy consistency requirement:
      *    adjacent polynomials must agree through two derivatives at knot points
      */
-    protected void verifyConsistency(PolynomialSplineFunction f, double x[])
+    protected void verifyConsistency(PolynomialSplineFunction f, double[] x)
         {
-        PolynomialFunction polynomials[] = f.getPolynomials();
+        PolynomialFunction[] polynomials = f.getPolynomials();
         for (int i = 1; i < x.length - 2; i++) {
             // evaluate polynomials and derivatives at x[i + 1]
             Assert.assertEquals(polynomials[i].value(x[i +1] - x[i]), polynomials[i + 1].value(0), 0.1);

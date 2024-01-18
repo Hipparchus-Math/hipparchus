@@ -84,7 +84,7 @@ public class AkimaSplineInterpolatorTest {
 
             try
             {
-                double yval[] = { 0.0, 1.0, 2.0, 3.0, 4.0 };
+                double[] yval = { 0.0, 1.0, 2.0, 3.0, 4.0 };
                 i.interpolate( null, yval );
                 Assert.fail( "Failed to detect x null pointer" );
             }
@@ -95,7 +95,7 @@ public class AkimaSplineInterpolatorTest {
 
         try
         {
-            double xval[] = { 0.0, 1.0, 2.0, 3.0, 4.0 };
+            double[] xval = { 0.0, 1.0, 2.0, 3.0, 4.0 };
             i.interpolate( xval, null );
             Assert.fail( "Failed to detect y null pointer" );
         }
@@ -106,8 +106,8 @@ public class AkimaSplineInterpolatorTest {
 
         try
         {
-            double xval[] = { 0.0, 1.0, 2.0, 3.0 };
-            double yval[] = { 0.0, 1.0, 2.0, 3.0 };
+            double[] xval = { 0.0, 1.0, 2.0, 3.0 };
+            double[] yval = { 0.0, 1.0, 2.0, 3.0 };
             i.interpolate( xval, yval );
             Assert.fail( "Failed to detect insufficient data" );
         }
@@ -118,8 +118,8 @@ public class AkimaSplineInterpolatorTest {
 
         try
         {
-            double xval[] = { 0.0, 1.0, 2.0, 3.0, 4.0 };
-            double yval[] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0 };
+            double[] xval = { 0.0, 1.0, 2.0, 3.0, 4.0 };
+            double[] yval = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0 };
             i.interpolate( xval, yval );
             Assert.fail( "Failed to detect data set array with different sizes." );
         }
@@ -131,8 +131,8 @@ public class AkimaSplineInterpolatorTest {
         // X values not sorted.
         try
         {
-            double xval[] = { 0.0, 1.0, 0.5, 7.0, 3.5, 2.2, 8.0 };
-            double yval[] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
+            double[] xval = { 0.0, 1.0, 0.5, 7.0, 3.5, 2.2, 8.0 };
+            double[] yval = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
             i.interpolate( xval, yval );
             Assert.fail( "Failed to detect unsorted arguments." );
         }
@@ -150,7 +150,7 @@ public class AkimaSplineInterpolatorTest {
 
         try
         {
-            Binary64 yval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
+            Binary64[] yval = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
             i.interpolate( null, yval );
             Assert.fail( "Failed to detect x null pointer" );
         }
@@ -161,7 +161,7 @@ public class AkimaSplineInterpolatorTest {
 
         try
         {
-            Binary64 xval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
+            Binary64[] xval = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
             i.interpolate( xval, null );
             Assert.fail( "Failed to detect y null pointer" );
         }
@@ -172,8 +172,8 @@ public class AkimaSplineInterpolatorTest {
 
         try
         {
-            Binary64 xval[] = buildD64(0.0, 1.0, 2.0, 3.0);
-            Binary64 yval[] = buildD64(0.0, 1.0, 2.0, 3.0);
+            Binary64[] xval = buildD64(0.0, 1.0, 2.0, 3.0);
+            Binary64[] yval = buildD64(0.0, 1.0, 2.0, 3.0);
             i.interpolate( xval, yval );
             Assert.fail( "Failed to detect insufficient data" );
         }
@@ -184,8 +184,8 @@ public class AkimaSplineInterpolatorTest {
 
         try
         {
-            Binary64 xval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
-            Binary64 yval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0, 5.0);
+            Binary64[] xval = buildD64(0.0, 1.0, 2.0, 3.0, 4.0);
+            Binary64[] yval = buildD64(0.0, 1.0, 2.0, 3.0, 4.0, 5.0);
             i.interpolate( xval, yval );
             Assert.fail( "Failed to detect data set array with different sizes." );
         }
@@ -197,8 +197,8 @@ public class AkimaSplineInterpolatorTest {
         // X values not sorted.
         try
         {
-            Binary64 xval[] = buildD64(0.0, 1.0, 0.5, 7.0, 3.5, 2.2, 8.0);
-            Binary64 yval[] = buildD64(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
+            Binary64[] xval = buildD64(0.0, 1.0, 0.5, 7.0, 3.5, 2.2, 8.0);
+            Binary64[] yval = buildD64(0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
             i.interpolate( xval, yval );
             Assert.fail( "Failed to detect unsorted arguments." );
         }
@@ -348,8 +348,8 @@ public class AkimaSplineInterpolatorTest {
         double actual;
         double currentX;
         final double delta = ( maximumX - minimumX ) / ( (double) numberOfElements );
-        double xValues[] = new double[numberOfElements];
-        double yValues[] = new double[numberOfElements];
+        double[] xValues = new double[numberOfElements];
+        double[] yValues = new double[numberOfElements];
 
         for ( int i = 0; i < numberOfElements; i++ )
         {
@@ -392,8 +392,8 @@ public class AkimaSplineInterpolatorTest {
         T actual;
         T currentX;
         final T delta = maximumX.subtract(minimumX).divide(numberOfElements);
-        T xValues[] = MathArrays.buildArray(field, numberOfElements);
-        T yValues[] = MathArrays.buildArray(field, numberOfElements);
+        T[] xValues = MathArrays.buildArray(field, numberOfElements);
+        T[] yValues = MathArrays.buildArray(field, numberOfElements);
 
         for ( int i = 0; i < numberOfElements; i++ )
         {

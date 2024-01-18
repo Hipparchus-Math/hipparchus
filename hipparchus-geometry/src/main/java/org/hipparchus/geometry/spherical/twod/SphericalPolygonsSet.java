@@ -224,7 +224,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * than \( \pi \). If longer edges are needed, they need to be broken up
      * in smaller sub-edges so this constraint holds.</p>
      * <p>For cases where this simple constructor applies, it is expected to
-     * be numerically more robust than the {@link #PolygonsSet(Collection) general
+     * be numerically more robust than the {@link #SphericalPolygonsSet(Collection, double) general
      * constructor} using {@link SubHyperplane subhyperplanes}.</p>
      * @param hyperplaneThickness tolerance below which points are consider to
      * belong to the hyperplane (which is therefore more a slab)

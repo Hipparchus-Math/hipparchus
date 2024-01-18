@@ -46,15 +46,15 @@ public class LinearInterpolatorTest extends UnivariateInterpolatorAbstractTest {
 
     @Test
     public void testInterpolateLinear() {
-        double x[] = { 0.0, 0.5, 1.0 };
-        double y[] = { 0.0, 0.5, 0.0 };
+        double[] x = { 0.0, 0.5, 1.0 };
+        double[] y = { 0.0, 0.5, 0.0 };
         UnivariateInterpolator i = buildDoubleInterpolator();
         UnivariateFunction f = i.interpolate(x, y);
         verifyInterpolation(f, x, y);
 
         // Verify coefficients using analytical values
-        PolynomialFunction polynomials[] = ((PolynomialSplineFunction) f).getPolynomials();
-        double target[] = {y[0], 1d};
+        PolynomialFunction[] polynomials = ((PolynomialSplineFunction) f).getPolynomials();
+        double[] target = {y[0], 1d};
         UnitTestUtils.assertEquals(polynomials[0].getCoefficients(), target, coefficientTolerance);
         target = new double[]{y[1], -1d};
         UnitTestUtils.assertEquals(polynomials[1].getCoefficients(), target, coefficientTolerance);
@@ -62,14 +62,14 @@ public class LinearInterpolatorTest extends UnivariateInterpolatorAbstractTest {
 
     @Test
     public void testInterpolateLinearD64() {
-        Binary64 x[] = buildD64(0.0, 0.5, 1.0);
-        Binary64 y[] = buildD64(0.0, 0.5, 0.0);
+        Binary64[] x = buildD64(0.0, 0.5, 1.0);
+        Binary64[] y = buildD64(0.0, 0.5, 0.0);
         FieldUnivariateInterpolator i = buildFieldInterpolator();
         CalculusFieldUnivariateFunction<Binary64> f = i.interpolate(x, y);
         verifyInterpolation(f, x, y);
 
         // Verify coefficients using analytical values
-        FieldPolynomialFunction<Binary64> polynomials[] = ((FieldPolynomialSplineFunction<Binary64>) f).getPolynomials();
+        FieldPolynomialFunction<Binary64>[] polynomials = ((FieldPolynomialSplineFunction<Binary64>) f).getPolynomials();
         checkCoeffs(coefficientTolerance, polynomials[0], y[0].getReal(), +1.0);
         checkCoeffs(coefficientTolerance, polynomials[1], y[1].getReal(), -1.0);
     }

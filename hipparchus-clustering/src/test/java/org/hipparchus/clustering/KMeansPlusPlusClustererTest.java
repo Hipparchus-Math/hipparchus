@@ -88,7 +88,7 @@ public class KMeansPlusPlusClustererTest {
             DoublePoint[] breakingPoints = new DoublePoint[numberOfVariables];
             // define the space which will break the cluster algorithm
             for (int i = 0; i < numberOfVariables; i++) {
-                int points[] = { position1, position2, position3, position4 };
+                int[] points = { position1, position2, position3, position4 };
                 // multiply the values
                 for (int j = 0; j < points.length; j++) {
                     points[j] *= multiplier;

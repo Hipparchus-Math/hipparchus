@@ -127,7 +127,7 @@ public class UnitTestUtils {
     /**
      * Verifies that two double arrays have equal entries, up to tolerance
      */
-    public static void assertEquals(double expected[], double observed[], double tolerance) {
+    public static void assertEquals(double[] expected, double[] observed, double tolerance) {
         assertEquals("Array comparison failure", expected, observed, tolerance);
     }
 

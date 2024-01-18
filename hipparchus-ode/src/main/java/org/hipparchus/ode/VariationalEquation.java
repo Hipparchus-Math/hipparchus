@@ -304,12 +304,7 @@ public class VariationalEquation {
         }
     }
 
-    /** Local implementation of secondary equations.
-     * <p>
-     * This class is an inner class to ensure proper scheduling of calls
-     * by forcing the use of {@link VariationalEquation#registerVariationalEquations(ExpandableODE)}.
-     * </p>
-     */
+    /** Local implementation of secondary equations. */
     private class JacobiansSecondaryODE implements SecondaryODE {
 
         /** {@inheritDoc} */

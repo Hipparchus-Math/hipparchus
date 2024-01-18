@@ -38,12 +38,12 @@ import org.hipparchus.util.MathUtils;
  * <p> Tests for differences between two or more categories of univariate data
  * (for example, the body mass index of accountants, lawyers, doctors and
  * computer programmers).  When two categories are given, this is equivalent to
- * the {@link org.hipparchus.stat.inference.TTest}.
+ * the {@link TTest}.
  * </p><p>
- * Uses the {@link org.hipparchus.distribution.continuous.FDistribution
+ * Uses the {@link FDistribution
  * Hipparchus F Distribution implementation} to estimate exact p-values.</p>
  * <p>This implementation is based on a description at
- * http://faculty.vassar.edu/lowry/ch13pt1.html</p>
+ * <a href="http://faculty.vassar.edu/lowry/ch13pt1.html">One way Anova (dead link)</a></p>
  * <pre>
  * Abbreviations: bg = between groups,
  *                wg = within groups,

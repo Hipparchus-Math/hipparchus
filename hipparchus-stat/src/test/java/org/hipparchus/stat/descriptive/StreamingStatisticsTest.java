@@ -46,8 +46,7 @@ public class StreamingStatisticsTest {
 
     private final double one = 1;
     private final float twoF = 2;
-    private final long twoL = 2;
-    private final int three = 3;
+
     private final double mean = 2;
     private final double sumSq = 18;
     private final double sum = 8;
@@ -70,7 +69,9 @@ public class StreamingStatisticsTest {
         assertEquals("total count", 0, u.getN(), tolerance);
         u.addValue(one);
         u.addValue(twoF);
+        long twoL = 2;
         u.addValue(twoL);
+        int three = 3;
         u.addValue(three);
         assertEquals("N", n, u.getN(), tolerance);
         assertEquals("sum", sum, u.getSum(), tolerance);
@@ -346,7 +347,7 @@ public class StreamingStatisticsTest {
         StreamingStatistics totalStats = new StreamingStatistics();
 
         // Create array of component stats
-        StreamingStatistics componentStats[] = new StreamingStatistics[nSamples];
+        StreamingStatistics[] componentStats = new StreamingStatistics[nSamples];
 
         for (int i = 0; i < nSamples; i++) {
 

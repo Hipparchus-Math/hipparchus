@@ -203,7 +203,7 @@ public class RegionParser {
 
         /** Simple constructor.
          * @param type type of the expected representation
-         * @param reader reader for the string representation
+         * @param s string representation
          * @exception IOException if the string cannot be read
          * @exception ParseException if the string cannot be parsed
          */

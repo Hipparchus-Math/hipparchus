@@ -46,7 +46,7 @@ public class DfpMath {
      * @return an array of two {@link Dfp} which sum is a
      */
     protected static Dfp[] split(final DfpField field, final String a) {
-        Dfp result[] = new Dfp[2];
+        Dfp[] result = new Dfp[2];
         boolean leading = true;
         int sp = 0;
         int sig = 0;
@@ -438,7 +438,7 @@ public class DfpMath {
      * @param a number from which logarithm is requested, in split form
      * @return log(a)
      */
-    protected static Dfp[] logInternal(final Dfp a[]) {
+    protected static Dfp[] logInternal(final Dfp[] a) {
 
         /* Now we want to compute x = (a-1)/(a+1) but this is prone to
          * loss of precision.  So instead, compute x = (a/4 - 1/4) / (a/4 + 1/4)
@@ -673,7 +673,7 @@ public class DfpMath {
      * @param a number from which sine is desired, in split form
      * @return sin(a)
      */
-    protected static Dfp sinInternal(Dfp a[]) {
+    protected static Dfp sinInternal(Dfp[] a) {
 
         Dfp c = a[0].add(a[1]);
         Dfp y = c;
@@ -703,7 +703,7 @@ public class DfpMath {
      * @param a number from which cosine is desired, in split form
      * @return cos(a)
      */
-    protected static Dfp cosInternal(Dfp a[]) {
+    protected static Dfp cosInternal(Dfp[] a) {
         final Dfp one = a[0].getOne();
 
 
@@ -763,7 +763,7 @@ public class DfpMath {
         if (x.lessThan(pi.divide(4))) {
             y = sinInternal(split(x));
         } else {
-            final Dfp c[] = new Dfp[2];
+            final Dfp[] c = new Dfp[2];
             final Dfp[] piSplit = a.getField().getPiSplit();
             c[0] = piSplit[0].divide(2).subtract(x);
             c[1] = piSplit[1].divide(2);
@@ -807,13 +807,13 @@ public class DfpMath {
 
         Dfp y;
         if (x.lessThan(pi.divide(4))) {
-            Dfp c[] = new Dfp[2];
+            Dfp[] c = new Dfp[2];
             c[0] = x;
             c[1] = zero;
 
             y = cosInternal(c);
         } else {
-            final Dfp c[] = new Dfp[2];
+            final Dfp[] c = new Dfp[2];
             final Dfp[] piSplit = a.getField().getPiSplit();
             c[0] = piSplit[0].divide(2).subtract(x);
             c[1] = piSplit[1].divide(2);
@@ -897,7 +897,7 @@ public class DfpMath {
         }
 
         if (x.greaterThan(ty)) {
-            Dfp sty[] = new Dfp[2];
+            Dfp[] sty = new Dfp[2];
             sub = true;
 
             sty[0] = sqr2Split[0].subtract(one);

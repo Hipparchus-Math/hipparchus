@@ -407,17 +407,17 @@ public class ArithmeticUtilsTest {
             // expected behavior
         }
 
-        Assert.assertEquals(1801088541l, ArithmeticUtils.pow(21l, 7));
-        Assert.assertEquals(1l, ArithmeticUtils.pow(21l, 0));
+        Assert.assertEquals(1801088541L, ArithmeticUtils.pow(21L, 7));
+        Assert.assertEquals(1L, ArithmeticUtils.pow(21L, 0));
         try {
-            ArithmeticUtils.pow(21l, -7);
+            ArithmeticUtils.pow(21L, -7);
             Assert.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected behavior
         }
 
-        BigInteger twentyOne = BigInteger.valueOf(21l);
-        Assert.assertEquals(BigInteger.valueOf(1801088541l), ArithmeticUtils.pow(twentyOne, 7));
+        BigInteger twentyOne = BigInteger.valueOf(21L);
+        Assert.assertEquals(BigInteger.valueOf(1801088541L), ArithmeticUtils.pow(twentyOne, 7));
         Assert.assertEquals(BigInteger.ONE, ArithmeticUtils.pow(twentyOne, 0));
         try {
             ArithmeticUtils.pow(twentyOne, -7);
@@ -426,19 +426,21 @@ public class ArithmeticUtilsTest {
             // expected behavior
         }
 
-        Assert.assertEquals(BigInteger.valueOf(1801088541l), ArithmeticUtils.pow(twentyOne, 7l));
-        Assert.assertEquals(BigInteger.ONE, ArithmeticUtils.pow(twentyOne, 0l));
+        Assert.assertEquals(BigInteger.valueOf(1801088541L), ArithmeticUtils.pow(twentyOne,
+                                                                                 7L));
+        Assert.assertEquals(BigInteger.ONE, ArithmeticUtils.pow(twentyOne, 0L));
         try {
-            ArithmeticUtils.pow(twentyOne, -7l);
+            ArithmeticUtils.pow(twentyOne, -7L);
             Assert.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected behavior
         }
 
-        Assert.assertEquals(BigInteger.valueOf(1801088541l), ArithmeticUtils.pow(twentyOne, BigInteger.valueOf(7l)));
+        Assert.assertEquals(BigInteger.valueOf(1801088541L), ArithmeticUtils.pow(twentyOne, BigInteger.valueOf(
+                        7L)));
         Assert.assertEquals(BigInteger.ONE, ArithmeticUtils.pow(twentyOne, BigInteger.ZERO));
         try {
-            ArithmeticUtils.pow(twentyOne, BigInteger.valueOf(-7l));
+            ArithmeticUtils.pow(twentyOne, BigInteger.valueOf(-7L));
             Assert.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected behavior
@@ -449,8 +451,9 @@ public class ArithmeticUtilsTest {
                            "4763915343722775611762713982220306372888519211" +
                            "560905579993523402015636025177602059044911261");
         Assert.assertEquals(bigOne, ArithmeticUtils.pow(twentyOne, 103));
-        Assert.assertEquals(bigOne, ArithmeticUtils.pow(twentyOne, 103l));
-        Assert.assertEquals(bigOne, ArithmeticUtils.pow(twentyOne, BigInteger.valueOf(103l)));
+        Assert.assertEquals(bigOne, ArithmeticUtils.pow(twentyOne, 103L));
+        Assert.assertEquals(bigOne, ArithmeticUtils.pow(twentyOne, BigInteger.valueOf(
+                        103L)));
 
     }
 
@@ -560,7 +563,7 @@ public class ArithmeticUtilsTest {
         }
         for (int i = 0; i < expected.length; i++) {
             final boolean actual = ArithmeticUtils.isPowerOfTwo(i);
-            Assert.assertTrue(Integer.toString(i), actual == expected[i]);
+            Assert.assertEquals(Integer.toString(i), actual, expected[i]);
         }
     }
 
@@ -601,7 +604,7 @@ public class ArithmeticUtilsTest {
      * </ul>
      */
     private static int[] getIntSpecialCases() {
-        int ints[] = new int[100];
+        int[] ints = new int[100];
         int i = 0;
         ints[i++] = Integer.MAX_VALUE;
         ints[i++] = Integer.MAX_VALUE - 1;
@@ -617,7 +620,7 @@ public class ArithmeticUtilsTest {
             ints[i++] = ints[j] > 0 ? -ints[j] : Integer.MIN_VALUE;
         }
         java.util.Random r = new java.util.Random(System.nanoTime());
-        for (; i < ints.length;) {
+        while (i < ints.length) {
             ints[i++] = r.nextInt();
         }
         return ints;
@@ -635,7 +638,7 @@ public class ArithmeticUtilsTest {
      * </ul>
      */
     private static long[] getLongSpecialCases() {
-        long longs[] = new long[100];
+        long[] longs = new long[100];
         int i = 0;
         longs[i++] = Long.MAX_VALUE;
         longs[i++] = Long.MAX_VALUE - 1L;
@@ -654,7 +657,7 @@ public class ArithmeticUtilsTest {
             longs[i++] = longs[j] > 0L ? -longs[j] : Long.MIN_VALUE;
         }
         java.util.Random r = new java.util.Random(System.nanoTime());
-        for (; i < longs.length;) {
+        while (i < longs.length) {
             longs[i++] = r.nextLong();
         }
         return longs;
@@ -692,7 +695,7 @@ public class ArithmeticUtilsTest {
 
     @Test(timeout=5000L)
     public void testRemainderUnsignedIntSpecialCases() {
-        int ints[] = getIntSpecialCases();
+        int[] ints = getIntSpecialCases();
         for (int dividend : ints) {
             for (int divisor : ints) {
                 if (divisor == 0) {
@@ -716,7 +719,7 @@ public class ArithmeticUtilsTest {
 
     @Test//(timeout=5000L)
     public void testRemainderUnsignedLongSpecialCases() {
-        long longs[] = getLongSpecialCases();
+        long[] longs = getLongSpecialCases();
         for (long dividend : longs) {
             for (long divisor : longs) {
                 if (divisor == 0L) {
@@ -749,7 +752,7 @@ public class ArithmeticUtilsTest {
 
     @Test(timeout=5000L)
     public void testDivideUnsignedIntSpecialCases() {
-        int ints[] = getIntSpecialCases();
+        int[] ints = getIntSpecialCases();
         for (int dividend : ints) {
             for (int divisor : ints) {
                 if (divisor == 0) {
@@ -773,7 +776,7 @@ public class ArithmeticUtilsTest {
 
     @Test(timeout=5000L)
     public void testDivideUnsignedLongSpecialCases() {
-        long longs[] = getLongSpecialCases();
+        long[] longs = getLongSpecialCases();
         for (long dividend : longs) {
             for (long divisor : longs) {
                 if (divisor == 0L) {

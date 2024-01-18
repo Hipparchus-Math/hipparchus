@@ -39,9 +39,9 @@ import org.hipparchus.util.Precision;
 /**
  * Computes a cubic spline interpolation for the data set using the Akima
  * algorithm, as originally formulated by Hiroshi Akima in his 1970 paper
- * "A New Method of Interpolation and Smooth Curve Fitting Based on Local Procedures."
+ * <a href="http://doi.acm.org/10.1145/321607.321609">A New Method of
+ * Interpolation and Smooth Curve Fitting Based on Local Procedures.</a>
  * J. ACM 17, 4 (October 1970), 589-602. DOI=10.1145/321607.321609
- * http://doi.acm.org/10.1145/321607.321609
  * <p>
  * This implementation is based on the Akima implementation in the CubicSpline
  * class in the Math.NET Numerics library. The method referenced is

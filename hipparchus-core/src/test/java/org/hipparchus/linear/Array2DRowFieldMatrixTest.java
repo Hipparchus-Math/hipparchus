@@ -1234,7 +1234,7 @@ public final class Array2DRowFieldMatrixTest {
         }
         int n = matrix.getRowDimension();
         int m = matrix.getColumnDimension();
-        Fraction out[][] = new Fraction[m][n];
+        Fraction[][] out = new Fraction[m][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 out[i][j] = matrix.getEntry(permutation[i], j);

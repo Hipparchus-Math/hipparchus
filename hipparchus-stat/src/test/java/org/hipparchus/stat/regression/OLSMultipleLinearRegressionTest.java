@@ -117,7 +117,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
      * pp. 819-841.
      *
      * Certified values (and data) are from NIST:
-     * http://www.itl.nist.gov/div898/strd/lls/data/LINKS/DATA/Longley.dat
+     * <a href="https://www.itl.nist.gov/div898/strd/lls/data/LINKS/DATA/Longley.dat">Longley dataset</a>
      */
     @Test
     public void testLongly() {
@@ -826,7 +826,8 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
     }
 
     /**
-     * From http://stackoverflow.com/questions/37320008/ols-multiple-linear-regression-with-commons-math
+     * From <a href="https://stackoverflow.com/questions/37320008/ols-multiple-linear-regression-with-commons-math">OLS
+     * Multiple Linear Regression with commons-math</a>
      */
     @Test
     public void testNewSampleDataNoIntercept() {

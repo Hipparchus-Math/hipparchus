@@ -57,7 +57,7 @@ import org.hipparchus.util.MathUtils;
  * user is responsible for converting his bounded point to unbounded by calling
  * {@link #boundedToUnbounded(double[])} before providing them to the optimizer.
  * For the same reason, the point returned by the {@link
- * org.hipparchus.optim.BaseMultivariateOptimizer#optimize(OptimizationData[])}
+ * org.hipparchus.optim.BaseMultivariateOptimizer#optimize(org.hipparchus.optim.OptimizationData[])}
  * method is unbounded. So to convert this point to bounded, users must call
  * {@link #unboundedToBounded(double[])} by themselves!</p>
  * <p>

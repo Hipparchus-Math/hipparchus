@@ -628,7 +628,7 @@ public class MillerUpdatingRegressionTest {
      * pp. 819-841.
      *
      * Certified values (and data) are from NIST:
-     * http://www.itl.nist.gov/div898/strd/lls/data/LINKS/DATA/Longley.dat
+     * <a href="https://www.itl.nist.gov/div898/strd/lls/data/LINKS/DATA/Longley.dat">Longley dataset</a>
      */
     @Test
     public void testLongly() {

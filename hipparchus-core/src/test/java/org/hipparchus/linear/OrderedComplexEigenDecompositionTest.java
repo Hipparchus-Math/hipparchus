@@ -183,8 +183,8 @@ public class OrderedComplexEigenDecompositionTest {
 
     /**
      * Verify two complex matrices.
-     * @param vector1 first vector
-     * @param vector2 second vector
+     * @param matrix1 first matrix
+     * @param matrix2 second matrix
      * @param threshold threshold
      */
     private static void compareMatrices(final FieldMatrix<Complex> matrix1,

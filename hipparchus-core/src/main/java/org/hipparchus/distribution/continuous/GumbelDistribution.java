@@ -39,7 +39,8 @@ public class GumbelDistribution extends AbstractRealDistribution {
 
     /**
      * Approximation of Euler's constant
-     * see http://mathworld.wolfram.com/Euler-MascheroniConstantApproximations.html
+     * see <a href="https://mathworld.wolfram.com/Euler-MascheroniConstantApproximations.html">Euler-Mascheroni
+     * Constant Approximations</a>
      */
     private static final double EULER = FastMath.PI / (2 * FastMath.E);
 

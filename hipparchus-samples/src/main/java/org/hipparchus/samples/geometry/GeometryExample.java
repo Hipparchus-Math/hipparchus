@@ -205,9 +205,6 @@ public class GeometryExample {
         /** Container. */
         private JComponent container;
 
-        /** Control panel. */
-        private JComponent controlPanel;
-
         /** Simple constructor.
          */
         public Display() {
@@ -219,7 +216,7 @@ public class GeometryExample {
             container.add(canvas);
             container.setBorder(BorderFactory.createLineBorder(Color.black, 1));
 
-            controlPanel = new JPanel();
+            JComponent controlPanel = new JPanel();
             JButton random = new JButton("Randomize");
             controlPanel.add(random);
 
@@ -262,7 +259,8 @@ public class GeometryExample {
                 }
             });
 
-            JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, container, controlPanel);
+            JSplitPane splitpane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, container,
+                                                  controlPanel);
             splitpane.setDividerLocation(600);
 
             add(splitpane);

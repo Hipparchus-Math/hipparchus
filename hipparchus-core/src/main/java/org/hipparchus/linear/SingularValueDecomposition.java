@@ -65,8 +65,6 @@ public class SingularValueDecomposition {
     private final int m;
     /** min(row dimension, column dimension). */
     private final int n;
-    /** Indicator for transposed matrix. */
-    private final boolean transposed;
     /** Cached value of U matrix. */
     private final RealMatrix cachedU;
     /** Cached value of transposed U matrix. */
@@ -92,6 +90,7 @@ public class SingularValueDecomposition {
         final double[][] A;
 
          // "m" is always the largest dimension.
+        final boolean transposed;
         if (matrix.getRowDimension() < matrix.getColumnDimension()) {
             transposed = true;
             A = matrix.transpose().getData();

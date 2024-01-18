@@ -43,11 +43,15 @@ public final class PolynomialFunctionNewtonFormTest {
     @Test
     public void testLinearFunction() {
         PolynomialFunctionNewtonForm p;
-        double coefficients[], z, expected, result, tolerance = 1E-12;
+        double[] coefficients;
+        double z;
+        double expected;
+        double result;
+        double tolerance = 1E-12;
 
         // p(x) = 1.5x - 4 = 2 + 1.5(x-4)
-        double a[] = { 2.0, 1.5 };
-        double c[] = { 4.0 };
+        double[] a = { 2.0, 1.5 };
+        double[] c = { 4.0 };
         p = new PolynomialFunctionNewtonForm(a, c);
 
         z = 2.0; expected = -1.0; result = p.value(z);
@@ -73,11 +77,15 @@ public final class PolynomialFunctionNewtonFormTest {
     @Test
     public void testQuadraticFunction() {
         PolynomialFunctionNewtonForm p;
-        double coefficients[], z, expected, result, tolerance = 1E-12;
+        double[] coefficients;
+        double z;
+        double expected;
+        double result;
+        double tolerance = 1E-12;
 
         // p(x) = 2x^2 + 5x - 3 = 4 + 3(x-1) + 2(x-1)(x+2)
-        double a[] = { 4.0, 3.0, 2.0 };
-        double c[] = { 1.0, -2.0 };
+        double[] a = { 4.0, 3.0, 2.0 };
+        double[] c = { 1.0, -2.0 };
         p = new PolynomialFunctionNewtonForm(a, c);
 
         z = 1.0; expected = 4.0; result = p.value(z);
@@ -104,12 +112,16 @@ public final class PolynomialFunctionNewtonFormTest {
     @Test
     public void testQuinticFunction() {
         PolynomialFunctionNewtonForm p;
-        double coefficients[], z, expected, result, tolerance = 1E-12;
+        double[] coefficients;
+        double z;
+        double expected;
+        double result;
+        double tolerance = 1E-12;
 
         // p(x) = x^5 - x^4 - 7x^3 + x^2 + 6x
         //      = 6x - 6x^2 -6x^2(x-1) + x^2(x-1)(x+1) + x^2(x-1)(x+1)(x-2)
-        double a[] = { 0.0, 6.0, -6.0, -6.0, 1.0, 1.0 };
-        double c[] = { 0.0, 0.0, 1.0, -1.0, 2.0 };
+        double[] a = { 0.0, 6.0, -6.0, -6.0, 1.0, 1.0 };
+        double[] c = { 0.0, 0.0, 1.0, -1.0, 2.0 };
         p = new PolynomialFunctionNewtonForm(a, c);
 
         z = 0.0; expected = 0.0; result = p.value(z);
@@ -166,8 +178,8 @@ public final class PolynomialFunctionNewtonFormTest {
 
         try {
             // bad input array length
-            double a[] = { 1.0 };
-            double c[] = { 2.0 };
+            double[] a = { 1.0 };
+            double[] c = { 2.0 };
             new PolynomialFunctionNewtonForm(a, c);
             Assert.fail("Expecting MathIllegalArgumentException - bad input array length");
         } catch (MathIllegalArgumentException ex) {
@@ -175,8 +187,8 @@ public final class PolynomialFunctionNewtonFormTest {
         }
         try {
             // mismatch input arrays
-            double a[] = { 1.0, 2.0, 3.0, 4.0 };
-            double c[] = { 4.0, 3.0, 2.0, 1.0 };
+            double[] a = { 1.0, 2.0, 3.0, 4.0 };
+            double[] c = { 4.0, 3.0, 2.0, 1.0 };
             new PolynomialFunctionNewtonForm(a, c);
             Assert.fail("Expecting MathIllegalArgumentException - mismatch input arrays");
         } catch (MathIllegalArgumentException ex) {

@@ -416,10 +416,10 @@ public final class FastFourierTransformerTest {
     public void testAdHocData() {
         FastFourierTransformer transformer;
         transformer = new FastFourierTransformer(DftNormalization.STANDARD);
-        Complex result[]; double tolerance = 1E-12;
+        Complex[] result; double tolerance = 1E-12;
 
-        double x[] = {1.3, 2.4, 1.7, 4.1, 2.9, 1.7, 5.1, 2.7};
-        Complex y[] = {
+        double[] x = {1.3, 2.4, 1.7, 4.1, 2.9, 1.7, 5.1, 2.7};
+        Complex[] y = {
             new Complex(21.9, 0.0),
             new Complex(-2.09497474683058, 1.91507575950825),
             new Complex(-2.6, 2.7),
@@ -441,9 +441,9 @@ public final class FastFourierTransformerTest {
             Assert.assertEquals(0.0, result[i].getImaginary(), tolerance);
         }
 
-        double x2[] = {10.4, 21.6, 40.8, 13.6, 23.2, 32.8, 13.6, 19.2};
+        double[] x2 = {10.4, 21.6, 40.8, 13.6, 23.2, 32.8, 13.6, 19.2};
         TransformUtils.scaleArray(x2, 1.0 / FastMath.sqrt(x2.length));
-        Complex y2[] = y;
+        Complex[] y2 = y;
 
         transformer = new FastFourierTransformer(DftNormalization.UNITARY);
         result = transformer.transform(y2, TransformType.FORWARD);
@@ -467,7 +467,7 @@ public final class FastFourierTransformerTest {
         UnivariateFunction f = new Sin();
         FastFourierTransformer transformer;
         transformer = new FastFourierTransformer(DftNormalization.STANDARD);
-        Complex result[]; int N = 1 << 8;
+        Complex[] result; int N = 1 << 8;
         double min, max, tolerance = 1E-12;
 
         min = 0.0; max = 2.0 * FastMath.PI;

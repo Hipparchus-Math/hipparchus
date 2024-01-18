@@ -896,8 +896,8 @@ public class Complex implements CalculusFieldElement<Complex>, Comparable<Comple
      *  </code>
      * </pre>
      * where the (real) functions on the right-hand side are
-     * {@link FastMath#exp}, {@link FastMath#cos}, and
-     * {@link FastMath#sin}.
+     * {@link FastMath#exp(double)} p}, {@link FastMath#cos(double)}, and
+     * {@link FastMath#sin(double)}.
      * <p>
      * Returns {@link Complex#NaN} if either real or imaginary part of the
      * input argument is {@code NaN}.
@@ -951,7 +951,7 @@ public class Complex implements CalculusFieldElement<Complex>, Comparable<Comple
      *   log(a + bi) = ln(|a + bi|) + arg(a + bi)i
      *  </code>
      * </pre>
-     * where ln on the right hand side is {@link FastMath#log},
+     * where ln on the right hand side is {@link FastMath#log(double)},
      * {@code |a + bi|} is the modulus, {@link Complex#abs},  and
      * {@code arg(a + bi) = }{@link FastMath#atan2}(b, a).
      * <p>

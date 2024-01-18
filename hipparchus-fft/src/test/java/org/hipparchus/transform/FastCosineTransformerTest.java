@@ -184,12 +184,13 @@ public final class FastCosineTransformerTest
     public void testAdHocData() {
         FastCosineTransformer transformer;
         transformer = new FastCosineTransformer(DctNormalization.STANDARD_DCT_I);
-        double result[], tolerance = 1E-12;
+        double[] result;
+        double tolerance = 1E-12;
 
-        double x[] = {
+        double[] x = {
             0.0, 1.0, 4.0, 9.0, 16.0, 25.0, 36.0, 49.0, 64.0
         };
-        double y[] =
+        double[] y =
             {
                 172.0, -105.096569476353, 27.3137084989848, -12.9593152353742,
                 8.0, -5.78585076868676, 4.68629150101524, -4.15826451958632,
@@ -257,10 +258,13 @@ public final class FastCosineTransformerTest
         UnivariateFunction f = new Sin();
         FastCosineTransformer transformer;
         transformer = new FastCosineTransformer(DctNormalization.STANDARD_DCT_I);
-        double min, max, result[], tolerance = 1E-12;
+        double min;
+        double max;
+        double[] result;
+        double tolerance = 1E-12;
         int N = 9;
 
-        double expected[] =
+        double[] expected =
             {
                 0.0, 3.26197262739567, 0.0, -2.17958042710327, 0.0,
                 -0.648846697642915, 0.0, -0.433545502649478, 0.0

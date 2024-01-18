@@ -78,10 +78,9 @@ import org.hipparchus.util.Precision;
  * Compute complex eigen values from the Schur transform. Compute complex eigen
  * vectors based on eigen values and the inverse iteration method.
  *
- * see: https://en.wikipedia.org/wiki/Inverse_iteration
- * https://en.wikiversity.org/wiki/Shifted_inverse_iteration
- * http://www.robots.ox.ac.uk/~sjrob/Teaching/EngComp/ecl4.pdf
- * http://www.math.ohiou.edu/courses/math3600/lecture16.pdf
+ * see: <a href="https://en.wikipedia.org/wiki/Inverse_iteration">Inverse iteration</a>
+ * <a href="https://en.wikiversity.org/wiki/Shifted_inverse_iteration">Shifted inverse iteration</a>
+ * <a href="https://www.robots.ox.ac.uk/~sjrob/Teaching/EngComp/ecl4.pdf">Computation of matrix eigenvalues and eigenvectors</a>
  *
  */
 public class ComplexEigenDecomposition {

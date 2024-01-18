@@ -64,7 +64,7 @@ public class LinearInterpolator implements UnivariateInterpolator, FieldUnivaria
      * than 2.
      */
     @Override
-    public PolynomialSplineFunction interpolate(double x[], double y[])
+    public PolynomialSplineFunction interpolate(double[] x, double[] y)
         throws MathIllegalArgumentException {
         MathUtils.checkNotNull(x);
         MathUtils.checkNotNull(y);
@@ -81,13 +81,13 @@ public class LinearInterpolator implements UnivariateInterpolator, FieldUnivaria
         MathArrays.checkOrder(x);
 
         // Slope of the lines between the datapoints.
-        final double m[] = new double[n];
+        final double[] m = new double[n];
         for (int i = 0; i < n; i++) {
             m[i] = (y[i + 1] - y[i]) / (x[i + 1] - x[i]);
         }
 
-        final PolynomialFunction polynomials[] = new PolynomialFunction[n];
-        final double coefficients[] = new double[2];
+        final PolynomialFunction[] polynomials = new PolynomialFunction[n];
+        final double[] coefficients = new double[2];
         for (int i = 0; i < n; i++) {
             coefficients[0] = y[i];
             coefficients[1] = m[i];
@@ -113,7 +113,7 @@ public class LinearInterpolator implements UnivariateInterpolator, FieldUnivaria
      * @since 1.5
      */
     @Override
-    public <T extends CalculusFieldElement<T>> FieldPolynomialSplineFunction<T> interpolate(final T x[], final T y[])
+    public <T extends CalculusFieldElement<T>> FieldPolynomialSplineFunction<T> interpolate(final T[] x, final T[] y)
         throws MathIllegalArgumentException {
         MathUtils.checkNotNull(x);
         MathUtils.checkNotNull(y);
@@ -130,15 +130,15 @@ public class LinearInterpolator implements UnivariateInterpolator, FieldUnivaria
         MathArrays.checkOrder(x);
 
         // Slope of the lines between the datapoints.
-        final T m[] = MathArrays.buildArray(x[0].getField(), n);
+        final T[] m = MathArrays.buildArray(x[0].getField(), n);
         for (int i = 0; i < n; i++) {
             m[i] = y[i + 1].subtract(y[i]).divide(x[i + 1].subtract(x[i]));
         }
 
         @SuppressWarnings("unchecked")
-        final FieldPolynomialFunction<T> polynomials[] =
+        final FieldPolynomialFunction<T>[] polynomials =
                         (FieldPolynomialFunction<T>[]) Array.newInstance(FieldPolynomialFunction.class, n);
-        final T coefficients[] = MathArrays.buildArray(x[0].getField(), 2);
+        final T[] coefficients = MathArrays.buildArray(x[0].getField(), 2);
         for (int i = 0; i < n; i++) {
             coefficients[0] = y[i];
             coefficients[1] = m[i];

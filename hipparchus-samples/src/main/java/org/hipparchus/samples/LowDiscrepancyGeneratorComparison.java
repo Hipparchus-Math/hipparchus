@@ -245,7 +245,7 @@ public class LowDiscrepancyGeneratorComparison {
     public static class Plot extends JComponent {
 
         /** Padding. */
-        private static double PAD = 10;
+        private static final double PAD = 10;
 
         /** Points to plot. */
         private List<Vector2D> points;

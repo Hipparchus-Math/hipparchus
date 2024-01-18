@@ -92,7 +92,7 @@ public final class FastHadamardTransformerTest {
         for (int i = 0; i < dX.length; ++i) {
             dX[i] = x[i];
         }
-        double dResult[] = transformer.transform(dX, TransformType.FORWARD);
+        double[] dResult = transformer.transform(dX, TransformType.FORWARD);
         for (int i = 0; i < dResult.length; i++) {
             // compare computed results to precomputed results
             Assert.assertTrue(Precision.equals(y[i], dResult[i], 1));
@@ -104,7 +104,7 @@ public final class FastHadamardTransformerTest {
         FastHadamardTransformer transformer = new FastHadamardTransformer();
 
         // check integer transform
-        int iResult[] = transformer.transform(x);
+        int[] iResult = transformer.transform(x);
         for (int i = 0; i < iResult.length; i++) {
             // compare computed results to precomputed results
             Assert.assertEquals(y[i], iResult[i]);
@@ -121,7 +121,7 @@ public final class FastHadamardTransformerTest {
         for (int i = 0; i < dY.length; ++i) {
             dY[i] = y[i];
         }
-        double dResult[] = transformer.transform(dY, TransformType.INVERSE);
+        double[] dResult = transformer.transform(dY, TransformType.INVERSE);
         for (int i = 0; i < dResult.length; i++) {
             // compare computed results to precomputed results
             Assert.assertTrue(Precision.equals(x[i], dResult[i], 1));

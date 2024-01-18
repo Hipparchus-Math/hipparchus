@@ -112,7 +112,7 @@ public class FastMath {
     private static final double LN_2_B = 1.17304635250823482e-7;
 
     /** Coefficients for log, when input 0.99 < x < 1.01. */
-    private static final double LN_QUICK_COEF[][] = {
+    private static final double[][] LN_QUICK_COEF = {
         {1.0, 5.669184079525E-24},
         {-0.25, -0.25},
         {0.3333333134651184, 1.986821492305628E-8},
@@ -125,7 +125,7 @@ public class FastMath {
     };
 
     /** Coefficients for log in the range of 1.0 < x < 1.0 + 2^-10. */
-    private static final double LN_HI_PREC_COEF[][] = {
+    private static final double[][] LN_HI_PREC_COEF = {
         {1.0, -6.032174644509064E-23},
         {-0.25, -0.25},
         {0.3333333134651184, 1.9868161777724352E-8},
@@ -137,7 +137,7 @@ public class FastMath {
     /** Sine, Cosine, Tangent tables are for 0, 1/8, 2/8, ... 13/8 = PI/2 approx. */
 
     /** Sine table (high bits). */
-    private static final double SINE_TABLE_A[] =
+    private static final double[] SINE_TABLE_A =
         {
         +0.0d,
         +0.1246747374534607d,
@@ -156,7 +156,7 @@ public class FastMath {
     };
 
     /** Sine table (low bits). */
-    private static final double SINE_TABLE_B[] =
+    private static final double[] SINE_TABLE_B =
         {
         +0.0d,
         -4.068233003401932E-9d,
@@ -175,7 +175,7 @@ public class FastMath {
     };
 
     /** Cosine table (high bits). */
-    private static final double COSINE_TABLE_A[] =
+    private static final double[] COSINE_TABLE_A =
         {
         +1.0d,
         +0.9921976327896118d,
@@ -194,7 +194,7 @@ public class FastMath {
     };
 
     /** Cosine table (low bits). */
-    private static final double COSINE_TABLE_B[] =
+    private static final double[] COSINE_TABLE_B =
         {
         +0.0d,
         +3.4439717236742845E-8d,
@@ -214,7 +214,7 @@ public class FastMath {
 
 
     /** Tangent table, used by atan() (high bits). */
-    private static final double TANGENT_TABLE_A[] =
+    private static final double[] TANGENT_TABLE_A =
         {
         +0.0d,
         +0.1256551444530487d,
@@ -233,7 +233,7 @@ public class FastMath {
     };
 
     /** Tangent table, used by atan() (low bits). */
-    private static final double TANGENT_TABLE_B[] =
+    private static final double[] TANGENT_TABLE_B =
         {
         +0.0d,
         -7.877917738262007E-9d,
@@ -252,7 +252,7 @@ public class FastMath {
     };
 
     /** Bits of 1/(2*pi), need for reducePayneHanek(). */
-    private static final long RECIP_2PI[] = {
+    private static final long[] RECIP_2PI = {
         (0x28be60dbL << 32) | 0x9391054aL,
         (0x7f09d5f4L << 32) | 0x7d4d3770L,
         (0x36d8a566L << 32) | 0x4f10e410L,
@@ -273,7 +273,7 @@ public class FastMath {
          0x9afed7ecL << 32  };
 
     /** Bits of pi/4, need for reducePayneHanek(). */
-    private static final long PI_O_4_BITS[] = {
+    private static final long[] PI_O_4_BITS = {
         (0xc90fdaa2L << 32) | 0x2168c234L,
         (0xc4c6628bL << 32) | 0x80dc1cd1L };
 
@@ -281,10 +281,11 @@ public class FastMath {
      * This is used by sinQ, because its faster to do a table lookup than
      * a multiply in this time-critical routine
      */
-    private static final double EIGHTHS[] = {0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.125, 1.25, 1.375, 1.5, 1.625};
+    private static final double[]
+                    EIGHTHS = {0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0, 1.125, 1.25, 1.375, 1.5, 1.625};
 
     /** Table of 2^((n+2)/3) */
-    private static final double CBRTTWO[] = { 0.6299605249474366,
+    private static final double[] CBRTTWO = { 0.6299605249474366,
                                             0.7937005259840998,
                                             1.0,
                                             1.2599210498948732,
@@ -423,7 +424,7 @@ public class FastMath {
           }
       }
 
-      final double hiPrec[] = new double[2];
+      final double[] hiPrec = new double[2];
       if (x < 0.0) {
           x = -x;
       }
@@ -502,7 +503,7 @@ public class FastMath {
           negate = true;
       }
 
-      double hiPrec[] = new double[2];
+      double[] hiPrec = new double[2];
       double result;
 
       if (x > 0.25) {
@@ -632,7 +633,7 @@ public class FastMath {
           negate = true;
       }
 
-      double hiPrec[] = new double[2];
+      double[] hiPrec = new double[2];
       double resultM;
       double resultP;
 
@@ -778,7 +779,7 @@ public class FastMath {
 
       double result;
       if (x >= 0.5) {
-          double hiPrec[] = new double[2];
+          double[] hiPrec = new double[2];
           // tanh(x) = (exp(2x) - 1) / (exp(2x) + 1)
           exp(x*2.0, 0.0, hiPrec);
 
@@ -820,7 +821,7 @@ public class FastMath {
           result = ratioa + ratiob;
       }
       else {
-          double hiPrec[] = new double[2];
+          double[] hiPrec = new double[2];
           // tanh(x) = expm1(2x) / (expm1(2x) + 2)
           expm1(x*2.0, hiPrec);
 
@@ -1221,7 +1222,7 @@ public class FastMath {
      * @param hiPrecOut receive high precision result for -1.0 < x < 1.0
      * @return exp(x) - 1
      */
-    private static double expm1(double x, double hiPrecOut[]) {
+    private static double expm1(double x, double[] hiPrecOut) {
         if (Double.isNaN(x) || x == 0.0) { // NaN or zero
             return x;
         }
@@ -1229,7 +1230,7 @@ public class FastMath {
         if (x <= -1.0 || x >= 1.0) {
             // If not between +/- 1.0
             //return exp(x) - 1.0;
-            double hiPrec[] = new double[2];
+            double[] hiPrec = new double[2];
             exp(x, 0.0, hiPrec);
             if (x > 0.0) {
                 return -1.0 + hiPrec[0] + hiPrec[1];
@@ -1643,7 +1644,7 @@ public class FastMath {
      * @return log10(x)
      */
     public static double log10(final double x) {
-        final double hiPrec[] = new double[2];
+        final double[] hiPrec = new double[2];
 
         final double lores = log(x, hiPrec);
         if (Double.isInfinite(lores)){ // don't allow this to be converted to NaN
@@ -1782,7 +1783,7 @@ public class FastMath {
                     final double yb = y - ya;
 
                     /* Compute ln(x) */
-                    final double lns[] = new double[2];
+                    final double[] lns = new double[2];
                     final double lores = log(x, lns);
                     if (Double.isInfinite(lores)) { // don't allow this to be converted to NaN
                         return lores;
@@ -2311,7 +2312,7 @@ public class FastMath {
      * @param x number to reduce
      * @param result placeholder where to put the result
      */
-    private static void reducePayneHanek(double x, double result[])
+    private static void reducePayneHanek(double x, double[] result)
     {
         /* Convert input double to bits */
         long inbits = Double.doubleToRawLongBits(x);
@@ -2560,7 +2561,7 @@ public class FastMath {
             // PI * (2**20)
             // Argument too big for CodyWaite reduction.  Must use
             // PayneHanek.
-            double reduceResults[] = new double[3];
+            double[] reduceResults = new double[3];
             reducePayneHanek(xa, reduceResults);
             quadrant = ((int) reduceResults[0]) & 3;
             xa = reduceResults[1];
@@ -2615,7 +2616,7 @@ public class FastMath {
             // PI * (2**20)
             // Argument too big for CodyWaite reduction.  Must use
             // PayneHanek.
-            double reduceResults[] = new double[3];
+            double[] reduceResults = new double[3];
             reducePayneHanek(xa, reduceResults);
             quadrant = ((int) reduceResults[0]) & 3;
             xa = reduceResults[1];
@@ -2681,7 +2682,7 @@ public class FastMath {
             // PI * (2**20)
             // Argument too big for CodyWaite reduction.  Must use
             // PayneHanek.
-            double reduceResults[] = new double[3];
+            double[] reduceResults = new double[3];
             reducePayneHanek(xa, reduceResults);
             quadrant = ((int) reduceResults[0]) & 3;
             xa = reduceResults[1];
@@ -2755,7 +2756,7 @@ public class FastMath {
             // PI * (2**20)
             // Argument too big for CodyWaite reduction.  Must use
             // PayneHanek.
-            double reduceResults[] = new double[3];
+            double[] reduceResults = new double[3];
             reducePayneHanek(xa, reduceResults);
             quadrant = ((int) reduceResults[0]) & 3;
             xa = reduceResults[1];
@@ -5505,8 +5506,8 @@ public class FastMath {
                 EXP_INT_TABLE_A = new double[FastMath.EXP_INT_TABLE_LEN];
                 EXP_INT_TABLE_B = new double[FastMath.EXP_INT_TABLE_LEN];
 
-                final double tmp[] = new double[2];
-                final double recip[] = new double[2];
+                final double[] tmp = new double[2];
+                final double[] recip = new double[2];
 
                 // Populate expIntTable
                 for (int i = 0; i < FastMath.EXP_INT_TABLE_MAX_INDEX; i++) {
@@ -5545,7 +5546,7 @@ public class FastMath {
                 EXP_FRAC_TABLE_A = new double[FastMath.EXP_FRAC_TABLE_LEN];
                 EXP_FRAC_TABLE_B = new double[FastMath.EXP_FRAC_TABLE_LEN];
 
-                final double tmp[] = new double[2];
+                final double[] tmp = new double[2];
 
                 // Populate expFracTable
                 final double factor = 1d / (EXP_FRAC_TABLE_LEN - 1);

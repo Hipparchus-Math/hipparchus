@@ -41,7 +41,7 @@ import org.hipparchus.util.FastMath;
 class BiDiagonalTransformer {
 
     /** Householder vectors. */
-    private final double householderVectors[][];
+    private final double[][] householderVectors;
 
     /** Main diagonal. */
     private final double[] main;

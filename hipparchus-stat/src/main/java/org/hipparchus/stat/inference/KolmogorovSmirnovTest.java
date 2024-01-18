@@ -1024,7 +1024,7 @@ public class KolmogorovSmirnovTest { // NOPMD - this is not a Junit test class, 
     private double exactPAtMeshpoint(double d, int n, int m) {
         final int nn = FastMath.max(n, m);
         final int mm = FastMath.min(n, m);
-        final double u[] = new double[nn + 2];
+        final double[] u = new double[nn + 2];
         final double k = mm * nn * d + 0.5;
         u[1] = 1d;
         for (int j = 1; j < nn + 1; j++) {

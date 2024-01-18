@@ -104,8 +104,8 @@ public class RombergIntegrator extends BaseAbstractUnivariateIntegrator {
         throws MathIllegalStateException {
 
         final int m = iterations.getMaximalCount() + 1;
-        double previousRow[] = new double[m];
-        double currentRow[]  = new double[m];
+        double[] previousRow = new double[m];
+        double[] currentRow = new double[m];
 
         TrapezoidIntegrator qtrap = new TrapezoidIntegrator();
         currentRow[0] = qtrap.stage(this, 0);

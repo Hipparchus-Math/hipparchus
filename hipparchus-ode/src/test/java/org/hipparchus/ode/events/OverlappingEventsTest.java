@@ -54,8 +54,8 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
 
     /** Test for events that occur at the exact same time, but due to numerical
      * calculations occur very close together instead. Uses event type 0. See
-     * {@link org.hipparchus.ode.events.ODEEventHandler#g(double, double[])
-     * ODEEventHandler.g(double, double[])}.
+     * {@link org.hipparchus.ode.events.ODEEventDetector#g(org.hipparchus.ode.ODEStateAndDerivative)}
+     * ODEEventDetector.g(stateAndDerivative)}.
      */
     @Test
     public void testOverlappingEvents0()
@@ -65,8 +65,8 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
 
     /** Test for events that occur at the exact same time, but due to numerical
      * calculations occur very close together instead. Uses event type 1. See
-     * {@link org.hipparchus.ode.events.ODEEventHandler#g(double, double[])
-     * ODEEventHandler.g(double, double[])}.
+     * {@link org.hipparchus.ode.events.ODEEventDetector#g(org.hipparchus.ode.ODEStateAndDerivative)}
+     *      * ODEEventDetector.g(stateAndDerivative)}.
      */
     @Test
     public void testOverlappingEvents1()
@@ -77,8 +77,8 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
     /** Test for events that occur at the exact same time, but due to numerical
      * calculations occur very close together instead.
      * @param eventType the type of events to use. See
-     * {@link org.hipparchus.ode.events.ODEEventHandler#g(double, double[])
-     * ODEEventHandler.g(double, double[])}.
+     * {@link org.hipparchus.ode.events.ODEEventDetector#g(org.hipparchus.ode.ODEStateAndDerivative)}
+      ODEEventDetector.g(stateAndDerivative)}.
      */
     public void test(int eventType)
         throws MathIllegalArgumentException, MathIllegalStateException {

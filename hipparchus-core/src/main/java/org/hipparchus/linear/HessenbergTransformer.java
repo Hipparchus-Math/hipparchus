@@ -46,9 +46,9 @@ import org.hipparchus.util.Precision;
  */
 public class HessenbergTransformer {
     /** Householder vectors. */
-    private final double householderVectors[][];
+    private final double[][] householderVectors;
     /** Temporary storage vector. */
-    private final double ort[];
+    private final double[] ort;
     /** Cached value of P. */
     private RealMatrix cachedP;
     /** Cached value of Pt. */

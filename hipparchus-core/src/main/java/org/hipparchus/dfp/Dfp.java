@@ -1863,9 +1863,9 @@ public class Dfp implements CalculusFieldElement<Dfp> {
      */
     @Override
     public Dfp divide(Dfp divisor) {
-        int dividend[]; // current status of the dividend
-        int quotient[]; // quotient
-        int remainder[];// remainder
+        int[] dividend; // current status of the dividend
+        int[] quotient; // quotient
+        int[] remainder;// remainder
         int qd;         // current quotient digit we're working with
         int nsqd;       // number of significant quotient digits we have
         int trial=0;    // trial quotient digit
@@ -2266,7 +2266,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
      * @return string representation of the instance in scientific notation
      */
     protected String dfp2sci() {
-        char rawdigits[]    = new char[mant.length * 4];
+        char[] rawdigits = new char[mant.length * 4];
         int p;
         int e;
         int ae;
@@ -2669,7 +2669,7 @@ public class Dfp implements CalculusFieldElement<Dfp> {
      * @see #toDouble()
      */
     public double[] toSplitDouble() {
-        double split[] = new double[2];
+        double[] split = new double[2];
         long mask = 0xffffffffc0000000L;
 
         split[0] = Double.longBitsToDouble(Double.doubleToLongBits(toDouble()) & mask);

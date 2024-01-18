@@ -1241,7 +1241,7 @@ public final class Array2DRowRealMatrixTest {
 
         int n = matrix.getRowDimension();
         int m = matrix.getColumnDimension();
-        double out[][] = new double[m][n];
+        double[][] out = new double[m][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 out[i][j] = matrix.getEntry(permutation[i], j);

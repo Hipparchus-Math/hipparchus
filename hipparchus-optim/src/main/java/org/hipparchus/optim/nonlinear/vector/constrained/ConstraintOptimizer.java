@@ -26,10 +26,13 @@ import org.hipparchus.optim.OptimizationData;
  */
 public abstract class ConstraintOptimizer extends BaseMultivariateOptimizer<LagrangeSolution> {
 
+    /** Simple constructor.
+     */
     public ConstraintOptimizer() {
         super(null);
     }
 
+    /** {@inheritDoc} */
     @Override
     public LagrangeSolution optimize(OptimizationData... optData)
         throws MathIllegalStateException {

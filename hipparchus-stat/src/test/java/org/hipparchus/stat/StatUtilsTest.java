@@ -75,10 +75,10 @@ public final class StatUtilsTest {
 
         values = new double[] { ONE };
 
-        assertTrue("Mean of n = 1 set should be value of single item n1",
-                   StatUtils.mean(values) == ONE);
-        assertTrue("Variance of n = 1 set should be zero",
-                   StatUtils.variance(values) == 0);
+        assertEquals("Mean of n = 1 set should be value of single item n1", ONE,
+                     StatUtils.mean(values), 0.0);
+        assertEquals("Variance of n = 1 set should be zero", 0,
+                     StatUtils.variance(values), 0.0);
     }
 
     @Test
@@ -406,10 +406,10 @@ public final class StatUtilsTest {
 
     @Test
     public void testDifferenceStats() {
-        double sample1[] = {1d, 2d, 3d, 4d};
-        double sample2[] = {1d, 3d, 4d, 2d};
-        double diff[] = {0d, -1d, -1d, 2d};
-        double small[] = {1d, 4d};
+        double[] sample1 = {1d, 2d, 3d, 4d};
+        double[] sample2 = {1d, 3d, 4d, 2d};
+        double[] diff = {0d, -1d, -1d, 2d};
+        double[] small = {1d, 4d};
         double meanDifference = StatUtils.meanDifference(sample1, sample2);
         assertEquals(StatUtils.sumDifference(sample1, sample2), StatUtils.sum(diff), TOLERANCE);
         assertEquals(meanDifference, StatUtils.mean(diff), TOLERANCE);
@@ -457,8 +457,9 @@ public final class StatUtilsTest {
      */
     @Test
     public void testNormalize1() {
-        double sample[] = { 50, 100 };
-        double expectedSample[] = { -25 / FastMath.sqrt(1250), 25 / FastMath.sqrt(1250) };
+        double[] sample = { 50, 100 };
+        double[]
+                        expectedSample = { -25 / FastMath.sqrt(1250), 25 / FastMath.sqrt(1250) };
         double[] out = StatUtils.normalize(sample);
         for (int i = 0; i < out.length; i++) {
             assertTrue(Precision.equals(out[i], expectedSample[i], 1));
@@ -473,12 +474,12 @@ public final class StatUtilsTest {
     public void testNormalize2() {
         // create an sample with 77 values
         int length = 77;
-        double sample[] = new double[length];
+        double[] sample = new double[length];
         for (int i = 0; i < length; i++) {
             sample[i] = FastMath.random();
         }
         // normalize this sample
-        double standardizedSample[] = StatUtils.normalize(sample);
+        double[] standardizedSample = StatUtils.normalize(sample);
 
         DescriptiveStatistics stats = new DescriptiveStatistics();
         // Add the data from the array

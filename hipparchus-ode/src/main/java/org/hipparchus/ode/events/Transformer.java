@@ -27,7 +27,7 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
 
-/** Transformer for {@link ODEEventHandler#g(org.hipparchus.ode.ODEStateAndDerivative) g functions}.
+/** Transformer for {@link ODEEventDetector#g(org.hipparchus.ode.ODEStateAndDerivative) g functions}.
  * @see EventSlopeFilter
  * @see FilterType
  */

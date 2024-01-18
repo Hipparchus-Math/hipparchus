@@ -123,7 +123,7 @@ public class ComplexUtils {
      * @return an array of {@code Complex} objects.
      */
     public static Complex[] convertToComplex(double[] real) {
-        final Complex c[] = new Complex[real.length];
+        final Complex[] c = new Complex[real.length];
         for (int i = 0; i < real.length; i++) {
             c[i] = new Complex(real[i], 0);
         }
