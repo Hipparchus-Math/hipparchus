@@ -22,6 +22,9 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.FastMath;
 
+/** TBD.
+ * @since 3.1
+ */
 public class ADMMQPModifiedRuizEquilibrium {
 
     /** Minimum scaling value. */
@@ -36,7 +39,7 @@ public class ADMMQPModifiedRuizEquilibrium {
     /** Vector of weights for linear terms. */
     private final RealVector q;
 
-    /** constraints coefficients matrix. */
+    /** Constraints coefficients matrix. */
     private final RealMatrix A;
 
     /** TBC. */
@@ -57,12 +60,21 @@ public class ADMMQPModifiedRuizEquilibrium {
     /** Inverse of c. */
     private double cinv;
 
+    /** Simple constructor
+     * @param H square matrix of weights for quadratic terms
+     * @param A constraints coefficients matrix
+     * @param q vector of weights for linear terms
+     */
     public ADMMQPModifiedRuizEquilibrium(RealMatrix H, RealMatrix A, RealVector q) {
         this.H  = H;
         this.A  = A;
         this.q  = q;
     }
 
+    /** Normalize matrices.
+     * @param epsilon TBD
+     * @param maxIteration TBD
+     */
     public void normalize(double epsilon, int maxIteration) {
 
         int iteration = 0;
@@ -141,18 +153,31 @@ public class ADMMQPModifiedRuizEquilibrium {
 
     }
 
+    /** Get scaled square matrix of weights for quadratic terms.
+     * @return scaled square matrix of weights for quadratic terms
+     */
     public RealMatrix getScaledH() {
         return D.multiply(H).multiply(D).scalarMultiply(c);
     }
 
+    /** Get scaled constraints coefficients matrix.
+     * @return scaled constraints coefficients matrix
+     */
     public RealMatrix getScaledA() {
         return E.multiply(A).multiply(D);
     }
 
-    public RealVector getScaledq() {
+    /** Get scaled vector of weights for linear terms.
+     * @return scaled vector of weights for linear terms
+     */
+    public RealVector getScaledQ() {
         return D.operate(q.mapMultiply(c));
     }
 
+    /** Get scaled upper bound
+     * @param lb1 unscaled lower bound
+     * @return scaled lower bound
+     */
     public RealVector getScaledLUb(RealVector lb1) {
         RealVector scaledLUb = new ArrayRealVector(lb1.getDimension());
         for (int i = 0; i < lb1.getDimension(); i++) {
@@ -165,22 +190,42 @@ public class ADMMQPModifiedRuizEquilibrium {
         return scaledLUb;
     }
 
+    /** Unscale solution vector.
+     * @param x scaled solution vector
+     * @return unscaled solution vector
+     */
     public RealVector unscaleX(RealVector x) {
         return D.operate(x);
     }
 
+    /** Unscale Y vector.
+     * @param y scaled Y vector
+     * @return unscaled Y vector
+     */
     public RealVector unscaleY(RealVector y) {
         return E.operate(y).mapMultiply(cinv);
     }
 
+    /** Unscale Z vector.
+     * @param z scaled Z vector
+     * @return unscaled Z vector
+     */
     public RealVector unscaleZ(RealVector z) {
         return Einv.operate(z);
     }
 
+    /** Scale solution vector.
+     * @param x unscaled solution vector
+     * @return scaled solution vector
+     */
     RealVector scaleX(RealVector x) {
         return Dinv.operate(x);
     }
 
+    /** Limit scaling.
+     * @param v vector to limit
+     * @return rescaled vector, taking scaling limits into account
+     */
     private RealVector limitScaling(RealVector v) {
 
         RealVector result = new ArrayRealVector(v.getDimension());

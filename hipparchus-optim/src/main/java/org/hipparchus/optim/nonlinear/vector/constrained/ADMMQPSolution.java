@@ -29,24 +29,46 @@ public class ADMMQPSolution extends LagrangeSolution {
     /** Z auxiliary variable. */
     private final RealVector z;
 
+    /** Simple constructor.
+     * @param x solution
+     * @param lambda Lagrange multipliers
+     * @param value objective function value
+     */
     public ADMMQPSolution(RealVector x, RealVector lambda, Double value) {
         super(x, lambda, value);
         this.v = null;
         this.z = null;
     }
 
+    /** Simple constructor.
+     * @param x solution
+     * @param v V-tilde auxiliary variable
+     */
     public ADMMQPSolution(RealVector x, RealVector v) {
         super(x, null, 0.0);
         this.v = v;
         this.z = null;
     }
 
+    /** Simple constructor.
+     * @param x solution
+     * @param v V-tilde auxiliary variable
+     * @param y Lagrange multipliers
+     * @param z Z auxiliary variable
+     */
     public ADMMQPSolution(final RealVector x, final RealVector v, final RealVector y, final RealVector z) {
         super(x, y, 0.0);
         this.v = v;
         this.z = z;
     }
 
+    /** Simple constructor.
+     * @param x solution
+     * @param v V-tilde auxiliary variable
+     * @param y Lagrange multipliers
+     * @param z Z auxiliary variable
+     * @param value objective function value
+     */
     public ADMMQPSolution(final RealVector x, final RealVector v, final RealVector y, final RealVector z, double value) {
         super(x, y, value);
         this.v = v;

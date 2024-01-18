@@ -72,9 +72,6 @@ public class SQPOptimizerS extends ConstraintOptimizer {
     /** Value of the inequality constraint. */
     private RealVector inequalityEval;
 
-    /** Value of the objective function. */
-    private double functionEval;
-
     /** Gradient of the objective function. */
     private RealVector functionGradient;
 
@@ -162,7 +159,7 @@ public class SQPOptimizerS extends ConstraintOptimizer {
         RealVector r = new ArrayRealVector(me + mi, 1.0);
         ArrayList<Double> oldPenalty = new ArrayList<Double>();
         //INITIAL VALUES
-        functionEval = this.obj.value(x);
+        double functionEval = this.obj.value(x);
         functionGradient = this.obj.gradient(x);
         double maxGrad = functionGradient.getLInfNorm();
 

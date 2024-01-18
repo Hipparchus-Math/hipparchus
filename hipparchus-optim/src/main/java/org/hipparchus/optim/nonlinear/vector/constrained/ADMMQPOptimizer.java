@@ -34,15 +34,12 @@ import org.hipparchus.util.MathUtils;
 
 /**
  * Alternating Direction Method of Multipliers Quadratic Programming Optimizer.
- * <br/>
- * min 0.5XT * Q*X + G*X * a
- * <br/>
- * A * X = b1
- * <br/>
- * B * X>=b2
- * <br/>
- * lb<=C * X<=ub
- * <br/>
+ * \[
+ *  min \frac{1}{2} X^T Q X + G X a\\
+ *  A  X    = B_1\\
+ *  B  X    \ge B_2\\
+ *  l_b \le C X \le u_b
+ * \]
  * Algorithm based on paper:"An Operator Splitting Solver for Quadratic Programs(Bartolomeo Stellato, Goran Banjac, Paul Goulart, Alberto Bemporad, Stephen Boyd,February 13 2020)"
  * @since 3.1
  */
@@ -222,7 +219,7 @@ public class ADMMQPOptimizer extends QPOptimizer {
             dec.normalize(settings.getEps(), settings.getScaleMaxIteration());
             Hw = dec.getScaledH();
             Aw = dec.getScaledA();
-            qw = dec.getScaledq();
+            qw = dec.getScaledQ();
             lbw = dec.getScaledLUb(lb);
             ubw = dec.getScaledLUb(ub);
 

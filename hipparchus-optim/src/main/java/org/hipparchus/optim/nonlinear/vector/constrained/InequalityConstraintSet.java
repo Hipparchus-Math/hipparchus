@@ -22,6 +22,9 @@ import java.util.List;
 
 import org.hipparchus.optim.OptimizationData;
 
+/** Set of inequality Constraints.
+ * @since 3.1
+ */
 public class InequalityConstraintSet implements OptimizationData {
 
     /** Constraints. */

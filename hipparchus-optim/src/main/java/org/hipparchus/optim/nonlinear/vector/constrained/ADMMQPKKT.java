@@ -36,7 +36,7 @@ public class ADMMQPKKT implements KarushKuhnTuckerSolver<ADMMQPSolution> {
     /** Vector of weights for linear terms. */
     private RealVector q;
 
-    /** constraints coefficients matrix. */
+    /** Constraints coefficients matrix. */
     private RealMatrix A;
 
     /** Regularization term sigma for Karush–Kuhn–Tucker solver. */
@@ -81,6 +81,11 @@ public class ADMMQPKKT implements KarushKuhnTuckerSolver<ADMMQPSolution> {
         return new ADMMQPSolution(z.getSubVector(0,b1.getDimension()), z.getSubVector(b1.getDimension(), b2.getDimension()));
     }
 
+    /** Update steps
+     * @param newSigma new regularization term sigma for Karush–Kuhn–Tucker solver
+     * @param me number of equality constraints
+     * @param rho new step size
+     */
     public void updateSigmaRho(double newSigma, int me, double rho) {
         this.sigma = newSigma;
         this.H = H.add(MatrixUtils.createRealIdentityMatrix(H.getColumnDimension()).scalarMultiply(newSigma));
@@ -94,6 +99,17 @@ public class ADMMQPKKT implements KarushKuhnTuckerSolver<ADMMQPSolution> {
         dsX = new EigenDecompositionSymmetric(M).getSolver();
     }
 
+    /** Initialize problem
+     * @param newH square matrix of weights for quadratic term
+     * @param newA constraints coefficients matrix
+     * @param newQ TBD
+     * @param me number of equality constraints
+     * @param newLb lower bound
+     * @param newUb upper bound
+     * @param rho step size
+     * @param newSigma regularization term sigma for Karush–Kuhn–Tucker solver
+     * @param newAlpha alpha filter for ADMM iteration
+     */
     public void initialize(RealMatrix newH, RealMatrix newA, RealVector newQ,
                            int me, RealVector newLb, RealVector newUb,
                            double rho, double newSigma, double newAlpha) {

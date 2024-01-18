@@ -23,10 +23,7 @@ import org.hipparchus.optim.OptimizationData;
  */
 public class SQPOption implements OptimizationData {
 
-    /** Default convergence criteria
-     * dxT * H*dx<epsilon * epsilon SQP_ConvCriteria = 0
-     * ||dx||<=sqrt(epsilon)*(1+||x|| SQP_ConvCriteria = 1
-     */
+    /** Default convergence criteria. */
     public static final int DEFAULT_CONV_CRITERIA = 1;
 
     /** Default tolerance for convergence and active constraint. */
@@ -83,6 +80,11 @@ public class SQPOption implements OptimizationData {
     /** Enable or Disable using direct the function Hessian. */
     private boolean useFunHessian;
 
+    /** Simple constructor.
+     * <p>
+     * This constructor uses all defaults values.
+     * </p>
+     */
     public SQPOption() {
         this.convCriteria           = DEFAULT_CONV_CRITERIA;
         this.eps                    = DEFAULT_EPSILON;

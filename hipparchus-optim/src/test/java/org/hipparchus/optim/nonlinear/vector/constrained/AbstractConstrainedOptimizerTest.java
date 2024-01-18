@@ -37,7 +37,7 @@ public abstract class AbstractConstrainedOptimizerTest {
      * @param multipliersTolerance tolerance on multipliers  (L₁ norm)
      * @param expectedValue expected objective function value
      * @param valueTolerance tolerance on objective function value
-     * @param objective objective function
+     * @param objectiveFunction objective function
      * @param initialGuess initial guess (may be null)
      * @param constraints contraints
      */

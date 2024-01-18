@@ -24,7 +24,7 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.MathUtils;
 
-/** Given h, c, d, implements \(\frac{1}{2}x^T P X + Q^T x + d\).
+/** Given P, Q, d, implements \(\frac{1}{2}x^T P X + Q^T x + d\).
  * The gradient is P x + Q^T, and the Hessian is P
  * @since 3.1
  */
