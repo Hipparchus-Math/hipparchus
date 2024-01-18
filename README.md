@@ -38,52 +38,55 @@ You can download source and binaries from our [download page](https://hipparchus
 Alternatively you can pull it from the central Maven repositories using `pom.xml` settings:
 
 ```xml
-<properties>
-  <!-- change the Hipparchus version number to the one suiting your needs -->
-  <myprojectname.hipparchus.version>3.0</myprojectname.hipparchus.version>
-</properties>
+<project>
+  <properties>
+    <!-- change the Hipparchus version number to the one suiting your needs -->
+    <myprojectname.hipparchus.version>3.0</myprojectname.hipparchus.version>
+  </properties>
 
-<dependency>
-  <groupId>org.hipparchus</groupId>
-  <artifactId>hipparchus-core</artifactId>
-  <version>${myprojectname.hipparchus.version}</version>
-</dependency>
-<dependency>
-  <groupId>org.hipparchus</groupId>
-  <artifactId>hipparchus-clustering</artifactId>
-  <version>${myprojectname.hipparchus.version}</version>
-</dependency>
-<dependency>
-  <groupId>org.hipparchus</groupId>
-  <artifactId>hipparchus-fft</artifactId>
-  <version>${myprojectname.hipparchus.version}</version>
-</dependency>
-<dependency>
-  <groupId>org.hipparchus</groupId>
-  <artifactId>hipparchus-fitting</artifactId>
-  <version>${myprojectname.hipparchus.version}</version>
-</dependency>
-<dependency>
-  <groupId>org.hipparchus</groupId>
-  <artifactId>hipparchus-geometry</artifactId>
-  <version>${myprojectname.hipparchus.version}</version>
-</dependency>
-<dependency>
-  <groupId>org.hipparchus</groupId>
-  <artifactId>hipparchus-ode</artifactId>
-  <version>${myprojectname.hipparchus.version}</version>
-</dependency>
-<dependency>
-  <groupId>org.hipparchus</groupId>
-  <artifactId>hipparchus-optim</artifactId>
-  <version>${myprojectname.hipparchus.version}</version>
-</dependency>
-<dependency>
-  <groupId>org.hipparchus</groupId>
-  <artifactId>hipparchus-stat</artifactId>
-  <version>${myprojectname.hipparchus.version}</version>
-</dependency>
-
+  <dependencies>
+    <dependency>
+      <groupId>org.hipparchus</groupId>
+      <artifactId>hipparchus-core</artifactId>
+      <version>${myprojectname.hipparchus.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hipparchus</groupId>
+      <artifactId>hipparchus-clustering</artifactId>
+      <version>${myprojectname.hipparchus.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hipparchus</groupId>
+      <artifactId>hipparchus-fft</artifactId>
+      <version>${myprojectname.hipparchus.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hipparchus</groupId>
+      <artifactId>hipparchus-fitting</artifactId>
+      <version>${myprojectname.hipparchus.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hipparchus</groupId>
+      <artifactId>hipparchus-geometry</artifactId>
+      <version>${myprojectname.hipparchus.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hipparchus</groupId>
+      <artifactId>hipparchus-ode</artifactId>
+      <version>${myprojectname.hipparchus.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hipparchus</groupId>
+      <artifactId>hipparchus-optim</artifactId>
+      <version>${myprojectname.hipparchus.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hipparchus</groupId>
+      <artifactId>hipparchus-stat</artifactId>
+      <version>${myprojectname.hipparchus.version}</version>
+    </dependency>
+  </dependencies>
+</project>
 ```
 
 If your project previously depended on [Apache Commons Math](https://commons.apache.org/proper/commons-math/)
