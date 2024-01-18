@@ -922,6 +922,7 @@
         </reportSets>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
         <version>${hipparchus.maven-pmd-plugin.version}</version>
         <reportSets>
@@ -1063,9 +1064,6 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-install-plugin</artifactId>
             <version>${hipparchus.maven-install-plugin.version}</version>
-            <configuration>
-              <createChecksum>true</createChecksum>
-            </configuration>
           </plugin>
         </plugins>
       </build>
@@ -1098,7 +1096,7 @@
                         </goals>
                       </pluginExecutionFilter>
                       <action>
-                        <ignore></ignore>
+                        <ignore/>
                       </action>
                      </pluginExecution>
                   </pluginExecutions>
