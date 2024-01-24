@@ -90,10 +90,10 @@ public class HighamHall54FieldIntegrator<T extends CalculusFieldElement<T>>
     @Override
     public T[] getC() {
         final T[] c = MathArrays.buildArray(getField(), 6);
-        c[0] = fraction(2, 9);
-        c[1] = fraction(1, 3);
-        c[2] = fraction(1, 2);
-        c[3] = fraction(3, 5);
+        c[0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 2, 9);
+        c[1] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 1, 3);
+        c[2] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 1, 2);
+        c[3] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 3, 5);
         c[4] = getField().getOne();
         c[5] = getField().getOne();
         return c;
@@ -106,27 +106,27 @@ public class HighamHall54FieldIntegrator<T extends CalculusFieldElement<T>>
         for (int i = 0; i < a.length; ++i) {
             a[i] = MathArrays.buildArray(getField(), i + 1);
         }
-        a[0][0] = fraction(     2,     9);
-        a[1][0] = fraction(     1,    12);
-        a[1][1] = fraction(     1,     4);
-        a[2][0] = fraction(     1,     8);
+        a[0][0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),      2,     9);
+        a[1][0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),      1,    12);
+        a[1][1] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),      1,     4);
+        a[2][0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),      1,     8);
         a[2][1] = getField().getZero();
-        a[2][2] = fraction(     3,     8);
-        a[3][0] = fraction(    91,   500);
-        a[3][1] = fraction(   -27,   100);
-        a[3][2] = fraction(    78,   125);
-        a[3][3] = fraction(     8,   125);
-        a[4][0] = fraction(   -11,    20);
-        a[4][1] = fraction(    27,    20);
-        a[4][2] = fraction(    12,     5);
-        a[4][3] = fraction(   -36,     5);
-        a[4][4] = fraction(     5,     1);
-        a[5][0] = fraction(     1,    12);
+        a[2][2] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),     3,     8);
+        a[3][0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),     91,   500);
+        a[3][1] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),    -27,   100);
+        a[3][2] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),     78,   125);
+        a[3][3] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),      8,   125);
+        a[4][0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),    -11,    20);
+        a[4][1] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),     27,    20);
+        a[4][2] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),     12,     5);
+        a[4][3] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),    -36,     5);
+        a[4][4] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),      5,     1);
+        a[5][0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),      1,    12);
         a[5][1] = getField().getZero();
-        a[5][2] = fraction(    27,    32);
-        a[5][3] = fraction(    -4,     3);
-        a[5][4] = fraction(   125,    96);
-        a[5][5] = fraction(     5,    48);
+        a[5][2] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),     27,    32);
+        a[5][3] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),     -4,     3);
+        a[5][4] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),    125,    96);
+        a[5][5] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),      5,    48);
         return a;
     }
 
@@ -134,12 +134,12 @@ public class HighamHall54FieldIntegrator<T extends CalculusFieldElement<T>>
     @Override
     public T[] getB() {
         final T[] b = MathArrays.buildArray(getField(), 7);
-        b[0] = fraction(  1, 12);
+        b[0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),   1, 12);
         b[1] = getField().getZero();
-        b[2] = fraction( 27, 32);
-        b[3] = fraction( -4,  3);
-        b[4] = fraction(125, 96);
-        b[5] = fraction(  5, 48);
+        b[2] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),  27, 32);
+        b[3] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),  -4,  3);
+        b[4] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 125, 96);
+        b[5] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),   5, 48);
         b[6] = getField().getZero();
         return b;
     }

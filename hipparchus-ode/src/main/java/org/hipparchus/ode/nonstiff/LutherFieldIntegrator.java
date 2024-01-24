@@ -80,8 +80,8 @@ public class LutherFieldIntegrator<T extends CalculusFieldElement<T>>
         final T q = getField().getZero().add(21).sqrt();
         final T[] c = MathArrays.buildArray(getField(), 6);
         c[0] = getField().getOne();
-        c[1] = fraction(1, 2);
-        c[2] = fraction(2, 3);
+        c[1] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 1, 2);
+        c[2] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 2, 3);
         c[3] = q.subtract(7).divide(-14);
         c[4] = q.add(7).divide(14);
         c[5] = getField().getOne();
@@ -97,10 +97,10 @@ public class LutherFieldIntegrator<T extends CalculusFieldElement<T>>
             a[i] = MathArrays.buildArray(getField(), i + 1);
         }
         a[0][0] = getField().getOne();
-        a[1][0] = fraction(3,  8);
-        a[1][1] = fraction(1,  8);
-        a[2][0] = fraction(8, 27);
-        a[2][1] = fraction(2, 27);
+        a[1][0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 3,  8);
+        a[1][1] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 1,  8);
+        a[2][0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 8, 27);
+        a[2][1] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 2, 27);
         a[2][2] = a[2][0];
         a[3][0] = q.multiply(   9).add(  -21).divide( 392);
         a[3][1] = q.multiply(   8).add(  -56).divide( 392);
@@ -112,7 +112,7 @@ public class LutherFieldIntegrator<T extends CalculusFieldElement<T>>
         a[4][3] = q.multiply( 363).add(   63).divide(1960);
         a[4][4] = q.multiply( 392).add( 2352).divide(1960);
         a[5][0] = q.multiply( 105).add(  330).divide( 180);
-        a[5][1] = fraction(2, 3);
+        a[5][1] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 2, 3);
         a[5][2] = q.multiply( 280).add( -200).divide( 180);
         a[5][3] = q.multiply(-189).add(  126).divide( 180);
         a[5][4] = q.multiply(-126).add( -686).divide( 180);
@@ -125,11 +125,11 @@ public class LutherFieldIntegrator<T extends CalculusFieldElement<T>>
     public T[] getB() {
 
         final T[] b = MathArrays.buildArray(getField(), 7);
-        b[0] = fraction( 1,  20);
+        b[0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(),  1,  20);
         b[1] = getField().getZero();
-        b[2] = fraction(16,  45);
+        b[2] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 16,  45);
         b[3] = getField().getZero();
-        b[4] = fraction(49, 180);
+        b[4] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 49, 180);
         b[5] = b[4];
         b[6] = b[0];
 

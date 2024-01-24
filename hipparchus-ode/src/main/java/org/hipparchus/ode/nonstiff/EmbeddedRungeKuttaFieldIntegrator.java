@@ -71,7 +71,7 @@ import org.hipparchus.util.MathUtils;
 
 public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldElement<T>>
     extends AdaptiveStepsizeFieldIntegrator<T>
-    implements FieldButcherArrayProvider<T> {
+    implements FieldExplicitRungeKuttaIntegrator<T> {
 
     /** Index of the pre-computed derivative for <i>fsal</i> methods. */
     private final int fsal;
@@ -85,6 +85,15 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
     /** External weights for the high order method from Butcher array. */
     private final T[] b;
 
+    /** Time steps from Butcher array (without the first zero). */
+    private double[] realC = new double[0];
+
+    /** Internal weights from Butcher array (without the first empty row). Real version, optional. */
+    private double[][] realA = new double[0][];
+
+    /** External weights for the high order method from Butcher array. Real version, optional. */
+    private double[] realB = new double[0];
+
     /** Stepsize control exponent. */
     private final double exp;
 
@@ -96,6 +105,9 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
 
     /** Maximal growth factor for stepsize control. */
     private T maxGrowth;
+
+    /** Flag setting whether coefficients in Butcher array are interpreted as Field or real numbers. */
+    private boolean usingFieldCoefficients;
 
     /** Build a Runge-Kutta integrator with the given Butcher array.
      * @param field field to which the time and state vector elements belong
@@ -150,6 +162,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
                                                 final double[] vecRelativeTolerance) {
 
         super(field, name, minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
+        this.usingFieldCoefficients = false;
 
         this.fsal = fsal;
         this.c    = getC();
@@ -165,24 +178,6 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
 
     }
 
-    /** Create a fraction.
-     * @param p numerator
-     * @param q denominator
-     * @return p/q computed in the instance field
-     */
-    protected T fraction(final int p, final int q) {
-        return getField().getOne().newInstance(((double) p) / q);
-    }
-
-    /** Create a fraction.
-     * @param p numerator
-     * @param q denominator
-     * @return p/q computed in the instance field
-     */
-    protected T fraction(final double p, final double q) {
-        return getField().getOne().newInstance(p / q);
-    }
-
     /** Create an interpolator.
      * @param forward integration direction indicator
      * @param yDotK slopes at the intermediate points
@@ -195,6 +190,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
                                                                               FieldODEStateAndDerivative<T> globalPreviousState,
                                                                               FieldODEStateAndDerivative<T> globalCurrentState,
                                                                               FieldEquationsMapper<T> mapper);
+
     /** Get the order of the method.
      * @return order of the method
      */
@@ -214,6 +210,38 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
         this.safety = safety;
     }
 
+    /**
+     * Setter for the flag between real or Field coefficients in the Butcher array.
+     *
+     * @param usingFieldCoefficients new value for flag
+     */
+    public void setUsingFieldCoefficients(boolean usingFieldCoefficients) {
+        this.usingFieldCoefficients = usingFieldCoefficients;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isUsingFieldCoefficients() {
+        return usingFieldCoefficients;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getNumberOfStages() {
+        return b.length;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected FieldODEStateAndDerivative<T> initIntegration(FieldExpandableODE<T> eqn, FieldODEState<T> s0, T t) {
+        if (!isUsingFieldCoefficients()) {
+            realA = getRealA();
+            realB = getRealB();
+            realC = getRealC();
+        }
+        return super.initIntegration(eqn, s0, t);
+    }
+
     /** {@inheritDoc} */
     @Override
     public FieldODEStateAndDerivative<T> integrate(final FieldExpandableODE<T> equations,
@@ -225,9 +253,9 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
         final boolean forward = finalTime.subtract(initialState.getTime()).getReal() > 0;
 
         // create some internal working arrays
-        final int   stages = c.length + 1;
+        final int   stages = getNumberOfStages();
         final T[][] yDotK  = MathArrays.buildArray(getField(), stages, -1);
-        final T[]   yTmp   = MathArrays.buildArray(getField(), equations.getMapper().getTotalDimension());
+        T[]   yTmp   = MathArrays.buildArray(getField(), equations.getMapper().getTotalDimension());
 
         // set up integration control objects
         T  hNew           = getField().getZero();
@@ -267,28 +295,17 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends CalculusFieldE
                 }
 
                 // next stages
-                for (int k = 1; k < stages; ++k) {
-
-                    for (int j = 0; j < y.length; ++j) {
-                        T sum = yDotK[0][j].multiply(a[k-1][0]);
-                        for (int l = 1; l < k; ++l) {
-                            sum = sum.add(yDotK[l][j].multiply(a[k-1][l]));
-                        }
-                        yTmp[j] = y[j].add(getStepSize().multiply(sum));
-                    }
-
-                    yDotK[k] = computeDerivatives(getStepStart().getTime().add(getStepSize().multiply(c[k-1])), yTmp);
-
+                if (isUsingFieldCoefficients()) {
+                    FieldExplicitRungeKuttaIntegrator.applyInternalButcherWeights(getEquations(),
+                            getStepStart().getTime(), y, getStepSize(), a, c, yDotK);
+                    yTmp = FieldExplicitRungeKuttaIntegrator.applyExternalButcherWeights(y, yDotK, getStepSize(), b);
+                } else {
+                    FieldExplicitRungeKuttaIntegrator.applyInternalButcherWeights(getEquations(),
+                            getStepStart().getTime(), y, getStepSize(), realA, realC, yDotK);
+                    yTmp = FieldExplicitRungeKuttaIntegrator.applyExternalButcherWeights(y, yDotK, getStepSize(), realB);
                 }
 
-                // estimate the state at the end of the step
-                for (int j = 0; j < y.length; ++j) {
-                    T sum    = yDotK[0][j].multiply(b[0]);
-                    for (int l = 1; l < stages; ++l) {
-                        sum = sum.add(yDotK[l][j].multiply(b[l]));
-                    }
-                    yTmp[j] = y[j].add(getStepSize().multiply(sum));
-                }
+                incrementEvaluations(stages - 1);
 
                 // estimate the error at the end of the step
                 error = estimateError(yDotK, y, yTmp, getStepSize());

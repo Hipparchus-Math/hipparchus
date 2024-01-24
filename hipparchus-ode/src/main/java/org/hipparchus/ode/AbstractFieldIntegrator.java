@@ -273,6 +273,14 @@ public abstract class AbstractFieldIntegrator<T extends CalculusFieldElement<T>>
         return equations.computeDerivatives(t, y);
     }
 
+    /** Increment evaluations of derivatives.
+     *
+     * @param nTimes number of evaluations to increment
+     */
+    protected void incrementEvaluations(final int nTimes) {
+        evaluations.increment(nTimes);
+    }
+
     /** Set the stateInitialized flag.
      * <p>This method must be called by integrators with the value
      * {@code false} before they start integration, so a proper lazy

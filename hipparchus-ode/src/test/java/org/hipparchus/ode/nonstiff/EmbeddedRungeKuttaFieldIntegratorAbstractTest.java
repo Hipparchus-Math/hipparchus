@@ -31,6 +31,8 @@ import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
+import org.hipparchus.complex.Complex;
+import org.hipparchus.complex.ComplexField;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.euclidean.threed.FieldRotation;
@@ -1047,6 +1049,34 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
         integrator.integrate(ode, new FieldODEState<>(t0, initState), tf);
 
+    }
+
+    @Test
+    public void testUsingFieldCoefficients()
+            throws MathIllegalArgumentException, MathIllegalStateException {
+
+        final ComplexField field = ComplexField.getInstance();
+        final TestFieldProblem1<Complex> pb = new TestFieldProblem1<>(field);
+
+        final double minStep = 1e-6;
+        final double maxStep = 10.;
+        final double scalAbsoluteTolerance = 1e-12;
+        final double scalRelativeTolerance = 1e-8;
+        final EmbeddedRungeKuttaFieldIntegrator<Complex> integratorUsingFieldCoefficients = createIntegrator(field,
+                minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
+        integratorUsingFieldCoefficients.setUsingFieldCoefficients(true);
+        final FieldODEStateAndDerivative<Complex> terminalState1 = integratorUsingFieldCoefficients.integrate(new FieldExpandableODE<>(pb),
+                pb.getInitialState(), pb.getFinalTime());
+        final EmbeddedRungeKuttaFieldIntegrator<Complex> integratorNotUsingFieldCoefficients = createIntegrator(field,
+                minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
+        integratorNotUsingFieldCoefficients.setUsingFieldCoefficients(false);
+        final FieldODEStateAndDerivative<Complex> terminalState2 = integratorNotUsingFieldCoefficients.integrate(new FieldExpandableODE<>(pb),
+                pb.getInitialState(), pb.getFinalTime());
+
+        final int size = terminalState1.getCompleteStateDimension();
+        for (int i = 0; i < size; i++) {
+            Assert.assertEquals(terminalState1.getCompleteState()[i], terminalState2.getCompleteState()[i]);
+        }
     }
 
     @Test
