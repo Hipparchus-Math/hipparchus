@@ -73,7 +73,7 @@ public class MidpointFieldIntegrator<T extends CalculusFieldElement<T>> extends 
     @Override
     public T[][] getA() {
         final T[][] a = MathArrays.buildArray(getField(), 1, 1);
-        a[0][0] = fraction(1, 2);
+        a[0][0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 1, 2);
         return a;
     }
 

@@ -29,24 +29,12 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.Gradient;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
+import org.hipparchus.complex.Complex;
+import org.hipparchus.complex.ComplexField;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.FieldExpandableODE;
-import org.hipparchus.ode.FieldODEIntegrator;
-import org.hipparchus.ode.FieldODEState;
-import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
-import org.hipparchus.ode.FieldSecondaryODE;
-import org.hipparchus.ode.LocalizedODEFormats;
-import org.hipparchus.ode.TestFieldProblem1;
-import org.hipparchus.ode.TestFieldProblem2;
-import org.hipparchus.ode.TestFieldProblem3;
-import org.hipparchus.ode.TestFieldProblem4;
-import org.hipparchus.ode.TestFieldProblem5;
-import org.hipparchus.ode.TestFieldProblem6;
-import org.hipparchus.ode.TestFieldProblemAbstract;
-import org.hipparchus.ode.TestFieldProblemHandler;
+import org.hipparchus.ode.*;
 import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.FieldAdaptableInterval;
 import org.hipparchus.ode.events.FieldODEEventDetector;
@@ -773,6 +761,30 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         final Gradient defaultStep = Gradient.constant(3, 60.);
         RungeKuttaFieldIntegrator<Gradient> integrator = createIntegrator(defaultStep.getField(), defaultStep);
         Assert.assertEquals(defaultStep.getReal(), integrator.getDefaultStep().getReal(), 0.);
+    }
+
+    @Test
+    public void testUsingFieldCoefficients()
+            throws MathIllegalArgumentException, MathIllegalStateException {
+
+        final ComplexField field = ComplexField.getInstance();
+        final TestFieldProblem1<Complex> pb = new TestFieldProblem1<>(field);
+        final double step = FastMath.abs(0.001 * (pb.getFinalTime().getReal() - pb.getInitialState().getTime().getReal()));
+        final Complex fieldStep = new Complex(step);
+
+        final RungeKuttaFieldIntegrator<Complex> integratorUsingFieldCoefficients = createIntegrator(field, fieldStep);
+        integratorUsingFieldCoefficients.setUsingFieldCoefficients(true);
+        final FieldODEStateAndDerivative<Complex> terminalState1 = integratorUsingFieldCoefficients.integrate(new FieldExpandableODE<>(pb),
+                pb.getInitialState(), pb.getFinalTime());
+        final RungeKuttaFieldIntegrator<Complex> integratorNotUsingFieldCoefficients = createIntegrator(field, fieldStep);
+        integratorNotUsingFieldCoefficients.setUsingFieldCoefficients(false);
+        final FieldODEStateAndDerivative<Complex> terminalState2 = integratorNotUsingFieldCoefficients.integrate(new FieldExpandableODE<>(pb),
+                pb.getInitialState(), pb.getFinalTime());
+
+        final int size = terminalState1.getCompleteStateDimension();
+        for (int i = 0; i < size; i++) {
+            Assert.assertEquals(terminalState1.getCompleteState()[i], terminalState2.getCompleteState()[i]);
+        }
     }
 
 }
