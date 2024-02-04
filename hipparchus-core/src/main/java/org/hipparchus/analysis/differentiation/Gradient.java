@@ -64,13 +64,23 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
     /** Gradient of the function. */
     private final double[] grad;
 
-    /** Build an instance with values and unitialized derivatives array.
+    /** Build an instance with values and uninitialized derivatives array.
      * @param value value of the function
      * @param freeParameters number of free parameters
      */
     private Gradient(final double value, int freeParameters) {
         this.value = value;
         this.grad  = new double[freeParameters];
+    }
+
+    /** Build an instance with value and derivatives array, used for performance internally (no copy).
+     * @param value value of the function
+     * @param gradient derivatives
+     * @since 3.1
+     */
+    private Gradient(final double[] gradient, final double value) {
+        this.value = value;
+        this.grad  = gradient;
     }
 
     /** Build an instance with values and derivative.
@@ -208,61 +218,61 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
     /** {@inheritDoc} */
     @Override
     public Gradient add(final Gradient a) {
-        final Gradient result = newInstance(value + a.value);
+        final double[] gradient = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = grad[i] + a.grad[i];
+            gradient[i] = grad[i] + a.grad[i];
         }
-        return result;
+        return new Gradient(gradient, value + a.value);
     }
 
     /** {@inheritDoc} */
     @Override
     public Gradient subtract(final Gradient a) {
-        final Gradient result = newInstance(value - a.value);
+        final double[] gradient = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = grad[i] - a.grad[i];
+            gradient[i] = grad[i] - a.grad[i];
         }
-        return result;
+        return new Gradient(gradient, value - a.value);
     }
 
     /** {@inheritDoc} */
     @Override
     public Gradient multiply(final int n) {
-        final Gradient result = newInstance(value * n);
+        final double[] gradient = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = grad[i] * n;
+            gradient[i] = grad[i] * n;
         }
-        return result;
+        return new Gradient(gradient, value * n);
     }
 
     /** {@inheritDoc} */
     @Override
     public Gradient multiply(final double a) {
-        final Gradient result = newInstance(value * a);
+        final double[] gradient = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = grad[i] * a;
+            gradient[i] = grad[i] * a;
         }
-        return result;
+        return new Gradient(gradient, value * a);
     }
 
     /** {@inheritDoc} */
     @Override
     public Gradient multiply(final Gradient a) {
-        final Gradient result = newInstance(value * a.value);
+        final double[] gradient = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = grad[i] * a.value + value * a.grad[i];
+            gradient[i] = grad[i] * a.value + value * a.grad[i];
         }
-        return result;
+        return new Gradient(gradient, value * a.value);
     }
 
     /** {@inheritDoc} */
     @Override
     public Gradient divide(final double a) {
-        final Gradient result = newInstance(value / a);
+        final double[] gradient = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = grad[i] / a;
+            gradient[i] = grad[i] / a;
         }
-        return result;
+        return new Gradient(gradient, value / a);
     }
 
     /** {@inheritDoc} */
@@ -270,11 +280,11 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
     public Gradient divide(final Gradient a) {
         final double inv1 = 1.0 / a.value;
         final double inv2 = inv1 * inv1;
-        final Gradient result = newInstance(value * inv1);
+        final double[] gradient = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = (grad[i] * a.value - value * a.grad[i]) * inv2;
+            gradient[i] = (grad[i] * a.value - value * a.grad[i]) * inv2;
         }
-        return result;
+        return new Gradient(gradient, value * inv1);
     }
 
     /** {@inheritDoc} */
@@ -285,22 +295,22 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
         final double rem = FastMath.IEEEremainder(value, a.value);
         final double k   = FastMath.rint((value - rem) / a.value);
 
-        final Gradient result = newInstance(rem);
+        final double[] gradient = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = grad[i] - k * a.grad[i];
+            gradient[i] = grad[i] - k * a.grad[i];
         }
-        return result;
+        return new Gradient(gradient, rem);
 
     }
 
     /** {@inheritDoc} */
     @Override
     public Gradient negate() {
-        final Gradient result = newInstance(-value);
+        final double[] gradient = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = -grad[i];
+            gradient[i] = -grad[i];
         }
-        return result;
+        return new Gradient(gradient, -value);
     }
 
     /** {@inheritDoc} */
@@ -339,11 +349,11 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
     /** {@inheritDoc} */
     @Override
     public Gradient scalb(final int n) {
-        final Gradient result = newInstance(FastMath.scalb(value, n));
+        final double[] gradient = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = FastMath.scalb(grad[i], n);
+            gradient[i] = FastMath.scalb(grad[i], n);
         }
-        return result;
+        return new Gradient(gradient, FastMath.scalb(value, n));
     }
 
     /** {@inheritDoc} */
@@ -395,11 +405,11 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
     /** {@inheritDoc} */
     @Override
     public Gradient compose(final double f0, final double f1) {
-        final Gradient result = newInstance(f0);
+        final double[] gradient = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = f1 * grad[i];
+            gradient[i] = f1 * grad[i];
         }
-        return result;
+        return new Gradient(gradient, f0);
     }
 
     /** {@inheritDoc} */
@@ -419,11 +429,11 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
         } else {
             final double aX = FastMath.pow(a, x.value);
             final double aXlnA = aX * FastMath.log(a);
-            final Gradient result = x.newInstance(aX);
-            for (int i = 0; i < x.grad.length; ++i) {
-                result.grad[i] =  aXlnA * x.grad[i];
+            final double[] gradient = new double[x.getFreeParameters()];
+            for (int i = 0; i < gradient.length; ++i) {
+                gradient[i] =  aXlnA * x.grad[i];
             }
-            return result;
+            return new Gradient(gradient, aX);
         }
     }
 
@@ -453,12 +463,14 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
     @Override
     public FieldSinCos<Gradient> sinCos() {
         final SinCos sinCos = FastMath.sinCos(value);
-        final Gradient sin = newInstance(sinCos.sin());
-        final Gradient cos = newInstance(sinCos.cos());
+        final double[] gradSin = new double[grad.length];
+        final double[] gradCos = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            sin.grad[i] =  +grad[i] * sinCos.cos();
-            cos.grad[i] =  -grad[i] * sinCos.sin();
+            gradSin[i] =  grad[i] * sinCos.cos();
+            gradCos[i] =  -grad[i] * sinCos.sin();
         }
+        final Gradient sin = new Gradient(gradSin, sinCos.sin());
+        final Gradient cos = new Gradient(gradCos, sinCos.cos());
         return new FieldSinCos<>(sin, cos);
     }
 
@@ -466,44 +478,46 @@ public class Gradient implements Derivative1<Gradient>, Serializable {
     @Override
     public Gradient atan2(final Gradient x) {
         final double inv = 1.0 / (value * value + x.value * x.value);
-        final Gradient result = newInstance(FastMath.atan2(value, x.value));
+        final double[] gradient = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = (x.value * grad[i] - x.grad[i] * value) * inv;
+            gradient[i] = (x.value * grad[i] - x.grad[i] * value) * inv;
         }
-        return result;
+        return new Gradient(gradient, FastMath.atan2(value, x.value));
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldSinhCosh<Gradient> sinhCosh() {
         final SinhCosh sinhCosh = FastMath.sinhCosh(value);
-        final Gradient sinh = newInstance(sinhCosh.sinh());
-        final Gradient cosh = newInstance(sinhCosh.cosh());
+        final double[] gradSinh = new double[grad.length];
+        final double[] gradCosh = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            sinh.grad[i] = grad[i] * sinhCosh.cosh();
-            cosh.grad[i] = grad[i] * sinhCosh.sinh();
+            gradSinh[i] = grad[i] * sinhCosh.cosh();
+            gradCosh[i] = grad[i] * sinhCosh.sinh();
         }
+        final Gradient sinh = new Gradient(gradSinh, sinhCosh.sinh());
+        final Gradient cosh = new Gradient(gradCosh, sinhCosh.cosh());
         return new FieldSinhCosh<>(sinh, cosh);
     }
 
     /** {@inheritDoc} */
     @Override
     public Gradient toDegrees() {
-        final Gradient result = newInstance(FastMath.toDegrees(value));
+        final double[] gradient = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = FastMath.toDegrees(grad[i]);
+            gradient[i] = FastMath.toDegrees(grad[i]);
         }
-        return result;
+        return new Gradient(gradient, FastMath.toDegrees(value));
     }
 
     /** {@inheritDoc} */
     @Override
     public Gradient toRadians() {
-        final Gradient result = newInstance(FastMath.toRadians(value));
+        final double[] gradient = new double[grad.length];
         for (int i = 0; i < grad.length; ++i) {
-            result.grad[i] = FastMath.toRadians(grad[i]);
+            gradient[i] = FastMath.toRadians(grad[i]);
         }
-        return result;
+        return new Gradient(gradient, FastMath.toRadians(value));
     }
 
     /** Evaluate Taylor expansion a derivative structure.
