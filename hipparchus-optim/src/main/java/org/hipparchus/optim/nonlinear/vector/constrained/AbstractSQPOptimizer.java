@@ -100,6 +100,15 @@ public abstract class AbstractSQPOptimizer extends ConstraintOptimizer {
 
     }
 
+    /**
+     * Compute Lagrangian gradient for variable X
+     *
+     * @param currentGrad current gradient
+     * @param jacobConstraint Jacobian
+     * @param x value of x
+     * @param y value of y
+     * @return Lagrangian
+     */
     protected RealVector lagrangianGradX(final RealVector currentGrad, final RealMatrix jacobConstraint,
                                          final RealVector x, final RealVector y) {
 
