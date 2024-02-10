@@ -28,6 +28,22 @@ import org.junit.Test;
 public class AbstractSQPOptimizerTest {
 
     @Test
+    public void testLagrangianGradX() {
+        // GIVEN
+        final TestSQPOptimizer testSQPOptimizer = new TestSQPOptimizer();
+        final TwiceDifferentiableFunction multivariateFunction = new RosenbrockFunction();
+        final ObjectiveFunction objectiveFunction = new ObjectiveFunction(multivariateFunction);
+        testSQPOptimizer.parseOptimizationData(objectiveFunction);
+        final RealVector expectedVector = MatrixUtils.createRealVector(new double[] { 1 });
+        // WHEN
+        final RealVector actualVector = testSQPOptimizer.lagrangianGradX(expectedVector, null,null, null);
+        // THEN
+        for (int i = 0; i < expectedVector.getDimension(); i++) {
+            Assert.assertEquals(expectedVector.getEntry(i), actualVector.getEntry(i), 0);
+        }
+    }
+
+    @Test
     public void testParseOptimizationData() {
         // GIVEN
         final TestSQPOptimizer testSQPOptimizer = new TestSQPOptimizer();
