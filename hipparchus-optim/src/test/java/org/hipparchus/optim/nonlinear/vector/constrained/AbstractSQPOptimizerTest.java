@@ -16,34 +16,99 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.linear.MatrixUtils;
+import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
+import org.junit.Assert;
 import org.junit.Test;
 
-public abstract class AbstractSQPOptimizerTest extends AbstractConstrainedOptimizerTest {
+public class AbstractSQPOptimizerTest {
 
     @Test
-    public void test1() {
-        QuadraticFunction q = new QuadraticFunction(new double[][] { { 4.0, -2.0 }, { -2.0, 4.0 } },
-                                                    new double[] { 6.0, 0.0 },
-                                                    0.0);
+    public void testParseOptimizationData() {
+        // GIVEN
+        final TestSQPOptimizer testSQPOptimizer = new TestSQPOptimizer();
+        final SQPOption expectedOptions = new SQPOption();
+        final TwiceDifferentiableFunction multivariateFunction = new RosenbrockFunction();
+        final ObjectiveFunction objectiveFunction = new ObjectiveFunction(multivariateFunction);
+        // WHEN
+        testSQPOptimizer.parseOptimizationData(objectiveFunction, expectedOptions);
+        // THEN
+        Assert.assertEquals(expectedOptions, testSQPOptimizer.getSettings());
+    }
 
-        // y = 1
-        LinearEqualityConstraint eqc = new LinearEqualityConstraint(new double[][] { { 0.0, 1.0 } },
-                                                                    new double[] { 1.0 });
+    @Test
+    public void testParseOptimizationDataException() {
+        // GIVEN
+        final TestSQPOptimizer testSQPOptimizer = new TestSQPOptimizer();
+        final EqualityConstraint equalityConstraint = new TestEqualityConstraints(100000);
+        final TwiceDifferentiableFunction multivariateFunction = new RosenbrockFunction();
+        final ObjectiveFunction objectiveFunction = new ObjectiveFunction(multivariateFunction);
+        // WHEN
+        try {
+            testSQPOptimizer.parseOptimizationData(objectiveFunction, equalityConstraint);
+            Assert.fail();
+        } catch (final MathIllegalArgumentException exception) {
+            Assert.assertEquals("rank of constraints must be lesser than domain dimension, but 100,000 >= 2",
+                    exception.getMessage());
+        }
+    }
 
+    @Test
+    public void testParseOptimizationDataException2() {
+        // GIVEN
+        final TestSQPOptimizer testSQPOptimizer = new TestSQPOptimizer();
+        final EqualityConstraint equalityConstraint = new TestEqualityConstraints(0);
+        final TwiceDifferentiableFunction multivariateFunction = new RosenbrockFunction();
+        final ObjectiveFunction objectiveFunction = new ObjectiveFunction(multivariateFunction);
+        // WHEN
+        try {
+            testSQPOptimizer.parseOptimizationData(objectiveFunction, equalityConstraint);
+            Assert.fail();
+        } catch (final MathIllegalArgumentException exception) {
+            Assert.assertEquals(LocalizedCoreFormats.ZERO_NOT_ALLOWED.getSourceString(),
+                    exception.getMessage());
+        }
+    }
 
-        // x > 0, y > 0, x + y > 2
-        LinearInequalityConstraint ineqc = new LinearInequalityConstraint(new double[][] { { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 } },
-                                                                          new double[] { 0.0, 0.0, 2.0 });
+    private static class TestSQPOptimizer extends AbstractSQPOptimizer {
 
+        TestSQPOptimizer() {
+            super();
+        }
 
-        doTestProblem(new double[] {  1, 1 },       2.5e-5,
-                      new double[] { -6, 0, 0, 8 }, 2.6e-4,
-                      8, 2.0e-4,
-                      new ObjectiveFunction(q),
-                      new double[] { 3.5, 3.5 },
-                      eqc, ineqc);
+        @Override
+        protected LagrangeSolution doOptimize() {
+            return null;
+        }
+    }
 
+    private static class TestEqualityConstraints extends EqualityConstraint {
+
+        private final int dimension;
+
+        TestEqualityConstraints(final int dimension) {
+            super(MatrixUtils.createRealVector(new double[dimension]));
+            this.dimension = dimension;
+        }
+
+        @Override
+        public int dim() {
+            return dimension;
+        }
+
+        @Override
+        public RealVector value(RealVector x) {
+            return null;
+        }
+
+        @Override
+        public RealMatrix jacobian(RealVector x) {
+            return null;
+        }
     }
 
 }

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
-public class SQPOptimizerGMTest extends AbstractSQPOptimizerTest {
+public class SQPOptimizerGMTest extends AbstractTestAbstractSQPOptimizerTest {
 
     protected ConstraintOptimizer buildOptimizer() {
         return new SQPOptimizerGM();

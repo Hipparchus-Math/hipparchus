@@ -20,7 +20,7 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.junit.Test;
 
-public class SQPOptimizerSTest extends AbstractSQPOptimizerTest {
+public class SQPOptimizerSTest extends AbstractTestAbstractSQPOptimizerTest {
 
     protected ConstraintOptimizer buildOptimizer() {
         return new SQPOptimizerS();
