@@ -1,23 +1,9 @@
-/*
- * Licensed to the Hipparchus project under one or more
- * contributor license agreements.  See the NOTICE file distributed with
- * this work for additional information regarding copyright ownership.
- * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
- * (the "License"); you may not use this file except in compliance with
- * the License.  You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
@@ -114,5 +100,35 @@ public abstract class AbstractSQPOptimizer extends ConstraintOptimizer {
 
     }
 
+    protected RealVector lagrangianGradX(final RealVector currentGrad, final RealMatrix jacobConstraint,
+                                         final RealVector x, final RealVector y) {
+
+        int me = 0;
+        int mi = 0;
+        RealVector partial = currentGrad.copy();
+        if (getEqConstraint() != null) {
+            me = getEqConstraint().dimY();
+
+            RealVector ye = y.getSubVector(0, me);
+            RealMatrix jacobe = jacobConstraint.getSubMatrix(0, me - 1, 0, x.getDimension() - 1);
+
+            RealVector firstTerm = jacobe.transpose().operate(ye);
+
+            // partial = partial.subtract(firstTerm).add(jacobe.transpose().operate(ge).mapMultiply(rho));
+            partial = partial.subtract(firstTerm);
+        }
+
+        if (getIqConstraint() != null) {
+            mi = getIqConstraint().dimY();
+
+            RealVector yi = y.getSubVector(me, mi);
+            RealMatrix jacobi = jacobConstraint.getSubMatrix(me, me + mi - 1, 0, x.getDimension() - 1);
+
+            RealVector firstTerm = jacobi.transpose().operate(yi);
+
+            partial = partial.subtract(firstTerm);
+        }
+        return partial;
+    }
 
 }

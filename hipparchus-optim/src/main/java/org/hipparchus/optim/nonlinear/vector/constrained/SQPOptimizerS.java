@@ -245,7 +245,7 @@ public class SQPOptimizerS extends AbstractSQPOptimizer {
             RealVector oldGradient = functionGradient;
             RealMatrix oldJacob = constraintJacob;
             // RealVector old1 = penaltyFunctionGradX(oldGradient,x, y.add((dy.subtract(y)).mapMultiply(alfa)),r);
-            RealVector old1 = lagrangianGradX(oldGradient, oldJacob, x, y.add((dy.subtract(y)).mapMultiply(alfa)), rho);
+            RealVector old1 = lagrangianGradX(oldGradient, oldJacob, x, y.add((dy.subtract(y)).mapMultiply(alfa)));
             functionEval = alfaF;
             functionGradient = this.getObj().gradient(x.add(dx.mapMultiply(alfa)));
             if (this.getEqConstraint() != null) {
@@ -259,7 +259,7 @@ public class SQPOptimizerS extends AbstractSQPOptimizer {
 
             constraintJacob = computeJacobianConstraint(x.add(dx.mapMultiply(alfa)));
             // RealVector new1 = penaltyFunctionGradX(functionGradient,x.add(dx.mapMultiply(alfa)), y.add((dy.subtract(y)).mapMultiply(alfa)),r);
-            RealVector new1 = lagrangianGradX(functionGradient, constraintJacob, x.add(dx.mapMultiply(alfa)), y.add((dy.subtract(y)).mapMultiply(alfa)), rho);
+            RealVector new1 = lagrangianGradX(functionGradient, constraintJacob, x.add(dx.mapMultiply(alfa)), y.add((dy.subtract(y)).mapMultiply(alfa)));
 
             if (failedSearch == 2) {
                 hessian = MatrixUtils.createRealIdentityMatrix(x.getDimension());
@@ -383,36 +383,6 @@ public class SQPOptimizerS extends AbstractSQPOptimizer {
             // partial -= firstTerm.dotProduct(dx) - secondTerm.dotProduct(dx) + g.dotProduct(dyi.ebeMultiply(mask));
         }
 
-        return partial;
-    }
-
-    private RealVector lagrangianGradX(RealVector currentGrad, RealMatrix jacobConstraint, RealVector x, RealVector y, double rho) {
-
-        int me = 0;
-        int mi = 0;
-        RealVector partial = currentGrad.copy();
-        if (getEqConstraint() != null) {
-            me = getEqConstraint().dimY();
-
-            RealVector ye = y.getSubVector(0, me);
-            RealMatrix jacobe = jacobConstraint.getSubMatrix(0, me - 1, 0, x.getDimension() - 1);
-
-            RealVector firstTerm = jacobe.transpose().operate(ye);
-
-            // partial = partial.subtract(firstTerm).add(jacobe.transpose().operate(ge).mapMultiply(rho));
-            partial = partial.subtract(firstTerm);
-        }
-
-        if (getIqConstraint() != null) {
-            mi = getIqConstraint().dimY();
-
-            RealVector yi = y.getSubVector(me, mi);
-            RealMatrix jacobi = jacobConstraint.getSubMatrix(me, me + mi - 1, 0, x.getDimension() - 1);
-
-            RealVector firstTerm = jacobi.transpose().operate(yi);
-
-            partial = partial.subtract(firstTerm);
-        }
         return partial;
     }
 
