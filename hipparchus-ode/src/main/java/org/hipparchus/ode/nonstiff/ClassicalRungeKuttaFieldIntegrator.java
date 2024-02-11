@@ -81,7 +81,7 @@ public class ClassicalRungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
         for (int i = 0; i < a.length; ++i) {
             a[i] = MathArrays.buildArray(getField(), i + 1);
         }
-        a[0][0] = fraction(1, 2);
+        a[0][0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 1, 2);
         a[1][0] = getField().getZero();
         a[1][1] = a[0][0];
         a[2][0] = getField().getZero();
@@ -94,8 +94,8 @@ public class ClassicalRungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
     @Override
     public T[] getB() {
         final T[] b = MathArrays.buildArray(getField(), 4);
-        b[0] = fraction(1, 6);
-        b[1] = fraction(1, 3);
+        b[0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 1, 6);
+        b[1] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 1, 3);
         b[2] = b[1];
         b[3] = b[0];
         return b;

@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.1" date="TBD" description="TBD.">
+      <action dev="serrof" type="add" issue="issues/300">
+        Add possibility to use real coefficients for Butcher array based Field integrators.
+      </action>
       <action dev="serrof" type="fix" issue="issues/290">
         Fixes regressions with Field in event detection.
       </action>

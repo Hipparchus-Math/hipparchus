@@ -32,7 +32,6 @@ import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -59,8 +58,7 @@ import org.hipparchus.util.MathArrays;
  */
 
 public abstract class RungeKuttaFieldIntegrator<T extends CalculusFieldElement<T>>
-    extends AbstractFieldIntegrator<T>
-    implements FieldButcherArrayProvider<T> {
+    extends AbstractFieldIntegrator<T> implements FieldExplicitRungeKuttaIntegrator<T> {
 
     /** Time steps from Butcher array (without the first zero). */
     private final T[] c;
@@ -71,8 +69,20 @@ public abstract class RungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
     /** External weights for the high order method from Butcher array. */
     private final T[] b;
 
+    /** Time steps from Butcher array (without the first zero). */
+    private double[] realC = new double[0];
+
+    /** Internal weights from Butcher array (without the first empty row). Real version, optional. */
+    private double[][] realA = new double[0][];
+
+    /** External weights for the high order method from Butcher array. Real version, optional. */
+    private double[] realB = new double[0];
+
     /** Integration step. */
     private final T step;
+
+    /** Flag setting whether coefficients in Butcher array are interpreted as Field or real numbers. */
+    private boolean usingFieldCoefficients;
 
     /** Simple constructor.
      * Build a Runge-Kutta integrator with the given
@@ -87,6 +97,7 @@ public abstract class RungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
         this.a    = getA();
         this.b    = getB();
         this.step = step.abs();
+        this.usingFieldCoefficients = false;
     }
 
     /** Getter for the default, positive step-size assigned at constructor level.
@@ -96,13 +107,25 @@ public abstract class RungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
         return this.step;
     }
 
-    /** Create a fraction.
-     * @param p numerator
-     * @param q denominator
-     * @return p/q computed in the instance field
+    /**
+     * Setter for the flag between real or Field coefficients in the Butcher array.
+     *
+     * @param usingFieldCoefficients new value for flag
      */
-    protected T fraction(final int p, final int q) {
-        return getField().getZero().newInstance(((double) p) / q);
+    public void setUsingFieldCoefficients(boolean usingFieldCoefficients) {
+        this.usingFieldCoefficients = usingFieldCoefficients;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isUsingFieldCoefficients() {
+        return usingFieldCoefficients;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getNumberOfStages() {
+        return b.length;
     }
 
     /** Create an interpolator.
@@ -120,6 +143,17 @@ public abstract class RungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
 
     /** {@inheritDoc} */
     @Override
+    protected FieldODEStateAndDerivative<T> initIntegration(FieldExpandableODE<T> eqn, FieldODEState<T> s0, T t) {
+        if (!isUsingFieldCoefficients()) {
+            realA = getRealA();
+            realB = getRealB();
+            realC = getRealC();
+        }
+        return super.initIntegration(eqn, s0, t);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public FieldODEStateAndDerivative<T> integrate(final FieldExpandableODE<T> equations,
                                                    final FieldODEState<T> initialState, final T finalTime)
         throws MathIllegalArgumentException, MathIllegalStateException {
@@ -129,9 +163,9 @@ public abstract class RungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
         final boolean forward = finalTime.subtract(initialState.getTime()).getReal() > 0;
 
         // create some internal working arrays
-        final int   stages = c.length + 1;
+        final int   stages = getNumberOfStages();
         final T[][] yDotK  = MathArrays.buildArray(getField(), stages, -1);
-        final T[]   yTmp   = MathArrays.buildArray(getField(), equations.getMapper().getTotalDimension());
+        MathArrays.buildArray(getField(), equations.getMapper().getTotalDimension());
 
         // set up integration control objects
         if (forward) {
@@ -157,28 +191,19 @@ public abstract class RungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
             yDotK[0]    = getStepStart().getCompleteDerivative();
 
             // next stages
-            for (int k = 1; k < stages; ++k) {
-
-                for (int j = 0; j < y.length; ++j) {
-                    T sum = yDotK[0][j].multiply(a[k-1][0]);
-                    for (int l = 1; l < k; ++l) {
-                        sum = sum.add(yDotK[l][j].multiply(a[k-1][l]));
-                    }
-                    yTmp[j] = y[j].add(getStepSize().multiply(sum));
-                }
-
-                yDotK[k] = computeDerivatives(getStepStart().getTime().add(getStepSize().multiply(c[k-1])), yTmp);
-
+            final T[] yTmp;
+            if (isUsingFieldCoefficients()) {
+                FieldExplicitRungeKuttaIntegrator.applyInternalButcherWeights(getEquations(), getStepStart().getTime(),
+                        y, getStepSize(), a, c, yDotK);
+                yTmp = FieldExplicitRungeKuttaIntegrator.applyExternalButcherWeights(y, yDotK, getStepSize(), b);
+            } else {
+                FieldExplicitRungeKuttaIntegrator.applyInternalButcherWeights(getEquations(), getStepStart().getTime(),
+                        y, getStepSize(), realA, realC, yDotK);
+                yTmp = FieldExplicitRungeKuttaIntegrator.applyExternalButcherWeights(y, yDotK, getStepSize(), realB);
             }
 
-            // estimate the state at the end of the step
-            for (int j = 0; j < y.length; ++j) {
-                T sum = yDotK[0][j].multiply(b[0]);
-                for (int l = 1; l < stages; ++l) {
-                    sum = sum.add(yDotK[l][j].multiply(b[l]));
-                }
-                yTmp[j] = y[j].add(getStepSize().multiply(sum));
-            }
+            incrementEvaluations(stages - 1);
+
             final T stepEnd   = getStepStart().getTime().add(getStepSize());
             final T[] yDotTmp = computeDerivatives(stepEnd, yTmp);
             final FieldODEStateAndDerivative<T> stateTmp = equations.getMapper().mapStateAndDerivative(stepEnd, yTmp, yDotTmp);
@@ -205,72 +230,6 @@ public abstract class RungeKuttaFieldIntegrator<T extends CalculusFieldElement<T
         setStepStart(null);
         setStepSize(null);
         return finalState;
-
-    }
-
-    /** Fast computation of a single step of ODE integration.
-     * <p>This method is intended for the limited use case of
-     * very fast computation of only one step without using any of the
-     * rich features of general integrators that may take some time
-     * to set up (i.e. no step handlers, no events handlers, no additional
-     * states, no interpolators, no error control, no evaluations count,
-     * no sanity checks ...). It handles the strict minimum of computation,
-     * so it can be embedded in outer loops.</p>
-     * <p>
-     * This method is <em>not</em> used at all by the {@link #integrate(FieldExpandableODE,
-     * FieldODEState, CalculusFieldElement)} method. It also completely ignores the step set at
-     * construction time, and uses only a single step to go from {@code t0} to {@code t}.
-     * </p>
-     * <p>
-     * As this method does not use any of the state-dependent features of the integrator,
-     * it should be reasonably thread-safe <em>if and only if</em> the provided differential
-     * equations are themselves thread-safe.
-     * </p>
-     * @param equations differential equations to integrate
-     * @param t0 initial time
-     * @param y0 initial value of the state vector at t0
-     * @param t target time for the integration
-     * (can be set to a value smaller than {@code t0} for backward integration)
-     * @return state vector at {@code t}
-     */
-    public T[] singleStep(final FieldOrdinaryDifferentialEquation<T> equations,
-                          final T t0, final T[] y0, final T t) {
-
-        // create some internal working arrays
-        final T[] y       = y0.clone();
-        final int stages  = c.length + 1;
-        final T[][] yDotK = MathArrays.buildArray(getField(), stages, -1);
-        final T[] yTmp    = y0.clone();
-
-        // first stage
-        final T h = t.subtract(t0);
-        yDotK[0] = equations.computeDerivatives(t0, y);
-
-        // next stages
-        for (int k = 1; k < stages; ++k) {
-
-            for (int j = 0; j < y0.length; ++j) {
-                T sum = yDotK[0][j].multiply(a[k-1][0]);
-                for (int l = 1; l < k; ++l) {
-                    sum = sum.add(yDotK[l][j].multiply(a[k-1][l]));
-                }
-                yTmp[j] = y[j].add(h.multiply(sum));
-            }
-
-            yDotK[k] = equations.computeDerivatives(t0.add(h.multiply(c[k-1])), yTmp);
-
-        }
-
-        // estimate the state at the end of the step
-        for (int j = 0; j < y0.length; ++j) {
-            T sum = yDotK[0][j].multiply(b[0]);
-            for (int l = 1; l < stages; ++l) {
-                sum = sum.add(yDotK[l][j].multiply(b[l]));
-            }
-            y[j] = y[j].add(h.multiply(sum));
-        }
-
-        return y;
 
     }
 
