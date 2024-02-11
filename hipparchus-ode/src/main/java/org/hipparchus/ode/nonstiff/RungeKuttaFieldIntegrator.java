@@ -32,7 +32,6 @@ import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.util.MathArrays;
 
 /**
