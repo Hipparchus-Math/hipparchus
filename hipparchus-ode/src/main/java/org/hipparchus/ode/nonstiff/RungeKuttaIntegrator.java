@@ -26,7 +26,6 @@ import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
-import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.util.FastMath;
 
 /**
