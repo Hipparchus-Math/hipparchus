@@ -16,11 +16,8 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
+import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.junit.Assert;
 import org.junit.Test;
@@ -101,6 +98,21 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
     }
 
     @Test
+    public void testOptimizeWithGuess() {
+        // GIVEN
+        final ADMMQPOptimizer optimizer = createOptimizerOnSimpleProblem(false, false);
+        optimizer.parseOptimizationData(new InitialGuess(new double[2]));
+
+        // WHEN
+        final LagrangeSolution solution  = optimizer.optimize();
+
+        // THEN
+        Assert.assertNotNull(optimizer.getConvergenceChecker());
+        Assert.assertTrue(optimizer.isConverged());
+        Assert.assertEquals(0., solution.getValue(), 0);
+    }
+
+    @Test
     public void testOptimizeWithoutScaling() {
         // GIVEN
         final ADMMQPOptimizer optimizer = createOptimizerOnSimpleProblem(false, false);
@@ -115,9 +127,23 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
     }
 
     @Test
-    public void testOptimizeWithPolish() {
+    public void testOptimizeWithPolishWithScaling() {
         // GIVEN
         final ADMMQPOptimizer optimizer = createOptimizerOnSimpleProblem(true, true);
+
+        // WHEN
+        final LagrangeSolution solution  = optimizer.optimize();
+
+        // THEN
+        Assert.assertNotNull(optimizer.getConvergenceChecker());
+        Assert.assertTrue(optimizer.isConverged());
+        Assert.assertEquals(0., solution.getValue(), 0);
+    }
+
+    @Test
+    public void testOptimizeWithPolishWithoutScaling() {
+        // GIVEN
+        final ADMMQPOptimizer optimizer = createOptimizerOnSimpleProblem(true, false);
 
         // WHEN
         final LagrangeSolution solution  = optimizer.optimize();
