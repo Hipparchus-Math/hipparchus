@@ -34,6 +34,60 @@ import org.junit.Test;
 
 public class RotationTest {
 
+    @Test
+    public void testIssue304() {
+
+        double[][] originalMatrix = { //
+            { 0.0, 1.0, 0.0 }, //
+            { 0.0, 0.0, -1.0 }, //
+            { -1.0, 0.0, 0.0 } //
+        };
+        {
+            System.out.println("Rotation 1");
+            Rotation rotation = new Rotation(originalMatrix, 1.0e-10);
+            double[] angles = rotation.getAngles(RotationOrder.ZYX, RotationConvention.VECTOR_OPERATOR);
+            printArray(angles);
+        }
+        {
+            System.out.println("Rotation 2");
+            Rotation rotation = new Rotation(RotationOrder.ZYX, RotationConvention.VECTOR_OPERATOR, 0, FastMath.PI / 2, 0);
+            double[][] matrix = rotation.getMatrix();
+            printMatrix(matrix);
+        }
+        {
+            System.out.println("Rotation 3");
+            Rotation rotation = new Rotation(RotationOrder.ZYX, RotationConvention.VECTOR_OPERATOR, 0, FastMath.PI / 2, FastMath.PI / 2);
+            double[][] matrix = rotation.getMatrix();
+            printMatrix(matrix);
+        }
+        {
+            System.out.println("Rotation 4");
+            Rotation rotation = new Rotation(RotationOrder.ZYX, RotationConvention.VECTOR_OPERATOR, 0, FastMath.PI / 2, FastMath.PI / 2);
+            double[][] matrix = rotation.getMatrix();
+            printMatrix(matrix);
+
+            double[] angles = new Rotation(matrix, 1.0e-10).getAngles(RotationOrder.ZYX, RotationConvention.VECTOR_OPERATOR);
+            printArray(angles);
+        }
+    }
+
+    private static void printArray(double[] angles) {
+        for (double angle : angles) {
+            System.out.print(" " + angle);
+        }
+        System.out.println();
+    }
+
+    private static void printMatrix(double[][] matrix) {
+        for (double[] row : matrix) {
+            for (double e : row) {
+                System.out.print(" " + e);
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
   @Test
   public void testIdentity() {
 
