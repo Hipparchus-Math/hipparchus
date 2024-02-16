@@ -49,61 +49,102 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
         PiecewiseBicubicSplineInterpolatingFunction bcf = new PiecewiseBicubicSplineInterpolatingFunction(xval, yval, zval);
 
         try {
-            bcf = new PiecewiseBicubicSplineInterpolatingFunction(null, yval, zval);
+            new PiecewiseBicubicSplineInterpolatingFunction(null, yval, zval);
             Assert.fail("Failed to detect x null pointer");
         } catch (NullArgumentException iae) {
             // Expected.
         }
 
         try {
-            bcf = new PiecewiseBicubicSplineInterpolatingFunction(xval, null, zval);
+            new PiecewiseBicubicSplineInterpolatingFunction(xval, null, zval);
             Assert.fail("Failed to detect y null pointer");
         } catch (NullArgumentException iae) {
             // Expected.
         }
 
         try {
-            bcf = new PiecewiseBicubicSplineInterpolatingFunction(xval, yval, null);
+            new PiecewiseBicubicSplineInterpolatingFunction(xval, yval, null);
             Assert.fail("Failed to detect z null pointer");
         } catch (NullArgumentException iae) {
             // Expected.
         }
 
         try {
-            double[] xval1 = { 0.0, 1.0, 2.0, 3.0 };
-            bcf = new PiecewiseBicubicSplineInterpolatingFunction(xval1, yval, zval);
+            final double[][] fnull = new double[1][];
+            new PiecewiseBicubicSplineInterpolatingFunction(xval, yval, fnull);
+            Assert.fail("Failed to detect z[0] null pointer");
+        } catch (NullArgumentException iae) {
+            // Expected.
+        }
+
+        try {
+            final double[][] f = new double[1][1];
+            new PiecewiseBicubicSplineInterpolatingFunction(new double[0], yval, f);
+            Assert.fail("Failed to detect empty x pointer");
+        } catch (MathIllegalArgumentException iae) {
+            // Expected.
+        }
+
+        try {
+            final double[][] f = new double[1][1];
+            new PiecewiseBicubicSplineInterpolatingFunction(xval, new double[0], f);
+            Assert.fail("Failed to detect empty y pointer");
+        } catch (MathIllegalArgumentException iae) {
+            // Expected.
+        }
+
+
+        try {
+            final double[][] f = new double[1][0];
+            new PiecewiseBicubicSplineInterpolatingFunction(xval, yval, f);
+            Assert.fail("Failed to detect empty z[0] pointer");
+        } catch (MathIllegalArgumentException iae) {
+            // Expected.
+        }
+
+        try {
+            final double[] xval1 = { 0.0, 1.0, 2.0, 3.0 };
+            new PiecewiseBicubicSplineInterpolatingFunction(xval1, yval, zval);
             Assert.fail("Failed to detect insufficient x data");
         } catch (MathIllegalArgumentException iae) {
             // Expected.
         }
 
         try {
-            double[] yval1 = { 0.0, 1.0, 2.0, 3.0 };
-            bcf = new PiecewiseBicubicSplineInterpolatingFunction(xval, yval1, zval);
+            final double[] yval1 = { 0.0, 1.0, 2.0, 3.0 };
+            new PiecewiseBicubicSplineInterpolatingFunction(xval, yval1, zval);
             Assert.fail("Failed to detect insufficient y data");
         } catch (MathIllegalArgumentException iae) {
             // Expected.
         }
 
         try {
-            double[][] zval1 = new double[4][4];
-            bcf = new PiecewiseBicubicSplineInterpolatingFunction(xval, yval, zval1);
+            final double[][] zval1 = new double[4][4];
+            new PiecewiseBicubicSplineInterpolatingFunction(xval, yval, zval1);
             Assert.fail("Failed to detect insufficient z data");
         } catch (MathIllegalArgumentException iae) {
             // Expected.
         }
 
         try {
-            double[] xval1 = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
-            bcf = new PiecewiseBicubicSplineInterpolatingFunction(xval1, yval, zval);
+            final double[][] zval1 = new double[5][4];
+            new PiecewiseBicubicSplineInterpolatingFunction(xval, yval, zval1);
+            Assert.fail("Failed to detect insufficient z data");
+        } catch (MathIllegalArgumentException iae) {
+            // Expected.
+        }
+
+        try {
+            final double[] xval1 = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
+            new PiecewiseBicubicSplineInterpolatingFunction(xval1, yval, zval);
             Assert.fail("Failed to detect data set array with different sizes.");
         } catch (MathIllegalArgumentException iae) {
             // Expected.
         }
 
         try {
-            double[] yval1 = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
-            bcf = new PiecewiseBicubicSplineInterpolatingFunction(xval, yval1, zval);
+            final double[] yval1 = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
+            new PiecewiseBicubicSplineInterpolatingFunction(xval, yval1, zval);
             Assert.fail("Failed to detect data set array with different sizes.");
         } catch (MathIllegalArgumentException iae) {
             // Expected.
@@ -111,8 +152,8 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
 
         // X values not sorted.
         try {
-            double[] xval1 = { 0.0, 1.0, 0.5, 7.0, 3.5 };
-            bcf = new PiecewiseBicubicSplineInterpolatingFunction(xval1, yval, zval);
+            final double[] xval1 = { 0.0, 1.0, 0.5, 7.0, 3.5 };
+            new PiecewiseBicubicSplineInterpolatingFunction(xval1, yval, zval);
             Assert.fail("Failed to detect unsorted x arguments.");
         } catch (MathIllegalArgumentException iae) {
             // Expected.
@@ -120,8 +161,8 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
 
         // Y values not sorted.
         try {
-            double[] yval1 = { 0.0, 1.0, 1.5, 0.0, 3.0 };
-            bcf = new PiecewiseBicubicSplineInterpolatingFunction(xval, yval1, zval);
+            final double[] yval1 = { 0.0, 1.0, 1.5, 0.0, 3.0 };
+            new PiecewiseBicubicSplineInterpolatingFunction(xval, yval1, zval);
             Assert.fail("Failed to detect unsorted y arguments.");
         } catch (MathIllegalArgumentException iae) {
             // Expected.
@@ -282,4 +323,19 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
         Assert.assertEquals(0, meanError64, meanTolerance);
 
     }
+
+    @Test
+    public void testIsValidPoint() {
+        // GIVEN
+        final double[] x = new double[] { 0., 1., 2., 3., 4. };
+        final double[] y = x.clone();
+        final PiecewiseBicubicSplineInterpolatingFunction interpolatingFunction =
+                new PiecewiseBicubicSplineInterpolatingFunction(x, y, new double[x.length][y.length]);
+        // WHEN & THEN
+        Assert.assertFalse(interpolatingFunction.isValidPoint(x[0] - 1, y[0]));
+        Assert.assertFalse(interpolatingFunction.isValidPoint(x[x.length - 1] + 1, y[0]));
+        Assert.assertFalse(interpolatingFunction.isValidPoint(x[0], y[0] - 1));
+        Assert.assertFalse(interpolatingFunction.isValidPoint(x[0], y[y.length - 1] + 1));
+    }
+
 }
