@@ -49,6 +49,14 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
+    <release version="3.1" date="TBD" description="TBD.">
+      <action dev="serrof" type="add" issue="issues/300">
+        Add possibility to use real coefficients for Butcher array based Field integrators.
+      </action>
+      <action dev="serrof" type="fix" issue="issues/290">
+        Fixes regressions with Field in event detection.
+      </action>
+    </release>
     <release version="3.0" date="2023-10-08" description="This is a major release.">
       <action dev="luc" type="update" issue="issues/271" due-to="Romain Serra">
         Removed unused mapper in initializeStep.

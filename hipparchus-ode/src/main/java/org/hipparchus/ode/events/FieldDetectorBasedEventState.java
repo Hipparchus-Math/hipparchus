@@ -366,7 +366,7 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
         // executed once if we didn't hit a special case above
         while ((afterRootG.isZero() || afterRootG.getReal() > 0.0 == g0Positive) &&
                strictlyAfter(afterRootT, tb)) {
-            if (loopG.isZero()) {
+            if (loopG.getReal() == 0.0) {
                 // ga == 0.0 and gb may or may not be 0.0
                 // handle the root at ta first
                 beforeRootT = loopT;
@@ -424,7 +424,7 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
         }
 
         // figure out the result of root finding, and return accordingly
-        if (afterRootG.isZero() || afterRootG.getReal() > 0.0 == g0Positive) {
+        if (afterRootG.getReal() == 0.0 || afterRootG.getReal() > 0.0 == g0Positive) {
             // loop gave up and didn't find any crossing within this step
             return false;
         } else {

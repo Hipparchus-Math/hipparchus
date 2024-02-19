@@ -67,7 +67,7 @@ public class ThreeEighthesFieldIntegrator<T extends CalculusFieldElement<T>>
     @Override
     public T[] getC() {
         final T[] c = MathArrays.buildArray(getField(), 3);
-        c[0] = fraction(1, 3);
+        c[0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 1, 3);
         c[1] = c[0].add(c[0]);
         c[2] = getField().getOne();
         return c;
@@ -80,7 +80,7 @@ public class ThreeEighthesFieldIntegrator<T extends CalculusFieldElement<T>>
         for (int i = 0; i < a.length; ++i) {
             a[i] = MathArrays.buildArray(getField(), i + 1);
         }
-        a[0][0] = fraction(1, 3);
+        a[0][0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 1, 3);
         a[1][0] = a[0][0].negate();
         a[1][1] = getField().getOne();
         a[2][0] = getField().getOne();
@@ -93,8 +93,8 @@ public class ThreeEighthesFieldIntegrator<T extends CalculusFieldElement<T>>
     @Override
     public T[] getB() {
         final T[] b = MathArrays.buildArray(getField(), 4);
-        b[0] = fraction(1, 8);
-        b[1] = fraction(3, 8);
+        b[0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 1, 8);
+        b[1] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 3, 8);
         b[2] = b[1];
         b[3] = b[0];
         return b;

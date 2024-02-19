@@ -62,7 +62,7 @@ import org.hipparchus.util.FastMath;
 
 public abstract class EmbeddedRungeKuttaIntegrator
     extends AdaptiveStepsizeIntegrator
-    implements ButcherArrayProvider {
+    implements ExplicitRungeKuttaIntegrator {
 
     /** Index of the pre-computed derivative for <i>fsal</i> methods. */
     private final int fsal;
@@ -198,7 +198,7 @@ public abstract class EmbeddedRungeKuttaIntegrator
         // create some internal working arrays
         final int        stages  = c.length + 1;
         final double[][] yDotK   = new double[stages][];
-        final double[]   yTmp    = new double[equations.getMapper().getTotalDimension()];
+        double[]   yTmp    = new double[equations.getMapper().getTotalDimension()];
 
         // set up integration control objects
         double  hNew      = 0;
@@ -238,28 +238,11 @@ public abstract class EmbeddedRungeKuttaIntegrator
                 }
 
                 // next stages
-                for (int k = 1; k < stages; ++k) {
+                ExplicitRungeKuttaIntegrator.applyInternalButcherWeights(getEquations(), getStepStart().getTime(), y,
+                        getStepSize(), a, c, yDotK);
+                yTmp = ExplicitRungeKuttaIntegrator.applyExternalButcherWeights(y, yDotK, getStepSize(), b);
 
-                    for (int j = 0; j < y.length; ++j) {
-                        double sum = a[k-1][0] * yDotK[0][j];
-                        for (int l = 1; l < k; ++l) {
-                            sum += a[k-1][l] * yDotK[l][j];
-                        }
-                        yTmp[j] = y[j] + getStepSize() * sum;
-                    }
-
-                    yDotK[k] = computeDerivatives(getStepStart().getTime() + c[k-1] * getStepSize(), yTmp);
-
-                }
-
-                // estimate the state at the end of the step
-                for (int j = 0; j < y.length; ++j) {
-                    double sum    = b[0] * yDotK[0][j];
-                    for (int l = 1; l < stages; ++l) {
-                        sum    += b[l] * yDotK[l][j];
-                    }
-                    yTmp[j] = y[j] + getStepSize() * sum;
-                }
+                incrementEvaluations(stages - 1);
 
                 // estimate the error at the end of the step
                 error = estimateError(yDotK, y, yTmp, getStepSize());

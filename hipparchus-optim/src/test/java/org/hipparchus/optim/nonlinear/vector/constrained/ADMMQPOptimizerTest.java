@@ -16,7 +16,10 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
@@ -92,6 +95,95 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
                       null,
                       ineqc);
 
+    }
+
+    @Test
+    public void testOptimizeWithGuess() {
+        // GIVEN
+        final ADMMQPOptimizer optimizer = createOptimizerOnSimpleProblem(false, false);
+        optimizer.parseOptimizationData(new InitialGuess(new double[2]));
+
+        // WHEN
+        final LagrangeSolution solution  = optimizer.optimize();
+
+        // THEN
+        Assert.assertNotNull(optimizer.getConvergenceChecker());
+        Assert.assertTrue(optimizer.isConverged());
+        Assert.assertEquals(0., solution.getValue(), 0);
+    }
+
+    @Test
+    public void testOptimizeWithoutScaling() {
+        // GIVEN
+        final ADMMQPOptimizer optimizer = createOptimizerOnSimpleProblem(false, false);
+
+        // WHEN
+        final LagrangeSolution solution  = optimizer.optimize();
+
+        // THEN
+        Assert.assertNotNull(optimizer.getConvergenceChecker());
+        Assert.assertTrue(optimizer.isConverged());
+        Assert.assertEquals(0., solution.getValue(), 0);
+    }
+
+    @Test
+    public void testOptimizeWithPolishWithScaling() {
+        // GIVEN
+        final ADMMQPOptimizer optimizer = createOptimizerOnSimpleProblem(true, true);
+
+        // WHEN
+        final LagrangeSolution solution  = optimizer.optimize();
+
+        // THEN
+        Assert.assertNotNull(optimizer.getConvergenceChecker());
+        Assert.assertTrue(optimizer.isConverged());
+        Assert.assertEquals(0., solution.getValue(), 0);
+    }
+
+    @Test
+    public void testOptimizeWithPolishWithoutScaling() {
+        // GIVEN
+        final ADMMQPOptimizer optimizer = createOptimizerOnSimpleProblem(true, false);
+
+        // WHEN
+        final LagrangeSolution solution  = optimizer.optimize();
+
+        // THEN
+        Assert.assertNotNull(optimizer.getConvergenceChecker());
+        Assert.assertTrue(optimizer.isConverged());
+        Assert.assertEquals(0., solution.getValue(), 0);
+    }
+
+    private ADMMQPOptimizer createOptimizerOnSimpleProblem(final boolean polishing, final boolean scaling) {
+        final QuadraticFunction q = new QuadraticFunction(new double[][] { { 1.0, 0.0 }, { 0.0, 1.0 } },
+                new double[] { 0.0, 0.0 }, 0.0);
+        final LinearEqualityConstraint eqc = new LinearEqualityConstraint(new double[][] { { 1.0, 1.0 } },
+                new double[] { 0.0 });
+
+        final ADMMQPOption option = new ADMMQPOption();
+        option.setPolishing(polishing);
+        option.setScaling(scaling);
+
+        final ADMMQPOptimizer optimizer = new ADMMQPOptimizer();
+        optimizer.parseOptimizationData(new ObjectiveFunction(q), eqc, option);
+        return optimizer;
+    }
+
+    @Test
+    public void testParseOptimizationDataException() {
+        // GIVEN
+        final ADMMQPOptimizer testSQPOptimizer = new ADMMQPOptimizer();
+        final EqualityConstraint equalityConstraint = new LinearEqualityConstraint(new double[1][1], new double[1]);
+        final QuadraticFunction multivariateFunction = new QuadraticFunction(new double[1][1], new double[1], 0);
+        final ObjectiveFunction objectiveFunction = new ObjectiveFunction(multivariateFunction);
+        // WHEN
+        try {
+            testSQPOptimizer.parseOptimizationData(objectiveFunction, equalityConstraint);
+            Assert.fail();
+        } catch (final MathIllegalArgumentException exception) {
+            Assert.assertEquals("rank of constraints must be lesser than domain dimension, but 1 >= 1",
+                    exception.getMessage());
+        }
     }
 
 }

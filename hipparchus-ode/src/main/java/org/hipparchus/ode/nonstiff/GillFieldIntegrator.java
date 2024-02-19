@@ -69,7 +69,7 @@ public class GillFieldIntegrator<T extends CalculusFieldElement<T>>
     @Override
     public T[] getC() {
         final T[] c = MathArrays.buildArray(getField(), 3);
-        c[0] = fraction(1, 2);
+        c[0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 1, 2);
         c[1] = c[0];
         c[2] = getField().getOne();
         return c;
@@ -86,7 +86,7 @@ public class GillFieldIntegrator<T extends CalculusFieldElement<T>>
         for (int i = 0; i < a.length; ++i) {
             a[i] = MathArrays.buildArray(getField(), i + 1);
         }
-        a[0][0] = fraction(1, 2);
+        a[0][0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 1, 2);
         a[1][0] = sqrtTwo.subtract(1).multiply(0.5);
         a[1][1] = sqrtTwo.subtract(2).multiply(-0.5);
         a[2][0] = getField().getZero();
@@ -103,7 +103,7 @@ public class GillFieldIntegrator<T extends CalculusFieldElement<T>>
         final T sqrtTwo = two.sqrt();
 
         final T[] b = MathArrays.buildArray(getField(), 4);
-        b[0] = fraction(1, 6);
+        b[0] = FieldExplicitRungeKuttaIntegrator.fraction(getField(), 1, 6);
         b[1] = sqrtTwo.subtract(2).divide(-6);
         b[2] = sqrtTwo.add(2).divide(6);
         b[3] = b[0];

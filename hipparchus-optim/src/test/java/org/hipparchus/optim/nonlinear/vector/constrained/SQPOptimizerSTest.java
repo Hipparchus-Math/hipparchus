@@ -17,38 +17,16 @@
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.linear.MatrixUtils;
+import org.hipparchus.optim.InitialGuess;
+import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
+import org.junit.Assert;
 import org.junit.Test;
 
-public class SQPOptimizerSTest extends AbstractConstrainedOptimizerTest {
+public class SQPOptimizerSTest extends AbstractTestAbstractSQPOptimizerTest {
 
     protected ConstraintOptimizer buildOptimizer() {
         return new SQPOptimizerS();
-    }
-
-    @Test
-    public void test1() {
-        QuadraticFunction q = new QuadraticFunction(new double[][] { { 4.0, -2.0 }, { -2.0, 4.0 } },
-                                                    new double[] { 6.0, 0.0 },
-                                                    0.0);
-
-        // y = 1
-        LinearEqualityConstraint eqc = new LinearEqualityConstraint(new double[][] { { 0.0, 1.0 } },
-                                                                    new double[] { 1.0 });
-
-
-        // x > 0, y > 0, x + y > 2
-        LinearInequalityConstraint ineqc = new LinearInequalityConstraint(new double[][] { { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 } },
-                                                                          new double[] { 0.0, 0.0, 2.0 });
-
-
-        doTestProblem(new double[] {  1, 1 },       2.5e-5,
-                      new double[] { -6, 0, 0, 8 }, 2.6e-4,
-                      8, 2.0e-4,
-                      new ObjectiveFunction(q),
-                      new double[] { 3.5, 3.5 },
-                      eqc, ineqc);
-
     }
 
     @Test
@@ -125,6 +103,48 @@ public class SQPOptimizerSTest extends AbstractConstrainedOptimizerTest {
                       new double[] { 2, 2 },
                       new RosenbrookConstraint(MatrixUtils.createRealMatrix(5, 2),
                                                MatrixUtils.createRealVector(new double[]{ -2, -1.5, -1.5, -1.5, -1.5 })));
+    }
+
+    @Test
+    public void testLowMaxLineSearchAndConvergenceCriterion0() {
+        // GIVEN
+        final OptimizationData[] data = createOptimizationData();
+        final SQPOption option = new SQPOption();
+        option.setMaxLineSearchIteration(2);
+        option.setConvCriteria(0);
+        data[data.length - 1] = option;
+
+        // WHEN
+        final SQPOptimizerS optimizer = new SQPOptimizerS();
+        optimizer.parseOptimizationData(data);
+        final LagrangeSolution    solution  = optimizer.optimize(data);
+
+        // THEN
+        final double[] expectedSolution = new double[] { 1, 1 };
+        Assert.assertEquals(0.0,
+                MatrixUtils.createRealVector(expectedSolution).subtract(solution.getX()).getL1Norm(), 2.5e-5);
+        Assert.assertEquals(8., solution.getValue(), 2e-4);
+    }
+
+    private OptimizationData[] createOptimizationData() {
+        final QuadraticFunction q = new QuadraticFunction(new double[][] { { 4.0, -2.0 }, { -2.0, 4.0 } },
+                new double[] { 6.0, 0.0 },
+                0.0);
+        // y = 1
+        final LinearEqualityConstraint eqc = new LinearEqualityConstraint(new double[][] { { 0.0, 1.0 } },
+                new double[] { 1.0 });
+        // x > 0, y > 0, x + y > 2
+        final LinearInequalityConstraint ineqc = new LinearInequalityConstraint(new double[][] { { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 } },
+                new double[] { 0.0, 0.0, 2.0 });
+
+        final OptimizationData[] constraints = new OptimizationData[] { eqc, ineqc };
+        final OptimizationData[] data = new OptimizationData[constraints.length + 3];
+        final ObjectiveFunction objectiveFunction =  new ObjectiveFunction(q);
+        data[0] = objectiveFunction;
+        System.arraycopy(constraints, 0, data, 1, constraints.length);
+        final double[] initialGuess = new double[] { -3.5, 3.5 };
+        data[data.length - 2] = new InitialGuess(initialGuess);
+        return data;
     }
 
 }
