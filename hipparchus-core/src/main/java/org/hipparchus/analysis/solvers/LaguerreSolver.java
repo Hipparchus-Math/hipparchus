@@ -187,7 +187,31 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
                                      double initial)
         throws MathIllegalArgumentException, NullArgumentException,
                MathIllegalStateException {
-        setup(Integer.MAX_VALUE,
+        return solveAllComplex(coefficients, 100_000, initial);
+    }
+    
+    /**
+     * Find all complex roots for the polynomial with the given
+     * coefficients, starting from the given initial value.
+     * <p>
+     * Note: This method is not part of the API of {@link BaseUnivariateSolver}.</p>
+     *
+     * @param coefficients Polynomial coefficients.
+     * @param maxEval Maximum number of evaluations.
+     * @param initial Start value.
+     * @return the point at which the function value is zero.
+     * @throws org.hipparchus.exception.MathIllegalStateException
+     * if the maximum number of evaluations is exceeded.
+     * @throws NullArgumentException if the {@code coefficients} is
+     * {@code null}.
+     * @throws MathIllegalArgumentException if the {@code coefficients} array is empty.
+     */
+    public Complex[] solveAllComplex(double[] coefficients,
+                                     int maxEval,
+                                     double initial)
+        throws MathIllegalArgumentException, NullArgumentException,
+               MathIllegalStateException {
+        setup(maxEval,
               new PolynomialFunction(coefficients),
               Double.NEGATIVE_INFINITY,
               Double.POSITIVE_INFINITY,
