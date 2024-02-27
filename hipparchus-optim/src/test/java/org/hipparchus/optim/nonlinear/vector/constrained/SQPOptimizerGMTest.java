@@ -16,10 +16,47 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
+import org.hipparchus.optim.OptimizationData;
+import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
+import org.junit.Assert;
+import org.junit.Test;
+
 public class SQPOptimizerGMTest extends AbstractTestAbstractSQPOptimizerTest {
 
     protected ConstraintOptimizer buildOptimizer() {
         return new SQPOptimizerGM();
+    }
+
+    @Test
+    public void testWithEqualityConstraintsOnly() {
+        final QuadraticFunction q = new QuadraticFunction(new double[][] { { 1.0, 0.0 }, { 0.0, 1.0 } },
+                new double[] { 1.0, 0.0 },
+                0.0);
+
+        final LinearEqualityConstraint eqc = new LinearEqualityConstraint(new double[][] { { 1.0, 0.0 } },
+                new double[] { 1.0 });
+
+        final ConstraintOptimizer optimizer = buildOptimizer();
+        final OptimizationData[] data = new OptimizationData[] { new ObjectiveFunction(q), eqc };
+        final LagrangeSolution    solution  = optimizer.optimize(data);
+
+        Assert.assertEquals(1.5, solution.getValue(), 1.e-4);
+    }
+
+    @Test
+    public void testWithInequalityConstraintsOnly() {
+        final QuadraticFunction q = new QuadraticFunction(new double[][] { { 1.0, 0.0 }, { 0.0, 1.0 } },
+                new double[] { 1.0, 0.0 },
+                0.0);
+
+        final LinearInequalityConstraint eqc = new LinearInequalityConstraint(new double[][] { { 1.0, 0.0 } },
+                new double[] { 1.0 });
+
+        final ConstraintOptimizer optimizer = buildOptimizer();
+        final OptimizationData[] data = new OptimizationData[] { new ObjectiveFunction(q), eqc };
+        final LagrangeSolution    solution  = optimizer.optimize(data);
+
+        Assert.assertEquals(1.5, solution.getValue(), 1.e-4);
     }
 
 }
