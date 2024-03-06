@@ -578,7 +578,11 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         }
         final int binIndex = findBin(x);
         final RealDistribution kernel = getKernel(binStats.get(binIndex));
-        return kernel.density(x) * pB(binIndex) / kB(binIndex);
+        double kernelDensity = kernel.density(x);
+        if (kernelDensity == 0d) {
+            return 0d;
+        }
+        return kernelDensity * pB(binIndex) / kB(binIndex);
     }
 
     /**
