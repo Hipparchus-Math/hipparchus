@@ -49,22 +49,30 @@ public abstract class AbstractSQPOptimizer extends ConstraintOptimizer {
         this.settings = new SQPOption();
     }
 
-    /** Getter for settings. */
+    /** Getter for settings.
+     * @return settings
+     */
     public SQPOption getSettings() {
         return settings;
     }
 
-    /** Getter for objective function. */
+    /** Getter for objective function.
+     * @return objective function
+     */
     public TwiceDifferentiableFunction getObj() {
         return obj;
     }
 
-    /** Getter for equality constraint. */
+    /** Getter for equality constraint.
+     * @return equality constraint
+     */
     public EqualityConstraint getEqConstraint() {
         return eqConstraint;
     }
 
-    /** Getter for inequality constraint. */
+    /** Getter for inequality constraint.
+     * @return inequality constraint
+     */
     public InequalityConstraint getIqConstraint() {
         return iqConstraint;
     }

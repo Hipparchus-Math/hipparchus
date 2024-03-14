@@ -137,6 +137,7 @@ public interface ExplicitRungeKuttaIntegrator extends ButcherArrayProvider, ODEI
      * @param y0 initial value of the state vector at t0
      * @param h step size
      * @param b external weights of Butcher array
+     * @return state vector
      */
     static double[] applyExternalButcherWeights(final double[] y0, final double[][] yDotK, final double h,
                                                 final double[] b) {

@@ -159,6 +159,7 @@ public interface FieldExplicitRungeKuttaIntegrator<T extends CalculusFieldElemen
      * Create a fraction from integers.
      *
      * @param <T> the type of the field elements
+     * @param field field to which elements belong
      * @param p numerator
      * @param q denominator
      * @return p/q computed in the instance field
@@ -171,6 +172,7 @@ public interface FieldExplicitRungeKuttaIntegrator<T extends CalculusFieldElemen
     /**
      * Create a fraction from doubles.
      * @param <T> the type of the field elements
+     * @param field field to which elements belong
      * @param p numerator
      * @param q denominator
      * @return p/q computed in the instance field
@@ -182,6 +184,7 @@ public interface FieldExplicitRungeKuttaIntegrator<T extends CalculusFieldElemen
 
     /**
      * Apply internal weights of Butcher array, with corresponding times.
+     * @param <T> the type of the field elements
      * @param equations differential equations to integrate
      * @param t0        initial time
      * @param y0        initial value of the state vector at t0
@@ -213,6 +216,7 @@ public interface FieldExplicitRungeKuttaIntegrator<T extends CalculusFieldElemen
     }
 
     /** Apply internal weights of Butcher array, with corresponding times. Version with real Butcher array (non-Field).
+     * @param <T> the type of the field elements
      * @param equations differential equations to integrate
      * @param t0 initial time
      * @param y0 initial value of the state vector at t0
@@ -244,10 +248,12 @@ public interface FieldExplicitRungeKuttaIntegrator<T extends CalculusFieldElemen
     }
 
     /** Apply external weights of Butcher array, assuming internal ones have been applied.
+     * @param <T> the type of the field elements
      * @param yDotK output of stages
      * @param y0 initial value of the state vector at t0
      * @param h step size
      * @param b external weights of Butcher array
+     * @return state vector
      */
     static <T extends CalculusFieldElement<T>> T[] applyExternalButcherWeights(final T[] y0, final T[][] yDotK,
                                                                                final T h, final T[] b) {
@@ -265,10 +271,12 @@ public interface FieldExplicitRungeKuttaIntegrator<T extends CalculusFieldElemen
 
     /** Apply external weights of Butcher array, assuming internal ones have been applied. Version with real Butcher
      * array (non-Field version).
+     * @param <T> the type of the field elements
      * @param yDotK output of stages
      * @param y0 initial value of the state vector at t0
      * @param h step size
      * @param b external weights of Butcher array
+     * @return state vector
      */
     static <T extends CalculusFieldElement<T>> T[] applyExternalButcherWeights(final T[] y0, final T[][] yDotK,
                                                                                final T h, final double[] b) {
