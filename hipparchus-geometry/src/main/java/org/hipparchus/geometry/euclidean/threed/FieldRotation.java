@@ -23,12 +23,10 @@
 package org.hipparchus.geometry.euclidean.threed;
 
 import java.io.Serializable;
-import java.util.function.Supplier;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.util.FastMath;
@@ -46,13 +44,8 @@ import org.hipparchus.util.MathArrays;
 
 public class FieldRotation<T extends CalculusFieldElement<T>> implements Serializable {
 
-    /** Switch to safe computation of asin/acos.
-     * @since 3.0
-     */
-    private static final double SAFE_SWITCH = 0.999;
-
     /** Serializable version identifier */
-    private static final long serialVersionUID = 20130224l;
+    private static final long serialVersionUID = 20130224L;
 
     /** Scalar coordinate of the quaternion. */
     private final T q0;
@@ -425,7 +418,7 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * of the instance
      */
     public FieldRotation<T> revert() {
-        return new FieldRotation<T>(q0.negate(), q1, q2, q3, false);
+        return new FieldRotation<>(q0.negate(), q1, q2, q3, false);
     }
 
     /** Get the scalar coordinate of the quaternion.
@@ -470,17 +463,17 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
         final T squaredSine = q1.square().add(q2.square()).add(q3.square());
         if (squaredSine.getReal() == 0) {
             final Field<T> field = squaredSine.getField();
-            return new FieldVector3D<T>(convention == RotationConvention.VECTOR_OPERATOR ? field.getOne(): field.getOne().negate(),
-                                        field.getZero(),
-                                        field.getZero());
+            return new FieldVector3D<>(convention == RotationConvention.VECTOR_OPERATOR ? field.getOne(): field.getOne().negate(),
+                                       field.getZero(),
+                                       field.getZero());
         } else {
             final double sgn = convention == RotationConvention.VECTOR_OPERATOR ? +1 : -1;
             if (q0.getReal() < 0) {
                 T inverse = squaredSine.sqrt().reciprocal().multiply(sgn);
-                return new FieldVector3D<T>(q1.multiply(inverse), q2.multiply(inverse), q3.multiply(inverse));
+                return new FieldVector3D<>(q1.multiply(inverse), q2.multiply(inverse), q3.multiply(inverse));
             }
             final T inverse = squaredSine.sqrt().reciprocal().negate().multiply(sgn);
-            return new FieldVector3D<T>(q1.multiply(inverse), q2.multiply(inverse), q3.multiply(inverse));
+            return new FieldVector3D<>(q1.multiply(inverse), q2.multiply(inverse), q3.multiply(inverse));
         }
     }
 
@@ -530,403 +523,9 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * @param order rotation order to use
      * @param convention convention to use for the semantics of the angle
      * @return an array of three angles, in the order specified by the set
-     * @exception MathIllegalStateException if the rotation is
-     * singular with respect to the angles set specified
      */
-    public T[] getAngles(final RotationOrder order, RotationConvention convention)
-        throws MathIllegalStateException {
-
-        if (convention == RotationConvention.VECTOR_OPERATOR) {
-            if (order == RotationOrder.XYZ) {
-
-                // r (+K) coordinates are :
-                //  sin (theta), -cos (theta) sin (phi), cos (theta) cos (phi)
-                // (-r) (+I) coordinates are :
-                // cos (psi) cos (theta), -sin (psi) cos (theta), sin (theta)
-                final // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
-                FieldVector3D<T> v1 = applyTo(vector(0, 0, 1));
-                final FieldVector3D<T> v2 = applyInverseTo(vector(1, 0, 0));
-                return buildArray(v1.getY().negate().atan2(v1.getZ()),
-                                  safeAsin(v2::getZ, v2::getX, v2::getY),
-                                  v2.getY().negate().atan2(v2.getX()));
-
-            } else if (order == RotationOrder.XZY) {
-
-                // r (+J) coordinates are :
-                // -sin (psi), cos (psi) cos (phi), cos (psi) sin (phi)
-                // (-r) (+I) coordinates are :
-                // cos (theta) cos (psi), -sin (psi), sin (theta) cos (psi)
-                // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
-                final FieldVector3D<T> v1 = applyTo(vector(0, 1, 0));
-                final FieldVector3D<T> v2 = applyInverseTo(vector(1, 0, 0));
-                return buildArray(v1.getZ().atan2(v1.getY()),
-                                  safeAsin(v2::getY, v2::getZ, v2::getX).negate(),
-                                  v2.getZ().atan2(v2.getX()));
-
-            } else if (order == RotationOrder.YXZ) {
-
-                // r (+K) coordinates are :
-                //  cos (phi) sin (theta), -sin (phi), cos (phi) cos (theta)
-                // (-r) (+J) coordinates are :
-                // sin (psi) cos (phi), cos (psi) cos (phi), -sin (phi)
-                // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
-                final FieldVector3D<T> v1 = applyTo(vector(0, 0, 1));
-                final FieldVector3D<T> v2 = applyInverseTo(vector(0, 1, 0));
-                return buildArray(v1.getX().atan2(v1.getZ()),
-                                  safeAsin(v2::getZ, v2::getX, v2::getY).negate(),
-                                  v2.getX().atan2(v2.getY()));
-
-            } else if (order == RotationOrder.YZX) {
-
-                // r (+I) coordinates are :
-                // cos (psi) cos (theta), sin (psi), -cos (psi) sin (theta)
-                // (-r) (+J) coordinates are :
-                // sin (psi), cos (phi) cos (psi), -sin (phi) cos (psi)
-                // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
-                final FieldVector3D<T> v1 = applyTo(vector(1, 0, 0));
-                final FieldVector3D<T> v2 = applyInverseTo(vector(0, 1, 0));
-                return buildArray(v1.getZ().negate().atan2(v1.getX()),
-                                  safeAsin(v2::getX, v2::getY, v2::getZ),
-                                  v2.getZ().negate().atan2(v2.getY()));
-
-            } else if (order == RotationOrder.ZXY) {
-
-                // r (+J) coordinates are :
-                // -cos (phi) sin (psi), cos (phi) cos (psi), sin (phi)
-                // (-r) (+K) coordinates are :
-                // -sin (theta) cos (phi), sin (phi), cos (theta) cos (phi)
-                // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
-                final FieldVector3D<T> v1 = applyTo(vector(0, 1, 0));
-                final FieldVector3D<T> v2 = applyInverseTo(vector(0, 0, 1));
-                return buildArray(v1.getX().negate().atan2(v1.getY()),
-                                  safeAsin(v2::getY, v2::getZ, v2::getX),
-                                  v2.getX().negate().atan2(v2.getZ()));
-
-            } else if (order == RotationOrder.ZYX) {
-
-                // r (+I) coordinates are :
-                //  cos (theta) cos (psi), cos (theta) sin (psi), -sin (theta)
-                // (-r) (+K) coordinates are :
-                // -sin (theta), sin (phi) cos (theta), cos (phi) cos (theta)
-                // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
-                final FieldVector3D<T> v1 = applyTo(vector(1, 0, 0));
-                final FieldVector3D<T> v2 = applyInverseTo(vector(0, 0, 1));
-                return buildArray(v1.getY().atan2(v1.getX()),
-                                  safeAsin(v2::getX, v2::getY, v2::getZ).negate(),
-                                  v2.getY().atan2(v2.getZ()));
-
-            } else if (order == RotationOrder.XYX) {
-
-                // r (+I) coordinates are :
-                //  cos (theta), sin (phi1) sin (theta), -cos (phi1) sin (theta)
-                // (-r) (+I) coordinates are :
-                // cos (theta), sin (theta) sin (phi2), sin (theta) cos (phi2)
-                // and we can choose to have theta in the interval [0 ; PI]
-                final FieldVector3D<T> v1 = applyTo(vector(1, 0, 0));
-                final FieldVector3D<T> v2 = applyInverseTo(vector(1, 0, 0));
-                return buildArray(v1.getY().atan2(v1.getZ().negate()),
-                                  safeAcos(v2::getX, v2::getY, v2::getZ),
-                                  v2.getY().atan2(v2.getZ()));
-
-            } else if (order == RotationOrder.XZX) {
-
-                // r (+I) coordinates are :
-                //  cos (psi), cos (phi1) sin (psi), sin (phi1) sin (psi)
-                // (-r) (+I) coordinates are :
-                // cos (psi), -sin (psi) cos (phi2), sin (psi) sin (phi2)
-                // and we can choose to have psi in the interval [0 ; PI]
-                final FieldVector3D<T> v1 = applyTo(vector(1, 0, 0));
-                final FieldVector3D<T> v2 = applyInverseTo(vector(1, 0, 0));
-                return buildArray(v1.getZ().atan2(v1.getY()),
-                                  safeAcos(v2::getX, v2::getY, v2::getZ),
-                                  v2.getZ().atan2(v2.getY().negate()));
-
-            } else if (order == RotationOrder.YXY) {
-
-                // r (+J) coordinates are :
-                //  sin (theta1) sin (phi), cos (phi), cos (theta1) sin (phi)
-                // (-r) (+J) coordinates are :
-                // sin (phi) sin (theta2), cos (phi), -sin (phi) cos (theta2)
-                // and we can choose to have phi in the interval [0 ; PI]
-                final FieldVector3D<T> v1 = applyTo(vector(0, 1, 0));
-                final FieldVector3D<T> v2 = applyInverseTo(vector(0, 1, 0));
-                return buildArray(v1.getX().atan2(v1.getZ()),
-                                  safeAcos(v2::getY, v2::getZ, v2::getX),
-                                  v2.getX().atan2(v2.getZ().negate()));
-
-            } else if (order == RotationOrder.YZY) {
-
-                // r (+J) coordinates are :
-                //  -cos (theta1) sin (psi), cos (psi), sin (theta1) sin (psi)
-                // (-r) (+J) coordinates are :
-                // sin (psi) cos (theta2), cos (psi), sin (psi) sin (theta2)
-                // and we can choose to have psi in the interval [0 ; PI]
-                final FieldVector3D<T> v1 = applyTo(vector(0, 1, 0));
-                final FieldVector3D<T> v2 = applyInverseTo(vector(0, 1, 0));
-                return buildArray(v1.getZ().atan2(v1.getX().negate()),
-                                  safeAcos(v2::getY, v2::getZ, v2::getX),
-                                  v2.getZ().atan2(v2.getX()));
-
-            } else if (order == RotationOrder.ZXZ) {
-
-                // r (+K) coordinates are :
-                //  sin (psi1) sin (phi), -cos (psi1) sin (phi), cos (phi)
-                // (-r) (+K) coordinates are :
-                // sin (phi) sin (psi2), sin (phi) cos (psi2), cos (phi)
-                // and we can choose to have phi in the interval [0 ; PI]
-                final FieldVector3D<T> v1 = applyTo(vector(0, 0, 1));
-                final FieldVector3D<T> v2 = applyInverseTo(vector(0, 0, 1));
-                return buildArray(v1.getX().atan2(v1.getY().negate()),
-                                  safeAcos(v2::getZ, v2::getX, v2::getY),
-                                  v2.getX().atan2(v2.getY()));
-
-            } else { // last possibility is ZYZ
-
-                // r (+K) coordinates are :
-                //  cos (psi1) sin (theta), sin (psi1) sin (theta), cos (theta)
-                // (-r) (+K) coordinates are :
-                // -sin (theta) cos (psi2), sin (theta) sin (psi2), cos (theta)
-                // and we can choose to have theta in the interval [0 ; PI]
-                final FieldVector3D<T> v1 = applyTo(vector(0, 0, 1));
-                final FieldVector3D<T> v2 = applyInverseTo(vector(0, 0, 1));
-                return buildArray(v1.getY().atan2(v1.getX()),
-                                  safeAcos(v2::getZ, v2::getX, v2::getY),
-                                  v2.getY().atan2(v2.getX().negate()));
-
-            }
-        } else {
-            if (order == RotationOrder.XYZ) {
-
-                // r (Vector3D.plusI) coordinates are :
-                //  cos (theta) cos (psi), -cos (theta) sin (psi), sin (theta)
-                // (-r) (Vector3D.plusK) coordinates are :
-                // sin (theta), -sin (phi) cos (theta), cos (phi) cos (theta)
-                // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
-                FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_I);
-                FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_K);
-                return buildArray(v2.getY().negate().atan2(v2.getZ()),
-                                  safeAsin(v2::getX, v2::getY, v2::getZ),
-                                  v1.getY().negate().atan2(v1.getX()));
-
-            } else if (order == RotationOrder.XZY) {
-
-                // r (Vector3D.plusI) coordinates are :
-                // cos (psi) cos (theta), -sin (psi), cos (psi) sin (theta)
-                // (-r) (Vector3D.plusJ) coordinates are :
-                // -sin (psi), cos (phi) cos (psi), sin (phi) cos (psi)
-                // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
-                FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_I);
-                FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_J);
-                return buildArray(v2.getZ().atan2(v2.getY()),
-                                  safeAsin(v2::getX, v2::getY, v2::getZ).negate(),
-                                  v1.getZ().atan2(v1.getX()));
-
-            } else if (order == RotationOrder.YXZ) {
-
-                // r (Vector3D.plusJ) coordinates are :
-                // cos (phi) sin (psi), cos (phi) cos (psi), -sin (phi)
-                // (-r) (Vector3D.plusK) coordinates are :
-                // sin (theta) cos (phi), -sin (phi), cos (theta) cos (phi)
-                // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
-                FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_J);
-                FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_K);
-                return buildArray(v2.getX().atan2(v2.getZ()),
-                                  safeAsin(v2::getY, v2::getZ, v2::getX).negate(),
-                                  v1.getX().atan2(v1.getY()));
-
-            } else if (order == RotationOrder.YZX) {
-
-                // r (Vector3D.plusJ) coordinates are :
-                // sin (psi), cos (psi) cos (phi), -cos (psi) sin (phi)
-                // (-r) (Vector3D.plusI) coordinates are :
-                // cos (theta) cos (psi), sin (psi), -sin (theta) cos (psi)
-                // and we can choose to have psi in the interval [-PI/2 ; +PI/2]
-                FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_J);
-                FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_I);
-                return buildArray(v2.getZ().negate().atan2(v2.getX()),
-                                  safeAsin(v2::getY, v2::getZ, v2::getX),
-                                  v1.getZ().negate().atan2(v1.getY()));
-
-            } else if (order == RotationOrder.ZXY) {
-
-                // r (Vector3D.plusK) coordinates are :
-                //  -cos (phi) sin (theta), sin (phi), cos (phi) cos (theta)
-                // (-r) (Vector3D.plusJ) coordinates are :
-                // -sin (psi) cos (phi), cos (psi) cos (phi), sin (phi)
-                // and we can choose to have phi in the interval [-PI/2 ; +PI/2]
-                FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_K);
-                FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_J);
-                return buildArray(v2.getX().negate().atan2(v2.getY()),
-                                  safeAsin(v2::getZ, v2::getX, v2::getY),
-                                  v1.getX().negate().atan2(v1.getZ()));
-
-            } else if (order == RotationOrder.ZYX) {
-
-                // r (Vector3D.plusK) coordinates are :
-                //  -sin (theta), cos (theta) sin (phi), cos (theta) cos (phi)
-                // (-r) (Vector3D.plusI) coordinates are :
-                // cos (psi) cos (theta), sin (psi) cos (theta), -sin (theta)
-                // and we can choose to have theta in the interval [-PI/2 ; +PI/2]
-                FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_K);
-                FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_I);
-                return buildArray(v2.getY().atan2(v2.getX()),
-                                  safeAsin(v2::getZ, v2::getX, v2::getY).negate(),
-                                  v1.getY().atan2(v1.getZ()));
-
-            } else if (order == RotationOrder.XYX) {
-
-                // r (Vector3D.plusI) coordinates are :
-                //  cos (theta), sin (phi2) sin (theta), cos (phi2) sin (theta)
-                // (-r) (Vector3D.plusI) coordinates are :
-                // cos (theta), sin (theta) sin (phi1), -sin (theta) cos (phi1)
-                // and we can choose to have theta in the interval [0 ; PI]
-                FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_I);
-                FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_I);
-                return buildArray(v2.getY().atan2(v2.getZ().negate()),
-                                  safeAcos(v2::getX, v2::getY, v2::getZ),
-                                  v1.getY().atan2(v1.getZ()));
-
-            } else if (order == RotationOrder.XZX) {
-
-                // r (Vector3D.plusI) coordinates are :
-                //  cos (psi), -cos (phi2) sin (psi), sin (phi2) sin (psi)
-                // (-r) (Vector3D.plusI) coordinates are :
-                // cos (psi), sin (psi) cos (phi1), sin (psi) sin (phi1)
-                // and we can choose to have psi in the interval [0 ; PI]
-                FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_I);
-                FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_I);
-                return buildArray(v2.getZ().atan2(v2.getY()),
-                                  safeAcos(v2::getX, v2::getY, v2::getZ),
-                                  v1.getZ().atan2(v1.getY().negate()));
-
-            } else if (order == RotationOrder.YXY) {
-
-                // r (Vector3D.plusJ) coordinates are :
-                // sin (phi) sin (theta2), cos (phi), -sin (phi) cos (theta2)
-                // (-r) (Vector3D.plusJ) coordinates are :
-                //  sin (theta1) sin (phi), cos (phi), cos (theta1) sin (phi)
-                // and we can choose to have phi in the interval [0 ; PI]
-                FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_J);
-                FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_J);
-                return buildArray(v2.getX().atan2(v2.getZ()),
-                                  safeAcos(v2::getY, v2::getZ, v2::getX),
-                                  v1.getX().atan2(v1.getZ().negate()));
-
-            } else if (order == RotationOrder.YZY) {
-
-                // r (Vector3D.plusJ) coordinates are :
-                // sin (psi) cos (theta2), cos (psi), sin (psi) sin (theta2)
-                // (-r) (Vector3D.plusJ) coordinates are :
-                //  -cos (theta1) sin (psi), cos (psi), sin (theta1) sin (psi)
-                // and we can choose to have psi in the interval [0 ; PI]
-                FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_J);
-                FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_J);
-                return buildArray(v2.getZ().atan2(v2.getX().negate()),
-                                  safeAcos(v2::getY, v2::getZ, v2::getX),
-                                  v1.getZ().atan2(v1.getX()));
-
-            } else if (order == RotationOrder.ZXZ) {
-
-                // r (Vector3D.plusK) coordinates are :
-                // sin (phi) sin (psi2), sin (phi) cos (psi2), cos (phi)
-                // (-r) (Vector3D.plusK) coordinates are :
-                //  sin (psi1) sin (phi), -cos (psi1) sin (phi), cos (phi)
-                // and we can choose to have phi in the interval [0 ; PI]
-                FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_K);
-                FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_K);
-                return buildArray(v2.getX().atan2(v2.getY().negate()),
-                                  safeAcos(v2::getZ, v2::getX, v2::getY),
-                                  v1.getX().atan2(v1.getY()));
-
-            } else { // last possibility is ZYZ
-
-                // r (Vector3D.plusK) coordinates are :
-                // -sin (theta) cos (psi2), sin (theta) sin (psi2), cos (theta)
-                // (-r) (Vector3D.plusK) coordinates are :
-                //  cos (psi1) sin (theta), sin (psi1) sin (theta), cos (theta)
-                // and we can choose to have theta in the interval [0 ; PI]
-                FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_K);
-                FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_K);
-                return buildArray(v2.getY().atan2(v2.getX()),
-                                  safeAcos(v2::getZ, v2::getX, v2::getY),
-                                  v1.getY().atan2(v1.getX().negate()));
-
-            }
-        }
-
-    }
-
-    /** Safe computation of acos(some vector coordinate) working around singularities.
-     * @param cosGetter getter for the cosine coordinate
-     * @param sin1Getter getter for one of the sine coordinates
-     * @param sin2Getter getter for the other sine coordinate
-     * @return acos of the coordinate
-     * @since 3.0
-     */
-    private T safeAcos(final Supplier<T> cosGetter,
-                       final Supplier<T> sin1Getter,
-                       final Supplier<T> sin2Getter) {
-        final T cos = cosGetter.get();
-        if (cos.getReal() < -SAFE_SWITCH) {
-            final T s1 = sin1Getter.get();
-            final T s2 = sin2Getter.get();
-            return FastMath.asin(FastMath.sqrt(s1.square().add(s2.square()))).subtract(s1.getPi()).negate();
-        } else if (cos.getReal() > SAFE_SWITCH) {
-            final T s1 = sin1Getter.get();
-            final T s2 = sin2Getter.get();
-            return FastMath.asin(FastMath.sqrt(s1.square().add(s2.square())));
-        } else {
-            return FastMath.acos(cos);
-        }
-    }
-
-    /** Safe computation of asin(some vector coordinate) working around singularities.
-     * @param sinGetter getter for the sine coordinate
-     * @param cos1Getter getter for one of the cosine coordinates
-     * @param cos2Getter getter for the other cosine coordinate
-     * @return acos of the coordinate
-     * @since 3.0
-     */
-    private T safeAsin(final Supplier<T> sinGetter,
-                       final Supplier<T> cos1Getter,
-                       final Supplier<T> cos2Getter) {
-        final T sin = sinGetter.get();
-        if (sin.getReal() < -SAFE_SWITCH) {
-            final T c1 = cos1Getter.get();
-            final T c2 = cos2Getter.get();
-            return FastMath.acos(FastMath.sqrt(c1.multiply(c1).add(c2.multiply(c2)))).negate();
-        } else if (sin.getReal() > SAFE_SWITCH) {
-            final T c1 = cos1Getter.get();
-            final T c2 = cos2Getter.get();
-            return FastMath.acos(FastMath.sqrt(c1.multiply(c1).add(c2.multiply(c2))));
-        } else {
-            return FastMath.asin(sin);
-        }
-    }
-
-    /** Create a dimension 3 array.
-     * @param a0 first array element
-     * @param a1 second array element
-     * @param a2 third array element
-     * @return new array
-     */
-    private T[] buildArray(final T a0, final T a1, final T a2) {
-        final T[] array = MathArrays.buildArray(a0.getField(), 3);
-        array[0] = a0;
-        array[1] = a1;
-        array[2] = a2;
-        return array;
-    }
-
-    /** Create a constant vector.
-     * @param x abscissa
-     * @param y ordinate
-     * @param z height
-     * @return a constant vector
-     */
-    private FieldVector3D<T> vector(final double x, final double y, final double z) {
-        final T zero = q0.getField().getZero();
-        return new FieldVector3D<T>(zero.add(x), zero.add(y), zero.add(z));
+    public T[] getAngles(final RotationOrder order, RotationConvention convention) {
+        return order.getAngles(this, convention);
     }
 
     /** Get the 3X3 matrix corresponding to the instance
@@ -984,9 +583,9 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
 
         final T s = q1.multiply(x).add(q2.multiply(y)).add(q3.multiply(z));
 
-        return new FieldVector3D<T>(q0.multiply(x.multiply(q0).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
-                                    q0.multiply(y.multiply(q0).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
-                                    q0.multiply(z.multiply(q0).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
+        return new FieldVector3D<>(q0.multiply(x.multiply(q0).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
+                                   q0.multiply(y.multiply(q0).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
+                                   q0.multiply(z.multiply(q0).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
 
     }
 
@@ -1002,9 +601,9 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
 
         final T s = q1.multiply(x).add(q2.multiply(y)).add(q3.multiply(z));
 
-        return new FieldVector3D<T>(q0.multiply(q0.multiply(x).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
-                                    q0.multiply(q0.multiply(y).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
-                                    q0.multiply(q0.multiply(z).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
+        return new FieldVector3D<>(q0.multiply(q0.multiply(x).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
+                                   q0.multiply(q0.multiply(y).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
+                                   q0.multiply(q0.multiply(z).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
 
     }
 
@@ -1059,9 +658,9 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
 
         final T s = x.multiply(r.getQ1()).add(y.multiply(r.getQ2())).add(z.multiply(r.getQ3()));
 
-        return new FieldVector3D<T>(x.multiply(r.getQ0()).subtract(z.multiply(r.getQ2()).subtract(y.multiply(r.getQ3()))).multiply(r.getQ0()).add(s.multiply(r.getQ1())).multiply(2).subtract(x),
-                                    y.multiply(r.getQ0()).subtract(x.multiply(r.getQ3()).subtract(z.multiply(r.getQ1()))).multiply(r.getQ0()).add(s.multiply(r.getQ2())).multiply(2).subtract(y),
-                                    z.multiply(r.getQ0()).subtract(y.multiply(r.getQ1()).subtract(x.multiply(r.getQ2()))).multiply(r.getQ0()).add(s.multiply(r.getQ3())).multiply(2).subtract(z));
+        return new FieldVector3D<>(x.multiply(r.getQ0()).subtract(z.multiply(r.getQ2()).subtract(y.multiply(r.getQ3()))).multiply(r.getQ0()).add(s.multiply(r.getQ1())).multiply(2).subtract(x),
+                                   y.multiply(r.getQ0()).subtract(x.multiply(r.getQ3()).subtract(z.multiply(r.getQ1()))).multiply(r.getQ0()).add(s.multiply(r.getQ2())).multiply(2).subtract(y),
+                                   z.multiply(r.getQ0()).subtract(y.multiply(r.getQ1()).subtract(x.multiply(r.getQ2()))).multiply(r.getQ0()).add(s.multiply(r.getQ3())).multiply(2).subtract(z));
 
     }
 
@@ -1078,9 +677,9 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
         final T s  = q1.multiply(x).add(q2.multiply(y)).add(q3.multiply(z));
         final T m0 = q0.negate();
 
-        return new FieldVector3D<T>(m0.multiply(x.multiply(m0).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
-                                    m0.multiply(y.multiply(m0).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
-                                    m0.multiply(z.multiply(m0).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
+        return new FieldVector3D<>(m0.multiply(x.multiply(m0).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
+                                   m0.multiply(y.multiply(m0).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
+                                   m0.multiply(z.multiply(m0).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
 
     }
 
@@ -1097,9 +696,9 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
         final T s  = q1.multiply(x).add(q2.multiply(y)).add(q3.multiply(z));
         final T m0 = q0.negate();
 
-        return new FieldVector3D<T>(m0.multiply(m0.multiply(x).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
-                                    m0.multiply(m0.multiply(y).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
-                                    m0.multiply(m0.multiply(z).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
+        return new FieldVector3D<>(m0.multiply(m0.multiply(x).subtract(q2.multiply(z).subtract(q3.multiply(y)))).add(s.multiply(q1)).multiply(2).subtract(x),
+                                   m0.multiply(m0.multiply(y).subtract(q3.multiply(x).subtract(q1.multiply(z)))).add(s.multiply(q2)).multiply(2).subtract(y),
+                                   m0.multiply(m0.multiply(z).subtract(q1.multiply(y).subtract(q2.multiply(x)))).add(s.multiply(q3)).multiply(2).subtract(z));
 
     }
 
@@ -1157,9 +756,9 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
         final T s  = x.multiply(r.getQ1()).add(y.multiply(r.getQ2())).add(z.multiply(r.getQ3()));
         final double m0 = -r.getQ0();
 
-        return new FieldVector3D<T>(x.multiply(m0).subtract(z.multiply(r.getQ2()).subtract(y.multiply(r.getQ3()))).multiply(m0).add(s.multiply(r.getQ1())).multiply(2).subtract(x),
-                                    y.multiply(m0).subtract(x.multiply(r.getQ3()).subtract(z.multiply(r.getQ1()))).multiply(m0).add(s.multiply(r.getQ2())).multiply(2).subtract(y),
-                                    z.multiply(m0).subtract(y.multiply(r.getQ1()).subtract(x.multiply(r.getQ2()))).multiply(m0).add(s.multiply(r.getQ3())).multiply(2).subtract(z));
+        return new FieldVector3D<>(x.multiply(m0).subtract(z.multiply(r.getQ2()).subtract(y.multiply(r.getQ3()))).multiply(m0).add(s.multiply(r.getQ1())).multiply(2).subtract(x),
+                                   y.multiply(m0).subtract(x.multiply(r.getQ3()).subtract(z.multiply(r.getQ1()))).multiply(m0).add(s.multiply(r.getQ2())).multiply(2).subtract(y),
+                                   z.multiply(m0).subtract(y.multiply(r.getQ1()).subtract(x.multiply(r.getQ2()))).multiply(m0).add(s.multiply(r.getQ3())).multiply(2).subtract(z));
 
     }
 
@@ -1211,11 +810,11 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * using vector operator convention
      */
     private FieldRotation<T> composeInternal(final FieldRotation<T> r) {
-        return new FieldRotation<T>(r.q0.multiply(q0).subtract(r.q1.multiply(q1).add(r.q2.multiply(q2)).add(r.q3.multiply(q3))),
-                                    r.q1.multiply(q0).add(r.q0.multiply(q1)).add(r.q2.multiply(q3).subtract(r.q3.multiply(q2))),
-                                    r.q2.multiply(q0).add(r.q0.multiply(q2)).add(r.q3.multiply(q1).subtract(r.q1.multiply(q3))),
-                                    r.q3.multiply(q0).add(r.q0.multiply(q3)).add(r.q1.multiply(q2).subtract(r.q2.multiply(q1))),
-                                    false);
+        return new FieldRotation<>(r.q0.multiply(q0).subtract(r.q1.multiply(q1).add(r.q2.multiply(q2)).add(r.q3.multiply(q3))),
+                                   r.q1.multiply(q0).add(r.q0.multiply(q1)).add(r.q2.multiply(q3).subtract(r.q3.multiply(q2))),
+                                   r.q2.multiply(q0).add(r.q0.multiply(q2)).add(r.q3.multiply(q1).subtract(r.q1.multiply(q3))),
+                                   r.q3.multiply(q0).add(r.q0.multiply(q3)).add(r.q1.multiply(q2).subtract(r.q2.multiply(q1))),
+                                   false);
     }
 
     /** Apply the instance to another rotation.
@@ -1266,11 +865,11 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * using vector operator convention
      */
     private FieldRotation<T> composeInternal(final Rotation r) {
-        return new FieldRotation<T>(q0.multiply(r.getQ0()).subtract(q1.multiply(r.getQ1()).add(q2.multiply(r.getQ2())).add(q3.multiply(r.getQ3()))),
-                        q0.multiply(r.getQ1()).add(q1.multiply(r.getQ0())).add(q3.multiply(r.getQ2()).subtract(q2.multiply(r.getQ3()))),
-                        q0.multiply(r.getQ2()).add(q2.multiply(r.getQ0())).add(q1.multiply(r.getQ3()).subtract(q3.multiply(r.getQ1()))),
-                        q0.multiply(r.getQ3()).add(q3.multiply(r.getQ0())).add(q2.multiply(r.getQ1()).subtract(q1.multiply(r.getQ2()))),
-                        false);
+        return new FieldRotation<>(q0.multiply(r.getQ0()).subtract(q1.multiply(r.getQ1()).add(q2.multiply(r.getQ2())).add(q3.multiply(r.getQ3()))),
+                                   q0.multiply(r.getQ1()).add(q1.multiply(r.getQ0())).add(q3.multiply(r.getQ2()).subtract(q2.multiply(r.getQ3()))),
+                                   q0.multiply(r.getQ2()).add(q2.multiply(r.getQ0())).add(q1.multiply(r.getQ3()).subtract(q3.multiply(r.getQ1()))),
+                                   q0.multiply(r.getQ3()).add(q3.multiply(r.getQ0())).add(q2.multiply(r.getQ1()).subtract(q1.multiply(r.getQ2()))),
+                                   false);
     }
 
     /** Apply a rotation to another rotation.
@@ -1285,11 +884,11 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * @return a new rotation which is the composition of r by the instance
      */
     public static <T extends CalculusFieldElement<T>> FieldRotation<T> applyTo(final Rotation r1, final FieldRotation<T> rInner) {
-        return new FieldRotation<T>(rInner.q0.multiply(r1.getQ0()).subtract(rInner.q1.multiply(r1.getQ1()).add(rInner.q2.multiply(r1.getQ2())).add(rInner.q3.multiply(r1.getQ3()))),
-                                    rInner.q1.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ1())).add(rInner.q2.multiply(r1.getQ3()).subtract(rInner.q3.multiply(r1.getQ2()))),
-                                    rInner.q2.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ2())).add(rInner.q3.multiply(r1.getQ1()).subtract(rInner.q1.multiply(r1.getQ3()))),
-                                    rInner.q3.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ3())).add(rInner.q1.multiply(r1.getQ2()).subtract(rInner.q2.multiply(r1.getQ1()))),
-                                    false);
+        return new FieldRotation<>(rInner.q0.multiply(r1.getQ0()).subtract(rInner.q1.multiply(r1.getQ1()).add(rInner.q2.multiply(r1.getQ2())).add(rInner.q3.multiply(r1.getQ3()))),
+                                   rInner.q1.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ1())).add(rInner.q2.multiply(r1.getQ3()).subtract(rInner.q3.multiply(r1.getQ2()))),
+                                   rInner.q2.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ2())).add(rInner.q3.multiply(r1.getQ1()).subtract(rInner.q1.multiply(r1.getQ3()))),
+                                   rInner.q3.multiply(r1.getQ0()).add(rInner.q0.multiply(r1.getQ3())).add(rInner.q1.multiply(r1.getQ2()).subtract(rInner.q2.multiply(r1.getQ1()))),
+                                   false);
     }
 
     /** Apply the inverse of the instance to another rotation.
@@ -1344,11 +943,11 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * of the instance using vector operator convention
      */
     private FieldRotation<T> composeInverseInternal(FieldRotation<T> r) {
-        return new FieldRotation<T>(r.q0.multiply(q0).add(r.q1.multiply(q1)).add(r.q2.multiply(q2)).add(r.q3.multiply(q3)).negate(),
-                                    r.q0.multiply(q1).add(r.q2.multiply(q3).subtract(r.q3.multiply(q2))).subtract(r.q1.multiply(q0)),
-                                    r.q0.multiply(q2).add(r.q3.multiply(q1).subtract(r.q1.multiply(q3))).subtract(r.q2.multiply(q0)),
-                                    r.q0.multiply(q3).add(r.q1.multiply(q2).subtract(r.q2.multiply(q1))).subtract(r.q3.multiply(q0)),
-                                    false);
+        return new FieldRotation<>(r.q0.multiply(q0).add(r.q1.multiply(q1)).add(r.q2.multiply(q2)).add(r.q3.multiply(q3)).negate(),
+                                   r.q0.multiply(q1).add(r.q2.multiply(q3).subtract(r.q3.multiply(q2))).subtract(r.q1.multiply(q0)),
+                                   r.q0.multiply(q2).add(r.q3.multiply(q1).subtract(r.q1.multiply(q3))).subtract(r.q2.multiply(q0)),
+                                   r.q0.multiply(q3).add(r.q1.multiply(q2).subtract(r.q2.multiply(q1))).subtract(r.q3.multiply(q0)),
+                                   false);
     }
 
     /** Apply the inverse of the instance to another rotation.
@@ -1403,11 +1002,11 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * of the instance using vector operator convention
      */
     private FieldRotation<T> composeInverseInternal(Rotation r) {
-        return new FieldRotation<T>(q0.multiply(r.getQ0()).add(q1.multiply(r.getQ1()).add(q2.multiply(r.getQ2())).add(q3.multiply(r.getQ3()))).negate(),
-                                    q1.multiply(r.getQ0()).add(q3.multiply(r.getQ2()).subtract(q2.multiply(r.getQ3()))).subtract(q0.multiply(r.getQ1())),
-                                    q2.multiply(r.getQ0()).add(q1.multiply(r.getQ3()).subtract(q3.multiply(r.getQ1()))).subtract(q0.multiply(r.getQ2())),
-                                    q3.multiply(r.getQ0()).add(q2.multiply(r.getQ1()).subtract(q1.multiply(r.getQ2()))).subtract(q0.multiply(r.getQ3())),
-                                    false);
+        return new FieldRotation<>(q0.multiply(r.getQ0()).add(q1.multiply(r.getQ1()).add(q2.multiply(r.getQ2())).add(q3.multiply(r.getQ3()))).negate(),
+                                   q1.multiply(r.getQ0()).add(q3.multiply(r.getQ2()).subtract(q2.multiply(r.getQ3()))).subtract(q0.multiply(r.getQ1())),
+                                   q2.multiply(r.getQ0()).add(q1.multiply(r.getQ3()).subtract(q3.multiply(r.getQ1()))).subtract(q0.multiply(r.getQ2())),
+                                   q3.multiply(r.getQ0()).add(q2.multiply(r.getQ1()).subtract(q1.multiply(r.getQ2()))).subtract(q0.multiply(r.getQ3())),
+                                   false);
     }
 
     /** Apply the inverse of a rotation to another rotation.
@@ -1424,11 +1023,11 @@ public class FieldRotation<T extends CalculusFieldElement<T>> implements Seriali
      * of the instance
      */
     public static <T extends CalculusFieldElement<T>> FieldRotation<T> applyInverseTo(final Rotation rOuter, final FieldRotation<T> rInner) {
-        return new FieldRotation<T>(rInner.q0.multiply(rOuter.getQ0()).add(rInner.q1.multiply(rOuter.getQ1()).add(rInner.q2.multiply(rOuter.getQ2())).add(rInner.q3.multiply(rOuter.getQ3()))).negate(),
-                                    rInner.q0.multiply(rOuter.getQ1()).add(rInner.q2.multiply(rOuter.getQ3()).subtract(rInner.q3.multiply(rOuter.getQ2()))).subtract(rInner.q1.multiply(rOuter.getQ0())),
-                                    rInner.q0.multiply(rOuter.getQ2()).add(rInner.q3.multiply(rOuter.getQ1()).subtract(rInner.q1.multiply(rOuter.getQ3()))).subtract(rInner.q2.multiply(rOuter.getQ0())),
-                                    rInner.q0.multiply(rOuter.getQ3()).add(rInner.q1.multiply(rOuter.getQ2()).subtract(rInner.q2.multiply(rOuter.getQ1()))).subtract(rInner.q3.multiply(rOuter.getQ0())),
-                                    false);
+        return new FieldRotation<>(rInner.q0.multiply(rOuter.getQ0()).add(rInner.q1.multiply(rOuter.getQ1()).add(rInner.q2.multiply(rOuter.getQ2())).add(rInner.q3.multiply(rOuter.getQ3()))).negate(),
+                                   rInner.q0.multiply(rOuter.getQ1()).add(rInner.q2.multiply(rOuter.getQ3()).subtract(rInner.q3.multiply(rOuter.getQ2()))).subtract(rInner.q1.multiply(rOuter.getQ0())),
+                                   rInner.q0.multiply(rOuter.getQ2()).add(rInner.q3.multiply(rOuter.getQ1()).subtract(rInner.q1.multiply(rOuter.getQ3()))).subtract(rInner.q2.multiply(rOuter.getQ0())),
+                                   rInner.q0.multiply(rOuter.getQ3()).add(rInner.q1.multiply(rOuter.getQ2()).subtract(rInner.q2.multiply(rOuter.getQ1()))).subtract(rInner.q3.multiply(rOuter.getQ0())),
+                                   false);
     }
 
     /** Perfect orthogonality on a 3X3 matrix.

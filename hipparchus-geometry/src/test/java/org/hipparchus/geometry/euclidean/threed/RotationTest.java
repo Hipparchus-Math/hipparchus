@@ -31,64 +31,63 @@ import org.hipparchus.util.MathUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
 
 public class RotationTest {
 
     @Test
-    public void testIssue304() {
+    public void testIssue304Cardan() {
+        for (final RotationConvention convention : RotationConvention.values()) {
+            for (final RotationOrder order : Arrays.asList(RotationOrder.XYZ,
+                                                           RotationOrder.XZY,
+                                                           RotationOrder.YXZ,
+                                                           RotationOrder.YZX,
+                                                           RotationOrder.ZXY,
+                                                           RotationOrder.ZYX)) {
 
-        double[][] originalMatrix = { //
-            { 0.0, 1.0, 0.0 }, //
-            { 0.0, 0.0, -1.0 }, //
-            { -1.0, 0.0, 0.0 } //
-        };
-        {
-            System.out.println("Rotation 1");
-            Rotation rotation = new Rotation(originalMatrix, 1.0e-10);
-            double[] angles = rotation.getAngles(RotationOrder.ZYX, RotationConvention.VECTOR_OPERATOR);
-            printArray(angles);
-        }
-        {
-            System.out.println("Rotation 2");
-            Rotation rotation = new Rotation(RotationOrder.ZYX, RotationConvention.VECTOR_OPERATOR, 0, FastMath.PI / 2, 0);
-            double[][] matrix = rotation.getMatrix();
-            printMatrix(matrix);
-        }
-        {
-            System.out.println("Rotation 3");
-            Rotation rotation = new Rotation(RotationOrder.ZYX, RotationConvention.VECTOR_OPERATOR, 0, FastMath.PI / 2, FastMath.PI / 2);
-            double[][] matrix = rotation.getMatrix();
-            printMatrix(matrix);
-        }
-        {
-            System.out.println("Rotation 4");
-            Rotation rotation = new Rotation(RotationOrder.ZYX, RotationConvention.VECTOR_OPERATOR, 0, FastMath.PI / 2, FastMath.PI / 2);
-            double[][] matrix = rotation.getMatrix();
-            printMatrix(matrix);
+                // first singularity
+                Rotation singularPlus = new Rotation(order, convention, 0.0, MathUtils.SEMI_PI, 0.125);
+                Assert.assertEquals(0.0, singularPlus.getAngles(order, convention)[0], 1.0e-16);
+                Assert.assertEquals(MathUtils.SEMI_PI, singularPlus.getAngles(order, convention)[1], 1.0e-16);
+                Assert.assertEquals(0.125, singularPlus.getAngles(order, convention)[2], 1.0e-16);
 
-            double[] angles = new Rotation(matrix, 1.0e-10).getAngles(RotationOrder.ZYX, RotationConvention.VECTOR_OPERATOR);
-            printArray(angles);
-        }
-    }
+                // second singularity
+                Rotation singularMinus = new Rotation(order, convention, 0.0, -MathUtils.SEMI_PI, 0.125);
+                Assert.assertEquals(0.0, singularMinus.getAngles(order, convention)[0], 1.0e-16);
+                Assert.assertEquals(-MathUtils.SEMI_PI, singularMinus.getAngles(order, convention)[1], 1.0e-16);
+                Assert.assertEquals(0.125, singularMinus.getAngles(order, convention)[2], 1.0e-16);
 
-    private static void printArray(double[] angles) {
-        for (double angle : angles) {
-            System.out.print(" " + angle);
-        }
-        System.out.println();
-    }
-
-    private static void printMatrix(double[][] matrix) {
-        for (double[] row : matrix) {
-            for (double e : row) {
-                System.out.print(" " + e);
             }
-            System.out.println();
         }
-        System.out.println();
     }
 
-  @Test
+    @Test
+    public void testIssue304Euler() {
+        for (final RotationConvention convention : RotationConvention.values()) {
+            for (final RotationOrder order : Arrays.asList(RotationOrder.XYX,
+                                                           RotationOrder.XZX,
+                                                           RotationOrder.YXY,
+                                                           RotationOrder.YZY,
+                                                           RotationOrder.ZXZ,
+                                                           RotationOrder.ZYZ)) {
+
+                // first singularity
+                Rotation singularZero = new Rotation(order, convention, 0.125, 0.0, 0.0);
+                Assert.assertEquals(0.125, singularZero.getAngles(order, convention)[0], 1.0e-16);
+                Assert.assertEquals(0.0, singularZero.getAngles(order, convention)[1], 1.0e-16);
+                Assert.assertEquals(0.0, singularZero.getAngles(order, convention)[2], 1.0e-16);
+
+                // second singularity
+                Rotation singularPi = new Rotation(order, convention, 0.125, FastMath.PI, 0.0);
+                Assert.assertEquals(0.125, singularPi.getAngles(order, convention)[0], 1.0e-16);
+                Assert.assertEquals(FastMath.PI, singularPi.getAngles(order, convention)[1], 1.0e-16);
+                Assert.assertEquals(0.0, singularPi.getAngles(order, convention)[2], 1.0e-16);
+
+            }
+        }
+    }
+
+    @Test
   public void testIdentity() {
 
     Rotation r = Rotation.IDENTITY;
@@ -127,6 +126,7 @@ public class RotationTest {
       new Rotation(new Vector3D(0, 0, 0), 2 * FastMath.PI / 3, RotationConvention.VECTOR_OPERATOR);
       Assert.fail("an exception should have been thrown");
     } catch (MathIllegalArgumentException e) {
+        Assert.assertEquals(LocalizedGeometryFormats.ZERO_NORM_FOR_ROTATION_AXIS, e.getSpecifier());
     }
 
     r = new Rotation(Vector3D.PLUS_K, 1.5 * FastMath.PI, RotationConvention.VECTOR_OPERATOR);
@@ -160,6 +160,7 @@ public class RotationTest {
       new Rotation(new Vector3D(0, 0, 0), 2 * FastMath.PI / 3, RotationConvention.FRAME_TRANSFORM);
       Assert.fail("an exception should have been thrown");
     } catch (MathIllegalArgumentException e) {
+        Assert.assertEquals(LocalizedGeometryFormats.ZERO_NORM_FOR_ROTATION_AXIS, e.getSpecifier());
     }
 
     r = new Rotation(Vector3D.PLUS_K, 1.5 * FastMath.PI, RotationConvention.FRAME_TRANSFORM);
