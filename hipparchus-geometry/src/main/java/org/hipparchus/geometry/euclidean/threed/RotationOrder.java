@@ -27,6 +27,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 
 /** Enumerate representing a rotation order specification for Cardan or Euler angles.
  * <p>
@@ -127,7 +128,7 @@ public enum RotationOrder {
     /** Missing stage (for Euler rotations). */
     private final RotationStage missing;
 
-    /** Sign for direct order (i.e. X → Y, Y → Z, Z → X). */
+    /** Sign for direct order (i.e. X before Y, Y before Z, Z before X). */
     private final double sign;
 
     /**
@@ -216,37 +217,134 @@ public enum RotationOrder {
      * @since 3.1
      */
     public double[] getAngles(final Rotation rotation, final RotationConvention convention) {
-        final Vector3D vA = getColumnVector(rotation, convention);
-        final Vector3D vB = getRowVector(rotation, convention);
+
+        // Cardan/Euler angles rotations matrices have the following form, taking
+        // RotationOrder.XYZ (φ about X, θ about Y, ψ about Z) and RotationConvention.FRAME_TRANSFORM
+        // as an example:
+        // [  cos θ cos ψ     cos φ sin ψ + sin φ sin θ cos ψ     sin φ sin ψ - cos φ sin θ cos ψ ]
+        // [ -cos θ sin ψ     cos φ cos ψ - sin φ sin θ sin ψ     cos ψ sin φ + cos φ sin θ sin ψ ]
+        // [  sin θ                       - sin φ cos θ                         cos φ cos θ       ]
+
+        // One can see that there is a "simple" column (the first column in the example above) and a "simple"
+        // row (the last row in the example above). In fact, the simple column always corresponds to the axis
+        // of the first rotation in RotationConvention.FRAME_TRANSFORM convention (i.e. X axis here, hence
+        // first column) and to the axis of the third rotation in RotationConvention.VECTOR_OPERATOR
+        // convention. The "simple" row always corresponds to axis of the third rotation in
+        // RotationConvention.FRAME_TRANSFORM convention (i.e. Z axis here, hence last row) and to the axis
+        // of the first rotation in RotationConvention.VECTOR_OPERATOR convention.
+        final Vector3D vCol = getColumnVector(rotation, convention);
+        final Vector3D vRow = getRowVector(rotation, convention);
+
+        // in the example above, we see that the components of the simple row
+        // are [ sin θ, -sin φ cos θ, cos φ cos θ ], which means that if we select
+        // θ strictly between -π/2 and +π/2 (i.e. cos θ > 0), then we can extract
+        // φ as atan2(-Yrow, +Zrow), i.e. the coordinates along the axes of the
+        // two final rotations in the Cardan sequence.
+
+        // in the example above, we see that the components of the simple column
+        // are [ cos θ cos ψ, -cos θ sin ψ, sin θ ], which means that if we select
+        // θ strictly between -π/2 and +π/2 (i.e. cos θ > 0), then we can extract
+        // ψ as atan2(-Ycol, +Xcol), i.e. the coordinates along the axes of the
+        // two initial rotations in the Cardan sequence.
+
+        // if we are exactly on the singularity (i.e. θ = ±π/2), then the matrix
+        // degenerates to:
+        // [  0    sin(ψ ± φ)    ∓ cos(ψ ± φ) ]
+        // [  0    cos(ψ ± φ)    ± sin(ψ ± φ) ]
+        // [ ±1       0              0        ]
+        // so we can set θ=±π/2 copying the sign from ±1 term,
+        // arbitrarily set φ=0
+        // and extract ψ as atan2(XmidCol, YmidCol)
+
+        // These results generalize to all sequences, with some adjustments for
+        // Euler sequence where we need to replace one axis by the missing axis
+        // and some sign adjustments depending on the rotation order being direct
+        // (i.e. X before Y, Y before Z, Z before X) or indirect
+
         if (missing == null) {
             // this is a Cardan angles order
-            if (convention == RotationConvention.VECTOR_OPERATOR) {
-                return new double[] {
-                    FastMath.atan2(stage2.getComponent(vA) * -sign, stage3.getComponent(vA)),
-                    safeAsin(stage3.getComponent(vB), stage1.getComponent(vB), stage2.getComponent(vB)) * sign,
-                    FastMath.atan2(stage2.getComponent(vB) * -sign, stage1.getComponent(vB))
-                };
+
+            if (convention == RotationConvention.FRAME_TRANSFORM) {
+                final double s = stage2.getComponent(vRow) * -sign;
+                final double c = stage3.getComponent(vRow);
+                if (s * s + c * c > 1.0e-30) {
+                    // regular case
+                    return new double[] {
+                        FastMath.atan2(s, c),
+                        safeAsin(stage1.getComponent(vRow), stage2.getComponent(vRow), stage3.getComponent(vRow)) * sign,
+                        FastMath.atan2(stage2.getComponent(vCol) * -sign, stage1.getComponent(vCol))
+                    };
+                } else {
+                    // near singularity
+                    final Vector3D midCol = rotation.applyTo(stage2.getAxis());
+                    return new double[] {
+                        0.0,
+                        FastMath.copySign(MathUtils.SEMI_PI, stage1.getComponent(vRow) * sign),
+                        FastMath.atan2(stage1.getComponent(midCol) * sign, stage2.getComponent(midCol))
+                    };
+                }
             } else {
-                 return new double[] {
-                    FastMath.atan2(stage2.getComponent(vB) * -sign, stage3.getComponent(vB)),
-                    safeAsin(stage1.getComponent(vB), stage2.getComponent(vB), stage3.getComponent(vB)) * sign,
-                    FastMath.atan2(stage2.getComponent(vA) * -sign, stage1.getComponent(vA))
-                };
+                final double s = stage2.getComponent(vCol) * -sign;
+                final double c = stage3.getComponent(vCol);
+                if (s * s + c * c > 1.0e-30) {
+                    // regular case
+                    return new double[] {
+                        FastMath.atan2(s, c),
+                        safeAsin(stage3.getComponent(vRow), stage1.getComponent(vRow), stage2.getComponent(vRow)) * sign,
+                        FastMath.atan2(stage2.getComponent(vRow) * -sign, stage1.getComponent(vRow))
+                    };
+                } else {
+                    // near singularity
+                    final Vector3D midRow = rotation.applyInverseTo(stage2.getAxis());
+                    return new double[] {
+                        0.0,
+                        FastMath.copySign(MathUtils.SEMI_PI, stage3.getComponent(vRow) * sign),
+                        FastMath.atan2(stage1.getComponent(midRow) * sign, stage2.getComponent(midRow))
+                    };
+                }
             }
         } else {
             // this is an Euler angles order
-            if (convention == RotationConvention.VECTOR_OPERATOR) {
-                return new double[] {
-                    FastMath.atan2(stage2.getComponent(vA), missing.getComponent(vA) * -sign),
-                    safeAcos(stage1.getComponent(vB), stage2.getComponent(vB), missing.getComponent(vB)),
-                    FastMath.atan2(stage2.getComponent(vB), missing.getComponent(vB) * sign)
-                };
+            if (convention == RotationConvention.FRAME_TRANSFORM) {
+                final double s = stage2.getComponent(vRow);
+                final double c = missing.getComponent(vRow) * -sign;
+                if (s * s + c * c > 1.0e-30) {
+                    // regular case
+                    return new double[] {
+                        FastMath.atan2(s, c),
+                        safeAcos(stage1.getComponent(vRow), stage2.getComponent(vRow), missing.getComponent(vRow)),
+                        FastMath.atan2(stage2.getComponent(vCol), missing.getComponent(vCol) * sign)
+                    };
+                } else {
+                    // near singularity
+                    final Vector3D midCol = rotation.applyTo(stage2.getAxis());
+                    return new double[] {
+                        FastMath.atan2(missing.getComponent(midCol) * -sign, stage2.getComponent(midCol)) *
+                        FastMath.copySign(1, stage1.getComponent(vRow)),
+                        stage1.getComponent(vRow) > 0 ? 0 : FastMath.PI,
+                        0.0
+                    };
+                }
             } else {
-                return new double[] {
-                    FastMath.atan2(stage2.getComponent(vB), missing.getComponent(vB) * -sign),
-                    safeAcos(stage1.getComponent(vB), stage2.getComponent(vB), missing.getComponent(vB)),
-                    FastMath.atan2(stage2.getComponent(vA), missing.getComponent(vA) * sign)
-                };
+                final double s = stage2.getComponent(vCol);
+                final double c = missing.getComponent(vCol) * -sign;
+                if (s * s + c * c > 1.0e-30) {
+                    // regular case
+                    return new double[] {
+                        FastMath.atan2(s, c),
+                        safeAcos(stage1.getComponent(vRow), stage2.getComponent(vRow), missing.getComponent(vRow)),
+                        FastMath.atan2(stage2.getComponent(vRow), missing.getComponent(vRow) * sign)
+                    };
+                } else {
+                    // near singularity
+                    final Vector3D midRow = rotation.applyInverseTo(stage2.getAxis());
+                    return new double[] {
+                        FastMath.atan2(missing.getComponent(midRow) * -sign, stage2.getComponent(midRow)) *
+                        FastMath.copySign(1, stage1.getComponent(vRow)),
+                        stage1.getComponent(vRow) > 0 ? 0 : FastMath.PI,
+                        0.0
+                    };
+                }
             }
         }
     }
@@ -259,29 +357,117 @@ public enum RotationOrder {
      * @since 3.1
      */
     public <T extends CalculusFieldElement<T>> T[] getAngles(final FieldRotation<T> rotation, final RotationConvention convention) {
-        final FieldVector3D<T> vA = getColumnVector(rotation, convention);
-        final FieldVector3D<T> vB = getRowVector(rotation, convention);
+
+        // Cardan/Euler angles rotations matrices have the following form, taking
+        // RotationOrder.XYZ (φ about X, θ about Y, ψ about Z) and RotationConvention.FRAME_TRANSFORM
+        // as an example:
+        // [  cos θ cos ψ     cos φ sin ψ + sin φ sin θ cos ψ     sin φ sin ψ - cos φ sin θ cos ψ ]
+        // [ -cos θ sin ψ     cos φ cos ψ - sin φ sin θ sin ψ     cos ψ sin φ + cos φ sin θ sin ψ ]
+        // [  sin θ                       - sin φ cos θ                         cos φ cos θ       ]
+
+        // One can see that there is a "simple" column (the first column in the example above) and a "simple"
+        // row (the last row in the example above). In fact, the simple column always corresponds to the axis
+        // of the first rotation in RotationConvention.FRAME_TRANSFORM convention (i.e. X axis here, hence
+        // first column) and to the axis of the third rotation in RotationConvention.VECTOR_OPERATOR
+        // convention. The "simple" row always corresponds to axis of the third rotation in
+        // RotationConvention.FRAME_TRANSFORM convention (i.e. Z axis here, hence last row) and to the axis
+        // of the first rotation in RotationConvention.VECTOR_OPERATOR convention.
+        final FieldVector3D<T> vCol = getColumnVector(rotation, convention);
+        final FieldVector3D<T> vRow = getRowVector(rotation, convention);
+
+        // in the example above, we see that the components of the simple row
+        // are [ sin θ, -sin φ cos θ, cos φ cos θ ], which means that if we select
+        // θ strictly between -π/2 and +π/2 (i.e. cos θ > 0), then we can extract
+        // φ as atan2(-Yrow, +Zrow), i.e. the coordinates along the axes of the
+        // two final rotations in the Cardan sequence.
+
+        // in the example above, we see that the components of the simple column
+        // are [ cos θ cos ψ, -cos θ sin ψ, sin θ ], which means that if we select
+        // θ strictly between -π/2 and +π/2 (i.e. cos θ > 0), then we can extract
+        // ψ as atan2(-Ycol, +Xcol), i.e. the coordinates along the axes of the
+        // two initial rotations in the Cardan sequence.
+
+        // if we are exactly on the singularity (i.e. θ = ±π/2), then the matrix
+        // degenerates to:
+        // [  0    sin(ψ ± φ)    ∓ cos(ψ ± φ) ]
+        // [  0    cos(ψ ± φ)    ± sin(ψ ± φ) ]
+        // [ ±1       0              0        ]
+        // so we can set θ=±π/2 copying the sign from ±1 term,
+        // arbitrarily set φ=0
+        // and extract ψ as atan2(XmidCol, YmidCol)
+
+        // These results generalize to all sequences, with some adjustments for
+        // Euler sequence where we need to replace one axis by the missing axis
+        // and some sign adjustments depending on the rotation order being direct
+        // (i.e. X before Y, Y before Z, Z before X) or indirect
+
         if (missing == null) {
             // this is a Cardan angles order
-            if (convention == RotationConvention.VECTOR_OPERATOR) {
-                return buildArray(FastMath.atan2(stage2.getComponent(vA).multiply(-sign), stage3.getComponent(vA)),
-                                  safeAsin(stage3.getComponent(vB), stage1.getComponent(vB), stage2.getComponent(vB)).multiply(sign),
-                                  FastMath.atan2(stage2.getComponent(vB).multiply(-sign), stage1.getComponent(vB)));
+            if (convention == RotationConvention.FRAME_TRANSFORM) {
+                final T s = stage2.getComponent(vRow).multiply(-sign);
+                final T c = stage3.getComponent(vRow);
+                if (s.square().add(c.square()).getReal() > 1.0e-30) {
+                    // regular case
+                    return buildArray(FastMath.atan2(s, c),
+                                      safeAsin(stage1.getComponent(vRow), stage2.getComponent(vRow), stage3.getComponent(vRow)).multiply(sign),
+                                      FastMath.atan2(stage2.getComponent(vCol).multiply(-sign), stage1.getComponent(vCol)));
+                } else {
+                    // near singularity
+                    final FieldVector3D<T> midCol = rotation.applyTo(stage2.getAxis());
+                    return buildArray(s.getField().getZero(),
+                                      FastMath.copySign(s.getPi().multiply(0.5), stage1.getComponent(vRow).multiply(sign)),
+                                      FastMath.atan2(stage1.getComponent(midCol).multiply(sign), stage2.getComponent(midCol)));
+                }
             } else {
-                return buildArray(FastMath.atan2(stage2.getComponent(vB).multiply(-sign), stage3.getComponent(vB)),
-                                  safeAsin(stage1.getComponent(vB), stage2.getComponent(vB), stage3.getComponent(vB)).multiply(sign),
-                                  FastMath.atan2(stage2.getComponent(vA).multiply(-sign), stage1.getComponent(vA)));
+                final T s = stage2.getComponent(vCol).multiply(-sign);
+                final T c = stage3.getComponent(vCol);
+                if (s.square().add(c.square()).getReal() > 1.0e-30) {
+                    // regular case
+                    return buildArray(FastMath.atan2(stage2.getComponent(vCol).multiply(-sign), stage3.getComponent(vCol)),
+                                      safeAsin(stage3.getComponent(vRow), stage1.getComponent(vRow), stage2.getComponent(vRow)).multiply(sign),
+                                      FastMath.atan2(stage2.getComponent(vRow).multiply(-sign), stage1.getComponent(vRow)));
+                } else {
+                    // near singularity
+                    final FieldVector3D<T> midRow = rotation.applyInverseTo(stage2.getAxis());
+                    return buildArray(s.getField().getZero(),
+                                      FastMath.copySign(s.getPi().multiply(0.5), stage3.getComponent(vRow).multiply(sign)),
+                                      FastMath.atan2(stage1.getComponent(midRow).multiply(sign), stage2.getComponent(midRow)));
+                }
             }
         } else {
             // this is an Euler angles order
-            if (convention == RotationConvention.VECTOR_OPERATOR) {
-                return buildArray(FastMath.atan2(stage2.getComponent(vA), missing.getComponent(vA).multiply(-sign)),
-                                  safeAcos(stage1.getComponent(vB), stage2.getComponent(vB), missing.getComponent(vB)),
-                                  FastMath.atan2(stage2.getComponent(vB), missing.getComponent(vB).multiply(sign)));
+            if (convention == RotationConvention.FRAME_TRANSFORM) {
+                final T s = stage2.getComponent(vRow);
+                final T c = missing.getComponent(vRow).multiply(-sign);
+                if (s.square().add(c.square()).getReal() > 1.0e-30) {
+                    // regular case
+                    return buildArray(FastMath.atan2(s, c),
+                                      safeAcos(stage1.getComponent(vRow), stage2.getComponent(vRow), missing.getComponent(vRow)),
+                                      FastMath.atan2(stage2.getComponent(vCol), missing.getComponent(vCol).multiply(sign)));
+                } else {
+                    // near singularity
+                    final FieldVector3D<T> midCol = rotation.applyTo(stage2.getAxis());
+                    return buildArray(FastMath.atan2(missing.getComponent(midCol).multiply(-sign), stage2.getComponent(midCol)).
+                                      multiply(FastMath.copySign(1, stage1.getComponent(vRow).getReal())),
+                                      stage1.getComponent(vRow).getReal() > 0 ? s.getField().getZero() : s.getPi(),
+                                      s.getField().getZero());
+                }
             } else {
-                return buildArray(FastMath.atan2(stage2.getComponent(vB), missing.getComponent(vB).multiply(-sign)),
-                                  safeAcos(stage1.getComponent(vB), stage2.getComponent(vB), missing.getComponent(vB)),
-                                  FastMath.atan2(stage2.getComponent(vA), missing.getComponent(vA).multiply(sign)));
+                final T s = stage2.getComponent(vCol);
+                final T c = missing.getComponent(vCol).multiply(-sign);
+                if (s.square().add(c.square()).getReal() > 1.0e-30) {
+                    // regular case
+                    return buildArray(FastMath.atan2(s, c),
+                                      safeAcos(stage1.getComponent(vRow), stage2.getComponent(vRow), missing.getComponent(vRow)),
+                                      FastMath.atan2(stage2.getComponent(vRow), missing.getComponent(vRow).multiply(sign)));
+                } else {
+                    // near singularity
+                    final FieldVector3D<T> midRow = rotation.applyInverseTo(stage2.getAxis());
+                    return buildArray(FastMath.atan2(missing.getComponent(midRow).multiply(-sign), stage2.getComponent(midRow)).
+                                      multiply(FastMath.copySign(1, stage1.getComponent(vRow).getReal())),
+                                      stage1.getComponent(vRow).getReal() > 0 ? s.getField().getZero() : s.getPi(),
+                                      s.getField().getZero());
+                }
             }
         }
     }
