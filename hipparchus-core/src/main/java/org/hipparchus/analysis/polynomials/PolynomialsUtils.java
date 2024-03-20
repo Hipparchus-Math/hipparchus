@@ -266,49 +266,6 @@ public class PolynomialsUtils {
 
     }
 
-    /** Inner class for Jacobi polynomials keys. */
-    private static class JacobiKey {
-
-        /** First exponent. */
-        private final int v;
-
-        /** Second exponent. */
-        private final int w;
-
-        /** Simple constructor.
-         * @param v first exponent
-         * @param w second exponent
-         */
-        JacobiKey(final int v, final int w) {
-            this.v = v;
-            this.w = w;
-        }
-
-        /** Get hash code.
-         * @return hash code
-         */
-        @Override
-        public int hashCode() {
-            return (v << 16) ^ w;
-        }
-
-        /** Check if the instance represent the same key as another instance.
-         * @param key other key
-         * @return true if the instance and the other key refer to the same polynomial
-         */
-        @Override
-        public boolean equals(final Object key) {
-
-            if ((key == null) || !(key instanceof JacobiKey)) {
-                return false;
-            }
-
-            final JacobiKey otherK = (JacobiKey) key;
-            return (v == otherK.v) && (w == otherK.w);
-
-        }
-    }
-
     /**
      * Compute the coefficients of the polynomial \(P_s(x)\)
      * whose values at point {@code x} will be the same as the those from the
