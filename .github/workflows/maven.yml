@@ -24,7 +24,7 @@ jobs:
             -Dsonar.login=$SONARQUBE_TOKEN \
             -Dsonar.branch.name=${GITHUB_REF##*/} \
             -Dsonar.projectName="$PROJECT_NAME" \
-              \
+            -Dsonar.qualitygate.wait=true \
             $KEY_OPTION
       env:
         SONARQUBE_TOKEN: ${{ secrets.SONARQUBE_TOKEN }}
