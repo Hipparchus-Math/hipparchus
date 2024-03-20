@@ -327,6 +327,22 @@ public class PolynomialsUtilsTest {
         }
     }
 
+    /** {@link JacobiKey} coverage tests.
+     * @since 3.1
+     */
+    @Test
+    public void testJacobiKeyCoverage() {
+        
+        final JacobiKey key = new JacobiKey(3, 4);
+        
+        Assert.assertEquals(false, key.equals(null));
+        Assert.assertEquals(false, key.equals(new Object()));
+        Assert.assertEquals(false, key.equals(new JacobiKey(3, 5)));
+        Assert.assertEquals(false, key.equals(new JacobiKey(5, 4)));
+        Assert.assertEquals(false, key.equals(new JacobiKey(5, 5)));
+        Assert.assertEquals(true, key.equals(new JacobiKey(3, 4)));
+    }
+    
     @Test
     public void testShift() {
         // f1(x) = 1 + x + 2 x^2
