@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.1" date="TBD" description="TBD.">
+      <action dev="maxime" type="update" issue="issues/322">
+        Extracted class JacobiKey from PolynomialsUtils.
+      </action>
       <action dev="serrof" type="update" issue="issues/302">
         Improved performance of Gradient.
       </action>
