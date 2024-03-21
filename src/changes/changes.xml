@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.1" date="TBD" description="TBD.">
+      <action dev="maxime" type="update" issue="issues/322">
+        Extracted class JacobiKey from PolynomialsUtils.
+      </action>
       <action dev="luc" type="update" issue="issues/304">
         Allow retrieving correct Cardan/Euler angles even at singularity.
       </action>
@@ -64,6 +67,9 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
       <action dev="luc" type="add" due-to="Francesco Rocca" issue="issues/296">
         Added constrained optimization.
+      </action>
+      <action dev="luc" type="fix" due-to="Axel Kramer" issue="issues/294">
+        Added GCD and LCM to {Big}Fraction.
       </action>
       <action dev="serrof" type="update" issue="issues/288">
         Replace uses of scalar multiplication on Field one.
