@@ -34,6 +34,13 @@ public interface UnscentedTransformProvider {
     RealVector[] unscentedTransform(RealVector state, RealMatrix covariance);
 
     /**
+     * Perform the inverse unscented transform from an array of sigma points.
+     * @param sigmaPoints array containing the sigma points of the unscented transform
+     * @return mean state and associated covariance
+     */
+    Pair<RealVector, RealMatrix> inverseUnscentedTransform(RealVector[] sigmaPoints);
+
+    /**
      * Get the covariance weights.
      * @return the covariance weights
      */

@@ -53,7 +53,7 @@ public class JulierUnscentedTransformTest {
 
     }
 
-    /** test unscented transform */
+    /** Test unscented transform */
     @Test
     public void testUnscentedTransform() {
 
@@ -74,6 +74,36 @@ public class JulierUnscentedTransformTest {
         checkSigmaPoint(sigma[3], 0.0, 1.0);
         checkSigmaPoint(sigma[4], 1.0, 0.0);
 
+    }
+
+    /** Test inverse unscented transform */
+    @Test
+    public void testInverseUnscentedTransform() {
+        
+        // Initialize
+        final int stateDim = 2;
+        final JulierUnscentedTransform julier = new JulierUnscentedTransform(stateDim);
+        final RealVector[] sigmaPoints = new RealVector[] {MatrixUtils.createRealVector(new double[] {1.0, 1.0}),
+                                                           MatrixUtils.createRealVector(new double[] {2.0, 1.0}),
+                                                           MatrixUtils.createRealVector(new double[] {1.0, 2.0}),
+                                                           MatrixUtils.createRealVector(new double[] {0.0, 1.0}),
+                                                           MatrixUtils.createRealVector(new double[] {1.0, 0.0})};
+        // Action
+        final Pair<RealVector, RealMatrix> out = julier.inverseUnscentedTransform(sigmaPoints);
+        final RealVector state = out.getFirst();
+        final RealMatrix covariance = out.getSecond();
+        
+        // Verify
+        Assert.assertEquals(2, state.getDimension());
+        Assert.assertEquals(1.0, state.getEntry(0), 0.);
+        Assert.assertEquals(1.0, state.getEntry(1), 0.);
+        
+        Assert.assertEquals(2, covariance.getColumnDimension());
+        Assert.assertEquals(2, covariance.getRowDimension());
+        Assert.assertEquals(0.5, covariance.getEntry(0, 0), 0.);
+        Assert.assertEquals(0.0, covariance.getEntry(0, 1), 0.);
+        Assert.assertEquals(0.0, covariance.getEntry(1, 0), 0.);
+        Assert.assertEquals(0.5, covariance.getEntry(1, 1), 0.);
     }
 
     private static void checkSigmaPoint(final RealVector sigma, final double ref1, final double ref2) {

@@ -30,11 +30,17 @@ import org.hipparchus.filtering.kalman.SimpleMeasurement;
 import org.hipparchus.filtering.kalman.extended.ExtendedKalmanFilter;
 import org.hipparchus.filtering.kalman.extended.NonLinearEvolution;
 import org.hipparchus.filtering.kalman.extended.NonLinearProcess;
-import org.hipparchus.linear.*;
+import org.hipparchus.linear.ArrayRealVector;
+import org.hipparchus.linear.CholeskyDecomposer;
+import org.hipparchus.linear.MatrixUtils;
+import org.hipparchus.linear.QRDecomposer;
+import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.linear.RealVector;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MerweUnscentedTransform;
+import org.hipparchus.util.Pair;
 import org.hipparchus.util.UnscentedTransformProvider;
 import org.junit.Assert;
 import org.junit.Test;
@@ -65,6 +71,14 @@ public class UnscentedKalmanFilterTest {
             @Override
             public RealVector getWc() {
                 return new ArrayRealVector();
+            }
+
+            @Override
+            public Pair<RealVector, RealMatrix> inverseUnscentedTransform(RealVector[] sigmaPoints) {
+                
+                final int stateDimension = sigmaPoints[0].getDimension();
+                
+                return new Pair<>(sigmaPoints[0], MatrixUtils.createRealIdentityMatrix(stateDimension));
             }
         };
 
