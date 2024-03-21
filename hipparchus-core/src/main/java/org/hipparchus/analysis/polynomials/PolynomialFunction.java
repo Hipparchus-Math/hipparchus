@@ -68,7 +68,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Fie
      * @throws NullArgumentException if {@code c} is {@code null}.
      * @throws MathIllegalArgumentException if {@code c} is empty.
      */
-    public PolynomialFunction(double[] c)
+    public PolynomialFunction(double... c)
         throws MathIllegalArgumentException, NullArgumentException {
         super();
         MathUtils.checkNotNull(c);
