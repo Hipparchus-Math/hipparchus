@@ -89,9 +89,9 @@ public class JulierUnscentedTransformTest {
                                                            MatrixUtils.createRealVector(new double[] {0.0, 1.0}),
                                                            MatrixUtils.createRealVector(new double[] {1.0, 0.0})};
         // Action
-        final Pair<RealVector, RealMatrix> out = julier.inverseUnscentedTransform(sigmaPoints);
-        final RealVector state = out.getFirst();
-        final RealMatrix covariance = out.getSecond();
+        final Pair<RealVector, RealMatrix> inverse = julier.inverseUnscentedTransform(sigmaPoints);
+        final RealVector state = inverse.getFirst();
+        final RealMatrix covariance = inverse.getSecond();
         
         // Verify
         Assert.assertEquals(2, state.getDimension());

@@ -16,6 +16,8 @@
  */
 package org.hipparchus.util;
 
+import org.hipparchus.linear.ArrayRealVector;
+import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 
@@ -34,11 +36,83 @@ public interface UnscentedTransformProvider {
     RealVector[] unscentedTransform(RealVector state, RealMatrix covariance);
 
     /**
+     * Computes a weighted mean state from a given set of sigma points.
+     * <p>
+     * This method can be used for computing both the mean state and the mean measurement
+     * in an Unscented Kalman filter.
+     * <p>
+     * It corresponds to Equation 17 of "Wan, E. A., & Van Der Merwe, R. The unscented Kalman filter for nonlinear estimation"
+     * <p>
+     * @param sigmaPoints input samples
+     * @return weighted mean state
+     */
+    default RealVector getUnscentedMeanState(RealVector[] sigmaPoints) {
+
+        // Sigma point dimension
+        final int sigmaPointDimension = sigmaPoints[0].getDimension();
+
+        // Compute weighted mean
+        // ---------------------
+
+        RealVector weightedMean = new ArrayRealVector(sigmaPointDimension);
+
+        // Compute the weight coefficients wm
+        final RealVector wm = getWm();
+
+        // Weight each sigma point and sum them
+        for (int i = 0; i < sigmaPoints.length; i++) {
+            weightedMean = weightedMean.add(sigmaPoints[i].mapMultiply(wm.getEntry(i)));
+        }
+
+        return weightedMean;
+    }
+
+    /** Computes the unscented covariance matrix from a weighted mean state and a set of sigma points.
+     * <p>
+     * This method can be used for computing both the predicted state
+     * covariance matrix and the innovation covariance matrix in an Unscented Kalman filter.
+     * <p>
+     * It corresponds to Equation 18 of "Wan, E. A., & Van Der Merwe, R. The unscented Kalman filter for nonlinear estimation"
+     * <p>
+     * @param sigmaPoints input sigma points
+     * @param meanState weighted mean state
+     * @return the unscented covariance matrix
+     */
+    default RealMatrix getUnscentedCovariance(RealVector[] sigmaPoints, RealVector meanState) {
+
+        // State dimension
+        final int stateDimension = meanState.getDimension();
+
+        // Compute covariance matrix
+        // -------------------------
+
+        RealMatrix covarianceMatrix = MatrixUtils.createRealMatrix(stateDimension, stateDimension);
+
+        // Compute the weight coefficients wc
+        final RealVector wc = getWc();
+
+        // Reconstruct the covariance
+        for (int i = 0; i < sigmaPoints.length; i++) {
+            final RealMatrix diff = MatrixUtils.createColumnRealMatrix(sigmaPoints[i].subtract(meanState).toArray());
+            covarianceMatrix = covarianceMatrix.add(diff.multiplyTransposed(diff).scalarMultiply(wc.getEntry(i)));
+        }
+
+        return covarianceMatrix;
+    }
+
+    /**
      * Perform the inverse unscented transform from an array of sigma points.
      * @param sigmaPoints array containing the sigma points of the unscented transform
      * @return mean state and associated covariance
      */
-    Pair<RealVector, RealMatrix> inverseUnscentedTransform(RealVector[] sigmaPoints);
+    default Pair<RealVector, RealMatrix> inverseUnscentedTransform(RealVector[] sigmaPoints) {
+
+        // Mean state
+        final RealVector meanState = getUnscentedMeanState(sigmaPoints);
+
+        // Return state and covariance
+        return new Pair<>(meanState, getUnscentedCovariance(sigmaPoints, meanState));
+    }
 
     /**
      * Get the covariance weights.

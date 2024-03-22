@@ -19,7 +19,6 @@ package org.hipparchus.util;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.linear.SemiDefinitePositiveCholeskyDecomposition;
@@ -80,43 +79,6 @@ public abstract class AbstractUnscentedTransform implements UnscentedTransformPr
         // Return sigma points
         return sigmaPoints;
 
-    }
-
-    /** {@inheritDoc}. */
-    @Override
-    public Pair<RealVector, RealMatrix> inverseUnscentedTransform(final RealVector[] sigmaPoints) {
-
-        // State dimension
-        final int stateDimension = sigmaPoints[0].getDimension();
-
-        // Compute weighted mean
-        // ---------------------
-
-        RealVector weightedMean = new ArrayRealVector(stateDimension);
-
-        // Compute the weight coefficients wm
-        final RealVector wm = getWm();
-
-        // Weight each sigma point and sum them
-        for (int i = 0; i <= 2 * stateDimension; i++) {
-            weightedMean = weightedMean.add(sigmaPoints[i].mapMultiply(wm.getEntry(i)));
-        }
-
-        // Compute covariance matrix
-        // -------------------------
-
-        RealMatrix covarianceMatrix = MatrixUtils.createRealMatrix(stateDimension, stateDimension);
-
-        // Compute the weight coefficients wc
-        final RealVector wc = getWc();
-
-        // Reconstruct the covariance
-        for (int i = 0; i <= 2 * stateDimension; i++) {
-            final RealMatrix diff = MatrixUtils.createColumnRealMatrix(sigmaPoints[i].subtract(weightedMean).toArray());
-            covarianceMatrix = covarianceMatrix.add(diff.multiplyTransposed(diff).scalarMultiply(wc.getEntry(i)));
-        }
-
-        return new Pair<>(weightedMean, covarianceMatrix);
     }
 
     /**

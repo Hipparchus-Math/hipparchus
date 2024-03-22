@@ -74,7 +74,7 @@ public class MerweUnscentedTransformTest {
         checkSigmaPoint(sigma[3], 0.5, 1.0);
         checkSigmaPoint(sigma[4], 1.0, 0.5);
     }
-
+    
     /** Test inverse unscented transform */
     @Test
     public void testInverseUnscentedTransform() {
@@ -88,9 +88,9 @@ public class MerweUnscentedTransformTest {
                                                            MatrixUtils.createRealVector(new double[] {0.5, 1.0}),
                                                            MatrixUtils.createRealVector(new double[] {1.0, 0.5})};
         // Action
-        final Pair<RealVector, RealMatrix> out = merwe.inverseUnscentedTransform(sigmaPoints);
-        final RealVector state = out.getFirst();
-        final RealMatrix covariance = out.getSecond();
+        final Pair<RealVector, RealMatrix> inverse = merwe.inverseUnscentedTransform(sigmaPoints);
+        final RealVector state = inverse.getFirst();
+        final RealMatrix covariance = inverse.getSecond();
         
         // Verify
         Assert.assertEquals(2, state.getDimension());
