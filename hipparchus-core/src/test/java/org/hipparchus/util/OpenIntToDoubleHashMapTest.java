@@ -39,7 +39,7 @@ import org.junit.Test;
  */
 public class OpenIntToDoubleHashMapTest {
 
-    private Map<Integer, Double> javaMap = new HashMap<Integer, Double>();
+    private final Map<Integer, Double> javaMap = new HashMap<>();
 
     @Before
     public void setUp() throws Exception {
@@ -62,7 +62,7 @@ public class OpenIntToDoubleHashMapTest {
     }
 
     private Map<Integer, Double> generate() {
-        Map<Integer, Double> map = new HashMap<Integer, Double>();
+        Map<Integer, Double> map = new HashMap<>();
         Random r = new Random();
         for (int i = 0; i < 2000; ++i)
             map.put(r.nextInt(), r.nextDouble());
@@ -96,7 +96,7 @@ public class OpenIntToDoubleHashMapTest {
     }
 
     private void assertPutAndGet(OpenIntToDoubleHashMap map) {
-        assertPutAndGet(map, 0, new HashSet<Integer>());
+        assertPutAndGet(map, 0, new HashSet<>());
     }
 
     private void assertPutAndGet(OpenIntToDoubleHashMap map, int mapSize,
@@ -170,7 +170,7 @@ public class OpenIntToDoubleHashMapTest {
         OpenIntToDoubleHashMap map = createFromJavaMap();
         int mapSize = javaMap.size();
         int count = 0;
-        Set<Integer> keysInMap = new HashSet<Integer>(javaMap.keySet());
+        Set<Integer> keysInMap = new HashSet<>(javaMap.keySet());
         for (Map.Entry<Integer, Double> mapEntry : javaMap.entrySet()) {
             keysInMap.remove(mapEntry.getKey());
             map.remove(mapEntry.getKey());
@@ -208,7 +208,7 @@ public class OpenIntToDoubleHashMapTest {
      * Returns a map with at least 100 elements where each element is absent from javaMap.
      */
     private Map<Integer, Double> generateAbsent() {
-        Map<Integer, Double> generated = new HashMap<Integer, Double>();
+        Map<Integer, Double> generated = new HashMap<>();
         do {
             generated.putAll(generate());
             for (Integer key : javaMap.keySet())
@@ -264,6 +264,35 @@ public class OpenIntToDoubleHashMapTest {
         } catch (NoSuchElementException nsee) {
             // expected
         }
+    }
+
+    @Test
+    public void testEquals() {
+        OpenIntToDoubleHashMap map1 = new OpenIntToDoubleHashMap();
+        map1.put(2,   2.5);
+        map1.put(17, -0.5);
+        map1.put(16,  0.0);
+        Assert.assertEquals(map1, map1);
+        OpenIntToDoubleHashMap map2 = new OpenIntToDoubleHashMap();
+        map2.put(17, -0.5);
+        map2.put(2,   2.5);
+        map2.put(16,  0.0);
+        Assert.assertEquals(map1, map2);
+        map2.put(16,  0.25);
+        Assert.assertNotEquals(map1, map2);
+        map2.put(16,  0.0);
+        Assert.assertEquals(map1, map2);
+        Assert.assertNotEquals(map1, "");
+        Assert.assertNotEquals(map1, null);
+    }
+
+    @Test
+    public void testHashcode() {
+        OpenIntToDoubleHashMap map = new OpenIntToDoubleHashMap();
+        map.put(2,   2.5);
+        map.put(17, -0.5);
+        map.put(16,  0.0);
+        Assert.assertEquals(978340117, map.hashCode());
     }
 
     @Test
