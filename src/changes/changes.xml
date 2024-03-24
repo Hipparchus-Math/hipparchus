@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.1" date="TBD" description="TBD.">
+      <action dev="luc" type="update" due-to="Bryan" issue="issues/277">
+        Improved release guide.
+      </action>
       <action dev="luc" type="update" issue="issues/333">
         Added Gauss-Markov order 1 autoregressive process generation.
       </action>

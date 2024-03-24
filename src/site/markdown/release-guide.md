@@ -23,6 +23,19 @@ guidelines to avoid forgetting something.
 You can also use the `release.sh` shell script to perform some of
 the commands depicted here.
 
+## Prerequisites
+
+In order to sign the binary releases, one has to create (once) a GPG
+signing key. This can be done on Linux-type using the command:
+
+    gpg --full-generate-key
+
+Once the key has been generated, it should be registered on the
+Hipparchus server so users would be able to download it from
+[https://www.hipparchus.org/KEYS](https://www.hipparchus.org/KEYS). Ask
+on the Hipparchus forum or on the GitHub discussion so the project
+team can add it.
+
 ## Prepare Git branch for release
 
 Release will be performed on a dedicated branch, not directly on
@@ -162,7 +175,7 @@ following command, with `-RCn` replaced with the Release Candidate number:
     git tag X.Y-RCn -s -u key-ID -m "Release Candidate n for version X.Y."
 
 The key ID is the 16 hexadecimal digits representing the manager keyID. This key ID should be
-available in the [http://www.hipparchus.org/KEYS](http://www.hipparchus.org/KEYS) file.
+available in the [https://www.hipparchus.org/KEYS](https://www.hipparchus.org/KEYS) file.
 
 The tag should be verified using command:
 
@@ -218,7 +231,8 @@ access the signing key.
 A huge number of files will be uploaded to SonaType server, some of which we do not really
 release. So once the commands ends, you will have to log into SonaType OSS site
 [https://oss.sonatype.org/](https://oss.sonatype.org/), check the staging repository and
-remove the artifacts from the `hipparchus-aggregator` and `hipparchus-coverage` modules.
+remove all the artifacts related to `hipparchus-aggregator` and
+`hipparchus-coverage` modules by right-clicking and selecting "delete".
 When the artifacts are considered OK, the repository must be closed so it is ready for the
 upcoming vote for the release.
 
@@ -254,9 +268,17 @@ Once generated, the site can be archived and uploaded to the Hipparchus site:
     tar cjf ../www-X.Y.hipparchus.org.tar.bz2 .
 
 This archive content must be extracted in the `staging` directory that already contains the
-`downloads` directory with the 12 files uploaded just before. When the `staging` directory
-is ready, the Apache server configuration must be updated to allow this directory to
-be served (it is not served when no vote is going on).
+`downloads` directory with the 12 files uploaded just before.
+
+## Prepare the site for the release
+
+When the `staging` directory is ready, the Apache server configuration
+must be updated to allow this directory to be served (it is not served
+when no vote is going on). This server configuration file is located
+in the `/etc/apache2/sites-enabled` folder. The `#` comment marker in
+front of the line that references the staging directory must be
+removed, the file must be saved and the `apache2ctl restart` command
+must be run to relaunch the Apache server.
 
 ## Calling for the vote
 
@@ -301,16 +323,7 @@ and non-maven artifacts must be removed from the `staging` directory in the Hipp
 Then a new release candidate must be created, with a new number, a new tag and new artifacts.
 Another vote is needed for this new release candidate.
 
-When the vote for a release candidate succeeds, the maven artifacts must be published using
-OSS site to release the repository. The non-maven artifacts must be published by moving them
-from the `staging` repository to the general repository. Beware to create a new
-`www-X.Y.hipparchus.org` directory for the site and link the latest version to it. This allows
-older versions to be kept available if needed. A dedicated `apidocs-X.Y` folder must also be
-set up with a copy of the `www-X.Y.hipparchus.org/apidocs` directory. Here again, it allows
-older versions to still be available online.
-
-The Apache server configuration must be updated to forbid serving the now unused `staging` directory,
-and to add an alias for the new `apidocs-X.Y` folder.
+### Tagging the released version
 
 As the vote passed, a final signed tag must be added to the succeeding release candidate,
 verified and pushed:
@@ -318,6 +331,47 @@ verified and pushed:
     git tag X.Y -s -u key-ID -m "Version X.Y."
     git tag -v X.Y
     git push --tags
+
+### Merging the release version into master
+
+After the release branch has been completed, it should be merged back
+to the master branch:
+
+    git checkout master
+    git merge --no-ff release-X.Y
+    git push
+
+### Releasing maven artifacts on SonaType
+
+In order to publish the maven artifacts, one should log into SonaType OSS site
+[https://oss.sonatype.org/](https://oss.sonatype.org/), select the
+staging repository and press the "Release" button in the top menu.
+
+### Releasing source artifacts on GitHub
+
+In order to publish the source artifacts, one should log to GitHub, go
+to the
+[https://github.com/Hipparchus-Math/hipparchus/releases/](https://github.com/Hipparchus-Math/hipparchus/releases/)
+page and declare the new release.
+
+### Finalize the site after the successful vote
+
+The non-maven artifacts must also be published on the Hipparchus
+server by moving them from the `staging` repository to the general
+repository. Beware to create a new `www-X.Y.hipparchus.org` directory
+for the site and link the latest version to it. This allows older
+versions to be kept available if needed. A dedicated `apidocs-X.Y`
+folder must also be set up with a copy of the
+`www-X.Y.hipparchus.org/apidocs` directory. Here again, it allows
+older versions to still be available online.
+
+The Apache server configuration must be updated to forbid serving the
+now unused `staging` directory, and to add an alias for the new
+`apidocs-X.Y` folder. Once again, this is done by editing the Apache
+configuration file in the `/etc/apache2/sites-enabled` folder, saving
+it and running `apache2ctl restart`.
+
+### Announcing the release
 
 The last step is to announce the release by creating a new topic in the announcements category of the forum.
 
