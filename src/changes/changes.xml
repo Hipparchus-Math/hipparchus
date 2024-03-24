@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.1" date="TBD" description="TBD.">
+      <action dev="luc" type="update" issue="issues/289">
+        Added equals and hashCode to OpenIntTo{Double|Field}HashMap.
+      </action>
       <action dev="luc" type="update" issue="issues/327">
         Allow variable arguments for building PolynomialFunction.
       </action>

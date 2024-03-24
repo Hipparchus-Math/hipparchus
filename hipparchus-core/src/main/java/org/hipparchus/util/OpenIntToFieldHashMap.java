@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.NoSuchElementException;
 
@@ -252,6 +253,32 @@ public class OpenIntToFieldHashMap<T extends FieldElement<T>> implements Seriali
      */
     public Iterator iterator() {
         return new Iterator();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        @SuppressWarnings("unchecked")
+        final OpenIntToFieldHashMap<T> that = (OpenIntToFieldHashMap<T>) o;
+        return field.equals(that.field) &&
+               Arrays.equals(keys, that.keys) &&
+               Arrays.equals(values, that.values) &&
+               Arrays.equals(states, that.states);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        return 67 * field.hashCode() +
+               53 * Arrays.hashCode(keys) +
+               31 * Arrays.hashCode(values) +
+               Arrays.hashCode(states);
     }
 
     /**

@@ -25,6 +25,7 @@ package org.hipparchus.util;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.NoSuchElementException;
 
@@ -239,6 +240,29 @@ public class OpenIntToDoubleHashMap implements Serializable {
      */
     public Iterator iterator() {
         return new Iterator();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final OpenIntToDoubleHashMap that = (OpenIntToDoubleHashMap) o;
+        return Arrays.equals(keys, that.keys) &&
+               Arrays.equals(values, that.values) &&
+               Arrays.equals(states, that.states);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        return 53 * Arrays.hashCode(keys) +
+               31 * Arrays.hashCode(values) +
+               Arrays.hashCode(states);
     }
 
     /**
