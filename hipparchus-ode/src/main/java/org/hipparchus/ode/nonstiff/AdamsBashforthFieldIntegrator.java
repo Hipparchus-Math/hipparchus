@@ -159,8 +159,8 @@ import org.hipparchus.util.FastMath;
  */
 public class AdamsBashforthFieldIntegrator<T extends CalculusFieldElement<T>> extends AdamsFieldIntegrator<T> {
 
-    /** Integrator method name. */
-    private static final String METHOD_NAME = "Adams-Bashforth";
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = AdamsBashforthIntegrator.METHOD_NAME;
 
     /**
      * Build an Adams-Bashforth integrator with the given order and step control parameters.

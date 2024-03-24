@@ -52,13 +52,16 @@ import org.hipparchus.util.MathArrays;
 
 public class MidpointFieldIntegrator<T extends CalculusFieldElement<T>> extends RungeKuttaFieldIntegrator<T> {
 
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = MidpointIntegrator.METHOD_NAME;
+
     /** Simple constructor.
      * Build a midpoint integrator with the given step.
      * @param field field to which the time and state vector elements belong
      * @param step integration step
      */
     public MidpointFieldIntegrator(final Field<T> field, final T step) {
-        super(field, "midpoint", step);
+        super(field, METHOD_NAME, step);
     }
 
     /** {@inheritDoc} */

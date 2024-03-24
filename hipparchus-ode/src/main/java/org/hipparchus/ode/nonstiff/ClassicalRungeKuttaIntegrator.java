@@ -45,13 +45,16 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 
 public class ClassicalRungeKuttaIntegrator extends RungeKuttaIntegrator {
 
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = "classical Runge-Kutta";
+
     /** Simple constructor.
      * Build a fourth-order Runge-Kutta integrator with the given
      * step.
      * @param step integration step
      */
     public ClassicalRungeKuttaIntegrator(final double step) {
-        super("classical Runge-Kutta", step);
+        super(METHOD_NAME, step);
     }
 
     /** {@inheritDoc} */

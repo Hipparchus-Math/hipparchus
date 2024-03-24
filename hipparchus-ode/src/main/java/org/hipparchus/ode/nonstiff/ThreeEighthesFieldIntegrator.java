@@ -54,13 +54,16 @@ import org.hipparchus.util.MathArrays;
 public class ThreeEighthesFieldIntegrator<T extends CalculusFieldElement<T>>
     extends RungeKuttaFieldIntegrator<T> {
 
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = ThreeEighthesIntegrator.METHOD_NAME;
+
     /** Simple constructor.
      * Build a 3/8 integrator with the given step.
      * @param field field to which the time and state vector elements belong
      * @param step integration step
      */
     public ThreeEighthesFieldIntegrator(final Field<T> field, final T step) {
-        super(field, "3/8", step);
+        super(field, METHOD_NAME, step);
     }
 
     /** {@inheritDoc} */

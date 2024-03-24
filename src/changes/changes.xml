@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="3.1" date="TBD" description="TBD.">
+      <action dev="serrof" type="add" issue="issues/269">
+        Add public, static access to integrators name.
+      </action>
       <action dev="luc" type="update" due-to="Bryan" issue="issues/277">
         Improved release guide.
       </action>

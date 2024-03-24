@@ -49,12 +49,15 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 
 public class EulerIntegrator extends RungeKuttaIntegrator {
 
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = "Euler";
+
     /** Simple constructor.
      * Build an Euler integrator with the given step.
      * @param step integration step
      */
     public EulerIntegrator(final double step) {
-        super("Euler", step);
+        super(METHOD_NAME, step);
     }
 
     /** {@inheritDoc} */

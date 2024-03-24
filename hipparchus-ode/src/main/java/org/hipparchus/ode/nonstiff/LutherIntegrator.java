@@ -56,6 +56,9 @@ import org.hipparchus.util.FastMath;
 
 public class LutherIntegrator extends RungeKuttaIntegrator {
 
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = "Luther";
+
     /** Square root. */
     private static final double Q = FastMath.sqrt(21);
 
@@ -64,7 +67,7 @@ public class LutherIntegrator extends RungeKuttaIntegrator {
      * @param step integration step
      */
     public LutherIntegrator(final double step) {
-        super("Luther", step);
+        super(METHOD_NAME, step);
     }
 
     /** {@inheritDoc} */

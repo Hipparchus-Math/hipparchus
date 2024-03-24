@@ -44,12 +44,15 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 
 public class ThreeEighthesIntegrator extends RungeKuttaIntegrator {
 
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = "3/8";
+
     /** Simple constructor.
      * Build a 3/8 integrator with the given step.
      * @param step integration step
      */
     public ThreeEighthesIntegrator(final double step) {
-        super("3/8", step);
+        super(METHOD_NAME, step);
     }
 
     /** {@inheritDoc} */

@@ -58,13 +58,16 @@ import org.hipparchus.util.MathArrays;
 
 public class EulerFieldIntegrator<T extends CalculusFieldElement<T>> extends RungeKuttaFieldIntegrator<T> {
 
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = EulerIntegrator.METHOD_NAME;
+
     /** Simple constructor.
      * Build an Euler integrator with the given step.
      * @param field field to which the time and state vector elements belong
      * @param step integration step
      */
     public EulerFieldIntegrator(final Field<T> field, final T step) {
-        super(field, "Euler", step);
+        super(field, METHOD_NAME, step);
     }
 
     /** {@inheritDoc} */
