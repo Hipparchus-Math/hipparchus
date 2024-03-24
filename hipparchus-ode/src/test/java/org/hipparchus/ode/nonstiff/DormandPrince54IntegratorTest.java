@@ -35,7 +35,7 @@ public class DormandPrince54IntegratorTest extends EmbeddedRungeKuttaIntegratorA
 
     @Override
     public void testBackward() {
-        doTestBackward(1.6e-7, 1.6e-7, 1.0e-22, "Dormand-Prince 5(4)");
+        doTestBackward(1.6e-7, 1.6e-7, 1.0e-22, "Dormand-Prince 5 (4)");
     }
 
     @Override
@@ -73,12 +73,12 @@ public class DormandPrince54IntegratorTest extends EmbeddedRungeKuttaIntegratorA
 
     @Override
     public void testEvents() {
-        doTestEvents(1.7e-7, "Dormand-Prince 5(4)");
+        doTestEvents(1.7e-7, "Dormand-Prince 5 (4)");
     }
 
     @Override
     public void testStepEnd() {
-        doTestStepEnd(119, "Dormand-Prince 5(4)");
+        doTestStepEnd(119, "Dormand-Prince 5 (4)");
     }
 
     @Override
