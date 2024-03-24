@@ -189,7 +189,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
                MathIllegalStateException {
         return solveAllComplex(coefficients, 100_000, initial);
     }
-    
+
     /**
      * Find all complex roots for the polynomial with the given
      * coefficients, starting from the given initial value.
