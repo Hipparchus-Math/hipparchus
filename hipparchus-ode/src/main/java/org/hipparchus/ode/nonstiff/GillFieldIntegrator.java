@@ -56,13 +56,16 @@ import org.hipparchus.util.MathArrays;
 public class GillFieldIntegrator<T extends CalculusFieldElement<T>>
     extends RungeKuttaFieldIntegrator<T> {
 
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = GillIntegrator.METHOD_NAME;
+
     /** Simple constructor.
      * Build a fourth-order Gill integrator with the given step.
      * @param field field to which the time and state vector elements belong
      * @param step integration step
      */
     public GillFieldIntegrator(final Field<T> field, final T step) {
-        super(field, "Gill", step);
+        super(field, METHOD_NAME, step);
     }
 
     /** {@inheritDoc} */

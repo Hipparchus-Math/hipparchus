@@ -46,6 +46,9 @@ import org.hipparchus.util.MathArrays;
 public class HighamHall54FieldIntegrator<T extends CalculusFieldElement<T>>
     extends EmbeddedRungeKuttaFieldIntegrator<T> {
 
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = HighamHall54Integrator.METHOD_NAME;
+
     /** Simple constructor.
      * Build a fifth order Higham and Hall integrator with the given step bounds
      * @param field field to which the time and state vector elements belong
@@ -62,7 +65,7 @@ public class HighamHall54FieldIntegrator<T extends CalculusFieldElement<T>>
                                        final double minStep, final double maxStep,
                                        final double scalAbsoluteTolerance,
                                        final double scalRelativeTolerance) {
-        super(field, HighamHall54Integrator.METHOD_NAME, -1,
+        super(field, METHOD_NAME, -1,
               minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
     }
 

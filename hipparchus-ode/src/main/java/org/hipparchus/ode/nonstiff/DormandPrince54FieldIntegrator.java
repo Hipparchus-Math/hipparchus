@@ -58,6 +58,9 @@ import org.hipparchus.util.MathArrays;
 public class DormandPrince54FieldIntegrator<T extends CalculusFieldElement<T>>
     extends EmbeddedRungeKuttaFieldIntegrator<T> {
 
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = DormandPrince54Integrator.METHOD_NAME;
+
     /** Simple constructor.
      * Build a fifth order Dormand-Prince integrator with the given step bounds
      * @param field field to which the time and state vector elements belong
@@ -74,7 +77,7 @@ public class DormandPrince54FieldIntegrator<T extends CalculusFieldElement<T>>
                                           final double minStep, final double maxStep,
                                           final double scalAbsoluteTolerance,
                                           final double scalRelativeTolerance) {
-        super(field, DormandPrince54Integrator.METHOD_NAME, 6,
+        super(field, METHOD_NAME, 6,
               minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
     }
 

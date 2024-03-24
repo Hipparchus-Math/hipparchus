@@ -36,8 +36,8 @@ import org.hipparchus.util.FastMath;
 
 public class HighamHall54Integrator extends EmbeddedRungeKuttaIntegrator {
 
-    /** Integrator method name. */
-    static final String METHOD_NAME = "Higham-Hall 5(4)";
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = "Higham-Hall 5(4)";
 
     /** Error weights Butcher array. */
     static final double[] STATIC_E = {

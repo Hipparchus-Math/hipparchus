@@ -55,13 +55,16 @@ import org.hipparchus.util.MathArrays;
 public class ClassicalRungeKuttaFieldIntegrator<T extends CalculusFieldElement<T>>
     extends RungeKuttaFieldIntegrator<T> {
 
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = ClassicalRungeKuttaIntegrator.METHOD_NAME;
+
     /** Simple constructor.
      * Build a fourth-order Runge-Kutta integrator with the given step.
      * @param field field to which the time and state vector elements belong
      * @param step integration step
      */
     public ClassicalRungeKuttaFieldIntegrator(final Field<T> field, final T step) {
-        super(field, "classical Runge-Kutta", step);
+        super(field, METHOD_NAME, step);
     }
 
     /** {@inheritDoc} */

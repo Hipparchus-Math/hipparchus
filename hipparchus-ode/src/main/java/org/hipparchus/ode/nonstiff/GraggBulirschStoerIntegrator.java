@@ -90,8 +90,8 @@ import org.hipparchus.util.FastMath;
 
 public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
 
-    /** Integrator method name. */
-    private static final String METHOD_NAME = "Gragg-Bulirsch-Stoer";
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = "Gragg-Bulirsch-Stoer";
 
     /** maximal order. */
     private int maxOrder;

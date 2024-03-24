@@ -47,12 +47,15 @@ import org.hipparchus.util.FastMath;
 
 public class GillIntegrator extends RungeKuttaIntegrator {
 
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = "Gill";
+
     /** Simple constructor.
      * Build a fourth-order Gill integrator with the given step.
      * @param step integration step
      */
     public GillIntegrator(final double step) {
-        super("Gill", step);
+        super(METHOD_NAME, step);
     }
 
     /** {@inheritDoc} */

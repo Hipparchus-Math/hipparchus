@@ -43,12 +43,15 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 
 public class MidpointIntegrator extends RungeKuttaIntegrator {
 
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = "midpoint";
+
     /** Simple constructor.
      * Build a midpoint integrator with the given step.
      * @param step integration step
      */
     public MidpointIntegrator(final double step) {
-        super("midpoint", step);
+        super(METHOD_NAME, step);
     }
 
     /** {@inheritDoc} */

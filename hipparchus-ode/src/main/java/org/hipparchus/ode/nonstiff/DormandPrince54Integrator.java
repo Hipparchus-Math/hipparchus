@@ -48,8 +48,8 @@ import org.hipparchus.util.FastMath;
 
 public class DormandPrince54Integrator extends EmbeddedRungeKuttaIntegrator {
 
-    /** Integrator method name. */
-    static final String METHOD_NAME = "Dormand-Prince 5(4)";
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = "Dormand-Prince 5 (4)";
 
     /** Error array, element 1. */
     static final double E1 =     71.0 / 57600.0;

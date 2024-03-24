@@ -176,8 +176,8 @@ import org.hipparchus.util.MathUtils;
  */
 public class AdamsMoultonFieldIntegrator<T extends CalculusFieldElement<T>> extends AdamsFieldIntegrator<T> {
 
-    /** Integrator method name. */
-    private static final String METHOD_NAME = "Adams-Moulton";
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = AdamsMoultonIntegrator.METHOD_NAME;
 
     /**
      * Build an Adams-Moulton integrator with the given order and error control parameters.

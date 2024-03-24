@@ -167,8 +167,8 @@ import org.hipparchus.util.FastMath;
  */
 public class AdamsMoultonIntegrator extends AdamsIntegrator {
 
-    /** Integrator method name. */
-    private static final String METHOD_NAME = "Adams-Moulton";
+    /** Name of integration scheme. */
+    public static final String METHOD_NAME = "Adams-Moulton";
 
     /**
      * Build an Adams-Moulton integrator with the given order and error control parameters.
