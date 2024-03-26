@@ -40,9 +40,10 @@ public interface UnscentedTransformProvider {
      * <p>
      * This method can be used for computing both the mean state and the mean measurement
      * in an Unscented Kalman filter.
+     * </p>
      * <p>
-     * It corresponds to Equation 17 of "Wan, E. A., & Van Der Merwe, R. The unscented Kalman filter for nonlinear estimation"
-     * <p>
+     * It corresponds to Equation 17 of "Wan, E. A., &amp; Van Der Merwe, R. The unscented Kalman filter for nonlinear estimation"
+     * </p>
      * @param sigmaPoints input samples
      * @return weighted mean state
      */
@@ -71,9 +72,10 @@ public interface UnscentedTransformProvider {
      * <p>
      * This method can be used for computing both the predicted state
      * covariance matrix and the innovation covariance matrix in an Unscented Kalman filter.
+     * </p>
      * <p>
-     * It corresponds to Equation 18 of "Wan, E. A., & Van Der Merwe, R. The unscented Kalman filter for nonlinear estimation"
-     * <p>
+     * It corresponds to Equation 18 of "Wan, E. A., &amp; Van Der Merwe, R. The unscented Kalman filter for nonlinear estimation"
+     * </p>
      * @param sigmaPoints input sigma points
      * @param meanState weighted mean state
      * @return the unscented covariance matrix
