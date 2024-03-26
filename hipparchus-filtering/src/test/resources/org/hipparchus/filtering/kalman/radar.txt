@@ -1,3 +1,18 @@
+# Licensed to the Hipparchus project under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The Hipparchus project licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#      https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
  0.05    1019.28514031432    4.19892612568951     89.9849853443891     1026.57855317649    100.258471325986     4.99992376451156   -0.372790425959169     100.009996198111  -0.0185911842189891     9.09938047660586
  0.10    1003.64456445668    8.11769294928251     89.9053600341848     1015.61489076285    101.006331345204     9.99875593985759   -0.603337707126964     100.019767447146  -0.0500880581381564     4.77255476316153
  0.15    1004.37512895945    12.1026224146043     89.8007116058457      1011.9454825604    102.236446261076     14.9936315467677   -0.820181035401379     100.028513982531  -0.0940397295724976     3.24142675739822

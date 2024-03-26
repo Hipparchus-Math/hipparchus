@@ -479,6 +479,7 @@
       <Class name="org.hipparchus.random.SynchronizedRandomGenerator"/>
       <Class name="org.hipparchus.random.UniformRandomGenerator"/>
       <Class name="org.hipparchus.random.UnitSphereRandomVectorGenerator"/>
+      <Class name="org.hipparchus.random.GaussMarkovGenerator"/>
       <Class name="org.hipparchus.special.elliptic.jacobi.FieldJacobiTheta"/>
     </Or>
     <Method name="&lt;init>"/>

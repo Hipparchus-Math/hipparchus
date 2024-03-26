@@ -206,7 +206,9 @@ public enum RotationOrder {
             return RotationOrder.valueOf(value);
         } catch (IllegalArgumentException iae) {
             // Invalid value. An exception is thrown
-            throw new MathIllegalStateException(LocalizedGeometryFormats.INVALID_ROTATION_ORDER_NAME, value);
+            throw new MathIllegalStateException(iae,
+                                                LocalizedGeometryFormats.INVALID_ROTATION_ORDER_NAME,
+                                                value);
         }
     }
 

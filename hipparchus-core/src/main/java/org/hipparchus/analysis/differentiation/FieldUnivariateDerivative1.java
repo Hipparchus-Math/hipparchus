@@ -359,6 +359,7 @@ public class FieldUnivariateDerivative1<T extends CalculusFieldElement<T>>
      * @param g1 first derivative of the function at the current point (i.e. at {@code g'(getValue())})
      * @return g(this)
      */
+    @Override
     public FieldUnivariateDerivative1<T> compose(final T g0, final T g1) {
         return new FieldUnivariateDerivative1<>(g0, g1.multiply(f1));
     }

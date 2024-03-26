@@ -55,12 +55,7 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
     /** Hessian of the objective function. */
     private RealMatrix hessian;
 
-    /** Simple constructor.
-     */
-    public SQPOptimizerGM() {
-        super();
-    }
-
+    /** {@inheritDoc} */
     @Override
     public LagrangeSolution doOptimize() {
         int me = 0;
@@ -75,9 +70,9 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
             mi = getIqConstraint().dimY();
         }
 
-        double alfa = 1.0;
-        double rho = 100.0;
-        RealVector x = null;
+        double alpha;
+        double rho;
+        RealVector x;
         if (getStartPoint() != null) {
             x = new ArrayRealVector(getStartPoint());
         } else {
@@ -105,7 +100,7 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
             maxGrad = FastMath.max(maxGrad, inequalityEval.getLInfNorm());
         }
 
-        if (!getSettings().getUseFunHessian()) {
+        if (!getSettings().useFunHessian()) {
             hessian= MatrixUtils.createRealIdentityMatrix(x.getDimension()).scalarMultiply(maxGrad);
         } else {
             hessian = getObj().hessian(x);
@@ -118,24 +113,24 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
 
             iterations.increment();
 
-            alfa = 1.0;
+            alpha = 1.0;
 
-            LagrangeSolution sol1 = null;
+            LagrangeSolution sol1;
             //SOLVE QP
-            sol1 = solveQP(x,y);
+            sol1 = solveQP(x);
             RealVector p = sol1.getX();
             RealVector e = sol1.getLambda().subtract(y);
 
             RealVector s = calculateSvector(y,rho);
             RealVector se = null;
-            RealMatrix jacobi = null;
+            RealMatrix jacobi; // NOPMD - PMD detext a false positive here
             RealVector q = null;
             RealVector qe = null;
 
             //TEST CON SI SOLO PER INEQUALITY AND Q FOR ALL
             if (getEqConstraint() != null) {
                 se = new ArrayRealVector(me);
-                jacobi = constraintJacob.getSubMatrix(0, me - 1, 0, x.getDimension() - 1);
+                jacobi = constraintJacob.getSubMatrix(0, me - 1, 0, x.getDimension() - 1); // NOPMD - PMD detect a false positive here
                 qe = new ArrayRealVector(me);
             }
             if (getIqConstraint() != null) {
@@ -153,52 +148,54 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
                 g.setSubVector(0,equalityEval.subtract(getEqConstraint().getLowerBound()));
             }
             if (mi > 0) {
-                g.setSubVector(me,inequalityEval.subtract(getIqConstraint().getLowerBound()).subtract(s));
+                g.setSubVector(me, inequalityEval.subtract(getIqConstraint().getLowerBound()).subtract(s));
             }
 
-            double rhoSegnato = 2.0 * e.getNorm()/g.getNorm();
+            double rhoSegnato = 2.0 * e.getNorm() / g.getNorm();
 
            // rho = rhoSegnato;
             //if (!(penaltyGradient<=-0.5 * p.dotProduct(hessian.operate(p))))
-           while (!(penaltyGradient <= -0.5 * p.dotProduct(hessian.operate(p)))) {
+           while (penaltyGradient > -0.5 * p.dotProduct(hessian.operate(p))) {
 
                  rho = FastMath.max(rhoSegnato,2.0 * rho);
 
                 penaltyGradient = penaltyFunctionGrad(p, y, s, e, qe, q, rho);
             }
             //LINE SEARCH
-            double alfaEval = getObj().value(x.add(p.mapMultiply(alfa)));
+            double alfaEval = getObj().value(x.add(p.mapMultiply(alpha)));
 
-            double alfaPenalty = 0;
+            double alphaPenalty;
             RealVector sineq = null;
             RealVector seq = null;
             if (se != null) {
-                seq = se.add(qe.mapMultiply(alfa));
+                seq = se.add(qe.mapMultiply(alpha));
             }
             if (s != null) {
-                sineq = s.add(q.mapMultiply(alfa));
+                sineq = s.add(q.mapMultiply(alpha));
             }
 
-            double currentPenalty = penaltyFunction(functionEval,x,y,se,s,rho);
-            alfaPenalty = penaltyFunction(alfaEval,x.add(p.mapMultiply(alfa)),y.add(e.mapMultiply(alfa)),seq,sineq,rho);
+            double currentPenalty = penaltyFunction(functionEval, x, y, se, s, rho);
+            alphaPenalty = penaltyFunction(alfaEval,x.add(p.mapMultiply(alpha)),
+                                           y.add(e.mapMultiply(alpha)),
+                                           seq, sineq, rho);
 
 
 
             int search = 0;
-            while ((alfaPenalty -currentPenalty) >= getSettings().getMu() * alfa *  penaltyGradient &&
+            while ((alphaPenalty -currentPenalty) >= getSettings().getMu() * alpha *  penaltyGradient &&
                    search < getSettings().getMaxLineSearchIteration()) {
 
-                double alfaStar = -0.5 * alfa * alfa *  penaltyGradient/ (-alfa *  penaltyGradient + alfaPenalty - currentPenalty);
+                double alfaStar = -0.5 * alpha * alpha *  penaltyGradient/ (-alpha *  penaltyGradient + alphaPenalty - currentPenalty);
 
-                alfa =  FastMath.max(getSettings().getB() * alfa, FastMath.min(1.0,alfaStar));
-                alfaEval = getObj().value(x.add(p.mapMultiply(alfa)));
+                alpha =  FastMath.max(getSettings().getB() * alpha, FastMath.min(1.0,alfaStar));
+                alfaEval = getObj().value(x.add(p.mapMultiply(alpha)));
                 if (se != null) {
-                    seq = se.add(qe.mapMultiply(alfa));
+                    seq = se.add(qe.mapMultiply(alpha));
                 }
                 if (s != null) {
-                    sineq = s.add(q.mapMultiply(alfa));
+                    sineq = s.add(q.mapMultiply(alpha));
                 }
-                alfaPenalty = penaltyFunction(alfaEval,x.add(p.mapMultiply(alfa)),y.add(e.mapMultiply(alfa)),seq,sineq,rho);
+                alphaPenalty = penaltyFunction(alfaEval,x.add(p.mapMultiply(alpha)),y.add(e.mapMultiply(alpha)),seq,sineq,rho);
 
                 search = search + 1;
 
@@ -206,36 +203,35 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
 
 
             if (getSettings().getConvCriteria() == 0) {
-                if (p.mapMultiply(alfa).dotProduct(hessian.operate(p.mapMultiply(alfa))) < getSettings().getEps() * getSettings().getEps()) {
+                if (p.mapMultiply(alpha).dotProduct(hessian.operate(p.mapMultiply(alpha))) < getSettings().getEps() * getSettings().getEps()) {
                     break;
                 }
             } else {
-                if (alfa * p.getNorm() <FastMath.sqrt(getSettings().getEps()) * (1 + x.getNorm())) {
+                if (alpha * p.getNorm() <FastMath.sqrt(getSettings().getEps()) * (1 + x.getNorm())) {
                     break;
                 }
 
             }
-
 
             //UPDATE ALL FUNCTION
             RealVector oldGradient = functionGradient;
             RealMatrix oldJacob = constraintJacob;
-            RealVector old1 = lagrangianGradX(oldGradient,oldJacob,x,y.add(e.mapMultiply(alfa)));
+            RealVector old1 = lagrangianGradX(oldGradient,oldJacob,x,y.add(e.mapMultiply(alpha)));
             functionEval = alfaEval;
-            functionGradient = getObj().gradient(x.add(p.mapMultiply(alfa)));
-            constraintJacob = computeJacobianConstraint(x.add(p.mapMultiply(alfa)));
-            RealVector new1 = lagrangianGradX(functionGradient,constraintJacob,x.add(p.mapMultiply(alfa)),y.add(e.mapMultiply(alfa)));
-            hessian = BFGSFormula(hessian, p, alfa, new1, old1);
+            functionGradient = getObj().gradient(x.add(p.mapMultiply(alpha)));
+            constraintJacob = computeJacobianConstraint(x.add(p.mapMultiply(alpha)));
+            RealVector new1 = lagrangianGradX(functionGradient,constraintJacob,x.add(p.mapMultiply(alpha)),y.add(e.mapMultiply(alpha)));
+            hessian = BFGSFormula(hessian, p, alpha, new1, old1);
 
             if (getEqConstraint() != null) {
-                equalityEval = getEqConstraint().value(x.add(p.mapMultiply(alfa)));
+                equalityEval = getEqConstraint().value(x.add(p.mapMultiply(alpha)));
             }
             if (getIqConstraint() != null) {
-                inequalityEval = getIqConstraint().value(x.add(p.mapMultiply(alfa)));
+                inequalityEval = getIqConstraint().value(x.add(p.mapMultiply(alpha)));
             }
 
-            x = x.add(p.mapMultiply(alfa));
-            y = y.add(e.mapMultiply(alfa));
+            x = x.add(p.mapMultiply(alpha));
+            y = y.add(e.mapMultiply(alpha));
         }
 
         functionEval = getObj().value(x);
@@ -247,7 +243,7 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
 
     private RealVector calculateSvector(RealVector y, double rho) {
         int me = 0;
-        int mi = 0;
+        int mi;
         RealVector si = null;
         if (getEqConstraint() != null) {
             me = getEqConstraint().dimY();
@@ -255,7 +251,7 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
         if (getIqConstraint() != null) {
             mi = getIqConstraint().dimY();
             si = new ArrayRealVector(mi);
-            RealVector yi = y.getSubVector(me,mi);
+            RealVector yi = y.getSubVector(me, mi);
             for (int i = 0; i < inequalityEval.getDimension(); i++) {
                 if (rho == 0) {
                     si.setEntry(i, FastMath.max(0, inequalityEval.getEntry(i)));
@@ -271,7 +267,7 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
         // the set of constraints is the same as the previous one but they must be evaluated with the increment
 
         int me = 0;
-        int mi = 0;
+        int mi;
         double partial = currentF;
 
         if (getEqConstraint() != null) {
@@ -279,7 +275,7 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
 
             RealVector ye = y.getSubVector(0, me);
             RealVector g = getEqConstraint().value(x).subtract(getEqConstraint().getLowerBound());
-            partial += -ye.dotProduct(g.subtract(se)) + 0.5 * rho*(g.subtract(se)).dotProduct(g.subtract(se));
+            partial += -ye.dotProduct(g.subtract(se)) + 0.5 * rho * (g.subtract(se)).dotProduct(g.subtract(se));
         }
 
         if (getIqConstraint() != null) {
@@ -287,14 +283,13 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
 
             RealVector yi = y.getSubVector(me, mi);
 
-
             RealVector g = getIqConstraint().value(x).subtract(getIqConstraint().getLowerBound());
 
 
 
 
 
-            partial+= -yi.dotProduct(g.subtract(s)) +0.5 * rho*(g.subtract(s)).dotProduct(g.subtract(s));;
+            partial+= -yi.dotProduct(g.subtract(s)) +0.5 * rho*(g.subtract(s)).dotProduct(g.subtract(s));
 
         }
 
@@ -304,7 +299,7 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
     private double penaltyFunctionGrad(RealVector p, RealVector y,RealVector s,RealVector e,RealVector qe, RealVector q,double rho) {
 
         int me = 0;
-        int mi = 0;
+        int mi;
         double partial = functionGradient.dotProduct(p);
         if (getEqConstraint() != null) {
             me = getEqConstraint().dimY();
@@ -315,7 +310,7 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
 
 
             RealVector ge = equalityEval.subtract(getEqConstraint().getLowerBound());
-            RealMatrix jacob = constraintJacob.getSubMatrix(0, me-1,0,p.getDimension()-1);
+            RealMatrix jacob = constraintJacob.getSubMatrix(0, me - 1, 0, p.getDimension() - 1);
             double term2 = p.dotProduct(jacob.transpose().operate(ye));
             double term3 = p.dotProduct(jacob.transpose().operate(ge))*rho;
             double term4 = ge.dotProduct(ee);
@@ -329,16 +324,14 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
 
             RealVector yi = y.getSubVector(me, mi);
             RealVector ei = e.getSubVector(me, mi);
-            RealVector qi = q;
-            RealVector si = s;
 
             RealVector gi = inequalityEval.subtract(getIqConstraint().getLowerBound());
-            RealMatrix jacob = constraintJacob.getSubMatrix(me,+me + mi-1,0,p.getDimension()-1);
+            RealMatrix jacob = constraintJacob.getSubMatrix(me, me + mi - 1, 0, p.getDimension() - 1);
             double term2 = p.dotProduct(jacob.transpose().operate(yi));
-            double term3 = p.dotProduct(jacob.transpose().operate(gi.subtract(si)))*rho;
-            double term4 = (gi.subtract(si)).dotProduct(ei);
-            double term5 = yi.dotProduct(qi);
-            double term6 = qi.dotProduct(gi.subtract(si))*rho;
+            double term3 = p.dotProduct(jacob.transpose().operate(gi.subtract(s)))*rho;
+            double term4 = (gi.subtract(s)).dotProduct(ei);
+            double term5 = yi.dotProduct(q);
+            double term6 = q.dotProduct(gi.subtract(s))*rho;
 
             partial +=-term2 + term3-term4 + term5-term6;
         }
@@ -346,7 +339,7 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
         return partial;
     }
 
-    private LagrangeSolution solveQP(RealVector x, RealVector y) {
+    private LagrangeSolution solveQP(RealVector x) {
 
         RealMatrix H = hessian;
         RealVector g = functionGradient;
@@ -384,7 +377,7 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
         LinearInequalityConstraint iqc = null;
 
         if (getIqConstraint() != null) {
-//
+
             RealMatrix iqJacob = constraintJacob.getSubMatrix(me,me + mi-1,0,x.getDimension()-1);
 
             RealMatrix Ai = new Array2DRowRealMatrix(mi, x.getDimension());
@@ -393,21 +386,17 @@ public class SQPOptimizerGM extends AbstractSQPOptimizer {
 
             bi.setSubVector(0, getIqConstraint().getLowerBound().subtract(inequalityEval));
 
-
-
             iqc = new LinearInequalityConstraint(Ai, bi);
 
         }
 
-
         QuadraticFunction q = new QuadraticFunction(H1, g1, 0);
-        LagrangeSolution sol = null;
+        LagrangeSolution sol;
 
         ADMMQPOptimizer solver = new ADMMQPOptimizer();
         sol = solver.optimize(new ObjectiveFunction(q), iqc, eqc);
 
-        LagrangeSolution solnew = new LagrangeSolution(sol.getX(), sol.getLambda(),0.0);
-        return solnew;
+        return new LagrangeSolution(sol.getX(), sol.getLambda(),0.0);
 
     }
 

@@ -244,6 +244,6 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
      * @return {@code true} if {@code x} is a valid point.
      */
     public boolean isValidPoint(double x) {
-        return !(x < knots[0]) && !(x > knots[n]);
+        return x >= knots[0] && x <= knots[n];
     }
 }

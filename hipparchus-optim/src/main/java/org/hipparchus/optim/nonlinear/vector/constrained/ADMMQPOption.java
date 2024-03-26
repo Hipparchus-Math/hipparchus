@@ -78,7 +78,7 @@ public class ADMMQPOption implements OptimizationData {
     private int scaleMaxIteration;
 
     /** Value for adapt the weight during iterations. */
-    private boolean rhoUpdate;
+    private boolean updateRho;
 
     /** Max Value for thr Weight for ADMM iteration. */
     private double rhoMax;
@@ -104,7 +104,7 @@ public class ADMMQPOption implements OptimizationData {
         alpha              = ADMMQPOption.DEFAULT_ALPHA;
         scaling            = ADMMQPOption.DEFAULT_SCALING;
         scaleMaxIteration  = ADMMQPOption.DEFAULT_SCALING_MAX_ITERATION;
-        rhoUpdate          = ADMMQPOption.DEFAULT_RHO_UPDATE;
+        updateRho = ADMMQPOption.DEFAULT_RHO_UPDATE;
         rhoMax             = ADMMQPOption.DEFAULT_RHO_MAX;
         rhoMin             = ADMMQPOption.DEFAULT_RHO_MIN;
         maxRhoIteration    = ADMMQPOption.DEFAULT_MAX_RHO_ITERATION;
@@ -175,10 +175,10 @@ public class ADMMQPOption implements OptimizationData {
         this.scaling = scaling;
     }
 
-    /** Get scaling enabling flag.
+    /** Check if scaling is enabled.
      * @return true if scaling is enabled
      */
-    public boolean getScaling() {
+    public boolean isScaling() {
         return scaling;
     }
 
@@ -197,17 +197,17 @@ public class ADMMQPOption implements OptimizationData {
     }
 
     /** Set weight updating flag.
-     * @param rhoUpdate if true, weight is updated during iterations
+     * @param updateRho if true, weight is updated during iterations
      */
-    public void setRhoUpdate(final boolean rhoUpdate) {
-        this.rhoUpdate = rhoUpdate;
+    public void setUpdateRho(final boolean updateRho) {
+        this.updateRho = updateRho;
     }
 
-    /** Get weight updating flag.
+    /** Check if weight updating is enabled.
      * @return true if weight is updated during iterations
      */
-    public boolean getRhoUpdate() {
-        return rhoUpdate;
+    public boolean updateRho() {
+        return updateRho;
     }
 
     /** Set min Value for the Weight for ADMM iteration.
@@ -259,10 +259,10 @@ public class ADMMQPOption implements OptimizationData {
         this.polishing = polishing;
     }
 
-    /** Get polishing enabling flag.
+    /** Check if polishing is enabled.
      * @return true if polishing is enabled
      */
-    public boolean getPolishing() {
+    public boolean isPolishing() {
         return polishing;
     }
 

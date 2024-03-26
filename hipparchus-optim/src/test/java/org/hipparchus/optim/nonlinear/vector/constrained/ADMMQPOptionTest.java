@@ -52,12 +52,12 @@ public class ADMMQPOptionTest {
         // WHEN
         final boolean expectedValue = true;
         option.setPolishing(expectedValue);
-        option.setRhoUpdate(expectedValue);
+        option.setUpdateRho(expectedValue);
         option.setScaling(expectedValue);
         // THEN
-        Assert.assertEquals(expectedValue, option.getPolishing());
-        Assert.assertEquals(expectedValue, option.getRhoUpdate());
-        Assert.assertEquals(expectedValue, option.getScaling());
+        Assert.assertEquals(expectedValue, option.isPolishing());
+        Assert.assertEquals(expectedValue, option.updateRho());
+        Assert.assertEquals(expectedValue, option.isScaling());
     }
 
     @Test

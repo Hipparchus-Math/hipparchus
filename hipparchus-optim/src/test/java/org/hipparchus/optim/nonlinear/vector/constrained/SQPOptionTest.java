@@ -50,7 +50,7 @@ public class SQPOptionTest {
         final boolean expectedValue = true;
         option.setUseFunHessian(expectedValue);
         // THEN
-        Assert.assertEquals(expectedValue, option.getUseFunHessian());
+        Assert.assertEquals(expectedValue, option.useFunHessian());
     }
 
     @Test

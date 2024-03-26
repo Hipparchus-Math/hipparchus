@@ -219,7 +219,7 @@ public class SQPOption implements OptimizationData {
     /** Check if using direct the function Hessian is enabled or disabled.
      * @return true if using direct the function Hessian is enabled
      */
-    public boolean getUseFunHessian() {
+    public boolean useFunHessian() {
         return useFunHessian;
     }
 

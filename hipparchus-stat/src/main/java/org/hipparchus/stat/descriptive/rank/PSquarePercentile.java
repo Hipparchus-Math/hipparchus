@@ -469,23 +469,21 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          *         sample fits
          */
         private int findCellAndUpdateMinMax(final double observation) {
-            int k = -1;
             if (observation < height(1)) {
                 markerArray[1].markerHeight = observation;
-                k = 1;
+                return 1;
             } else if (observation < height(2)) {
-                k = 1;
+                return 1;
             } else if (observation < height(3)) {
-                k = 2;
+                return 2;
             } else if (observation < height(4)) {
-                k = 3;
+                return 3;
             } else if (observation <= height(5)) {
-                k = 4;
+                return 4;
             } else {
                 markerArray[5].markerHeight = observation;
-                k = 4;
+                return 4;
             }
-            return k;
         }
 
         /**

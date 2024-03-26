@@ -197,7 +197,7 @@ public class PiecewiseBicubicSplineInterpolatingFunction
      */
     public boolean isValidPoint(double x,
                                 double y) {
-        return !(x < xval[0]) && !(x > xval[xval.length - 1]) && !(y < yval[0]) && !(y > yval[yval.length - 1]);
+        return x >= xval[0] && x <= xval[xval.length - 1] && y >= yval[0] && y <= yval[yval.length - 1];
     }
 
     /**

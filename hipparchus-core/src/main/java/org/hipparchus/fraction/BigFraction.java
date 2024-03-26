@@ -798,8 +798,7 @@ public class BigFraction
       BigInteger a = i0.abs();
       BigInteger b = i1.abs();
       BigInteger gcd = i0.gcd(b);
-      BigInteger lcm = (a.multiply(b)).divide(gcd);
-      return lcm;
+      return (a.multiply(b)).divide(gcd);
     }
 
     /**

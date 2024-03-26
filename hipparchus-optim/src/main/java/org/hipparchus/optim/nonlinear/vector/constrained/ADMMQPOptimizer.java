@@ -62,7 +62,7 @@ public class ADMMQPOptimizer extends QPOptimizer {
     private QuadraticFunction function;
 
     /** Problem solver. */
-    private ADMMQPKKT solver;
+    private final ADMMQPKKT solver;
 
     /** Problem convergence checker. */
     private ADMMQPConvergenceChecker checker;
@@ -124,7 +124,6 @@ public class ADMMQPOptimizer extends QPOptimizer {
 
             if (data instanceof ADMMQPOption) {
                 settings = (ADMMQPOption) data;
-                continue;
             }
 
         }
@@ -205,7 +204,7 @@ public class ADMMQPOptimizer extends QPOptimizer {
         RealVector qw = q.copy();
         RealVector ubw = ub.copy();
         RealVector lbw = lb.copy();
-        RealVector x =null;
+        RealVector x;
         if (getStartPoint() != null) {
             x = new ArrayRealVector(getStartPoint());
         } else {
@@ -214,7 +213,7 @@ public class ADMMQPOptimizer extends QPOptimizer {
 
         ADMMQPModifiedRuizEquilibrium dec = new ADMMQPModifiedRuizEquilibrium(H, A,q);
 
-        if (settings.getScaling()) {
+        if (settings.isScaling()) {
            //
             dec.normalize(settings.getEps(), settings.getScaleMaxIteration());
             Hw = dec.getScaledH();
@@ -236,7 +235,7 @@ public class ADMMQPOptimizer extends QPOptimizer {
         solver.initialize(Hw, Aw, qw, me, lbw, ubw, rho, settings.getSigma(), settings.getAlpha());
         RealVector xstar = null;
         RealVector ystar = null;
-        RealVector zstar = null;
+        RealVector zstar;
 
         while (iterations.getCount() <= iterations.getMaximalCount()) {
             ADMMQPSolution sol = solver.iterate(x, y, z);
@@ -257,7 +256,7 @@ public class ADMMQPOptimizer extends QPOptimizer {
             }
 
 
-            if (settings.getScaling()) {
+            if (settings.isScaling()) {
 
                 xstar = dec.unscaleX(x);
                 ystar = dec.unscaleY(y);
@@ -284,28 +283,22 @@ public class ADMMQPOptimizer extends QPOptimizer {
 
         }
 
-
-
         //SOLUTION POLISHING
-
-        ADMMQPSolution finalSol = null;
-        if (settings.getPolishing()) {
-            finalSol = polish(Hw, Aw, qw, lbw, ubw, x, y, z);
-            if (settings.getScaling()) {
+        if (settings.isPolishing()) {
+            ADMMQPSolution finalSol = polish(Hw, Aw, qw, lbw, ubw, x, y, z);
+            if (settings.isScaling()) {
                 xstar = dec.unscaleX(finalSol.getX());
                 ystar = dec.unscaleY(finalSol.getLambda());
-                zstar = dec.unscaleZ(finalSol.getZ());
             } else {
                 xstar = finalSol.getX();
                 ystar = finalSol.getLambda();
-                zstar = finalSol.getZ();
             }
         }
         for (int i = 0; i < me + mi; i++) {
-            ystar.setEntry(i,-ystar.getEntry(i));
+            ystar.setEntry(i, -ystar.getEntry(i));
         }
 
-        return new LagrangeSolution(xstar,ystar,function.value(xstar));
+        return new LagrangeSolution(xstar, ystar, function.value(xstar));
 
     }
 
@@ -355,17 +348,17 @@ public class ADMMQPOptimizer extends QPOptimizer {
             }
 
         }
-        RealMatrix Aactive = null;
-        RealVector lub = null;
+        RealMatrix Aactive;
+        RealVector lub;
 
         RealVector ystar;
         RealVector xstar = x.copy();
         //!Aentry.isEmpty()
         if (!Aentry.isEmpty()) {
 
-            Aactive = new Array2DRowRealMatrix(Aentry.toArray(new double[Aentry.size()][]));
-            lub = new ArrayRealVector(lubEntry.toArray(new Double[lubEntry.size()]));
-            ystar = new ArrayRealVector(yEntry.toArray(new Double[yEntry.size()]));
+            Aactive = new Array2DRowRealMatrix(Aentry.toArray(new double[0][]));
+            lub = new ArrayRealVector(lubEntry.toArray(new Double[0]));
+            ystar = new ArrayRealVector(yEntry.toArray(new Double[0]));
             solver.initialize(H, Aactive, q, 0, lub, lub,
                               settings.getSigma(), settings.getSigma(), settings.getAlpha());
 
@@ -396,7 +389,7 @@ public class ADMMQPOptimizer extends QPOptimizer {
      */
     private boolean manageRho(int me, double rp, double rd, double maxPrimal, double maxDual) {
         boolean updated = false;
-        if (settings.getRhoUpdate()) {
+        if (settings.updateRho()) {
 
             // estimate new step size
             double rhonew = FastMath.min(FastMath.max(rho * FastMath.sqrt((rp * maxDual) / (rd * maxPrimal)),

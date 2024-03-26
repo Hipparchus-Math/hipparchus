@@ -22,7 +22,6 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEIntegrator;
-import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.util.MathArrays;
 
@@ -118,7 +117,7 @@ public interface FieldExplicitRungeKuttaIntegrator<T extends CalculusFieldElemen
      * so it can be embedded in outer loops.</p>
      * <p>
      * This method is <em>not</em> used at all by the {@link #integrate(FieldExpandableODE,
-     * FieldODEState, CalculusFieldElement)} method. It also completely ignores the step set at
+     * org.hipparchus.ode.FieldODEState, CalculusFieldElement)} method. It also completely ignores the step set at
      * construction time, and uses only a single step to go from {@code t0} to {@code t}.
      * </p>
      * <p>

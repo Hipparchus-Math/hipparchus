@@ -476,6 +476,7 @@ public class FieldGradient<T extends CalculusFieldElement<T>> implements FieldDe
      * @param g1 first derivative of the function at the current point (i.e. at {@code g'(getValue())})
      * @return g(this)
      */
+    @Override
     public FieldGradient<T> compose(final T g0, final T g1) {
         final FieldGradient<T> result = newInstance(g0);
         for (int i = 0; i < grad.length; ++i) {

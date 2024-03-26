@@ -69,10 +69,65 @@
       <Class name="org.hipparchus.optim.linear.LinearObjectiveFunction"/>
       <Class name="org.hipparchus.optim.nonlinear.scalar.noderiv.CMAESOptimizer"/>
       <Class name="org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresBuilder"/>
+      <Class name="org.hipparchus.optim.nonlinear.vector.constrained.ADMMQPKKT"/>
+      <Class name="org.hipparchus.optim.nonlinear.vector.constrained.ADMMQPModifiedRuizEquilibrium"/>
+      <Class name="org.hipparchus.optim.nonlinear.vector.constrained.ADMMQPSolution"/>
+      <Class name="org.hipparchus.optim.nonlinear.vector.constrained.BoundedConstraint"/>
+      <Class name="org.hipparchus.optim.nonlinear.vector.constrained.LagrangeSolution"/>
+      <Class name="org.hipparchus.optim.nonlinear.vector.constrained.LinearBoundedConstraint"/>
+      <Class name="org.hipparchus.optim.nonlinear.vector.constrained.LinearEqualityConstraint"/>
+      <Class name="org.hipparchus.optim.nonlinear.vector.constrained.LinearInequalityConstraint"/>
       <Class name="org.hipparchus.optim.univariate.MultiStartUnivariateOptimizer"/>
     </Or>
     <Method name="&lt;init>"/>
     <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.optim.nonlinear.vector.constrained.ADMMQPKKT"/>
+    <Method name="initialize"/>
+    <Bug pattern="EI_EXPOSE_REP2" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.optim.nonlinear.vector.constrained.ADMMQPSolution"/>
+    <Or>
+      <Method name="getV"/>
+      <Method name="getZ"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.optim.nonlinear.vector.constrained.AbstractSQPOptimizer"/>
+    <Method name="getSettings"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.optim.nonlinear.vector.constrained.BoundedConstraint"/>
+    <Or>
+      <Method name="getLowerBound"/>
+      <Method name="getUpperBound"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.optim.nonlinear.vector.constrained.LagrangeSolution"/>
+    <Or>
+      <Method name="getLambda"/>
+      <Method name="getX"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.optim.nonlinear.vector.constrained.LinearEqualityConstraint"/>
+    <Method name="getA"/>
+    <Bug pattern="EI_EXPOSE_REP" />
+  </Match>
+  <Match>
+    <Class name="org.hipparchus.optim.nonlinear.vector.constrained.QuadraticFunction"/>
+    <Or>
+      <Method name="getP"/>
+      <Method name="getQ"/>
+    </Or>
+    <Bug pattern="EI_EXPOSE_REP" />
   </Match>
 
   <!--  the following equality tests are part of the reference algorithms -->

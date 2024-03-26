@@ -56,6 +56,7 @@ public interface VectorDifferentiableFunction extends MultivariateVectorFunction
      * @param x a point to evaluate this function at.
      * @return the value of this function at (x)
      */
+    @Override
     default double[] value(final double[] x) {
         return value(new ArrayRealVector(x, false)).toArray();
     }

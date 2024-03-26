@@ -86,8 +86,8 @@ public class ADMMQPModifiedRuizEquilibrium {
         RealVector q1 = q.copy();
         RealMatrix H1 = H.copy();
         RealMatrix A1 = A.copy();
-        RealMatrix diagD = null;
-        RealMatrix diagE = null;
+        RealMatrix diagD;
+        RealMatrix diagE;
         RealMatrix SD = MatrixUtils.createRealIdentityMatrix(H.getRowDimension());
         RealMatrix SE = MatrixUtils.createRealIdentityMatrix(A.getRowDimension());
         RealVector H1norm = new ArrayRealVector(H1.getColumnDimension());

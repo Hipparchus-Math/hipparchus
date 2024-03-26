@@ -103,7 +103,6 @@ public abstract class AbstractSQPOptimizer extends ConstraintOptimizer {
 
             if (data instanceof SQPOption) {
                 settings = (SQPOption) data;
-                continue;
             }
 
         }
@@ -137,7 +136,7 @@ public abstract class AbstractSQPOptimizer extends ConstraintOptimizer {
                                          final RealVector x, final RealVector y) {
 
         int me = 0;
-        int mi = 0;
+        int mi;
         RealVector partial = currentGrad.copy();
         if (getEqConstraint() != null) {
             me = getEqConstraint().dimY();
