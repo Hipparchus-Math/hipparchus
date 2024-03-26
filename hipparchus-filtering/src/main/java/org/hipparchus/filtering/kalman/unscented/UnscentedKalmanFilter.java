@@ -22,7 +22,6 @@ import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.filtering.kalman.KalmanFilter;
 import org.hipparchus.filtering.kalman.Measurement;
 import org.hipparchus.filtering.kalman.ProcessEstimate;
-import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.MatrixDecomposer;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
@@ -113,7 +112,7 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
 
         // Correction phase
         final RealVector[] predictedMeasurements = process.getPredictedMeasurements(predictedSigmaPoints, measurement);
-        final RealVector   predictedMeasurement  = sum(predictedMeasurements, measurement.getValue().getDimension());
+        final RealVector   predictedMeasurement  = utProvider.getUnscentedMeanState(predictedMeasurements);
         final RealMatrix   r                     = computeInnovationCovarianceMatrix(predictedMeasurements, predictedMeasurement, measurement.getCovariance());
         final RealMatrix   crossCovarianceMatrix = computeCrossCovarianceMatrix(predictedSigmaPoints, predicted.getState(),
                                                                                 predictedMeasurements, predictedMeasurement);
@@ -131,10 +130,10 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
     private void predict(final double time, final RealVector[] predictedStates,  final RealMatrix noise) {
 
         // Computation of Eq. 17, weighted mean state
-        final RealVector predictedState = sum(predictedStates, n);
+        final RealVector predictedState = utProvider.getUnscentedMeanState(predictedStates);
 
         // Computation of Eq. 18, predicted covariance matrix
-        final RealMatrix predictedCovariance = computeCovariance(predictedStates, predictedState).add(noise);
+        final RealMatrix predictedCovariance = utProvider.getUnscentedCovariance(predictedStates, predictedState).add(noise);
 
         predicted = new ProcessEstimate(time, predictedState, predictedCovariance);
         corrected = null;
@@ -220,7 +219,8 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
             return null;
         }
         // Computation of the innovation covariance matrix
-        final RealMatrix innovationCovarianceMatrix = computeCovariance(predictedMeasurements, predictedMeasurement);
+        final RealMatrix innovationCovarianceMatrix = utProvider.getUnscentedCovariance(predictedMeasurements, predictedMeasurement);
+
         // Add the measurement covariance
         return innovationCovarianceMatrix.add(r);
     }
@@ -254,70 +254,7 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
         return crossCovarianceMatrix;
     }
 
-    /**
-     * Computes a weighted mean parameter from a given samples.
-     * <p>
-     * This method can be used for computing both the mean state and the mean measurement.
-     * <p>
-     * It corresponds to the Equation 17 of "Wan, E. A., & Van Der Merwe, R.
-     * The unscented Kalman filter for nonlinear estimation"
-     * </p>
-     * @param samples input samples
-     * @param size size of the weighted mean parameter
-     * @return weighted mean parameter
-     */
-    private RealVector sum(final RealVector[] samples, final int size) {
-
-        // Initialize the weighted mean parameter
-        RealVector mean = new ArrayRealVector(size);
-
-        // Mean weights
-        final RealVector wm = utProvider.getWm();
-
-        // Compute weighted mean parameter
-        for (int i = 0; i <= 2 * n; i++) {
-            mean = mean.add(samples[i].mapMultiply(wm.getEntry(i)));
-        }
-
-        // Return the weighted mean value
-        return mean;
-
-    }
-
-    /** Computes the covariance matrix.
-     * <p>
-     * This method can be used for computing both the predicted state
-     * covariance matrix and the innovation covariance matrix.
-     * <p>
-     * It corresponds to the Equation 18 of "Wan, E. A., & Van Der Merwe, R.
-     * The unscented Kalman filter for nonlinear estimation"
-     * </p>
-     * @param samples input samples
-     * @param state weighted mean parameter
-     * @return the covariance matrix
-     */
-    private RealMatrix computeCovariance(final RealVector[] samples,
-                                         final RealVector state) {
-
-        // Initialize the covariance matrix, by using the size of the weighted mean parameter
-        final int dim = state.getDimension();
-        RealMatrix covarianceMatrix = MatrixUtils.createRealMatrix(dim, dim);
-
-        // Covariance weights
-        final RealVector wc = utProvider.getWc();
-
-        // Compute the covariance matrix
-        for (int i = 0; i <= 2 * n; i++) {
-            final RealVector diff = samples[i].subtract(state);
-            covarianceMatrix = covarianceMatrix.add(outer(diff, diff).scalarMultiply(wc.getEntry(i)));
-        }
-
-        // Return the covariance
-        return covarianceMatrix;
-
-    }
-
-    /** Conputes the outer product of two vectors.
+    /** Computes the outer product of two vectors.
      * @param a first vector
      * @param b second vector
      * @return the outer product of a and b
@@ -336,7 +273,5 @@ public class UnscentedKalmanFilter<T extends Measurement> implements KalmanFilte
 
         // Return
         return outMatrix;
-
     }
-
 }
