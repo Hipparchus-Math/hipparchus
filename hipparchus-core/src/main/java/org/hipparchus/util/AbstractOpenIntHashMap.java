@@ -396,18 +396,20 @@ public abstract class AbstractOpenIntHashMap {
         return h ^ (h >>> 7) ^ (h >>> 4);
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        final AbstractOpenIntHashMap that = (AbstractOpenIntHashMap) o;
-        return Arrays.equals(keys, that.keys) &&
-             Arrays.equals(states, that.states);
+    /** Check if keys are equals.
+     * @param other other map
+     * @return true if keys are equals
+     */
+    protected boolean equalKeys(final AbstractOpenIntHashMap other) {
+        return Arrays.equals(keys, other.keys);
+    }
+
+    /** Check if states are equals.
+     * @param other other map
+     * @return true if states are equals
+     */
+    protected boolean equalStates(final AbstractOpenIntHashMap other) {
+        return Arrays.equals(states, other.states);
     }
 
     /** {@inheritDoc} */
@@ -456,18 +458,9 @@ public abstract class AbstractOpenIntHashMap {
 
         /** Get index of current entry.
          * @return key of current entry
-         * @exception ConcurrentModificationException if the map is modified during iteration
-         * @exception NoSuchElementException if there is no element left in the map
          * @since 3.1
          */
-        protected int getCurrent()
-            throws ConcurrentModificationException, NoSuchElementException {
-            if (referenceCount != count) {
-                throw new ConcurrentModificationException();
-            }
-            if (current < 0) {
-                throw new NoSuchElementException();
-            }
+        protected int getCurrent() {
             return current;
         }
 

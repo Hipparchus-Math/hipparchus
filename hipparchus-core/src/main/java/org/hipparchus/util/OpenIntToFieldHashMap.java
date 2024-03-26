@@ -161,7 +161,8 @@ public class OpenIntToFieldHashMap<T extends FieldElement<T>> extends AbstractOp
         }
         @SuppressWarnings("unchecked")
         final OpenIntToFieldHashMap<T> that = (OpenIntToFieldHashMap<T>) o;
-        return super.equals(o) &&
+        return equalKeys(that) &&
+               equalStates(that) &&
                field.equals(that.field) &&
                Arrays.equals(values, that.values);
     }

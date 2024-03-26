@@ -147,7 +147,7 @@ public class OpenIntToDoubleHashMap extends AbstractOpenIntHashMap implements Se
             return false;
         }
         final OpenIntToDoubleHashMap that = (OpenIntToDoubleHashMap) o;
-        return super.equals(o) && Arrays.equals(values, that.values);
+        return equalKeys(that) && equalStates(that) && Arrays.equals(values, that.values);
     }
 
     /** {@inheritDoc} */
