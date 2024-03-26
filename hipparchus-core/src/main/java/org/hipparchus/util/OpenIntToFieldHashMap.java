@@ -170,7 +170,7 @@ public class OpenIntToFieldHashMap<T extends FieldElement<T>> extends AbstractOp
     /** {@inheritDoc} */
     @Override
     public int hashCode() {
-        return 67 * field.hashCode() + Arrays.hashCode(values) + super.hashCode();
+        return keysStatesHashCode() + 67 * field.hashCode() + Arrays.hashCode(values);
     }
 
     /**

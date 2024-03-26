@@ -153,7 +153,7 @@ public class OpenIntToDoubleHashMap extends AbstractOpenIntHashMap implements Se
     /** {@inheritDoc} */
     @Override
     public int hashCode() {
-        return super.hashCode() + Arrays.hashCode(values);
+        return keysStatesHashCode() + Arrays.hashCode(values);
     }
 
     /**

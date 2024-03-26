@@ -412,9 +412,10 @@ public abstract class AbstractOpenIntHashMap {
         return Arrays.equals(states, other.states);
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public int hashCode() {
+    /** Compute partial hashcode on keys and states.
+     * @return partial hashcode on keys and states
+     */
+    protected int keysStatesHashCode() {
         return  53 * Arrays.hashCode(keys) + 31 * Arrays.hashCode(states);
     }
 
