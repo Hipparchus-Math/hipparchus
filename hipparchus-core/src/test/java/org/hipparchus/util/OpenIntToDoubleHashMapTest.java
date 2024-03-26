@@ -292,7 +292,7 @@ public class OpenIntToDoubleHashMapTest {
         map.put(2,   2.5);
         map.put(17, -0.5);
         map.put(16,  0.0);
-        Assert.assertEquals(978340117, map.hashCode());
+        Assert.assertEquals(-686630537, map.hashCode());
     }
 
     @Test

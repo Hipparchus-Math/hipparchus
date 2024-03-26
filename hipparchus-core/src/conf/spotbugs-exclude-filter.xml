@@ -487,6 +487,8 @@
       <Class name="org.hipparchus.random.UnitSphereRandomVectorGenerator"/>
       <Class name="org.hipparchus.random.GaussMarkovGenerator"/>
       <Class name="org.hipparchus.special.elliptic.jacobi.FieldJacobiTheta"/>
+      <Class name="org.hipparchus.util.OpenIntToDoubleHashMap$Iterator"/>
+      <Class name="org.hipparchus.util.OpenIntToFieldHashMap$Iterator"/>
     </Or>
     <Method name="&lt;init>"/>
     <Bug pattern="EI_EXPOSE_REP2" />

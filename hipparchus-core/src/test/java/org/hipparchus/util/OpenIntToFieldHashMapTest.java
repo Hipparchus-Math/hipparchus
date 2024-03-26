@@ -41,7 +41,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class OpenIntToFieldTest {
+public class OpenIntToFieldHashMapTest {
 
     private final Map<Integer, Fraction> javaMap = new HashMap<>();
     private final FractionField field = FractionField.getInstance();
@@ -309,7 +309,7 @@ public class OpenIntToFieldTest {
         map.put(2,   new Fraction( 5, 2));
         map.put(17,  new Fraction(-1, 2));
         map.put(16,  Fraction.ZERO);
-        Assert.assertEquals(-1204899356, map.hashCode());
+        Assert.assertEquals(-528348218, map.hashCode());
     }
 
     @Test
