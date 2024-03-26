@@ -247,5 +247,56 @@ public class OpenIntToDoubleHashMap extends AbstractOpenIntHashMap implements Se
         resetCount();
     }
 
+    /**
+     * Replace the instance with a data transfer object for serialization.
+     * @return data transfer object that will be serialized
+     */
+    private Object writeReplace() {
+        return new DataTransferObject(missingEntries, getSize(), iterator());
+    }
+
+    /** Internal class used only for serialization. */
+    private static class DataTransferObject implements Serializable {
+
+        /** Serializable UID. */
+        private static final long serialVersionUID = 20240326L;
+
+        /** Return value for missing entries. */
+        private final double missingEntries;
+
+        /** Keys table. */
+        private final int[] keys;
+
+        /** Values table. */
+        private final double[] values;
+
+        /** Simple constructor.
+         * @param missingEntries return value for missing entries
+         * @param size number of objects in the map
+         * @param iterator iterator on serialized map
+         */
+        DataTransferObject(final double missingEntries, final int size, final Iterator iterator) {
+            this.missingEntries = missingEntries;
+            this.keys           = new int[size];
+            this.values         = new double[size];
+            for (int i = 0; i < size; ++i) {
+                iterator.advance();
+                keys[i]   = iterator.key();
+                values[i] = iterator.value();
+            }
+        }
+
+        /** Replace the deserialized data transfer object with a {@link OpenIntToDoubleHashMap}.
+         * @return replacement {@link OpenIntToDoubleHashMap}
+         */
+        private Object readResolve() {
+            final OpenIntToDoubleHashMap map = new OpenIntToDoubleHashMap(missingEntries);
+            for (int i = 0; i < keys.length; ++i) {
+                map.put(keys[i], values[i]);
+            }
+            return map;
+        }
+
+    }
 
 }
