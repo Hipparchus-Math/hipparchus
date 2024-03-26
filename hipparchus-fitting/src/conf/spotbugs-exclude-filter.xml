@@ -28,4 +28,10 @@
 -->
 <FindBugsFilter>
 
+  <!-- Hipparchus classes do not manage any sensitive information -->
+  <!-- we therefore allow constructors to throw exception -->
+  <Match>
+    <Bug pattern="CT_CONSTRUCTOR_THROW" />
+  </Match>
+
 </FindBugsFilter>

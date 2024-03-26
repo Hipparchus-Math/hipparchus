@@ -23,6 +23,12 @@
 -->
 <FindBugsFilter>
 
+  <!-- Hipparchus classes do not manage any sensitive information -->
+  <!-- we therefore allow constructors to throw exception -->
+  <Match>
+    <Bug pattern="CT_CONSTRUCTOR_THROW" />
+  </Match>
+
   <!-- the following are considered false positive, they correspond to regular object oriented design
        SpotBugs has just become too stringent (see https://github.com/spotbugs/spotbugs/issues/1601,
        https://github.com/spotbugs/spotbugs/issues/1771, https://github.com/spotbugs/spotbugs/issues/2083,
