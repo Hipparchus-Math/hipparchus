@@ -80,8 +80,7 @@ public class OpenIntToDoubleHashMap extends AbstractOpenIntHashMap implements Se
     public OpenIntToDoubleHashMap(final int expectedSize,
                                   final double missingEntries) {
         super(expectedSize);
-        final int capacity = computeCapacity(expectedSize);
-        values = new double[capacity];
+        values = new double[getCapacity()];
         this.missingEntries = missingEntries;
     }
 
@@ -102,28 +101,8 @@ public class OpenIntToDoubleHashMap extends AbstractOpenIntHashMap implements Se
      * @return data associated with the key
      */
     public double get(final int key) {
-
-        final int hash  = hashOf(key);
-        int index = hash & getMask();
-        if (containsKey(key, index)) {
-            return values[index];
-        }
-
-        if (getState(index) == FREE) {
-            return missingEntries;
-        }
-
-        int j = index;
-        for (int perturb = perturb(hash); getState(index) != FREE; perturb >>= PERTURB_SHIFT) {
-            j = probe(perturb, j);
-            index = j & getMask();
-            if (containsKey(key, index)) {
-                return values[index];
-            }
-        }
-
-        return missingEntries;
-
+        final int index = locate(key);
+        return index < 0 ? missingEntries : values[index];
     }
 
     /**
@@ -162,40 +141,15 @@ public class OpenIntToDoubleHashMap extends AbstractOpenIntHashMap implements Se
      * @return removed value
      */
     public double remove(final int key) {
-
-        final int hash  = hashOf(key);
-        int index = hash & getMask();
-        if (containsKey(key, index)) {
-            return doRemove(index);
-        }
-
-        if (getState(index) == FREE) {
+        final int index = locate(key);
+        if (index < 0) {
             return missingEntries;
+        } else {
+            final double previous = values[index];
+            doRemove(index);
+            values[index] = missingEntries;
+            return previous;
         }
-
-        int j = index;
-        for (int perturb = perturb(hash); getState(index) != FREE; perturb >>= PERTURB_SHIFT) {
-            j = probe(perturb, j);
-            index = j & getMask();
-            if (containsKey(key, index)) {
-                return doRemove(index);
-            }
-        }
-
-        return missingEntries;
-
-    }
-
-    /**
-     * Remove an element at specified index.
-     * @param index index of the element to remove
-     * @return removed value
-     */
-    private double doRemove(int index) {
-        topDoRemove(index);
-        final double previous = values[index];
-        values[index] = missingEntries;
-        return previous;
     }
 
     /**

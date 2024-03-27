@@ -70,7 +70,7 @@ public class OpenIntToFieldHashMap<T extends FieldElement<T>> extends AbstractOp
      * @param missingEntries value to return when a missing entry is fetched
      */
     public OpenIntToFieldHashMap(final Field<T>field, final T missingEntries) {
-        this(field,DEFAULT_EXPECTED_SIZE, missingEntries);
+        this(field, DEFAULT_EXPECTED_SIZE, missingEntries);
     }
 
     /**
@@ -79,7 +79,7 @@ public class OpenIntToFieldHashMap<T extends FieldElement<T>> extends AbstractOp
      * @param expectedSize expected number of elements in the map
      */
     public OpenIntToFieldHashMap(final Field<T> field,final int expectedSize) {
-        this(field,expectedSize, field.getZero());
+        this(field, expectedSize, field.getZero());
     }
 
     /**
@@ -88,12 +88,11 @@ public class OpenIntToFieldHashMap<T extends FieldElement<T>> extends AbstractOp
      * @param expectedSize expected number of elements in the map
      * @param missingEntries value to return when a missing entry is fetched
      */
-    public OpenIntToFieldHashMap(final Field<T> field,final int expectedSize,
+    public OpenIntToFieldHashMap(final Field<T> field, final int expectedSize,
                                   final T missingEntries) {
         super(expectedSize);
-        this.field = field;
-        final int capacity = computeCapacity(expectedSize);
-        values = buildArray(capacity);
+        this.field          = field;
+        this.values         = buildArray(getCapacity());
         this.missingEntries = missingEntries;
     }
 
@@ -115,28 +114,8 @@ public class OpenIntToFieldHashMap<T extends FieldElement<T>> extends AbstractOp
      * @return data associated with the key
      */
     public T get(final int key) {
-
-        final int hash  = hashOf(key);
-        int index = hash & getMask();
-        if (containsKey(key, index)) {
-            return values[index];
-        }
-
-        if (getState(index) == FREE) {
-            return missingEntries;
-        }
-
-        int j = index;
-        for (int perturb = perturb(hash); getState(index) != FREE; perturb >>= PERTURB_SHIFT) {
-            j = probe(perturb, j);
-            index = j & getMask();
-            if (containsKey(key, index)) {
-                return values[index];
-            }
-        }
-
-        return missingEntries;
-
+        final int index = locate(key);
+        return index < 0 ? missingEntries : values[index];
     }
 
     /**
@@ -179,40 +158,15 @@ public class OpenIntToFieldHashMap<T extends FieldElement<T>> extends AbstractOp
      * @return removed value
      */
     public T remove(final int key) {
-
-        final int hash  = hashOf(key);
-        int index = hash & getMask();
-        if (containsKey(key, index)) {
-            return doRemove(index);
-        }
-
-        if (getState(index) == FREE) {
+        final int index = locate(key);
+        if (index < 0) {
             return missingEntries;
+        } else {
+            final T previous = values[index];
+            doRemove(index);
+            values[index] = missingEntries;
+            return previous;
         }
-
-        int j = index;
-        for (int perturb = perturb(hash); getState(index) != FREE; perturb >>= PERTURB_SHIFT) {
-            j = probe(perturb, j);
-            index = j & getMask();
-            if (containsKey(key, index)) {
-                return doRemove(index);
-            }
-        }
-
-        return missingEntries;
-
-    }
-
-    /**
-     * Remove an element at specified index.
-     * @param index index of the element to remove
-     * @return removed value
-     */
-    private T doRemove(int index) {
-        topDoRemove(index);
-        final T previous = values[index];
-        values[index] = missingEntries;
-        return previous;
     }
 
     /**

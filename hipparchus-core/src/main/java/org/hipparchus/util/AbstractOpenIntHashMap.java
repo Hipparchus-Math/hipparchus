@@ -26,16 +26,16 @@ import java.util.NoSuchElementException;
 public abstract class AbstractOpenIntHashMap {
 
     /** Status indicator for free table entries. */
-    protected static final byte FREE    = 0;
+    private static final byte FREE    = 0;
 
     /** Status indicator for full table entries. */
-    protected static final byte FULL    = 1;
+    private static final byte FULL    = 1;
 
     /** Status indicator for removed table entries. */
-    protected static final byte REMOVED = 2;
+    private static final byte REMOVED = 2;
 
     /** Load factor for the map. */
-    protected static final float LOAD_FACTOR = 0.5f;
+    private static final float LOAD_FACTOR = 0.5f;
 
     /** Default starting size.
      * <p>This must be a power of two for bit mask to work properly. </p>
@@ -48,7 +48,7 @@ public abstract class AbstractOpenIntHashMap {
     protected static final int RESIZE_MULTIPLIER = 2;
 
     /** Number of bits to perturb the index when probing for collision resolution. */
-    protected static final int PERTURB_SHIFT = 5;
+    private static final int PERTURB_SHIFT = 5;
 
     /** Keys table. */
     private int[] keys;
@@ -106,15 +106,6 @@ public abstract class AbstractOpenIntHashMap {
         return keys.length;
     }
 
-    /** Get state of element at index
-     * @param index element index
-     * @return state of element
-     * @since 3.1
-     */
-    protected byte getState(final int index) {
-        return states[index];
-    }
-
     /** Get the number of elements stored in the map.
      * @return number of elements stored in the map
      */
@@ -122,19 +113,12 @@ public abstract class AbstractOpenIntHashMap {
         return size;
     }
 
-    /** Get bit mask for hash values.
-     * @return bit mask for hash values
-     */
-    protected int getMask() {
-        return mask;
-    }
-
     /**
      * Compute the capacity needed for a given size.
      * @param expectedSize expected size of the map
      * @return capacity to use for the specified size
      */
-    protected static int computeCapacity(final int expectedSize) {
+    private static int computeCapacity(final int expectedSize) {
         if (expectedSize == 0) {
             return 1;
         }
@@ -197,7 +181,7 @@ public abstract class AbstractOpenIntHashMap {
      * @param hash initial hash
      * @return perturbed hash
      */
-    protected static int perturb(final int hash) {
+    private static int perturb(final int hash) {
         return hash & 0x7fffffff;
     }
 
@@ -264,7 +248,7 @@ public abstract class AbstractOpenIntHashMap {
      * @param j previous probe
      * @return next probe
      */
-    protected static int probe(final int perturb, final int j) {
+    private static int probe(final int perturb, final int j) {
         return (j << 2) + j + perturb + 1;
     }
 
@@ -296,19 +280,47 @@ public abstract class AbstractOpenIntHashMap {
         return (key != 0 || states[index] == FULL) && keys[index] == key;
     }
 
-    /**
-     * Remove an element at specified index.
+    /** Locate the index of value associated with the given key
+     * @param key key associated with the data
+     * @return index of value associated with the given key or negative
+     * if key not present
+     */
+    protected int locate(final int key) {
+
+        final int hash  = hashOf(key);
+        int index = hash & mask;
+        if (containsKey(key, index)) {
+            return index;
+        }
+
+        if (states[index] == FREE) {
+            return -1;
+        }
+
+        int j = index;
+        for (int perturb = perturb(hash); states[index] != FREE; perturb >>= PERTURB_SHIFT) {
+            j = probe(perturb, j);
+            index = j & mask;
+            if (containsKey(key, index)) {
+                return index;
+            }
+        }
+
+        return -1;
+
+    }
+
+    /** Remove an element at specified index.
      * @param index index of the element to remove
      */
-    protected void topDoRemove(int index) {
+    protected void doRemove(int index) {
         keys[index]   = 0;
         states[index] = REMOVED;
         --size;
         ++count;
     }
 
-    /**
-     * Put a value associated with a key in the map.
+    /** Put a value associated with a key in the map.
      * @param key key to which value is associated
      * @return holder to manage insertion
      */
@@ -391,7 +403,7 @@ public abstract class AbstractOpenIntHashMap {
      * @param key key to hash
      * @return hash value of the key
      */
-    protected static int hashOf(final int key) {
+    private static int hashOf(final int key) {
         final int h = key ^ ((key >>> 20) ^ (key >>> 12));
         return h ^ (h >>> 7) ^ (h >>> 4);
     }
