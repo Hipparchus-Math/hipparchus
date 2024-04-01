@@ -25,6 +25,16 @@ import java.util.NoSuchElementException;
  */
 public abstract class AbstractOpenIntHashMap {
 
+    /** Default starting size.
+     * <p>This must be a power of two for bit mask to work properly. </p>
+     */
+    protected static final int DEFAULT_EXPECTED_SIZE = 16;
+
+    /** Multiplier for size growth when map fills up.
+     * <p>This must be a power of two for bit mask to work properly. </p>
+     */
+    protected static final int RESIZE_MULTIPLIER = 2;
+
     /** Status indicator for free table entries. */
     private static final byte FREE    = 0;
 
@@ -36,16 +46,6 @@ public abstract class AbstractOpenIntHashMap {
 
     /** Load factor for the map. */
     private static final float LOAD_FACTOR = 0.5f;
-
-    /** Default starting size.
-     * <p>This must be a power of two for bit mask to work properly. </p>
-     */
-    protected static final int DEFAULT_EXPECTED_SIZE = 16;
-
-    /** Multiplier for size growth when map fills up.
-     * <p>This must be a power of two for bit mask to work properly. </p>
-     */
-    protected static final int RESIZE_MULTIPLIER = 2;
 
     /** Number of bits to perturb the index when probing for collision resolution. */
     private static final int PERTURB_SHIFT = 5;
