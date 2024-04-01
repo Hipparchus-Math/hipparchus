@@ -49,7 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
-    <release version="3.1" date="TBD" description="TBD.">
+    <release version="3.1" date="2024-04-05" description="This is a maintenance release. It includes several
+                                                          bugfixes and improvements, and adds one important
+                                                          feature: constrained optimization! Other additions
+                                                          are Gauss-Markov order 1 autoregressive process
+                                                          generation and GCD/LCM to {Big}Fraction">
       <action dev="serrof" type="add" issue="issues/269">
         Add public, static access to integrators name.
       </action>
@@ -83,7 +87,7 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="add" due-to="Francesco Rocca" issue="issues/296">
         Added constrained optimization.
       </action>
-      <action dev="luc" type="fix" due-to="Axel Kramer" issue="issues/294">
+      <action dev="luc" type="add" due-to="Axel Kramer" issue="issues/294">
         Added GCD and LCM to {Big}Fraction.
       </action>
       <action dev="serrof" type="update" issue="issues/288">
