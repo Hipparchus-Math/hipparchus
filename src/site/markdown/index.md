@@ -45,13 +45,18 @@ often than would be possible in a large monolithic library.
 
 ## Community
 
-The recommended channel for community discussions is a forum. There are
-three categories [Hipparchus annoucements](https://forum.orekit.org/c/hipparchus-announcements),
+There are two channels for community discussions. The first one is a
+forum, there are three categories [Hipparchus
+annoucements](https://forum.orekit.org/c/hipparchus-announcements),
 [Hipparchus usage](https://forum.orekit.org/c/hipparchus-usage) and
-[Hipparchus development](https://forum.orekit.org/c/hipparchus-development)
-in the forum. Regular users should subscribe to the forum and configure
-their preferences to add these categories to the "Watched" list so they are
-notified when a new message appears there.
+[Hipparchus
+development](https://forum.orekit.org/c/hipparchus-development) in the
+forum. Regular users should subscribe to the forum and configure their
+preferences to add these categories to the "Watched" list so they are
+notified when a new message appears there. The second one is a
+[GitHub discussions](https://github.com/Hipparchus-Math/hipparchus/discussions)
+page. Users are free to select the channel they are more comfortable
+with.
 
 ## Fork
  
@@ -66,16 +71,23 @@ at fork time.
 
  ---
 
-## 3.0 Release is out!
+## 3.1 Release is out!
 
-Hipparchus 3.0 is now available for download from the [Hipparchus download page](downloads.html) or on
-Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 3.0 release are:
+Hipparchus 3.1 is now available for download from the [Hipparchus download page](downloads.html) or on
+Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 3.1 release are:
 
-   * Field version of Erf and Gamma classes.
-   * A new Blendable interface for data blending
-   * Torque-free motion model for non-symmetrical rigid body
-   * A SmoothStepFactory which allow for quick creation of common and generic smoothstep function.
-   * Replacement of EigenDecomposition by EigenDecompositionSymmetric and EigenDecompositionNonSymmetric.
-   * Separation of {Field}ODEEventDetector and {Field}ODEEventHandler.
-   * Improved compatibility with recent JDK.
-   * Many bug fixes in FastMath, polynomial functions, eigen decomposition, etc. 
+   * Add public, static access to integrators name.
+   * Add possibility to use real coefficients for Butcher array based Field integrators.
+   * Added constrained optimization. Thanks to Francesco Rocca.
+   * Added GCD and LCM to {Big}Fraction. Thanks to Axel Kramer.
+   * Add default implementations in CalculusFieldElement and inheritors.
+   * Add square method to CalculusFieldElement.
+   * Added Gauss-Markov order 1 autoregressive process generation.
+   * Added equals and hashCode to OpenIntTo{Double|Field}HashMap.
+   * Allow variable arguments for building PolynomialFunction.
+   * Extracted class JacobiKey from PolynomialsUtils.
+   * Allow retrieving correct Cardan/Euler angles even at singularity.
+   * Improved performance of Gradient.
+   * Replace uses of scalar multiplication on Field one.
+   * Rework interfaces for Derivative and FieldDerivative.
+   * Several bug fixes in field classes and rotation
