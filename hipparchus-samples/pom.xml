@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.hipparchus</groupId>
     <artifactId>hipparchus</artifactId>
-    <version>3.1</version>
+    <version>3.2-SNAPSHOT</version>
     <relativePath>../hipparchus-parent</relativePath>
   </parent>
 
@@ -76,7 +76,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.1</version>
+      <version>3.2-SNAPSHOT</version>
     </dependency>
   </dependencies>
 
