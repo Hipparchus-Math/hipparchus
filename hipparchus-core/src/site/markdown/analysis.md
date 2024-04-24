@@ -559,6 +559,8 @@ are more efficient than the general purpose <a
 href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
 DerivativeStructure</a> class in their more limited domain.
 
+![differentiation hierarchy class diagram](images/userguide/differentiation-hierarchy.png)
+
 The <a
 href="../apidocs/org/hipparchus/analysis/differentiation/UnivariateDerivative1.html">
 UnivariateDerivative1</a> class is an implementation devoted to univariate functions and

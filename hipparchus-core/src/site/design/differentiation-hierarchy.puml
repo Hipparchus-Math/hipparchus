@@ -1,0 +1,96 @@
+' Licensed to the Hipparchus project under one or more
+' contributor license agreements.  See the NOTICE file distributed with
+' this work for additional information regarding copyright ownership.
+' The ASF licenses this file to You under the Apache License, Version 2.0
+' (the "License"); you may not use this file except in compliance with
+' the License.  You may obtain a copy of the License at
+'
+'      https://www.apache.org/licenses/LICENSE-2.0
+'
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
+
+@startuml
+
+  skinparam svek                  true
+  skinparam ClassBackgroundColor  #F3EFEB
+  skinparam ClassArrowColor       #691616
+  skinparam ClassBorderColor      #691616
+  skinparam NoteBackgroundColor   #F3EFEB
+  skinparam NoteBorderColor       #691616
+  skinparam NoteFontColor         #691616
+  skinparam ClassFontSize         11
+
+  package org.hipparchus #ECEBD8 {
+
+    package analysis #DDEBD8  {
+      package differentiation #DDDBD8 {
+
+        interface Derivative {
+          +getValue()
+          +getPartialDerivative()
+        }
+
+        interface DifferentialAlgebra {
+          +getFreeParameters()
+          +getOrder()
+        }
+
+        class Gradient
+
+        interface Derivative1
+
+        abstract class UnivariateDerive
+        class UnivariateDerive1
+        class UnivariateDerive2
+
+        class DerivativeStructure
+
+        class TaylorMap {
+          +double[] value(double... deltaP)
+          +TaylorMap compose(TaylorMap other)
+          +TaylorMap invert(MatrixDecomposer decomposer)
+        }
+
+        Derivative               ..>      DifferentialAlgebra
+        DifferentialAlgebra     <..       TaylorMap
+        Derivative              <.left.   DerivativeStructure
+        Derivative1              .right.> Derivative
+        Derivative              <|--      UnivariateDerive
+        UnivariateDerive        <|--      UnivariateDerive1
+        Derivative1             <..       Gradient
+        Derivative1             <..       UnivariateDerive1
+        UnivariateDerive        <|--      UnivariateDerive2
+        DerivativeStructure "*" <--o      TaylorMap
+
+      }
+    }
+
+    interface "FieldElement<T>" as FieldElement_T_ {
+      T add(T a)
+      T subtract(T a)
+      T negate()
+      T multiply(int n)
+      T multiply(T a)
+      T divide(T a)
+      T reciprocal()
+      Field<T> getField()
+    }
+
+    interface "CalculusFieldElement<T>" as CalculusFieldElement_T_ {
+      T sin()
+      T cos()
+      ...
+      T copySign(T sign)
+      double getReal()
+    }
+
+    CalculusFieldElement_T_  <..      Derivative
+    FieldElement_T_          <.right. CalculusFieldElement_T_
+
+  }
+
+@enduml
