@@ -35,7 +35,7 @@
     <reflowSkin>
       <theme>default</theme>
       <localResources>false</localResources>
-      <highlightJs>true</highlightJs>
+      <highlightJs>false</highlightJs>
       <titleTemplate>%2$s | %1$s</titleTemplate>
       <toc>top</toc>
       <topNav>Hipparchus|User Guide|Parent|Modules|Reports</topNav>
@@ -78,6 +78,10 @@
   </custom>
 
   <body>
+    <head>
+      <![CDATA[<link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets/styles/default.min.css"/>]]>
+      <![CDATA[<script src="https://unpkg.com/@highlightjs/cdn-assets/highlight.min.js"></script>]]>
+    </head>
 
     <menu name="Hipparchus">
       <item name="Overview"                      href="index.html"/>

@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
+    <release version="3.2" date="TBD" description="TBD">
+      <action dev="luc" type="fix" issue="issues/339">
+        Changed CDN for faster site load.
+      </action>
+    </release>
     <release version="3.1" date="2024-04-05" description="This is a maintenance release. It includes several
                                                           bugfixes and improvements, and adds one important
                                                           feature: constrained optimization! Other additions
