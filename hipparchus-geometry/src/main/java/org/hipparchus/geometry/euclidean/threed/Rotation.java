@@ -531,18 +531,16 @@ public class Rotation implements Serializable {
    *   second angle is between 0 and &pi; (i.e its sine is positive).</li>
    * </ul>
 
-   * <p>Cardan and Euler angle have a very disappointing drawback: all
-   * of them have singularities. This means that if the instance is
-   * too close to the singularities corresponding to the given
-   * rotation order, it will be impossible to retrieve the angles. For
-   * Cardan angles, this is often called gimbal lock. There is
-   * <em>nothing</em> to do to prevent this, it is an intrinsic problem
-   * with Cardan and Euler representation (but not a problem with the
-   * rotation itself, which is perfectly well defined). For Cardan
-   * angles, singularities occur when the second angle is close to
-   * -&pi;/2 or +&pi;/2, for Euler angle singularities occur when the
-   * second angle is close to 0 or &pi;, this implies that the identity
-   * rotation is always singular for Euler angles!</p>
+   * <p>
+   * The algorithm used here works even when the rotation is exactly at the
+   * the singularity of the rotation order and convention. In this case, one of
+   * the angles in the singular pair is arbitrarily set to exactly 0 and the
+   * second angle is computed. The angle set to 0 in the singular case is the
+   * angle of the first rotation in the case of Cardan orders, and it is the angle
+   * of the last rotation in the case of Euler orders. This implies that extracting
+   * the angles of a rotation never fails (it used to trigger an exception in singular
+   * cases up to Hipparchus 3.0).
+   * </p>
 
    * @param order rotation order to use
    * @param convention convention to use for the semantics of the angle

@@ -131,10 +131,7 @@ public enum RotationOrder {
     /** Sign for direct order (i.e. X before Y, Y before Z, Z before X). */
     private final double sign;
 
-    /**
-     * /** Private constructor. This is a utility class that cannot be
-     * instantiated by the user, so its only constructor is private.
-     *
+    /** Enum constructor.
      * @param stage1 first stage
      * @param stage2 second stage
      * @param stage3 third stage
@@ -213,6 +210,16 @@ public enum RotationOrder {
     }
 
     /** Get the Cardan or Euler angles corresponding to the instance.
+     * <p>
+     * The algorithm used here works even when the rotation is exactly at the
+     * the singularity of the rotation order and convention. In this case, one of
+     * the angles in the singular pair is arbitrarily set to exactly 0 and the
+     * second angle is computed. The angle set to 0 in the singular case is the
+     * angle of the first rotation in the case of Cardan orders, and it is the angle
+     * of the last rotation in the case of Euler orders. This implies that extracting
+     * the angles of a rotation never fails (it used to trigger an exception in singular
+     * cases up to Hipparchus 3.0).
+     * </p>
      * @param rotation rotation from which angles should be extracted
      * @param convention convention to use for the semantics of the angle
      * @return an array of three angles, in the order specified by the set
@@ -254,9 +261,15 @@ public enum RotationOrder {
         // [  0    sin(ψ ± φ)    ∓ cos(ψ ± φ) ]
         // [  0    cos(ψ ± φ)    ± sin(ψ ± φ) ]
         // [ ±1       0              0        ]
-        // so we can set θ=±π/2 copying the sign from ±1 term,
-        // arbitrarily set φ=0
-        // and extract ψ as atan2(XmidCol, YmidCol)
+        // at singularity, there is an infinite number of pairs (here ψ and φ) that represent
+        // the same rotation, so we have to make some assumptions, arbitrarily setting one angle
+        // of the pair and computing the other one from the non-singular middle column in the
+        // FRAME_TRANSFORM rotation convention or from the non-singular middle row in the
+        // VECTOR_OPERATOR rotation convention. In our XYZ rotation order and FRAME_TRANSFORM
+        // rotation convention example, we can extract a consistent set of angles set by:
+        //   - setting θ = ±π/2 copying the sign from ±1 term,
+        //   - arbitrarily set φ = 0
+        //   - compute ψ = atan2(XmidCol, YmidCol)
 
         // These results generalize to all sequences, with some adjustments for
         // Euler sequence where we need to replace one axis by the missing axis
@@ -352,6 +365,16 @@ public enum RotationOrder {
     }
 
     /** Get the Cardan or Euler angles corresponding to the instance.
+     * <p>
+     * The algorithm used here works even when the rotation is exactly at the
+     * the singularity of the rotation order and convention. In this case, one of
+     * the angles in the singular pair is arbitrarily set to exactly 0 and the
+     * second angle is computed. The angle set to 0 in the singular case is the
+     * angle of the first rotation in the case of Cardan orders, and it is the angle
+     * of the last rotation in the case of Euler orders. This implies that extracting
+     * the angles of a rotation never fails (it used to trigger an exception in singular
+     * cases up to Hipparchus 3.0).
+     * </p>
      * @param <T> type of the field elements
      * @param rotation rotation from which angles should be extracted
      * @param convention convention to use for the semantics of the angle
@@ -394,9 +417,15 @@ public enum RotationOrder {
         // [  0    sin(ψ ± φ)    ∓ cos(ψ ± φ) ]
         // [  0    cos(ψ ± φ)    ± sin(ψ ± φ) ]
         // [ ±1       0              0        ]
-        // so we can set θ=±π/2 copying the sign from ±1 term,
-        // arbitrarily set φ=0
-        // and extract ψ as atan2(XmidCol, YmidCol)
+        // at singularity, there is an infinite number of pairs (here ψ and φ) that represent
+        // the same rotation, so we have to make some assumptions, arbitrarily setting one angle
+        // of the pair and computing the other one from the non-singular middle column in the
+        // FRAME_TRANSFORM rotation convention or from the non-singular middle row in the
+        // VECTOR_OPERATOR rotation convention. In our XYZ rotation order and FRAME_TRANSFORM
+        // rotation convention example, we can extract a consistent set of angles set by:
+        //   - setting θ = ±π/2 copying the sign from ±1 term,
+        //   - arbitrarily set φ = 0
+        //   - compute ψ = atan2(XmidCol, YmidCol)
 
         // These results generalize to all sequences, with some adjustments for
         // Euler sequence where we need to replace one axis by the missing axis
