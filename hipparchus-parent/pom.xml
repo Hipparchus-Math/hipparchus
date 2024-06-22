@@ -467,6 +467,12 @@
         <scope>test</scope>
       </dependency>
       <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>${hipparchus.mockito-core.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
         <groupId>org.hamcrest</groupId>
         <artifactId>hamcrest-library</artifactId>
         <version>${hipparchus.hamcrest.version}</version>
@@ -527,6 +533,7 @@
     <hipparchus.maven-install-plugin.version>3.1.1</hipparchus.maven-install-plugin.version>
     <hipparchus.apache-rat-plugin.version>0.16.1</hipparchus.apache-rat-plugin.version>
     <hipparchus.junit.version>4.13.2</hipparchus.junit.version>
+    <hipparchus.mockito-core.version>4.11.0</hipparchus.mockito-core.version>
     <hipparchus.hamcrest.version>2.2</hipparchus.hamcrest.version>
     <hipparchus.reflow-velocity-tools.version>2.0.0</hipparchus.reflow-velocity-tools.version>
     <hipparchus.mathjax.enable>&lt;script src=&quot;https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js&quot; id=&quot;MathJax-script&quot;&gt;&lt;/script&gt;</hipparchus.mathjax.enable>
