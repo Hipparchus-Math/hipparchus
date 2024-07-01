@@ -279,7 +279,7 @@ public class FieldDetectorBasedEventState<T extends CalculusFieldElement<T>> imp
             // we have to select some intermediate state
             // attempting to split the remaining time in an integer number of checks
             final T dt       = target.getTime().subtract(done.getTime());
-            final double maxCheck = detector.getMaxCheckInterval().currentInterval(done);
+            final double maxCheck = detector.getMaxCheckInterval().currentInterval(done, dt.getReal() >= 0.);
             final int    n        = FastMath.max(1, (int) FastMath.ceil(dt.abs().divide(maxCheck).getReal()));
             return n == 1 ? target : interpolator.getInterpolatedState(done.getTime().add(dt.divide(n)));
         }

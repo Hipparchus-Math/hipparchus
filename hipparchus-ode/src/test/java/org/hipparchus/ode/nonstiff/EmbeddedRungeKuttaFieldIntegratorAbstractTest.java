@@ -261,7 +261,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
       for (int i = 0; i < detectors.size(); ++i) {
           Assert.assertSame(functions[i], detectors.get(i).getHandler());
-          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
+          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null, true), 1.0);
           Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
           Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
@@ -304,7 +304,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
       for (int i = 0; i < detectors.size(); ++i) {
           Assert.assertSame(functions[i], detectors.get(i).getHandler());
-          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
+          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null, true), 1.0);
           Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
           Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
@@ -350,7 +350,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
       for (int i = 0; i < detectors.size(); ++i) {
           Assert.assertSame(functions[i], detectors.get(i).getHandler());
-          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
+          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null, true), 1.0);
           Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
           Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
@@ -392,7 +392,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
       for (int i = 0; i < detectors.size(); ++i) {
           Assert.assertSame(functions[i], detectors.get(i).getHandler());
-          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
+          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null, true), 1.0);
           Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
           Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
@@ -448,7 +448,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
         integ.addEventDetector(new FieldODEEventDetector<T>() {
             public FieldAdaptableInterval<T> getMaxCheckInterval() {
-                return s -> Double.POSITIVE_INFINITY;
+                return (s, isForward) -> Double.POSITIVE_INFINITY;
             }
             public int getMaxIterationCount() {
                 return 1000;
@@ -494,7 +494,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
         integ.addEventDetector(new FieldODEEventDetector<T>() {
             public FieldAdaptableInterval<T> getMaxCheckInterval() {
-                return s -> Double.POSITIVE_INFINITY;
+                return (s, isForward) -> Double.POSITIVE_INFINITY;
             }
             public int getMaxIterationCount() {
                 return 3;
@@ -1088,7 +1088,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         fieldIntegrator.addEventDetector(new FieldODEEventDetector<Binary64>() {
             @Override
             public FieldAdaptableInterval<Binary64> getMaxCheckInterval() {
-                return s -> Double.POSITIVE_INFINITY;
+                return (s, isForward) -> Double.POSITIVE_INFINITY;
             }
             @Override
             public int getMaxIterationCount() {

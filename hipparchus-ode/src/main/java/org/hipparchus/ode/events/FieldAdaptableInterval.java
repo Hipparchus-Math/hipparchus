@@ -29,10 +29,13 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
 @FunctionalInterface
 public interface FieldAdaptableInterval<T extends CalculusFieldElement<T>> {
 
-    /** Get the current value of maximal time interval between events handler checks.
-     * @param state current state
+    /**
+     * Get the current value of maximal time interval between events handler checks.
+     *
+     * @param state     current state
+     * @param isForward true if propagation is forward in independent variable, false otherwise
      * @return current value of maximal time interval between events handler checks (only as a double)
      */
-    double currentInterval(FieldODEStateAndDerivative<T> state);
+    double currentInterval(FieldODEStateAndDerivative<T> state, boolean isForward);
 
 }

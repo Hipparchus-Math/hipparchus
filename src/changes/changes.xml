@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
+    <release version="4.0" date="TBD" description="TBD">
+      <action dev="serrof" type="add" issue="issues/335">
+        Add boolean for propagation direction in (Field)AdaptableInterval.
+      </action>
+    </release>
     <release version="3.2" date="TBD" description="TBD">
       <action dev="luc" type="fix" issue="issues/339">
         Changed CDN for faster site load.

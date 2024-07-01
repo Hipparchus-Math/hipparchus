@@ -2127,7 +2127,7 @@ public class FieldCloseEventsTest {
 
         public BaseDetector(final double maxCheck, final double threshold, final int maxIter,
                             Action action, List<Event> events) {
-            this.maxCheck  = s -> maxCheck;
+            this.maxCheck  = (s, isForward) -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new FieldBracketingNthOrderBrentSolver<>(new Binary64(0),
                                                                       new Binary64(threshold),
@@ -2422,7 +2422,7 @@ public class FieldCloseEventsTest {
 
         public ResetChangesSignGenerator(final double y1, final double y2, final double change,
                                          final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = s -> maxCheck;
+            this.maxCheck  = (s, isForward) -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new FieldBracketingNthOrderBrentSolver<>(new Binary64(0),
                             new Binary64(threshold),
