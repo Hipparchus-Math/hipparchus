@@ -138,7 +138,7 @@ public class TestFieldProblem4<T extends CalculusFieldElement<T>>
         }
 
         public FieldAdaptableInterval<T> getMaxCheckInterval() {
-            return s -> maxCheck;
+            return (s, isForward) -> maxCheck;
         }
 
         public int getMaxIterationCount() {

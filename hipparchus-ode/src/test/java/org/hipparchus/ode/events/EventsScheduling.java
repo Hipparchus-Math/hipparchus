@@ -181,7 +181,7 @@ public class EventsScheduling {
         private final ScheduleChecker               checker;
         SimpleDetector(final double tEvent, final ScheduleChecker checker,
                        final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = s -> maxCheck;
+            this.maxCheck  = (s, isForward) -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.tEvent    = tEvent;
@@ -224,7 +224,7 @@ public class EventsScheduling {
 
         SimpleFieldDetector(final double tEvent, final ScheduleChecker checker,
                             final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = s -> maxCheck;
+            this.maxCheck  = (s, isForward) -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new FieldBracketingNthOrderBrentSolver<>(new Binary64(0),
                                                                       new Binary64(threshold),

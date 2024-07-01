@@ -131,7 +131,7 @@ public class DetectorBasedEventStateTest {
 
         public ResettingEvent(final double tEvent,
                               final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = s -> maxCheck;
+            this.maxCheck  = (s, isForward) -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.tEvent    = tEvent;
@@ -225,7 +225,7 @@ public class DetectorBasedEventStateTest {
 
         public SecondaryStateEvent(final int index, final double target,
                                    final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = s -> maxCheck;
+            this.maxCheck  = (s, isForward) -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.index     = index;
@@ -291,7 +291,7 @@ public class DetectorBasedEventStateTest {
 
         public CloseEventsGenerator(final double r1, final double r2,
                                     final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = s -> maxCheck;
+            this.maxCheck  = (s, isForward) -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.r1        = r1;

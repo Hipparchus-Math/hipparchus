@@ -149,7 +149,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
         integrator.addEventDetector(new FieldODEEventDetector<T>() {
             public FieldAdaptableInterval<T> getMaxCheckInterval() {
-                return s -> Double.POSITIVE_INFINITY;
+                return (s, isForward) -> Double.POSITIVE_INFINITY;
             }
             public int getMaxIterationCount() {
                 return 100;
@@ -492,7 +492,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
     protected <T extends CalculusFieldElement<T>> void doTestUnstableDerivative(Field<T> field, double epsilon) {
       final StepFieldProblem<T> stepProblem = new StepFieldProblem<T>(field,
-                                                                      s -> 999.0,
+                                                                      (s, isForward) -> 999.0,
                                                                       field.getZero().newInstance(1.0e+12),
                                                                       1000000,
                                                                       field.getZero().newInstance(0.0),
@@ -501,7 +501,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                                               withMaxCheck(field.getZero().newInstance(1.0)).
                                               withMaxIter(1000).
                                               withThreshold(field.getZero().newInstance(1.0e-12));
-      Assert.assertEquals(1.0,     stepProblem.getMaxCheckInterval().currentInterval(null), 1.0e-15);
+      Assert.assertEquals(1.0,     stepProblem.getMaxCheckInterval().currentInterval(null, true), 1.0e-15);
       Assert.assertEquals(1000,    stepProblem.getMaxIterationCount());
       Assert.assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy().getReal(), 1.0e-25);
       Assert.assertNotNull(stepProblem.getHandler());
