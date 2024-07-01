@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="4.0" date="TBD" description="TBD">
+      <action dev="serrof" type="add" issue="issues/335">
+          Add boolean for propagation direction in (Field)AdaptableInterval.
+      </action>
       <action dev="luc" type="update" issue="issues/350">
         Removed obsolete hipparchus-migration module.
       </action>

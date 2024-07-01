@@ -112,7 +112,7 @@ public abstract class AbstractODEDetector<T extends AbstractODEDetector<T>> impl
      * @return a new detector with updated configuration (the instance is not changed)
      */
     public T withMaxCheck(final double newMaxCheck) {
-        return withMaxCheck(s -> newMaxCheck);
+        return withMaxCheck((s, isForward) -> newMaxCheck);
     }
 
     /**

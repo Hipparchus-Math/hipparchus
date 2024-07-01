@@ -448,7 +448,7 @@ class EventSlopeFilterTest {
 
         public Event(final double maxCheck, final double threshold, final int maxIter,
                      boolean expectDecreasing, boolean expectIncreasing) {
-            this.maxCheck         = s -> maxCheck;
+            this.maxCheck         = (s, isForward) -> maxCheck;
             this.maxIter          = maxIter;
             this.solver           = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.expectDecreasing = expectDecreasing;
@@ -505,7 +505,7 @@ class EventSlopeFilterTest {
 
         public FieldEvent(final double maxCheck, final T threshold, final int maxIter,
                           boolean expectDecreasing, boolean expectIncreasing) {
-            this.maxCheck         = s -> maxCheck;
+            this.maxCheck         = (s, isForward) -> maxCheck;
             this.maxIter          = maxIter;
             this.solver           = new FieldBracketingNthOrderBrentSolver<>(threshold.getField().getZero(),
                                                                             threshold,

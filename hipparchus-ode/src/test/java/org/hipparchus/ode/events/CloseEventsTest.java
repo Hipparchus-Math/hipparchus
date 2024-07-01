@@ -2098,7 +2098,7 @@ class CloseEventsTest {
 
         public BaseDetector(final double maxCheck, final double threshold, final int maxIter,
                             Action action, List<Event> events) {
-            this.maxCheck  = s -> maxCheck;
+            this.maxCheck  = (s, isForward) -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.action    = action;
@@ -2382,7 +2382,7 @@ class CloseEventsTest {
 
         public ResetChangesSignGenerator(final double y1, final double y2, final double change,
                                          final double maxCheck, final double threshold, final int maxIter) {
-            this.maxCheck  = s -> maxCheck;
+            this.maxCheck  = (s, isForward) -> maxCheck;
             this.maxIter   = maxIter;
             this.solver    = new BracketingNthOrderBrentSolver(0, threshold, 0, 5);
             this.y1        = y1;
