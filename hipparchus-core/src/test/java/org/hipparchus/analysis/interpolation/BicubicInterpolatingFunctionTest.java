@@ -26,8 +26,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for the bicubic function.
@@ -49,28 +49,28 @@ public final class BicubicInterpolatingFunctionTest {
         try {
             bcf = new BicubicInterpolatingFunction(new double[0], yval,
                                                    zval, zval, zval, zval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             bcf = new BicubicInterpolatingFunction(xval, new double[0],
                                                    zval, zval, zval, zval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval,
                                                     new double[0][], zval, zval, zval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval,
                                                     new double[1][0], zval, zval, zval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -78,39 +78,39 @@ public final class BicubicInterpolatingFunctionTest {
         double[] wxval = new double[] {3, 2, 5, 6.5};
         try {
             bcf = new BicubicInterpolatingFunction(wxval, yval, zval, zval, zval, zval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         double[] wyval = new double[] {-4, -1, -1, 2.5};
         try {
             bcf = new BicubicInterpolatingFunction(xval, wyval, zval, zval, zval, zval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         double[][] wzval = new double[xval.length][yval.length - 1];
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, wzval, zval, zval, zval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, zval, wzval, zval, zval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, zval, zval, wzval, zval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, zval, zval, zval, wzval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -118,25 +118,25 @@ public final class BicubicInterpolatingFunctionTest {
         wzval = new double[xval.length - 1][yval.length];
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, wzval, zval, zval, zval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, zval, wzval, zval, zval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, zval, zval, wzval, zval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, zval, zval, zval, wzval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -164,13 +164,13 @@ public final class BicubicInterpolatingFunctionTest {
 
         x = xMin;
         y = yMin;
-        Assert.assertTrue(bcf.isValidPoint(x, y));
+        Assertions.assertTrue(bcf.isValidPoint(x, y));
         // Ensure that no exception is thrown.
         bcf.value(x, y);
 
         x = xMax;
         y = yMax;
-        Assert.assertTrue(bcf.isValidPoint(x, y));
+        Assertions.assertTrue(bcf.isValidPoint(x, y));
         // Ensure that no exception is thrown.
         bcf.value(x, y);
 
@@ -178,27 +178,27 @@ public final class BicubicInterpolatingFunctionTest {
         final double yRange = yMax - yMin;
         x = xMin + xRange / 3.4;
         y = yMin + yRange / 1.2;
-        Assert.assertTrue(bcf.isValidPoint(x, y));
+        Assertions.assertTrue(bcf.isValidPoint(x, y));
         // Ensure that no exception is thrown.
         bcf.value(x, y);
 
         final double small = 1e-8;
         x = xMin - small;
         y = yMax;
-        Assert.assertFalse(bcf.isValidPoint(x, y));
+        Assertions.assertFalse(bcf.isValidPoint(x, y));
         // Ensure that an exception would have been thrown.
         try {
             bcf.value(x, y);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException expected) {}
 
         x = xMin;
         y = yMax + small;
-        Assert.assertFalse(bcf.isValidPoint(x, y));
+        Assertions.assertFalse(bcf.isValidPoint(x, y));
         // Ensure that an exception would have been thrown.
         try {
             bcf.value(x, y);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException expected) {}
     }
 
@@ -385,8 +385,8 @@ public final class BicubicInterpolatingFunctionTest {
                 currentY = yValues[j];
                 expected = f.value(currentX, currentY);
                 actual = interpolation.value(currentX, currentY);
-                Assert.assertTrue("On data point: " + expected + " != " + actual,
-                                  Precision.equals(expected, actual));
+                Assertions.assertTrue(Precision.equals(expected, actual),
+                                  "On data point: " + expected + " != " + actual);
             }
         }
 
@@ -409,10 +409,10 @@ public final class BicubicInterpolatingFunctionTest {
                 System.out.println(actual + " (diff=" + (expected - actual) + ")");
             }
 
-            Assert.assertEquals(expected, actual, maxTolerance);
+            Assertions.assertEquals(expected, actual, maxTolerance);
         }
 
         final double meanError = sumError / numberOfSamples;
-        Assert.assertEquals(0, meanError, meanTolerance);
+        Assertions.assertEquals(0, meanError, meanTolerance);
     }
 }

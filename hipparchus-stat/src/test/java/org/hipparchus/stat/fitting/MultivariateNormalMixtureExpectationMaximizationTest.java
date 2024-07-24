@@ -16,12 +16,6 @@
  */
 package org.hipparchus.stat.fitting;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.hipparchus.distribution.multivariate.MixtureMultivariateNormalDistribution;
 import org.hipparchus.distribution.multivariate.MultivariateNormalDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -30,8 +24,16 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.util.Pair;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test that demonstrates the use of
@@ -39,109 +41,123 @@ import org.junit.Test;
  */
 public class MultivariateNormalMixtureExpectationMaximizationTest {
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testNonEmptyData() {
-        // Should not accept empty data
-        new MultivariateNormalMixtureExpectationMaximization(new double[][] {});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            // Should not accept empty data
+            new MultivariateNormalMixtureExpectationMaximization(new double[][]{});
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testNonJaggedData() {
-        // Reject data with nonconstant numbers of columns
-        double[][] data = new double[][] {
-                { 1, 2, 3 },
-                { 4, 5, 6, 7 },
-        };
-        new MultivariateNormalMixtureExpectationMaximization(data);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            // Reject data with nonconstant numbers of columns
+            double[][] data = new double[][]{
+                {1, 2, 3},
+                {4, 5, 6, 7},
+            };
+            new MultivariateNormalMixtureExpectationMaximization(data);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testMultipleColumnsRequired() {
-        // Data should have at least 2 columns
-        double[][] data = new double[][] {
-                { 1 }, { 2 }
-        };
-        new MultivariateNormalMixtureExpectationMaximization(data);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            // Data should have at least 2 columns
+            double[][] data = new double[][]{
+                {1}, {2}
+            };
+            new MultivariateNormalMixtureExpectationMaximization(data);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testMaxIterationsPositive() {
-        // Maximum iterations for fit must be positive integer
-        double[][] data = getTestSamples();
-        MultivariateNormalMixtureExpectationMaximization fitter =
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            // Maximum iterations for fit must be positive integer
+            double[][] data = getTestSamples();
+            MultivariateNormalMixtureExpectationMaximization fitter =
                 new MultivariateNormalMixtureExpectationMaximization(data);
 
-        MixtureMultivariateNormalDistribution
-            initialMix = MultivariateNormalMixtureExpectationMaximization.estimate(data, 2);
+            MixtureMultivariateNormalDistribution
+                initialMix = MultivariateNormalMixtureExpectationMaximization.estimate(data, 2);
 
-        fitter.fit(initialMix, 0, 1E-5);
+            fitter.fit(initialMix, 0, 1E-5);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testThresholdPositive() {
-        // Maximum iterations for fit must be positive
-        double[][] data = getTestSamples();
-        MultivariateNormalMixtureExpectationMaximization fitter =
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            // Maximum iterations for fit must be positive
+            double[][] data = getTestSamples();
+            MultivariateNormalMixtureExpectationMaximization fitter =
                 new MultivariateNormalMixtureExpectationMaximization(
                     data);
 
-        MixtureMultivariateNormalDistribution
-            initialMix = MultivariateNormalMixtureExpectationMaximization.estimate(data, 2);
+            MixtureMultivariateNormalDistribution
+                initialMix = MultivariateNormalMixtureExpectationMaximization.estimate(data, 2);
 
-        fitter.fit(initialMix, 1000, 0);
+            fitter.fit(initialMix, 1000, 0);
+        });
     }
 
-    @Test(expected = MathIllegalStateException.class)
+    @Test
     public void testConvergenceException() {
-        // MathIllegalStateException thrown if fit terminates before threshold met
-        double[][] data = getTestSamples();
-        MultivariateNormalMixtureExpectationMaximization fitter
-            = new MultivariateNormalMixtureExpectationMaximization(data);
+        assertThrows(MathIllegalStateException.class, () -> {
+            // MathIllegalStateException thrown if fit terminates before threshold met
+            double[][] data = getTestSamples();
+            MultivariateNormalMixtureExpectationMaximization fitter
+                = new MultivariateNormalMixtureExpectationMaximization(data);
 
-        MixtureMultivariateNormalDistribution
-            initialMix = MultivariateNormalMixtureExpectationMaximization.estimate(data, 2);
+            MixtureMultivariateNormalDistribution
+                initialMix = MultivariateNormalMixtureExpectationMaximization.estimate(data, 2);
 
-        // 5 iterations not enough to meet convergence threshold
-        fitter.fit(initialMix, 5, 1E-5);
+            // 5 iterations not enough to meet convergence threshold
+            fitter.fit(initialMix, 5, 1E-5);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testIncompatibleIntialMixture() {
-        // Data has 3 columns
-        double[][] data = new double[][] {
-                { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 }
-        };
-        double[] weights = new double[] { 0.5, 0.5 };
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            // Data has 3 columns
+            double[][] data = new double[][]{
+                {1, 2, 3}, {4, 5, 6}, {7, 8, 9}
+            };
+            double[] weights = new double[]{0.5, 0.5};
 
-        // These distributions are compatible with 2-column data, not 3-column
-        // data
-        MultivariateNormalDistribution[] mvns = new MultivariateNormalDistribution[2];
+            // These distributions are compatible with 2-column data, not 3-column
+            // data
+            MultivariateNormalDistribution[] mvns = new MultivariateNormalDistribution[2];
 
-        mvns[0] = new MultivariateNormalDistribution(new double[] {
-                        -0.0021722935000328823, 3.5432892936887908 },
-                        new double[][] {
-                                { 4.537422569229048, 3.5266152281729304 },
-                                { 3.5266152281729304, 6.175448814169779 } });
-        mvns[1] = new MultivariateNormalDistribution(new double[] {
-                        5.090902706507635, 8.68540656355283 }, new double[][] {
-                        { 2.886778573963039, 1.5257474543463154 },
-                        { 1.5257474543463154, 3.3794567673616918 } });
+            mvns[0] = new MultivariateNormalDistribution(new double[]{
+                    -0.0021722935000328823, 3.5432892936887908},
+                new double[][]{
+                    {4.537422569229048, 3.5266152281729304},
+                    {3.5266152281729304, 6.175448814169779}});
+            mvns[1] = new MultivariateNormalDistribution(new double[]{
+                5.090902706507635, 8.68540656355283}, new double[][]{
+                {2.886778573963039, 1.5257474543463154},
+                {1.5257474543463154, 3.3794567673616918}});
 
-        // Create components and mixture
-        List<Pair<Double, MultivariateNormalDistribution>> components =
+            // Create components and mixture
+            List<Pair<Double, MultivariateNormalDistribution>> components =
                 new ArrayList<Pair<Double, MultivariateNormalDistribution>>();
-        components.add(new Pair<Double, MultivariateNormalDistribution>(
+            components.add(new Pair<Double, MultivariateNormalDistribution>(
                 weights[0], mvns[0]));
-        components.add(new Pair<Double, MultivariateNormalDistribution>(
+            components.add(new Pair<Double, MultivariateNormalDistribution>(
                 weights[1], mvns[1]));
 
-        MixtureMultivariateNormalDistribution badInitialMix
-            = new MixtureMultivariateNormalDistribution(components);
+            MixtureMultivariateNormalDistribution badInitialMix
+                = new MixtureMultivariateNormalDistribution(components);
 
-        MultivariateNormalMixtureExpectationMaximization fitter
-            = new MultivariateNormalMixtureExpectationMaximization(data);
+            MultivariateNormalMixtureExpectationMaximization fitter
+                = new MultivariateNormalMixtureExpectationMaximization(data);
 
-        fitter.fit(badInitialMix);
+            fitter.fit(badInitialMix);
+        });
     }
 
     @Test
@@ -179,14 +195,14 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
         int i = 0;
         for (Pair<Double, MultivariateNormalDistribution> component : initialMix
                 .getComponents()) {
-            Assert.assertEquals(correctWeights[i], component.getFirst(),
+            Assertions.assertEquals(correctWeights[i], component.getFirst(),
                     Math.ulp(1d));
 
             final double[] means = component.getValue().getMeans();
-            Assert.assertTrue(Arrays.equals(correctMeans[i], means));
+            Assertions.assertTrue(Arrays.equals(correctMeans[i], means));
 
             final RealMatrix covMat = component.getValue().getCovariances();
-            Assert.assertEquals(correctCovMats[i], covMat);
+            Assertions.assertEquals(correctCovMats[i], covMat);
             i++;
         }
     }
@@ -202,9 +218,9 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
                                 final LocalizedCoreFormats expected) {
         try {
             MultivariateNormalMixtureExpectationMaximization.estimate(data, numComponents);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(expected, miae.getSpecifier());
+            Assertions.assertEquals(expected, miae.getSpecifier());
         }
     }
 
@@ -216,14 +232,14 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
             Constructor<?> dataRowConstructor = dataRowClass.getDeclaredConstructor(double[].class);
             dataRowConstructor.setAccessible(true);
             Object dr1 = dataRowConstructor.newInstance(new double[] { 1, 2, 3 });
-            Assert.assertEquals(66614367, dr1.hashCode());
-            Assert.assertTrue(dr1.equals(dr1));
-            Assert.assertFalse(dr1.equals(""));
-            Assert.assertTrue(dr1.equals(dataRowConstructor.newInstance(new double[] { 1, 2, 3 })));
-            Assert.assertFalse(dr1.equals(dataRowConstructor.newInstance(new double[] { 3, 2, 1 })));
+            Assertions.assertEquals(66614367, dr1.hashCode());
+            Assertions.assertEquals(dr1, dr1);
+            Assertions.assertNotEquals("", dr1);
+            Assertions.assertEquals(dr1, dataRowConstructor.newInstance(new double[]{1, 2, 3}));
+            Assertions.assertNotEquals(dr1, dataRowConstructor.newInstance(new double[]{3, 2, 1}));
         } catch (InvocationTargetException | NoSuchMethodException | SecurityException |
                  InstantiationException | IllegalAccessException | IllegalArgumentException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
     }
 
@@ -262,7 +278,7 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
         MixtureMultivariateNormalDistribution fittedMix = fitter.getFittedModel();
         List<Pair<Double, MultivariateNormalDistribution>> components = fittedMix.getComponents();
 
-        Assert.assertEquals(correctLogLikelihood,
+        Assertions.assertEquals(correctLogLikelihood,
                             fitter.getLogLikelihood(),
                             Math.ulp(1d));
 
@@ -272,9 +288,9 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
             final MultivariateNormalDistribution mvn = component.getSecond();
             final double[] mean = mvn.getMeans();
             final RealMatrix covMat = mvn.getCovariances();
-            Assert.assertEquals(correctWeights[i], weight, Math.ulp(1d));
-            Assert.assertTrue(Arrays.equals(correctMeans[i], mean));
-            Assert.assertEquals(correctCovMats[i], covMat);
+            Assertions.assertEquals(correctWeights[i], weight, Math.ulp(1d));
+            Assertions.assertTrue(Arrays.equals(correctMeans[i], mean));
+            Assertions.assertEquals(correctCovMats[i], covMat);
             i++;
         }
     }

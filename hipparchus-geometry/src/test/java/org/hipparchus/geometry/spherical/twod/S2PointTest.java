@@ -27,8 +27,10 @@ import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class S2PointTest {
 
@@ -37,30 +39,34 @@ public class S2PointTest {
     public void testS2Point() {
         for (int k = -2; k < 3; ++k) {
             S2Point p = new S2Point(1.0 + k * MathUtils.TWO_PI, 1.4);
-            Assert.assertEquals(1.0 + k * MathUtils.TWO_PI, p.getTheta(), 1.0e-10);
-            Assert.assertEquals(1.4, p.getPhi(), 1.0e-10);
-            Assert.assertEquals(FastMath.cos(1.0) * FastMath.sin(1.4), p.getVector().getX(), 1.0e-10);
-            Assert.assertEquals(FastMath.sin(1.0) * FastMath.sin(1.4), p.getVector().getY(), 1.0e-10);
-            Assert.assertEquals(FastMath.cos(1.4), p.getVector().getZ(), 1.0e-10);
-            Assert.assertFalse(p.isNaN());
+            Assertions.assertEquals(1.0 + k * MathUtils.TWO_PI, p.getTheta(), 1.0e-10);
+            Assertions.assertEquals(1.4, p.getPhi(), 1.0e-10);
+            Assertions.assertEquals(FastMath.cos(1.0) * FastMath.sin(1.4), p.getVector().getX(), 1.0e-10);
+            Assertions.assertEquals(FastMath.sin(1.0) * FastMath.sin(1.4), p.getVector().getY(), 1.0e-10);
+            Assertions.assertEquals(FastMath.cos(1.4), p.getVector().getZ(), 1.0e-10);
+            Assertions.assertFalse(p.isNaN());
         }
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNegativePolarAngle() {
-        new S2Point(1.0, -1.0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new S2Point(1.0, -1.0);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testTooLargePolarAngle() {
-        new S2Point(1.0, 3.5);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new S2Point(1.0, 3.5);
+        });
     }
 
     @Test
     public void testNaN() {
-        Assert.assertTrue(S2Point.NaN.isNaN());
-        Assert.assertTrue(S2Point.NaN.equals(new S2Point(Double.NaN, 1.0)));
-        Assert.assertFalse(new S2Point(1.0, 1.3).equals(S2Point.NaN));
+        Assertions.assertTrue(S2Point.NaN.isNaN());
+        Assertions.assertEquals(S2Point.NaN, new S2Point(Double.NaN, 1.0));
+        Assertions.assertNotEquals(S2Point.NaN, new S2Point(1.0, 1.3));
     }
 
     @SuppressWarnings("unlikely-arg-type")
@@ -68,38 +74,38 @@ public class S2PointTest {
     public void testEquals() {
         S2Point a = new S2Point(1.0, 1.0);
         S2Point b = new S2Point(1.0, 1.0);
-        Assert.assertEquals(a.hashCode(), b.hashCode());
-        Assert.assertFalse(a == b);
-        Assert.assertTrue(a.equals(b));
-        Assert.assertTrue(a.equals(a));
-        Assert.assertFalse(a.equals('a'));
-        Assert.assertTrue(S2Point.NaN.equals(S2Point.NaN));
-        Assert.assertTrue(S2Point.NaN.equals(new S2Point(Double.NaN, 0.0)));
-        Assert.assertTrue(S2Point.NaN.equals(new S2Point(0.0, Double.NaN)));
+        Assertions.assertEquals(a.hashCode(), b.hashCode());
+        Assertions.assertFalse(a == b);
+        Assertions.assertEquals(a, b);
+        Assertions.assertEquals(a, a);
+        Assertions.assertNotEquals('a', a);
+        Assertions.assertEquals(S2Point.NaN, S2Point.NaN);
+        Assertions.assertEquals(S2Point.NaN, new S2Point(Double.NaN, 0.0));
+        Assertions.assertEquals(S2Point.NaN, new S2Point(0.0, Double.NaN));
     }
 
     @Test
     public void testEqualsIeee754() {
         S2Point a = new S2Point(1.0, 1.0);
         S2Point b = new S2Point(1.0, 1.0);
-        Assert.assertEquals(a.hashCode(), b.hashCode());
-        Assert.assertFalse(a == b);
-        Assert.assertTrue(a.equalsIeee754(b));
-        Assert.assertTrue(a.equalsIeee754(a));
-        Assert.assertFalse(a.equalsIeee754('a'));
-        Assert.assertFalse(S2Point.NaN.equalsIeee754(S2Point.NaN));
-        Assert.assertFalse(S2Point.NaN.equalsIeee754(new S2Point(Double.NaN, 0.0)));
-        Assert.assertFalse(S2Point.NaN.equalsIeee754(new S2Point(0.0, Double.NaN)));
+        Assertions.assertEquals(a.hashCode(), b.hashCode());
+        Assertions.assertFalse(a == b);
+        Assertions.assertTrue(a.equalsIeee754(b));
+        Assertions.assertTrue(a.equalsIeee754(a));
+        Assertions.assertFalse(a.equalsIeee754('a'));
+        Assertions.assertFalse(S2Point.NaN.equalsIeee754(S2Point.NaN));
+        Assertions.assertFalse(S2Point.NaN.equalsIeee754(new S2Point(Double.NaN, 0.0)));
+        Assertions.assertFalse(S2Point.NaN.equalsIeee754(new S2Point(0.0, Double.NaN)));
     }
 
     @Test
     public void testDistance() {
         S2Point a = new S2Point(1.0, 0.5 * FastMath.PI);
         S2Point b = new S2Point(a.getTheta() + 0.5 * FastMath.PI, a.getPhi());
-        Assert.assertEquals(0.5 * FastMath.PI, a.distance(b), 1.0e-10);
-        Assert.assertEquals(FastMath.PI, a.distance(a.negate()), 1.0e-10);
-        Assert.assertEquals(0.5 * FastMath.PI, S2Point.MINUS_I.distance(S2Point.MINUS_K), 1.0e-10);
-        Assert.assertEquals(0.0, new S2Point(1.0, 0).distance(new S2Point(2.0, 0)), 1.0e-10);
+        Assertions.assertEquals(0.5 * FastMath.PI, a.distance(b), 1.0e-10);
+        Assertions.assertEquals(FastMath.PI, a.distance(a.negate()), 1.0e-10);
+        Assertions.assertEquals(0.5 * FastMath.PI, S2Point.MINUS_I.distance(S2Point.MINUS_K), 1.0e-10);
+        Assertions.assertEquals(0.0, new S2Point(1.0, 0).distance(new S2Point(2.0, 0)), 1.0e-10);
     }
 
     @Test
@@ -109,16 +115,16 @@ public class S2PointTest {
             S2Point p = new S2Point(MathUtils.TWO_PI * generator.nextDouble(),
                                     FastMath.PI * generator.nextDouble());
             S2Point np = new S2Point(p.negate().getTheta(), p.negate().getPhi());
-            Assert.assertEquals(FastMath.PI, p.distance(np), 1.4e-15);
+            Assertions.assertEquals(FastMath.PI, p.distance(np), 1.4e-15);
         }
     }
 
     @Test
     public void testSpace() {
         S2Point a = new S2Point(1.0, 1.0);
-        Assert.assertTrue(a.getSpace() instanceof Sphere2D);
-        Assert.assertEquals(2, a.getSpace().getDimension());
-        Assert.assertTrue(a.getSpace().getSubSpace() instanceof Sphere1D);
+        Assertions.assertTrue(a.getSpace() instanceof Sphere2D);
+        Assertions.assertEquals(2, a.getSpace().getDimension());
+        Assertions.assertTrue(a.getSpace().getSubSpace() instanceof Sphere1D);
     }
 
 }

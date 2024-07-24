@@ -23,24 +23,29 @@ package org.hipparchus.util;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.special.Gamma;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test cases for the {@link CombinatoricsUtils.FactorialLog} class.
  */
 public class FactorialLogTest {
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPrecondition1() {
-        CombinatoricsUtils.FactorialLog.create().withCache(-1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            CombinatoricsUtils.FactorialLog.create().withCache(-1);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNonPositiveArgument() {
-        final CombinatoricsUtils.FactorialLog f = CombinatoricsUtils.FactorialLog.create();
-        f.value(-1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final CombinatoricsUtils.FactorialLog f = CombinatoricsUtils.FactorialLog.create();
+            f.value(-1);
+        });
     }
 
     @Test
@@ -51,8 +56,7 @@ public class FactorialLogTest {
         // "Gamma" class.
         for (int i = 21; i < 10000; i++) {
             final double expected = Gamma.logGamma(i + 1);
-            Assert.assertEquals(i + "! ",
-                                expected, f.value(i), 0d);
+            Assertions.assertEquals(expected, f.value(i), 0d, i + "! ");
         }
     }
 
@@ -66,8 +70,7 @@ public class FactorialLogTest {
 
         for (int i = 0; i < max; i++) {
             final double expected = factorialLog(i);
-            Assert.assertEquals(i + "! ",
-                                expected, f.value(i), 2 * Math.ulp(expected));
+            Assertions.assertEquals(expected, f.value(i), 2 * Math.ulp(expected), i + "! ");
         }
     }
 
@@ -78,8 +81,7 @@ public class FactorialLogTest {
 
         for (int i = 0; i < max; i++) {
             final double expected = factorialLog(i);
-            Assert.assertEquals(i + "! ",
-                                expected, f.value(i), 0d);
+            Assertions.assertEquals(expected, f.value(i), 0d, i + "! ");
         }
     }
 
@@ -91,7 +93,7 @@ public class FactorialLogTest {
 
         final int val = max + max / 2;
         final double expected = factorialLog(val);
-        Assert.assertEquals(expected, f2.value(val), 0d);
+        Assertions.assertEquals(expected, f2.value(val), 0d);
     }
 
     @Test
@@ -102,7 +104,7 @@ public class FactorialLogTest {
 
         final int val = max / 4;
         final double expected = factorialLog(val);
-        Assert.assertEquals(expected, f2.value(val), 0d);
+        Assertions.assertEquals(expected, f2.value(val), 0d);
     }
 
     // Direct implementation.

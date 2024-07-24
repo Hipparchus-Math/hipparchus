@@ -21,13 +21,13 @@
  */
 package org.hipparchus.stat.descriptive.moment;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
 import org.hipparchus.util.FastMath;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test cases for the {@link StandardDeviation} class.

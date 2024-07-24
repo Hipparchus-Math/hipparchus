@@ -21,13 +21,13 @@
  */
 package org.hipparchus.fitting;
 
-import java.util.Random;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.random.RandomDataGenerator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import java.util.Random;
 
 /**
  * Test for class {@link SimpleCurveFitter}.

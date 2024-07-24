@@ -22,12 +22,6 @@
 
 package org.hipparchus.stat.inference;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.distribution.continuous.UniformRealDistribution;
@@ -36,8 +30,16 @@ import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Test cases for {@link KolmogorovSmirnovTest}.
@@ -110,11 +112,11 @@ public class KolmogorovSmirnovTestTest {
         final NormalDistribution unitNormal = new NormalDistribution(0d, 1d);
         // Uncomment to run exact test - takes about a minute. Same value is used in R tests and for
         // approx.
-        // Assert.assertEquals(0.3172069207622391, test.kolmogorovSmirnovTest(unitNormal, gaussian,
+        // Assertions.assertEquals(0.3172069207622391, test.kolmogorovSmirnovTest(unitNormal, gaussian,
         // true), TOLERANCE);
-        Assert.assertEquals(0.3172069207622391, test.kolmogorovSmirnovTest(unitNormal, gaussian, false), TOLERANCE);
-        Assert.assertFalse(test.kolmogorovSmirnovTest(unitNormal, gaussian, 0.05));
-        Assert.assertEquals(0.0932947561266756, test.kolmogorovSmirnovStatistic(unitNormal, gaussian), TOLERANCE);
+        Assertions.assertEquals(0.3172069207622391, test.kolmogorovSmirnovTest(unitNormal, gaussian, false), TOLERANCE);
+        Assertions.assertFalse(test.kolmogorovSmirnovTest(unitNormal, gaussian, 0.05));
+        Assertions.assertEquals(0.0932947561266756, test.kolmogorovSmirnovStatistic(unitNormal, gaussian), TOLERANCE);
     }
 
     /** Unit normal distribution, unit normal data, small dataset */
@@ -124,9 +126,9 @@ public class KolmogorovSmirnovTestTest {
         final NormalDistribution unitNormal = new NormalDistribution(0d, 1d);
         final double[] shortGaussian = new double[50];
         System.arraycopy(gaussian, 0, shortGaussian, 0, 50);
-        Assert.assertEquals(0.683736463728347, test.kolmogorovSmirnovTest(unitNormal, shortGaussian, false), TOLERANCE);
-        Assert.assertFalse(test.kolmogorovSmirnovTest(unitNormal, gaussian, 0.05));
-        Assert.assertEquals(0.09820779969463278, test.kolmogorovSmirnovStatistic(unitNormal, shortGaussian), TOLERANCE);
+        Assertions.assertEquals(0.683736463728347, test.kolmogorovSmirnovTest(unitNormal, shortGaussian, false), TOLERANCE);
+        Assertions.assertFalse(test.kolmogorovSmirnovTest(unitNormal, gaussian, 0.05));
+        Assertions.assertEquals(0.09820779969463278, test.kolmogorovSmirnovStatistic(unitNormal, shortGaussian), TOLERANCE);
     }
 
     /** Unit normal distribution, uniform data */
@@ -136,11 +138,11 @@ public class KolmogorovSmirnovTestTest {
         final NormalDistribution unitNormal = new NormalDistribution(0d, 1d);
         // Uncomment to run exact test - takes a long time. Same value is used in R tests and for
         // approx.
-        // Assert.assertEquals(0.3172069207622391, test.kolmogorovSmirnovTest(unitNormal, uniform,
+        // Assertions.assertEquals(0.3172069207622391, test.kolmogorovSmirnovTest(unitNormal, uniform,
         // true), TOLERANCE);
-        Assert.assertEquals(8.881784197001252E-16, test.kolmogorovSmirnovTest(unitNormal, uniform, false), TOLERANCE);
-        Assert.assertFalse(test.kolmogorovSmirnovTest(unitNormal, gaussian, 0.05));
-        Assert.assertEquals(0.5117493931609258, test.kolmogorovSmirnovStatistic(unitNormal, uniform), TOLERANCE);
+        Assertions.assertEquals(8.881784197001252E-16, test.kolmogorovSmirnovTest(unitNormal, uniform, false), TOLERANCE);
+        Assertions.assertFalse(test.kolmogorovSmirnovTest(unitNormal, gaussian, 0.05));
+        Assertions.assertEquals(0.5117493931609258, test.kolmogorovSmirnovStatistic(unitNormal, uniform), TOLERANCE);
     }
 
     /** Uniform distribution, uniform data */
@@ -148,9 +150,9 @@ public class KolmogorovSmirnovTestTest {
     public void testOneSampleUniformUniform() {
         final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
         final UniformRealDistribution unif = new UniformRealDistribution(-0.5, 0.5);
-        Assert.assertEquals(8.881784197001252E-16, test.kolmogorovSmirnovTest(unif, uniform, false), TOLERANCE);
-        Assert.assertTrue(test.kolmogorovSmirnovTest(unif, uniform, 0.05));
-        Assert.assertEquals(0.5400666982352942, test.kolmogorovSmirnovStatistic(unif, uniform), TOLERANCE);
+        Assertions.assertEquals(8.881784197001252E-16, test.kolmogorovSmirnovTest(unif, uniform, false), TOLERANCE);
+        Assertions.assertTrue(test.kolmogorovSmirnovTest(unif, uniform, 0.05));
+        Assertions.assertEquals(0.5400666982352942, test.kolmogorovSmirnovStatistic(unif, uniform), TOLERANCE);
     }
 
     /** Uniform distribution, uniform data, small dataset */
@@ -160,9 +162,9 @@ public class KolmogorovSmirnovTestTest {
         final UniformRealDistribution unif = new UniformRealDistribution(-0.5, 0.5);
         final double[] shortUniform = new double[20];
         System.arraycopy(uniform, 0, shortUniform, 0, 20);
-        Assert.assertEquals(4.117594598618268E-9, test.kolmogorovSmirnovTest(unif, shortUniform, false), TOLERANCE);
-        Assert.assertTrue(test.kolmogorovSmirnovTest(unif, shortUniform, 0.05));
-        Assert.assertEquals(0.6610459, test.kolmogorovSmirnovStatistic(unif, shortUniform), TOLERANCE);
+        Assertions.assertEquals(4.117594598618268E-9, test.kolmogorovSmirnovTest(unif, shortUniform, false), TOLERANCE);
+        Assertions.assertTrue(test.kolmogorovSmirnovTest(unif, shortUniform, 0.05));
+        Assertions.assertEquals(0.6610459, test.kolmogorovSmirnovStatistic(unif, shortUniform), TOLERANCE);
     }
 
     /** Uniform distribution, unit normal dataset */
@@ -172,9 +174,9 @@ public class KolmogorovSmirnovTestTest {
         final UniformRealDistribution unif = new UniformRealDistribution(-0.5, 0.5);
         // Value was obtained via exact test, validated against R. Running exact test takes a long
         // time.
-        Assert.assertEquals(4.9405812774239166E-11, test.kolmogorovSmirnovTest(unif, gaussian, false), TOLERANCE);
-        Assert.assertTrue(test.kolmogorovSmirnovTest(unif, gaussian, 0.05));
-        Assert.assertEquals(0.3401058049019608, test.kolmogorovSmirnovStatistic(unif, gaussian), TOLERANCE);
+        Assertions.assertEquals(4.9405812774239166E-11, test.kolmogorovSmirnovTest(unif, gaussian, false), TOLERANCE);
+        Assertions.assertTrue(test.kolmogorovSmirnovTest(unif, gaussian, 0.05));
+        Assertions.assertEquals(0.3401058049019608, test.kolmogorovSmirnovStatistic(unif, gaussian), TOLERANCE);
     }
 
     /**
@@ -187,9 +189,9 @@ public class KolmogorovSmirnovTestTest {
      */
     private void checkValues(double[] sample1, double[] sample2, double expectedD, double expectedP) {
         final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
-        Assert
+        Assertions
             .assertEquals(expectedP, test.kolmogorovSmirnovTest(sample1, sample2, false), TOLERANCE);
-        Assert.assertEquals(expectedD, test.kolmogorovSmirnovStatistic(sample1, sample2), TOLERANCE);
+        Assertions.assertEquals(expectedD, test.kolmogorovSmirnovStatistic(sample1, sample2), TOLERANCE);
     }
 
 
@@ -325,7 +327,7 @@ public class KolmogorovSmirnovTestTest {
         int k = 0;
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++, k++) {
-                Assert.assertEquals(ref[k], ksTest.pelzGood(d[i], n[j]), tol);
+                Assertions.assertEquals(ref[k], ksTest.pelzGood(d[i], n[j]), tol);
             }
         }
     }
@@ -335,8 +337,8 @@ public class KolmogorovSmirnovTestTest {
     public void testTwoSampleApproximateP() {
         final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
         // Reference values from R, version 2.15.3
-        Assert.assertEquals(0.0319983962391632, test.kolmogorovSmirnovTest(gaussian, gaussian2), TOLERANCE);
-        Assert.assertEquals(0.202352941176471, test.kolmogorovSmirnovStatistic(gaussian, gaussian2), TOLERANCE);
+        Assertions.assertEquals(0.0319983962391632, test.kolmogorovSmirnovTest(gaussian, gaussian2), TOLERANCE);
+        Assertions.assertEquals(0.202352941176471, test.kolmogorovSmirnovStatistic(gaussian, gaussian2), TOLERANCE);
     }
 
     /**
@@ -344,14 +346,15 @@ public class KolmogorovSmirnovTestTest {
      * Verify that large sample method is selected for sample product &gt; Integer.MAX_VALUE
      * (integer overflow in sample product)
      */
-    @Test(timeout=5000)
+    @Test
+    @Timeout(value = 5000, unit = TimeUnit.MILLISECONDS)
     public void testTwoSampleProductSizeOverflow() {
         final int n = 50000;
-        Assert.assertTrue(n * n < 0);
+        Assertions.assertTrue(n * n < 0);
         double[] x = new double[n];
         double[] y = new double[n];
         final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
-        Assert.assertFalse(Double.isNaN(test.kolmogorovSmirnovTest(x, y)));
+        Assertions.assertFalse(Double.isNaN(test.kolmogorovSmirnovTest(x, y)));
     }
 
     @Test
@@ -412,8 +415,8 @@ public class KolmogorovSmirnovTestTest {
 
         final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
 
-        Assert.assertEquals(0.0640394088, test.kolmogorovSmirnovStatistic(x, y), 1e-6);
-        Assert.assertEquals(0.9792777290, test.kolmogorovSmirnovTest(x, y), 1e-6);
+        Assertions.assertEquals(0.0640394088, test.kolmogorovSmirnovStatistic(x, y), 1e-6);
+        Assertions.assertEquals(0.9792777290, test.kolmogorovSmirnovTest(x, y), 1e-6);
 
     }
 
@@ -430,16 +433,16 @@ public class KolmogorovSmirnovTestTest {
                 ascendingValues[j] = j;
             }
 
-            Assert.assertEquals(0., test.kolmogorovSmirnovStatistic(values, values), 0.);
-            Assert.assertEquals(0., test.kolmogorovSmirnovStatistic(ascendingValues, ascendingValues), 0.);
+            Assertions.assertEquals(0., test.kolmogorovSmirnovStatistic(values, values), 0.);
+            Assertions.assertEquals(0., test.kolmogorovSmirnovStatistic(ascendingValues, ascendingValues), 0.);
 
             if (i < 10) {
-                Assert.assertEquals(1.0, test.exactP(0, values.length, values.length, true), 0.);
-                Assert.assertEquals(1.0, test.exactP(0, values.length, values.length, false), 0.);
+                Assertions.assertEquals(1.0, test.exactP(0, values.length, values.length, true), 0.);
+                Assertions.assertEquals(1.0, test.exactP(0, values.length, values.length, false), 0.);
             }
 
-            Assert.assertEquals(1.0, test.approximateP(0, values.length, values.length), 0.);
-            Assert.assertEquals(1.0, test.approximateP(0, values.length, values.length), 0.);
+            Assertions.assertEquals(1.0, test.approximateP(0, values.length, values.length), 0.);
+            Assertions.assertEquals(1.0, test.approximateP(0, values.length, values.length), 0.);
         }
     }
 
@@ -455,15 +458,15 @@ public class KolmogorovSmirnovTestTest {
         final double[] x = {0, 2, 3, 4, 5, 6, 7, 8, 9, 12};
         final double[] y = {1, 10, 11, 13, 14, 15, 16, 17, 18};
         final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
-        Assert.assertEquals(0.0027495724090154106, test.kolmogorovSmirnovTest(x, y,false), tol);
+        Assertions.assertEquals(0.0027495724090154106, test.kolmogorovSmirnovTest(x, y,false), tol);
 
         final double[] x1 = {2, 4, 6, 8, 9, 10, 11, 12, 13};
         final double[] y1 = {0, 1, 3, 5, 7};
-        Assert.assertEquals(0.085914085914085896, test.kolmogorovSmirnovTest(x1, y1, false), tol);
+        Assertions.assertEquals(0.085914085914085896, test.kolmogorovSmirnovTest(x1, y1, false), tol);
 
         final double[] x2 = {4, 6, 7, 8, 9, 10, 11};
         final double[] y2 = {0, 1, 2, 3, 5};
-        Assert.assertEquals(0.015151515151515027, test.kolmogorovSmirnovTest(x2, y2, false), tol);
+        Assertions.assertEquals(0.015151515151515027, test.kolmogorovSmirnovTest(x2, y2, false), tol);
     }
 
     @Test
@@ -507,11 +510,11 @@ public class KolmogorovSmirnovTestTest {
                     observedIdx += 1;
                 }
                 else {
-                    Assert.assertEquals(0, counts[i]);
+                    Assertions.assertEquals(0, counts[i]);
                 }
             }
 
-            Assert.assertEquals(numCombinations, observedIdx);
+            Assertions.assertEquals(numCombinations, observedIdx);
             UnitTestUtils.assertChiSquareAccept(expected, observed, alpha);
         }
     }
@@ -525,7 +528,7 @@ public class KolmogorovSmirnovTestTest {
         final double[] x = {0, 2, 4, 6, 8, 8, 10, 15, 22, 30, 33, 36, 38};
         final double[] y = {9, 17, 20, 33, 40, 51, 60, 60, 72, 90, 101};
         final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest(1000);
-        Assert.assertEquals(0.0059, test.bootstrap(x, y, 10000, false), 1E-3);
+        Assertions.assertEquals(0.0059, test.bootstrap(x, y, 10000, false), 1E-3);
     }
 
     /**
@@ -535,7 +538,7 @@ public class KolmogorovSmirnovTestTest {
     @Test
     public void testBootstrapLargeSamples() {
         final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest(1000);
-        Assert.assertEquals(0.0237, test.bootstrap(gaussian, gaussian2, 10000), 1E-2);
+        Assertions.assertEquals(0.0237, test.bootstrap(gaussian, gaussian2, 10000), 1E-2);
     }
 
     /**
@@ -548,7 +551,7 @@ public class KolmogorovSmirnovTestTest {
         final double[] x = {2,4,6,8,9,10,11,12,13};
         final double[] y = {0,1,3,5,7};
         final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest(1000);
-        Assert.assertEquals(0.06303, test.bootstrap(x, y, 10000, false), 1E-2);
+        Assertions.assertEquals(0.06303, test.bootstrap(x, y, 10000, false), 1E-2);
     }
 
     @Test
@@ -558,8 +561,8 @@ public class KolmogorovSmirnovTestTest {
         final double[] origX = x.clone();
         final double[] origY = y.clone();
         fixTies(x,y);
-        Assert.assertArrayEquals(origX, x, 0);
-        Assert.assertArrayEquals(origY, y, 0);
+        Assertions.assertArrayEquals(origX, x, 0);
+        Assertions.assertArrayEquals(origY, y, 0);
     }
 
     /**
@@ -576,8 +579,8 @@ public class KolmogorovSmirnovTestTest {
         final double[] fixedX = x.clone();
         final double[] fixedY = y.clone();
         checkFixTies(xP, yP);
-        Assert.assertArrayEquals(fixedX, xP, 0);
-        Assert.assertArrayEquals(fixedY,  yP, 0);
+        Assertions.assertArrayEquals(fixedX, xP, 0);
+        Assertions.assertArrayEquals(fixedY,  yP, 0);
     }
 
     @Test
@@ -595,13 +598,13 @@ public class KolmogorovSmirnovTestTest {
     private void checkFixTies(double[] x, double[] y) throws Exception {
         final double[] origCombined = MathArrays.concatenate(x, y);
         fixTies(x, y);
-        Assert.assertFalse(hasTies(x, y));
+        Assertions.assertFalse(hasTies(x, y));
         final double[] combined = MathArrays.concatenate(x, y);
         for (int i = 0; i < combined.length; i++) {
             for (int j = 0; j < i; j++) {
-                Assert.assertTrue(combined[i] != combined[j]);
+                Assertions.assertTrue(combined[i] != combined[j]);
                 if (combined[i] < combined[j])
-                    Assert.assertTrue(origCombined[i] < origCombined[j]
+                    Assertions.assertTrue(origCombined[i] < origCombined[j]
                                           || origCombined[i] == origCombined[j]);
             }
 
@@ -624,8 +627,8 @@ public class KolmogorovSmirnovTestTest {
      */
     private void checkExactTable(int n, int m, double criticalValue, double alpha) {
         final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
-        Assert.assertTrue(test.exactP(criticalValue, n, m, true) < alpha);
-        Assert.assertTrue(test.exactP(criticalValue, n, m, false) > alpha);
+        Assertions.assertTrue(test.exactP(criticalValue, n, m, true) < alpha);
+        Assertions.assertTrue(test.exactP(criticalValue, n, m, false) > alpha);
     }
 
     /**
@@ -639,7 +642,7 @@ public class KolmogorovSmirnovTestTest {
      */
     private void checkApproximateTable(int n, int m, double criticalValue, double alpha, double epsilon) {
         final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
-        Assert.assertEquals(alpha, test.approximateP(criticalValue, n, m), epsilon);
+        Assertions.assertEquals(alpha, test.approximateP(criticalValue, n, m), epsilon);
     }
 
     /**
@@ -724,7 +727,7 @@ public class KolmogorovSmirnovTestTest {
             for (int n = 2; n < maxSize; n++) {
                 double d = 0;
                 for (int i = 0; i < 100; i++) {
-                    Assert.assertEquals(
+                    Assertions.assertEquals(
                             exactP341(d, m, n, true),
                             ksTest.exactP(d, m, n, true),
                             tol);
@@ -774,7 +777,7 @@ public class KolmogorovSmirnovTestTest {
                     final double curD = kStatTest.kolmogorovSmirnovStatistic(nSet, mSet);
                     final double curP = kStatTest.exactP(curD, m, n, true);
                     dValues.putIfAbsent(curD, curP);
-                    Assert.assertEquals(
+                    Assertions.assertEquals(
                             exactP341(curD, m, n, true),
                             kStatTest.exactP(curD, m, n, true),
                             tol);

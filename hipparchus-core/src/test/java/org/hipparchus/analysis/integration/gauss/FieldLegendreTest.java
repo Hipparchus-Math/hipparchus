@@ -26,8 +26,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test of the {@link FieldLegendreRuleFactory}.
@@ -40,11 +40,11 @@ public class FieldLegendreTest {
     public void testTooLArgeNumberOfPoints() {
         try {
             factory.legendre(10000, new Binary64(0), new Binary64(Math.PI / 2));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, miae.getSpecifier());
-            Assert.assertEquals(10000, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(1000,  ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, miae.getSpecifier());
+            Assertions.assertEquals(10000, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(1000,  ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -53,7 +53,7 @@ public class FieldLegendreTest {
         final FieldGaussIntegrator<Binary64> integrator = factory.legendre(7, new Binary64(0), new Binary64(Math.PI / 2));
         final double s = integrator.integrate(x -> FastMath.cos(x)).getReal();
         // System.out.println("s=" + s + " e=" + 1);
-        Assert.assertEquals(1, s, Math.ulp(1d));
+        Assertions.assertEquals(1, s, Math.ulp(1d));
     }
 
 
@@ -67,6 +67,6 @@ public class FieldLegendreTest {
         final double s = integrator.integrate(x -> x.reciprocal()).getReal();
         final double expected = FastMath.log(hi).subtract(FastMath.log(lo)).getReal();
         // System.out.println("s=" + s + " e=" + expected);
-        Assert.assertEquals(expected, s, 1e-14);
+        Assertions.assertEquals(expected, s, 1e-14);
     }
 }

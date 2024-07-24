@@ -22,7 +22,7 @@
 
 package org.hipparchus.analysis.solvers;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link IllinoisSolver Illinois} solver.

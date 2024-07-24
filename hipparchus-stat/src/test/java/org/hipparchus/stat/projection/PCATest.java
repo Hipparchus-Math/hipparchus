@@ -18,8 +18,8 @@ package org.hipparchus.stat.projection;
 
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.stat.LocalizedStatFormats;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class PCATest {
 
@@ -106,24 +106,24 @@ public class PCATest {
     @Test
     public void defaultSettings() {
         PCA pca = new PCA(2);
-        Assert.assertEquals(2, pca.getNumComponents());
-        Assert.assertFalse(pca.isScale());
-        Assert.assertTrue(pca.isBiasCorrection());
+        Assertions.assertEquals(2, pca.getNumComponents());
+        Assertions.assertFalse(pca.isScale());
+        Assertions.assertTrue(pca.isBiasCorrection());
     }
 
     @Test
     public void covariance() {
         PCA pca = new PCA(2);
         double[][] actual = pca.fitAndTransform(SCORES);
-        Assert.assertArrayEquals(EXPECTED_MEAN, pca.getCenter(), DELTA);
-        Assert.assertArrayEquals(EXPECTED_VARIANCE, pca.getVariance(), DELTA);
+        Assertions.assertArrayEquals(EXPECTED_MEAN, pca.getCenter(), DELTA);
+        Assertions.assertArrayEquals(EXPECTED_VARIANCE, pca.getVariance(), DELTA);
         assertExpected(EXPECTED_COMPONENTS, pca.getComponents());
         assertExpected(EXPECTED_COV, actual);
 
         // calling fit and transform individually should be the same as combo method
         pca = new PCA(2);
         actual = pca.fit(SCORES).transform(SCORES);
-        Assert.assertArrayEquals(EXPECTED_MEAN, pca.getCenter(), DELTA);
+        Assertions.assertArrayEquals(EXPECTED_MEAN, pca.getCenter(), DELTA);
         assertExpected(EXPECTED_COV, actual);
     }
 
@@ -146,10 +146,10 @@ public class PCATest {
         PCA pca = new PCA(2);
         try {
             pca.transform(SCORES);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedStatFormats.ILLEGAL_STATE_PCA, mise.getSpecifier());
-            Assert.assertEquals("transform", mise.getParts()[0]);
+            Assertions.assertEquals(LocalizedStatFormats.ILLEGAL_STATE_PCA, mise.getSpecifier());
+            Assertions.assertEquals("transform", mise.getParts()[0]);
         }
     }
 
@@ -157,7 +157,7 @@ public class PCATest {
         for (int i = 0; i < expected.length; i++) {
             double[] e = expected[i];
             double[] t = actual[i];
-            Assert.assertArrayEquals(e, t, DELTA);
+            Assertions.assertArrayEquals(e, t, DELTA);
         }
     }
 }

@@ -22,16 +22,18 @@
 
 package org.hipparchus.linear;
 
-import java.util.Random;
-
-import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.analysis.differentiation.Gradient;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.MathArrays;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class FieldQRDecompositionTest {
@@ -70,10 +72,12 @@ public class FieldQRDecompositionTest {
     }
 
     /**Testing if is impossible to solve QR.*/
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testQRSingular(){
-        QRSingular(GradientField);
-        QRSingular(Binary64Field.getInstance());
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            QRSingular(GradientField);
+            QRSingular(Binary64Field.getInstance());
+        });
     }
 
     /**Testing if Q is orthogonal*/
@@ -111,10 +115,12 @@ public class FieldQRDecompositionTest {
     }
 
     /**Testing if there is an error inverting a non invertible matrix.*/
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNonInvertible(){
-        NonInvertible(GradientField);
-        NonInvertible(Binary64Field.getInstance());
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            NonInvertible(GradientField);
+            NonInvertible(Binary64Field.getInstance());
+        });
     }
     /**Testing to invert a tall and skinny matrix.*/
     @Test
@@ -151,10 +157,10 @@ public class FieldQRDecompositionTest {
         int rows = m.getRowDimension();
         int columns = m.getColumnDimension();
         FieldQRDecomposition<T> qr = new FieldQRDecomposition<T>(m);
-        Assert.assertEquals(rows,    qr.getQ().getRowDimension());
-        Assert.assertEquals(rows,    qr.getQ().getColumnDimension());
-        Assert.assertEquals(rows,    qr.getR().getRowDimension());
-        Assert.assertEquals(columns, qr.getR().getColumnDimension());
+        Assertions.assertEquals(rows,    qr.getQ().getRowDimension());
+        Assertions.assertEquals(rows,    qr.getQ().getColumnDimension());
+        Assertions.assertEquals(rows,    qr.getR().getRowDimension());
+        Assertions.assertEquals(columns, qr.getR().getColumnDimension());
     }
 
     private  <T extends CalculusFieldElement<T>> void AEqualQR(Field<T> field) {
@@ -182,7 +188,7 @@ public class FieldQRDecompositionTest {
     private  <T extends CalculusFieldElement<T>> void checkAEqualQR(FieldMatrix<T> m) {
         FieldQRDecomposition<T> qr = new FieldQRDecomposition<>(m);
         T norm = norm(qr.getQ().multiply(qr.getR()).subtract(m));
-        Assert.assertEquals(0, norm.getReal(), normTolerance);
+        Assertions.assertEquals(0, norm.getReal(), normTolerance);
     }
 
     private  <T extends CalculusFieldElement<T>> void QOrthogonal(Field<T> field) {
@@ -211,7 +217,7 @@ public class FieldQRDecompositionTest {
         FieldQRDecomposition<T> qr = new FieldQRDecomposition<T>(m);
         FieldMatrix<T> eye = MatrixUtils.createFieldIdentityMatrix(m.getField(),m.getRowDimension());
         T norm = norm(qr.getQT().multiply(qr.getQ()).subtract(eye));
-        Assert.assertEquals(0, norm.getReal(), normTolerance);
+        Assertions.assertEquals(0, norm.getReal(), normTolerance);
     }
 
     private  <T extends CalculusFieldElement<T>> void RUpperTriangular(Field<T> field) {
@@ -247,7 +253,7 @@ public class FieldQRDecompositionTest {
             @Override
             public void visit(int row, int column, T value) {
                 if (column < row) {
-                    Assert.assertEquals(0.0, value.getReal(), entryTolerance);
+                    Assertions.assertEquals(0.0, value.getReal(), entryTolerance);
                 }
             }
         });
@@ -286,7 +292,7 @@ public class FieldQRDecompositionTest {
             @Override
             public void visit(int row, int column, T value) {
                 if (column > row) {
-                    Assert.assertEquals(0.0, value.getReal(), entryTolerance);
+                    Assertions.assertEquals(0.0, value.getReal(), entryTolerance);
                 }
             }
         });
@@ -314,18 +320,18 @@ public class FieldQRDecompositionTest {
 
         // check values against known references
         FieldMatrix<T> q = qr.getQ();
-        Assert.assertEquals(0, norm(q.subtract(qRef)).getReal(), 1.0e-13);
+        Assertions.assertEquals(0, norm(q.subtract(qRef)).getReal(), 1.0e-13);
         FieldMatrix<T> qT = qr.getQT();
-        Assert.assertEquals(0, norm(qT.subtract(qRef.transpose())).getReal(), 1.0e-13);
+        Assertions.assertEquals(0, norm(qT.subtract(qRef.transpose())).getReal(), 1.0e-13);
         FieldMatrix<T> r = qr.getR();
-        Assert.assertEquals(0, norm(r.subtract(rRef)).getReal(), 1.0e-13);
+        Assertions.assertEquals(0, norm(r.subtract(rRef)).getReal(), 1.0e-13);
         FieldMatrix<T> h = qr.getH();
-        Assert.assertEquals(0, norm(h.subtract(hRef)).getReal(), 1.0e-13);
+        Assertions.assertEquals(0, norm(h.subtract(hRef)).getReal(), 1.0e-13);
 
         // check the same cached instance is returned the second time
-        Assert.assertTrue(q == qr.getQ());
-        Assert.assertTrue(r == qr.getR());
-        Assert.assertTrue(h == qr.getH());
+        Assertions.assertTrue(q == qr.getQ());
+        Assertions.assertTrue(r == qr.getR());
+        Assertions.assertTrue(h == qr.getH());
 
     }
 
@@ -341,9 +347,9 @@ public class FieldQRDecompositionTest {
         FieldMatrix<T> a     = MatrixUtils.createFieldMatrix(data4x3);
         FieldDecompositionSolver<T> solver = new FieldQRDecomposer<>(field.getZero()).decompose(a);
         FieldMatrix<T> pinv  = solver.getInverse();
-        Assert.assertEquals(0, norm(pinv.multiply(a).subtract(MatrixUtils.createFieldIdentityMatrix(field, 3))).getReal(), 1.0e-6);
-        Assert.assertEquals(testData4x3.length,    solver.getRowDimension());
-        Assert.assertEquals(testData4x3[0].length, solver.getColumnDimension());
+        Assertions.assertEquals(0, norm(pinv.multiply(a).subtract(MatrixUtils.createFieldIdentityMatrix(field, 3))).getReal(), 1.0e-6);
+        Assertions.assertEquals(testData4x3.length,    solver.getRowDimension());
+        Assertions.assertEquals(testData4x3[0].length, solver.getColumnDimension());
     }
 
     private  <T extends CalculusFieldElement<T>> void InvertShortWide(Field<T> field) {
@@ -351,10 +357,10 @@ public class FieldQRDecompositionTest {
         FieldMatrix<T> a = MatrixUtils.createFieldMatrix( data3x4);
         FieldDecompositionSolver<T> solver = new FieldQRDecomposition<T>(a).getSolver();
         FieldMatrix<T> pinv  = solver.getInverse();
-        Assert.assertEquals(0,norm( a.multiply(pinv).subtract(MatrixUtils.createFieldIdentityMatrix(field, 3))).getReal(), 1.0e-6);
-        Assert.assertEquals(0,norm( pinv.multiply(a).getSubMatrix(0, 2, 0, 2).subtract(MatrixUtils.createFieldIdentityMatrix(field, 3))).getReal(), 1.0e-6);
-        Assert.assertEquals(testData3x4.length,    solver.getRowDimension());
-        Assert.assertEquals(testData3x4[0].length, solver.getColumnDimension());
+        Assertions.assertEquals(0,norm( a.multiply(pinv).subtract(MatrixUtils.createFieldIdentityMatrix(field, 3))).getReal(), 1.0e-6);
+        Assertions.assertEquals(0,norm( pinv.multiply(a).getSubMatrix(0, 2, 0, 2).subtract(MatrixUtils.createFieldIdentityMatrix(field, 3))).getReal(), 1.0e-6);
+        Assertions.assertEquals(testData3x4.length,    solver.getRowDimension());
+        Assertions.assertEquals(testData3x4[0].length, solver.getColumnDimension());
     }
 
     private  <T extends CalculusFieldElement<T>> FieldMatrix<T> createTestMatrix(Field<T> field, final Random r, final int rows, final int columns) {

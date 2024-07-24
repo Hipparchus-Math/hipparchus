@@ -21,12 +21,6 @@
  */
 package org.hipparchus.random;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
-import org.hipparchus.RetryRunner;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.continuous.BetaDistribution;
 import org.hipparchus.distribution.continuous.EnumeratedRealDistribution;
@@ -38,15 +32,20 @@ import org.hipparchus.distribution.discrete.PoissonDistribution;
 import org.hipparchus.distribution.discrete.ZipfDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test cases for the RandomDataGenerator class.
  *
  */
-@RunWith(RetryRunner.class)
 public class RandomDataGeneratorTest {
 
     public RandomDataGeneratorTest() {
@@ -65,32 +64,32 @@ public class RandomDataGeneratorTest {
     public void testNextIntExtremeValues() {
         int x = randomData.nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
         int y = randomData.nextInt(Integer.MIN_VALUE, Integer.MAX_VALUE);
-        Assert.assertFalse(x == y);
+        Assertions.assertFalse(x == y);
     }
 
     @Test
     public void testNextLongExtremeValues() {
         long x = randomData.nextLong(Long.MIN_VALUE, Long.MAX_VALUE);
         long y = randomData.nextLong(Long.MIN_VALUE, Long.MAX_VALUE);
-        Assert.assertFalse(x == y);
+        Assertions.assertFalse(x == y);
     }
 
     @Test
     public void testNextUniformExtremeValues() {
         double x = randomData.nextUniform(-Double.MAX_VALUE, Double.MAX_VALUE);
         double y = randomData.nextUniform(-Double.MAX_VALUE, Double.MAX_VALUE);
-        Assert.assertFalse(x == y);
-        Assert.assertFalse(Double.isNaN(x));
-        Assert.assertFalse(Double.isNaN(y));
-        Assert.assertFalse(Double.isInfinite(x));
-        Assert.assertFalse(Double.isInfinite(y));
+        Assertions.assertFalse(x == y);
+        Assertions.assertFalse(Double.isNaN(x));
+        Assertions.assertFalse(Double.isNaN(y));
+        Assertions.assertFalse(Double.isInfinite(x));
+        Assertions.assertFalse(Double.isInfinite(y));
     }
 
     @Test
     public void testNextIntIAE() {
         try {
             randomData.nextInt(4, 3);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -128,7 +127,7 @@ public class RandomDataGeneratorTest {
         final UnitTestUtils.Frequency<Integer> freq = new UnitTestUtils.Frequency<Integer>();
         for (int i = 0; i < smallSampleSize; i++) {
             final int value = randomData.nextInt(min, max);
-            Assert.assertTrue("nextInt range", (value >= min) && (value <= max));
+            Assertions.assertTrue((value >= min) && (value <= max), "nextInt range");
             freq.addValue(value);
         }
         final long[] observed = new long[len];
@@ -153,19 +152,19 @@ public class RandomDataGeneratorTest {
             int r = randomData.nextInt(lower, upper);
             max = FastMath.max(max, r);
             min = FastMath.min(min, r);
-            Assert.assertTrue(r >= lower);
-            Assert.assertTrue(r <= upper);
+            Assertions.assertTrue(r >= lower);
+            Assertions.assertTrue(r <= upper);
         }
         double ratio = (((double) max)   - ((double) min)) /
                        (((double) upper) - ((double) lower));
-        Assert.assertTrue(ratio > 0.99999);
+        Assertions.assertTrue(ratio > 0.99999);
     }
 
     @Test
     public void testNextLongIAE() {
         try {
             randomData.nextLong(4, 3);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -202,8 +201,8 @@ public class RandomDataGeneratorTest {
         final UnitTestUtils.Frequency<Integer> freq = new UnitTestUtils.Frequency<Integer>();
         for (int i = 0; i < smallSampleSize; i++) {
             final long value = randomData.nextLong(min, max);
-            Assert.assertTrue("nextLong range: " + value + " " + min + " " + max,
-                              (value >= min) && (value <= max));
+            Assertions.assertTrue((value >= min) && (value <= max),
+                              "nextLong range: " + value + " " + min + " " + max);
             freq.addValue((int)value);
         }
         final long[] observed = new long[len];
@@ -228,12 +227,12 @@ public class RandomDataGeneratorTest {
             long r = randomData.nextLong(lower, upper);
             max = FastMath.max(max, r);
             min = FastMath.min(min, r);
-            Assert.assertTrue(r >= lower);
-            Assert.assertTrue(r <= upper);
+            Assertions.assertTrue(r >= lower);
+            Assertions.assertTrue(r <= upper);
         }
         double ratio = (((double) max)   - ((double) min)) /
                        (((double) upper) - ((double) lower));
-        Assert.assertTrue(ratio > 0.99999);
+        Assertions.assertTrue(ratio > 0.99999);
     }
 
     /**
@@ -245,19 +244,19 @@ public class RandomDataGeneratorTest {
     public void testNextPoisson() {
         try {
             randomData.nextPoisson(0);
-            Assert.fail("zero mean -- expecting MathIllegalArgumentException");
+            Assertions.fail("zero mean -- expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             randomData.nextPoisson(-1);
-            Assert.fail("negative mean supplied -- MathIllegalArgumentException expected");
+            Assertions.fail("negative mean supplied -- MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             randomData.nextPoisson(0);
-            Assert.fail("0 mean supplied -- MathIllegalArgumentException expected");
+            Assertions.fail("0 mean supplied -- MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -423,7 +422,7 @@ public class RandomDataGeneratorTest {
             msgBuffer.append("This test can fail randomly due to sampling error with probability ");
             msgBuffer.append(alpha);
             msgBuffer.append(".");
-            Assert.fail(msgBuffer.toString());
+            Assertions.fail(msgBuffer.toString());
         }
     }
 
@@ -432,27 +431,27 @@ public class RandomDataGeneratorTest {
     public void testNextHex() {
         try {
             randomData.nextHexString(-1);
-            Assert.fail("negative length supplied -- MathIllegalArgumentException expected");
+            Assertions.fail("negative length supplied -- MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             randomData.nextHexString(0);
-            Assert.fail("zero length supplied -- MathIllegalArgumentException expected");
+            Assertions.fail("zero length supplied -- MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         String hexString = randomData.nextHexString(3);
         if (hexString.length() != 3) {
-            Assert.fail("incorrect length for generated string");
+            Assertions.fail("incorrect length for generated string");
         }
         hexString = randomData.nextHexString(1);
         if (hexString.length() != 1) {
-            Assert.fail("incorrect length for generated string");
+            Assertions.fail("incorrect length for generated string");
         }
         try {
             hexString = randomData.nextHexString(0);
-            Assert.fail("zero length requested -- expecting MathIllegalArgumentException");
+            Assertions.fail("zero length requested -- expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -460,7 +459,7 @@ public class RandomDataGeneratorTest {
         for (int i = 0; i < smallSampleSize; i++) {
             hexString = randomData.nextHexString(100);
             if (hexString.length() != 100) {
-                Assert.fail("incorrect length for generated string");
+                Assertions.fail("incorrect length for generated string");
             }
             for (int j = 0; j < hexString.length(); j++) {
                 f.addValue(hexString.substring(j, j + 1));
@@ -479,31 +478,31 @@ public class RandomDataGeneratorTest {
     public void testNextUniformIAE() {
         try {
             randomData.nextUniform(4, 3);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             randomData.nextUniform(0, Double.POSITIVE_INFINITY);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             randomData.nextUniform(Double.NEGATIVE_INFINITY, 0);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             randomData.nextUniform(0, Double.NaN);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             randomData.nextUniform(Double.NaN, 0);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -550,7 +549,7 @@ public class RandomDataGeneratorTest {
         UnitTestUtils.Frequency<Integer> freq = new UnitTestUtils.Frequency<Integer>();
         for (int i = 0; i < smallSampleSize; i++) {
             final double value = randomData.nextUniform(min, max);
-            Assert.assertTrue("nextUniform range", (value > min) && (value < max));
+            Assertions.assertTrue((value > min) && (value < max), "nextUniform range");
             // Find bin
             int j = 0;
             while (j < binCount - 1 && value > binBounds[j]) {
@@ -576,7 +575,7 @@ public class RandomDataGeneratorTest {
     public void testNextUniformExclusiveEndpoints() {
         for (int i = 0; i < 1000; i++) {
             double u = randomData.nextUniform(0.99, 1);
-            Assert.assertTrue(u > 0.99 && u < 1);
+            Assertions.assertTrue(u > 0.99 && u < 1);
         }
     }
 
@@ -585,7 +584,7 @@ public class RandomDataGeneratorTest {
     public void testNextGaussian() {
         try {
             randomData.nextNormal(0, 0);
-            Assert.fail("zero sigma -- MathIllegalArgumentException expected");
+            Assertions.fail("zero sigma -- MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -604,13 +603,13 @@ public class RandomDataGeneratorTest {
     public void testNextExponential() {
         try {
             randomData.nextExponential(-1);
-            Assert.fail("negative mean -- expecting MathIllegalArgumentException");
+            Assertions.fail("negative mean -- expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             randomData.nextExponential(0);
-            Assert.fail("zero mean -- expecting MathIllegalArgumentException");
+            Assertions.fail("zero mean -- expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -644,9 +643,9 @@ public class RandomDataGeneratorTest {
         randomData.setSeed(1000);
         double v = randomData.nextUniform(0, 1);
         randomData.setSeed(System.currentTimeMillis());
-        Assert.assertTrue("different seeds", FastMath.abs(v - randomData.nextUniform(0, 1)) > 10E-12);
+        Assertions.assertTrue(FastMath.abs(v - randomData.nextUniform(0, 1)) > 10E-12, "different seeds");
         randomData.setSeed(1000);
-        Assert.assertEquals("same seeds", v, randomData.nextUniform(0, 1), 10E-12);
+        Assertions.assertEquals(v, randomData.nextUniform(0, 1), 10E-12, "same seeds");
     }
 
     /** tests for nextSample() sampling from Collection */
@@ -680,8 +679,8 @@ public class RandomDataGeneratorTest {
          * Use ChiSquare dist with df = 10-1 = 9, alpha = .001 Change to 21.67
          * for alpha = .01
          */
-        Assert.assertTrue("chi-square test -- will fail about 1 in 1000 times",
-                UnitTestUtils.chiSquare(expected, observed) < 27.88);
+        Assertions.assertTrue(UnitTestUtils.chiSquare(expected, observed) < 27.88,
+                "chi-square test -- will fail about 1 in 1000 times");
 
         // Make sure sample of size = size of collection returns same collection
         HashSet<Object> hs = new HashSet<Object>();
@@ -689,13 +688,13 @@ public class RandomDataGeneratorTest {
         Object[] one = randomData.nextSample(hs, 1);
         String oneString = (String) one[0];
         if ((one.length != 1) || !oneString.equals("one")) {
-            Assert.fail("bad sample for set size = 1, sample size = 1");
+            Assertions.fail("bad sample for set size = 1, sample size = 1");
         }
 
         // Make sure we fail for sample size > collection size
         try {
             one = randomData.nextSample(hs, 2);
-            Assert.fail("sample size > set size, expecting MathIllegalArgumentException");
+            Assertions.fail("sample size > set size, expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -704,7 +703,7 @@ public class RandomDataGeneratorTest {
         try {
             hs = new HashSet<Object>();
             one = randomData.nextSample(hs, 0);
-            Assert.fail("n = k = 0, expecting MathIllegalArgumentException");
+            Assertions.fail("n = k = 0, expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -722,7 +721,7 @@ public class RandomDataGeneratorTest {
                 return i;
             }
         }
-        Assert.fail("sample not found:{" + samp[0] + "," + samp[1] + "}");
+        Assertions.fail("sample not found:{" + samp[0] + "," + samp[1] + "}");
         return -1;
     }
 
@@ -746,12 +745,12 @@ public class RandomDataGeneratorTest {
         // Check size = 1 boundary case
         int[] perm = randomData.nextPermutation(1, 1);
         if ((perm.length != 1) || (perm[0] != 0)) {
-            Assert.fail("bad permutation for n = 1, sample k = 1");
+            Assertions.fail("bad permutation for n = 1, sample k = 1");
 
             // Make sure we fail for k size > n
             try {
                 perm = randomData.nextPermutation(2, 3);
-                Assert.fail("permutation k > n, expecting MathIllegalArgumentException");
+                Assertions.fail("permutation k > n, expecting MathIllegalArgumentException");
             } catch (MathIllegalArgumentException ex) {
                 // ignored
             }
@@ -759,7 +758,7 @@ public class RandomDataGeneratorTest {
             // Make sure we fail for n = 0
             try {
                 perm = randomData.nextPermutation(0, 0);
-                Assert.fail("permutation k = n = 0, expecting MathIllegalArgumentException");
+                Assertions.fail("permutation k = n = 0, expecting MathIllegalArgumentException");
             } catch (MathIllegalArgumentException ex) {
                 // ignored
             }
@@ -767,7 +766,7 @@ public class RandomDataGeneratorTest {
             // Make sure we fail for k < n < 0
             try {
                 perm = randomData.nextPermutation(-1, -3);
-                Assert.fail("permutation k < n < 0, expecting MathIllegalArgumentException");
+                Assertions.fail("permutation k < n < 0, expecting MathIllegalArgumentException");
             } catch (MathIllegalArgumentException ex) {
                 // ignored
             }
@@ -787,7 +786,7 @@ public class RandomDataGeneratorTest {
                 return i;
             }
         }
-        Assert.fail("permutation not found");
+        Assertions.fail("permutation not found");
         return -1;
     }
 
@@ -920,16 +919,20 @@ public class RandomDataGeneratorTest {
         UnitTestUtils.assertEquals(expected, randomData.nextSampleWithReplacement(sampleSize, weights));
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNextSampleWithReplacementAllZeroWeights() {
-        final double[] weights = {0, 0, 0};
-        randomData.nextSampleWithReplacement(1, weights);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final double[] weights = {0, 0, 0};
+            randomData.nextSampleWithReplacement(1, weights);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNextSampleWithReplacementNegativeWeights() {
-        final double[] weights = {-1, 1, 0};
-        randomData.nextSampleWithReplacement(1, weights);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final double[] weights = {-1, 1, 0};
+            randomData.nextSampleWithReplacement(1, weights);
+        });
     }
 
     @Test
@@ -939,16 +942,20 @@ public class RandomDataGeneratorTest {
         UnitTestUtils.assertEquals(expected, randomData.nextSampleWithReplacement(0, weights));
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNextSampleWithReplacementNegativeSampleSize() {
-        final double[] weights = {1, 0};
-        randomData.nextSampleWithReplacement(-1, weights);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final double[] weights = {1, 0};
+            randomData.nextSampleWithReplacement(-1, weights);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNextSampleWithReplacementNaNWeights() {
-        final double[] weights = {1, Double.NaN};
-        randomData.nextSampleWithReplacement(0, weights);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final double[] weights = {1, Double.NaN};
+            randomData.nextSampleWithReplacement(0, weights);
+        });
     }
 
     @Test

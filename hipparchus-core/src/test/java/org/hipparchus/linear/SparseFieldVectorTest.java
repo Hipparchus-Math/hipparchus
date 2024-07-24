@@ -21,14 +21,13 @@
  */
 package org.hipparchus.linear;
 
-
-import java.util.Arrays;
-
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 
 /**
@@ -60,57 +59,57 @@ public class SparseFieldVectorTest {
         //octave =  v1 .+ 2.0
         FieldVector<Fraction> v_mapAdd = v1.mapAdd(new Fraction(2));
         Fraction[] result_mapAdd = {new Fraction(3), new Fraction(4), new Fraction(5)};
-        Assert.assertArrayEquals("compare vectors" ,result_mapAdd,v_mapAdd.toArray());
+        Assertions.assertArrayEquals(result_mapAdd,v_mapAdd.toArray(),"compare vectors");
 
         //octave =  v1 .+ 2.0
         FieldVector<Fraction> v_mapAddToSelf = v1.copy();
         v_mapAddToSelf.mapAddToSelf(new Fraction(2));
         Fraction[] result_mapAddToSelf = {new Fraction(3), new Fraction(4), new Fraction(5)};
-        Assert.assertArrayEquals("compare vectors" ,result_mapAddToSelf,v_mapAddToSelf.toArray());
+        Assertions.assertArrayEquals(result_mapAddToSelf,v_mapAddToSelf.toArray(),"compare vectors");
 
         //octave =  v1 .- 2.0
         FieldVector<Fraction> v_mapSubtract = v1.mapSubtract(new Fraction(2));
         Fraction[] result_mapSubtract = {new Fraction(-1), new Fraction(0), new Fraction(1)};
-        Assert.assertArrayEquals("compare vectors" ,result_mapSubtract,v_mapSubtract.toArray());
+        Assertions.assertArrayEquals(result_mapSubtract,v_mapSubtract.toArray(),"compare vectors");
 
         //octave =  v1 .- 2.0
         FieldVector<Fraction> v_mapSubtractToSelf = v1.copy();
         v_mapSubtractToSelf.mapSubtractToSelf(new Fraction(2));
         Fraction[] result_mapSubtractToSelf = {new Fraction(-1), new Fraction(0), new Fraction(1)};
-        Assert.assertArrayEquals("compare vectors" ,result_mapSubtractToSelf,v_mapSubtractToSelf.toArray());
+        Assertions.assertArrayEquals(result_mapSubtractToSelf,v_mapSubtractToSelf.toArray(),"compare vectors");
 
         //octave =  v1 .* 2.0
         FieldVector<Fraction> v_mapMultiply = v1.mapMultiply(new Fraction(2));
         Fraction[] result_mapMultiply = {new Fraction(2), new Fraction(4), new Fraction(6)};
-        Assert.assertArrayEquals("compare vectors" ,result_mapMultiply,v_mapMultiply.toArray());
+        Assertions.assertArrayEquals(result_mapMultiply,v_mapMultiply.toArray(),"compare vectors");
 
         //octave =  v1 .* 2.0
         FieldVector<Fraction> v_mapMultiplyToSelf = v1.copy();
         v_mapMultiplyToSelf.mapMultiplyToSelf(new Fraction(2));
         Fraction[] result_mapMultiplyToSelf = {new Fraction(2), new Fraction(4), new Fraction(6)};
-        Assert.assertArrayEquals("compare vectors" ,result_mapMultiplyToSelf,v_mapMultiplyToSelf.toArray());
+        Assertions.assertArrayEquals(result_mapMultiplyToSelf,v_mapMultiplyToSelf.toArray(),"compare vectors");
 
         //octave =  v1 ./ 2.0
         FieldVector<Fraction> v_mapDivide = v1.mapDivide(new Fraction(2));
         Fraction[] result_mapDivide = {new Fraction(.5d), new Fraction(1), new Fraction(1.5d)};
-        Assert.assertArrayEquals("compare vectors" ,result_mapDivide,v_mapDivide.toArray());
+        Assertions.assertArrayEquals(result_mapDivide,v_mapDivide.toArray(),"compare vectors");
 
         //octave =  v1 ./ 2.0
         FieldVector<Fraction> v_mapDivideToSelf = v1.copy();
         v_mapDivideToSelf.mapDivideToSelf(new Fraction(2));
         Fraction[] result_mapDivideToSelf = {new Fraction(.5d), new Fraction(1), new Fraction(1.5d)};
-        Assert.assertArrayEquals("compare vectors" ,result_mapDivideToSelf,v_mapDivideToSelf.toArray());
+        Assertions.assertArrayEquals(result_mapDivideToSelf,v_mapDivideToSelf.toArray(),"compare vectors");
 
         //octave =  v1 .^-1
         FieldVector<Fraction> v_mapInv = v1.mapInv();
         Fraction[] result_mapInv = {new Fraction(1),new Fraction(0.5d),new Fraction(3.333333333333333e-01d)};
-        Assert.assertArrayEquals("compare vectors" ,result_mapInv,v_mapInv.toArray());
+        Assertions.assertArrayEquals(result_mapInv,v_mapInv.toArray(),"compare vectors");
 
         //octave =  v1 .^-1
         FieldVector<Fraction> v_mapInvToSelf = v1.copy();
         v_mapInvToSelf.mapInvToSelf();
         Fraction[] result_mapInvToSelf = {new Fraction(1),new Fraction(0.5d),new Fraction(3.333333333333333e-01d)};
-        Assert.assertArrayEquals("compare vectors" ,result_mapInvToSelf,v_mapInvToSelf.toArray());
+        Assertions.assertArrayEquals(result_mapInvToSelf,v_mapInvToSelf.toArray(),"compare vectors");
 
 
     }
@@ -120,18 +119,18 @@ public class SparseFieldVectorTest {
         SparseFieldVector<Fraction> v1 = (SparseFieldVector<Fraction>) new SparseFieldVector<>(field).append(new SparseFieldVector<>(field,vec1));
         SparseFieldVector<Fraction> v2 = (SparseFieldVector<Fraction>) new SparseFieldVector<>(field).append(new ArrayFieldVector<>(vec2));
 
-        Assert.assertSame(field, v1.getField());
+        Assertions.assertSame(field, v1.getField());
         FieldVector<Fraction> v2_t = new ArrayFieldVectorTest.FieldVectorTestImpl<Fraction>(vec2);
 
         //octave =  v1 + v2
         FieldVector<Fraction> v_add = v1.add(v2);
         Fraction[] result_add = {new Fraction(5), new Fraction(7), new Fraction(9)};
-        Assert.assertArrayEquals("compare vect" ,v_add.toArray(),result_add);
+        Assertions.assertArrayEquals(v_add.toArray(),result_add,"compare vect");
 
         FieldVector<Fraction> vt2 = new ArrayFieldVectorTest.FieldVectorTestImpl<Fraction>(vec2);
         FieldVector<Fraction> v_add_i = v1.add(vt2);
         Fraction[] result_add_i = {new Fraction(5), new Fraction(7), new Fraction(9)};
-        Assert.assertArrayEquals("compare vect" ,v_add_i.toArray(),result_add_i);
+        Assertions.assertArrayEquals(v_add_i.toArray(),result_add_i,"compare vect");
 
         //octave =  v1 - v2
         SparseFieldVector<Fraction> v_subtract = v1.subtract(v2);
@@ -162,17 +161,17 @@ public class SparseFieldVectorTest {
 
         // octave  dot(v1,v2)
         Fraction dot =  v1.dotProduct(v2);
-        Assert.assertEquals("compare val ",new Fraction(32), dot);
+        Assertions.assertEquals(new Fraction(32), dot, "compare val ");
 
         // octave  dot(v1,v2_t)
         Fraction dot_2 =  v1.dotProduct(v2_t);
-        Assert.assertEquals("compare val ",new Fraction(32), dot_2);
+        Assertions.assertEquals(new Fraction(32), dot_2, "compare val ");
 
         FieldMatrix<Fraction> m_outerProduct = v1.outerProduct(v2);
-        Assert.assertEquals("compare val ",new Fraction(4), m_outerProduct.getEntry(0,0));
+        Assertions.assertEquals(new Fraction(4), m_outerProduct.getEntry(0,0), "compare val ");
 
         FieldMatrix<Fraction> m_outerProduct_2 = v1.outerProduct(v2_t);
-        Assert.assertEquals("compare val ",new Fraction(4), m_outerProduct_2.getEntry(0,0));
+        Assertions.assertEquals(new Fraction(4), m_outerProduct_2.getEntry(0,0), "compare val ");
 
     }
 
@@ -191,12 +190,12 @@ public class SparseFieldVectorTest {
         final FieldMatrix<Fraction> uv = u.outerProduct(v);
 
         final double tol = Math.ulp(1d);
-        Assert.assertEquals(new Fraction(4).doubleValue(), uv.getEntry(0, 0).doubleValue(), tol);
-        Assert.assertEquals(new Fraction(-2).doubleValue(), uv.getEntry(0, 1).doubleValue(), tol);
-        Assert.assertEquals(new Fraction(8).doubleValue(), uv.getEntry(1, 0).doubleValue(), tol);
-        Assert.assertEquals(new Fraction(-4).doubleValue(), uv.getEntry(1, 1).doubleValue(), tol);
-        Assert.assertEquals(new Fraction(-12).doubleValue(), uv.getEntry(2, 0).doubleValue(), tol);
-        Assert.assertEquals(new Fraction(6).doubleValue(), uv.getEntry(2, 1).doubleValue(), tol);
+        Assertions.assertEquals(new Fraction(4).doubleValue(), uv.getEntry(0, 0).doubleValue(), tol);
+        Assertions.assertEquals(new Fraction(-2).doubleValue(), uv.getEntry(0, 1).doubleValue(), tol);
+        Assertions.assertEquals(new Fraction(8).doubleValue(), uv.getEntry(1, 0).doubleValue(), tol);
+        Assertions.assertEquals(new Fraction(-4).doubleValue(), uv.getEntry(1, 1).doubleValue(), tol);
+        Assertions.assertEquals(new Fraction(-12).doubleValue(), uv.getEntry(2, 0).doubleValue(), tol);
+        Assertions.assertEquals(new Fraction(6).doubleValue(), uv.getEntry(2, 1).doubleValue(), tol);
     }
 
     @Test
@@ -204,10 +203,10 @@ public class SparseFieldVectorTest {
         SparseFieldVector<Fraction> v1 = new SparseFieldVector<Fraction>(field,vec1);
 
         String out1 = v1.toString();
-        Assert.assertTrue("some output ",  out1.length()!=0);
+        Assertions.assertTrue(out1.length()!=0,  "some output ");
         try {
             v1.checkVectorDimensions(2);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
@@ -221,28 +220,28 @@ public class SparseFieldVectorTest {
         SparseFieldVector<Fraction> v = new SparseFieldVector<Fraction>(field, new Fraction[] { new Fraction(0), new Fraction(1), new Fraction(2) });
 
         v.setEntry(0, field.getZero());
-        Assert.assertEquals(v, new SparseFieldVector<Fraction>(field, new Fraction[] { new Fraction(0), new Fraction(1), new Fraction(2) }));
-        Assert.assertNotSame(v, new SparseFieldVector<Fraction>(field, new Fraction[] { new Fraction(0), new Fraction(1), new Fraction(2), new Fraction(3) }));
+        Assertions.assertEquals(v, new SparseFieldVector<Fraction>(field, new Fraction[] { new Fraction(0), new Fraction(1), new Fraction(2) }));
+        Assertions.assertNotSame(v, new SparseFieldVector<Fraction>(field, new Fraction[] { new Fraction(0), new Fraction(1), new Fraction(2), new Fraction(3) }));
 
     }
 
     /** verifies that two vectors are close (sup norm) */
     protected void assertEquals(String msg, Fraction[] m, Fraction[] n) {
         if (m.length != n.length) {
-            Assert.fail("vectors have different lengths");
+            Assertions.fail("vectors have different lengths");
         }
         for (int i = 0; i < m.length; i++) {
-            Assert.assertEquals(msg + " " +  i + " elements differ", m[i],n[i]);
+            Assertions.assertEquals(m[i],n[i],msg + " " +  i + " elements differ");
         }
     }
 
     /** verifies that two vectors are close (sup norm) */
     protected void assertClose(String msg, Fraction[] m, Fraction[] n, double tolerance) {
         if (m.length != n.length) {
-            Assert.fail("vectors have different lengths");
+            Assertions.fail("vectors have different lengths");
         }
         for (int i = 0; i < m.length; i++) {
-            Assert.assertEquals(msg + " " +  i + " elements differ", m[i].doubleValue(),n[i].doubleValue(), tolerance);
+            Assertions.assertEquals(m[i].doubleValue(),n[i].doubleValue(), tolerance, msg + " " +  i + " elements differ");
         }
     }
 
@@ -265,17 +264,16 @@ public class SparseFieldVectorTest {
             private int expectedIndex;
 
             public void visit(final int actualIndex, final Fraction actualValue) {
-                Assert.assertEquals(expectedIndex, actualIndex);
-                Assert.assertEquals(Integer.toString(actualIndex),
-                                    data[actualIndex], actualValue);
+                Assertions.assertEquals(expectedIndex, actualIndex);
+                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
                 ++expectedIndex;
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assert.assertEquals(data.length, actualSize);
-                Assert.assertEquals(0, actualStart);
-                Assert.assertEquals(data.length - 1, actualEnd);
+                Assertions.assertEquals(data.length, actualSize);
+                Assertions.assertEquals(0, actualStart);
+                Assertions.assertEquals(data.length - 1, actualEnd);
                 expectedIndex = 0;
             }
 
@@ -307,31 +305,31 @@ public class SparseFieldVectorTest {
         };
         try {
             v.walkInDefaultOrder(visitor, -1, 4);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 5, 4);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, -1);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, 5);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 4, 0);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
@@ -354,17 +352,16 @@ public class SparseFieldVectorTest {
             private int expectedIndex;
 
             public void visit(final int actualIndex, final Fraction actualValue) {
-                Assert.assertEquals(expectedIndex, actualIndex);
-                Assert.assertEquals(Integer.toString(actualIndex),
-                                    data[actualIndex], actualValue);
+                Assertions.assertEquals(expectedIndex, actualIndex);
+                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
                 ++expectedIndex;
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assert.assertEquals(data.length, actualSize);
-                Assert.assertEquals(expectedStart, actualStart);
-                Assert.assertEquals(expectedEnd, actualEnd);
+                Assertions.assertEquals(data.length, actualSize);
+                Assertions.assertEquals(expectedStart, actualStart);
+                Assertions.assertEquals(expectedEnd, actualEnd);
                 expectedIndex = expectedStart;
             }
 
@@ -390,22 +387,21 @@ public class SparseFieldVectorTest {
 
             public void visit(final int actualIndex, final Fraction actualValue) {
                 visited[actualIndex] = true;
-                Assert.assertEquals(Integer.toString(actualIndex),
-                                    data[actualIndex], actualValue);
+                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assert.assertEquals(data.length, actualSize);
-                Assert.assertEquals(0, actualStart);
-                Assert.assertEquals(data.length - 1, actualEnd);
+                Assertions.assertEquals(data.length, actualSize);
+                Assertions.assertEquals(0, actualStart);
+                Assertions.assertEquals(data.length - 1, actualEnd);
                 Arrays.fill(visited, false);
             }
 
             public Fraction end() {
                 for (int i = 0; i < data.length; i++) {
-                    Assert.assertTrue("entry " + i + "has not been visited",
-                                      visited[i]);
+                    Assertions.assertTrue(visited[i],
+                                      "entry " + i + "has not been visited");
                 }
                 return Fraction.ZERO;
             }
@@ -434,31 +430,31 @@ public class SparseFieldVectorTest {
         };
         try {
             v.walkInOptimizedOrder(visitor, -1, 4);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 5, 4);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, -1);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, 5);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 4, 0);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
@@ -480,23 +476,22 @@ public class SparseFieldVectorTest {
             private final boolean[] visited = new boolean[data.length];
 
             public void visit(final int actualIndex, final Fraction actualValue) {
-                Assert.assertEquals(Integer.toString(actualIndex),
-                                    data[actualIndex], actualValue);
+                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
                 visited[actualIndex] = true;
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assert.assertEquals(data.length, actualSize);
-                Assert.assertEquals(expectedStart, actualStart);
-                Assert.assertEquals(expectedEnd, actualEnd);
+                Assertions.assertEquals(data.length, actualSize);
+                Assertions.assertEquals(expectedStart, actualStart);
+                Assertions.assertEquals(expectedEnd, actualEnd);
                 Arrays.fill(visited, true);
             }
 
             public Fraction end() {
                 for (int i = expectedStart; i <= expectedEnd; i++) {
-                    Assert.assertTrue("entry " + i + "has not been visited",
-                                      visited[i]);
+                    Assertions.assertTrue(visited[i],
+                                      "entry " + i + "has not been visited");
                 }
                 return Fraction.ZERO;
             }
@@ -519,18 +514,17 @@ public class SparseFieldVectorTest {
             private int expectedIndex;
 
             public Fraction visit(final int actualIndex, final Fraction actualValue) {
-                Assert.assertEquals(expectedIndex, actualIndex);
-                Assert.assertEquals(Integer.toString(actualIndex),
-                                    data[actualIndex], actualValue);
+                Assertions.assertEquals(expectedIndex, actualIndex);
+                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
                 ++expectedIndex;
                 return actualValue.add(actualIndex);
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assert.assertEquals(data.length, actualSize);
-                Assert.assertEquals(0, actualStart);
-                Assert.assertEquals(data.length - 1, actualEnd);
+                Assertions.assertEquals(data.length, actualSize);
+                Assertions.assertEquals(0, actualStart);
+                Assertions.assertEquals(data.length - 1, actualEnd);
                 expectedIndex = 0;
             }
 
@@ -540,7 +534,7 @@ public class SparseFieldVectorTest {
         };
         v.walkInDefaultOrder(visitor);
         for (int i = 0; i < data.length; i++) {
-            Assert.assertEquals("entry " + i, data[i].add(i), v.getEntry(i));
+            Assertions.assertEquals(data[i].add(i), v.getEntry(i), "entry " + i);
         }
     }
 
@@ -565,31 +559,31 @@ public class SparseFieldVectorTest {
         };
         try {
             v.walkInDefaultOrder(visitor, -1, 4);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 5, 4);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, -1);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, 5);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 4, 0);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
@@ -612,18 +606,17 @@ public class SparseFieldVectorTest {
             private int expectedIndex;
 
             public Fraction visit(final int actualIndex, final Fraction actualValue) {
-                Assert.assertEquals(expectedIndex, actualIndex);
-                Assert.assertEquals(Integer.toString(actualIndex),
-                                    data[actualIndex], actualValue);
+                Assertions.assertEquals(expectedIndex, actualIndex);
+                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
                 ++expectedIndex;
                 return actualValue.add(actualIndex);
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assert.assertEquals(data.length, actualSize);
-                Assert.assertEquals(expectedStart, actualStart);
-                Assert.assertEquals(expectedEnd, actualEnd);
+                Assertions.assertEquals(data.length, actualSize);
+                Assertions.assertEquals(expectedStart, actualStart);
+                Assertions.assertEquals(expectedEnd, actualEnd);
                 expectedIndex = expectedStart;
             }
 
@@ -633,7 +626,7 @@ public class SparseFieldVectorTest {
         };
         v.walkInDefaultOrder(visitor, expectedStart, expectedEnd);
         for (int i = expectedStart; i <= expectedEnd; i++) {
-            Assert.assertEquals("entry " + i, data[i].add(i), v.getEntry(i));
+            Assertions.assertEquals(data[i].add(i), v.getEntry(i), "entry " + i);
         }
     }
 
@@ -652,30 +645,29 @@ public class SparseFieldVectorTest {
 
             public Fraction visit(final int actualIndex, final Fraction actualValue) {
                 visited[actualIndex] = true;
-                Assert.assertEquals(Integer.toString(actualIndex),
-                                    data[actualIndex], actualValue);
+                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
                 return actualValue.add(actualIndex);
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assert.assertEquals(data.length, actualSize);
-                Assert.assertEquals(0, actualStart);
-                Assert.assertEquals(data.length - 1, actualEnd);
+                Assertions.assertEquals(data.length, actualSize);
+                Assertions.assertEquals(0, actualStart);
+                Assertions.assertEquals(data.length - 1, actualEnd);
                 Arrays.fill(visited, false);
             }
 
             public Fraction end() {
                 for (int i = 0; i < data.length; i++) {
-                    Assert.assertTrue("entry " + i + "has not been visited",
-                                      visited[i]);
+                    Assertions.assertTrue(visited[i],
+                                      "entry " + i + "has not been visited");
                 }
                 return Fraction.ZERO;
             }
         };
         v.walkInOptimizedOrder(visitor);
         for (int i = 0; i < data.length; i++) {
-            Assert.assertEquals("entry " + i, data[i].add(i), v.getEntry(i));
+            Assertions.assertEquals(data[i].add(i), v.getEntry(i), "entry " + i);
         }
     }
 
@@ -700,31 +692,31 @@ public class SparseFieldVectorTest {
         };
         try {
             v.walkInOptimizedOrder(visitor, -1, 4);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 5, 4);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, -1);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, 5);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 4, 0);
-            Assert.fail();
+            Assertions.fail();
         } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
@@ -746,31 +738,30 @@ public class SparseFieldVectorTest {
             private final boolean[] visited = new boolean[data.length];
 
             public Fraction visit(final int actualIndex, final Fraction actualValue) {
-                Assert.assertEquals(Integer.toString(actualIndex),
-                                    data[actualIndex], actualValue);
+                Assertions.assertEquals(data[actualIndex], actualValue, Integer.toString(actualIndex));
                 visited[actualIndex] = true;
                 return actualValue.add(actualIndex);
             }
 
             public void start(final int actualSize, final int actualStart,
                               final int actualEnd) {
-                Assert.assertEquals(data.length, actualSize);
-                Assert.assertEquals(expectedStart, actualStart);
-                Assert.assertEquals(expectedEnd, actualEnd);
+                Assertions.assertEquals(data.length, actualSize);
+                Assertions.assertEquals(expectedStart, actualStart);
+                Assertions.assertEquals(expectedEnd, actualEnd);
                 Arrays.fill(visited, true);
             }
 
             public Fraction end() {
                 for (int i = expectedStart; i <= expectedEnd; i++) {
-                    Assert.assertTrue("entry " + i + "has not been visited",
-                                      visited[i]);
+                    Assertions.assertTrue(visited[i],
+                                      "entry " + i + "has not been visited");
                 }
                 return Fraction.ZERO;
             }
         };
         v.walkInOptimizedOrder(visitor, expectedStart, expectedEnd);
         for (int i = expectedStart; i <= expectedEnd; i++) {
-            Assert.assertEquals("entry " + i, data[i].add(i), v.getEntry(i));
+            Assertions.assertEquals(data[i].add(i), v.getEntry(i), "entry " + i);
         }
     }
 

@@ -27,8 +27,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for the {@link OpenMapRealMatrix} class.
@@ -115,12 +115,12 @@ public final class SparseRealMatrixTest {
     public void testDimensions() {
         OpenMapRealMatrix m = createSparseMatrix(testData);
         OpenMapRealMatrix m2 = createSparseMatrix(testData2);
-        Assert.assertEquals("testData row dimension", 3, m.getRowDimension());
-        Assert.assertEquals("testData column dimension", 3, m.getColumnDimension());
-        Assert.assertTrue("testData is square", m.isSquare());
-        Assert.assertEquals("testData2 row dimension", m2.getRowDimension(), 2);
-        Assert.assertEquals("testData2 column dimension", m2.getColumnDimension(), 3);
-        Assert.assertTrue("testData2 is not square", !m2.isSquare());
+        Assertions.assertEquals(3, m.getRowDimension(), "testData row dimension");
+        Assertions.assertEquals(3, m.getColumnDimension(), "testData column dimension");
+        Assertions.assertTrue(m.isSquare(), "testData is square");
+        Assertions.assertEquals(2, m2.getRowDimension(), "testData2 row dimension");
+        Assertions.assertEquals(3, m2.getColumnDimension(), "testData2 column dimension");
+        Assertions.assertFalse(m2.isSquare(), "testData2 is not square");
     }
 
     /** test copy functions */
@@ -128,12 +128,12 @@ public final class SparseRealMatrixTest {
     public void testCopyFunctions() {
         OpenMapRealMatrix m1 = createSparseMatrix(testData);
         RealMatrix m2 = m1.copy();
-        Assert.assertEquals(m1.getClass(), m2.getClass());
-        Assert.assertEquals((m2), m1);
+        Assertions.assertEquals(m1.getClass(), m2.getClass());
+        Assertions.assertEquals((m2), m1);
         OpenMapRealMatrix m3 = createSparseMatrix(testData);
         RealMatrix m4 = m3.copy();
-        Assert.assertEquals(m3.getClass(), m4.getClass());
-        Assert.assertEquals((m4), m3);
+        Assertions.assertEquals(m3.getClass(), m4.getClass());
+        Assertions.assertEquals((m4), m3);
     }
 
     /** test add */
@@ -145,9 +145,9 @@ public final class SparseRealMatrixTest {
         RealMatrix mPlusMInv = m.add(mInv);
         for (int row = 0; row < m.getRowDimension(); row++) {
             for (int col = 0; col < m.getColumnDimension(); col++) {
-                Assert.assertEquals("sum entry entry",
-                    mDataPlusInv.getEntry(row, col), mPlusMInv.getEntry(row, col),
-                    entryTolerance);
+                Assertions.assertEquals(mDataPlusInv.getEntry(row, col), mPlusMInv.getEntry(row, col),
+                    entryTolerance,
+                    "sum entry entry");
             }
         }
     }
@@ -159,7 +159,7 @@ public final class SparseRealMatrixTest {
         OpenMapRealMatrix m2 = createSparseMatrix(testData2);
         try {
             m.add(m2);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -170,10 +170,10 @@ public final class SparseRealMatrixTest {
     public void testNorm() {
         OpenMapRealMatrix m = createSparseMatrix(testData);
         OpenMapRealMatrix m2 = createSparseMatrix(testData2);
-        Assert.assertEquals("testData norm", 14d, m.getNorm1(), entryTolerance);
-        Assert.assertEquals("testData2 norm", 7d, m2.getNorm1(), entryTolerance);
-        Assert.assertEquals("testData norm", 10d, m.getNormInfty(), entryTolerance);
-        Assert.assertEquals("testData2 norm", 10d, m2.getNormInfty(), entryTolerance);
+        Assertions.assertEquals(14d, m.getNorm1(), entryTolerance, "testData norm");
+        Assertions.assertEquals(7d, m2.getNorm1(), entryTolerance, "testData2 norm");
+        Assertions.assertEquals(10d, m.getNormInfty(), entryTolerance, "testData norm");
+        Assertions.assertEquals(10d, m2.getNormInfty(), entryTolerance, "testData2 norm");
     }
 
     /** test m-n = m + -n */
@@ -185,7 +185,7 @@ public final class SparseRealMatrixTest {
             n.scalarMultiply(-1d).add(m), entryTolerance);
         try {
             m.subtract(createSparseMatrix(testData2));
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -212,7 +212,7 @@ public final class SparseRealMatrixTest {
                 entryTolerance);
         try {
             m.multiply(createSparseMatrix(bigSingular));
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -247,7 +247,7 @@ public final class SparseRealMatrixTest {
                 for (int interm = 1; interm <= 64; interm += 7) {
                     final OpenMapRealMatrix b = new OpenMapRealMatrix(interm, cols);
                     b.walkInOptimizedOrder(randomSetter);
-                    Assert.assertEquals(0.0,
+                    Assertions.assertEquals(0.0,
                                         a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm1(),
                                         1.0e-15);
                 }
@@ -259,11 +259,11 @@ public final class SparseRealMatrixTest {
     public void testMultiplyTransposedWrongDimensions() {
         try {
             new OpenMapRealMatrix(2, 3).multiplyTransposed(new OpenMapRealMatrix(3, 2));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -282,7 +282,7 @@ public final class SparseRealMatrixTest {
                 for (int interm = 1; interm <= 64; interm += 7) {
                     final OpenMapRealMatrix b = new OpenMapRealMatrix(rows, interm);
                     b.walkInOptimizedOrder(randomSetter);
-                    Assert.assertEquals(0.0,
+                    Assertions.assertEquals(0.0,
                                         a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm1(),
                                         4.0e-13);
                 }
@@ -294,11 +294,11 @@ public final class SparseRealMatrixTest {
     public void testTransposeMultiplyWrongDimensions() {
         try {
             new OpenMapRealMatrix(2, 3).transposeMultiply(new OpenMapRealMatrix(3, 2));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assert.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(3, ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(3, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -306,11 +306,11 @@ public final class SparseRealMatrixTest {
     @Test
     public void testTrace() {
         RealMatrix m = createSparseMatrix(id);
-        Assert.assertEquals("identity trace", 3d, m.getTrace(), entryTolerance);
+        Assertions.assertEquals(3d, m.getTrace(), entryTolerance, "identity trace");
         m = createSparseMatrix(testData2);
         try {
             m.getTrace();
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -335,7 +335,7 @@ public final class SparseRealMatrixTest {
         m = createSparseMatrix(bigSingular);
         try {
             m.operate(testVector);
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -347,10 +347,10 @@ public final class SparseRealMatrixTest {
         RealMatrix a = createSparseMatrix(new double[][] {
                 { 1, 2 }, { 3, 4 }, { 5, 6 } });
         double[] b = a.operate(new double[] { 1, 1 });
-        Assert.assertEquals(a.getRowDimension(), b.length);
-        Assert.assertEquals(3.0, b[0], 1.0e-12);
-        Assert.assertEquals(7.0, b[1], 1.0e-12);
-        Assert.assertEquals(11.0, b[2], 1.0e-12);
+        Assertions.assertEquals(a.getRowDimension(), b.length);
+        Assertions.assertEquals(3.0, b[0], 1.0e-12);
+        Assertions.assertEquals(7.0, b[1], 1.0e-12);
+        Assertions.assertEquals(11.0, b[2], 1.0e-12);
     }
 
     /** test transpose */
@@ -376,7 +376,7 @@ public final class SparseRealMatrixTest {
         m = createSparseMatrix(bigSingular);
         try {
             m.preMultiply(testVector);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -402,7 +402,7 @@ public final class SparseRealMatrixTest {
                 entryTolerance);
         try {
             m.preMultiply(createSparseMatrix(bigSingular));
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -415,13 +415,13 @@ public final class SparseRealMatrixTest {
         assertClose("get col", m.getColumn(2), testDataCol3, entryTolerance);
         try {
             m.getRow(10);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             m.getColumn(-1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -430,10 +430,10 @@ public final class SparseRealMatrixTest {
     @Test
     public void testGetEntry() {
         RealMatrix m = createSparseMatrix(testData);
-        Assert.assertEquals("get entry", m.getEntry(0, 1), 2d, entryTolerance);
+        Assertions.assertEquals(2d, m.getEntry(0, 1), entryTolerance, "get entry");
         try {
             m.getEntry(10, 4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -450,12 +450,12 @@ public final class SparseRealMatrixTest {
         RealMatrix n = createSparseMatrix(matrixData2);
         // Now multiply m by n
         RealMatrix p = m.multiply(n);
-        Assert.assertEquals(2, p.getRowDimension());
-        Assert.assertEquals(2, p.getColumnDimension());
+        Assertions.assertEquals(2, p.getRowDimension());
+        Assertions.assertEquals(2, p.getColumnDimension());
         // Invert p
         RealMatrix pInverse = new LUDecomposition(p).getSolver().getInverse();
-        Assert.assertEquals(2, pInverse.getRowDimension());
-        Assert.assertEquals(2, pInverse.getColumnDimension());
+        Assertions.assertEquals(2, pInverse.getRowDimension());
+        Assertions.assertEquals(2, pInverse.getColumnDimension());
 
         // Solve example
         double[][] coefficientsData = { { 2, 3, -2 }, { -1, 7, 6 },
@@ -469,9 +469,9 @@ public final class SparseRealMatrixTest {
         final double sol0 = solution.getEntry(0);
         final double sol1 = solution.getEntry(1);
         final double sol2 = solution.getEntry(2);
-        Assert.assertEquals(2 * sol0 + 3 * sol1 - 2 * sol2, cst0, 1E-12);
-        Assert.assertEquals(-1 * sol0 + 7 * sol1 + 6 * sol2, cst1, 1E-12);
-        Assert.assertEquals(4 * sol0 - 3 * sol1 - 5 * sol2, cst2, 1E-12);
+        Assertions.assertEquals(2 * sol0 + 3 * sol1 - 2 * sol2, cst0, 1E-12);
+        Assertions.assertEquals(-1 * sol0 + 7 * sol1 + 6 * sol2, cst1, 1E-12);
+        Assertions.assertEquals(4 * sol0 - 3 * sol1 - 5 * sol2, cst2, 1E-12);
 
     }
 
@@ -487,55 +487,61 @@ public final class SparseRealMatrixTest {
         RealMatrix mRows03Cols123 = createSparseMatrix(subRows03Cols123);
         RealMatrix mRows20Cols123 = createSparseMatrix(subRows20Cols123);
         RealMatrix mRows31Cols31 = createSparseMatrix(subRows31Cols31);
-        Assert.assertEquals("Rows23Cols00", mRows23Cols00, m.getSubMatrix(2, 3, 0, 0));
-        Assert.assertEquals("Rows00Cols33", mRows00Cols33, m.getSubMatrix(0, 0, 3, 3));
-        Assert.assertEquals("Rows01Cols23", mRows01Cols23, m.getSubMatrix(0, 1, 2, 3));
-        Assert.assertEquals("Rows02Cols13", mRows02Cols13,
-            m.getSubMatrix(new int[] { 0, 2 }, new int[] { 1, 3 }));
-        Assert.assertEquals("Rows03Cols12", mRows03Cols12,
-            m.getSubMatrix(new int[] { 0, 3 }, new int[] { 1, 2 }));
-        Assert.assertEquals("Rows03Cols123", mRows03Cols123,
-            m.getSubMatrix(new int[] { 0, 3 }, new int[] { 1, 2, 3 }));
-        Assert.assertEquals("Rows20Cols123", mRows20Cols123,
-            m.getSubMatrix(new int[] { 2, 0 }, new int[] { 1, 2, 3 }));
-        Assert.assertEquals("Rows31Cols31", mRows31Cols31,
-            m.getSubMatrix(new int[] { 3, 1 }, new int[] { 3, 1 }));
-        Assert.assertEquals("Rows31Cols31", mRows31Cols31,
-            m.getSubMatrix(new int[] { 3, 1 }, new int[] { 3, 1 }));
+        Assertions.assertEquals(mRows23Cols00, m.getSubMatrix(2, 3, 0, 0), "Rows23Cols00");
+        Assertions.assertEquals(mRows00Cols33, m.getSubMatrix(0, 0, 3, 3), "Rows00Cols33");
+        Assertions.assertEquals(mRows01Cols23, m.getSubMatrix(0, 1, 2, 3), "Rows01Cols23");
+        Assertions.assertEquals(mRows02Cols13,
+            m.getSubMatrix(new int[] { 0, 2 }, new int[] { 1, 3 }),
+            "Rows02Cols13");
+        Assertions.assertEquals(mRows03Cols12,
+            m.getSubMatrix(new int[] { 0, 3 }, new int[] { 1, 2 }),
+            "Rows03Cols12");
+        Assertions.assertEquals(mRows03Cols123,
+            m.getSubMatrix(new int[] { 0, 3 }, new int[] { 1, 2, 3 }),
+            "Rows03Cols123");
+        Assertions.assertEquals(mRows20Cols123,
+            m.getSubMatrix(new int[] { 2, 0 }, new int[] { 1, 2, 3 }),
+            "Rows20Cols123");
+        Assertions.assertEquals(mRows31Cols31,
+            m.getSubMatrix(new int[] { 3, 1 }, new int[] { 3, 1 }),
+            "Rows31Cols31");
+        Assertions.assertEquals(mRows31Cols31,
+            m.getSubMatrix(new int[] { 3, 1 }, new int[] { 3, 1 }),
+            "Rows31Cols31");
 
         try {
             m.getSubMatrix(1, 0, 2, 4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getSubMatrix(-1, 1, 2, 2);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getSubMatrix(1, 0, 2, 2);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getSubMatrix(1, 0, 2, 4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getSubMatrix(new int[] {}, new int[] { 0 });
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getSubMatrix(new int[] { 0 }, new int[] { 4 });
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -546,17 +552,17 @@ public final class SparseRealMatrixTest {
         RealMatrix m = createSparseMatrix(subTestData);
         RealMatrix mRow0 = createSparseMatrix(subRow0);
         RealMatrix mRow3 = createSparseMatrix(subRow3);
-        Assert.assertEquals("Row0", mRow0, m.getRowMatrix(0));
-        Assert.assertEquals("Row3", mRow3, m.getRowMatrix(3));
+        Assertions.assertEquals(mRow0, m.getRowMatrix(0), "Row0");
+        Assertions.assertEquals(mRow3, m.getRowMatrix(3), "Row3");
         try {
             m.getRowMatrix(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowMatrix(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -567,17 +573,17 @@ public final class SparseRealMatrixTest {
         RealMatrix m = createSparseMatrix(subTestData);
         RealMatrix mColumn1 = createSparseMatrix(subColumn1);
         RealMatrix mColumn3 = createSparseMatrix(subColumn3);
-        Assert.assertEquals("Column1", mColumn1, m.getColumnMatrix(1));
-        Assert.assertEquals("Column3", mColumn3, m.getColumnMatrix(3));
+        Assertions.assertEquals(mColumn1, m.getColumnMatrix(1), "Column1");
+        Assertions.assertEquals(mColumn3, m.getColumnMatrix(3), "Column3");
         try {
             m.getColumnMatrix(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnMatrix(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -588,17 +594,17 @@ public final class SparseRealMatrixTest {
         RealMatrix m = createSparseMatrix(subTestData);
         RealVector mRow0 = new ArrayRealVector(subRow0[0]);
         RealVector mRow3 = new ArrayRealVector(subRow3[0]);
-        Assert.assertEquals("Row0", mRow0, m.getRowVector(0));
-        Assert.assertEquals("Row3", mRow3, m.getRowVector(3));
+        Assertions.assertEquals(mRow0, m.getRowVector(0), "Row0");
+        Assertions.assertEquals(mRow3, m.getRowVector(3), "Row3");
         try {
             m.getRowVector(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowVector(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -609,17 +615,17 @@ public final class SparseRealMatrixTest {
         RealMatrix m = createSparseMatrix(subTestData);
         RealVector mColumn1 = columnToVector(subColumn1);
         RealVector mColumn3 = columnToVector(subColumn3);
-        Assert.assertEquals("Column1", mColumn1, m.getColumnVector(1));
-        Assert.assertEquals("Column3", mColumn3, m.getColumnVector(3));
+        Assertions.assertEquals(mColumn1, m.getColumnVector(1), "Column1");
+        Assertions.assertEquals(mColumn3, m.getColumnVector(3), "Column3");
         try {
             m.getColumnVector(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnVector(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -638,22 +644,22 @@ public final class SparseRealMatrixTest {
         OpenMapRealMatrix m = createSparseMatrix(testData);
         OpenMapRealMatrix m1 = m.copy();
         OpenMapRealMatrix mt = (OpenMapRealMatrix) m.transpose();
-        Assert.assertTrue(m.hashCode() != mt.hashCode());
-        Assert.assertEquals(m.hashCode(), m1.hashCode());
-        Assert.assertEquals(m, m);
-        Assert.assertEquals(m, m1);
-        Assert.assertFalse(m.equals(null));
-        Assert.assertFalse(m.equals(mt));
-        Assert.assertFalse(m.equals(createSparseMatrix(bigSingular)));
+        Assertions.assertTrue(m.hashCode() != mt.hashCode());
+        Assertions.assertEquals(m.hashCode(), m1.hashCode());
+        Assertions.assertEquals(m, m);
+        Assertions.assertEquals(m, m1);
+        Assertions.assertNotEquals(null, m);
+        Assertions.assertNotEquals(m, mt);
+        Assertions.assertNotEquals(m, createSparseMatrix(bigSingular));
     }
 
     @Test
     public void testToString() {
         OpenMapRealMatrix m = createSparseMatrix(testData);
-        Assert.assertEquals("OpenMapRealMatrix{{1.0,2.0,3.0},{2.0,5.0,3.0},{1.0,0.0,8.0}}",
+        Assertions.assertEquals("OpenMapRealMatrix{{1.0,2.0,3.0},{2.0,5.0,3.0},{1.0,0.0,8.0}}",
             m.toString());
         m = new OpenMapRealMatrix(1, 1);
-        Assert.assertEquals("OpenMapRealMatrix{{0.0}}", m.toString());
+        Assertions.assertEquals("OpenMapRealMatrix{{0.0}}", m.toString());
     }
 
     @Test
@@ -662,17 +668,17 @@ public final class SparseRealMatrixTest {
         m.setSubMatrix(detData2, 1, 1);
         RealMatrix expected = createSparseMatrix(new double[][] {
                 { 1.0, 2.0, 3.0 }, { 2.0, 1.0, 3.0 }, { 1.0, 2.0, 4.0 } });
-        Assert.assertEquals(expected, m);
+        Assertions.assertEquals(expected, m);
 
         m.setSubMatrix(detData2, 0, 0);
         expected = createSparseMatrix(new double[][] {
                 { 1.0, 3.0, 3.0 }, { 2.0, 4.0, 3.0 }, { 1.0, 2.0, 4.0 } });
-        Assert.assertEquals(expected, m);
+        Assertions.assertEquals(expected, m);
 
         m.setSubMatrix(testDataPlus2, 0, 0);
         expected = createSparseMatrix(new double[][] {
                 { 3.0, 4.0, 5.0 }, { 4.0, 7.0, 5.0 }, { 3.0, 2.0, 10.0 } });
-        Assert.assertEquals(expected, m);
+        Assertions.assertEquals(expected, m);
 
         // javadoc example
         OpenMapRealMatrix matrix =
@@ -681,25 +687,25 @@ public final class SparseRealMatrixTest {
         matrix.setSubMatrix(new double[][] { { 3, 4 }, { 5, 6 } }, 1, 1);
         expected = createSparseMatrix(new double[][] {
                 { 1, 2, 3, 4 }, { 5, 3, 4, 8 }, { 9, 5, 6, 2 } });
-        Assert.assertEquals(expected, matrix);
+        Assertions.assertEquals(expected, matrix);
 
         // dimension overflow
         try {
             m.setSubMatrix(testData, 1, 1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
         // dimension underflow
         try {
             m.setSubMatrix(testData, -1, 1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
         try {
             m.setSubMatrix(testData, 1, -1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -707,13 +713,13 @@ public final class SparseRealMatrixTest {
         // null
         try {
             m.setSubMatrix(null, 1, 1);
-            Assert.fail("expecting NullArgumentException");
+            Assertions.fail("expecting NullArgumentException");
         } catch (NullArgumentException e) {
             // expected
         }
         try {
             new OpenMapRealMatrix(0, 0);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -721,7 +727,7 @@ public final class SparseRealMatrixTest {
         // ragged
         try {
             m.setSubMatrix(new double[][] { { 1 }, { 2, 3 } }, 0, 0);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -729,7 +735,7 @@ public final class SparseRealMatrixTest {
         // empty
         try {
             m.setSubMatrix(new double[][] { {} }, 0, 0);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -739,7 +745,7 @@ public final class SparseRealMatrixTest {
     @Test
     public void testSerial()  {
         OpenMapRealMatrix m = createSparseMatrix(testData);
-        Assert.assertEquals(m,UnitTestUtils.serializeAndRecover(m));
+        Assertions.assertEquals(m,UnitTestUtils.serializeAndRecover(m));
     }
 
     // --------------- -----------------Protected methods
@@ -747,18 +753,19 @@ public final class SparseRealMatrixTest {
     /** verifies that two matrices are close (1-norm) */
     protected void assertClose(String msg, RealMatrix m, RealMatrix n,
             double tolerance) {
-        Assert.assertTrue(msg, m.subtract(n).getNorm1() < tolerance);
+        Assertions.assertTrue(m.subtract(n).getNorm1() < tolerance, msg);
     }
 
     /** verifies that two vectors are close (sup norm) */
     protected void assertClose(String msg, double[] m, double[] n,
             double tolerance) {
         if (m.length != n.length) {
-            Assert.fail("vectors not same length");
+            Assertions.fail("vectors not same length");
         }
         for (int i = 0; i < m.length; i++) {
-            Assert.assertEquals(msg + " " + i + " elements differ", m[i], n[i],
-                    tolerance);
+            Assertions.assertEquals(m[i], n[i],
+                    tolerance,
+                    msg + " " + i + " elements differ");
         }
     }
 

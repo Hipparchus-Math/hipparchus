@@ -22,18 +22,6 @@
 
 package org.hipparchus;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexFormat;
 import org.hipparchus.complex.FieldComplex;
@@ -46,7 +34,19 @@ import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  */
@@ -63,7 +63,7 @@ public class UnitTestUtils {
      * infinities of the same sign.
      */
     public static void assertEquals(double expected, double actual, double delta) {
-        Assert.assertEquals(null, expected, actual, delta);
+        Assertions.assertEquals(expected, actual, delta);
     }
 
     /**
@@ -73,10 +73,10 @@ public class UnitTestUtils {
     public static void assertEquals(String msg, double expected, double actual, double delta) {
         // check for NaN
         if(Double.isNaN(expected)){
-            Assert.assertTrue("" + actual + " is not NaN.",
-                Double.isNaN(actual));
+            Assertions.assertTrue(Double.isNaN(actual),
+                "" + actual + " is not NaN.");
         } else {
-            Assert.assertEquals(msg, expected, actual, delta);
+            Assertions.assertEquals(expected, actual, delta, msg);
         }
     }
 
@@ -85,7 +85,7 @@ public class UnitTestUtils {
      * both NaN or infinities of same sign, or identical floating point values.
      */
     public static void assertSame(double expected, double actual) {
-     Assert.assertEquals(expected, actual, 0);
+     Assertions.assertEquals(expected, actual, 0);
     }
 
     /**
@@ -102,8 +102,8 @@ public class UnitTestUtils {
      * differ by at most delta.  Also ensures that NaN / infinite components match.
      */
     public static void assertEquals(Complex expected, Complex actual, double delta) {
-        Assert.assertEquals(expected.getRealPart(), actual.getRealPart(), delta);
-        Assert.assertEquals(expected.getImaginaryPart(), actual.getImaginaryPart(), delta);
+        Assertions.assertEquals(expected.getRealPart(), actual.getRealPart(), delta);
+        Assertions.assertEquals(expected.getImaginaryPart(), actual.getImaginaryPart(), delta);
     }
 
     /**
@@ -111,8 +111,8 @@ public class UnitTestUtils {
      * differ by at most delta.  Also ensures that NaN / infinite components match.
      */
     public static void assertEquals(FieldComplex<Binary64> expected, FieldComplex<Binary64> actual, double delta) {
-        Assert.assertEquals(expected.getRealPart().getReal(), actual.getRealPart().getReal(), delta);
-        Assert.assertEquals(expected.getImaginaryPart().getReal(), actual.getImaginaryPart().getReal(), delta);
+        Assertions.assertEquals(expected.getRealPart().getReal(), actual.getRealPart().getReal(), delta);
+        Assertions.assertEquals(expected.getImaginaryPart().getReal(), actual.getImaginaryPart().getReal(), delta);
     }
 
     /**
@@ -164,8 +164,8 @@ public class UnitTestUtils {
      */
     public static void checkSerializedEquality(Object object) {
         Object object2 = serializeAndRecover(object);
-        Assert.assertEquals("Equals check", object, object2);
-        Assert.assertEquals("HashCode check", object.hashCode(), object2.hashCode());
+        Assertions.assertEquals(object, object2, "Equals check");
+        Assertions.assertEquals(object.hashCode(), object2.hashCode(), "HashCode check");
     }
 
     /**
@@ -195,16 +195,16 @@ public class UnitTestUtils {
     public static void assertRelativelyEquals(String msg, double expected,
             double actual, double relativeError) {
         if (Double.isNaN(expected)) {
-            Assert.assertTrue(msg, Double.isNaN(actual));
+            Assertions.assertTrue(Double.isNaN(actual), msg);
         } else if (Double.isNaN(actual)) {
-            Assert.assertTrue(msg, Double.isNaN(expected));
+            Assertions.assertTrue(Double.isNaN(expected), msg);
         } else if (Double.isInfinite(actual) || Double.isInfinite(expected)) {
-            Assert.assertEquals(expected, actual, relativeError);
+            Assertions.assertEquals(expected, actual, relativeError);
         } else if (expected == 0.0) {
-            Assert.assertEquals(msg, actual, expected, relativeError);
+            Assertions.assertEquals(actual, expected, relativeError, msg);
         } else {
             double absError = FastMath.abs(expected) * relativeError;
-            Assert.assertEquals(msg, expected, actual, absError);
+            Assertions.assertEquals(expected, actual, absError, msg);
         }
     }
 
@@ -224,7 +224,7 @@ public class UnitTestUtils {
                 return;
             }
         }
-        Assert.fail(msg + " Unable to find " + (new ComplexFormat()).format(z));
+        Assertions.fail(msg + " Unable to find " + (new ComplexFormat()).format(z));
     }
 
     /**
@@ -254,7 +254,7 @@ public class UnitTestUtils {
                 return;
             }
         }
-        Assert.fail(msg + " Unable to find " + x);
+        Assertions.fail(msg + " Unable to find " + x);
     }
 
     /**
@@ -283,11 +283,12 @@ public class UnitTestUtils {
     public static void assertEquals(final String message,
         final double[] expected, final RealVector actual, final double delta) {
         final String msgAndSep = message.equals("") ? "" : message + ", ";
-        Assert.assertEquals(msgAndSep + "dimension", expected.length,
-            actual.getDimension());
+        Assertions.assertEquals(expected.length,
+            actual.getDimension(),
+            msgAndSep + "dimension");
         for (int i = 0; i < expected.length; i++) {
-            Assert.assertEquals(msgAndSep + "entry #" + i, expected[i],
-                actual.getEntry(i), delta);
+            Assertions.assertEquals(expected[i],
+                actual.getEntry(i), delta, msgAndSep + "entry #" + i);
         }
     }
 
@@ -305,19 +306,19 @@ public class UnitTestUtils {
     public static void assertEquals(final String message,
         final RealVector expected, final RealVector actual, final double delta) {
         final String msgAndSep = message.equals("") ? "" : message + ", ";
-        Assert.assertEquals(msgAndSep + "dimension", expected.getDimension(),
-            actual.getDimension());
+        Assertions.assertEquals(expected.getDimension(),
+            actual.getDimension(),
+            msgAndSep + "dimension");
         final int dim = expected.getDimension();
         for (int i = 0; i < dim; i++) {
-            Assert.assertEquals(msgAndSep + "entry #" + i,
-                expected.getEntry(i), actual.getEntry(i), delta);
+            Assertions.assertEquals(expected.getEntry(i), actual.getEntry(i), delta, msgAndSep + "entry #" + i);
         }
     }
 
     /** verifies that two matrices are close (1-norm) */
     public static void assertEquals(String msg, RealMatrix expected, RealMatrix observed, double tolerance) {
 
-        Assert.assertNotNull(msg + "\nObserved should not be null",observed);
+        Assertions.assertNotNull(observed,msg + "\nObserved should not be null");
 
         if (expected.getColumnDimension() != observed.getColumnDimension() ||
                 expected.getRowDimension() != observed.getRowDimension()) {
@@ -327,7 +328,7 @@ public class UnitTestUtils {
                     " x " + observed.getColumnDimension());
             messageBuffer.append("\nexpected " + expected.getRowDimension() +
                     " x " + expected.getColumnDimension());
-            Assert.fail(messageBuffer.toString());
+            Assertions.fail(messageBuffer.toString());
         }
 
         RealMatrix delta = expected.subtract(observed);
@@ -336,7 +337,7 @@ public class UnitTestUtils {
             messageBuffer.append("\nExpected: " + expected);
             messageBuffer.append("\nObserved: " + observed);
             messageBuffer.append("\nexpected - observed: " + delta);
-            Assert.fail(messageBuffer.toString());
+            Assertions.fail(messageBuffer.toString());
         }
     }
 
@@ -344,7 +345,7 @@ public class UnitTestUtils {
     public static void assertEquals(FieldMatrix<? extends FieldElement<?>> expected,
                                     FieldMatrix<? extends FieldElement<?>> observed) {
 
-        Assert.assertNotNull("Observed should not be null",observed);
+        Assertions.assertNotNull(observed,"Observed should not be null");
 
         if (expected.getColumnDimension() != observed.getColumnDimension() ||
                 expected.getRowDimension() != observed.getRowDimension()) {
@@ -354,14 +355,14 @@ public class UnitTestUtils {
                     " x " + observed.getColumnDimension());
             messageBuffer.append("\nexpected " + expected.getRowDimension() +
                     " x " + expected.getColumnDimension());
-            Assert.fail(messageBuffer.toString());
+            Assertions.fail(messageBuffer.toString());
         }
 
         for (int i = 0; i < expected.getRowDimension(); ++i) {
             for (int j = 0; j < expected.getColumnDimension(); ++j) {
                 FieldElement<?> eij = expected.getEntry(i, j);
                 FieldElement<?> oij = observed.getEntry(i, j);
-                Assert.assertEquals(eij, oij);
+                Assertions.assertEquals(eij, oij);
             }
         }
     }
@@ -375,7 +376,7 @@ public class UnitTestUtils {
             out.append(expected.length);
             out.append(" observed length = ");
             out.append(observed.length);
-            Assert.fail(out.toString());
+            Assertions.fail(out.toString());
         }
         boolean failure = false;
         for (int i=0; i < expected.length; i++) {
@@ -391,7 +392,7 @@ public class UnitTestUtils {
             }
         }
         if (failure) {
-            Assert.fail(out.toString());
+            Assertions.fail(out.toString());
         }
     }
 
@@ -404,7 +405,7 @@ public class UnitTestUtils {
             out.append(expected.length);
             out.append(" observed length = ");
             out.append(observed.length);
-            Assert.fail(out.toString());
+            Assertions.fail(out.toString());
         }
         boolean failure = false;
         for (int i=0; i < expected.length; i++) {
@@ -420,7 +421,7 @@ public class UnitTestUtils {
             }
         }
         if (failure) {
-            Assert.fail(out.toString());
+            Assertions.fail(out.toString());
         }
     }
 
@@ -436,7 +437,7 @@ public class UnitTestUtils {
             out.append(expected.length);
             out.append(" observed length = ");
             out.append(observed.length);
-            Assert.fail(out.toString());
+            Assertions.fail(out.toString());
         }
         boolean failure = false;
         for (int i = 0; i < expected.length; i++) {
@@ -458,7 +459,7 @@ public class UnitTestUtils {
             }
         }
         if (failure) {
-            Assert.fail(out.toString());
+            Assertions.fail(out.toString());
         }
     }
 
@@ -473,7 +474,7 @@ public class UnitTestUtils {
             out.append(expected.length);
             out.append(" observed length = ");
             out.append(observed.length);
-            Assert.fail(out.toString());
+            Assertions.fail(out.toString());
         }
         boolean failure = false;
         for (int i=0; i < expected.length; i++) {
@@ -489,17 +490,17 @@ public class UnitTestUtils {
             }
         }
         if (failure) {
-            Assert.fail(out.toString());
+            Assertions.fail(out.toString());
         }
     }
 
     /** verifies that two arrays are equal */
     public static <T extends FieldElement<T>> void assertEquals(T[] m, T[] n) {
         if (m.length != n.length) {
-            Assert.fail("vectors not same length");
+            Assertions.fail("vectors not same length");
         }
         for (int i = 0; i < m.length; i++) {
-            Assert.assertEquals(m[i],n[i]);
+            Assertions.assertEquals(m[i],n[i]);
         }
     }
 
@@ -552,7 +553,7 @@ public class UnitTestUtils {
             msgBuffer.append("This test can fail randomly due to sampling error with probability ");
             msgBuffer.append(alpha);
             msgBuffer.append(".");
-            Assert.fail(msgBuffer.toString());
+            Assertions.fail(msgBuffer.toString());
         }
     }
 
@@ -645,7 +646,7 @@ public class UnitTestUtils {
             msgBuffer.append("This test can fail randomly due to sampling error with probability ");
             msgBuffer.append(alpha);
             msgBuffer.append(".");
-            Assert.fail(msgBuffer.toString());
+            Assertions.fail(msgBuffer.toString());
         }
     }
 

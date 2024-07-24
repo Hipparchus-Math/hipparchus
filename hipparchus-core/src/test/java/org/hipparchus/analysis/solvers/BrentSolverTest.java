@@ -34,8 +34,8 @@ import org.hipparchus.analysis.function.Sqrt;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link BrentSolver Brent} solver.
@@ -60,14 +60,14 @@ public final class BrentSolverTest {
         result = solver.solve(100, f, 3, 4);
         // System.out.println(
         //    "Root: " + result + " Evaluations: " + solver.getEvaluations());
-        Assert.assertEquals(result, FastMath.PI, solver.getAbsoluteAccuracy());
-        Assert.assertTrue(solver.getEvaluations() <= 7);
+        Assertions.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
+        Assertions.assertTrue(solver.getEvaluations() <= 7);
         // Larger and somewhat less benign interval. The function is grows first.
         result = solver.solve(100, f, 1, 4);
         // System.out.println(
         //    "Root: " + result + " Evaluations: " + solver.getEvaluations());
-        Assert.assertEquals(result, FastMath.PI, solver.getAbsoluteAccuracy());
-        Assert.assertTrue(solver.getEvaluations() <= 8);
+        Assertions.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
+        Assertions.assertTrue(solver.getEvaluations() <= 8);
     }
 
     @Test
@@ -88,77 +88,77 @@ public final class BrentSolverTest {
         result = solver.solve(100, f, -0.2, 0.2);
         //System.out.println(
         //    "Root: " + result + " Evaluations: " + solver.getEvaluations());
-        Assert.assertEquals(result, 0, solver.getAbsoluteAccuracy());
-        Assert.assertTrue(solver.getEvaluations() <= 3);
+        Assertions.assertEquals(0, result, solver.getAbsoluteAccuracy());
+        Assertions.assertTrue(solver.getEvaluations() <= 3);
         // 1 iterations on i586 JDK 1.4.1.
         // Asymmetric bracket around 0, just for fun. Contains extremum.
         result = solver.solve(100, f, -0.1, 0.3);
         //System.out.println(
         //    "Root: " + result + " Evaluations: " + solver.getEvaluations());
-        Assert.assertEquals(result, 0, solver.getAbsoluteAccuracy());
+        Assertions.assertEquals(0, result, solver.getAbsoluteAccuracy());
         // 5 iterations on i586 JDK 1.4.1.
-        Assert.assertTrue(solver.getEvaluations() <= 7);
+        Assertions.assertTrue(solver.getEvaluations() <= 7);
         // Large bracket around 0. Contains two extrema.
         result = solver.solve(100, f, -0.3, 0.45);
         //System.out.println(
         //    "Root: " + result + " Evaluations: " + solver.getEvaluations());
-        Assert.assertEquals(result, 0, solver.getAbsoluteAccuracy());
+        Assertions.assertEquals(0, result, solver.getAbsoluteAccuracy());
         // 6 iterations on i586 JDK 1.4.1.
-        Assert.assertTrue(solver.getEvaluations() <= 8);
+        Assertions.assertTrue(solver.getEvaluations() <= 8);
         // Benign bracket around 0.5, function is monotonous.
         result = solver.solve(100, f, 0.3, 0.7);
         //System.out.println(
         //    "Root: " + result + " Evaluations: " + solver.getEvaluations());
-        Assert.assertEquals(result, 0.5, solver.getAbsoluteAccuracy());
+        Assertions.assertEquals(0.5, result, solver.getAbsoluteAccuracy());
         // 6 iterations on i586 JDK 1.4.1.
-        Assert.assertTrue(solver.getEvaluations() <= 9);
+        Assertions.assertTrue(solver.getEvaluations() <= 9);
         // Less benign bracket around 0.5, contains one extremum.
         result = solver.solve(100, f, 0.2, 0.6);
         // System.out.println(
         //    "Root: " + result + " Evaluations: " + solver.getEvaluations());
-        Assert.assertEquals(result, 0.5, solver.getAbsoluteAccuracy());
-        Assert.assertTrue(solver.getEvaluations() <= 10);
+        Assertions.assertEquals(0.5, result, solver.getAbsoluteAccuracy());
+        Assertions.assertTrue(solver.getEvaluations() <= 10);
         // Large, less benign bracket around 0.5, contains both extrema.
         result = solver.solve(100, f, 0.05, 0.95);
         //System.out.println(
         //    "Root: " + result + " Evaluations: " + solver.getEvaluations());
-        Assert.assertEquals(result, 0.5, solver.getAbsoluteAccuracy());
-        Assert.assertTrue(solver.getEvaluations() <= 11);
+        Assertions.assertEquals(0.5, result, solver.getAbsoluteAccuracy());
+        Assertions.assertTrue(solver.getEvaluations() <= 11);
         // Relatively benign bracket around 1, function is monotonous. Fast growth for x>1
         // is still a problem.
         result = solver.solve(100, f, 0.85, 1.25);
         //System.out.println(
         //    "Root: " + result + " Evaluations: " + solver.getEvaluations());
-        Assert.assertEquals(result, 1.0, solver.getAbsoluteAccuracy());
-        Assert.assertTrue(solver.getEvaluations() <= 11);
+        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        Assertions.assertTrue(solver.getEvaluations() <= 11);
         // Less benign bracket around 1 with extremum.
         result = solver.solve(100, f, 0.8, 1.2);
         //System.out.println(
         //    "Root: " + result + " Evaluations: " + solver.getEvaluations());
-        Assert.assertEquals(result, 1.0, solver.getAbsoluteAccuracy());
-        Assert.assertTrue(solver.getEvaluations() <= 11);
+        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        Assertions.assertTrue(solver.getEvaluations() <= 11);
         // Large bracket around 1. Monotonous.
         result = solver.solve(100, f, 0.85, 1.75);
         //System.out.println(
         //    "Root: " + result + " Evaluations: " + solver.getEvaluations());
-        Assert.assertEquals(result, 1.0, solver.getAbsoluteAccuracy());
-        Assert.assertTrue(solver.getEvaluations() <= 13);
+        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        Assertions.assertTrue(solver.getEvaluations() <= 13);
         // Large bracket around 1. Interval contains extremum.
         result = solver.solve(100, f, 0.55, 1.45);
         //System.out.println(
         //    "Root: " + result + " Evaluations: " + solver.getEvaluations());
-        Assert.assertEquals(result, 1.0, solver.getAbsoluteAccuracy());
-        Assert.assertTrue(solver.getEvaluations() <= 10);
+        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        Assertions.assertTrue(solver.getEvaluations() <= 10);
         // Very large bracket around 1 for testing fast growth behaviour.
         result = solver.solve(100, f, 0.85, 5);
         //System.out.println(
        //     "Root: " + result + " Evaluations: " + solver.getEvaluations());
-        Assert.assertEquals(result, 1.0, solver.getAbsoluteAccuracy());
-        Assert.assertTrue(solver.getEvaluations() <= 15);
+        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        Assertions.assertTrue(solver.getEvaluations() <= 15);
 
         try {
             result = solver.solve(5, f, 0.85, 5);
-            Assert.fail("Expected MathIllegalStateException");
+            Assertions.fail("Expected MathIllegalStateException");
         } catch (MathIllegalStateException e) {
             // Expected.
         }
@@ -171,16 +171,16 @@ public final class BrentSolverTest {
 
         // endpoint is root
         double result = solver.solve(100, f, FastMath.PI, 4);
-        Assert.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
+        Assertions.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 3, FastMath.PI);
-        Assert.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
+        Assertions.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, FastMath.PI, 4, 3.5);
-        Assert.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
+        Assertions.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
 
         result = solver.solve(100, f, 3, FastMath.PI, 3.07);
-        Assert.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
+        Assertions.assertEquals(FastMath.PI, result, solver.getAbsoluteAccuracy());
     }
 
     @Test
@@ -189,19 +189,19 @@ public final class BrentSolverTest {
         BrentSolver solver = new BrentSolver();
         try {  // bad interval
             solver.solve(100, f, 1, -1);
-            Assert.fail("Expecting MathIllegalArgumentException - bad interval");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {  // no bracket
             solver.solve(100, f, 1, 1.5);
-            Assert.fail("Expecting MathIllegalArgumentException - non-bracketing");
+            Assertions.fail("Expecting MathIllegalArgumentException - non-bracketing");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {  // no bracket
             solver.solve(100, f, 1, 1.5, 1.2);
-            Assert.fail("Expecting MathIllegalArgumentException - non-bracketing");
+            Assertions.fail("Expecting MathIllegalArgumentException - non-bracketing");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -215,14 +215,14 @@ public final class BrentSolverTest {
 
         // no guess
         result = solver.solve(100, f, 0.6, 7.0);
-        Assert.assertEquals(result, 1.0, solver.getAbsoluteAccuracy());
+        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
         int referenceCallsCount = f.getCallsCount();
-        Assert.assertTrue(referenceCallsCount >= 13);
+        Assertions.assertTrue(referenceCallsCount >= 13);
 
         // invalid guess (it *is* a root, but outside of the range)
         try {
           result = solver.solve(100, f, 0.6, 7.0, 0.0);
-          Assert.fail("a MathIllegalArgumentException was expected");
+          Assertions.fail("a MathIllegalArgumentException was expected");
         } catch (MathIllegalArgumentException iae) {
             // expected behaviour
         }
@@ -230,21 +230,21 @@ public final class BrentSolverTest {
         // bad guess
         f.setCallsCount(0);
         result = solver.solve(100, f, 0.6, 7.0, 0.61);
-        Assert.assertEquals(result, 1.0, solver.getAbsoluteAccuracy());
-        Assert.assertTrue(f.getCallsCount() > referenceCallsCount);
+        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        Assertions.assertTrue(f.getCallsCount() > referenceCallsCount);
 
         // good guess
         f.setCallsCount(0);
         result = solver.solve(100, f, 0.6, 7.0, 0.999999);
-        Assert.assertEquals(result, 1.0, solver.getAbsoluteAccuracy());
-        Assert.assertTrue(f.getCallsCount() < referenceCallsCount);
+        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        Assertions.assertTrue(f.getCallsCount() < referenceCallsCount);
 
         // perfect guess
         f.setCallsCount(0);
         result = solver.solve(100, f, 0.6, 7.0, 1.0);
-        Assert.assertEquals(result, 1.0, solver.getAbsoluteAccuracy());
-        Assert.assertEquals(1, solver.getEvaluations());
-        Assert.assertEquals(1, f.getCallsCount());
+        Assertions.assertEquals(1.0, result, solver.getAbsoluteAccuracy());
+        Assertions.assertEquals(1, solver.getEvaluations());
+        Assertions.assertEquals(1, f.getCallsCount());
     }
 
     @Test
@@ -267,6 +267,6 @@ public final class BrentSolverTest {
 
         BrentSolver solver = new BrentSolver();
         final double result = solver.solve(99, f, 1, 1e30, 1 + 1e-10);
-        Assert.assertEquals(804.93558250, result, 1e-8);
+        Assertions.assertEquals(804.93558250, result, 1e-8);
     }
 }

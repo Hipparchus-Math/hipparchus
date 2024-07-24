@@ -18,8 +18,10 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SemiDefinitePositiveCholeskyDecompositionTest {
 
@@ -36,28 +38,32 @@ public class SemiDefinitePositiveCholeskyDecompositionTest {
     public void testDimensions() {
         SemiDefinitePositiveCholeskyDecomposition llt =
             new SemiDefinitePositiveCholeskyDecomposition(MatrixUtils.createRealMatrix(testData));
-        Assert.assertEquals(testData.length, llt.getL().getRowDimension());
-        Assert.assertEquals(testData.length, llt.getL().getColumnDimension());
-        Assert.assertEquals(testData.length, llt.getLT().getRowDimension());
-        Assert.assertEquals(testData.length, llt.getLT().getColumnDimension());
+        Assertions.assertEquals(testData.length, llt.getL().getRowDimension());
+        Assertions.assertEquals(testData.length, llt.getL().getColumnDimension());
+        Assertions.assertEquals(testData.length, llt.getLT().getRowDimension());
+        Assertions.assertEquals(testData.length, llt.getLT().getColumnDimension());
     }
 
     /** test non-square matrix */
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testNonSquare() {
-        new SemiDefinitePositiveCholeskyDecomposition(MatrixUtils.createRealMatrix(new double[3][2]));
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new SemiDefinitePositiveCholeskyDecomposition(MatrixUtils.createRealMatrix(new double[3][2]));
+        });
     }
 
     /** test negative definite matrix */
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testNotPositiveDefinite() {
-        new SemiDefinitePositiveCholeskyDecomposition(MatrixUtils.createRealMatrix(new double[][] {
-                { -14, 11,  13, 15,  24 },
-                {  11, 34,  13,  8,  25 },
-                { -13, 13,  14, 15,  21 },
-                {  15,  8, -15, 18,  23 },
-                {  24, 25,  21, 23, -45 }
-        }));
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new SemiDefinitePositiveCholeskyDecomposition(MatrixUtils.createRealMatrix(new double[][]{
+                {-14, 11, 13, 15, 24},
+                {11, 34, 13, 8, 25},
+                {-13, 13, 14, 15, 21},
+                {15, 8, -15, 18, 23},
+                {24, 25, 21, 23, -45}
+            }));
+        });
     }
 
     /** test A = LLT */
@@ -68,7 +74,7 @@ public class SemiDefinitePositiveCholeskyDecompositionTest {
         RealMatrix l  = llt.getL();
         RealMatrix lt = llt.getLT();
         double norm = l.multiply(lt).subtract(matrix).getNorm1();
-        Assert.assertEquals(0, norm, 1.0e-15);
+        Assertions.assertEquals(0, norm, 1.0e-15);
     }
 
     /** test that L is lower triangular */
@@ -78,7 +84,7 @@ public class SemiDefinitePositiveCholeskyDecompositionTest {
         RealMatrix l = new SemiDefinitePositiveCholeskyDecomposition(matrix).getL();
         for (int i = 0; i < l.getRowDimension(); i++) {
             for (int j = i + 1; j < l.getColumnDimension(); j++) {
-                Assert.assertEquals(0.0, l.getEntry(i, j), 0.0);
+                Assertions.assertEquals(0.0, l.getEntry(i, j), 0.0);
             }
         }
     }
@@ -91,7 +97,7 @@ public class SemiDefinitePositiveCholeskyDecompositionTest {
         RealMatrix l  = llt.getL();
         RealMatrix lt = llt.getLT();
         double norm = l.subtract(lt.transpose()).getNorm1();
-        Assert.assertEquals(0, norm, 1.0e-15);
+        Assertions.assertEquals(0, norm, 1.0e-15);
     }
 
 }

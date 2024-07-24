@@ -23,8 +23,8 @@ package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.analysis.function.Power;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+
 
 /**
  * Base class for standard testing of Gaussian quadrature rules,
@@ -33,48 +33,6 @@ import org.junit.Test;
  *
  */
 public abstract class GaussianQuadratureAbstractTest {
-    /**
-     * The maximum absolute error (for zero testing).
-     */
-    private final double eps;
-    /**
-     * The maximum relative error (in ulps).
-     */
-    private final double numUlps;
-    /**
-     * The quadrature rule under test.
-     */
-    private final GaussIntegrator integrator;
-    /**
-     * Maximum degree of monomials to be tested.
-     */
-    private final int maxDegree;
-
-    /**
-     * Creates a new instance of this abstract test with the specified
-     * quadrature rule.
-     * If the expected value is non-zero, equality of actual and expected values
-     * is checked in the relative sense <center>
-     * |x<sub>act</sub>&nbsp;-&nbsp;x<sub>exp</sub>|&nbsp;&le;&nbsp; n&nbsp;
-     * <code>Math.ulp(</code>x<sub>exp</sub><code>)</code>, </center> where n is
-     * the maximum relative error (in ulps). If the expected value is zero, the
-     * test checks that <center> |x<sub>act</sub>|&nbsp;&le;&nbsp;&epsilon;,
-     * </center> where &epsilon; is the maximum absolute error.
-     *
-     * @param integrator Quadrature rule under test.
-     * @param maxDegree Maximum degree of monomials to be tested.
-     * @param eps &epsilon;.
-     * @param numUlps Value of the maximum relative error (in ulps).
-     */
-    public GaussianQuadratureAbstractTest(GaussIntegrator integrator,
-                                          int maxDegree,
-                                          double eps,
-                                          double numUlps) {
-        this.integrator = integrator;
-        this.maxDegree = maxDegree;
-        this.eps = eps;
-        this.numUlps = numUlps;
-    }
 
     /**
      * Returns the expected value of the integral of the specified monomial.
@@ -94,8 +52,10 @@ public abstract class GaussianQuadratureAbstractTest {
      * Here {@code p} denotes the degree of the highest polynomial for which
      * exactness is to be expected.
      */
-    @Test
-    public void testAllMonomials() {
+    public void testAllMonomials(GaussIntegrator integrator,
+                                 int maxDegree,
+                                 double eps,
+                                 double numUlps) {
         for (int n = 0; n <= maxDegree; n++) {
             final double expected = getExpectedValue(n);
 
@@ -105,16 +65,14 @@ public abstract class GaussianQuadratureAbstractTest {
             // System.out.println(n + "/" + maxDegree + " " + integrator.getNumberOfPoints()
             //                    + " " + expected + " " + actual + " " + Math.ulp(expected));
             if (expected == 0) {
-                Assert.assertEquals("while integrating monomial x**" + n +
+                Assertions.assertEquals(expected, actual, eps, "while integrating monomial x**" + n +
                                     " with a " +
-                                    integrator.getNumberOfPoints() + "-point quadrature rule",
-                                    expected, actual, eps);
+                                    integrator.getNumberOfPoints() + "-point quadrature rule");
             } else {
                 double err = FastMath.abs(actual - expected) / Math.ulp(expected);
-                Assert.assertEquals("while integrating monomial x**" + n + " with a " +
+                Assertions.assertEquals(expected, actual, Math.ulp(expected) * numUlps, "while integrating monomial x**" + n + " with a " +
                                     + integrator.getNumberOfPoints() + "-point quadrature rule, " +
-                                    " error was " + err + " ulps",
-                                    expected, actual, Math.ulp(expected) * numUlps);
+                                    " error was " + err + " ulps");
             }
         }
     }

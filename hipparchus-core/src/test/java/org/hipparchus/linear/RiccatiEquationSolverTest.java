@@ -16,8 +16,8 @@
  */
 package org.hipparchus.linear;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class RiccatiEquationSolverTest {
 
@@ -161,11 +161,11 @@ public class RiccatiEquationSolverTest {
     }
 
     private void checkEquals(final RealMatrix reference, final RealMatrix m, final double tol) {
-        Assert.assertEquals(reference.getRowDimension(), m.getRowDimension());
-        Assert.assertEquals(reference.getColumnDimension(), m.getColumnDimension());
+        Assertions.assertEquals(reference.getRowDimension(), m.getRowDimension());
+        Assertions.assertEquals(reference.getColumnDimension(), m.getColumnDimension());
         for (int i = 0; i < reference.getRowDimension(); ++i) {
             for (int j = 0; j < reference.getColumnDimension(); ++j) {
-                Assert.assertEquals(reference.getEntry(i, j), m.getEntry(i, j), tol);
+                Assertions.assertEquals(reference.getEntry(i, j), m.getEntry(i, j), tol);
             }
         }
     }

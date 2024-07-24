@@ -20,8 +20,8 @@ package org.hipparchus.ode;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.ode.nonstiff.LutherIntegrator;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 public class ComplexODEConverterTest {
@@ -30,7 +30,7 @@ public class ComplexODEConverterTest {
     public void testDoubleDimension() {
         ComplexODEConverter converter = new ComplexODEConverter();
         for (int i = 1; i < 10; ++i) {
-            Assert.assertEquals(2 * i, converter.convertEquations(new Circle(i, 0.2)).getDimension());
+            Assertions.assertEquals(2 * i, converter.convertEquations(new Circle(i, 0.2)).getDimension());
         }
     }
 
@@ -44,25 +44,25 @@ public class ComplexODEConverterTest {
                                                                             initial.getPrimaryState(),
                                                                             circle.computeDerivatives(initial.getTime(),
                                                                                                       initial.getPrimaryState()));
-        Assert.assertEquals(initial.getTime(), der.getTime(), 1.0e-15);
-        Assert.assertEquals(initial.getPrimaryState()[0], der.getPrimaryState()[0]);
-        Assert.assertEquals(initial.getPrimaryState()[0], der.getCompleteState()[0]);
-        Assert.assertEquals(initial.getPrimaryState()[0].multiply(((Circle) circle).iOmega),
+        Assertions.assertEquals(initial.getTime(), der.getTime(), 1.0e-15);
+        Assertions.assertEquals(initial.getPrimaryState()[0], der.getPrimaryState()[0]);
+        Assertions.assertEquals(initial.getPrimaryState()[0], der.getCompleteState()[0]);
+        Assertions.assertEquals(initial.getPrimaryState()[0].multiply(((Circle) circle).iOmega),
                             der.getSecondaryDerivative(0)[0]);
-        Assert.assertEquals(initial.getPrimaryState()[0].multiply(((Circle) circle).iOmega),
+        Assertions.assertEquals(initial.getPrimaryState()[0].multiply(((Circle) circle).iOmega),
                             der.getCompleteDerivative()[0]);
         LutherIntegrator integrator = new LutherIntegrator(1.0e-3);
         final ComplexODEStateAndDerivative finalstate =
                         converter.convertState(integrator.integrate(converter.convertEquations(circle),
                                                                     converter.convertState(initial),
                                                                     FastMath.PI / omega));
-        Assert.assertEquals(0, finalstate.getNumberOfSecondaryStates());
-        Assert.assertEquals(1, finalstate.getPrimaryStateDimension());
-        Assert.assertEquals(FastMath.PI / omega, finalstate.getTime(),                                1.0e-15);
-        Assert.assertEquals(-1.0,                finalstate.getPrimaryState()[0].getReal(),           1.0e-12);
-        Assert.assertEquals( 0.0,                finalstate.getPrimaryState()[0].getImaginary(),      1.0e-12);
-        Assert.assertEquals( 0.0,                finalstate.getPrimaryDerivative()[0].getReal(),      1.0e-12);
-        Assert.assertEquals(-omega,              finalstate.getPrimaryDerivative()[0].getImaginary(), 1.0e-12);
+        Assertions.assertEquals(0, finalstate.getNumberOfSecondaryStates());
+        Assertions.assertEquals(1, finalstate.getPrimaryStateDimension());
+        Assertions.assertEquals(FastMath.PI / omega, finalstate.getTime(),                                1.0e-15);
+        Assertions.assertEquals(-1.0,                finalstate.getPrimaryState()[0].getReal(),           1.0e-12);
+        Assertions.assertEquals( 0.0,                finalstate.getPrimaryState()[0].getImaginary(),      1.0e-12);
+        Assertions.assertEquals( 0.0,                finalstate.getPrimaryDerivative()[0].getReal(),      1.0e-12);
+        Assertions.assertEquals(-omega,              finalstate.getPrimaryDerivative()[0].getImaginary(), 1.0e-12);
     }
 
     @Test
@@ -102,39 +102,39 @@ public class ComplexODEConverterTest {
                                                                                                                                          initial.getPrimaryState()),
                                                                                                               initial.getSecondaryState(1))
                                                                             });
-        Assert.assertEquals(initial.getTime(), der.getTime(), 1.0e-15);
-        Assert.assertEquals(initial.getPrimaryState()[0], der.getPrimaryState()[0]);
-        Assert.assertEquals(initial.getPrimaryState()[0], der.getCompleteState()[0]);
-        Assert.assertEquals(initial.getSecondaryState(0)[0], der.getCompleteState()[1]);
-        Assert.assertEquals(initial.getSecondaryState(1)[0], der.getCompleteState()[2]);
-        Assert.assertEquals(initial.getPrimaryState()[0].multiply(((Circle) primary).iOmega),
+        Assertions.assertEquals(initial.getTime(), der.getTime(), 1.0e-15);
+        Assertions.assertEquals(initial.getPrimaryState()[0], der.getPrimaryState()[0]);
+        Assertions.assertEquals(initial.getPrimaryState()[0], der.getCompleteState()[0]);
+        Assertions.assertEquals(initial.getSecondaryState(0)[0], der.getCompleteState()[1]);
+        Assertions.assertEquals(initial.getSecondaryState(1)[0], der.getCompleteState()[2]);
+        Assertions.assertEquals(initial.getPrimaryState()[0].multiply(((Circle) primary).iOmega),
                             der.getSecondaryDerivative(0)[0]);
-        Assert.assertEquals(initial.getPrimaryState()[0].multiply(((Circle) primary).iOmega),
+        Assertions.assertEquals(initial.getPrimaryState()[0].multiply(((Circle) primary).iOmega),
                             der.getCompleteDerivative()[0]);
-        Assert.assertEquals(initial.getSecondaryState(0)[0].multiply(((Circle) secondary0).iOmega),
+        Assertions.assertEquals(initial.getSecondaryState(0)[0].multiply(((Circle) secondary0).iOmega),
                             der.getCompleteDerivative()[1]);
-        Assert.assertEquals(initial.getSecondaryState(1)[0].multiply(((Circle) secondary1).iOmega),
+        Assertions.assertEquals(initial.getSecondaryState(1)[0].multiply(((Circle) secondary1).iOmega),
                             der.getCompleteDerivative()[2]);
         LutherIntegrator integrator = new LutherIntegrator(1.0e-3);
         final ComplexODEStateAndDerivative finalstate =
                         converter.convertState(integrator.integrate(expandable,
                                                                     converter.convertState(initial),
                                                                     FastMath.PI / omegaP));
-        Assert.assertEquals(2, finalstate.getNumberOfSecondaryStates());
-        Assert.assertEquals(1, finalstate.getPrimaryStateDimension());
-        Assert.assertEquals(FastMath.PI / omegaP, finalstate.getTime(),                                   1.0e-15);
-        Assert.assertEquals(-1.0,                 finalstate.getPrimaryState()[0].getReal(),              1.0e-12);
-        Assert.assertEquals( 0.0,                 finalstate.getPrimaryState()[0].getImaginary(),         1.0e-12);
-        Assert.assertEquals( 0.0,                 finalstate.getPrimaryDerivative()[0].getReal(),         1.0e-12);
-        Assert.assertEquals(-omegaP,              finalstate.getPrimaryDerivative()[0].getImaginary(),    1.0e-12);
-        Assert.assertEquals( 0.0,                 finalstate.getSecondaryState(1)[0].getReal(),           1.0e-12);
-        Assert.assertEquals( 1.0,                 finalstate.getSecondaryState(1)[0].getImaginary(),      1.0e-12);
-        Assert.assertEquals(-omegaS0,             finalstate.getSecondaryDerivative(1)[0].getReal(),      1.0e-12);
-        Assert.assertEquals( 0.0,                 finalstate.getSecondaryDerivative(1)[0].getImaginary(), 1.0e-12);
-        Assert.assertEquals( 1.0,                 finalstate.getSecondaryState(2)[0].getReal(),           1.0e-12);
-        Assert.assertEquals( 0.0,                 finalstate.getSecondaryState(2)[0].getImaginary(),      2.0e-12);
-        Assert.assertEquals( 0.0,                 finalstate.getSecondaryDerivative(2)[0].getReal(),      1.0e-12);
-        Assert.assertEquals( omegaS1,             finalstate.getSecondaryDerivative(2)[0].getImaginary(), 1.0e-12);
+        Assertions.assertEquals(2, finalstate.getNumberOfSecondaryStates());
+        Assertions.assertEquals(1, finalstate.getPrimaryStateDimension());
+        Assertions.assertEquals(FastMath.PI / omegaP, finalstate.getTime(),                                   1.0e-15);
+        Assertions.assertEquals(-1.0,                 finalstate.getPrimaryState()[0].getReal(),              1.0e-12);
+        Assertions.assertEquals( 0.0,                 finalstate.getPrimaryState()[0].getImaginary(),         1.0e-12);
+        Assertions.assertEquals( 0.0,                 finalstate.getPrimaryDerivative()[0].getReal(),         1.0e-12);
+        Assertions.assertEquals(-omegaP,              finalstate.getPrimaryDerivative()[0].getImaginary(),    1.0e-12);
+        Assertions.assertEquals( 0.0,                 finalstate.getSecondaryState(1)[0].getReal(),           1.0e-12);
+        Assertions.assertEquals( 1.0,                 finalstate.getSecondaryState(1)[0].getImaginary(),      1.0e-12);
+        Assertions.assertEquals(-omegaS0,             finalstate.getSecondaryDerivative(1)[0].getReal(),      1.0e-12);
+        Assertions.assertEquals( 0.0,                 finalstate.getSecondaryDerivative(1)[0].getImaginary(), 1.0e-12);
+        Assertions.assertEquals( 1.0,                 finalstate.getSecondaryState(2)[0].getReal(),           1.0e-12);
+        Assertions.assertEquals( 0.0,                 finalstate.getSecondaryState(2)[0].getImaginary(),      2.0e-12);
+        Assertions.assertEquals( 0.0,                 finalstate.getSecondaryDerivative(2)[0].getReal(),      1.0e-12);
+        Assertions.assertEquals( omegaS1,             finalstate.getSecondaryDerivative(2)[0].getImaginary(), 1.0e-12);
     }
 
     private static class Circle

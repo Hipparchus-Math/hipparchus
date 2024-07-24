@@ -21,7 +21,7 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.util.Binary64Field;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class DormandPrince54FieldIntegratorTest extends EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
@@ -38,51 +38,61 @@ public class DormandPrince54FieldIntegratorTest extends EmbeddedRungeKuttaFieldI
     }
 
     @Override
+    @Test
     public void testNonFieldIntegratorConsistency() {
         doTestNonFieldIntegratorConsistency(Binary64Field.getInstance());
     }
 
     @Override
+    @Test
     public void testSanityChecks() {
         doTestSanityChecks(Binary64Field.getInstance());
     }
 
     @Override
+    @Test
     public void testBackward() {
         doTestBackward(Binary64Field.getInstance(), 1.6e-7, 1.6e-7, 1.0e-22, "Dormand-Prince 5 (4)");
     }
 
     @Override
+    @Test
     public void testKepler() {
         doTestKepler(Binary64Field.getInstance(), 3.1e-10);
     }
 
     @Override
+    @Test
     public void testTorqueFreeMotionOmegaOnly() {
         doTestTorqueFreeMotionOmegaOnly(Binary64Field.getInstance(), 3.0e-16);
     }
 
     @Override
+    @Test
     public void testTorqueFreeMotion() {
         doTestTorqueFreeMotion(Binary64Field.getInstance(), 1.6e-15, 7.0e-16);
     }
 
     @Override
+    @Test
     public void testTorqueFreeMotionIssue230() {
         doTestTorqueFreeMotionIssue230(Binary64Field.getInstance(), 5.4e-15, 1.5e-15);
     }
 
     @Override
+    @Test
     public void testForwardBackwardExceptions() {
         doTestForwardBackwardExceptions(Binary64Field.getInstance());
     }
 
     @Override
+    @Test
     public void testMinStep() {
         doTestMinStep(Binary64Field.getInstance());
     }
 
     @Override
+    @Test
     public void testIncreasingTolerance() {
         // the 0.7 factor is only valid for this test
         // and has been obtained from trial and error
@@ -91,36 +101,43 @@ public class DormandPrince54FieldIntegratorTest extends EmbeddedRungeKuttaFieldI
     }
 
     @Override
+    @Test
     public void testEvents() {
         doTestEvents(Binary64Field.getInstance(), 1.7e-7, "Dormand-Prince 5 (4)");
     }
 
     @Override
+    @Test
     public void testStepEnd() {
         doTestStepEnd(Binary64Field.getInstance(), 119, "Dormand-Prince 5 (4)");
     }
 
     @Override
+    @Test
     public void testStopAfterStep() {
         doTestStopAfterStep(Binary64Field.getInstance(), 12, 1.117270);
     }
 
     @Override
+    @Test
     public void testResetAfterStep() {
         doTestResetAfterStep(Binary64Field.getInstance(), 12, 14);
     }
 
     @Override
+    @Test
     public void testEventsErrors() {
         doTestEventsErrors(Binary64Field.getInstance());
     }
 
     @Override
+    @Test
     public void testEventsNoConvergence() {
         doTestEventsNoConvergence(Binary64Field.getInstance());
     }
 
     @Override
+    @Test
     public void testPartialDerivatives() {
         doTestPartialDerivatives(4.8e-12, new double[] { 3.3e-11, 6.3e-12, 1.1e-12, 1.1e-12, 6.3e-12 });
     }

@@ -25,9 +25,9 @@ package org.hipparchus.stat.inference;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.StreamingStatistics;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for the TTestImpl class.
@@ -42,7 +42,7 @@ public class TTestTest {
     private StreamingStatistics emptyStats = new StreamingStatistics();
    StreamingStatistics tooShortStats = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         tooShortStats = new StreamingStatistics();
         tooShortStats.addValue(0d);
@@ -60,65 +60,65 @@ public class TTestTest {
         }
 
         // Target comparison values computed using R version 1.8.1 (Linux version)
-        Assert.assertEquals("t statistic",  -2.81976445346,
-                testStatistic.t(mu, observed), 10E-10);
-        Assert.assertEquals("t statistic",  -2.81976445346,
-                testStatistic.t(mu, sampleStats), 10E-10);
-        Assert.assertEquals("p value", 0.0136390585873,
-                testStatistic.tTest(mu, observed), 10E-10);
-        Assert.assertEquals("p value", 0.0136390585873,
-                testStatistic.tTest(mu, sampleStats), 10E-10);
+        Assertions.assertEquals(-2.81976445346,
+                testStatistic.t(mu, observed), 10E-10, "t statistic");
+        Assertions.assertEquals(-2.81976445346,
+                testStatistic.t(mu, sampleStats), 10E-10, "t statistic");
+        Assertions.assertEquals(0.0136390585873,
+                testStatistic.tTest(mu, observed), 10E-10, "p value");
+        Assertions.assertEquals(0.0136390585873,
+                testStatistic.tTest(mu, sampleStats), 10E-10, "p value");
 
         try {
             testStatistic.t(mu, (double[]) null);
-            Assert.fail("arguments too short, NullArgumentException expected");
+            Assertions.fail("arguments too short, NullArgumentException expected");
         } catch (NullArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.t(mu, (StreamingStatistics) null);
-            Assert.fail("arguments too short, NullArgumentException expected");
+            Assertions.fail("arguments too short, NullArgumentException expected");
         } catch (NullArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.t(mu, emptyObs);
-            Assert.fail("arguments too short, MathIllegalArgumentException expected");
+            Assertions.fail("arguments too short, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.t(mu, emptyStats);
-            Assert.fail("arguments too short, MathIllegalArgumentException expected");
+            Assertions.fail("arguments too short, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.t(mu, tooShortObs);
-            Assert.fail("insufficient data to compute t statistic, MathIllegalArgumentException expected");
+            Assertions.fail("insufficient data to compute t statistic, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             testStatistic.tTest(mu, tooShortObs);
-            Assert.fail("insufficient data to perform t test, MathIllegalArgumentException expected");
+            Assertions.fail("insufficient data to perform t test, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
            // expected
         }
 
         try {
             testStatistic.t(mu, tooShortStats);
-            Assert.fail("insufficient data to compute t statistic, MathIllegalArgumentException expected");
+            Assertions.fail("insufficient data to compute t statistic, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             testStatistic.tTest(mu, tooShortStats);
-            Assert.fail("insufficient data to perform t test, MathIllegalArgumentException expected");
+            Assertions.fail("insufficient data to perform t test, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -133,29 +133,29 @@ public class TTestTest {
             oneSidedPStats.addValue(oneSidedP[i]);
         }
         // Target comparison values computed using R version 1.8.1 (Linux version)
-        Assert.assertEquals("one sample t stat", 3.86485535541,
-                testStatistic.t(0d, oneSidedP), 10E-10);
-        Assert.assertEquals("one sample t stat", 3.86485535541,
-                testStatistic.t(0d, oneSidedPStats),1E-10);
-        Assert.assertEquals("one sample p value", 0.000521637019637,
-                testStatistic.tTest(0d, oneSidedP) / 2d, 10E-10);
-        Assert.assertEquals("one sample p value", 0.000521637019637,
-                testStatistic.tTest(0d, oneSidedPStats) / 2d, 10E-5);
-        Assert.assertTrue("one sample t-test reject", testStatistic.tTest(0d, oneSidedP, 0.01));
-        Assert.assertTrue("one sample t-test reject", testStatistic.tTest(0d, oneSidedPStats, 0.01));
-        Assert.assertTrue("one sample t-test accept", !testStatistic.tTest(0d, oneSidedP, 0.0001));
-        Assert.assertTrue("one sample t-test accept", !testStatistic.tTest(0d, oneSidedPStats, 0.0001));
+        Assertions.assertEquals(3.86485535541,
+                testStatistic.t(0d, oneSidedP), 10E-10, "one sample t stat");
+        Assertions.assertEquals(3.86485535541,
+                testStatistic.t(0d, oneSidedPStats),1E-10,"one sample t stat");
+        Assertions.assertEquals(0.000521637019637,
+                testStatistic.tTest(0d, oneSidedP) / 2d, 10E-10, "one sample p value");
+        Assertions.assertEquals(0.000521637019637,
+                testStatistic.tTest(0d, oneSidedPStats) / 2d, 10E-5, "one sample p value");
+        Assertions.assertTrue(testStatistic.tTest(0d, oneSidedP, 0.01), "one sample t-test reject");
+        Assertions.assertTrue(testStatistic.tTest(0d, oneSidedPStats, 0.01), "one sample t-test reject");
+        Assertions.assertFalse(testStatistic.tTest(0d, oneSidedP, 0.0001), "one sample t-test accept");
+        Assertions.assertFalse(testStatistic.tTest(0d, oneSidedPStats, 0.0001), "one sample t-test accept");
 
         try {
             testStatistic.tTest(0d, oneSidedP, 95);
-            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+            Assertions.fail("alpha out of range, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.tTest(0d, oneSidedPStats, 95);
-            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+            Assertions.fail("alpha out of range, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -176,75 +176,73 @@ public class TTestTest {
         }
 
         // Target comparison values computed using R version 1.8.1 (Linux version)
-        Assert.assertEquals("two sample heteroscedastic t stat", 1.60371728768,
-                testStatistic.t(sample1, sample2), 1E-10);
-        Assert.assertEquals("two sample heteroscedastic t stat", 1.60371728768,
-                testStatistic.t(sampleStats1, sampleStats2), 1E-10);
-        Assert.assertEquals("two sample heteroscedastic p value", 0.128839369622,
-                testStatistic.tTest(sample1, sample2), 1E-10);
-        Assert.assertEquals("two sample heteroscedastic p value", 0.128839369622,
-                testStatistic.tTest(sampleStats1, sampleStats2), 1E-10);
-        Assert.assertTrue("two sample heteroscedastic t-test reject",
-                testStatistic.tTest(sample1, sample2, 0.2));
-        Assert.assertTrue("two sample heteroscedastic t-test reject",
-                testStatistic.tTest(sampleStats1, sampleStats2, 0.2));
-        Assert.assertTrue("two sample heteroscedastic t-test accept",
-                !testStatistic.tTest(sample1, sample2, 0.1));
-        Assert.assertTrue("two sample heteroscedastic t-test accept",
-                !testStatistic.tTest(sampleStats1, sampleStats2, 0.1));
+        Assertions.assertEquals(1.60371728768,
+                testStatistic.t(sample1, sample2), 1E-10, "two sample heteroscedastic t stat");
+        Assertions.assertEquals(1.60371728768,
+                testStatistic.t(sampleStats1, sampleStats2), 1E-10, "two sample heteroscedastic t stat");
+        Assertions.assertEquals(0.128839369622,
+                testStatistic.tTest(sample1, sample2), 1E-10, "two sample heteroscedastic p value");
+        Assertions.assertEquals(0.128839369622,
+                testStatistic.tTest(sampleStats1, sampleStats2), 1E-10, "two sample heteroscedastic p value");
+        Assertions.assertTrue(testStatistic.tTest(sample1, sample2, 0.2),
+                "two sample heteroscedastic t-test reject");
+        Assertions.assertTrue(testStatistic.tTest(sampleStats1, sampleStats2, 0.2),
+                "two sample heteroscedastic t-test reject");
+        Assertions.assertFalse(testStatistic.tTest(sample1, sample2, 0.1), "two sample heteroscedastic t-test accept");
+        Assertions.assertFalse(testStatistic.tTest(sampleStats1, sampleStats2, 0.1), "two sample heteroscedastic t-test accept");
 
         try {
             testStatistic.tTest(sample1, sample2, .95);
-            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+            Assertions.fail("alpha out of range, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.tTest(sampleStats1, sampleStats2, .95);
-            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+            Assertions.fail("alpha out of range, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.tTest(sample1, tooShortObs, .01);
-            Assert.fail("insufficient data, MathIllegalArgumentException expected");
+            Assertions.fail("insufficient data, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.tTest(sampleStats1, tooShortStats, .01);
-            Assert.fail("insufficient data, MathIllegalArgumentException expected");
+            Assertions.fail("insufficient data, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.tTest(sample1, tooShortObs);
-            Assert.fail("insufficient data, MathIllegalArgumentException expected");
+            Assertions.fail("insufficient data, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
            // expected
         }
 
         try {
             testStatistic.tTest(sampleStats1, tooShortStats);
-            Assert.fail("insufficient data, MathIllegalArgumentException expected");
+            Assertions.fail("insufficient data, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.t(sample1, tooShortObs);
-            Assert.fail("insufficient data, MathIllegalArgumentException expected");
+            Assertions.fail("insufficient data, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.t(sampleStats1, tooShortStats);
-            Assert.fail("insufficient data, MathIllegalArgumentException expected");
+            Assertions.fail("insufficient data, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
            // expected
         }
@@ -263,14 +261,13 @@ public class TTestTest {
         }
 
         // Target comparison values computed using R version 1.8.1 (Linux version)
-        Assert.assertEquals("two sample homoscedastic t stat", 0.73096310086,
-              testStatistic.homoscedasticT(sample1, sample2), 10E-11);
-        Assert.assertEquals("two sample homoscedastic p value", 0.4833963785,
-                testStatistic.homoscedasticTTest(sampleStats1, sampleStats2), 1E-10);
-        Assert.assertTrue("two sample homoscedastic t-test reject",
-                testStatistic.homoscedasticTTest(sample1, sample2, 0.49));
-        Assert.assertTrue("two sample homoscedastic t-test accept",
-                !testStatistic.homoscedasticTTest(sample1, sample2, 0.48));
+        Assertions.assertEquals(0.73096310086,
+              testStatistic.homoscedasticT(sample1, sample2), 10E-11, "two sample homoscedastic t stat");
+        Assertions.assertEquals(0.4833963785,
+                testStatistic.homoscedasticTTest(sampleStats1, sampleStats2), 1E-10, "two sample homoscedastic p value");
+        Assertions.assertTrue(testStatistic.homoscedasticTTest(sample1, sample2, 0.49),
+                "two sample homoscedastic t-test reject");
+        Assertions.assertFalse(testStatistic.homoscedasticTTest(sample1, sample2, 0.48), "two sample homoscedastic t-test accept");
     }
 
     @Test
@@ -279,9 +276,9 @@ public class TTestTest {
         double[] sample2 = {4d, 5d};
 
         // Target values computed using R, version 1.8.1 (linux version)
-        Assert.assertEquals(-2.2360679775, testStatistic.t(sample1, sample2),
+        Assertions.assertEquals(-2.2360679775, testStatistic.t(sample1, sample2),
                 1E-10);
-        Assert.assertEquals(0.198727388935, testStatistic.tTest(sample1, sample2),
+        Assertions.assertEquals(0.198727388935, testStatistic.tTest(sample1, sample2),
                 1E-10);
     }
 
@@ -292,10 +289,10 @@ public class TTestTest {
         double[] sample3 = {5d, 7d, 8d, 10d};
 
         // Target values computed using R, version 1.8.1 (linux version)
-        Assert.assertEquals(-0.3133, testStatistic.pairedT(sample1, sample2), 1E-4);
-        Assert.assertEquals(0.774544295819, testStatistic.pairedTTest(sample1, sample2), 1E-10);
-        Assert.assertEquals(0.001208, testStatistic.pairedTTest(sample1, sample3), 1E-6);
-        Assert.assertFalse(testStatistic.pairedTTest(sample1, sample3, .001));
-        Assert.assertTrue(testStatistic.pairedTTest(sample1, sample3, .002));
+        Assertions.assertEquals(-0.3133, testStatistic.pairedT(sample1, sample2), 1E-4);
+        Assertions.assertEquals(0.774544295819, testStatistic.pairedTTest(sample1, sample2), 1E-10);
+        Assertions.assertEquals(0.001208, testStatistic.pairedTTest(sample1, sample3), 1E-6);
+        Assertions.assertFalse(testStatistic.pairedTTest(sample1, sample3, .001));
+        Assertions.assertTrue(testStatistic.pairedTTest(sample1, sample3, .002));
     }
 }

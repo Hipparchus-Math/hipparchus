@@ -25,8 +25,8 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Cos;
 import org.hipparchus.analysis.function.Inverse;
 import org.hipparchus.analysis.function.Log;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test of the {@link FieldLegendreRuleFactory}.
@@ -42,7 +42,7 @@ public class LegendreHighPrecisionTest {
         final GaussIntegrator integrator = factory.legendreHighPrecision(7, 0, Math.PI / 2);
         final double s = integrator.integrate(cos);
         // System.out.println("s=" + s + " e=" + 1);
-        Assert.assertEquals(1, s, Math.ulp(1d));
+        Assertions.assertEquals(1, s, Math.ulp(1d));
     }
 
 
@@ -58,6 +58,6 @@ public class LegendreHighPrecisionTest {
         final double s = integrator.integrate(inv);
         final double expected = log.value(hi) - log.value(lo);
         // System.out.println("s=" + s + " e=" + expected);
-        Assert.assertEquals(expected, s, 1e-15);
+        Assertions.assertEquals(expected, s, 1e-15);
     }
 }

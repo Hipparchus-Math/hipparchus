@@ -21,6 +21,12 @@
  */
 package org.hipparchus.stat.descriptive.rank;
 
+import org.hipparchus.stat.descriptive.UnivariateStatistic;
+import org.hipparchus.stat.descriptive.UnivariateStatisticAbstractTest;
+import org.hipparchus.stat.descriptive.rank.Percentile.EstimationType;
+import org.hipparchus.stat.ranking.NaNStrategy;
+import org.junit.jupiter.api.Test;
+
 import static org.hipparchus.stat.descriptive.rank.Percentile.EstimationType.LEGACY;
 import static org.hipparchus.stat.descriptive.rank.Percentile.EstimationType.R_1;
 import static org.hipparchus.stat.descriptive.rank.Percentile.EstimationType.R_2;
@@ -31,14 +37,8 @@ import static org.hipparchus.stat.descriptive.rank.Percentile.EstimationType.R_6
 import static org.hipparchus.stat.descriptive.rank.Percentile.EstimationType.R_7;
 import static org.hipparchus.stat.descriptive.rank.Percentile.EstimationType.R_8;
 import static org.hipparchus.stat.descriptive.rank.Percentile.EstimationType.R_9;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.hipparchus.stat.descriptive.UnivariateStatistic;
-import org.hipparchus.stat.descriptive.UnivariateStatisticAbstractTest;
-import org.hipparchus.stat.descriptive.rank.Percentile.EstimationType;
-import org.hipparchus.stat.ranking.NaNStrategy;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test cases for the {@link Median} class.
@@ -97,8 +97,8 @@ public class MedianTest extends UnivariateStatisticAbstractTest{
             EstimationType e = (EstimationType) o[0];
             double expected = (Double) o[1];
             double result = getTestMedian(e).evaluate(d);
-            assertEquals("expected[" + e + "] = " + expected +
-                         " but was = " + result, expected, result, tolerance);
+            assertEquals(expected, result, tolerance, "expected[" + e + "] = " + expected +
+                         " but was = " + result);
         }
     }
 }

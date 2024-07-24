@@ -18,8 +18,10 @@ package org.hipparchus.util;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for ContinuedFraction.
@@ -43,44 +45,48 @@ public class FieldContinuedFractionTest {
         };
 
         Binary64 gr = cf.evaluate(new Binary64(0.0), 10e-9);
-        Assert.assertEquals(1.61803399, gr.getReal(), 10e-9);
+        Assertions.assertEquals(1.61803399, gr.getReal(), 10e-9);
     }
 
-    @Test(expected = MathIllegalStateException.class)
+    @Test
     public void testNonConvergentContinuedFraction() {
-        FieldContinuedFraction cf = new FieldContinuedFraction() {
+        assertThrows(MathIllegalStateException.class, () -> {
+            FieldContinuedFraction cf = new FieldContinuedFraction() {
 
-            @Override
-            public <T extends CalculusFieldElement<T>> T getA(final int n, final T x) {
-                return x.getField().getOne();
-            }
+                @Override
+                public <T extends CalculusFieldElement<T>> T getA(final int n, final T x) {
+                    return x.getField().getOne();
+                }
 
-            @Override
-            public <T extends CalculusFieldElement<T>> T getB(final int n, final T x) {
-                return x.getField().getOne();
-            }
+                @Override
+                public <T extends CalculusFieldElement<T>> T getB(final int n, final T x) {
+                    return x.getField().getOne();
+                }
 
-        };
+            };
 
-        cf.evaluate(new Binary64(0.0), 10e-9, 10);
+            cf.evaluate(new Binary64(0.0), 10e-9, 10);
+        });
     }
 
-    @Test(expected = MathIllegalStateException.class)
+    @Test
     public void testInfinityDivergence() {
-        FieldContinuedFraction cf = new FieldContinuedFraction() {
+        assertThrows(MathIllegalStateException.class, () -> {
+            FieldContinuedFraction cf = new FieldContinuedFraction() {
 
-            @Override
-            public <T extends CalculusFieldElement<T>> T getA(final int n, final T x) {
-                return x.getField().getOne().divide(n);
-            }
+                @Override
+                public <T extends CalculusFieldElement<T>> T getA(final int n, final T x) {
+                    return x.getField().getOne().divide(n);
+                }
 
-            @Override
-            public <T extends CalculusFieldElement<T>> T getB(final int n, final T x) {
-                return x.getField().getOne();
-            }
+                @Override
+                public <T extends CalculusFieldElement<T>> T getB(final int n, final T x) {
+                    return x.getField().getOne();
+                }
 
-        };
+            };
 
-        cf.evaluate(new Binary64(1));
+            cf.evaluate(new Binary64(1));
+        });
     }
 }

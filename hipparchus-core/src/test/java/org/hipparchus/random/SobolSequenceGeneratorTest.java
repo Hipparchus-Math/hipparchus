@@ -21,12 +21,12 @@
  */
 package org.hipparchus.random;
 
-import java.io.InputStream;
-
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.io.InputStream;
 
 public class SobolSequenceGeneratorTest {
 
@@ -45,7 +45,7 @@ public class SobolSequenceGeneratorTest {
 
     private SobolSequenceGenerator generator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         generator = new SobolSequenceGenerator(3);
     }
@@ -54,8 +54,8 @@ public class SobolSequenceGeneratorTest {
     public void test3DReference() {
         for (int i = 0; i < referenceValues.length; i++) {
             double[] result = generator.nextVector();
-            Assert.assertArrayEquals(referenceValues[i], result, 1e-6);
-            Assert.assertEquals(i + 1, generator.getNextIndex());
+            Assertions.assertArrayEquals(referenceValues[i], result, 1e-6);
+            Assertions.assertEquals(i + 1, generator.getNextIndex());
         }
     }
 
@@ -63,14 +63,14 @@ public class SobolSequenceGeneratorTest {
     public void testConstructor() {
         try {
             new SobolSequenceGenerator(0);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
 
         try {
             new SobolSequenceGenerator(1001);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -82,14 +82,14 @@ public class SobolSequenceGeneratorTest {
             final String RESOURCE_NAME = "/assets/org/hipparchus/random/new-joe-kuo-6.1000";
             final InputStream is = getClass().getResourceAsStream(RESOURCE_NAME);
             new SobolSequenceGenerator(1001, is);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
 
         try {
             new SobolSequenceGenerator(1001);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -98,13 +98,13 @@ public class SobolSequenceGeneratorTest {
     @Test
     public void testSkip() {
         double[] result = generator.skipTo(5);
-        Assert.assertArrayEquals(referenceValues[5], result, 1e-6);
-        Assert.assertEquals(6, generator.getNextIndex());
+        Assertions.assertArrayEquals(referenceValues[5], result, 1e-6);
+        Assertions.assertEquals(6, generator.getNextIndex());
 
         for (int i = 6; i < referenceValues.length; i++) {
             result = generator.nextVector();
-            Assert.assertArrayEquals(referenceValues[i], result, 1e-6);
-            Assert.assertEquals(i + 1, generator.getNextIndex());
+            Assertions.assertArrayEquals(referenceValues[i], result, 1e-6);
+            Assertions.assertEquals(i + 1, generator.getNextIndex());
         }
     }
 

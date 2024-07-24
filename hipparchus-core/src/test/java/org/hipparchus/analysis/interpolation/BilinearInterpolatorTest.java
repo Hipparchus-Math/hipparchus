@@ -18,15 +18,15 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.BivariateFunction;
-import org.hipparchus.analysis.FieldBivariateFunction;
 import org.hipparchus.analysis.CalculusFieldBivariateFunction;
+import org.hipparchus.analysis.FieldBivariateFunction;
 import org.hipparchus.random.RandomVectorGenerator;
 import org.hipparchus.random.SobolSequenceGenerator;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class BilinearInterpolatorTest {
 
@@ -47,10 +47,10 @@ public class BilinearInterpolatorTest {
         CalculusFieldBivariateFunction<Binary64> fT = (x, y) -> new Binary64(3.5);
         BilinearInterpolatingFunction bif = createInterpolatingFunction(xVal, yVal, f);
 
-        Assert.assertEquals(xMin, bif.getXInf(), 1.0e-15);
-        Assert.assertEquals(xMax, bif.getXSup(), 1.0e-15);
-        Assert.assertEquals(yMin, bif.getYInf(), 1.0e-15);
-        Assert.assertEquals(yMax, bif.getYSup(), 1.0e-15);
+        Assertions.assertEquals(xMin, bif.getXInf(), 1.0e-15);
+        Assertions.assertEquals(xMax, bif.getXSup(), 1.0e-15);
+        Assertions.assertEquals(yMin, bif.getYInf(), 1.0e-15);
+        Assertions.assertEquals(yMax, bif.getYSup(), 1.0e-15);
 
         checkInterpolationAtNodes(xVal, yVal, bif, f, fT, 1.0e-15);
         checkInterpolationRandom(new SobolSequenceGenerator(2), xMin, xMax, yMin, yMax, bif, f, fT, 1.0e-15);
@@ -79,10 +79,10 @@ public class BilinearInterpolatorTest {
         }.toCalculusFieldBivariateFunction(Binary64Field.getInstance());
         BilinearInterpolatingFunction bif = createInterpolatingFunction(xVal, yVal, f);
 
-        Assert.assertEquals(xMin, bif.getXInf(), 1.0e-15);
-        Assert.assertEquals(xMax, bif.getXSup(), 1.0e-15);
-        Assert.assertEquals(yMin, bif.getYInf(), 1.0e-15);
-        Assert.assertEquals(yMax, bif.getYSup(), 1.0e-15);
+        Assertions.assertEquals(xMin, bif.getXInf(), 1.0e-15);
+        Assertions.assertEquals(xMax, bif.getXSup(), 1.0e-15);
+        Assertions.assertEquals(yMin, bif.getYInf(), 1.0e-15);
+        Assertions.assertEquals(yMax, bif.getYSup(), 1.0e-15);
 
         checkInterpolationAtNodes(xVal, yVal, bif, f, fT, 1.0e-15);
         checkInterpolationRandom(new SobolSequenceGenerator(2), xMin, xMax, yMin, yMax, bif, f, fT, 1.0e-15);
@@ -106,10 +106,10 @@ public class BilinearInterpolatorTest {
         CalculusFieldBivariateFunction<Binary64> fT = (x, y) -> x.multiply(3).subtract(2).multiply(y.multiply(-0.5).add(6));
         BilinearInterpolatingFunction bif = createInterpolatingFunction(xVal, yVal, f);
 
-        Assert.assertEquals(xMin, bif.getXInf(), 1.0e-15);
-        Assert.assertEquals(xMax, bif.getXSup(), 1.0e-15);
-        Assert.assertEquals(yMin, bif.getYInf(), 1.0e-15);
-        Assert.assertEquals(yMax, bif.getYSup(), 1.0e-15);
+        Assertions.assertEquals(xMin, bif.getXInf(), 1.0e-15);
+        Assertions.assertEquals(xMax, bif.getXSup(), 1.0e-15);
+        Assertions.assertEquals(yMin, bif.getYInf(), 1.0e-15);
+        Assertions.assertEquals(yMax, bif.getYSup(), 1.0e-15);
 
         checkInterpolationAtNodes(xVal, yVal, bif, f, fT, 1.0e-15);
         checkInterpolationRandom(new SobolSequenceGenerator(2), xMin, xMax, yMin, yMax, bif, f, fT, 1.0e-15);
@@ -136,10 +136,10 @@ public class BilinearInterpolatorTest {
         CalculusFieldBivariateFunction<Binary64> fT = (x, y) -> FastMath.sin(x).multiply(FastMath.cos(y));
         BilinearInterpolatingFunction bif = createInterpolatingFunction(xVal, yVal, f);
 
-        Assert.assertEquals(xMin, bif.getXInf(), 1.0e-15);
-        Assert.assertEquals(xMax, bif.getXSup(), 1.0e-15);
-        Assert.assertEquals(yMin, bif.getYInf(), 1.0e-15);
-        Assert.assertEquals(yMax, bif.getYSup(), 1.0e-15);
+        Assertions.assertEquals(xMin, bif.getXInf(), 1.0e-15);
+        Assertions.assertEquals(xMax, bif.getXSup(), 1.0e-15);
+        Assertions.assertEquals(yMin, bif.getYInf(), 1.0e-15);
+        Assertions.assertEquals(yMax, bif.getYSup(), 1.0e-15);
 
         checkInterpolationAtNodes(xVal, yVal, bif, f, fT, 1.0e-15);
         checkInterpolationRandom(new SobolSequenceGenerator(2), xMin, xMax, yMin, yMax, bif, f, fT, tol);
@@ -177,11 +177,11 @@ public class BilinearInterpolatorTest {
 
                 final double x = xVal[i];
                 final double y = yVal[j];
-                Assert.assertEquals(f.value(x, y), bif.value(x, y), tol);
+                Assertions.assertEquals(f.value(x, y), bif.value(x, y), tol);
 
                 final Binary64 x64 = new Binary64(x);
                 final Binary64 y64 = new Binary64(y);
-                Assert.assertEquals(fT.value(x64, y64).getReal(), bif.value(x64, y64).getReal(), tol);
+                Assertions.assertEquals(fT.value(x64, y64).getReal(), bif.value(x64, y64).getReal(), tol);
 
             }
         }
@@ -208,7 +208,7 @@ public class BilinearInterpolatorTest {
             maxError = FastMath.max(maxError, FastMath.abs(fT.value(x64, y64).getReal()- bif.value(x64, y64).getReal()));
         }
 
-        Assert.assertEquals(0.0, maxError, tol);
+        Assertions.assertEquals(0.0, maxError, tol);
 
     }
 

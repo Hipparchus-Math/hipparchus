@@ -17,12 +17,13 @@
 package org.hipparchus.exception;
 
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
 import org.hipparchus.util.FastMath;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Unit tests for {@link MathRuntimeException}.
@@ -57,12 +58,12 @@ public class MathRuntimeExceptionTest {
             e.printStackTrace(writer);
             String message = buffer.toString();
             // check original reason is preserved
-            MatcherAssert.assertThat(message,
+            assertThat(message,
                     CoreMatchers.containsString("contains no data"));
-            MatcherAssert.assertThat(message,
+            assertThat(message,
                     CoreMatchers.containsString("MathRuntimeException"));
             // check exception during formatting is preserved
-            MatcherAssert.assertThat(message,
+            assertThat(message,
                     CoreMatchers.containsString("toString failed"));
         }
     }
@@ -83,7 +84,7 @@ public class MathRuntimeExceptionTest {
         String expected = "interval does not bracket a root: " +
                 "f(1.0000000000000002E0) = -22.250738585072014E-309, " +
                 "f(999.9999999999999E-3) = -1.2345678901234566E-9";
-        MatcherAssert.assertThat( message, CoreMatchers.is( expected) );
+        assertThat( message, CoreMatchers.is( expected) );
     }
 
 }

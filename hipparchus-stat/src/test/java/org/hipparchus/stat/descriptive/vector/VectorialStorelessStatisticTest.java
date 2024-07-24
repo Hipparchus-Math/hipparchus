@@ -17,13 +17,13 @@
 
 package org.hipparchus.stat.descriptive.vector;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.moment.Mean;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class VectorialStorelessStatisticTest {
     private double[][] points;

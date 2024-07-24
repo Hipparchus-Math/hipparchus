@@ -14,8 +14,8 @@
 package org.hipparchus.distribution.discrete;
 
 import org.hipparchus.distribution.IntegerDistribution;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for BinomialDistribution.
@@ -103,8 +103,8 @@ public class BinomialDistributionTest extends IntegerDistributionAbstractTest {
         verifyDensities();
         verifyCumulativeProbabilities();
         verifyInverseCumulativeProbabilities();
-        Assert.assertEquals(dist.getSupportLowerBound(), 0);
-        Assert.assertEquals(dist.getSupportUpperBound(), 0);
+        Assertions.assertEquals(0, dist.getSupportLowerBound());
+        Assertions.assertEquals(0, dist.getSupportUpperBound());
     }
 
     /** Test degenerate case p = 1 */
@@ -121,8 +121,8 @@ public class BinomialDistributionTest extends IntegerDistributionAbstractTest {
         verifyDensities();
         verifyCumulativeProbabilities();
         verifyInverseCumulativeProbabilities();
-        Assert.assertEquals(dist.getSupportLowerBound(), 5);
-        Assert.assertEquals(dist.getSupportUpperBound(), 5);
+        Assertions.assertEquals(5, dist.getSupportLowerBound());
+        Assertions.assertEquals(5, dist.getSupportUpperBound());
     }
 
     /** Test degenerate case n = 0 */
@@ -139,8 +139,8 @@ public class BinomialDistributionTest extends IntegerDistributionAbstractTest {
         verifyDensities();
         verifyCumulativeProbabilities();
         verifyInverseCumulativeProbabilities();
-        Assert.assertEquals(dist.getSupportLowerBound(), 0);
-        Assert.assertEquals(dist.getSupportUpperBound(), 0);
+        Assertions.assertEquals(0, dist.getSupportLowerBound());
+        Assertions.assertEquals(0, dist.getSupportUpperBound());
     }
 
     @Test
@@ -149,12 +149,12 @@ public class BinomialDistributionTest extends IntegerDistributionAbstractTest {
         BinomialDistribution dist;
 
         dist = new BinomialDistribution(10, 0.5);
-        Assert.assertEquals(dist.getNumericalMean(), 10d * 0.5d, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), 10d * 0.5d * 0.5d, tol);
+        Assertions.assertEquals(dist.getNumericalMean(), 10d * 0.5d, tol);
+        Assertions.assertEquals(dist.getNumericalVariance(), 10d * 0.5d * 0.5d, tol);
 
         dist = new BinomialDistribution(30, 0.3);
-        Assert.assertEquals(dist.getNumericalMean(), 30d * 0.3d, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), 30d * 0.3d * (1d - 0.3d), tol);
+        Assertions.assertEquals(dist.getNumericalMean(), 30d * 0.3d, tol);
+        Assertions.assertEquals(dist.getNumericalVariance(), 30d * 0.3d * (1d - 0.3d), tol);
     }
 
     @Test
@@ -166,7 +166,7 @@ public class BinomialDistributionTest extends IntegerDistributionAbstractTest {
         for (int trials = 500000; trials < 20000000; trials += 100000) {
             BinomialDistribution dist = new BinomialDistribution(trials, 0.5);
             int p = dist.inverseCumulativeProbability(0.5);
-            Assert.assertEquals(trials / 2, p);
+            Assertions.assertEquals(trials / 2, p);
         }
     }
 }

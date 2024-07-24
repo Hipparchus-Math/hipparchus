@@ -17,7 +17,7 @@
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public abstract class AbstractTestAbstractSQPOptimizerTest extends AbstractConstrainedOptimizerTest {
 

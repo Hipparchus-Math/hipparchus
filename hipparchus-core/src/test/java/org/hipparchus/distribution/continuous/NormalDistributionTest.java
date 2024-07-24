@@ -24,8 +24,11 @@ package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test cases for {@link NormalDistribution}.
@@ -64,6 +67,8 @@ public class NormalDistributionTest extends RealDistributionAbstractTest {
 
     // --------------------- Override tolerance  --------------
     protected double defaultTolerance = 1e-9;
+
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -121,24 +126,26 @@ public class NormalDistributionTest extends RealDistributionAbstractTest {
         double expected = 7.61985e-24;
         double v = dist.cumulativeProbability(x);
         double tol = 1e-5;
-        Assert.assertEquals(1, v / expected, tol);
+        Assertions.assertEquals(1, v / expected, tol);
     }
 
     @Test
     public void testGetMean() {
         NormalDistribution distribution = (NormalDistribution) getDistribution();
-        Assert.assertEquals(2.1, distribution.getMean(), 0);
+        Assertions.assertEquals(2.1, distribution.getMean(), 0);
     }
 
     @Test
     public void testGetStandardDeviation() {
         NormalDistribution distribution = (NormalDistribution) getDistribution();
-        Assert.assertEquals(1.4, distribution.getStandardDeviation(), 0);
+        Assertions.assertEquals(1.4, distribution.getStandardDeviation(), 0);
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions() {
-        new NormalDistribution(1, 0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new NormalDistribution(1, 0);
+        });
     }
 
     @Test
@@ -153,7 +160,7 @@ public class NormalDistributionTest extends RealDistributionAbstractTest {
     private void checkDensity(double mean, double sd, double[] x, double[] expected) {
         NormalDistribution d = new NormalDistribution(mean, sd);
         for (int i = 0; i < x.length; i++) {
-            Assert.assertEquals(expected[i], d.density(x[i]), 1e-9);
+            Assertions.assertEquals(expected[i], d.density(x[i]), 1e-9);
         }
     }
 
@@ -170,32 +177,32 @@ public class NormalDistributionTest extends RealDistributionAbstractTest {
             if (i < 9) { // make sure not top-coded
                 // For i = 10, due to bad tail precision in erf (MATH-364), 1 is returned
                 // TODO: once MATH-364 is resolved, replace 9 with 30
-                Assert.assertTrue(lowerTail > 0.0d);
-                Assert.assertTrue(upperTail < 1.0d);
+                Assertions.assertTrue(lowerTail > 0.0d);
+                Assertions.assertTrue(upperTail < 1.0d);
             }
             else { // make sure top coding not reversed
-                Assert.assertTrue(lowerTail < 0.00001);
-                Assert.assertTrue(upperTail > 0.99999);
+                Assertions.assertTrue(lowerTail < 0.00001);
+                Assertions.assertTrue(upperTail > 0.99999);
             }
         }
 
-        Assert.assertEquals(distribution.cumulativeProbability(Double.MAX_VALUE), 1, 0);
-        Assert.assertEquals(distribution.cumulativeProbability(-Double.MAX_VALUE), 0, 0);
-        Assert.assertEquals(distribution.cumulativeProbability(Double.POSITIVE_INFINITY), 1, 0);
-        Assert.assertEquals(distribution.cumulativeProbability(Double.NEGATIVE_INFINITY), 0, 0);
+        Assertions.assertEquals(1, distribution.cumulativeProbability(Double.MAX_VALUE), 0);
+        Assertions.assertEquals(0, distribution.cumulativeProbability(-Double.MAX_VALUE), 0);
+        Assertions.assertEquals(1, distribution.cumulativeProbability(Double.POSITIVE_INFINITY), 0);
+        Assertions.assertEquals(0, distribution.cumulativeProbability(Double.NEGATIVE_INFINITY), 0);
     }
 
     @Test
     public void testMath280() {
         NormalDistribution normal = new NormalDistribution(0,1);
         double result = normal.inverseCumulativeProbability(0.9986501019683698);
-        Assert.assertEquals(3.0, result, defaultTolerance);
+        Assertions.assertEquals(3.0, result, defaultTolerance);
         result = normal.inverseCumulativeProbability(0.841344746068543);
-        Assert.assertEquals(1.0, result, defaultTolerance);
+        Assertions.assertEquals(1.0, result, defaultTolerance);
         result = normal.inverseCumulativeProbability(0.9999683287581673);
-        Assert.assertEquals(4.0, result, defaultTolerance);
+        Assertions.assertEquals(4.0, result, defaultTolerance);
         result = normal.inverseCumulativeProbability(0.9772498680518209);
-        Assert.assertEquals(2.0, result, defaultTolerance);
+        Assertions.assertEquals(2.0, result, defaultTolerance);
     }
 
     @Test
@@ -204,15 +211,15 @@ public class NormalDistributionTest extends RealDistributionAbstractTest {
         NormalDistribution dist;
 
         dist = new NormalDistribution(0, 1);
-        Assert.assertEquals(dist.getNumericalMean(), 0, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), 1, tol);
+        Assertions.assertEquals(0, dist.getNumericalMean(), tol);
+        Assertions.assertEquals(1, dist.getNumericalVariance(), tol);
 
         dist = new NormalDistribution(2.2, 1.4);
-        Assert.assertEquals(dist.getNumericalMean(), 2.2, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), 1.4 * 1.4, tol);
+        Assertions.assertEquals(2.2, dist.getNumericalMean(), tol);
+        Assertions.assertEquals(dist.getNumericalVariance(), 1.4 * 1.4, tol);
 
         dist = new NormalDistribution(-2000.9, 10.4);
-        Assert.assertEquals(dist.getNumericalMean(), -2000.9, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), 10.4 * 10.4, tol);
+        Assertions.assertEquals(dist.getNumericalMean(), -2000.9, tol);
+        Assertions.assertEquals(dist.getNumericalVariance(), 10.4 * 10.4, tol);
     }
 }

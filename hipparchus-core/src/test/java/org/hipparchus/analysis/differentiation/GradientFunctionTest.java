@@ -25,7 +25,7 @@ package org.hipparchus.analysis.differentiation;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 /**

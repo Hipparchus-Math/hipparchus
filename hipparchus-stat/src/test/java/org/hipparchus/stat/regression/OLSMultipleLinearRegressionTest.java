@@ -21,7 +21,6 @@
  */
 package org.hipparchus.stat.regression;
 
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
@@ -31,16 +30,18 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.stat.StatUtils;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbstractTest {
 
     private double[] y;
     private double[][] x;
 
-    @Before
+    @BeforeEach
     @Override
     public void setUp(){
         y = new double[]{11.0, 12.0, 13.0, 14.0, 15.0, 16.0};
@@ -71,12 +72,14 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         return y.length;
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void cannotAddSampleDataWithSizeMismatch() {
-        double[] y = new double[]{1.0, 2.0};
-        double[][] x = new double[1][];
-        x[0] = new double[]{1.0, 0};
-        createRegression().newSampleData(y, x);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] y = new double[]{1.0, 2.0};
+            double[][] x = new double[1][];
+            x[0] = new double[]{1.0, 0};
+            createRegression().newSampleData(y, x);
+        });
     }
 
     @Test
@@ -102,10 +105,10 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
                 return (row == column) ? 2 * x : x;
             }
         });
-       Assert.assertEquals(0.0,
+       Assertions.assertEquals(0.0,
                      errors.subtract(referenceVariance).getNorm1(),
                      5.0e-16 * referenceVariance.getNorm1());
-       Assert.assertEquals(1, ((OLSMultipleLinearRegression) regression).calculateRSquared(), 1E-12);
+       Assertions.assertEquals(1, ((OLSMultipleLinearRegression) regression).calculateRSquared(), 1E-12);
     }
 
 
@@ -179,11 +182,11 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
                        455.478499142212}, errors, 1E-6);
 
         // Check regression standard error against R
-        Assert.assertEquals(304.8540735619638, model.estimateRegressionStandardError(), 1E-10);
+        Assertions.assertEquals(304.8540735619638, model.estimateRegressionStandardError(), 1E-10);
 
         // Check R-Square statistics against R
-        Assert.assertEquals(0.995479004577296, model.calculateRSquared(), 1E-12);
-        Assert.assertEquals(0.992465007628826, model.calculateAdjustedRSquared(), 1E-12);
+        Assertions.assertEquals(0.995479004577296, model.calculateRSquared(), 1E-12);
+        Assertions.assertEquals(0.992465007628826, model.calculateAdjustedRSquared(), 1E-12);
 
         checkVarianceConsistency(model);
 
@@ -214,11 +217,11 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
                       1E-10);
 
         // Check regression standard error against R
-        Assert.assertEquals(475.1655079819517, model.estimateRegressionStandardError(), 1E-10);
+        Assertions.assertEquals(475.1655079819517, model.estimateRegressionStandardError(), 1E-10);
 
         // Check R-Square statistics against R
-        Assert.assertEquals(0.9999670130706, model.calculateRSquared(), 1E-12);
-        Assert.assertEquals(0.999947220913, model.calculateAdjustedRSquared(), 1E-12);
+        Assertions.assertEquals(0.9999670130706, model.calculateRSquared(), 1E-12);
+        Assertions.assertEquals(0.999947220913, model.calculateAdjustedRSquared(), 1E-12);
 
     }
 
@@ -324,11 +327,11 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
                 0.03726654773803}, errors, 1E-10);
 
         // Check regression standard error against R
-        Assert.assertEquals(7.73642194433223, model.estimateRegressionStandardError(), 1E-12);
+        Assertions.assertEquals(7.73642194433223, model.estimateRegressionStandardError(), 1E-12);
 
         // Check R-Square statistics against R
-        Assert.assertEquals(0.649789742860228, model.calculateRSquared(), 1E-12);
-        Assert.assertEquals(0.6164363850373927, model.calculateAdjustedRSquared(), 1E-12);
+        Assertions.assertEquals(0.649789742860228, model.calculateRSquared(), 1E-12);
+        Assertions.assertEquals(0.6164363850373927, model.calculateAdjustedRSquared(), 1E-12);
 
         checkVarianceConsistency(model);
 
@@ -368,11 +371,11 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
                 0.43370143099691, 0.07694953606522}, errors, 1E-10);
 
         // Check regression standard error against R
-        Assert.assertEquals(17.24710630547, model.estimateRegressionStandardError(), 1E-10);
+        Assertions.assertEquals(17.24710630547, model.estimateRegressionStandardError(), 1E-10);
 
         // Check R-Square statistics against R
-        Assert.assertEquals(0.946350722085, model.calculateRSquared(), 1E-12);
-        Assert.assertEquals(0.9413600915813, model.calculateAdjustedRSquared(), 1E-12);
+        Assertions.assertEquals(0.946350722085, model.calculateRSquared(), 1E-12);
+        Assertions.assertEquals(0.9413600915813, model.calculateAdjustedRSquared(), 1E-12);
     }
 
     /**
@@ -428,8 +431,8 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         int k = 0;
         for (int i = 0; i < 10; i++) {
             for (int j = i; j < 10; j++) {
-                Assert.assertEquals(referenceData[k], hat.getEntry(i, j), 10e-3);
-                Assert.assertEquals(hat.getEntry(i, j), hat.getEntry(j, i), 10e-12);
+                Assertions.assertEquals(referenceData[k], hat.getEntry(i, j), 10e-3);
+                Assertions.assertEquals(hat.getEntry(i, j), hat.getEntry(j, i), 10e-12);
                 k++;
             }
         }
@@ -492,8 +495,8 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         RealVector combinedY = regression.getY().copy();
         regression.newXSampleData(x);
         regression.newYSampleData(y);
-        Assert.assertEquals(combinedX, regression.getX());
-        Assert.assertEquals(combinedY, regression.getY());
+        Assertions.assertEquals(combinedX, regression.getX());
+        Assertions.assertEquals(combinedY, regression.getY());
 
         // No intercept
         regression.setNoIntercept(true);
@@ -502,18 +505,22 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         combinedY = regression.getY().copy();
         regression.newXSampleData(x);
         regression.newYSampleData(y);
-        Assert.assertEquals(combinedX, regression.getX());
-        Assert.assertEquals(combinedY, regression.getY());
+        Assertions.assertEquals(combinedX, regression.getX());
+        Assertions.assertEquals(combinedY, regression.getY());
     }
 
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void testNewSampleDataYNull() {
-        createRegression().newSampleData(null, new double[][] {});
+        assertThrows(NullArgumentException.class, () -> {
+            createRegression().newSampleData(null, new double[][]{});
+        });
     }
 
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void testNewSampleDataXNull() {
-        createRegression().newSampleData(new double[] {}, null);
+        assertThrows(NullArgumentException.class, () -> {
+            createRegression().newSampleData(new double[]{}, null);
+        });
     }
 
      /*
@@ -793,36 +800,44 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
     /**
      * Anything requiring beta calculation should advertise SME.
      */
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testSingularCalculateBeta() {
-        OLSMultipleLinearRegression model = new OLSMultipleLinearRegression();
-        model.newSampleData(new double[] {1,  2,  3, 1, 2, 3, 1, 2, 3}, 3, 2);
-        model.calculateBeta();
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            OLSMultipleLinearRegression model = new OLSMultipleLinearRegression();
+            model.newSampleData(new double[]{1, 2, 3, 1, 2, 3, 1, 2, 3}, 3, 2);
+            model.calculateBeta();
+        });
     }
 
     @Test
     public void testNoSSTOCalculateRsquare() {
         OLSMultipleLinearRegression model = new OLSMultipleLinearRegression();
         model.newSampleData(new double[] {1,  2,  3, 1, 7, 8, 1, 10, 12}, 3, 2);
-        Assert.assertTrue(Double.isNaN(model.calculateRSquared()));
+        Assertions.assertTrue(Double.isNaN(model.calculateRSquared()));
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test
     public void testNoDataNPECalculateBeta() {
-        OLSMultipleLinearRegression model = new OLSMultipleLinearRegression();
-        model.calculateBeta();
+        assertThrows(NullPointerException.class, () -> {
+            OLSMultipleLinearRegression model = new OLSMultipleLinearRegression();
+            model.calculateBeta();
+        });
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test
     public void testNoDataNPECalculateHat() {
-        OLSMultipleLinearRegression model = new OLSMultipleLinearRegression();
-        model.calculateHat();
+        assertThrows(NullPointerException.class, () -> {
+            OLSMultipleLinearRegression model = new OLSMultipleLinearRegression();
+            model.calculateHat();
+        });
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test
     public void testNoDataNPESSTO() {
-        OLSMultipleLinearRegression model = new OLSMultipleLinearRegression();
-        model.calculateTotalSumOfSquares();
+        assertThrows(NullPointerException.class, () -> {
+            OLSMultipleLinearRegression model = new OLSMultipleLinearRegression();
+            model.calculateTotalSumOfSquares();
+        });
     }
 
     /**
@@ -840,7 +855,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
 
         final double[] b = regression.estimateRegressionParameters();
         for (int i = 0; i < y.length; i++) {
-            Assert.assertEquals(b[i], y[i], 0.001);
+            Assertions.assertEquals(b[i], y[i], 0.001);
         }
     }
 }

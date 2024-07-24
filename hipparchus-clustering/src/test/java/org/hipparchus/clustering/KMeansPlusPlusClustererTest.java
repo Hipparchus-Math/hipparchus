@@ -22,24 +22,26 @@
 
 package org.hipparchus.clustering;
 
+import org.hipparchus.clustering.distance.EuclideanDistance;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.random.JDKRandomGenerator;
+import org.hipparchus.random.RandomGenerator;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.hipparchus.clustering.distance.EuclideanDistance;
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.JDKRandomGenerator;
-import org.hipparchus.random.RandomGenerator;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class KMeansPlusPlusClustererTest {
 
     private RandomGenerator random;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         random = new JDKRandomGenerator();
         random.setSeed(1746432956321l);
@@ -59,12 +61,12 @@ public class KMeansPlusPlusClustererTest {
                 new DoublePoint(new int[] { 1959, 325100 }),
                 new DoublePoint(new int[] { 1960, 373200 }), };
         List<? extends Cluster<DoublePoint>> clusters = transformer.cluster(Arrays.asList(points));
-        Assert.assertEquals(1, clusters.size());
-        Assert.assertEquals(2, (clusters.get(0).getPoints().size()));
+        Assertions.assertEquals(1, clusters.size());
+        Assertions.assertEquals(2, (clusters.get(0).getPoints().size()));
         DoublePoint pt1 = new DoublePoint(new int[] { 1959, 325100 });
         DoublePoint pt2 = new DoublePoint(new int[] { 1960, 373200 });
-        Assert.assertTrue(clusters.get(0).getPoints().contains(pt1));
-        Assert.assertTrue(clusters.get(0).getPoints().contains(pt2));
+        Assertions.assertTrue(clusters.get(0).getPoints().contains(pt1));
+        Assertions.assertTrue(clusters.get(0).getPoints().contains(pt2));
 
     }
 
@@ -108,12 +110,12 @@ public class KMeansPlusPlusClustererTest {
                 List<? extends Cluster<DoublePoint>> clusters =
                         transformer.cluster(Arrays.asList(breakingPoints));
 
-                Assert.assertEquals(n, clusters.size());
+                Assertions.assertEquals(n, clusters.size());
                 int sum = 0;
                 for (Cluster<DoublePoint> cluster : clusters) {
                     sum += cluster.getPoints().size();
                 }
-                Assert.assertEquals(numberOfVariables, sum);
+                Assertions.assertEquals(numberOfVariables, sum);
             }
         }
 
@@ -170,26 +172,29 @@ public class KMeansPlusPlusClustererTest {
                 uniquePointIsCenter = true;
             }
         }
-        Assert.assertTrue(uniquePointIsCenter);
+        Assertions.assertTrue(uniquePointIsCenter);
     }
 
     /**
      * 2 variables cannot be clustered into 3 clusters. See issue MATH-436.
      */
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPerformClusterAnalysisToManyClusters() {
-        KMeansPlusPlusClusterer<DoublePoint> transformer =
-            new KMeansPlusPlusClusterer<DoublePoint>(3, 1, new EuclideanDistance(), random);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            KMeansPlusPlusClusterer<DoublePoint> transformer =
+                new KMeansPlusPlusClusterer<DoublePoint>(3, 1, new EuclideanDistance(), random);
 
-        DoublePoint[] points = new DoublePoint[] {
-            new DoublePoint(new int[] {
-                1959, 325100
-            }), new DoublePoint(new int[] {
+            DoublePoint[] points = new DoublePoint[]{
+                new DoublePoint(new int[]{
+                    1959, 325100
+                }), new DoublePoint(new int[]{
                 1960, 373200
             })
-        };
+            };
 
-        transformer.cluster(Arrays.asList(points));
+            transformer.cluster(Arrays.asList(points));
+
+        });
 
     }
 

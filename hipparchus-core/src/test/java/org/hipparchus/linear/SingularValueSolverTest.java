@@ -23,8 +23,8 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class SingularValueSolverTest {
 
@@ -49,19 +49,19 @@ public class SingularValueSolverTest {
         RealMatrix b = MatrixUtils.createRealMatrix(new double[3][2]);
         try {
             solver.solve(b);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
         try {
             solver.solve(b.getColumnVector(0));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
         try {
             solver.solve(new ArrayRealVectorTest.RealVectorTestImpl(b.getColumn(0)));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
@@ -80,16 +80,16 @@ public class SingularValueSolverTest {
             { 11, 12 }, { 21, 22 }
         });
         RealMatrix xMatrix = solver.solve(b);
-        Assert.assertEquals(11, xMatrix.getEntry(0, 0), 1.0e-15);
-        Assert.assertEquals(12, xMatrix.getEntry(0, 1), 1.0e-15);
-        Assert.assertEquals(0, xMatrix.getEntry(1, 0), 1.0e-15);
-        Assert.assertEquals(0, xMatrix.getEntry(1, 1), 1.0e-15);
+        Assertions.assertEquals(11, xMatrix.getEntry(0, 0), 1.0e-15);
+        Assertions.assertEquals(12, xMatrix.getEntry(0, 1), 1.0e-15);
+        Assertions.assertEquals(0, xMatrix.getEntry(1, 0), 1.0e-15);
+        Assertions.assertEquals(0, xMatrix.getEntry(1, 1), 1.0e-15);
         RealVector xColVec = solver.solve(b.getColumnVector(0));
-        Assert.assertEquals(11, xColVec.getEntry(0), 1.0e-15);
-        Assert.assertEquals(0, xColVec.getEntry(1), 1.0e-15);
+        Assertions.assertEquals(11, xColVec.getEntry(0), 1.0e-15);
+        Assertions.assertEquals(0, xColVec.getEntry(1), 1.0e-15);
         RealVector xColOtherVec = solver.solve(new ArrayRealVectorTest.RealVectorTestImpl(b.getColumn(0)));
-        Assert.assertEquals(11, xColOtherVec.getEntry(0), 1.0e-15);
-        Assert.assertEquals(0, xColOtherVec.getEntry(1), 1.0e-15);
+        Assertions.assertEquals(11, xColOtherVec.getEntry(0), 1.0e-15);
+        Assertions.assertEquals(0, xColOtherVec.getEntry(1), 1.0e-15);
     }
 
     /** test solve */
@@ -97,8 +97,8 @@ public class SingularValueSolverTest {
     public void testSolve() {
         DecompositionSolver solver =
             new SingularValueDecomposition(MatrixUtils.createRealMatrix(testSquare)).getSolver();
-        Assert.assertEquals(testSquare.length, solver.getRowDimension());
-        Assert.assertEquals(testSquare[0].length, solver.getColumnDimension());
+        Assertions.assertEquals(testSquare.length, solver.getRowDimension());
+        Assertions.assertEquals(testSquare[0].length, solver.getColumnDimension());
         RealMatrix b = MatrixUtils.createRealMatrix(new double[][] {
                 { 1, 2, 3 }, { 0, -5, 1 }
         });
@@ -108,11 +108,11 @@ public class SingularValueSolverTest {
         });
 
         // using RealMatrix
-        Assert.assertEquals(0, solver.solve(b).subtract(xRef).getNorm1(), normTolerance);
+        Assertions.assertEquals(0, solver.solve(b).subtract(xRef).getNorm1(), normTolerance);
 
         // using ArrayRealVector
         for (int i = 0; i < b.getColumnDimension(); ++i) {
-            Assert.assertEquals(0,
+            Assertions.assertEquals(0,
                          solver.solve(b.getColumnVector(i)).subtract(xRef.getColumnVector(i)).getNorm(),
                          1.0e-13);
         }
@@ -121,7 +121,7 @@ public class SingularValueSolverTest {
         for (int i = 0; i < b.getColumnDimension(); ++i) {
             ArrayRealVectorTest.RealVectorTestImpl v =
                 new ArrayRealVectorTest.RealVectorTestImpl(b.getColumn(i));
-            Assert.assertEquals(0,
+            Assertions.assertEquals(0,
                          solver.solve(v).subtract(xRef.getColumnVector(i)).getNorm(),
                          1.0e-13);
         }
@@ -134,7 +134,7 @@ public class SingularValueSolverTest {
         SingularValueDecomposition svd =
             new SingularValueDecomposition(MatrixUtils.createRealMatrix(testSquare));
         // replace 1.0e-15 with 1.5e-15
-        Assert.assertEquals(3.0, svd.getConditionNumber(), 1.5e-15);
+        Assertions.assertEquals(3.0, svd.getConditionNumber(), 1.5e-15);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class SingularValueSolverTest {
         SingularValueDecomposition svd =
             new SingularValueDecomposition(rm);
         RealMatrix recomposed = svd.getU().multiply(svd.getS()).multiply(svd.getVT());
-        Assert.assertEquals(0.0, recomposed.subtract(rm).getNorm1(), 2.0e-15);
+        Assertions.assertEquals(0.0, recomposed.subtract(rm).getNorm1(), 2.0e-15);
     }
 
     @Test
@@ -159,7 +159,7 @@ public class SingularValueSolverTest {
           {0.5437098346,-0.4107754586,-0.0008256918,0.132934376},
           {-0.0714905202,0.053808742,0.0006279816,-0.0176817782}
       });
-      Assert.assertEquals(0, expected.subtract(pseudoInverse).getNorm1(), 1.0e-9);
+      Assertions.assertEquals(0, expected.subtract(pseudoInverse).getNorm1(), 1.0e-9);
     }
 
 }

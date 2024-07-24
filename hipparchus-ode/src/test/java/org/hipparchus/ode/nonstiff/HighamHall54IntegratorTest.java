@@ -17,8 +17,7 @@
 
 package org.hipparchus.ode.nonstiff;
 
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class HighamHall54IntegratorTest extends EmbeddedRungeKuttaIntegratorAbstractTest {
 
@@ -35,36 +34,43 @@ public class HighamHall54IntegratorTest extends EmbeddedRungeKuttaIntegratorAbst
     }
 
     @Override
+    @Test
     public void testBackward() {
         doTestBackward(5.0e-7, 5.0e-7, 1.0e-12, "Higham-Hall 5(4)");
     }
 
     @Override
+    @Test
     public void testKepler() {
         doTestKepler(1.5e-4);
     }
 
     @Override
+    @Test
     public void testTorqueFreeMotionOmegaOnly() {
         doTestTorqueFreeMotionOmegaOnly(2.7e-15);
     }
 
     @Override
+    @Test
     public void testTorqueFreeMotion() {
         doTestTorqueFreeMotion(1.5e-15, 5.6e-16);
     }
 
     @Override
+    @Test
     public void testTorqueFreeMotionIssue230() {
         doTestTorqueFreeMotionIssue230(5.4e-15, 1.5e-15);
     }
 
     @Override
+    @Test
     public void testForwardBackwardExceptions() {
         doTestForwardBackwardExceptions();
     }
 
     @Override
+    @Test
     public void testIncreasingTolerance() {
         // the 1.3 factor is only valid for this test
         // and has been obtained from trial and error
@@ -73,21 +79,25 @@ public class HighamHall54IntegratorTest extends EmbeddedRungeKuttaIntegratorAbst
     }
 
     @Override
+    @Test
     public void testEvents() {
         doTestEvents(1.0e-7, "Higham-Hall 5(4)");
     }
 
     @Override
+    @Test
     public void testStepEnd() {
         doTestStepEnd(119, "Higham-Hall 5(4)");
     }
 
     @Override
+    @Test
     public void testStopAfterStep() {
         doTestStopAfterStep(12, 1.110791);
     }
 
     @Override
+    @Test
     public void testResetAfterStep() {
         doTestResetAfterStep(12, 14);
     }
@@ -108,6 +118,7 @@ public class HighamHall54IntegratorTest extends EmbeddedRungeKuttaIntegratorAbst
     }
 
     @Override
+    @Test
     public void testPartialDerivatives() {
         doTestPartialDerivatives(1.2e-11, 8.0e-11);
     }

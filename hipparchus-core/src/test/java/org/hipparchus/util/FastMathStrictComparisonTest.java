@@ -21,6 +21,11 @@
  */
 package org.hipparchus.util;
 
+import org.hipparchus.exception.MathRuntimeException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -28,13 +33,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.hipparchus.exception.MathRuntimeException;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 /**
  * Test to compare FastMath results against StrictMath results for boundary values.
@@ -44,7 +42,6 @@ import org.junit.runners.Parameterized.Parameters;
  * or just run tests against a single method (e.g. scalb):<br>
  * {@code mvn test -Dtest=FastMathStrictComparisonTest -DargLine="-DtestMethod=scalb"}
  */
-@RunWith(Parameterized.class)
 public class FastMathStrictComparisonTest {
 
     // Values which often need special handling
@@ -77,20 +74,22 @@ public class FastMathStrictComparisonTest {
         Integer.MIN_VALUE, Integer.MAX_VALUE,               // 4,5
     };
 
-    private final Method mathMethod;
-    private final Method fastMethod;
-    private final Type[] types;
-    private final Object[][] valueArrays;
+    private Method mathMethod;
+    private Method fastMethod;
+    private Type[] types;
+    private Object[][] valueArrays;
 
-    public FastMathStrictComparisonTest(Method m, Method f, Type[] types, Object[][] data) throws Exception{
+    public void initFastMathStrictComparisonTest(Method m, Method f, Type[] types, Object[][] data) throws Exception {
         this.mathMethod=m;
         this.fastMethod=f;
         this.types=types;
         this.valueArrays=data;
     }
 
-    @Test
-    public void test1() throws Exception{
+    @MethodSource("data")
+    @ParameterizedTest
+    public void test1(Method m, Method f, Type[] types, Object[][] data) throws Exception {
+        initFastMathStrictComparisonTest(m, f, types, data);
         setupMethodCall(mathMethod, fastMethod, types, valueArrays);
     }
     private static boolean isNumber(Double d) {
@@ -157,7 +156,7 @@ public class FastMathStrictComparisonTest {
         String message = sb.toString();
         final boolean fatal = true;
         if (fatal) {
-            Assert.fail(message);
+            Assertions.fail(message);
         } else {
             System.out.println(message);
         }
@@ -179,7 +178,7 @@ public class FastMathStrictComparisonTest {
                 actual = ite.getCause();
             }
             if (expected instanceof ArithmeticException) {
-                Assert.assertEquals(MathRuntimeException.class, actual.getClass());
+                Assertions.assertEquals(MathRuntimeException.class, actual.getClass());
             } else  if (!expected.equals(actual)) {
                 reportFailedResults(mathMethod, params, expected, actual, entries);
             }
@@ -197,7 +196,7 @@ public class FastMathStrictComparisonTest {
             }
             System.out.println();
             e.printStackTrace();
-            Assert.fail(mathMethod+" "+e);
+            Assertions.fail(mathMethod+" "+e);
         }
     }
 
@@ -215,7 +214,6 @@ public class FastMathStrictComparisonTest {
         callMethods(mathMethod, fastMethod, params, entries);
     }
 
-    @Parameters
     public static List<Object[]> data() throws Exception {
         String singleMethod = System.getProperty("testMethod");
         List<Object[]> list = new ArrayList<Object[]>();

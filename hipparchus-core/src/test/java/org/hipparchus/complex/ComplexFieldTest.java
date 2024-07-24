@@ -21,25 +21,25 @@
  */
 package org.hipparchus.complex;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.util.Binary64Field;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ComplexFieldTest {
 
     @Test
     public void testZero() {
-        Assert.assertEquals(Complex.ZERO, ComplexField.getInstance().getZero());
+        Assertions.assertEquals(Complex.ZERO, ComplexField.getInstance().getZero());
     }
 
     @Test
     public void testOne() {
-        Assert.assertEquals(Complex.ONE, ComplexField.getInstance().getOne());
+        Assertions.assertEquals(Complex.ONE, ComplexField.getInstance().getOne());
     }
 
     @SuppressWarnings("unlikely-arg-type")
@@ -50,21 +50,21 @@ public class ComplexFieldTest {
             map.put(new Complex(i).getField(), 0);
         }
         // there should be only one field for all values
-        Assert.assertEquals(1, map.size());
-        Assert.assertTrue(ComplexField.getInstance().equals(map.entrySet().iterator().next().getKey()));
-        Assert.assertFalse(ComplexField.getInstance().equals(Binary64Field.getInstance()));
+        Assertions.assertEquals(1, map.size());
+        Assertions.assertEquals(ComplexField.getInstance(), map.entrySet().iterator().next().getKey());
+        Assertions.assertNotEquals(ComplexField.getInstance(), Binary64Field.getInstance());
     }
 
     @Test
     public void testRunTimeClass() {
-        Assert.assertEquals(Complex.class, ComplexField.getInstance().getRuntimeClass());
+        Assertions.assertEquals(Complex.class, ComplexField.getInstance().getRuntimeClass());
     }
 
     @Test
     public void testSerial() {
         // deserializing the singleton should give the singleton itself back
         ComplexField field = ComplexField.getInstance();
-        Assert.assertTrue(field == UnitTestUtils.serializeAndRecover(field));
+        Assertions.assertTrue(field == UnitTestUtils.serializeAndRecover(field));
     }
 
 }

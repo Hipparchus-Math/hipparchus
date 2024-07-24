@@ -13,9 +13,6 @@
  */
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
-import java.io.IOException;
-import java.util.Arrays;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
@@ -30,8 +27,11 @@ import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Ev
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Pair;
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * The only features tested here are utility methods defined
@@ -80,10 +80,10 @@ public class EvaluationTest {
                 .evaluate(point);
 
         //action + verify
-        Assert.assertArrayEquals(
-                evaluation.getResiduals().toArray(),
-                new double[]{2, -3},
-                Precision.EPSILON);
+        Assertions.assertArrayEquals(
+            new double[]{2, -3},
+            evaluation.getResiduals().toArray(),
+            Precision.EPSILON);
     }
 
     @Test
@@ -115,7 +115,7 @@ public class EvaluationTest {
         //singularity fail
         try {
             evaluation.getCovariances(FastMath.nextAfter(1e-4, 1.0));
-            Assert.fail("Expected Exception");
+            Assertions.fail("Expected Exception");
         } catch (MathIllegalArgumentException e) {
             //expected
         }
@@ -130,7 +130,7 @@ public class EvaluationTest {
                 .model(new MultivariateJacobianFunction() {
                     public Pair<RealVector, RealMatrix> value(RealVector actualPoint) {
                         //verify correct values passed in
-                        Assert.assertArrayEquals(
+                        Assertions.assertArrayEquals(
                                 point.toArray(), actualPoint.toArray(), Precision.EPSILON);
                         //return values
                         return new Pair<RealVector, RealMatrix>(
@@ -148,8 +148,8 @@ public class EvaluationTest {
         RealMatrix jacobian = evaluation.getJacobian();
 
         //verify
-        Assert.assertArrayEquals(evaluation.getPoint().toArray(), point.toArray(), 0);
-        Assert.assertArrayEquals(new double[]{-12, -8}, residuals.toArray(), Precision.EPSILON);
+        Assertions.assertArrayEquals(evaluation.getPoint().toArray(), point.toArray(), 0);
+        Assertions.assertArrayEquals(new double[]{-12, -8}, residuals.toArray(), Precision.EPSILON);
         UnitTestUtils.assertEquals(
                 "jacobian",
                 jacobian,
@@ -167,7 +167,7 @@ public class EvaluationTest {
         final double expected = dataset.getResidualSumOfSquares();
         final double cost = lsp.evaluate(lsp.getStart()).getCost();
         final double actual = cost * cost;
-        Assert.assertEquals(dataset.getName(), expected, actual, 1e-11 * expected);
+        Assertions.assertEquals(expected, actual, 1e-11 * expected, dataset.getName());
     }
 
     @Test
@@ -180,7 +180,7 @@ public class EvaluationTest {
         final double expected = FastMath.sqrt(dataset.getResidualSumOfSquares() /
                                               dataset.getNumObservations());
         final double actual = lsp.evaluate(lsp.getStart()).getRMS();
-        Assert.assertEquals(dataset.getName(), expected, actual, 1e-11 * expected);
+        Assertions.assertEquals(expected, actual, 1e-11 * expected, dataset.getName());
     }
 
     @Test
@@ -198,8 +198,7 @@ public class EvaluationTest {
         final int dof = lsp.getObservationSize() - lsp.getParameterSize();
         for (int i = 0; i < sig.getDimension(); i++) {
             final double actual = FastMath.sqrt(cost * cost / dof) * sig.getEntry(i);
-            Assert.assertEquals(dataset.getName() + ", parameter #" + i,
-                                expected[i], actual, 1e-6 * expected[i]);
+            Assertions.assertEquals(expected[i], actual, 1e-6 * expected[i], dataset.getName() + ", parameter #" + i);
         }
     }
 
@@ -215,9 +214,9 @@ public class EvaluationTest {
         Evaluation evaluation = lsp.evaluate(point);
 
         //verify
-        Assert.assertNotSame(point, evaluation.getPoint());
+        Assertions.assertNotSame(point, evaluation.getPoint());
         point.setEntry(0, 1);
-        Assert.assertEquals(evaluation.getPoint().getEntry(0), 0, 0);
+        Assertions.assertEquals(0, evaluation.getPoint().getEntry(0), 0);
     }
 
     @Test
@@ -233,18 +232,18 @@ public class EvaluationTest {
 
         try {
             eval.getResiduals();
-            Assert.fail("Exception expected");
+            Assertions.fail("Exception expected");
         } catch (RuntimeException e) {
             // Expecting exception.
-            Assert.assertEquals("dummyModel", e.getMessage());
+            Assertions.assertEquals("dummyModel", e.getMessage());
         }
 
         try {
             eval.getJacobian();
-            Assert.fail("Exception expected");
+            Assertions.fail("Exception expected");
         } catch (RuntimeException e) {
             // Expecting exception.
-            Assert.assertEquals("dummyJacobian", e.getMessage());
+            Assertions.assertEquals("dummyJacobian", e.getMessage());
         }
     }
 
@@ -264,7 +263,7 @@ public class EvaluationTest {
         try {
             // Should throw.
             LeastSquaresFactory.create(m1, dummy, dummy, null, null, 0, 0, true, null);
-            Assert.fail("Expecting MathIllegalStateException");
+            Assertions.fail("Expecting MathIllegalStateException");
         } catch (MathIllegalStateException e) {
             // Expected.
         }
@@ -296,12 +295,12 @@ public class EvaluationTest {
         try {
             // Should throw.
             p.evaluate(dummy);
-            Assert.fail("Exception expected");
+            Assertions.fail("Exception expected");
         } catch (RuntimeException e) {
             // Expecting exception.
             // Whether it is model or Jacobian that caused it is not significant.
             final String msg = e.getMessage();
-            Assert.assertTrue(msg.equals("dummyModel") ||
+            Assertions.assertTrue(msg.equals("dummyModel") ||
                               msg.equals("dummyJacobian"));
         }
     }

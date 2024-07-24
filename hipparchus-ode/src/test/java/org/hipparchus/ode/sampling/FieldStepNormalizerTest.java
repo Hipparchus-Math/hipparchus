@@ -28,8 +28,8 @@ import org.hipparchus.ode.nonstiff.DormandPrince54FieldIntegrator;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 public class FieldStepNormalizerTest {
@@ -131,8 +131,8 @@ public class FieldStepNormalizerTest {
             integ.addStepHandler(new FieldStepNormalizer<>(stepSize.getReal(), checker, bounds));
         }
         integ.integrate(new FieldExpandableODE<>(pb), pb.getInitialState(), pb.getFinalTime());
-        Assert.assertEquals(expectedFirst.getReal(), checker.firstTime.getReal(), 1.0e-10);
-        Assert.assertEquals(expectedLast.getReal(),  checker.lastTime.getReal(),  1.0e-10);
+        Assertions.assertEquals(expectedFirst.getReal(), checker.firstTime.getReal(), 1.0e-10);
+        Assertions.assertEquals(expectedLast.getReal(),  checker.lastTime.getReal(),  1.0e-10);
     }
 
     private void doTestStepsAtIntegerTimes(final StepNormalizerMode mode,
@@ -152,8 +152,8 @@ public class FieldStepNormalizerTest {
             public int getDimension() { return 1; }
             public Binary64[] computeDerivatives(Binary64 t, Binary64[] y) { return y; }
         }), new FieldODEState<>(new Binary64(t0), new Binary64[] { new Binary64(0) }), new Binary64(t1));
-        Assert.assertEquals(expectedFirst, checker.firstTime.getReal(), 1.0e-10);
-        Assert.assertEquals(expectedLast, checker.lastTime.getReal(),  1.0e-10);
+        Assertions.assertEquals(expectedFirst, checker.firstTime.getReal(), 1.0e-10);
+        Assertions.assertEquals(expectedLast, checker.lastTime.getReal(),  1.0e-10);
     }
 
     private static class Checker<T extends CalculusFieldElement<T>> implements FieldODEFixedStepHandler<T> {

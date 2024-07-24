@@ -21,15 +21,15 @@
  */
 package org.hipparchus.fitting;
 
-import java.util.Random;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Random;
 
 /**
  * Test for class {@link PolynomialCurveFitter}.
@@ -74,7 +74,7 @@ public class PolynomialCurveFitterTest {
             for (double x = -1.0; x < 1.0; x += 0.01) {
                 final double error = FastMath.abs(p.value(x) - fitted.value(x)) /
                     (1.0 + FastMath.abs(p.value(x)));
-                Assert.assertEquals(0.0, error, 1.0e-6);
+                Assertions.assertEquals(0.0, error, 1.0e-6);
             }
         }
     }
@@ -98,10 +98,10 @@ public class PolynomialCurveFitterTest {
                 final double error = FastMath.abs(p.value(x) - fitted.value(x)) /
                     (1.0 + FastMath.abs(p.value(x)));
                 maxError = FastMath.max(maxError, error);
-                Assert.assertTrue(FastMath.abs(error) < 0.1);
+                Assertions.assertTrue(FastMath.abs(error) < 0.1);
             }
         }
-        Assert.assertTrue(maxError > 0.01);
+        Assertions.assertTrue(maxError > 0.01);
     }
 
     @Test
@@ -129,10 +129,10 @@ public class PolynomialCurveFitterTest {
                 final double error = FastMath.abs(p.value(x) - fitted.value(x)) /
                     (1.0 + FastMath.abs(p.value(x)));
                 maxError = FastMath.max(maxError, error);
-                Assert.assertTrue(FastMath.abs(error) < 0.01);
+                Assertions.assertTrue(FastMath.abs(error) < 0.01);
             }
         }
-        Assert.assertTrue(maxError > 0.001);
+        Assertions.assertTrue(maxError > 0.001);
     }
 
     private void checkUnsolvableProblem(boolean solvable) {
@@ -152,9 +152,9 @@ public class PolynomialCurveFitterTest {
 
             try {
                 fitter.fit(obs.toList());
-                Assert.assertTrue(solvable || (degree == 0));
+                Assertions.assertTrue(solvable || (degree == 0));
             } catch(MathIllegalStateException e) {
-                Assert.assertTrue((! solvable) && (degree > 0));
+                Assertions.assertTrue((! solvable) && (degree > 0));
             }
         }
     }

@@ -16,12 +16,12 @@
  */
 package org.hipparchus.special.elliptic.jacobi;
 
-import java.io.IOException;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 public class JacobiEllipticComplexTest {
 

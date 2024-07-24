@@ -24,8 +24,8 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for the bicubic interpolator.
@@ -48,7 +48,7 @@ public final class BicubicInterpolatorTest {
         double[] wxval = new double[] {3, 2, 5, 6.5};
         try {
             p = interpolator.interpolate(wxval, yval, zval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -56,7 +56,7 @@ public final class BicubicInterpolatorTest {
         double[] wyval = new double[] {-4, -3, -1, -1};
         try {
             p = interpolator.interpolate(xval, wyval, zval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -64,14 +64,14 @@ public final class BicubicInterpolatorTest {
         double[][] wzval = new double[xval.length][yval.length + 1];
         try {
             p = interpolator.interpolate(xval, yval, wzval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         wzval = new double[xval.length - 1][yval.length];
         try {
             p = interpolator.interpolate(xval, yval, wzval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -170,7 +170,7 @@ public final class BicubicInterpolatorTest {
                 System.out.println(x + " " + y + " " + expected + " " + actual);
             }
 
-            Assert.assertEquals(expected, actual, tolerance);
+            Assertions.assertEquals(expected, actual, tolerance);
         }
     }
 }

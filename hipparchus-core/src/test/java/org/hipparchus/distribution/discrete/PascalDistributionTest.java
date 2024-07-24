@@ -22,8 +22,9 @@
 package org.hipparchus.distribution.discrete;
 
 import org.hipparchus.distribution.IntegerDistribution;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for PascalDistribution.
@@ -32,6 +33,8 @@ public class PascalDistributionTest extends IntegerDistributionAbstractTest {
 
     // --------------------- Override tolerance  --------------
     protected double defaultTolerance = 1e-9;
+
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -125,11 +128,11 @@ public class PascalDistributionTest extends IntegerDistributionAbstractTest {
         PascalDistribution dist;
 
         dist = new PascalDistribution(10, 0.5);
-        Assert.assertEquals(dist.getNumericalMean(), ( 10d * 0.5d ) / 0.5d, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), ( 10d * 0.5d ) / (0.5d * 0.5d), tol);
+        Assertions.assertEquals(dist.getNumericalMean(), ( 10d * 0.5d ) / 0.5d, tol);
+        Assertions.assertEquals(dist.getNumericalVariance(), ( 10d * 0.5d ) / (0.5d * 0.5d), tol);
 
         dist = new PascalDistribution(25, 0.7);
-        Assert.assertEquals(dist.getNumericalMean(), ( 25d * 0.3d ) / 0.7d, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), ( 25d * 0.3d ) / (0.7d * 0.7d), tol);
+        Assertions.assertEquals(dist.getNumericalMean(), ( 25d * 0.3d ) / 0.7d, tol);
+        Assertions.assertEquals(dist.getNumericalVariance(), ( 25d * 0.3d ) / (0.7d * 0.7d), tol);
     }
 }

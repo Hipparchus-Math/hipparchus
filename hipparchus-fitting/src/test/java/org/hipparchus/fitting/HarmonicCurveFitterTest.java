@@ -21,25 +21,29 @@
  */
 package org.hipparchus.fitting;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import org.hipparchus.analysis.function.HarmonicOscillator;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class HarmonicCurveFitterTest {
     /**
      * Zero points is not enough observed points.
      */
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions1() {
-        HarmonicCurveFitter.create().fit(new WeightedObservedPoints().toList());
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            HarmonicCurveFitter.create().fit(new WeightedObservedPoints().toList());
+        });
     }
 
     @Test
@@ -56,13 +60,13 @@ public class HarmonicCurveFitterTest {
 
         final HarmonicCurveFitter fitter = HarmonicCurveFitter.create();
         final double[] fitted = fitter.fit(points.toList());
-        Assert.assertEquals(a, fitted[0], 1.0e-13);
-        Assert.assertEquals(w, fitted[1], 1.0e-13);
-        Assert.assertEquals(p, MathUtils.normalizeAngle(fitted[2], p), 1e-13);
+        Assertions.assertEquals(a, fitted[0], 1.0e-13);
+        Assertions.assertEquals(w, fitted[1], 1.0e-13);
+        Assertions.assertEquals(p, MathUtils.normalizeAngle(fitted[2], p), 1e-13);
 
         final HarmonicOscillator ff = new HarmonicOscillator(fitted[0], fitted[1], fitted[2]);
         for (double x = -1.0; x < 1.0; x += 0.01) {
-            Assert.assertTrue(FastMath.abs(f.value(x) - ff.value(x)) < 1e-13);
+            Assertions.assertTrue(FastMath.abs(f.value(x) - ff.value(x)) < 1e-13);
         }
     }
 
@@ -81,9 +85,9 @@ public class HarmonicCurveFitterTest {
 
         final HarmonicCurveFitter fitter = HarmonicCurveFitter.create();
         final double[] fitted = fitter.fit(points.toList());
-        Assert.assertEquals(a, fitted[0], 7.6e-4);
-        Assert.assertEquals(w, fitted[1], 2.7e-3);
-        Assert.assertEquals(p, MathUtils.normalizeAngle(fitted[2], p), 1.3e-2);
+        Assertions.assertEquals(a, fitted[0], 7.6e-4);
+        Assertions.assertEquals(w, fitted[1], 2.7e-3);
+        Assertions.assertEquals(p, MathUtils.normalizeAngle(fitted[2], p), 1.3e-2);
     }
 
     @Test
@@ -118,9 +122,9 @@ public class HarmonicCurveFitterTest {
         final HarmonicCurveFitter fitter = HarmonicCurveFitter.create()
             .withStartPoint(new double[] { 0.15, 3.6, 4.5 });
         final double[] fitted = fitter.fit(points.toList());
-        Assert.assertEquals(a, fitted[0], 1.2e-3);
-        Assert.assertEquals(w, fitted[1], 3.3e-3);
-        Assert.assertEquals(p, MathUtils.normalizeAngle(fitted[2], p), 1.7e-2);
+        Assertions.assertEquals(a, fitted[0], 1.2e-3);
+        Assertions.assertEquals(w, fitted[1], 3.3e-3);
+        Assertions.assertEquals(p, MathUtils.normalizeAngle(fitted[2], p), 1.7e-2);
     }
 
     @Test
@@ -160,28 +164,30 @@ public class HarmonicCurveFitterTest {
 
         final HarmonicCurveFitter fitter = HarmonicCurveFitter.create();
         final double[] fitted = fitter.fit(points.toList());
-        Assert.assertEquals(a, fitted[0], 7.6e-4);
-        Assert.assertEquals(w, fitted[1], 3.5e-3);
-        Assert.assertEquals(p, MathUtils.normalizeAngle(fitted[2], p), 1.5e-2);
+        Assertions.assertEquals(a, fitted[0], 7.6e-4);
+        Assertions.assertEquals(w, fitted[1], 3.5e-3);
+        Assertions.assertEquals(p, MathUtils.normalizeAngle(fitted[2], p), 1.5e-2);
     }
 
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testMath844() {
-        final double[] y = { 0, 1, 2, 3, 2, 1,
-                             0, -1, -2, -3, -2, -1,
-                             0, 1, 2, 3, 2, 1,
-                             0, -1, -2, -3, -2, -1,
-                             0, 1, 2, 3, 2, 1, 0 };
-        final List<WeightedObservedPoint> points = new ArrayList<WeightedObservedPoint>();
-        for (int i = 0; i < y.length; i++) {
-            points.add(new WeightedObservedPoint(1, i, y[i]));
-        }
+        assertThrows(MathIllegalStateException.class, () -> {
+            final double[] y = {0, 1, 2, 3, 2, 1,
+                0, -1, -2, -3, -2, -1,
+                0, 1, 2, 3, 2, 1,
+                0, -1, -2, -3, -2, -1,
+                0, 1, 2, 3, 2, 1, 0};
+            final List<WeightedObservedPoint> points = new ArrayList<WeightedObservedPoint>();
+            for (int i = 0; i < y.length; i++) {
+                points.add(new WeightedObservedPoint(1, i, y[i]));
+            }
 
-        // The guesser fails because the function is far from an harmonic
-        // function: It is a triangular periodic function with amplitude 3
-        // and period 12, and all sample points are taken at integer abscissae
-        // so function values all belong to the integer subset {-3, -2, -1, 0,
-        // 1, 2, 3}.
-        new HarmonicCurveFitter.ParameterGuesser(points);
+            // The guesser fails because the function is far from an harmonic
+            // function: It is a triangular periodic function with amplitude 3
+            // and period 12, and all sample points are taken at integer abscissae
+            // so function values all belong to the integer subset {-3, -2, -1, 0,
+            // 1, 2, 3}.
+            new HarmonicCurveFitter.ParameterGuesser(points);
+        });
     }
 }

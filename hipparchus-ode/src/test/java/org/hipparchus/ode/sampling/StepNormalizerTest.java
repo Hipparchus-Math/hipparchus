@@ -30,8 +30,8 @@ import org.hipparchus.ode.TestProblem3;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 public class StepNormalizerTest {
@@ -133,8 +133,8 @@ public class StepNormalizerTest {
             integ.addStepHandler(new StepNormalizer(stepSize, checker, bounds));
         }
         integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
-        Assert.assertEquals(expectedFirst, checker.firstTime, 1.0e-10);
-        Assert.assertEquals(expectedLast,  checker.lastTime,  1.0e-10);
+        Assertions.assertEquals(expectedFirst, checker.firstTime, 1.0e-10);
+        Assertions.assertEquals(expectedLast,  checker.lastTime,  1.0e-10);
     }
 
     private void doTestStepsAtIntegerTimes(final TestProblemAbstract pb,
@@ -151,8 +151,8 @@ public class StepNormalizerTest {
             public int getDimension() { return 1; }
             public double[] computeDerivatives(double t, double[] y) { return y; }
         }, new ODEState(t0, new double[1]), t1);
-        Assert.assertEquals(expectedFirst, checker.firstTime, 1.0e-10);
-        Assert.assertEquals(expectedLast, checker.lastTime,  1.0e-10);
+        Assertions.assertEquals(expectedFirst, checker.firstTime, 1.0e-10);
+        Assertions.assertEquals(expectedLast, checker.lastTime,  1.0e-10);
     }
 
     private static class Checker implements ODEFixedStepHandler {

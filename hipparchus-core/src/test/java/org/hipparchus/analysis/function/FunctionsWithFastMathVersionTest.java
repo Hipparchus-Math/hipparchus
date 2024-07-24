@@ -16,9 +16,6 @@
  */
 package org.hipparchus.analysis.function;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.differentiation.DSFactory;
@@ -26,8 +23,11 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.Gradient;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class FunctionsWithFastMathVersionTest {
 
@@ -198,12 +198,12 @@ public class FunctionsWithFastMathVersionTest {
                 double aRef = FastMath.atan2(y, x);
                 double a    = new Atan2().value(y, x);
                 if (Double.isNaN(aRef)) {
-                    Assert.assertTrue(Double.isNaN(a));
+                    Assertions.assertTrue(Double.isNaN(a));
                 } else if (Double.isInfinite(aRef)) {
-                    Assert.assertTrue(Double.isInfinite(a));
-                    Assert.assertTrue(a * aRef > 0.0);
+                    Assertions.assertTrue(Double.isInfinite(a));
+                    Assertions.assertTrue(a * aRef > 0.0);
                 } else {
-                    Assert.assertEquals(aRef, a, FastMath.ulp(aRef));
+                    Assertions.assertEquals(aRef, a, FastMath.ulp(aRef));
                 }
             }
         }
@@ -219,7 +219,7 @@ public class FunctionsWithFastMathVersionTest {
             checkF0Equality(f, fastMathVersion, Double.POSITIVE_INFINITY);
             checkF0Equality(f, fastMathVersion, Double.NaN);
         } catch (NoSuchMethodException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
     }
 
@@ -228,15 +228,15 @@ public class FunctionsWithFastMathVersionTest {
             double yRef = ((Double) ref.invoke(null, x)).doubleValue();
             double y    = f.value(x);
             if (Double.isNaN(yRef)) {
-                Assert.assertTrue(Double.isNaN(y));
+                Assertions.assertTrue(Double.isNaN(y));
             } else if (Double.isInfinite(yRef)) {
-                Assert.assertTrue(Double.isInfinite(y));
-                Assert.assertTrue(y * yRef > 0.0);
+                Assertions.assertTrue(Double.isInfinite(y));
+                Assertions.assertTrue(y * yRef > 0.0);
             } else {
-                Assert.assertEquals(yRef, y, FastMath.ulp(yRef));
+                Assertions.assertEquals(yRef, y, FastMath.ulp(yRef));
             }
         } catch (InvocationTargetException | IllegalAccessException | IllegalArgumentException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
     }
 
@@ -251,7 +251,7 @@ public class FunctionsWithFastMathVersionTest {
             checkFnEqualities(f, fastMathVersion, Double.POSITIVE_INFINITY);
             checkFnEqualities(f, fastMathVersion, Double.NaN);
         } catch (NoSuchMethodException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
     }
 
@@ -263,16 +263,16 @@ public class FunctionsWithFastMathVersionTest {
             DerivativeStructure y       = f.value(xDS);
             for (int order = 0; order < factory.getCompiler().getOrder(); ++order) {
                 if (Double.isNaN(yRef.getPartialDerivative(order))) {
-                    Assert.assertTrue(Double.isNaN(y.getPartialDerivative(order)));
+                    Assertions.assertTrue(Double.isNaN(y.getPartialDerivative(order)));
                 } else if (Double.isInfinite(yRef.getPartialDerivative(order))) {
-                    Assert.assertTrue(Double.isInfinite(y.getPartialDerivative(order)));
-                    Assert.assertTrue(y.getPartialDerivative(order) * yRef.getPartialDerivative(order) > 0.0);
+                    Assertions.assertTrue(Double.isInfinite(y.getPartialDerivative(order)));
+                    Assertions.assertTrue(y.getPartialDerivative(order) * yRef.getPartialDerivative(order) > 0.0);
                 } else {
-                    Assert.assertEquals(yRef.getPartialDerivative(order), y.getPartialDerivative(order), FastMath.ulp(yRef.getPartialDerivative(order)));
+                    Assertions.assertEquals(yRef.getPartialDerivative(order), y.getPartialDerivative(order), FastMath.ulp(yRef.getPartialDerivative(order)));
                 }
             }
         } catch (InvocationTargetException | IllegalAccessException | IllegalArgumentException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
     }
 
@@ -287,7 +287,7 @@ public class FunctionsWithFastMathVersionTest {
             checkF1Equalities(f, fastMathVersion, Double.POSITIVE_INFINITY);
             checkF1Equalities(f, fastMathVersion, Double.NaN);
         } catch (NoSuchMethodException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
     }
 
@@ -297,15 +297,15 @@ public class FunctionsWithFastMathVersionTest {
             Gradient yRef    = (Gradient) ref.invoke(null, xDS);
             Gradient y       = f.value(xDS);
             if (Double.isNaN(yRef.getPartialDerivative(0))) {
-                Assert.assertTrue(Double.isNaN(y.getPartialDerivative(0)));
+                Assertions.assertTrue(Double.isNaN(y.getPartialDerivative(0)));
             } else if (Double.isInfinite(yRef.getPartialDerivative(0))) {
-                Assert.assertTrue(Double.isInfinite(y.getPartialDerivative(0)));
-                Assert.assertTrue(y.getPartialDerivative(0) * yRef.getPartialDerivative(0) > 0.0);
+                Assertions.assertTrue(Double.isInfinite(y.getPartialDerivative(0)));
+                Assertions.assertTrue(y.getPartialDerivative(0) * yRef.getPartialDerivative(0) > 0.0);
             } else {
-                Assert.assertEquals(yRef.getPartialDerivative(0), y.getPartialDerivative(0), FastMath.ulp(yRef.getPartialDerivative(0)));
+                Assertions.assertEquals(yRef.getPartialDerivative(0), y.getPartialDerivative(0), FastMath.ulp(yRef.getPartialDerivative(0)));
             }
         } catch (InvocationTargetException | IllegalAccessException | IllegalArgumentException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
     }
 

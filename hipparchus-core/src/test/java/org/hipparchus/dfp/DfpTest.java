@@ -22,17 +22,17 @@
 
 package org.hipparchus.dfp;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.hipparchus.CalculusFieldElementAbstractTest;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
 
@@ -48,7 +48,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
     private Dfp snan;
     private Dfp qnan;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         // Some basic setup.  Define some constants and clear the status flags
         field = new DfpField(20);
@@ -60,7 +60,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         ninf.getField().clearIEEEFlags();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         field = null;
         pinf    = null;
@@ -86,40 +86,40 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         b = (b && x.getField().getIEEEFlags() == flags);
 
         if (!b)
-            Assert.assertTrue("assersion failed "+desc+" x = "+x.toString()+" flags = "+x.getField().getIEEEFlags(), b);
+            Assertions.assertTrue(b, "assersion failed "+desc+" x = "+x.toString()+" flags = "+x.getField().getIEEEFlags());
 
         x.getField().clearIEEEFlags();
     }
 
     @Test
     public void testByteConstructor() {
-        Assert.assertEquals("0.", new Dfp(field, (byte) 0).toString());
-        Assert.assertEquals("1.", new Dfp(field, (byte) 1).toString());
-        Assert.assertEquals("-1.", new Dfp(field, (byte) -1).toString());
-        Assert.assertEquals("-128.", new Dfp(field, Byte.MIN_VALUE).toString());
-        Assert.assertEquals("127.", new Dfp(field, Byte.MAX_VALUE).toString());
+        Assertions.assertEquals("0.", new Dfp(field, (byte) 0).toString());
+        Assertions.assertEquals("1.", new Dfp(field, (byte) 1).toString());
+        Assertions.assertEquals("-1.", new Dfp(field, (byte) -1).toString());
+        Assertions.assertEquals("-128.", new Dfp(field, Byte.MIN_VALUE).toString());
+        Assertions.assertEquals("127.", new Dfp(field, Byte.MAX_VALUE).toString());
     }
 
     @Test
     public void testIntConstructor() {
-        Assert.assertEquals("0.", new Dfp(field, 0).toString());
-        Assert.assertEquals("1.", new Dfp(field, 1).toString());
-        Assert.assertEquals("-1.", new Dfp(field, -1).toString());
-        Assert.assertEquals("1234567890.", new Dfp(field, 1234567890).toString());
-        Assert.assertEquals("-1234567890.", new Dfp(field, -1234567890).toString());
-        Assert.assertEquals("-2147483648.", new Dfp(field, Integer.MIN_VALUE).toString());
-        Assert.assertEquals("2147483647.", new Dfp(field, Integer.MAX_VALUE).toString());
+        Assertions.assertEquals("0.", new Dfp(field, 0).toString());
+        Assertions.assertEquals("1.", new Dfp(field, 1).toString());
+        Assertions.assertEquals("-1.", new Dfp(field, -1).toString());
+        Assertions.assertEquals("1234567890.", new Dfp(field, 1234567890).toString());
+        Assertions.assertEquals("-1234567890.", new Dfp(field, -1234567890).toString());
+        Assertions.assertEquals("-2147483648.", new Dfp(field, Integer.MIN_VALUE).toString());
+        Assertions.assertEquals("2147483647.", new Dfp(field, Integer.MAX_VALUE).toString());
     }
 
     @Test
     public void testLongConstructor() {
-        Assert.assertEquals("0.", new Dfp(field, 0l).toString());
-        Assert.assertEquals("1.", new Dfp(field, 1l).toString());
-        Assert.assertEquals("-1.", new Dfp(field, -1l).toString());
-        Assert.assertEquals("1234567890.", new Dfp(field, 1234567890l).toString());
-        Assert.assertEquals("-1234567890.", new Dfp(field, -1234567890l).toString());
-        Assert.assertEquals("-9223372036854775808.", new Dfp(field, Long.MIN_VALUE).toString());
-        Assert.assertEquals("9223372036854775807.", new Dfp(field, Long.MAX_VALUE).toString());
+        Assertions.assertEquals("0.", new Dfp(field, 0l).toString());
+        Assertions.assertEquals("1.", new Dfp(field, 1l).toString());
+        Assertions.assertEquals("-1.", new Dfp(field, -1l).toString());
+        Assertions.assertEquals("1234567890.", new Dfp(field, 1234567890l).toString());
+        Assertions.assertEquals("-1234567890.", new Dfp(field, -1234567890l).toString());
+        Assertions.assertEquals("-9223372036854775808.", new Dfp(field, Long.MIN_VALUE).toString());
+        Assertions.assertEquals("9223372036854775807.", new Dfp(field, Long.MAX_VALUE).toString());
     }
 
     /*
@@ -384,19 +384,19 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
     {
         if (op == "equal")
             if (a.equals(b) != result)
-                Assert.fail("assersion failed.  "+op+" compare #"+num);
+                Assertions.fail("assersion failed.  "+op+" compare #"+num);
 
         if (op == "unequal")
             if (a.unequal(b) != result)
-                Assert.fail("assersion failed.  "+op+" compare #"+num);
+                Assertions.fail("assersion failed.  "+op+" compare #"+num);
 
         if (op == "lessThan")
             if (a.lessThan(b) != result)
-                Assert.fail("assersion failed.  "+op+" compare #"+num);
+                Assertions.fail("assersion failed.  "+op+" compare #"+num);
 
         if (op == "greaterThan")
             if (a.greaterThan(b) != result)
-                Assert.fail("assersion failed.  "+op+" compare #"+num);
+                Assertions.fail("assersion failed.  "+op+" compare #"+num);
     }
 
     @Test
@@ -420,13 +420,13 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         cmptst(field.newDfp("0"), field.newDfp("1e-131072"), "equal", false, 9); // 0 == 1e-131072
         // check flags
         if (field.getIEEEFlags() != 0)
-            Assert.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
+            Assertions.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
 
         cmptst(field.newDfp("0"), field.newDfp("1e-131078"), "equal", false, 10); // 0 == 1e-131078
 
         // check flags  -- underflow should be set
         if (field.getIEEEFlags() != DfpField.FLAG_UNDERFLOW)
-            Assert.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
+            Assertions.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
 
         field.clearIEEEFlags();
 
@@ -457,7 +457,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         // 100000 == 1.0000000000000001
         cmptst(field.newDfp("1e20"), field.newDfp("1.0000000000000001"), "equal", false, 24);
         if (field.getIEEEFlags() != 0)
-            Assert.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
+            Assertions.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
 
         cmptst(field.newDfp("0.000001"), field.newDfp("1e-6"), "equal", true, 25);
 
@@ -508,13 +508,13 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         cmptst(field.newDfp("0"), field.newDfp("1e-131072"), "unequal", true, 9); // 0 == 1e-131072
         // check flags
         if (field.getIEEEFlags() != 0)
-            Assert.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
+            Assertions.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
 
         cmptst(field.newDfp("0"), field.newDfp("1e-131078"), "unequal", true, 10); // 0 == 1e-131078
 
         // check flags  -- underflow should be set
         if (field.getIEEEFlags() != DfpField.FLAG_UNDERFLOW)
-            Assert.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
+            Assertions.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
 
         field.clearIEEEFlags();
 
@@ -545,7 +545,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         // 100000 == 1.0000000000000001
         cmptst(field.newDfp("1e20"), field.newDfp("1.0000000000000001"), "unequal", true, 24);
         if (field.getIEEEFlags() != 0)
-            Assert.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
+            Assertions.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
 
         cmptst(field.newDfp("0.000001"), field.newDfp("1e-6"), "unequal", false, 25);
 
@@ -579,7 +579,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         cmptst(qnan.negate(), qnan, "unequal", false, 52);
 
         if (field.getIEEEFlags() != 0)
-            Assert.fail("assersion failed.  compare unequal flags = "+field.getIEEEFlags());
+            Assertions.fail("assersion failed.  compare unequal flags = "+field.getIEEEFlags());
 
         //
         // Tests for lessThan  -- do it all over again
@@ -599,13 +599,13 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         cmptst(field.newDfp("0"), field.newDfp("1e-131072"), "lessThan", true, 9); // 0 < 1e-131072
         // check flags
         if (field.getIEEEFlags() != 0)
-            Assert.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
+            Assertions.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
 
         cmptst(field.newDfp("0"), field.newDfp("1e-131078"), "lessThan", true, 10); // 0 < 1e-131078
 
         // check flags  -- underflow should be set
         if (field.getIEEEFlags() != DfpField.FLAG_UNDERFLOW)
-            Assert.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
+            Assertions.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
         field.clearIEEEFlags();
 
         cmptst(field.newDfp("0"), field.newDfp("1e+131071"), "lessThan", true, 11); // 0 < 1e+131071
@@ -635,7 +635,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         // 100000 < 1.0000000000000001
         cmptst(field.newDfp("1e20"), field.newDfp("1.0000000000000001"), "lessThan", false, 24);
         if (field.getIEEEFlags() != 0)
-            Assert.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
+            Assertions.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
 
         cmptst(field.newDfp("0.000001"), field.newDfp("1e-6"), "lessThan", false, 25);
 
@@ -669,7 +669,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
 
         //lessThan compares with nans should raise FLAG_INVALID
         if (field.getIEEEFlags() != DfpField.FLAG_INVALID)
-            Assert.fail("assersion failed.  compare lessThan flags = "+field.getIEEEFlags());
+            Assertions.fail("assersion failed.  compare lessThan flags = "+field.getIEEEFlags());
         field.clearIEEEFlags();
 
         //
@@ -690,13 +690,13 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         cmptst(field.newDfp("0"), field.newDfp("1e-131072"), "greaterThan", false, 9); // 0 > 1e-131072
         // check flags
         if (field.getIEEEFlags() != 0)
-            Assert.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
+            Assertions.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
 
         cmptst(field.newDfp("0"), field.newDfp("1e-131078"), "greaterThan", false, 10); // 0 > 1e-131078
 
         // check flags  -- underflow should be set
         if (field.getIEEEFlags() != DfpField.FLAG_UNDERFLOW)
-            Assert.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
+            Assertions.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
         field.clearIEEEFlags();
 
         cmptst(field.newDfp("0"), field.newDfp("1e+131071"), "greaterThan", false, 11); // 0 > 1e+131071
@@ -726,7 +726,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         // 100000 > 1.0000000000000001
         cmptst(field.newDfp("1e20"), field.newDfp("1.0000000000000001"), "greaterThan", true, 24);
         if (field.getIEEEFlags() != 0)
-            Assert.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
+            Assertions.fail("assersion failed.  compare flags = "+field.getIEEEFlags());
 
         cmptst(field.newDfp("0.000001"), field.newDfp("1e-6"), "greaterThan", false, 25);
 
@@ -760,7 +760,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
 
         //greaterThan compares with nans should raise FLAG_INVALID
         if (field.getIEEEFlags() != DfpField.FLAG_INVALID)
-            Assert.fail("assersion failed.  compare greaterThan flags = "+field.getIEEEFlags());
+            Assertions.fail("assersion failed.  compare greaterThan flags = "+field.getIEEEFlags());
         field.clearIEEEFlags();
     }
 
@@ -1229,15 +1229,15 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
     @Test
     public void testToString()
     {
-        Assert.assertEquals("toString #1", "Infinity", pinf.toString());
-        Assert.assertEquals("toString #2", "-Infinity", ninf.toString());
-        Assert.assertEquals("toString #3", "NaN", nan.toString());
-        Assert.assertEquals("toString #4", "NaN", field.newDfp((byte) 1, Dfp.QNAN).toString());
-        Assert.assertEquals("toString #5", "NaN", field.newDfp((byte) 1, Dfp.SNAN).toString());
-        Assert.assertEquals("toString #6", "1.2300000000000000e100", field.newDfp("1.23e100").toString());
-        Assert.assertEquals("toString #7", "-1.2300000000000000e100", field.newDfp("-1.23e100").toString());
-        Assert.assertEquals("toString #8", "12345678.1234", field.newDfp("12345678.1234").toString());
-        Assert.assertEquals("toString #9", "0.00001234", field.newDfp("0.00001234").toString());
+        Assertions.assertEquals("Infinity", pinf.toString(), "toString #1");
+        Assertions.assertEquals("-Infinity", ninf.toString(), "toString #2");
+        Assertions.assertEquals("NaN", nan.toString(), "toString #3");
+        Assertions.assertEquals("NaN", field.newDfp((byte) 1, Dfp.QNAN).toString(), "toString #4");
+        Assertions.assertEquals("NaN", field.newDfp((byte) 1, Dfp.SNAN).toString(), "toString #5");
+        Assertions.assertEquals("1.2300000000000000e100", field.newDfp("1.23e100").toString(), "toString #6");
+        Assertions.assertEquals("-1.2300000000000000e100", field.newDfp("-1.23e100").toString(), "toString #7");
+        Assertions.assertEquals("12345678.1234", field.newDfp("12345678.1234").toString(), "toString #8");
+        Assertions.assertEquals("0.00001234", field.newDfp("0.00001234").toString(), "toString #9");
     }
 
     @Override
@@ -1450,22 +1450,22 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
     @Test
     public void testIntValue()
     {
-        Assert.assertEquals("intValue #1", 1234, field.newDfp("1234").intValue());
-        Assert.assertEquals("intValue #2", -1234, field.newDfp("-1234").intValue());
-        Assert.assertEquals("intValue #3", 1234, field.newDfp("1234.5").intValue());
-        Assert.assertEquals("intValue #4", 1235, field.newDfp("1234.500001").intValue());
-        Assert.assertEquals("intValue #5", 2147483647, field.newDfp("1e1000").intValue());
-        Assert.assertEquals("intValue #6", -2147483648, field.newDfp("-1e1000").intValue());
+        Assertions.assertEquals(1234, field.newDfp("1234").intValue(), "intValue #1");
+        Assertions.assertEquals(-1234, field.newDfp("-1234").intValue(), "intValue #2");
+        Assertions.assertEquals(1234, field.newDfp("1234.5").intValue(), "intValue #3");
+        Assertions.assertEquals(1235, field.newDfp("1234.500001").intValue(), "intValue #4");
+        Assertions.assertEquals(2147483647, field.newDfp("1e1000").intValue(), "intValue #5");
+        Assertions.assertEquals(-2147483648, field.newDfp("-1e1000").intValue(), "intValue #6");
     }
 
     @Test
     public void testLog10K()
     {
-        Assert.assertEquals("log10K #1", 1, field.newDfp("123456").log10K());
-        Assert.assertEquals("log10K #2", 2, field.newDfp("123456789").log10K());
-        Assert.assertEquals("log10K #3", 0, field.newDfp("2").log10K());
-        Assert.assertEquals("log10K #3", 0, field.newDfp("1").log10K());
-        Assert.assertEquals("log10K #4", -1, field.newDfp("0.1").log10K());
+        Assertions.assertEquals(1, field.newDfp("123456").log10K(), "log10K #1");
+        Assertions.assertEquals(2, field.newDfp("123456789").log10K(), "log10K #2");
+        Assertions.assertEquals(0, field.newDfp("2").log10K(), "log10K #3");
+        Assertions.assertEquals(0, field.newDfp("1").log10K(), "log10K #3");
+        Assertions.assertEquals(-1, field.newDfp("0.1").log10K(), "log10K #4");
     }
 
     @Test
@@ -1486,23 +1486,23 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
     public void testLog10()
     {
 
-        Assert.assertEquals("log10 #1", 1, field.newDfp("12").intLog10());
-        Assert.assertEquals("log10 #2", 2, field.newDfp("123").intLog10());
-        Assert.assertEquals("log10 #3", 3, field.newDfp("1234").intLog10());
-        Assert.assertEquals("log10 #4", 4, field.newDfp("12345").intLog10());
-        Assert.assertEquals("log10 #5", 5, field.newDfp("123456").intLog10());
-        Assert.assertEquals("log10 #6", 6, field.newDfp("1234567").intLog10());
-        Assert.assertEquals("log10 #6", 7, field.newDfp("12345678").intLog10());
-        Assert.assertEquals("log10 #7", 8, field.newDfp("123456789").intLog10());
-        Assert.assertEquals("log10 #8", 9, field.newDfp("1234567890").intLog10());
-        Assert.assertEquals("log10 #9", 10, field.newDfp("12345678901").intLog10());
-        Assert.assertEquals("log10 #10", 11, field.newDfp("123456789012").intLog10());
-        Assert.assertEquals("log10 #11", 12, field.newDfp("1234567890123").intLog10());
+        Assertions.assertEquals(1, field.newDfp("12").intLog10(), "log10 #1");
+        Assertions.assertEquals(2, field.newDfp("123").intLog10(), "log10 #2");
+        Assertions.assertEquals(3, field.newDfp("1234").intLog10(), "log10 #3");
+        Assertions.assertEquals(4, field.newDfp("12345").intLog10(), "log10 #4");
+        Assertions.assertEquals(5, field.newDfp("123456").intLog10(), "log10 #5");
+        Assertions.assertEquals(6, field.newDfp("1234567").intLog10(), "log10 #6");
+        Assertions.assertEquals(7, field.newDfp("12345678").intLog10(), "log10 #6");
+        Assertions.assertEquals(8, field.newDfp("123456789").intLog10(), "log10 #7");
+        Assertions.assertEquals(9, field.newDfp("1234567890").intLog10(), "log10 #8");
+        Assertions.assertEquals(10, field.newDfp("12345678901").intLog10(), "log10 #9");
+        Assertions.assertEquals(11, field.newDfp("123456789012").intLog10(), "log10 #10");
+        Assertions.assertEquals(12, field.newDfp("1234567890123").intLog10(), "log10 #11");
 
-        Assert.assertEquals("log10 #12", 0, field.newDfp("2").intLog10());
-        Assert.assertEquals("log10 #13", 0, field.newDfp("1").intLog10());
-        Assert.assertEquals("log10 #14", -1, field.newDfp("0.12").intLog10());
-        Assert.assertEquals("log10 #15", -2, field.newDfp("0.012").intLog10());
+        Assertions.assertEquals(0, field.newDfp("2").intLog10(), "log10 #12");
+        Assertions.assertEquals(0, field.newDfp("1").intLog10(), "log10 #13");
+        Assertions.assertEquals(-1, field.newDfp("0.12").intLog10(), "log10 #14");
+        Assertions.assertEquals(-2, field.newDfp("0.012").intLog10(), "log10 #15");
     }
 
     @Test
@@ -1605,90 +1605,90 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
     @Test
     public void testIssue567() {
         DfpField field = new DfpField(100);
-        Assert.assertEquals(0.0, field.getZero().toDouble(), Precision.SAFE_MIN);
-        Assert.assertEquals(0.0, field.newDfp(0.0).toDouble(), Precision.SAFE_MIN);
-        Assert.assertEquals(-1, FastMath.copySign(1, field.newDfp(-0.0).toDouble()), Precision.EPSILON);
-        Assert.assertEquals(+1, FastMath.copySign(1, field.newDfp(+0.0).toDouble()), Precision.EPSILON);
+        Assertions.assertEquals(0.0, field.getZero().toDouble(), Precision.SAFE_MIN);
+        Assertions.assertEquals(0.0, field.newDfp(0.0).toDouble(), Precision.SAFE_MIN);
+        Assertions.assertEquals(-1, FastMath.copySign(1, field.newDfp(-0.0).toDouble()), Precision.EPSILON);
+        Assertions.assertEquals(+1, FastMath.copySign(1, field.newDfp(+0.0).toDouble()), Precision.EPSILON);
     }
 
     @Test
     public void testIsZero() {
-        Assert.assertTrue(field.getZero().isZero());
-        Assert.assertTrue(field.getZero().negate().isZero());
-        Assert.assertTrue(field.newDfp(+0.0).isZero());
-        Assert.assertTrue(field.newDfp(-0.0).isZero());
-        Assert.assertFalse(field.newDfp(1.0e-90).isZero());
-        Assert.assertFalse(nan.isZero());
-        Assert.assertFalse(nan.negate().isZero());
-        Assert.assertFalse(pinf.isZero());
-        Assert.assertFalse(pinf.negate().isZero());
-        Assert.assertFalse(ninf.isZero());
-        Assert.assertFalse(ninf.negate().isZero());
+        Assertions.assertTrue(field.getZero().isZero());
+        Assertions.assertTrue(field.getZero().negate().isZero());
+        Assertions.assertTrue(field.newDfp(+0.0).isZero());
+        Assertions.assertTrue(field.newDfp(-0.0).isZero());
+        Assertions.assertFalse(field.newDfp(1.0e-90).isZero());
+        Assertions.assertFalse(nan.isZero());
+        Assertions.assertFalse(nan.negate().isZero());
+        Assertions.assertFalse(pinf.isZero());
+        Assertions.assertFalse(pinf.negate().isZero());
+        Assertions.assertFalse(ninf.isZero());
+        Assertions.assertFalse(ninf.negate().isZero());
     }
 
     @Test
     public void testSignPredicates() {
 
-        Assert.assertTrue(field.getZero().negativeOrNull());
-        Assert.assertTrue(field.getZero().positiveOrNull());
-        Assert.assertFalse(field.getZero().strictlyNegative());
-        Assert.assertFalse(field.getZero().strictlyPositive());
+        Assertions.assertTrue(field.getZero().negativeOrNull());
+        Assertions.assertTrue(field.getZero().positiveOrNull());
+        Assertions.assertFalse(field.getZero().strictlyNegative());
+        Assertions.assertFalse(field.getZero().strictlyPositive());
 
-        Assert.assertTrue(field.getZero().negate().negativeOrNull());
-        Assert.assertTrue(field.getZero().negate().positiveOrNull());
-        Assert.assertFalse(field.getZero().negate().strictlyNegative());
-        Assert.assertFalse(field.getZero().negate().strictlyPositive());
+        Assertions.assertTrue(field.getZero().negate().negativeOrNull());
+        Assertions.assertTrue(field.getZero().negate().positiveOrNull());
+        Assertions.assertFalse(field.getZero().negate().strictlyNegative());
+        Assertions.assertFalse(field.getZero().negate().strictlyPositive());
 
-        Assert.assertFalse(field.getOne().negativeOrNull());
-        Assert.assertTrue(field.getOne().positiveOrNull());
-        Assert.assertFalse(field.getOne().strictlyNegative());
-        Assert.assertTrue(field.getOne().strictlyPositive());
+        Assertions.assertFalse(field.getOne().negativeOrNull());
+        Assertions.assertTrue(field.getOne().positiveOrNull());
+        Assertions.assertFalse(field.getOne().strictlyNegative());
+        Assertions.assertTrue(field.getOne().strictlyPositive());
 
-        Assert.assertTrue(field.getOne().negate().negativeOrNull());
-        Assert.assertFalse(field.getOne().negate().positiveOrNull());
-        Assert.assertTrue(field.getOne().negate().strictlyNegative());
-        Assert.assertFalse(field.getOne().negate().strictlyPositive());
+        Assertions.assertTrue(field.getOne().negate().negativeOrNull());
+        Assertions.assertFalse(field.getOne().negate().positiveOrNull());
+        Assertions.assertTrue(field.getOne().negate().strictlyNegative());
+        Assertions.assertFalse(field.getOne().negate().strictlyPositive());
 
-        Assert.assertFalse(nan.negativeOrNull());
-        Assert.assertFalse(nan.positiveOrNull());
-        Assert.assertFalse(nan.strictlyNegative());
-        Assert.assertFalse(nan.strictlyPositive());
+        Assertions.assertFalse(nan.negativeOrNull());
+        Assertions.assertFalse(nan.positiveOrNull());
+        Assertions.assertFalse(nan.strictlyNegative());
+        Assertions.assertFalse(nan.strictlyPositive());
 
-        Assert.assertFalse(nan.negate().negativeOrNull());
-        Assert.assertFalse(nan.negate().positiveOrNull());
-        Assert.assertFalse(nan.negate().strictlyNegative());
-        Assert.assertFalse(nan.negate().strictlyPositive());
+        Assertions.assertFalse(nan.negate().negativeOrNull());
+        Assertions.assertFalse(nan.negate().positiveOrNull());
+        Assertions.assertFalse(nan.negate().strictlyNegative());
+        Assertions.assertFalse(nan.negate().strictlyPositive());
 
-        Assert.assertFalse(pinf.negativeOrNull());
-        Assert.assertTrue(pinf.positiveOrNull());
-        Assert.assertFalse(pinf.strictlyNegative());
-        Assert.assertTrue(pinf.strictlyPositive());
+        Assertions.assertFalse(pinf.negativeOrNull());
+        Assertions.assertTrue(pinf.positiveOrNull());
+        Assertions.assertFalse(pinf.strictlyNegative());
+        Assertions.assertTrue(pinf.strictlyPositive());
 
-        Assert.assertTrue(pinf.negate().negativeOrNull());
-        Assert.assertFalse(pinf.negate().positiveOrNull());
-        Assert.assertTrue(pinf.negate().strictlyNegative());
-        Assert.assertFalse(pinf.negate().strictlyPositive());
+        Assertions.assertTrue(pinf.negate().negativeOrNull());
+        Assertions.assertFalse(pinf.negate().positiveOrNull());
+        Assertions.assertTrue(pinf.negate().strictlyNegative());
+        Assertions.assertFalse(pinf.negate().strictlyPositive());
 
-        Assert.assertTrue(ninf.negativeOrNull());
-        Assert.assertFalse(ninf.positiveOrNull());
-        Assert.assertTrue(ninf.strictlyNegative());
-        Assert.assertFalse(ninf.strictlyPositive());
+        Assertions.assertTrue(ninf.negativeOrNull());
+        Assertions.assertFalse(ninf.positiveOrNull());
+        Assertions.assertTrue(ninf.strictlyNegative());
+        Assertions.assertFalse(ninf.strictlyPositive());
 
-        Assert.assertFalse(ninf.negate().negativeOrNull());
-        Assert.assertTrue(ninf.negate().positiveOrNull());
-        Assert.assertFalse(ninf.negate().strictlyNegative());
-        Assert.assertTrue(ninf.negate().strictlyPositive());
+        Assertions.assertFalse(ninf.negate().negativeOrNull());
+        Assertions.assertTrue(ninf.negate().positiveOrNull());
+        Assertions.assertFalse(ninf.negate().strictlyNegative());
+        Assertions.assertTrue(ninf.negate().strictlyPositive());
 
     }
 
     @Test
     public void testSpecialConstructors() {
-        Assert.assertEquals(ninf, field.newDfp(Double.NEGATIVE_INFINITY));
-        Assert.assertEquals(ninf, field.newDfp("-Infinity"));
-        Assert.assertEquals(pinf, field.newDfp(Double.POSITIVE_INFINITY));
-        Assert.assertEquals(pinf, field.newDfp("Infinity"));
-        Assert.assertTrue(field.newDfp(Double.NaN).isNaN());
-        Assert.assertTrue(field.newDfp("NaN").isNaN());
+        Assertions.assertEquals(ninf, field.newDfp(Double.NEGATIVE_INFINITY));
+        Assertions.assertEquals(ninf, field.newDfp("-Infinity"));
+        Assertions.assertEquals(pinf, field.newDfp(Double.POSITIVE_INFINITY));
+        Assertions.assertEquals(pinf, field.newDfp("Infinity"));
+        Assertions.assertTrue(field.newDfp(Double.NaN).isNaN());
+        Assertions.assertTrue(field.newDfp("NaN").isNaN());
     }
 
     @Test
@@ -1701,7 +1701,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
             y = y.multiply(10);
             h = h.multiply(10);
         }
-        Assert.assertEquals(h, x.hypot(y));
+        Assertions.assertEquals(h, x.hypot(y));
     }
 
     @Test
@@ -1712,26 +1712,26 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
             final double xPlus  = 1.01 * x;
             final Dfp dfpMinus  = field.newDfp(xMinus);
             final Dfp dfpPlus   = field.newDfp(xPlus);
-            Assert.assertEquals(FastMath.getExponent(xMinus), dfpMinus.getExponent());
-            Assert.assertEquals(FastMath.getExponent(xPlus),  dfpPlus.getExponent());
+            Assertions.assertEquals(FastMath.getExponent(xMinus), dfpMinus.getExponent());
+            Assertions.assertEquals(FastMath.getExponent(xPlus),  dfpPlus.getExponent());
         }
     }
 
     @Test
     public void testGetExponentSpecialCases() {
-        Assert.assertEquals(-435412, field.newDfp(0).getExponent());
-        Assert.assertEquals(0, field.newDfp(1).getExponent());
-        Assert.assertEquals(1, field.newDfp(2).getExponent());
-        Assert.assertEquals(435411, field.newDfp(Double.NaN).getExponent());
-        Assert.assertEquals(435411, field.newDfp(Double.POSITIVE_INFINITY).getExponent());
-        Assert.assertEquals(435411, field.newDfp(Double.NEGATIVE_INFINITY).getExponent());
+        Assertions.assertEquals(-435412, field.newDfp(0).getExponent());
+        Assertions.assertEquals(0, field.newDfp(1).getExponent());
+        Assertions.assertEquals(1, field.newDfp(2).getExponent());
+        Assertions.assertEquals(435411, field.newDfp(Double.NaN).getExponent());
+        Assertions.assertEquals(435411, field.newDfp(Double.POSITIVE_INFINITY).getExponent());
+        Assertions.assertEquals(435411, field.newDfp(Double.NEGATIVE_INFINITY).getExponent());
     }
 
     @Test
     public void testGetExponentAutonomous() {
         for (int i = -435411; i < 435411; i += 217) {
             final Dfp x = field.newDfp(2).pow(i).multiply(1.1);
-            Assert.assertEquals(i, x.getExponent());
+            Assertions.assertEquals(i, x.getExponent());
         }
     }
 
@@ -1742,19 +1742,19 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         Dfp var5 = var1.newDfp(0L);
 
         // Checks the contract:  equals-hashcode on var5 and var6
-        Assert.assertTrue(var5.equals(var6) ? var5.hashCode() == var6.hashCode() : true);
+        Assertions.assertTrue(var5.equals(var6) ? var5.hashCode() == var6.hashCode() : true);
     }
 
     @Test
     public void testZero() {
         Dfp zero = new DfpField(15).getZero();
-        Assert.assertEquals(0.0, zero.toDouble(), 1.0e-15);
+        Assertions.assertEquals(0.0, zero.toDouble(), 1.0e-15);
     }
 
     @Test
     public void testOne() {
         Dfp one = new DfpField(15).getOne();
-        Assert.assertEquals(1.0, one.toDouble(), 1.0e-15);
+        Assertions.assertEquals(1.0, one.toDouble(), 1.0e-15);
     }
 
     @Test
@@ -1763,7 +1763,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             for (double x = 0.1; x < 1.0; x += 0.001) {
                 Dfp value = new Dfp(field, x);
-                Assert.assertEquals(FastMath.toDegrees(x), value.toDegrees().getReal(), epsilon);
+                Assertions.assertEquals(FastMath.toDegrees(x), value.toDegrees().getReal(), epsilon);
             }
         }
     }
@@ -1774,7 +1774,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             for (double x = 0.1; x < 1.0; x += 0.001) {
                 Dfp value = new Dfp(field, x);
-                Assert.assertEquals(FastMath.toRadians(x), value.toRadians().getReal(), epsilon);
+                Assertions.assertEquals(FastMath.toRadians(x), value.toRadians().getReal(), epsilon);
             }
         }
     }
@@ -1785,7 +1785,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
             Dfp value = field.newDfp("x");
             Dfp rebuilt = value.toDegrees().toRadians();
             Dfp zero = rebuilt.subtract(value);
-            Assert.assertEquals(zero.getReal(), 0, 3.0e-16);
+            Assertions.assertEquals(0, zero.getReal(), 3.0e-16);
         }
     }
 
@@ -1801,16 +1801,16 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
 
         // despite we have created numerous DfpField instances,
         // there should be only one field for each precision
-        Assert.assertEquals(decimalDigits.length, map.size());
+        Assertions.assertEquals(decimalDigits.length, map.size());
         DfpField first = map.entrySet().iterator().next().getKey();
-        Assert.assertTrue(first.equals(first));
-        Assert.assertFalse(first.equals(Binary64Field.getInstance()));
+        Assertions.assertEquals(first, first);
+        Assertions.assertNotEquals(first, Binary64Field.getInstance());
 
     }
 
     @Test
     public void testPi() {
-        Assert.assertEquals("3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117",
+        Assertions.assertEquals("3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117",
                             new DfpField(100).newDfp(1.0).getPi().toString());
     }
 
@@ -1819,21 +1819,21 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         DfpField f10A = new DfpField(10);
         DfpField f10B = new DfpField(10);
         DfpField f50  = new DfpField(50);
-        Assert.assertNotEquals(f10A, f50);
-        Assert.assertEquals(f10A, f10B);
+        Assertions.assertNotEquals(f10A, f50);
+        Assertions.assertEquals(f10A, f10B);
         f10B.setRoundingMode(DfpField.RoundingMode.ROUND_DOWN);
-        Assert.assertNotEquals(f10A, f10B);
+        Assertions.assertNotEquals(f10A, f10B);
         f10B.setRoundingMode(DfpField.RoundingMode.ROUND_HALF_EVEN);
-        Assert.assertEquals(f10A, f10B);
+        Assertions.assertEquals(f10A, f10B);
         f10B.setIEEEFlags(DfpField.FLAG_UNDERFLOW | DfpField.FLAG_OVERFLOW);
-        Assert.assertNotEquals(f10A.getIEEEFlags(), f10B.getIEEEFlags());
-        Assert.assertEquals(f10A, f10B);
+        Assertions.assertNotEquals(f10A.getIEEEFlags(), f10B.getIEEEFlags());
+        Assertions.assertEquals(f10A, f10B);
     }
 
     @Test
     public void testRunTimeClass() {
         DfpField field = new DfpField(15);
-        Assert.assertEquals(Dfp.class, field.getRuntimeClass());
+        Assertions.assertEquals(Dfp.class, field.getRuntimeClass());
     }
 
     @Override
@@ -1848,7 +1848,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         DfpField field13 = new DfpField(13);
         DfpField field16 = new DfpField(16); // in fact 13, 14, 15 and 16 decimal digits are all similar to 4 digits in radix 10000
         Dfp dfp = field13.newDfp(1.25);
-        Assert.assertSame(dfp, dfp.newInstance(field16, DfpField.RoundingMode.ROUND_HALF_EVEN));
+        Assertions.assertSame(dfp, dfp.newInstance(field16, DfpField.RoundingMode.ROUND_HALF_EVEN));
     }
 
     @Test
@@ -1859,14 +1859,14 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
 
         checkConvert(field16, "1.25", field24, "1.25", null);
 
-        Assert.assertTrue(field16.newDfp(-1).sqrt().newInstance(field24, null).isNaN());
-        Assert.assertTrue(field16.newDfp().reciprocal().newInstance(field24, null).isInfinite());
+        Assertions.assertTrue(field16.newDfp(-1).sqrt().newInstance(field24, null).isNaN());
+        Assertions.assertTrue(field16.newDfp().reciprocal().newInstance(field24, null).isInfinite());
     }
 
     @Test
     public void testUlpdDfpA() {
-        Assert.assertEquals(1.0e-36, new DfpField(40).getOne().ulp().getReal(), 1.0e-51);
-        Assert.assertEquals(1.0e-40, new DfpField(41).getOne().ulp().getReal(), 1.0e-55);
+        Assertions.assertEquals(1.0e-36, new DfpField(40).getOne().ulp().getReal(), 1.0e-51);
+        Assertions.assertEquals(1.0e-40, new DfpField(41).getOne().ulp().getReal(), 1.0e-55);
     }
 
     @Test
@@ -1874,8 +1874,8 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         DfpField field = new DfpField(41);
         Dfp one = field.getOne();
         Dfp ulp = one.ulp();
-        Assert.assertTrue(one.add(ulp).greaterThan(one));
-        Assert.assertFalse(one.add(ulp.divide(2)).greaterThan(one));
+        Assertions.assertTrue(one.add(ulp).greaterThan(one));
+        Assertions.assertFalse(one.add(ulp.divide(2)).greaterThan(one));
     }
 
     @Test
@@ -1997,8 +1997,8 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
         checkConvert(field24, "9999.99999999999950000000", field16, "9999.999999999999", DfpField.RoundingMode.ROUND_HALF_ODD);
         checkConvert(field24, "9999.99999999999950000001", field16, "10000.", DfpField.RoundingMode.ROUND_HALF_ODD);
 
-        Assert.assertTrue(field24.newDfp(-1).sqrt().newInstance(field16, DfpField.RoundingMode.ROUND_HALF_EVEN).isNaN());
-        Assert.assertTrue(field24.newDfp().reciprocal().newInstance(field16, DfpField.RoundingMode.ROUND_HALF_EVEN).isInfinite());
+        Assertions.assertTrue(field24.newDfp(-1).sqrt().newInstance(field16, DfpField.RoundingMode.ROUND_HALF_EVEN).isNaN());
+        Assertions.assertTrue(field24.newDfp().reciprocal().newInstance(field16, DfpField.RoundingMode.ROUND_HALF_EVEN).isInfinite());
 
     }
 
@@ -2007,7 +2007,7 @@ public class DfpTest extends CalculusFieldElementAbstractTest<Dfp> {
                             DfpField.RoundingMode rmode) {
         Dfp original  = originalField.newDfp(originalValue);
         Dfp converted = original.newInstance(targetField, rmode);
-        Assert.assertEquals(targetValue, converted.toString());
+        Assertions.assertEquals(targetValue, converted.toString());
     }
 
 }

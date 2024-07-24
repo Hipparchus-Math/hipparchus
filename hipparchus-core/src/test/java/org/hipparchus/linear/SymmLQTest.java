@@ -21,6 +21,8 @@
  */
 package org.hipparchus.linear;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Arrays;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -28,8 +30,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.IterationEvent;
 import org.hipparchus.util.IterationListener;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class SymmLQTest {
 
@@ -115,8 +117,8 @@ public class SymmLQTest {
         }
         final double enorm = x.subtract(xtrue).getNorm() / xtrue.getNorm();
         final double etol = 1E-5;
-        Assert.assertTrue("enorm=" + enorm + ", " +
-        solver.getIterationManager().getIterations(), enorm <= etol);
+        Assertions.assertTrue(enorm <= etol, "enorm=" + enorm + ", " +
+        solver.getIterationManager().getIterations());
     }
 
     @Test
@@ -219,33 +221,39 @@ public class SymmLQTest {
         saundersTest(50, true, true, 0.25, 0.10);
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testNonSquareOperator() {
-        final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 3);
-        final IterativeLinearSolver solver;
-        solver = new SymmLQ(10, 0., false);
-        final ArrayRealVector b = new ArrayRealVector(a.getRowDimension());
-        final ArrayRealVector x = new ArrayRealVector(a.getColumnDimension());
-        solver.solve(a, b, x);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 3);
+            final IterativeLinearSolver solver;
+            solver = new SymmLQ(10, 0., false);
+            final ArrayRealVector b = new ArrayRealVector(a.getRowDimension());
+            final ArrayRealVector x = new ArrayRealVector(a.getColumnDimension());
+            solver.solve(a, b, x);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testDimensionMismatchRightHandSide() {
-        final Array2DRowRealMatrix a = new Array2DRowRealMatrix(3, 3);
-        final IterativeLinearSolver solver;
-        solver = new SymmLQ(10, 0., false);
-        final ArrayRealVector b = new ArrayRealVector(2);
-        solver.solve(a, b);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Array2DRowRealMatrix a = new Array2DRowRealMatrix(3, 3);
+            final IterativeLinearSolver solver;
+            solver = new SymmLQ(10, 0., false);
+            final ArrayRealVector b = new ArrayRealVector(2);
+            solver.solve(a, b);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testDimensionMismatchSolution() {
-        final Array2DRowRealMatrix a = new Array2DRowRealMatrix(3, 3);
-        final IterativeLinearSolver solver;
-        solver = new SymmLQ(10, 0., false);
-        final ArrayRealVector b = new ArrayRealVector(3);
-        final ArrayRealVector x = new ArrayRealVector(2);
-        solver.solve(a, b, x);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Array2DRowRealMatrix a = new Array2DRowRealMatrix(3, 3);
+            final IterativeLinearSolver solver;
+            solver = new SymmLQ(10, 0., false);
+            final ArrayRealVector b = new ArrayRealVector(3);
+            final ArrayRealVector x = new ArrayRealVector(2);
+            solver.solve(a, b, x);
+        });
     }
 
     @Test
@@ -266,7 +274,7 @@ public class SymmLQTest {
                 final double expected = ainv.getEntry(i, j);
                 final double delta = 1E-6 * FastMath.abs(expected);
                 final String msg = String.format("entry[%d][%d]", i, j);
-                Assert.assertEquals(msg, expected, actual, delta);
+                Assertions.assertEquals(expected, actual, delta, msg);
             }
         }
     }
@@ -286,13 +294,13 @@ public class SymmLQTest {
             final RealVector x0 = new ArrayRealVector(n);
             x0.set(1.);
             final RealVector x = solver.solveInPlace(a, b, x0);
-            Assert.assertSame("x should be a reference to x0", x0, x);
+            Assertions.assertSame(x0, x, "x should be a reference to x0");
             for (int i = 0; i < n; i++) {
                 final double actual = x.getEntry(i);
                 final double expected = ainv.getEntry(i, j);
                 final double delta = 1E-6 * FastMath.abs(expected);
                 final String msg = String.format("entry[%d][%d)", i, j);
-                Assert.assertEquals(msg, expected, actual, delta);
+                Assertions.assertEquals(expected, actual, delta, msg);
             }
         }
     }
@@ -312,103 +320,109 @@ public class SymmLQTest {
             final RealVector x0 = new ArrayRealVector(n);
             x0.set(1.);
             final RealVector x = solver.solve(a, b, x0);
-            Assert.assertNotSame("x should not be a reference to x0", x0, x);
+            Assertions.assertNotSame(x0, x, "x should not be a reference to x0");
             for (int i = 0; i < n; i++) {
                 final double actual = x.getEntry(i);
                 final double expected = ainv.getEntry(i, j);
                 final double delta = 1E-6 * FastMath.abs(expected);
                 final String msg = String.format("entry[%d][%d]", i, j);
-                Assert.assertEquals(msg, expected, actual, delta);
-                Assert.assertEquals(msg, x0.getEntry(i), 1., Math.ulp(1.));
+                Assertions.assertEquals(expected, actual, delta, msg);
+                Assertions.assertEquals(1., x0.getEntry(i), Math.ulp(1.), msg);
             }
         }
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testNonSquarePreconditioner() {
-        final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
-        final RealLinearOperator m = new RealLinearOperator() {
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
+            final RealLinearOperator m = new RealLinearOperator() {
 
-            @Override
-            public RealVector operate(final RealVector x) {
-                throw new UnsupportedOperationException();
-            }
+                @Override
+                public RealVector operate(final RealVector x) {
+                    throw new UnsupportedOperationException();
+                }
 
-            @Override
-            public int getRowDimension() {
-                return 2;
-            }
+                @Override
+                public int getRowDimension() {
+                    return 2;
+                }
 
-            @Override
-            public int getColumnDimension() {
-                return 3;
-            }
-        };
-        final PreconditionedIterativeLinearSolver solver;
-        solver = new SymmLQ(10, 0., false);
-        final ArrayRealVector b = new ArrayRealVector(a.getRowDimension());
-        solver.solve(a, m, b);
+                @Override
+                public int getColumnDimension() {
+                    return 3;
+                }
+            };
+            final PreconditionedIterativeLinearSolver solver;
+            solver = new SymmLQ(10, 0., false);
+            final ArrayRealVector b = new ArrayRealVector(a.getRowDimension());
+            solver.solve(a, m, b);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testMismatchedOperatorDimensions() {
-        final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
-        final RealLinearOperator m = new RealLinearOperator() {
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
+            final RealLinearOperator m = new RealLinearOperator() {
 
-            @Override
-            public RealVector operate(final RealVector x) {
-                throw new UnsupportedOperationException();
-            }
+                @Override
+                public RealVector operate(final RealVector x) {
+                    throw new UnsupportedOperationException();
+                }
 
-            @Override
-            public int getRowDimension() {
-                return 3;
-            }
+                @Override
+                public int getRowDimension() {
+                    return 3;
+                }
 
-            @Override
-            public int getColumnDimension() {
-                return 3;
-            }
-        };
-        final PreconditionedIterativeLinearSolver solver;
-        solver = new SymmLQ(10, 0d, false);
-        final ArrayRealVector b = new ArrayRealVector(a.getRowDimension());
-        solver.solve(a, m, b);
+                @Override
+                public int getColumnDimension() {
+                    return 3;
+                }
+            };
+            final PreconditionedIterativeLinearSolver solver;
+            solver = new SymmLQ(10, 0d, false);
+            final ArrayRealVector b = new ArrayRealVector(a.getRowDimension());
+            solver.solve(a, m, b);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testNonPositiveDefinitePreconditioner() {
-        final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
-        a.setEntry(0, 0, 1d);
-        a.setEntry(0, 1, 2d);
-        a.setEntry(1, 0, 3d);
-        a.setEntry(1, 1, 4d);
-        final RealLinearOperator m = new RealLinearOperator() {
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
+            a.setEntry(0, 0, 1d);
+            a.setEntry(0, 1, 2d);
+            a.setEntry(1, 0, 3d);
+            a.setEntry(1, 1, 4d);
+            final RealLinearOperator m = new RealLinearOperator() {
 
-            @Override
-            public RealVector operate(final RealVector x) {
-                final ArrayRealVector y = new ArrayRealVector(2);
-                y.setEntry(0, -x.getEntry(0));
-                y.setEntry(1, -x.getEntry(1));
-                return y;
-            }
+                @Override
+                public RealVector operate(final RealVector x) {
+                    final ArrayRealVector y = new ArrayRealVector(2);
+                    y.setEntry(0, -x.getEntry(0));
+                    y.setEntry(1, -x.getEntry(1));
+                    return y;
+                }
 
-            @Override
-            public int getRowDimension() {
-                return 2;
-            }
+                @Override
+                public int getRowDimension() {
+                    return 2;
+                }
 
-            @Override
-            public int getColumnDimension() {
-                return 2;
-            }
-        };
-        final PreconditionedIterativeLinearSolver solver;
-        solver = new SymmLQ(10, 0d, true);
-        final ArrayRealVector b = new ArrayRealVector(2);
-        b.setEntry(0, -1d);
-        b.setEntry(1, -1d);
-        solver.solve(a, m, b);
+                @Override
+                public int getColumnDimension() {
+                    return 2;
+                }
+            };
+            final PreconditionedIterativeLinearSolver solver;
+            solver = new SymmLQ(10, 0d, true);
+            final ArrayRealVector b = new ArrayRealVector(2);
+            b.setEntry(0, -1d);
+            b.setEntry(1, -1d);
+            solver.solve(a, m, b);
+        });
     }
 
     @Test
@@ -430,7 +444,7 @@ public class SymmLQTest {
                 final double expected = ainv.getEntry(i, j);
                 final double delta = 1E-6 * FastMath.abs(expected);
                 final String msg = String.format("coefficient (%d, %d)", i, j);
-                Assert.assertEquals(msg, expected, actual, delta);
+                Assertions.assertEquals(expected, actual, delta, msg);
             }
         }
     }
@@ -475,7 +489,7 @@ public class SymmLQTest {
                 final double expected = x.getEntry(i);
                 final double actual = px.getEntry(i);
                 final double delta = 5E-5 * FastMath.abs(expected);
-                Assert.assertEquals(msg, expected, actual, delta);
+                Assertions.assertEquals(expected, actual, delta, msg);
             }
         }
     }
@@ -502,16 +516,16 @@ public class SymmLQTest {
 
             public void iterationPerformed(final IterationEvent e) {
                 ++count[2];
-                Assert.assertEquals("iteration performed",
-                                    count[2],
-                                    e.getIterations() - 1);
+                Assertions.assertEquals(count[2],
+                                    e.getIterations() - 1,
+                                    "iteration performed");
             }
 
             public void iterationStarted(final IterationEvent e) {
                 ++count[1];
-                Assert.assertEquals("iteration started",
-                                    count[1],
-                                    e.getIterations() - 1);
+                Assertions.assertEquals(count[1],
+                                    e.getIterations() - 1,
+                                    "iteration started");
             }
 
             public void terminationPerformed(final IterationEvent e) {
@@ -530,9 +544,9 @@ public class SymmLQTest {
             b.setEntry(j, 1.);
             final RealVector xFromSolver = solver.solve(a, b);
             String msg = String.format("column %d (initialization)", j);
-            Assert.assertEquals(msg, 1, count[0]);
+            Assertions.assertEquals(1, count[0], msg);
             msg = String.format("column %d (finalization)", j);
-            Assert.assertEquals(msg, 1, count[3]);
+            Assertions.assertEquals(1, count[3], msg);
             /*
              *  Check that solution is not "over-refined". When the last
              *  iteration has occurred, no further refinement should be
@@ -542,60 +556,64 @@ public class SymmLQTest {
                 msg = String.format("row %d, column %d", i, j);
                 final double expected = xFromSolver.getEntry(i);
                 final double actual = xFromListener.getEntry(i);
-                Assert.assertEquals(msg, expected, actual, 0.0);
+                Assertions.assertEquals(expected, actual, 0.0, msg);
             }
         }
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testNonSelfAdjointOperator() {
-        final RealLinearOperator a;
-        a = new Array2DRowRealMatrix(new double[][] {
-            {1., 2., 3.},
-            {2., 4., 5.},
-            {2.999, 5., 6.}
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final RealLinearOperator a;
+            a = new Array2DRowRealMatrix(new double[][]{
+                {1., 2., 3.},
+                {2., 4., 5.},
+                {2.999, 5., 6.}
+            });
+            final RealVector b;
+            b = new ArrayRealVector(new double[]{1., 1., 1.});
+            new SymmLQ(100, 1., true).solve(a, b);
         });
-        final RealVector b;
-        b = new ArrayRealVector(new double[] {1., 1., 1.});
-        new SymmLQ(100, 1., true).solve(a, b);
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testNonSelfAdjointPreconditioner() {
-        final RealLinearOperator a = new Array2DRowRealMatrix(new double[][] {
-            {1., 2., 3.},
-            {2., 4., 5.},
-            {3., 5., 6.}
-        });
-        final Array2DRowRealMatrix mMat;
-        mMat = new Array2DRowRealMatrix(new double[][] {
-            {1., 0., 1.},
-            {0., 1., 0.},
-            {0., 0., 1.}
-        });
-        final DecompositionSolver mSolver;
-        mSolver = new LUDecomposition(mMat).getSolver();
-        final RealLinearOperator minv = new RealLinearOperator() {
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final RealLinearOperator a = new Array2DRowRealMatrix(new double[][]{
+                {1., 2., 3.},
+                {2., 4., 5.},
+                {3., 5., 6.}
+            });
+            final Array2DRowRealMatrix mMat;
+            mMat = new Array2DRowRealMatrix(new double[][]{
+                {1., 0., 1.},
+                {0., 1., 0.},
+                {0., 0., 1.}
+            });
+            final DecompositionSolver mSolver;
+            mSolver = new LUDecomposition(mMat).getSolver();
+            final RealLinearOperator minv = new RealLinearOperator() {
 
-            @Override
-            public RealVector operate(final RealVector x) {
-                return mSolver.solve(x);
-            }
+                @Override
+                public RealVector operate(final RealVector x) {
+                    return mSolver.solve(x);
+                }
 
-            @Override
-            public int getRowDimension() {
-                return mMat.getRowDimension();
-            }
+                @Override
+                public int getRowDimension() {
+                    return mMat.getRowDimension();
+                }
 
-            @Override
-            public int getColumnDimension() {
-                return mMat.getColumnDimension();
-            }
-        };
-        final RealVector b = new ArrayRealVector(new double[] {
-            1., 1., 1.
+                @Override
+                public int getColumnDimension() {
+                    return mMat.getColumnDimension();
+                }
+            };
+            final RealVector b = new ArrayRealVector(new double[]{
+                1., 1., 1.
+            });
+            new SymmLQ(100, 1., true).solve(a, minv, b);
         });
-        new SymmLQ(100, 1., true).solve(a, minv, b);
     }
 
     @Test
@@ -613,9 +631,9 @@ public class SymmLQTest {
                 final RealVector b = evt.getRightHandSideVector();
                 final RealVector r = b.subtract(a.operate(x));
                 final double rnorm = r.getNorm();
-                Assert.assertEquals("iteration performed (residual)",
-                    rnorm, evt.getNormOfResidual(),
-                    FastMath.max(1E-5 * rnorm, 1E-10));
+                Assertions.assertEquals(rnorm, evt.getNormOfResidual(),
+                    FastMath.max(1E-5 * rnorm, 1E-10),
+                    "iteration performed (residual)");
             }
 
             public void initializationPerformed(final IterationEvent e) {
@@ -661,9 +679,9 @@ public class SymmLQTest {
                 final RealVector b = evt.getRightHandSideVector();
                 final RealVector r = b.subtract(a.operate(x));
                 final double rnorm = p.operate(r).getNorm();
-                Assert.assertEquals("iteration performed (residual)",
-                    rnorm, evt.getNormOfResidual(),
-                    FastMath.max(1E-5 * rnorm, 1E-10));
+                Assertions.assertEquals(rnorm, evt.getNormOfResidual(),
+                    FastMath.max(1E-5 * rnorm, 1E-10),
+                    "iteration performed (residual)");
             }
 
             public void initializationPerformed(final IterationEvent e) {

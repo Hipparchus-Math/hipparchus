@@ -22,15 +22,15 @@
 
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
-import java.io.IOException;
-
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.LUDecomposer;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.SimpleVectorValueChecker;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -63,7 +63,7 @@ public class GaussNewtonOptimizerWithLUTest
             super.testMoreEstimatedParametersSimple();
             fail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
                                 e.getSpecifier());
         }
     }
@@ -78,7 +78,7 @@ public class GaussNewtonOptimizerWithLUTest
             super.testMoreEstimatedParametersUnsorted();
             fail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
                                 e.getSpecifier());
         }
     }
@@ -103,7 +103,7 @@ public class GaussNewtonOptimizerWithLUTest
 
             fail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
         }
     }
 
@@ -117,7 +117,7 @@ public class GaussNewtonOptimizerWithLUTest
             super.testCircleFittingBadInit();
             fail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
                                 e.getSpecifier());
         }
     }
@@ -133,7 +133,7 @@ public class GaussNewtonOptimizerWithLUTest
             super.testHahn1();
             fail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
                                 e.getSpecifier());
         }
     }

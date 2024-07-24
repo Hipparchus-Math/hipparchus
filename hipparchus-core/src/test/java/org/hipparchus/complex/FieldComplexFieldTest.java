@@ -21,25 +21,25 @@
  */
 package org.hipparchus.complex;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.hipparchus.Field;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FieldComplexFieldTest {
 
     @Test
     public void testZero() {
-        Assert.assertEquals(new FieldComplex<>(Binary64.ZERO), FieldComplexField.getField(Binary64Field.getInstance()).getZero());
+        Assertions.assertEquals(new FieldComplex<>(Binary64.ZERO), FieldComplexField.getField(Binary64Field.getInstance()).getZero());
     }
 
     @Test
     public void testOne() {
-        Assert.assertEquals(new FieldComplex<>(Binary64.ONE), FieldComplexField.getField(Binary64Field.getInstance()).getOne());
+        Assertions.assertEquals(new FieldComplex<>(Binary64.ONE), FieldComplexField.getField(Binary64Field.getInstance()).getOne());
     }
 
     @SuppressWarnings("unlikely-arg-type")
@@ -51,14 +51,14 @@ public class FieldComplexFieldTest {
         }
         // there should be only one field for all values
         FieldComplexField<Binary64> field = FieldComplexField.getField(Binary64Field.getInstance());
-        Assert.assertEquals(1, map.size());
-        Assert.assertTrue(field.equals(map.entrySet().iterator().next().getKey()));
-        Assert.assertFalse(field.equals(Binary64Field.getInstance()));
+        Assertions.assertEquals(1, map.size());
+        Assertions.assertEquals(field, map.entrySet().iterator().next().getKey());
+        Assertions.assertNotEquals(field, Binary64Field.getInstance());
     }
 
     @Test
     public void testRunTimeClass() {
-        Assert.assertEquals(Complex.class, ComplexField.getInstance().getRuntimeClass());
+        Assertions.assertEquals(Complex.class, ComplexField.getInstance().getRuntimeClass());
     }
 
 }

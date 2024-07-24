@@ -25,16 +25,18 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public abstract class MultipleLinearRegressionAbstractTest {
 
     protected AbstractMultipleLinearRegression regression;
 
-    @Before
+    @BeforeEach
     public void setUp(){
         regression = createRegression();
     }
@@ -48,26 +50,26 @@ public abstract class MultipleLinearRegressionAbstractTest {
     @Test
     public void canEstimateRegressionParameters(){
         double[] beta = regression.estimateRegressionParameters();
-        Assert.assertEquals(getNumberOfRegressors(), beta.length);
+        Assertions.assertEquals(getNumberOfRegressors(), beta.length);
     }
 
     @Test
     public void canEstimateResiduals(){
         double[] e = regression.estimateResiduals();
-        Assert.assertEquals(getSampleSize(), e.length);
+        Assertions.assertEquals(getSampleSize(), e.length);
     }
 
     @Test
     public void canEstimateRegressionParametersVariance(){
         double[][] variance = regression.estimateRegressionParametersVariance();
-        Assert.assertEquals(getNumberOfRegressors(), variance.length);
+        Assertions.assertEquals(getNumberOfRegressors(), variance.length);
     }
 
     @Test
     public void canEstimateRegressandVariance(){
         if (getSampleSize() > getNumberOfRegressors()) {
             double variance = regression.estimateRegressandVariance();
-            Assert.assertTrue(variance > 0.0);
+            Assertions.assertTrue(variance > 0.0);
         }
     }
 
@@ -96,8 +98,8 @@ public abstract class MultipleLinearRegressionAbstractTest {
         RealVector flatY = regression.getY().copy();
         regression.newXSampleData(x);
         regression.newYSampleData(y);
-        Assert.assertEquals(flatX, regression.getX());
-        Assert.assertEquals(flatY, regression.getY());
+        Assertions.assertEquals(flatX, regression.getX());
+        Assertions.assertEquals(flatY, regression.getY());
 
         // No intercept
         regression.setNoIntercept(true);
@@ -106,36 +108,46 @@ public abstract class MultipleLinearRegressionAbstractTest {
         flatY = regression.getY().copy();
         regression.newXSampleData(x);
         regression.newYSampleData(y);
-        Assert.assertEquals(flatX, regression.getX());
-        Assert.assertEquals(flatY, regression.getY());
+        Assertions.assertEquals(flatX, regression.getX());
+        Assertions.assertEquals(flatY, regression.getY());
     }
 
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void testNewSampleNullData() {
-        double[] data = null;
-        createRegression().newSampleData(data, 2, 3);
+        assertThrows(NullArgumentException.class, () -> {
+            double[] data = null;
+            createRegression().newSampleData(data, 2, 3);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNewSampleInvalidData() {
-        double[] data = new double[] {1, 2, 3, 4};
-        createRegression().newSampleData(data, 2, 3);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] data = new double[]{1, 2, 3, 4};
+            createRegression().newSampleData(data, 2, 3);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNewSampleInsufficientData() {
-        double[] data = new double[] {1, 2, 3, 4};
-        createRegression().newSampleData(data, 1, 3);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] data = new double[]{1, 2, 3, 4};
+            createRegression().newSampleData(data, 1, 3);
+        });
     }
 
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void testXSampleDataNull() {
-        createRegression().newXSampleData(null);
+        assertThrows(NullArgumentException.class, () -> {
+            createRegression().newXSampleData(null);
+        });
     }
 
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void testYSampleDataNull() {
-        createRegression().newYSampleData(null);
+        assertThrows(NullArgumentException.class, () -> {
+            createRegression().newYSampleData(null);
+        });
     }
 
 }

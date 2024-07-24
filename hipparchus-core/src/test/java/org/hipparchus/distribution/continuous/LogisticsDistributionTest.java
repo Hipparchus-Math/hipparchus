@@ -22,8 +22,8 @@
 package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for LogisticsDistribution.
@@ -33,16 +33,16 @@ public class LogisticsDistributionTest extends RealDistributionAbstractTest {
     @Test
     public void testParameters() {
         LogisticDistribution d = makeDistribution();
-        Assert.assertEquals(2, d.getLocation(), Precision.EPSILON);
-        Assert.assertEquals(5, d.getScale(), Precision.EPSILON);
+        Assertions.assertEquals(2, d.getLocation(), Precision.EPSILON);
+        Assertions.assertEquals(5, d.getScale(), Precision.EPSILON);
     }
 
     @Test
     public void testSupport() {
         LogisticDistribution d = makeDistribution();
-        Assert.assertTrue(Double.isInfinite(d.getSupportLowerBound()));
-        Assert.assertTrue(Double.isInfinite(d.getSupportUpperBound()));
-        Assert.assertTrue(d.isSupportConnected());
+        Assertions.assertTrue(Double.isInfinite(d.getSupportLowerBound()));
+        Assertions.assertTrue(Double.isInfinite(d.getSupportUpperBound()));
+        Assertions.assertTrue(d.isSupportConnected());
     }
 
     @Override

@@ -21,6 +21,10 @@
  */
 package org.hipparchus.analysis.integration.gauss;
 
+import org.hipparchus.util.Pair;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -30,10 +34,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.hipparchus.util.Pair;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * Test for {@link AbstractRuleFactory}.
@@ -67,7 +67,7 @@ public class RuleFactoryTest {
 
         // Assertion would fail if "getRuleInternal" were not "synchronized".
         final int n = RuleBuilder.getNumberOfCalls();
-        Assert.assertEquals("Rule computation was called " + n + " times", 1, n);
+        Assertions.assertEquals(1, n, "Rule computation was called " + n + " times");
     }
 
     private static class RuleBuilder implements Callable<Pair<double[], double[]>> {
@@ -92,12 +92,10 @@ public class RuleFactoryTest {
             // Tracks whether this computation has been called more than once.
             nCalls.getAndIncrement();
 
-            try {
+            Assertions.assertDoesNotThrow(() -> {
                 // Sleep to simulate computation time.
                 Thread.sleep(20);
-            } catch (InterruptedException e) {
-                Assert.fail("Unexpected interruption");
-            }
+            }, "Unexpected interruption");
 
             // Dummy rule (but contents must exist).
             final double[] p = new double[order];

@@ -22,11 +22,13 @@
 
 package org.hipparchus.linear;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.util.Random;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class QRDecompositionTest {
@@ -76,10 +78,10 @@ public class QRDecompositionTest {
         int rows = m.getRowDimension();
         int columns = m.getColumnDimension();
         QRDecomposition qr = new QRDecomposition(m);
-        Assert.assertEquals(rows,    qr.getQ().getRowDimension());
-        Assert.assertEquals(rows,    qr.getQ().getColumnDimension());
-        Assert.assertEquals(rows,    qr.getR().getRowDimension());
-        Assert.assertEquals(columns, qr.getR().getColumnDimension());
+        Assertions.assertEquals(rows,    qr.getQ().getRowDimension());
+        Assertions.assertEquals(rows,    qr.getQ().getColumnDimension());
+        Assertions.assertEquals(rows,    qr.getR().getRowDimension());
+        Assertions.assertEquals(columns, qr.getR().getColumnDimension());
     }
 
     /** test A = QR */
@@ -105,7 +107,7 @@ public class QRDecompositionTest {
     private void checkAEqualQR(RealMatrix m) {
         QRDecomposition qr = new QRDecomposition(m);
         double norm = qr.getQ().multiply(qr.getR()).subtract(m).getNorm1();
-        Assert.assertEquals(0, norm, normTolerance);
+        Assertions.assertEquals(0, norm, normTolerance);
     }
 
     /** test the orthogonality of Q */
@@ -132,7 +134,7 @@ public class QRDecompositionTest {
         QRDecomposition qr = new QRDecomposition(m);
         RealMatrix eye = MatrixUtils.createRealIdentityMatrix(m.getRowDimension());
         double norm = qr.getQT().multiply(qr.getQ()).subtract(eye).getNorm1();
-        Assert.assertEquals(0, norm, normTolerance);
+        Assertions.assertEquals(0, norm, normTolerance);
     }
 
     /** test that R is upper triangular */
@@ -166,7 +168,7 @@ public class QRDecompositionTest {
             @Override
             public void visit(int row, int column, double value) {
                 if (column < row) {
-                    Assert.assertEquals(0.0, value, entryTolerance);
+                    Assertions.assertEquals(0.0, value, entryTolerance);
                 }
             }
         });
@@ -203,7 +205,7 @@ public class QRDecompositionTest {
             @Override
             public void visit(int row, int column, double value) {
                 if (column > row) {
-                    Assert.assertEquals(0.0, value, entryTolerance);
+                    Assertions.assertEquals(0.0, value, entryTolerance);
                 }
             }
         });
@@ -231,26 +233,28 @@ public class QRDecompositionTest {
 
         // check values against known references
         RealMatrix q = qr.getQ();
-        Assert.assertEquals(0, q.subtract(qRef).getNorm1(), 1.0e-13);
+        Assertions.assertEquals(0, q.subtract(qRef).getNorm1(), 1.0e-13);
         RealMatrix qT = qr.getQT();
-        Assert.assertEquals(0, qT.subtract(qRef.transpose()).getNorm1(), 1.0e-13);
+        Assertions.assertEquals(0, qT.subtract(qRef.transpose()).getNorm1(), 1.0e-13);
         RealMatrix r = qr.getR();
-        Assert.assertEquals(0, r.subtract(rRef).getNorm1(), 1.0e-13);
+        Assertions.assertEquals(0, r.subtract(rRef).getNorm1(), 1.0e-13);
         RealMatrix h = qr.getH();
-        Assert.assertEquals(0, h.subtract(hRef).getNorm1(), 1.0e-13);
+        Assertions.assertEquals(0, h.subtract(hRef).getNorm1(), 1.0e-13);
 
         // check the same cached instance is returned the second time
-        Assert.assertTrue(q == qr.getQ());
-        Assert.assertTrue(r == qr.getR());
-        Assert.assertTrue(h == qr.getH());
+        Assertions.assertTrue(q == qr.getQ());
+        Assertions.assertTrue(r == qr.getR());
+        Assertions.assertTrue(h == qr.getH());
 
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNonInvertible() {
-        QRDecomposition qr =
-            new QRDecomposition(MatrixUtils.createRealMatrix(testData3x3Singular));
-        qr.getSolver().getInverse();
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            QRDecomposition qr =
+                new QRDecomposition(MatrixUtils.createRealMatrix(testData3x3Singular));
+            qr.getSolver().getInverse();
+        });
     }
 
     @Test
@@ -258,9 +262,9 @@ public class QRDecompositionTest {
         RealMatrix a     = MatrixUtils.createRealMatrix(testData4x3);
         DecompositionSolver solver = new QRDecomposition(a).getSolver();
         RealMatrix pinv  = solver.getInverse();
-        Assert.assertEquals(0, pinv.multiply(a).subtract(MatrixUtils.createRealIdentityMatrix(3)).getNorm1(), 1.0e-6);
-        Assert.assertEquals(testData4x3.length,    solver.getRowDimension());
-        Assert.assertEquals(testData4x3[0].length, solver.getColumnDimension());
+        Assertions.assertEquals(0, pinv.multiply(a).subtract(MatrixUtils.createRealIdentityMatrix(3)).getNorm1(), 1.0e-6);
+        Assertions.assertEquals(testData4x3.length,    solver.getRowDimension());
+        Assertions.assertEquals(testData4x3[0].length, solver.getColumnDimension());
     }
 
     @Test
@@ -268,10 +272,10 @@ public class QRDecompositionTest {
         RealMatrix a = MatrixUtils.createRealMatrix(testData3x4);
         DecompositionSolver solver = new QRDecomposition(a).getSolver();
         RealMatrix pinv  = solver.getInverse();
-        Assert.assertEquals(0, a.multiply(pinv).subtract(MatrixUtils.createRealIdentityMatrix(3)).getNorm1(), 1.0e-6);
-        Assert.assertEquals(0, pinv.multiply(a).getSubMatrix(0, 2, 0, 2).subtract(MatrixUtils.createRealIdentityMatrix(3)).getNorm1(), 1.0e-6);
-        Assert.assertEquals(testData3x4.length,    solver.getRowDimension());
-        Assert.assertEquals(testData3x4[0].length, solver.getColumnDimension());
+        Assertions.assertEquals(0, a.multiply(pinv).subtract(MatrixUtils.createRealIdentityMatrix(3)).getNorm1(), 1.0e-6);
+        Assertions.assertEquals(0, pinv.multiply(a).getSubMatrix(0, 2, 0, 2).subtract(MatrixUtils.createRealIdentityMatrix(3)).getNorm1(), 1.0e-6);
+        Assertions.assertEquals(testData3x4.length,    solver.getRowDimension());
+        Assertions.assertEquals(testData3x4[0].length, solver.getColumnDimension());
     }
 
     private RealMatrix createTestMatrix(final Random r, final int rows, final int columns) {
@@ -285,13 +289,15 @@ public class QRDecompositionTest {
         return m;
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testQRSingular() {
-        final RealMatrix a = MatrixUtils.createRealMatrix(new double[][] {
-            { 1, 6, 4 }, { 2, 4, -1 }, { -1, 2, 5 }
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final RealMatrix a = MatrixUtils.createRealMatrix(new double[][]{
+                {1, 6, 4}, {2, 4, -1}, {-1, 2, 5}
+            });
+            final RealVector b = new ArrayRealVector(new double[]{5, 6, 1});
+            new QRDecomposer(1.0e-15).decompose(a).solve(b);
         });
-        final RealVector b = new ArrayRealVector(new double[]{ 5, 6, 1 });
-        new QRDecomposer(1.0e-15).decompose(a).solve(b);
     }
 
 }

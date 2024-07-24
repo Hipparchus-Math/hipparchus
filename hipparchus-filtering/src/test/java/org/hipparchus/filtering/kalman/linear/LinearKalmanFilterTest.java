@@ -17,10 +17,6 @@
 
 package org.hipparchus.filtering.kalman.linear;
 
-import java.util.List;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import org.hipparchus.filtering.kalman.ProcessEstimate;
 import org.hipparchus.filtering.kalman.Reference;
 import org.hipparchus.filtering.kalman.SimpleMeasurement;
@@ -31,8 +27,12 @@ import org.hipparchus.linear.RealVector;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class LinearKalmanFilterTest {
 
@@ -49,7 +49,7 @@ public class LinearKalmanFilterTest {
         final ProcessEstimate initial = new ProcessEstimate(0,
                                                             MatrixUtils.createRealVector(new double[] { 10.0 }),
                                                             q);
-        Assert.assertNull(initial.getInnovationCovariance());
+        Assertions.assertNull(initial.getInnovationCovariance());
 
         // reference values from Apache Commons Math 3.6.1 unit test
         final List<Reference> referenceData = Reference.loadReferenceData(1, 1, "constant-value.txt");
@@ -260,8 +260,8 @@ public class LinearKalmanFilterTest {
         map(estimate -> {
             final ProcessEstimate p = filter.getPredicted();
             final ProcessEstimate c = filter.getCorrected();
-            Assert.assertEquals(p.getTime(), c.getTime(), 1.0e-15);
-            Assert.assertTrue(p.getState().getDistance(c.getState()) > 0.005);
+            Assertions.assertEquals(p.getTime(), c.getTime(), 1.0e-15);
+            Assertions.assertTrue(p.getState().getDistance(c.getState()) > 0.005);
             return estimate;
         }).
         forEach(estimate -> {
@@ -338,7 +338,7 @@ public class LinearKalmanFilterTest {
                         map(measurement -> filter.estimationStep(measurement)).
                         reduce((first, second) -> second).get();
 
-        Assert.assertEquals(expected, finalEstimate.getState().getEntry(0), tolerance);
+        Assertions.assertEquals(expected, finalEstimate.getState().getEntry(0), tolerance);
 
     }
 

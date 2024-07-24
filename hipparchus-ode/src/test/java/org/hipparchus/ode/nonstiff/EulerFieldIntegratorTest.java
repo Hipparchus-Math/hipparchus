@@ -21,7 +21,7 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.util.Binary64Field;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class EulerFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractTest {
 
@@ -31,73 +31,87 @@ public class EulerFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractT
     }
 
     @Override
+    @Test
     public void testNonFieldIntegratorConsistency() {
         doTestNonFieldIntegratorConsistency(Binary64Field.getInstance());
     }
 
     @Override
+    @Test
     public void testMissedEndEvent() {
         doTestMissedEndEvent(Binary64Field.getInstance(), 1.0e-15, 6.0e-5);
     }
 
     @Override
+    @Test
     public void testSanityChecks() {
         doTestSanityChecks(Binary64Field.getInstance());
     }
 
     @Override
+    @Test
     public void testDecreasingSteps() {
         doTestDecreasingSteps(Binary64Field.getInstance(), 1.0, 1.5, 1.0e-10);
     }
 
     @Override
+    @Test
     public void testSmallStep() {
         doTestSmallStep(Binary64Field.getInstance(), 2.0e-4, 1.0e-3, 1.0e-12, "Euler");
     }
 
     @Override
+    @Test
     public void testBigStep() {
         doTestBigStep(Binary64Field.getInstance(), 0.01, 0.2, 1.0e-12, "Euler");
 
     }
 
     @Override
+    @Test
     public void testBackward() {
         doTestBackward(Binary64Field.getInstance(), 0.45, 0.45, 1.0e-12, "Euler");
     }
 
     @Override
+    @Test
     public void testKepler() {
         // Euler integrator is clearly not able to solve this problem
         doTestKepler(Binary64Field.getInstance(), 881.176, 0.001);
     }
 
     @Override
+    @Test
     public void testStepSize() {
         doTestStepSize(Binary64Field.getInstance(), 1.0e-12);
     }
 
     @Override
+    @Test
     public void testSingleStep() {
         doTestSingleStep(Binary64Field.getInstance(), 0.21);
     }
 
     @Override
+    @Test
     public void testTooLargeFirstStep() {
         doTestTooLargeFirstStep(Binary64Field.getInstance());
     }
 
     @Override
+    @Test
     public void testUnstableDerivative() {
         doTestUnstableDerivative(Binary64Field.getInstance(), 1.0e-12);
     }
 
     @Override
+    @Test
     public void testDerivativesConsistency() {
         doTestDerivativesConsistency(Binary64Field.getInstance(), 1.0e-10);
     }
 
     @Override
+    @Test
     public void testPartialDerivatives() {
         doTestPartialDerivatives(0.085, new double[] { 0.47, 0.13, 0.019, 0.019, 0.13 });
     }

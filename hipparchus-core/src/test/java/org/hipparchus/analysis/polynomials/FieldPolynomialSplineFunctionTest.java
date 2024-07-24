@@ -21,9 +21,6 @@
  */
 package org.hipparchus.analysis.polynomials;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
-
 import org.hipparchus.analysis.differentiation.Gradient;
 import org.hipparchus.analysis.differentiation.GradientField;
 import org.hipparchus.analysis.interpolation.LinearInterpolator;
@@ -31,9 +28,12 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Binary64;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 /**
  * Tests the FieldFieldPolynomialSplineFunction implementation.
@@ -68,13 +68,13 @@ public class FieldPolynomialSplineFunctionTest {
     public void testConstructor() {
         FieldPolynomialSplineFunction<Binary64> spline =
             new FieldPolynomialSplineFunction<>(knots, polynomials);
-        Assert.assertTrue(Arrays.equals(knots, spline.getKnots()));
-        Assert.assertEquals(1d, spline.getPolynomials()[0].getCoefficients()[2].getReal(), 0);
-        Assert.assertEquals(3, spline.getN());
+        Assertions.assertTrue(Arrays.equals(knots, spline.getKnots()));
+        Assertions.assertEquals(1d, spline.getPolynomials()[0].getCoefficients()[2].getReal(), 0);
+        Assertions.assertEquals(3, spline.getN());
 
         try { // too few knots
             new FieldPolynomialSplineFunction<>(new Binary64[] { new Binary64(0) }, polynomials);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -84,7 +84,7 @@ public class FieldPolynomialSplineFunctionTest {
                 new Binary64(0), new Binary64(1), new Binary64(2),
                 new Binary64(3), new Binary64(4)
             }, polynomials);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -93,7 +93,7 @@ public class FieldPolynomialSplineFunctionTest {
             new FieldPolynomialSplineFunction<>(new Binary64[] {
                 new Binary64(0), new Binary64(1), new Binary64(3), new Binary64(2)
             }, polynomials);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -115,38 +115,38 @@ public class FieldPolynomialSplineFunctionTest {
         for (int i = 0; i < 10; i++) {
            x += 0.25;
            index = findKnot(knots, x);
-           Assert.assertEquals("spline function evaluation failed for x=" + x,
-                               polynomials[index].value(new Binary64(x).subtract(knots[index])).getReal(),
+           Assertions.assertEquals(polynomials[index].value(new Binary64(x).subtract(knots[index])).getReal(),
                                spline.value(x).getReal(),
-                               tolerance);
-           Assert.assertEquals("spline derivative evaluation failed for x=" + x,
-                               dp.value(new Binary64(x).subtract(knots[index])).getReal(),
+                               tolerance,
+                               "spline function evaluation failed for x=" + x);
+           Assertions.assertEquals(dp.value(new Binary64(x).subtract(knots[index])).getReal(),
                                dSpline.value(x).getReal(),
-                               tolerance);
+                               tolerance,
+                               "spline derivative evaluation failed for x=" + x);
         }
 
         // knot points -- centering should zero arguments
         for (int i = 0; i < 3; i++) {
-            Assert.assertEquals("spline function evaluation failed for knot=" + knots[i].getReal(),
-                                polynomials[i].value(0).getReal(),
+            Assertions.assertEquals(polynomials[i].value(0).getReal(),
                                 spline.value(knots[i]).getReal(),
-                                tolerance);
-            Assert.assertEquals("spline function evaluation failed for knot=" + knots[i],
-                                dp.value(0),
+                                tolerance,
+                                "spline function evaluation failed for knot=" + knots[i].getReal());
+            Assertions.assertEquals(dp.value(0),
                                 dSpline.value(knots[i]).getReal(),
-                                tolerance);
+                                tolerance,
+                                "spline function evaluation failed for knot=" + knots[i]);
         }
 
         try { //outside of domain -- under min
             spline.value(-1.5);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try { //outside of domain -- over max
             spline.value(2.5);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -162,28 +162,28 @@ public class FieldPolynomialSplineFunctionTest {
         Binary64 x;
 
         x = xMin;
-        Assert.assertTrue(spline.isValidPoint(x));
+        Assertions.assertTrue(spline.isValidPoint(x));
         // Ensure that no exception is thrown.
         spline.value(x);
 
         x = xMax;
-        Assert.assertTrue(spline.isValidPoint(x));
+        Assertions.assertTrue(spline.isValidPoint(x));
         // Ensure that no exception is thrown.
         spline.value(x);
 
         final Binary64 xRange = xMax.subtract(xMin);
         x = xMin.add(xRange.divide(3.4));
-        Assert.assertTrue(spline.isValidPoint(x));
+        Assertions.assertTrue(spline.isValidPoint(x));
         // Ensure that no exception is thrown.
         spline.value(x);
 
         final Binary64 small = new Binary64(1e-8);
         x = xMin.subtract(small);
-        Assert.assertFalse(spline.isValidPoint(x));
+        Assertions.assertFalse(spline.isValidPoint(x));
         // Ensure that an exception would have been thrown.
         try {
             spline.value(x);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException expected) {}
     }
 
@@ -212,7 +212,7 @@ public class FieldPolynomialSplineFunctionTest {
          return new FieldPolynomialFunction<>(array);
      }
 
-     @Before
+     @BeforeEach
      @SuppressWarnings("unchecked")
      public void setUp() {
          tolerance = 1.0e-12;
@@ -245,7 +245,7 @@ public class FieldPolynomialSplineFunctionTest {
          final Gradient actualEvaluation = spline.value(zero.add(3.));
          // Then
          final Gradient expectedEvaluation = Gradient.variable(freeParameters, 0, 0).multiply(0.5).add(-1.0);
-         Assert.assertEquals(expectedEvaluation, actualEvaluation);
+         Assertions.assertEquals(expectedEvaluation, actualEvaluation);
      }
 
 }

@@ -21,10 +21,15 @@
  */
 package org.hipparchus.distribution.continuous;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 /**
  * Test cases for TDistribution.
  */
@@ -61,6 +66,7 @@ public class TDistributionTest extends RealDistributionAbstractTest {
     }
 
     // --------------------- Override tolerance  --------------
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -108,9 +114,9 @@ public class TDistributionTest extends RealDistributionAbstractTest {
         TDistribution dist;
         for (int i = 1; i < 11; i++) {
             dist = new TDistribution(i * 5);
-            Assert.assertEquals(1,
+            Assertions.assertEquals(1,
                 dist.cumulativeProbability(Double.POSITIVE_INFINITY), Double.MIN_VALUE);
-            Assert.assertEquals(0,
+            Assertions.assertEquals(0,
                 dist.cumulativeProbability(Double.NEGATIVE_INFINITY), Double.MIN_VALUE);
         }
     }
@@ -118,12 +124,14 @@ public class TDistributionTest extends RealDistributionAbstractTest {
     @Test
     public void testDfAccessors() {
         TDistribution dist = (TDistribution) getDistribution();
-        Assert.assertEquals(5d, dist.getDegreesOfFreedom(), Double.MIN_VALUE);
+        Assertions.assertEquals(5d, dist.getDegreesOfFreedom(), Double.MIN_VALUE);
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions() {
-        new TDistribution(0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new TDistribution(0);
+        });
     }
 
     @Test
@@ -132,16 +140,16 @@ public class TDistributionTest extends RealDistributionAbstractTest {
         TDistribution dist;
 
         dist = new TDistribution(1);
-        Assert.assertTrue(Double.isNaN(dist.getNumericalMean()));
-        Assert.assertTrue(Double.isNaN(dist.getNumericalVariance()));
+        Assertions.assertTrue(Double.isNaN(dist.getNumericalMean()));
+        Assertions.assertTrue(Double.isNaN(dist.getNumericalVariance()));
 
         dist = new TDistribution(1.5);
-        Assert.assertEquals(dist.getNumericalMean(), 0, tol);
-        Assert.assertTrue(Double.isInfinite(dist.getNumericalVariance()));
+        Assertions.assertEquals(0, dist.getNumericalMean(), tol);
+        Assertions.assertTrue(Double.isInfinite(dist.getNumericalVariance()));
 
         dist = new TDistribution(5);
-        Assert.assertEquals(dist.getNumericalMean(), 0, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), 5d / (5d - 2d), tol);
+        Assertions.assertEquals(0, dist.getNumericalMean(), tol);
+        Assertions.assertEquals(dist.getNumericalVariance(), 5d / (5d - 2d), tol);
     }
 
     /*

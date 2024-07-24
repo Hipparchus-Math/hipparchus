@@ -19,8 +19,8 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TwiceDifferentiableFunctionTest {
 
@@ -33,7 +33,7 @@ public class TwiceDifferentiableFunctionTest {
         final double actualValue = function.value(x);
         // THEN
         final double expectedValueElement = x[0];
-        Assert.assertEquals(expectedValueElement, actualValue, 0);
+        Assertions.assertEquals(expectedValueElement, actualValue, 0);
     }
 
     @Test
@@ -45,7 +45,7 @@ public class TwiceDifferentiableFunctionTest {
         final RealVector actualGradient = function.gradient(x);
         // THEN
         final double expectedValueElement = 1.;
-        Assert.assertEquals(expectedValueElement, actualGradient.getEntry(0), 0);
+        Assertions.assertEquals(expectedValueElement, actualGradient.getEntry(0), 0);
     }
 
     @Test
@@ -57,7 +57,7 @@ public class TwiceDifferentiableFunctionTest {
         final RealMatrix actualGradient = function.hessian(x);
         // THEN
         final double expectedValueElement = 0.;
-        Assert.assertEquals(expectedValueElement, actualGradient.getEntry(0, 0), 0);
+        Assertions.assertEquals(expectedValueElement, actualGradient.getEntry(0, 0), 0);
     }
 
     private static class TestTwiceDifferentiableFunction extends TwiceDifferentiableFunction {

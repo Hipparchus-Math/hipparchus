@@ -22,6 +22,14 @@
 
 package org.hipparchus.stat.data;
 
+import org.hipparchus.UnitTestUtils;
+import org.hipparchus.stat.descriptive.DescriptiveStatistics;
+import org.hipparchus.stat.descriptive.StreamingStatistics;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,14 +38,6 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.hipparchus.UnitTestUtils;
-import org.hipparchus.stat.descriptive.DescriptiveStatistics;
-import org.hipparchus.stat.descriptive.StreamingStatistics;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  */
@@ -49,7 +49,7 @@ public abstract class CertifiedDataAbstractTest {
 
     private Map<String, Double> certifiedValues;
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         descriptives = new DescriptiveStatistics();
         summaries = new StreamingStatistics();
@@ -104,7 +104,7 @@ public abstract class CertifiedDataAbstractTest {
         return 1.0e-5;
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         descriptives.clear();
         descriptives = null;
@@ -150,14 +150,14 @@ public abstract class CertifiedDataAbstractTest {
             } else if (meth.getReturnType().equals(Long.TYPE)) {
                 return Double.valueOf(((Long) property).doubleValue());
             } else {
-                Assert.fail("wrong type: " + meth.getReturnType().getName());
+                Assertions.fail("wrong type: " + meth.getReturnType().getName());
             }
         } catch (NoSuchMethodException nsme) {
             // ignored
         } catch (InvocationTargetException ite) {
-            Assert.fail(ite.getMessage());
+            Assertions.fail(ite.getMessage());
         } catch (IllegalAccessException iae) {
-            Assert.fail(iae.getMessage());
+            Assertions.fail(iae.getMessage());
         }
         return null;
     }

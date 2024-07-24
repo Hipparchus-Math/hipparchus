@@ -23,8 +23,11 @@
 package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test cases for {@link ParetoDistribution}.
@@ -88,6 +91,7 @@ public class ParetoDistributionTest extends RealDistributionAbstractTest {
     }
 
     // --------------------- Override tolerance  --------------
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -137,18 +141,20 @@ public class ParetoDistributionTest extends RealDistributionAbstractTest {
     @Test
     public void testGetScale() {
         ParetoDistribution distribution = (ParetoDistribution)getDistribution();
-        Assert.assertEquals(2.1, distribution.getScale(), 0);
+        Assertions.assertEquals(2.1, distribution.getScale(), 0);
     }
 
     @Test
     public void testGetShape() {
         ParetoDistribution distribution = (ParetoDistribution)getDistribution();
-        Assert.assertEquals(1.4, distribution.getShape(), 0);
+        Assertions.assertEquals(1.4, distribution.getShape(), 0);
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions() {
-        new ParetoDistribution(1, 0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new ParetoDistribution(1, 0);
+        });
     }
 
     @Test
@@ -164,7 +170,7 @@ public class ParetoDistributionTest extends RealDistributionAbstractTest {
         double[] expected) {
         ParetoDistribution d = new ParetoDistribution(scale, shape);
         for (int i = 0; i < x.length; i++) {
-            Assert.assertEquals(expected[i], d.density(x[i]), 1e-9);
+            Assertions.assertEquals(expected[i], d.density(x[i]), 1e-9);
         }
     }
 
@@ -177,17 +183,17 @@ public class ParetoDistributionTest extends RealDistributionAbstractTest {
         for (int i = 0; i < 1e5; i++) { // make sure no convergence exception
             double upperTail = d.cumulativeProbability(i);
             if (i <= 1000) { // make sure not top-coded
-                Assert.assertTrue(upperTail < 1.0d);
+                Assertions.assertTrue(upperTail < 1.0d);
             }
             else { // make sure top coding not reversed
-                Assert.assertTrue(upperTail > 0.999);
+                Assertions.assertTrue(upperTail > 0.999);
             }
         }
 
-        Assert.assertEquals(d.cumulativeProbability(Double.MAX_VALUE), 1, 0);
-        Assert.assertEquals(d.cumulativeProbability(-Double.MAX_VALUE), 0, 0);
-        Assert.assertEquals(d.cumulativeProbability(Double.POSITIVE_INFINITY), 1, 0);
-        Assert.assertEquals(d.cumulativeProbability(Double.NEGATIVE_INFINITY), 0, 0);
+        Assertions.assertEquals(1, d.cumulativeProbability(Double.MAX_VALUE), 0);
+        Assertions.assertEquals(0, d.cumulativeProbability(-Double.MAX_VALUE), 0);
+        Assertions.assertEquals(1, d.cumulativeProbability(Double.POSITIVE_INFINITY), 0);
+        Assertions.assertEquals(0, d.cumulativeProbability(Double.NEGATIVE_INFINITY), 0);
     }
 
     @Test
@@ -196,11 +202,11 @@ public class ParetoDistributionTest extends RealDistributionAbstractTest {
         ParetoDistribution dist;
 
         dist = new ParetoDistribution(1, 1);
-        Assert.assertEquals(dist.getNumericalMean(), Double.POSITIVE_INFINITY, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), Double.POSITIVE_INFINITY, tol);
+        Assertions.assertEquals(Double.POSITIVE_INFINITY, dist.getNumericalMean(), tol);
+        Assertions.assertEquals(Double.POSITIVE_INFINITY, dist.getNumericalVariance(), tol);
 
         dist = new ParetoDistribution(2.2, 2.4);
-        Assert.assertEquals(dist.getNumericalMean(), 3.771428571428, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), 14.816326530, tol);
+        Assertions.assertEquals(3.771428571428, dist.getNumericalMean(), tol);
+        Assertions.assertEquals(14.816326530, dist.getNumericalVariance(), tol);
     }
 }

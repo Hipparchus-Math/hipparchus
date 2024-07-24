@@ -26,8 +26,8 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test the SplineInterpolator.
@@ -92,8 +92,8 @@ public class SplineInterpolatorTest extends UnivariateInterpolatorAbstractTest {
         UnitTestUtils.assertEquals(polynomials[7].getCoefficients(), target, sineCoefficientTolerance);
 
         //Check interpolation
-        Assert.assertEquals(FastMath.sqrt(2d) / 2d,f.value(FastMath.PI/4d),sineInterpolationTolerance);
-        Assert.assertEquals(FastMath.sqrt(2d) / 2d,f.value(3d*FastMath.PI/4d),sineInterpolationTolerance);
+        Assertions.assertEquals(FastMath.sqrt(2d) / 2d,f.value(FastMath.PI/4d),sineInterpolationTolerance);
+        Assertions.assertEquals(FastMath.sqrt(2d) / 2d,f.value(3d*FastMath.PI/4d),sineInterpolationTolerance);
     }
 
     /**
@@ -105,10 +105,10 @@ public class SplineInterpolatorTest extends UnivariateInterpolatorAbstractTest {
         PolynomialFunction[] polynomials = f.getPolynomials();
         for (int i = 1; i < x.length - 2; i++) {
             // evaluate polynomials and derivatives at x[i + 1]
-            Assert.assertEquals(polynomials[i].value(x[i +1] - x[i]), polynomials[i + 1].value(0), 0.1);
-            Assert.assertEquals(polynomials[i].polynomialDerivative().value(x[i +1] - x[i]),
+            Assertions.assertEquals(polynomials[i].value(x[i +1] - x[i]), polynomials[i + 1].value(0), 0.1);
+            Assertions.assertEquals(polynomials[i].polynomialDerivative().value(x[i +1] - x[i]),
                                 polynomials[i + 1].polynomialDerivative().value(0), 0.5);
-            Assert.assertEquals(polynomials[i].polynomialDerivative().polynomialDerivative().value(x[i +1] - x[i]),
+            Assertions.assertEquals(polynomials[i].polynomialDerivative().polynomialDerivative().value(x[i +1] - x[i]),
                                 polynomials[i + 1].polynomialDerivative().polynomialDerivative().value(0), 0.5);
         }
     }

@@ -17,15 +17,15 @@
 
 package org.hipparchus.random;
 
-import java.util.Arrays;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 public class CorrelatedRandomVectorGeneratorTest {
     private double[] mean;
@@ -64,7 +64,7 @@ public class CorrelatedRandomVectorGeneratorTest {
 
     @Test
     public void testRank() {
-        Assert.assertEquals(2, generator.getRank());
+        Assertions.assertEquals(2, generator.getRank());
     }
 
     @Test
@@ -95,7 +95,7 @@ public class CorrelatedRandomVectorGeneratorTest {
             }
         }
         for (int j = 0; j < min.length; ++j) {
-            Assert.assertTrue(max[j] - min[j] > 2.0);
+            Assertions.assertTrue(max[j] - min[j] > 2.0);
         }
 
     }
@@ -106,7 +106,7 @@ public class CorrelatedRandomVectorGeneratorTest {
         RealMatrix bbt = b.multiplyTransposed(b);
         for (int i = 0; i < covariance.getRowDimension(); ++i) {
             for (int j = 0; j < covariance.getColumnDimension(); ++j) {
-                Assert.assertEquals(covariance.getEntry(i, j), bbt.getEntry(i, j), 1.0e-12);
+                Assertions.assertEquals(covariance.getEntry(i, j), bbt.getEntry(i, j), 1.0e-12);
             }
         }
     }
@@ -127,9 +127,9 @@ public class CorrelatedRandomVectorGeneratorTest {
 
         RealMatrix estimatedCovariance = UnitTestUtils.covarianceMatrix(matrix);
         for (int i = 0; i < meanStat.length; ++i) {
-            Assert.assertEquals(mean[i], meanStat[i], 0.07);
+            Assertions.assertEquals(mean[i], meanStat[i], 0.07);
             for (int j = 0; j <= i; ++j) {
-                Assert.assertEquals(covariance.getEntry(i, j),
+                Assertions.assertEquals(covariance.getEntry(i, j),
                                     estimatedCovariance.getEntry(i, j),
                                     0.1 * (1.0 + FastMath.abs(mean[i])) * (1.0 + FastMath.abs(mean[j])));
             }

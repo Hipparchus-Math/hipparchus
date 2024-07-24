@@ -25,8 +25,10 @@ package org.hipparchus.analysis.solvers;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test case for {@link RegulaFalsiSolver Regula Falsi} solver.
@@ -50,17 +52,19 @@ public final class RegulaFalsiSolverTest extends BaseSecantSolverAbstractTest {
         return new int[] {3, 7, 8, 19, 18, 11, 67, 55, 288, 151, -1};
     }
 
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testIssue631() {
-        final UnivariateFunction f = new UnivariateFunction() {
+        assertThrows(MathIllegalStateException.class, () -> {
+            final UnivariateFunction f = new UnivariateFunction() {
                 /** {@inheritDoc} */
                 public double value(double x) {
                     return FastMath.exp(x) - FastMath.pow(Math.PI, 3.0);
                 }
             };
 
-        final UnivariateSolver solver = new RegulaFalsiSolver();
-        final double root = solver.solve(3624, f, 1, 10);
-        Assert.assertEquals(3.4341896575482003, root, 1e-15);
+            final UnivariateSolver solver = new RegulaFalsiSolver();
+            final double root = solver.solve(3624, f, 1, 10);
+            Assertions.assertEquals(3.4341896575482003, root, 1e-15);
+        });
     }
 }

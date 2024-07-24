@@ -16,10 +16,10 @@
  */
 package org.hipparchus.exception;
 
-import java.util.Locale;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Assert;
-import org.junit.Test;
+import java.util.Locale;
 
 public class DummyLocalizableTest {
 
@@ -27,9 +27,9 @@ public class DummyLocalizableTest {
     public void  testAllSame() {
         final String source = "this is a string";
         DummyLocalizable dummy = new DummyLocalizable(source);
-        Assert.assertSame(source, dummy.getSourceString());
-        Assert.assertSame(source, dummy.getLocalizedString(Locale.FRENCH));
-        Assert.assertSame(source, dummy.toString());
+        Assertions.assertSame(source, dummy.getSourceString());
+        Assertions.assertSame(source, dummy.getLocalizedString(Locale.FRENCH));
+        Assertions.assertSame(source, dummy.toString());
     }
 
 }

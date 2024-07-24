@@ -16,17 +16,17 @@
  */
 package org.hipparchus.distribution;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.Pair;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.util.MathArrays;
-import org.hipparchus.util.Pair;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class EnumeratedDistributionTest {
 

@@ -25,8 +25,8 @@ import org.hipparchus.special.Gamma;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test of the {@link FieldLaguerreRuleFactory}.
@@ -42,7 +42,7 @@ public class FieldLaguerreTest {
             final double t = i;
             final FieldGaussIntegrator<Binary64> integrator = factory.laguerre(7);
             final double s = integrator.integrate(x -> FastMath.pow(x, t - 1)).getReal();
-            Assert.assertEquals(1d, Gamma.gamma(t) / s, tol);
+            Assertions.assertEquals(1d, Gamma.gamma(t) / s, tol);
         }
     }
 }

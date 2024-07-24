@@ -36,8 +36,10 @@ import org.hipparchus.optim.SimpleValueChecker;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunctionGradient;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -102,21 +104,23 @@ import org.junit.Test;
  * @author Luc Maisonobe (non-minpack tests and minpack tests Java translation)
  */
 public class NonLinearConjugateGradientOptimizerTest {
-    @Test(expected=MathRuntimeException.class)
+    @Test
     public void testBoundsUnsupported() {
-        LinearProblem problem
-            = new LinearProblem(new double[][] { { 2 } }, new double[] { 3 });
-        NonLinearConjugateGradientOptimizer optimizer
-            = new NonLinearConjugateGradientOptimizer(NonLinearConjugateGradientOptimizer.Formula.POLAK_RIBIERE,
-                                                      new SimpleValueChecker(1e-6, 1e-6),
-                                                      1e-3, 1e-3, 1);
-        optimizer.optimize(new MaxEval(100),
-                           problem.getObjectiveFunction(),
-                           problem.getObjectiveFunctionGradient(),
-                           GoalType.MINIMIZE,
-                           new InitialGuess(new double[] { 0 }),
-                           new SimpleBounds(new double[] { -1 },
-                                            new double[] { 1 }));
+        assertThrows(MathRuntimeException.class, () -> {
+            LinearProblem problem
+                = new LinearProblem(new double[][]{{2}}, new double[]{3});
+            NonLinearConjugateGradientOptimizer optimizer
+                = new NonLinearConjugateGradientOptimizer(NonLinearConjugateGradientOptimizer.Formula.POLAK_RIBIERE,
+                new SimpleValueChecker(1e-6, 1e-6),
+                1e-3, 1e-3, 1);
+            optimizer.optimize(new MaxEval(100),
+                problem.getObjectiveFunction(),
+                problem.getObjectiveFunctionGradient(),
+                GoalType.MINIMIZE,
+                new InitialGuess(new double[]{0}),
+                new SimpleBounds(new double[]{-1},
+                    new double[]{1}));
+        });
     }
 
     @Test
@@ -133,11 +137,11 @@ public class NonLinearConjugateGradientOptimizerTest {
                                  problem.getObjectiveFunctionGradient(),
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { 0 }));
-        Assert.assertEquals(1.5, optimum.getPoint()[0], 1.0e-10);
-        Assert.assertEquals(0.0, optimum.getValue(), 1.0e-10);
+        Assertions.assertEquals(1.5, optimum.getPoint()[0], 1.0e-10);
+        Assertions.assertEquals(0.0, optimum.getValue(), 1.0e-10);
 
         // Check that the number of iterations is updated (MATH-949).
-        Assert.assertTrue(optimizer.getIterations() > 0);
+        Assertions.assertTrue(optimizer.getIterations() > 0);
     }
 
     @Test
@@ -156,9 +160,9 @@ public class NonLinearConjugateGradientOptimizerTest {
                                  problem.getObjectiveFunctionGradient(),
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { 0, 0 }));
-        Assert.assertEquals(7.0, optimum.getPoint()[0], 1.0e-10);
-        Assert.assertEquals(3.0, optimum.getPoint()[1], 1.0e-10);
-        Assert.assertEquals(0.0, optimum.getValue(), 1.0e-10);
+        Assertions.assertEquals(7.0, optimum.getPoint()[0], 1.0e-10);
+        Assertions.assertEquals(3.0, optimum.getPoint()[1], 1.0e-10);
+        Assertions.assertEquals(0.0, optimum.getValue(), 1.0e-10);
 
     }
 
@@ -183,7 +187,7 @@ public class NonLinearConjugateGradientOptimizerTest {
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { 0, 0, 0, 0, 0, 0 }));
         for (int i = 0; i < problem.target.length; ++i) {
-            Assert.assertEquals(0.55 * i, optimum.getPoint()[i], 1.0e-10);
+            Assertions.assertEquals(0.55 * i, optimum.getPoint()[i], 1.0e-10);
         }
     }
 
@@ -204,9 +208,9 @@ public class NonLinearConjugateGradientOptimizerTest {
                                  problem.getObjectiveFunctionGradient(),
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { 0, 0, 0 }));
-        Assert.assertEquals(1.0, optimum.getPoint()[0], 1.0e-10);
-        Assert.assertEquals(2.0, optimum.getPoint()[1], 1.0e-10);
-        Assert.assertEquals(3.0, optimum.getPoint()[2], 1.0e-10);
+        Assertions.assertEquals(1.0, optimum.getPoint()[0], 1.0e-10);
+        Assertions.assertEquals(2.0, optimum.getPoint()[1], 1.0e-10);
+        Assertions.assertEquals(3.0, optimum.getPoint()[2], 1.0e-10);
 
     }
 
@@ -252,12 +256,12 @@ public class NonLinearConjugateGradientOptimizerTest {
         final double[] result = optimum.getPoint();
         final double[] expected = {3, 4, -1, -2, 1 + epsilon, 1 - epsilon};
 
-        Assert.assertEquals(expected[0], result[0], 1.0e-7);
-        Assert.assertEquals(expected[1], result[1], 1.0e-7);
-        Assert.assertEquals(expected[2], result[2], 1.0e-9);
-        Assert.assertEquals(expected[3], result[3], 1.0e-8);
-        Assert.assertEquals(expected[4] + epsilon, result[4], 1.0e-6);
-        Assert.assertEquals(expected[5] - epsilon, result[5], 1.0e-6);
+        Assertions.assertEquals(expected[0], result[0], 1.0e-7);
+        Assertions.assertEquals(expected[1], result[1], 1.0e-7);
+        Assertions.assertEquals(expected[2], result[2], 1.0e-9);
+        Assertions.assertEquals(expected[3], result[3], 1.0e-8);
+        Assertions.assertEquals(expected[4] + epsilon, result[4], 1.0e-6);
+        Assertions.assertEquals(expected[5] - epsilon, result[5], 1.0e-6);
 
     }
 
@@ -278,7 +282,7 @@ public class NonLinearConjugateGradientOptimizerTest {
                                  problem.getObjectiveFunctionGradient(),
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { 0, 0, 0 }));
-        Assert.assertTrue(optimum.getValue() > 0.5);
+        Assertions.assertTrue(optimum.getValue() > 0.5);
     }
 
     @Test
@@ -299,10 +303,10 @@ public class NonLinearConjugateGradientOptimizerTest {
                                  problem1.getObjectiveFunctionGradient(),
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { 0, 1, 2, 3 }));
-        Assert.assertEquals(1.0, optimum1.getPoint()[0], 1.0e-4);
-        Assert.assertEquals(1.0, optimum1.getPoint()[1], 1.0e-3);
-        Assert.assertEquals(1.0, optimum1.getPoint()[2], 1.0e-4);
-        Assert.assertEquals(1.0, optimum1.getPoint()[3], 1.0e-4);
+        Assertions.assertEquals(1.0, optimum1.getPoint()[0], 1.0e-4);
+        Assertions.assertEquals(1.0, optimum1.getPoint()[1], 1.0e-3);
+        Assertions.assertEquals(1.0, optimum1.getPoint()[2], 1.0e-4);
+        Assertions.assertEquals(1.0, optimum1.getPoint()[3], 1.0e-4);
 
         LinearProblem problem2 = new LinearProblem(new double[][] {
                 { 10.00, 7.00, 8.10, 7.20 },
@@ -320,10 +324,10 @@ public class NonLinearConjugateGradientOptimizerTest {
         final double[] result2 = optimum2.getPoint();
         final double[] expected2 = {-81, 137, -34, 22};
 
-        Assert.assertEquals(expected2[0], result2[0], 2);
-        Assert.assertEquals(expected2[1], result2[1], 4);
-        Assert.assertEquals(expected2[2], result2[2], 1);
-        Assert.assertEquals(expected2[3], result2[3], 1);
+        Assertions.assertEquals(expected2[0], result2[0], 2);
+        Assertions.assertEquals(expected2[1], result2[1], 4);
+        Assertions.assertEquals(expected2[2], result2[2], 1);
+        Assertions.assertEquals(expected2[3], result2[3], 1);
     }
 
     @Test
@@ -344,7 +348,7 @@ public class NonLinearConjugateGradientOptimizerTest {
                                  problem.getObjectiveFunctionGradient(),
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { 7, 6, 5, 4 }));
-        Assert.assertEquals(0, optimum.getValue(), 1.0e-10);
+        Assertions.assertEquals(0, optimum.getValue(), 1.0e-10);
 
     }
 
@@ -367,7 +371,7 @@ public class NonLinearConjugateGradientOptimizerTest {
                                  problem.getObjectiveFunctionGradient(),
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { 2, 2, 2, 2, 2, 2 }));
-        Assert.assertEquals(0, optimum.getValue(), 1.0e-10);
+        Assertions.assertEquals(0, optimum.getValue(), 1.0e-10);
     }
 
     @Test
@@ -388,8 +392,8 @@ public class NonLinearConjugateGradientOptimizerTest {
                                  problem.getObjectiveFunctionGradient(),
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { 1, 1 }));
-        Assert.assertEquals(2.0, optimum.getPoint()[0], 1.0e-8);
-        Assert.assertEquals(1.0, optimum.getPoint()[1], 1.0e-8);
+        Assertions.assertEquals(2.0, optimum.getPoint()[0], 1.0e-8);
+        Assertions.assertEquals(1.0, optimum.getPoint()[1], 1.0e-8);
 
     }
 
@@ -411,7 +415,7 @@ public class NonLinearConjugateGradientOptimizerTest {
                                  problem.getObjectiveFunctionGradient(),
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { 1, 1 }));
-        Assert.assertTrue(optimum.getValue() > 0.1);
+        Assertions.assertTrue(optimum.getValue() > 0.1);
 
     }
 
@@ -434,9 +438,9 @@ public class NonLinearConjugateGradientOptimizerTest {
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { 98.680, 47.345 }));
         Vector2D center = new Vector2D(optimum.getPointRef()[0], optimum.getPointRef()[1]);
-        Assert.assertEquals(69.960161753, problem.getRadius(center), 1.0e-8);
-        Assert.assertEquals(96.075902096, center.getX(), 1.0e-7);
-        Assert.assertEquals(48.135167894, center.getY(), 1.0e-6);
+        Assertions.assertEquals(69.960161753, problem.getRadius(center), 1.0e-8);
+        Assertions.assertEquals(96.075902096, center.getX(), 1.0e-7);
+        Assertions.assertEquals(48.135167894, center.getY(), 1.0e-6);
     }
 
     private static class LinearProblem {

@@ -17,11 +17,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
-
-import java.lang.reflect.InvocationTargetException;
-
-import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
@@ -33,8 +30,10 @@ import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.InvocationTargetException;
 
 public abstract class FieldODEStateInterpolatorAbstractTest {
 
@@ -47,21 +46,21 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
                                                                       new SinCos<T>(field),
                                                                       0.0, new double[] { 0.0, 1.0 }, 0.125);
 
-        Assert.assertEquals(0.0, interpolator.getPreviousState().getTime().getReal(), 1.0e-15);
+        Assertions.assertEquals(0.0, interpolator.getPreviousState().getTime().getReal(), 1.0e-15);
         for (int i = 0; i < 2; ++i) {
-            Assert.assertEquals(interpolator.getPreviousState().getPrimaryState()[i].getReal(),
+            Assertions.assertEquals(interpolator.getPreviousState().getPrimaryState()[i].getReal(),
                                 interpolator.getInterpolatedState(interpolator.getPreviousState().getTime()).getPrimaryState()[i].getReal(),
                                 epsilon);
         }
-        Assert.assertEquals(0.125, interpolator.getCurrentState().getTime().getReal(), 1.0e-15);
+        Assertions.assertEquals(0.125, interpolator.getCurrentState().getTime().getReal(), 1.0e-15);
         for (int i = 0; i < 2; ++i) {
-            Assert.assertEquals(interpolator.getCurrentState().getPrimaryState()[i].getReal(),
+            Assertions.assertEquals(interpolator.getCurrentState().getPrimaryState()[i].getReal(),
                                 interpolator.getInterpolatedState(interpolator.getCurrentState().getTime()).getPrimaryState()[i].getReal(),
                                 epsilon);
         }
 
-        Assert.assertEquals(false, interpolator.isPreviousStateInterpolated());
-        Assert.assertEquals(false, interpolator.isCurrentStateInterpolated());
+        Assertions.assertFalse(interpolator.isPreviousStateInterpolated());
+        Assertions.assertFalse(interpolator.isCurrentStateInterpolated());
     }
 
     @Test
@@ -86,11 +85,11 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
             maxErrorSin = FastMath.max(maxErrorSin, state.getPrimaryState()[0].subtract(ref[0]).norm());
             maxErrorCos = FastMath.max(maxErrorCos, state.getPrimaryState()[1].subtract(ref[1]).norm());
         }
-        Assert.assertEquals(0.0, maxErrorSin, epsilonSin);
-        Assert.assertEquals(0.0, maxErrorCos, epsilonCos);
+        Assertions.assertEquals(0.0, maxErrorSin, epsilonSin);
+        Assertions.assertEquals(0.0, maxErrorCos, epsilonCos);
 
-        Assert.assertEquals(false, interpolator.isPreviousStateInterpolated());
-        Assert.assertEquals(false, interpolator.isCurrentStateInterpolated());
+        Assertions.assertFalse(interpolator.isPreviousStateInterpolated());
+        Assertions.assertFalse(interpolator.isCurrentStateInterpolated());
     }
 
     @Test
@@ -106,22 +105,22 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
         AbstractFieldODEStateInterpolator<T> original = setUpInterpolator(
                 field, new SinCos<>(field), 0.0, new double[]{0.0, 1.0}, 0.125);
 
-        Assert.assertEquals(false, original.isPreviousStateInterpolated());
-        Assert.assertEquals(false, original.isCurrentStateInterpolated());
+        Assertions.assertFalse(original.isPreviousStateInterpolated());
+        Assertions.assertFalse(original.isCurrentStateInterpolated());
 
         AbstractFieldODEStateInterpolator<T> restricted = original.restrictStep(
                 original.getInterpolatedState(field.getZero().add(1.0 / 32)),
                 original.getCurrentState());
 
-        Assert.assertSame(original.getPreviousState(),       original.getGlobalPreviousState());
-        Assert.assertSame(original.getCurrentState(),        original.getGlobalCurrentState());
-        Assert.assertSame(original.getGlobalPreviousState(), restricted.getGlobalPreviousState());
-        Assert.assertSame(original.getGlobalCurrentState(),  restricted.getGlobalCurrentState());
-        Assert.assertNotSame(restricted.getPreviousState(),  restricted.getGlobalPreviousState());
-        Assert.assertSame(restricted.getCurrentState(),      restricted.getGlobalCurrentState());
-        Assert.assertEquals(1.0 / 32, restricted.getPreviousState().getTime().getReal(), 1.0e-15);
-        Assert.assertEquals(true, restricted.isPreviousStateInterpolated());
-        Assert.assertEquals(false, restricted.isCurrentStateInterpolated());
+        Assertions.assertSame(original.getPreviousState(),       original.getGlobalPreviousState());
+        Assertions.assertSame(original.getCurrentState(),        original.getGlobalCurrentState());
+        Assertions.assertSame(original.getGlobalPreviousState(), restricted.getGlobalPreviousState());
+        Assertions.assertSame(original.getGlobalCurrentState(),  restricted.getGlobalCurrentState());
+        Assertions.assertNotSame(restricted.getPreviousState(),  restricted.getGlobalPreviousState());
+        Assertions.assertSame(restricted.getCurrentState(),      restricted.getGlobalCurrentState());
+        Assertions.assertEquals(1.0 / 32, restricted.getPreviousState().getTime().getReal(), 1.0e-15);
+        Assertions.assertTrue(restricted.isPreviousStateInterpolated());
+        Assertions.assertFalse(restricted.isCurrentStateInterpolated());
 
         checkRestricted(original, restricted, epsilon, epsilonDot);
 
@@ -139,22 +138,22 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
         AbstractFieldODEStateInterpolator<T> original = setUpInterpolator(
                 field, new SinCos<>(field), 0.0, new double[]{0.0, 1.0}, 0.125);
 
-        Assert.assertEquals(false, original.isPreviousStateInterpolated());
-        Assert.assertEquals(false, original.isCurrentStateInterpolated());
+        Assertions.assertFalse(original.isPreviousStateInterpolated());
+        Assertions.assertFalse(original.isCurrentStateInterpolated());
 
         AbstractFieldODEStateInterpolator<T> restricted = original.restrictStep(
                 original.getPreviousState(),
                 original.getInterpolatedState(field.getZero().add(3.0 / 32)));
 
-        Assert.assertSame(original.getPreviousState(),       original.getGlobalPreviousState());
-        Assert.assertSame(original.getCurrentState(),        original.getGlobalCurrentState());
-        Assert.assertSame(original.getGlobalPreviousState(), restricted.getGlobalPreviousState());
-        Assert.assertSame(original.getGlobalCurrentState(),  restricted.getGlobalCurrentState());
-        Assert.assertSame(restricted.getPreviousState(),     restricted.getGlobalPreviousState());
-        Assert.assertNotSame(restricted.getCurrentState(),   restricted.getGlobalCurrentState());
-        Assert.assertEquals(3.0 / 32, restricted.getCurrentState().getTime().getReal(), 1.0e-15);
-        Assert.assertEquals(false, restricted.isPreviousStateInterpolated());
-        Assert.assertEquals(true, restricted.isCurrentStateInterpolated());
+        Assertions.assertSame(original.getPreviousState(),       original.getGlobalPreviousState());
+        Assertions.assertSame(original.getCurrentState(),        original.getGlobalCurrentState());
+        Assertions.assertSame(original.getGlobalPreviousState(), restricted.getGlobalPreviousState());
+        Assertions.assertSame(original.getGlobalCurrentState(),  restricted.getGlobalCurrentState());
+        Assertions.assertSame(restricted.getPreviousState(),     restricted.getGlobalPreviousState());
+        Assertions.assertNotSame(restricted.getCurrentState(),   restricted.getGlobalCurrentState());
+        Assertions.assertEquals(3.0 / 32, restricted.getCurrentState().getTime().getReal(), 1.0e-15);
+        Assertions.assertFalse(restricted.isPreviousStateInterpolated());
+        Assertions.assertTrue(restricted.isCurrentStateInterpolated());
 
         checkRestricted(original, restricted, epsilon, epsilonDot);
 
@@ -172,23 +171,23 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
         AbstractFieldODEStateInterpolator<T> original = setUpInterpolator(
                 field, new SinCos<>(field), 0.0, new double[]{0.0, 1.0}, 0.125);
 
-        Assert.assertEquals(false, original.isPreviousStateInterpolated());
-        Assert.assertEquals(false, original.isCurrentStateInterpolated());
+        Assertions.assertFalse(original.isPreviousStateInterpolated());
+        Assertions.assertFalse(original.isCurrentStateInterpolated());
 
         AbstractFieldODEStateInterpolator<T> restricted = original.restrictStep(
                 original.getInterpolatedState(field.getZero().add(1.0 / 32)),
                 original.getInterpolatedState(field.getZero().add(3.0 / 32)));
 
-        Assert.assertSame(original.getPreviousState(),       original.getGlobalPreviousState());
-        Assert.assertSame(original.getCurrentState(),        original.getGlobalCurrentState());
-        Assert.assertSame(original.getGlobalPreviousState(), restricted.getGlobalPreviousState());
-        Assert.assertSame(original.getGlobalCurrentState(),  restricted.getGlobalCurrentState());
-        Assert.assertNotSame(restricted.getPreviousState(),  restricted.getGlobalPreviousState());
-        Assert.assertNotSame(restricted.getCurrentState(),   restricted.getGlobalCurrentState());
-        Assert.assertEquals(1.0 / 32, restricted.getPreviousState().getTime().getReal(), 1.0e-15);
-        Assert.assertEquals(3.0 / 32, restricted.getCurrentState().getTime().getReal(), 1.0e-15);
-        Assert.assertEquals(true, restricted.isPreviousStateInterpolated());
-        Assert.assertEquals(true, restricted.isCurrentStateInterpolated());
+        Assertions.assertSame(original.getPreviousState(),       original.getGlobalPreviousState());
+        Assertions.assertSame(original.getCurrentState(),        original.getGlobalCurrentState());
+        Assertions.assertSame(original.getGlobalPreviousState(), restricted.getGlobalPreviousState());
+        Assertions.assertSame(original.getGlobalCurrentState(),  restricted.getGlobalCurrentState());
+        Assertions.assertNotSame(restricted.getPreviousState(),  restricted.getGlobalPreviousState());
+        Assertions.assertNotSame(restricted.getCurrentState(),   restricted.getGlobalCurrentState());
+        Assertions.assertEquals(1.0 / 32, restricted.getPreviousState().getTime().getReal(), 1.0e-15);
+        Assertions.assertEquals(3.0 / 32, restricted.getCurrentState().getTime().getReal(), 1.0e-15);
+        Assertions.assertTrue(restricted.isPreviousStateInterpolated());
+        Assertions.assertTrue(restricted.isCurrentStateInterpolated());
 
         checkRestricted(original, restricted, epsilon, epsilonDot);
 
@@ -203,11 +202,11 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
         AbstractFieldODEStateInterpolator<T> interpolator = setUpInterpolator(
                 field, new SinCos<>(field), 0.0, new double[] { 0.0, 1.0 }, 0.0);
         FieldODEStateAndDerivative<T> interpolatedState = interpolator.getInterpolatedState(field.getZero());
-        Assert.assertEquals(0.0, interpolatedState.getTime().getReal(), 0.0);
-        Assert.assertEquals(0.0, interpolatedState.getPrimaryState()[0].getReal(), 0.0);
-        Assert.assertEquals(1.0, interpolatedState.getPrimaryState()[1].getReal(), 0.0);
-        Assert.assertEquals(1.0, interpolatedState.getPrimaryDerivative()[0].getReal(), 0.0);
-        Assert.assertEquals(0.0, interpolatedState.getPrimaryDerivative()[1].getReal(), 0.0);
+        Assertions.assertEquals(0.0, interpolatedState.getTime().getReal(), 0.0);
+        Assertions.assertEquals(0.0, interpolatedState.getPrimaryState()[0].getReal(), 0.0);
+        Assertions.assertEquals(1.0, interpolatedState.getPrimaryState()[1].getReal(), 0.0);
+        Assertions.assertEquals(1.0, interpolatedState.getPrimaryDerivative()[0].getReal(), 0.0);
+        Assertions.assertEquals(0.0, interpolatedState.getPrimaryDerivative()[1].getReal(), 0.0);
     }
 
     private <T extends CalculusFieldElement<T>> void checkRestricted(
@@ -221,18 +220,18 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
              t = t.add(1.0 / 256)) {
             FieldODEStateAndDerivative<T> originalInterpolated   = original.getInterpolatedState(t);
             FieldODEStateAndDerivative<T> restrictedInterpolated = restricted.getInterpolatedState(t);
-            Assert.assertEquals(t.getReal(), originalInterpolated.getTime().getReal(), 1.0e-15);
-            Assert.assertEquals(t.getReal(), restrictedInterpolated.getTime().getReal(), 1.0e-15);
-            Assert.assertEquals(originalInterpolated.getPrimaryState()[0].getReal(),
+            Assertions.assertEquals(t.getReal(), originalInterpolated.getTime().getReal(), 1.0e-15);
+            Assertions.assertEquals(t.getReal(), restrictedInterpolated.getTime().getReal(), 1.0e-15);
+            Assertions.assertEquals(originalInterpolated.getPrimaryState()[0].getReal(),
                                 restrictedInterpolated.getPrimaryState()[0].getReal(),
                                 epsilon);
-            Assert.assertEquals(originalInterpolated.getPrimaryState()[1].getReal(),
+            Assertions.assertEquals(originalInterpolated.getPrimaryState()[1].getReal(),
                                 restrictedInterpolated.getPrimaryState()[1].getReal(),
                                 epsilon);
-            Assert.assertEquals(originalInterpolated.getPrimaryDerivative()[0].getReal(),
+            Assertions.assertEquals(originalInterpolated.getPrimaryDerivative()[0].getReal(),
                                 restrictedInterpolated.getPrimaryDerivative()[0].getReal(),
                                 epsilonDot);
-            Assert.assertEquals(originalInterpolated.getPrimaryDerivative()[1].getReal(),
+            Assertions.assertEquals(originalInterpolated.getPrimaryDerivative()[1].getReal(),
                                 restrictedInterpolated.getPrimaryDerivative()[1].getReal(),
                                 epsilonDot);
         }
@@ -276,10 +275,10 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
             maxErrorCosDot = FastMath.max(maxErrorCosDot, fieldYDot[1].subtract(regularYDot[1]).norm());
 
         }
-        Assert.assertEquals(0.0, maxErrorSin,    epsilonSin);
-        Assert.assertEquals(0.0, maxErrorCos,    epsilonCos);
-        Assert.assertEquals(0.0, maxErrorSinDot, epsilonSinDot);
-        Assert.assertEquals(0.0, maxErrorCosDot, epsilonCosDot);
+        Assertions.assertEquals(0.0, maxErrorSin,    epsilonSin);
+        Assertions.assertEquals(0.0, maxErrorCos,    epsilonCos);
+        Assertions.assertEquals(0.0, maxErrorSinDot, epsilonSinDot);
+        Assertions.assertEquals(0.0, maxErrorCosDot, epsilonCosDot);
 
     }
 

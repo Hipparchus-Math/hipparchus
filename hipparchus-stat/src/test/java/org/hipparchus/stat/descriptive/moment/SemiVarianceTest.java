@@ -22,18 +22,18 @@
 
 package org.hipparchus.stat.descriptive.moment;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.Arrays;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.UnivariateStatisticAbstractTest;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for the {@link SemiVariance} class.
@@ -42,7 +42,7 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
 
     private double semiVariance;
 
-    @Before
+    @BeforeEach
     public void setup() {
         // calculate the semivariance the same way as defined by
         // the SemiVariance class. This is not the same as calculating

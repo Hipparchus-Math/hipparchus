@@ -24,8 +24,10 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test of the LoessInterpolator class.
@@ -37,8 +39,8 @@ public class LoessInterpolatorTest {
         double[] xval = {0.5};
         double[] yval = {0.7};
         double[] res = new LoessInterpolator().smooth(xval, yval);
-        Assert.assertEquals(1, res.length);
-        Assert.assertEquals(0.7, res[0], 0.0);
+        Assertions.assertEquals(1, res.length);
+        Assertions.assertEquals(0.7, res[0], 0.0);
     }
 
     @Test
@@ -46,9 +48,9 @@ public class LoessInterpolatorTest {
         double[] xval = {0.5, 0.6};
         double[] yval = {0.7, 0.8};
         double[] res = new LoessInterpolator().smooth(xval, yval);
-        Assert.assertEquals(2, res.length);
-        Assert.assertEquals(0.7, res[0], 0.0);
-        Assert.assertEquals(0.8, res[1], 0.0);
+        Assertions.assertEquals(2, res.length);
+        Assertions.assertEquals(0.7, res[0], 0.0);
+        Assertions.assertEquals(0.8, res[1], 0.0);
     }
 
     @Test
@@ -57,9 +59,9 @@ public class LoessInterpolatorTest {
         double[] yval = {2,4,6,8,10};
         LoessInterpolator li = new LoessInterpolator(0.6, 2, 1e-12);
         double[] res = li.smooth(xval, yval);
-        Assert.assertEquals(5, res.length);
+        Assertions.assertEquals(5, res.length);
         for(int i = 0; i < 5; ++i) {
-            Assert.assertEquals(yval[i], res[i], 1e-8);
+            Assertions.assertEquals(yval[i], res[i], 1e-8);
         }
     }
 
@@ -92,7 +94,7 @@ public class LoessInterpolatorTest {
             fitResidualSum += FastMath.pow(fit - expected, 2);
         }
 
-        Assert.assertTrue(fitResidualSum < noisyResidualSum);
+        Assertions.assertTrue(fitResidualSum < noisyResidualSum);
     }
 
     @Test
@@ -122,7 +124,7 @@ public class LoessInterpolatorTest {
         }
 
         for(int i = 1; i < variances.length; ++i) {
-            Assert.assertTrue(variances[i] < variances[i-1]);
+            Assertions.assertTrue(variances[i] < variances[i-1]);
         }
     }
 
@@ -155,37 +157,45 @@ public class LoessInterpolatorTest {
         }
 
         for(int i = 1; i < variances.length; ++i) {
-            Assert.assertTrue(variances[i] < variances[i-1]);
+            Assertions.assertTrue(variances[i] < variances[i-1]);
         }
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testUnequalSizeArguments() {
-        new LoessInterpolator().smooth(new double[] {1,2,3}, new double[] {1,2,3,4});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new LoessInterpolator().smooth(new double[]{1, 2, 3}, new double[]{1, 2, 3, 4});
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testEmptyData() {
-        new LoessInterpolator().smooth(new double[] {}, new double[] {});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new LoessInterpolator().smooth(new double[]{}, new double[]{});
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNonStrictlyIncreasing1() {
-        new LoessInterpolator().smooth(new double[] {4,3,1,2}, new double[] {3,4,5,6});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new LoessInterpolator().smooth(new double[]{4, 3, 1, 2}, new double[]{3, 4, 5, 6});
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNonStrictlyIncreasing2() {
-        new LoessInterpolator().smooth(new double[] {1,2,2,3}, new double[] {3,4,5,6});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new LoessInterpolator().smooth(new double[]{1, 2, 2, 3}, new double[]{3, 4, 5, 6});
+        });
     }
 
     @Test
     public void testNotAllFiniteReal1() {
         try {
             new LoessInterpolator().smooth(new double[] {1,2,Double.NaN}, new double[] {3,4,5});
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
     }
 
@@ -194,7 +204,7 @@ public class LoessInterpolatorTest {
         try {
             new LoessInterpolator().smooth(new double[] {1,2,Double.POSITIVE_INFINITY}, new double[] {3,4,5});
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
     }
 
@@ -203,7 +213,7 @@ public class LoessInterpolatorTest {
         try {
             new LoessInterpolator().smooth(new double[] {1,2,Double.NEGATIVE_INFINITY}, new double[] {3,4,5});
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
     }
 
@@ -212,7 +222,7 @@ public class LoessInterpolatorTest {
         try {
             new LoessInterpolator().smooth(new double[] {3,4,5}, new double[] {1,2,Double.NaN});
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
     }
 
@@ -221,7 +231,7 @@ public class LoessInterpolatorTest {
         try {
             new LoessInterpolator().smooth(new double[] {3,4,5}, new double[] {1,2,Double.POSITIVE_INFINITY});
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
     }
 
@@ -230,24 +240,30 @@ public class LoessInterpolatorTest {
         try {
             new LoessInterpolator().smooth(new double[] {3,4,5}, new double[] {1,2,Double.NEGATIVE_INFINITY});
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testInsufficientBandwidth() {
-        LoessInterpolator li = new LoessInterpolator(0.1, 3, 1e-12);
-        li.smooth(new double[] {1,2,3,4,5,6,7,8,9,10,11,12}, new double[] {1,2,3,4,5,6,7,8,9,10,11,12});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            LoessInterpolator li = new LoessInterpolator(0.1, 3, 1e-12);
+            li.smooth(new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}, new double[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testCompletelyIncorrectBandwidth1() {
-        new LoessInterpolator(-0.2, 3, 1e-12);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new LoessInterpolator(-0.2, 3, 1e-12);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testCompletelyIncorrectBandwidth2() {
-        new LoessInterpolator(1.1, 3, 1e-12);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new LoessInterpolator(1.1, 3, 1e-12);
+        });
     }
 
     @Test
@@ -267,9 +283,9 @@ public class LoessInterpolatorTest {
         };
         LoessInterpolator li = new LoessInterpolator(0.3, 4, 1e-12);
         double[] res = li.smooth(xval, yval);
-        Assert.assertEquals(xval.length, res.length);
+        Assertions.assertEquals(xval.length, res.length);
         for(int i = 0; i < res.length; ++i) {
-            Assert.assertEquals(yref[i], res[i], 0.02);
+            Assertions.assertEquals(yref[i], res[i], 0.02);
         }
     }
 

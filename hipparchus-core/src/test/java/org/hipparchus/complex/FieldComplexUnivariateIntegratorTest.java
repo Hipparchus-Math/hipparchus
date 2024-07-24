@@ -23,9 +23,9 @@ import org.hipparchus.analysis.polynomials.FieldPolynomialFunction;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.MathUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 public class FieldComplexUnivariateIntegratorTest {
@@ -123,7 +123,7 @@ public class FieldComplexUnivariateIntegratorTest {
                                    1.0e-15);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         integrator = new FieldComplexUnivariateIntegrator<>(new IterativeLegendreFieldGaussIntegrator<>(Binary64Field.getInstance(),
                                                                                                         24,
@@ -131,7 +131,7 @@ public class FieldComplexUnivariateIntegratorTest {
                                                                                                         1.0e-12));
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         integrator = null;
     }

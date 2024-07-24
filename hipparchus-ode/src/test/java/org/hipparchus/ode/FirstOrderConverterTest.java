@@ -26,8 +26,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.nonstiff.ClassicalRungeKuttaIntegrator;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 public class FirstOrderConverterTest {
@@ -37,7 +37,7 @@ public class FirstOrderConverterTest {
         for (int i = 1; i < 10; ++i) {
             SecondOrderODE eqn2 = new Equations(i, 0.2);
             FirstOrderConverter eqn1 = new FirstOrderConverter(eqn2);
-            Assert.assertTrue(eqn1.getDimension() == (2 * eqn2.getDimension()));
+            Assertions.assertEquals(eqn1.getDimension(), (2 * eqn2.getDimension()));
         }
     }
 
@@ -52,7 +52,7 @@ public class FirstOrderConverterTest {
             double error = integrateWithSpecifiedStep(4.0, 0.0, 1.0, step)
                             - FastMath.sin(4.0);
             if (i > 0) {
-                Assert.assertTrue(FastMath.abs(error) < FastMath.abs(previousError));
+                Assertions.assertTrue(FastMath.abs(error) < FastMath.abs(previousError));
             }
             previousError = error;
 
@@ -64,7 +64,7 @@ public class FirstOrderConverterTest {
                     throws MathIllegalArgumentException, MathIllegalStateException {
         double error = integrateWithSpecifiedStep(4.0, 0.0, 1.0, 1.0e-4)
                         - FastMath.sin(4.0);
-        Assert.assertTrue(FastMath.abs(error) < 1.0e-10);
+        Assertions.assertTrue(FastMath.abs(error) < 1.0e-10);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class FirstOrderConverterTest {
                     throws MathIllegalArgumentException, MathIllegalStateException {
         double error = integrateWithSpecifiedStep(4.0, 0.0, 1.0, 0.5)
                         - FastMath.sin(4.0);
-        Assert.assertTrue(FastMath.abs(error) > 0.1);
+        Assertions.assertTrue(FastMath.abs(error) > 0.1);
     }
 
     private static class Equations

@@ -23,8 +23,8 @@ import org.hipparchus.special.elliptic.carlson.CarlsonEllipticIntegral;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends CalculusFieldElement<T>> {
 
@@ -46,12 +46,12 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
     protected abstract T integrate(int maxEval, CalculusFieldUnivariateFunction<T> f, T start, T middle, T end);
 
     private void check(double expectedReal, double expectedImaginary, T result, double tol) {
-        Assert.assertEquals(0, buildComplex(expectedReal, expectedImaginary).subtract(result).norm(), tol);
+        Assertions.assertEquals(0, buildComplex(expectedReal, expectedImaginary).subtract(result).norm(), tol);
     }
 
     @Test
     public void testNoConvergence() {
-        Assert.assertTrue(K(buildComplex(Double.NaN)).isNaN());
+        Assertions.assertTrue(K(buildComplex(Double.NaN)).isNaN());
     }
 
     @Test
@@ -59,14 +59,14 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
         for (double m = 0.01; m < 1; m += 0.01) {
             T k1 = K(buildComplex(m));
             T k2 = Kprime(buildComplex(1 - m));
-            Assert.assertEquals(k1.getReal(), k2.getReal(), FastMath.ulp(k1).getReal());
+            Assertions.assertEquals(k1.getReal(), k2.getReal(), FastMath.ulp(k1).getReal());
         }
     }
 
     @Test
     public void testAbramowitzStegunExample3() {
         T k = K(buildComplex(80.0 / 81.0));
-        Assert.assertEquals(3.591545001, k.getReal(), 2.0e-9);
+        Assertions.assertEquals(3.591545001, k.getReal(), 2.0e-9);
     }
 
     public void testAbramowitzStegunExample4() {
@@ -131,7 +131,7 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
         for (double m = 0.01; m < 1; m += 0.01) {
             double complete   = K(buildComplex(m)).getReal();
             double incomplete = F(buildComplex(MathUtils.SEMI_PI), buildComplex(m)).getReal();
-            Assert.assertEquals(complete, incomplete, FastMath.ulp(complete));
+            Assertions.assertEquals(complete, incomplete, FastMath.ulp(complete));
         }
     }
 
@@ -140,7 +140,7 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
         for (double m = 0.01; m < 1; m += 0.01) {
             double complete   = E(buildComplex(m)).getReal();
             double incomplete = E(buildComplex(MathUtils.SEMI_PI), buildComplex(m)).getReal();
-            Assert.assertEquals(complete, incomplete, 4 * FastMath.ulp(complete));
+            Assertions.assertEquals(complete, incomplete, 4 * FastMath.ulp(complete));
         }
     }
 
@@ -149,7 +149,7 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
         for (double m = 0.01; m < 1; m += 0.01) {
             double complete   = D(buildComplex(m)).getReal();
             double incomplete = D(buildComplex(MathUtils.SEMI_PI), buildComplex(m)).getReal();
-            Assert.assertEquals(complete, incomplete, FastMath.ulp(complete));
+            Assertions.assertEquals(complete, incomplete, FastMath.ulp(complete));
         }
     }
 
@@ -159,19 +159,19 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
             for (double m = 0.01; m < 1; m += 0.01) {
                 double complete   = Pi(buildComplex(alpha2), buildComplex(m)).getReal();
                 double incomplete = Pi(buildComplex(alpha2), buildComplex(MathUtils.SEMI_PI), buildComplex(m)).getReal();
-                Assert.assertEquals(complete, incomplete, FastMath.ulp(complete));
+                Assertions.assertEquals(complete, incomplete, FastMath.ulp(complete));
             }
         }
     }
 
     @Test
     public void testNomeSmallParameter() {
-        Assert.assertEquals(5.9375e-18, LegendreEllipticIntegral.nome(buildComplex(0.95e-16)).getReal(), 1.0e-50);
+        Assertions.assertEquals(5.9375e-18, LegendreEllipticIntegral.nome(buildComplex(0.95e-16)).getReal(), 1.0e-50);
     }
 
     @Test
     public void testIntegralsSmallParameter() {
-        Assert.assertEquals(7.8539816428e-10, K(buildComplex(2.0e-9)).getReal() - MathUtils.SEMI_PI, 1.0e-15);
+        Assertions.assertEquals(7.8539816428e-10, K(buildComplex(2.0e-9)).getReal() - MathUtils.SEMI_PI, 1.0e-15);
     }
 
     @Test
@@ -181,7 +181,7 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
         T m   = buildComplex(0.2,   0.6);
         T phi = buildComplex(1.2, 0.08);
         T ref = buildComplex(0.48657872913710487, -0.9325310177613093);
-        Assert.assertEquals(0.0, Pi(n, phi, m).subtract(ref).getReal(), 1.0e-15);
+        Assertions.assertEquals(0.0, Pi(n, phi, m).subtract(ref).getReal(), 1.0e-15);
 
         // no argument reduction and no precomputed delta
         final T csc     = phi.sin().reciprocal();
@@ -191,7 +191,7 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
         final T cMn     = csc2.subtract(n);
         final T pinphim = CarlsonEllipticIntegral.rF(cM1, cMm, csc2).
                           add(CarlsonEllipticIntegral.rJ(cM1, cMm, csc2, cMn).multiply(n).divide(3));
-        Assert.assertEquals(0.0, pinphim.subtract(ref).getReal(), 1.0e-15);
+        Assertions.assertEquals(0.0, pinphim.subtract(ref).getReal(), 1.0e-15);
 
     }
 
@@ -203,8 +203,8 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
                             subtract(E(phi, m)).
                             divide(m);
         final T integrated = integrate(100000, new Difference<>(m), buildComplex(1.0e-10, 1.0e-10), phi);
-        Assert.assertEquals(0.0, integrated.subtract(ref).norm(), 2.0e-10);
-        Assert.assertEquals(0.0, D(phi, m).subtract(ref).norm(), 1.0e-10);
+        Assertions.assertEquals(0.0, integrated.subtract(ref).norm(), 2.0e-10);
+        Assertions.assertEquals(0.0, D(phi, m).subtract(ref).norm(), 1.0e-10);
     }
 
     @Test
@@ -215,8 +215,8 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
                             subtract(E(phi, m)).
                             divide(m);
         final T integrated = integrate(100000, new Difference<>(m), buildComplex(1.0e-10, 1.0e-10), phi);
-        Assert.assertEquals(0.0, integrated.subtract(ref).norm(), 2.0e-10);
-        Assert.assertEquals(0.0, D(phi, m).subtract(ref).norm(), 1.0e-10);
+        Assertions.assertEquals(0.0, integrated.subtract(ref).norm(), 2.0e-10);
+        Assertions.assertEquals(0.0, D(phi, m).subtract(ref).norm(), 1.0e-10);
     }
 
     @Test
@@ -227,8 +227,8 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
         // we have to use a specific path to get the correct result
         // integrating over a single straight line gives a completely wrong result
         final T integrated = integrate(100000, new Difference<>(m), buildComplex(1.0e-12, 1.0e-12), buildComplex(0, -1.5), phi);
-        Assert.assertEquals(0.0, integrated.subtract(ref).norm(), 2.0e-10);
-        Assert.assertEquals(0.0, D(phi, m).subtract(ref).norm(), 1.0e-10);
+        Assertions.assertEquals(0.0, integrated.subtract(ref).norm(), 2.0e-10);
+        Assertions.assertEquals(0.0, D(phi, m).subtract(ref).norm(), 1.0e-10);
     }
 
     @Test
@@ -239,8 +239,8 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
                             subtract(E(phi, m)).
                             divide(m);
         final T integrated = integrate(100000, new Difference<>(m), buildComplex(1.0e-10, 1.0e-10), phi);
-        Assert.assertEquals(0.0, integrated.subtract(ref).norm(), 2.0e-10);
-        Assert.assertEquals(0.0, D(phi, m).subtract(ref).norm(), 1.0e-10);
+        Assertions.assertEquals(0.0, integrated.subtract(ref).norm(), 2.0e-10);
+        Assertions.assertEquals(0.0, D(phi, m).subtract(ref).norm(), 1.0e-10);
     }
 
     @Test
@@ -248,8 +248,8 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
         final T phi = buildComplex(1.2, 0.75);
         final T m   = buildComplex(0.2, 0.6);
         final T ref = buildComplex(1.00265860821563927579252866, 0.80128721521822408811217);
-        Assert.assertEquals(0.0, integratedF(phi, m).subtract(ref).norm(), 2.0e-10);
-        Assert.assertEquals(0.0, F(phi, m).subtract(ref).norm(), 1.0e-10);
+        Assertions.assertEquals(0.0, integratedF(phi, m).subtract(ref).norm(), 2.0e-10);
+        Assertions.assertEquals(0.0, F(phi, m).subtract(ref).norm(), 1.0e-10);
     }
 
     @Test
@@ -257,8 +257,8 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
         final T phi = buildComplex(1.2, 0.0);
         final T m   = buildComplex(2.3, -1.5);
         final T ref = buildComplex(1.04335840461807753156026488, -0.5872679121672512828049797);
-        Assert.assertEquals(0.0, integratedF(phi, m).subtract(ref).norm(), 2.0e-10);
-        Assert.assertEquals(0.0, F(phi, m).subtract(ref).norm(), 1.0e-10);
+        Assertions.assertEquals(0.0, integratedF(phi, m).subtract(ref).norm(), 2.0e-10);
+        Assertions.assertEquals(0.0, F(phi, m).subtract(ref).norm(), 1.0e-10);
     }
 
     @Test
@@ -266,8 +266,8 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
         final T phi = buildComplex(-0.4, 2.5);
         final T m   = buildComplex(2.3, -1.5);
         final T ref = buildComplex(-0.20646268947416273887690961, 1.0927692344374984107332330625089);
-        Assert.assertEquals(0.0, integratedF(phi, m).subtract(ref).norm(), 2.0e-10);
-        Assert.assertEquals(0.0, F(phi, m).subtract(ref).norm(), 1.0e-10);
+        Assertions.assertEquals(0.0, integratedF(phi, m).subtract(ref).norm(), 2.0e-10);
+        Assertions.assertEquals(0.0, F(phi, m).subtract(ref).norm(), 1.0e-10);
     }
 
     @Test
@@ -275,8 +275,8 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
         final T phi = buildComplex(1.2, 0.75);
         final T m   = buildComplex(0.2, 0.6);
         final T ref = buildComplex(1.4103674846223375296500, 0.644849758860533700396);
-        Assert.assertEquals(0.0, integratedE(phi, m).subtract(ref).norm(), 2.0e-10);
-        Assert.assertEquals(0.0, E(phi, m).subtract(ref).norm(), 1.0e-10);
+        Assertions.assertEquals(0.0, integratedE(phi, m).subtract(ref).norm(), 2.0e-10);
+        Assertions.assertEquals(0.0, E(phi, m).subtract(ref).norm(), 1.0e-10);
     }
 
     @Test
@@ -284,8 +284,8 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
         final T phi = buildComplex(1.2, 0.0);
         final T m   = buildComplex(2.3, -1.5);
         final T ref = buildComplex(0.8591316843513079270009549421, 0.55423174445992167002660);
-        Assert.assertEquals(0.0, integratedE(phi, m).subtract(ref).norm(), 2.0e-10);
-        Assert.assertEquals(0.0, E(phi, m).subtract(ref).norm(), 1.0e-10);
+        Assertions.assertEquals(0.0, integratedE(phi, m).subtract(ref).norm(), 2.0e-10);
+        Assertions.assertEquals(0.0, E(phi, m).subtract(ref).norm(), 1.0e-10);
     }
 
     @Test
@@ -293,8 +293,8 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
         final T phi = buildComplex(-0.4, 2.5);
         final T m   = buildComplex(2.3, -1.5);
         final T ref = buildComplex(-1.68645030068870706703580773597, 9.176675281683098106653799);
-        Assert.assertEquals(0.0, integratedE(phi, m).subtract(ref).norm(), 2.0e-10);
-        Assert.assertEquals(0.0, E(phi, m).subtract(ref).norm(), 1.0e-10);
+        Assertions.assertEquals(0.0, integratedE(phi, m).subtract(ref).norm(), 2.0e-10);
+        Assertions.assertEquals(0.0, E(phi, m).subtract(ref).norm(), 1.0e-10);
     }
 
     @Test
@@ -352,29 +352,29 @@ public abstract class LegendreEllipticIntegralAbstractComplexTest<T extends Calc
             T carlson    = Pi(n, ref[0], m);
             if (i < 2) {
                 // integration, Carlson and Wolfram Alpha all give different results
-                Assert.assertTrue(true);
+                Assertions.assertTrue(true);
             } else if (i == 2) {
                 // integration hits the pole
-                Assert.assertTrue(integrated.isNaN());
+                Assertions.assertTrue(integrated.isNaN());
             } else if (i < 6) {
                 // integration and Carlson agree and are most probably right
                 // Wolfram Alpha gives a different result which seems to be wrong
-                Assert.assertEquals(0.0, carlson.subtract(integrated).norm(), 4.1e-7);
+                Assertions.assertEquals(0.0, carlson.subtract(integrated).norm(), 4.1e-7);
             } else if (i < 16) {
                 // integration, Carlson and Wolfram Alpha all agree and are most probably right
-                Assert.assertEquals(0.0, integrated.subtract(ref[1]).norm(), 1.0e-10);
-                Assert.assertEquals(0.0, carlson.subtract(ref[1]).norm(), 1.0e-10);
+                Assertions.assertEquals(0.0, integrated.subtract(ref[1]).norm(), 1.0e-10);
+                Assertions.assertEquals(0.0, carlson.subtract(ref[1]).norm(), 1.0e-10);
             } else if (i < 30) {
                 // integration and Carlson agree and are most probably right
                 // Wolfram Alpha gives a different result which seems to be wrong
-                Assert.assertEquals(0.0, carlson.subtract(integrated).norm(), 2.0e-6);
+                Assertions.assertEquals(0.0, carlson.subtract(integrated).norm(), 2.0e-6);
             } else if (i < 35) {
                 // integration, Carlson and Wolfram Alpha all give different results
-                Assert.assertTrue(true);
+                Assertions.assertTrue(true);
             } else {
                 // integration and Wolfram Alpha agree and are most probably right
                 // Carlson gives a different result which seems to be wrong
-                Assert.assertEquals(0.0, integrated.subtract(ref[1]).norm(), 2.5e-7);
+                Assertions.assertEquals(0.0, integrated.subtract(ref[1]).norm(), 2.5e-7);
             }
         }
     }

@@ -17,10 +17,11 @@
 
 package org.hipparchus.ode.nonstiff;
 
-
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AdamsMoultonIntegratorTest extends AdamsIntegratorAbstractTest {
 
@@ -43,9 +44,11 @@ public class AdamsMoultonIntegratorTest extends AdamsIntegratorAbstractTest {
         doNbPointsTest();
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testMinStep() {
-        doDimensionCheck();
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            doDimensionCheck();
+        });
     }
 
     @Test
@@ -56,9 +59,11 @@ public class AdamsMoultonIntegratorTest extends AdamsIntegratorAbstractTest {
         doTestIncreasingTolerance(0.45, 8.69);
     }
 
-    @Test(expected = MathIllegalStateException.class)
+    @Test
     public void exceedMaxEvaluations() {
-        doExceedMaxEvaluations(650);
+        assertThrows(MathIllegalStateException.class, () -> {
+            doExceedMaxEvaluations(650);
+        });
     }
 
     @Test
@@ -76,9 +81,11 @@ public class AdamsMoultonIntegratorTest extends AdamsIntegratorAbstractTest {
         doTestSecondaryEquations(1.9e-11, 7.2e-15);
     }
 
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testStartFailure() {
-        doTestStartFailure();
+        assertThrows(MathIllegalStateException.class, () -> {
+            doTestStartFailure();
+        });
     }
 
 }

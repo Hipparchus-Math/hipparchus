@@ -22,8 +22,10 @@
 package org.hipparchus.special;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @version $Id$
@@ -765,17 +767,21 @@ public class BesselJTest {
             final double actual = BesselJ.value(order, x);
 
             String msg = "" + order + " @ " + x;
-            Assert.assertEquals(msg, expected, actual, tol);
+            Assertions.assertEquals(expected, actual, tol, msg);
         }
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testIAEBadOrder() {
-        BesselJ.value(-1, 1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            BesselJ.value(-1, 1);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testIAEBadArgument() {
-        BesselJ.value(1, 100000);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            BesselJ.value(1, 100000);
+        });
     }
 }

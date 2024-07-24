@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class GillIntegratorTest extends RungeKuttaIntegratorAbstractTest {
 
@@ -26,67 +26,80 @@ public class GillIntegratorTest extends RungeKuttaIntegratorAbstractTest {
     }
 
     @Override
+    @Test
     public void testMissedEndEvent() {
         doTestMissedEndEvent(1.0e-15, 6.0e-5);
     }
 
     @Override
+    @Test
     public void testSanityChecks() {
         doTestSanityChecks();
     }
 
     @Override
+    @Test
     public void testDecreasingSteps() {
         doTestDecreasingSteps(1.0, 1.0, 1.0e-10);
     }
 
     @Override
+    @Test
     public void testSmallStep() {
         doTestSmallStep(2.0e-13, 4.0e-12, 1.0e-12, "Gill");
     }
 
     @Override
+    @Test
     public void testBigStep() {
         doTestBigStep(0.0004, 0.005, 1.0e-12, "Gill");
 
     }
 
     @Override
+    @Test
     public void testBackward() {
         doTestBackward(5.0e-10, 7.0e-10, 1.0e-12, "Gill");
     }
 
     @Override
+    @Test
     public void testKepler() {
         doTestKepler(1.72e-3, 1.0e-5);
     }
 
     @Override
+    @Test
     public void testStepSize() {
         doTestStepSize(1.0e-12);
     }
 
     @Override
+    @Test
     public void testSingleStep() {
         doTestSingleStep(0.21);
     }
 
     @Override
+    @Test
     public void testTooLargeFirstStep() {
         doTestTooLargeFirstStep();
     }
 
     @Override
+    @Test
     public void testUnstableDerivative() {
         doTestUnstableDerivative(1.0e-12);
     }
 
     @Override
+    @Test
     public void testDerivativesConsistency() {
         doTestDerivativesConsistency(1.0e-10);
     }
 
     @Override
+    @Test
     public void testSerialization() {
         doTestSerialization(1017877, 1.7e-3);
     }

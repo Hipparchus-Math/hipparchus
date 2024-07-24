@@ -26,8 +26,8 @@ import org.hipparchus.analysis.integration.IterativeLegendreGaussIntegrator;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests the PolynomialsUtils class.
@@ -54,7 +54,7 @@ public class PolynomialsUtilsTest {
         for (int k = 0; k < 12; ++k) {
             PolynomialFunction Tk = PolynomialsUtils.createChebyshevPolynomial(k);
             for (double x = -1; x <= 1; x += 0.02) {
-                Assert.assertTrue(k + " " + Tk.value(x), FastMath.abs(Tk.value(x)) < (1 + 1e-12));
+                Assertions.assertTrue(FastMath.abs(Tk.value(x)) < (1 + 1e-12), k + " " + Tk.value(x));
             }
         }
     }
@@ -275,9 +275,9 @@ public class PolynomialsUtilsTest {
         for (int i = 0; i < l40.length; ++i) {
             if (i % 2 == 0) {
                 double ci = numerators[i / 2] / denominator;
-                Assert.assertEquals(ci, l40[i], FastMath.abs(ci) * 1e-15);
+                Assertions.assertEquals(ci, l40[i], FastMath.abs(ci) * 1e-15);
             } else {
-                Assert.assertEquals(0, l40[i], 0);
+                Assertions.assertEquals(0, l40[i], 0);
             }
         }
     }
@@ -298,7 +298,7 @@ public class PolynomialsUtilsTest {
                 for (int i = 0; i < 10; ++i) {
                     PolynomialFunction jacobi = PolynomialsUtils.createJacobiPolynomial(i, v, w);
                     double binomial = CombinatoricsUtils.binomialCoefficient(v + i, i);
-                    Assert.assertTrue(Precision.equals(binomial, jacobi.value(1.0), 1));
+                    Assertions.assertTrue(Precision.equals(binomial, jacobi.value(1.0), 1));
                 }
             }
         }
@@ -334,13 +334,13 @@ public class PolynomialsUtilsTest {
     public void testJacobiKeyCoverage() {
         
         final JacobiKey key = new JacobiKey(3, 4);
-        
-        Assert.assertEquals(false, key.equals(null));
-        Assert.assertEquals(false, key.equals(new Object()));
-        Assert.assertEquals(false, key.equals(new JacobiKey(3, 5)));
-        Assert.assertEquals(false, key.equals(new JacobiKey(5, 4)));
-        Assert.assertEquals(false, key.equals(new JacobiKey(5, 5)));
-        Assert.assertEquals(true, key.equals(new JacobiKey(3, 4)));
+
+        Assertions.assertFalse(key.equals(null));
+        Assertions.assertFalse(key.equals(new Object()));
+        Assertions.assertFalse(key.equals(new JacobiKey(3, 5)));
+        Assertions.assertFalse(key.equals(new JacobiKey(5, 4)));
+        Assertions.assertFalse(key.equals(new JacobiKey(5, 5)));
+        Assertions.assertTrue(key.equals(new JacobiKey(3, 4)));
     }
     
     @Test
@@ -375,16 +375,16 @@ public class PolynomialsUtilsTest {
 
     private void checkPolynomial(PolynomialFunction p, long denominator, String reference) {
         PolynomialFunction q = new PolynomialFunction(new double[] { denominator});
-        Assert.assertEquals(reference, p.multiply(q).toString());
+        Assertions.assertEquals(reference, p.multiply(q).toString());
     }
 
     private void checkPolynomial(PolynomialFunction p, String reference) {
-        Assert.assertEquals(reference, p.toString());
+        Assertions.assertEquals(reference, p.toString());
     }
 
     private void checkNullPolynomial(PolynomialFunction p) {
         for (double coefficient : p.getCoefficients()) {
-            Assert.assertEquals(0, coefficient, 1e-13);
+            Assertions.assertEquals(0, coefficient, 1e-13);
         }
     }
 
@@ -404,12 +404,11 @@ public class PolynomialsUtilsTest {
                 new IterativeLegendreGaussIntegrator(5, 1.0e-9, 1.0e-8, 2, 15).integrate(1000000, f, a, b);
         if (p1.degree() == p2.degree()) {
             // integral should be non-zero
-            Assert.assertTrue("I(" + p1.degree() + ", " + p2.degree() + ") = "+ dotProduct,
-                              FastMath.abs(dotProduct) > nonZeroThreshold);
+            Assertions.assertTrue(FastMath.abs(dotProduct) > nonZeroThreshold,
+                              "I(" + p1.degree() + ", " + p2.degree() + ") = "+ dotProduct);
         } else {
             // integral should be zero
-            Assert.assertEquals("I(" + p1.degree() + ", " + p2.degree() + ") = "+ dotProduct,
-                                0.0, FastMath.abs(dotProduct), zeroThreshold);
+            Assertions.assertEquals(0.0, FastMath.abs(dotProduct), zeroThreshold, "I(" + p1.degree() + ", " + p2.degree() + ") = "+ dotProduct);
         }
     }
 }

@@ -16,14 +16,14 @@
  */
 package org.hipparchus.analysis.interpolation;
 
-import java.util.Arrays;
-
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 public class GridAxisTest {
 
@@ -99,11 +99,11 @@ public class GridAxisTest {
     public void testTooSmallGrid() {
         try {
             new GridAxis(new double[3], 4);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.INSUFFICIENT_DIMENSION, miae.getSpecifier());
-            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(4, ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.INSUFFICIENT_DIMENSION, miae.getSpecifier());
+            Assertions.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(4, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -111,13 +111,13 @@ public class GridAxisTest {
     public void testDuplicate() {
         try {
             new GridAxis(new double[] { 0.0, 1.0, 2.0, 2.0, 3.0 }, 2);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.NOT_STRICTLY_INCREASING_SEQUENCE, miae.getSpecifier());
-            Assert.assertEquals(2.0, ((Double)  miae.getParts()[0]).doubleValue(), 1.0e-15);
-            Assert.assertEquals(2.0, ((Double)  miae.getParts()[1]).doubleValue(), 1.0e-15);
-            Assert.assertEquals(3,   ((Integer) miae.getParts()[2]).intValue());
-            Assert.assertEquals(2,   ((Integer) miae.getParts()[3]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.NOT_STRICTLY_INCREASING_SEQUENCE, miae.getSpecifier());
+            Assertions.assertEquals(2.0, ((Double)  miae.getParts()[0]).doubleValue(), 1.0e-15);
+            Assertions.assertEquals(2.0, ((Double)  miae.getParts()[1]).doubleValue(), 1.0e-15);
+            Assertions.assertEquals(3,   ((Integer) miae.getParts()[2]).intValue());
+            Assertions.assertEquals(2,   ((Integer) miae.getParts()[3]).intValue());
         }
     }
 
@@ -125,13 +125,13 @@ public class GridAxisTest {
     public void testUnsorted() {
         try {
             new GridAxis(new double[] { 0.0, 1.0, 0.5, 2.0, 3.0 }, 2);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.NOT_STRICTLY_INCREASING_SEQUENCE, miae.getSpecifier());
-            Assert.assertEquals(0.5, ((Double)  miae.getParts()[0]).doubleValue(), 1.0e-15);
-            Assert.assertEquals(1.0, ((Double)  miae.getParts()[1]).doubleValue(), 1.0e-15);
-            Assert.assertEquals(2,   ((Integer) miae.getParts()[2]).intValue());
-            Assert.assertEquals(1,   ((Integer) miae.getParts()[3]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.NOT_STRICTLY_INCREASING_SEQUENCE, miae.getSpecifier());
+            Assertions.assertEquals(0.5, ((Double)  miae.getParts()[0]).doubleValue(), 1.0e-15);
+            Assertions.assertEquals(1.0, ((Double)  miae.getParts()[1]).doubleValue(), 1.0e-15);
+            Assertions.assertEquals(2,   ((Integer) miae.getParts()[2]).intValue());
+            Assertions.assertEquals(1,   ((Integer) miae.getParts()[3]).intValue());
         }
     }
 
@@ -162,9 +162,9 @@ public class GridAxisTest {
 
     private GridAxis create(final double[] gridData, final int n) {
         final GridAxis gridAxis = new GridAxis(gridData, n);
-        Assert.assertEquals(n, gridAxis.getN());
+        Assertions.assertEquals(n, gridAxis.getN());
         for (int i = 0; i < 5; ++i) {
-            Assert.assertEquals(gridData[i], gridAxis.node(i), 1.0e-15);
+            Assertions.assertEquals(gridData[i], gridAxis.node(i), 1.0e-15);
         }
         return gridAxis;
     }
@@ -199,28 +199,28 @@ public class GridAxisTest {
         final int o = (n - 1) / 2;
         final int p = n / 2;
         final int i = gridAxis.interpolationIndex(t);
-        Assert.assertTrue(i >= 0);
-        Assert.assertTrue(i + n - 1 < s);
+        Assertions.assertTrue(i >= 0);
+        Assertions.assertTrue(i + n - 1 < s);
         if (t < gridAxis.node(0)) {
             // extrapolating below grid
-            Assert.assertEquals(0, i);
+            Assertions.assertEquals(0, i);
         } else if (t < gridAxis.node(s - 1)) {
 
             // interpolating within the grid
             // the nodes should surround the test value
-            Assert.assertTrue(gridAxis.node(i) <= t);
-            Assert.assertTrue(gridAxis.node(i + n - 1) > t);
+            Assertions.assertTrue(gridAxis.node(i) <= t);
+            Assertions.assertTrue(gridAxis.node(i + n - 1) > t);
 
             if (t >= gridAxis.node(o) && t <  gridAxis.node(s - p)) {
                 // interpolation in the part of the grid where balancing is possible
                 // the central nodes should surround the test value
-                Assert.assertTrue(gridAxis.node(i + o)     <= t);
-                Assert.assertTrue(gridAxis.node(i + o + 1) >  t);
+                Assertions.assertTrue(gridAxis.node(i + o)     <= t);
+                Assertions.assertTrue(gridAxis.node(i + o + 1) >  t);
             }
 
         } else {
             // extrapolating above grid
-            Assert.assertEquals(s - n, i);
+            Assertions.assertEquals(s - n, i);
         }
     }
 

@@ -24,8 +24,8 @@ package org.hipparchus.analysis.integration.gauss;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test of the {@link LaguerreRuleFactory}.
@@ -49,7 +49,7 @@ public class LaguerreTest {
 
             final GaussIntegrator integrator = factory.laguerre(7);
             final double s = integrator.integrate(f);
-            Assert.assertEquals(1d, Gamma.gamma(t) / s, tol);
+            Assertions.assertEquals(1d, Gamma.gamma(t) / s, tol);
         }
     }
 }

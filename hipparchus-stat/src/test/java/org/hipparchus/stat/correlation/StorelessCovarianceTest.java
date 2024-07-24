@@ -25,8 +25,8 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.ISAACRandom;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class StorelessCovarianceTest {
 
@@ -222,7 +222,7 @@ public class StorelessCovarianceTest {
         double[][] covMatrix = storelessCov.getData();
         for (int i = 0; i < dimension; i++) {
             for (int j = i; j < dimension; j++) {
-                Assert.assertEquals(covMatrix[i][j], covMatrix[j][i], 10e-9);
+                Assertions.assertEquals(covMatrix[i][j], covMatrix[j][i], 10e-9);
             }
         }
     }

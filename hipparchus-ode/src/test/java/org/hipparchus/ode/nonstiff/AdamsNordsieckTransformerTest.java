@@ -21,8 +21,8 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class AdamsNordsieckTransformerTest {
 
@@ -71,12 +71,12 @@ public class AdamsNordsieckTransformerTest {
         PolynomialFunction derivative = polynomial.polynomialDerivative();
         final Array2DRowRealMatrix nordsieck = start(transformer, nbSteps, t0, h, polynomial, derivative);
 
-        Assert.assertEquals(nbSteps - 1, nordsieck.getRowDimension());
+        Assertions.assertEquals(nbSteps - 1, nordsieck.getRowDimension());
         double coeff = h;
         for (int i = 0; i < nordsieck.getRowDimension(); ++i) {
             coeff *= h / (i + 2);
             derivative = derivative.polynomialDerivative();
-            Assert.assertEquals(derivative.value(t0) * coeff, nordsieck.getEntry(i, 0), epsilon);
+            Assertions.assertEquals(derivative.value(t0) * coeff, nordsieck.getEntry(i, 0), epsilon);
         }
 
     }
@@ -95,7 +95,7 @@ public class AdamsNordsieckTransformerTest {
                                                      n1);
         final Array2DRowRealMatrix n2 = start(transformer, nbSteps, t0 + h, h, polynomial, derivative);
 
-        Assert.assertEquals(expectedError, n2.subtract(n1).getNorm1(), expectedError * 0.001);
+        Assertions.assertEquals(expectedError, n2.subtract(n1).getNorm1(), expectedError * 0.001);
 
     }
 

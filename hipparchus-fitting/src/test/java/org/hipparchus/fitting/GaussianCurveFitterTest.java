@@ -23,8 +23,10 @@ package org.hipparchus.fitting;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests {@link GaussianCurveFitter}.
@@ -188,9 +190,9 @@ public class GaussianCurveFitterTest {
         GaussianCurveFitter fitter = GaussianCurveFitter.create();
         double[] parameters = fitter.fit(createDataset(DATASET1).toList());
 
-        Assert.assertEquals(3496978.1837704973, parameters[0], 1e-4);
-        Assert.assertEquals(4.054933085999146, parameters[1], 1e-4);
-        Assert.assertEquals(0.015039355620304326, parameters[2], 1e-4);
+        Assertions.assertEquals(3496978.1837704973, parameters[0], 1e-4);
+        Assertions.assertEquals(4.054933085999146, parameters[1], 1e-4);
+        Assertions.assertEquals(0.015039355620304326, parameters[2], 1e-4);
     }
 
     @Test
@@ -204,20 +206,22 @@ public class GaussianCurveFitterTest {
             .withStartPoint(init)
             .fit(createDataset(DATASET1).toList());
 
-        Assert.assertEquals(3496978.1837704973, parameters[0], 1e-2);
-        Assert.assertEquals(4.054933085999146, parameters[1], 1e-4);
-        Assert.assertEquals(0.015039355620304326, parameters[2], 1e-4);
+        Assertions.assertEquals(3496978.1837704973, parameters[0], 1e-2);
+        Assertions.assertEquals(4.054933085999146, parameters[1], 1e-4);
+        Assertions.assertEquals(0.015039355620304326, parameters[2], 1e-4);
     }
 
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testWithMaxIterations2() {
-        final int maxIter = 1; // Too few iterations.
-        final double[] init = { 3.5e6, 4.2, 0.1 };
+        assertThrows(MathIllegalStateException.class, () -> {
+            final int maxIter = 1; // Too few iterations.
+            final double[] init = {3.5e6, 4.2, 0.1};
 
-        GaussianCurveFitter fitter = GaussianCurveFitter.create();
-        fitter.withMaxIterations(maxIter)
-              .withStartPoint(init)
-              .fit(createDataset(DATASET1).toList());
+            GaussianCurveFitter fitter = GaussianCurveFitter.create();
+            fitter.withMaxIterations(maxIter)
+                .withStartPoint(init)
+                .fit(createDataset(DATASET1).toList());
+        });
     }
 
     @Test
@@ -229,29 +233,33 @@ public class GaussianCurveFitterTest {
             .withStartPoint(init)
             .fit(createDataset(DATASET1).toList());
 
-        Assert.assertEquals(3496978.1837704973, parameters[0], 1e-2);
-        Assert.assertEquals(4.054933085999146, parameters[1], 1e-4);
-        Assert.assertEquals(0.015039355620304326, parameters[2], 1e-4);
+        Assertions.assertEquals(3496978.1837704973, parameters[0], 1e-2);
+        Assertions.assertEquals(4.054933085999146, parameters[1], 1e-4);
+        Assertions.assertEquals(0.015039355620304326, parameters[2], 1e-4);
     }
 
     /**
      * Zero points is not enough observed points.
      */
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testFit02() {
-        GaussianCurveFitter.create().fit(new WeightedObservedPoints().toList());
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            GaussianCurveFitter.create().fit(new WeightedObservedPoints().toList());
+        });
     }
 
     /**
      * Two points is not enough observed points.
      */
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testFit03() {
-        GaussianCurveFitter fitter = GaussianCurveFitter.create();
-        fitter.fit(createDataset(new double[][] {
-                    {4.0254623,  531026.0},
-                    {4.02804905, 664002.0}
-                }).toList());
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            GaussianCurveFitter fitter = GaussianCurveFitter.create();
+            fitter.fit(createDataset(new double[][]{
+                {4.0254623, 531026.0},
+                {4.02804905, 664002.0}
+            }).toList());
+        });
     }
 
     /**
@@ -262,9 +270,9 @@ public class GaussianCurveFitterTest {
         GaussianCurveFitter fitter = GaussianCurveFitter.create();
         double[] parameters = fitter.fit(createDataset(DATASET2).toList());
 
-        Assert.assertEquals(233003.2967252038, parameters[0], 1e-4);
-        Assert.assertEquals(-10.654887521095983, parameters[1], 1e-4);
-        Assert.assertEquals(4.335937353196641, parameters[2], 1e-4);
+        Assertions.assertEquals(233003.2967252038, parameters[0], 1e-4);
+        Assertions.assertEquals(-10.654887521095983, parameters[1], 1e-4);
+        Assertions.assertEquals(4.335937353196641, parameters[2], 1e-4);
     }
 
     /**
@@ -275,9 +283,9 @@ public class GaussianCurveFitterTest {
         GaussianCurveFitter fitter = GaussianCurveFitter.create();
         double[] parameters = fitter.fit(createDataset(DATASET3).toList());
 
-        Assert.assertEquals(283863.81929180305, parameters[0], 1e-4);
-        Assert.assertEquals(-13.29641995105174, parameters[1], 1e-4);
-        Assert.assertEquals(1.7297330293549908, parameters[2], 1e-4);
+        Assertions.assertEquals(283863.81929180305, parameters[0], 1e-4);
+        Assertions.assertEquals(-13.29641995105174, parameters[1], 1e-4);
+        Assertions.assertEquals(1.7297330293549908, parameters[2], 1e-4);
     }
 
     /**
@@ -288,9 +296,9 @@ public class GaussianCurveFitterTest {
         GaussianCurveFitter fitter = GaussianCurveFitter.create();
         double[] parameters = fitter.fit(createDataset(DATASET4).toList());
 
-        Assert.assertEquals(285250.66754309234, parameters[0], 1e-4);
-        Assert.assertEquals(-13.528375695228455, parameters[1], 1e-4);
-        Assert.assertEquals(1.5204344894331614, parameters[2], 1e-4);
+        Assertions.assertEquals(285250.66754309234, parameters[0], 1e-4);
+        Assertions.assertEquals(-13.528375695228455, parameters[1], 1e-4);
+        Assertions.assertEquals(1.5204344894331614, parameters[2], 1e-4);
     }
 
     /**
@@ -301,9 +309,9 @@ public class GaussianCurveFitterTest {
         GaussianCurveFitter fitter = GaussianCurveFitter.create();
         double[] parameters = fitter.fit(createDataset(DATASET5).toList());
 
-        Assert.assertEquals(3514384.729342235, parameters[0], 1e-4);
-        Assert.assertEquals(4.054970307455625, parameters[1], 1e-4);
-        Assert.assertEquals(0.015029412832160017, parameters[2], 1e-4);
+        Assertions.assertEquals(3514384.729342235, parameters[0], 1e-4);
+        Assertions.assertEquals(4.054970307455625, parameters[1], 1e-4);
+        Assertions.assertEquals(0.015029412832160017, parameters[2], 1e-4);
     }
 
     @Test
@@ -347,8 +355,8 @@ public class GaussianCurveFitterTest {
         }
         final double[] p = GaussianCurveFitter.create().fit(obs.toList());
 
-        Assert.assertEquals(53.1572792, p[1], 1e-7);
-        Assert.assertEquals(5.75214622, p[2], 1e-8);
+        Assertions.assertEquals(53.1572792, p[1], 1e-7);
+        Assertions.assertEquals(5.75214622, p[2], 1e-8);
     }
 
     @Test
@@ -375,9 +383,9 @@ public class GaussianCurveFitterTest {
         final double[] p = GaussianCurveFitter.create().fit(obs.toList());
 
         // Values are copied from a previous run of this test.
-        Assert.assertEquals(420.8397296167364, p[0], 1e-12);
-        Assert.assertEquals(0.603770729862231, p[1], 1e-15);
-        Assert.assertEquals(1.0786447936766612, p[2], 1e-14);
+        Assertions.assertEquals(420.8397296167364, p[0], 1e-12);
+        Assertions.assertEquals(0.603770729862231, p[1], 1e-15);
+        Assertions.assertEquals(1.0786447936766612, p[2], 1e-14);
     }
 
     /**

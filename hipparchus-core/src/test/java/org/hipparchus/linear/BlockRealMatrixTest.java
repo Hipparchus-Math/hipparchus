@@ -28,8 +28,8 @@ import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -106,12 +106,12 @@ public final class BlockRealMatrixTest {
     public void testDimensions() {
         BlockRealMatrix m = new BlockRealMatrix(testData);
         BlockRealMatrix m2 = new BlockRealMatrix(testData2);
-        Assert.assertEquals("testData row dimension",3,m.getRowDimension());
-        Assert.assertEquals("testData column dimension",3,m.getColumnDimension());
-        Assert.assertTrue("testData is square",m.isSquare());
-        Assert.assertEquals("testData2 row dimension",m2.getRowDimension(),2);
-        Assert.assertEquals("testData2 column dimension",m2.getColumnDimension(),3);
-        Assert.assertTrue("testData2 is not square",!m2.isSquare());
+        Assertions.assertEquals(3,m.getRowDimension(),"testData row dimension");
+        Assertions.assertEquals(3,m.getColumnDimension(),"testData column dimension");
+        Assertions.assertTrue(m.isSquare(),"testData is square");
+        Assertions.assertEquals(2, m2.getRowDimension(), "testData2 row dimension");
+        Assertions.assertEquals(3, m2.getColumnDimension(), "testData2 column dimension");
+        Assertions.assertFalse(m2.isSquare(), "testData2 is not square");
     }
 
     /** test copy functions */
@@ -120,10 +120,10 @@ public final class BlockRealMatrixTest {
         Random r = new Random(66636328996002l);
         BlockRealMatrix m1 = createRandomMatrix(r, 47, 83);
         BlockRealMatrix m2 = new BlockRealMatrix(m1.getData());
-        Assert.assertEquals(m1, m2);
+        Assertions.assertEquals(m1, m2);
         BlockRealMatrix m3 = new BlockRealMatrix(testData);
         BlockRealMatrix m4 = new BlockRealMatrix(m3.getData());
-        Assert.assertEquals(m3, m4);
+        Assertions.assertEquals(m3, m4);
     }
 
     /** test add */
@@ -135,9 +135,9 @@ public final class BlockRealMatrixTest {
         double[][] sumEntries = mPlusMInv.getData();
         for (int row = 0; row < m.getRowDimension(); row++) {
             for (int col = 0; col < m.getColumnDimension(); col++) {
-                Assert.assertEquals("sum entry entry",
-                    testDataPlusInv[row][col],sumEntries[row][col],
-                        entryTolerance);
+                Assertions.assertEquals(testDataPlusInv[row][col],sumEntries[row][col],
+                        entryTolerance,
+                        "sum entry entry");
             }
         }
     }
@@ -149,7 +149,7 @@ public final class BlockRealMatrixTest {
         BlockRealMatrix m2 = new BlockRealMatrix(testData2);
         try {
             m.add(m2);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -160,10 +160,10 @@ public final class BlockRealMatrixTest {
     public void testNorm() {
         BlockRealMatrix m = new BlockRealMatrix(testData);
         BlockRealMatrix m2 = new BlockRealMatrix(testData2);
-        Assert.assertEquals("testData norm",14d,m.getNorm1(),entryTolerance);
-        Assert.assertEquals("testData2 norm",7d,m2.getNorm1(),entryTolerance);
-        Assert.assertEquals("testData norm",10d,m.getNormInfty(),entryTolerance);
-        Assert.assertEquals("testData2 norm",10d,m2.getNormInfty(),entryTolerance);
+        Assertions.assertEquals(14d,m.getNorm1(),entryTolerance,"testData norm");
+        Assertions.assertEquals(7d,m2.getNorm1(),entryTolerance,"testData2 norm");
+        Assertions.assertEquals(10d,m.getNormInfty(),entryTolerance,"testData norm");
+        Assertions.assertEquals(10d,m2.getNormInfty(),entryTolerance,"testData2 norm");
     }
 
     /** test Frobenius norm */
@@ -171,8 +171,8 @@ public final class BlockRealMatrixTest {
     public void testFrobeniusNorm() {
         BlockRealMatrix m = new BlockRealMatrix(testData);
         BlockRealMatrix m2 = new BlockRealMatrix(testData2);
-        Assert.assertEquals("testData Frobenius norm", FastMath.sqrt(117.0), m.getFrobeniusNorm(), entryTolerance);
-        Assert.assertEquals("testData2 Frobenius norm", FastMath.sqrt(52.0), m2.getFrobeniusNorm(), entryTolerance);
+        Assertions.assertEquals(FastMath.sqrt(117.0), m.getFrobeniusNorm(), entryTolerance, "testData Frobenius norm");
+        Assertions.assertEquals(FastMath.sqrt(52.0), m2.getFrobeniusNorm(), entryTolerance, "testData2 Frobenius norm");
     }
 
     /** test m-n = m + -n */
@@ -183,7 +183,7 @@ public final class BlockRealMatrixTest {
         assertClose(m.subtract(m2), m2.scalarMultiply(-1d).add(m), entryTolerance);
         try {
             m.subtract(new BlockRealMatrix(testData2));
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -203,7 +203,7 @@ public final class BlockRealMatrixTest {
         assertClose(m2.multiply(identity), m2, entryTolerance);
         try {
             m.multiply(new BlockRealMatrix(bigSingular));
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -219,25 +219,25 @@ public final class BlockRealMatrixTest {
         }
 
         RealMatrix mT = m.transpose();
-        Assert.assertEquals(m.getRowDimension(), mT.getColumnDimension());
-        Assert.assertEquals(m.getColumnDimension(), mT.getRowDimension());
+        Assertions.assertEquals(m.getRowDimension(), mT.getColumnDimension());
+        Assertions.assertEquals(m.getColumnDimension(), mT.getRowDimension());
         for (int i = 0; i < mT.getRowDimension(); ++i) {
             for (int j = 0; j < mT.getColumnDimension(); ++j) {
-                Assert.assertEquals(m.getEntry(j, i), mT.getEntry(i, j), 0);
+                Assertions.assertEquals(m.getEntry(j, i), mT.getEntry(i, j), 0);
             }
         }
 
         RealMatrix mPm = m.add(m);
         for (int i = 0; i < mPm.getRowDimension(); ++i) {
             for (int j = 0; j < mPm.getColumnDimension(); ++j) {
-                Assert.assertEquals(2 * m.getEntry(i, j), mPm.getEntry(i, j), 0);
+                Assertions.assertEquals(2 * m.getEntry(i, j), mPm.getEntry(i, j), 0);
             }
         }
 
         RealMatrix mPmMm = mPm.subtract(m);
         for (int i = 0; i < mPmMm.getRowDimension(); ++i) {
             for (int j = 0; j < mPmMm.getColumnDimension(); ++j) {
-                Assert.assertEquals(m.getEntry(i, j), mPmMm.getEntry(i, j), 0);
+                Assertions.assertEquals(m.getEntry(i, j), mPmMm.getEntry(i, j), 0);
             }
         }
 
@@ -248,7 +248,7 @@ public final class BlockRealMatrixTest {
                 for (int k = 0; k < mT.getColumnDimension(); ++k) {
                     sum += (k + i / 1024.0) * (k + j / 1024.0);
                 }
-                Assert.assertEquals(sum, mTm.getEntry(i, j), 0);
+                Assertions.assertEquals(sum, mTm.getEntry(i, j), 0);
             }
         }
 
@@ -259,35 +259,35 @@ public final class BlockRealMatrixTest {
                 for (int k = 0; k < m.getColumnDimension(); ++k) {
                     sum += (i + k / 1024.0) * (j + k / 1024.0);
                 }
-                Assert.assertEquals(sum, mmT.getEntry(i, j), 0);
+                Assertions.assertEquals(sum, mmT.getEntry(i, j), 0);
             }
         }
 
         RealMatrix sub1 = m.getSubMatrix(2, 9, 5, 20);
         for (int i = 0; i < sub1.getRowDimension(); ++i) {
             for (int j = 0; j < sub1.getColumnDimension(); ++j) {
-                Assert.assertEquals((i + 2) + (j + 5) / 1024.0, sub1.getEntry(i, j), 0);
+                Assertions.assertEquals((i + 2) + (j + 5) / 1024.0, sub1.getEntry(i, j), 0);
             }
         }
 
         RealMatrix sub2 = m.getSubMatrix(10, 12, 3, 70);
         for (int i = 0; i < sub2.getRowDimension(); ++i) {
             for (int j = 0; j < sub2.getColumnDimension(); ++j) {
-                Assert.assertEquals((i + 10) + (j + 3) / 1024.0, sub2.getEntry(i, j), 0);
+                Assertions.assertEquals((i + 10) + (j + 3) / 1024.0, sub2.getEntry(i, j), 0);
             }
         }
 
         RealMatrix sub3 = m.getSubMatrix(30, 34, 0, 5);
         for (int i = 0; i < sub3.getRowDimension(); ++i) {
             for (int j = 0; j < sub3.getColumnDimension(); ++j) {
-                Assert.assertEquals((i + 30) + (j + 0) / 1024.0, sub3.getEntry(i, j), 0);
+                Assertions.assertEquals((i + 30) + (j + 0) / 1024.0, sub3.getEntry(i, j), 0);
             }
         }
 
         RealMatrix sub4 = m.getSubMatrix(30, 32, 62, 65);
         for (int i = 0; i < sub4.getRowDimension(); ++i) {
             for (int j = 0; j < sub4.getColumnDimension(); ++j) {
-                Assert.assertEquals((i + 30) + (j + 62) / 1024.0, sub4.getEntry(i, j), 0);
+                Assertions.assertEquals((i + 30) + (j + 62) / 1024.0, sub4.getEntry(i, j), 0);
             }
         }
 
@@ -325,7 +325,7 @@ public final class BlockRealMatrixTest {
                             return randomGenerator.nextDouble();
                         }
                     });
-                    Assert.assertEquals(0.0,
+                    Assertions.assertEquals(0.0,
                                         a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm1(),
                                         1.0e-15);
                 }
@@ -348,7 +348,7 @@ public final class BlockRealMatrixTest {
                 for (int interm = 1; interm <= 64; interm += 7) {
                     final Array2DRowRealMatrix b = new Array2DRowRealMatrix(interm, cols);
                     b.walkInOptimizedOrder(randomSetter);
-                    Assert.assertEquals(0.0,
+                    Assertions.assertEquals(0.0,
                                         a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm1(),
                                         1.0e-15);
                 }
@@ -360,11 +360,11 @@ public final class BlockRealMatrixTest {
     public void testMultiplyTransposedWrongDimensions() {
         try {
             new BlockRealMatrix(2, 3).multiplyTransposed(new BlockRealMatrix(3, 2));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -386,7 +386,7 @@ public final class BlockRealMatrixTest {
                             return randomGenerator.nextDouble();
                         }
                     });
-                    Assert.assertEquals(0.0,
+                    Assertions.assertEquals(0.0,
                                         a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm1(),
                                         1.0e-15);
                 }
@@ -409,7 +409,7 @@ public final class BlockRealMatrixTest {
                 for (int interm = 1; interm <= 64; interm += 7) {
                     final Array2DRowRealMatrix b = new Array2DRowRealMatrix(rows, interm);
                     b.walkInOptimizedOrder(randomSetter);
-                    Assert.assertEquals(0.0,
+                    Assertions.assertEquals(0.0,
                                         a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm1(),
                                         1.0e-15);
                 }
@@ -421,11 +421,11 @@ public final class BlockRealMatrixTest {
     public void testTransposeMultiplyWrongDimensions() {
         try {
             new BlockRealMatrix(2, 3).transposeMultiply(new BlockRealMatrix(3, 2));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assert.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(3, ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(3, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -433,11 +433,11 @@ public final class BlockRealMatrixTest {
     @Test
     public void testTrace() {
         RealMatrix m = new BlockRealMatrix(id);
-        Assert.assertEquals("identity trace",3d,m.getTrace(),entryTolerance);
+        Assertions.assertEquals(3d,m.getTrace(),entryTolerance,"identity trace");
         m = new BlockRealMatrix(testData2);
         try {
             m.getTrace();
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -459,7 +459,7 @@ public final class BlockRealMatrixTest {
         m = new BlockRealMatrix(bigSingular);
         try {
             m.operate(testVector);
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -500,10 +500,10 @@ public final class BlockRealMatrixTest {
                 { 1, 2 }, { 3, 4 }, { 5, 6 }
         });
         double[] b = a.operate(new double[] { 1, 1 });
-        Assert.assertEquals(a.getRowDimension(), b.length);
-        Assert.assertEquals( 3.0, b[0], 1.0e-12);
-        Assert.assertEquals( 7.0, b[1], 1.0e-12);
-        Assert.assertEquals(11.0, b[2], 1.0e-12);
+        Assertions.assertEquals(a.getRowDimension(), b.length);
+        Assertions.assertEquals( 3.0, b[0], 1.0e-12);
+        Assertions.assertEquals( 7.0, b[1], 1.0e-12);
+        Assertions.assertEquals(11.0, b[2], 1.0e-12);
     }
 
     /** test transpose */
@@ -528,7 +528,7 @@ public final class BlockRealMatrixTest {
         m = new BlockRealMatrix(bigSingular);
         try {
             m.preMultiply(testVector);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -580,7 +580,7 @@ public final class BlockRealMatrixTest {
         assertClose(identity.preMultiply(mInv), mInv, entryTolerance);
         try {
             m.preMultiply(new BlockRealMatrix(bigSingular));
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -593,13 +593,13 @@ public final class BlockRealMatrixTest {
         assertClose(m.getColumn(2), testDataCol3, entryTolerance);
         try {
             m.getRow(10);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             m.getColumn(-1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -608,10 +608,10 @@ public final class BlockRealMatrixTest {
     @Test
     public void testGetEntry() {
         RealMatrix m = new BlockRealMatrix(testData);
-        Assert.assertEquals("get entry",m.getEntry(0,1),2d,entryTolerance);
+        Assertions.assertEquals(2d, m.getEntry(0, 1), entryTolerance, "get entry");
         try {
             m.getEntry(10, 4);
-            Assert.fail ("Expecting MathIllegalArgumentException");
+            Assertions.fail ("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -628,12 +628,12 @@ public final class BlockRealMatrixTest {
         RealMatrix n = new BlockRealMatrix(matrixData2);
         // Now multiply m by n
         RealMatrix p = m.multiply(n);
-        Assert.assertEquals(2, p.getRowDimension());
-        Assert.assertEquals(2, p.getColumnDimension());
+        Assertions.assertEquals(2, p.getRowDimension());
+        Assertions.assertEquals(2, p.getColumnDimension());
         // Invert p
         RealMatrix pInverse = new LUDecomposition(p).getSolver().getInverse();
-        Assert.assertEquals(2, pInverse.getRowDimension());
-        Assert.assertEquals(2, pInverse.getColumnDimension());
+        Assertions.assertEquals(2, pInverse.getRowDimension());
+        Assertions.assertEquals(2, pInverse.getColumnDimension());
 
         // Solve example
         double[][] coefficientsData = {{2, 3, -2}, {-1, 7, 6}, {4, -3, -5}};
@@ -646,9 +646,9 @@ public final class BlockRealMatrixTest {
         final double sol0 = solution.getEntry(0);
         final double sol1 = solution.getEntry(1);
         final double sol2 = solution.getEntry(2);
-        Assert.assertEquals(2 * sol0 + 3 * sol1 -2 * sol2, cst0, 1E-12);
-        Assert.assertEquals(-1 * sol0 + 7 * sol1 + 6 * sol2, cst1, 1E-12);
-        Assert.assertEquals(4 * sol0 - 3 * sol1 -5 * sol2, cst2, 1E-12);
+        Assertions.assertEquals(2 * sol0 + 3 * sol1 -2 * sol2, cst0, 1E-12);
+        Assertions.assertEquals(-1 * sol0 + 7 * sol1 + 6 * sol2, cst1, 1E-12);
+        Assertions.assertEquals(4 * sol0 - 3 * sol1 -5 * sol2, cst2, 1E-12);
     }
 
     // test submatrix accessors
@@ -677,9 +677,9 @@ public final class BlockRealMatrixTest {
         try {
             RealMatrix sub = m.getSubMatrix(startRow, endRow, startColumn, endColumn);
             if (reference != null) {
-                Assert.assertEquals(new BlockRealMatrix(reference), sub);
+                Assertions.assertEquals(new BlockRealMatrix(reference), sub);
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
+                Assertions.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -693,9 +693,9 @@ public final class BlockRealMatrixTest {
         try {
             RealMatrix sub = m.getSubMatrix(selectedRows, selectedColumns);
             if (reference != null) {
-                Assert.assertEquals(new BlockRealMatrix(reference), sub);
+                Assertions.assertEquals(new BlockRealMatrix(reference), sub);
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentExceptiono r MathIllegalArgumentException");
+                Assertions.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentExceptiono r MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -714,13 +714,13 @@ public final class BlockRealMatrixTest {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if ((i < 2) || (i > n - 3) || (j < 2) || (j > n - 3)) {
-                    Assert.assertEquals(0.0, m.getEntry(i, j), 0.0);
+                    Assertions.assertEquals(0.0, m.getEntry(i, j), 0.0);
                 } else {
-                    Assert.assertEquals(1.0, m.getEntry(i, j), 0.0);
+                    Assertions.assertEquals(1.0, m.getEntry(i, j), 0.0);
                 }
             }
         }
-        Assert.assertEquals(sub, m.getSubMatrix(2, n - 3, 2, n - 3));
+        Assertions.assertEquals(sub, m.getSubMatrix(2, n - 3, 2, n - 3));
 
     }
 
@@ -753,9 +753,9 @@ public final class BlockRealMatrixTest {
                              new double[reference.length][reference[0].length];
             m.copySubMatrix(startRow, endRow, startColumn, endColumn, sub);
             if (reference != null) {
-                Assert.assertEquals(new BlockRealMatrix(reference), new BlockRealMatrix(sub));
+                Assertions.assertEquals(new BlockRealMatrix(reference), new BlockRealMatrix(sub));
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
+                Assertions.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -772,9 +772,9 @@ public final class BlockRealMatrixTest {
                     new double[reference.length][reference[0].length];
             m.copySubMatrix(selectedRows, selectedColumns, sub);
             if (reference != null) {
-                Assert.assertEquals(new BlockRealMatrix(reference), new BlockRealMatrix(sub));
+                Assertions.assertEquals(new BlockRealMatrix(reference), new BlockRealMatrix(sub));
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
+                Assertions.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -788,17 +788,17 @@ public final class BlockRealMatrixTest {
         RealMatrix m     = new BlockRealMatrix(subTestData);
         RealMatrix mRow0 = new BlockRealMatrix(subRow0);
         RealMatrix mRow3 = new BlockRealMatrix(subRow3);
-        Assert.assertEquals("Row0", mRow0, m.getRowMatrix(0));
-        Assert.assertEquals("Row3", mRow3, m.getRowMatrix(3));
+        Assertions.assertEquals(mRow0, m.getRowMatrix(0), "Row0");
+        Assertions.assertEquals(mRow3, m.getRowMatrix(3), "Row3");
         try {
             m.getRowMatrix(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowMatrix(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -808,18 +808,18 @@ public final class BlockRealMatrixTest {
     public void testSetRowMatrix() {
         RealMatrix m = new BlockRealMatrix(subTestData);
         RealMatrix mRow3 = new BlockRealMatrix(subRow3);
-        Assert.assertNotSame(mRow3, m.getRowMatrix(0));
+        Assertions.assertNotSame(mRow3, m.getRowMatrix(0));
         m.setRowMatrix(0, mRow3);
-        Assert.assertEquals(mRow3, m.getRowMatrix(0));
+        Assertions.assertEquals(mRow3, m.getRowMatrix(0));
         try {
             m.setRowMatrix(-1, mRow3);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setRowMatrix(0, m);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -835,13 +835,13 @@ public final class BlockRealMatrixTest {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (i != 2) {
-                    Assert.assertEquals(0.0, m.getEntry(i, j), 0.0);
+                    Assertions.assertEquals(0.0, m.getEntry(i, j), 0.0);
                 } else {
-                    Assert.assertEquals(1.0, m.getEntry(i, j), 0.0);
+                    Assertions.assertEquals(1.0, m.getEntry(i, j), 0.0);
                 }
             }
         }
-        Assert.assertEquals(sub, m.getRowMatrix(2));
+        Assertions.assertEquals(sub, m.getRowMatrix(2));
     }
 
     @Test
@@ -849,17 +849,17 @@ public final class BlockRealMatrixTest {
         RealMatrix m = new BlockRealMatrix(subTestData);
         RealMatrix mColumn1 = new BlockRealMatrix(subColumn1);
         RealMatrix mColumn3 = new BlockRealMatrix(subColumn3);
-        Assert.assertEquals(mColumn1, m.getColumnMatrix(1));
-        Assert.assertEquals(mColumn3, m.getColumnMatrix(3));
+        Assertions.assertEquals(mColumn1, m.getColumnMatrix(1));
+        Assertions.assertEquals(mColumn3, m.getColumnMatrix(3));
         try {
             m.getColumnMatrix(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnMatrix(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -869,18 +869,18 @@ public final class BlockRealMatrixTest {
     public void testSetColumnMatrix() {
         RealMatrix m = new BlockRealMatrix(subTestData);
         RealMatrix mColumn3 = new BlockRealMatrix(subColumn3);
-        Assert.assertNotSame(mColumn3, m.getColumnMatrix(1));
+        Assertions.assertNotSame(mColumn3, m.getColumnMatrix(1));
         m.setColumnMatrix(1, mColumn3);
-        Assert.assertEquals(mColumn3, m.getColumnMatrix(1));
+        Assertions.assertEquals(mColumn3, m.getColumnMatrix(1));
         try {
             m.setColumnMatrix(-1, mColumn3);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setColumnMatrix(0, m);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -896,13 +896,13 @@ public final class BlockRealMatrixTest {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (j != 2) {
-                    Assert.assertEquals(0.0, m.getEntry(i, j), 0.0);
+                    Assertions.assertEquals(0.0, m.getEntry(i, j), 0.0);
                 } else {
-                    Assert.assertEquals(1.0, m.getEntry(i, j), 0.0);
+                    Assertions.assertEquals(1.0, m.getEntry(i, j), 0.0);
                 }
             }
         }
-        Assert.assertEquals(sub, m.getColumnMatrix(2));
+        Assertions.assertEquals(sub, m.getColumnMatrix(2));
 
     }
 
@@ -911,17 +911,17 @@ public final class BlockRealMatrixTest {
         RealMatrix m = new BlockRealMatrix(subTestData);
         RealVector mRow0 = new ArrayRealVector(subRow0[0]);
         RealVector mRow3 = new ArrayRealVector(subRow3[0]);
-        Assert.assertEquals(mRow0, m.getRowVector(0));
-        Assert.assertEquals(mRow3, m.getRowVector(3));
+        Assertions.assertEquals(mRow0, m.getRowVector(0));
+        Assertions.assertEquals(mRow3, m.getRowVector(3));
         try {
             m.getRowVector(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowVector(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -931,18 +931,18 @@ public final class BlockRealMatrixTest {
     public void testSetRowVector() {
         RealMatrix m = new BlockRealMatrix(subTestData);
         RealVector mRow3 = new ArrayRealVector(subRow3[0]);
-        Assert.assertNotSame(mRow3, m.getRowMatrix(0));
+        Assertions.assertNotSame(mRow3, m.getRowMatrix(0));
         m.setRowVector(0, mRow3);
-        Assert.assertEquals(mRow3, m.getRowVector(0));
+        Assertions.assertEquals(mRow3, m.getRowVector(0));
         try {
             m.setRowVector(-1, mRow3);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setRowVector(0, new ArrayRealVector(5));
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -958,13 +958,13 @@ public final class BlockRealMatrixTest {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (i != 2) {
-                    Assert.assertEquals(0.0, m.getEntry(i, j), 0.0);
+                    Assertions.assertEquals(0.0, m.getEntry(i, j), 0.0);
                 } else {
-                    Assert.assertEquals(1.0, m.getEntry(i, j), 0.0);
+                    Assertions.assertEquals(1.0, m.getEntry(i, j), 0.0);
                 }
             }
         }
-        Assert.assertEquals(sub, m.getRowVector(2));
+        Assertions.assertEquals(sub, m.getRowVector(2));
     }
 
     @Test
@@ -972,17 +972,17 @@ public final class BlockRealMatrixTest {
         RealMatrix m = new BlockRealMatrix(subTestData);
         RealVector mColumn1 = columnToVector(subColumn1);
         RealVector mColumn3 = columnToVector(subColumn3);
-        Assert.assertEquals(mColumn1, m.getColumnVector(1));
-        Assert.assertEquals(mColumn3, m.getColumnVector(3));
+        Assertions.assertEquals(mColumn1, m.getColumnVector(1));
+        Assertions.assertEquals(mColumn3, m.getColumnVector(3));
         try {
             m.getColumnVector(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnVector(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -992,18 +992,18 @@ public final class BlockRealMatrixTest {
     public void testSetColumnVector() {
         RealMatrix m = new BlockRealMatrix(subTestData);
         RealVector mColumn3 = columnToVector(subColumn3);
-        Assert.assertNotSame(mColumn3, m.getColumnVector(1));
+        Assertions.assertNotSame(mColumn3, m.getColumnVector(1));
         m.setColumnVector(1, mColumn3);
-        Assert.assertEquals(mColumn3, m.getColumnVector(1));
+        Assertions.assertEquals(mColumn3, m.getColumnVector(1));
         try {
             m.setColumnVector(-1, mColumn3);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setColumnVector(0, new ArrayRealVector(5));
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -1019,13 +1019,13 @@ public final class BlockRealMatrixTest {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (j != 2) {
-                    Assert.assertEquals(0.0, m.getEntry(i, j), 0.0);
+                    Assertions.assertEquals(0.0, m.getEntry(i, j), 0.0);
                 } else {
-                    Assert.assertEquals(1.0, m.getEntry(i, j), 0.0);
+                    Assertions.assertEquals(1.0, m.getEntry(i, j), 0.0);
                 }
             }
         }
-        Assert.assertEquals(sub, m.getColumnVector(2));
+        Assertions.assertEquals(sub, m.getColumnVector(2));
     }
 
     private RealVector columnToVector(double[][] column) {
@@ -1043,13 +1043,13 @@ public final class BlockRealMatrixTest {
         checkArrays(subRow3[0], m.getRow(3));
         try {
             m.getRow(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRow(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -1058,18 +1058,18 @@ public final class BlockRealMatrixTest {
     @Test
     public void testSetRow() {
         RealMatrix m = new BlockRealMatrix(subTestData);
-        Assert.assertTrue(subRow3[0][0] != m.getRow(0)[0]);
+        Assertions.assertTrue(subRow3[0][0] != m.getRow(0)[0]);
         m.setRow(0, subRow3[0]);
         checkArrays(subRow3[0], m.getRow(0));
         try {
             m.setRow(-1, subRow3[0]);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setRow(0, new double[5]);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -1086,9 +1086,9 @@ public final class BlockRealMatrixTest {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (i != 2) {
-                    Assert.assertEquals(0.0, m.getEntry(i, j), 0.0);
+                    Assertions.assertEquals(0.0, m.getEntry(i, j), 0.0);
                 } else {
-                    Assert.assertEquals(1.0, m.getEntry(i, j), 0.0);
+                    Assertions.assertEquals(1.0, m.getEntry(i, j), 0.0);
                 }
             }
         }
@@ -1104,13 +1104,13 @@ public final class BlockRealMatrixTest {
         checkArrays(mColumn3, m.getColumn(3));
         try {
             m.getColumn(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumn(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -1120,18 +1120,18 @@ public final class BlockRealMatrixTest {
     public void testSetColumn() {
         RealMatrix m = new BlockRealMatrix(subTestData);
         double[] mColumn3 = columnToArray(subColumn3);
-        Assert.assertTrue(mColumn3[0] != m.getColumn(1)[0]);
+        Assertions.assertTrue(mColumn3[0] != m.getColumn(1)[0]);
         m.setColumn(1, mColumn3);
         checkArrays(mColumn3, m.getColumn(1));
         try {
             m.setColumn(-1, mColumn3);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setColumn(0, new double[5]);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -1148,9 +1148,9 @@ public final class BlockRealMatrixTest {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (j != 2) {
-                    Assert.assertEquals(0.0, m.getEntry(i, j), 0.0);
+                    Assertions.assertEquals(0.0, m.getEntry(i, j), 0.0);
                 } else {
-                    Assert.assertEquals(1.0, m.getEntry(i, j), 0.0);
+                    Assertions.assertEquals(1.0, m.getEntry(i, j), 0.0);
                 }
             }
         }
@@ -1166,9 +1166,9 @@ public final class BlockRealMatrixTest {
     }
 
     private void checkArrays(double[] expected, double[] actual) {
-        Assert.assertEquals(expected.length, actual.length);
+        Assertions.assertEquals(expected.length, actual.length);
         for (int i = 0; i < expected.length; ++i) {
-            Assert.assertEquals(expected[i], actual[i], 0);
+            Assertions.assertEquals(expected[i], actual[i], 0);
         }
     }
 
@@ -1177,19 +1177,19 @@ public final class BlockRealMatrixTest {
         BlockRealMatrix m = new BlockRealMatrix(testData);
         BlockRealMatrix m1 = m.copy();
         BlockRealMatrix mt = m.transpose();
-        Assert.assertTrue(m.hashCode() != mt.hashCode());
-        Assert.assertEquals(m.hashCode(), m1.hashCode());
-        Assert.assertEquals(m, m);
-        Assert.assertEquals(m, m1);
-        Assert.assertFalse(m.equals(null));
-        Assert.assertFalse(m.equals(mt));
-        Assert.assertFalse(m.equals(new BlockRealMatrix(bigSingular)));
+        Assertions.assertTrue(m.hashCode() != mt.hashCode());
+        Assertions.assertEquals(m.hashCode(), m1.hashCode());
+        Assertions.assertEquals(m, m);
+        Assertions.assertEquals(m, m1);
+        Assertions.assertNotEquals(null, m);
+        Assertions.assertNotEquals(m, mt);
+        Assertions.assertNotEquals(m, new BlockRealMatrix(bigSingular));
     }
 
     @Test
     public void testToString() {
         BlockRealMatrix m = new BlockRealMatrix(testData);
-        Assert.assertEquals("BlockRealMatrix{{1.0,2.0,3.0},{2.0,5.0,3.0},{1.0,0.0,8.0}}",
+        Assertions.assertEquals("BlockRealMatrix{{1.0,2.0,3.0},{2.0,5.0,3.0},{1.0,0.0,8.0}}",
                 m.toString());
     }
 
@@ -1199,17 +1199,17 @@ public final class BlockRealMatrixTest {
         m.setSubMatrix(detData2,1,1);
         RealMatrix expected = new BlockRealMatrix
             (new double[][] {{1.0,2.0,3.0},{2.0,1.0,3.0},{1.0,2.0,4.0}});
-        Assert.assertEquals(expected, m);
+        Assertions.assertEquals(expected, m);
 
         m.setSubMatrix(detData2,0,0);
         expected = new BlockRealMatrix
             (new double[][] {{1.0,3.0,3.0},{2.0,4.0,3.0},{1.0,2.0,4.0}});
-        Assert.assertEquals(expected, m);
+        Assertions.assertEquals(expected, m);
 
         m.setSubMatrix(testDataPlus2,0,0);
         expected = new BlockRealMatrix
             (new double[][] {{3.0,4.0,5.0},{4.0,7.0,5.0},{3.0,2.0,10.0}});
-        Assert.assertEquals(expected, m);
+        Assertions.assertEquals(expected, m);
 
         // javadoc example
         BlockRealMatrix matrix = new BlockRealMatrix
@@ -1217,25 +1217,25 @@ public final class BlockRealMatrixTest {
         matrix.setSubMatrix(new double[][] {{3, 4}, {5, 6}}, 1, 1);
         expected = new BlockRealMatrix
             (new double[][] {{1, 2, 3, 4}, {5, 3, 4, 8}, {9, 5 ,6, 2}});
-        Assert.assertEquals(expected, matrix);
+        Assertions.assertEquals(expected, matrix);
 
         // dimension overflow
         try {
             m.setSubMatrix(testData,1,1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
         // dimension underflow
         try {
             m.setSubMatrix(testData,-1,1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
         try {
             m.setSubMatrix(testData,1,-1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -1243,7 +1243,7 @@ public final class BlockRealMatrixTest {
         // null
         try {
             m.setSubMatrix(null,1,1);
-            Assert.fail("expecting NullArgumentException");
+            Assertions.fail("expecting NullArgumentException");
         } catch (NullArgumentException e) {
             // expected
         }
@@ -1251,7 +1251,7 @@ public final class BlockRealMatrixTest {
         // ragged
         try {
             m.setSubMatrix(new double[][] {{1}, {2, 3}}, 0, 0);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -1259,7 +1259,7 @@ public final class BlockRealMatrixTest {
         // empty
         try {
             m.setSubMatrix(new double[][] {{}}, 0, 0);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -1274,80 +1274,80 @@ public final class BlockRealMatrixTest {
         m.walkInRowOrder(new SetVisitor());
         GetVisitor getVisitor = new GetVisitor();
         m.walkInOptimizedOrder(getVisitor);
-        Assert.assertEquals(rows * columns, getVisitor.getCount());
+        Assertions.assertEquals(rows * columns, getVisitor.getCount());
 
         m = new BlockRealMatrix(rows, columns);
         m.walkInRowOrder(new SetVisitor(), 1, rows - 2, 1, columns - 2);
         getVisitor = new GetVisitor();
         m.walkInOptimizedOrder(getVisitor, 1, rows - 2, 1, columns - 2);
-        Assert.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
+        Assertions.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
         for (int i = 0; i < rows; ++i) {
-            Assert.assertEquals(0.0, m.getEntry(i, 0), 0);
-            Assert.assertEquals(0.0, m.getEntry(i, columns - 1), 0);
+            Assertions.assertEquals(0.0, m.getEntry(i, 0), 0);
+            Assertions.assertEquals(0.0, m.getEntry(i, columns - 1), 0);
         }
         for (int j = 0; j < columns; ++j) {
-            Assert.assertEquals(0.0, m.getEntry(0, j), 0);
-            Assert.assertEquals(0.0, m.getEntry(rows - 1, j), 0);
+            Assertions.assertEquals(0.0, m.getEntry(0, j), 0);
+            Assertions.assertEquals(0.0, m.getEntry(rows - 1, j), 0);
         }
 
         m = new BlockRealMatrix(rows, columns);
         m.walkInColumnOrder(new SetVisitor());
         getVisitor = new GetVisitor();
         m.walkInOptimizedOrder(getVisitor);
-        Assert.assertEquals(rows * columns, getVisitor.getCount());
+        Assertions.assertEquals(rows * columns, getVisitor.getCount());
 
         m = new BlockRealMatrix(rows, columns);
         m.walkInColumnOrder(new SetVisitor(), 1, rows - 2, 1, columns - 2);
         getVisitor = new GetVisitor();
         m.walkInOptimizedOrder(getVisitor, 1, rows - 2, 1, columns - 2);
-        Assert.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
+        Assertions.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
         for (int i = 0; i < rows; ++i) {
-            Assert.assertEquals(0.0, m.getEntry(i, 0), 0);
-            Assert.assertEquals(0.0, m.getEntry(i, columns - 1), 0);
+            Assertions.assertEquals(0.0, m.getEntry(i, 0), 0);
+            Assertions.assertEquals(0.0, m.getEntry(i, columns - 1), 0);
         }
         for (int j = 0; j < columns; ++j) {
-            Assert.assertEquals(0.0, m.getEntry(0, j), 0);
-            Assert.assertEquals(0.0, m.getEntry(rows - 1, j), 0);
+            Assertions.assertEquals(0.0, m.getEntry(0, j), 0);
+            Assertions.assertEquals(0.0, m.getEntry(rows - 1, j), 0);
         }
 
         m = new BlockRealMatrix(rows, columns);
         m.walkInOptimizedOrder(new SetVisitor());
         getVisitor = new GetVisitor();
         m.walkInRowOrder(getVisitor);
-        Assert.assertEquals(rows * columns, getVisitor.getCount());
+        Assertions.assertEquals(rows * columns, getVisitor.getCount());
 
         m = new BlockRealMatrix(rows, columns);
         m.walkInOptimizedOrder(new SetVisitor(), 1, rows - 2, 1, columns - 2);
         getVisitor = new GetVisitor();
         m.walkInRowOrder(getVisitor, 1, rows - 2, 1, columns - 2);
-        Assert.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
+        Assertions.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
         for (int i = 0; i < rows; ++i) {
-            Assert.assertEquals(0.0, m.getEntry(i, 0), 0);
-            Assert.assertEquals(0.0, m.getEntry(i, columns - 1), 0);
+            Assertions.assertEquals(0.0, m.getEntry(i, 0), 0);
+            Assertions.assertEquals(0.0, m.getEntry(i, columns - 1), 0);
         }
         for (int j = 0; j < columns; ++j) {
-            Assert.assertEquals(0.0, m.getEntry(0, j), 0);
-            Assert.assertEquals(0.0, m.getEntry(rows - 1, j), 0);
+            Assertions.assertEquals(0.0, m.getEntry(0, j), 0);
+            Assertions.assertEquals(0.0, m.getEntry(rows - 1, j), 0);
         }
 
         m = new BlockRealMatrix(rows, columns);
         m.walkInOptimizedOrder(new SetVisitor());
         getVisitor = new GetVisitor();
         m.walkInColumnOrder(getVisitor);
-        Assert.assertEquals(rows * columns, getVisitor.getCount());
+        Assertions.assertEquals(rows * columns, getVisitor.getCount());
 
         m = new BlockRealMatrix(rows, columns);
         m.walkInOptimizedOrder(new SetVisitor(), 1, rows - 2, 1, columns - 2);
         getVisitor = new GetVisitor();
         m.walkInColumnOrder(getVisitor, 1, rows - 2, 1, columns - 2);
-        Assert.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
+        Assertions.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
         for (int i = 0; i < rows; ++i) {
-            Assert.assertEquals(0.0, m.getEntry(i, 0), 0);
-            Assert.assertEquals(0.0, m.getEntry(i, columns - 1), 0);
+            Assertions.assertEquals(0.0, m.getEntry(i, 0), 0);
+            Assertions.assertEquals(0.0, m.getEntry(i, columns - 1), 0);
         }
         for (int j = 0; j < columns; ++j) {
-            Assert.assertEquals(0.0, m.getEntry(0, j), 0);
-            Assert.assertEquals(0.0, m.getEntry(rows - 1, j), 0);
+            Assertions.assertEquals(0.0, m.getEntry(0, j), 0);
+            Assertions.assertEquals(0.0, m.getEntry(rows - 1, j), 0);
         }
 
     }
@@ -1355,7 +1355,7 @@ public final class BlockRealMatrixTest {
     @Test
     public void testSerial()  {
         BlockRealMatrix m = new BlockRealMatrix(testData);
-        Assert.assertEquals(m,UnitTestUtils.serializeAndRecover(m));
+        Assertions.assertEquals(m,UnitTestUtils.serializeAndRecover(m));
     }
 
     private static class SetVisitor extends DefaultRealMatrixChangingVisitor {
@@ -1370,7 +1370,7 @@ public final class BlockRealMatrixTest {
         @Override
         public void visit(int i, int j, double value) {
             ++count;
-            Assert.assertEquals(i + j / 1024.0, value, 0.0);
+            Assertions.assertEquals(i + j / 1024.0, value, 0.0);
         }
         public int getCount() {
             return count;
@@ -1381,16 +1381,16 @@ public final class BlockRealMatrixTest {
 
     /** verifies that two matrices are close (1-norm) */
     protected void assertClose(RealMatrix m, RealMatrix n, double tolerance) {
-        Assert.assertTrue(m.subtract(n).getNorm1() < tolerance);
+        Assertions.assertTrue(m.subtract(n).getNorm1() < tolerance);
     }
 
     /** verifies that two vectors are close (sup norm) */
     protected void assertClose(double[] m, double[] n, double tolerance) {
         if (m.length != n.length) {
-            Assert.fail("vectors not same length");
+            Assertions.fail("vectors not same length");
         }
         for (int i = 0; i < m.length; i++) {
-            Assert.assertEquals(m[i], n[i], tolerance);
+            Assertions.assertEquals(m[i], n[i], tolerance);
         }
     }
 

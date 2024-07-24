@@ -16,12 +16,12 @@
  */
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
-import org.junit.Assert;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
+import org.junit.jupiter.api.Assertions;
 
 public abstract class AbstractConstrainedOptimizerTest {
 
@@ -62,13 +62,13 @@ public abstract class AbstractConstrainedOptimizerTest {
         final LagrangeSolution    solution  = optimizer.optimize(data);
 
         // check result
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             MatrixUtils.createRealVector(expectedSolution).subtract(solution.getX()).getL1Norm(),
                             solutionTolerance);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             MatrixUtils.createRealVector(expectedMultipliers).subtract(solution.getLambda()).getL1Norm(),
                             multipliersTolerance);
-        Assert.assertEquals(expectedValue, solution.getValue(),                                  valueTolerance);
+        Assertions.assertEquals(expectedValue, solution.getValue(),                                  valueTolerance);
 
         // check neighboring points either violate constraints or have worst objective function
         for (int i = 0; i < expectedSolution.length; ++i) {
@@ -82,7 +82,7 @@ public abstract class AbstractConstrainedOptimizerTest {
             if (plusIsFeasible) {
                 // the plusShift point fulfills all constraints,
                 // so it must have worst objective function than the expected optimum
-                Assert.assertTrue(objectiveFunction.getObjectiveFunction().value(plusShift.toArray()) > expectedValue);
+                Assertions.assertTrue(objectiveFunction.getObjectiveFunction().value(plusShift.toArray()) > expectedValue);
             }
             
             final RealVector minusShift = MatrixUtils.createRealVector(expectedSolution);
@@ -94,7 +94,7 @@ public abstract class AbstractConstrainedOptimizerTest {
             if (minusIsFeasible) {
                 // the minusShift point fulfills all constraints,
                 // so it must have worst objective function than the expected optimum
-                Assert.assertTrue(objectiveFunction.getObjectiveFunction().value(minusShift.toArray()) > expectedValue);
+                Assertions.assertTrue(objectiveFunction.getObjectiveFunction().value(minusShift.toArray()) > expectedValue);
             }
             
         }

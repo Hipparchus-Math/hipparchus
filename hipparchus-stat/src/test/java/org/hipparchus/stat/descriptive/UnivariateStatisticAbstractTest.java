@@ -21,14 +21,14 @@ s * Unless required by applicable law or agreed to in writing, software
  */
 package org.hipparchus.stat.descriptive;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Test cases for the {@link UnivariateStatistic} class.
@@ -96,7 +96,7 @@ public abstract class UnivariateStatisticAbstractTest {
 
     @Test
     public void testEvaluation() {
-        Assert.assertEquals(expectedValue(), getUnivariateStatistic().evaluate(testArray), getTolerance());
+        Assertions.assertEquals(expectedValue(), getUnivariateStatistic().evaluate(testArray), getTolerance());
     }
 
     @Test
@@ -104,13 +104,13 @@ public abstract class UnivariateStatisticAbstractTest {
         final UnivariateStatistic stat = getUnivariateStatistic();
         final double[] arrayZero = new double[5];
         System.arraycopy(testArray, 0, arrayZero, 0, 5);
-        Assert.assertEquals(stat.evaluate(arrayZero), stat.evaluate(testArray, 0, 5), 0);
+        Assertions.assertEquals(stat.evaluate(arrayZero), stat.evaluate(testArray, 0, 5), 0);
         final double[] arrayOne = new double[5];
         System.arraycopy(testArray, 5, arrayOne, 0, 5);
-        Assert.assertEquals(stat.evaluate(arrayOne), stat.evaluate(testArray, 5, 5), 0);
+        Assertions.assertEquals(stat.evaluate(arrayOne), stat.evaluate(testArray, 5, 5), 0);
         final double[] arrayEnd = new double[5];
         System.arraycopy(testArray, testArray.length - 5, arrayEnd, 0, 5);
-        Assert.assertEquals(stat.evaluate(arrayEnd), stat.evaluate(testArray, testArray.length - 5, 5), 0);
+        Assertions.assertEquals(stat.evaluate(arrayEnd), stat.evaluate(testArray, testArray.length - 5, 5), 0);
     }
 
     @Test
@@ -126,19 +126,19 @@ public abstract class UnivariateStatisticAbstractTest {
         final double[] weightZero = new double[5];
         System.arraycopy(testArray, 0, arrayZero, 0, 5);
         System.arraycopy(testWeightsArray, 0, weightZero, 0, 5);
-        Assert.assertEquals(stat.evaluate(arrayZero, weightZero),
+        Assertions.assertEquals(stat.evaluate(arrayZero, weightZero),
                             stat.evaluate(testArray, testWeightsArray, 0, 5), 0);
         final double[] arrayOne = new double[5];
         final double[] weightOne = new double[5];
         System.arraycopy(testArray, 5, arrayOne, 0, 5);
         System.arraycopy(testWeightsArray, 5, weightOne, 0, 5);
-        Assert.assertEquals(stat.evaluate(arrayOne, weightOne),
+        Assertions.assertEquals(stat.evaluate(arrayOne, weightOne),
                             stat.evaluate(testArray, testWeightsArray, 5, 5), 0);
         final double[] arrayEnd = new double[5];
         final double[] weightEnd = new double[5];
         System.arraycopy(testArray, testArray.length - 5, arrayEnd, 0, 5);
         System.arraycopy(testWeightsArray, testArray.length - 5, weightEnd, 0, 5);
-        Assert.assertEquals(stat.evaluate(arrayEnd, weightEnd),
+        Assertions.assertEquals(stat.evaluate(arrayEnd, weightEnd),
                             stat.evaluate(testArray, testWeightsArray, testArray.length - 5, 5), 0);
     }
 
@@ -146,7 +146,7 @@ public abstract class UnivariateStatisticAbstractTest {
     public void testCopy() {
         UnivariateStatistic original = getUnivariateStatistic();
         UnivariateStatistic copy = original.copy();
-        Assert.assertEquals(expectedValue(), copy.evaluate(testArray), getTolerance());
+        Assertions.assertEquals(expectedValue(), copy.evaluate(testArray), getTolerance());
     }
 
     @Test
@@ -156,13 +156,13 @@ public abstract class UnivariateStatisticAbstractTest {
         if (stat instanceof AbstractUnivariateStatistic) {
             AbstractUnivariateStatistic original = (AbstractUnivariateStatistic) stat;
             original.setData(testArray);
-            Assert.assertEquals(expectedValue(), original.evaluate(), getTolerance());
+            Assertions.assertEquals(expectedValue(), original.evaluate(), getTolerance());
 
             AbstractUnivariateStatistic copy = (AbstractUnivariateStatistic) original.copy();
-            Assert.assertEquals(original.evaluate(), copy.evaluate(), getTolerance());
+            Assertions.assertEquals(original.evaluate(), copy.evaluate(), getTolerance());
 
-            Assert.assertArrayEquals(original.getData(), copy.getData(), 1e-10);
-            Assert.assertNotSame(original.getDataRef(), copy.getDataRef());
+            Assertions.assertArrayEquals(original.getData(), copy.getData(), 1e-10);
+            Assertions.assertNotSame(original.getDataRef(), copy.getDataRef());
         }
     }
 
@@ -227,7 +227,7 @@ public abstract class UnivariateStatisticAbstractTest {
                 10E-12);
 
         // Check consistency of weighted evaluation methods
-        Assert.assertEquals(weightedStatistic.evaluate(values, weights, 0, values.length),
+        Assertions.assertEquals(weightedStatistic.evaluate(values, weights, 0, values.length),
                             weightedStatistic.evaluate(values, weights), Double.MIN_VALUE);
 
     }

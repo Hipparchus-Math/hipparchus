@@ -24,8 +24,9 @@ package org.hipparchus.distribution.discrete;
 
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for UniformIntegerDistribution.
@@ -34,6 +35,7 @@ public class UniformIntegerDistributionTest extends IntegerDistributionAbstractT
 
     // --- Override tolerance -------------------------------------------------
 
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -95,12 +97,12 @@ public class UniformIntegerDistributionTest extends IntegerDistributionAbstractT
         UniformIntegerDistribution dist;
 
         dist = new UniformIntegerDistribution(0, 5);
-        Assert.assertEquals(dist.getNumericalMean(), 2.5, 0);
-        Assert.assertEquals(dist.getNumericalVariance(), 35 / 12.0, 0);
+        Assertions.assertEquals(2.5, dist.getNumericalMean(), 0);
+        Assertions.assertEquals(dist.getNumericalVariance(), 35 / 12.0, 0);
 
         dist = new UniformIntegerDistribution(0, 1);
-        Assert.assertEquals(dist.getNumericalMean(), 0.5, 0);
-        Assert.assertEquals(dist.getNumericalVariance(), 3 / 12.0, 0);
+        Assertions.assertEquals(0.5, dist.getNumericalMean(), 0);
+        Assertions.assertEquals(dist.getNumericalVariance(), 3 / 12.0, 0);
     }
 
     // MATH-1141

@@ -21,11 +21,6 @@
  */
 package org.hipparchus.optim.nonlinear.scalar.noderiv;
 
-import java.util.Arrays;
-import java.util.Random;
-
-import org.hipparchus.Retry;
-import org.hipparchus.RetryRunner;
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.optim.InitialGuess;
@@ -36,92 +31,107 @@ import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.random.MersenneTwister;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junitpioneer.jupiter.RetryingTest;
+
+import java.util.Arrays;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for {@link CMAESOptimizer}.
  */
-@RunWith(RetryRunner.class)
 public class CMAESOptimizerTest {
 
     static final int DIM = 13;
     static final int LAMBDA = 4 + (int)(3.*FastMath.log(DIM));
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testInitOutofbounds1() {
-        double[] startPoint = point(DIM,3);
-        double[] insigma = point(DIM, 0.3);
-        double[][] boundaries = boundaries(DIM,-1,2);
-        PointValuePair expected =
-            new PointValuePair(point(DIM,1.0),0.0);
-        doTest(new Rosen(), startPoint, insigma, boundaries,
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] startPoint = point(DIM, 3);
+            double[] insigma = point(DIM, 0.3);
+            double[][] boundaries = boundaries(DIM, -1, 2);
+            PointValuePair expected =
+                new PointValuePair(point(DIM, 1.0), 0.0);
+            doTest(new Rosen(), startPoint, insigma, boundaries,
                 GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,
                 1e-13, 1e-6, 100000, expected);
+        });
     }
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testInitOutofbounds2() {
-        double[] startPoint = point(DIM, -2);
-        double[] insigma = point(DIM, 0.3);
-        double[][] boundaries = boundaries(DIM,-1,2);
-        PointValuePair expected =
-            new PointValuePair(point(DIM,1.0),0.0);
-        doTest(new Rosen(), startPoint, insigma, boundaries,
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] startPoint = point(DIM, -2);
+            double[] insigma = point(DIM, 0.3);
+            double[][] boundaries = boundaries(DIM, -1, 2);
+            PointValuePair expected =
+                new PointValuePair(point(DIM, 1.0), 0.0);
+            doTest(new Rosen(), startPoint, insigma, boundaries,
                 GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,
                 1e-13, 1e-6, 100000, expected);
-    }
-
-    @Test(expected = MathIllegalArgumentException.class)
-    public void testBoundariesDimensionMismatch() {
-        double[] startPoint = point(DIM,0.5);
-        double[] insigma = point(DIM, 0.3);
-        double[][] boundaries = boundaries(DIM+1,-1,2);
-        PointValuePair expected =
-            new PointValuePair(point(DIM,1.0),0.0);
-        doTest(new Rosen(), startPoint, insigma, boundaries,
-                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,
-                1e-13, 1e-6, 100000, expected);
-    }
-
-    @Test(expected = MathIllegalArgumentException.class)
-    public void testInputSigmaNegative() {
-        double[] startPoint = point(DIM,0.5);
-        double[] insigma = point(DIM,-0.5);
-        double[][] boundaries = null;
-        PointValuePair expected =
-            new PointValuePair(point(DIM,1.0),0.0);
-        doTest(new Rosen(), startPoint, insigma, boundaries,
-                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,
-                1e-13, 1e-6, 100000, expected);
-    }
-
-    @Test(expected = MathIllegalArgumentException.class)
-    public void testInputSigmaOutOfRange() {
-        double[] startPoint = point(DIM,0.5);
-        double[] insigma = point(DIM, 1.1);
-        double[][] boundaries = boundaries(DIM,-0.5,0.5);
-        PointValuePair expected =
-            new PointValuePair(point(DIM,1.0),0.0);
-        doTest(new Rosen(), startPoint, insigma, boundaries,
-                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,
-                1e-13, 1e-6, 100000, expected);
-    }
-
-    @Test(expected = MathIllegalArgumentException.class)
-    public void testInputSigmaDimensionMismatch() {
-        double[] startPoint = point(DIM,0.5);
-        double[] insigma = point(DIM + 1, 0.5);
-        double[][] boundaries = null;
-        PointValuePair expected =
-            new PointValuePair(point(DIM,1.0),0.0);
-        doTest(new Rosen(), startPoint, insigma, boundaries,
-                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,
-                1e-13, 1e-6, 100000, expected);
+        });
     }
 
     @Test
-    @Retry(3)
+    public void testBoundariesDimensionMismatch() {
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] startPoint = point(DIM, 0.5);
+            double[] insigma = point(DIM, 0.3);
+            double[][] boundaries = boundaries(DIM + 1, -1, 2);
+            PointValuePair expected =
+                new PointValuePair(point(DIM, 1.0), 0.0);
+            doTest(new Rosen(), startPoint, insigma, boundaries,
+                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,
+                1e-13, 1e-6, 100000, expected);
+        });
+    }
+
+    @Test
+    public void testInputSigmaNegative() {
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] startPoint = point(DIM, 0.5);
+            double[] insigma = point(DIM, -0.5);
+            double[][] boundaries = null;
+            PointValuePair expected =
+                new PointValuePair(point(DIM, 1.0), 0.0);
+            doTest(new Rosen(), startPoint, insigma, boundaries,
+                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,
+                1e-13, 1e-6, 100000, expected);
+        });
+    }
+
+    @Test
+    public void testInputSigmaOutOfRange() {
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] startPoint = point(DIM, 0.5);
+            double[] insigma = point(DIM, 1.1);
+            double[][] boundaries = boundaries(DIM, -0.5, 0.5);
+            PointValuePair expected =
+                new PointValuePair(point(DIM, 1.0), 0.0);
+            doTest(new Rosen(), startPoint, insigma, boundaries,
+                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,
+                1e-13, 1e-6, 100000, expected);
+        });
+    }
+
+    @Test
+    public void testInputSigmaDimensionMismatch() {
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] startPoint = point(DIM, 0.5);
+            double[] insigma = point(DIM + 1, 0.5);
+            double[][] boundaries = null;
+            PointValuePair expected =
+                new PointValuePair(point(DIM, 1.0), 0.0);
+            doTest(new Rosen(), startPoint, insigma, boundaries,
+                GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,
+                1e-13, 1e-6, 100000, expected);
+        });
+    }
+
+    @RetryingTest(3)
     public void testRosen() {
         double[] startPoint = point(DIM,0.1);
         double[] insigma = point(DIM,0.1);
@@ -136,9 +146,9 @@ public class CMAESOptimizerTest {
                 1e-13, 1e-6, 100000, expected);
     }
 
-    @Test
-    @Retry(3)
-    public void testMaximize() {
+
+    @RetryingTest(3)
+    void testMaximize() {
         double[] startPoint = point(DIM,1.0);
         double[] insigma = point(DIM,0.1);
         double[][] boundaries = null;
@@ -388,8 +398,8 @@ public class CMAESOptimizerTest {
                                                    new CMAESOptimizer.Sigma(sigma),
                                                    new InitialGuess(start),
                                                    new SimpleBounds(lower, upper)).getPoint();
-        Assert.assertTrue("Out of bounds (" + result[0] + " > " + upper[0] + ")",
-                          result[0] <= upper[0]);
+        Assertions.assertTrue(result[0] <= upper[0],
+                          "Out of bounds (" + result[0] + " > " + upper[0] + ")");
     }
 
     /**
@@ -451,8 +461,8 @@ public class CMAESOptimizerTest {
 
         // The two values currently differ by a substantial amount, indicating that
         // the bounds definition can prevent reaching the optimum.
-        Assert.assertEquals(resNoBound, resNearLo, 1e-3);
-        Assert.assertEquals(resNoBound, resNearHi, 1e-3);
+        Assertions.assertEquals(resNoBound, resNearLo, 1e-3);
+        Assertions.assertEquals(resNoBound, resNearHi, 1e-3);
     }
 
     /**
@@ -505,12 +515,12 @@ public class CMAESOptimizerTest {
                            new CMAESOptimizer.PopulationSize(lambda));
 
         // System.out.println("sol=" + Arrays.toString(result.getPoint()));
-        Assert.assertEquals(expected.getValue(), result.getValue(), fTol);
+        Assertions.assertEquals(expected.getValue(), result.getValue(), fTol);
         for (int i = 0; i < dim; i++) {
-            Assert.assertEquals(expected.getPoint()[i], result.getPoint()[i], pointTol);
+            Assertions.assertEquals(expected.getPoint()[i], result.getPoint()[i], pointTol);
         }
 
-        Assert.assertTrue(optim.getIterations() > 0);
+        Assertions.assertTrue(optim.getIterations() > 0);
     }
 
     private static double[] point(int n, double value) {

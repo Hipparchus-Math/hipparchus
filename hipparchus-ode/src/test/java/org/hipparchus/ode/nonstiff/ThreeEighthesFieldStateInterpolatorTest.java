@@ -23,7 +23,7 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.Binary64Field;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ThreeEighthesFieldStateInterpolatorTest extends RungeKuttaFieldStateInterpolatorAbstractTest {
 

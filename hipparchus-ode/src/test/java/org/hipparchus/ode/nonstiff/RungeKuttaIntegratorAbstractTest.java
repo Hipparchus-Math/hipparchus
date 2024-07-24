@@ -17,15 +17,6 @@
 
 package org.hipparchus.ode.nonstiff;
 
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Random;
-
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
@@ -57,8 +48,17 @@ import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Random;
+
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public abstract class RungeKuttaIntegratorAbstractTest {
 
@@ -98,10 +98,10 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         ODEStateAndDerivative result = integrator.integrate(new ExpandableODE(ode),
                                                             new ODEState(t0, y0),
                                                             tEvent);
-        Assert.assertEquals(tEvent, result.getTime(), epsilonT);
+        Assertions.assertEquals(tEvent, result.getTime(), epsilonT);
         double[] y = result.getPrimaryState();
         for (int i = 0; i < y.length; ++i) {
-            Assert.assertEquals(y0[i] * FastMath.exp(k[i] * (result.getTime() - t0)), y[i], epsilonY);
+            Assertions.assertEquals(y0[i] * FastMath.exp(k[i] * (result.getTime() - t0)), y[i], epsilonY);
         }
 
         integrator.addEventDetector(new ODEEventDetector() {
@@ -119,7 +119,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
             }
             public ODEEventHandler getHandler() {
                 return (state, detector, increasing) -> {
-                    Assert.assertEquals(tEvent, state.getTime(), epsilonT);
+                    Assertions.assertEquals(tEvent, state.getTime(), epsilonT);
                     return Action.CONTINUE;
                 };
             }
@@ -127,10 +127,10 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         result = integrator.integrate(new ExpandableODE(ode),
                                       new ODEState(t0, y0),
                                       tEvent + 120);
-        Assert.assertEquals(tEvent + 120, result.getTime(), epsilonT);
+        Assertions.assertEquals(tEvent + 120, result.getTime(), epsilonT);
         y = result.getPrimaryState();
         for (int i = 0; i < y.length; ++i) {
-            Assert.assertEquals(y0[i] * FastMath.exp(k[i] * (result.getTime() - t0)), y[i], epsilonY);
+            Assertions.assertEquals(y0[i] * FastMath.exp(k[i] * (result.getTime() - t0)), y[i], epsilonY);
         }
 
     }
@@ -145,18 +145,18 @@ public abstract class RungeKuttaIntegratorAbstractTest {
             integrator.integrate(new ExpandableODE(pb),
                                  new ODEState(0.0, new double[pb.getDimension() + 10]),
                                  1.0);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch(MathIllegalArgumentException ie) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, ie.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, ie.getSpecifier());
         }
         try  {
             TestProblem1 pb = new TestProblem1();
             integrator.integrate(new ExpandableODE(pb),
                                  new ODEState(0.0, new double[pb.getDimension()]),
                                  0.0);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch(MathIllegalArgumentException ie) {
-            Assert.assertEquals(LocalizedODEFormats.TOO_SMALL_INTEGRATION_INTERVAL, ie.getSpecifier());
+            Assertions.assertEquals(LocalizedODEFormats.TOO_SMALL_INTEGRATION_INTERVAL, ie.getSpecifier());
         }
     }
 
@@ -188,17 +188,17 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                 for (int l = 0; l < functions.length; ++l) {
                     integ.addEventDetector(functions[l]);
                 }
-                Assert.assertEquals(functions.length, integ.getEventDetectors().size());
+                Assertions.assertEquals(functions.length, integ.getEventDetectors().size());
                 ODEStateAndDerivative stop = integ.integrate(new ExpandableODE(pb),
                                                                      pb.getInitialState(),
                                                                      pb.getFinalTime());
                 if (functions.length == 0) {
-                    Assert.assertEquals(pb.getFinalTime(), stop.getTime(), epsilonT);
+                    Assertions.assertEquals(pb.getFinalTime(), stop.getTime(), epsilonT);
                 }
 
                 double error = handler.getMaximalValueError();
                 if (i > 4) {
-                    Assert.assertTrue(error < FastMath.abs(previousValueError * safetyValueFactor));
+                    Assertions.assertTrue(error < FastMath.abs(previousValueError * safetyValueFactor));
                 }
                 previousValueError = error;
 
@@ -206,7 +206,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                 // can't expect time error to be less than event finding tolerance
                 double timeTol = FastMath.max(eventTol, FastMath.abs(previousTimeError * safetyTimeFactor));
                 if (i > 4) {
-                    MatcherAssert.assertThat(
+                    assertThat(
                             "Problem=" + pb + ", i=" + i + ", step=" + step,
                             timeError,
                             Matchers.lessThanOrEqualTo(timeTol));
@@ -214,7 +214,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                 previousTimeError = timeError;
 
                 integ.clearEventDetectors();
-                Assert.assertEquals(0, integ.getEventDetectors().size());
+                Assertions.assertEquals(0, integ.getEventDetectors().size());
             }
 
         }
@@ -237,10 +237,10 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         integ.addStepHandler(handler);
         integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
 
-        Assert.assertEquals(0, handler.getLastError(),         epsilonLast);
-        Assert.assertEquals(0, handler.getMaximalValueError(), epsilonMaxValue);
-        Assert.assertEquals(0, handler.getMaximalTimeError(),  epsilonMaxTime);
-        Assert.assertEquals(name, integ.getName());
+        Assertions.assertEquals(0, handler.getLastError(),         epsilonLast);
+        Assertions.assertEquals(0, handler.getMaximalValueError(), epsilonMaxValue);
+        Assertions.assertEquals(0, handler.getMaximalTimeError(),  epsilonMaxTime);
+        Assertions.assertEquals(name, integ.getName());
 
     }
 
@@ -261,10 +261,10 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         integ.addStepHandler(handler);
         integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
 
-        Assert.assertTrue(handler.getLastError()         > belowLast);
-        Assert.assertTrue(handler.getMaximalValueError() > belowMaxValue);
-        Assert.assertEquals(0, handler.getMaximalTimeError(),  epsilonMaxTime);
-        Assert.assertEquals(name, integ.getName());
+        Assertions.assertTrue(handler.getLastError()         > belowLast);
+        Assertions.assertTrue(handler.getMaximalValueError() > belowMaxValue);
+        Assertions.assertEquals(0, handler.getMaximalTimeError(),  epsilonMaxTime);
+        Assertions.assertEquals(name, integ.getName());
 
     }
 
@@ -285,10 +285,10 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         integ.addStepHandler(handler);
         integ.integrate(new ExpandableODE(pb), pb.getInitialState(), pb.getFinalTime());
 
-        Assert.assertEquals(0, handler.getLastError(),         epsilonLast);
-        Assert.assertEquals(0, handler.getMaximalValueError(), epsilonMaxValue);
-        Assert.assertEquals(0, handler.getMaximalTimeError(),  epsilonMaxTime);
-        Assert.assertEquals(name, integ.getName());
+        Assertions.assertEquals(0, handler.getLastError(),         epsilonLast);
+        Assertions.assertEquals(0, handler.getMaximalValueError(), epsilonMaxValue);
+        Assertions.assertEquals(0, handler.getMaximalTimeError(),  epsilonMaxTime);
+        Assertions.assertEquals(name, integ.getName());
 
     }
 
@@ -304,7 +304,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         RungeKuttaIntegrator integ = createIntegrator(step);
         integ.addStepHandler(new KeplerHandler(pb, expectedMaxError, epsilon));
         final ExpandableODE expandable = new ExpandableODE(pb);
-        Assert.assertSame(pb, expandable.getPrimary());
+        Assertions.assertSame(pb, expandable.getPrimary());
         integ.integrate(expandable, pb.getInitialState(), pb.getFinalTime());
     }
 
@@ -331,7 +331,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
             maxError = FastMath.max(maxError, dx * dx + dy * dy);
         }
         public void finish(ODEStateAndDerivative finalState) {
-            Assert.assertEquals(expectedMaxError, maxError, epsilon);
+            Assertions.assertEquals(expectedMaxError, maxError, epsilon);
         }
     }
 
@@ -346,7 +346,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         integ.addStepHandler(new ODEStepHandler() {
             public void handleStep(ODEStateInterpolator interpolator) {
                 if (interpolator.getCurrentState().getTime() < finalTime - 0.001) {
-                    Assert.assertEquals(step,
+                    Assertions.assertEquals(step,
                                         interpolator.getCurrentState().getTime() - interpolator.getPreviousState().getTime(),
                                         epsilon);
                 }
@@ -381,7 +381,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         double dx    = y[0] - yth[0];
         double dy    = y[1] - yth[1];
         double error = dx * dx + dy * dy;
-        Assert.assertEquals(0.0, error, epsilon);
+        Assertions.assertEquals(0.0, error, epsilon);
     }
 
     @Test
@@ -400,8 +400,8 @@ public abstract class RungeKuttaIntegratorAbstractTest {
             }
 
             public double[] computeDerivatives(double t, double[] y) {
-                Assert.assertTrue(t >= FastMath.nextAfter(t0, Double.NEGATIVE_INFINITY));
-                Assert.assertTrue(t <= FastMath.nextAfter(t,  Double.POSITIVE_INFINITY));
+                Assertions.assertTrue(t >= FastMath.nextAfter(t0, Double.NEGATIVE_INFINITY));
+                Assertions.assertTrue(t <= FastMath.nextAfter(t,  Double.POSITIVE_INFINITY));
                 return new double[] { -100 * y[0] };
             }
 
@@ -419,16 +419,16 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                         withMaxCheck(1.0).
                         withMaxIter(1000).
                         withThreshold(1.0e-12);
-        Assert.assertEquals(1.0,     stepProblem.getMaxCheckInterval().currentInterval(null), 1.0e-15);
-        Assert.assertEquals(1000,    stepProblem.getMaxIterationCount());
-        Assert.assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy(), 1.0e-25);
-        Assert.assertNotNull(stepProblem.getHandler());
+        Assertions.assertEquals(1.0,     stepProblem.getMaxCheckInterval().currentInterval(null), 1.0e-15);
+        Assertions.assertEquals(1000,    stepProblem.getMaxIterationCount());
+        Assertions.assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy(), 1.0e-25);
+        Assertions.assertNotNull(stepProblem.getHandler());
         RungeKuttaIntegrator integ = createIntegrator(0.3);
       integ.addEventDetector(stepProblem);
       ODEStateAndDerivative result = integ.integrate(new ExpandableODE(stepProblem),
                                                      new ODEState(0, new double[1]),
                                                      10.0);
-      Assert.assertEquals(8.0, result.getPrimaryState()[0], epsilon);
+      Assertions.assertEquals(8.0, result.getPrimaryState()[0], epsilon);
     }
 
     @Test
@@ -499,11 +499,11 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                     double tCurr = interpolator.getCurrentState().getTime();
                     double t     = (tPrev * (10 - i) + tCurr * i) / 10;
                     ODEStateAndDerivative state = interpolator.getInterpolatedState(t);
-                    Assert.assertEquals(2, state.getPrimaryStateDimension());
-                    Assert.assertEquals(1, state.getNumberOfSecondaryStates());
-                    Assert.assertEquals(2, state.getSecondaryStateDimension(0));
-                    Assert.assertEquals(1, state.getSecondaryStateDimension(1));
-                    Assert.assertEquals(3, state.getCompleteStateDimension());
+                    Assertions.assertEquals(2, state.getPrimaryStateDimension());
+                    Assertions.assertEquals(1, state.getNumberOfSecondaryStates());
+                    Assertions.assertEquals(2, state.getSecondaryStateDimension(0));
+                    Assertions.assertEquals(1, state.getSecondaryStateDimension(1));
+                    Assertions.assertEquals(3, state.getCompleteStateDimension());
                     max[0] = FastMath.max(max[0],
                                           FastMath.abs(FastMath.sin(t) - state.getPrimaryState()[0]));
                     max[0] = FastMath.max(max[0],
@@ -520,9 +520,9 @@ public abstract class RungeKuttaIntegratorAbstractTest {
 
         ODEStateAndDerivative finalState =
                         integrator.integrate(expandable, initialState, 10.0);
-        Assert.assertEquals(10.0, finalState.getTime(), 1.0e-12);
-        Assert.assertEquals(0, max[0], epsilonSinCos);
-        Assert.assertEquals(0, max[1], epsilonLinear);
+        Assertions.assertEquals(10.0, finalState.getTime(), 1.0e-12);
+        Assertions.assertEquals(0, max[0], epsilonSinCos);
+        Assertions.assertEquals(0, max[1], epsilonLinear);
 
     }
 
@@ -538,10 +538,10 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                     return new double[] { FastMath.log(t) };
                 }
             }, new ODEState(1.0, new double[] { 1.0 }), -1.0);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
-            Assert.assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
+            Assertions.assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
+            Assertions.assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
         }
     }
 
@@ -563,8 +563,8 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                 oos.writeObject(handler);
             }
 
-            Assert.assertTrue("size = " + bos.size (), bos.size () >  9 * expectedSize / 10);
-            Assert.assertTrue("size = " + bos.size (), bos.size () < 11 * expectedSize / 10);
+            Assertions.assertTrue(bos.size () >  9 * expectedSize / 10, "size = " + bos.size ());
+            Assertions.assertTrue(bos.size () < 11 * expectedSize / 10, "size = " + bos.size ());
 
             ByteArrayInputStream  bis = new ByteArrayInputStream(bos.toByteArray());
             ObjectInputStream     ois = new ObjectInputStream(bis);
@@ -585,10 +585,10 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                 }
             }
 
-            Assert.assertEquals(0, maxError, tolerance);
+            Assertions.assertEquals(0, maxError, tolerance);
 
         } catch (IOException | ClassNotFoundException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
 
     }
@@ -597,7 +597,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
     public void testIssue250() {
         final double defaultStep = 60.;
         RungeKuttaIntegrator integrator = createIntegrator(defaultStep);
-        Assert.assertEquals(defaultStep, integrator.getDefaultStep(), 0.);
+        Assertions.assertEquals(defaultStep, integrator.getDefaultStep(), 0.);
     }
 
 }

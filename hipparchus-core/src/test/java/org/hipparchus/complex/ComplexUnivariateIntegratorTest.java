@@ -21,9 +21,9 @@ import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.analysis.integration.IterativeLegendreGaussIntegrator;
 import org.hipparchus.analysis.polynomials.FieldPolynomialFunction;
 import org.hipparchus.util.MathUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 
 public class ComplexUnivariateIntegratorTest {
@@ -112,14 +112,14 @@ public class ComplexUnivariateIntegratorTest {
                                    1.0e-15);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         integrator = new ComplexUnivariateIntegrator(new IterativeLegendreGaussIntegrator(24,
                                                                                           1.0e-12,
                                                                                           1.0e-12));
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         integrator = null;
     }

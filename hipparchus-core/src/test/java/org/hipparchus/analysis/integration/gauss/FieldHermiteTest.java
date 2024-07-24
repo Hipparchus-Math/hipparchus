@@ -25,8 +25,8 @@ import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test of the {@link HermiteRuleFactory}.
@@ -54,7 +54,7 @@ public class FieldHermiteTest {
         final FieldGaussIntegrator<Binary64> integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f).getReal();
         final double expected = 1;
-        Assert.assertEquals(expected, result, FastMath.ulp(expected));
+        Assertions.assertEquals(expected, result, FastMath.ulp(expected));
     }
 
     @Test
@@ -78,7 +78,7 @@ public class FieldHermiteTest {
         final FieldGaussIntegrator<Binary64> integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f).getReal();
         final double expected = mu.getReal();
-        Assert.assertEquals(expected, result, 5 * FastMath.ulp(expected));
+        Assertions.assertEquals(expected, result, 5 * FastMath.ulp(expected));
     }
 
     @Test
@@ -101,6 +101,6 @@ public class FieldHermiteTest {
         final FieldGaussIntegrator<Binary64> integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f).getReal();
         final double expected = sigma2.getReal();
-        Assert.assertEquals(expected, result, 10 * FastMath.ulp(expected));
+        Assertions.assertEquals(expected, result, 10 * FastMath.ulp(expected));
     }
 }

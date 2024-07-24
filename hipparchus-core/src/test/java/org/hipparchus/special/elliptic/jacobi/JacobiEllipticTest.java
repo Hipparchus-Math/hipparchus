@@ -18,8 +18,8 @@ package org.hipparchus.special.elliptic.jacobi;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class JacobiEllipticTest {
 
@@ -30,9 +30,9 @@ public class JacobiEllipticTest {
             final JacobiElliptic je = JacobiEllipticBuilder.build(m);
             for (double t = -10; t < 10; t += 0.01) {
                 final CopolarN n = je.valuesN(t);
-                Assert.assertEquals(FastMath.sin(t), n.sn(), eps);
-                Assert.assertEquals(FastMath.cos(t), n.cn(), eps);
-                Assert.assertEquals(1.0,             n.dn(), eps);
+                Assertions.assertEquals(FastMath.sin(t), n.sn(), eps);
+                Assertions.assertEquals(FastMath.cos(t), n.cn(), eps);
+                Assertions.assertEquals(1.0,             n.dn(), eps);
             }
         }
     }
@@ -44,65 +44,65 @@ public class JacobiEllipticTest {
             final JacobiElliptic je = JacobiEllipticBuilder.build(1.0 - m1);
             for (double t = -3; t < 3; t += 0.01) {
                 final CopolarN n = je.valuesN(t);
-                Assert.assertEquals(FastMath.tanh(t),       n.sn(), eps);
-                Assert.assertEquals(1.0 / FastMath.cosh(t), n.cn(), eps);
-                Assert.assertEquals(1.0 / FastMath.cosh(t), n.dn(), eps);
+                Assertions.assertEquals(FastMath.tanh(t),       n.sn(), eps);
+                Assertions.assertEquals(1.0 / FastMath.cosh(t), n.cn(), eps);
+                Assertions.assertEquals(1.0 / FastMath.cosh(t), n.dn(), eps);
             }
         }
     }
 
     @Test
     public void testNoConvergence() {
-        Assert.assertTrue(Double.isNaN(JacobiEllipticBuilder.build(Double.NaN).valuesS(0.0).cs()));
+        Assertions.assertTrue(Double.isNaN(JacobiEllipticBuilder.build(Double.NaN).valuesS(0.0).cs()));
     }
 
     @Test
     public void testNegativeParameter() {
-        Assert.assertEquals(0.49781366219021166315, JacobiEllipticBuilder.build(-4.5).valuesN(8.3).sn(), 1.5e-10);
-        Assert.assertEquals(0.86728401215332559984, JacobiEllipticBuilder.build(-4.5).valuesN(8.3).cn(), 1.5e-10);
-        Assert.assertEquals(1.45436686918553524215, JacobiEllipticBuilder.build(-4.5).valuesN(8.3).dn(), 1.5e-10);
+        Assertions.assertEquals(0.49781366219021166315, JacobiEllipticBuilder.build(-4.5).valuesN(8.3).sn(), 1.5e-10);
+        Assertions.assertEquals(0.86728401215332559984, JacobiEllipticBuilder.build(-4.5).valuesN(8.3).cn(), 1.5e-10);
+        Assertions.assertEquals(1.45436686918553524215, JacobiEllipticBuilder.build(-4.5).valuesN(8.3).dn(), 1.5e-10);
     }
 
     @Test
     public void testAbramowitzStegunExample1() {
         // Abramowitz and Stegun give a result of -1667, but Wolfram Alpha gives the following value
-        Assert.assertEquals(-1392.11114434139393839735, JacobiEllipticBuilder.build(0.64).valuesC(1.99650).nc(), 6.0e-10);
+        Assertions.assertEquals(-1392.11114434139393839735, JacobiEllipticBuilder.build(0.64).valuesC(1.99650).nc(), 6.0e-10);
     }
 
     @Test
     public void testAbramowitzStegunExample2() {
-        Assert.assertEquals(0.996253, JacobiEllipticBuilder.build(0.19).valuesN(0.20).dn(), 1.0e-6);
+        Assertions.assertEquals(0.996253, JacobiEllipticBuilder.build(0.19).valuesN(0.20).dn(), 1.0e-6);
     }
 
     @Test
     public void testAbramowitzStegunExample3() {
-        Assert.assertEquals(0.984056, JacobiEllipticBuilder.build(0.81).valuesN(0.20).dn(), 1.0e-6);
+        Assertions.assertEquals(0.984056, JacobiEllipticBuilder.build(0.81).valuesN(0.20).dn(), 1.0e-6);
     }
 
     @Test
     public void testAbramowitzStegunExample4() {
-        Assert.assertEquals(0.980278, JacobiEllipticBuilder.build(0.81).valuesN(0.20).cn(), 1.0e-6);
+        Assertions.assertEquals(0.980278, JacobiEllipticBuilder.build(0.81).valuesN(0.20).cn(), 1.0e-6);
     }
 
     @Test
     public void testAbramowitzStegunExample5() {
-        Assert.assertEquals(0.60952, JacobiEllipticBuilder.build(0.36).valuesN(0.672).sn(), 1.0e-5);
-        Assert.assertEquals(1.1740, JacobiEllipticBuilder.build(0.36).valuesC(0.672).dc(), 1.0e-4);
+        Assertions.assertEquals(0.60952, JacobiEllipticBuilder.build(0.36).valuesN(0.672).sn(), 1.0e-5);
+        Assertions.assertEquals(1.1740, JacobiEllipticBuilder.build(0.36).valuesC(0.672).dc(), 1.0e-4);
     }
 
     @Test
     public void testAbramowitzStegunExample7() {
-        Assert.assertEquals(1.6918083, JacobiEllipticBuilder.build(0.09).valuesS(0.5360162).cs(), 1.0e-7);
+        Assertions.assertEquals(1.6918083, JacobiEllipticBuilder.build(0.09).valuesS(0.5360162).cs(), 1.0e-7);
     }
 
     @Test
     public void testAbramowitzStegunExample8() {
-        Assert.assertEquals(0.56458, JacobiEllipticBuilder.build(0.5).valuesN(0.61802).sn(), 1.0e-5);
+        Assertions.assertEquals(0.56458, JacobiEllipticBuilder.build(0.5).valuesN(0.61802).sn(), 1.0e-5);
     }
 
     @Test
     public void testAbramowitzStegunExample9() {
-        Assert.assertEquals(0.68402, JacobiEllipticBuilder.build(0.5).valuesC(0.61802).sc(), 1.0e-5);
+        Assertions.assertEquals(0.68402, JacobiEllipticBuilder.build(0.5).valuesC(0.61802).sc(), 1.0e-5);
     }
 
     @Test
@@ -120,18 +120,18 @@ public class JacobiEllipticTest {
               1.57945467502452678756, 1.46125047743207819361, 0.59951990180590090343
         };
         final JacobiElliptic je = JacobiEllipticBuilder.build(m);
-        Assert.assertEquals(reference[ 0], je.valuesN(u).sn(), 4 * FastMath.ulp(reference[ 0]));
-        Assert.assertEquals(reference[ 1], je.valuesN(u).cn(), 4 * FastMath.ulp(reference[ 1]));
-        Assert.assertEquals(reference[ 2], je.valuesN(u).dn(), 4 * FastMath.ulp(reference[ 2]));
-        Assert.assertEquals(reference[ 3], je.valuesS(u).cs(), 4 * FastMath.ulp(reference[ 3]));
-        Assert.assertEquals(reference[ 4], je.valuesS(u).ds(), 4 * FastMath.ulp(reference[ 4]));
-        Assert.assertEquals(reference[ 5], je.valuesS(u).ns(), 4 * FastMath.ulp(reference[ 5]));
-        Assert.assertEquals(reference[ 6], je.valuesC(u).dc(), 4 * FastMath.ulp(reference[ 6]));
-        Assert.assertEquals(reference[ 7], je.valuesC(u).nc(), 4 * FastMath.ulp(reference[ 7]));
-        Assert.assertEquals(reference[ 8], je.valuesC(u).sc(), 4 * FastMath.ulp(reference[ 8]));
-        Assert.assertEquals(reference[ 9], je.valuesD(u).nd(), 4 * FastMath.ulp(reference[ 9]));
-        Assert.assertEquals(reference[10], je.valuesD(u).sd(), 4 * FastMath.ulp(reference[10]));
-        Assert.assertEquals(reference[11], je.valuesD(u).cd(), 4 * FastMath.ulp(reference[11]));
+        Assertions.assertEquals(reference[ 0], je.valuesN(u).sn(), 4 * FastMath.ulp(reference[ 0]));
+        Assertions.assertEquals(reference[ 1], je.valuesN(u).cn(), 4 * FastMath.ulp(reference[ 1]));
+        Assertions.assertEquals(reference[ 2], je.valuesN(u).dn(), 4 * FastMath.ulp(reference[ 2]));
+        Assertions.assertEquals(reference[ 3], je.valuesS(u).cs(), 4 * FastMath.ulp(reference[ 3]));
+        Assertions.assertEquals(reference[ 4], je.valuesS(u).ds(), 4 * FastMath.ulp(reference[ 4]));
+        Assertions.assertEquals(reference[ 5], je.valuesS(u).ns(), 4 * FastMath.ulp(reference[ 5]));
+        Assertions.assertEquals(reference[ 6], je.valuesC(u).dc(), 4 * FastMath.ulp(reference[ 6]));
+        Assertions.assertEquals(reference[ 7], je.valuesC(u).nc(), 4 * FastMath.ulp(reference[ 7]));
+        Assertions.assertEquals(reference[ 8], je.valuesC(u).sc(), 4 * FastMath.ulp(reference[ 8]));
+        Assertions.assertEquals(reference[ 9], je.valuesD(u).nd(), 4 * FastMath.ulp(reference[ 9]));
+        Assertions.assertEquals(reference[10], je.valuesD(u).sd(), 4 * FastMath.ulp(reference[10]));
+        Assertions.assertEquals(reference[11], je.valuesD(u).cd(), 4 * FastMath.ulp(reference[11]));
     }
 
     @Test
@@ -180,7 +180,7 @@ public class JacobiEllipticTest {
         for (int i = 0; i < n; ++i) {
             final double x        = xMin + i * (xMax - xMin) / (n - 1);
             final double xRebuilt = direct.value(inverse.value(x));
-            Assert.assertEquals(x, xRebuilt, tolerance);
+            Assertions.assertEquals(x, xRebuilt, tolerance);
         }
     }
 

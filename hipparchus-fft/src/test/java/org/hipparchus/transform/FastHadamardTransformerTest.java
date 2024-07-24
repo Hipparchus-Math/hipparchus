@@ -23,8 +23,8 @@ package org.hipparchus.transform;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 /**
@@ -58,10 +58,10 @@ public final class FastHadamardTransformerTest {
     public void testNoIntInverse() {
         FastHadamardTransformer transformer = new FastHadamardTransformer();
         double[] x = transformer.transform(new double[] { 0, 1, 0, 1}, TransformType.INVERSE);
-        Assert.assertEquals( 0.5, x[0], 0);
-        Assert.assertEquals(-0.5, x[1], 0);
-        Assert.assertEquals( 0.0, x[2], 0);
-        Assert.assertEquals( 0.0, x[3], 0);
+        Assertions.assertEquals( 0.5, x[0], 0);
+        Assertions.assertEquals(-0.5, x[1], 0);
+        Assertions.assertEquals( 0.0, x[2], 0);
+        Assertions.assertEquals( 0.0, x[3], 0);
     }
 
     /**
@@ -71,7 +71,7 @@ public final class FastHadamardTransformerTest {
     public void test3Points() {
         try {
             new FastHadamardTransformer().transform(new double[3], TransformType.FORWARD);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected
         }
@@ -95,7 +95,7 @@ public final class FastHadamardTransformerTest {
         double[] dResult = transformer.transform(dX, TransformType.FORWARD);
         for (int i = 0; i < dResult.length; i++) {
             // compare computed results to precomputed results
-            Assert.assertTrue(Precision.equals(y[i], dResult[i], 1));
+            Assertions.assertTrue(Precision.equals(y[i], dResult[i], 1));
         }
     }
 
@@ -107,7 +107,7 @@ public final class FastHadamardTransformerTest {
         int[] iResult = transformer.transform(x);
         for (int i = 0; i < iResult.length; i++) {
             // compare computed results to precomputed results
-            Assert.assertEquals(y[i], iResult[i]);
+            Assertions.assertEquals(y[i], iResult[i]);
         }
 
     }
@@ -124,7 +124,7 @@ public final class FastHadamardTransformerTest {
         double[] dResult = transformer.transform(dY, TransformType.INVERSE);
         for (int i = 0; i < dResult.length; i++) {
             // compare computed results to precomputed results
-            Assert.assertTrue(Precision.equals(x[i], dResult[i], 1));
+            Assertions.assertTrue(Precision.equals(x[i], dResult[i], 1));
         }
 
     }

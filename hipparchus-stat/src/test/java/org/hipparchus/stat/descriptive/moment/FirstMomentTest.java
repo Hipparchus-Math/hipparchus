@@ -21,10 +21,10 @@
  */
 package org.hipparchus.stat.descriptive.moment;
 
-import static org.junit.Assert.assertTrue;
-
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test cases for the {@link FirstMoment} class.

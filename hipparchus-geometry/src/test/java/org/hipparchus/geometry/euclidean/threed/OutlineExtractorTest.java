@@ -24,8 +24,8 @@ package org.hipparchus.geometry.euclidean.threed;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class OutlineExtractorTest {
 
@@ -33,11 +33,11 @@ public class OutlineExtractorTest {
     public void testBox() {
 
         PolyhedronsSet tree = new PolyhedronsSet(0, 1, 0, 1, 0, 1, 1.0e-10);
-        Assert.assertEquals(1.0, tree.getSize(), 1.0e-10);
-        Assert.assertEquals(6.0, tree.getBoundarySize(), 1.0e-10);
+        Assertions.assertEquals(1.0, tree.getSize(), 1.0e-10);
+        Assertions.assertEquals(6.0, tree.getBoundarySize(), 1.0e-10);
         Vector2D[][] outline = new OutlineExtractor(Vector3D.PLUS_I, Vector3D.PLUS_J).getOutline(tree);
-        Assert.assertEquals(1, outline.length);
-        Assert.assertEquals(4, outline[0].length);
+        Assertions.assertEquals(1, outline.length);
+        Assertions.assertEquals(4, outline[0].length);
 
         Vector2D[] expected = new Vector2D[] {
             new Vector2D(0.0, 0.0),
@@ -53,7 +53,7 @@ public class OutlineExtractorTest {
             }
         }
         for (final Vector2D e : expected) {
-            Assert.assertNull(e);
+            Assertions.assertNull(e);
         }
 
         // observed from a diagonal, the cube appears as an hexagon
@@ -62,13 +62,13 @@ public class OutlineExtractorTest {
         Vector2D[][] outlineSkew = new OutlineExtractor(r.applyTo(Vector3D.PLUS_I),
                                                         r.applyTo(Vector3D.PLUS_J)).
                                    getOutline(tree);
-        Assert.assertEquals(1, outlineSkew.length);
+        Assertions.assertEquals(1, outlineSkew.length);
         int n = outlineSkew[0].length;
-        Assert.assertEquals(6, n);
+        Assertions.assertEquals(6, n);
         for (int i = 0; i < n; ++i) {
             Vector2D v1 = outlineSkew[0][i];
             Vector2D v2 = outlineSkew[0][(i + n - 1) % n];
-            Assert.assertEquals(FastMath.sqrt(2.0 / 3.0), Vector2D.distance(v1, v2), 1.0e-10);
+            Assertions.assertEquals(FastMath.sqrt(2.0 / 3.0), Vector2D.distance(v1, v2), 1.0e-10);
         }
 
     }
@@ -84,11 +84,11 @@ public class OutlineExtractorTest {
         PolyhedronsSet cubeWithHoles = (PolyhedronsSet) factory.difference(cube,
                                                                            factory.union(tubeAlongX,
                                                                                          factory.union(tubeAlongY, tubeAlongZ)));
-        Assert.assertEquals(4.0, cubeWithHoles.getSize(), 1.0e-10);
+        Assertions.assertEquals(4.0, cubeWithHoles.getSize(), 1.0e-10);
         Vector2D[][] outline = new OutlineExtractor(Vector3D.PLUS_I, Vector3D.PLUS_J).getOutline(cubeWithHoles);
-        Assert.assertEquals(2, outline.length);
-        Assert.assertEquals(4, outline[0].length);
-        Assert.assertEquals(4, outline[1].length);
+        Assertions.assertEquals(2, outline.length);
+        Assertions.assertEquals(4, outline[0].length);
+        Assertions.assertEquals(4, outline[1].length);
     }
 
 }

@@ -21,8 +21,8 @@
  */
 package org.hipparchus.random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class MersenneTwisterTest extends RandomGeneratorAbstractTest {
 
@@ -294,12 +294,12 @@ public class MersenneTwisterTest extends RandomGeneratorAbstractTest {
 
         for (int i = 0; i < refInt.length; ++i) {
             int r = mt.nextInt();
-            Assert.assertEquals(refInt[i], (r & 0x7fffffffl) | ((r < 0) ? 0x80000000l : 0x0l));
+            Assertions.assertEquals(refInt[i], (r & 0x7fffffffl) | ((r < 0) ? 0x80000000l : 0x0l));
         }
 
         for (int i = 0; i < refDouble.length; ++i) {
             int r = mt.nextInt();
-            Assert.assertEquals(refDouble[i],
+            Assertions.assertEquals(refDouble[i],
                          ((r & 0x7fffffffl) | ((r < 0) ? 0x80000000l : 0x0l)) / 4294967296.0,
                          1.0e-8);
         }

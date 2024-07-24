@@ -17,13 +17,14 @@
 
 package org.hipparchus.ode.nonstiff;
 
-
-import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Binary64Field;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AdamsMoultonFieldIntegratorTest extends AdamsFieldIntegratorAbstractTest {
 
@@ -46,9 +47,11 @@ public class AdamsMoultonFieldIntegratorTest extends AdamsFieldIntegratorAbstrac
         doNbPointsTest();
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testMinStep() {
-        doDimensionCheck(Binary64Field.getInstance());
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            doDimensionCheck(Binary64Field.getInstance());
+        });
     }
 
     @Test
@@ -59,9 +62,11 @@ public class AdamsMoultonFieldIntegratorTest extends AdamsFieldIntegratorAbstrac
         doTestIncreasingTolerance(Binary64Field.getInstance(), 0.45, 8.69);
     }
 
-    @Test(expected = MathIllegalStateException.class)
+    @Test
     public void exceedMaxEvaluations() {
-        doExceedMaxEvaluations(Binary64Field.getInstance(), 650);
+        assertThrows(MathIllegalStateException.class, () -> {
+            doExceedMaxEvaluations(Binary64Field.getInstance(), 650);
+        });
     }
 
     @Test
@@ -79,9 +84,11 @@ public class AdamsMoultonFieldIntegratorTest extends AdamsFieldIntegratorAbstrac
         doTestSecondaryEquations(Binary64Field.getInstance(), 1.9e-11, 1.1e-14);
     }
 
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testStartFailure() {
-        doTestStartFailure(Binary64Field.getInstance());
+        assertThrows(MathIllegalStateException.class, () -> {
+            doTestStartFailure(Binary64Field.getInstance());
+        });
     }
 
 }

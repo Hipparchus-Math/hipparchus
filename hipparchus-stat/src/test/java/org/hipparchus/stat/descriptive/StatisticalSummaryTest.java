@@ -22,15 +22,15 @@
 
 package org.hipparchus.stat.descriptive;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.random.RandomDataGenerator;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 
 /**
@@ -181,7 +181,7 @@ public class StatisticalSummaryTest {
                                                          double delta) {
         UnitTestUtils.assertEquals(expected.getMax(), observed.getMax(), 0);
         UnitTestUtils.assertEquals(expected.getMin(), observed.getMin(), 0);
-        Assert.assertEquals(expected.getN(), observed.getN());
+        Assertions.assertEquals(expected.getN(), observed.getN());
         UnitTestUtils.assertEquals(expected.getSum(), observed.getSum(), delta);
         UnitTestUtils.assertEquals(expected.getMean(), observed.getMean(), delta);
         UnitTestUtils.assertEquals(expected.getStandardDeviation(), observed.getStandardDeviation(), delta);

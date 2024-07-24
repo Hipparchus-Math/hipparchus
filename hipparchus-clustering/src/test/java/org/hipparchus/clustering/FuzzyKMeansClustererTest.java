@@ -21,20 +21,22 @@
  */
 package org.hipparchus.clustering;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
 import org.hipparchus.clustering.distance.CanberraDistance;
 import org.hipparchus.clustering.distance.DistanceMeasure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test cases for FuzzyKMeansClusterer.
@@ -67,7 +69,7 @@ public class FuzzyKMeansClustererTest {
         boolean cluster1Found = false;
         boolean cluster2Found = false;
         boolean cluster3Found = false;
-        Assert.assertEquals(3, clusters.size());
+        Assertions.assertEquals(3, clusters.size());
         for (final Cluster<DoublePoint> cluster : clusters) {
             if (cluster.getPoints().containsAll(clusterOne)) {
                 cluster1Found = true;
@@ -79,20 +81,24 @@ public class FuzzyKMeansClustererTest {
                 cluster3Found = true;
             }
         }
-        Assert.assertTrue(cluster1Found);
-        Assert.assertTrue(cluster2Found);
-        Assert.assertTrue(cluster3Found);
+        Assertions.assertTrue(cluster1Found);
+        Assertions.assertTrue(cluster2Found);
+        Assertions.assertTrue(cluster3Found);
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testTooSmallFuzzynessFactor() {
-        new FuzzyKMeansClusterer<DoublePoint>(3, 1.0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new FuzzyKMeansClusterer<DoublePoint>(3, 1.0);
+        });
     }
 
-    @Test(expected = NullArgumentException.class)
+    @Test
     public void testNullDataset() {
-        final FuzzyKMeansClusterer<DoublePoint> clusterer = new FuzzyKMeansClusterer<DoublePoint>(3, 2.0);
-        clusterer.cluster(null);
+        assertThrows(NullArgumentException.class, () -> {
+            final FuzzyKMeansClusterer<DoublePoint> clusterer = new FuzzyKMeansClusterer<DoublePoint>(3, 2.0);
+            clusterer.cluster(null);
+        });
     }
 
     @Test
@@ -102,12 +108,12 @@ public class FuzzyKMeansClustererTest {
         final FuzzyKMeansClusterer<DoublePoint> clusterer =
                 new FuzzyKMeansClusterer<DoublePoint>(3, 2.0, 100, measure, 1e-6, random);
 
-        Assert.assertEquals(3, clusterer.getK());
-        Assert.assertEquals(2.0, clusterer.getFuzziness(), 1e-6);
-        Assert.assertEquals(100, clusterer.getMaxIterations());
-        Assert.assertEquals(1e-6, clusterer.getEpsilon(), 1e-12);
-        MatcherAssert.assertThat(clusterer.getDistanceMeasure(), CoreMatchers.is(measure));
-        MatcherAssert.assertThat(clusterer.getRandomGenerator(), CoreMatchers.is(random));
+        Assertions.assertEquals(3, clusterer.getK());
+        Assertions.assertEquals(2.0, clusterer.getFuzziness(), 1e-6);
+        Assertions.assertEquals(100, clusterer.getMaxIterations());
+        Assertions.assertEquals(1e-6, clusterer.getEpsilon(), 1e-12);
+        assertThat(clusterer.getDistanceMeasure(), CoreMatchers.is(measure));
+        assertThat(clusterer.getRandomGenerator(), CoreMatchers.is(random));
     }
 
     @Test
@@ -119,7 +125,7 @@ public class FuzzyKMeansClustererTest {
                 new FuzzyKMeansClusterer<DoublePoint>(1, 2.0);
         final List<CentroidCluster<DoublePoint>> clusters = transformer.cluster(points);
 
-        Assert.assertEquals(1, clusters.size());
+        Assertions.assertEquals(1, clusters.size());
     }
 
     @Test
@@ -134,7 +140,7 @@ public class FuzzyKMeansClustererTest {
                 new FuzzyKMeansClusterer<DoublePoint>(3, 2.0);
         final List<CentroidCluster<DoublePoint>> clusters = transformer.cluster(points);
 
-        Assert.assertEquals(3, clusters.size());
+        Assertions.assertEquals(3, clusters.size());
     }
 
 }

@@ -26,8 +26,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 /**
@@ -51,18 +51,18 @@ public final class FieldTrapezoidIntegratorTest {
         double expected = 2;
         double tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         double result = integrator.integrate(10000, x -> x.sin(), min, max).getReal();
-        Assert.assertTrue(integrator.getEvaluations() < 2500);
-        Assert.assertTrue(integrator.getIterations()  < 15);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < 2500);
+        Assertions.assertTrue(integrator.getIterations()  < 15);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = new Binary64(-FastMath.PI/3);
         max = new Binary64(0);
         expected = -0.5;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(10000, x -> x.sin(), min, max).getReal();
-        Assert.assertTrue(integrator.getEvaluations() < 2500);
-        Assert.assertTrue(integrator.getIterations()  < 15);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < 2500);
+        Assertions.assertTrue(integrator.getIterations()  < 15);
+        Assertions.assertEquals(expected, result, tolerance);
     }
 
     /**
@@ -79,27 +79,27 @@ public final class FieldTrapezoidIntegratorTest {
         double expected = -1.0 / 48;
         double tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         double result = integrator.integrate(10000, f, min, max).getReal();
-        Assert.assertTrue(integrator.getEvaluations() < 5000);
-        Assert.assertTrue(integrator.getIterations()  < 15);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < 5000);
+        Assertions.assertTrue(integrator.getIterations()  < 15);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = new Binary64(0);
         max = new Binary64(0.5);
         expected = 11.0 / 768;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(10000, f, min, max).getReal();
-        Assert.assertTrue(integrator.getEvaluations() < 2500);
-        Assert.assertTrue(integrator.getIterations()  < 15);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < 2500);
+        Assertions.assertTrue(integrator.getIterations()  < 15);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = new Binary64(-1);
         max = new Binary64(4);
         expected = 2048 / 3.0 - 78 + 1.0 / 48;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(10000, f, min, max).getReal();
-        Assert.assertTrue(integrator.getEvaluations() < 5000);
-        Assert.assertTrue(integrator.getIterations()  < 15);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < 5000);
+        Assertions.assertTrue(integrator.getIterations()  < 15);
+        Assertions.assertEquals(expected, result, tolerance);
 
     }
 
@@ -112,21 +112,21 @@ public final class FieldTrapezoidIntegratorTest {
             // bad interval
             new FieldTrapezoidIntegrator<>(Binary64Field.getInstance()).integrate(1000, x -> x.sin(),
                                                                                    new Binary64(1), new Binary64(-1));
-            Assert.fail("Expecting MathIllegalArgumentException - bad interval");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
             new FieldTrapezoidIntegrator<>(Binary64Field.getInstance(), 5, 4);
-            Assert.fail("Expecting MathIllegalArgumentException - bad iteration limits");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad iteration limits");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
             new FieldTrapezoidIntegrator<>(Binary64Field.getInstance(), 10,99);
-            Assert.fail("Expecting MathIllegalArgumentException - bad iteration limits");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad iteration limits");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }

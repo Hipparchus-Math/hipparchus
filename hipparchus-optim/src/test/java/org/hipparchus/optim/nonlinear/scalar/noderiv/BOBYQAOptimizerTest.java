@@ -21,9 +21,6 @@
  */
 package org.hipparchus.optim.nonlinear.scalar.noderiv;
 
-import java.util.Arrays;
-import java.util.Random;
-
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -34,8 +31,13 @@ import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for {@link BOBYQAOptimizer}.
@@ -44,41 +46,49 @@ public class BOBYQAOptimizerTest {
 
     static final int DIM = 13;
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testInitOutOfBounds() {
-        double[] startPoint = point(DIM, 3);
-        double[][] boundaries = boundaries(DIM, -1, 2);
-        doTest(new Rosen(), startPoint, boundaries,
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] startPoint = point(DIM, 3);
+            double[][] boundaries = boundaries(DIM, -1, 2);
+            doTest(new Rosen(), startPoint, boundaries,
                 GoalType.MINIMIZE,
                 1e-13, 1e-6, 2000, null);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testBoundariesDimensionMismatch() {
-        double[] startPoint = point(DIM, 0.5);
-        double[][] boundaries = boundaries(DIM + 1, -1, 2);
-        doTest(new Rosen(), startPoint, boundaries,
-               GoalType.MINIMIZE,
-               1e-13, 1e-6, 2000, null);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] startPoint = point(DIM, 0.5);
+            double[][] boundaries = boundaries(DIM + 1, -1, 2);
+            doTest(new Rosen(), startPoint, boundaries,
+                GoalType.MINIMIZE,
+                1e-13, 1e-6, 2000, null);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testProblemDimensionTooSmall() {
-        double[] startPoint = point(1, 0.5);
-        doTest(new Rosen(), startPoint, null,
-               GoalType.MINIMIZE,
-               1e-13, 1e-6, 2000, null);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] startPoint = point(1, 0.5);
+            doTest(new Rosen(), startPoint, null,
+                GoalType.MINIMIZE,
+                1e-13, 1e-6, 2000, null);
+        });
     }
 
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testMaxEvaluations() {
-        final int lowMaxEval = 2;
-        double[] startPoint = point(DIM, 0.1);
-        double[][] boundaries = null;
-        doTest(new Rosen(), startPoint, boundaries,
-               GoalType.MINIMIZE,
-               1e-13, 1e-6, lowMaxEval, null);
-     }
+        assertThrows(MathIllegalStateException.class, () -> {
+            final int lowMaxEval = 2;
+            double[] startPoint = point(DIM, 0.1);
+            double[][] boundaries = null;
+            doTest(new Rosen(), startPoint, boundaries,
+                GoalType.MINIMIZE,
+                1e-13, 1e-6, lowMaxEval, null);
+        });
+    }
 
     @Test
     public void testRosen() {
@@ -313,9 +323,9 @@ public class BOBYQAOptimizerTest {
 //              + optim.getEvaluations() + " f(");
 //        for (double x: result.getPoint())  System.out.print(x + " ");
 //        System.out.println(") = " +  result.getValue());
-        Assert.assertEquals(assertMsg, expected.getValue(), result.getValue(), fTol);
+        Assertions.assertEquals(expected.getValue(), result.getValue(), fTol, assertMsg);
         for (int i = 0; i < dim; i++) {
-            Assert.assertEquals(expected.getPoint()[i],
+            Assertions.assertEquals(expected.getPoint()[i],
                                 result.getPoint()[i], pointTol);
         }
 

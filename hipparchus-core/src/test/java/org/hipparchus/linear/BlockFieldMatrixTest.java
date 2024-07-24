@@ -21,9 +21,6 @@
  */
 package org.hipparchus.linear;
 
-import java.util.Arrays;
-import java.util.Random;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -34,8 +31,11 @@ import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  * Test cases for the {@link BlockFieldMatrix} class.
@@ -166,12 +166,12 @@ public final class BlockFieldMatrixTest {
     public void testDimensions() {
         BlockFieldMatrix<Fraction> m = new BlockFieldMatrix<Fraction>(testData);
         BlockFieldMatrix<Fraction> m2 = new BlockFieldMatrix<Fraction>(testData2);
-        Assert.assertEquals("testData row dimension",3,m.getRowDimension());
-        Assert.assertEquals("testData column dimension",3,m.getColumnDimension());
-        Assert.assertTrue("testData is square",m.isSquare());
-        Assert.assertEquals("testData2 row dimension",m2.getRowDimension(),2);
-        Assert.assertEquals("testData2 column dimension",m2.getColumnDimension(),3);
-        Assert.assertTrue("testData2 is not square",!m2.isSquare());
+        Assertions.assertEquals(3,m.getRowDimension(),"testData row dimension");
+        Assertions.assertEquals(3,m.getColumnDimension(),"testData column dimension");
+        Assertions.assertTrue(m.isSquare(),"testData is square");
+        Assertions.assertEquals(2, m2.getRowDimension(), "testData2 row dimension");
+        Assertions.assertEquals(3, m2.getColumnDimension(), "testData2 column dimension");
+        Assertions.assertFalse(m2.isSquare(), "testData2 is not square");
     }
 
     /** test copy functions */
@@ -180,10 +180,10 @@ public final class BlockFieldMatrixTest {
         Random r = new Random(66636328996002l);
         BlockFieldMatrix<Fraction> m1 = createRandomMatrix(r, 47, 83);
         BlockFieldMatrix<Fraction> m2 = new BlockFieldMatrix<Fraction>(m1.getData());
-        Assert.assertEquals(m1, m2);
+        Assertions.assertEquals(m1, m2);
         BlockFieldMatrix<Fraction> m3 = new BlockFieldMatrix<Fraction>(testData);
         BlockFieldMatrix<Fraction> m4 = new BlockFieldMatrix<Fraction>(m3.getData());
-        Assert.assertEquals(m3, m4);
+        Assertions.assertEquals(m3, m4);
     }
 
     /** test add */
@@ -195,7 +195,7 @@ public final class BlockFieldMatrixTest {
         Fraction[][] sumEntries = mPlusMInv.getData();
         for (int row = 0; row < m.getRowDimension(); row++) {
             for (int col = 0; col < m.getColumnDimension(); col++) {
-                Assert.assertEquals(testDataPlusInv[row][col],sumEntries[row][col]);
+                Assertions.assertEquals(testDataPlusInv[row][col],sumEntries[row][col]);
             }
         }
     }
@@ -207,7 +207,7 @@ public final class BlockFieldMatrixTest {
         BlockFieldMatrix<Fraction> m2 = new BlockFieldMatrix<Fraction>(testData2);
         try {
             m.add(m2);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -221,7 +221,7 @@ public final class BlockFieldMatrixTest {
         UnitTestUtils.assertEquals(m.subtract(m2), m2.scalarMultiply(new Fraction(-1)).add(m));
         try {
             m.subtract(new BlockFieldMatrix<Fraction>(testData2));
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -241,7 +241,7 @@ public final class BlockFieldMatrixTest {
         UnitTestUtils.assertEquals(m2.multiply(identity), m2);
         try {
             m.multiply(new BlockFieldMatrix<Fraction>(bigSingular));
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -258,25 +258,25 @@ public final class BlockFieldMatrixTest {
         }
 
         FieldMatrix<Fraction> mT = m.transpose();
-        Assert.assertEquals(m.getRowDimension(), mT.getColumnDimension());
-        Assert.assertEquals(m.getColumnDimension(), mT.getRowDimension());
+        Assertions.assertEquals(m.getRowDimension(), mT.getColumnDimension());
+        Assertions.assertEquals(m.getColumnDimension(), mT.getRowDimension());
         for (int i = 0; i < mT.getRowDimension(); ++i) {
             for (int j = 0; j < mT.getColumnDimension(); ++j) {
-                Assert.assertEquals(m.getEntry(j, i), mT.getEntry(i, j));
+                Assertions.assertEquals(m.getEntry(j, i), mT.getEntry(i, j));
             }
         }
 
         FieldMatrix<Fraction> mPm = m.add(m);
         for (int i = 0; i < mPm.getRowDimension(); ++i) {
             for (int j = 0; j < mPm.getColumnDimension(); ++j) {
-                Assert.assertEquals(m.getEntry(i, j).multiply(new Fraction(2)), mPm.getEntry(i, j));
+                Assertions.assertEquals(m.getEntry(i, j).multiply(new Fraction(2)), mPm.getEntry(i, j));
             }
         }
 
         FieldMatrix<Fraction> mPmMm = mPm.subtract(m);
         for (int i = 0; i < mPmMm.getRowDimension(); ++i) {
             for (int j = 0; j < mPmMm.getColumnDimension(); ++j) {
-                Assert.assertEquals(m.getEntry(i, j), mPmMm.getEntry(i, j));
+                Assertions.assertEquals(m.getEntry(i, j), mPmMm.getEntry(i, j));
             }
         }
 
@@ -287,7 +287,7 @@ public final class BlockFieldMatrixTest {
                 for (int k = 0; k < mT.getColumnDimension(); ++k) {
                     sum = sum.add(new Fraction(k * 11 + i, 11).multiply(new Fraction(k * 11 + j, 11)));
                 }
-                Assert.assertEquals(sum, mTm.getEntry(i, j));
+                Assertions.assertEquals(sum, mTm.getEntry(i, j));
             }
         }
 
@@ -298,35 +298,35 @@ public final class BlockFieldMatrixTest {
                 for (int k = 0; k < m.getColumnDimension(); ++k) {
                     sum = sum.add(new Fraction(i * 11 + k, 11).multiply(new Fraction(j * 11 + k, 11)));
                 }
-                Assert.assertEquals(sum, mmT.getEntry(i, j));
+                Assertions.assertEquals(sum, mmT.getEntry(i, j));
             }
         }
 
         FieldMatrix<Fraction> sub1 = m.getSubMatrix(2, 9, 5, 20);
         for (int i = 0; i < sub1.getRowDimension(); ++i) {
             for (int j = 0; j < sub1.getColumnDimension(); ++j) {
-                Assert.assertEquals(new Fraction((i + 2) * 11 + (j + 5), 11), sub1.getEntry(i, j));
+                Assertions.assertEquals(new Fraction((i + 2) * 11 + (j + 5), 11), sub1.getEntry(i, j));
             }
         }
 
         FieldMatrix<Fraction> sub2 = m.getSubMatrix(10, 12, 3, 40);
         for (int i = 0; i < sub2.getRowDimension(); ++i) {
             for (int j = 0; j < sub2.getColumnDimension(); ++j) {
-                Assert.assertEquals(new Fraction((i + 10) * 11 + (j + 3), 11), sub2.getEntry(i, j));
+                Assertions.assertEquals(new Fraction((i + 10) * 11 + (j + 3), 11), sub2.getEntry(i, j));
             }
         }
 
         FieldMatrix<Fraction> sub3 = m.getSubMatrix(30, 34, 0, 5);
         for (int i = 0; i < sub3.getRowDimension(); ++i) {
             for (int j = 0; j < sub3.getColumnDimension(); ++j) {
-                Assert.assertEquals(new Fraction((i + 30) * 11 + (j + 0), 11), sub3.getEntry(i, j));
+                Assertions.assertEquals(new Fraction((i + 30) * 11 + (j + 0), 11), sub3.getEntry(i, j));
             }
         }
 
         FieldMatrix<Fraction> sub4 = m.getSubMatrix(30, 32, 32, 35);
         for (int i = 0; i < sub4.getRowDimension(); ++i) {
             for (int j = 0; j < sub4.getColumnDimension(); ++j) {
-                Assert.assertEquals(new Fraction((i + 30) * 11 + (j + 32), 11), sub4.getEntry(i, j));
+                Assertions.assertEquals(new Fraction((i + 30) * 11 + (j + 32), 11), sub4.getEntry(i, j));
             }
         }
 
@@ -364,7 +364,7 @@ public final class BlockFieldMatrixTest {
         };
         final FieldMatrixPreservingVisitor<Binary64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
             public void visit(final int row, final int column, final Binary64 value) {
-                Assert.assertEquals(0.0, value.doubleValue(), 1.0e-15);
+                Assertions.assertEquals(0.0, value.doubleValue(), 1.0e-15);
             }
         };
         for (int rows = 1; rows <= 64; rows += 7) {
@@ -390,7 +390,7 @@ public final class BlockFieldMatrixTest {
         };
         final FieldMatrixPreservingVisitor<Binary64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
             public void visit(final int row, final int column, final Binary64 value) {
-                Assert.assertEquals(0.0, value.doubleValue(), 1.0e-15);
+                Assertions.assertEquals(0.0, value.doubleValue(), 1.0e-15);
             }
         };
         for (int rows = 1; rows <= 64; rows += 7) {
@@ -411,11 +411,11 @@ public final class BlockFieldMatrixTest {
         try {
             new BlockFieldMatrix<Binary64>(Binary64Field.getInstance(), 2, 3).
             multiplyTransposed(new BlockFieldMatrix<Binary64>(Binary64Field.getInstance(), 3, 2));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -429,7 +429,7 @@ public final class BlockFieldMatrixTest {
         };
         final FieldMatrixPreservingVisitor<Binary64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
             public void visit(final int row, final int column, final Binary64 value) {
-                Assert.assertEquals(0.0, value.doubleValue(), 2.0e-14);
+                Assertions.assertEquals(0.0, value.doubleValue(), 2.0e-14);
             }
         };
         for (int rows = 1; rows <= 64; rows += 7) {
@@ -455,7 +455,7 @@ public final class BlockFieldMatrixTest {
         };
         final FieldMatrixPreservingVisitor<Binary64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
             public void visit(final int row, final int column, final Binary64 value) {
-                Assert.assertEquals(0.0, value.doubleValue(), 1.0e-15);
+                Assertions.assertEquals(0.0, value.doubleValue(), 1.0e-15);
             }
         };
         for (int rows = 1; rows <= 64; rows += 7) {
@@ -476,11 +476,11 @@ public final class BlockFieldMatrixTest {
         try {
             new BlockFieldMatrix<Binary64>(Binary64Field.getInstance(), 2, 3).
             transposeMultiply(new BlockFieldMatrix<Binary64>(Binary64Field.getInstance(), 3, 2));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assert.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(3, ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(3, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -488,11 +488,11 @@ public final class BlockFieldMatrixTest {
     @Test
     public void testTrace() {
         FieldMatrix<Fraction> m = new BlockFieldMatrix<Fraction>(id);
-        Assert.assertEquals(new Fraction(3),m.getTrace());
+        Assertions.assertEquals(new Fraction(3),m.getTrace());
         m = new BlockFieldMatrix<Fraction>(testData2);
         try {
             m.getTrace();
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -515,7 +515,7 @@ public final class BlockFieldMatrixTest {
         m = new BlockFieldMatrix<Fraction>(bigSingular);
         try {
             m.operate(testVector);
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -558,10 +558,10 @@ public final class BlockFieldMatrixTest {
                 { new Fraction(5), new Fraction(6) }
         });
         Fraction[] b = a.operate(new Fraction[] { new Fraction(1), new Fraction(1) });
-        Assert.assertEquals(a.getRowDimension(), b.length);
-        Assert.assertEquals( new Fraction(3), b[0]);
-        Assert.assertEquals( new Fraction(7), b[1]);
-        Assert.assertEquals(new Fraction(11), b[2]);
+        Assertions.assertEquals(a.getRowDimension(), b.length);
+        Assertions.assertEquals( new Fraction(3), b[0]);
+        Assertions.assertEquals( new Fraction(7), b[1]);
+        Assertions.assertEquals(new Fraction(11), b[2]);
     }
 
     /** test transpose */
@@ -586,7 +586,7 @@ public final class BlockFieldMatrixTest {
         m = new BlockFieldMatrix<Fraction>(bigSingular);
         try {
             m.preMultiply(testVector);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -608,7 +608,7 @@ public final class BlockFieldMatrixTest {
         UnitTestUtils.assertEquals(identity.preMultiply(mInv), mInv);
         try {
             m.preMultiply(new BlockFieldMatrix<Fraction>(bigSingular));
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -621,13 +621,13 @@ public final class BlockFieldMatrixTest {
         UnitTestUtils.assertEquals(m.getColumn(2), testDataCol3);
         try {
             m.getRow(10);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             m.getColumn(-1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -636,10 +636,10 @@ public final class BlockFieldMatrixTest {
     @Test
     public void testGetEntry() {
         FieldMatrix<Fraction> m = new BlockFieldMatrix<Fraction>(testData);
-        Assert.assertEquals(m.getEntry(0,1),new Fraction(2));
+        Assertions.assertEquals(m.getEntry(0,1),new Fraction(2));
         try {
             m.getEntry(10, 4);
-            Assert.fail ("Expecting MathIllegalArgumentException");
+            Assertions.fail ("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -663,12 +663,12 @@ public final class BlockFieldMatrixTest {
         FieldMatrix<Fraction> n = new BlockFieldMatrix<Fraction>(matrixData2);
         // Now multiply m by n
         FieldMatrix<Fraction> p = m.multiply(n);
-        Assert.assertEquals(2, p.getRowDimension());
-        Assert.assertEquals(2, p.getColumnDimension());
+        Assertions.assertEquals(2, p.getRowDimension());
+        Assertions.assertEquals(2, p.getColumnDimension());
         // Invert p
         FieldMatrix<Fraction> pInverse = new FieldLUDecomposition<Fraction>(p).getSolver().getInverse();
-        Assert.assertEquals(2, pInverse.getRowDimension());
-        Assert.assertEquals(2, pInverse.getColumnDimension());
+        Assertions.assertEquals(2, pInverse.getRowDimension());
+        Assertions.assertEquals(2, pInverse.getColumnDimension());
 
         // Solve example
         Fraction[][] coefficientsData = {
@@ -684,15 +684,15 @@ public final class BlockFieldMatrixTest {
         solution = new FieldLUDecomposition<Fraction>(coefficients)
             .getSolver()
             .solve(new ArrayFieldVector<Fraction>(constants, false)).toArray();
-        Assert.assertEquals(new Fraction(2).multiply(solution[0]).
+        Assertions.assertEquals(new Fraction(2).multiply(solution[0]).
                      add(new Fraction(3).multiply(solution[1])).
                      subtract(new Fraction(2).multiply(solution[2])),
                      constants[0]);
-        Assert.assertEquals(new Fraction(-1).multiply(solution[0]).
+        Assertions.assertEquals(new Fraction(-1).multiply(solution[0]).
                      add(new Fraction(7).multiply(solution[1])).
                      add(new Fraction(6).multiply(solution[2])),
                      constants[1]);
-        Assert.assertEquals(new Fraction(4).multiply(solution[0]).
+        Assertions.assertEquals(new Fraction(4).multiply(solution[0]).
                      subtract(new Fraction(3).multiply(solution[1])).
                      subtract(new Fraction(5).multiply(solution[2])),
                      constants[2]);
@@ -725,9 +725,9 @@ public final class BlockFieldMatrixTest {
         try {
             FieldMatrix<Fraction> sub = m.getSubMatrix(startRow, endRow, startColumn, endColumn);
             if (reference != null) {
-                Assert.assertEquals(new BlockFieldMatrix<Fraction>(reference), sub);
+                Assertions.assertEquals(new BlockFieldMatrix<Fraction>(reference), sub);
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException"
+                Assertions.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException"
                      + " or MathIllegalArgumentException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
@@ -742,9 +742,9 @@ public final class BlockFieldMatrixTest {
         try {
             FieldMatrix<Fraction> sub = m.getSubMatrix(selectedRows, selectedColumns);
             if (reference != null) {
-                Assert.assertEquals(new BlockFieldMatrix<Fraction>(reference), sub);
+                Assertions.assertEquals(new BlockFieldMatrix<Fraction>(reference), sub);
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException");
+                Assertions.fail("Expecting MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -765,13 +765,13 @@ public final class BlockFieldMatrixTest {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if ((i < 2) || (i > n - 3) || (j < 2) || (j > n - 3)) {
-                    Assert.assertEquals(new Fraction(0), m.getEntry(i, j));
+                    Assertions.assertEquals(new Fraction(0), m.getEntry(i, j));
                 } else {
-                    Assert.assertEquals(new Fraction(1), m.getEntry(i, j));
+                    Assertions.assertEquals(new Fraction(1), m.getEntry(i, j));
                 }
             }
         }
-        Assert.assertEquals(sub, m.getSubMatrix(2, n - 3, 2, n - 3));
+        Assertions.assertEquals(sub, m.getSubMatrix(2, n - 3, 2, n - 3));
     }
 
     @Test
@@ -803,9 +803,9 @@ public final class BlockFieldMatrixTest {
                              new Fraction[reference.length][reference[0].length];
             m.copySubMatrix(startRow, endRow, startColumn, endColumn, sub);
             if (reference != null) {
-                Assert.assertEquals(new BlockFieldMatrix<Fraction>(reference), new BlockFieldMatrix<Fraction>(sub));
+                Assertions.assertEquals(new BlockFieldMatrix<Fraction>(reference), new BlockFieldMatrix<Fraction>(sub));
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
+                Assertions.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -822,9 +822,9 @@ public final class BlockFieldMatrixTest {
                     new Fraction[reference.length][reference[0].length];
             m.copySubMatrix(selectedRows, selectedColumns, sub);
             if (reference != null) {
-                Assert.assertEquals(new BlockFieldMatrix<Fraction>(reference), new BlockFieldMatrix<Fraction>(sub));
+                Assertions.assertEquals(new BlockFieldMatrix<Fraction>(reference), new BlockFieldMatrix<Fraction>(sub));
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
+                Assertions.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -838,17 +838,17 @@ public final class BlockFieldMatrixTest {
         FieldMatrix<Fraction> m     = new BlockFieldMatrix<Fraction>(subTestData);
         FieldMatrix<Fraction> mRow0 = new BlockFieldMatrix<Fraction>(subRow0);
         FieldMatrix<Fraction> mRow3 = new BlockFieldMatrix<Fraction>(subRow3);
-        Assert.assertEquals("Row0", mRow0, m.getRowMatrix(0));
-        Assert.assertEquals("Row3", mRow3, m.getRowMatrix(3));
+        Assertions.assertEquals(mRow0, m.getRowMatrix(0), "Row0");
+        Assertions.assertEquals(mRow3, m.getRowMatrix(3), "Row3");
         try {
             m.getRowMatrix(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowMatrix(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -858,18 +858,18 @@ public final class BlockFieldMatrixTest {
     public void testSetRowMatrix() {
         FieldMatrix<Fraction> m = new BlockFieldMatrix<Fraction>(subTestData);
         FieldMatrix<Fraction> mRow3 = new BlockFieldMatrix<Fraction>(subRow3);
-        Assert.assertNotSame(mRow3, m.getRowMatrix(0));
+        Assertions.assertNotSame(mRow3, m.getRowMatrix(0));
         m.setRowMatrix(0, mRow3);
-        Assert.assertEquals(mRow3, m.getRowMatrix(0));
+        Assertions.assertEquals(mRow3, m.getRowMatrix(0));
         try {
             m.setRowMatrix(-1, mRow3);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setRowMatrix(0, m);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -887,13 +887,13 @@ public final class BlockFieldMatrixTest {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (i != 2) {
-                    Assert.assertEquals(new Fraction(0), m.getEntry(i, j));
+                    Assertions.assertEquals(new Fraction(0), m.getEntry(i, j));
                 } else {
-                    Assert.assertEquals(new Fraction(1), m.getEntry(i, j));
+                    Assertions.assertEquals(new Fraction(1), m.getEntry(i, j));
                 }
             }
         }
-        Assert.assertEquals(sub, m.getRowMatrix(2));
+        Assertions.assertEquals(sub, m.getRowMatrix(2));
 
     }
 
@@ -902,17 +902,17 @@ public final class BlockFieldMatrixTest {
         FieldMatrix<Fraction> m = new BlockFieldMatrix<Fraction>(subTestData);
         FieldMatrix<Fraction> mColumn1 = new BlockFieldMatrix<Fraction>(subColumn1);
         FieldMatrix<Fraction> mColumn3 = new BlockFieldMatrix<Fraction>(subColumn3);
-        Assert.assertEquals(mColumn1, m.getColumnMatrix(1));
-        Assert.assertEquals(mColumn3, m.getColumnMatrix(3));
+        Assertions.assertEquals(mColumn1, m.getColumnMatrix(1));
+        Assertions.assertEquals(mColumn3, m.getColumnMatrix(3));
         try {
             m.getColumnMatrix(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnMatrix(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -922,18 +922,18 @@ public final class BlockFieldMatrixTest {
     public void testSetColumnMatrix() {
         FieldMatrix<Fraction> m = new BlockFieldMatrix<Fraction>(subTestData);
         FieldMatrix<Fraction> mColumn3 = new BlockFieldMatrix<Fraction>(subColumn3);
-        Assert.assertNotSame(mColumn3, m.getColumnMatrix(1));
+        Assertions.assertNotSame(mColumn3, m.getColumnMatrix(1));
         m.setColumnMatrix(1, mColumn3);
-        Assert.assertEquals(mColumn3, m.getColumnMatrix(1));
+        Assertions.assertEquals(mColumn3, m.getColumnMatrix(1));
         try {
             m.setColumnMatrix(-1, mColumn3);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setColumnMatrix(0, m);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -951,13 +951,13 @@ public final class BlockFieldMatrixTest {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (j != 2) {
-                    Assert.assertEquals(new Fraction(0), m.getEntry(i, j));
+                    Assertions.assertEquals(new Fraction(0), m.getEntry(i, j));
                 } else {
-                    Assert.assertEquals(new Fraction(1), m.getEntry(i, j));
+                    Assertions.assertEquals(new Fraction(1), m.getEntry(i, j));
                 }
             }
         }
-        Assert.assertEquals(sub, m.getColumnMatrix(2));
+        Assertions.assertEquals(sub, m.getColumnMatrix(2));
 
     }
 
@@ -966,17 +966,17 @@ public final class BlockFieldMatrixTest {
         FieldMatrix<Fraction> m = new BlockFieldMatrix<Fraction>(subTestData);
         FieldVector<Fraction> mRow0 = new ArrayFieldVector<Fraction>(subRow0[0]);
         FieldVector<Fraction> mRow3 = new ArrayFieldVector<Fraction>(subRow3[0]);
-        Assert.assertEquals(mRow0, m.getRowVector(0));
-        Assert.assertEquals(mRow3, m.getRowVector(3));
+        Assertions.assertEquals(mRow0, m.getRowVector(0));
+        Assertions.assertEquals(mRow3, m.getRowVector(3));
         try {
             m.getRowVector(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowVector(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -986,18 +986,18 @@ public final class BlockFieldMatrixTest {
     public void testSetRowVector() {
         FieldMatrix<Fraction> m = new BlockFieldMatrix<Fraction>(subTestData);
         FieldVector<Fraction> mRow3 = new ArrayFieldVector<Fraction>(subRow3[0]);
-        Assert.assertNotSame(mRow3, m.getRowMatrix(0));
+        Assertions.assertNotSame(mRow3, m.getRowMatrix(0));
         m.setRowVector(0, mRow3);
-        Assert.assertEquals(mRow3, m.getRowVector(0));
+        Assertions.assertEquals(mRow3, m.getRowVector(0));
         try {
             m.setRowVector(-1, mRow3);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setRowVector(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), 5));
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -1013,13 +1013,13 @@ public final class BlockFieldMatrixTest {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (i != 2) {
-                    Assert.assertEquals(new Fraction(0), m.getEntry(i, j));
+                    Assertions.assertEquals(new Fraction(0), m.getEntry(i, j));
                 } else {
-                    Assert.assertEquals(new Fraction(1), m.getEntry(i, j));
+                    Assertions.assertEquals(new Fraction(1), m.getEntry(i, j));
                 }
             }
         }
-        Assert.assertEquals(sub, m.getRowVector(2));
+        Assertions.assertEquals(sub, m.getRowVector(2));
 
     }
 
@@ -1028,17 +1028,17 @@ public final class BlockFieldMatrixTest {
         FieldMatrix<Fraction> m = new BlockFieldMatrix<Fraction>(subTestData);
         FieldVector<Fraction> mColumn1 = columnToVector(subColumn1);
         FieldVector<Fraction> mColumn3 = columnToVector(subColumn3);
-        Assert.assertEquals(mColumn1, m.getColumnVector(1));
-        Assert.assertEquals(mColumn3, m.getColumnVector(3));
+        Assertions.assertEquals(mColumn1, m.getColumnVector(1));
+        Assertions.assertEquals(mColumn3, m.getColumnVector(3));
         try {
             m.getColumnVector(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnVector(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -1048,18 +1048,18 @@ public final class BlockFieldMatrixTest {
     public void testSetColumnVector() {
         FieldMatrix<Fraction> m = new BlockFieldMatrix<Fraction>(subTestData);
         FieldVector<Fraction> mColumn3 = columnToVector(subColumn3);
-        Assert.assertNotSame(mColumn3, m.getColumnVector(1));
+        Assertions.assertNotSame(mColumn3, m.getColumnVector(1));
         m.setColumnVector(1, mColumn3);
-        Assert.assertEquals(mColumn3, m.getColumnVector(1));
+        Assertions.assertEquals(mColumn3, m.getColumnVector(1));
         try {
             m.setColumnVector(-1, mColumn3);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setColumnVector(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), 5));
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -1075,13 +1075,13 @@ public final class BlockFieldMatrixTest {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (j != 2) {
-                    Assert.assertEquals(new Fraction(0), m.getEntry(i, j));
+                    Assertions.assertEquals(new Fraction(0), m.getEntry(i, j));
                 } else {
-                    Assert.assertEquals(new Fraction(1), m.getEntry(i, j));
+                    Assertions.assertEquals(new Fraction(1), m.getEntry(i, j));
                 }
             }
         }
-        Assert.assertEquals(sub, m.getColumnVector(2));
+        Assertions.assertEquals(sub, m.getColumnVector(2));
 
     }
 
@@ -1100,13 +1100,13 @@ public final class BlockFieldMatrixTest {
         checkArrays(subRow3[0], m.getRow(3));
         try {
             m.getRow(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRow(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -1115,18 +1115,18 @@ public final class BlockFieldMatrixTest {
     @Test
     public void testSetRow() {
         FieldMatrix<Fraction> m = new BlockFieldMatrix<Fraction>(subTestData);
-        Assert.assertTrue(subRow3[0][0] != m.getRow(0)[0]);
+        Assertions.assertTrue(subRow3[0][0] != m.getRow(0)[0]);
         m.setRow(0, subRow3[0]);
         checkArrays(subRow3[0], m.getRow(0));
         try {
             m.setRow(-1, subRow3[0]);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setRow(0, new Fraction[5]);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -1143,9 +1143,9 @@ public final class BlockFieldMatrixTest {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (i != 2) {
-                    Assert.assertEquals(new Fraction(0), m.getEntry(i, j));
+                    Assertions.assertEquals(new Fraction(0), m.getEntry(i, j));
                 } else {
-                    Assert.assertEquals(new Fraction(1), m.getEntry(i, j));
+                    Assertions.assertEquals(new Fraction(1), m.getEntry(i, j));
                 }
             }
         }
@@ -1162,13 +1162,13 @@ public final class BlockFieldMatrixTest {
         checkArrays(mColumn3, m.getColumn(3));
         try {
             m.getColumn(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumn(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -1178,18 +1178,18 @@ public final class BlockFieldMatrixTest {
     public void testSetColumn() {
         FieldMatrix<Fraction> m = new BlockFieldMatrix<Fraction>(subTestData);
         Fraction[] mColumn3 = columnToArray(subColumn3);
-        Assert.assertTrue(mColumn3[0] != m.getColumn(1)[0]);
+        Assertions.assertTrue(mColumn3[0] != m.getColumn(1)[0]);
         m.setColumn(1, mColumn3);
         checkArrays(mColumn3, m.getColumn(1));
         try {
             m.setColumn(-1, mColumn3);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setColumn(0, new Fraction[5]);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -1206,9 +1206,9 @@ public final class BlockFieldMatrixTest {
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (j != 2) {
-                    Assert.assertEquals(new Fraction(0), m.getEntry(i, j));
+                    Assertions.assertEquals(new Fraction(0), m.getEntry(i, j));
                 } else {
-                    Assert.assertEquals(new Fraction(1), m.getEntry(i, j));
+                    Assertions.assertEquals(new Fraction(1), m.getEntry(i, j));
                 }
             }
         }
@@ -1225,9 +1225,9 @@ public final class BlockFieldMatrixTest {
     }
 
     private void checkArrays(Fraction[] expected, Fraction[] actual) {
-        Assert.assertEquals(expected.length, actual.length);
+        Assertions.assertEquals(expected.length, actual.length);
         for (int i = 0; i < expected.length; ++i) {
-            Assert.assertEquals(expected[i], actual[i]);
+            Assertions.assertEquals(expected[i], actual[i]);
         }
     }
 
@@ -1236,19 +1236,19 @@ public final class BlockFieldMatrixTest {
         BlockFieldMatrix<Fraction> m = new BlockFieldMatrix<Fraction>(testData);
         BlockFieldMatrix<Fraction> m1 = (BlockFieldMatrix<Fraction>) m.copy();
         BlockFieldMatrix<Fraction> mt = (BlockFieldMatrix<Fraction>) m.transpose();
-        Assert.assertTrue(m.hashCode() != mt.hashCode());
-        Assert.assertEquals(m.hashCode(), m1.hashCode());
-        Assert.assertEquals(m, m);
-        Assert.assertEquals(m, m1);
-        Assert.assertFalse(m.equals(null));
-        Assert.assertFalse(m.equals(mt));
-        Assert.assertFalse(m.equals(new BlockFieldMatrix<Fraction>(bigSingular)));
+        Assertions.assertTrue(m.hashCode() != mt.hashCode());
+        Assertions.assertEquals(m.hashCode(), m1.hashCode());
+        Assertions.assertEquals(m, m);
+        Assertions.assertEquals(m, m1);
+        Assertions.assertNotEquals(null, m);
+        Assertions.assertNotEquals(m, mt);
+        Assertions.assertNotEquals(m, new BlockFieldMatrix<Fraction>(bigSingular));
     }
 
     @Test
     public void testToString() {
         BlockFieldMatrix<Fraction> m = new BlockFieldMatrix<Fraction>(testData);
-        Assert.assertEquals("BlockFieldMatrix{{1,2,3},{2,5,3},{1,0,8}}", m.toString());
+        Assertions.assertEquals("BlockFieldMatrix{{1,2,3},{2,5,3},{1,0,8}}", m.toString());
     }
 
     @Test
@@ -1257,17 +1257,17 @@ public final class BlockFieldMatrixTest {
         m.setSubMatrix(detData2,1,1);
         FieldMatrix<Fraction> expected = new BlockFieldMatrix<Fraction>
             (new Fraction[][] {{new Fraction(1),new Fraction(2),new Fraction(3)},{new Fraction(2),new Fraction(1),new Fraction(3)},{new Fraction(1),new Fraction(2),new Fraction(4)}});
-        Assert.assertEquals(expected, m);
+        Assertions.assertEquals(expected, m);
 
         m.setSubMatrix(detData2,0,0);
         expected = new BlockFieldMatrix<Fraction>
             (new Fraction[][] {{new Fraction(1),new Fraction(3),new Fraction(3)},{new Fraction(2),new Fraction(4),new Fraction(3)},{new Fraction(1),new Fraction(2),new Fraction(4)}});
-        Assert.assertEquals(expected, m);
+        Assertions.assertEquals(expected, m);
 
         m.setSubMatrix(testDataPlus2,0,0);
         expected = new BlockFieldMatrix<Fraction>
             (new Fraction[][] {{new Fraction(3),new Fraction(4),new Fraction(5)},{new Fraction(4),new Fraction(7),new Fraction(5)},{new Fraction(3),new Fraction(2),new Fraction(10)}});
-        Assert.assertEquals(expected, m);
+        Assertions.assertEquals(expected, m);
 
         // javadoc example
         BlockFieldMatrix<Fraction> matrix =
@@ -1286,25 +1286,25 @@ public final class BlockFieldMatrixTest {
                     {new Fraction(5), new Fraction(3), new Fraction(4), new Fraction(8)},
                     {new Fraction(9), new Fraction(5) ,new Fraction(6), new Fraction(2)}
             });
-        Assert.assertEquals(expected, matrix);
+        Assertions.assertEquals(expected, matrix);
 
         // dimension overflow
         try {
             m.setSubMatrix(testData,1,1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
         // dimension underflow
         try {
             m.setSubMatrix(testData,-1,1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
         try {
             m.setSubMatrix(testData,1,-1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -1312,7 +1312,7 @@ public final class BlockFieldMatrixTest {
         // null
         try {
             m.setSubMatrix(null,1,1);
-            Assert.fail("expecting NullArgumentException");
+            Assertions.fail("expecting NullArgumentException");
         } catch (NullArgumentException e) {
             // expected
         }
@@ -1320,7 +1320,7 @@ public final class BlockFieldMatrixTest {
         // ragged
         try {
             m.setSubMatrix(new Fraction[][] {{new Fraction(1)}, {new Fraction(2), new Fraction(3)}}, 0, 0);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -1328,7 +1328,7 @@ public final class BlockFieldMatrixTest {
         // empty
         try {
             m.setSubMatrix(new Fraction[][] {{}}, 0, 0);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -1343,80 +1343,80 @@ public final class BlockFieldMatrixTest {
         m.walkInRowOrder(new SetVisitor());
         GetVisitor getVisitor = new GetVisitor();
         m.walkInOptimizedOrder(getVisitor);
-        Assert.assertEquals(rows * columns, getVisitor.getCount());
+        Assertions.assertEquals(rows * columns, getVisitor.getCount());
 
         m = new BlockFieldMatrix<Fraction>(FractionField.getInstance(), rows, columns);
         m.walkInRowOrder(new SetVisitor(), 1, rows - 2, 1, columns - 2);
         getVisitor = new GetVisitor();
         m.walkInOptimizedOrder(getVisitor, 1, rows - 2, 1, columns - 2);
-        Assert.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
+        Assertions.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
         for (int i = 0; i < rows; ++i) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, 0));
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, 0));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
         }
         for (int j = 0; j < columns; ++j) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(0, j));
-            Assert.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(0, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
         }
 
         m = new BlockFieldMatrix<Fraction>(FractionField.getInstance(), rows, columns);
         m.walkInColumnOrder(new SetVisitor());
         getVisitor = new GetVisitor();
         m.walkInOptimizedOrder(getVisitor);
-        Assert.assertEquals(rows * columns, getVisitor.getCount());
+        Assertions.assertEquals(rows * columns, getVisitor.getCount());
 
         m = new BlockFieldMatrix<Fraction>(FractionField.getInstance(), rows, columns);
         m.walkInColumnOrder(new SetVisitor(), 1, rows - 2, 1, columns - 2);
         getVisitor = new GetVisitor();
         m.walkInOptimizedOrder(getVisitor, 1, rows - 2, 1, columns - 2);
-        Assert.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
+        Assertions.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
         for (int i = 0; i < rows; ++i) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, 0));
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, 0));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
         }
         for (int j = 0; j < columns; ++j) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(0, j));
-            Assert.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(0, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
         }
 
         m = new BlockFieldMatrix<Fraction>(FractionField.getInstance(), rows, columns);
         m.walkInOptimizedOrder(new SetVisitor());
         getVisitor = new GetVisitor();
         m.walkInRowOrder(getVisitor);
-        Assert.assertEquals(rows * columns, getVisitor.getCount());
+        Assertions.assertEquals(rows * columns, getVisitor.getCount());
 
         m = new BlockFieldMatrix<Fraction>(FractionField.getInstance(), rows, columns);
         m.walkInOptimizedOrder(new SetVisitor(), 1, rows - 2, 1, columns - 2);
         getVisitor = new GetVisitor();
         m.walkInRowOrder(getVisitor, 1, rows - 2, 1, columns - 2);
-        Assert.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
+        Assertions.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
         for (int i = 0; i < rows; ++i) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, 0));
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, 0));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
         }
         for (int j = 0; j < columns; ++j) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(0, j));
-            Assert.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(0, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
         }
 
         m = new BlockFieldMatrix<Fraction>(FractionField.getInstance(), rows, columns);
         m.walkInOptimizedOrder(new SetVisitor());
         getVisitor = new GetVisitor();
         m.walkInColumnOrder(getVisitor);
-        Assert.assertEquals(rows * columns, getVisitor.getCount());
+        Assertions.assertEquals(rows * columns, getVisitor.getCount());
 
         m = new BlockFieldMatrix<Fraction>(FractionField.getInstance(), rows, columns);
         m.walkInOptimizedOrder(new SetVisitor(), 1, rows - 2, 1, columns - 2);
         getVisitor = new GetVisitor();
         m.walkInColumnOrder(getVisitor, 1, rows - 2, 1, columns - 2);
-        Assert.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
+        Assertions.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
         for (int i = 0; i < rows; ++i) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, 0));
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, 0));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
         }
         for (int j = 0; j < columns; ++j) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(0, j));
-            Assert.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(0, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
         }
 
     }
@@ -1424,7 +1424,7 @@ public final class BlockFieldMatrixTest {
     @Test
     public void testSerial()  {
         BlockFieldMatrix<Fraction> m = new BlockFieldMatrix<Fraction>(testData);
-        Assert.assertEquals(m,UnitTestUtils.serializeAndRecover(m));
+        Assertions.assertEquals(m,UnitTestUtils.serializeAndRecover(m));
     }
 
     private static class SetVisitor extends DefaultFieldMatrixChangingVisitor<Fraction> {
@@ -1446,7 +1446,7 @@ public final class BlockFieldMatrixTest {
         @Override
         public void visit(int i, int j, Fraction value) {
             ++count;
-            Assert.assertEquals(new Fraction(i * 11 + j, 11), value);
+            Assertions.assertEquals(new Fraction(i * 11 + j, 11), value);
         }
         public int getCount() {
             return count;

@@ -22,8 +22,8 @@
 package org.hipparchus.stat.descriptive.moment;
 
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for the {@link GeometricMean} class.
@@ -44,31 +44,31 @@ public class GeometricMeanTest extends StorelessUnivariateStatisticAbstractTest{
     public void testSpecialValues() {
         GeometricMean mean = getUnivariateStatistic();
         // empty
-        Assert.assertTrue(Double.isNaN(mean.getResult()));
+        Assertions.assertTrue(Double.isNaN(mean.getResult()));
 
         // finite data
         mean.increment(1d);
-        Assert.assertFalse(Double.isNaN(mean.getResult()));
+        Assertions.assertFalse(Double.isNaN(mean.getResult()));
 
         // add 0 -- makes log sum blow to minus infinity, should make 0
         mean.increment(0d);
-        Assert.assertEquals(0d, mean.getResult(), 0);
+        Assertions.assertEquals(0d, mean.getResult(), 0);
 
         // add positive infinity - note the minus infinity above
         mean.increment(Double.POSITIVE_INFINITY);
-        Assert.assertTrue(Double.isNaN(mean.getResult()));
+        Assertions.assertTrue(Double.isNaN(mean.getResult()));
 
         // clear
         mean.clear();
-        Assert.assertTrue(Double.isNaN(mean.getResult()));
+        Assertions.assertTrue(Double.isNaN(mean.getResult()));
 
         // positive infinity by itself
         mean.increment(Double.POSITIVE_INFINITY);
-        Assert.assertEquals(Double.POSITIVE_INFINITY, mean.getResult(), 0);
+        Assertions.assertEquals(Double.POSITIVE_INFINITY, mean.getResult(), 0);
 
         // negative value -- should make NaN
         mean.increment(-2d);
-        Assert.assertTrue(Double.isNaN(mean.getResult()));
+        Assertions.assertTrue(Double.isNaN(mean.getResult()));
     }
 
 }

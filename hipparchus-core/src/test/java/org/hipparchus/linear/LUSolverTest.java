@@ -23,8 +23,8 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class LUSolverTest {
     private double[][] testData = {
@@ -58,8 +58,8 @@ public class LUSolverTest {
                                                        { 2.0, 5.0, 3.0},
                                                        { 4.000001, 9.0, 9.0}
                                                      });
-        Assert.assertFalse(new LUDecomposer(1.0e-5).decompose(matrix).isNonSingular());
-        Assert.assertTrue(new LUDecomposer(1.0e-10).decompose(matrix).isNonSingular());
+        Assertions.assertFalse(new LUDecomposer(1.0e-5).decompose(matrix).isNonSingular());
+        Assertions.assertTrue(new LUDecomposer(1.0e-10).decompose(matrix).isNonSingular());
     }
 
     /** test singular */
@@ -67,11 +67,11 @@ public class LUSolverTest {
     public void testSingular() {
         DecompositionSolver solver =
             new LUDecomposition(MatrixUtils.createRealMatrix(testData)).getSolver();
-        Assert.assertTrue(solver.isNonSingular());
+        Assertions.assertTrue(solver.isNonSingular());
         solver = new LUDecomposition(MatrixUtils.createRealMatrix(singular)).getSolver();
-        Assert.assertFalse(solver.isNonSingular());
+        Assertions.assertFalse(solver.isNonSingular());
         solver = new LUDecomposition(MatrixUtils.createRealMatrix(bigSingular)).getSolver();
-        Assert.assertFalse(solver.isNonSingular());
+        Assertions.assertFalse(solver.isNonSingular());
     }
 
     /** test solve dimension errors */
@@ -82,19 +82,19 @@ public class LUSolverTest {
         RealMatrix b = MatrixUtils.createRealMatrix(new double[2][2]);
         try {
             solver.solve(b);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
         try {
             solver.solve(b.getColumnVector(0));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
         try {
             solver.solve(new ArrayRealVectorTest.RealVectorTestImpl(b.getColumn(0)));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
@@ -108,19 +108,19 @@ public class LUSolverTest {
         RealMatrix b = MatrixUtils.createRealMatrix(new double[2][2]);
         try {
             solver.solve(b);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException ime) {
             // expected behavior
         }
         try {
             solver.solve(b.getColumnVector(0));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException ime) {
             // expected behavior
         }
         try {
             solver.solve(new ArrayRealVectorTest.RealVectorTestImpl(b.getColumn(0)));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException ime) {
             // expected behavior
         }
@@ -139,11 +139,11 @@ public class LUSolverTest {
         });
 
         // using RealMatrix
-        Assert.assertEquals(0, solver.solve(b).subtract(xRef).getNorm1(), 1.0e-13);
+        Assertions.assertEquals(0, solver.solve(b).subtract(xRef).getNorm1(), 1.0e-13);
 
         // using ArrayRealVector
         for (int i = 0; i < b.getColumnDimension(); ++i) {
-            Assert.assertEquals(0,
+            Assertions.assertEquals(0,
                          solver.solve(b.getColumnVector(i)).subtract(xRef.getColumnVector(i)).getNorm(),
                          1.0e-13);
         }
@@ -152,7 +152,7 @@ public class LUSolverTest {
         for (int i = 0; i < b.getColumnDimension(); ++i) {
             ArrayRealVectorTest.RealVectorTestImpl v =
                 new ArrayRealVectorTest.RealVectorTestImpl(b.getColumn(i));
-            Assert.assertEquals(0,
+            Assertions.assertEquals(0,
                          solver.solve(v).subtract(xRef.getColumnVector(i)).getNorm(),
                          1.0e-13);
         }
@@ -161,10 +161,10 @@ public class LUSolverTest {
     /** test determinant */
     @Test
     public void testDeterminant() {
-        Assert.assertEquals( -1, getDeterminant(MatrixUtils.createRealMatrix(testData)), 1.0e-15);
-        Assert.assertEquals(-10, getDeterminant(MatrixUtils.createRealMatrix(luData)), 1.0e-14);
-        Assert.assertEquals(  0, getDeterminant(MatrixUtils.createRealMatrix(singular)), 1.0e-17);
-        Assert.assertEquals(  0, getDeterminant(MatrixUtils.createRealMatrix(bigSingular)), 1.0e-10);
+        Assertions.assertEquals( -1, getDeterminant(MatrixUtils.createRealMatrix(testData)), 1.0e-15);
+        Assertions.assertEquals(-10, getDeterminant(MatrixUtils.createRealMatrix(luData)), 1.0e-14);
+        Assertions.assertEquals(  0, getDeterminant(MatrixUtils.createRealMatrix(singular)), 1.0e-17);
+        Assertions.assertEquals(  0, getDeterminant(MatrixUtils.createRealMatrix(bigSingular)), 1.0e-10);
     }
 
     private double getDeterminant(RealMatrix m) {

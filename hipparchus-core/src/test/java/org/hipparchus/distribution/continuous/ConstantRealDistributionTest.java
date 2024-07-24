@@ -22,10 +22,11 @@
 
 package org.hipparchus.distribution.continuous;
 
-import static org.junit.Assert.assertEquals;
-
 import org.hipparchus.distribution.RealDistribution;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for ConstantRealDistribution.
@@ -34,6 +35,7 @@ public class ConstantRealDistributionTest extends RealDistributionAbstractTest {
 
     // --- Override tolerance -------------------------------------------------
 
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -83,8 +85,8 @@ public class ConstantRealDistributionTest extends RealDistributionAbstractTest {
         ConstantRealDistribution dist;
 
         dist = new ConstantRealDistribution(-1);
-        assertEquals(dist.getNumericalMean(), -1, 0d);
-        assertEquals(dist.getNumericalVariance(), 0, 0d);
+        assertEquals(-1, dist.getNumericalMean(), 0d);
+        assertEquals(0, dist.getNumericalVariance(), 0d);
     }
 
 }

@@ -26,8 +26,10 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests the PolynomialFunction implementation of a UnivariateFunction.
@@ -48,16 +50,16 @@ public final class PolynomialFunctionTest {
         PolynomialFunction f = new PolynomialFunction(c);
 
         // verify that we are equal to c[0] at several (nonsymmetric) places
-        Assert.assertEquals(f.value(0), c[0], tolerance);
-        Assert.assertEquals(f.value(-1), c[0], tolerance);
-        Assert.assertEquals(f.value(-123.5), c[0], tolerance);
-        Assert.assertEquals(f.value(3), c[0], tolerance);
-        Assert.assertEquals(f.value(456.89), c[0], tolerance);
+        Assertions.assertEquals(f.value(0), c[0], tolerance);
+        Assertions.assertEquals(f.value(-1), c[0], tolerance);
+        Assertions.assertEquals(f.value(-123.5), c[0], tolerance);
+        Assertions.assertEquals(f.value(3), c[0], tolerance);
+        Assertions.assertEquals(f.value(456.89), c[0], tolerance);
 
-        Assert.assertEquals(f.degree(), 0);
-        Assert.assertEquals(f.polynomialDerivative().value(0), 0, tolerance);
+        Assertions.assertEquals(0, f.degree());
+        Assertions.assertEquals(0, f.polynomialDerivative().value(0), tolerance);
 
-        Assert.assertEquals(f.polynomialDerivative().polynomialDerivative().value(0), 0, tolerance);
+        Assertions.assertEquals(0, f.polynomialDerivative().polynomialDerivative().value(0), tolerance);
     }
 
     /**
@@ -75,18 +77,18 @@ public final class PolynomialFunctionTest {
         PolynomialFunction f = new PolynomialFunction(c);
 
         // verify that we are equal to c[0] when x=0
-        Assert.assertEquals(f.value(new Binary64(0)).getReal(), c[0], tolerance);
+        Assertions.assertEquals(f.value(new Binary64(0)).getReal(), c[0], tolerance);
 
         // now check a few other places
-        Assert.assertEquals(-4.5, f.value(new Binary64(-1)).getReal(), tolerance);
-        Assert.assertEquals(-9, f.value(new Binary64(-2.5)).getReal(), tolerance);
-        Assert.assertEquals(0, f.value(new Binary64(0.5)).getReal(), tolerance);
-        Assert.assertEquals(3, f.value(new Binary64(1.5)).getReal(), tolerance);
-        Assert.assertEquals(7.5, f.value(new Binary64(3)).getReal(), tolerance);
+        Assertions.assertEquals(-4.5, f.value(new Binary64(-1)).getReal(), tolerance);
+        Assertions.assertEquals(-9, f.value(new Binary64(-2.5)).getReal(), tolerance);
+        Assertions.assertEquals(0, f.value(new Binary64(0.5)).getReal(), tolerance);
+        Assertions.assertEquals(3, f.value(new Binary64(1.5)).getReal(), tolerance);
+        Assertions.assertEquals(7.5, f.value(new Binary64(3)).getReal(), tolerance);
 
-        Assert.assertEquals(f.degree(), 1);
+        Assertions.assertEquals(1, f.degree());
 
-        Assert.assertEquals(f.polynomialDerivative().polynomialDerivative().value(0), 0, tolerance);
+        Assertions.assertEquals(0, f.polynomialDerivative().polynomialDerivative().value(0), tolerance);
     }
 
     /**
@@ -99,14 +101,14 @@ public final class PolynomialFunctionTest {
         PolynomialFunction f = new PolynomialFunction(c);
 
         // verify that we are equal to c[0] when x=0
-        Assert.assertEquals(f.value(0), c[0], tolerance);
+        Assertions.assertEquals(f.value(0), c[0], tolerance);
 
         // now check a few other places
-        Assert.assertEquals(0, f.value(-0.5), tolerance);
-        Assert.assertEquals(0, f.value(2), tolerance);
-        Assert.assertEquals(-2, f.value(1.5), tolerance);
-        Assert.assertEquals(7, f.value(-1.5), tolerance);
-        Assert.assertEquals(265.5312, f.value(12.34), tolerance);
+        Assertions.assertEquals(0, f.value(-0.5), tolerance);
+        Assertions.assertEquals(0, f.value(2), tolerance);
+        Assertions.assertEquals(-2, f.value(1.5), tolerance);
+        Assertions.assertEquals(7, f.value(-1.5), tolerance);
+        Assertions.assertEquals(265.5312, f.value(12.34), tolerance);
     }
 
     /**
@@ -119,16 +121,16 @@ public final class PolynomialFunctionTest {
         PolynomialFunction f = new PolynomialFunction(c);
 
         // verify that we are equal to c[0] when x=0
-        Assert.assertEquals(f.value(0), c[0], tolerance);
+        Assertions.assertEquals(f.value(0), c[0], tolerance);
 
         // now check a few other places
-        Assert.assertEquals(0, f.value(5), tolerance);
-        Assert.assertEquals(0, f.value(1), tolerance);
-        Assert.assertEquals(0, f.value(-3), tolerance);
-        Assert.assertEquals(54.84375, f.value(-1.5), tolerance);
-        Assert.assertEquals(-8.06637, f.value(1.3), tolerance);
+        Assertions.assertEquals(0, f.value(5), tolerance);
+        Assertions.assertEquals(0, f.value(1), tolerance);
+        Assertions.assertEquals(0, f.value(-3), tolerance);
+        Assertions.assertEquals(54.84375, f.value(-1.5), tolerance);
+        Assertions.assertEquals(-8.06637, f.value(1.3), tolerance);
 
-        Assert.assertEquals(f.degree(), 5);
+        Assertions.assertEquals(5, f.degree());
     }
 
     /**
@@ -149,15 +151,15 @@ public final class PolynomialFunctionTest {
         PolynomialFunction h = new PolynomialFunction(h_coeff);
 
         // compare f' = g
-        Assert.assertEquals(f.polynomialDerivative().value(0), g.value(0), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(1), g.value(1), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(100), g.value(100), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(4.1), g.value(4.1), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(-3.25), g.value(-3.25), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(0), g.value(0), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(1), g.value(1), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(100), g.value(100), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(4.1), g.value(4.1), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(-3.25), g.value(-3.25), tolerance);
 
         // compare g' = h
-        Assert.assertEquals(g.polynomialDerivative().value(FastMath.PI), h.value(FastMath.PI), tolerance);
-        Assert.assertEquals(g.polynomialDerivative().value(FastMath.E),  h.value(FastMath.E),  tolerance);
+        Assertions.assertEquals(g.polynomialDerivative().value(FastMath.PI), h.value(FastMath.PI), tolerance);
+        Assertions.assertEquals(g.polynomialDerivative().value(FastMath.E),  h.value(FastMath.E),  tolerance);
     }
 
     @Test
@@ -190,7 +192,7 @@ public final class PolynomialFunctionTest {
         p1 = new PolynomialFunction(new double[] { 1, -4, 2 });
         p2 = new PolynomialFunction(new double[] { -1, 3, -2 });
         p1 = p1.add(p2);
-        Assert.assertEquals(1, p1.degree());
+        Assertions.assertEquals(1, p1.degree());
         checkPolynomial(p1, "-x");
     }
 
@@ -206,7 +208,7 @@ public final class PolynomialFunctionTest {
         p1 = new PolynomialFunction(new double[] { 1, -4, 2 });
         p2 = new PolynomialFunction(new double[] { -1, 3, 2 });
         p1 = p1.subtract(p2);
-        Assert.assertEquals(1, p1.degree());
+        Assertions.assertEquals(1, p1.degree());
         checkPolynomial(p1, "2 - 7 x");
     }
 
@@ -227,7 +229,7 @@ public final class PolynomialFunctionTest {
     @Test
     public void testSerial() {
         PolynomialFunction p2 = new PolynomialFunction(new double[] { 3, 2, 1 });
-        Assert.assertEquals(p2, UnitTestUtils.serializeAndRecover(p2));
+        Assertions.assertEquals(p2, UnitTestUtils.serializeAndRecover(p2));
     }
 
     /**
@@ -248,15 +250,15 @@ public final class PolynomialFunctionTest {
         PolynomialFunction h = new PolynomialFunction(h_coeff);
 
         // compare f' = g
-        Assert.assertEquals(f.polynomialDerivative().value(0), g.value(0), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(1), g.value(1), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(100), g.value(100), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(4.1), g.value(4.1), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(-3.25), g.value(-3.25), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(0), g.value(0), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(1), g.value(1), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(100), g.value(100), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(4.1), g.value(4.1), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(-3.25), g.value(-3.25), tolerance);
 
         // compare g' = h
-        Assert.assertEquals(g.polynomialDerivative().value(FastMath.PI), h.value(FastMath.PI), tolerance);
-        Assert.assertEquals(g.polynomialDerivative().value(FastMath.E),  h.value(FastMath.E),  tolerance);
+        Assertions.assertEquals(g.polynomialDerivative().value(FastMath.PI), h.value(FastMath.PI), tolerance);
+        Assertions.assertEquals(g.polynomialDerivative().value(FastMath.E),  h.value(FastMath.E),  tolerance);
     }
 
     @Test
@@ -266,7 +268,7 @@ public final class PolynomialFunctionTest {
         final PolynomialFunction p = new PolynomialFunction(coeff);
         // x + x^2 + x^3
         final double[] aCoeff = {0, 1, 1, 1};
-        Assert.assertArrayEquals(aCoeff, p.antiDerivative().getCoefficients(), Double.MIN_VALUE);
+        Assertions.assertArrayEquals(aCoeff, p.antiDerivative().getCoefficients(), Double.MIN_VALUE);
     }
 
     @Test
@@ -274,7 +276,7 @@ public final class PolynomialFunctionTest {
         final double[] coeff = {2};
         final PolynomialFunction p = new PolynomialFunction(coeff);
         final double[] aCoeff = {0, 2};
-        Assert.assertArrayEquals(aCoeff, p.antiDerivative().getCoefficients(), Double.MIN_VALUE);
+        Assertions.assertArrayEquals(aCoeff, p.antiDerivative().getCoefficients(), Double.MIN_VALUE);
     }
 
     @Test
@@ -282,7 +284,7 @@ public final class PolynomialFunctionTest {
         final double[] coeff = {0};
         final PolynomialFunction p = new PolynomialFunction(coeff);
         final double[] aCoeff = {0};
-        Assert.assertArrayEquals(aCoeff, p.antiDerivative().getCoefficients(), Double.MIN_VALUE);
+        Assertions.assertArrayEquals(aCoeff, p.antiDerivative().getCoefficients(), Double.MIN_VALUE);
     }
 
     @Test
@@ -307,40 +309,44 @@ public final class PolynomialFunctionTest {
         // -x^2
         final double[] coeff = {0, 0, -1};
         final PolynomialFunction p = new PolynomialFunction(coeff);
-        Assert.assertEquals(-2d/3d, p.integrate(-1, 1),Double.MIN_VALUE);
+        Assertions.assertEquals(-2d/3d, p.integrate(-1, 1),Double.MIN_VALUE);
 
         // x(x-1)(x+1) - should integrate to 0 over [-1,1]
         final PolynomialFunction p2 = new PolynomialFunction(new double[] {0, 1}).
                 multiply(new PolynomialFunction(new double[]{-1,1})).
                          multiply(new PolynomialFunction(new double[] {1, 1}));
-        Assert.assertEquals(0, p2.integrate(-1, 1), Double.MIN_VALUE);
+        Assertions.assertEquals(0, p2.integrate(-1, 1), Double.MIN_VALUE);
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testIntegrateInfiniteBounds() {
-        final PolynomialFunction p = new PolynomialFunction(new double[]{1});
-        p.integrate(0, Double.POSITIVE_INFINITY);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final PolynomialFunction p = new PolynomialFunction(new double[]{1});
+            p.integrate(0, Double.POSITIVE_INFINITY);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testIntegrateBadInterval() {
-        final PolynomialFunction p = new PolynomialFunction(new double[]{1});
-        p.integrate(0, -1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final PolynomialFunction p = new PolynomialFunction(new double[]{1});
+            p.integrate(0, -1);
+        });
     }
 
     public void checkPolynomial(PolynomialFunction p, String reference) {
-        Assert.assertEquals(reference, p.toString());
+        Assertions.assertEquals(reference, p.toString());
     }
 
     private void checkInverseDifferentiation(PolynomialFunction p) {
-        Assert.assertArrayEquals(p.getCoefficients(),
+        Assertions.assertArrayEquals(p.getCoefficients(),
                                  p.antiDerivative().polynomialDerivative().getCoefficients(),
                                  1e-12);
     }
 
     private void checkNullPolynomial(PolynomialFunction p) {
         for (double coefficient : p.getCoefficients()) {
-            Assert.assertEquals(0, coefficient, 1e-15);
+            Assertions.assertEquals(0, coefficient, 1e-15);
         }
     }
 }

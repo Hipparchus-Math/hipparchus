@@ -25,8 +25,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for class {@link UnivariateDerivative}.
@@ -41,28 +41,28 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
 
     @Test
     public void testOrder() {
-        Assert.assertEquals(getMaxOrder(), build(0).getOrder());
+        Assertions.assertEquals(getMaxOrder(), build(0).getOrder());
     }
 
     @Test
     public void testNewInstance() {
         T ud = build(5.25);
-        Assert.assertEquals(5.25, ud.getValue(), 1.0e-15);
-        Assert.assertEquals(1.0,  ud.getDerivative(1), 1.0e-15);
+        Assertions.assertEquals(5.25, ud.getValue(), 1.0e-15);
+        Assertions.assertEquals(1.0,  ud.getDerivative(1), 1.0e-15);
         T newInstance = ud.newInstance(7.5);
-        Assert.assertEquals(7.5, newInstance.getValue(), 1.0e-15);
-        Assert.assertEquals(0.0, newInstance.getDerivative(1), 1.0e-15);
+        Assertions.assertEquals(7.5, newInstance.getValue(), 1.0e-15);
+        Assertions.assertEquals(0.0, newInstance.getDerivative(1), 1.0e-15);
     }
 
     @Test
     public void testGetPartialDerivative() {
         try {
             build(3.0).getPartialDerivative(0, 1);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch( MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assert.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(1, ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(1, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -72,27 +72,27 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
         T ud = x.square();
         try {
             ud.getDerivative(-1);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
         }
-        Assert.assertEquals(9.0, ud.getValue(), 1.0e-15);
-        Assert.assertEquals(9.0, ud.getDerivative(0), 1.0e-15);
-        Assert.assertEquals(6.0, ud.getDerivative(1), 1.0e-15);
+        Assertions.assertEquals(9.0, ud.getValue(), 1.0e-15);
+        Assertions.assertEquals(9.0, ud.getDerivative(0), 1.0e-15);
+        Assertions.assertEquals(6.0, ud.getDerivative(1), 1.0e-15);
         for (int n = 2; n <= getMaxOrder(); ++n) {
-            Assert.assertEquals(n == 2 ? 2.0 : 0.0, ud.getDerivative(n), 1.0e-15);
+            Assertions.assertEquals(n == 2 ? 2.0 : 0.0, ud.getDerivative(n), 1.0e-15);
         }
         try {
             ud.getDerivative(getMaxOrder() + 1);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
         }
     }
 
     @Test
     public void testGetFreeParameters() {
-        Assert.assertEquals(1, build(3.0).getFreeParameters());
+        Assertions.assertEquals(1, build(3.0).getFreeParameters());
     }
 
     protected void checkAgainstDS(final double x, final FieldUnivariateFunction f) {
@@ -100,9 +100,14 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
         final T yUD = f.value(xUD);
         final DerivativeStructure yDS = f.value(xUD.toDerivativeStructure());
         for (int i = 0; i <= yUD.getOrder(); ++i) {
-            Assert.assertEquals(yDS.getPartialDerivative(i),
-                                yUD.getDerivative(i),
-                                4.0e-14* FastMath.abs(yDS.getPartialDerivative(i)));
+            if  (Double.isNaN(yDS.getPartialDerivative(i))) {
+                Assertions.assertEquals(yDS.getPartialDerivative(i),
+                                        yUD.getDerivative(i));
+            }else {
+                Assertions.assertEquals(yDS.getPartialDerivative(i),
+                                        yUD.getDerivative(i),
+                                        4.0e-14* FastMath.abs(yDS.getPartialDerivative(i)));
+            }
         }
     }
 
@@ -431,15 +436,15 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
         T a = build(1.3);
         @SuppressWarnings("unchecked")
         T b = (T) UnitTestUtils.serializeAndRecover(a);
-        Assert.assertEquals(a, b);
-        Assert.assertNotSame(a, b);
+        Assertions.assertEquals(a, b);
+        Assertions.assertNotSame(a, b);
     }
 
     @Test
     public void testZero() {
         T zero = build(17.0).getField().getZero();
         for (int i = 0; i <= zero.getOrder(); ++i) {
-            Assert.assertEquals(0.0, zero.getDerivative(i), 1.0e-15);
+            Assertions.assertEquals(0.0, zero.getDerivative(i), 1.0e-15);
         }
     }
 
@@ -447,7 +452,7 @@ public abstract class UnivariateDerivativeAbstractTest<T extends UnivariateDeriv
     public void testOne() {
         T one = build(17.0).getField().getOne();
         for (int i = 0; i <= one.getOrder(); ++i) {
-            Assert.assertEquals(i == 0 ? 1.0 : 0.0, one.getDerivative(i), 1.0e-15);
+            Assertions.assertEquals(i == 0 ? 1.0 : 0.0, one.getDerivative(i), 1.0e-15);
         }
     }
 

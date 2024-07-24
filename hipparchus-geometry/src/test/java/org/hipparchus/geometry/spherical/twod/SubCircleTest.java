@@ -29,8 +29,8 @@ import org.hipparchus.geometry.partitioning.SubHyperplane.SplitSubHyperplane;
 import org.hipparchus.geometry.spherical.oned.ArcsSet;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.hipparchus.util.MathUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class SubCircleTest {
 
@@ -38,9 +38,9 @@ public class SubCircleTest {
     public void testFullCircle() {
         Circle circle = new Circle(Vector3D.PLUS_K, 1.0e-10);
         SubCircle set = circle.wholeHyperplane();
-        Assert.assertEquals(MathUtils.TWO_PI, set.getSize(), 1.0e-10);
-        Assert.assertTrue(circle == set.getHyperplane());
-        Assert.assertTrue(circle != set.copySelf().getHyperplane());
+        Assertions.assertEquals(MathUtils.TWO_PI, set.getSize(), 1.0e-10);
+        Assertions.assertTrue(circle == set.getHyperplane());
+        Assertions.assertTrue(circle != set.copySelf().getHyperplane());
     }
 
     @Test
@@ -49,19 +49,19 @@ public class SubCircleTest {
         Circle xzPlane = new Circle(Vector3D.PLUS_J, 1.0e-10);
 
         SubCircle sc1 = create(Vector3D.PLUS_K, Vector3D.PLUS_I, Vector3D.PLUS_J, 1.0e-10, 1.0, 3.0, 5.0, 6.0);
-        Assert.assertEquals(Side.BOTH, sc1.split(xzPlane).getSide());
+        Assertions.assertEquals(Side.BOTH, sc1.split(xzPlane).getSide());
 
         SubCircle sc2 = create(Vector3D.PLUS_K, Vector3D.PLUS_I, Vector3D.PLUS_J, 1.0e-10, 1.0, 3.0);
-        Assert.assertEquals(Side.MINUS, sc2.split(xzPlane).getSide());
+        Assertions.assertEquals(Side.MINUS, sc2.split(xzPlane).getSide());
 
         SubCircle sc3 = create(Vector3D.PLUS_K, Vector3D.PLUS_I, Vector3D.PLUS_J, 1.0e-10, 5.0, 6.0);
-        Assert.assertEquals(Side.PLUS, sc3.split(xzPlane).getSide());
+        Assertions.assertEquals(Side.PLUS, sc3.split(xzPlane).getSide());
 
         SubCircle sc4 = create(Vector3D.PLUS_J, Vector3D.PLUS_K, Vector3D.PLUS_I, 1.0e-10, 5.0, 6.0);
-        Assert.assertEquals(Side.HYPER, sc4.split(xzPlane).getSide());
+        Assertions.assertEquals(Side.HYPER, sc4.split(xzPlane).getSide());
 
         SubCircle sc5 = create(Vector3D.MINUS_J, Vector3D.PLUS_I, Vector3D.PLUS_K, 1.0e-10, 5.0, 6.0);
-        Assert.assertEquals(Side.HYPER, sc5.split(xzPlane).getSide());
+        Assertions.assertEquals(Side.HYPER, sc5.split(xzPlane).getSide());
 
     }
 
@@ -74,40 +74,40 @@ public class SubCircleTest {
         SplitSubHyperplane<Sphere2D> split1 = sc1.split(xzPlane);
         ArcsSet plus1  = (ArcsSet) ((SubCircle) split1.getPlus()).getRemainingRegion();
         ArcsSet minus1 = (ArcsSet) ((SubCircle) split1.getMinus()).getRemainingRegion();
-        Assert.assertEquals(1, plus1.asList().size());
-        Assert.assertEquals(5.0, plus1.asList().get(0).getInf(), 1.0e-10);
-        Assert.assertEquals(6.0, plus1.asList().get(0).getSup(), 1.0e-10);
-        Assert.assertEquals(1, minus1.asList().size());
-        Assert.assertEquals(1.0, minus1.asList().get(0).getInf(), 1.0e-10);
-        Assert.assertEquals(3.0, minus1.asList().get(0).getSup(), 1.0e-10);
+        Assertions.assertEquals(1, plus1.asList().size());
+        Assertions.assertEquals(5.0, plus1.asList().get(0).getInf(), 1.0e-10);
+        Assertions.assertEquals(6.0, plus1.asList().get(0).getSup(), 1.0e-10);
+        Assertions.assertEquals(1, minus1.asList().size());
+        Assertions.assertEquals(1.0, minus1.asList().get(0).getInf(), 1.0e-10);
+        Assertions.assertEquals(3.0, minus1.asList().get(0).getSup(), 1.0e-10);
 
         SubCircle sc2 = create(Vector3D.PLUS_K, Vector3D.PLUS_I, Vector3D.PLUS_J, 1.0e-10, 1.0, 3.0);
         SplitSubHyperplane<Sphere2D> split2 = sc2.split(xzPlane);
-        Assert.assertNull(split2.getPlus());
+        Assertions.assertNull(split2.getPlus());
         ArcsSet minus2 = (ArcsSet) ((SubCircle) split2.getMinus()).getRemainingRegion();
-        Assert.assertEquals(1, minus2.asList().size());
-        Assert.assertEquals(1.0, minus2.asList().get(0).getInf(), 1.0e-10);
-        Assert.assertEquals(3.0, minus2.asList().get(0).getSup(), 1.0e-10);
+        Assertions.assertEquals(1, minus2.asList().size());
+        Assertions.assertEquals(1.0, minus2.asList().get(0).getInf(), 1.0e-10);
+        Assertions.assertEquals(3.0, minus2.asList().get(0).getSup(), 1.0e-10);
 
         SubCircle sc3 = create(Vector3D.PLUS_K, Vector3D.PLUS_I, Vector3D.PLUS_J, 1.0e-10, 5.0, 6.0);
         SplitSubHyperplane<Sphere2D> split3 = sc3.split(xzPlane);
         ArcsSet plus3  = (ArcsSet) ((SubCircle) split3.getPlus()).getRemainingRegion();
-        Assert.assertEquals(1, plus3.asList().size());
-        Assert.assertEquals(5.0, plus3.asList().get(0).getInf(), 1.0e-10);
-        Assert.assertEquals(6.0, plus3.asList().get(0).getSup(), 1.0e-10);
-        Assert.assertNull(split3.getMinus());
+        Assertions.assertEquals(1, plus3.asList().size());
+        Assertions.assertEquals(5.0, plus3.asList().get(0).getInf(), 1.0e-10);
+        Assertions.assertEquals(6.0, plus3.asList().get(0).getSup(), 1.0e-10);
+        Assertions.assertNull(split3.getMinus());
 
         SubCircle sc4 = create(Vector3D.PLUS_J, Vector3D.PLUS_K, Vector3D.PLUS_I, 1.0e-10, 5.0, 6.0);
         SplitSubHyperplane<Sphere2D> split4 = sc4.split(xzPlane);
-        Assert.assertEquals(Side.HYPER, sc4.split(xzPlane).getSide());
-        Assert.assertNull(split4.getPlus());
-        Assert.assertNull(split4.getMinus());
+        Assertions.assertEquals(Side.HYPER, sc4.split(xzPlane).getSide());
+        Assertions.assertNull(split4.getPlus());
+        Assertions.assertNull(split4.getMinus());
 
         SubCircle sc5 = create(Vector3D.MINUS_J, Vector3D.PLUS_I, Vector3D.PLUS_K, 1.0e-10, 5.0, 6.0);
         SplitSubHyperplane<Sphere2D> split5 = sc5.split(xzPlane);
-        Assert.assertEquals(Side.HYPER, sc5.split(xzPlane).getSide());
-        Assert.assertNull(split5.getPlus());
-        Assert.assertNull(split5.getMinus());
+        Assertions.assertEquals(Side.HYPER, sc5.split(xzPlane).getSide());
+        Assertions.assertNull(split5.getPlus());
+        Assertions.assertNull(split5.getMinus());
 
     }
 
@@ -121,9 +121,9 @@ public class SubCircleTest {
                                                  tolerance),
                                       new ArcsSet(4.7121441684170700, 4.7125386635004760, tolerance));
         SplitSubHyperplane<Sphere2D> split = sub.split(hyperplane);
-        Assert.assertNotNull(split.getMinus());
-        Assert.assertNull(split.getPlus());
-        Assert.assertEquals(Side.MINUS, sub.split(hyperplane).getSide());
+        Assertions.assertNotNull(split.getMinus());
+        Assertions.assertNull(split.getPlus());
+        Assertions.assertEquals(Side.MINUS, sub.split(hyperplane).getSide());
 
     }
 

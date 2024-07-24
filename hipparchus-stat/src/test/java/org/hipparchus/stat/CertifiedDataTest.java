@@ -21,14 +21,14 @@
  */
 package org.hipparchus.stat;
 
+import org.hipparchus.stat.descriptive.DescriptiveStatistics;
+import org.hipparchus.stat.descriptive.StreamingStatistics;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
-import org.hipparchus.stat.descriptive.DescriptiveStatistics;
-import org.hipparchus.stat.descriptive.StreamingStatistics;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * Certified data test cases.
@@ -47,24 +47,24 @@ public class CertifiedDataTest {
     public void testSummaryStatistics() throws Exception {
         StreamingStatistics u = new StreamingStatistics();
         loadStats("data/PiDigits.txt", u);
-        Assert.assertEquals("PiDigits: std", std, u.getStandardDeviation(), 1E-13);
-        Assert.assertEquals("PiDigits: mean", mean, u.getMean(), 1E-13);
+        Assertions.assertEquals(std, u.getStandardDeviation(), 1E-13, "PiDigits: std");
+        Assertions.assertEquals(mean, u.getMean(), 1E-13, "PiDigits: mean");
 
         loadStats("data/Mavro.txt", u);
-        Assert.assertEquals("Mavro: std", std, u.getStandardDeviation(), 1E-14);
-        Assert.assertEquals("Mavro: mean", mean, u.getMean(), 1E-14);
+        Assertions.assertEquals(std, u.getStandardDeviation(), 1E-14, "Mavro: std");
+        Assertions.assertEquals(mean, u.getMean(), 1E-14, "Mavro: mean");
 
         loadStats("data/Michelso.txt", u);
-        Assert.assertEquals("Michelso: std", std, u.getStandardDeviation(), 1E-13);
-        Assert.assertEquals("Michelso: mean", mean, u.getMean(), 1E-13);
+        Assertions.assertEquals(std, u.getStandardDeviation(), 1E-13, "Michelso: std");
+        Assertions.assertEquals(mean, u.getMean(), 1E-13, "Michelso: mean");
 
         loadStats("data/NumAcc1.txt", u);
-        Assert.assertEquals("NumAcc1: std", std, u.getStandardDeviation(), 1E-14);
-        Assert.assertEquals("NumAcc1: mean", mean, u.getMean(), 1E-14);
+        Assertions.assertEquals(std, u.getStandardDeviation(), 1E-14, "NumAcc1: std");
+        Assertions.assertEquals(mean, u.getMean(), 1E-14, "NumAcc1: mean");
 
         loadStats("data/NumAcc2.txt", u);
-        Assert.assertEquals("NumAcc2: std", std, u.getStandardDeviation(), 1E-14);
-        Assert.assertEquals("NumAcc2: mean", mean, u.getMean(), 1E-14);
+        Assertions.assertEquals(std, u.getStandardDeviation(), 1E-14, "NumAcc2: std");
+        Assertions.assertEquals(mean, u.getMean(), 1E-14, "NumAcc2: mean");
     }
 
     /**
@@ -77,24 +77,24 @@ public class CertifiedDataTest {
         DescriptiveStatistics u = new DescriptiveStatistics();
 
         loadStats("data/PiDigits.txt", u);
-        Assert.assertEquals("PiDigits: std", std, u.getStandardDeviation(), 1E-14);
-        Assert.assertEquals("PiDigits: mean", mean, u.getMean(), 1E-14);
+        Assertions.assertEquals(std, u.getStandardDeviation(), 1E-14, "PiDigits: std");
+        Assertions.assertEquals(mean, u.getMean(), 1E-14, "PiDigits: mean");
 
         loadStats("data/Mavro.txt", u);
-        Assert.assertEquals("Mavro: std", std, u.getStandardDeviation(), 1E-14);
-        Assert.assertEquals("Mavro: mean", mean, u.getMean(), 1E-14);
+        Assertions.assertEquals(std, u.getStandardDeviation(), 1E-14, "Mavro: std");
+        Assertions.assertEquals(mean, u.getMean(), 1E-14, "Mavro: mean");
 
         loadStats("data/Michelso.txt", u);
-        Assert.assertEquals("Michelso: std", std, u.getStandardDeviation(), 1E-14);
-        Assert.assertEquals("Michelso: mean", mean, u.getMean(), 1E-14);
+        Assertions.assertEquals(std, u.getStandardDeviation(), 1E-14, "Michelso: std");
+        Assertions.assertEquals(mean, u.getMean(), 1E-14, "Michelso: mean");
 
         loadStats("data/NumAcc1.txt", u);
-        Assert.assertEquals("NumAcc1: std", std, u.getStandardDeviation(), 1E-14);
-        Assert.assertEquals("NumAcc1: mean", mean, u.getMean(), 1E-14);
+        Assertions.assertEquals(std, u.getStandardDeviation(), 1E-14, "NumAcc1: std");
+        Assertions.assertEquals(mean, u.getMean(), 1E-14, "NumAcc1: mean");
 
         loadStats("data/NumAcc2.txt", u);
-        Assert.assertEquals("NumAcc2: std", std, u.getStandardDeviation(), 1E-14);
-        Assert.assertEquals("NumAcc2: mean", mean, u.getMean(), 1E-14);
+        Assertions.assertEquals(std, u.getStandardDeviation(), 1E-14, "NumAcc2: std");
+        Assertions.assertEquals(mean, u.getMean(), 1E-14, "NumAcc2: mean");
     }
 
     /**
@@ -116,7 +116,7 @@ public class CertifiedDataTest {
         std = Double.NaN;
 
         InputStream resourceAsStream = CertifiedDataTest.class.getResourceAsStream(resource);
-        Assert.assertNotNull("Could not find resource "+resource,resourceAsStream);
+        Assertions.assertNotNull(resourceAsStream,"Could not find resource "+resource);
         BufferedReader in =
             new BufferedReader(
                     new InputStreamReader(

@@ -26,8 +26,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.stat.descriptive.moment.Variance;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 public class CovarianceTest {
@@ -163,8 +163,8 @@ public class CovarianceTest {
     public void testConstant() {
         double[] noVariance = new double[] {1, 1, 1, 1};
         double[] values = new double[] {1, 2, 3, 4};
-        Assert.assertEquals(0d, new Covariance().covariance(noVariance, values, true), Double.MIN_VALUE);
-        Assert.assertEquals(0d, new Covariance().covariance(noVariance, noVariance, true), Double.MIN_VALUE);
+        Assertions.assertEquals(0d, new Covariance().covariance(noVariance, values, true), Double.MIN_VALUE);
+        Assertions.assertEquals(0d, new Covariance().covariance(noVariance, noVariance, true), Double.MIN_VALUE);
     }
 
     /**
@@ -173,9 +173,9 @@ public class CovarianceTest {
     @Test
     public void testOneColumn() {
         RealMatrix cov = new Covariance(new double[][] {{1}, {2}}, false).getCovarianceMatrix();
-        Assert.assertEquals(1, cov.getRowDimension());
-        Assert.assertEquals(1, cov.getColumnDimension());
-        Assert.assertEquals(0.25, cov.getEntry(0, 0), 1.0e-15);
+        Assertions.assertEquals(1, cov.getRowDimension());
+        Assertions.assertEquals(1, cov.getColumnDimension());
+        Assertions.assertEquals(0.25, cov.getEntry(0, 0), 1.0e-15);
     }
 
     /**
@@ -187,13 +187,13 @@ public class CovarianceTest {
         double[] two = new double[] {2};
         try {
             new Covariance().covariance(one, two, false);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try {
             new Covariance(new double[][] {{},{}});
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
@@ -211,13 +211,13 @@ public class CovarianceTest {
         // Variances on the diagonal
         Variance variance = new Variance();
         for (int i = 0; i < 5; i++) {
-            Assert.assertEquals(variance.evaluate(matrix.getColumn(i)), covarianceMatrix.getEntry(i,i), 10E-14);
+            Assertions.assertEquals(variance.evaluate(matrix.getColumn(i)), covarianceMatrix.getEntry(i,i), 10E-14);
         }
 
         // Symmetry, column-consistency
-        Assert.assertEquals(covarianceMatrix.getEntry(2, 3),
+        Assertions.assertEquals(covarianceMatrix.getEntry(2, 3),
                 new Covariance().covariance(matrix.getColumn(2), matrix.getColumn(3), true), 10E-14);
-        Assert.assertEquals(covarianceMatrix.getEntry(2, 3), covarianceMatrix.getEntry(3, 2), Double.MIN_VALUE);
+        Assertions.assertEquals(covarianceMatrix.getEntry(2, 3), covarianceMatrix.getEntry(3, 2), Double.MIN_VALUE);
 
         // All columns same -> all entries = column variance
         RealMatrix repeatedColumns = new Array2DRowRealMatrix(47, 3);
@@ -228,7 +228,7 @@ public class CovarianceTest {
         double columnVariance = variance.evaluate(matrix.getColumn(0));
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                Assert.assertEquals(columnVariance, repeatedCovarianceMatrix.getEntry(i, j), 10E-14);
+                Assertions.assertEquals(columnVariance, repeatedCovarianceMatrix.getEntry(i, j), 10E-14);
             }
         }
 
@@ -241,7 +241,7 @@ public class CovarianceTest {
 
         double[] x = data[0];
         double[] y = data[1];
-        Assert.assertEquals(new Covariance().covariance(x, y),
+        Assertions.assertEquals(new Covariance().covariance(x, y),
                 new Covariance().covariance(x, y, true), Double.MIN_VALUE);
     }
 

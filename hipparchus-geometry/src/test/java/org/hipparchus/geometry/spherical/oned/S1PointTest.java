@@ -24,8 +24,8 @@ package org.hipparchus.geometry.spherical.oned;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class S1PointTest {
 
@@ -33,17 +33,17 @@ public class S1PointTest {
     public void testS1Point() {
         for (int k = -2; k < 3; ++k) {
             S1Point p = new S1Point(1.0 + k * MathUtils.TWO_PI);
-            Assert.assertEquals(FastMath.cos(1.0), p.getVector().getX(), 1.0e-10);
-            Assert.assertEquals(FastMath.sin(1.0), p.getVector().getY(), 1.0e-10);
-            Assert.assertFalse(p.isNaN());
+            Assertions.assertEquals(FastMath.cos(1.0), p.getVector().getX(), 1.0e-10);
+            Assertions.assertEquals(FastMath.sin(1.0), p.getVector().getY(), 1.0e-10);
+            Assertions.assertFalse(p.isNaN());
         }
     }
 
     @Test
     public void testNaN() {
-        Assert.assertTrue(S1Point.NaN.isNaN());
-        Assert.assertTrue(S1Point.NaN.equals(new S1Point(Double.NaN)));
-        Assert.assertFalse(new S1Point(1.0).equals(S1Point.NaN));
+        Assertions.assertTrue(S1Point.NaN.isNaN());
+        Assertions.assertEquals(S1Point.NaN, new S1Point(Double.NaN));
+        Assertions.assertNotEquals(S1Point.NaN, new S1Point(1.0));
     }
 
     @SuppressWarnings("unlikely-arg-type")
@@ -51,43 +51,43 @@ public class S1PointTest {
     public void testEquals() {
         S1Point a = new S1Point(1.0);
         S1Point b = new S1Point(1.0);
-        Assert.assertEquals(a.hashCode(), b.hashCode());
-        Assert.assertFalse(a == b);
-        Assert.assertTrue(a.equals(b));
-        Assert.assertTrue(a.equals(a));
-        Assert.assertFalse(a.equals('a'));
-        Assert.assertTrue(S1Point.NaN.equals(S1Point.NaN));
-        Assert.assertTrue(S1Point.NaN.equals(new S1Point(Double.NaN)));
+        Assertions.assertEquals(a.hashCode(), b.hashCode());
+        Assertions.assertFalse(a == b);
+        Assertions.assertEquals(a, b);
+        Assertions.assertEquals(a, a);
+        Assertions.assertNotEquals('a', a);
+        Assertions.assertEquals(S1Point.NaN, S1Point.NaN);
+        Assertions.assertEquals(S1Point.NaN, new S1Point(Double.NaN));
     }
 
     @Test
     public void testEqualsIeee754() {
         S1Point a = new S1Point(1.0);
         S1Point b = new S1Point(1.0);
-        Assert.assertEquals(a.hashCode(), b.hashCode());
-        Assert.assertFalse(a == b);
-        Assert.assertTrue(a.equalsIeee754(b));
-        Assert.assertTrue(a.equalsIeee754(a));
-        Assert.assertFalse(a.equalsIeee754('a'));
-        Assert.assertFalse(S1Point.NaN.equalsIeee754(S1Point.NaN));
-        Assert.assertFalse(S1Point.NaN.equalsIeee754(new S1Point(Double.NaN)));
+        Assertions.assertEquals(a.hashCode(), b.hashCode());
+        Assertions.assertFalse(a == b);
+        Assertions.assertTrue(a.equalsIeee754(b));
+        Assertions.assertTrue(a.equalsIeee754(a));
+        Assertions.assertFalse(a.equalsIeee754('a'));
+        Assertions.assertFalse(S1Point.NaN.equalsIeee754(S1Point.NaN));
+        Assertions.assertFalse(S1Point.NaN.equalsIeee754(new S1Point(Double.NaN)));
     }
 
     @Test
     public void testDistance() {
         S1Point a = new S1Point(1.0);
         S1Point b = new S1Point(a.getAlpha() + 0.5 * FastMath.PI);
-        Assert.assertEquals(0.5 * FastMath.PI, a.distance(b), 1.0e-10);
+        Assertions.assertEquals(0.5 * FastMath.PI, a.distance(b), 1.0e-10);
     }
 
     @Test
     public void testSpace() {
         S1Point a = new S1Point(1.0);
-        Assert.assertTrue(a.getSpace() instanceof Sphere1D);
-        Assert.assertEquals(1, a.getSpace().getDimension());
+        Assertions.assertTrue(a.getSpace() instanceof Sphere1D);
+        Assertions.assertEquals(1, a.getSpace().getDimension());
         try {
             a.getSpace().getSubSpace();
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathRuntimeException muoe) {
             // expected
         }

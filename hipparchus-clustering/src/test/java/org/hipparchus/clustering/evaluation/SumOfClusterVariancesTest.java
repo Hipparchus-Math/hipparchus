@@ -22,9 +22,9 @@
 
 package org.hipparchus.clustering.evaluation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +32,14 @@ import java.util.List;
 import org.hipparchus.clustering.Cluster;
 import org.hipparchus.clustering.DoublePoint;
 import org.hipparchus.clustering.distance.EuclideanDistance;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SumOfClusterVariancesTest {
 
     private ClusterEvaluator<DoublePoint> evaluator;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         evaluator = new SumOfClusterVariances<DoublePoint>(new EuclideanDistance());
     }

@@ -25,8 +25,8 @@ package org.hipparchus.linear;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.fraction.Fraction;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class LUDecompositionTest {
     private double[][] testData = {
@@ -66,12 +66,12 @@ public class LUDecompositionTest {
     public void testDimensions() {
         RealMatrix matrix = MatrixUtils.createRealMatrix(testData);
         LUDecomposition LU = new LUDecomposition(matrix);
-        Assert.assertEquals(testData.length, LU.getL().getRowDimension());
-        Assert.assertEquals(testData.length, LU.getL().getColumnDimension());
-        Assert.assertEquals(testData.length, LU.getU().getRowDimension());
-        Assert.assertEquals(testData.length, LU.getU().getColumnDimension());
-        Assert.assertEquals(testData.length, LU.getP().getRowDimension());
-        Assert.assertEquals(testData.length, LU.getP().getColumnDimension());
+        Assertions.assertEquals(testData.length, LU.getL().getRowDimension());
+        Assertions.assertEquals(testData.length, LU.getL().getColumnDimension());
+        Assertions.assertEquals(testData.length, LU.getU().getRowDimension());
+        Assertions.assertEquals(testData.length, LU.getU().getColumnDimension());
+        Assertions.assertEquals(testData.length, LU.getP().getRowDimension());
+        Assertions.assertEquals(testData.length, LU.getP().getColumnDimension());
 
     }
 
@@ -80,9 +80,9 @@ public class LUDecompositionTest {
     public void testNonSquare() {
         try {
             new LUDecomposition(MatrixUtils.createRealMatrix(new double[3][2]));
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ime) {
-            Assert.assertEquals(LocalizedCoreFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
         }
     }
 
@@ -95,7 +95,7 @@ public class LUDecompositionTest {
         RealMatrix u = lu.getU();
         RealMatrix p = lu.getP();
         double norm = l.multiply(u).subtract(p.multiply(matrix)).getNorm1();
-        Assert.assertEquals(0, norm, normTolerance);
+        Assertions.assertEquals(0, norm, normTolerance);
 
         matrix = MatrixUtils.createRealMatrix(testDataMinus);
         lu = new LUDecomposition(matrix);
@@ -103,7 +103,7 @@ public class LUDecompositionTest {
         u = lu.getU();
         p = lu.getP();
         norm = l.multiply(u).subtract(p.multiply(matrix)).getNorm1();
-        Assert.assertEquals(0, norm, normTolerance);
+        Assertions.assertEquals(0, norm, normTolerance);
 
         matrix = MatrixUtils.createRealIdentityMatrix(17);
         lu = new LUDecomposition(matrix);
@@ -111,21 +111,21 @@ public class LUDecompositionTest {
         u = lu.getU();
         p = lu.getP();
         norm = l.multiply(u).subtract(p.multiply(matrix)).getNorm1();
-        Assert.assertEquals(0, norm, normTolerance);
+        Assertions.assertEquals(0, norm, normTolerance);
 
         matrix = MatrixUtils.createRealMatrix(singular);
         lu = new LUDecomposition(matrix);
-        Assert.assertFalse(lu.getSolver().isNonSingular());
-        Assert.assertNull(lu.getL());
-        Assert.assertNull(lu.getU());
-        Assert.assertNull(lu.getP());
+        Assertions.assertFalse(lu.getSolver().isNonSingular());
+        Assertions.assertNull(lu.getL());
+        Assertions.assertNull(lu.getU());
+        Assertions.assertNull(lu.getP());
 
         matrix = MatrixUtils.createRealMatrix(bigSingular);
         lu = new LUDecomposition(matrix);
-        Assert.assertFalse(lu.getSolver().isNonSingular());
-        Assert.assertNull(lu.getL());
-        Assert.assertNull(lu.getU());
-        Assert.assertNull(lu.getP());
+        Assertions.assertFalse(lu.getSolver().isNonSingular());
+        Assertions.assertNull(lu.getL());
+        Assertions.assertNull(lu.getU());
+        Assertions.assertNull(lu.getP());
 
     }
 
@@ -135,9 +135,9 @@ public class LUDecompositionTest {
         RealMatrix matrix = MatrixUtils.createRealMatrix(testData);
         RealMatrix l = new LUDecomposition(matrix).getL();
         for (int i = 0; i < l.getRowDimension(); i++) {
-            Assert.assertEquals(l.getEntry(i, i), 1, entryTolerance);
+            Assertions.assertEquals(1, l.getEntry(i, i), entryTolerance);
             for (int j = i + 1; j < l.getColumnDimension(); j++) {
-                Assert.assertEquals(l.getEntry(i, j), 0, entryTolerance);
+                Assertions.assertEquals(0, l.getEntry(i, j), entryTolerance);
             }
         }
     }
@@ -149,7 +149,7 @@ public class LUDecompositionTest {
         RealMatrix u = new LUDecomposition(matrix).getU();
         for (int i = 0; i < u.getRowDimension(); i++) {
             for (int j = 0; j < i; j++) {
-                Assert.assertEquals(u.getEntry(i, j), 0, entryTolerance);
+                Assertions.assertEquals(0, u.getEntry(i, j), entryTolerance);
             }
         }
     }
@@ -162,7 +162,7 @@ public class LUDecompositionTest {
 
         RealMatrix ppT = p.multiplyTransposed(p);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(p.getRowDimension());
-        Assert.assertEquals(0, ppT.subtract(id).getNorm1(), normTolerance);
+        Assertions.assertEquals(0, ppT.subtract(id).getNorm1(), normTolerance);
 
         for (int i = 0; i < p.getRowDimension(); i++) {
             int zeroCount  = 0;
@@ -178,9 +178,9 @@ public class LUDecompositionTest {
                     ++otherCount;
                 }
             }
-            Assert.assertEquals(p.getColumnDimension() - 1, zeroCount);
-            Assert.assertEquals(1, oneCount);
-            Assert.assertEquals(0, otherCount);
+            Assertions.assertEquals(p.getColumnDimension() - 1, zeroCount);
+            Assertions.assertEquals(1, oneCount);
+            Assertions.assertEquals(0, otherCount);
         }
 
         for (int j = 0; j < p.getColumnDimension(); j++) {
@@ -197,9 +197,9 @@ public class LUDecompositionTest {
                     ++otherCount;
                 }
             }
-            Assert.assertEquals(p.getRowDimension() - 1, zeroCount);
-            Assert.assertEquals(1, oneCount);
-            Assert.assertEquals(0, otherCount);
+            Assertions.assertEquals(p.getRowDimension() - 1, zeroCount);
+            Assertions.assertEquals(1, oneCount);
+            Assertions.assertEquals(0, otherCount);
         }
 
     }
@@ -209,22 +209,22 @@ public class LUDecompositionTest {
     public void testSingular() {
         final RealMatrix m = MatrixUtils.createRealMatrix(testData);
         LUDecomposition lu = new LUDecomposition(m);
-        Assert.assertTrue(lu.getSolver().isNonSingular());
-        Assert.assertEquals(-1.0, lu.getDeterminant(), 1.0e-15);
+        Assertions.assertTrue(lu.getSolver().isNonSingular());
+        Assertions.assertEquals(-1.0, lu.getDeterminant(), 1.0e-15);
         lu = new LUDecomposition(m.getSubMatrix(0, 1, 0, 1));
-        Assert.assertTrue(lu.getSolver().isNonSingular());
-        Assert.assertEquals(+1.0, lu.getDeterminant(), 1.0e-15);
+        Assertions.assertTrue(lu.getSolver().isNonSingular());
+        Assertions.assertEquals(+1.0, lu.getDeterminant(), 1.0e-15);
         lu = new LUDecomposition(MatrixUtils.createRealMatrix(singular));
-        Assert.assertFalse(lu.getSolver().isNonSingular());
-        Assert.assertEquals(0.0, lu.getDeterminant(), 1.0e-15);
+        Assertions.assertFalse(lu.getSolver().isNonSingular());
+        Assertions.assertEquals(0.0, lu.getDeterminant(), 1.0e-15);
         lu = new LUDecomposition(MatrixUtils.createRealMatrix(bigSingular));
-        Assert.assertFalse(lu.getSolver().isNonSingular());
-        Assert.assertEquals(0.0, lu.getDeterminant(), 1.0e-15);
+        Assertions.assertFalse(lu.getSolver().isNonSingular());
+        Assertions.assertEquals(0.0, lu.getDeterminant(), 1.0e-15);
         try {
             lu.getSolver().solve(new ArrayRealVector(new double[] { 1, 1, 1, 1 }));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.SINGULAR_MATRIX, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.SINGULAR_MATRIX, miae.getSpecifier());
         }
     }
 
@@ -252,20 +252,20 @@ public class LUDecompositionTest {
 
         // check values against known references
         RealMatrix l = lu.getL();
-        Assert.assertEquals(0, l.subtract(lRef).getNorm1(), 1.0e-13);
+        Assertions.assertEquals(0, l.subtract(lRef).getNorm1(), 1.0e-13);
         RealMatrix u = lu.getU();
-        Assert.assertEquals(0, u.subtract(uRef).getNorm1(), 1.0e-13);
+        Assertions.assertEquals(0, u.subtract(uRef).getNorm1(), 1.0e-13);
         RealMatrix p = lu.getP();
-        Assert.assertEquals(0, p.subtract(pRef).getNorm1(), 1.0e-13);
+        Assertions.assertEquals(0, p.subtract(pRef).getNorm1(), 1.0e-13);
         int[] pivot = lu.getPivot();
         for (int i = 0; i < pivotRef.length; ++i) {
-            Assert.assertEquals(pivotRef[i], pivot[i]);
+            Assertions.assertEquals(pivotRef[i], pivot[i]);
         }
 
         // check the same cached instance is returned the second time
-        Assert.assertTrue(l == lu.getL());
-        Assert.assertTrue(u == lu.getU());
-        Assert.assertTrue(p == lu.getP());
+        Assertions.assertTrue(l == lu.getL());
+        Assertions.assertTrue(u == lu.getU());
+        Assertions.assertTrue(p == lu.getP());
 
     }
 
@@ -293,20 +293,20 @@ public class LUDecompositionTest {
 
         // check values against known references
         RealMatrix l = lu.getL();
-        Assert.assertEquals(0, l.subtract(lRef).getNorm1(), 1.0e-13);
+        Assertions.assertEquals(0, l.subtract(lRef).getNorm1(), 1.0e-13);
         RealMatrix u = lu.getU();
-        Assert.assertEquals(0, u.subtract(uRef).getNorm1(), 1.0e-13);
+        Assertions.assertEquals(0, u.subtract(uRef).getNorm1(), 1.0e-13);
         RealMatrix p = lu.getP();
-        Assert.assertEquals(0, p.subtract(pRef).getNorm1(), 1.0e-13);
+        Assertions.assertEquals(0, p.subtract(pRef).getNorm1(), 1.0e-13);
         int[] pivot = lu.getPivot();
         for (int i = 0; i < pivotRef.length; ++i) {
-            Assert.assertEquals(pivotRef[i], pivot[i]);
+            Assertions.assertEquals(pivotRef[i], pivot[i]);
         }
 
         // check the same cached instance is returned the second time
-        Assert.assertTrue(l == lu.getL());
-        Assert.assertTrue(u == lu.getU());
-        Assert.assertTrue(p == lu.getP());
+        Assertions.assertTrue(l == lu.getL());
+        Assertions.assertTrue(u == lu.getU());
+        Assertions.assertTrue(p == lu.getP());
     }
 
     @Test
@@ -317,17 +317,17 @@ public class LUDecompositionTest {
         RealVector solution = solver.solve(new ArrayRealVector(new double[] {
             new Fraction(1, 2).doubleValue(), new Fraction(2, 3).doubleValue(), new Fraction(3,4).doubleValue()
         }));
-        Assert.assertEquals(testData.length, solution.getDimension());
-        Assert.assertEquals(new Fraction(-31, 12).doubleValue(), solution.getEntry(0), 1.0e-14);
-        Assert.assertEquals(new Fraction( 11, 12).doubleValue(), solution.getEntry(1), 1.0e-14);
-        Assert.assertEquals(new Fraction(  5, 12).doubleValue(), solution.getEntry(2), 1.0e-14);
-        Assert.assertEquals(testData.length,    solver.getRowDimension());
-        Assert.assertEquals(testData[0].length, solver.getColumnDimension());
+        Assertions.assertEquals(testData.length, solution.getDimension());
+        Assertions.assertEquals(new Fraction(-31, 12).doubleValue(), solution.getEntry(0), 1.0e-14);
+        Assertions.assertEquals(new Fraction( 11, 12).doubleValue(), solution.getEntry(1), 1.0e-14);
+        Assertions.assertEquals(new Fraction(  5, 12).doubleValue(), solution.getEntry(2), 1.0e-14);
+        Assertions.assertEquals(testData.length,    solver.getRowDimension());
+        Assertions.assertEquals(testData[0].length, solver.getColumnDimension());
         try {
             solver.solve(new ArrayRealVector(new double[] { 1, 1 }));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
         }
     }
 

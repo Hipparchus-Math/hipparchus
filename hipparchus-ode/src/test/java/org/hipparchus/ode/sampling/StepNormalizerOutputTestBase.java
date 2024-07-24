@@ -17,9 +17,6 @@
 
 package org.hipparchus.ode.sampling;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ODEIntegrator;
@@ -27,8 +24,11 @@ import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.GraggBulirschStoerIntegrator;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** Base class for step normalizer output tests. */
 public abstract class StepNormalizerOutputTestBase
@@ -238,7 +238,7 @@ public abstract class StepNormalizerOutputTestBase
         for(int i = 0; i < actual.length; i++) {
             actual[i] = output.get(i);
         }
-        Assert.assertArrayEquals(expected, actual, 1e-5);
+        Assertions.assertArrayEquals(expected, actual, 1e-5);
     }
 
     /** {@inheritDoc} */

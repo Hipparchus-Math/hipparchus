@@ -41,8 +41,8 @@ import org.hipparchus.analysis.function.Sinh;
 import org.hipparchus.analysis.function.Sqrt;
 import org.hipparchus.analysis.function.Tan;
 import org.hipparchus.analysis.function.Tanh;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for the {@link OpenMapRealVector} class.
@@ -61,47 +61,47 @@ public class SparseRealVectorTest extends RealVectorAbstractTest {
         final Double[] dvec1 = {1d, 2d, 3d, 4d, 5d, 6d, 7d, 8d, 9d};
 
         OpenMapRealVector v0 = new OpenMapRealVector();
-        Assert.assertEquals("testData len", 0, v0.getDimension());
+        Assertions.assertEquals(0, v0.getDimension(), "testData len");
 
         OpenMapRealVector v1 = new OpenMapRealVector(7);
-        Assert.assertEquals("testData len", 7, v1.getDimension());
-        Assert.assertEquals("testData is 0.0 ", 0.0, v1.getEntry(6), 0);
+        Assertions.assertEquals(7, v1.getDimension(), "testData len");
+        Assertions.assertEquals(0.0, v1.getEntry(6), 0, "testData is 0.0 ");
 
         OpenMapRealVector v3 = new OpenMapRealVector(vec1);
-        Assert.assertEquals("testData len", 3, v3.getDimension());
-        Assert.assertEquals("testData is 2.0 ", 2.0, v3.getEntry(1), 0);
+        Assertions.assertEquals(3, v3.getDimension(), "testData len");
+        Assertions.assertEquals(2.0, v3.getEntry(1), 0, "testData is 2.0 ");
 
         //SparseRealVector v4 = new SparseRealVector(vec4, 3, 2);
-        //Assert.assertEquals("testData len", 2, v4.getDimension());
-        //Assert.assertEquals("testData is 4.0 ", 4.0, v4.getEntry(0));
+        //Assertions.assertEquals("testData len", 2, v4.getDimension());
+        //Assertions.assertEquals("testData is 4.0 ", 4.0, v4.getEntry(0));
         //try {
         //    new SparseRealVector(vec4, 8, 3);
-        //    Assert.fail("MathIllegalArgumentException expected");
+        //    Assertions.fail("MathIllegalArgumentException expected");
         //} catch (MathIllegalArgumentException ex) {
             // expected behavior
         //}
 
         RealVector v5_i = new OpenMapRealVector(dvec1);
-        Assert.assertEquals("testData len", 9, v5_i.getDimension());
-        Assert.assertEquals("testData is 9.0 ", 9.0, v5_i.getEntry(8), 0);
+        Assertions.assertEquals(9, v5_i.getDimension(), "testData len");
+        Assertions.assertEquals(9.0, v5_i.getEntry(8), 0, "testData is 9.0 ");
 
         OpenMapRealVector v5 = new OpenMapRealVector(dvec1);
-        Assert.assertEquals("testData len", 9, v5.getDimension());
-        Assert.assertEquals("testData is 9.0 ", 9.0, v5.getEntry(8), 0);
+        Assertions.assertEquals(9, v5.getDimension(), "testData len");
+        Assertions.assertEquals(9.0, v5.getEntry(8), 0, "testData is 9.0 ");
 
         OpenMapRealVector v7 = new OpenMapRealVector(v1);
-        Assert.assertEquals("testData len", 7, v7.getDimension());
-        Assert.assertEquals("testData is 0.0 ", 0.0, v7.getEntry(6), 0);
+        Assertions.assertEquals(7, v7.getDimension(), "testData len");
+        Assertions.assertEquals(0.0, v7.getEntry(6), 0, "testData is 0.0 ");
 
         RealVectorTestImpl v7_i = new RealVectorTestImpl(vec1);
 
         OpenMapRealVector v7_2 = new OpenMapRealVector(v7_i);
-        Assert.assertEquals("testData len", 3, v7_2.getDimension());
-        Assert.assertEquals("testData is 0.0 ", 2.0d, v7_2.getEntry(1), 0);
+        Assertions.assertEquals(3, v7_2.getDimension(), "testData len");
+        Assertions.assertEquals(2.0d, v7_2.getEntry(1), 0, "testData is 0.0 ");
 
         OpenMapRealVector v8 = new OpenMapRealVector(v1);
-        Assert.assertEquals("testData len", 7, v8.getDimension());
-        Assert.assertEquals("testData is 0.0 ", 0.0, v8.getEntry(6), 0);
+        Assertions.assertEquals(7, v8.getDimension(), "testData len");
+        Assertions.assertEquals(0.0, v8.getEntry(6), 0, "testData is 0.0 ");
 
     }
 

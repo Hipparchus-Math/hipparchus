@@ -21,6 +21,10 @@
  */
 package org.hipparchus.util;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -28,9 +32,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for the {@link Combinations} class.
@@ -40,13 +42,13 @@ public class CombinationsTest {
     public void testAccessor1() {
         final int n = 5;
         final int k = 3;
-        Assert.assertEquals(n, new Combinations(n, k).getN());
+        Assertions.assertEquals(n, new Combinations(n, k).getN());
     }
     @Test
     public void testAccessor2() {
         final int n = 5;
         final int k = 3;
-        Assert.assertEquals(k, new Combinations(n, k).getK());
+        Assertions.assertEquals(k, new Combinations(n, k).getK());
     }
 
     @Test
@@ -63,36 +65,44 @@ public class CombinationsTest {
         checkLexicographicIterator(new Combinations(123, 2));
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testLexicographicComparatorWrongIterate1() {
-        final int n = 5;
-        final int k = 3;
-        final Comparator<int[]> comp = new Combinations(n, k).comparator();
-        comp.compare(new int[] {1}, new int[] {0, 1, 2});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final int n = 5;
+            final int k = 3;
+            final Comparator<int[]> comp = new Combinations(n, k).comparator();
+            comp.compare(new int[]{1}, new int[]{0, 1, 2});
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testLexicographicComparatorWrongIterate2() {
-        final int n = 5;
-        final int k = 3;
-        final Comparator<int[]> comp = new Combinations(n, k).comparator();
-        comp.compare(new int[] {0, 1, 2}, new int[] {0, 1, 2, 3});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final int n = 5;
+            final int k = 3;
+            final Comparator<int[]> comp = new Combinations(n, k).comparator();
+            comp.compare(new int[]{0, 1, 2}, new int[]{0, 1, 2, 3});
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testLexicographicComparatorWrongIterate3() {
-        final int n = 5;
-        final int k = 3;
-        final Comparator<int[]> comp = new Combinations(n, k).comparator();
-        comp.compare(new int[] {1, 2, 5}, new int[] {0, 1, 2});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final int n = 5;
+            final int k = 3;
+            final Comparator<int[]> comp = new Combinations(n, k).comparator();
+            comp.compare(new int[]{1, 2, 5}, new int[]{0, 1, 2});
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testLexicographicComparatorWrongIterate4() {
-        final int n = 5;
-        final int k = 3;
-        final Comparator<int[]> comp = new Combinations(n, k).comparator();
-        comp.compare(new int[] {1, 2, 4}, new int[] {-1, 1, 2});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final int n = 5;
+            final int k = 3;
+            final Comparator<int[]> comp = new Combinations(n, k).comparator();
+            comp.compare(new int[]{1, 2, 4}, new int[]{-1, 1, 2});
+        });
     }
 
     @Test
@@ -100,11 +110,11 @@ public class CombinationsTest {
         final int n = 5;
         final int k = 3;
         final Comparator<int[]> comp = new Combinations(n, k).comparator();
-        Assert.assertEquals(1, comp.compare(new int[] {1, 2, 4},
+        Assertions.assertEquals(1, comp.compare(new int[] {1, 2, 4},
                                             new int[] {1, 2, 3}));
-        Assert.assertEquals(-1, comp.compare(new int[] {0, 1, 4},
+        Assertions.assertEquals(-1, comp.compare(new int[] {0, 1, 4},
                                              new int[] {0, 2, 4}));
-        Assert.assertEquals(0, comp.compare(new int[] {1, 3, 4},
+        Assertions.assertEquals(0, comp.compare(new int[] {1, 3, 4},
                                             new int[] {1, 3, 4}));
     }
 
@@ -116,36 +126,36 @@ public class CombinationsTest {
         final int n = 5;
         final int k = 3;
         final Comparator<int[]> comp = new Combinations(n, k).comparator();
-        Assert.assertEquals(1, comp.compare(new int[] {1, 4, 2},
+        Assertions.assertEquals(1, comp.compare(new int[] {1, 4, 2},
                                             new int[] {1, 3, 2}));
-        Assert.assertEquals(-1, comp.compare(new int[] {0, 4, 1},
+        Assertions.assertEquals(-1, comp.compare(new int[] {0, 4, 1},
                                              new int[] {0, 4, 2}));
-        Assert.assertEquals(0, comp.compare(new int[] {1, 4, 3},
+        Assertions.assertEquals(0, comp.compare(new int[] {1, 4, 3},
                                             new int[] {1, 3, 4}));
     }
 
     @Test
     public void testEmptyCombination() {
         final Iterator<int[]> iter = new Combinations(12345, 0).iterator();
-        Assert.assertTrue(iter.hasNext());
+        Assertions.assertTrue(iter.hasNext());
         final int[] c = iter.next();
-        Assert.assertEquals(0, c.length);
-        Assert.assertFalse(iter.hasNext());
+        Assertions.assertEquals(0, c.length);
+        Assertions.assertFalse(iter.hasNext());
     }
 
     @Test
     public void testFullSetCombination() {
         final int n = 67;
         final Iterator<int[]> iter = new Combinations(n, n).iterator();
-        Assert.assertTrue(iter.hasNext());
+        Assertions.assertTrue(iter.hasNext());
         final int[] c = iter.next();
-        Assert.assertEquals(n, c.length);
+        Assertions.assertEquals(n, c.length);
 
         for (int i = 0; i < n; i++) {
-            Assert.assertEquals(i, c[i]);
+            Assertions.assertEquals(i, c[i]);
         }
 
-        Assert.assertFalse(iter.hasNext());
+        Assertions.assertFalse(iter.hasNext());
     }
 
     /**
@@ -164,16 +174,16 @@ public class CombinationsTest {
 
         long numIterates = 0;
         for (int[] iterate : c) {
-            Assert.assertEquals(k, iterate.length);
+            Assertions.assertEquals(k, iterate.length);
 
             // Check that the sequence of iterates is ordered.
             if (lastIterate != null) {
-                Assert.assertTrue(comp.compare(iterate, lastIterate) == 1);
+                Assertions.assertEquals(1, comp.compare(iterate, lastIterate));
             }
 
             // Check that each iterate is ordered.
             for (int i = 1; i < iterate.length; i++) {
-                Assert.assertTrue(iterate[i] > iterate[i - 1]);
+                Assertions.assertTrue(iterate[i] > iterate[i - 1]);
             }
 
             lastIterate = iterate;
@@ -181,7 +191,7 @@ public class CombinationsTest {
         }
 
         // Check the number of iterates.
-        Assert.assertEquals(CombinatoricsUtils.binomialCoefficient(n, k),
+        Assertions.assertEquals(CombinatoricsUtils.binomialCoefficient(n, k),
                             numIterates);
     }
 
@@ -189,14 +199,14 @@ public class CombinationsTest {
     public void testCombinationsIteratorFail() {
         try {
             new Combinations(4, 5).iterator();
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
 
         try {
             new Combinations(-1, -2).iterator();
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -218,24 +228,24 @@ public class CombinationsTest {
             Method hasNext = lexicographicIteratorClass.getDeclaredMethod("hasNext");
             Method next = lexicographicIteratorClass.getDeclaredMethod("next");
             Method remove = lexicographicIteratorClass.getDeclaredMethod("remove");
-            Assert.assertFalse((Boolean) hasNext.invoke(ctr.newInstance(3, 0)));
-            Assert.assertFalse((Boolean) hasNext.invoke(ctr.newInstance(3, 3)));
-            Assert.assertTrue((Boolean) hasNext.invoke(ctr.newInstance(3, 2)));
+            Assertions.assertFalse((Boolean) hasNext.invoke(ctr.newInstance(3, 0)));
+            Assertions.assertFalse((Boolean) hasNext.invoke(ctr.newInstance(3, 3)));
+            Assertions.assertTrue((Boolean) hasNext.invoke(ctr.newInstance(3, 2)));
             try {
                 next.invoke(ctr.newInstance(3, 0));
-                Assert.fail("an exception should have been thrown");
+                Assertions.fail("an exception should have been thrown");
             } catch (InvocationTargetException ite) {
-                Assert.assertTrue(ite.getCause() instanceof NoSuchElementException);
+                Assertions.assertTrue(ite.getCause() instanceof NoSuchElementException);
             }
             try {
                 remove.invoke(ctr.newInstance(3, 2));
-                Assert.fail("an exception should have been thrown");
+                Assertions.fail("an exception should have been thrown");
             } catch (InvocationTargetException ite) {
-                Assert.assertTrue(ite.getCause() instanceof UnsupportedOperationException);
+                Assertions.assertTrue(ite.getCause() instanceof UnsupportedOperationException);
             }
         } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException |
                  InvocationTargetException | InstantiationException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
     }
 
@@ -254,28 +264,28 @@ public class CombinationsTest {
             Method next = singletonIteratorClass.getDeclaredMethod("next");
             Method remove = singletonIteratorClass.getDeclaredMethod("remove");
             Object iterator = ctr.newInstance(3);
-            Assert.assertTrue((Boolean) hasNext.invoke(iterator));
+            Assertions.assertTrue((Boolean) hasNext.invoke(iterator));
             int[] ret = (int[]) next.invoke(iterator);
-            Assert.assertEquals(3, ret.length);
-            Assert.assertEquals(0, ret[0]);
-            Assert.assertEquals(1, ret[1]);
-            Assert.assertEquals(2, ret[2]);
-            Assert.assertFalse((Boolean) hasNext.invoke(iterator));
+            Assertions.assertEquals(3, ret.length);
+            Assertions.assertEquals(0, ret[0]);
+            Assertions.assertEquals(1, ret[1]);
+            Assertions.assertEquals(2, ret[2]);
+            Assertions.assertFalse((Boolean) hasNext.invoke(iterator));
             try {
                 next.invoke(iterator);
-                Assert.fail("an exception should have been thrown");
+                Assertions.fail("an exception should have been thrown");
             } catch (InvocationTargetException ite) {
-                Assert.assertTrue(ite.getCause() instanceof NoSuchElementException);
+                Assertions.assertTrue(ite.getCause() instanceof NoSuchElementException);
             }
             try {
                 remove.invoke(iterator);
-                Assert.fail("an exception should have been thrown");
+                Assertions.fail("an exception should have been thrown");
             } catch (InvocationTargetException ite) {
-                Assert.assertTrue(ite.getCause() instanceof UnsupportedOperationException);
+                Assertions.assertTrue(ite.getCause() instanceof UnsupportedOperationException);
             }
         } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException |
                  InvocationTargetException | InstantiationException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
     }
 

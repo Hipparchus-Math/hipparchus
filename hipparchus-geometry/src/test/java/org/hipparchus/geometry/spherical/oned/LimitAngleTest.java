@@ -23,8 +23,10 @@ package org.hipparchus.geometry.spherical.oned;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class LimitAngleTest {
 
@@ -32,18 +34,20 @@ public class LimitAngleTest {
     public void testReversedLimit() {
         for (int k = -2; k < 3; ++k) {
             LimitAngle l  = new LimitAngle(new S1Point(1.0 + k * MathUtils.TWO_PI), false, 1.0e-10);
-            Assert.assertEquals(l.getLocation().getAlpha(), l.getReverse().getLocation().getAlpha(), 1.0e-10);
-            Assert.assertEquals(l.getTolerance(), l.getReverse().getTolerance(), 1.0e-10);
-            Assert.assertTrue(l.sameOrientationAs(l));
-            Assert.assertFalse(l.sameOrientationAs(l.getReverse()));
-            Assert.assertEquals(MathUtils.TWO_PI, l.wholeSpace().getSize(), 1.0e-10);
-            Assert.assertEquals(MathUtils.TWO_PI, l.getReverse().wholeSpace().getSize(), 1.0e-10);
+            Assertions.assertEquals(l.getLocation().getAlpha(), l.getReverse().getLocation().getAlpha(), 1.0e-10);
+            Assertions.assertEquals(l.getTolerance(), l.getReverse().getTolerance(), 1.0e-10);
+            Assertions.assertTrue(l.sameOrientationAs(l));
+            Assertions.assertFalse(l.sameOrientationAs(l.getReverse()));
+            Assertions.assertEquals(MathUtils.TWO_PI, l.wholeSpace().getSize(), 1.0e-10);
+            Assertions.assertEquals(MathUtils.TWO_PI, l.getReverse().wholeSpace().getSize(), 1.0e-10);
         }
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testTooSmallTolerance() {
-        new LimitAngle(new S1Point(1.0), false, 0.9 * Sphere1D.SMALLEST_TOLERANCE);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new LimitAngle(new S1Point(1.0), false, 0.9 * Sphere1D.SMALLEST_TOLERANCE);
+        });
     }
 
 }

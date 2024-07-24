@@ -22,8 +22,10 @@
 package org.hipparchus.stat.interval;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test cases for the BinomialProportion implementations.
@@ -57,33 +59,43 @@ public abstract class BinomialProportionAbstractTest {
         return testMethod.calculate(trials, probabilityOfSuccess, confidenceLevel);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         testMethod = getBinomialProportionMethod();
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testZeroConfidencelevel() {
-        testMethod.calculate(trials, probabilityOfSuccess, 0d);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            testMethod.calculate(trials, probabilityOfSuccess, 0d);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testOneConfidencelevel() {
-        testMethod.calculate(trials, probabilityOfSuccess, 1d);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            testMethod.calculate(trials, probabilityOfSuccess, 1d);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testZeroTrials() {
-        testMethod.calculate(0, 0, confidenceLevel);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            testMethod.calculate(0, 0, confidenceLevel);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testNegativeSuccesses() {
-        testMethod.calculate(trials, -1, confidenceLevel);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            testMethod.calculate(trials, -1, confidenceLevel);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testSuccessesExceedingTrials() {
-        testMethod.calculate(trials, trials + 1, confidenceLevel);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            testMethod.calculate(trials, trials + 1, confidenceLevel);
+        });
     }
 }

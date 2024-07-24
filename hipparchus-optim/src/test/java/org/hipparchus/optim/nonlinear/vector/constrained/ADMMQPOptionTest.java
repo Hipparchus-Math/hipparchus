@@ -17,8 +17,8 @@
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class ADMMQPOptionTest {
 
@@ -37,12 +37,12 @@ public class ADMMQPOptionTest {
         option.setSigma(expectedValue);
         // THEN
         final double tolerance = 0.;
-        Assert.assertEquals(expectedValue, option.getAlpha(), tolerance);
-        Assert.assertEquals(expectedValue, option.getEps(), tolerance);
-        Assert.assertEquals(expectedValue, option.getEpsInfeasible(), tolerance);
-        Assert.assertEquals(expectedValue, option.getRhoMax(), tolerance);
-        Assert.assertEquals(expectedValue, option.getRhoMin(), tolerance);
-        Assert.assertEquals(expectedValue, option.getSigma(), tolerance);
+        Assertions.assertEquals(expectedValue, option.getAlpha(), tolerance);
+        Assertions.assertEquals(expectedValue, option.getEps(), tolerance);
+        Assertions.assertEquals(expectedValue, option.getEpsInfeasible(), tolerance);
+        Assertions.assertEquals(expectedValue, option.getRhoMax(), tolerance);
+        Assertions.assertEquals(expectedValue, option.getRhoMin(), tolerance);
+        Assertions.assertEquals(expectedValue, option.getSigma(), tolerance);
     }
 
     @Test
@@ -55,9 +55,9 @@ public class ADMMQPOptionTest {
         option.setUpdateRho(expectedValue);
         option.setScaling(expectedValue);
         // THEN
-        Assert.assertEquals(expectedValue, option.isPolishing());
-        Assert.assertEquals(expectedValue, option.updateRho());
-        Assert.assertEquals(expectedValue, option.isScaling());
+        Assertions.assertEquals(expectedValue, option.isPolishing());
+        Assertions.assertEquals(expectedValue, option.updateRho());
+        Assertions.assertEquals(expectedValue, option.isScaling());
     }
 
     @Test
@@ -70,9 +70,9 @@ public class ADMMQPOptionTest {
         option.setPolishingIteration(expectedValue);
         option.setScaleMaxIteration(expectedValue);
         // THEN
-        Assert.assertEquals(expectedValue, option.getMaxRhoIteration());
-        Assert.assertEquals(expectedValue, option.getPolishIteration());
-        Assert.assertEquals(expectedValue, option.getScaleMaxIteration());
+        Assertions.assertEquals(expectedValue, option.getMaxRhoIteration());
+        Assertions.assertEquals(expectedValue, option.getPolishIteration());
+        Assertions.assertEquals(expectedValue, option.getScaleMaxIteration());
     }
 
 }

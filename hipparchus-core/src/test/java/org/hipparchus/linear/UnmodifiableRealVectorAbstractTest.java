@@ -16,6 +16,8 @@
  */
 package org.hipparchus.linear;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -28,8 +30,8 @@ import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.linear.RealVector.Entry;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * This is an abstract test of the {@link
@@ -310,10 +312,10 @@ public abstract class UnmodifiableRealVectorAbstractTest {
         Object exp = m.invoke(u, args);
         if (equals(uu, u)) {
             Object act = m.invoke(v, args);
-            Assert.assertTrue(m.toGenericString() + ", unmodifiable vector has changed",
-                              equals(uu, v));
-            Assert.assertTrue(m.toGenericString() + ", wrong result",
-                              equals(exp, act));
+            Assertions.assertTrue(equals(uu, v),
+                              m.toGenericString() + ", unmodifiable vector has changed");
+            Assertions.assertTrue(equals(exp, act),
+                              m.toGenericString() + ", wrong result");
 
         } else {
             boolean flag = false;
@@ -324,7 +326,7 @@ public abstract class UnmodifiableRealVectorAbstractTest {
                     flag = true;
                 }
             }
-            Assert.assertTrue(m.toGenericString()+", exception should have been thrown", flag);
+            Assertions.assertTrue(flag, m.toGenericString()+", exception should have been thrown");
         }
     }
 
@@ -359,26 +361,30 @@ public abstract class UnmodifiableRealVectorAbstractTest {
         RealVector u = createVector();
         RealVector v = RealVector.unmodifiableRealVector(u);
         for (int i = 0; i < DIM; i++) {
-            Assert.assertTrue(equals(u.getEntry(i), v.getEntry(i)));
+            Assertions.assertTrue(equals(u.getEntry(i), v.getEntry(i)));
         }
     }
 
-    @Test(expected = MathRuntimeException.class)
+    @Test
     public void testSetEntry() {
-        RealVector u = createVector();
-        RealVector v = RealVector.unmodifiableRealVector(u);
-        for (int i = 0; i < DIM; i++) {
-            v.setEntry(i, 0d);
-        }
+        assertThrows(MathRuntimeException.class, () -> {
+            RealVector u = createVector();
+            RealVector v = RealVector.unmodifiableRealVector(u);
+            for (int i = 0; i < DIM; i++) {
+                v.setEntry(i, 0d);
+            }
+        });
     }
 
-    @Test(expected = MathRuntimeException.class)
+    @Test
     public void testAddToEntry() {
-        RealVector u = createVector();
-        RealVector v = RealVector.unmodifiableRealVector(u);
-        for (int i = 0; i < DIM; i++) {
-            v.addToEntry(i, 0d);
-        }
+        assertThrows(MathRuntimeException.class, () -> {
+            RealVector u = createVector();
+            RealVector v = RealVector.unmodifiableRealVector(u);
+            for (int i = 0; i < DIM; i++) {
+                v.addToEntry(i, 0d);
+            }
+        });
     }
 
     @Test
@@ -389,16 +395,18 @@ public abstract class UnmodifiableRealVectorAbstractTest {
             for (int n = 1; n < DIM - i; n++) {
                 RealVector exp = u.getSubVector(i, n);
                 RealVector act = v.getSubVector(i, n);
-                Assert.assertTrue(equals(exp, act));
+                Assertions.assertTrue(equals(exp, act));
             }
         }
     }
 
-    @Test(expected = MathRuntimeException.class)
+    @Test
     public void testSetSubVector() {
-        RealVector u = createVector();
-        RealVector v = RealVector.unmodifiableRealVector(u);
-        v.setSubVector(0, new ArrayRealVector());
+        assertThrows(MathRuntimeException.class, () -> {
+            RealVector u = createVector();
+            RealVector v = RealVector.unmodifiableRealVector(u);
+            v.setSubVector(0, new ArrayRealVector());
+        });
     }
 
     @Test
@@ -409,11 +417,11 @@ public abstract class UnmodifiableRealVectorAbstractTest {
         Iterator<Entry> j = v.iterator();
         boolean flag;
         while (i.hasNext()) {
-            Assert.assertTrue(j.hasNext());
+            Assertions.assertTrue(j.hasNext());
             Entry exp = i.next();
             Entry act = j.next();
-            Assert.assertTrue(equals(exp.getIndex(), act.getIndex()));
-            Assert.assertTrue(equals(exp.getValue(), act.getValue()));
+            Assertions.assertTrue(equals(exp.getIndex(), act.getIndex()));
+            Assertions.assertTrue(equals(exp.getValue(), act.getValue()));
             exp.setIndex(RANDOM.nextInt(DIM));
             act.setIndex(RANDOM.nextInt(DIM));
             flag = false;
@@ -422,9 +430,9 @@ public abstract class UnmodifiableRealVectorAbstractTest {
             } catch (MathRuntimeException e) {
                 flag = true;
             }
-            Assert.assertTrue("exception should have been thrown", flag);
+            Assertions.assertTrue(flag, "exception should have been thrown");
         }
-        Assert.assertFalse(j.hasNext());
+        Assertions.assertFalse(j.hasNext());
     }
 
     @Test
@@ -435,11 +443,11 @@ public abstract class UnmodifiableRealVectorAbstractTest {
         Iterator<Entry> j = v.sparseIterator();
         boolean flag;
         while (i.hasNext()) {
-            Assert.assertTrue(j.hasNext());
+            Assertions.assertTrue(j.hasNext());
             Entry exp = i.next();
             Entry act = j.next();
-            Assert.assertTrue(equals(exp.getIndex(), act.getIndex()));
-            Assert.assertTrue(equals(exp.getValue(), act.getValue()));
+            Assertions.assertTrue(equals(exp.getIndex(), act.getIndex()));
+            Assertions.assertTrue(equals(exp.getValue(), act.getValue()));
             exp.setIndex(RANDOM.nextInt(DIM));
             act.setIndex(RANDOM.nextInt(DIM));
             flag = false;
@@ -448,8 +456,8 @@ public abstract class UnmodifiableRealVectorAbstractTest {
             } catch (MathRuntimeException e) {
                 flag = true;
             }
-            Assert.assertTrue("exception should have been thrown", flag);
+            Assertions.assertTrue(flag, "exception should have been thrown");
         }
-        Assert.assertFalse(j.hasNext());
+        Assertions.assertFalse(j.hasNext());
     }
 }

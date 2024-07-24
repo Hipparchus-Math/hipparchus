@@ -20,8 +20,8 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class SQPOptimizerSTest extends AbstractTestAbstractSQPOptimizerTest {
 
@@ -121,9 +121,9 @@ public class SQPOptimizerSTest extends AbstractTestAbstractSQPOptimizerTest {
 
         // THEN
         final double[] expectedSolution = new double[] { 1, 1 };
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                 MatrixUtils.createRealVector(expectedSolution).subtract(solution.getX()).getL1Norm(), 2.5e-5);
-        Assert.assertEquals(8., solution.getValue(), 2e-4);
+        Assertions.assertEquals(8., solution.getValue(), 2e-4);
     }
 
     private OptimizationData[] createOptimizationData() {

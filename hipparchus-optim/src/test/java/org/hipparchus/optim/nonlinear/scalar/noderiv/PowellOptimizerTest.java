@@ -31,25 +31,29 @@ import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for {@link PowellOptimizer}.
  */
 public class PowellOptimizerTest {
-    @Test(expected=MathRuntimeException.class)
+    @Test
     public void testBoundsUnsupported() {
-        final MultivariateFunction func = new SumSincFunction(-1);
-        final PowellOptimizer optim = new PowellOptimizer(1e-8, 1e-5,
-                                                          1e-4, 1e-4);
+        assertThrows(MathRuntimeException.class, () -> {
+            final MultivariateFunction func = new SumSincFunction(-1);
+            final PowellOptimizer optim = new PowellOptimizer(1e-8, 1e-5,
+                1e-4, 1e-4);
 
-        optim.optimize(new MaxEval(100),
-                       new ObjectiveFunction(func),
-                       GoalType.MINIMIZE,
-                       new InitialGuess(new double[] { -3, 0 }),
-                       new SimpleBounds(new double[] { -5, -1 },
-                                        new double[] { 5, 1 }));
+            optim.optimize(new MaxEval(100),
+                new ObjectiveFunction(func),
+                GoalType.MINIMIZE,
+                new InitialGuess(new double[]{-3, 0}),
+                new SimpleBounds(new double[]{-5, -1},
+                    new double[]{5, 1}));
+        });
     }
 
     @Test
@@ -201,10 +205,10 @@ public class PowellOptimizerTest {
 
         // Check that both minima provide the same objective funciton values,
         // within the relative function tolerance.
-        Assert.assertEquals(1, funcScaledValue / (scale * funcValue), relTol);
+        Assertions.assertEquals(1, funcScaledValue / (scale * funcValue), relTol);
 
         // Check that the numbers of evaluations are the same.
-        Assert.assertEquals(funcEvaluations, funcScaledEvaluations);
+        Assertions.assertEquals(funcEvaluations, funcScaledEvaluations);
     }
 
     /**
@@ -231,8 +235,7 @@ public class PowellOptimizerTest {
         final double[] point = result.getPoint();
 
         for (int i = 0, dim = optimum.length; i < dim; i++) {
-            Assert.assertEquals("found[" + i + "]=" + point[i] + " value=" + result.getValue(),
-                                optimum[i], point[i], pointTol);
+            Assertions.assertEquals(optimum[i], point[i], pointTol, "found[" + i + "]=" + point[i] + " value=" + result.getValue());
         }
     }
 
@@ -264,10 +267,9 @@ public class PowellOptimizerTest {
         final double[] point = result.getPoint();
 
         for (int i = 0, dim = optimum.length; i < dim; i++) {
-            Assert.assertEquals("found[" + i + "]=" + point[i] + " value=" + result.getValue(),
-                                optimum[i], point[i], pointTol);
+            Assertions.assertEquals(optimum[i], point[i], pointTol, "found[" + i + "]=" + point[i] + " value=" + result.getValue());
         }
 
-        Assert.assertTrue(optim.getIterations() > 0);
+        Assertions.assertTrue(optim.getIterations() > 0);
     }
 }

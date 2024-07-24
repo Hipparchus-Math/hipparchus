@@ -17,8 +17,8 @@
 package org.hipparchus.util;
 
 import org.hipparchus.CalculusFieldElementAbstractTest;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class TupleTest extends CalculusFieldElementAbstractTest<Tuple> {
     public static final double X = 1.2345;
@@ -44,41 +44,41 @@ public class TupleTest extends CalculusFieldElementAbstractTest<Tuple> {
 
     @Test
     public void testComponents() {
-        Assert.assertEquals(2, PLUS_ZERO.getDimension());
+        Assertions.assertEquals(2, PLUS_ZERO.getDimension());
         final Tuple oneToFive = new Tuple(1, 2, 3, 4, 5);
-        Assert.assertEquals(5, oneToFive.getDimension());
-        Assert.assertArrayEquals(new double[] { 1,  2,  3, 4, 5 }, oneToFive.getComponents(), 1.0e-10);
-        Assert.assertEquals(1, oneToFive.getComponent(0), 1.0e-10);
-        Assert.assertEquals(2, oneToFive.getComponent(1), 1.0e-10);
-        Assert.assertEquals(3, oneToFive.getComponent(2), 1.0e-10);
-        Assert.assertEquals(4, oneToFive.getComponent(3), 1.0e-10);
-        Assert.assertEquals(5, oneToFive.getComponent(4), 1.0e-10);
+        Assertions.assertEquals(5, oneToFive.getDimension());
+        Assertions.assertArrayEquals(new double[] { 1,  2,  3, 4, 5 }, oneToFive.getComponents(), 1.0e-10);
+        Assertions.assertEquals(1, oneToFive.getComponent(0), 1.0e-10);
+        Assertions.assertEquals(2, oneToFive.getComponent(1), 1.0e-10);
+        Assertions.assertEquals(3, oneToFive.getComponent(2), 1.0e-10);
+        Assertions.assertEquals(4, oneToFive.getComponent(3), 1.0e-10);
+        Assertions.assertEquals(5, oneToFive.getComponent(4), 1.0e-10);
     }
 
     @Test
     public void testEquals() {
-        Assert.assertNotEquals(PLUS_ZERO, null);
-        Assert.assertEquals(PLUS_ZERO, PLUS_ZERO);
-        Assert.assertEquals(PLUS_X,    PLUS_X);
-        Assert.assertEquals(PLUS_Y,    PLUS_Y);
-        Assert.assertEquals(MINUS_X,   MINUS_X);
-        Assert.assertEquals(MINUS_Y,   MINUS_Y);
-        Assert.assertNotEquals(PLUS_X,  new Tuple(1, 2, 3, 4, 5));
-        Assert.assertNotEquals(PLUS_X,  new Tuple(PLUS_X.getComponent(0), 999.999));
-        Assert.assertNotEquals(PLUS_ZERO.getField(), null);
-        Assert.assertNotEquals(PLUS_X.getField(), new Tuple(1, 2, 3, 4, 5).getField());
-        Assert.assertEquals(PLUS_ZERO.getField(), MINUS_Y.getField());
+        Assertions.assertNotEquals(PLUS_ZERO, null);
+        Assertions.assertEquals(PLUS_ZERO, PLUS_ZERO);
+        Assertions.assertEquals(PLUS_X,    PLUS_X);
+        Assertions.assertEquals(PLUS_Y,    PLUS_Y);
+        Assertions.assertEquals(MINUS_X,   MINUS_X);
+        Assertions.assertEquals(MINUS_Y,   MINUS_Y);
+        Assertions.assertNotEquals(PLUS_X,  new Tuple(1, 2, 3, 4, 5));
+        Assertions.assertNotEquals(PLUS_X,  new Tuple(PLUS_X.getComponent(0), 999.999));
+        Assertions.assertNotEquals(null, PLUS_ZERO.getField());
+        Assertions.assertNotEquals(PLUS_X.getField(), new Tuple(1, 2, 3, 4, 5).getField());
+        Assertions.assertEquals(PLUS_ZERO.getField(), MINUS_Y.getField());
     }
 
     @Test
     public void testHashcode() {
-        Assert.assertEquals(1718765887, PLUS_ZERO.getField().hashCode());
-        Assert.assertEquals(884058117, PLUS_ZERO.hashCode());
-        Assert.assertEquals(884058117, MINUS_ZERO.hashCode());
-        Assert.assertEquals(-396588603, PLUS_X.hashCode());
-        Assert.assertEquals(-396588603, MINUS_X.hashCode());
-        Assert.assertEquals(851552261, new Tuple(1, 2).hashCode());
-        Assert.assertEquals(883009541, new Tuple(2, 1).hashCode());
+        Assertions.assertEquals(1718765887, PLUS_ZERO.getField().hashCode());
+        Assertions.assertEquals(884058117, PLUS_ZERO.hashCode());
+        Assertions.assertEquals(884058117, MINUS_ZERO.hashCode());
+        Assertions.assertEquals(-396588603, PLUS_X.hashCode());
+        Assertions.assertEquals(-396588603, MINUS_X.hashCode());
+        Assertions.assertEquals(851552261, new Tuple(1, 2).hashCode());
+        Assertions.assertEquals(883009541, new Tuple(2, 1).hashCode());
     }
 
     @Test
@@ -87,21 +87,21 @@ public class TupleTest extends CalculusFieldElementAbstractTest<Tuple> {
 
         expected = new Tuple(X + Y, X + Y);
         actual = PLUS_X.add(PLUS_Y);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
         actual = PLUS_Y.add(PLUS_X);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = new Tuple(X + (-Y), X + (-Y));
         actual = PLUS_X.add(MINUS_Y);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
         actual = MINUS_Y.add(PLUS_X);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = new Tuple((-X) + (-Y), (-X) + (-Y));
         actual = MINUS_X.add(MINUS_Y);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
         actual = MINUS_Y.add(MINUS_X);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
     }
 
@@ -111,19 +111,19 @@ public class TupleTest extends CalculusFieldElementAbstractTest<Tuple> {
 
         expected = new Tuple(X - Y, X - Y);
         actual = PLUS_X.subtract(PLUS_Y);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = new Tuple(X - (-Y), X - (-Y));
         actual = PLUS_X.subtract(MINUS_Y);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = new Tuple((-X) - Y, (-X) - Y);
         actual = MINUS_X.subtract(PLUS_Y);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = new Tuple((-X) - (-Y), (-X) - (-Y));
         actual = MINUS_X.subtract(MINUS_Y);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
     }
 
@@ -133,19 +133,19 @@ public class TupleTest extends CalculusFieldElementAbstractTest<Tuple> {
 
         expected = MINUS_X;
         actual = PLUS_X.negate();
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = PLUS_X;
         actual = MINUS_X.negate();
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = MINUS_ZERO;
         actual = PLUS_ZERO.negate();
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = PLUS_ZERO;
         actual = MINUS_ZERO.negate();
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
     }
 
@@ -155,21 +155,21 @@ public class TupleTest extends CalculusFieldElementAbstractTest<Tuple> {
 
         expected = new Tuple(X * Y, X * Y);
         actual = PLUS_X.multiply(PLUS_Y);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
         actual = PLUS_Y.multiply(PLUS_X);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = new Tuple(X * (-Y), X * (-Y));
         actual = PLUS_X.multiply(MINUS_Y);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
         actual = MINUS_Y.multiply(PLUS_X);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = new Tuple((-X) * (-Y), (-X) * (-Y));
         actual = MINUS_X.multiply(MINUS_Y);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
         actual = MINUS_Y.multiply(MINUS_X);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
     }
 
@@ -179,19 +179,19 @@ public class TupleTest extends CalculusFieldElementAbstractTest<Tuple> {
 
         expected = new Tuple(X / Y, X / Y);
         actual = PLUS_X.divide(PLUS_Y);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = new Tuple(X / (-Y), X / (-Y));
         actual = PLUS_X.divide(MINUS_Y);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = new Tuple((-X) / Y, (-X) / Y);
         actual = MINUS_X.divide(PLUS_Y);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = new Tuple((-X) / (-Y), (-X) / (-Y));
         actual = MINUS_X.divide(MINUS_Y);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
     }
 
@@ -201,19 +201,19 @@ public class TupleTest extends CalculusFieldElementAbstractTest<Tuple> {
 
         expected = new Tuple(1.0 / X, 1.0 / X);
         actual = PLUS_X.reciprocal();
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = new Tuple(1.0 / (-X), 1.0 / (-X));
         actual = MINUS_X.reciprocal();
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = PLUS_ZERO;
         actual = new Tuple(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY).reciprocal();
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         expected = MINUS_ZERO;
         actual = new Tuple(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY).reciprocal();
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -222,7 +222,7 @@ public class TupleTest extends CalculusFieldElementAbstractTest<Tuple> {
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             for (double x = 0.1; x < 1.2; x += 0.001) {
                 Tuple value = new Tuple(x, x);
-                Assert.assertEquals(FastMath.toDegrees(x), value.toDegrees().getReal(), epsilon);
+                Assertions.assertEquals(FastMath.toDegrees(x), value.toDegrees().getReal(), epsilon);
             }
         }
     }
@@ -233,7 +233,7 @@ public class TupleTest extends CalculusFieldElementAbstractTest<Tuple> {
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             for (double x = 0.1; x < 1.2; x += 0.001) {
                 Tuple value = new Tuple(x, x);
-                Assert.assertEquals(FastMath.toRadians(x), value.toRadians().getReal(), epsilon);
+                Assertions.assertEquals(FastMath.toRadians(x), value.toRadians().getReal(), epsilon);
             }
         }
     }
@@ -244,7 +244,7 @@ public class TupleTest extends CalculusFieldElementAbstractTest<Tuple> {
             Tuple value = new Tuple(x, x);
             Tuple rebuilt = value.toDegrees().toRadians();
             Tuple zero = rebuilt.subtract(value);
-            Assert.assertEquals(zero.getReal(), 0, 3.0e-16);
+            Assertions.assertEquals(0, zero.getReal(), 3.0e-16);
         }
     }
 

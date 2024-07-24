@@ -22,11 +22,6 @@
 
 package org.hipparchus.geometry.euclidean.oned;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.Locale;
-
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Space;
@@ -34,8 +29,13 @@ import org.hipparchus.geometry.euclidean.twod.FieldVector2D;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class Vector1DTest {
     @Test
@@ -58,12 +58,12 @@ public class Vector1DTest {
     @Test
     public void testSpace() {
         Space space = new Vector1D(1).getSpace();
-        Assert.assertEquals(1, space.getDimension());
+        Assertions.assertEquals(1, space.getDimension());
     }
 
     @Test
     public void testZero() {
-        Assert.assertEquals(0, new Vector1D(1).getZero().getNorm(), 1.0e-15);
+        Assertions.assertEquals(0, new Vector1D(1).getZero().getNorm(), 1.0e-15);
     }
 
     @SuppressWarnings("unlikely-arg-type")
@@ -71,112 +71,112 @@ public class Vector1DTest {
     public void testEquals() {
         Vector1D u1 = new Vector1D(1);
         Vector1D u2 = new Vector1D(1);
-        Assert.assertTrue(u1.equals(u1));
-        Assert.assertTrue(u1.equals(u2));
-        Assert.assertFalse(u1.equals(FieldVector2D.getPlusI(Binary64Field.getInstance())));
-        Assert.assertFalse(u1.equals(new Vector1D(1 + 10 * Precision.EPSILON)));
-        Assert.assertTrue(new Vector1D(Double.NaN).equals(new Vector1D(Double.NaN)));
-        Assert.assertTrue(Vector1D.NaN.equals(Vector1D.NaN));
+        Assertions.assertEquals(u1, u1);
+        Assertions.assertEquals(u1, u2);
+        Assertions.assertNotEquals(u1, FieldVector2D.getPlusI(Binary64Field.getInstance()));
+        Assertions.assertNotEquals(u1, new Vector1D(1 + 10 * Precision.EPSILON));
+        Assertions.assertEquals(new Vector1D(Double.NaN), new Vector1D(Double.NaN));
+        Assertions.assertEquals(Vector1D.NaN, Vector1D.NaN);
     }
 
     @Test
     public void testEqualsIeee754() {
         Vector1D u1 = new Vector1D(1);
         Vector1D u2 = new Vector1D(1);
-        Assert.assertTrue(u1.equalsIeee754(u1));
-        Assert.assertTrue(u1.equalsIeee754(u2));
-        Assert.assertFalse(u1.equalsIeee754(FieldVector2D.getPlusI(Binary64Field.getInstance())));
-        Assert.assertFalse(u1.equalsIeee754(new Vector1D(1 + 10 * Precision.EPSILON)));
-        Assert.assertFalse(new Vector1D(Double.NaN).equalsIeee754(new Vector1D(Double.NaN)));
-        Assert.assertFalse(Vector1D.NaN.equalsIeee754(Vector1D.NaN));
-        Assert.assertFalse(Vector1D.NaN.equalsIeee754(Vector1D.NaN));
+        Assertions.assertTrue(u1.equalsIeee754(u1));
+        Assertions.assertTrue(u1.equalsIeee754(u2));
+        Assertions.assertFalse(u1.equalsIeee754(FieldVector2D.getPlusI(Binary64Field.getInstance())));
+        Assertions.assertFalse(u1.equalsIeee754(new Vector1D(1 + 10 * Precision.EPSILON)));
+        Assertions.assertFalse(new Vector1D(Double.NaN).equalsIeee754(new Vector1D(Double.NaN)));
+        Assertions.assertFalse(Vector1D.NaN.equalsIeee754(Vector1D.NaN));
+        Assertions.assertFalse(Vector1D.NaN.equalsIeee754(Vector1D.NaN));
     }
 
     @Test
     public void testHash() {
-        Assert.assertEquals(new Vector1D(Double.NaN).hashCode(), new Vector1D(Double.NaN).hashCode());
+        Assertions.assertEquals(new Vector1D(Double.NaN).hashCode(), new Vector1D(Double.NaN).hashCode());
         Vector1D u = new Vector1D(1);
         Vector1D v = new Vector1D(1 + 10 * Precision.EPSILON);
-        Assert.assertTrue(u.hashCode() != v.hashCode());
+        Assertions.assertTrue(u.hashCode() != v.hashCode());
     }
 
     @Test
     public void testInfinite() {
-        Assert.assertTrue(new Vector1D(Double.NEGATIVE_INFINITY).isInfinite());
-        Assert.assertTrue(new Vector1D(Double.POSITIVE_INFINITY).isInfinite());
-        Assert.assertFalse(new Vector1D(1).isInfinite());
-        Assert.assertFalse(new Vector1D(Double.NaN).isInfinite());
+        Assertions.assertTrue(new Vector1D(Double.NEGATIVE_INFINITY).isInfinite());
+        Assertions.assertTrue(new Vector1D(Double.POSITIVE_INFINITY).isInfinite());
+        Assertions.assertFalse(new Vector1D(1).isInfinite());
+        Assertions.assertFalse(new Vector1D(Double.NaN).isInfinite());
     }
 
     @Test
     public void testNaN() {
-        Assert.assertTrue(new Vector1D(Double.NaN).isNaN());
-        Assert.assertFalse(new Vector1D(1).isNaN());
-        Assert.assertFalse(new Vector1D(Double.NEGATIVE_INFINITY).isNaN());
+        Assertions.assertTrue(new Vector1D(Double.NaN).isNaN());
+        Assertions.assertFalse(new Vector1D(1).isNaN());
+        Assertions.assertFalse(new Vector1D(Double.NEGATIVE_INFINITY).isNaN());
     }
 
     @Test
     public void testToString() {
-        Assert.assertEquals("{3}", new Vector1D(3).toString());
+        Assertions.assertEquals("{3}", new Vector1D(3).toString());
         NumberFormat format = new DecimalFormat("0.000", new DecimalFormatSymbols(Locale.US));
-        Assert.assertEquals("{3.000}", new Vector1D(3).toString(format));
+        Assertions.assertEquals("{3.000}", new Vector1D(3).toString(format));
     }
 
     @Test
     public void testCoordinates() {
         Vector1D v = new Vector1D(1);
-        Assert.assertTrue(FastMath.abs(v.getX() - 1) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(v.getX() - 1) < 1.0e-12);
     }
 
     @Test
     public void testNorm1() {
-        Assert.assertEquals(0.0, Vector1D.ZERO.getNorm1(), 0);
-        Assert.assertEquals(6.0, new Vector1D(6).getNorm1(), 0);
+        Assertions.assertEquals(0.0, Vector1D.ZERO.getNorm1(), 0);
+        Assertions.assertEquals(6.0, new Vector1D(6).getNorm1(), 0);
     }
 
     @Test
     public void testNorm() {
-        Assert.assertEquals(0.0, Vector1D.ZERO.getNorm(), 0);
-        Assert.assertEquals(3.0, new Vector1D(-3).getNorm(), 1.0e-12);
+        Assertions.assertEquals(0.0, Vector1D.ZERO.getNorm(), 0);
+        Assertions.assertEquals(3.0, new Vector1D(-3).getNorm(), 1.0e-12);
     }
 
     @Test
     public void testNormSq() {
-        Assert.assertEquals(0.0, new Vector1D(0).getNormSq(), 0);
-        Assert.assertEquals(9.0, new Vector1D(-3).getNormSq(), 1.0e-12);
+        Assertions.assertEquals(0.0, new Vector1D(0).getNormSq(), 0);
+        Assertions.assertEquals(9.0, new Vector1D(-3).getNormSq(), 1.0e-12);
     }
 
     @Test
     public void testNormInf() {
-        Assert.assertEquals(0.0, Vector1D.ZERO.getNormInf(), 0);
-        Assert.assertEquals(3.0, new Vector1D(-3).getNormInf(), 0);
+        Assertions.assertEquals(0.0, Vector1D.ZERO.getNormInf(), 0);
+        Assertions.assertEquals(3.0, new Vector1D(-3).getNormInf(), 0);
     }
 
     @Test
     public void testDistance1() {
         Vector1D v1 = new Vector1D(1);
         Vector1D v2 = new Vector1D(-4);
-        Assert.assertEquals(0.0, new Vector1D(-1).distance1(new Vector1D(-1)), 0);
-        Assert.assertEquals(5.0, v1.distance1(v2), 1.0e-12);
-        Assert.assertEquals(v1.subtract(v2).getNorm1(), v1.distance1(v2), 1.0e-12);
+        Assertions.assertEquals(0.0, new Vector1D(-1).distance1(new Vector1D(-1)), 0);
+        Assertions.assertEquals(5.0, v1.distance1(v2), 1.0e-12);
+        Assertions.assertEquals(v1.subtract(v2).getNorm1(), v1.distance1(v2), 1.0e-12);
     }
 
     @Test
     public void testDistance() {
         Vector1D v1 = new Vector1D(1);
         Vector1D v2 = new Vector1D(-4);
-        Assert.assertEquals(0.0, Vector1D.distance(new Vector1D(-1), new Vector1D(-1)), 0);
-        Assert.assertEquals(5.0, Vector1D.distance(v1, v2), 1.0e-12);
-        Assert.assertEquals(v1.subtract(v2).getNorm(), Vector1D.distance(v1, v2), 1.0e-12);
+        Assertions.assertEquals(0.0, Vector1D.distance(new Vector1D(-1), new Vector1D(-1)), 0);
+        Assertions.assertEquals(5.0, Vector1D.distance(v1, v2), 1.0e-12);
+        Assertions.assertEquals(v1.subtract(v2).getNorm(), Vector1D.distance(v1, v2), 1.0e-12);
     }
 
     @Test
     public void testDistanceSq() {
         Vector1D v1 = new Vector1D(1);
         Vector1D v2 = new Vector1D(-4);
-        Assert.assertEquals(0.0, Vector1D.distanceSq(new Vector1D(-1), new Vector1D(-1)), 0);
-        Assert.assertEquals(25.0, Vector1D.distanceSq(v1, v2), 1.0e-12);
-        Assert.assertEquals(Vector1D.distance(v1, v2) * Vector1D.distance(v1, v2),
+        Assertions.assertEquals(0.0, Vector1D.distanceSq(new Vector1D(-1), new Vector1D(-1)), 0);
+        Assertions.assertEquals(25.0, Vector1D.distanceSq(v1, v2), 1.0e-12);
+        Assertions.assertEquals(Vector1D.distance(v1, v2) * Vector1D.distance(v1, v2),
                             Vector1D.distanceSq(v1, v2), 1.0e-12);
   }
 
@@ -184,9 +184,9 @@ public class Vector1DTest {
     public void testDistanceInf() {
         Vector1D v1 = new Vector1D(1);
         Vector1D v2 = new Vector1D(-4);
-        Assert.assertEquals(0.0, Vector1D.distanceInf(new Vector1D(-1), new Vector1D(-1)), 0);
-        Assert.assertEquals(5.0, Vector1D.distanceInf(v1, v2), 1.0e-12);
-        Assert.assertEquals(v1.subtract(v2).getNormInf(), Vector1D.distanceInf(v1, v2), 1.0e-12);
+        Assertions.assertEquals(0.0, Vector1D.distanceInf(new Vector1D(-1), new Vector1D(-1)), 0);
+        Assertions.assertEquals(5.0, Vector1D.distanceInf(v1, v2), 1.0e-12);
+        Assertions.assertEquals(v1.subtract(v2).getNormInf(), Vector1D.distanceInf(v1, v2), 1.0e-12);
     }
 
     @Test
@@ -222,10 +222,10 @@ public class Vector1DTest {
 
     @Test
     public void testNormalize() throws MathRuntimeException {
-        Assert.assertEquals(1.0, new Vector1D(5).normalize().getNorm(), 1.0e-12);
+        Assertions.assertEquals(1.0, new Vector1D(5).normalize().getNorm(), 1.0e-12);
         try {
             Vector1D.ZERO.normalize();
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathRuntimeException ae) {
             // expected behavior
         }
@@ -253,6 +253,6 @@ public class Vector1DTest {
     }
 
     private void checkVector(Vector1D v, double x) {
-        Assert.assertEquals(x, v.getX(), 1.0e-12);
+        Assertions.assertEquals(x, v.getX(), 1.0e-12);
     }
 }

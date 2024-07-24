@@ -21,13 +21,6 @@
  */
 package org.hipparchus.stat.descriptive.rank;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.Arrays;
-
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
@@ -38,8 +31,17 @@ import org.hipparchus.stat.descriptive.rank.Percentile.EstimationType;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.util.KthSelector;
 import org.hipparchus.util.PivotingStrategy;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for the {@link Percentile} class.
@@ -73,7 +75,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     /**
      * Before method to ensure defaults retained
      */
-    @Before
+    @BeforeEach
     public void setup() {
         quantile         = 95.0;
         type             = Percentile.EstimationType.LEGACY;
@@ -192,8 +194,8 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
         specialValues = new double[] {1d, 1d, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
         assertTrue(Double.isInfinite(percentile.evaluate(specialValues)));
         specialValues = new double[] {1d, 1d, Double.NaN, Double.NaN};
-        assertTrue(!Double.isNaN(percentile.evaluate(specialValues)));
-        assertTrue(1d==percentile.evaluate(specialValues));
+        assertFalse(Double.isNaN(percentile.evaluate(specialValues)));
+        assertEquals(1d, percentile.evaluate(specialValues));
         specialValues = new double[] {1d, 1d, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY};
         // Interpolation results in NEGATIVE_INFINITY + POSITIVE_INFINITY
         assertTrue(Double.isNaN(percentile.evaluate(specialValues)));
@@ -531,8 +533,8 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     public void testPercentileWithTechnique() {
         reset (50, Percentile.EstimationType.LEGACY);;
         final Percentile p = getUnivariateStatistic();
-        assertTrue(Percentile.EstimationType.LEGACY.equals(p.getEstimationType()));
-        assertFalse(Percentile.EstimationType.R_1.equals(p.getEstimationType()));
+        assertEquals(Percentile.EstimationType.LEGACY, p.getEstimationType());
+        assertNotEquals(Percentile.EstimationType.R_1, p.getEstimationType());
     }
 
     static final int TINY = 10, SMALL = 50, NOMINAL = 100, MEDIUM = 500,
@@ -554,9 +556,8 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
                     final double storedDataResult=pStoredData.evaluate();
                     pStoredData.setData(null);
                     final Percentile pDirect = getUnivariateStatistic();
-                    assertEquals("Sample="+sampleSize+",P="+p+" e="+e,
-                                 storedDataResult,
-                                 pDirect.evaluate(data), 0d);
+                    assertEquals(storedDataResult,
+                                 pDirect.evaluate(data), 0d, "Sample="+sampleSize+",P="+p+" e="+e);
                 }
             }
         }
@@ -567,16 +568,18 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
         reset(50.0, Percentile.EstimationType.R_7);
         final Percentile p = getUnivariateStatistic();
         p.setData(testArray);
-        assertTrue(Percentile.EstimationType.R_7.equals(p.getEstimationType()));
-        assertFalse(Percentile.EstimationType.R_1.equals(p.getEstimationType()));
+        assertEquals(Percentile.EstimationType.R_7, p.getEstimationType());
+        assertNotEquals(Percentile.EstimationType.R_1, p.getEstimationType());
         assertEquals(12d, p.evaluate(), 0d);
         assertEquals(12.16d, p.evaluate(60d), 0d);
     }
 
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void testNullEstimation() {
-        type = null;
-        getUnivariateStatistic();
+        assertThrows(NullArgumentException.class, () -> {
+            type = null;
+            getUnivariateStatistic();
+        });
     }
 
     @Test
@@ -602,8 +605,8 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
             final Percentile.EstimationType t= (Percentile.EstimationType) arr[0];
             double pMin=(Double)arr[1];
             final double pMax=(Double)arr[2];
-            assertEquals("Type:"+t,0d, t.index(pMin, N),0d);
-            assertEquals("Type:"+t,N, t.index(pMax, N),0.5d);
+            assertEquals(0d, t.index(pMin, N),0d,"Type:"+t);
+            assertEquals(N, t.index(pMax, N),0.5d,"Type:"+t);
             pMin=pMin==0d?pMin+0.01:pMin;
             testAssertMappedValues(testArray, new Object[][] { { t, min }}, pMin, 0.01);
             testAssertMappedValues(testArray, new Object[][] { { t, max }}, pMax * 100, tolerance);
@@ -634,8 +637,8 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
             final Percentile.EstimationType e = (Percentile.EstimationType) o[0];
             final double expected = (Double) o[1];
             final double result = e.evaluate(testArray, DEFAULT_PERCENTILE, new KthSelector());
-            assertEquals("expected[" + e + "] = " + expected +
-                    " but was = " + result, expected, result, tolerance);
+            assertEquals(expected, result, tolerance, "expected[" + e + "] = " + expected +
+                    " but was = " + result);
         }
     }
 
@@ -661,7 +664,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
         for (final Object[] o : map) {
             final Percentile.EstimationType e = (Percentile.EstimationType) o[0];
                 assertEquals(((Double)o[1]).doubleValue(), e.index(0d, (int)MAX),0d);
-                assertEquals("Enum:"+e,((Double)o[2]).doubleValue(), e.index(1.0, (int)MAX),0d);
+                assertEquals(((Double)o[2]).doubleValue(), e.index(1.0, (int)MAX),0d,"Enum:"+e);
             }
     }
 
@@ -707,8 +710,8 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
             try {
                 reset(p, e);
                 final double result = getUnivariateStatistic().evaluate(data);
-                assertEquals("expected[" + e + "] = " + expected +
-                             " but was = " + result, expected, result, tolerance);
+                assertEquals(expected, result, tolerance, "expected[" + e + "] = " + expected +
+                             " but was = " + result);
             } catch(final Exception ex) {
                 fail("Exception occured for estimation type "+e+":"+
                      ex.getLocalizedMessage());
@@ -739,14 +742,16 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     // Some NaNStrategy specific testing
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNanStrategyFailed() {
-        double[] specialValues =
-                new double[] { 0d, 1d, 2d, 3d, 4d, Double.NaN };
-        new Percentile(50d).
-        withEstimationType(Percentile.EstimationType.R_9).
-        withNaNStrategy(NaNStrategy.FAILED).
-        evaluate(specialValues);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] specialValues =
+                new double[]{0d, 1d, 2d, 3d, 4d, Double.NaN};
+            new Percentile(50d).
+                withEstimationType(Percentile.EstimationType.R_9).
+                withNaNStrategy(NaNStrategy.FAILED).
+                evaluate(specialValues);
+        });
     }
 
     @Test
@@ -805,8 +810,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
             double expected = (Double) o[1];
             try {
                 double result = new Percentile(p).withEstimationType(e).withNaNStrategy(nanStrategy).evaluate(data);
-                assertEquals("expected[" + e + "] = " + expected + " but was = " + result,
-                                    expected, result, tolerance);
+                assertEquals(expected, result, tolerance, "expected[" + e + "] = " + expected + " but was = " + result);
             } catch(Exception ex) {
                 fail("Exception occured for estimation type " + e + ":" + ex.getLocalizedMessage());
             }

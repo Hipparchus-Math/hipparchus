@@ -16,17 +16,17 @@
  */
 package org.hipparchus.analysis.differentiation;
 
-import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.CalculusFieldElementAbstractTest;
+import org.hipparchus.Field;
 import org.hipparchus.analysis.FieldUnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for class {@link FieldUnivariateDerivative1}.
@@ -58,28 +58,28 @@ public abstract class FieldUnivariateDerivative1AbstractTest<T extends CalculusF
 
     @Test
     public void testOrder() {
-        Assert.assertEquals(getMaxOrder(), build(0).getOrder());
+        Assertions.assertEquals(getMaxOrder(), build(0).getOrder());
     }
 
     @Test
     public void testNewInstance() {
         FieldUnivariateDerivative1<T> ud = build(5.25);
-        Assert.assertEquals(5.25, ud.getValue().getReal(), 1.0e-15);
-        Assert.assertEquals(1.0,  ud.getDerivative(1).getReal(), 1.0e-15);
+        Assertions.assertEquals(5.25, ud.getValue().getReal(), 1.0e-15);
+        Assertions.assertEquals(1.0,  ud.getDerivative(1).getReal(), 1.0e-15);
         FieldUnivariateDerivative1<T> newInstance = ud.newInstance(7.5);
-        Assert.assertEquals(7.5, newInstance.getValue().getReal(), 1.0e-15);
-        Assert.assertEquals(0.0, newInstance.getDerivative(1).getReal(), 1.0e-15);
+        Assertions.assertEquals(7.5, newInstance.getValue().getReal(), 1.0e-15);
+        Assertions.assertEquals(0.0, newInstance.getDerivative(1).getReal(), 1.0e-15);
     }
 
     @Test
     public void testGetPartialDerivative() {
         try {
             build(3.0).getPartialDerivative(0, 1);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch( MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assert.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(1, ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(1, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -89,37 +89,44 @@ public abstract class FieldUnivariateDerivative1AbstractTest<T extends CalculusF
         FieldUnivariateDerivative1<T> ud = x.square();
         try {
             ud.getDerivative(-1);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
         }
-        Assert.assertEquals(9.0, ud.getValue().getReal(), 1.0e-15);
-        Assert.assertEquals(9.0, ud.getDerivative(0).getReal(), 1.0e-15);
-        Assert.assertEquals(6.0, ud.getDerivative(1).getReal(), 1.0e-15);
+        Assertions.assertEquals(9.0, ud.getValue().getReal(), 1.0e-15);
+        Assertions.assertEquals(9.0, ud.getDerivative(0).getReal(), 1.0e-15);
+        Assertions.assertEquals(6.0, ud.getDerivative(1).getReal(), 1.0e-15);
         for (int n = 2; n <= getMaxOrder(); ++n) {
-            Assert.assertEquals(n == 2 ? 2.0 : 0.0, ud.getDerivative(n).getReal(), 1.0e-15);
+            Assertions.assertEquals(n == 2 ? 2.0 : 0.0, ud.getDerivative(n).getReal(), 1.0e-15);
         }
         try {
             ud.getDerivative(getMaxOrder() + 1);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
         }
     }
 
     @Test
     public void testGetFreeParameters() {
-        Assert.assertEquals(1, build(3.0).getFreeParameters());
+        Assertions.assertEquals(1, build(3.0).getFreeParameters());
     }
 
-    protected void checkAgainstDS(final double x, final FieldUnivariateFunction f) {
+    protected void checkAgainstDS(final double x,
+                                  final FieldUnivariateFunction f) {
         final FieldUnivariateDerivative1<T> xUD = build(x);
         final FieldUnivariateDerivative1<T> yUD = f.value(xUD);
-        final FieldDerivativeStructure<T> yDS = f.value(xUD.toDerivativeStructure());
+        final FieldDerivativeStructure<T> yDS = f.value(
+                        xUD.toDerivativeStructure());
         for (int i = 0; i <= yUD.getOrder(); ++i) {
-            Assert.assertEquals(yDS.getPartialDerivative(i).getReal(),
-                                yUD.getDerivative(i).getReal(),
-                                4.0e-14* FastMath.abs(yDS.getPartialDerivative(i).getReal()));
+            if (Double.isNaN(yDS.getPartialDerivative(i).getReal())) {
+                Assertions.assertEquals(yDS.getPartialDerivative(i).getReal(),
+                                        yUD.getDerivative(i).getReal());
+            } else {
+                Assertions.assertEquals(yDS.getPartialDerivative(i).getReal(),
+                                        yUD.getDerivative(i).getReal(),
+                                        4.0e-14 * FastMath.abs(yDS.getPartialDerivative(i).getReal()));
+            }
         }
     }
 
@@ -147,18 +154,18 @@ public abstract class FieldUnivariateDerivative1AbstractTest<T extends CalculusF
     public void testCopySignField() {
 
         FieldUnivariateDerivative1<T> minusOne = build(-1.0);
-        Assert.assertEquals(+1.0, minusOne.copySign(buildScalar(+1.0)).getReal(), 1.0e-15);
-        Assert.assertEquals(-1.0, minusOne.copySign(buildScalar(-1.0)).getReal(), 1.0e-15);
-        Assert.assertEquals(+1.0, minusOne.copySign(buildScalar(+0.0)).getReal(), 1.0e-15);
-        Assert.assertEquals(-1.0, minusOne.copySign(buildScalar(-0.0)).getReal(), 1.0e-15);
-        Assert.assertEquals(+1.0, minusOne.copySign(buildScalar(Double.NaN)).getReal(), 1.0e-15);
+        Assertions.assertEquals(+1.0, minusOne.copySign(buildScalar(+1.0)).getReal(), 1.0e-15);
+        Assertions.assertEquals(-1.0, minusOne.copySign(buildScalar(-1.0)).getReal(), 1.0e-15);
+        Assertions.assertEquals(+1.0, minusOne.copySign(buildScalar(+0.0)).getReal(), 1.0e-15);
+        Assertions.assertEquals(-1.0, minusOne.copySign(buildScalar(-0.0)).getReal(), 1.0e-15);
+        Assertions.assertEquals(+1.0, minusOne.copySign(buildScalar(Double.NaN)).getReal(), 1.0e-15);
 
         FieldUnivariateDerivative1<T> plusOne = build(1.0);
-        Assert.assertEquals(+1.0, plusOne.copySign(buildScalar(+1.0)).getReal(), 1.0e-15);
-        Assert.assertEquals(-1.0, plusOne.copySign(buildScalar(-1.0)).getReal(), 1.0e-15);
-        Assert.assertEquals(+1.0, plusOne.copySign(buildScalar(+0.0)).getReal(), 1.0e-15);
-        Assert.assertEquals(-1.0, plusOne.copySign(buildScalar(-0.0)).getReal(), 1.0e-15);
-        Assert.assertEquals(+1.0, plusOne.copySign(buildScalar(Double.NaN)).getReal(), 1.0e-15);
+        Assertions.assertEquals(+1.0, plusOne.copySign(buildScalar(+1.0)).getReal(), 1.0e-15);
+        Assertions.assertEquals(-1.0, plusOne.copySign(buildScalar(-1.0)).getReal(), 1.0e-15);
+        Assertions.assertEquals(+1.0, plusOne.copySign(buildScalar(+0.0)).getReal(), 1.0e-15);
+        Assertions.assertEquals(-1.0, plusOne.copySign(buildScalar(-0.0)).getReal(), 1.0e-15);
+        Assertions.assertEquals(+1.0, plusOne.copySign(buildScalar(Double.NaN)).getReal(), 1.0e-15);
 
     }
 
@@ -171,7 +178,7 @@ public abstract class FieldUnivariateDerivative1AbstractTest<T extends CalculusF
                 FieldUnivariateDerivative1<T> remainder = dsX.remainder(buildScalar(y));
                 FieldUnivariateDerivative1<T> ref = dsX.subtract(x - FastMath.IEEEremainder(x, y));
                 FieldUnivariateDerivative1<T> zero = remainder.subtract(ref);
-                Assert.assertEquals(0, zero.getFirstDerivative().getReal(), epsilon);
+                Assertions.assertEquals(0, zero.getFirstDerivative().getReal(), epsilon);
             }
         }
     }
@@ -487,16 +494,16 @@ public abstract class FieldUnivariateDerivative1AbstractTest<T extends CalculusF
                                                                                  a[1], b[1],
                                                                                  a[2], b[2]);
         final FieldUnivariateDerivative1<T> abSumArray = b[0].linearCombination(a, b);
-        Assert.assertEquals(abSumInline.getReal(), abSumArray.getReal(), 3.0e-8);
-        Assert.assertEquals(-1.8551294182586248737720779899, abSumInline.getReal(), 5.0e-8);
-        Assert.assertEquals(abSumInline.getFirstDerivative().getReal(), abSumArray.getFirstDerivative().getReal(), 3.0e-8);
+        Assertions.assertEquals(abSumInline.getReal(), abSumArray.getReal(), 3.0e-8);
+        Assertions.assertEquals(-1.8551294182586248737720779899, abSumInline.getReal(), 5.0e-8);
+        Assertions.assertEquals(abSumInline.getFirstDerivative().getReal(), abSumArray.getFirstDerivative().getReal(), 3.0e-8);
     }
 
     @Test
     public void testZero() {
         FieldUnivariateDerivative1<T> zero = build(17.0).getField().getZero();
         for (int i = 0; i <= zero.getOrder(); ++i) {
-            Assert.assertEquals(0.0, zero.getDerivative(i).getReal(), 1.0e-15);
+            Assertions.assertEquals(0.0, zero.getDerivative(i).getReal(), 1.0e-15);
         }
     }
 
@@ -504,84 +511,84 @@ public abstract class FieldUnivariateDerivative1AbstractTest<T extends CalculusF
     public void testOne() {
         FieldUnivariateDerivative1<T> one = build(17.0).getField().getOne();
         for (int i = 0; i <= one.getOrder(); ++i) {
-            Assert.assertEquals(i == 0 ? 1.0 : 0.0, one.getDerivative(i).getReal(), 1.0e-15);
+            Assertions.assertEquals(i == 0 ? 1.0 : 0.0, one.getDerivative(i).getReal(), 1.0e-15);
         }
     }
 
     @Test
     public void testGetFirstDerivative() {
         FieldUnivariateDerivative1<T> ud1 = build(-0.5, 2.5);
-        Assert.assertEquals(-0.5, ud1.getReal(), 1.0e-15);
-        Assert.assertEquals(-0.5, ud1.getValue().getReal(), 1.0e-15);
-        Assert.assertEquals(+2.5, ud1.getFirstDerivative().getReal(), 1.0e-15);
+        Assertions.assertEquals(-0.5, ud1.getReal(), 1.0e-15);
+        Assertions.assertEquals(-0.5, ud1.getValue().getReal(), 1.0e-15);
+        Assertions.assertEquals(+2.5, ud1.getFirstDerivative().getReal(), 1.0e-15);
     }
 
     @Test
     public void testConversion() {
         FieldUnivariateDerivative1<T> udA = build(-0.5, 2.5);
         FieldDerivativeStructure<T> ds = udA.toDerivativeStructure();
-        Assert.assertEquals(1, ds.getFreeParameters());
-        Assert.assertEquals(1, ds.getOrder());
-        Assert.assertEquals(-0.5, ds.getValue().getReal(), 1.0e-15);
-        Assert.assertEquals(-0.5, ds.getPartialDerivative(0).getReal(), 1.0e-15);
-        Assert.assertEquals( 2.5, ds.getPartialDerivative(1).getReal(), 1.0e-15);
+        Assertions.assertEquals(1, ds.getFreeParameters());
+        Assertions.assertEquals(1, ds.getOrder());
+        Assertions.assertEquals(-0.5, ds.getValue().getReal(), 1.0e-15);
+        Assertions.assertEquals(-0.5, ds.getPartialDerivative(0).getReal(), 1.0e-15);
+        Assertions.assertEquals( 2.5, ds.getPartialDerivative(1).getReal(), 1.0e-15);
         FieldUnivariateDerivative1<T> udB = new FieldUnivariateDerivative1<>(ds);
-        Assert.assertNotSame(udA, udB);
-        Assert.assertEquals(udA, udB);
+        Assertions.assertNotSame(udA, udB);
+        Assertions.assertEquals(udA, udB);
         try {
             new FieldUnivariateDerivative1<>(new FDSFactory<>(getValueField(), 2, 2).variable(0, 1.0));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
         }
         try {
             new FieldUnivariateDerivative1<>(new FDSFactory<>(getValueField(), 1, 2).variable(0, 1.0));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
         }
     }
 
     @Test
     public void testDoublePow() {
-        Assert.assertSame(build(3).getField().getZero(), FieldUnivariateDerivative1.pow(0.0, build(1.5)));
+        Assertions.assertSame(build(3).getField().getZero(), FieldUnivariateDerivative1.pow(0.0, build(1.5)));
         FieldUnivariateDerivative1<T> ud = FieldUnivariateDerivative1.pow(2.0, build(1.5));
         DSFactory factory = new DSFactory(1, 1);
         DerivativeStructure ds = factory.constant(2.0).pow(factory.variable(0, 1.5));
-        Assert.assertEquals(ds.getValue(), ud.getValue().getReal(), 1.0e-15);
-        Assert.assertEquals(ds.getPartialDerivative(1), ud.getFirstDerivative().getReal(), 1.0e-15);
+        Assertions.assertEquals(ds.getValue(), ud.getValue().getReal(), 1.0e-15);
+        Assertions.assertEquals(ds.getPartialDerivative(1), ud.getFirstDerivative().getReal(), 1.0e-15);
     }
 
     @Test
     public void testTaylor() {
-        Assert.assertEquals(2.5, build(2, 1).taylor(0.5).getReal(), 1.0e-15);
-        Assert.assertEquals(2.5, build(2, 1).taylor(getValueField().getZero().newInstance(0.5)).getReal(), 1.0e-15);
+        Assertions.assertEquals(2.5, build(2, 1).taylor(0.5).getReal(), 1.0e-15);
+        Assertions.assertEquals(2.5, build(2, 1).taylor(getValueField().getZero().newInstance(0.5)).getReal(), 1.0e-15);
     }
 
     @Test
     public void testEquals() {
         FieldUnivariateDerivative1<T> ud1 = build(12, -34);
-        Assert.assertEquals(ud1, ud1);
-        Assert.assertNotEquals(ud1, "");
-        Assert.assertEquals(ud1,    build(12, -34));
-        Assert.assertNotEquals(ud1, build(21, -34));
-        Assert.assertNotEquals(ud1, build(12, -43));
-        Assert.assertNotEquals(ud1, build(21, -43));
+        Assertions.assertEquals(ud1, ud1);
+        Assertions.assertNotEquals("", ud1);
+        Assertions.assertEquals(ud1,    build(12, -34));
+        Assertions.assertNotEquals(ud1, build(21, -34));
+        Assertions.assertNotEquals(ud1, build(12, -43));
+        Assertions.assertNotEquals(ud1, build(21, -43));
     }
 
     @Test
     public void testRunTimeClass() {
         Field<FieldUnivariateDerivative1<T>> field = build(0.0).getField();
-        Assert.assertEquals(FieldUnivariateDerivative1.class, field.getRuntimeClass());
+        Assertions.assertEquals(FieldUnivariateDerivative1.class, field.getRuntimeClass());
     }
 
     private void check(FieldUnivariateDerivative1<T> ud1, double value, double derivative) {
 
         // check value
-        Assert.assertEquals(value, ud1.getReal(), 1.0e-15);
+        Assertions.assertEquals(value, ud1.getReal(), 1.0e-15);
 
         // check derivatives
-        Assert.assertEquals(derivative, ud1.getFirstDerivative().getReal(), 1.0e-15);
+        Assertions.assertEquals(derivative, ud1.getFirstDerivative().getReal(), 1.0e-15);
 
     }
 

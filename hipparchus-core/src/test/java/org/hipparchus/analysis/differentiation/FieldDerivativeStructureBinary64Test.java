@@ -20,7 +20,7 @@ package org.hipparchus.analysis.differentiation;
 import org.hipparchus.Field;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for class {@link FieldDerivativeStructure} on {@link Binary64}.

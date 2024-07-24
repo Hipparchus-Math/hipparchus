@@ -22,10 +22,6 @@
 
 package org.hipparchus.migration.ode;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Random;
-
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.EquationsMapper;
@@ -39,10 +35,14 @@ import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.ode.sampling.DummyStepInterpolator;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.util.FastMath;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Random;
 
 @Deprecated
 public class ContinuousOutputModelTest {
@@ -88,8 +88,8 @@ public class ContinuousOutputModelTest {
             maxErrorDot = FastMath.max(maxErrorDot, errorDot);
         }
 
-        Assert.assertEquals(0.0, maxError,    1.0e-9);
-        Assert.assertEquals(0.0, maxErrorDot, 4.0e-7);
+        Assertions.assertEquals(0.0, maxError,    1.0e-9);
+        Assertions.assertEquals(0.0, maxErrorDot, 4.0e-7);
 
     }
 
@@ -133,14 +133,14 @@ public class ContinuousOutputModelTest {
         cm.append(cm1);
 
         // check circle
-        Assert.assertEquals(2.0 * FastMath.PI, cm.getInitialTime(), 1.0e-12);
-        Assert.assertEquals(0, cm.getFinalTime(), 1.0e-12);
-        Assert.assertEquals(cm.getFinalTime(), cm.getInterpolatedTime(), 1.0e-12);
+        Assertions.assertEquals(2.0 * FastMath.PI, cm.getInitialTime(), 1.0e-12);
+        Assertions.assertEquals(0, cm.getFinalTime(), 1.0e-12);
+        Assertions.assertEquals(cm.getFinalTime(), cm.getInterpolatedTime(), 1.0e-12);
         for (double t = 0; t < 2.0 * FastMath.PI; t += 0.1) {
             cm.setInterpolatedTime(t);
             double[] y = cm.getInterpolatedState();
-            Assert.assertEquals(FastMath.cos(t), y[0], 1.0e-7);
-            Assert.assertEquals(FastMath.sin(t), y[1], 1.0e-7);
+            Assertions.assertEquals(FastMath.cos(t), y[0], 1.0e-7);
+            Assertions.assertEquals(FastMath.sin(t), y[1], 1.0e-7);
         }
 
     }
@@ -152,16 +152,16 @@ public class ContinuousOutputModelTest {
         cm.handleStep(buildInterpolator(0, new double[] { 0.0, 1.0, -2.0 }, 1));
 
         // dimension mismatch
-        Assert.assertTrue(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0 }, 2.0));
+        Assertions.assertTrue(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0 }, 2.0));
 
         // hole between time ranges
-        Assert.assertTrue(checkAppendError(cm, 10.0, new double[] { 0.0, 1.0, -2.0 }, 20.0));
+        Assertions.assertTrue(checkAppendError(cm, 10.0, new double[] { 0.0, 1.0, -2.0 }, 20.0));
 
         // propagation direction mismatch
-        Assert.assertTrue(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0, -2.0 }, 0.0));
+        Assertions.assertTrue(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0, -2.0 }, 0.0));
 
         // no errors
-        Assert.assertFalse(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0, -2.0 }, 2.0));
+        Assertions.assertFalse(checkAppendError(cm, 1.0, new double[] { 0.0, 1.0, -2.0 }, 2.0));
 
     }
 
@@ -187,7 +187,7 @@ public class ContinuousOutputModelTest {
             mapper = ctr.newInstance(null, y0.length);
         } catch (NoSuchMethodException | SecurityException | InstantiationException |
                  IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
         return new DummyStepInterpolator(t1 >= t0,
                                          new ODEStateAndDerivative(t0, y0,  new double[y0.length]),
@@ -198,10 +198,10 @@ public class ContinuousOutputModelTest {
     }
 
     public void checkValue(double value, double reference) {
-        Assert.assertTrue(FastMath.abs(value - reference) < 1.0e-10);
+        Assertions.assertTrue(FastMath.abs(value - reference) < 1.0e-10);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         pb = new TestProblem3(0.9);
         double minStep = 0;
@@ -209,7 +209,7 @@ public class ContinuousOutputModelTest {
         integ = new DormandPrince54Integrator(minStep, maxStep, 1.0e-8, 1.0e-8);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         pb    = null;
         integ = null;

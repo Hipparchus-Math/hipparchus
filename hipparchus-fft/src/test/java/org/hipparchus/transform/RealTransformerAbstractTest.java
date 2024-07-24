@@ -21,13 +21,14 @@
  */
 package org.hipparchus.transform;
 
-import java.util.Random;
-
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.Random;
 
 /**
  * Abstract test for classes implementing the {@link RealTransformer} interface.
@@ -39,7 +40,7 @@ import org.junit.Test;
  * parameters throw the expected exceptions.
  *
  */
-public abstract class RealTransformerAbstractTest {
+public abstract class RealTransformerAbstractTest <T> {
 
     /** The common seed of all random number generators used in this test. */
     private final static long SEED = 20110119L;
@@ -137,6 +138,12 @@ public abstract class RealTransformerAbstractTest {
      */
     abstract double[] transform(double[] x, TransformType type);
 
+    /**
+     * Initialize subclass parameters.
+     * @param normalization normalization to use
+     */
+    abstract void init(T normalization);
+
     /*
      * Check of preconditions.
      */
@@ -145,8 +152,10 @@ public abstract class RealTransformerAbstractTest {
      * {@link RealTransformer#transform(double[], TransformType)} should throw a
      * {@link MathIllegalArgumentException} if data size is invalid.
      */
-    @Test
-    public void testTransformRealInvalidDataSize() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testTransformRealInvalidDataSize(T normalization) {
+        init(normalization);
         final TransformType[] type = TransformType.values();
         final RealTransformer transformer = createRealTransformer();
         for (int i = 0; i < getNumberOfInvalidDataSizes(); i++) {
@@ -154,7 +163,7 @@ public abstract class RealTransformerAbstractTest {
             for (int j = 0; j < type.length; j++) {
                 try {
                     transformer.transform(createRealData(n), type[j]);
-                    Assert.fail(type[j] + ", " + n);
+                    Assertions.fail(type[j] + ", " + n);
                 } catch (MathIllegalArgumentException e) {
                     // Expected: do nothing
                 }
@@ -167,8 +176,10 @@ public abstract class RealTransformerAbstractTest {
      * should throw a {@link MathIllegalArgumentException} if number of samples
      * is invalid.
      */
-    @Test
-    public void testTransformFunctionInvalidDataSize() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testTransformFunctionInvalidDataSize(T normalization) {
+        init(normalization);
         final TransformType[] type = TransformType.values();
         final RealTransformer transformer = createRealTransformer();
         final UnivariateFunction f = getValidFunction();
@@ -179,7 +190,7 @@ public abstract class RealTransformerAbstractTest {
             for (int j = 0; j < type.length; j++) {
                 try {
                     transformer.transform(f, a, b, n, type[j]);
-                    Assert.fail(type[j] + ", " + n);
+                    Assertions.fail(type[j] + ", " + n);
                 } catch (MathIllegalArgumentException e) {
                     // Expected: do nothing
                 }
@@ -192,8 +203,10 @@ public abstract class RealTransformerAbstractTest {
      * should throw a {@link MathIllegalArgumentException} if number of samples
      * is not strictly positive.
      */
-    @Test
-    public void testTransformFunctionNotStrictlyPositiveNumberOfSamples() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testTransformFunctionNotStrictlyPositiveNumberOfSamples(T normalization) {
+        init(normalization);
         final TransformType[] type = TransformType.values();
         final RealTransformer transformer = createRealTransformer();
         final UnivariateFunction f = getValidFunction();
@@ -204,7 +217,7 @@ public abstract class RealTransformerAbstractTest {
             for (int j = 0; j < type.length; j++) {
                 try {
                     transformer.transform(f, a, b, -n, type[j]);
-                    Assert.fail(type[j] + ", " + (-n));
+                    Assertions.fail(type[j] + ", " + (-n));
                 } catch (MathIllegalArgumentException e) {
                     // Expected: do nothing
                 }
@@ -217,8 +230,10 @@ public abstract class RealTransformerAbstractTest {
      * should throw a {@link MathIllegalArgumentException} if sampling bounds are
      * not correctly ordered.
      */
-    @Test
-    public void testTransformFunctionInvalidBounds() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testTransformFunctionInvalidBounds(T normalization) {
+        init(normalization);
         final TransformType[] type = TransformType.values();
         final RealTransformer transformer = createRealTransformer();
         final UnivariateFunction f = getValidFunction();
@@ -229,7 +244,7 @@ public abstract class RealTransformerAbstractTest {
             for (int j = 0; j < type.length; j++) {
                 try {
                     transformer.transform(f, b, a, n, type[j]);
-                    Assert.fail(type[j] + ", " + b + ", " + a);
+                    Assertions.fail(type[j] + ", " + b + ", " + a);
                 } catch (MathIllegalArgumentException e) {
                     // Expected: do nothing
                 }
@@ -252,8 +267,10 @@ public abstract class RealTransformerAbstractTest {
      * should be equal to within the relative error returned by
      * {@link #getRelativeTolerance(int) getRelativeTolerance(i)}.
      */
-    @Test
-    public void testTransformReal() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testTransformReal(T normalization) {
+        init(normalization);
         final TransformType[] type = TransformType.values();
         for (int i = 0; i < getNumberOfValidDataSizes(); i++) {
             final int n = getValidDataSize(i);
@@ -275,8 +292,10 @@ public abstract class RealTransformerAbstractTest {
      * and expected values should be equal to within the relative error returned
      * by {@link #getRelativeTolerance(int) getRelativeTolerance(i)}.
      */
-    @Test
-    public void testTransformFunction() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testTransformFunction(T normalization) {
+        init(normalization);
         final TransformType[] type = TransformType.values();
         for (int i = 0; i < getNumberOfValidDataSizes(); i++) {
             final int n = getValidDataSize(i);
@@ -320,7 +339,7 @@ public abstract class RealTransformerAbstractTest {
         for (int i = 0; i < n; i++) {
             final String msg = String.format("%d, %d", n, i);
             final double delta = tol * FastMath.abs(expected[i]);
-            Assert.assertEquals(msg, expected[i], actual[i], delta);
+            Assertions.assertEquals(expected[i], actual[i], delta, msg);
         }
     }
 
@@ -340,7 +359,7 @@ public abstract class RealTransformerAbstractTest {
         for (int i = 0; i < n; i++) {
             final String msg = String.format("%d, %d", n, i);
             final double delta = tol * FastMath.abs(expected[i]);
-            Assert.assertEquals(msg, expected[i], actual[i], delta);
+            Assertions.assertEquals(expected[i], actual[i], delta, msg);
         }
     }
 }

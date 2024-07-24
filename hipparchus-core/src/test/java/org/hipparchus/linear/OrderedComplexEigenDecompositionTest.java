@@ -16,10 +16,10 @@
  */
 package org.hipparchus.linear;
 
-import org.junit.Assert;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.complex.Complex;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class OrderedComplexEigenDecompositionTest {
 
@@ -74,8 +74,8 @@ public class OrderedComplexEigenDecompositionTest {
         Array2DRowRealMatrix matrix = new Array2DRowRealMatrix(d);
         ComplexEigenDecomposition ed = new OrderedComplexEigenDecomposition(matrix);
         for (Complex z : ed.getEigenvalues()) {
-            Assert.assertEquals(1.0, z.getReal(),      1.0e-15);
-            Assert.assertEquals(0.0, z.getImaginary(), 1.0e-15);
+            Assertions.assertEquals(1.0, z.getReal(),      1.0e-15);
+            Assertions.assertEquals(0.0, z.getImaginary(), 1.0e-15);
         }
     }
 
@@ -98,7 +98,7 @@ public class OrderedComplexEigenDecompositionTest {
             {0.0,0.0,0.0,0.0,0.0,0.0,-1.0,0.0,0.0,0.2843196976,0.0,0.0000015871,-0.0000013528,-0.0000000063}
         });
         
-        Assert.assertNotNull(new OrderedComplexEigenDecomposition(m,
+        Assertions.assertNotNull(new OrderedComplexEigenDecomposition(m,
                                                                   1.0e-6,
                                                                   ComplexEigenDecomposition.DEFAULT_EPSILON,
                                                                   ComplexEigenDecomposition.DEFAULT_EPSILON_AV_VD_CHECK));
@@ -125,7 +125,7 @@ public class OrderedComplexEigenDecompositionTest {
             {0.0,0.0,0.0,0.0,0.0,0.0,-1.0,0.0,0.0,0.1095029805,0.0,0.0000015871,-0.0000013528,-0.0000000063}
         });
         
-        Assert.assertNotNull(new OrderedComplexEigenDecomposition(m,
+        Assertions.assertNotNull(new OrderedComplexEigenDecomposition(m,
                                                                   1.0e-6,
                                                                   ComplexEigenDecomposition.DEFAULT_EPSILON,
                                                                   ComplexEigenDecomposition.DEFAULT_EPSILON_AV_VD_CHECK));
@@ -151,7 +151,7 @@ public class OrderedComplexEigenDecompositionTest {
             {0.0,0.0,0.0,0.0,0.0,0.0,-1.0,0.0,0.0,0.109502989,0.0,0.0000015871,-0.0000013528,-0.0000000063}
         });
         
-        Assert.assertNotNull(new OrderedComplexEigenDecomposition(m,
+        Assertions.assertNotNull(new OrderedComplexEigenDecomposition(m,
                                                                   1.0e-6,
                                                                   ComplexEigenDecomposition.DEFAULT_EPSILON,
                                                                   ComplexEigenDecomposition.DEFAULT_EPSILON_AV_VD_CHECK));
@@ -169,14 +169,14 @@ public class OrderedComplexEigenDecompositionTest {
                                        final double threshold) {
 
         // Verify size
-        Assert.assertEquals(vector1.getDimension(), vector2.getDimension());
+        Assertions.assertEquals(vector1.getDimension(), vector2.getDimension());
 
         // Loop on vector entries
         for (int index = 0; index < vector1.getDimension(); index++) {
             final Complex complex1 = vector1.getEntry(index);
             final Complex complex2 = vector2.getEntry(index);
-            Assert.assertEquals(complex1.getReal(),      complex2.getReal(),      threshold);
-            Assert.assertEquals(complex1.getImaginary(), complex2.getImaginary(), threshold);
+            Assertions.assertEquals(complex1.getReal(),      complex2.getReal(),      threshold);
+            Assertions.assertEquals(complex1.getImaginary(), complex2.getImaginary(), threshold);
         }
 
     }
@@ -192,16 +192,16 @@ public class OrderedComplexEigenDecompositionTest {
                                         final double threshold) {
 
         // Verify size
-        Assert.assertEquals(matrix1.getRowDimension(),    matrix2.getRowDimension());
-        Assert.assertEquals(matrix1.getColumnDimension(), matrix2.getColumnDimension());
+        Assertions.assertEquals(matrix1.getRowDimension(),    matrix2.getRowDimension());
+        Assertions.assertEquals(matrix1.getColumnDimension(), matrix2.getColumnDimension());
 
         // Loop on matrices entries
         for (int row = 0; row < matrix1.getRowDimension(); row++) {
             for (int column = 0; column < matrix1.getColumnDimension(); column++) {
                 final Complex complex1 = matrix1.getEntry(row, column);
                 final Complex complex2 = matrix2.getEntry(row, column);
-                Assert.assertEquals(complex1.getReal(),      complex2.getReal(),      threshold);
-                Assert.assertEquals(complex1.getImaginary(), complex2.getImaginary(), threshold);
+                Assertions.assertEquals(complex1.getReal(),      complex2.getReal(),      threshold);
+                Assertions.assertEquals(complex1.getImaginary(), complex2.getImaginary(), threshold);
             }
 
         }

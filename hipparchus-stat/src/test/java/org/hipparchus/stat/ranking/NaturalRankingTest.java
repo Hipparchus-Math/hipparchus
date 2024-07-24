@@ -25,8 +25,10 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 /**
@@ -50,7 +52,7 @@ public class NaturalRankingTest {
 
         try {
             ranks = ranking.rank(exampleData);
-            Assert.fail("expected MathIllegalArgumentException due to NaNStrategy.FAILED");
+            Assertions.fail("expected MathIllegalArgumentException due to NaNStrategy.FAILED");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -64,7 +66,7 @@ public class NaturalRankingTest {
 
         try {
             ranks = ranking.rank(multipleNaNs);
-            Assert.fail("expected MathIllegalArgumentException due to NaNStrategy.FAILED");
+            Assertions.fail("expected MathIllegalArgumentException due to NaNStrategy.FAILED");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -210,11 +212,13 @@ public class NaturalRankingTest {
         UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNaNsFailed() {
-        double[] data = { 0, Double.POSITIVE_INFINITY, Double.NaN, Double.NEGATIVE_INFINITY };
-        NaturalRanking ranking = new NaturalRanking(NaNStrategy.FAILED);
-        ranking.rank(data);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] data = {0, Double.POSITIVE_INFINITY, Double.NaN, Double.NEGATIVE_INFINITY};
+            NaturalRanking ranking = new NaturalRanking(NaNStrategy.FAILED);
+            ranking.rank(data);
+        });
     }
 
     @Test

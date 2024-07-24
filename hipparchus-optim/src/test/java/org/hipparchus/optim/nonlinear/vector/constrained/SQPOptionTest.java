@@ -17,8 +17,8 @@
 package org.hipparchus.optim.nonlinear.vector.constrained;
 
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class SQPOptionTest {
 
@@ -35,11 +35,11 @@ public class SQPOptionTest {
         option.setSigmaMax(expectedValue);
         // THEN
         final double tolerance = 0.;
-        Assert.assertEquals(expectedValue, option.getB(), tolerance);
-        Assert.assertEquals(expectedValue, option.getEps(), tolerance);
-        Assert.assertEquals(expectedValue, option.getMu(), tolerance);
-        Assert.assertEquals(expectedValue, option.getRhoCons(), tolerance);
-        Assert.assertEquals(expectedValue, option.getSigmaMax(), tolerance);
+        Assertions.assertEquals(expectedValue, option.getB(), tolerance);
+        Assertions.assertEquals(expectedValue, option.getEps(), tolerance);
+        Assertions.assertEquals(expectedValue, option.getMu(), tolerance);
+        Assertions.assertEquals(expectedValue, option.getRhoCons(), tolerance);
+        Assertions.assertEquals(expectedValue, option.getSigmaMax(), tolerance);
     }
 
     @Test
@@ -50,7 +50,7 @@ public class SQPOptionTest {
         final boolean expectedValue = true;
         option.setUseFunHessian(expectedValue);
         // THEN
-        Assert.assertEquals(expectedValue, option.useFunHessian());
+        Assertions.assertEquals(expectedValue, option.useFunHessian());
     }
 
     @Test
@@ -63,9 +63,9 @@ public class SQPOptionTest {
         option.setMaxLineSearchIteration(expectedValue);
         option.setQpMaxLoop(expectedValue);
         // THEN
-        Assert.assertEquals(expectedValue, option.getConvCriteria());
-        Assert.assertEquals(expectedValue, option.getMaxLineSearchIteration());
-        Assert.assertEquals(expectedValue, option.getQpMaxLoop());
+        Assertions.assertEquals(expectedValue, option.getConvCriteria());
+        Assertions.assertEquals(expectedValue, option.getMaxLineSearchIteration());
+        Assertions.assertEquals(expectedValue, option.getQpMaxLoop());
     }
 
 }

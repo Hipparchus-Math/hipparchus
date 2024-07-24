@@ -32,8 +32,8 @@ import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for the {@link Array2DRowFieldMatrix} class.
@@ -107,12 +107,12 @@ public final class Array2DRowFieldMatrixTest {
     public void testDimensions() {
         Array2DRowFieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(testData);
         Array2DRowFieldMatrix<Fraction> m2 = new Array2DRowFieldMatrix<Fraction>(testData2);
-        Assert.assertEquals("testData row dimension",3,m.getRowDimension());
-        Assert.assertEquals("testData column dimension",3,m.getColumnDimension());
-        Assert.assertTrue("testData is square",m.isSquare());
-        Assert.assertEquals("testData2 row dimension",m2.getRowDimension(),2);
-        Assert.assertEquals("testData2 column dimension",m2.getColumnDimension(),3);
-        Assert.assertTrue("testData2 is not square",!m2.isSquare());
+        Assertions.assertEquals(3,m.getRowDimension(),"testData row dimension");
+        Assertions.assertEquals(3,m.getColumnDimension(),"testData column dimension");
+        Assertions.assertTrue(m.isSquare(),"testData is square");
+        Assertions.assertEquals(2, m2.getRowDimension(), "testData2 row dimension");
+        Assertions.assertEquals(3, m2.getColumnDimension(), "testData2 column dimension");
+        Assertions.assertFalse(m2.isSquare(), "testData2 is not square");
     }
 
     /** test copy functions */
@@ -120,10 +120,10 @@ public final class Array2DRowFieldMatrixTest {
     public void testCopyFunctions() {
         Array2DRowFieldMatrix<Fraction> m1 = new Array2DRowFieldMatrix<Fraction>(testData);
         Array2DRowFieldMatrix<Fraction> m2 = new Array2DRowFieldMatrix<Fraction>(m1.getData());
-        Assert.assertEquals(m2,m1);
+        Assertions.assertEquals(m2,m1);
         Array2DRowFieldMatrix<Fraction> m3 = new Array2DRowFieldMatrix<Fraction>(testData);
         Array2DRowFieldMatrix<Fraction> m4 = new Array2DRowFieldMatrix<Fraction>(m3.getData(), false);
-        Assert.assertEquals(m4,m3);
+        Assertions.assertEquals(m4,m3);
     }
 
     /** test add */
@@ -135,7 +135,7 @@ public final class Array2DRowFieldMatrixTest {
         Fraction[][] sumEntries = mPlusMInv.getData();
         for (int row = 0; row < m.getRowDimension(); row++) {
             for (int col = 0; col < m.getColumnDimension(); col++) {
-                Assert.assertEquals(testDataPlusInv[row][col],sumEntries[row][col]);
+                Assertions.assertEquals(testDataPlusInv[row][col],sumEntries[row][col]);
             }
         }
     }
@@ -147,7 +147,7 @@ public final class Array2DRowFieldMatrixTest {
         Array2DRowFieldMatrix<Fraction> m2 = new Array2DRowFieldMatrix<Fraction>(testData2);
         try {
             m.add(m2);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -161,7 +161,7 @@ public final class Array2DRowFieldMatrixTest {
         UnitTestUtils.assertEquals(m.subtract(m2),m2.scalarMultiply(new Fraction(-1)).add(m));
         try {
             m.subtract(new Array2DRowFieldMatrix<Fraction>(testData2));
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -181,7 +181,7 @@ public final class Array2DRowFieldMatrixTest {
         UnitTestUtils.assertEquals(m2.multiply(identity), m2);
         try {
             m.multiply(new Array2DRowFieldMatrix<Fraction>(bigSingular));
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -211,7 +211,7 @@ public final class Array2DRowFieldMatrixTest {
         };
         final FieldMatrixPreservingVisitor<Binary64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
             public void visit(final int row, final int column, final Binary64 value) {
-                Assert.assertEquals(0.0, value.doubleValue(), 1.0e-15);
+                Assertions.assertEquals(0.0, value.doubleValue(), 1.0e-15);
             }
         };
         for (int rows = 1; rows <= 64; rows += 7) {
@@ -237,7 +237,7 @@ public final class Array2DRowFieldMatrixTest {
         };
         final FieldMatrixPreservingVisitor<Binary64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
             public void visit(final int row, final int column, final Binary64 value) {
-                Assert.assertEquals(0.0, value.doubleValue(), 1.0e-15);
+                Assertions.assertEquals(0.0, value.doubleValue(), 1.0e-15);
             }
         };
         for (int rows = 1; rows <= 64; rows += 7) {
@@ -258,11 +258,11 @@ public final class Array2DRowFieldMatrixTest {
         try {
             new Array2DRowFieldMatrix<Binary64>(Binary64Field.getInstance(), 2, 3).
             multiplyTransposed(new Array2DRowFieldMatrix<Binary64>(Binary64Field.getInstance(), 3, 2));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -276,7 +276,7 @@ public final class Array2DRowFieldMatrixTest {
         };
         final FieldMatrixPreservingVisitor<Binary64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
             public void visit(final int row, final int column, final Binary64 value) {
-                Assert.assertEquals(0.0, value.doubleValue(), 1.0e-15);
+                Assertions.assertEquals(0.0, value.doubleValue(), 1.0e-15);
             }
         };
         for (int rows = 1; rows <= 64; rows += 7) {
@@ -302,7 +302,7 @@ public final class Array2DRowFieldMatrixTest {
         };
         final FieldMatrixPreservingVisitor<Binary64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Binary64>(Binary64Field.getInstance().getZero()) {
             public void visit(final int row, final int column, final Binary64 value) {
-                Assert.assertEquals(0.0, value.doubleValue(), 1.0e-15);
+                Assertions.assertEquals(0.0, value.doubleValue(), 1.0e-15);
             }
         };
         for (int rows = 1; rows <= 64; rows += 7) {
@@ -323,11 +323,11 @@ public final class Array2DRowFieldMatrixTest {
         try {
             new Array2DRowFieldMatrix<Binary64>(Binary64Field.getInstance(), 2, 3).
             transposeMultiply(new Array2DRowFieldMatrix<Binary64>(Binary64Field.getInstance(), 3, 2));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assert.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(3, ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(3, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -364,14 +364,14 @@ public final class Array2DRowFieldMatrixTest {
         try {
             FieldMatrix<Fraction> mNotSquare = new Array2DRowFieldMatrix<Fraction>(testData2T);
             mNotSquare.power(2);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
 
         try {
             m.power(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -381,11 +381,11 @@ public final class Array2DRowFieldMatrixTest {
     @Test
     public void testTrace() {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(id);
-        Assert.assertEquals("identity trace",new Fraction(3),m.getTrace());
+        Assertions.assertEquals(new Fraction(3),m.getTrace(),"identity trace");
         m = new Array2DRowFieldMatrix<Fraction>(testData2);
         try {
             m.getTrace();
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -407,7 +407,7 @@ public final class Array2DRowFieldMatrixTest {
         m = new Array2DRowFieldMatrix<Fraction>(bigSingular);
         try {
             m.operate(testVector);
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -420,10 +420,10 @@ public final class Array2DRowFieldMatrixTest {
                 { new Fraction(1), new Fraction(2) }, { new Fraction(3), new Fraction(4) }, { new Fraction(5), new Fraction(6) }
         }, false);
         Fraction[] b = a.operate(new Fraction[] { new Fraction(1), new Fraction(1) });
-        Assert.assertEquals(a.getRowDimension(), b.length);
-        Assert.assertEquals( new Fraction(3), b[0]);
-        Assert.assertEquals( new Fraction(7), b[1]);
-        Assert.assertEquals(new Fraction(11), b[2]);
+        Assertions.assertEquals(a.getRowDimension(), b.length);
+        Assertions.assertEquals( new Fraction(3), b[0]);
+        Assertions.assertEquals( new Fraction(7), b[1]);
+        Assertions.assertEquals(new Fraction(11), b[2]);
     }
 
     /** test transpose */
@@ -448,7 +448,7 @@ public final class Array2DRowFieldMatrixTest {
         m = new Array2DRowFieldMatrix<Fraction>(bigSingular);
         try {
             m.preMultiply(testVector);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -470,7 +470,7 @@ public final class Array2DRowFieldMatrixTest {
         UnitTestUtils.assertEquals(identity.preMultiply(mInv), mInv);
         try {
             m.preMultiply(new Array2DRowFieldMatrix<Fraction>(bigSingular));
-            Assert.fail("Expecting illegalArgumentException");
+            Assertions.fail("Expecting illegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -483,13 +483,13 @@ public final class Array2DRowFieldMatrixTest {
         UnitTestUtils.assertEquals(m.getColumn(2), testDataCol3);
         try {
             m.getRow(10);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             m.getColumn(-1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
@@ -498,10 +498,10 @@ public final class Array2DRowFieldMatrixTest {
     @Test
     public void testGetEntry() {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(testData);
-        Assert.assertEquals("get entry", m.getEntry(0,1), new Fraction(2));
+        Assertions.assertEquals(m.getEntry(0,1), new Fraction(2), "get entry");
         try {
             m.getEntry(10, 4);
-            Assert.fail ("Expecting MathIllegalArgumentException");
+            Assertions.fail ("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -525,12 +525,12 @@ public final class Array2DRowFieldMatrixTest {
         FieldMatrix<Fraction> n = new Array2DRowFieldMatrix<Fraction>(matrixData2);
         // Now multiply m by n
         FieldMatrix<Fraction> p = m.multiply(n);
-        Assert.assertEquals(2, p.getRowDimension());
-        Assert.assertEquals(2, p.getColumnDimension());
+        Assertions.assertEquals(2, p.getRowDimension());
+        Assertions.assertEquals(2, p.getColumnDimension());
         // Invert p
         FieldMatrix<Fraction> pInverse = new FieldLUDecomposition<Fraction>(p).getSolver().getInverse();
-        Assert.assertEquals(2, pInverse.getRowDimension());
-        Assert.assertEquals(2, pInverse.getColumnDimension());
+        Assertions.assertEquals(2, pInverse.getRowDimension());
+        Assertions.assertEquals(2, pInverse.getColumnDimension());
 
         // Solve example
         Fraction[][] coefficientsData = {
@@ -546,13 +546,13 @@ public final class Array2DRowFieldMatrixTest {
         solution = new FieldLUDecomposition<Fraction>(coefficients)
             .getSolver()
             .solve(new ArrayFieldVector<Fraction>(constants, false)).toArray();
-        Assert.assertEquals(new Fraction(2).multiply(solution[0]).
+        Assertions.assertEquals(new Fraction(2).multiply(solution[0]).
                      add(new Fraction(3).multiply(solution[1])).
                      subtract(new Fraction(2).multiply(solution[2])), constants[0]);
-        Assert.assertEquals(new Fraction(-1).multiply(solution[0]).
+        Assertions.assertEquals(new Fraction(-1).multiply(solution[0]).
                      add(new Fraction(7).multiply(solution[1])).
                      add(new Fraction(6).multiply(solution[2])), constants[1]);
-        Assert.assertEquals(new Fraction(4).multiply(solution[0]).
+        Assertions.assertEquals(new Fraction(4).multiply(solution[0]).
                      subtract(new Fraction(3).multiply(solution[1])).
                      subtract(new Fraction(5).multiply(solution[2])), constants[2]);
 
@@ -584,9 +584,9 @@ public final class Array2DRowFieldMatrixTest {
         try {
             FieldMatrix<Fraction> sub = m.getSubMatrix(startRow, endRow, startColumn, endColumn);
             if (reference != null) {
-                Assert.assertEquals(new Array2DRowFieldMatrix<Fraction>(reference), sub);
+                Assertions.assertEquals(new Array2DRowFieldMatrix<Fraction>(reference), sub);
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException"
+                Assertions.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException"
                      + " or MathIllegalArgumentException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
@@ -601,9 +601,9 @@ public final class Array2DRowFieldMatrixTest {
         try {
             FieldMatrix<Fraction> sub = m.getSubMatrix(selectedRows, selectedColumns);
             if (reference != null) {
-                Assert.assertEquals(new Array2DRowFieldMatrix<Fraction>(reference), sub);
+                Assertions.assertEquals(new Array2DRowFieldMatrix<Fraction>(reference), sub);
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException"
+                Assertions.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException"
                      + " or MathIllegalArgumentException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
@@ -642,9 +642,9 @@ public final class Array2DRowFieldMatrixTest {
                              new Fraction[reference.length][reference[0].length];
             m.copySubMatrix(startRow, endRow, startColumn, endColumn, sub);
             if (reference != null) {
-                Assert.assertEquals(new Array2DRowFieldMatrix<Fraction>(reference), new Array2DRowFieldMatrix<Fraction>(sub));
+                Assertions.assertEquals(new Array2DRowFieldMatrix<Fraction>(reference), new Array2DRowFieldMatrix<Fraction>(sub));
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
+                Assertions.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -661,9 +661,9 @@ public final class Array2DRowFieldMatrixTest {
                     new Fraction[reference.length][reference[0].length];
             m.copySubMatrix(selectedRows, selectedColumns, sub);
             if (reference != null) {
-                Assert.assertEquals(new Array2DRowFieldMatrix<Fraction>(reference), new Array2DRowFieldMatrix<Fraction>(sub));
+                Assertions.assertEquals(new Array2DRowFieldMatrix<Fraction>(reference), new Array2DRowFieldMatrix<Fraction>(sub));
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
+                Assertions.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -677,19 +677,21 @@ public final class Array2DRowFieldMatrixTest {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(subTestData);
         FieldMatrix<Fraction> mRow0 = new Array2DRowFieldMatrix<Fraction>(subRow0);
         FieldMatrix<Fraction> mRow3 = new Array2DRowFieldMatrix<Fraction>(subRow3);
-        Assert.assertEquals("Row0", mRow0,
-                m.getRowMatrix(0));
-        Assert.assertEquals("Row3", mRow3,
-                m.getRowMatrix(3));
+        Assertions.assertEquals(mRow0,
+                m.getRowMatrix(0),
+                "Row0");
+        Assertions.assertEquals(mRow3,
+                m.getRowMatrix(3),
+                "Row3");
         try {
             m.getRowMatrix(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowMatrix(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -699,18 +701,18 @@ public final class Array2DRowFieldMatrixTest {
     public void testSetRowMatrix() {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(subTestData);
         FieldMatrix<Fraction> mRow3 = new Array2DRowFieldMatrix<Fraction>(subRow3);
-        Assert.assertNotSame(mRow3, m.getRowMatrix(0));
+        Assertions.assertNotSame(mRow3, m.getRowMatrix(0));
         m.setRowMatrix(0, mRow3);
-        Assert.assertEquals(mRow3, m.getRowMatrix(0));
+        Assertions.assertEquals(mRow3, m.getRowMatrix(0));
         try {
             m.setRowMatrix(-1, mRow3);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setRowMatrix(0, m);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -721,19 +723,21 @@ public final class Array2DRowFieldMatrixTest {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(subTestData);
         FieldMatrix<Fraction> mColumn1 = new Array2DRowFieldMatrix<Fraction>(subColumn1);
         FieldMatrix<Fraction> mColumn3 = new Array2DRowFieldMatrix<Fraction>(subColumn3);
-        Assert.assertEquals("Column1", mColumn1,
-                m.getColumnMatrix(1));
-        Assert.assertEquals("Column3", mColumn3,
-                m.getColumnMatrix(3));
+        Assertions.assertEquals(mColumn1,
+                m.getColumnMatrix(1),
+                "Column1");
+        Assertions.assertEquals(mColumn3,
+                m.getColumnMatrix(3),
+                "Column3");
         try {
             m.getColumnMatrix(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnMatrix(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -743,18 +747,18 @@ public final class Array2DRowFieldMatrixTest {
     public void testSetColumnMatrix() {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(subTestData);
         FieldMatrix<Fraction> mColumn3 = new Array2DRowFieldMatrix<Fraction>(subColumn3);
-        Assert.assertNotSame(mColumn3, m.getColumnMatrix(1));
+        Assertions.assertNotSame(mColumn3, m.getColumnMatrix(1));
         m.setColumnMatrix(1, mColumn3);
-        Assert.assertEquals(mColumn3, m.getColumnMatrix(1));
+        Assertions.assertEquals(mColumn3, m.getColumnMatrix(1));
         try {
             m.setColumnMatrix(-1, mColumn3);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setColumnMatrix(0, m);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -765,17 +769,17 @@ public final class Array2DRowFieldMatrixTest {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(subTestData);
         FieldVector<Fraction> mRow0 = new ArrayFieldVector<Fraction>(subRow0[0]);
         FieldVector<Fraction> mRow3 = new ArrayFieldVector<Fraction>(subRow3[0]);
-        Assert.assertEquals("Row0", mRow0, m.getRowVector(0));
-        Assert.assertEquals("Row3", mRow3, m.getRowVector(3));
+        Assertions.assertEquals(mRow0, m.getRowVector(0), "Row0");
+        Assertions.assertEquals(mRow3, m.getRowVector(3), "Row3");
         try {
             m.getRowVector(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowVector(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -785,18 +789,18 @@ public final class Array2DRowFieldMatrixTest {
     public void testSetRowVector() {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(subTestData);
         FieldVector<Fraction> mRow3 = new ArrayFieldVector<Fraction>(subRow3[0]);
-        Assert.assertNotSame(mRow3, m.getRowMatrix(0));
+        Assertions.assertNotSame(mRow3, m.getRowMatrix(0));
         m.setRowVector(0, mRow3);
-        Assert.assertEquals(mRow3, m.getRowVector(0));
+        Assertions.assertEquals(mRow3, m.getRowVector(0));
         try {
             m.setRowVector(-1, mRow3);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setRowVector(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), 5));
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -807,17 +811,17 @@ public final class Array2DRowFieldMatrixTest {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(subTestData);
         FieldVector<Fraction> mColumn1 = columnToVector(subColumn1);
         FieldVector<Fraction> mColumn3 = columnToVector(subColumn3);
-        Assert.assertEquals("Column1", mColumn1, m.getColumnVector(1));
-        Assert.assertEquals("Column3", mColumn3, m.getColumnVector(3));
+        Assertions.assertEquals(mColumn1, m.getColumnVector(1), "Column1");
+        Assertions.assertEquals(mColumn3, m.getColumnVector(3), "Column3");
         try {
             m.getColumnVector(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnVector(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -827,18 +831,18 @@ public final class Array2DRowFieldMatrixTest {
     public void testSetColumnVector() {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(subTestData);
         FieldVector<Fraction> mColumn3 = columnToVector(subColumn3);
-        Assert.assertNotSame(mColumn3, m.getColumnVector(1));
+        Assertions.assertNotSame(mColumn3, m.getColumnVector(1));
         m.setColumnVector(1, mColumn3);
-        Assert.assertEquals(mColumn3, m.getColumnVector(1));
+        Assertions.assertEquals(mColumn3, m.getColumnVector(1));
         try {
             m.setColumnVector(-1, mColumn3);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setColumnVector(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), 5));
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -859,13 +863,13 @@ public final class Array2DRowFieldMatrixTest {
         checkArrays(subRow3[0], m.getRow(3));
         try {
             m.getRow(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRow(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -874,18 +878,18 @@ public final class Array2DRowFieldMatrixTest {
     @Test
     public void testSetRow() {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(subTestData);
-        Assert.assertTrue(subRow3[0][0] != m.getRow(0)[0]);
+        Assertions.assertTrue(subRow3[0][0] != m.getRow(0)[0]);
         m.setRow(0, subRow3[0]);
         checkArrays(subRow3[0], m.getRow(0));
         try {
             m.setRow(-1, subRow3[0]);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setRow(0, new Fraction[5]);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -900,13 +904,13 @@ public final class Array2DRowFieldMatrixTest {
         checkArrays(mColumn3, m.getColumn(3));
         try {
             m.getColumn(-1);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumn(4);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -916,18 +920,18 @@ public final class Array2DRowFieldMatrixTest {
     public void testSetColumn() {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(subTestData);
         Fraction[] mColumn3 = columnToArray(subColumn3);
-        Assert.assertTrue(mColumn3[0] != m.getColumn(1)[0]);
+        Assertions.assertTrue(mColumn3[0] != m.getColumn(1)[0]);
         m.setColumn(1, mColumn3);
         checkArrays(mColumn3, m.getColumn(1));
         try {
             m.setColumn(-1, mColumn3);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setColumn(0, new Fraction[5]);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -942,9 +946,9 @@ public final class Array2DRowFieldMatrixTest {
     }
 
     private void checkArrays(Fraction[] expected, Fraction[] actual) {
-        Assert.assertEquals(expected.length, actual.length);
+        Assertions.assertEquals(expected.length, actual.length);
         for (int i = 0; i < expected.length; ++i) {
-            Assert.assertEquals(expected[i], actual[i]);
+            Assertions.assertEquals(expected[i], actual[i]);
         }
     }
 
@@ -953,21 +957,21 @@ public final class Array2DRowFieldMatrixTest {
         Array2DRowFieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(testData);
         Array2DRowFieldMatrix<Fraction> m1 = (Array2DRowFieldMatrix<Fraction>) m.copy();
         Array2DRowFieldMatrix<Fraction> mt = (Array2DRowFieldMatrix<Fraction>) m.transpose();
-        Assert.assertTrue(m.hashCode() != mt.hashCode());
-        Assert.assertEquals(m.hashCode(), m1.hashCode());
-        Assert.assertEquals(m, m);
-        Assert.assertEquals(m, m1);
-        Assert.assertFalse(m.equals(null));
-        Assert.assertFalse(m.equals(mt));
-        Assert.assertFalse(m.equals(new Array2DRowFieldMatrix<Fraction>(bigSingular)));
+        Assertions.assertTrue(m.hashCode() != mt.hashCode());
+        Assertions.assertEquals(m.hashCode(), m1.hashCode());
+        Assertions.assertEquals(m, m);
+        Assertions.assertEquals(m, m1);
+        Assertions.assertNotEquals(null, m);
+        Assertions.assertNotEquals(m, mt);
+        Assertions.assertNotEquals(m, new Array2DRowFieldMatrix<Fraction>(bigSingular));
     }
 
     @Test
     public void testToString() {
         Array2DRowFieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(testData);
-        Assert.assertEquals("Array2DRowFieldMatrix{{1,2,3},{2,5,3},{1,0,8}}", m.toString());
+        Assertions.assertEquals("Array2DRowFieldMatrix{{1,2,3},{2,5,3},{1,0,8}}", m.toString());
         m = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance());
-        Assert.assertEquals("Array2DRowFieldMatrix{}", m.toString());
+        Assertions.assertEquals("Array2DRowFieldMatrix{}", m.toString());
     }
 
     @Test
@@ -980,7 +984,7 @@ public final class Array2DRowFieldMatrixTest {
                     {new Fraction(2),new Fraction(1),new Fraction(3)},
                     {new Fraction(1),new Fraction(2),new Fraction(4)}
              });
-        Assert.assertEquals(expected, m);
+        Assertions.assertEquals(expected, m);
 
         m.setSubMatrix(detData2,0,0);
         expected = new Array2DRowFieldMatrix<Fraction>
@@ -989,7 +993,7 @@ public final class Array2DRowFieldMatrixTest {
                     {new Fraction(2),new Fraction(4),new Fraction(3)},
                     {new Fraction(1),new Fraction(2),new Fraction(4)}
              });
-        Assert.assertEquals(expected, m);
+        Assertions.assertEquals(expected, m);
 
         m.setSubMatrix(testDataPlus2,0,0);
         expected = new Array2DRowFieldMatrix<Fraction>
@@ -998,25 +1002,25 @@ public final class Array2DRowFieldMatrixTest {
                     {new Fraction(4),new Fraction(7),new Fraction(5)},
                     {new Fraction(3),new Fraction(2),new Fraction(10)}
              });
-        Assert.assertEquals(expected, m);
+        Assertions.assertEquals(expected, m);
 
         // dimension overflow
         try {
             m.setSubMatrix(testData,1,1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
         // dimension underflow
         try {
             m.setSubMatrix(testData,-1,1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
         try {
             m.setSubMatrix(testData,1,-1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -1024,20 +1028,20 @@ public final class Array2DRowFieldMatrixTest {
         // null
         try {
             m.setSubMatrix(null, 1, 1);
-            Assert.fail("expecting NullArgumentException");
+            Assertions.fail("expecting NullArgumentException");
         } catch (NullArgumentException e) {
             // expected
         }
         Array2DRowFieldMatrix<Fraction> m2 = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance());
         try {
             m2.setSubMatrix(testData,0,1);
-            Assert.fail("expecting MathIllegalStateException");
+            Assertions.fail("expecting MathIllegalStateException");
         } catch (MathIllegalStateException e) {
             // expected
         }
         try {
             m2.setSubMatrix(testData,1,0);
-            Assert.fail("expecting MathIllegalStateException");
+            Assertions.fail("expecting MathIllegalStateException");
         } catch (MathIllegalStateException e) {
             // expected
         }
@@ -1045,7 +1049,7 @@ public final class Array2DRowFieldMatrixTest {
         // ragged
         try {
             m.setSubMatrix(new Fraction[][] {{new Fraction(1)}, {new Fraction(2), new Fraction(3)}}, 0, 0);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -1053,7 +1057,7 @@ public final class Array2DRowFieldMatrixTest {
         // empty
         try {
             m.setSubMatrix(new Fraction[][] {{}}, 0, 0);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -1070,87 +1074,87 @@ public final class Array2DRowFieldMatrixTest {
         m.walkInRowOrder(new SetVisitor());
         GetVisitor getVisitor = new GetVisitor();
         m.walkInOptimizedOrder(getVisitor);
-        Assert.assertEquals(rows * columns, getVisitor.getCount());
+        Assertions.assertEquals(rows * columns, getVisitor.getCount());
 
         m = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), rows, columns);
         m.walkInRowOrder(new SetVisitor(), 1, rows - 2, 1, columns - 2);
         getVisitor = new GetVisitor();
         m.walkInOptimizedOrder(getVisitor, 1, rows - 2, 1, columns - 2);
-        Assert.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
+        Assertions.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
         for (int i = 0; i < rows; ++i) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, 0));
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, 0));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
         }
         for (int j = 0; j < columns; ++j) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(0, j));
-            Assert.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(0, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
         }
 
         m = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), rows, columns);
         m.walkInColumnOrder(new SetVisitor());
         getVisitor = new GetVisitor();
         m.walkInOptimizedOrder(getVisitor);
-        Assert.assertEquals(rows * columns, getVisitor.getCount());
+        Assertions.assertEquals(rows * columns, getVisitor.getCount());
 
         m = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), rows, columns);
         m.walkInColumnOrder(new SetVisitor(), 1, rows - 2, 1, columns - 2);
         getVisitor = new GetVisitor();
         m.walkInOptimizedOrder(getVisitor, 1, rows - 2, 1, columns - 2);
-        Assert.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
+        Assertions.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
         for (int i = 0; i < rows; ++i) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, 0));
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, 0));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
         }
         for (int j = 0; j < columns; ++j) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(0, j));
-            Assert.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(0, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
         }
 
         m = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), rows, columns);
         m.walkInOptimizedOrder(new SetVisitor());
         getVisitor = new GetVisitor();
         m.walkInRowOrder(getVisitor);
-        Assert.assertEquals(rows * columns, getVisitor.getCount());
+        Assertions.assertEquals(rows * columns, getVisitor.getCount());
 
         m = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), rows, columns);
         m.walkInOptimizedOrder(new SetVisitor(), 1, rows - 2, 1, columns - 2);
         getVisitor = new GetVisitor();
         m.walkInRowOrder(getVisitor, 1, rows - 2, 1, columns - 2);
-        Assert.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
+        Assertions.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
         for (int i = 0; i < rows; ++i) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, 0));
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, 0));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
         }
         for (int j = 0; j < columns; ++j) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(0, j));
-            Assert.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(0, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
         }
 
         m = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), rows, columns);
         m.walkInOptimizedOrder(new SetVisitor());
         getVisitor = new GetVisitor();
         m.walkInColumnOrder(getVisitor);
-        Assert.assertEquals(rows * columns, getVisitor.getCount());
+        Assertions.assertEquals(rows * columns, getVisitor.getCount());
 
         m = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), rows, columns);
         m.walkInOptimizedOrder(new SetVisitor(), 1, rows - 2, 1, columns - 2);
         getVisitor = new GetVisitor();
         m.walkInColumnOrder(getVisitor, 1, rows - 2, 1, columns - 2);
-        Assert.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
+        Assertions.assertEquals((rows - 2) * (columns - 2), getVisitor.getCount());
         for (int i = 0; i < rows; ++i) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, 0));
-            Assert.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, 0));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(i, columns - 1));
         }
         for (int j = 0; j < columns; ++j) {
-            Assert.assertEquals(new Fraction(0), m.getEntry(0, j));
-            Assert.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(0, j));
+            Assertions.assertEquals(new Fraction(0), m.getEntry(rows - 1, j));
         }
     }
 
     @Test
     public void testSerial()  {
         Array2DRowFieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(testData);
-        Assert.assertEquals(m,UnitTestUtils.serializeAndRecover(m));
+        Assertions.assertEquals(m,UnitTestUtils.serializeAndRecover(m));
     }
 
     private static class SetVisitor extends DefaultFieldMatrixChangingVisitor<Fraction> {
@@ -1172,7 +1176,7 @@ public final class Array2DRowFieldMatrixTest {
         @Override
         public void visit(int i, int j, Fraction value) {
             ++count;
-            Assert.assertEquals(new Fraction(i * 1024 + j, 1024), value);
+            Assertions.assertEquals(new Fraction(i * 1024 + j, 1024), value);
         }
         public int getCount() {
             return count;

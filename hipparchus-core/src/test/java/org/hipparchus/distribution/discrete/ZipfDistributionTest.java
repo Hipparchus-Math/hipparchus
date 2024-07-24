@@ -25,8 +25,10 @@ package org.hipparchus.distribution.discrete;
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test cases for {@link ZipfDistribution}.
@@ -40,14 +42,18 @@ public class ZipfDistributionTest extends IntegerDistributionAbstractTest {
         setTolerance(1e-12);
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions1() {
-        new ZipfDistribution(0, 1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new ZipfDistribution(0, 1);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions2() {
-        new ZipfDistribution(1, 0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new ZipfDistribution(1, 0);
+        });
     }
 
     //-------------- Implementations for abstract methods -----------------------
@@ -118,8 +124,8 @@ public class ZipfDistributionTest extends IntegerDistributionAbstractTest {
         ZipfDistribution dist;
 
         dist = new ZipfDistribution(2, 0.5);
-        Assert.assertEquals(dist.getNumericalMean(), FastMath.sqrt(2), tol);
-        Assert.assertEquals(dist.getNumericalVariance(), 0.24264068711928521, tol);
+        Assertions.assertEquals(dist.getNumericalMean(), FastMath.sqrt(2), tol);
+        Assertions.assertEquals(0.24264068711928521, dist.getNumericalVariance(), tol);
     }
 
 }

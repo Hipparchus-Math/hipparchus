@@ -23,8 +23,8 @@ package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test of the {@link HermiteRuleFactory}.
@@ -56,7 +56,7 @@ public class HermiteTest {
         final GaussIntegrator integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f);
         final double expected = 1;
-        Assert.assertEquals(expected, result, FastMath.ulp(expected));
+        Assertions.assertEquals(expected, result, FastMath.ulp(expected));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class HermiteTest {
         final GaussIntegrator integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f);
         final double expected = mu;
-        Assert.assertEquals(expected, result, 5 * FastMath.ulp(expected));
+        Assertions.assertEquals(expected, result, 5 * FastMath.ulp(expected));
     }
 
     @Test
@@ -109,6 +109,6 @@ public class HermiteTest {
         final GaussIntegrator integrator = factory.hermite(numPoints);
         final double result = integrator.integrate(f);
         final double expected = sigma2;
-        Assert.assertEquals(expected, result, 10 * FastMath.ulp(expected));
+        Assertions.assertEquals(expected, result, 10 * FastMath.ulp(expected));
     }
 }

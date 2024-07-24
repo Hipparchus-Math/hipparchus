@@ -20,20 +20,20 @@ package org.hipparchus.geometry.euclidean.threed;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.util.Binary64Field;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class RotationStageTest {
 
     @Test
     public void testAxis() {
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             Vector3D.distance(Vector3D.PLUS_I, RotationStage.X.getAxis()),
                             1.0e-15);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             Vector3D.distance(Vector3D.PLUS_J, RotationStage.Y.getAxis()),
                             1.0e-15);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             Vector3D.distance(Vector3D.PLUS_K, RotationStage.Z.getAxis()),
                             1.0e-15);
     }
@@ -41,9 +41,9 @@ public class RotationStageTest {
     @Test
     public void testComponent() {
         final Vector3D v = new Vector3D(1.0, 2.0, 3.0);
-        Assert.assertEquals( 1.0, RotationStage.X.getComponent(v), 1.0e-15);
-        Assert.assertEquals( 2.0, RotationStage.Y.getComponent(v), 1.0e-15);
-        Assert.assertEquals( 3.0, RotationStage.Z.getComponent(v), 1.0e-15);
+        Assertions.assertEquals( 1.0, RotationStage.X.getComponent(v), 1.0e-15);
+        Assertions.assertEquals( 2.0, RotationStage.Y.getComponent(v), 1.0e-15);
+        Assertions.assertEquals( 3.0, RotationStage.Z.getComponent(v), 1.0e-15);
     }
 
     @Test
@@ -55,9 +55,9 @@ public class RotationStageTest {
         final FieldVector3D<T> v = new FieldVector3D<>(field.getZero().newInstance(1.0),
                                                        field.getZero().newInstance(2.0),
                                                        field.getZero().newInstance(3.0));
-        Assert.assertEquals( 1.0, RotationStage.X.getComponent(v).getReal(), 1.0e-15);
-        Assert.assertEquals( 2.0, RotationStage.Y.getComponent(v).getReal(), 1.0e-15);
-        Assert.assertEquals( 3.0, RotationStage.Z.getComponent(v).getReal(), 1.0e-15);
+        Assertions.assertEquals( 1.0, RotationStage.X.getComponent(v).getReal(), 1.0e-15);
+        Assertions.assertEquals( 2.0, RotationStage.Y.getComponent(v).getReal(), 1.0e-15);
+        Assertions.assertEquals( 3.0, RotationStage.Z.getComponent(v).getReal(), 1.0e-15);
     }
 
 }

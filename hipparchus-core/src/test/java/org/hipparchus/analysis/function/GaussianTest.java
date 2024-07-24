@@ -29,8 +29,10 @@ import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for class {@link Gaussian}.
@@ -38,28 +40,30 @@ import org.junit.Test;
 public class GaussianTest {
     private final double EPS = Math.ulp(1d);
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions() {
-        new Gaussian(1, 2, -1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new Gaussian(1, 2, -1);
+        });
     }
 
     @Test
     public void testSomeValues() {
         final UnivariateFunction f = new Gaussian();
 
-        Assert.assertEquals(1 / FastMath.sqrt(2 * Math.PI), f.value(0), EPS);
+        Assertions.assertEquals(1 / FastMath.sqrt(2 * Math.PI), f.value(0), EPS);
     }
 
     @Test
     public void testLargeArguments() {
         final UnivariateFunction f = new Gaussian();
 
-        Assert.assertEquals(0, f.value(Double.NEGATIVE_INFINITY), 0);
-        Assert.assertEquals(0, f.value(-Double.MAX_VALUE), 0);
-        Assert.assertEquals(0, f.value(-1e2), 0);
-        Assert.assertEquals(0, f.value(1e2), 0);
-        Assert.assertEquals(0, f.value(Double.MAX_VALUE), 0);
-        Assert.assertEquals(0, f.value(Double.POSITIVE_INFINITY), 0);
+        Assertions.assertEquals(0, f.value(Double.NEGATIVE_INFINITY), 0);
+        Assertions.assertEquals(0, f.value(-Double.MAX_VALUE), 0);
+        Assertions.assertEquals(0, f.value(-1e2), 0);
+        Assertions.assertEquals(0, f.value(1e2), 0);
+        Assertions.assertEquals(0, f.value(Double.MAX_VALUE), 0);
+        Assertions.assertEquals(0, f.value(Double.POSITIVE_INFINITY), 0);
     }
 
     @Test
@@ -67,11 +71,11 @@ public class GaussianTest {
         final UnivariateDifferentiableFunction gaussian = new Gaussian(2.0, 0.9, 3.0);
         final DerivativeStructure dsX = new DSFactory(1, 4).variable(0, 1.1);
         final DerivativeStructure dsY = gaussian.value(dsX);
-        Assert.assertEquals( 1.9955604901712128349,   dsY.getValue(),              EPS);
-        Assert.assertEquals(-0.044345788670471396332, dsY.getPartialDerivative(1), EPS);
-        Assert.assertEquals(-0.22074348138190206174,  dsY.getPartialDerivative(2), EPS);
-        Assert.assertEquals( 0.014760030401924800557, dsY.getPartialDerivative(3), EPS);
-        Assert.assertEquals( 0.073253159785035691678, dsY.getPartialDerivative(4), EPS);
+        Assertions.assertEquals( 1.9955604901712128349,   dsY.getValue(),              EPS);
+        Assertions.assertEquals(-0.044345788670471396332, dsY.getPartialDerivative(1), EPS);
+        Assertions.assertEquals(-0.22074348138190206174,  dsY.getPartialDerivative(2), EPS);
+        Assertions.assertEquals( 0.014760030401924800557, dsY.getPartialDerivative(3), EPS);
+        Assertions.assertEquals( 0.073253159785035691678, dsY.getPartialDerivative(4), EPS);
     }
 
     @Test
@@ -79,14 +83,14 @@ public class GaussianTest {
         final Gaussian f = new Gaussian(0, 1e-50);
 
         DSFactory factory = new DSFactory(1, 1);
-        Assert.assertEquals(0, f.value(factory.variable(0, Double.NEGATIVE_INFINITY)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(factory.variable(0, -Double.MAX_VALUE)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(factory.variable(0, -1e50)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(factory.variable(0, -1e2)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(factory.variable(0, 1e2)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(factory.variable(0, 1e50)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(factory.variable(0, Double.MAX_VALUE)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(factory.variable(0, Double.POSITIVE_INFINITY)).getPartialDerivative(1), 0);
+        Assertions.assertEquals(0, f.value(factory.variable(0, Double.NEGATIVE_INFINITY)).getPartialDerivative(1), 0);
+        Assertions.assertEquals(0, f.value(factory.variable(0, -Double.MAX_VALUE)).getPartialDerivative(1), 0);
+        Assertions.assertEquals(0, f.value(factory.variable(0, -1e50)).getPartialDerivative(1), 0);
+        Assertions.assertEquals(0, f.value(factory.variable(0, -1e2)).getPartialDerivative(1), 0);
+        Assertions.assertEquals(0, f.value(factory.variable(0, 1e2)).getPartialDerivative(1), 0);
+        Assertions.assertEquals(0, f.value(factory.variable(0, 1e50)).getPartialDerivative(1), 0);
+        Assertions.assertEquals(0, f.value(factory.variable(0, Double.MAX_VALUE)).getPartialDerivative(1), 0);
+        Assertions.assertEquals(0, f.value(factory.variable(0, Double.POSITIVE_INFINITY)).getPartialDerivative(1), 0);
     }
 
     @Test
@@ -94,44 +98,56 @@ public class GaussianTest {
         final Gaussian f = new Gaussian(0, 1e-50);
         final DerivativeStructure fx = f.value(new DSFactory(1, 5).variable(0, Double.NaN));
         for (int i = 0; i <= fx.getOrder(); ++i) {
-            Assert.assertTrue(Double.isNaN(fx.getPartialDerivative(i)));
+            Assertions.assertTrue(Double.isNaN(fx.getPartialDerivative(i)));
         }
     }
 
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void testParametricUsage1() {
-        final Gaussian.Parametric g = new Gaussian.Parametric();
-        g.value(0, null);
+        assertThrows(NullArgumentException.class, () -> {
+            final Gaussian.Parametric g = new Gaussian.Parametric();
+            g.value(0, null);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testParametricUsage2() {
-        final Gaussian.Parametric g = new Gaussian.Parametric();
-        g.value(0, new double[] {0});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Gaussian.Parametric g = new Gaussian.Parametric();
+            g.value(0, new double[]{0});
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testParametricUsage3() {
-        final Gaussian.Parametric g = new Gaussian.Parametric();
-        g.value(0, new double[] {0, 1, 0});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Gaussian.Parametric g = new Gaussian.Parametric();
+            g.value(0, new double[]{0, 1, 0});
+        });
     }
 
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void testParametricUsage4() {
-        final Gaussian.Parametric g = new Gaussian.Parametric();
-        g.gradient(0, null);
+        assertThrows(NullArgumentException.class, () -> {
+            final Gaussian.Parametric g = new Gaussian.Parametric();
+            g.gradient(0, null);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testParametricUsage5() {
-        final Gaussian.Parametric g = new Gaussian.Parametric();
-        g.gradient(0, new double[] {0});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Gaussian.Parametric g = new Gaussian.Parametric();
+            g.gradient(0, new double[]{0});
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testParametricUsage6() {
-        final Gaussian.Parametric g = new Gaussian.Parametric();
-        g.gradient(0, new double[] {0, 1, 0});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Gaussian.Parametric g = new Gaussian.Parametric();
+            g.gradient(0, new double[]{0, 1, 0});
+        });
     }
 
     @Test
@@ -142,9 +158,9 @@ public class GaussianTest {
         final Gaussian f = new Gaussian(norm, mean, sigma);
 
         final Gaussian.Parametric g = new Gaussian.Parametric();
-        Assert.assertEquals(f.value(-1), g.value(-1, new double[] {norm, mean, sigma}), 0);
-        Assert.assertEquals(f.value(0), g.value(0, new double[] {norm, mean, sigma}), 0);
-        Assert.assertEquals(f.value(2), g.value(2, new double[] {norm, mean, sigma}), 0);
+        Assertions.assertEquals(f.value(-1), g.value(-1, new double[] {norm, mean, sigma}), 0);
+        Assertions.assertEquals(f.value(0), g.value(0, new double[] {norm, mean, sigma}), 0);
+        Assertions.assertEquals(f.value(2), g.value(2, new double[] {norm, mean, sigma}), 0);
     }
 
     @Test
@@ -158,10 +174,10 @@ public class GaussianTest {
         final double[] grad = f.gradient(1, new double[] {norm, mean, sigma});
         final double diff = x - mean;
         final double n = FastMath.exp(-diff * diff / (2 * sigma * sigma));
-        Assert.assertEquals(n, grad[0], EPS);
+        Assertions.assertEquals(n, grad[0], EPS);
         final double m = norm * n * diff / (sigma * sigma);
-        Assert.assertEquals(m, grad[1], EPS);
+        Assertions.assertEquals(m, grad[1], EPS);
         final double s = m * diff / sigma;
-        Assert.assertEquals(s, grad[2], EPS);
+        Assertions.assertEquals(s, grad[2], EPS);
     }
 }

@@ -21,17 +21,17 @@
  */
 package org.hipparchus.geometry.enclosing;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.hipparchus.geometry.euclidean.twod.DiskGenerator;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class WelzlEncloser2DTest {
@@ -42,7 +42,7 @@ public class WelzlEncloser2DTest {
         WelzlEncloser<Euclidean2D, Vector2D> encloser =
                 new WelzlEncloser<Euclidean2D, Vector2D>(1.0e-10, generator);
         EnclosingBall<Euclidean2D, Vector2D> ball = encloser.enclose(null);
-        Assert.assertTrue(ball.getRadius() < 0);
+        Assertions.assertTrue(ball.getRadius() < 0);
     }
 
     @Test
@@ -51,7 +51,7 @@ public class WelzlEncloser2DTest {
         WelzlEncloser<Euclidean2D, Vector2D> encloser =
                 new WelzlEncloser<Euclidean2D, Vector2D>(1.0e-10, generator);
         EnclosingBall<Euclidean2D, Vector2D> ball = encloser.enclose(new ArrayList<Vector2D>());
-        Assert.assertTrue(ball.getRadius() < 0);
+        Assertions.assertTrue(ball.getRadius() < 0);
     }
 
     @Test
@@ -115,10 +115,10 @@ public class WelzlEncloser2DTest {
         // compare computed disk with expected disk
         DiskGenerator generator = new DiskGenerator();
         EnclosingBall<Euclidean2D, Vector2D> expected = generator.ballOnSupport(refSupport);
-        Assert.assertEquals(refSupport.size(), disk.getSupportSize());
-        Assert.assertEquals(expected.getRadius(),        disk.getRadius(),        1.0e-10);
-        Assert.assertEquals(expected.getCenter().getX(), disk.getCenter().getX(), 1.0e-10);
-        Assert.assertEquals(expected.getCenter().getY(), disk.getCenter().getY(), 1.0e-10);
+        Assertions.assertEquals(refSupport.size(), disk.getSupportSize());
+        Assertions.assertEquals(expected.getRadius(),        disk.getRadius(),        1.0e-10);
+        Assertions.assertEquals(expected.getCenter().getX(), disk.getCenter().getX(), 1.0e-10);
+        Assertions.assertEquals(expected.getCenter().getY(), disk.getCenter().getY(), 1.0e-10);
 
         for (Vector2D s : disk.getSupport()) {
             boolean found = false;
@@ -127,7 +127,7 @@ public class WelzlEncloser2DTest {
                     found = true;
                 }
             }
-            Assert.assertTrue(found);
+            Assertions.assertTrue(found);
         }
 
         // check removing any point of the support disk fails to enclose the point
@@ -146,7 +146,7 @@ public class WelzlEncloser2DTest {
                     foundOutside = true;
                 }
             }
-            Assert.assertTrue(foundOutside);
+            Assertions.assertTrue(foundOutside);
         }
 
     }
@@ -159,7 +159,7 @@ public class WelzlEncloser2DTest {
 
         // all points are enclosed
         for (Vector2D v : points) {
-            Assert.assertTrue(disk.contains(v, 1.0e-10));
+            Assertions.assertTrue(disk.contains(v, 1.0e-10));
         }
 
         for (Vector2D v : points) {
@@ -171,7 +171,7 @@ public class WelzlEncloser2DTest {
             }
             if (inSupport) {
                 // points on the support should be outside of reduced ball
-                Assert.assertFalse(disk.contains(v, -0.001));
+                Assertions.assertFalse(disk.contains(v, -0.001));
             }
         }
 

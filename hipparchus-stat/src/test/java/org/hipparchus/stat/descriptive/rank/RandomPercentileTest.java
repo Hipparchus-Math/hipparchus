@@ -16,17 +16,6 @@
  */
 package org.hipparchus.stat.descriptive.rank;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.SplittableRandom;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.ExponentialDistribution;
@@ -44,7 +33,19 @@ import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
 import org.hipparchus.stat.inference.AlternativeHypothesis;
 import org.hipparchus.stat.inference.BinomialTest;
 import org.hipparchus.util.FastMath;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.SplittableRandom;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test cases for the {@link RandomPercentileTest} class.
@@ -86,14 +87,14 @@ public class RandomPercentileTest extends
         replica = master.copy();
 
         // Check same
-        assertTrue(replica.equals(master));
-        assertTrue(master.equals(replica));
+        assertEquals(replica, master);
+        assertEquals(master, replica);
 
         // Now add second part to both and check again
         master.incrementAll(testArray, (int) index, (int) (testArray.length - index));
         replica.incrementAll(testArray, (int) index, (int) (testArray.length - index));
-        assertTrue(replica.equals(master));
-        assertTrue(master.equals(replica));
+        assertEquals(replica, master);
+        assertEquals(master, replica);
     }
 
     /**
@@ -116,15 +117,15 @@ public class RandomPercentileTest extends
         replica = master.copy();
 
         // Check same
-        assertTrue(replica.equals(master));
-        assertTrue(master.equals(replica));
+        assertEquals(replica, master);
+        assertEquals(master, replica);
         // Now add second part to both and check again
         master.incrementAll(testArray, (int) index, (int) (testArray.length - index));
         replica.incrementAll(testArray, (int) index, (int) (testArray.length - index));
-        assertTrue(master.equals(master));
-        assertTrue(replica.equals(replica));
-        assertTrue(replica.equals(master));
-        assertTrue(master.equals(replica));
+        assertEquals(master, master);
+        assertEquals(replica, replica);
+        assertEquals(replica, master);
+        assertEquals(master, replica);
     }
 
     @Test
@@ -142,14 +143,16 @@ public class RandomPercentileTest extends
         assertEquals(p.evaluate(d),randomPercentile.getResult(50d), 1.0e-5);
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testNonPositiveEpsilon() {
-        double[] d =
-                new double[] { 95.1772, 95.1567, 95.1937, 95.1959, 95.1442,
-                        95.0610, 95.1591, 95.1195, 95.1772, 95.0925, 95.1990,
-                        95.1682 };
-        RandomPercentile p = new RandomPercentile(0);
-        p.evaluate(d, 0, d.length);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] d =
+                new double[]{95.1772, 95.1567, 95.1937, 95.1959, 95.1442,
+                    95.0610, 95.1591, 95.1195, 95.1772, 95.0925, 95.1990,
+                    95.1682};
+            RandomPercentile p = new RandomPercentile(0);
+            p.evaluate(d, 0, d.length);
+        });
     }
 
     @Test
@@ -484,8 +487,8 @@ public class RandomPercentileTest extends
         // Check some quantiles
         for (int l = 0; l < 5; l++) {
             final double percentile = l * 13 + 1;
-            assertEquals("percentile = " + percentile, randomMaster.getResult(percentile),
-                    randomMaster.reduce(percentile, aggregates), 5E-3);
+            assertEquals(randomMaster.getResult(percentile),
+                    randomMaster.reduce(percentile, aggregates), 5E-3, "percentile = " + percentile);
         }
     }
 
@@ -511,15 +514,15 @@ public class RandomPercentileTest extends
 
     private void assertValues(Double a, Double b, double delta) {
         if (Double.isNaN(a)) {
-            assertTrue("" + b + " is not NaN.", Double.isNaN(a));
+            assertTrue(Double.isNaN(a), "" + b + " is not NaN.");
         } else if (Double.isInfinite(a)) {
-            assertTrue(a.equals(b));
+            assertEquals(a, b);
         } else {
             double max = FastMath.max(a, b);
             double percentage = FastMath.abs(a - b) / max;
             double deviation = delta;
-            assertTrue(String.format("Deviated = %f and is beyond %f as a=%f,  b=%f",
-                                     percentage, deviation, a, b), percentage < deviation);
+            assertTrue(percentage < deviation, String.format("Deviated = %f and is beyond %f as a=%f,  b=%f",
+                                     percentage, deviation, a, b));
         }
     }
 
@@ -544,13 +547,13 @@ public class RandomPercentileTest extends
          if (Double.isNaN(referenceValue)) {
              assertTrue(Double.isNaN(value));
          } else if (Double.isInfinite(value)) {
-             assertTrue(value == referenceValue);
+             assertEquals(value, referenceValue);
          } else {
-             assertTrue("Quantile error exceeded: value returned = " + value +
+             assertTrue(FastMath.abs(quantile - (double) nLess / n) < tolerance,
+                        "Quantile error exceeded: value returned = " + value +
                         " Reference value = " + referenceValue +
                         " quantile = " + quantile + " n = " + n +
-                        " error = " + (quantile - (double) nLess / n),
-                        FastMath.abs(quantile - (double) nLess / n) < tolerance);
+                        " error = " + (quantile - (double) nLess / n));
          }
     }
 
@@ -674,14 +677,18 @@ public class RandomPercentileTest extends
         assertEquals(2064, RandomPercentile.maxValuesRetained(1E-2));
     }
     
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testMaxValuesRetained0Epsilon() {
-        RandomPercentile.maxValuesRetained(0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            RandomPercentile.maxValuesRetained(0);
+        });
     }
     
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testMaxValuesRetained1Epsilon() {
-        RandomPercentile.maxValuesRetained(1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            RandomPercentile.maxValuesRetained(1);
+        });
     }
 
 

@@ -22,14 +22,18 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public final class OpenMapRealMatrixTest {
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testMath679() {
-        new OpenMapRealMatrix(3, Integer.MAX_VALUE);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new OpenMapRealMatrix(3, Integer.MAX_VALUE);
+        });
     }
 
     @Test
@@ -47,7 +51,7 @@ public final class OpenMapRealMatrixTest {
         for (int i = 0; i < b.getRowDimension(); ++i) {
             for (int j = 0; j < b.getColumnDimension(); ++j) {
                 // NaNs and infinities have disappeared, this is a limitation of our implementation
-                Assert.assertEquals(0.0, b.getEntry(i, j), 1.0e-20);
+                Assertions.assertEquals(0.0, b.getEntry(i, j), 1.0e-20);
             }
         }
     }

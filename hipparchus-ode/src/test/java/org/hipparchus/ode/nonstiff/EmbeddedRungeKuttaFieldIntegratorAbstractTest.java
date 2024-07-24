@@ -17,14 +17,6 @@
 
 package org.hipparchus.ode.nonstiff;
 
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Stream;
-
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.analysis.differentiation.DSFactory;
@@ -63,8 +55,15 @@ import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.SinCos;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
 
 public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
@@ -104,7 +103,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             double[]   regularB = regularIntegrator.getB();
             double[]   regularC = regularIntegrator.getC();
 
-            Assert.assertEquals(regularA.length, fieldA.length);
+            Assertions.assertEquals(regularA.length, fieldA.length);
             for (int i = 0; i < regularA.length; ++i) {
                 checkArray(regularA[i], fieldA[i]);
             }
@@ -114,17 +113,17 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException  |
                  SecurityException      | NoSuchMethodException  | InvocationTargetException |
                  InstantiationException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
     }
 
     private <T extends CalculusFieldElement<T>> void checkArray(double[] regularArray, T[] fieldArray) {
-        Assert.assertEquals(regularArray.length, fieldArray.length);
+        Assertions.assertEquals(regularArray.length, fieldArray.length);
         for (int i = 0; i < regularArray.length; ++i) {
             if (regularArray[i] == 0) {
-                Assert.assertTrue(0.0 == fieldArray[i].getReal());
+                Assertions.assertEquals(0.0, fieldArray[i].getReal());
             } else {
-                Assert.assertEquals(regularArray[i], fieldArray[i].getReal(), FastMath.ulp(regularArray[i]));
+                Assertions.assertEquals(regularArray[i], fieldArray[i].getReal(), FastMath.ulp(regularArray[i]));
             }
         }
     }
@@ -158,7 +157,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                                  new FieldODEState<T>(field.getOne().negate(),
                                                       MathArrays.buildArray(field, 1)),
                                  field.getZero());
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
           } catch(LocalException de) {
             // expected behavior
           }
@@ -168,7 +167,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                                    new FieldODEState<T>(field.getZero(),
                                                         MathArrays.buildArray(field, 1)),
                                    field.getOne());
-               Assert.fail("an exception should have been thrown");
+               Assertions.fail("an exception should have been thrown");
           } catch(RuntimeException de) {
             // expected behavior
           }
@@ -178,7 +177,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         private static final long serialVersionUID = 20151208L;
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public abstract void testMinStep();
 
     protected <T extends CalculusFieldElement<T>> void doTestMinStep(final Field<T> field)
@@ -192,11 +191,13 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
         FieldODEIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
                                                               vecAbsoluteTolerance, vecRelativeTolerance);
-        TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
+        TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb,
+                                                                            integ);
         integ.addStepHandler(handler);
-        integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
-        Assert.fail("an exception should have been thrown");
-
+        Assertions.assertThrows(MathIllegalArgumentException.class, () -> {
+            integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(),
+                            pb.getFinalTime());
+        });
     }
 
     @Test
@@ -220,12 +221,12 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             integ.addStepHandler(handler);
             integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
 
-            Assert.assertTrue(handler.getMaximalValueError().getReal() < (factor * scalAbsoluteTolerance));
-            Assert.assertEquals(0, handler.getMaximalTimeError().getReal(), epsilon);
+            Assertions.assertTrue(handler.getMaximalValueError().getReal() < (factor * scalAbsoluteTolerance));
+            Assertions.assertEquals(0, handler.getMaximalTimeError().getReal(), epsilon);
 
             int calls = pb.getCalls();
-            Assert.assertEquals(integ.getEvaluations(), calls);
-            Assert.assertTrue(calls <= previousCalls);
+            Assertions.assertEquals(integ.getEvaluations(), calls);
+            Assertions.assertTrue(calls <= previousCalls);
             previousCalls = calls;
 
         }
@@ -257,23 +258,23 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
           integ.addEventDetector(functions[l]);
       }
       List<FieldODEEventDetector<T>> detectors = new ArrayList<>(integ.getEventDetectors());
-      Assert.assertEquals(functions.length, integ.getEventDetectors().size());
+      Assertions.assertEquals(functions.length, integ.getEventDetectors().size());
 
       for (int i = 0; i < detectors.size(); ++i) {
-          Assert.assertSame(functions[i], detectors.get(i).getHandler());
-          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
-          Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
-          Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
+          Assertions.assertSame(functions[i], detectors.get(i).getHandler());
+          Assertions.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
+          Assertions.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
+          Assertions.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
 
       integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
 
-      Assert.assertEquals(0, handler.getMaximalValueError().getReal(), epsilonMaxValue);
-      Assert.assertEquals(0, handler.getMaximalTimeError().getReal(), convergence);
-      Assert.assertEquals(12.0, handler.getLastTime().getReal(), convergence);
-      Assert.assertEquals(name, integ.getName());
+      Assertions.assertEquals(0, handler.getMaximalValueError().getReal(), epsilonMaxValue);
+      Assertions.assertEquals(0, handler.getMaximalTimeError().getReal(), convergence);
+      Assertions.assertEquals(12.0, handler.getLastTime().getReal(), convergence);
+      Assertions.assertEquals(name, integ.getName());
       integ.clearEventDetectors();
-      Assert.assertEquals(0, integ.getEventDetectors().size());
+      Assertions.assertEquals(0, integ.getEventDetectors().size());
 
     }
 
@@ -300,26 +301,26 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
           integ.addEventDetector(functions[l]);
       }
       List<FieldODEEventDetector<T>> detectors = new ArrayList<>(integ.getEventDetectors());
-      Assert.assertEquals(functions.length, integ.getEventDetectors().size());
+      Assertions.assertEquals(functions.length, integ.getEventDetectors().size());
 
       for (int i = 0; i < detectors.size(); ++i) {
-          Assert.assertSame(functions[i], detectors.get(i).getHandler());
-          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
-          Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
-          Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
+          Assertions.assertSame(functions[i], detectors.get(i).getHandler());
+          Assertions.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
+          Assertions.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
+          Assertions.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
 
       final StepCounter<T> counter = new StepCounter<>(expectedCount + 10, Action.STOP);
       integ.addStepEndHandler(counter);
-      Assert.assertEquals(1, integ.getStepEndHandlers().size());
+      Assertions.assertEquals(1, integ.getStepEndHandlers().size());
       integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
 
-      Assert.assertEquals(expectedCount, counter.count);
-      Assert.assertEquals(name, integ.getName());
+      Assertions.assertEquals(expectedCount, counter.count);
+      Assertions.assertEquals(name, integ.getName());
       integ.clearEventDetectors();
-      Assert.assertEquals(0, integ.getEventDetectors().size());
+      Assertions.assertEquals(0, integ.getEventDetectors().size());
       integ.clearStepEndHandlers();
-      Assert.assertEquals(0, integ.getStepEndHandlers().size());
+      Assertions.assertEquals(0, integ.getStepEndHandlers().size());
 
     }
 
@@ -346,22 +347,22 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
           integ.addEventDetector(functions[l]);
       }
       List<FieldODEEventDetector<T>> detectors = new ArrayList<>(integ.getEventDetectors());
-      Assert.assertEquals(functions.length, integ.getEventDetectors().size());
+      Assertions.assertEquals(functions.length, integ.getEventDetectors().size());
 
       for (int i = 0; i < detectors.size(); ++i) {
-          Assert.assertSame(functions[i], detectors.get(i).getHandler());
-          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
-          Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
-          Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
+          Assertions.assertSame(functions[i], detectors.get(i).getHandler());
+          Assertions.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
+          Assertions.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
+          Assertions.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
 
       final StepCounter<T> counter = new StepCounter<>(count, Action.STOP);
       integ.addStepEndHandler(counter);
-      Assert.assertEquals(1, integ.getStepEndHandlers().size());
+      Assertions.assertEquals(1, integ.getStepEndHandlers().size());
       FieldODEStateAndDerivative<T> finalState = integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
 
-      Assert.assertEquals(count, counter.count);
-      Assert.assertEquals(expectedTime, finalState.getTime().getReal(), 1.0e-6);
+      Assertions.assertEquals(count, counter.count);
+      Assertions.assertEquals(expectedTime, finalState.getTime().getReal(), 1.0e-6);
 
     }
 
@@ -388,25 +389,25 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
           integ.addEventDetector(functions[l]);
       }
       List<FieldODEEventDetector<T>> detectors = new ArrayList<>(integ.getEventDetectors());
-      Assert.assertEquals(functions.length, integ.getEventDetectors().size());
+      Assertions.assertEquals(functions.length, integ.getEventDetectors().size());
 
       for (int i = 0; i < detectors.size(); ++i) {
-          Assert.assertSame(functions[i], detectors.get(i).getHandler());
-          Assert.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
-          Assert.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
-          Assert.assertEquals(1000, detectors.get(i).getMaxIterationCount());
+          Assertions.assertSame(functions[i], detectors.get(i).getHandler());
+          Assertions.assertEquals(Double.POSITIVE_INFINITY, detectors.get(i).getMaxCheckInterval().currentInterval(null), 1.0);
+          Assertions.assertEquals(convergence, detectors.get(i).getSolver().getAbsoluteAccuracy().getReal(), 1.0e-15 * convergence);
+          Assertions.assertEquals(1000, detectors.get(i).getMaxIterationCount());
       }
 
       final StepCounter<T> counter = new StepCounter<>(resetCount, Action.RESET_STATE);
       integ.addStepEndHandler(counter);
-      Assert.assertEquals(1, integ.getStepEndHandlers().size());
+      Assertions.assertEquals(1, integ.getStepEndHandlers().size());
       FieldODEStateAndDerivative<T> finalState = integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
 
-      Assert.assertEquals(expectedCount, counter.count);
-      Assert.assertEquals(12.0, finalState.getTime().getReal(), 1.0e-6); // this corresponds to the Stop event detector
+      Assertions.assertEquals(expectedCount, counter.count);
+      Assertions.assertEquals(12.0, finalState.getTime().getReal(), 1.0e-6); // this corresponds to the Stop event detector
       for (int i = 0; i < finalState.getPrimaryStateDimension(); ++i) {
-          Assert.assertEquals(0.0, finalState.getPrimaryState()[i].getReal(), 1.0e-15);
-          Assert.assertEquals(0.0, finalState.getPrimaryDerivative()[i].getReal(), 1.0e-15);
+          Assertions.assertEquals(0.0, finalState.getPrimaryState()[i].getReal(), 1.0e-15);
+          Assertions.assertEquals(0.0, finalState.getPrimaryDerivative()[i].getReal(), 1.0e-15);
       }
 
     }
@@ -430,7 +431,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         }
     }
 
-    @Test(expected=LocalException.class)
+    @Test
     public abstract void testEventsErrors();
 
     protected <T extends CalculusFieldElement<T>> void doTestEventsErrors(final Field<T> field)
@@ -472,8 +473,9 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             }
         });
 
-        integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
-
+        Assertions.assertThrows(LocalException.class, ()->{
+            integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
+        });
     }
 
     @Test
@@ -517,7 +519,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
         try {
             integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalStateException mcee) {
             // Expected.
         }
@@ -537,7 +539,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                                  new FieldODEState<T>(pb.getInitialState().getTime(),
                                                       MathArrays.buildArray(field, 6)),
                                  pb.getFinalTime());
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch(MathIllegalArgumentException ie) {
         }
         try  {
@@ -546,7 +548,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                                              pb.getFinalTime().subtract(pb.getInitialState().getTime()).getReal(),
                                              new double[2], new double[4]);
             integrator.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch(MathIllegalArgumentException ie) {
         }
         try  {
@@ -555,7 +557,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                                              pb.getFinalTime().subtract(pb.getInitialState().getTime()).getReal(),
                                              new double[4], new double[4]);
             integrator.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getInitialState().getTime());
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch(MathIllegalArgumentException ie) {
         }
     }
@@ -583,10 +585,10 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         integ.addStepHandler(handler);
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
 
-        Assert.assertEquals(0, handler.getLastError().getReal(),         epsilonLast);
-        Assert.assertEquals(0, handler.getMaximalValueError().getReal(), epsilonMaxValue);
-        Assert.assertEquals(0, handler.getMaximalTimeError().getReal(),  epsilonMaxTime);
-        Assert.assertEquals(name, integ.getName());
+        Assertions.assertEquals(0, handler.getLastError().getReal(),         epsilonLast);
+        Assertions.assertEquals(0, handler.getMaximalValueError().getReal(), epsilonMaxValue);
+        Assertions.assertEquals(0, handler.getMaximalTimeError().getReal(),  epsilonMaxTime);
+        Assertions.assertEquals(name, integ.getName());
 
     }
 
@@ -631,7 +633,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             }
         }
         public void finish(FieldODEStateAndDerivative<T> finalState) {
-            Assert.assertEquals(0.0, maxError.getReal(), epsilon);
+            Assertions.assertEquals(0.0, maxError.getReal(), epsilon);
         }
     }
 
@@ -677,7 +679,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             }
         }
         public void finish(FieldODEStateAndDerivative<T> finalState) {
-            Assert.assertEquals(0.0, maxError.getReal(), epsilon);
+            Assertions.assertEquals(0.0, maxError.getReal(), epsilon);
         }
     }
 
@@ -868,8 +870,8 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         }
 
         public void finish(FieldODEStateAndDerivative<T> finalState) {
-            Assert.assertEquals(0.0, maxErrorOmega.getReal(), epsilonOmega);
-            Assert.assertEquals(0.0, maxErrorQ.getReal(),     epsilonQ);
+            Assertions.assertEquals(0.0, maxErrorOmega.getReal(), epsilonOmega);
+            Assertions.assertEquals(0.0, maxErrorQ.getReal(),     epsilonQ);
         }
 
     }
@@ -926,11 +928,11 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                     T tCurr = interpolator.getCurrentState().getTime();
                     T t     = tPrev.multiply(10 - i).add(tCurr.multiply(i)).divide(10);
                     FieldODEStateAndDerivative<T> state = interpolator.getInterpolatedState(t);
-                    Assert.assertEquals(2, state.getPrimaryStateDimension());
-                    Assert.assertEquals(1, state.getNumberOfSecondaryStates());
-                    Assert.assertEquals(2, state.getSecondaryStateDimension(0));
-                    Assert.assertEquals(1, state.getSecondaryStateDimension(1));
-                    Assert.assertEquals(3, state.getCompleteStateDimension());
+                    Assertions.assertEquals(2, state.getPrimaryStateDimension());
+                    Assertions.assertEquals(1, state.getNumberOfSecondaryStates());
+                    Assertions.assertEquals(2, state.getSecondaryStateDimension(0));
+                    Assertions.assertEquals(1, state.getSecondaryStateDimension(1));
+                    Assertions.assertEquals(3, state.getCompleteStateDimension());
                     max[0] = FastMath.max(max[0],
                                           t.sin().subtract(state.getPrimaryState()[0]).norm());
                     max[0] = FastMath.max(max[0],
@@ -950,9 +952,9 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
         FieldODEStateAndDerivative<T> finalState =
                         integrator.integrate(expandable, initialState, field.getZero().add(10.0));
-        Assert.assertEquals(10.0, finalState.getTime().getReal(), 1.0e-12);
-        Assert.assertEquals(0, max[0], epsilonSinCos);
-        Assert.assertEquals(0, max[1], epsilonLinear);
+        Assertions.assertEquals(10.0, finalState.getTime().getReal(), 1.0e-12);
+        Assertions.assertEquals(0, max[0], epsilonSinCos);
+        Assertions.assertEquals(0, max[1], epsilonLinear);
 
     }
 
@@ -990,14 +992,14 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
         // check values
         for (int i = 0; i < sinCos.getDimension(); ++i) {
-            Assert.assertEquals(sinCos.theoreticalY(t.getReal())[i], result.getPrimaryState()[i].getValue(), epsilonY);
+            Assertions.assertEquals(sinCos.theoreticalY(t.getReal())[i], result.getPrimaryState()[i].getValue(), epsilonY);
         }
 
         // check derivatives
         final double[][] derivatives = sinCos.getDerivatives(t.getReal());
         for (int i = 0; i < sinCos.getDimension(); ++i) {
             for (int parameter = 0; parameter < factory.getCompiler().getFreeParameters(); ++parameter) {
-                Assert.assertEquals(derivatives[i][parameter], dYdP(result.getPrimaryState()[i], parameter), epsilonPartials[parameter]);
+                Assertions.assertEquals(derivatives[i][parameter], dYdP(result.getPrimaryState()[i], parameter), epsilonPartials[parameter]);
             }
         }
 
@@ -1041,8 +1043,8 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                     for (int ord : orders) {
                         scaler *= CombinatoricsUtils.factorialDouble(ord);
                     }
-                    Assert.assertEquals(truncatedI[k], theoreticalI[k], 1e-15 * scaler);
-                    Assert.assertEquals(truncatedI[k], integratedI[k],  1e-8  * scaler);
+                    Assertions.assertEquals(truncatedI[k], theoreticalI[k], 1e-15 * scaler);
+                    Assertions.assertEquals(truncatedI[k], integratedI[k],  1e-8  * scaler);
                 }
             }
         });
@@ -1075,7 +1077,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
         final int size = terminalState1.getCompleteStateDimension();
         for (int i = 0; i < size; i++) {
-            Assert.assertEquals(terminalState1.getCompleteState()[i], terminalState2.getCompleteState()[i]);
+            Assertions.assertEquals(terminalState1.getCompleteState()[i], terminalState2.getCompleteState()[i]);
         }
     }
 
@@ -1111,7 +1113,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             }
         });
         FieldODEStateAndDerivative<Binary64> finalState = fieldIntegrator.integrate(new FieldExpandableODE<>(pb), pb.getInitialState(), Binary64.POSITIVE_INFINITY);
-        Assert.assertEquals(pb.getFinalTime().getReal(), finalState.getTime().getReal(), convergence);
+        Assertions.assertEquals(pb.getFinalTime().getReal(), finalState.getTime().getReal(), convergence);
     }
 
     private double dYdP(final DerivativeStructure y, final int parameter) {

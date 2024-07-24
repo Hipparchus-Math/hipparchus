@@ -21,8 +21,8 @@ import org.hipparchus.random.Well19937a;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class CarlsonEllipticIntegralFieldTest {
 
@@ -32,26 +32,26 @@ public class CarlsonEllipticIntegralFieldTest {
 
     @Test
     public void testNoConvergenceRf() {
-        Assert.assertTrue(CarlsonEllipticIntegral.rF(build(1), build(2), build(Double.NaN)).isNaN());
+        Assertions.assertTrue(CarlsonEllipticIntegral.rF(build(1), build(2), build(Double.NaN)).isNaN());
     }
 
     @Test
     public void testDlmfRf() {
         Binary64 rf = CarlsonEllipticIntegral.rF(build(1), build(2), build(4));
-        Assert.assertEquals(0.6850858166, rf.getReal(), 1.0e-10);
+        Assertions.assertEquals(0.6850858166, rf.getReal(), 1.0e-10);
     }
 
     @Test
     public void testCarlson1995rF() {
 
         Binary64 rf1 = CarlsonEllipticIntegral.rF(build(1), build(2), build(0));
-        Assert.assertEquals( 1.3110287771461, rf1.getReal(), 1.0e-13);
+        Assertions.assertEquals( 1.3110287771461, rf1.getReal(), 1.0e-13);
 
         Binary64 rf2 = CarlsonEllipticIntegral.rF(build(0.5), build(1), build(0));
-        Assert.assertEquals( 1.8540746773014, rf2.getReal(), 1.0e-13);
+        Assertions.assertEquals( 1.8540746773014, rf2.getReal(), 1.0e-13);
 
         Binary64 rf4 = CarlsonEllipticIntegral.rF(build(2), build(3), build(4));
-        Assert.assertEquals( 0.58408284167715, rf4.getReal(), 1.0e-13);
+        Assertions.assertEquals( 0.58408284167715, rf4.getReal(), 1.0e-13);
 
     }
 
@@ -66,26 +66,26 @@ public class CarlsonEllipticIntegralFieldTest {
             Binary64 rfL    = CarlsonEllipticIntegral.rF(x.add(lambda), y.add(lambda), lambda);
             Binary64 rfM    = CarlsonEllipticIntegral.rF(x.add(mu),     y.add(mu),     mu);
             Binary64 rf0    = CarlsonEllipticIntegral.rF(x,             y,             Binary64.ZERO);
-            Assert.assertEquals(0.0, rfL.add(rfM).subtract(rf0).norm(), 2.0e-14);
+            Assertions.assertEquals(0.0, rfL.add(rfM).subtract(rf0).norm(), 2.0e-14);
         }
     }
 
     @Test
     public void testNoConvergenceRc() {
-        Assert.assertTrue(CarlsonEllipticIntegral.rC(build(1), build(Double.NaN)).isNaN());
+        Assertions.assertTrue(CarlsonEllipticIntegral.rC(build(1), build(Double.NaN)).isNaN());
     }
 
     @Test
     public void testCarlson1995rC() {
 
         Binary64 rc1 = CarlsonEllipticIntegral.rC(build(0), build(0.25));
-        Assert.assertEquals(FastMath.PI, rc1.getReal(), 1.0e-15);
+        Assertions.assertEquals(FastMath.PI, rc1.getReal(), 1.0e-15);
 
         Binary64 rc2 = CarlsonEllipticIntegral.rC(build(2.25), build(2));
-        Assert.assertEquals(FastMath.log(2), rc2.getReal(), 1.0e-15);
+        Assertions.assertEquals(FastMath.log(2), rc2.getReal(), 1.0e-15);
 
         Binary64 rc5 = CarlsonEllipticIntegral.rC(build(0.25), build(-2));
-        Assert.assertEquals(FastMath.log(2) / 3.0, rc5.getReal(), 1.0e-15);
+        Assertions.assertEquals(FastMath.log(2) / 3.0, rc5.getReal(), 1.0e-15);
 
     }
 
@@ -99,7 +99,7 @@ public class CarlsonEllipticIntegralFieldTest {
             Binary64 rcL    = CarlsonEllipticIntegral.rC(lambda,         x.add(lambda));
             Binary64 rcM    = CarlsonEllipticIntegral.rC(mu,             x.add(mu));
             Binary64 rc0    = CarlsonEllipticIntegral.rC(Binary64.ZERO, x);
-            Assert.assertEquals(0.0, rcL.add(rcM).subtract(rc0).norm(), 3.0e-14);
+            Assertions.assertEquals(0.0, rcL.add(rcM).subtract(rc0).norm(), 3.0e-14);
         }
     }
 
@@ -111,23 +111,23 @@ public class CarlsonEllipticIntegralFieldTest {
             final Binary64 y = build(3 * random.nextDouble());
             final Binary64 rf = CarlsonEllipticIntegral.rF(x, y, y);
             final Binary64 rc = CarlsonEllipticIntegral.rC(x, y);
-            Assert.assertEquals(0.0, rf.subtract(rc).norm(), 4.0e-15);
+            Assertions.assertEquals(0.0, rf.subtract(rc).norm(), 4.0e-15);
         }
     }
 
     @Test
     public void testNoConvergenceRj() {
-        Assert.assertTrue(CarlsonEllipticIntegral.rJ(build(1), build(1), build(1), build(Double.NaN)).isNaN());
+        Assertions.assertTrue(CarlsonEllipticIntegral.rJ(build(1), build(1), build(1), build(Double.NaN)).isNaN());
     }
 
     @Test
     public void testCarlson1995rJ() {
 
         Binary64 rj01 = CarlsonEllipticIntegral.rJ(build(0), build(1), build(2), build(3));
-        Assert.assertEquals(0.77688623778582, rj01.getReal(), 1.0e-13);
+        Assertions.assertEquals(0.77688623778582, rj01.getReal(), 1.0e-13);
 
         Binary64 rj02 = CarlsonEllipticIntegral.rJ(build(2), build(3), build(4), build(5));
-        Assert.assertEquals( 0.14297579667157, rj02.getReal(), 1.0e-13);
+        Assertions.assertEquals( 0.14297579667157, rj02.getReal(), 1.0e-13);
 
     }
 
@@ -146,23 +146,23 @@ public class CarlsonEllipticIntegralFieldTest {
             Binary64 rjM    = CarlsonEllipticIntegral.rJ(x.add(mu),     y.add(mu),     mu,             p.add(mu));
             Binary64 rj0    = CarlsonEllipticIntegral.rJ(x,             y,             Binary64.ZERO, p);
             Binary64 rc     = CarlsonEllipticIntegral.rC(a, b);
-            Assert.assertEquals(0.0, rjL.add(rjM).subtract(rj0.subtract(rc.multiply(3))).norm(), 3.0e-13);
+            Assertions.assertEquals(0.0, rjL.add(rjM).subtract(rj0.subtract(rc.multiply(3))).norm(), 3.0e-13);
         }
     }
 
     @Test
     public void testNoConvergenceRd() {
-        Assert.assertTrue(CarlsonEllipticIntegral.rD(build(1), build(1), build(Double.NaN)).isNaN());
+        Assertions.assertTrue(CarlsonEllipticIntegral.rD(build(1), build(1), build(Double.NaN)).isNaN());
     }
 
     @Test
     public void testCarlson1995rD() {
 
         Binary64 rd1 = CarlsonEllipticIntegral.rD(build(0), build(2), build(1));
-        Assert.assertEquals(1.7972103521034, rd1.getReal(), 1.0e-13);
+        Assertions.assertEquals(1.7972103521034, rd1.getReal(), 1.0e-13);
 
         Binary64 rd2 = CarlsonEllipticIntegral.rD(build(2), build(3), build(4));
-        Assert.assertEquals( 0.16510527294261, rd2.getReal(), 1.0e-13);
+        Assertions.assertEquals( 0.16510527294261, rd2.getReal(), 1.0e-13);
 
     }
 
@@ -178,7 +178,7 @@ public class CarlsonEllipticIntegralFieldTest {
             Binary64 rdM    = CarlsonEllipticIntegral.rD(mu,             x.add(mu),     y.add(mu));
             Binary64 rd0    = CarlsonEllipticIntegral.rD(Binary64.ZERO, x,             y);
             Binary64 frac   = y.multiply(x.add(y).add(lambda).add(mu).sqrt()).reciprocal().multiply(3);
-            Assert.assertEquals(0.0, rdL.add(rdM).subtract(rd0.subtract(frac)).norm(), 9.0e-12);
+            Assertions.assertEquals(0.0, rdL.add(rdM).subtract(rd0.subtract(frac)).norm(), 9.0e-12);
         }
     }
 
@@ -196,7 +196,7 @@ public class CarlsonEllipticIntegralFieldTest {
             Binary64 lhs = x.subtract(y).multiply(CarlsonEllipticIntegral.rD(y, z, x)).
                             add(z.subtract(y).multiply(CarlsonEllipticIntegral.rD(x, y, z)));
             Binary64 rhs = CarlsonEllipticIntegral.rF(x, y, z).subtract(y.divide(x.multiply(z)).sqrt()).multiply(3);
-            Assert.assertEquals(0.0, lhs.subtract(rhs).norm(), 1.0e-10);
+            Assertions.assertEquals(0.0, lhs.subtract(rhs).norm(), 1.0e-10);
         }
     }
 
@@ -215,7 +215,7 @@ public class CarlsonEllipticIntegralFieldTest {
                             add(CarlsonEllipticIntegral.rD(z, x, y)).
                             add(CarlsonEllipticIntegral.rD(x, y, z));
             Binary64 rhs = x.multiply(y.multiply(z)).sqrt().reciprocal().multiply(3);
-            Assert.assertEquals(0.0, lhs.subtract(rhs).norm(), 2.0e-11);
+            Assertions.assertEquals(0.0, lhs.subtract(rhs).norm(), 2.0e-11);
         }
     }
 
@@ -223,13 +223,13 @@ public class CarlsonEllipticIntegralFieldTest {
     public void testCarlson1995rG() {
 
         Binary64 rg1 = CarlsonEllipticIntegral.rG(build(0), build(16), build(16));
-        Assert.assertEquals(FastMath.PI, rg1.getReal(), 1.0e-13);
+        Assertions.assertEquals(FastMath.PI, rg1.getReal(), 1.0e-13);
 
         Binary64 rg2 = CarlsonEllipticIntegral.rG(build(2), build(3), build(4));
-        Assert.assertEquals(1.7255030280692, rg2.getReal(), 1.0e-13);
+        Assertions.assertEquals(1.7255030280692, rg2.getReal(), 1.0e-13);
 
         Binary64 rg6 = CarlsonEllipticIntegral.rG(build(0), build(0.0796), build(4));
-        Assert.assertEquals( 1.0284758090288, rg6.getReal(), 1.0e-13);
+        Assertions.assertEquals( 1.0284758090288, rg6.getReal(), 1.0e-13);
 
     }
 
@@ -240,7 +240,7 @@ public class CarlsonEllipticIntegralFieldTest {
             Binary64 x = build(random.nextDouble() * 3);
             Binary64 y = build(random.nextDouble() * 3);
             Binary64 z = build(random.nextDouble() * 3);
-            Assert.assertEquals(0.0, CarlsonEllipticIntegral.rG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(), 2.0e-15);
+            Assertions.assertEquals(0.0, CarlsonEllipticIntegral.rG(x, y, z).subtract(rgAlternateImplementation(x, y, z)).norm(), 2.0e-15);
         }
     }
 

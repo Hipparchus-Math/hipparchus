@@ -33,9 +33,11 @@ import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.stat.correlation.Covariance;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbstractTest {
 
@@ -61,7 +63,7 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
             70551,116.9,554894,4007,2827,130081,1962
         };
 
-    @Before
+    @BeforeEach
     @Override
     public void setUp(){
         y = new double[]{11.0, 12.0, 13.0, 14.0, 15.0, 16.0};
@@ -82,62 +84,76 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         super.setUp();
     }
 
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void cannotAddXSampleData() {
-        createRegression().newSampleData(new double[]{}, null, null);
+        assertThrows(NullArgumentException.class, () -> {
+            createRegression().newSampleData(new double[]{}, null, null);
+        });
     }
 
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void cannotAddNullYSampleData() {
-        createRegression().newSampleData(null, new double[][]{}, null);
+        assertThrows(NullArgumentException.class, () -> {
+            createRegression().newSampleData(null, new double[][]{}, null);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void cannotAddSampleDataWithSizeMismatch() {
-        double[] y = new double[]{1.0, 2.0};
-        double[][] x = new double[1][];
-        x[0] = new double[]{1.0, 0};
-        createRegression().newSampleData(y, x, null);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] y = new double[]{1.0, 2.0};
+            double[][] x = new double[1][];
+            x[0] = new double[]{1.0, 0};
+            createRegression().newSampleData(y, x, null);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void cannotAddNullCovarianceData() {
-        createRegression().newSampleData(new double[]{}, new double[][]{}, null);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            createRegression().newSampleData(new double[]{}, new double[][]{}, null);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void notEnoughData() {
-        double[]   reducedY = new double[y.length - 1];
-        double[][] reducedX = new double[x.length - 1][];
-        double[][] reducedO = new double[omega.length - 1][];
-        System.arraycopy(y,     0, reducedY, 0, reducedY.length);
-        System.arraycopy(x,     0, reducedX, 0, reducedX.length);
-        System.arraycopy(omega, 0, reducedO, 0, reducedO.length);
-        createRegression().newSampleData(reducedY, reducedX, reducedO);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[]   reducedY = new double[y.length - 1];
+            double[][] reducedX = new double[x.length - 1][];
+            double[][] reducedO = new double[omega.length - 1][];
+            System.arraycopy(y, 0, reducedY, 0, reducedY.length);
+            System.arraycopy(x, 0, reducedX, 0, reducedX.length);
+            System.arraycopy(omega, 0, reducedO, 0, reducedO.length);
+            createRegression().newSampleData(reducedY, reducedX, reducedO);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void cannotAddCovarianceDataWithSampleSizeMismatch() {
-        double[] y = new double[]{1.0, 2.0};
-        double[][] x = new double[2][];
-        x[0] = new double[]{1.0, 0};
-        x[1] = new double[]{0, 1.0};
-        double[][] omega = new double[1][];
-        omega[0] = new double[]{1.0, 0};
-        createRegression().newSampleData(y, x, omega);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] y = new double[]{1.0, 2.0};
+            double[][] x = new double[2][];
+            x[0] = new double[]{1.0, 0};
+            x[1] = new double[]{0, 1.0};
+            double[][] omega = new double[1][];
+            omega[0] = new double[]{1.0, 0};
+            createRegression().newSampleData(y, x, omega);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void cannotAddCovarianceDataThatIsNotSquare() {
-        double[] y = new double[]{1.0, 2.0};
-        double[][] x = new double[2][];
-        x[0] = new double[]{1.0, 0};
-        x[1] = new double[]{0, 1.0};
-        double[][] omega = new double[3][];
-        omega[0] = new double[]{1.0, 0};
-        omega[1] = new double[]{0, 1.0};
-        omega[2] = new double[]{0, 2.0};
-        createRegression().newSampleData(y, x, omega);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            double[] y = new double[]{1.0, 2.0};
+            double[][] x = new double[2][];
+            x[0] = new double[]{1.0, 0};
+            x[1] = new double[]{0, 1.0};
+            double[][] omega = new double[3][];
+            omega[0] = new double[]{1.0, 0};
+            omega[1] = new double[]{0, 1.0};
+            omega[2] = new double[]{0, 2.0};
+            createRegression().newSampleData(y, x, omega);
+        });
     }
 
     @Override
@@ -190,9 +206,9 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         RealMatrix combinedCovInv = regression.getOmegaInverse();
         regression.newXSampleData(x);
         regression.newYSampleData(y);
-        Assert.assertEquals(combinedX, regression.getX());
-        Assert.assertEquals(combinedY, regression.getY());
-        Assert.assertEquals(combinedCovInv, regression.getOmegaInverse());
+        Assertions.assertEquals(combinedX, regression.getX());
+        Assertions.assertEquals(combinedY, regression.getY());
+        Assertions.assertEquals(combinedCovInv, regression.getOmegaInverse());
     }
 
     /**

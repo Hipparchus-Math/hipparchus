@@ -28,8 +28,10 @@ import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test cases for the {@link DiagonalMatrix} class.
@@ -39,8 +41,8 @@ public class DiagonalMatrixTest {
     public void testConstructor1() {
         final int dim = 3;
         final DiagonalMatrix m = new DiagonalMatrix(dim);
-        Assert.assertEquals(dim, m.getRowDimension());
-        Assert.assertEquals(dim, m.getColumnDimension());
+        Assertions.assertEquals(dim, m.getRowDimension());
+        Assertions.assertEquals(dim, m.getColumnDimension());
     }
 
     @Test
@@ -50,16 +52,16 @@ public class DiagonalMatrixTest {
         for (int i = 0; i < m.getRowDimension(); i++) {
             for (int j = 0; j < m.getRowDimension(); j++) {
                 if (i == j) {
-                    Assert.assertEquals(d[i], m.getEntry(i, j), 0d);
+                    Assertions.assertEquals(d[i], m.getEntry(i, j), 0d);
                 } else {
-                    Assert.assertEquals(0d, m.getEntry(i, j), 0d);
+                    Assertions.assertEquals(0d, m.getEntry(i, j), 0d);
                 }
             }
         }
 
         // Check that the underlying was copied.
         d[0] = 0;
-        Assert.assertFalse(d[0] == m.getEntry(0, 0));
+        Assertions.assertFalse(d[0] == m.getEntry(0, 0));
     }
 
     @Test
@@ -69,24 +71,26 @@ public class DiagonalMatrixTest {
         for (int i = 0; i < m.getRowDimension(); i++) {
             for (int j = 0; j < m.getRowDimension(); j++) {
                 if (i == j) {
-                    Assert.assertEquals(d[i], m.getEntry(i, j), 0d);
+                    Assertions.assertEquals(d[i], m.getEntry(i, j), 0d);
                 } else {
-                    Assert.assertEquals(0d, m.getEntry(i, j), 0d);
+                    Assertions.assertEquals(0d, m.getEntry(i, j), 0d);
                 }
             }
         }
 
         // Check that the underlying is referenced.
         d[0] = 0;
-        Assert.assertTrue(d[0] == m.getEntry(0, 0));
+        Assertions.assertEquals(d[0], m.getEntry(0, 0));
 
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testCreateError() {
-        final double[] d = { -1.2, 3.4, 5 };
-        final DiagonalMatrix m = new DiagonalMatrix(d, false);
-        m.createMatrix(5, 3);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final double[] d = {-1.2, 3.4, 5};
+            final DiagonalMatrix m = new DiagonalMatrix(d, false);
+            m.createMatrix(5, 3);
+        });
     }
 
     @Test
@@ -94,9 +98,9 @@ public class DiagonalMatrixTest {
         final double[] d = { -1.2, 3.4, 5 };
         final DiagonalMatrix m = new DiagonalMatrix(d, false);
         final RealMatrix p = m.createMatrix(5, 5);
-        Assert.assertTrue(p instanceof DiagonalMatrix);
-        Assert.assertEquals(5, p.getRowDimension());
-        Assert.assertEquals(5, p.getColumnDimension());
+        Assertions.assertTrue(p instanceof DiagonalMatrix);
+        Assertions.assertEquals(5, p.getRowDimension());
+        Assertions.assertEquals(5, p.getColumnDimension());
     }
 
     @Test
@@ -105,7 +109,7 @@ public class DiagonalMatrixTest {
         final DiagonalMatrix m = new DiagonalMatrix(d, false);
         final DiagonalMatrix p = (DiagonalMatrix) m.copy();
         for (int i = 0; i < m.getRowDimension(); ++i) {
-            Assert.assertEquals(m.getEntry(i, i), p.getEntry(i, i), 1.0e-20);
+            Assertions.assertEquals(m.getEntry(i, i), p.getEntry(i, i), 1.0e-20);
         }
     }
 
@@ -119,14 +123,14 @@ public class DiagonalMatrixTest {
         }
 
         final double[][] out = m.getData();
-        Assert.assertEquals(dim, out.length);
+        Assertions.assertEquals(dim, out.length);
         for (int i = 0; i < m.getRowDimension(); i++) {
-            Assert.assertEquals(dim, out[i].length);
+            Assertions.assertEquals(dim, out[i].length);
             for (int j = 0; j < m.getRowDimension(); j++) {
                 if (i == j) {
-                    Assert.assertEquals(data[i], out[i][j], 0d);
+                    Assertions.assertEquals(data[i], out[i][j], 0d);
                 } else {
-                    Assert.assertEquals(0d, out[i][j], 0d);
+                    Assertions.assertEquals(0d, out[i][j], 0d);
                 }
             }
         }
@@ -141,13 +145,13 @@ public class DiagonalMatrixTest {
         final DiagonalMatrix m2 = new DiagonalMatrix(data2);
 
         final DiagonalMatrix result = m1.add(m2);
-        Assert.assertEquals(m1.getRowDimension(), result.getRowDimension());
+        Assertions.assertEquals(m1.getRowDimension(), result.getRowDimension());
         for (int i = 0; i < result.getRowDimension(); i++) {
             for (int j = 0; j < result.getRowDimension(); j++) {
                 if (i == j) {
-                    Assert.assertEquals(data1[i] + data2[i], result.getEntry(i, j), 0d);
+                    Assertions.assertEquals(data1[i] + data2[i], result.getEntry(i, j), 0d);
                 } else {
-                    Assert.assertEquals(0d, result.getEntry(i, j), 0d);
+                    Assertions.assertEquals(0d, result.getEntry(i, j), 0d);
                 }
             }
         }
@@ -162,13 +166,13 @@ public class DiagonalMatrixTest {
         final DiagonalMatrix m2 = new DiagonalMatrix(data2);
 
         final DiagonalMatrix result = m1.subtract(m2);
-        Assert.assertEquals(m1.getRowDimension(), result.getRowDimension());
+        Assertions.assertEquals(m1.getRowDimension(), result.getRowDimension());
         for (int i = 0; i < result.getRowDimension(); i++) {
             for (int j = 0; j < result.getRowDimension(); j++) {
                 if (i == j) {
-                    Assert.assertEquals(data1[i] - data2[i], result.getEntry(i, j), 0d);
+                    Assertions.assertEquals(data1[i] - data2[i], result.getEntry(i, j), 0d);
                 } else {
-                    Assert.assertEquals(0d, result.getEntry(i, j), 0d);
+                    Assertions.assertEquals(0d, result.getEntry(i, j), 0d);
                 }
             }
         }
@@ -181,7 +185,7 @@ public class DiagonalMatrixTest {
 
         for (int i = 0; i < m.getRowDimension(); i++) {
             m.addToEntry(i, i, i);
-            Assert.assertEquals(data[i] + i, m.getEntry(i, i), 0d);
+            Assertions.assertEquals(data[i] + i, m.getEntry(i, i), 0d);
         }
     }
 
@@ -192,7 +196,7 @@ public class DiagonalMatrixTest {
 
         for (int i = 0; i < m.getRowDimension(); i++) {
             m.multiplyEntry(i, i, i);
-            Assert.assertEquals(data[i] * i, m.getEntry(i, i), 0d);
+            Assertions.assertEquals(data[i] * i, m.getEntry(i, i), 0d);
         }
     }
 
@@ -204,13 +208,13 @@ public class DiagonalMatrixTest {
         final DiagonalMatrix m2 = new DiagonalMatrix(data2);
 
         final DiagonalMatrix result = (DiagonalMatrix) m1.multiply((RealMatrix) m2);
-        Assert.assertEquals(m1.getRowDimension(), result.getRowDimension());
+        Assertions.assertEquals(m1.getRowDimension(), result.getRowDimension());
         for (int i = 0; i < result.getRowDimension(); i++) {
             for (int j = 0; j < result.getRowDimension(); j++) {
                 if (i == j) {
-                    Assert.assertEquals(data1[i] * data2[i], result.getEntry(i, j), 0d);
+                    Assertions.assertEquals(data1[i] * data2[i], result.getEntry(i, j), 0d);
                 } else {
-                    Assert.assertEquals(0d, result.getEntry(i, j), 0d);
+                    Assertions.assertEquals(0d, result.getEntry(i, j), 0d);
                 }
             }
         }
@@ -232,7 +236,7 @@ public class DiagonalMatrixTest {
 
         for (int i = 0; i < dense1.getRowDimension(); i++) {
             for (int j = 0; j < dense2.getColumnDimension(); j++) {
-                Assert.assertEquals(denseResult.getEntry(i, j),
+                Assertions.assertEquals(denseResult.getEntry(i, j),
                                     diagResult.getEntry(i, j), 0d);
             }
         }
@@ -250,7 +254,7 @@ public class DiagonalMatrixTest {
             for (int i = 0; i < rows; ++i) {
                 b.setEntry(i, i, randomGenerator.nextDouble());
             }
-            Assert.assertEquals(0.0,
+            Assertions.assertEquals(0.0,
                                 a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm1(),
                                 1.0e-15);
         }
@@ -272,7 +276,7 @@ public class DiagonalMatrixTest {
             for (int interm = 1; interm <= 64; interm += 7) {
                 final Array2DRowRealMatrix b = new Array2DRowRealMatrix(interm, rows);
                 b.walkInOptimizedOrder(randomSetter);
-                Assert.assertEquals(0.0,
+                Assertions.assertEquals(0.0,
                                     a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm1(),
                                     1.0e-15);
             }
@@ -283,11 +287,11 @@ public class DiagonalMatrixTest {
     public void testMultiplyTransposedWrongDimensions() {
         try {
             new DiagonalMatrix(3).multiplyTransposed(new DiagonalMatrix(2));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -303,7 +307,7 @@ public class DiagonalMatrixTest {
             for (int i = 0; i < rows; ++i) {
                 b.setEntry(i, i, randomGenerator.nextDouble());
             }
-            Assert.assertEquals(0.0,
+            Assertions.assertEquals(0.0,
                                 a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm1(),
                                 1.0e-15);
         }
@@ -325,7 +329,7 @@ public class DiagonalMatrixTest {
             for (int interm = 1; interm <= 64; interm += 7) {
                 final Array2DRowRealMatrix b = new Array2DRowRealMatrix(rows, interm);
                 b.walkInOptimizedOrder(randomSetter);
-                Assert.assertEquals(0.0,
+                Assertions.assertEquals(0.0,
                                     a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm1(),
                                     1.0e-15);
             }
@@ -336,11 +340,11 @@ public class DiagonalMatrixTest {
     public void testTransposeMultiplyWrongDimensions() {
         try {
             new DiagonalMatrix(3).transposeMultiply(new DiagonalMatrix(2));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -384,62 +388,72 @@ public class DiagonalMatrixTest {
         UnitTestUtils.assertEquals("preMultiply(Vector) returns wrong result", diagResult, denseResult, 0d);
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testSetNonDiagonalEntry() {
-        final DiagonalMatrix diag = new DiagonalMatrix(3);
-        diag.setEntry(1, 2, 3.4);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final DiagonalMatrix diag = new DiagonalMatrix(3);
+            diag.setEntry(1, 2, 3.4);
+        });
     }
 
     @Test
     public void testSetNonDiagonalZero() {
         final DiagonalMatrix diag = new DiagonalMatrix(3);
         diag.setEntry(1, 2, 0.0);
-        Assert.assertEquals(0.0, diag.getEntry(1, 2), Precision.SAFE_MIN);
+        Assertions.assertEquals(0.0, diag.getEntry(1, 2), Precision.SAFE_MIN);
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testAddNonDiagonalEntry() {
-        final DiagonalMatrix diag = new DiagonalMatrix(3);
-        diag.addToEntry(1, 2, 3.4);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final DiagonalMatrix diag = new DiagonalMatrix(3);
+            diag.addToEntry(1, 2, 3.4);
+        });
     }
 
     @Test
     public void testAddNonDiagonalZero() {
         final DiagonalMatrix diag = new DiagonalMatrix(3);
         diag.addToEntry(1, 2, 0.0);
-        Assert.assertEquals(0.0, diag.getEntry(1, 2), Precision.SAFE_MIN);
+        Assertions.assertEquals(0.0, diag.getEntry(1, 2), Precision.SAFE_MIN);
     }
 
     @Test
     public void testMultiplyNonDiagonalEntry() {
         final DiagonalMatrix diag = new DiagonalMatrix(3);
         diag.multiplyEntry(1, 2, 3.4);
-        Assert.assertEquals(0.0, diag.getEntry(1, 2), Precision.SAFE_MIN);
+        Assertions.assertEquals(0.0, diag.getEntry(1, 2), Precision.SAFE_MIN);
     }
 
     @Test
     public void testMultiplyNonDiagonalZero() {
         final DiagonalMatrix diag = new DiagonalMatrix(3);
         diag.multiplyEntry(1, 2, 0.0);
-        Assert.assertEquals(0.0, diag.getEntry(1, 2), Precision.SAFE_MIN);
+        Assertions.assertEquals(0.0, diag.getEntry(1, 2), Precision.SAFE_MIN);
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testSetEntryOutOfRange() {
-        final DiagonalMatrix diag = new DiagonalMatrix(3);
-        diag.setEntry(3, 3, 3.4);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final DiagonalMatrix diag = new DiagonalMatrix(3);
+            diag.setEntry(3, 3, 3.4);
+        });
     }
 
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void testNull() {
-        new DiagonalMatrix(null, false);
+        assertThrows(NullArgumentException.class, () -> {
+            new DiagonalMatrix(null, false);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testSetSubMatrixError() {
-        final double[] data = { -1.2, 3.4, 5 };
-        final DiagonalMatrix diag = new DiagonalMatrix(data);
-        diag.setSubMatrix(new double[][] { {1.0, 1.0}, {1.0, 1.0}}, 1, 1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final double[] data = {-1.2, 3.4, 5};
+            final DiagonalMatrix diag = new DiagonalMatrix(data);
+            diag.setSubMatrix(new double[][]{{1.0, 1.0}, {1.0, 1.0}}, 1, 1);
+        });
     }
 
     @Test
@@ -447,23 +461,27 @@ public class DiagonalMatrixTest {
         final double[] data = { -1.2, 3.4, 5 };
         final DiagonalMatrix diag = new DiagonalMatrix(data);
         diag.setSubMatrix(new double[][] { {0.0, 5.0, 0.0}, {0.0, 0.0, 6.0}}, 1, 0);
-        Assert.assertEquals(-1.2, diag.getEntry(0, 0), 1.0e-20);
-        Assert.assertEquals( 5.0, diag.getEntry(1, 1), 1.0e-20);
-        Assert.assertEquals( 6.0, diag.getEntry(2, 2), 1.0e-20);
+        Assertions.assertEquals(-1.2, diag.getEntry(0, 0), 1.0e-20);
+        Assertions.assertEquals( 5.0, diag.getEntry(1, 1), 1.0e-20);
+        Assertions.assertEquals( 6.0, diag.getEntry(2, 2), 1.0e-20);
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testInverseError() {
-        final double[] data = { 1, 2, 0 };
-        final DiagonalMatrix diag = new DiagonalMatrix(data);
-        diag.inverse();
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final double[] data = {1, 2, 0};
+            final DiagonalMatrix diag = new DiagonalMatrix(data);
+            diag.inverse();
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testInverseError2() {
-        final double[] data = { 1, 2, 1e-6 };
-        final DiagonalMatrix diag = new DiagonalMatrix(data);
-        diag.inverse(1e-5);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final double[] data = {1, 2, 1e-6};
+            final DiagonalMatrix diag = new DiagonalMatrix(data);
+            diag.inverse(1e-5);
+        });
     }
 
     @Test

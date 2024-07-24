@@ -17,7 +17,6 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -37,47 +36,57 @@ import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class GraggBulirschStoerIntegratorTest {
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testDimensionCheck() {
-        TestProblem1 pb = new TestProblem1();
-        AdaptiveStepsizeIntegrator integrator =
-                        new GraggBulirschStoerIntegrator(0.0, 1.0, 1.0e-10, 1.0e-10);
-        integrator.integrate(pb,
-                             new ODEState(0.0, new double[pb.getDimension()+10]),
-                             1.0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            TestProblem1 pb = new TestProblem1();
+            AdaptiveStepsizeIntegrator integrator =
+                new GraggBulirschStoerIntegrator(0.0, 1.0, 1.0e-10, 1.0e-10);
+            integrator.integrate(pb,
+                new ODEState(0.0, new double[pb.getDimension() + 10]),
+                1.0);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNullIntervalCheck() {
-        TestProblem1 pb = new TestProblem1();
-        GraggBulirschStoerIntegrator integrator =
-                        new GraggBulirschStoerIntegrator(0.0, 1.0, 1.0e-10, 1.0e-10);
-        integrator.integrate(pb,
-                             new ODEState(0.0, new double[pb.getDimension()]),
-                             0.0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            TestProblem1 pb = new TestProblem1();
+            GraggBulirschStoerIntegrator integrator =
+                new GraggBulirschStoerIntegrator(0.0, 1.0, 1.0e-10, 1.0e-10);
+            integrator.integrate(pb,
+                new ODEState(0.0, new double[pb.getDimension()]),
+                0.0);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testMinStep() {
+        assertThrows(MathIllegalArgumentException.class, () -> {
 
-        TestProblem5 pb  = new TestProblem5();
-        double minStep   = 0.1 * FastMath.abs(pb.getFinalTime() - pb.getInitialTime());
-        double maxStep   = FastMath.abs(pb.getFinalTime() - pb.getInitialTime());
-        double[] vecAbsoluteTolerance = { 1.0e-20, 1.0e-21 };
-        double[] vecRelativeTolerance = { 1.0e-20, 1.0e-21 };
+            TestProblem5 pb = new TestProblem5();
+            double minStep = 0.1 * FastMath.abs(pb.getFinalTime() - pb.getInitialTime());
+            double maxStep = FastMath.abs(pb.getFinalTime() - pb.getInitialTime());
+            double[] vecAbsoluteTolerance = {1.0e-20, 1.0e-21};
+            double[] vecRelativeTolerance = {1.0e-20, 1.0e-21};
 
-        ODEIntegrator integ =
-                        new GraggBulirschStoerIntegrator(minStep, maxStep,
-                                                         vecAbsoluteTolerance, vecRelativeTolerance);
-        TestProblemHandler handler = new TestProblemHandler(pb, integ);
-        integ.addStepHandler(handler);
-        integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
+            ODEIntegrator integ =
+                new GraggBulirschStoerIntegrator(minStep, maxStep,
+                    vecAbsoluteTolerance, vecRelativeTolerance);
+            TestProblemHandler handler = new TestProblemHandler(pb, integ);
+            integ.addStepHandler(handler);
+            integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
+
+        });
 
     }
 
@@ -97,10 +106,10 @@ public class GraggBulirschStoerIntegratorTest {
         integ.addStepHandler(handler);
         integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
-        Assert.assertTrue(handler.getLastError() < 7.5e-9);
-        Assert.assertTrue(handler.getMaximalValueError() < 8.1e-9);
-        Assert.assertEquals(0, handler.getMaximalTimeError(), 1.0e-12);
-        Assert.assertEquals("Gragg-Bulirsch-Stoer", integ.getName());
+        Assertions.assertTrue(handler.getLastError() < 7.5e-9);
+        Assertions.assertTrue(handler.getMaximalValueError() < 8.1e-9);
+        Assertions.assertEquals(0, handler.getMaximalTimeError(), 1.0e-12);
+        Assertions.assertEquals("Gragg-Bulirsch-Stoer", integ.getName());
     }
 
     @Test
@@ -125,13 +134,13 @@ public class GraggBulirschStoerIntegratorTest {
             // and have been obtained from trial and error
             // there is no general relation between local and global errors
             double ratio =  handler.getMaximalValueError() / absTolerance;
-            Assert.assertTrue(ratio < 2.4);
-            Assert.assertTrue(ratio > 0.02);
-            Assert.assertEquals(0, handler.getMaximalTimeError(), 1.0e-12);
+            Assertions.assertTrue(ratio < 2.4);
+            Assertions.assertTrue(ratio > 0.02);
+            Assertions.assertEquals(0, handler.getMaximalTimeError(), 1.0e-12);
 
             int calls = pb.getCalls();
-            Assert.assertEquals(integ.getEvaluations(), calls);
-            Assert.assertTrue(calls <= previousCalls);
+            Assertions.assertEquals(integ.getEvaluations(), calls);
+            Assertions.assertTrue(calls <= previousCalls);
             previousCalls = calls;
 
         }
@@ -150,19 +159,19 @@ public class GraggBulirschStoerIntegratorTest {
 
         // stability control
         integ.setStabilityCheck(true, 2, 1, 0.99);
-        Assert.assertTrue(errorWithDefaultSettings < getMaxError(integ, pb));
+        Assertions.assertTrue(errorWithDefaultSettings < getMaxError(integ, pb));
         integ.setStabilityCheck(true, -1, -1, -1);
 
         integ.setControlFactors(0.5, 0.99, 0.1, 2.5);
-        Assert.assertTrue(errorWithDefaultSettings < getMaxError(integ, pb));
+        Assertions.assertTrue(errorWithDefaultSettings < getMaxError(integ, pb));
         integ.setControlFactors(-1, -1, -1, -1);
 
         integ.setOrderControl(10, 0.7, 0.95);
-        Assert.assertTrue(errorWithDefaultSettings < getMaxError(integ, pb));
+        Assertions.assertTrue(errorWithDefaultSettings < getMaxError(integ, pb));
         integ.setOrderControl(-1, -1, -1);
 
         integ.setInterpolationControl(true, 3);
-        Assert.assertTrue(errorWithDefaultSettings < getMaxError(integ, pb));
+        Assertions.assertTrue(errorWithDefaultSettings < getMaxError(integ, pb));
         integ.setInterpolationControl(true, -1);
 
     }
@@ -194,16 +203,16 @@ public class GraggBulirschStoerIntegratorTest {
         for (int l = 0; l < functions.length; ++l) {
             integ.addEventDetector(functions[l]);
         }
-        Assert.assertEquals(functions.length, integ.getEventDetectors().size());
+        Assertions.assertEquals(functions.length, integ.getEventDetectors().size());
         integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
-        MatcherAssert.assertThat(handler.getMaximalValueError(), Matchers.lessThan(2.5e-11));
+        assertThat(handler.getMaximalValueError(), Matchers.lessThan(2.5e-11));
         // integration error builds up by the last event,
         // so tolerance is slightly more than the convergence.
-        Assert.assertEquals(0, handler.getMaximalTimeError(), 1.5 * convergence);
-        Assert.assertEquals(12.0, handler.getLastTime(), convergence);
+        Assertions.assertEquals(0, handler.getMaximalTimeError(), 1.5 * convergence);
+        Assertions.assertEquals(12.0, handler.getLastTime(), convergence);
         integ.clearEventDetectors();
-        Assert.assertEquals(0, integ.getEventDetectors().size());
+        Assertions.assertEquals(0, integ.getEventDetectors().size());
 
     }
 
@@ -222,8 +231,8 @@ public class GraggBulirschStoerIntegratorTest {
         integ.addStepHandler(new KeplerStepHandler(pb));
         integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
-        Assert.assertEquals(integ.getEvaluations(), pb.getCalls());
-        Assert.assertTrue(pb.getCalls() < 2150);
+        Assertions.assertEquals(integ.getEvaluations(), pb.getCalls());
+        Assertions.assertTrue(pb.getCalls() < 2150);
 
     }
 
@@ -240,8 +249,8 @@ public class GraggBulirschStoerIntegratorTest {
                                                          absTolerance, relTolerance);
         integ.addStepHandler(new VariableStepHandler());
         double stopTime = integ.integrate(pb, pb.getInitialState(), pb.getFinalTime()).getTime();
-        Assert.assertEquals(pb.getFinalTime(), stopTime, 1.0e-10);
-        Assert.assertEquals("Gragg-Bulirsch-Stoer", integ.getName());
+        Assertions.assertEquals(pb.getFinalTime(), stopTime, 1.0e-10);
+        Assertions.assertEquals("Gragg-Bulirsch-Stoer", integ.getName());
     }
 
     @Test
@@ -258,8 +267,8 @@ public class GraggBulirschStoerIntegratorTest {
             }
 
             public double[] computeDerivatives(double t, double[] y) {
-                Assert.assertTrue(t >= FastMath.nextAfter(start, Double.NEGATIVE_INFINITY));
-                Assert.assertTrue(t <= FastMath.nextAfter(end,   Double.POSITIVE_INFINITY));
+                Assertions.assertTrue(t >= FastMath.nextAfter(start, Double.NEGATIVE_INFINITY));
+                Assertions.assertTrue(t <= FastMath.nextAfter(end,   Double.POSITIVE_INFINITY));
                 return new double[] { -100.0 * y[0] };
             }
 
@@ -276,14 +285,14 @@ public class GraggBulirschStoerIntegratorTest {
                                         withMaxCheck(1.0).
                                         withMaxIter(1000).
                                         withThreshold(1.0e-12);
-        Assert.assertEquals(1.0,     stepProblem.getMaxCheckInterval().currentInterval(null), 1.0e-15);
-        Assert.assertEquals(1000,    stepProblem.getMaxIterationCount());
-        Assert.assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy(), 1.0e-25);
-        Assert.assertNotNull(stepProblem.getHandler());
+        Assertions.assertEquals(1.0,     stepProblem.getMaxCheckInterval().currentInterval(null), 1.0e-15);
+        Assertions.assertEquals(1000,    stepProblem.getMaxIterationCount());
+        Assertions.assertEquals(1.0e-12, stepProblem.getSolver().getAbsoluteAccuracy(), 1.0e-25);
+        Assertions.assertNotNull(stepProblem.getHandler());
         ODEIntegrator integ =
                         new GraggBulirschStoerIntegrator(0.1, 10, 1.0e-12, 0.0);
         integ.addEventDetector(stepProblem);
-        Assert.assertEquals(8.0,
+        Assertions.assertEquals(8.0,
                             integ.integrate(stepProblem, new ODEState(0.0, new double[] { 0.0 }), 10.0).getPrimaryState()[0],
                             1.0e-12);
     }
@@ -310,8 +319,8 @@ public class GraggBulirschStoerIntegratorTest {
             double t = interpolator.getCurrentState().getTime();
             double[] y = interpolator.getInterpolatedState(t).getPrimaryState();
             double[] yDot = interpolator.getInterpolatedState(t).getPrimaryDerivative();
-            Assert.assertEquals(3.0 * t - 5.0, y[0], 1.0e-14);
-            Assert.assertEquals(3.0, yDot[0], 1.0e-14);
+            Assertions.assertEquals(3.0 * t - 5.0, y[0], 1.0e-14);
+            Assertions.assertEquals(3.0, yDot[0], 1.0e-14);
         });
         double[] y = {4.0};
         double t0 = 3.0;
@@ -340,10 +349,10 @@ public class GraggBulirschStoerIntegratorTest {
                     return new double[] { FastMath.log(t) };
                 }
             }, new ODEState(1.0, new double[] { 1.0 }), -1.0);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
-            Assert.assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
+            Assertions.assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
+            Assertions.assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
         }
     }
 
@@ -375,8 +384,8 @@ public class GraggBulirschStoerIntegratorTest {
             }
         }
         public void finish(ODEStateAndDerivative finalState) {
-            Assert.assertTrue(maxError < 2.7e-6);
-            Assert.assertTrue(nbSteps < 80);
+            Assertions.assertTrue(maxError < 2.7e-6);
+            Assertions.assertTrue(nbSteps < 80);
         }
         private int nbSteps;
         private double maxError;
@@ -415,8 +424,8 @@ public class GraggBulirschStoerIntegratorTest {
             }
         }
         public void finish(ODEStateAndDerivative finalState) {
-            Assert.assertTrue(minStep < 8.2e-3);
-            Assert.assertTrue(maxStep > 1.5);
+            Assertions.assertTrue(minStep < 8.2e-3);
+            Assertions.assertTrue(maxStep > 1.5);
         }
     }
 

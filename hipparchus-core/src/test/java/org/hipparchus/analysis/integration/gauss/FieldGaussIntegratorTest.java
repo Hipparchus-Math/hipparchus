@@ -24,8 +24,8 @@ package org.hipparchus.analysis.integration.gauss;
 import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Pair;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for {@link GaussIntegrator} class.
@@ -40,10 +40,10 @@ public class FieldGaussIntegratorTest {
         final FieldGaussIntegrator<Binary64> integrator
             = new FieldGaussIntegrator<>(new Pair<>(toBinary64(points), toBinary64(weights)));
 
-        Assert.assertEquals(weights.length, integrator.getNumberOfPoints());
+        Assertions.assertEquals(weights.length, integrator.getNumberOfPoints());
 
         for (int i = 0; i < integrator.getNumberOfPoints(); i++) {
-            Assert.assertEquals(weights[i], integrator.getWeight(i).getReal(), 0d);
+            Assertions.assertEquals(weights[i], integrator.getWeight(i).getReal(), 0d);
         }
     }
 
@@ -55,10 +55,10 @@ public class FieldGaussIntegratorTest {
         final FieldGaussIntegrator<Binary64> integrator
         = new FieldGaussIntegrator<>(new Pair<>(toBinary64(points), toBinary64(weights)));
 
-        Assert.assertEquals(points.length, integrator.getNumberOfPoints());
+        Assertions.assertEquals(points.length, integrator.getNumberOfPoints());
 
         for (int i = 0; i < integrator.getNumberOfPoints(); i++) {
-            Assert.assertEquals(points[i], integrator.getPoint(i).getReal(), 0d);
+            Assertions.assertEquals(points[i], integrator.getPoint(i).getReal(), 0d);
         }
     }
 
@@ -74,7 +74,7 @@ public class FieldGaussIntegratorTest {
         final CalculusFieldUnivariateFunction<Binary64> c = x -> val;
 
         final Binary64 s = integrator.integrate(c);
-        Assert.assertEquals(val.multiply(points.length).getReal(), s.getReal(), 0d);
+        Assertions.assertEquals(val.multiply(points.length).getReal(), s.getReal(), 0d);
     }
 
     private Binary64[] toBinary64(final double[] a) {

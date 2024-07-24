@@ -17,16 +17,16 @@
 
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
-import java.io.IOException;
-
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.LUDecomposer;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.SimpleVectorValueChecker;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Evaluation;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -64,7 +64,7 @@ public class SequentialGaussNewtonOptimizerWithLUTest
             super.testMoreEstimatedParametersSimple();
             fail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
                                 e.getSpecifier());
         }
     }
@@ -79,7 +79,7 @@ public class SequentialGaussNewtonOptimizerWithLUTest
             super.testMoreEstimatedParametersUnsorted();
             fail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
+            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM,
                                 e.getSpecifier());
         }
     }
@@ -105,7 +105,7 @@ public class SequentialGaussNewtonOptimizerWithLUTest
 
             fail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
         }
     }
 
@@ -121,7 +121,7 @@ public class SequentialGaussNewtonOptimizerWithLUTest
         try {
             super.testHahn1();
         } catch (MathIllegalStateException e) {
-           Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e.getSpecifier());
+           Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e.getSpecifier());
         }
     }
 }

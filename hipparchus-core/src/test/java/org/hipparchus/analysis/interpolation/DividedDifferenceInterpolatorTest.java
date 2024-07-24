@@ -26,8 +26,8 @@ import org.hipparchus.analysis.function.Expm1;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 /**
@@ -75,11 +75,11 @@ public final class DividedDifferenceInterpolatorTest {
 
         z = FastMath.PI / 4; expected = f.value(z); result = p.value(z);
         tolerance = FastMath.abs(derivativebound * partialerror(x, z));
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         z = FastMath.PI * 1.5; expected = f.value(z); result = p.value(z);
         tolerance = FastMath.abs(derivativebound * partialerror(x, z));
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
     }
 
     /**
@@ -112,15 +112,15 @@ public final class DividedDifferenceInterpolatorTest {
 
         z = 0.0; expected = f.value(z); result = p.value(z);
         tolerance = FastMath.abs(derivativebound * partialerror(x, z));
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         z = 0.5; expected = f.value(z); result = p.value(z);
         tolerance = FastMath.abs(derivativebound * partialerror(x, z));
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         z = -0.5; expected = f.value(z); result = p.value(z);
         tolerance = FastMath.abs(derivativebound * partialerror(x, z));
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
     }
 
     /**
@@ -136,7 +136,7 @@ public final class DividedDifferenceInterpolatorTest {
             double[] y = { 0.0, 4.0, 4.0, 2.5 };
             UnivariateFunction p = interpolator.interpolate(x, y);
             p.value(0.0);
-            Assert.fail("Expecting MathIllegalArgumentException - bad abscissas array");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad abscissas array");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }

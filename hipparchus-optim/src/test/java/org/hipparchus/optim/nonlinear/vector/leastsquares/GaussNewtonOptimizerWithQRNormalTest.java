@@ -22,14 +22,16 @@
 
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
-import java.io.IOException;
-
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.QRDecomposer;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.SimpleVectorValueChecker;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -61,7 +63,7 @@ public class GaussNewtonOptimizerWithQRNormalTest
         try {
             super.testMoreEstimatedParametersUnsorted();
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
+            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
         }
     }
 
@@ -98,7 +100,7 @@ public class GaussNewtonOptimizerWithQRNormalTest
              */
             super.testCircleFittingBadInit();
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
+            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
         }
     }
 
@@ -111,17 +113,19 @@ public class GaussNewtonOptimizerWithQRNormalTest
              * optimizer. This should be inquired.
              */
             super.testHahn1();
-            Assert.fail("Expected Exception with: " + optimizer);
+            Assertions.fail("Expected Exception with: " + optimizer);
         } catch (MathIllegalStateException mise) {
             // pass. Both singular problem, and max iterations is acceptable.
         }
     }
 
     @Override
-    @Test(expected = MathIllegalStateException.class)
+    @Test
     public void testMoreEstimatedParametersSimple() {
-        // reduced numerical stability when forming the normal equations
-        super.testMoreEstimatedParametersSimple();
+        assertThrows(MathIllegalStateException.class, () -> {
+            // reduced numerical stability when forming the normal equations
+            super.testMoreEstimatedParametersSimple();
+        });
     }
 
 }

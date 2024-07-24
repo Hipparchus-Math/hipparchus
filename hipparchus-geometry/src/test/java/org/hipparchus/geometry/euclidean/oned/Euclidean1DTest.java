@@ -23,26 +23,30 @@ package org.hipparchus.geometry.euclidean.oned;
 
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.geometry.Space;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Euclidean1DTest {
 
     @Test
     public void testDimension() {
-        Assert.assertEquals(1, Euclidean1D.getInstance().getDimension());
+        Assertions.assertEquals(1, Euclidean1D.getInstance().getDimension());
     }
 
-    @Test(expected=Euclidean1D.NoSubSpaceException.class)
+    @Test
     public void testSubSpace() {
-        Euclidean1D.getInstance().getSubSpace();
+        assertThrows(Euclidean1D.NoSubSpaceException.class, () -> {
+            Euclidean1D.getInstance().getSubSpace();
+        });
     }
 
     @Test
     public void testSerialization() {
         Space e1 = Euclidean1D.getInstance();
         Space deserialized = (Space) UnitTestUtils.serializeAndRecover(e1);
-        Assert.assertTrue(e1 == deserialized);
+        Assertions.assertTrue(e1 == deserialized);
     }
 
 }

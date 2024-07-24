@@ -21,25 +21,24 @@
  */
 package org.hipparchus.fraction;
 
+import org.hipparchus.Field;
+import org.hipparchus.UnitTestUtils;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import org.hipparchus.Field;
-import org.hipparchus.UnitTestUtils;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class BigFractionFieldTest {
 
     @Test
     public void testZero() {
-        Assert.assertEquals(BigFraction.ZERO, BigFractionField.getInstance().getZero());
+        Assertions.assertEquals(BigFraction.ZERO, BigFractionField.getInstance().getZero());
     }
 
     @Test
     public void testOne() {
-        Assert.assertEquals(BigFraction.ONE, BigFractionField.getInstance().getOne());
+        Assertions.assertEquals(BigFraction.ONE, BigFractionField.getInstance().getOne());
     }
 
     @SuppressWarnings("unlikely-arg-type")
@@ -52,21 +51,21 @@ public class BigFractionFieldTest {
             }
         }
         // there should be only one field for all fractions
-        Assert.assertEquals(1, map.size());
-        Assert.assertTrue(BigFractionField.getInstance().equals(map.entrySet().iterator().next().getKey()));
-        Assert.assertFalse(BigFractionField.getInstance().equals(FractionField.getInstance()));
+        Assertions.assertEquals(1, map.size());
+        Assertions.assertEquals(BigFractionField.getInstance(), map.entrySet().iterator().next().getKey());
+        Assertions.assertNotEquals(BigFractionField.getInstance(), FractionField.getInstance());
     }
 
     @Test
     public void testRunTImeClass() {
-        Assert.assertEquals(BigFraction.class, BigFractionField.getInstance().getRuntimeClass());
+        Assertions.assertEquals(BigFraction.class, BigFractionField.getInstance().getRuntimeClass());
     }
 
     @Test
     public void testSerial() {
         // deserializing the singleton should give the singleton itself back
         BigFractionField field = BigFractionField.getInstance();
-        Assert.assertTrue(field == UnitTestUtils.serializeAndRecover(field));
+        Assertions.assertTrue(field == UnitTestUtils.serializeAndRecover(field));
     }
 
 }

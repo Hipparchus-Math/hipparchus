@@ -22,13 +22,13 @@
 
 package org.hipparchus.fraction;
 
-import java.util.Locale;
-
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Locale;
 
 
 public class FractionFormatTest {
@@ -40,7 +40,7 @@ public class FractionFormatTest {
         return Locale.getDefault();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         properFormat = FractionFormat.getProperInstance(getLocale());
         improperFormat = FractionFormat.getImproperInstance(getLocale());
@@ -52,10 +52,10 @@ public class FractionFormatTest {
         String expected = "1 / 2";
 
         String actual = properFormat.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         actual = improperFormat.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -64,10 +64,10 @@ public class FractionFormatTest {
         String expected = "-1 / 2";
 
         String actual = properFormat.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         actual = improperFormat.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -76,10 +76,10 @@ public class FractionFormatTest {
         String expected = "0 / 1";
 
         String actual = properFormat.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         actual = improperFormat.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -87,10 +87,10 @@ public class FractionFormatTest {
         Fraction c = new Fraction(5, 3);
 
         String actual = properFormat.format(c);
-        Assert.assertEquals("1 2 / 3", actual);
+        Assertions.assertEquals("1 2 / 3", actual);
 
         actual = improperFormat.format(c);
-        Assert.assertEquals("5 / 3", actual);
+        Assertions.assertEquals("5 / 3", actual);
     }
 
     @Test
@@ -98,10 +98,10 @@ public class FractionFormatTest {
         Fraction c = new Fraction(-5, 3);
 
         String actual = properFormat.format(c);
-        Assert.assertEquals("-1 2 / 3", actual);
+        Assertions.assertEquals("-1 2 / 3", actual);
 
         actual = improperFormat.format(c);
-        Assert.assertEquals("-5 / 3", actual);
+        Assertions.assertEquals("-5 / 3", actual);
     }
 
     @Test
@@ -110,16 +110,16 @@ public class FractionFormatTest {
 
         try {
             Fraction c = properFormat.parse(source);
-            Assert.assertNotNull(c);
-            Assert.assertEquals(1, c.getNumerator());
-            Assert.assertEquals(2, c.getDenominator());
+            Assertions.assertNotNull(c);
+            Assertions.assertEquals(1, c.getNumerator());
+            Assertions.assertEquals(2, c.getDenominator());
 
             c = improperFormat.parse(source);
-            Assert.assertNotNull(c);
-            Assert.assertEquals(1, c.getNumerator());
-            Assert.assertEquals(2, c.getDenominator());
+            Assertions.assertNotNull(c);
+            Assertions.assertEquals(1, c.getNumerator());
+            Assertions.assertEquals(2, c.getDenominator());
         } catch (MathIllegalStateException ex) {
-            Assert.fail(ex.getMessage());
+            Assertions.fail(ex.getMessage());
         }
     }
 
@@ -128,15 +128,15 @@ public class FractionFormatTest {
         String source = "10";
         {
             Fraction c = properFormat.parse(source);
-            Assert.assertNotNull(c);
-            Assert.assertEquals(10, c.getNumerator());
-            Assert.assertEquals(1, c.getDenominator());
+            Assertions.assertNotNull(c);
+            Assertions.assertEquals(10, c.getNumerator());
+            Assertions.assertEquals(1, c.getDenominator());
         }
         {
             Fraction c = improperFormat.parse(source);
-            Assert.assertNotNull(c);
-            Assert.assertEquals(10, c.getNumerator());
-            Assert.assertEquals(1, c.getDenominator());
+            Assertions.assertNotNull(c);
+            Assertions.assertEquals(10, c.getNumerator());
+            Assertions.assertEquals(1, c.getDenominator());
         }
     }
 
@@ -144,38 +144,38 @@ public class FractionFormatTest {
     public void testParseOne1() {
         String source = "1 / 1";
         Fraction c = properFormat.parse(source);
-        Assert.assertNotNull(c);
-        Assert.assertEquals(1, c.getNumerator());
-        Assert.assertEquals(1, c.getDenominator());
+        Assertions.assertNotNull(c);
+        Assertions.assertEquals(1, c.getNumerator());
+        Assertions.assertEquals(1, c.getDenominator());
     }
 
     @Test
     public void testParseOne2() {
         String source = "10 / 10";
         Fraction c = properFormat.parse(source);
-        Assert.assertNotNull(c);
-        Assert.assertEquals(1, c.getNumerator());
-        Assert.assertEquals(1, c.getDenominator());
+        Assertions.assertNotNull(c);
+        Assertions.assertEquals(1, c.getNumerator());
+        Assertions.assertEquals(1, c.getDenominator());
     }
 
     @Test
     public void testParseZero1() {
         String source = "0 / 1";
         Fraction c = properFormat.parse(source);
-        Assert.assertNotNull(c);
-        Assert.assertEquals(0, c.getNumerator());
-        Assert.assertEquals(1, c.getDenominator());
+        Assertions.assertNotNull(c);
+        Assertions.assertEquals(0, c.getNumerator());
+        Assertions.assertEquals(1, c.getDenominator());
     }
 
     @Test
     public void testParseZero2() {
         String source = "-0 / 1";
         Fraction c = properFormat.parse(source);
-        Assert.assertNotNull(c);
-        Assert.assertEquals(0, c.getNumerator());
-        Assert.assertEquals(1, c.getDenominator());
+        Assertions.assertNotNull(c);
+        Assertions.assertEquals(0, c.getNumerator());
+        Assertions.assertEquals(1, c.getDenominator());
         // This test shows that the sign is not preserved.
-        Assert.assertEquals(Double.POSITIVE_INFINITY, 1d / c.doubleValue(), 0);
+        Assertions.assertEquals(Double.POSITIVE_INFINITY, 1d / c.doubleValue(), 0);
     }
 
     @Test
@@ -184,13 +184,13 @@ public class FractionFormatTest {
         String msg = "should not be able to parse '10 / a'.";
         try {
             properFormat.parse(source);
-            Assert.fail(msg);
+            Assertions.fail(msg);
         } catch (MathIllegalStateException ex) {
             // success
         }
         try {
             improperFormat.parse(source);
-            Assert.fail(msg);
+            Assertions.fail(msg);
         } catch (MathIllegalStateException ex) {
             // success
         }
@@ -202,13 +202,13 @@ public class FractionFormatTest {
         String msg = "should not be able to parse '10 / a'.";
         try {
             properFormat.parse(source);
-            Assert.fail(msg);
+            Assertions.fail(msg);
         } catch (MathIllegalStateException ex) {
             // success
         }
         try {
             improperFormat.parse(source);
-            Assert.fail(msg);
+            Assertions.fail(msg);
         } catch (MathIllegalStateException ex) {
             // success
         }
@@ -220,25 +220,25 @@ public class FractionFormatTest {
         {
             String source = "-1 / 2";
             Fraction c = properFormat.parse(source);
-            Assert.assertNotNull(c);
-            Assert.assertEquals(-1, c.getNumerator());
-            Assert.assertEquals(2, c.getDenominator());
+            Assertions.assertNotNull(c);
+            Assertions.assertEquals(-1, c.getNumerator());
+            Assertions.assertEquals(2, c.getDenominator());
 
             c = improperFormat.parse(source);
-            Assert.assertNotNull(c);
-            Assert.assertEquals(-1, c.getNumerator());
-            Assert.assertEquals(2, c.getDenominator());
+            Assertions.assertNotNull(c);
+            Assertions.assertEquals(-1, c.getNumerator());
+            Assertions.assertEquals(2, c.getDenominator());
 
             source = "1 / -2";
             c = properFormat.parse(source);
-            Assert.assertNotNull(c);
-            Assert.assertEquals(-1, c.getNumerator());
-            Assert.assertEquals(2, c.getDenominator());
+            Assertions.assertNotNull(c);
+            Assertions.assertEquals(-1, c.getNumerator());
+            Assertions.assertEquals(2, c.getDenominator());
 
             c = improperFormat.parse(source);
-            Assert.assertNotNull(c);
-            Assert.assertEquals(-1, c.getNumerator());
-            Assert.assertEquals(2, c.getDenominator());
+            Assertions.assertNotNull(c);
+            Assertions.assertEquals(-1, c.getNumerator());
+            Assertions.assertEquals(2, c.getDenominator());
         }
     }
 
@@ -248,14 +248,14 @@ public class FractionFormatTest {
 
         {
             Fraction c = properFormat.parse(source);
-            Assert.assertNotNull(c);
-            Assert.assertEquals(5, c.getNumerator());
-            Assert.assertEquals(3, c.getDenominator());
+            Assertions.assertNotNull(c);
+            Assertions.assertEquals(5, c.getNumerator());
+            Assertions.assertEquals(3, c.getDenominator());
         }
 
         try {
             improperFormat.parse(source);
-            Assert.fail("invalid improper fraction.");
+            Assertions.fail("invalid improper fraction.");
         } catch (MathIllegalStateException ex) {
             // success
         }
@@ -266,14 +266,14 @@ public class FractionFormatTest {
         String source = "-1 2 / 3";
         {
             Fraction c = properFormat.parse(source);
-            Assert.assertNotNull(c);
-            Assert.assertEquals(-5, c.getNumerator());
-            Assert.assertEquals(3, c.getDenominator());
+            Assertions.assertNotNull(c);
+            Assertions.assertEquals(-5, c.getNumerator());
+            Assertions.assertEquals(3, c.getDenominator());
         }
 
         try {
             improperFormat.parse(source);
-            Assert.fail("invalid improper fraction.");
+            Assertions.fail("invalid improper fraction.");
         } catch (MathIllegalStateException ex) {
             // success
         }
@@ -284,14 +284,14 @@ public class FractionFormatTest {
         String source = "2 -2 / 3";
         try {
             properFormat.parse(source);
-            Assert.fail("invalid minus in improper fraction.");
+            Assertions.fail("invalid minus in improper fraction.");
         } catch (MathIllegalStateException ex) {
             // expected
         }
         source = "2 2 / -3";
         try {
             properFormat.parse(source);
-            Assert.fail("invalid minus in improper fraction.");
+            Assertions.fail("invalid minus in improper fraction.");
         } catch (MathIllegalStateException ex) {
             // expected
         }
@@ -299,11 +299,11 @@ public class FractionFormatTest {
 
     @Test
     public void testLongFormat() {
-        Assert.assertEquals("10 / 1", improperFormat.format(10l));
+        Assertions.assertEquals("10 / 1", improperFormat.format(10l));
     }
 
     @Test
     public void testDoubleFormat() {
-        Assert.assertEquals("355 / 113", improperFormat.format(FastMath.PI));
+        Assertions.assertEquals("355 / 113", improperFormat.format(FastMath.PI));
     }
 }

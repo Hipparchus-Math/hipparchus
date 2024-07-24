@@ -20,8 +20,8 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Evaluation;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /** Unit tests for {@link EvaluationRmsChecker}. */
 public class EvaluationRmsCheckerTest {
@@ -36,13 +36,13 @@ public class EvaluationRmsCheckerTest {
 
         //action + verify
         //just matches rel tol
-        Assert.assertEquals(true, checker.converged(0, e200, mockEvaluation(210)));
+        Assertions.assertTrue(checker.converged(0, e200, mockEvaluation(210)));
         //just matches abs tol
-        Assert.assertEquals(true, checker.converged(0, e1, mockEvaluation(1.9)));
+        Assertions.assertTrue(checker.converged(0, e1, mockEvaluation(1.9)));
         //matches both
-        Assert.assertEquals(true, checker.converged(0, e1, mockEvaluation(1.01)));
+        Assertions.assertTrue(checker.converged(0, e1, mockEvaluation(1.01)));
         //matches neither
-        Assert.assertEquals(false, checker.converged(0, e200, mockEvaluation(300)));
+        Assertions.assertFalse(checker.converged(0, e200, mockEvaluation(300)));
     }
 
     /**

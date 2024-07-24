@@ -20,8 +20,8 @@ import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.MathArrays;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class FieldFunctionsTest {
 
@@ -36,7 +36,7 @@ public class FieldFunctionsTest {
         CalculusFieldUnivariateFunction<Binary64> f2 = x -> x.multiply(2);
 
         for (double x = 0; x < 1; x += 0.01) {
-            Assert.assertEquals(f2.value(new Binary64(x)).getReal(),
+            Assertions.assertEquals(f2.value(new Binary64(x)).getReal(),
                                 f1Converted.value(new Binary64(x)).getReal(),
                                 1.0e-15);
         }
@@ -54,7 +54,7 @@ public class FieldFunctionsTest {
 
         for (double x0 = 0; x0 < 1; x0 += 0.01) {
             for (double x1 = 0; x1 < 1; x1 += 0.01) {
-                Assert.assertEquals(f2.value(new Binary64(x0), new Binary64(x1)).getReal(),
+                Assertions.assertEquals(f2.value(new Binary64(x0), new Binary64(x1)).getReal(),
                                     f1Converted.value(new Binary64(x0), new Binary64(x1)).getReal(),
                                     1.0e-15);
             }
@@ -79,7 +79,7 @@ public class FieldFunctionsTest {
 
         for (double x = 0; x < 1; x += 0.01) {
             for (int i = 0; i < 3; ++i) {
-                Assert.assertEquals(f2.value(new Binary64(x))[i].getReal(),
+                Assertions.assertEquals(f2.value(new Binary64(x))[i].getReal(),
                                     f1Converted.value(new Binary64(x))[i].getReal(),
                                     1.0e-15);
             }
@@ -105,7 +105,7 @@ public class FieldFunctionsTest {
         for (double x0 = 0; x0 < 1; x0 += 0.01) {
             for (double x1 = 0; x1 < 1; x1 += 0.01) {
                 for (int i = 0; i < 3; ++i) {
-                    Assert.assertEquals(f2.value(new Binary64(x0), new Binary64(x1))[i].getReal(),
+                    Assertions.assertEquals(f2.value(new Binary64(x0), new Binary64(x1))[i].getReal(),
                                         f1Converted.value(new Binary64(x0), new Binary64(x1))[i].getReal(),
                                         1.0e-15);
                 }
@@ -134,7 +134,7 @@ public class FieldFunctionsTest {
         for (double x = 0; x < 1; x += 0.01) {
             for (int i = 0; i < 2; ++i) {
                 for (int j = 0; j < 2; ++j) {
-                    Assert.assertEquals(f2.value(new Binary64(x))[i][j].getReal(),
+                    Assertions.assertEquals(f2.value(new Binary64(x))[i][j].getReal(),
                                         f1Converted.value(new Binary64(x))[i][j].getReal(),
                                         1.0e-15);
                 }
@@ -164,7 +164,7 @@ public class FieldFunctionsTest {
             for (double x1 = 0; x1 < 1; x1 += 0.01) {
                 for (int i = 0; i < 2; ++i) {
                     for (int j = 0; j < 2; ++j) {
-                        Assert.assertEquals(f2.value(new Binary64(x0), new Binary64(x1))[i][j].getReal(),
+                        Assertions.assertEquals(f2.value(new Binary64(x0), new Binary64(x1))[i][j].getReal(),
                                             f1Converted.value(new Binary64(x0), new Binary64(x1))[i][j].getReal(),
                                             1.0e-15);
                     }

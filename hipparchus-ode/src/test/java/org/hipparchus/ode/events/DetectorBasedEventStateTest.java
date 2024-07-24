@@ -38,8 +38,8 @@ import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.ode.nonstiff.LutherIntegrator;
 import org.hipparchus.ode.sampling.DummyStepInterpolator;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class DetectorBasedEventStateTest {
 
@@ -72,15 +72,15 @@ public class DetectorBasedEventStateTest {
                                                                         osdLongBefore, osBefore,
                                                                         mapper);
         es.reinitializeBegin(interpolatorA);
-        Assert.assertFalse(es.evaluateStep(interpolatorA));
+        Assertions.assertFalse(es.evaluateStep(interpolatorA));
 
         ODEStateAndDerivative osdBetween    = new ODEStateAndDerivative(0.5 * (r1 + r2), a, a);
         ODEStateInterpolator interpolatorB  = new DummyStepInterpolator(true,
                                                                         osBefore, osdBetween,
                                                                         osBefore, osdBetween,
                                                                         mapper);
-        Assert.assertTrue(es.evaluateStep(interpolatorB));
-        Assert.assertEquals(r1, es.getEventTime(), tolerance);
+        Assertions.assertTrue(es.evaluateStep(interpolatorB));
+        Assertions.assertEquals(r1, es.getEventTime(), tolerance);
         ODEStateAndDerivative osdAtEvent    = new ODEStateAndDerivative(es.getEventTime(), a, a);
         es.doEvent(osdAtEvent);
 
@@ -89,8 +89,8 @@ public class DetectorBasedEventStateTest {
                                                                         osdAtEvent, osdAfterSecond,
                                                                         osdAtEvent, osdAfterSecond,
                                                                         mapper);
-        Assert.assertTrue(es.evaluateStep(interpolatorC));
-        Assert.assertEquals(r2, es.getEventTime(), tolerance);
+        Assertions.assertTrue(es.evaluateStep(interpolatorC));
+        Assertions.assertEquals(r2, es.getEventTime(), tolerance);
 
     }
 
@@ -116,8 +116,8 @@ public class DetectorBasedEventStateTest {
         double target = 30.0;
         ODEStateAndDerivative finalState =
                         integrator.integrate(equation, new ODEState(0.0, new double[1]), target);
-        Assert.assertEquals(target, finalState.getTime(), 1.0e-10);
-        Assert.assertEquals(32.0, finalState.getPrimaryState()[0], 1.0e-10);
+        Assertions.assertEquals(target, finalState.getTime(), 1.0e-10);
+        Assertions.assertEquals(32.0, finalState.getPrimaryState()[0], 1.0e-10);
 
     }
 
@@ -154,8 +154,8 @@ public class DetectorBasedEventStateTest {
             // to be called at obsolete times t despite an event
             // occurring later has already been triggered.
             // When this occurs, the following assertion is violated
-            Assert.assertTrue("going backard in time! (" + s.getTime() + " < " + lastTriggerTime + ")",
-                              s.getTime() >= lastTriggerTime);
+            Assertions.assertTrue(s.getTime() >= lastTriggerTime,
+                              "going backard in time! (" + s.getTime() + " < " + lastTriggerTime + ")");
             return s.getTime() - tEvent;
         }
 
@@ -199,7 +199,7 @@ public class DetectorBasedEventStateTest {
                 return new double[] { -3.0 };
             }
         });
-        Assert.assertEquals(1, index);
+        Assertions.assertEquals(1, index);
 
         DormandPrince853Integrator integrator = new DormandPrince853Integrator(0.001, 1000, 1.0e-14, 1.0e-14);
         integrator.addEventDetector(new SecondaryStateEvent(index, -3.0, 0.1, 1.0e-9, 1000));
@@ -209,9 +209,9 @@ public class DetectorBasedEventStateTest {
                                              new double[] { 0.0 },
                                              new double[][] { { 0.0 } });
         ODEStateAndDerivative finalState = integrator.integrate(equation, initialState, 30.0);
-        Assert.assertEquals( 1.0, finalState.getTime(), 1.0e-10);
-        Assert.assertEquals( 2.0, finalState.getPrimaryState()[0], 1.0e-10);
-        Assert.assertEquals(-3.0, finalState.getSecondaryState(index)[0], 1.0e-10);
+        Assertions.assertEquals( 1.0, finalState.getTime(), 1.0e-10);
+        Assertions.assertEquals( 2.0, finalState.getPrimaryState()[0], 1.0e-10);
+        Assertions.assertEquals(-3.0, finalState.getSecondaryState(index)[0], 1.0e-10);
 
     }
 
@@ -275,8 +275,8 @@ public class DetectorBasedEventStateTest {
                         new CloseEventsGenerator(9.0 - 1.0 / 128, 9.0 + 1.0 / 128, 1.0, 0.02, 1000);
         integrator.addEventDetector(eventsGenerator);
         double tEnd = integrator.integrate(equation, new ODEState(0.0, new double[1]), 100.0).getTime();
-        Assert.assertEquals( 2, eventsGenerator.getCount());
-        Assert.assertEquals( 9.0 + 1.0 / 128, tEnd, 1.0 / 32.0);
+        Assertions.assertEquals( 2, eventsGenerator.getCount());
+        Assertions.assertEquals( 9.0 + 1.0 / 128, tEnd, 1.0 / 32.0);
 
     }
 

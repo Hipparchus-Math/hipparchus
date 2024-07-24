@@ -33,8 +33,8 @@ import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 public class FieldRotationDSTest {
@@ -80,7 +80,7 @@ public class FieldRotationDSTest {
             new FieldRotation<DerivativeStructure>(createAxis(0, 0, 0),
                                                    createAngle(2 * FastMath.PI / 3),
                                                    RotationConvention.VECTOR_OPERATOR);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
         }
 
@@ -121,7 +121,7 @@ public class FieldRotationDSTest {
             new FieldRotation<DerivativeStructure>(createAxis(0, 0, 0),
                                                    createAngle(2 * FastMath.PI / 3),
                                                    RotationConvention.FRAME_TRANSFORM);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
         }
 
@@ -156,61 +156,61 @@ public class FieldRotationDSTest {
         double c2 = c * c;
         double d2 = d * d;
         double den = (a2 + b2 + c2 + d2) * FastMath.sqrt(a2 + b2 + c2 + d2);
-        Assert.assertEquals((b2 + c2 + d2) / den, r.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(-a * b / den, r.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(-a * c / den, r.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(-a * d / den, r.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(-b * a / den, r.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals((a2 + c2 + d2) / den, r.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(-b * c / den, r.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(-b * d / den, r.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(-c * a / den, r.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(-c * b / den, r.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals((a2 + b2 + d2) / den, r.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(-c * d / den, r.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(-d * a / den, r.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(-d * b / den, r.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(-d * c / den, r.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals((a2 + b2 + c2) / den, r.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals((b2 + c2 + d2) / den, r.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-a * b / den, r.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-a * c / den, r.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(-a * d / den, r.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(-b * a / den, r.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals((a2 + c2 + d2) / den, r.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-b * c / den, r.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(-b * d / den, r.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(-c * a / den, r.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-c * b / den, r.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals((a2 + b2 + d2) / den, r.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(-c * d / den, r.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(-d * a / den, r.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-d * b / den, r.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-d * c / den, r.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals((a2 + b2 + c2) / den, r.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
         FieldRotation<DerivativeStructure> reverted = r.revert();
         FieldRotation<DerivativeStructure> rrT = r.applyTo(reverted);
         checkRotationDS(rrT, 1, 0, 0, 0);
-        Assert.assertEquals(0, rrT.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
         FieldRotation<DerivativeStructure> rTr = reverted.applyTo(r);
         checkRotationDS(rTr, 1, 0, 0, 0);
-        Assert.assertEquals(0, rTr.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(r.getAngle().getReal(), reverted.getAngle().getReal(), 1.0e-15);
-        Assert.assertEquals(-1,
+        Assertions.assertEquals(0, rTr.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(r.getAngle().getReal(), reverted.getAngle().getReal(), 1.0e-15);
+        Assertions.assertEquals(-1,
                             FieldVector3D.dotProduct(r.getAxis(RotationConvention.VECTOR_OPERATOR),
                                                      reverted.getAxis(RotationConvention.VECTOR_OPERATOR)).getReal(),
                             1.0e-15);
@@ -228,61 +228,61 @@ public class FieldRotationDSTest {
         double c2 = c * c;
         double d2 = d * d;
         double den = (a2 + b2 + c2 + d2) * FastMath.sqrt(a2 + b2 + c2 + d2);
-        Assert.assertEquals((b2 + c2 + d2) / den, r.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(-a * b / den, r.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(-a * c / den, r.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(-a * d / den, r.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(-b * a / den, r.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals((a2 + c2 + d2) / den, r.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(-b * c / den, r.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(-b * d / den, r.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(-c * a / den, r.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(-c * b / den, r.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals((a2 + b2 + d2) / den, r.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(-c * d / den, r.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(-d * a / den, r.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(-d * b / den, r.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(-d * c / den, r.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals((a2 + b2 + c2) / den, r.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals((b2 + c2 + d2) / den, r.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-a * b / den, r.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-a * c / den, r.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(-a * d / den, r.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(-b * a / den, r.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals((a2 + c2 + d2) / den, r.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-b * c / den, r.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(-b * d / den, r.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(-c * a / den, r.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-c * b / den, r.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals((a2 + b2 + d2) / den, r.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(-c * d / den, r.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(-d * a / den, r.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-d * b / den, r.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-d * c / den, r.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals((a2 + b2 + c2) / den, r.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
         FieldRotation<DerivativeStructure> reverted = r.revert();
         FieldRotation<DerivativeStructure> rrT = r.compose(reverted, RotationConvention.VECTOR_OPERATOR);
         checkRotationDS(rrT, 1, 0, 0, 0);
-        Assert.assertEquals(0, rrT.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
         FieldRotation<DerivativeStructure> rTr = reverted.compose(r, RotationConvention.VECTOR_OPERATOR);
         checkRotationDS(rTr, 1, 0, 0, 0);
-        Assert.assertEquals(0, rTr.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(r.getAngle().getReal(), reverted.getAngle().getReal(), 1.0e-15);
-        Assert.assertEquals(-1,
+        Assertions.assertEquals(0, rTr.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(r.getAngle().getReal(), reverted.getAngle().getReal(), 1.0e-15);
+        Assertions.assertEquals(-1,
                             FieldVector3D.dotProduct(r.getAxis(RotationConvention.VECTOR_OPERATOR),
                                                      reverted.getAxis(RotationConvention.VECTOR_OPERATOR)).getReal(),
                             1.0e-15);
@@ -300,61 +300,61 @@ public class FieldRotationDSTest {
         double c2 = c * c;
         double d2 = d * d;
         double den = (a2 + b2 + c2 + d2) * FastMath.sqrt(a2 + b2 + c2 + d2);
-        Assert.assertEquals((b2 + c2 + d2) / den, r.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(-a * b / den, r.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(-a * c / den, r.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(-a * d / den, r.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(-b * a / den, r.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals((a2 + c2 + d2) / den, r.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(-b * c / den, r.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(-b * d / den, r.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(-c * a / den, r.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(-c * b / den, r.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals((a2 + b2 + d2) / den, r.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(-c * d / den, r.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(-d * a / den, r.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(-d * b / den, r.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(-d * c / den, r.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals((a2 + b2 + c2) / den, r.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals((b2 + c2 + d2) / den, r.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-a * b / den, r.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-a * c / den, r.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(-a * d / den, r.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(-b * a / den, r.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals((a2 + c2 + d2) / den, r.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-b * c / den, r.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(-b * d / den, r.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(-c * a / den, r.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-c * b / den, r.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals((a2 + b2 + d2) / den, r.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(-c * d / den, r.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(-d * a / den, r.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-d * b / den, r.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(-d * c / den, r.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals((a2 + b2 + c2) / den, r.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
         FieldRotation<DerivativeStructure> reverted = r.revert();
         FieldRotation<DerivativeStructure> rrT = r.compose(reverted, RotationConvention.FRAME_TRANSFORM);
         checkRotationDS(rrT, 1, 0, 0, 0);
-        Assert.assertEquals(0, rrT.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rrT.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
         FieldRotation<DerivativeStructure> rTr = reverted.compose(r, RotationConvention.FRAME_TRANSFORM);
         checkRotationDS(rTr, 1, 0, 0, 0);
-        Assert.assertEquals(0, rTr.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
-        Assert.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
-        Assert.assertEquals(r.getAngle().getReal(), reverted.getAngle().getReal(), 1.0e-15);
-        Assert.assertEquals(-1,
+        Assertions.assertEquals(0, rTr.getQ0().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ0().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ1().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ1().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ2().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ2().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ3().getPartialDerivative(1, 0, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 1, 0, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 0, 1, 0), 1.0e-15);
+        Assertions.assertEquals(0, rTr.getQ3().getPartialDerivative(0, 0, 0, 1), 1.0e-15);
+        Assertions.assertEquals(r.getAngle().getReal(), reverted.getAngle().getReal(), 1.0e-15);
+        Assertions.assertEquals(-1,
                             FieldVector3D.dotProduct(r.getAxis(RotationConvention.FRAME_TRANSFORM),
                                                      reverted.getAxis(RotationConvention.FRAME_TRANSFORM)).getReal(),
                             1.0e-15);
@@ -372,7 +372,7 @@ public class FieldRotationDSTest {
 
         try {
             new FieldRotation<DerivativeStructure>(u, createVector(0, 0, 0));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathRuntimeException e) {
             // expected behavior
         }
@@ -412,7 +412,7 @@ public class FieldRotationDSTest {
 
         try {
             new FieldRotation<DerivativeStructure>(u1, u2, createVector(0, 0, 0), v2);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathRuntimeException e) {
             // expected behavior
         }
@@ -428,7 +428,7 @@ public class FieldRotationDSTest {
                 { 0.0, 1.0, 0.0 },
                 { 1.0, 0.0, 0.0 }
             }, 1.0e-7);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException nrme) {
             // expected behavior
         }
@@ -439,7 +439,7 @@ public class FieldRotationDSTest {
                 {  0.821760, -0.184320,  0.539200 },
                 { -0.354816,  0.574912,  0.737280 }
             }, 1.0e-7);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException nrme) {
             // expected behavior
         }
@@ -450,7 +450,7 @@ public class FieldRotationDSTest {
                 { -0.4,  0.6,  0.7 },
                 {  0.8, -0.2,  0.5 }
             }, 1.0e-15);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException nrme) {
             // expected behavior
         }
@@ -507,25 +507,25 @@ public class FieldRotationDSTest {
         double d21 = m2[2][1] - m3[2][1].getReal();
         double d22 = m2[2][2] - m3[2][2].getReal();
 
-        Assert.assertTrue(FastMath.abs(d00) < 6.0e-6);
-        Assert.assertTrue(FastMath.abs(d01) < 6.0e-6);
-        Assert.assertTrue(FastMath.abs(d02) < 6.0e-6);
-        Assert.assertTrue(FastMath.abs(d10) < 6.0e-6);
-        Assert.assertTrue(FastMath.abs(d11) < 6.0e-6);
-        Assert.assertTrue(FastMath.abs(d12) < 6.0e-6);
-        Assert.assertTrue(FastMath.abs(d20) < 6.0e-6);
-        Assert.assertTrue(FastMath.abs(d21) < 6.0e-6);
-        Assert.assertTrue(FastMath.abs(d22) < 6.0e-6);
+        Assertions.assertTrue(FastMath.abs(d00) < 6.0e-6);
+        Assertions.assertTrue(FastMath.abs(d01) < 6.0e-6);
+        Assertions.assertTrue(FastMath.abs(d02) < 6.0e-6);
+        Assertions.assertTrue(FastMath.abs(d10) < 6.0e-6);
+        Assertions.assertTrue(FastMath.abs(d11) < 6.0e-6);
+        Assertions.assertTrue(FastMath.abs(d12) < 6.0e-6);
+        Assertions.assertTrue(FastMath.abs(d20) < 6.0e-6);
+        Assertions.assertTrue(FastMath.abs(d21) < 6.0e-6);
+        Assertions.assertTrue(FastMath.abs(d22) < 6.0e-6);
 
-        Assert.assertTrue(FastMath.abs(d00) > 4.0e-7);
-        Assert.assertTrue(FastMath.abs(d01) > 4.0e-7);
-        Assert.assertTrue(FastMath.abs(d02) > 4.0e-7);
-        Assert.assertTrue(FastMath.abs(d10) > 4.0e-7);
-        Assert.assertTrue(FastMath.abs(d11) > 4.0e-7);
-        Assert.assertTrue(FastMath.abs(d12) > 4.0e-7);
-        Assert.assertTrue(FastMath.abs(d20) > 4.0e-7);
-        Assert.assertTrue(FastMath.abs(d21) > 4.0e-7);
-        Assert.assertTrue(FastMath.abs(d22) > 4.0e-7);
+        Assertions.assertTrue(FastMath.abs(d00) > 4.0e-7);
+        Assertions.assertTrue(FastMath.abs(d01) > 4.0e-7);
+        Assertions.assertTrue(FastMath.abs(d02) > 4.0e-7);
+        Assertions.assertTrue(FastMath.abs(d10) > 4.0e-7);
+        Assertions.assertTrue(FastMath.abs(d11) > 4.0e-7);
+        Assertions.assertTrue(FastMath.abs(d12) > 4.0e-7);
+        Assertions.assertTrue(FastMath.abs(d20) > 4.0e-7);
+        Assertions.assertTrue(FastMath.abs(d21) > 4.0e-7);
+        Assertions.assertTrue(FastMath.abs(d22) > 4.0e-7);
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -533,9 +533,9 @@ public class FieldRotationDSTest {
                                m3[i][1].getReal() * m3[j][1].getReal() +
                                m3[i][2].getReal() * m3[j][2].getReal();
                 if (i == j) {
-                    Assert.assertTrue(FastMath.abs(m3tm3 - 1.0) < 1.0e-10);
+                    Assertions.assertTrue(FastMath.abs(m3tm3 - 1.0) < 1.0e-10);
                 } else {
-                    Assert.assertTrue(FastMath.abs(m3tm3) < 1.0e-10);
+                    Assertions.assertTrue(FastMath.abs(m3tm3) < 1.0e-10);
                 }
             }
         }
@@ -558,7 +558,7 @@ public class FieldRotationDSTest {
                 { 0.0, 1.0, 0.0 },
                 { 1.0, 0.0, 0.0 } };
             r = createRotation(m5, 1.0e-7);
-            Assert.fail("got " + r + ", should have caught an exception");
+            Assertions.fail("got " + r + ", should have caught an exception");
         } catch (MathIllegalArgumentException e) {
             // expected
         }
@@ -644,7 +644,7 @@ public class FieldRotationDSTest {
                                                                            factory.variable(0, 0.1),
                                                                            factory.variable(1, singularCardanAngle[j]),
                                                                            factory.variable(2, 0.3));
-                    Assert.assertEquals(singularCardanAngle[j], r.getAngles(CardanOrders[i], convention)[1].getReal(), 4.5e-16);
+                    Assertions.assertEquals(singularCardanAngle[j], r.getAngles(CardanOrders[i], convention)[1].getReal(), 4.5e-16);
                 }
             }
 
@@ -663,7 +663,7 @@ public class FieldRotationDSTest {
                                                                            factory.variable(1, singularEulerAngle[j]),
                                                                            factory.variable(2, 0.3));
                     r.getAngles(EulerOrders[i], convention);
-                    Assert.assertEquals(singularEulerAngle[j],  r.getAngles(EulerOrders[i], convention)[1].getReal(), 1.0e-24);
+                    Assertions.assertEquals(singularEulerAngle[j],  r.getAngles(EulerOrders[i], convention)[1].getReal(), 1.0e-24);
                 }
             }
 
@@ -693,10 +693,10 @@ public class FieldRotationDSTest {
         checkRotationDS(r1,
                         -r1.getQ0().getReal(), -r1.getQ1().getReal(),
                         -r1.getQ2().getReal(), -r1.getQ3().getReal());
-        Assert.assertEquals(0.288, r1.toRotation().getQ0(), 1.0e-15);
-        Assert.assertEquals(0.384, r1.toRotation().getQ1(), 1.0e-15);
-        Assert.assertEquals(0.36,  r1.toRotation().getQ2(), 1.0e-15);
-        Assert.assertEquals(0.8,   r1.toRotation().getQ3(), 1.0e-15);
+        Assertions.assertEquals(0.288, r1.toRotation().getQ0(), 1.0e-15);
+        Assertions.assertEquals(0.384, r1.toRotation().getQ1(), 1.0e-15);
+        Assertions.assertEquals(0.36,  r1.toRotation().getQ2(), 1.0e-15);
+        Assertions.assertEquals(0.8,   r1.toRotation().getQ3(), 1.0e-15);
 
     }
 
@@ -987,9 +987,9 @@ public class FieldRotationDSTest {
                     double c1      = 1 - cosTheta;
                     double c2      = c1 * dot;
                     Vector3D rt    = new Vector3D(cosTheta, u, c2, a, sinTheta, cross);
-                    Assert.assertEquals(rt.getX(), v.getX().getReal(), eps);
-                    Assert.assertEquals(rt.getY(), v.getY().getReal(), eps);
-                    Assert.assertEquals(rt.getZ(), v.getZ().getReal(), eps);
+                    Assertions.assertEquals(rt.getX(), v.getX().getReal(), eps);
+                    Assertions.assertEquals(rt.getY(), v.getY().getReal(), eps);
+                    Assertions.assertEquals(rt.getZ(), v.getZ().getReal(), eps);
 
                     // Jacobian of the image v = r(u) with respect to rotation axis a
                     // (analytical differentiation of the explicit formula)
@@ -1003,23 +1003,23 @@ public class FieldRotationDSTest {
                     RealMatrix dvdk = dvda.multiply(dadk);
 
                     // derivatives with respect to un-normalized axis
-                    Assert.assertEquals(dvdk.getEntry(0, 0), v.getX().getPartialDerivative(1, 0, 0, 0), eps);
-                    Assert.assertEquals(dvdk.getEntry(0, 1), v.getX().getPartialDerivative(0, 1, 0, 0), eps);
-                    Assert.assertEquals(dvdk.getEntry(0, 2), v.getX().getPartialDerivative(0, 0, 1, 0), eps);
-                    Assert.assertEquals(dvdk.getEntry(1, 0), v.getY().getPartialDerivative(1, 0, 0, 0), eps);
-                    Assert.assertEquals(dvdk.getEntry(1, 1), v.getY().getPartialDerivative(0, 1, 0, 0), eps);
-                    Assert.assertEquals(dvdk.getEntry(1, 2), v.getY().getPartialDerivative(0, 0, 1, 0), eps);
-                    Assert.assertEquals(dvdk.getEntry(2, 0), v.getZ().getPartialDerivative(1, 0, 0, 0), eps);
-                    Assert.assertEquals(dvdk.getEntry(2, 1), v.getZ().getPartialDerivative(0, 1, 0, 0), eps);
-                    Assert.assertEquals(dvdk.getEntry(2, 2), v.getZ().getPartialDerivative(0, 0, 1, 0), eps);
+                    Assertions.assertEquals(dvdk.getEntry(0, 0), v.getX().getPartialDerivative(1, 0, 0, 0), eps);
+                    Assertions.assertEquals(dvdk.getEntry(0, 1), v.getX().getPartialDerivative(0, 1, 0, 0), eps);
+                    Assertions.assertEquals(dvdk.getEntry(0, 2), v.getX().getPartialDerivative(0, 0, 1, 0), eps);
+                    Assertions.assertEquals(dvdk.getEntry(1, 0), v.getY().getPartialDerivative(1, 0, 0, 0), eps);
+                    Assertions.assertEquals(dvdk.getEntry(1, 1), v.getY().getPartialDerivative(0, 1, 0, 0), eps);
+                    Assertions.assertEquals(dvdk.getEntry(1, 2), v.getY().getPartialDerivative(0, 0, 1, 0), eps);
+                    Assertions.assertEquals(dvdk.getEntry(2, 0), v.getZ().getPartialDerivative(1, 0, 0, 0), eps);
+                    Assertions.assertEquals(dvdk.getEntry(2, 1), v.getZ().getPartialDerivative(0, 1, 0, 0), eps);
+                    Assertions.assertEquals(dvdk.getEntry(2, 2), v.getZ().getPartialDerivative(0, 0, 1, 0), eps);
 
                     // derivative with respect to rotation angle
                     // (analytical differentiation of the explicit formula)
                     Vector3D dvdTheta =
                             new Vector3D(-sinTheta, u, sinTheta * dot, a, cosTheta, cross);
-                    Assert.assertEquals(dvdTheta.getX(), v.getX().getPartialDerivative(0, 0, 0, 1), eps);
-                    Assert.assertEquals(dvdTheta.getY(), v.getY().getPartialDerivative(0, 0, 0, 1), eps);
-                    Assert.assertEquals(dvdTheta.getZ(), v.getZ().getPartialDerivative(0, 0, 0, 1), eps);
+                    Assertions.assertEquals(dvdTheta.getX(), v.getX().getPartialDerivative(0, 0, 0, 1), eps);
+                    Assertions.assertEquals(dvdTheta.getY(), v.getY().getPartialDerivative(0, 0, 0, 1), eps);
+                    Assertions.assertEquals(dvdTheta.getZ(), v.getZ().getPartialDerivative(0, 0, 0, 1), eps);
 
                 }
             }
@@ -1040,13 +1040,13 @@ public class FieldRotationDSTest {
                     FieldVector3D<DerivativeStructure> v = r.applyTo(u);
                     DerivativeStructure[] out = new DerivativeStructure[3];
                     r.applyTo(new DerivativeStructure[] { u.getX(), u.getY(), u.getZ() }, out);
-                    Assert.assertEquals(v.getX().getReal(), out[0].getReal(), 1.0e-10);
-                    Assert.assertEquals(v.getY().getReal(), out[1].getReal(), 1.0e-10);
-                    Assert.assertEquals(v.getZ().getReal(), out[2].getReal(), 1.0e-10);
+                    Assertions.assertEquals(v.getX().getReal(), out[0].getReal(), 1.0e-10);
+                    Assertions.assertEquals(v.getY().getReal(), out[1].getReal(), 1.0e-10);
+                    Assertions.assertEquals(v.getZ().getReal(), out[2].getReal(), 1.0e-10);
                     r.applyInverseTo(out, out);
-                    Assert.assertEquals(u.getX().getReal(), out[0].getReal(), 1.0e-10);
-                    Assert.assertEquals(u.getY().getReal(), out[1].getReal(), 1.0e-10);
-                    Assert.assertEquals(u.getZ().getReal(), out[2].getReal(), 1.0e-10);
+                    Assertions.assertEquals(u.getX().getReal(), out[0].getReal(), 1.0e-10);
+                    Assertions.assertEquals(u.getY().getReal(), out[1].getReal(), 1.0e-10);
+                    Assertions.assertEquals(u.getZ().getReal(), out[2].getReal(), 1.0e-10);
                 }
             }
         }
@@ -1075,9 +1075,9 @@ public class FieldRotationDSTest {
                 in[2] = u.getZ();
                 r.applyTo(in, out);
                 r.applyInverseTo(out, rebuilt);
-                Assert.assertEquals(in[0].getReal(), rebuilt[0].getReal(), 1.0e-12);
-                Assert.assertEquals(in[1].getReal(), rebuilt[1].getReal(), 1.0e-12);
-                Assert.assertEquals(in[2].getReal(), rebuilt[2].getReal(), 1.0e-12);
+                Assertions.assertEquals(in[0].getReal(), rebuilt[0].getReal(), 1.0e-12);
+                Assertions.assertEquals(in[1].getReal(), rebuilt[1].getReal(), 1.0e-12);
+                Assertions.assertEquals(in[2].getReal(), rebuilt[2].getReal(), 1.0e-12);
             }
         }
 
@@ -1116,10 +1116,10 @@ public class FieldRotationDSTest {
                                    -2275058564560979.0 /    1048576.0,
                                    4423475992255071.0 /      65536.0);
         FieldRotation<DerivativeStructure> rot = new FieldRotation<DerivativeStructure>(u1, u2, createVector(1, 0, 0),createVector(0, 0, 1));
-        Assert.assertEquals( 0.6228370359608200639829222, rot.getQ0().getReal(), 1.0e-15);
-        Assert.assertEquals( 0.0257707621456498790029987, rot.getQ1().getReal(), 1.0e-15);
-        Assert.assertEquals(-0.0000000002503012255839931, rot.getQ2().getReal(), 1.0e-15);
-        Assert.assertEquals(-0.7819270390861109450724902, rot.getQ3().getReal(), 1.0e-15);
+        Assertions.assertEquals( 0.6228370359608200639829222, rot.getQ0().getReal(), 1.0e-15);
+        Assertions.assertEquals( 0.0257707621456498790029987, rot.getQ1().getReal(), 1.0e-15);
+        Assertions.assertEquals(-0.0000000002503012255839931, rot.getQ2().getReal(), 1.0e-15);
+        Assertions.assertEquals(-0.7819270390861109450724902, rot.getQ3().getReal(), 1.0e-15);
     }
 
     @Test
@@ -1135,19 +1135,19 @@ public class FieldRotationDSTest {
                     quat.getQ1().getReal() * quat.getQ1().getReal() +
                     quat.getQ2().getReal() * quat.getQ2().getReal() +
                     quat.getQ3().getReal() * quat.getQ3().getReal();
-        Assert.assertEquals(1.0, q2, 1.0e-14);
-        Assert.assertEquals(0.0, FieldVector3D.angle(v1, quat.applyTo(u1)).getReal(), 1.0e-14);
-        Assert.assertEquals(0.0, FieldVector3D.angle(v2, quat.applyTo(u2)).getReal(), 1.0e-14);
+        Assertions.assertEquals(1.0, q2, 1.0e-14);
+        Assertions.assertEquals(0.0, FieldVector3D.angle(v1, quat.applyTo(u1)).getReal(), 1.0e-14);
+        Assertions.assertEquals(0.0, FieldVector3D.angle(v2, quat.applyTo(u2)).getReal(), 1.0e-14);
 
     }
 
     private void checkAngle(DerivativeStructure a1, double a2) {
-        Assert.assertEquals(a1.getReal(), MathUtils.normalizeAngle(a2, a1.getReal()), 1.0e-10);
+        Assertions.assertEquals(a1.getReal(), MathUtils.normalizeAngle(a2, a1.getReal()), 1.0e-10);
     }
 
     private void checkRotationDS(FieldRotation<DerivativeStructure> r, double q0, double q1, double q2, double q3) {
         FieldRotation<DerivativeStructure> rPrime = createRotation(q0, q1, q2, q3, false);
-        Assert.assertEquals(0, FieldRotation.distance(r, rPrime).getReal(), 1.0e-12);
+        Assertions.assertEquals(0, FieldRotation.distance(r, rPrime).getReal(), 1.0e-12);
     }
 
     private FieldRotation<DerivativeStructure> createRotation(double q0, double q1, double q2, double q3,
@@ -1193,9 +1193,9 @@ public class FieldRotationDSTest {
     }
 
     private void checkVector(FieldVector3D<DerivativeStructure> u, FieldVector3D<DerivativeStructure> v) {
-        Assert.assertEquals(u.getX().getReal(), v.getX().getReal(), 1.0e-12);
-        Assert.assertEquals(u.getY().getReal(), v.getY().getReal(), 1.0e-12);
-        Assert.assertEquals(u.getZ().getReal(), v.getZ().getReal(), 1.0e-12);
+        Assertions.assertEquals(u.getX().getReal(), v.getX().getReal(), 1.0e-12);
+        Assertions.assertEquals(u.getY().getReal(), v.getY().getReal(), 1.0e-12);
+        Assertions.assertEquals(u.getZ().getReal(), v.getZ().getReal(), 1.0e-12);
     }
 
 }

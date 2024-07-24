@@ -23,17 +23,17 @@
 package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.analysis.FieldUnivariateFunction;
 import org.hipparchus.analysis.CalculusFieldUnivariateFunction;
+import org.hipparchus.analysis.FieldUnivariateFunction;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
 import org.hipparchus.dfp.DfpMath;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link FieldBracketingNthOrderBrentSolver bracketing n<sup>th</sup> order Brent} solver.
@@ -41,10 +41,14 @@ import org.junit.Test;
  */
 public final class FieldBracketingNthOrderBrentSolverTest {
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testInsufficientOrder3() {
-        new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy, absoluteAccuracy,
-                                                    functionValueAccuracy, 1);
+        Assertions.assertThrows(MathIllegalArgumentException.class, () -> {
+            new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy,
+                                                        absoluteAccuracy,
+                                                        functionValueAccuracy,
+                                                        1);
+        });
     }
 
     @Test
@@ -52,7 +56,7 @@ public final class FieldBracketingNthOrderBrentSolverTest {
         FieldBracketingNthOrderBrentSolver<Dfp> solver =
                 new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy, absoluteAccuracy,
                                                             functionValueAccuracy, 2);
-        Assert.assertEquals(2, solver.getMaximalOrder());
+        Assertions.assertEquals(2, solver.getMaximalOrder());
     }
 
     @Test
@@ -74,14 +78,14 @@ public final class FieldBracketingNthOrderBrentSolverTest {
 
         Dfp result = solver.solve(20, f.toCalculusFieldUnivariateFunction(field), field.newDfp(0.2), field.newDfp(0.9),
                                   field.newDfp(0.4), AllowedSolution.BELOW_SIDE);
-        Assert.assertTrue(f.value(result).abs().lessThan(solver.getFunctionValueAccuracy()));
-        Assert.assertTrue(f.value(result).negativeOrNull());
-        Assert.assertTrue(result.subtract(field.newDfp(0.5)).subtract(solver.getAbsoluteAccuracy()).positiveOrNull());
+        Assertions.assertTrue(f.value(result).abs().lessThan(solver.getFunctionValueAccuracy()));
+        Assertions.assertTrue(f.value(result).negativeOrNull());
+        Assertions.assertTrue(result.subtract(field.newDfp(0.5)).subtract(solver.getAbsoluteAccuracy()).positiveOrNull());
         result = solver.solve(20, f.toCalculusFieldUnivariateFunction(field), field.newDfp(-0.9), field.newDfp(-0.2),
                               field.newDfp(-0.4), AllowedSolution.ABOVE_SIDE);
-        Assert.assertTrue(f.value(result).abs().lessThan(solver.getFunctionValueAccuracy()));
-        Assert.assertTrue(f.value(result).positiveOrNull());
-        Assert.assertTrue(result.add(field.newDfp(0.5)).subtract(solver.getAbsoluteAccuracy()).negativeOrNull());
+        Assertions.assertTrue(f.value(result).abs().lessThan(solver.getFunctionValueAccuracy()));
+        Assertions.assertTrue(f.value(result).positiveOrNull());
+        Assertions.assertTrue(result.add(field.newDfp(0.5)).subtract(solver.getAbsoluteAccuracy()).negativeOrNull());
     }
 
     @Test
@@ -97,7 +101,7 @@ public final class FieldBracketingNthOrderBrentSolverTest {
         // make sure it doesn't throw a maxIterations exception
         Dfp result = solver.solve(200, f, zero, zero.add(5.0), AllowedSolution.LEFT_SIDE);
         double difference = field.newDfp(2.1).subtract(result).abs().getReal();
-        Assert.assertTrue("difference: " + difference, difference < FastMath.ulp(2.1));
+        Assertions.assertTrue( difference < FastMath.ulp(2.1), "difference: " + difference);
     }
 
     @Test
@@ -157,23 +161,23 @@ public final class FieldBracketingNthOrderBrentSolverTest {
         Dfp yResult = f.value(xResult);
         switch (allowedSolution) {
         case ANY_SIDE :
-            Assert.assertTrue(yResult.abs().lessThan(functionValueAccuracy.multiply(2)));
+            Assertions.assertTrue(yResult.abs().lessThan(functionValueAccuracy.multiply(2)));
             break;
         case LEFT_SIDE : {
             boolean increasing = f.value(xResult).add(absoluteAccuracy).greaterThan(yResult);
-            Assert.assertTrue(increasing ? yResult.negativeOrNull() : yResult.positiveOrNull());
+            Assertions.assertTrue(increasing ? yResult.negativeOrNull() : yResult.positiveOrNull());
             break;
         }
         case RIGHT_SIDE : {
             boolean increasing = f.value(xResult).add(absoluteAccuracy).greaterThan(yResult);
-            Assert.assertTrue(increasing ? yResult.positiveOrNull() : yResult.negativeOrNull());
+            Assertions.assertTrue(increasing ? yResult.positiveOrNull() : yResult.negativeOrNull());
             break;
         }
         case BELOW_SIDE :
-            Assert.assertTrue(yResult.negativeOrNull());
+            Assertions.assertTrue(yResult.negativeOrNull());
             break;
         case ABOVE_SIDE :
-            Assert.assertTrue(yResult.positiveOrNull());
+            Assertions.assertTrue(yResult.positiveOrNull());
             break;
         default :
             // this should never happen
@@ -181,7 +185,7 @@ public final class FieldBracketingNthOrderBrentSolverTest {
         }
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         field                 = new DfpField(50);
         absoluteAccuracy      = field.newDfp(1.0e-45);

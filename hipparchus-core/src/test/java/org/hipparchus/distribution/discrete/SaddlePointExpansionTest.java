@@ -16,15 +16,15 @@
  */
 package org.hipparchus.distribution.discrete;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class SaddlePointExpansionTest {
 
     @Test
     public void testSmallInteger() {
         for (int n = 4; n < 16; ++n) {
-             Assert.assertEquals(alternateStirlingErrorImplementation(n, 8),
+             Assertions.assertEquals(alternateStirlingErrorImplementation(n, 8),
                                 SaddlePointExpansion.getStirlingError(n),
                                 1.0e-10);
         }
@@ -33,7 +33,7 @@ public class SaddlePointExpansionTest {
     @Test
     public void testSmallNonInteger() {
         for (double z = 3.75; z < 14.8; z += 1.0) {
-            Assert.assertEquals(alternateStirlingErrorImplementation(z, 12),
+            Assertions.assertEquals(alternateStirlingErrorImplementation(z, 12),
                                 SaddlePointExpansion.getStirlingError(z),
                                 1.0e-10);
         }
@@ -42,7 +42,7 @@ public class SaddlePointExpansionTest {
     @Test
     public void testLargeValues() {
         for (double z = 15.25; z < 25.5; z += 1.0) {
-            Assert.assertEquals(alternateStirlingErrorImplementation(z, 21),
+            Assertions.assertEquals(alternateStirlingErrorImplementation(z, 21),
                                 SaddlePointExpansion.getStirlingError(z),
                                 1.0e-15);
         }
@@ -50,8 +50,8 @@ public class SaddlePointExpansionTest {
 
     @Test
     public void testSpecialValues() {
-        Assert.assertEquals(0.0, SaddlePointExpansion.logBinomialProbability(0, 0, 0.6, 0.4), 1.0e-15);
-        Assert.assertEquals(Double.NEGATIVE_INFINITY, SaddlePointExpansion.logBinomialProbability(1, 0, 0.6, 0.4), 1.0e-15);
+        Assertions.assertEquals(0.0, SaddlePointExpansion.logBinomialProbability(0, 0, 0.6, 0.4), 1.0e-15);
+        Assertions.assertEquals(Double.NEGATIVE_INFINITY, SaddlePointExpansion.logBinomialProbability(1, 0, 0.6, 0.4), 1.0e-15);
     }
 
     private double alternateStirlingErrorImplementation(final double z, final int kMax) {

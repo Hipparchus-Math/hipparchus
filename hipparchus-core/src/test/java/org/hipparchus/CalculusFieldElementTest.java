@@ -21,8 +21,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class CalculusFieldElementTest {
 
@@ -36,7 +36,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.multiply(factor);
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(value * factor);
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -49,7 +49,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement1.add(value2);
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(value1 + value2);
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -62,7 +62,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement1.subtract(value2);
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(value1 - value2);
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -75,7 +75,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement1.multiply(value2);
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(value1 * value2);
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement1.divide(value2);
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(value1 / value2);
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -102,7 +102,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement1.subtract(testElement2);
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(value1 - value2);
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement1.divide(testElement2);
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(value1 / value2);
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -128,7 +128,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.square();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(value * value);
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -140,7 +140,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.sqrt();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.sqrt(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -152,7 +152,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.cbrt();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.cbrt(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -165,7 +165,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.rootN(n);
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.pow(value, 1. / n));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -178,7 +178,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.pow(exponent);
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.pow(value, exponent));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -191,7 +191,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.pow(exponent);
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.pow(value, exponent));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -203,7 +203,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.sin();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.sin(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -215,7 +215,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.cos();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.cos(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -227,7 +227,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.tan();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.tan(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -239,7 +239,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.sinh();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.sinh(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -251,7 +251,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.cosh();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.cosh(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -263,7 +263,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.tanh();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.tanh(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -275,7 +275,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.sign();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.signum(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -287,7 +287,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.ulp();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.ulp(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -299,7 +299,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.floor();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.floor(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -311,7 +311,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.ceil();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.ceil(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -323,7 +323,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.rint();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.rint(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -335,7 +335,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.toDegrees();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.toDegrees(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -347,7 +347,7 @@ public class CalculusFieldElementTest {
         final TestCalculusFieldElement actualOperation = testElement.toRadians();
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(FastMath.toRadians(value));
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -365,7 +365,7 @@ public class CalculusFieldElementTest {
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(
                 coeff1 * value1 + coeff2 * value2);
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -386,7 +386,7 @@ public class CalculusFieldElementTest {
         // THEN
         final TestCalculusFieldElement expectedOperation = new TestCalculusFieldElement(
                 coeff1 * value1 + coeff2 * value2 + coeff3 * value3);
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
@@ -398,31 +398,31 @@ public class CalculusFieldElementTest {
         final int actualOperation = testElement.getExponent();
         // THEN
         final int expectedOperation = FastMath.getExponent(value);
-        Assert.assertEquals(expectedOperation, actualOperation);
+        Assertions.assertEquals(expectedOperation, actualOperation);
     }
 
     @Test
     public void testIsFinite() {
-        Assert.assertTrue(new TestCalculusFieldElement(1.).isFinite());
-        Assert.assertFalse(new TestCalculusFieldElement(Double.NaN).isFinite());
-        Assert.assertFalse(new TestCalculusFieldElement(Double.POSITIVE_INFINITY).isFinite());
+        Assertions.assertTrue(new TestCalculusFieldElement(1.).isFinite());
+        Assertions.assertFalse(new TestCalculusFieldElement(Double.NaN).isFinite());
+        Assertions.assertFalse(new TestCalculusFieldElement(Double.POSITIVE_INFINITY).isFinite());
     }
 
     @Test
     public void testIsInfinite() {
-        Assert.assertFalse(new TestCalculusFieldElement(1.).isInfinite());
-        Assert.assertTrue(new TestCalculusFieldElement(Double.POSITIVE_INFINITY).isInfinite());
+        Assertions.assertFalse(new TestCalculusFieldElement(1.).isInfinite());
+        Assertions.assertTrue(new TestCalculusFieldElement(Double.POSITIVE_INFINITY).isInfinite());
     }
 
     @Test
     public void testIsNan() {
-        Assert.assertFalse(new TestCalculusFieldElement(1.).isNaN());
-        Assert.assertTrue(new TestCalculusFieldElement(Double.NaN).isNaN());
+        Assertions.assertFalse(new TestCalculusFieldElement(1.).isNaN());
+        Assertions.assertTrue(new TestCalculusFieldElement(Double.NaN).isNaN());
     }
 
     @Test
     public void testNorm() {
-        Assert.assertEquals(0., new TestCalculusFieldElement(0.).norm(), 0.0);
+        Assertions.assertEquals(0., new TestCalculusFieldElement(0.).norm(), 0.0);
     }
 
     private static class TestCalculusFieldElement implements CalculusFieldElement<TestCalculusFieldElement> {

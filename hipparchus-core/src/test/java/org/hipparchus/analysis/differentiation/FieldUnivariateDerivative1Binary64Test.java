@@ -19,8 +19,8 @@ package org.hipparchus.analysis.differentiation;
 
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for class {@link FieldUnivariateDerivative1} on {@link Binary64}.
@@ -34,7 +34,7 @@ public class FieldUnivariateDerivative1Binary64Test extends FieldUnivariateDeriv
 
     @Test
     public void testHashcode() {
-        Assert.assertEquals(2108686789, build(2, 1).hashCode());
+        Assertions.assertEquals(2108686789, build(2, 1).hashCode());
     }
 
     @Override

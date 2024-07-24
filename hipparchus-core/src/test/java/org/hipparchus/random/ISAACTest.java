@@ -22,8 +22,8 @@
 
 package org.hipparchus.random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public final class ISAACTest extends RandomGeneratorAbstractTest {
 
@@ -379,11 +379,11 @@ public final class ISAACTest extends RandomGeneratorAbstractTest {
         ISAACRandom isaacRandom = new ISAACRandom(SEED_1);
 
         int[] actualSequence = getActualSequence(isaacRandom);
-        Assert.assertArrayEquals(EXPECTED_SEQUENCE_1, actualSequence);
+        Assertions.assertArrayEquals(EXPECTED_SEQUENCE_1, actualSequence);
 
         isaacRandom.setSeed(SEED_2);
         actualSequence = getActualSequence(isaacRandom);
-        Assert.assertArrayEquals(EXPECTED_SEQUENCE_2, actualSequence);
+        Assertions.assertArrayEquals(EXPECTED_SEQUENCE_2, actualSequence);
 
     }
 

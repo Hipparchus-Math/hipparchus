@@ -21,8 +21,6 @@
  */
 package org.hipparchus.analysis.integration;
 
-import java.util.Random;
-
 import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Gaussian;
@@ -31,8 +29,10 @@ import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Random;
 
 
 public class IterativeLegendreGaussIntegratorTest {
@@ -48,13 +48,13 @@ public class IterativeLegendreGaussIntegratorTest {
         tolerance = FastMath.max(integrator.getAbsoluteAccuracy(),
                              FastMath.abs(expected * integrator.getRelativeAccuracy()));
         result = integrator.integrate(10000, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = -FastMath.PI/3; max = 0; expected = -0.5;
         tolerance = FastMath.max(integrator.getAbsoluteAccuracy(),
                 FastMath.abs(expected * integrator.getRelativeAccuracy()));
         result = integrator.integrate(10000, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
     }
 
     @Test
@@ -70,15 +70,15 @@ public class IterativeLegendreGaussIntegratorTest {
 
         min = 0; max = 1; expected = -1.0/48;
         result = integrator.integrate(10000, f, min, max);
-        Assert.assertEquals(expected, result, 1.0e-16);
+        Assertions.assertEquals(expected, result, 1.0e-16);
 
         min = 0; max = 0.5; expected = 11.0/768;
         result = integrator.integrate(10000, f, min, max);
-        Assert.assertEquals(expected, result, 1.0e-16);
+        Assertions.assertEquals(expected, result, 1.0e-16);
 
         min = -1; max = 4; expected = 2048/3.0 - 78 + 1.0/48;
         result = integrator.integrate(10000, f, min, max);
-        Assert.assertEquals(expected, result, 1.0e-16);
+        Assertions.assertEquals(expected, result, 1.0e-16);
     }
 
     @Test
@@ -102,7 +102,7 @@ public class IterativeLegendreGaussIntegratorTest {
                     PolynomialFunction p = new PolynomialFunction(coeff);
                     double result    = integrator.integrate(10000, p, -5.0, 15.0);
                     double reference = exactIntegration(p, -5.0, 15.0);
-                    Assert.assertEquals(n + " " + degree + " " + i, reference, result, 1.0e-12 * (1.0 + FastMath.abs(reference)));
+                    Assertions.assertEquals(reference, result, 1.0e-12 * (1.0 + FastMath.abs(reference)), n + " " + degree + " " + i);
                 }
             }
 
@@ -124,7 +124,7 @@ public class IterativeLegendreGaussIntegratorTest {
         final double a = -5000;
         final double b = 5000;
         final double s = integrator.integrate(50, normal, a, b);
-        Assert.assertEquals(1, s, 1e-5);
+        Assertions.assertEquals(1, s, 1e-5);
     }
 
     @Test
@@ -141,18 +141,18 @@ public class IterativeLegendreGaussIntegratorTest {
 
         // due to the discontinuity, integration implies *many* calls
         double maxX = 0.32462367623786328;
-        Assert.assertEquals(maxX * value, gauss.integrate(Integer.MAX_VALUE, f, -10, maxX), 1.0e-7);
-        Assert.assertTrue(gauss.getEvaluations() > 37000000);
-        Assert.assertTrue(gauss.getIterations() < 30);
+        Assertions.assertEquals(maxX * value, gauss.integrate(Integer.MAX_VALUE, f, -10, maxX), 1.0e-7);
+        Assertions.assertTrue(gauss.getEvaluations() > 37000000);
+        Assertions.assertTrue(gauss.getIterations() < 30);
 
         // setting up limits prevents such large number of calls
         try {
             gauss.integrate(1000, f, -10, maxX);
-            Assert.fail("expected MathIllegalStateException");
+            Assertions.fail("expected MathIllegalStateException");
         } catch (MathIllegalStateException tmee) {
             // expected
-            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, tmee.getSpecifier());
-            Assert.assertEquals(1000, ((Integer) tmee.getParts()[0]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, tmee.getSpecifier());
+            Assertions.assertEquals(1000, ((Integer) tmee.getParts()[0]).intValue());
         }
 
         // integrating on the two sides should be simpler
@@ -160,8 +160,8 @@ public class IterativeLegendreGaussIntegratorTest {
         int eval1   = gauss.getEvaluations();
         double sum2 = gauss.integrate(1000, f, 0, maxX);
         int eval2   = gauss.getEvaluations();
-        Assert.assertEquals(maxX * value, sum1 + sum2, 1.0e-7);
-        Assert.assertTrue(eval1 + eval2 < 200);
+        Assertions.assertEquals(maxX * value, sum1 + sum2, 1.0e-7);
+        Assertions.assertTrue(eval1 + eval2 < 200);
 
     }
 

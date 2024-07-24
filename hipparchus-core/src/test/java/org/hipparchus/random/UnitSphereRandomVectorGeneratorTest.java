@@ -22,8 +22,8 @@
 package org.hipparchus.random;
 
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class UnitSphereRandomVectorGeneratorTest {
     /**
@@ -42,8 +42,8 @@ public class UnitSphereRandomVectorGeneratorTest {
         int steps = 1000000;
         for (int i = 0; i < steps; ++i) {
             final double[] v = generator.nextVector();
-            Assert.assertEquals(2, v.length);
-            Assert.assertEquals(1, length(v), 1e-10);
+            Assertions.assertEquals(2, v.length);
+            Assertions.assertEquals(1, length(v), 1e-10);
             // Compute angle formed with vector (1,0)
             // Cosine of angle is their dot product, because both are unit length
             // Dot product here is just the first element of the vector by construction
@@ -55,8 +55,8 @@ public class UnitSphereRandomVectorGeneratorTest {
         // Simplistic test for roughly even distribution
         final int expectedBucketSize = steps / angleBuckets.length;
         for (int bucket : angleBuckets) {
-            Assert.assertTrue("Bucket count " + bucket + " vs expected " + expectedBucketSize,
-                              FastMath.abs(expectedBucketSize - bucket) < 350);
+            Assertions.assertTrue(FastMath.abs(expectedBucketSize - bucket) < 350,
+                              "Bucket count " + bucket + " vs expected " + expectedBucketSize);
         }
     }
 

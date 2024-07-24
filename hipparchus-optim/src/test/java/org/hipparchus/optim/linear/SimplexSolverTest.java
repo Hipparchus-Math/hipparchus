@@ -21,18 +21,20 @@
  */
 package org.hipparchus.optim.linear;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.MaxIter;
 import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SimplexSolverTest {
     private static final MaxIter DEFAULT_MAX_ITER = new MaxIter(100);
@@ -61,8 +63,8 @@ public class SimplexSolverTest {
                                                   GoalType.MAXIMIZE,
                                                   new NonNegativeConstraint(true),
                                                   PivotSelectionRule.BLAND);
-        Assert.assertEquals(1.0d, solution.getValue(), epsilon);
-        Assert.assertTrue(validSolution(solution, constraints, epsilon));
+        Assertions.assertEquals(1.0d, solution.getValue(), epsilon);
+        Assertions.assertTrue(validSolution(solution, constraints, epsilon));
     }
 
     @Test
@@ -83,8 +85,8 @@ public class SimplexSolverTest {
         double epsilon = 1e-6;
         PointValuePair solution = new SimplexSolver().optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                                GoalType.MINIMIZE, new NonNegativeConstraint(true));
-        Assert.assertEquals(1.0d, solution.getValue(), epsilon);
-        Assert.assertTrue(validSolution(solution, constraints, epsilon));
+        Assertions.assertEquals(1.0d, solution.getValue(), epsilon);
+        Assertions.assertTrue(validSolution(solution, constraints, epsilon));
     }
 
     @Test
@@ -107,8 +109,8 @@ public class SimplexSolverTest {
                                                                new LinearConstraintSet(constraints),
                                                                GoalType.MINIMIZE, new NonNegativeConstraint(true),
                                                                PivotSelectionRule.BLAND);
-        Assert.assertEquals(1.0d, solution.getValue(), epsilon);
-        Assert.assertTrue(validSolution(solution, constraints, epsilon));
+        Assertions.assertEquals(1.0d, solution.getValue(), epsilon);
+        Assertions.assertTrue(validSolution(solution, constraints, epsilon));
     }
 
     @Test
@@ -125,10 +127,10 @@ public class SimplexSolverTest {
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MAXIMIZE, new NonNegativeConstraint(false));
 
-        Assert.assertTrue(Precision.compareTo(solution.getPoint()[0], 0.0d, epsilon) > 0);
-        Assert.assertTrue(Precision.compareTo(solution.getPoint()[1], 0.0d, epsilon) > 0);
-        Assert.assertTrue(Precision.compareTo(solution.getPoint()[2], 0.0d, epsilon) < 0);
-        Assert.assertEquals(2.0d, solution.getValue(), epsilon);
+        Assertions.assertTrue(Precision.compareTo(solution.getPoint()[0], 0.0d, epsilon) > 0);
+        Assertions.assertTrue(Precision.compareTo(solution.getPoint()[1], 0.0d, epsilon) > 0);
+        Assertions.assertTrue(Precision.compareTo(solution.getPoint()[2], 0.0d, epsilon) < 0);
+        Assertions.assertEquals(2.0d, solution.getValue(), epsilon);
     }
 
     @Test
@@ -142,8 +144,8 @@ public class SimplexSolverTest {
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MINIMIZE, new NonNegativeConstraint(true));
 
-        Assert.assertTrue(Precision.compareTo(solution.getPoint()[0], 0.0d, epsilon) >= 0);
-        Assert.assertTrue(Precision.compareTo(solution.getPoint()[1], 0.0d, epsilon) >= 0);
+        Assertions.assertTrue(Precision.compareTo(solution.getPoint()[0], 0.0d, epsilon) >= 0);
+        Assertions.assertTrue(Precision.compareTo(solution.getPoint()[1], 0.0d, epsilon) >= 0);
     }
 
     @Test
@@ -158,25 +160,27 @@ public class SimplexSolverTest {
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MINIMIZE, new NonNegativeConstraint(false));
 
-        Assert.assertEquals(5.0, solution.getPoint()[0] + solution.getPoint()[1], epsilon);
-        Assert.assertEquals(-10.0, solution.getPoint()[2], epsilon);
-        Assert.assertEquals(-10.0, solution.getValue(), epsilon);
+        Assertions.assertEquals(5.0, solution.getPoint()[0] + solution.getPoint()[1], epsilon);
+        Assertions.assertEquals(-10.0, solution.getPoint()[2], epsilon);
+        Assertions.assertEquals(-10.0, solution.getValue(), epsilon);
 
     }
 
-    @Test(expected = MathIllegalStateException.class)
+    @Test
     public void testMath434UnfeasibleSolution() {
-        double epsilon = 1e-6;
+        assertThrows(MathIllegalStateException.class, () -> {
+            double epsilon = 1e-6;
 
-        LinearObjectiveFunction f = new LinearObjectiveFunction(new double[] {1.0, 0.0}, 0.0);
-        ArrayList<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
-        constraints.add(new LinearConstraint(new double[] {epsilon/2, 0.5}, Relationship.EQ, 0));
-        constraints.add(new LinearConstraint(new double[] {1e-3, 0.1}, Relationship.EQ, 10));
+            LinearObjectiveFunction f = new LinearObjectiveFunction(new double[]{1.0, 0.0}, 0.0);
+            ArrayList<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
+            constraints.add(new LinearConstraint(new double[]{epsilon / 2, 0.5}, Relationship.EQ, 0));
+            constraints.add(new LinearConstraint(new double[]{1e-3, 0.1}, Relationship.EQ, 10));
 
-        SimplexSolver solver = new SimplexSolver();
-        // allowing only non-negative values, no feasible solution shall be found
-        solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
-                        GoalType.MINIMIZE, new NonNegativeConstraint(true));
+            SimplexSolver solver = new SimplexSolver();
+            // allowing only non-negative values, no feasible solution shall be found
+            solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
+                GoalType.MINIMIZE, new NonNegativeConstraint(true));
+        });
     }
 
     @Test
@@ -192,8 +196,8 @@ public class SimplexSolverTest {
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MINIMIZE, new NonNegativeConstraint(false));
 
-        Assert.assertTrue(Precision.compareTo(solution.getPoint()[0] * 200.d, 1.d, epsilon) >= 0);
-        Assert.assertEquals(0.0050, solution.getValue(), epsilon);
+        Assertions.assertTrue(Precision.compareTo(solution.getPoint()[0] * 200.d, 1.d, epsilon) >= 0);
+        Assertions.assertEquals(0.0050, solution.getValue(), epsilon);
     }
 
     @Test
@@ -216,10 +220,10 @@ public class SimplexSolverTest {
         PointValuePair solution = simplex.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                    GoalType.MINIMIZE, new NonNegativeConstraint(false));
 
-        Assert.assertTrue(Precision.compareTo(solution.getPoint()[0], -1e-18d, epsilon) >= 0);
-        Assert.assertEquals(1.0d, solution.getPoint()[1], epsilon);
-        Assert.assertEquals(0.0d, solution.getPoint()[2], epsilon);
-        Assert.assertEquals(1.0d, solution.getValue(), epsilon);
+        Assertions.assertTrue(Precision.compareTo(solution.getPoint()[0], -1e-18d, epsilon) >= 0);
+        Assertions.assertEquals(1.0d, solution.getPoint()[1], epsilon);
+        Assertions.assertEquals(0.0d, solution.getPoint()[2], epsilon);
+        Assertions.assertEquals(1.0d, solution.getValue(), epsilon);
     }
 
     @Test
@@ -234,10 +238,10 @@ public class SimplexSolverTest {
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MINIMIZE, new NonNegativeConstraint(true));
 
-        Assert.assertEquals(0.0, solution.getPoint()[0], .0000001);
-        Assert.assertEquals(1.0, solution.getPoint()[1], .0000001);
-        Assert.assertEquals(1.0, solution.getPoint()[2], .0000001);
-        Assert.assertEquals(3.0, solution.getValue(), .0000001);
+        Assertions.assertEquals(0.0, solution.getPoint()[0], .0000001);
+        Assertions.assertEquals(1.0, solution.getPoint()[1], .0000001);
+        Assertions.assertEquals(1.0, solution.getPoint()[2], .0000001);
+        Assertions.assertEquals(3.0, solution.getValue(), .0000001);
     }
 
     @Test
@@ -254,12 +258,12 @@ public class SimplexSolverTest {
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MAXIMIZE, new NonNegativeConstraint(true));
 
-        Assert.assertEquals(25.8, solution.getValue(), .0000001);
-        Assert.assertEquals(23.0, solution.getPoint()[0] + solution.getPoint()[2] + solution.getPoint()[4], 0.0000001);
-        Assert.assertEquals(23.0, solution.getPoint()[1] + solution.getPoint()[3] + solution.getPoint()[5], 0.0000001);
-        Assert.assertTrue(solution.getPoint()[0] >= 10.0 - 0.0000001);
-        Assert.assertTrue(solution.getPoint()[2] >= 8.0 - 0.0000001);
-        Assert.assertTrue(solution.getPoint()[4] >= 5.0 - 0.0000001);
+        Assertions.assertEquals(25.8, solution.getValue(), .0000001);
+        Assertions.assertEquals(23.0, solution.getPoint()[0] + solution.getPoint()[2] + solution.getPoint()[4], 0.0000001);
+        Assertions.assertEquals(23.0, solution.getPoint()[1] + solution.getPoint()[3] + solution.getPoint()[5], 0.0000001);
+        Assertions.assertTrue(solution.getPoint()[0] >= 10.0 - 0.0000001);
+        Assertions.assertTrue(solution.getPoint()[2] >= 8.0 - 0.0000001);
+        Assertions.assertTrue(solution.getPoint()[4] >= 5.0 - 0.0000001);
     }
 
     @Test
@@ -273,7 +277,7 @@ public class SimplexSolverTest {
         SimplexSolver solver = new SimplexSolver();
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MINIMIZE, new NonNegativeConstraint(true));
-        Assert.assertEquals(13.6, solution.getValue(), .0000001);
+        Assertions.assertEquals(13.6, solution.getValue(), .0000001);
     }
 
     @Test
@@ -289,7 +293,7 @@ public class SimplexSolverTest {
         SimplexSolver solver = new SimplexSolver();
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MAXIMIZE, new NonNegativeConstraint(true));
-        Assert.assertEquals(10.0, solution.getValue(), .0000001);
+        Assertions.assertEquals(10.0, solution.getValue(), .0000001);
     }
 
     @Test
@@ -300,19 +304,21 @@ public class SimplexSolverTest {
         SimplexSolver solver = new SimplexSolver();
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MINIMIZE, new NonNegativeConstraint(true));
-        Assert.assertEquals(0, solution.getValue(), .0000001);
-        Assert.assertEquals(0, solution.getPoint()[0], .0000001);
-        Assert.assertEquals(0, solution.getPoint()[1], .0000001);
+        Assertions.assertEquals(0, solution.getValue(), .0000001);
+        Assertions.assertEquals(0, solution.getPoint()[0], .0000001);
+        Assertions.assertEquals(0, solution.getPoint()[1], .0000001);
     }
 
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testMath290LEQ() {
-        LinearObjectiveFunction f = new LinearObjectiveFunction(new double[] { 1, 5 }, 0 );
-        Collection<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
-        constraints.add(new LinearConstraint(new double[] { 2, 0 }, Relationship.LEQ, -1.0));
-        SimplexSolver solver = new SimplexSolver();
-        solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
-                        GoalType.MINIMIZE, new NonNegativeConstraint(true));
+        assertThrows(MathIllegalStateException.class, () -> {
+            LinearObjectiveFunction f = new LinearObjectiveFunction(new double[]{1, 5}, 0 );
+            Collection<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
+            constraints.add(new LinearConstraint(new double[]{2, 0}, Relationship.LEQ, -1.0));
+            SimplexSolver solver = new SimplexSolver();
+            solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
+                GoalType.MINIMIZE, new NonNegativeConstraint(true));
+        });
     }
 
     @Test
@@ -329,13 +335,13 @@ public class SimplexSolverTest {
       PointValuePair solution1 = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                  GoalType.MAXIMIZE, new NonNegativeConstraint(true));
 
-      Assert.assertEquals(15.7143, solution1.getPoint()[0], .0001);
-      Assert.assertEquals(0.0, solution1.getPoint()[1], .0001);
-      Assert.assertEquals(14.2857, solution1.getPoint()[2], .0001);
-      Assert.assertEquals(0.0, solution1.getPoint()[3], .0001);
-      Assert.assertEquals(0.0, solution1.getPoint()[4], .0001);
-      Assert.assertEquals(30.0, solution1.getPoint()[5], .0001);
-      Assert.assertEquals(40.57143, solution1.getValue(), .0001);
+      Assertions.assertEquals(15.7143, solution1.getPoint()[0], .0001);
+      Assertions.assertEquals(0.0, solution1.getPoint()[1], .0001);
+      Assertions.assertEquals(14.2857, solution1.getPoint()[2], .0001);
+      Assertions.assertEquals(0.0, solution1.getPoint()[3], .0001);
+      Assertions.assertEquals(0.0, solution1.getPoint()[4], .0001);
+      Assertions.assertEquals(30.0, solution1.getPoint()[5], .0001);
+      Assertions.assertEquals(40.57143, solution1.getValue(), .0001);
 
       double valA = 0.8 * solution1.getPoint()[0] + 0.2 * solution1.getPoint()[1];
       double valB = 0.7 * solution1.getPoint()[2] + 0.3 * solution1.getPoint()[3];
@@ -351,7 +357,7 @@ public class SimplexSolverTest {
 
       PointValuePair solution2 = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                  GoalType.MAXIMIZE, new NonNegativeConstraint(true));
-      Assert.assertEquals(40.57143, solution2.getValue(), .0001);
+      Assertions.assertEquals(40.57143, solution2.getValue(), .0001);
     }
 
     @Test
@@ -365,7 +371,7 @@ public class SimplexSolverTest {
 
         PointValuePair solution = solver.optimize(new MaxIter(1000), f, new LinearConstraintSet(constraints),
                                                   GoalType.MINIMIZE, new NonNegativeConstraint(true));
-        Assert.assertEquals(0.3752298, solution.getValue(), 1e-4);
+        Assertions.assertEquals(0.3752298, solution.getValue(), 1e-4);
     }
 
     private List<LinearConstraint> createMath930Constraints() {
@@ -482,9 +488,9 @@ public class SimplexSolverTest {
         SimplexSolver solver = new SimplexSolver();
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MAXIMIZE, new NonNegativeConstraint(true));
-        Assert.assertEquals(2.0, solution.getPoint()[0], 0.0);
-        Assert.assertEquals(2.0, solution.getPoint()[1], 0.0);
-        Assert.assertEquals(57.0, solution.getValue(), 0.0);
+        Assertions.assertEquals(2.0, solution.getPoint()[0], 0.0);
+        Assertions.assertEquals(2.0, solution.getPoint()[1], 0.0);
+        Assertions.assertEquals(57.0, solution.getValue(), 0.0);
     }
 
     @Test
@@ -496,8 +502,8 @@ public class SimplexSolverTest {
         SimplexSolver solver = new SimplexSolver();
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MAXIMIZE, new NonNegativeConstraint(false));
-        Assert.assertEquals(10.0, solution.getPoint()[0], 0.0);
-        Assert.assertEquals(30.0, solution.getValue(), 0.0);
+        Assertions.assertEquals(10.0, solution.getPoint()[0], 0.0);
+        Assertions.assertEquals(30.0, solution.getValue(), 0.0);
     }
 
     /**
@@ -515,9 +521,9 @@ public class SimplexSolverTest {
         SimplexSolver solver = new SimplexSolver();
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MAXIMIZE, new NonNegativeConstraint(false));
-        Assert.assertEquals(2.0, solution.getPoint()[0], 0.0);
-        Assert.assertEquals(2.0, solution.getPoint()[1], 0.0);
-        Assert.assertEquals(50.0, solution.getValue(), 0.0);
+        Assertions.assertEquals(2.0, solution.getPoint()[0], 0.0);
+        Assertions.assertEquals(2.0, solution.getPoint()[1], 0.0);
+        Assertions.assertEquals(50.0, solution.getValue(), 0.0);
     }
 
     @Test
@@ -531,9 +537,9 @@ public class SimplexSolverTest {
         SimplexSolver solver = new SimplexSolver();
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MINIMIZE, new NonNegativeConstraint(false));
-        Assert.assertEquals(4.0, solution.getPoint()[0], 0.0);
-        Assert.assertEquals(0.0, solution.getPoint()[1], 0.0);
-        Assert.assertEquals(-13.0, solution.getValue(), 0.0);
+        Assertions.assertEquals(4.0, solution.getPoint()[0], 0.0);
+        Assertions.assertEquals(0.0, solution.getPoint()[1], 0.0);
+        Assertions.assertEquals(-13.0, solution.getValue(), 0.0);
     }
 
     @Test
@@ -546,32 +552,36 @@ public class SimplexSolverTest {
         SimplexSolver solver = new SimplexSolver();
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MAXIMIZE, new NonNegativeConstraint(false));
-        Assert.assertEquals(-2.0, solution.getPoint()[0], 0.0);
-        Assert.assertEquals(8.0, solution.getPoint()[1], 0.0);
-        Assert.assertEquals(12.0, solution.getValue(), 0.0);
+        Assertions.assertEquals(-2.0, solution.getPoint()[0], 0.0);
+        Assertions.assertEquals(8.0, solution.getPoint()[1], 0.0);
+        Assertions.assertEquals(12.0, solution.getValue(), 0.0);
     }
 
-    @Test(expected = MathIllegalStateException.class)
+    @Test
     public void testInfeasibleSolution() {
-        LinearObjectiveFunction f = new LinearObjectiveFunction(new double[] { 15 }, 0);
-        Collection<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
-        constraints.add(new LinearConstraint(new double[] { 1 }, Relationship.LEQ, 1));
-        constraints.add(new LinearConstraint(new double[] { 1 }, Relationship.GEQ, 3));
+        assertThrows(MathIllegalStateException.class, () -> {
+            LinearObjectiveFunction f = new LinearObjectiveFunction(new double[]{15}, 0);
+            Collection<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
+            constraints.add(new LinearConstraint(new double[]{1}, Relationship.LEQ, 1));
+            constraints.add(new LinearConstraint(new double[]{1}, Relationship.GEQ, 3));
 
-        SimplexSolver solver = new SimplexSolver();
-        solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
-                        GoalType.MAXIMIZE, new NonNegativeConstraint(false));
+            SimplexSolver solver = new SimplexSolver();
+            solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
+                GoalType.MAXIMIZE, new NonNegativeConstraint(false));
+        });
     }
 
-    @Test(expected = MathIllegalStateException.class)
+    @Test
     public void testUnboundedSolution() {
-        LinearObjectiveFunction f = new LinearObjectiveFunction(new double[] { 15, 10 }, 0);
-        Collection<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
-        constraints.add(new LinearConstraint(new double[] { 1, 0 }, Relationship.EQ, 2));
+        assertThrows(MathIllegalStateException.class, () -> {
+            LinearObjectiveFunction f = new LinearObjectiveFunction(new double[]{15, 10}, 0);
+            Collection<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
+            constraints.add(new LinearConstraint(new double[]{1, 0}, Relationship.EQ, 2));
 
-        SimplexSolver solver = new SimplexSolver();
-        solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
-                        GoalType.MAXIMIZE, new NonNegativeConstraint(false));
+            SimplexSolver solver = new SimplexSolver();
+            solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
+                GoalType.MAXIMIZE, new NonNegativeConstraint(false));
+        });
     }
 
     @Test
@@ -587,12 +597,12 @@ public class SimplexSolverTest {
         SimplexSolver solver = new SimplexSolver();
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MAXIMIZE, new NonNegativeConstraint(true));
-        Assert.assertEquals(2902.92783505155, solution.getPoint()[0], .0000001);
-        Assert.assertEquals(480.419243986254, solution.getPoint()[1], .0000001);
-        Assert.assertEquals(0.0, solution.getPoint()[2], .0000001);
-        Assert.assertEquals(0.0, solution.getPoint()[3], .0000001);
-        Assert.assertEquals(0.0, solution.getPoint()[4], .0000001);
-        Assert.assertEquals(1438556.7491409, solution.getValue(), .0000001);
+        Assertions.assertEquals(2902.92783505155, solution.getPoint()[0], .0000001);
+        Assertions.assertEquals(480.419243986254, solution.getPoint()[1], .0000001);
+        Assertions.assertEquals(0.0, solution.getPoint()[2], .0000001);
+        Assertions.assertEquals(0.0, solution.getPoint()[3], .0000001);
+        Assertions.assertEquals(0.0, solution.getPoint()[4], .0000001);
+        Assertions.assertEquals(1438556.7491409, solution.getValue(), .0000001);
     }
 
     @Test
@@ -607,10 +617,10 @@ public class SimplexSolverTest {
       SimplexSolver solver = new SimplexSolver();
       PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                 GoalType.MAXIMIZE, new NonNegativeConstraint(false));
-      Assert.assertEquals(1.0, solution.getPoint()[0], 0.0);
-      Assert.assertEquals(1.0, solution.getPoint()[1], 0.0);
-      Assert.assertEquals(0.0, solution.getPoint()[2], 0.0);
-      Assert.assertEquals(15.0, solution.getValue(), 0.0);
+      Assertions.assertEquals(1.0, solution.getPoint()[0], 0.0);
+      Assertions.assertEquals(1.0, solution.getPoint()[1], 0.0);
+      Assertions.assertEquals(0.0, solution.getPoint()[2], 0.0);
+      Assertions.assertEquals(15.0, solution.getValue(), 0.0);
   }
 
     @Test
@@ -622,7 +632,7 @@ public class SimplexSolverTest {
         SimplexSolver solver = new SimplexSolver();
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MAXIMIZE, new NonNegativeConstraint(true));
-        Assert.assertEquals(0, solution.getValue(), .0000001);
+        Assertions.assertEquals(0, solution.getValue(), .0000001);
     }
 
     @Test
@@ -750,7 +760,7 @@ public class SimplexSolverTest {
         SimplexSolver solver = new SimplexSolver();
         PointValuePair solution = solver.optimize(DEFAULT_MAX_ITER, f, new LinearConstraintSet(constraints),
                                                   GoalType.MINIMIZE, new NonNegativeConstraint(true));
-        Assert.assertEquals(7518.0, solution.getValue(), .0000001);
+        Assertions.assertEquals(7518.0, solution.getValue(), .0000001);
     }
 
     @Test
@@ -770,48 +780,50 @@ public class SimplexSolverTest {
         final SimplexSolver solver = new SimplexSolver();
         final SolutionCallback callback = new SolutionCallback();
 
-        Assert.assertNull(callback.getSolution());
-        Assert.assertFalse(callback.isSolutionOptimal());
+        Assertions.assertNull(callback.getSolution());
+        Assertions.assertFalse(callback.isSolutionOptimal());
 
         try {
             solver.optimize(new MaxIter(3), f, new LinearConstraintSet(constraints),
                             GoalType.MAXIMIZE, new NonNegativeConstraint(true), callback);
-            Assert.fail("expected MathIllegalStateException");
+            Assertions.fail("expected MathIllegalStateException");
         } catch (MathIllegalStateException ex) {
             // expected
         }
 
         final PointValuePair solution = callback.getSolution();
-        Assert.assertNotNull(solution);
-        Assert.assertTrue(validSolution(solution, constraints, 1e-4));
-        Assert.assertFalse(callback.isSolutionOptimal());
+        Assertions.assertNotNull(solution);
+        Assertions.assertTrue(validSolution(solution, constraints, 1e-4));
+        Assertions.assertFalse(callback.isSolutionOptimal());
         // the solution is clearly not optimal: optimal = 10.0
-        Assert.assertEquals(7.0, solution.getValue(), 1e-4);
+        Assertions.assertEquals(7.0, solution.getValue(), 1e-4);
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testDimensionMatch() {
-        // min 2x1 +15x2 +18x3
-        // Subject to
-        //   -x1 +2x2 -6x3  <=-10
-        //         x2 +2x3  <= 6
-        //   2x1      +10x3 <= 19
-        //   -x1  +x2       <= -2
-        // x1,x2,x3 >= 0
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            // min 2x1 +15x2 +18x3
+            // Subject to
+            //   -x1 +2x2 -6x3  <=-10
+            //         x2 +2x3  <= 6
+            //   2x1      +10x3 <= 19
+            //   -x1  +x2       <= -2
+            // x1,x2,x3 >= 0
 
-        LinearObjectiveFunction f = new LinearObjectiveFunction(new double[] { 2, 15, 18 }, 0);
-        Collection<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
-        // this constraint is wrong, the dimension is less than expected one
-        constraints.add(new LinearConstraint(new double[] { -1, 2 - 6 }, Relationship.LEQ, -10));
-        constraints.add(new LinearConstraint(new double[] { 0, 1, 2 }, Relationship.LEQ, 6));
-        constraints.add(new LinearConstraint(new double[] { 2, 0, 10 }, Relationship.LEQ, 19));
-        constraints.add(new LinearConstraint(new double[] { -1, 1, 0 }, Relationship.LEQ, -2));
+            LinearObjectiveFunction f = new LinearObjectiveFunction(new double[]{2, 15, 18}, 0);
+            Collection<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
+            // this constraint is wrong, the dimension is less than expected one
+            constraints.add(new LinearConstraint(new double[]{-1, 2 - 6}, Relationship.LEQ, -10));
+            constraints.add(new LinearConstraint(new double[]{0, 1, 2}, Relationship.LEQ, 6));
+            constraints.add(new LinearConstraint(new double[]{2, 0, 10}, Relationship.LEQ, 19));
+            constraints.add(new LinearConstraint(new double[]{-1, 1, 0}, Relationship.LEQ, -2));
 
-        SimplexSolver solver = new SimplexSolver();
-        solver.optimize(f,
-                        new LinearConstraintSet(constraints),
-                        new NonNegativeConstraint(true),
-                        PivotSelectionRule.BLAND);
+            SimplexSolver solver = new SimplexSolver();
+            solver.optimize(f,
+                new LinearConstraintSet(constraints),
+                new NonNegativeConstraint(true),
+                PivotSelectionRule.BLAND);
+        });
     }
 
     /**

@@ -32,8 +32,8 @@ import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.MathArrays;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class FieldLUDecompositionTest {
     private Fraction[][] testData = {
@@ -70,12 +70,12 @@ public class FieldLUDecompositionTest {
         FieldMatrix<Fraction> matrix =
             new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), testData);
         FieldLUDecomposition<Fraction> LU = new FieldLUDecomposition<Fraction>(matrix);
-        Assert.assertEquals(testData.length, LU.getL().getRowDimension());
-        Assert.assertEquals(testData.length, LU.getL().getColumnDimension());
-        Assert.assertEquals(testData.length, LU.getU().getRowDimension());
-        Assert.assertEquals(testData.length, LU.getU().getColumnDimension());
-        Assert.assertEquals(testData.length, LU.getP().getRowDimension());
-        Assert.assertEquals(testData.length, LU.getP().getColumnDimension());
+        Assertions.assertEquals(testData.length, LU.getL().getRowDimension());
+        Assertions.assertEquals(testData.length, LU.getL().getColumnDimension());
+        Assertions.assertEquals(testData.length, LU.getU().getRowDimension());
+        Assertions.assertEquals(testData.length, LU.getU().getColumnDimension());
+        Assertions.assertEquals(testData.length, LU.getP().getRowDimension());
+        Assertions.assertEquals(testData.length, LU.getP().getColumnDimension());
 
     }
 
@@ -89,9 +89,9 @@ public class FieldLUDecompositionTest {
                     { Fraction.ZERO, Fraction.ZERO },
                     { Fraction.ZERO, Fraction.ZERO }
             }));
-            Assert.fail("Expected MathIllegalArgumentException");
+            Assertions.fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ime) {
-            Assert.assertEquals(LocalizedCoreFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
         }
     }
 
@@ -124,17 +124,17 @@ public class FieldLUDecompositionTest {
 
         matrix = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), singular);
         lu = new FieldLUDecomposition<Fraction>(matrix);
-        Assert.assertFalse(lu.getSolver().isNonSingular());
-        Assert.assertNull(lu.getL());
-        Assert.assertNull(lu.getU());
-        Assert.assertNull(lu.getP());
+        Assertions.assertFalse(lu.getSolver().isNonSingular());
+        Assertions.assertNull(lu.getL());
+        Assertions.assertNull(lu.getU());
+        Assertions.assertNull(lu.getP());
 
         matrix = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), bigSingular);
         lu = new FieldLUDecomposition<Fraction>(matrix);
-        Assert.assertFalse(lu.getSolver().isNonSingular());
-        Assert.assertNull(lu.getL());
-        Assert.assertNull(lu.getU());
-        Assert.assertNull(lu.getP());
+        Assertions.assertFalse(lu.getSolver().isNonSingular());
+        Assertions.assertNull(lu.getL());
+        Assertions.assertNull(lu.getU());
+        Assertions.assertNull(lu.getP());
 
     }
 
@@ -144,9 +144,9 @@ public class FieldLUDecompositionTest {
         FieldMatrix<Fraction> matrix = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), testData);
         FieldMatrix<Fraction> l = new FieldLUDecomposition<Fraction>(matrix).getL();
         for (int i = 0; i < l.getRowDimension(); i++) {
-            Assert.assertEquals(Fraction.ONE, l.getEntry(i, i));
+            Assertions.assertEquals(Fraction.ONE, l.getEntry(i, i));
             for (int j = i + 1; j < l.getColumnDimension(); j++) {
-                Assert.assertEquals(Fraction.ZERO, l.getEntry(i, j));
+                Assertions.assertEquals(Fraction.ZERO, l.getEntry(i, j));
             }
         }
     }
@@ -158,7 +158,7 @@ public class FieldLUDecompositionTest {
         FieldMatrix<Fraction> u = new FieldLUDecomposition<Fraction>(matrix).getU();
         for (int i = 0; i < u.getRowDimension(); i++) {
             for (int j = 0; j < i; j++) {
-                Assert.assertEquals(Fraction.ZERO, u.getEntry(i, j));
+                Assertions.assertEquals(Fraction.ZERO, u.getEntry(i, j));
             }
         }
     }
@@ -192,9 +192,9 @@ public class FieldLUDecompositionTest {
                     ++otherCount;
                 }
             }
-            Assert.assertEquals(p.getColumnDimension() - 1, zeroCount);
-            Assert.assertEquals(1, oneCount);
-            Assert.assertEquals(0, otherCount);
+            Assertions.assertEquals(p.getColumnDimension() - 1, zeroCount);
+            Assertions.assertEquals(1, oneCount);
+            Assertions.assertEquals(0, otherCount);
         }
 
         for (int j = 0; j < p.getColumnDimension(); j++) {
@@ -211,9 +211,9 @@ public class FieldLUDecompositionTest {
                     ++otherCount;
                 }
             }
-            Assert.assertEquals(p.getRowDimension() - 1, zeroCount);
-            Assert.assertEquals(1, oneCount);
-            Assert.assertEquals(0, otherCount);
+            Assertions.assertEquals(p.getRowDimension() - 1, zeroCount);
+            Assertions.assertEquals(1, oneCount);
+            Assertions.assertEquals(0, otherCount);
         }
 
     }
@@ -224,22 +224,22 @@ public class FieldLUDecompositionTest {
     public void testSingular() {
         final FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), testData);
         FieldLUDecomposition<Fraction> lu = new FieldLUDecomposition<Fraction>(m);
-        Assert.assertTrue(lu.getSolver().isNonSingular());
-        Assert.assertEquals(new Fraction(-1, 1), lu.getDeterminant());
+        Assertions.assertTrue(lu.getSolver().isNonSingular());
+        Assertions.assertEquals(new Fraction(-1, 1), lu.getDeterminant());
         lu = new FieldLUDecomposition<>(m.getSubMatrix(0, 1, 0, 1));
-        Assert.assertTrue(lu.getSolver().isNonSingular());
-        Assert.assertEquals(new Fraction(+1, 1), lu.getDeterminant());
+        Assertions.assertTrue(lu.getSolver().isNonSingular());
+        Assertions.assertEquals(new Fraction(+1, 1), lu.getDeterminant());
         lu = new FieldLUDecomposition<Fraction>(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), singular));
-        Assert.assertFalse(lu.getSolver().isNonSingular());
-        Assert.assertEquals(new Fraction(0, 1), lu.getDeterminant());
+        Assertions.assertFalse(lu.getSolver().isNonSingular());
+        Assertions.assertEquals(new Fraction(0, 1), lu.getDeterminant());
         lu = new FieldLUDecomposition<Fraction>(new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), bigSingular));
-        Assert.assertFalse(lu.getSolver().isNonSingular());
-        Assert.assertEquals(new Fraction(0, 1), lu.getDeterminant());
+        Assertions.assertFalse(lu.getSolver().isNonSingular());
+        Assertions.assertEquals(new Fraction(0, 1), lu.getDeterminant());
         try {
             lu.getSolver().solve(new ArrayFieldVector<>(new Fraction[] { Fraction.ONE, Fraction.ONE, Fraction.ONE, Fraction.ONE }));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.SINGULAR_MATRIX, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.SINGULAR_MATRIX, miae.getSpecifier());
         }
     }
 
@@ -274,13 +274,13 @@ public class FieldLUDecompositionTest {
         UnitTestUtils.assertEquals(pRef, p);
         int[] pivot = lu.getPivot();
         for (int i = 0; i < pivotRef.length; ++i) {
-            Assert.assertEquals(pivotRef[i], pivot[i]);
+            Assertions.assertEquals(pivotRef[i], pivot[i]);
         }
 
         // check the same cached instance is returned the second time
-        Assert.assertTrue(l == lu.getL());
-        Assert.assertTrue(u == lu.getU());
-        Assert.assertTrue(p == lu.getP());
+        Assertions.assertTrue(l == lu.getL());
+        Assertions.assertTrue(u == lu.getU());
+        Assertions.assertTrue(p == lu.getP());
 
     }
 
@@ -315,13 +315,13 @@ public class FieldLUDecompositionTest {
         UnitTestUtils.assertEquals(pRef, p);
         int[] pivot = lu.getPivot();
         for (int i = 0; i < pivotRef.length; ++i) {
-            Assert.assertEquals(pivotRef[i], pivot[i]);
+            Assertions.assertEquals(pivotRef[i], pivot[i]);
         }
 
         // check the same cached instance is returned the second time
-        Assert.assertTrue(l == lu.getL());
-        Assert.assertTrue(u == lu.getU());
-        Assert.assertTrue(p == lu.getP());
+        Assertions.assertTrue(l == lu.getL());
+        Assertions.assertTrue(u == lu.getU());
+        Assertions.assertTrue(p == lu.getP());
     }
 
     @Test
@@ -336,8 +336,8 @@ public class FieldLUDecompositionTest {
         });
         FieldDecompositionSolver<Complex> solver = new FieldLUDecomposition<>(m).getSolver();
         FieldVector<Complex> u = solver.solve(v);
-        Assert.assertEquals(u.getEntry(0), new Complex(0, 2));
-        Assert.assertEquals(u.getEntry(1), new Complex(2, 0));
+        Assertions.assertEquals(u.getEntry(0), new Complex(0, 2));
+        Assertions.assertEquals(u.getEntry(1), new Complex(2, 0));
     }
 
     @Test
@@ -349,17 +349,17 @@ public class FieldLUDecompositionTest {
         FieldVector<Fraction> solution = solver.solve(new ArrayFieldVector<>(new Fraction[] {
             new Fraction(1, 2), new Fraction(2, 3), new Fraction(3,4)
         }));
-        Assert.assertEquals(testData.length, solution.getDimension());
-        Assert.assertEquals(new Fraction(-31, 12), solution.getEntry(0));
-        Assert.assertEquals(new Fraction( 11, 12), solution.getEntry(1));
-        Assert.assertEquals(new Fraction(  5, 12), solution.getEntry(2));
-        Assert.assertEquals(testData.length,    solver.getRowDimension());
-        Assert.assertEquals(testData[0].length, solver.getColumnDimension());
+        Assertions.assertEquals(testData.length, solution.getDimension());
+        Assertions.assertEquals(new Fraction(-31, 12), solution.getEntry(0));
+        Assertions.assertEquals(new Fraction( 11, 12), solution.getEntry(1));
+        Assertions.assertEquals(new Fraction(  5, 12), solution.getEntry(2));
+        Assertions.assertEquals(testData.length,    solver.getRowDimension());
+        Assertions.assertEquals(testData[0].length, solver.getColumnDimension());
         try {
             solver.solve(new ArrayFieldVector<>(new Fraction[] { Fraction.ONE, Fraction.ONE }));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
         }
     }
 
@@ -407,7 +407,7 @@ public class FieldLUDecompositionTest {
         // Verify
         for (int row = 0; row < inverseReal.getRowDimension(); row++) {
             for (int column = 0; column < inverseReal.getColumnDimension(); column++) {
-               Assert.assertEquals(inverseReal.getEntry(row, column), inverseField.getEntry(row, column).getReal(), 1.0e-15); 
+               Assertions.assertEquals(inverseReal.getEntry(row, column), inverseField.getEntry(row, column).getReal(), 1.0e-15); 
             }
         }
 
@@ -422,9 +422,9 @@ public class FieldLUDecompositionTest {
         // L
         final FieldMatrix<Fraction> l = lu.getL();
         for (int i = 0; i < l.getRowDimension(); i++) {
-            Assert.assertEquals(Fraction.ONE, l.getEntry(i, i));
+            Assertions.assertEquals(Fraction.ONE, l.getEntry(i, i));
             for (int j = i + 1; j < l.getColumnDimension(); j++) {
-                Assert.assertEquals(Fraction.ZERO, l.getEntry(i, j));
+                Assertions.assertEquals(Fraction.ZERO, l.getEntry(i, j));
             }
         }
 
@@ -432,7 +432,7 @@ public class FieldLUDecompositionTest {
         final FieldMatrix<Fraction> u = lu.getU();
         for (int i = 0; i < u.getRowDimension(); i++) {
             for (int j = 0; j < i; j++) {
-                Assert.assertEquals(Fraction.ZERO, u.getEntry(i, j));
+                Assertions.assertEquals(Fraction.ZERO, u.getEntry(i, j));
             }
         }
 

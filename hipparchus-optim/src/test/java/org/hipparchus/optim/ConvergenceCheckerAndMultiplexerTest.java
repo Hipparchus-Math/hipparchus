@@ -16,32 +16,32 @@
  */
 package org.hipparchus.optim;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 public class ConvergenceCheckerAndMultiplexerTest {
 
     @Test
     public void testFalseFalse() {
-        Assert.assertFalse(new ConvergenceCheckerAndMultiplexer<>(buildCheckers(false, false)).converged(0, null, null));
+        Assertions.assertFalse(new ConvergenceCheckerAndMultiplexer<>(buildCheckers(false, false)).converged(0, null, null));
     }
 
     @Test
     public void testFalseTrue() {
-        Assert.assertFalse(new ConvergenceCheckerAndMultiplexer<>(buildCheckers(false, true)).converged(0, null, null));
+        Assertions.assertFalse(new ConvergenceCheckerAndMultiplexer<>(buildCheckers(false, true)).converged(0, null, null));
     }
 
     @Test
     public void testTrueFalse() {
-        Assert.assertFalse(new ConvergenceCheckerAndMultiplexer<>(buildCheckers(true, false)).converged(0, null, null));
+        Assertions.assertFalse(new ConvergenceCheckerAndMultiplexer<>(buildCheckers(true, false)).converged(0, null, null));
     }
 
     @Test
     public void testTrueTrue() {
-        Assert.assertTrue(new ConvergenceCheckerAndMultiplexer<>(buildCheckers(true, true)).converged(0, null, null));
+        Assertions.assertTrue(new ConvergenceCheckerAndMultiplexer<>(buildCheckers(true, true)).converged(0, null, null));
     }
 
     private List<ConvergenceChecker<Object>> buildCheckers(final boolean result1, final boolean result2) {

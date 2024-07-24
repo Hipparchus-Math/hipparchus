@@ -27,8 +27,8 @@ import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for Laguerre solver.
@@ -56,7 +56,7 @@ public final class LaguerreSolverTest {
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
     }
 
     /**
@@ -75,13 +75,13 @@ public final class LaguerreSolverTest {
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = -4.0; max = -1.0; expected = -3.0;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
     }
 
     /**
@@ -100,19 +100,19 @@ public final class LaguerreSolverTest {
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = -5.0; max = -2.5; expected = -3.0;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = 3.0; max = 6.0; expected = 4.0;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
     }
 
     /**
@@ -149,14 +149,14 @@ public final class LaguerreSolverTest {
         try {
             // bad interval
             solver.solve(100, f, 1, -1);
-            Assert.fail("Expecting MathIllegalArgumentException - bad interval");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // no bracketing
             solver.solve(100, f, 2, 3);
-            Assert.fail("Expecting MathIllegalArgumentException - no bracketing");
+            Assertions.fail("Expecting MathIllegalArgumentException - no bracketing");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -171,10 +171,10 @@ public final class LaguerreSolverTest {
 
     private void doTestIssue177(final double[] coefficients, final double expected) {
         Complex[] roots = new LaguerreSolver(1.0e-5).solveAllComplex(coefficients, 0);
-        Assert.assertEquals(coefficients.length - 1, roots.length);
+        Assertions.assertEquals(coefficients.length - 1, roots.length);
         for (final Complex root : roots) {
-            Assert.assertEquals(expected, root.norm(), 1.0e-15);
-            Assert.assertEquals(0.0, MathUtils.normalizeAngle(roots.length * root.getArgument(), 0.0), 1.0e-15);
+            Assertions.assertEquals(expected, root.norm(), 1.0e-15);
+            Assertions.assertEquals(0.0, MathUtils.normalizeAngle(roots.length * root.getArgument(), 0.0), 1.0e-15);
         }
     }
 

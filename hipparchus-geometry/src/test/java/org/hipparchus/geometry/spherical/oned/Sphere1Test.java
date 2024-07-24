@@ -23,26 +23,30 @@ package org.hipparchus.geometry.spherical.oned;
 
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.geometry.Space;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class Sphere1Test {
 
     @Test
     public void testDimension() {
-        Assert.assertEquals(1, Sphere1D.getInstance().getDimension());
+        Assertions.assertEquals(1, Sphere1D.getInstance().getDimension());
     }
 
-    @Test(expected=Sphere1D.NoSubSpaceException.class)
+    @Test
     public void testSubSpace() {
-        Sphere1D.getInstance().getSubSpace();
+        assertThrows(Sphere1D.NoSubSpaceException.class, () -> {
+            Sphere1D.getInstance().getSubSpace();
+        });
     }
 
     @Test
     public void testSerialization() {
         Space s1 = Sphere1D.getInstance();
         Space deserialized = (Space) UnitTestUtils.serializeAndRecover(s1);
-        Assert.assertTrue(s1 == deserialized);
+        Assertions.assertTrue(s1 == deserialized);
     }
 
 }

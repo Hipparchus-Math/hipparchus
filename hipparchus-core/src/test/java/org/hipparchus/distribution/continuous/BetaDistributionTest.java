@@ -21,9 +21,9 @@
  */
 package org.hipparchus.distribution.continuous;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BetaDistributionTest {
 
@@ -295,7 +295,7 @@ public class BetaDistributionTest {
     private void checkDensity(double alpha, double beta, double[] x, double[] expected) {
         BetaDistribution d = new BetaDistribution(alpha, beta);
         for (int i = 0; i < x.length; i++) {
-            assertEquals(String.format("density at x=%.1f for alpha=%.1f, beta=%.1f", x[i], alpha, beta), expected[i], d.density(x[i]), 1e-5);
+            assertEquals(expected[i], d.density(x[i]), 1e-5, String.format("density at x=%.1f for alpha=%.1f, beta=%.1f", x[i], alpha, beta));
         }
     }
 
@@ -305,7 +305,7 @@ public class BetaDistributionTest {
         BetaDistribution dist;
 
         dist = new BetaDistribution(1, 1);
-        assertEquals(dist.getNumericalMean(), 0.5, tol);
+        assertEquals(0.5, dist.getNumericalMean(), tol);
         assertEquals(dist.getNumericalVariance(), 1.0 / 12.0, tol);
 
         dist = new BetaDistribution(2, 5);

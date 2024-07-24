@@ -26,8 +26,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 /**
@@ -52,18 +52,18 @@ public final class FieldRombergIntegratorTest {
         double expected = 2;
         double tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         double result = integrator.integrate(100, x -> x.sin(), min, max).getReal();
-        Assert.assertTrue(integrator.getEvaluations() < 50);
-        Assert.assertTrue(integrator.getIterations()  < 10);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < 50);
+        Assertions.assertTrue(integrator.getIterations()  < 10);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = new Binary64(-FastMath.PI/3);
         max = new Binary64(0);
         expected = -0.5;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(100, x -> x.sin(), min, max).getReal();
-        Assert.assertTrue(integrator.getEvaluations() < 50);
-        Assert.assertTrue(integrator.getIterations()  < 10);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < 50);
+        Assertions.assertTrue(integrator.getIterations()  < 10);
+        Assertions.assertEquals(expected, result, tolerance);
     }
 
     /**
@@ -80,27 +80,27 @@ public final class FieldRombergIntegratorTest {
         double expected = -1.0 / 48;
         double tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         double result = integrator.integrate(100, f, min, max).getReal();
-        Assert.assertTrue(integrator.getEvaluations() < 10);
-        Assert.assertTrue(integrator.getIterations()  < 5);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < 10);
+        Assertions.assertTrue(integrator.getIterations()  < 5);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = new Binary64(0);
         max = new Binary64(0.5);
         expected = 11.0 / 768;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(100, f, min, max).getReal();
-        Assert.assertTrue(integrator.getEvaluations() < 10);
-        Assert.assertTrue(integrator.getIterations()  < 5);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < 10);
+        Assertions.assertTrue(integrator.getIterations()  < 5);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = new Binary64(-1);
         max = new Binary64(4);
         expected = 2048 / 3.0 - 78 + 1.0 / 48;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(100, f, min, max).getReal();
-        Assert.assertTrue(integrator.getEvaluations() < 10);
-        Assert.assertTrue(integrator.getIterations()  < 5);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < 10);
+        Assertions.assertTrue(integrator.getIterations()  < 5);
+        Assertions.assertEquals(expected, result, tolerance);
     }
 
     /**
@@ -113,21 +113,21 @@ public final class FieldRombergIntegratorTest {
             // bad interval
             new FieldRombergIntegrator<>(Binary64Field.getInstance()).integrate(1000, x -> x.sin(),
                                                                                  new Binary64(1), new Binary64(-1));
-            Assert.fail("Expecting MathIllegalArgumentException - bad interval");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
             new FieldRombergIntegrator<>(Binary64Field.getInstance(), 5, 4);
-            Assert.fail("Expecting MathIllegalArgumentException - bad iteration limits");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad iteration limits");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
             new FieldRombergIntegrator<>(Binary64Field.getInstance(), 10, 50);
-            Assert.fail("Expecting MathIllegalArgumentException - bad iteration limits");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad iteration limits");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }

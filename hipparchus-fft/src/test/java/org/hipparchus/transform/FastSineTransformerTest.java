@@ -21,9 +21,6 @@
  */
 package org.hipparchus.transform;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.Sinc;
@@ -32,11 +29,12 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Test case for fast sine transformer.
@@ -45,18 +43,17 @@ import org.junit.runners.Parameterized.Parameters;
  * to account for round-off errors.
  *
  */
-@RunWith(value = Parameterized.class)
-public final class FastSineTransformerTest extends RealTransformerAbstractTest {
+public final class FastSineTransformerTest extends RealTransformerAbstractTest<DstNormalization> {
 
-    private final DstNormalization normalization;
+    private DstNormalization normalization;
 
-    private final int[] invalidDataSize;
+    private int[] invalidDataSize;
 
-    private final double[] relativeTolerance;
+    private double[] relativeTolerance;
 
-    private final int[] validDataSize;
+    private int[] validDataSize;
 
-    public FastSineTransformerTest(final DstNormalization normalization) {
+    public void initFastSineTransformerTest(final DstNormalization normalization) {
         this.normalization = normalization;
         this.validDataSize = new int[] {
             1, 2, 4, 8, 16, 32, 64, 128
@@ -75,7 +72,6 @@ public final class FastSineTransformerTest extends RealTransformerAbstractTest {
      *
      * @return an array of parameters for this parameterized test
      */
-    @Parameters
     public static Collection<Object[]> data() {
         final DstNormalization[] normalization = DstNormalization.values();
         final Object[][] data = new DstNormalization[normalization.length][1];
@@ -184,11 +180,18 @@ public final class FastSineTransformerTest extends RealTransformerAbstractTest {
         return y;
     }
 
+    @Override
+    void init(DstNormalization normalization) {
+        initFastSineTransformerTest(normalization);
+    }
+
     /*
      * Additional tests.
      */
-    @Test
-    public void testTransformRealFirstElementNotZero() {
+    @MethodSource("data")
+    @ParameterizedTest
+    public void testTransformRealFirstElementNotZero(final DstNormalization normalization) {
+        initFastSineTransformerTest(normalization);
         final TransformType[] type = TransformType.values();
         final double[] data = new double[] {
             1.0, 1.0, 1.0, 1.0
@@ -197,7 +200,7 @@ public final class FastSineTransformerTest extends RealTransformerAbstractTest {
         for (int j = 0; j < type.length; j++) {
             try {
                 transformer.transform(data, type[j]);
-                Assert.fail(type[j].toString());
+                Assertions.fail(type[j].toString());
             } catch (MathIllegalArgumentException e) {
                 // Expected: do nothing
             }
@@ -211,8 +214,10 @@ public final class FastSineTransformerTest extends RealTransformerAbstractTest {
     /**
      * Test of transformer for the ad hoc data.
      */
-    @Test
-    public void testAdHocData() {
+    @MethodSource("data")
+    @ParameterizedTest
+    public void testAdHocData(final DstNormalization normalization) {
+        initFastSineTransformerTest(normalization);
         FastSineTransformer transformer;
         transformer = new FastSineTransformer(DstNormalization.STANDARD_DST_I);
         double[] result;
@@ -225,12 +230,12 @@ public final class FastSineTransformerTest extends RealTransformerAbstractTest {
 
         result = transformer.transform(x, TransformType.FORWARD);
         for (int i = 0; i < result.length; i++) {
-            Assert.assertEquals(y[i], result[i], tolerance);
+            Assertions.assertEquals(y[i], result[i], tolerance);
         }
 
         result = transformer.transform(y, TransformType.INVERSE);
         for (int i = 0; i < result.length; i++) {
-            Assert.assertEquals(x[i], result[i], tolerance);
+            Assertions.assertEquals(x[i], result[i], tolerance);
         }
 
         TransformUtils.scaleArray(x, FastMath.sqrt(x.length / 2.0));
@@ -238,20 +243,22 @@ public final class FastSineTransformerTest extends RealTransformerAbstractTest {
 
         result = transformer.transform(y, TransformType.FORWARD);
         for (int i = 0; i < result.length; i++) {
-            Assert.assertEquals(x[i], result[i], tolerance);
+            Assertions.assertEquals(x[i], result[i], tolerance);
         }
 
         result = transformer.transform(x, TransformType.INVERSE);
         for (int i = 0; i < result.length; i++) {
-            Assert.assertEquals(y[i], result[i], tolerance);
+            Assertions.assertEquals(y[i], result[i], tolerance);
         }
     }
 
     /**
      * Test of transformer for the sine function.
      */
-    @Test
-    public void testSinFunction() {
+    @MethodSource("data")
+    @ParameterizedTest
+    public void testSinFunction(final DstNormalization normalization) {
+        initFastSineTransformerTest(normalization);
         UnivariateFunction f = new Sin();
         FastSineTransformer transformer;
         transformer = new FastSineTransformer(DstNormalization.STANDARD_DST_I);
@@ -263,24 +270,26 @@ public final class FastSineTransformerTest extends RealTransformerAbstractTest {
 
         min = 0.0; max = 2.0 * FastMath.PI;
         result = transformer.transform(f, min, max, N, TransformType.FORWARD);
-        Assert.assertEquals(N >> 1, result[2], tolerance);
+        Assertions.assertEquals(N >> 1, result[2], tolerance);
         for (int i = 0; i < N; i += (i == 1 ? 2 : 1)) {
-            Assert.assertEquals(0.0, result[i], tolerance);
+            Assertions.assertEquals(0.0, result[i], tolerance);
         }
 
         min = -FastMath.PI; max = FastMath.PI;
         result = transformer.transform(f, min, max, N, TransformType.FORWARD);
-        Assert.assertEquals(-(N >> 1), result[2], tolerance);
+        Assertions.assertEquals(-(N >> 1), result[2], tolerance);
         for (int i = 0; i < N; i += (i == 1 ? 2 : 1)) {
-            Assert.assertEquals(0.0, result[i], tolerance);
+            Assertions.assertEquals(0.0, result[i], tolerance);
         }
     }
 
     /**
      * Test of parameters for the transformer.
      */
-    @Test
-    public void testParameters() throws Exception {
+    @MethodSource("data")
+    @ParameterizedTest
+    public void testParameters(final DstNormalization normalization) throws Exception {
+        initFastSineTransformerTest(normalization);
         UnivariateFunction f = new Sin();
         FastSineTransformer transformer;
         transformer = new FastSineTransformer(DstNormalization.STANDARD_DST_I);
@@ -288,21 +297,21 @@ public final class FastSineTransformerTest extends RealTransformerAbstractTest {
         try {
             // bad interval
             transformer.transform(f, 1, -1, 64, TransformType.FORWARD);
-            Assert.fail("Expecting MathIllegalArgumentException - bad interval");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad samples number
             transformer.transform(f, -1, 1, 0, TransformType.FORWARD);
-            Assert.fail("Expecting MathIllegalArgumentException - bad samples number");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad samples number");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad samples number
             transformer.transform(f, -1, 1, 100, TransformType.FORWARD);
-            Assert.fail("Expecting MathIllegalArgumentException - bad samples number");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad samples number");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }

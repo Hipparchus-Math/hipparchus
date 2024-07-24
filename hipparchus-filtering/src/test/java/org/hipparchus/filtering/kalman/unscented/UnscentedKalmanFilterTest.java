@@ -17,10 +17,6 @@
 
 package org.hipparchus.filtering.kalman.unscented;
 
-import java.util.List;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.filtering.kalman.Measurement;
@@ -41,39 +37,47 @@ import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MerweUnscentedTransform;
 import org.hipparchus.util.UnscentedTransformProvider;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class UnscentedKalmanFilterTest {
 
     /** test state dimension equal to 0 */
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testWrongStateDimension() {
-        final ConstantProcess process = new ConstantProcess();
-        final ProcessEstimate initial = new ProcessEstimate(0,
-                                                            MatrixUtils.createRealVector(new double[0]),
-                                                            process.q);
-        final UnscentedTransformProvider provider = new UnscentedTransformProvider() {
-            
-            @Override
-            public RealVector[] unscentedTransform(RealVector state,
-                                                   RealMatrix covariance) {
-                return new RealVector[0];
-            }
-            
-            @Override
-            public RealVector getWm() {
-                return new ArrayRealVector();
-            }
-            
-            @Override
-            public RealVector getWc() {
-                return new ArrayRealVector();
-            }
-        };
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final ConstantProcess process = new ConstantProcess();
+            final ProcessEstimate initial = new ProcessEstimate(0,
+                MatrixUtils.createRealVector(new double[0]),
+                process.q);
+            final UnscentedTransformProvider provider = new UnscentedTransformProvider() {
 
-        new UnscentedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial, provider);
+                @Override
+                public RealVector[] unscentedTransform(RealVector state,
+                    RealMatrix covariance) {
+                    return new RealVector[0];
+                }
+
+                @Override
+                public RealVector getWm() {
+                    return new ArrayRealVector();
+                }
+
+                @Override
+                public RealVector getWc() {
+                    return new ArrayRealVector();
+                }
+            };
+
+            new UnscentedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial, provider);
+        });
     }
 
     @Test
@@ -85,7 +89,7 @@ public class UnscentedKalmanFilterTest {
         final ProcessEstimate initial = new ProcessEstimate(0,
                                                             MatrixUtils.createRealVector(new double[] { 10.0 }),
                                                             process.q);
-        Assert.assertNull(initial.getInnovationCovariance());
+        Assertions.assertNull(initial.getInnovationCovariance());
 
         // reference values from Apache Commons Math 3.6.1 unit test
         final List<Reference> referenceData = Reference.loadReferenceData(1, 1, "constant-value.txt");
@@ -202,8 +206,8 @@ public class UnscentedKalmanFilterTest {
         map(estimate -> {
             final ProcessEstimate p = filter.getPredicted();
             final ProcessEstimate c = filter.getCorrected();
-            Assert.assertEquals(p.getTime(), c.getTime(), 1.0e-15);
-            Assert.assertTrue(p.getState().getDistance(c.getState()) > 0.005);
+            Assertions.assertEquals(p.getTime(), c.getTime(), 1.0e-15);
+            Assertions.assertTrue(p.getState().getDistance(c.getState()) > 0.005);
             return estimate;
         }).
         forEach(estimate -> {
@@ -320,7 +324,7 @@ public class UnscentedKalmanFilterTest {
                         map(measurement -> filter.estimationStep(measurement)).
                         reduce((first, second) -> second).get();
 
-        Assert.assertEquals(expected, finalEstimate.getState().getEntry(0), tolerance);
+        Assertions.assertEquals(expected, finalEstimate.getState().getEntry(0), tolerance);
 
     }
 
@@ -559,7 +563,7 @@ public class UnscentedKalmanFilterTest {
 
             // Number of sigma-points
             int numPoints = sigmaPoints.length;
-            Assert.assertEquals(STATE_DIMENSION * 2 + 1, numPoints);
+            Assertions.assertEquals(STATE_DIMENSION * 2 + 1, numPoints);
 
             // Time delta
             double dt = measurement.getTime() - previousTime;

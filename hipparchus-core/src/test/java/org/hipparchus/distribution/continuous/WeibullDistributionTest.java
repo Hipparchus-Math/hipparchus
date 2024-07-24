@@ -25,8 +25,8 @@ package org.hipparchus.distribution.continuous;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for WeibullDistribution.
@@ -71,7 +71,7 @@ public class WeibullDistributionTest extends RealDistributionAbstractTest {
         // Analytically, answer is solution to 1e-17 = 1-exp(-(x/3)^2)
         // x = sqrt(-9*log(1-1e-17))
         // If we're not careful, answer will be 0. Answer below is computed with care in Octave:
-        Assert.assertEquals(9.48683298050514e-9, t, 1e-17);
+        Assertions.assertEquals(9.48683298050514e-9, t, 1e-17);
     }
 
     @Test
@@ -85,10 +85,10 @@ public class WeibullDistributionTest extends RealDistributionAbstractTest {
     @Test
     public void testAlpha() {
         WeibullDistribution dist = new WeibullDistribution(1, 2);
-        Assert.assertEquals(1, dist.getShape(), 0);
+        Assertions.assertEquals(1, dist.getShape(), 0);
         try {
             new WeibullDistribution(0, 2);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException e) {
             // Expected.
         }
@@ -97,10 +97,10 @@ public class WeibullDistributionTest extends RealDistributionAbstractTest {
     @Test
     public void testBeta() {
         WeibullDistribution dist = new WeibullDistribution(1, 2);
-        Assert.assertEquals(2, dist.getScale(), 0);
+        Assertions.assertEquals(2, dist.getScale(), 0);
         try {
             new WeibullDistribution(1, 0);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException e) {
             // Expected.
         }
@@ -113,14 +113,14 @@ public class WeibullDistributionTest extends RealDistributionAbstractTest {
 
         dist = new WeibullDistribution(2.5, 3.5);
         // In R: 3.5*gamma(1+(1/2.5)) (or emperically: mean(rweibull(10000, 2.5, 3.5)))
-        Assert.assertEquals(dist.getNumericalMean(), 3.5 * FastMath.exp(Gamma.logGamma(1 + (1 / 2.5))), tol);
-        Assert.assertEquals(dist.getNumericalVariance(), (3.5 * 3.5) *
+        Assertions.assertEquals(dist.getNumericalMean(), 3.5 * FastMath.exp(Gamma.logGamma(1 + (1 / 2.5))), tol);
+        Assertions.assertEquals(dist.getNumericalVariance(), (3.5 * 3.5) *
                 FastMath.exp(Gamma.logGamma(1 + (2 / 2.5))) -
                 (dist.getNumericalMean() * dist.getNumericalMean()), tol);
 
         dist = new WeibullDistribution(10.4, 2.222);
-        Assert.assertEquals(dist.getNumericalMean(), 2.222 * FastMath.exp(Gamma.logGamma(1 + (1 / 10.4))), tol);
-        Assert.assertEquals(dist.getNumericalVariance(), (2.222 * 2.222) *
+        Assertions.assertEquals(dist.getNumericalMean(), 2.222 * FastMath.exp(Gamma.logGamma(1 + (1 / 10.4))), tol);
+        Assertions.assertEquals(dist.getNumericalVariance(), (2.222 * 2.222) *
                 FastMath.exp(Gamma.logGamma(1 + (2 / 10.4))) -
                 (dist.getNumericalMean() * dist.getNumericalMean()), tol);
     }

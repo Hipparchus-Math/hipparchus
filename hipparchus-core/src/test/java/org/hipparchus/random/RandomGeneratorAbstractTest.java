@@ -21,17 +21,18 @@
  */
 package org.hipparchus.random;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.Arrays;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Base class for RandomGenerator tests.
@@ -65,7 +66,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
     /**
      * Set a fixed seed for the tests
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         generator = makeGenerator();
     }
@@ -124,7 +125,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
                 Arrays.fill(observed, 0);
                 for (int k = 0; k < smallSampleSize; k++) {
                     final int value = generator.nextInt(n);
-                    assertTrue("nextInt range",(value >= 0) && (value < n));
+                    assertTrue((value >= 0) && (value < n),"nextInt range");
                     for (int l = 0; l < binCount; l++) {
                         if (binUpperBounds[l] >= value) {
                             observed[l]++;
@@ -168,8 +169,8 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         /* Use ChiSquare dist with df = 4-1 = 3, alpha = .001
          * Change to 11.34 for alpha = .01
          */
-        assertTrue("chi-square test -- will fail about 1 in 1000 times",
-                   UnitTestUtils.chiSquare(expected,observed) < 16.27);
+        assertTrue(UnitTestUtils.chiSquare(expected,observed) < 16.27,
+                   "chi-square test -- will fail about 1 in 1000 times");
     }
 
     @Test
@@ -187,8 +188,8 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         /* Use ChiSquare dist with df = 2-1 = 1, alpha = .001
          * Change to 6.635 for alpha = .01
          */
-        assertTrue("chi-square test -- will fail about 1 in 1000 times",
-                   UnitTestUtils.chiSquare(expected,observed) < 10.828);
+        assertTrue(UnitTestUtils.chiSquare(expected,observed) < 10.828,
+                   "chi-square test -- will fail about 1 in 1000 times");
     }
 
     @Test
@@ -210,8 +211,8 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         /* Use ChiSquare dist with df = 4-1 = 3, alpha = .001
          * Change to 11.34 for alpha = .01
          */
-        assertTrue("chi-square test -- will fail about 1 in 1000 times",
-                   UnitTestUtils.chiSquare(expected,observed) < 16.27);
+        assertTrue(UnitTestUtils.chiSquare(expected,observed) < 16.27,
+                   "chi-square test -- will fail about 1 in 1000 times");
     }
 
     @Test
@@ -232,14 +233,18 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
     }
 
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNextIntPrecondition1() {
-        generator.nextInt(-1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            generator.nextInt(-1);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNextIntPrecondition2() {
-        generator.nextInt(0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            generator.nextInt(0);
+        });
     }
 
     @Test
@@ -253,9 +258,9 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
                --walk;
            }
         }
-        assertTrue("Walked too far astray: " + walk + "\nNote: This " +
-                   "test will fail randomly about 1 in 100 times.",
-                   FastMath.abs(walk) < FastMath.sqrt(N) * 2.576);
+        assertTrue(FastMath.abs(walk) < FastMath.sqrt(N) * 2.576,
+                   "Walked too far astray: " + walk + "\nNote: This " +
+                   "test will fail randomly about 1 in 100 times.");
     }
 
     @Test
@@ -269,9 +274,9 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
                --walk;
            }
         }
-        assertTrue("Walked too far astray: " + walk + "\nNote: This " +
-                   "test will fail randomly about 1 in 100 times.",
-                   FastMath.abs(walk) < FastMath.sqrt(N) * 2.576);
+        assertTrue(FastMath.abs(walk) < FastMath.sqrt(N) * 2.576,
+                   "Walked too far astray: " + walk + "\nNote: This " +
+                   "test will fail randomly about 1 in 100 times.");
     }
 
     @Test
@@ -285,9 +290,9 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
                --walk;
            }
         }
-        assertTrue("Walked too far astray: " + walk + "\nNote: This " +
-                   "test will fail randomly about 1 in 100 times.",
-                   FastMath.abs(walk) < FastMath.sqrt(N) * 2.576);
+        assertTrue(FastMath.abs(walk) < FastMath.sqrt(N) * 2.576,
+                   "Walked too far astray: " + walk + "\nNote: This " +
+                   "test will fail randomly about 1 in 100 times.");
     }
 
     @Test
@@ -416,11 +421,11 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         System.arraycopy(b1, b1.length - b3.length, b3, 0, b3.length);
 
         // Sequence of calls must be the same.
-        Assert.assertArrayEquals("chunkSize=" + chunkSize + " numChunks=" + numChunks,
-                                 b2, b3);
+        Assertions.assertArrayEquals(b2, b3, "chunkSize=" + chunkSize + " numChunks=" + numChunks);
     }
 
     @Override
+    @Test
     public void testNextZipf() {
         // Skip this test for the individual generators
     }

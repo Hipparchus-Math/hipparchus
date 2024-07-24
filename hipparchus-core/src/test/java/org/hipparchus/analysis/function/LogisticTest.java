@@ -28,8 +28,10 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for class {@link Logistic}.
@@ -37,14 +39,18 @@ import org.junit.Test;
 public class LogisticTest {
     private final double EPS = Math.ulp(1d);
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions1() {
-        new Logistic(1, 0, 1, 1, 0, -1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new Logistic(1, 0, 1, 1, 0, -1);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions2() {
-        new Logistic(1, 0, 1, 1, 0, 0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new Logistic(1, 0, 1, 1, 0, 0);
+        });
     }
 
     @Test
@@ -58,7 +64,7 @@ public class LogisticTest {
         final double delta = (max - min) / n;
         for (int i = 0; i < n; i++) {
             final double x = min + i * delta;
-            Assert.assertEquals("x=" + x, sig.value(x), sigL.value(x), EPS);
+            Assertions.assertEquals(sig.value(x), sigL.value(x), EPS, "x=" + x);
         }
     }
 
@@ -75,13 +81,13 @@ public class LogisticTest {
 
         double x;
         x = m;
-        Assert.assertEquals("x=" + x, a + (k - a) / FastMath.sqrt(1 + q), f.value(x), EPS);
+        Assertions.assertEquals(a + (k - a) / FastMath.sqrt(1 + q), f.value(x), EPS, "x=" + x);
 
         x = Double.NEGATIVE_INFINITY;
-        Assert.assertEquals("x=" + x, a, f.value(x), EPS);
+        Assertions.assertEquals(a, f.value(x), EPS, "x=" + x);
 
         x = Double.POSITIVE_INFINITY;
-        Assert.assertEquals("x=" + x, k, f.value(x), EPS);
+        Assertions.assertEquals(k, f.value(x), EPS, "x=" + x);
     }
 
     @Test
@@ -100,48 +106,60 @@ public class LogisticTest {
         for (int i = 0; i < n; i++) {
             final DerivativeStructure x = factory.variable(0, min + i * delta);
             for (int order = 0; order <= x.getOrder(); ++order) {
-                Assert.assertEquals("x=" + x.getValue(),
-                                    g.value(x).getPartialDerivative(order),
+                Assertions.assertEquals(g.value(x).getPartialDerivative(order),
                                     f.value(x).getPartialDerivative(order),
-                                    3.0e-15);
+                                    3.0e-15,
+                                    "x=" + x.getValue());
             }
         }
     }
 
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void testParametricUsage1() {
-        final Logistic.Parametric g = new Logistic.Parametric();
-        g.value(0, null);
+        assertThrows(NullArgumentException.class, () -> {
+            final Logistic.Parametric g = new Logistic.Parametric();
+            g.value(0, null);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testParametricUsage2() {
-        final Logistic.Parametric g = new Logistic.Parametric();
-        g.value(0, new double[] {0});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Logistic.Parametric g = new Logistic.Parametric();
+            g.value(0, new double[]{0});
+        });
     }
 
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void testParametricUsage3() {
-        final Logistic.Parametric g = new Logistic.Parametric();
-        g.gradient(0, null);
+        assertThrows(NullArgumentException.class, () -> {
+            final Logistic.Parametric g = new Logistic.Parametric();
+            g.gradient(0, null);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testParametricUsage4() {
-        final Logistic.Parametric g = new Logistic.Parametric();
-        g.gradient(0, new double[] {0});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Logistic.Parametric g = new Logistic.Parametric();
+            g.gradient(0, new double[]{0});
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testParametricUsage5() {
-        final Logistic.Parametric g = new Logistic.Parametric();
-        g.value(0, new double[] {1, 0, 1, 1, 0 ,0});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Logistic.Parametric g = new Logistic.Parametric();
+            g.value(0, new double[]{1, 0, 1, 1, 0, 0});
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testParametricUsage6() {
-        final Logistic.Parametric g = new Logistic.Parametric();
-        g.gradient(0, new double[] {1, 0, 1, 1, 0 ,0});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Logistic.Parametric g = new Logistic.Parametric();
+            g.gradient(0, new double[]{1, 0, 1, 1, 0, 0});
+        });
     }
 
     @Test
@@ -157,8 +175,8 @@ public class LogisticTest {
         final double[] gf = f.gradient(x, new double[] {k, 0, 1, 1, a, 1});
         final double[] gg = g.gradient(x, new double[] {a, k});
 
-        Assert.assertEquals(gg[0], gf[4], EPS);
-        Assert.assertEquals(gg[1], gf[0], EPS);
+        Assertions.assertEquals(gg[0], gf[4], EPS);
+        Assertions.assertEquals(gg[1], gf[0], EPS);
     }
 
     @Test
@@ -177,7 +195,7 @@ public class LogisticTest {
 
         final double[] gf = f.gradient(x, new double[] {k, m, b, q, a, n});
 
-        Assert.assertEquals((k - a) * FastMath.log(qExp1) / (n * n * FastMath.pow(qExp1, 1 / n)),
+        Assertions.assertEquals((k - a) * FastMath.log(qExp1) / (n * n * FastMath.pow(qExp1, 1 / n)),
                             gf[5], EPS);
     }
 
@@ -198,8 +216,8 @@ public class LogisticTest {
         final double[] gf = f.gradient(x, new double[] {k, m, b, q, a, n});
 
         final double factor = (a - k) / (n * FastMath.pow(qExp1, 1 / n + 1));
-        Assert.assertEquals(factor * b, gf[1], EPS);
-        Assert.assertEquals(factor * m, gf[2], EPS);
-        Assert.assertEquals(factor / q, gf[3], EPS);
+        Assertions.assertEquals(factor * b, gf[1], EPS);
+        Assertions.assertEquals(factor * m, gf[2], EPS);
+        Assertions.assertEquals(factor / q, gf[3], EPS);
     }
 }

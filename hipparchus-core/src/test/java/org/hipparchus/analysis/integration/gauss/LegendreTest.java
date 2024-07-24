@@ -27,8 +27,8 @@ import org.hipparchus.analysis.function.Inverse;
 import org.hipparchus.analysis.function.Log;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test of the {@link LegendreRuleFactory}.
@@ -41,11 +41,11 @@ public class LegendreTest {
     public void testTooLArgeNumberOfPoints() {
         try {
             factory.legendre(10000, 0, Math.PI / 2);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, miae.getSpecifier());
-            Assert.assertEquals(10000, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(1000,  ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, miae.getSpecifier());
+            Assertions.assertEquals(10000, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(1000,  ((Integer) miae.getParts()[1]).intValue());
         }
     }
 
@@ -56,7 +56,7 @@ public class LegendreTest {
         final GaussIntegrator integrator = factory.legendre(7, 0, Math.PI / 2);
         final double s = integrator.integrate(cos);
         // System.out.println("s=" + s + " e=" + 1);
-        Assert.assertEquals(1, s, Math.ulp(1d));
+        Assertions.assertEquals(1, s, Math.ulp(1d));
     }
 
 
@@ -72,6 +72,6 @@ public class LegendreTest {
         final double s = integrator.integrate(inv);
         final double expected = log.value(hi) - log.value(lo);
         // System.out.println("s=" + s + " e=" + expected);
-        Assert.assertEquals(expected, s, 1e-14);
+        Assertions.assertEquals(expected, s, 1e-14);
     }
 }

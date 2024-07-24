@@ -19,8 +19,8 @@ package org.hipparchus.linear;
 import org.hipparchus.Field;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class FieldMatrixTest {
 
@@ -35,7 +35,7 @@ public class FieldMatrixTest {
         FieldMatrix<Binary64> diff = abT.subtract(abTRef);
         for (int i = 0; i < diff.getRowDimension(); ++i) {
             for (int j = 0; j < diff.getColumnDimension(); ++j) {
-                Assert.assertEquals(0.0, diff.getEntry(i, j).doubleValue(), 1.0e-10);
+                Assertions.assertEquals(0.0, diff.getEntry(i, j).doubleValue(), 1.0e-10);
             }
         }
     }
@@ -51,7 +51,7 @@ public class FieldMatrixTest {
         FieldMatrix<Binary64> diff = aTb.subtract(aTbRef);
         for (int i = 0; i < diff.getRowDimension(); ++i) {
             for (int j = 0; j < diff.getColumnDimension(); ++j) {
-                Assert.assertEquals(0.0, diff.getEntry(i, j).doubleValue(), 1.0e-10);
+                Assertions.assertEquals(0.0, diff.getEntry(i, j).doubleValue(), 1.0e-10);
             }
         }
     }
@@ -64,7 +64,7 @@ public class FieldMatrixTest {
             
             @Override
             public void visit(int row, int column, Binary64 value) {
-                Assert.assertEquals(0.0, value.getReal(), 1.0e-10);
+                Assertions.assertEquals(0.0, value.getReal(), 1.0e-10);
             }
             
             @Override
@@ -102,10 +102,10 @@ public class FieldMatrixTest {
         final FieldMatrix<Binary64> blendedMatrix = matrix1.blendArithmeticallyWith(matrix2, blendingValue);
 
         // Then
-        Assert.assertEquals(1.65 , blendedMatrix.getEntry(0,0).getReal(), 1.0e-15);
-        Assert.assertEquals(3.3  , blendedMatrix.getEntry(0,1).getReal(), 1.0e-15);
-        Assert.assertEquals(6.9  , blendedMatrix.getEntry(1,0).getReal(), 1.0e-15);
-        Assert.assertEquals(11.8 , blendedMatrix.getEntry(1,1).getReal(), 1.0e-15);
+        Assertions.assertEquals(1.65 , blendedMatrix.getEntry(0,0).getReal(), 1.0e-15);
+        Assertions.assertEquals(3.3  , blendedMatrix.getEntry(0,1).getReal(), 1.0e-15);
+        Assertions.assertEquals(6.9  , blendedMatrix.getEntry(1,0).getReal(), 1.0e-15);
+        Assertions.assertEquals(11.8 , blendedMatrix.getEntry(1,1).getReal(), 1.0e-15);
     }
 
     // local class that does NOT override multiplyTransposed nor transposeMultiply nor map nor mapToSelf

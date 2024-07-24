@@ -17,8 +17,8 @@
 package org.hipparchus.random;
 
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class GaussMarkovGeneratorTest {
 
@@ -30,8 +30,8 @@ public class GaussMarkovGeneratorTest {
         GaussMarkovGenerator  gm              = new GaussMarkovGenerator(tau,
                                                                          stationarySigma,
                                                                          random);
-        Assert.assertEquals(tau,             gm.getTau(),             1.0e-15);
-        Assert.assertEquals(stationarySigma, gm.getStationarySigma(), 1.0e-15);
+        Assertions.assertEquals(tau,             gm.getTau(),             1.0e-15);
+        Assertions.assertEquals(stationarySigma, gm.getStationarySigma(), 1.0e-15);
 
         double sum = 0;
         int count = 0;
@@ -41,7 +41,7 @@ public class GaussMarkovGeneratorTest {
 
             ++count;
         }
-        Assert.assertEquals(0.0, sum / count, 0.014);
+        Assertions.assertEquals(0.0, sum / count, 0.014);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class GaussMarkovGeneratorTest {
             sum2 += v * v;
         }
 
-        Assert.assertEquals(gm.getStationarySigma(), FastMath.sqrt(sum2 / count), 3.7e-5);
+        Assertions.assertEquals(gm.getStationarySigma(), FastMath.sqrt(sum2 / count), 3.7e-5);
 
     }
 

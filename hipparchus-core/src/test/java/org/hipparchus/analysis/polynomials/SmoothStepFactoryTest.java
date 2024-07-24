@@ -20,43 +20,51 @@ import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SmoothStepFactoryTest {
 
     final double THRESHOLD = 1e-15;
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testExceptionBelowBoundary() {
-        // Given
-        final double                               x          = 2;
-        final SmoothStepFactory.SmoothStepFunction smoothstep = SmoothStepFactory.getGeneralOrder(1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            // Given
+            final double                               x = 2;
+            final SmoothStepFactory.SmoothStepFunction smoothstep = SmoothStepFactory.getGeneralOrder(1);
 
-        // When
-        smoothstep.value(x);
+            // When
+            smoothstep.value(x);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testExceptionOverBoundary() {
-        // Given
-        final double                               x          = 17;
-        final SmoothStepFactory.SmoothStepFunction smoothstep = SmoothStepFactory.getGeneralOrder(1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            // Given
+            final double                               x = 17;
+            final SmoothStepFactory.SmoothStepFunction smoothstep = SmoothStepFactory.getGeneralOrder(1);
 
-        // When
-        smoothstep.value(x);
+            // When
+            smoothstep.value(x);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testEdgesConsistency() {
-        // Given
-        final double                               leftEdge   = 5;
-        final double                               rightEdge  = 2;
-        final double                               x          = 3;
-        final SmoothStepFactory.SmoothStepFunction smoothstep = SmoothStepFactory.getGeneralOrder(1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            // Given
+            final double                               leftEdge = 5;
+            final double                               rightEdge = 2;
+            final double                               x = 3;
+            final SmoothStepFactory.SmoothStepFunction smoothstep = SmoothStepFactory.getGeneralOrder(1);
 
-        // When
-        smoothstep.value(leftEdge, rightEdge, x);
+            // When
+            smoothstep.value(leftEdge, rightEdge, x);
+        });
     }
 
     @Test
@@ -74,8 +82,8 @@ public class SmoothStepFactoryTest {
         final double computedResult2 = clamp.value(leftEdge, rightEdge, x2);
 
         // Then
-        Assert.assertEquals(0, computedResult1, THRESHOLD);
-        Assert.assertEquals(1, computedResult2, THRESHOLD);
+        Assertions.assertEquals(0, computedResult1, THRESHOLD);
+        Assertions.assertEquals(1, computedResult2, THRESHOLD);
     }
 
     @Test
@@ -89,7 +97,7 @@ public class SmoothStepFactoryTest {
         final double computedResult = cubic.value(x);
 
         // Then
-        Assert.assertEquals(0.352, computedResult, THRESHOLD);
+        Assertions.assertEquals(0.352, computedResult, THRESHOLD);
 
     }
 
@@ -107,7 +115,7 @@ public class SmoothStepFactoryTest {
         final double computedResult = clamp.value(leftEdge, rightEdge, x);
 
         // Then
-        Assert.assertEquals(0.4, computedResult, THRESHOLD);
+        Assertions.assertEquals(0.4, computedResult, THRESHOLD);
 
     }
 
@@ -125,7 +133,7 @@ public class SmoothStepFactoryTest {
         final double computedResult = quadratic.value(leftEdge, rightEdge, x);
 
         // Then
-        Assert.assertEquals(0.32, computedResult, THRESHOLD);
+        Assertions.assertEquals(0.32, computedResult, THRESHOLD);
 
     }
 
@@ -143,7 +151,7 @@ public class SmoothStepFactoryTest {
         final double computedResult = quadratic.value(leftEdge, rightEdge, x);
 
         // Then
-        Assert.assertEquals(0.68, computedResult, THRESHOLD);
+        Assertions.assertEquals(0.68, computedResult, THRESHOLD);
 
     }
 
@@ -161,7 +169,7 @@ public class SmoothStepFactoryTest {
         final double computedResult = cubic.value(leftEdge, rightEdge, x);
 
         // Then
-        Assert.assertEquals(0.352, computedResult, THRESHOLD);
+        Assertions.assertEquals(0.352, computedResult, THRESHOLD);
 
     }
 
@@ -179,23 +187,25 @@ public class SmoothStepFactoryTest {
         final double computedResult = quintic.value(leftEdge, rightEdge, x);
 
         // Then
-        Assert.assertEquals(0.31744, computedResult, THRESHOLD);
+        Assertions.assertEquals(0.31744, computedResult, THRESHOLD);
 
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testFieldEdgesConsistency() {
-        // Given
-        final Field<Binary64> field = Binary64Field.getInstance();
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            // Given
+            final Field<Binary64> field = Binary64Field.getInstance();
 
-        final double   leftEdge  = 5;
-        final double   rightEdge = 2;
-        final Binary64 x         = new Binary64(3);
-        final SmoothStepFactory.FieldSmoothStepFunction<Binary64> smoothstep =
+            final double   leftEdge = 5;
+            final double   rightEdge = 2;
+            final Binary64 x = new Binary64(3);
+            final SmoothStepFactory.FieldSmoothStepFunction<Binary64> smoothstep =
                 SmoothStepFactory.getFieldGeneralOrder(field, 1);
 
-        // When
-        smoothstep.value(leftEdge, rightEdge, x);
+            // When
+            smoothstep.value(leftEdge, rightEdge, x);
+        });
     }
 
     @Test
@@ -215,8 +225,8 @@ public class SmoothStepFactoryTest {
         final Binary64 computedResult2 = clamp.value(leftEdge, rightEdge, x2);
 
         // Then
-        Assert.assertEquals(0, computedResult1.getReal(), THRESHOLD);
-        Assert.assertEquals(1, computedResult2.getReal(), THRESHOLD);
+        Assertions.assertEquals(0, computedResult1.getReal(), THRESHOLD);
+        Assertions.assertEquals(1, computedResult2.getReal(), THRESHOLD);
     }
 
     @Test
@@ -232,7 +242,7 @@ public class SmoothStepFactoryTest {
         final Binary64 computedResult = cubic.value(x);
 
         // Then
-        Assert.assertEquals(0.352, computedResult.getReal(), THRESHOLD);
+        Assertions.assertEquals(0.352, computedResult.getReal(), THRESHOLD);
 
     }
 
@@ -251,7 +261,7 @@ public class SmoothStepFactoryTest {
         final Binary64 computedResult = clamp.value(leftEdge, rightEdge, x);
 
         // Then
-        Assert.assertEquals(0.4, computedResult.getReal(), THRESHOLD);
+        Assertions.assertEquals(0.4, computedResult.getReal(), THRESHOLD);
 
     }
 
@@ -272,8 +282,8 @@ public class SmoothStepFactoryTest {
         final Binary64 computedResult2 = quadratic.value((x - leftEdge) / (rightEdge - leftEdge));
 
         // Then
-        Assert.assertEquals(0.32, computedResult.getReal(), THRESHOLD);
-        Assert.assertEquals(computedResult.getReal(), computedResult2.getReal(), THRESHOLD);
+        Assertions.assertEquals(0.32, computedResult.getReal(), THRESHOLD);
+        Assertions.assertEquals(computedResult.getReal(), computedResult2.getReal(), THRESHOLD);
 
     }
 
@@ -293,8 +303,8 @@ public class SmoothStepFactoryTest {
         final Binary64 computedResult2 = quadratic.value((x - leftEdge) / (rightEdge - leftEdge));
 
         // Then
-        Assert.assertEquals(0.68, computedResult.getReal(), THRESHOLD);
-        Assert.assertEquals(computedResult.getReal(), computedResult2.getReal(), THRESHOLD);
+        Assertions.assertEquals(0.68, computedResult.getReal(), THRESHOLD);
+        Assertions.assertEquals(computedResult.getReal(), computedResult2.getReal(), THRESHOLD);
 
     }
 
@@ -313,7 +323,7 @@ public class SmoothStepFactoryTest {
         final Binary64 computedResult = cubic.value(leftEdge, rightEdge, x);
 
         // Then
-        Assert.assertEquals(0.352, computedResult.getReal(), THRESHOLD);
+        Assertions.assertEquals(0.352, computedResult.getReal(), THRESHOLD);
 
     }
 
@@ -336,9 +346,9 @@ public class SmoothStepFactoryTest {
         final Binary64 computedResult3 = quintic.value(new Binary64(xNormalized));
 
         // Then
-        Assert.assertEquals(0.31744, computedResult.getReal(), THRESHOLD);
-        Assert.assertEquals(computedResult.getReal(), computedResult2.getReal(), THRESHOLD);
-        Assert.assertEquals(computedResult2.getReal(), computedResult3.getReal(), THRESHOLD);
+        Assertions.assertEquals(0.31744, computedResult.getReal(), THRESHOLD);
+        Assertions.assertEquals(computedResult.getReal(), computedResult2.getReal(), THRESHOLD);
+        Assertions.assertEquals(computedResult2.getReal(), computedResult3.getReal(), THRESHOLD);
     }
 
 }

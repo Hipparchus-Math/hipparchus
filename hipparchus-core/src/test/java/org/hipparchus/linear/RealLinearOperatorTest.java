@@ -16,21 +16,21 @@
  */
 package org.hipparchus.linear;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class RealLinearOperatorTest {
 
     @Test
     public void testDefaultIsTransposable() {
-        Assert.assertFalse(new DefaultOperator(MatrixUtils.createRealIdentityMatrix(2)).isTransposable());
+        Assertions.assertFalse(new DefaultOperator(MatrixUtils.createRealIdentityMatrix(2)).isTransposable());
     }
 
     @Test
     public void testDefaultTransposeMultiply() {
         try {
             new DefaultOperator(MatrixUtils.createRealIdentityMatrix(2)).operateTranspose(MatrixUtils.createRealVector(2));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (UnsupportedOperationException uoe) {
             // expected
         }

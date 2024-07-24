@@ -25,8 +25,8 @@ import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for the piecewise bicubic interpolator.
@@ -45,21 +45,21 @@ public final class PiecewiseBicubicSplineInterpolatorTest {
 
         try {
             interpolator.interpolate( null, yval, zval );
-            Assert.fail( "Failed to detect x null pointer" );
+            Assertions.fail( "Failed to detect x null pointer" );
         } catch ( NullArgumentException iae ) {
             // Expected.
         }
 
         try {
             interpolator.interpolate( xval, null, zval );
-            Assert.fail( "Failed to detect y null pointer" );
+            Assertions.fail( "Failed to detect y null pointer" );
         } catch ( NullArgumentException iae ) {
             // Expected.
         }
 
         try {
             interpolator.interpolate( xval, yval, null );
-            Assert.fail( "Failed to detect z null pointer" );
+            Assertions.fail( "Failed to detect z null pointer" );
         } catch ( NullArgumentException iae ) {
             // Expected.
         }
@@ -67,7 +67,7 @@ public final class PiecewiseBicubicSplineInterpolatorTest {
         try {
             double[] xval1 = { 0.0, 1.0, 2.0, 3.0 };
             interpolator.interpolate( xval1, yval, zval );
-            Assert.fail( "Failed to detect insufficient x data" );
+            Assertions.fail( "Failed to detect insufficient x data" );
         } catch ( MathIllegalArgumentException iae ) {
             // Expected.
         }
@@ -75,7 +75,7 @@ public final class PiecewiseBicubicSplineInterpolatorTest {
         try  {
             double[] yval1 = { 0.0, 1.0, 2.0, 3.0 };
             interpolator.interpolate( xval, yval1, zval );
-            Assert.fail( "Failed to detect insufficient y data" );
+            Assertions.fail( "Failed to detect insufficient y data" );
         } catch ( MathIllegalArgumentException iae ) {
             // Expected.
         }
@@ -83,7 +83,7 @@ public final class PiecewiseBicubicSplineInterpolatorTest {
         try {
             double[][] zval1 = new double[4][4];
             interpolator.interpolate( xval, yval, zval1 );
-            Assert.fail( "Failed to detect insufficient z data" );
+            Assertions.fail( "Failed to detect insufficient z data" );
         } catch ( MathIllegalArgumentException iae ) {
             // Expected.
         }
@@ -91,7 +91,7 @@ public final class PiecewiseBicubicSplineInterpolatorTest {
         try {
             double[] xval1 = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
             interpolator.interpolate( xval1, yval, zval );
-            Assert.fail( "Failed to detect data set array with different sizes." );
+            Assertions.fail( "Failed to detect data set array with different sizes." );
         } catch ( MathIllegalArgumentException iae ) {
             // Expected.
         }
@@ -99,7 +99,7 @@ public final class PiecewiseBicubicSplineInterpolatorTest {
         try {
             double[] yval1 = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
             interpolator.interpolate( xval, yval1, zval );
-            Assert.fail( "Failed to detect data set array with different sizes." );
+            Assertions.fail( "Failed to detect data set array with different sizes." );
         } catch ( MathIllegalArgumentException iae ) {
             // Expected.
         }
@@ -108,7 +108,7 @@ public final class PiecewiseBicubicSplineInterpolatorTest {
         try {
             double[] xval1 = { 0.0, 1.0, 0.5, 7.0, 3.5 };
             interpolator.interpolate( xval1, yval, zval );
-            Assert.fail( "Failed to detect unsorted x arguments." );
+            Assertions.fail( "Failed to detect unsorted x arguments." );
         } catch ( MathIllegalArgumentException iae ) {
             // Expected.
         }
@@ -117,7 +117,7 @@ public final class PiecewiseBicubicSplineInterpolatorTest {
         try {
             double[] yval1 = { 0.0, 1.0, 1.5, 0.0, 3.0 };
             interpolator.interpolate( xval, yval1, zval );
-            Assert.fail( "Failed to detect unsorted y arguments." );
+            Assertions.fail( "Failed to detect unsorted y arguments." );
         } catch ( MathIllegalArgumentException iae ) {
             // Expected.
         }
@@ -166,7 +166,7 @@ public final class PiecewiseBicubicSplineInterpolatorTest {
             for ( int j = 0; j < numSamples; j++ ) {
                 y = gen.nextUniform(yval[0], yval[yval.length - 1]);
 //                 System.out.println(x + " " + y + " " + f.value(x, y) + " " + p.value(x, y));
-                Assert.assertEquals(f.value(x, y),  p.value(x, y), tol);
+                Assertions.assertEquals(f.value(x, y),  p.value(x, y), tol);
             }
 //             System.out.println();
         }
@@ -215,7 +215,7 @@ public final class PiecewiseBicubicSplineInterpolatorTest {
             for ( int j = 0; j < numSamples; j++ ) {
                 y = gen.nextUniform(yval[0], yval[yval.length - 1]);
 //                 System.out.println(x + " " + y + " " + f.value(x, y) + " " + p.value(x, y));
-                Assert.assertEquals(f.value(x, y),  p.value(x, y), tol);
+                Assertions.assertEquals(f.value(x, y),  p.value(x, y), tol);
             }
 //             System.out.println();
         }

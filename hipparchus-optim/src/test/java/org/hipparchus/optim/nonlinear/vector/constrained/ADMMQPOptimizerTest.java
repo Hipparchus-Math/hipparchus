@@ -19,8 +19,8 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
 
@@ -107,9 +107,9 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
         final LagrangeSolution solution  = optimizer.optimize();
 
         // THEN
-        Assert.assertNotNull(optimizer.getConvergenceChecker());
-        Assert.assertTrue(optimizer.isConverged());
-        Assert.assertEquals(0., solution.getValue(), 0);
+        Assertions.assertNotNull(optimizer.getConvergenceChecker());
+        Assertions.assertTrue(optimizer.isConverged());
+        Assertions.assertEquals(0., solution.getValue(), 0);
     }
 
     @Test
@@ -121,9 +121,9 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
         final LagrangeSolution solution  = optimizer.optimize();
 
         // THEN
-        Assert.assertNotNull(optimizer.getConvergenceChecker());
-        Assert.assertTrue(optimizer.isConverged());
-        Assert.assertEquals(0., solution.getValue(), 0);
+        Assertions.assertNotNull(optimizer.getConvergenceChecker());
+        Assertions.assertTrue(optimizer.isConverged());
+        Assertions.assertEquals(0., solution.getValue(), 0);
     }
 
     @Test
@@ -135,9 +135,9 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
         final LagrangeSolution solution  = optimizer.optimize();
 
         // THEN
-        Assert.assertNotNull(optimizer.getConvergenceChecker());
-        Assert.assertTrue(optimizer.isConverged());
-        Assert.assertEquals(0., solution.getValue(), 0);
+        Assertions.assertNotNull(optimizer.getConvergenceChecker());
+        Assertions.assertTrue(optimizer.isConverged());
+        Assertions.assertEquals(0., solution.getValue(), 0);
     }
 
     @Test
@@ -149,9 +149,9 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
         final LagrangeSolution solution  = optimizer.optimize();
 
         // THEN
-        Assert.assertNotNull(optimizer.getConvergenceChecker());
-        Assert.assertTrue(optimizer.isConverged());
-        Assert.assertEquals(0., solution.getValue(), 0);
+        Assertions.assertNotNull(optimizer.getConvergenceChecker());
+        Assertions.assertTrue(optimizer.isConverged());
+        Assertions.assertEquals(0., solution.getValue(), 0);
     }
 
     private ADMMQPOptimizer createOptimizerOnSimpleProblem(final boolean polishing, final boolean scaling) {
@@ -179,9 +179,9 @@ public class ADMMQPOptimizerTest extends AbstractConstrainedOptimizerTest {
         // WHEN
         try {
             testSQPOptimizer.parseOptimizationData(objectiveFunction, equalityConstraint);
-            Assert.fail();
+            Assertions.fail();
         } catch (final MathIllegalArgumentException exception) {
-            Assert.assertEquals("rank of constraints must be lesser than domain dimension, but 1 >= 1",
+            Assertions.assertEquals("rank of constraints must be lesser than domain dimension, but 1 >= 1",
                     exception.getMessage());
         }
     }

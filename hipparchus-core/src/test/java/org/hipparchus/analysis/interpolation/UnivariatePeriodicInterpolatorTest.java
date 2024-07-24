@@ -21,13 +21,15 @@
  */
 package org.hipparchus.analysis.interpolation;
 
-import java.util.Random;
-
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 /**
@@ -67,7 +69,7 @@ public class UnivariatePeriodicInterpolatorTest {
             final double y = f.value(x);
             final double yP = fP.value(x);
 
-            Assert.assertEquals("x=" + x, y, yP, Math.ulp(1d));
+            Assertions.assertEquals(y, yP, Math.ulp(1d), "x=" + x);
         }
 
         // Test interpolation outside the primary interval.
@@ -77,7 +79,7 @@ public class UnivariatePeriodicInterpolatorTest {
             final double yIn = fP.value(xIn);
             final double yOut = fP.value(xOut);
 
-            Assert.assertEquals(yIn, yOut, 1e-7);
+            Assertions.assertEquals(yIn, yOut, 1e-7);
         }
     }
 
@@ -108,7 +110,7 @@ public class UnivariatePeriodicInterpolatorTest {
             final double yIn = fP.value(xIn);
             final double yOut = fP.value(xOut);
 
-            Assert.assertEquals(yIn, yOut, 1e-7);
+            Assertions.assertEquals(yIn, yOut, 1e-7);
         }
     }
 
@@ -139,29 +141,33 @@ public class UnivariatePeriodicInterpolatorTest {
             final double yIn = fP.value(xIn);
             final double yOut = fP.value(xOut);
 
-            Assert.assertEquals(yIn, yOut, 1e-6);
+            Assertions.assertEquals(yIn, yOut, 1e-6);
         }
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testTooFewSamples() {
-        final double[] xval = { 2, 3, 7 };
-        final double[] yval = { 1, 6, 5 };
-        final double period = 10;
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final double[] xval = {2, 3, 7};
+            final double[] yval = {1, 6, 5};
+            final double period = 10;
 
-        final UnivariateInterpolator interpolator
-            = new UnivariatePeriodicInterpolator(new LinearInterpolator(), period);
-        interpolator.interpolate(xval, yval);
+            final UnivariateInterpolator interpolator
+                = new UnivariatePeriodicInterpolator(new LinearInterpolator(), period);
+            interpolator.interpolate(xval, yval);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testUnsortedSamples() {
-        final double[] xval = { 2, 3, 7, 4, 6 };
-        final double[] yval = { 1, 6, 5, -1, -2 };
-        final double period = 10;
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final double[] xval = {2, 3, 7, 4, 6};
+            final double[] yval = {1, 6, 5, -1, -2};
+            final double period = 10;
 
-        final UnivariateInterpolator interpolator
-            = new UnivariatePeriodicInterpolator(new LinearInterpolator(), period);
-        interpolator.interpolate(xval, yval);
+            final UnivariateInterpolator interpolator
+                = new UnivariatePeriodicInterpolator(new LinearInterpolator(), period);
+            interpolator.interpolate(xval, yval);
+        });
     }
 }

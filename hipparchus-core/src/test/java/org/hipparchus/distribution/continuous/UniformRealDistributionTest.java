@@ -22,9 +22,13 @@
 
 package org.hipparchus.distribution.continuous;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for UniformRealDistribution.
@@ -33,6 +37,7 @@ public class UniformRealDistributionTest extends RealDistributionAbstractTest {
 
     // --- Override tolerance -------------------------------------------------
 
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -75,26 +80,30 @@ public class UniformRealDistributionTest extends RealDistributionAbstractTest {
     @Test
     public void testGetLowerBound() {
         UniformRealDistribution distribution = makeDistribution();
-        Assert.assertEquals(-0.5, distribution.getSupportLowerBound(), 0);
+        Assertions.assertEquals(-0.5, distribution.getSupportLowerBound(), 0);
     }
 
     /** Test upper bound getter. */
     @Test
     public void testGetUpperBound() {
         UniformRealDistribution distribution = makeDistribution();
-        Assert.assertEquals(1.25, distribution.getSupportUpperBound(), 0);
+        Assertions.assertEquals(1.25, distribution.getSupportUpperBound(), 0);
     }
 
     /** Test pre-condition for equal lower/upper bound. */
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions1() {
-        new UniformRealDistribution(0, 0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new UniformRealDistribution(0, 0);
+        });
     }
 
     /** Test pre-condition for lower bound larger than upper bound. */
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions2() {
-        new UniformRealDistribution(1, 0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new UniformRealDistribution(1, 0);
+        });
     }
 
     /** Test mean/variance. */
@@ -103,16 +112,16 @@ public class UniformRealDistributionTest extends RealDistributionAbstractTest {
         UniformRealDistribution dist;
 
         dist = new UniformRealDistribution(0, 1);
-        Assert.assertEquals(dist.getNumericalMean(), 0.5, 0);
-        Assert.assertEquals(dist.getNumericalVariance(), 1/12.0, 0);
+        Assertions.assertEquals(0.5, dist.getNumericalMean(), 0);
+        Assertions.assertEquals(dist.getNumericalVariance(), 1/12.0, 0);
 
         dist = new UniformRealDistribution(-1.5, 0.6);
-        Assert.assertEquals(dist.getNumericalMean(), -0.45, 0);
-        Assert.assertEquals(dist.getNumericalVariance(), 0.3675, 0);
+        Assertions.assertEquals(dist.getNumericalMean(), -0.45, 0);
+        Assertions.assertEquals(0.3675, dist.getNumericalVariance(), 0);
 
         dist = new UniformRealDistribution(-0.5, 1.25);
-        Assert.assertEquals(dist.getNumericalMean(), 0.375, 0);
-        Assert.assertEquals(dist.getNumericalVariance(), 0.2552083333333333, 0);
+        Assertions.assertEquals(0.375, dist.getNumericalMean(), 0);
+        Assertions.assertEquals(0.2552083333333333, dist.getNumericalVariance(), 0);
     }
 
     /**
@@ -123,6 +132,6 @@ public class UniformRealDistributionTest extends RealDistributionAbstractTest {
     public void testInverseCumulativeDistribution() {
         UniformRealDistribution dist = new UniformRealDistribution(0, 1e-9);
 
-        Assert.assertEquals(2.5e-10, dist.inverseCumulativeProbability(0.25), 0);
+        Assertions.assertEquals(2.5e-10, dist.inverseCumulativeProbability(0.25), 0);
     }
 }

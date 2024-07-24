@@ -22,10 +22,8 @@
 
 package org.hipparchus.ode;
 
-import java.util.Random;
-
-import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ode.nonstiff.DormandPrince54FieldIntegrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
@@ -35,8 +33,10 @@ import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Random;
 
 public class FieldDenseOutputModelTest {
 
@@ -92,8 +92,8 @@ public class FieldDenseOutputModelTest {
             maxErrorDot = MathUtils.max(maxErrorDot, errorDot);
         }
 
-        Assert.assertEquals(0.0, maxError.getReal(),    1.0e-9);
-        Assert.assertEquals(0.0, maxErrorDot.getReal(), 4.0e-7);
+        Assertions.assertEquals(0.0, maxError.getReal(),    1.0e-9);
+        Assertions.assertEquals(0.0, maxErrorDot.getReal(), 4.0e-7);
 
     }
 
@@ -152,12 +152,12 @@ public class FieldDenseOutputModelTest {
         cm.append(cm1);
 
         // check circle
-        Assert.assertEquals(2.0 * FastMath.PI, cm.getInitialTime().getReal(), 1.0e-12);
-        Assert.assertEquals(0, cm.getFinalTime().getReal(), 1.0e-12);
+        Assertions.assertEquals(2.0 * FastMath.PI, cm.getInitialTime().getReal(), 1.0e-12);
+        Assertions.assertEquals(0, cm.getFinalTime().getReal(), 1.0e-12);
         for (double t = 0; t < 2.0 * FastMath.PI; t += 0.1) {
             FieldODEStateAndDerivative<T> interpolated = cm.getInterpolatedState(field.getZero().add(t));
-            Assert.assertEquals(FastMath.cos(t), interpolated.getPrimaryState()[0].getReal(), 1.0e-7);
-            Assert.assertEquals(FastMath.sin(t), interpolated.getPrimaryState()[1].getReal(), 1.0e-7);
+            Assertions.assertEquals(FastMath.cos(t), interpolated.getPrimaryState()[0].getReal(), 1.0e-7);
+            Assertions.assertEquals(FastMath.sin(t), interpolated.getPrimaryState()[1].getReal(), 1.0e-7);
         }
 
     }
@@ -172,16 +172,16 @@ public class FieldDenseOutputModelTest {
         cm.handleStep(buildInterpolator(field, 0, 1, new double[] { 0.0, 1.0, -2.0 }));
 
         // dimension mismatch
-        Assert.assertTrue(checkAppendError(field, cm, 1.0, 2.0, new double[] { 0.0, 1.0 }));
+        Assertions.assertTrue(checkAppendError(field, cm, 1.0, 2.0, new double[] { 0.0, 1.0 }));
 
         // hole between time ranges
-        Assert.assertTrue(checkAppendError(field, cm, 10.0, 20.0, new double[] { 0.0, 1.0, -2.0 }));
+        Assertions.assertTrue(checkAppendError(field, cm, 10.0, 20.0, new double[] { 0.0, 1.0, -2.0 }));
 
         // propagation direction mismatch
-        Assert.assertTrue(checkAppendError(field, cm, 1.0, 0.0, new double[] { 0.0, 1.0, -2.0 }));
+        Assertions.assertTrue(checkAppendError(field, cm, 1.0, 0.0, new double[] { 0.0, 1.0, -2.0 }));
 
         // no errors
-        Assert.assertFalse(checkAppendError(field, cm, 1.0, 2.0, new double[] { 0.0, 1.0, -2.0 }));
+        Assertions.assertFalse(checkAppendError(field, cm, 1.0, 2.0, new double[] { 0.0, 1.0, -2.0 }));
 
     }
 
@@ -219,7 +219,7 @@ public class FieldDenseOutputModelTest {
     }
 
     public void checkValue(double value, double reference) {
-        Assert.assertTrue(FastMath.abs(value - reference) < 1.0e-10);
+        Assertions.assertTrue(FastMath.abs(value - reference) < 1.0e-10);
     }
 
 }

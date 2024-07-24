@@ -22,16 +22,16 @@
 
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
-import java.util.Arrays;
-
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.DiagonalMatrix;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -521,11 +521,11 @@ public class MinpackTest {
 
         try {
             final Optimum optimum = optimizer.optimize(problem);
-            Assert.assertFalse(exceptionExpected);
+            Assertions.assertFalse(exceptionExpected);
             function.checkTheoreticalMinCost(optimum.getRMS());
             function.checkTheoreticalMinParams(optimum.getPoint().toArray());
         } catch (MathIllegalStateException e) {
-            Assert.assertTrue(exceptionExpected);
+            Assertions.assertTrue(exceptionExpected);
         }
     }
 
@@ -582,7 +582,7 @@ public class MinpackTest {
 
         public void checkTheoreticalMinCost(double rms) {
             double threshold = costAccuracy * (1.0 + theoreticalMinCost);
-            Assert.assertEquals(theoreticalMinCost, FastMath.sqrt(m) * rms, threshold);
+            Assertions.assertEquals(theoreticalMinCost, FastMath.sqrt(m) * rms, threshold);
         }
 
         public void checkTheoreticalMinParams(double[] params) {
@@ -590,7 +590,7 @@ public class MinpackTest {
                 for (int i = 0; i < theoreticalMinParams.length; ++i) {
                     double mi = theoreticalMinParams[i];
                     double vi = params[i];
-                    Assert.assertEquals(mi, vi, paramsAccuracy * (1.0 + FastMath.abs(mi)));
+                    Assertions.assertEquals(mi, vi, paramsAccuracy * (1.0 + FastMath.abs(mi)));
                 }
             }
         }

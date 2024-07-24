@@ -22,8 +22,8 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class AbstractSQPOptimizerTest {
 
@@ -39,7 +39,7 @@ public class AbstractSQPOptimizerTest {
         final RealVector actualVector = testSQPOptimizer.lagrangianGradX(expectedVector, null,null, null);
         // THEN
         for (int i = 0; i < expectedVector.getDimension(); i++) {
-            Assert.assertEquals(expectedVector.getEntry(i), actualVector.getEntry(i), 0);
+            Assertions.assertEquals(expectedVector.getEntry(i), actualVector.getEntry(i), 0);
         }
     }
 
@@ -53,7 +53,7 @@ public class AbstractSQPOptimizerTest {
         // WHEN
         testSQPOptimizer.parseOptimizationData(objectiveFunction, expectedOptions);
         // THEN
-        Assert.assertEquals(expectedOptions, testSQPOptimizer.getSettings());
+        Assertions.assertEquals(expectedOptions, testSQPOptimizer.getSettings());
     }
 
     @Test
@@ -66,9 +66,9 @@ public class AbstractSQPOptimizerTest {
         // WHEN
         try {
             testSQPOptimizer.parseOptimizationData(objectiveFunction, equalityConstraint);
-            Assert.fail();
+            Assertions.fail();
         } catch (final MathIllegalArgumentException exception) {
-            Assert.assertEquals("rank of constraints must be lesser than domain dimension, but 100,000 >= 2",
+            Assertions.assertEquals("rank of constraints must be lesser than domain dimension, but 100,000 >= 2",
                     exception.getMessage());
         }
     }
@@ -83,9 +83,9 @@ public class AbstractSQPOptimizerTest {
         // WHEN
         try {
             testSQPOptimizer.parseOptimizationData(objectiveFunction, equalityConstraint);
-            Assert.fail();
+            Assertions.fail();
         } catch (final MathIllegalArgumentException exception) {
-            Assert.assertEquals(LocalizedCoreFormats.ZERO_NOT_ALLOWED.getSourceString(),
+            Assertions.assertEquals(LocalizedCoreFormats.ZERO_NOT_ALLOWED.getSourceString(),
                     exception.getMessage());
         }
     }

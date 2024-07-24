@@ -27,8 +27,8 @@ import org.hipparchus.analysis.function.Expm1;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for {@link MullerSolver Muller} solver.
@@ -56,13 +56,13 @@ public final class MullerSolverTest {
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = -1.0; max = 1.5; expected = 0.0;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
     }
 
     /**
@@ -78,19 +78,19 @@ public final class MullerSolverTest {
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = 0.75; max = 1.5; expected = 1.0;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = -0.9; max = -0.2; expected = -0.5;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
     }
 
     /**
@@ -110,19 +110,19 @@ public final class MullerSolverTest {
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = -20.0; max = 10.0; expected = 0.0;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = -50.0; max = 100.0; expected = 0.0;
         tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                     FastMath.abs(expected * solver.getRelativeAccuracy()));
         result = solver.solve(100, f, min, max);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
     }
 
     /**
@@ -137,14 +137,14 @@ public final class MullerSolverTest {
             // bad interval
             double root = solver.solve(100, f, 1, -1);
             System.out.println("root=" + root);
-            Assert.fail("Expecting MathIllegalArgumentException - bad interval");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // no bracketing
             solver.solve(100, f, 2, 3);
-            Assert.fail("Expecting MathIllegalArgumentException - no bracketing");
+            Assertions.fail("Expecting MathIllegalArgumentException - no bracketing");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }

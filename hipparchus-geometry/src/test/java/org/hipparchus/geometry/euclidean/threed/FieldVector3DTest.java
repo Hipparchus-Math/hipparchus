@@ -22,11 +22,6 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.Locale;
-
 import org.hipparchus.Field;
 import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
@@ -37,8 +32,15 @@ import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.Locale;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class FieldVector3DTest {
 
@@ -55,12 +57,12 @@ public class FieldVector3DTest {
                                                                    new FieldVector3D<>(factory21.variable(0,  FastMath.PI / 3),
                                                                                        factory21.variable(1, -FastMath.PI / 4)));
         checkVector(u, 2 * cosAlpha * cosDelta, 2 * sinAlpha * cosDelta, 2 * sinDelta);
-        Assert.assertEquals(-2 * sinAlpha * cosDelta, u.getX().getPartialDerivative(1, 0), 1.0e-12);
-        Assert.assertEquals(+2 * cosAlpha * cosDelta, u.getY().getPartialDerivative(1, 0), 1.0e-12);
-        Assert.assertEquals(0,                        u.getZ().getPartialDerivative(1, 0), 1.0e-12);
-        Assert.assertEquals(-2 * cosAlpha * sinDelta, u.getX().getPartialDerivative(0, 1), 1.0e-12);
-        Assert.assertEquals(-2 * sinAlpha * sinDelta, u.getY().getPartialDerivative(0, 1), 1.0e-12);
-        Assert.assertEquals(2 * cosDelta,             u.getZ().getPartialDerivative(0, 1), 1.0e-12);
+        Assertions.assertEquals(-2 * sinAlpha * cosDelta, u.getX().getPartialDerivative(1, 0), 1.0e-12);
+        Assertions.assertEquals(+2 * cosAlpha * cosDelta, u.getY().getPartialDerivative(1, 0), 1.0e-12);
+        Assertions.assertEquals(0,                        u.getZ().getPartialDerivative(1, 0), 1.0e-12);
+        Assertions.assertEquals(-2 * cosAlpha * sinDelta, u.getX().getPartialDerivative(0, 1), 1.0e-12);
+        Assertions.assertEquals(-2 * sinAlpha * sinDelta, u.getY().getPartialDerivative(0, 1), 1.0e-12);
+        Assertions.assertEquals(2 * cosDelta,             u.getZ().getPartialDerivative(0, 1), 1.0e-12);
 
         checkVector(new FieldVector3D<>(2, createVector(1, 0,  0, 3)),
                     2, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2);
@@ -143,48 +145,48 @@ public class FieldVector3DTest {
         DSFactory factory31 = new DSFactory(3, 1);
         FieldVector3D<DerivativeStructure> u1 = createVector(1, 2, 3, 3);
         FieldVector3D<DerivativeStructure> v  = createVector(1, 2, 3 + 10 * Precision.EPSILON, 3);
-        Assert.assertTrue(u1.equals(u1));
-        Assert.assertTrue(u1.equals(new FieldVector3D<>(factory31.variable(0, 1.0),
-                                                        factory31.variable(1, 2.0),
-                                                        factory31.variable(2, 3.0))));
-        Assert.assertFalse(u1.equals(new FieldVector3D<>(factory31.constant(1.0),
-                                                         factory31.variable(1, 2.0),
-                                                         factory31.variable(2, 3.0))));
-        Assert.assertFalse(u1.equals(new FieldVector3D<>(factory31.variable(0, 1.0),
-                                                         factory31.constant(2.0),
-                                                         factory31.variable(2, 3.0))));
-        Assert.assertFalse(u1.equals(new FieldVector3D<>(factory31.variable(0, 1.0),
-                                                         factory31.variable(1, 2.0),
-                                                         factory31.constant(3.0))));
-        Assert.assertFalse(u1.equals(v));
-        Assert.assertFalse(u1.equals(u1.toVector3D()));
-        Assert.assertTrue(createVector(0, Double.NaN, 0, 3).equals(createVector(0, 0, Double.NaN, 3)));
+        Assertions.assertEquals(u1, u1);
+        Assertions.assertEquals(u1, new FieldVector3D<>(factory31.variable(0, 1.0),
+            factory31.variable(1, 2.0),
+            factory31.variable(2, 3.0)));
+        Assertions.assertNotEquals(u1, new FieldVector3D<>(factory31.constant(1.0),
+            factory31.variable(1, 2.0),
+            factory31.variable(2, 3.0)));
+        Assertions.assertNotEquals(u1, new FieldVector3D<>(factory31.variable(0, 1.0),
+            factory31.constant(2.0),
+            factory31.variable(2, 3.0)));
+        Assertions.assertNotEquals(u1, new FieldVector3D<>(factory31.variable(0, 1.0),
+            factory31.variable(1, 2.0),
+            factory31.constant(3.0)));
+        Assertions.assertNotEquals(u1, v);
+        Assertions.assertNotEquals(u1, u1.toVector3D());
+        Assertions.assertEquals(createVector(0, Double.NaN, 0, 3), createVector(0, 0, Double.NaN, 3));
     }
 
     @Test
     public void testHash() {
-        Assert.assertEquals(createVector(0, Double.NaN, 0, 3).hashCode(), createVector(0, 0, Double.NaN, 3).hashCode());
+        Assertions.assertEquals(createVector(0, Double.NaN, 0, 3).hashCode(), createVector(0, 0, Double.NaN, 3).hashCode());
         FieldVector3D<DerivativeStructure> u = createVector(1, 2, 3, 3);
         FieldVector3D<DerivativeStructure> v = createVector(1, 2, 3 + 10 * Precision.EPSILON, 3);
-        Assert.assertTrue(u.hashCode() != v.hashCode());
+        Assertions.assertTrue(u.hashCode() != v.hashCode());
     }
 
     @Test
     public void testInfinite() {
-        Assert.assertTrue(createVector(1, 1, Double.NEGATIVE_INFINITY, 3).isInfinite());
-        Assert.assertTrue(createVector(1, Double.NEGATIVE_INFINITY, 1, 3).isInfinite());
-        Assert.assertTrue(createVector(Double.NEGATIVE_INFINITY, 1, 1, 3).isInfinite());
-        Assert.assertFalse(createVector(1, 1, 2, 3).isInfinite());
-        Assert.assertFalse(createVector(1, Double.NaN, Double.NEGATIVE_INFINITY, 3).isInfinite());
+        Assertions.assertTrue(createVector(1, 1, Double.NEGATIVE_INFINITY, 3).isInfinite());
+        Assertions.assertTrue(createVector(1, Double.NEGATIVE_INFINITY, 1, 3).isInfinite());
+        Assertions.assertTrue(createVector(Double.NEGATIVE_INFINITY, 1, 1, 3).isInfinite());
+        Assertions.assertFalse(createVector(1, 1, 2, 3).isInfinite());
+        Assertions.assertFalse(createVector(1, Double.NaN, Double.NEGATIVE_INFINITY, 3).isInfinite());
     }
 
     @Test
     public void testNaN() {
-        Assert.assertTrue(createVector(1, 1, Double.NaN, 3).isNaN());
-        Assert.assertTrue(createVector(1, Double.NaN, 1, 3).isNaN());
-        Assert.assertTrue(createVector(Double.NaN, 1, 1, 3).isNaN());
-        Assert.assertFalse(createVector(1, 1, 2, 3).isNaN());
-        Assert.assertFalse(createVector(1, 1, Double.NEGATIVE_INFINITY, 3).isNaN());
+        Assertions.assertTrue(createVector(1, 1, Double.NaN, 3).isNaN());
+        Assertions.assertTrue(createVector(1, Double.NaN, 1, 3).isNaN());
+        Assertions.assertTrue(createVector(Double.NaN, 1, 1, 3).isNaN());
+        Assertions.assertFalse(createVector(1, 1, 2, 3).isNaN());
+        Assertions.assertFalse(createVector(1, 1, Double.NEGATIVE_INFINITY, 3).isNaN());
     }
 
     @Test
@@ -192,239 +194,241 @@ public class FieldVector3DTest {
 
         final Field<Binary64> field = Binary64Field.getInstance();
 
-        Assert.assertEquals(0.0, FieldVector3D.getZero(field).getNorm().getReal(), 1.0e-20);
-        Assert.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getPlusI(field), Vector3D.PLUS_I).getReal(),   1.0e-20);
-        Assert.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getMinusI(field), Vector3D.MINUS_I).getReal(), 1.0e-20);
-        Assert.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getPlusJ(field), Vector3D.PLUS_J).getReal(),   1.0e-20);
-        Assert.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getMinusJ(field), Vector3D.MINUS_J).getReal(), 1.0e-20);
-        Assert.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getPlusK(field), Vector3D.PLUS_K).getReal(),   1.0e-20);
-        Assert.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getMinusK(field), Vector3D.MINUS_K).getReal(), 1.0e-20);
-        Assert.assertTrue(FieldVector3D.getNaN(field).isNaN());
-        Assert.assertTrue(FieldVector3D.getPositiveInfinity(field).isInfinite());
-        Assert.assertTrue(FieldVector3D.getNegativeInfinity(field).isInfinite());
+        Assertions.assertEquals(0.0, FieldVector3D.getZero(field).getNorm().getReal(), 1.0e-20);
+        Assertions.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getPlusI(field), Vector3D.PLUS_I).getReal(),   1.0e-20);
+        Assertions.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getMinusI(field), Vector3D.MINUS_I).getReal(), 1.0e-20);
+        Assertions.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getPlusJ(field), Vector3D.PLUS_J).getReal(),   1.0e-20);
+        Assertions.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getMinusJ(field), Vector3D.MINUS_J).getReal(), 1.0e-20);
+        Assertions.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getPlusK(field), Vector3D.PLUS_K).getReal(),   1.0e-20);
+        Assertions.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getMinusK(field), Vector3D.MINUS_K).getReal(), 1.0e-20);
+        Assertions.assertTrue(FieldVector3D.getNaN(field).isNaN());
+        Assertions.assertTrue(FieldVector3D.getPositiveInfinity(field).isInfinite());
+        Assertions.assertTrue(FieldVector3D.getNegativeInfinity(field).isInfinite());
 
         // new instances are created each time
-        Assert.assertNotSame(FieldVector3D.getZero(field),            FieldVector3D.getZero(field));
-        Assert.assertNotSame(FieldVector3D.getPlusI(field),           FieldVector3D.getPlusI(field));
-        Assert.assertNotSame(FieldVector3D.getMinusI(field),          FieldVector3D.getMinusI(field));
-        Assert.assertNotSame(FieldVector3D.getPlusJ(field),           FieldVector3D.getPlusJ(field));
-        Assert.assertNotSame(FieldVector3D.getMinusJ(field),          FieldVector3D.getMinusJ(field));
-        Assert.assertNotSame(FieldVector3D.getPlusK(field),           FieldVector3D.getPlusK(field));
-        Assert.assertNotSame(FieldVector3D.getMinusK(field),          FieldVector3D.getMinusK(field));
-        Assert.assertNotSame(FieldVector3D.getNaN(field),             FieldVector3D.getNaN(field));
-        Assert.assertNotSame(FieldVector3D.getPositiveInfinity(field),FieldVector3D.getPositiveInfinity(field));
-        Assert.assertNotSame(FieldVector3D.getNegativeInfinity(field),FieldVector3D.getNegativeInfinity(field));
+        Assertions.assertNotSame(FieldVector3D.getZero(field),            FieldVector3D.getZero(field));
+        Assertions.assertNotSame(FieldVector3D.getPlusI(field),           FieldVector3D.getPlusI(field));
+        Assertions.assertNotSame(FieldVector3D.getMinusI(field),          FieldVector3D.getMinusI(field));
+        Assertions.assertNotSame(FieldVector3D.getPlusJ(field),           FieldVector3D.getPlusJ(field));
+        Assertions.assertNotSame(FieldVector3D.getMinusJ(field),          FieldVector3D.getMinusJ(field));
+        Assertions.assertNotSame(FieldVector3D.getPlusK(field),           FieldVector3D.getPlusK(field));
+        Assertions.assertNotSame(FieldVector3D.getMinusK(field),          FieldVector3D.getMinusK(field));
+        Assertions.assertNotSame(FieldVector3D.getNaN(field),             FieldVector3D.getNaN(field));
+        Assertions.assertNotSame(FieldVector3D.getPositiveInfinity(field),FieldVector3D.getPositiveInfinity(field));
+        Assertions.assertNotSame(FieldVector3D.getNegativeInfinity(field),FieldVector3D.getNegativeInfinity(field));
 
     }
 
     @Test
     public void testToString() {
-        Assert.assertEquals("{3; 2; 1}", createVector(3, 2, 1, 3).toString());
+        Assertions.assertEquals("{3; 2; 1}", createVector(3, 2, 1, 3).toString());
         NumberFormat format = new DecimalFormat("0.000", new DecimalFormatSymbols(Locale.US));
-        Assert.assertEquals("{3.000; 2.000; 1.000}", createVector(3, 2, 1, 3).toString(format));
+        Assertions.assertEquals("{3.000; 2.000; 1.000}", createVector(3, 2, 1, 3).toString(format));
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testWrongDimension() throws MathIllegalArgumentException {
-        DSFactory factory31 = new DSFactory(3, 1);
-        new FieldVector3D<DerivativeStructure>(new DerivativeStructure[] {
-            factory31.variable(0, 2),
-            factory31.variable(0, 5)
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            DSFactory factory31 = new DSFactory(3, 1);
+            new FieldVector3D<DerivativeStructure>(new DerivativeStructure[]{
+                factory31.variable(0, 2),
+                factory31.variable(0, 5)
+            });
         });
     }
 
     @Test
     public void testCoordinates() {
         FieldVector3D<DerivativeStructure> v = createVector(1, 2, 3, 3);
-        Assert.assertTrue(FastMath.abs(v.getX().getReal() - 1) < 1.0e-12);
-        Assert.assertTrue(FastMath.abs(v.getY().getReal() - 2) < 1.0e-12);
-        Assert.assertTrue(FastMath.abs(v.getZ().getReal() - 3) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(v.getX().getReal() - 1) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(v.getY().getReal() - 2) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(v.getZ().getReal() - 3) < 1.0e-12);
         DerivativeStructure[] coordinates = v.toArray();
-        Assert.assertTrue(FastMath.abs(coordinates[0].getReal() - 1) < 1.0e-12);
-        Assert.assertTrue(FastMath.abs(coordinates[1].getReal() - 2) < 1.0e-12);
-        Assert.assertTrue(FastMath.abs(coordinates[2].getReal() - 3) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(coordinates[0].getReal() - 1) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(coordinates[1].getReal() - 2) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(coordinates[2].getReal() - 3) < 1.0e-12);
     }
 
     @Test
     public void testNorm1() {
-        Assert.assertEquals( 0.0, createVector(0, 0, 0, 3).getNorm1().getReal(), 0);
-        Assert.assertEquals( 6.0, createVector(1, -2, 3, 3).getNorm1().getReal(), 0);
-        Assert.assertEquals( 1.0, createVector(1, -2, 3, 3).getNorm1().getPartialDerivative(1, 0, 0), 0);
-        Assert.assertEquals(-1.0, createVector(1, -2, 3, 3).getNorm1().getPartialDerivative(0, 1, 0), 0);
-        Assert.assertEquals( 1.0, createVector(1, -2, 3, 3).getNorm1().getPartialDerivative(0, 0, 1), 0);
+        Assertions.assertEquals( 0.0, createVector(0, 0, 0, 3).getNorm1().getReal(), 0);
+        Assertions.assertEquals( 6.0, createVector(1, -2, 3, 3).getNorm1().getReal(), 0);
+        Assertions.assertEquals( 1.0, createVector(1, -2, 3, 3).getNorm1().getPartialDerivative(1, 0, 0), 0);
+        Assertions.assertEquals(-1.0, createVector(1, -2, 3, 3).getNorm1().getPartialDerivative(0, 1, 0), 0);
+        Assertions.assertEquals( 1.0, createVector(1, -2, 3, 3).getNorm1().getPartialDerivative(0, 0, 1), 0);
     }
 
     @Test
     public void testNorm() {
         double r = FastMath.sqrt(14);
-        Assert.assertEquals(0.0, createVector(0, 0, 0, 3).getNorm().getReal(), 0);
-        Assert.assertEquals(r, createVector(1, 2, 3, 3).getNorm().getReal(), 1.0e-12);
-        Assert.assertEquals( 1.0 / r, createVector(1, 2, 3, 3).getNorm().getPartialDerivative(1, 0, 0), 0);
-        Assert.assertEquals( 2.0 / r, createVector(1, 2, 3, 3).getNorm().getPartialDerivative(0, 1, 0), 0);
-        Assert.assertEquals( 3.0 / r, createVector(1, 2, 3, 3).getNorm().getPartialDerivative(0, 0, 1), 0);
+        Assertions.assertEquals(0.0, createVector(0, 0, 0, 3).getNorm().getReal(), 0);
+        Assertions.assertEquals(r, createVector(1, 2, 3, 3).getNorm().getReal(), 1.0e-12);
+        Assertions.assertEquals( 1.0 / r, createVector(1, 2, 3, 3).getNorm().getPartialDerivative(1, 0, 0), 0);
+        Assertions.assertEquals( 2.0 / r, createVector(1, 2, 3, 3).getNorm().getPartialDerivative(0, 1, 0), 0);
+        Assertions.assertEquals( 3.0 / r, createVector(1, 2, 3, 3).getNorm().getPartialDerivative(0, 0, 1), 0);
     }
 
     @Test
     public void testNormSq() {
-        Assert.assertEquals(0.0, createVector(0, 0, 0, 3).getNormSq().getReal(), 0);
-        Assert.assertEquals(14, createVector(1, 2, 3, 3).getNormSq().getReal(), 1.0e-12);
-        Assert.assertEquals( 2, createVector(1, 2, 3, 3).getNormSq().getPartialDerivative(1, 0, 0), 0);
-        Assert.assertEquals( 4, createVector(1, 2, 3, 3).getNormSq().getPartialDerivative(0, 1, 0), 0);
-        Assert.assertEquals( 6, createVector(1, 2, 3, 3).getNormSq().getPartialDerivative(0, 0, 1), 0);
+        Assertions.assertEquals(0.0, createVector(0, 0, 0, 3).getNormSq().getReal(), 0);
+        Assertions.assertEquals(14, createVector(1, 2, 3, 3).getNormSq().getReal(), 1.0e-12);
+        Assertions.assertEquals( 2, createVector(1, 2, 3, 3).getNormSq().getPartialDerivative(1, 0, 0), 0);
+        Assertions.assertEquals( 4, createVector(1, 2, 3, 3).getNormSq().getPartialDerivative(0, 1, 0), 0);
+        Assertions.assertEquals( 6, createVector(1, 2, 3, 3).getNormSq().getPartialDerivative(0, 0, 1), 0);
     }
 
     @Test
     public void testNormInf() {
-        Assert.assertEquals( 0.0, createVector(0, 0, 0, 3).getNormInf().getReal(), 0);
-        Assert.assertEquals( 3.0, createVector(1, -2, 3, 3).getNormInf().getReal(), 0);
-        Assert.assertEquals( 0.0, createVector(1, -2, 3, 3).getNormInf().getPartialDerivative(1, 0, 0), 0);
-        Assert.assertEquals( 0.0, createVector(1, -2, 3, 3).getNormInf().getPartialDerivative(0, 1, 0), 0);
-        Assert.assertEquals( 1.0, createVector(1, -2, 3, 3).getNormInf().getPartialDerivative(0, 0, 1), 0);
-        Assert.assertEquals( 3.0, createVector(2, -1, 3, 3).getNormInf().getReal(), 0);
-        Assert.assertEquals( 0.0, createVector(2, -1, 3, 3).getNormInf().getPartialDerivative(1, 0, 0), 0);
-        Assert.assertEquals( 0.0, createVector(2, -1, 3, 3).getNormInf().getPartialDerivative(0, 1, 0), 0);
-        Assert.assertEquals( 1.0, createVector(2, -1, 3, 3).getNormInf().getPartialDerivative(0, 0, 1), 0);
-        Assert.assertEquals( 3.0, createVector(1, -3, 2, 3).getNormInf().getReal(), 0);
-        Assert.assertEquals( 0.0, createVector(1, -3, 2, 3).getNormInf().getPartialDerivative(1, 0, 0), 0);
-        Assert.assertEquals(-1.0, createVector(1, -3, 2, 3).getNormInf().getPartialDerivative(0, 1, 0), 0);
-        Assert.assertEquals( 0.0, createVector(1, -3, 2, 3).getNormInf().getPartialDerivative(0, 0, 1), 0);
-        Assert.assertEquals( 3.0, createVector(2, -3, 1, 3).getNormInf().getReal(), 0);
-        Assert.assertEquals( 0.0, createVector(2, -3, 1, 3).getNormInf().getPartialDerivative(1, 0, 0), 0);
-        Assert.assertEquals(-1.0, createVector(2, -3, 1, 3).getNormInf().getPartialDerivative(0, 1, 0), 0);
-        Assert.assertEquals( 0.0, createVector(2, -3, 1, 3).getNormInf().getPartialDerivative(0, 0, 1), 0);
-        Assert.assertEquals( 3.0, createVector(3, -1, 2, 3).getNormInf().getReal(), 0);
-        Assert.assertEquals( 1.0, createVector(3, -1, 2, 3).getNormInf().getPartialDerivative(1, 0, 0), 0);
-        Assert.assertEquals( 0.0, createVector(3, -1, 2, 3).getNormInf().getPartialDerivative(0, 1, 0), 0);
-        Assert.assertEquals( 0.0, createVector(3, -1, 2, 3).getNormInf().getPartialDerivative(0, 0, 1), 0);
-        Assert.assertEquals( 3.0, createVector(3, -2, 1, 3).getNormInf().getReal(), 0);
-        Assert.assertEquals( 1.0, createVector(3, -2, 1, 3).getNormInf().getPartialDerivative(1, 0, 0), 0);
-        Assert.assertEquals( 0.0, createVector(3, -2, 1, 3).getNormInf().getPartialDerivative(0, 1, 0), 0);
-        Assert.assertEquals( 0.0, createVector(3, -2, 1, 3).getNormInf().getPartialDerivative(0, 0, 1), 0);
+        Assertions.assertEquals( 0.0, createVector(0, 0, 0, 3).getNormInf().getReal(), 0);
+        Assertions.assertEquals( 3.0, createVector(1, -2, 3, 3).getNormInf().getReal(), 0);
+        Assertions.assertEquals( 0.0, createVector(1, -2, 3, 3).getNormInf().getPartialDerivative(1, 0, 0), 0);
+        Assertions.assertEquals( 0.0, createVector(1, -2, 3, 3).getNormInf().getPartialDerivative(0, 1, 0), 0);
+        Assertions.assertEquals( 1.0, createVector(1, -2, 3, 3).getNormInf().getPartialDerivative(0, 0, 1), 0);
+        Assertions.assertEquals( 3.0, createVector(2, -1, 3, 3).getNormInf().getReal(), 0);
+        Assertions.assertEquals( 0.0, createVector(2, -1, 3, 3).getNormInf().getPartialDerivative(1, 0, 0), 0);
+        Assertions.assertEquals( 0.0, createVector(2, -1, 3, 3).getNormInf().getPartialDerivative(0, 1, 0), 0);
+        Assertions.assertEquals( 1.0, createVector(2, -1, 3, 3).getNormInf().getPartialDerivative(0, 0, 1), 0);
+        Assertions.assertEquals( 3.0, createVector(1, -3, 2, 3).getNormInf().getReal(), 0);
+        Assertions.assertEquals( 0.0, createVector(1, -3, 2, 3).getNormInf().getPartialDerivative(1, 0, 0), 0);
+        Assertions.assertEquals(-1.0, createVector(1, -3, 2, 3).getNormInf().getPartialDerivative(0, 1, 0), 0);
+        Assertions.assertEquals( 0.0, createVector(1, -3, 2, 3).getNormInf().getPartialDerivative(0, 0, 1), 0);
+        Assertions.assertEquals( 3.0, createVector(2, -3, 1, 3).getNormInf().getReal(), 0);
+        Assertions.assertEquals( 0.0, createVector(2, -3, 1, 3).getNormInf().getPartialDerivative(1, 0, 0), 0);
+        Assertions.assertEquals(-1.0, createVector(2, -3, 1, 3).getNormInf().getPartialDerivative(0, 1, 0), 0);
+        Assertions.assertEquals( 0.0, createVector(2, -3, 1, 3).getNormInf().getPartialDerivative(0, 0, 1), 0);
+        Assertions.assertEquals( 3.0, createVector(3, -1, 2, 3).getNormInf().getReal(), 0);
+        Assertions.assertEquals( 1.0, createVector(3, -1, 2, 3).getNormInf().getPartialDerivative(1, 0, 0), 0);
+        Assertions.assertEquals( 0.0, createVector(3, -1, 2, 3).getNormInf().getPartialDerivative(0, 1, 0), 0);
+        Assertions.assertEquals( 0.0, createVector(3, -1, 2, 3).getNormInf().getPartialDerivative(0, 0, 1), 0);
+        Assertions.assertEquals( 3.0, createVector(3, -2, 1, 3).getNormInf().getReal(), 0);
+        Assertions.assertEquals( 1.0, createVector(3, -2, 1, 3).getNormInf().getPartialDerivative(1, 0, 0), 0);
+        Assertions.assertEquals( 0.0, createVector(3, -2, 1, 3).getNormInf().getPartialDerivative(0, 1, 0), 0);
+        Assertions.assertEquals( 0.0, createVector(3, -2, 1, 3).getNormInf().getPartialDerivative(0, 0, 1), 0);
     }
 
     @Test
     public void testDistance1() {
         FieldVector3D<DerivativeStructure> v1 = createVector(1, -2, 3, 3);
         FieldVector3D<DerivativeStructure> v2 = createVector(-4, 2, 0, 3);
-        Assert.assertEquals(0.0, FieldVector3D.distance1(createVector(-1, 0, 0, 3), createVector(-1, 0, 0, 3)).getReal(), 0);
+        Assertions.assertEquals(0.0, FieldVector3D.distance1(createVector(-1, 0, 0, 3), createVector(-1, 0, 0, 3)).getReal(), 0);
         DerivativeStructure distance = FieldVector3D.distance1(v1, v2);
-        Assert.assertEquals(12.0, distance.getReal(), 1.0e-12);
-        Assert.assertEquals(0, distance.getPartialDerivative(1, 0, 0), 1.0e-12);
-        Assert.assertEquals(0, distance.getPartialDerivative(0, 1, 0), 1.0e-12);
-        Assert.assertEquals(0, distance.getPartialDerivative(0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(12.0, distance.getReal(), 1.0e-12);
+        Assertions.assertEquals(0, distance.getPartialDerivative(1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(0, distance.getPartialDerivative(0, 1, 0), 1.0e-12);
+        Assertions.assertEquals(0, distance.getPartialDerivative(0, 0, 1), 1.0e-12);
         distance = FieldVector3D.distance1(v1, new Vector3D(-4, 2, 0));
-        Assert.assertEquals(12.0, distance.getReal(), 1.0e-12);
-        Assert.assertEquals( 1, distance.getPartialDerivative(1, 0, 0), 1.0e-12);
-        Assert.assertEquals(-1, distance.getPartialDerivative(0, 1, 0), 1.0e-12);
-        Assert.assertEquals( 1, distance.getPartialDerivative(0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(12.0, distance.getReal(), 1.0e-12);
+        Assertions.assertEquals( 1, distance.getPartialDerivative(1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(-1, distance.getPartialDerivative(0, 1, 0), 1.0e-12);
+        Assertions.assertEquals( 1, distance.getPartialDerivative(0, 0, 1), 1.0e-12);
         distance = FieldVector3D.distance1(new Vector3D(-4, 2, 0), v1);
-        Assert.assertEquals(12.0, distance.getReal(), 1.0e-12);
-        Assert.assertEquals( 1, distance.getPartialDerivative(1, 0, 0), 1.0e-12);
-        Assert.assertEquals(-1, distance.getPartialDerivative(0, 1, 0), 1.0e-12);
-        Assert.assertEquals( 1, distance.getPartialDerivative(0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(12.0, distance.getReal(), 1.0e-12);
+        Assertions.assertEquals( 1, distance.getPartialDerivative(1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(-1, distance.getPartialDerivative(0, 1, 0), 1.0e-12);
+        Assertions.assertEquals( 1, distance.getPartialDerivative(0, 0, 1), 1.0e-12);
     }
 
     @Test
     public void testDistance() {
         FieldVector3D<DerivativeStructure> v1 = createVector(1, -2, 3, 3);
         FieldVector3D<DerivativeStructure> v2 = createVector(-4, 2, 0, 3);
-        Assert.assertEquals(0.0, FieldVector3D.distance(createVector(-1, 0, 0, 3), createVector(-1, 0, 0, 3)).getReal(), 0);
+        Assertions.assertEquals(0.0, FieldVector3D.distance(createVector(-1, 0, 0, 3), createVector(-1, 0, 0, 3)).getReal(), 0);
         DerivativeStructure distance = FieldVector3D.distance(v1, v2);
-        Assert.assertEquals(FastMath.sqrt(50), distance.getReal(), 1.0e-12);
-        Assert.assertEquals(0, distance.getPartialDerivative(1, 0, 0), 1.0e-12);
-        Assert.assertEquals(0, distance.getPartialDerivative(0, 1, 0), 1.0e-12);
-        Assert.assertEquals(0, distance.getPartialDerivative(0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(FastMath.sqrt(50), distance.getReal(), 1.0e-12);
+        Assertions.assertEquals(0, distance.getPartialDerivative(1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(0, distance.getPartialDerivative(0, 1, 0), 1.0e-12);
+        Assertions.assertEquals(0, distance.getPartialDerivative(0, 0, 1), 1.0e-12);
         distance = FieldVector3D.distance(v1, new Vector3D(-4, 2, 0));
-        Assert.assertEquals(FastMath.sqrt(50), distance.getReal(), 1.0e-12);
-        Assert.assertEquals( 5 / FastMath.sqrt(50), distance.getPartialDerivative(1, 0, 0), 1.0e-12);
-        Assert.assertEquals(-4 / FastMath.sqrt(50), distance.getPartialDerivative(0, 1, 0), 1.0e-12);
-        Assert.assertEquals( 3 / FastMath.sqrt(50), distance.getPartialDerivative(0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(FastMath.sqrt(50), distance.getReal(), 1.0e-12);
+        Assertions.assertEquals( 5 / FastMath.sqrt(50), distance.getPartialDerivative(1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(-4 / FastMath.sqrt(50), distance.getPartialDerivative(0, 1, 0), 1.0e-12);
+        Assertions.assertEquals( 3 / FastMath.sqrt(50), distance.getPartialDerivative(0, 0, 1), 1.0e-12);
         distance = FieldVector3D.distance(new Vector3D(-4, 2, 0), v1);
-        Assert.assertEquals(FastMath.sqrt(50), distance.getReal(), 1.0e-12);
-        Assert.assertEquals( 5 / FastMath.sqrt(50), distance.getPartialDerivative(1, 0, 0), 1.0e-12);
-        Assert.assertEquals(-4 / FastMath.sqrt(50), distance.getPartialDerivative(0, 1, 0), 1.0e-12);
-        Assert.assertEquals( 3 / FastMath.sqrt(50), distance.getPartialDerivative(0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(FastMath.sqrt(50), distance.getReal(), 1.0e-12);
+        Assertions.assertEquals( 5 / FastMath.sqrt(50), distance.getPartialDerivative(1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(-4 / FastMath.sqrt(50), distance.getPartialDerivative(0, 1, 0), 1.0e-12);
+        Assertions.assertEquals( 3 / FastMath.sqrt(50), distance.getPartialDerivative(0, 0, 1), 1.0e-12);
     }
 
     @Test
     public void testDistanceSq() {
         FieldVector3D<DerivativeStructure> v1 = createVector(1, -2, 3, 3);
         FieldVector3D<DerivativeStructure> v2 = createVector(-4, 2, 0, 3);
-        Assert.assertEquals(0.0, FieldVector3D.distanceSq(createVector(-1, 0, 0, 3), createVector(-1, 0, 0, 3)).getReal(), 0);
+        Assertions.assertEquals(0.0, FieldVector3D.distanceSq(createVector(-1, 0, 0, 3), createVector(-1, 0, 0, 3)).getReal(), 0);
         DerivativeStructure distanceSq = FieldVector3D.distanceSq(v1, v2);
-        Assert.assertEquals(50.0, distanceSq.getReal(), 1.0e-12);
-        Assert.assertEquals(0, distanceSq.getPartialDerivative(1, 0, 0), 1.0e-12);
-        Assert.assertEquals(0, distanceSq.getPartialDerivative(0, 1, 0), 1.0e-12);
-        Assert.assertEquals(0, distanceSq.getPartialDerivative(0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(50.0, distanceSq.getReal(), 1.0e-12);
+        Assertions.assertEquals(0, distanceSq.getPartialDerivative(1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(0, distanceSq.getPartialDerivative(0, 1, 0), 1.0e-12);
+        Assertions.assertEquals(0, distanceSq.getPartialDerivative(0, 0, 1), 1.0e-12);
         distanceSq = FieldVector3D.distanceSq(v1, new Vector3D(-4, 2, 0));
-        Assert.assertEquals(50.0, distanceSq.getReal(), 1.0e-12);
-        Assert.assertEquals(10, distanceSq.getPartialDerivative(1, 0, 0), 1.0e-12);
-        Assert.assertEquals(-8, distanceSq.getPartialDerivative(0, 1, 0), 1.0e-12);
-        Assert.assertEquals( 6, distanceSq.getPartialDerivative(0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(50.0, distanceSq.getReal(), 1.0e-12);
+        Assertions.assertEquals(10, distanceSq.getPartialDerivative(1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(-8, distanceSq.getPartialDerivative(0, 1, 0), 1.0e-12);
+        Assertions.assertEquals( 6, distanceSq.getPartialDerivative(0, 0, 1), 1.0e-12);
         distanceSq = FieldVector3D.distanceSq(new Vector3D(-4, 2, 0), v1);
-        Assert.assertEquals(50.0, distanceSq.getReal(), 1.0e-12);
-        Assert.assertEquals(10, distanceSq.getPartialDerivative(1, 0, 0), 1.0e-12);
-        Assert.assertEquals(-8, distanceSq.getPartialDerivative(0, 1, 0), 1.0e-12);
-        Assert.assertEquals( 6, distanceSq.getPartialDerivative(0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(50.0, distanceSq.getReal(), 1.0e-12);
+        Assertions.assertEquals(10, distanceSq.getPartialDerivative(1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(-8, distanceSq.getPartialDerivative(0, 1, 0), 1.0e-12);
+        Assertions.assertEquals( 6, distanceSq.getPartialDerivative(0, 0, 1), 1.0e-12);
   }
 
     @Test
     public void testDistanceInf() {
         FieldVector3D<DerivativeStructure> v1 = createVector(1, -2, 3, 3);
         FieldVector3D<DerivativeStructure> v2 = createVector(-4, 2, 0, 3);
-        Assert.assertEquals(0.0, FieldVector3D.distanceInf(createVector(-1, 0, 0, 3), createVector(-1, 0, 0, 3)).getReal(), 0);
+        Assertions.assertEquals(0.0, FieldVector3D.distanceInf(createVector(-1, 0, 0, 3), createVector(-1, 0, 0, 3)).getReal(), 0);
         DerivativeStructure distance = FieldVector3D.distanceInf(v1, v2);
-        Assert.assertEquals(5.0, distance.getReal(), 1.0e-12);
-        Assert.assertEquals(0, distance.getPartialDerivative(1, 0, 0), 1.0e-12);
-        Assert.assertEquals(0, distance.getPartialDerivative(0, 1, 0), 1.0e-12);
-        Assert.assertEquals(0, distance.getPartialDerivative(0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(5.0, distance.getReal(), 1.0e-12);
+        Assertions.assertEquals(0, distance.getPartialDerivative(1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(0, distance.getPartialDerivative(0, 1, 0), 1.0e-12);
+        Assertions.assertEquals(0, distance.getPartialDerivative(0, 0, 1), 1.0e-12);
         distance = FieldVector3D.distanceInf(v1, new Vector3D(-4, 2, 0));
-        Assert.assertEquals(5.0, distance.getReal(), 1.0e-12);
-        Assert.assertEquals(1, distance.getPartialDerivative(1, 0, 0), 1.0e-12);
-        Assert.assertEquals(0, distance.getPartialDerivative(0, 1, 0), 1.0e-12);
-        Assert.assertEquals(0, distance.getPartialDerivative(0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(5.0, distance.getReal(), 1.0e-12);
+        Assertions.assertEquals(1, distance.getPartialDerivative(1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(0, distance.getPartialDerivative(0, 1, 0), 1.0e-12);
+        Assertions.assertEquals(0, distance.getPartialDerivative(0, 0, 1), 1.0e-12);
         distance = FieldVector3D.distanceInf(new Vector3D(-4, 2, 0), v1);
-        Assert.assertEquals(5.0, distance.getReal(), 1.0e-12);
-        Assert.assertEquals(1, distance.getPartialDerivative(1, 0, 0), 1.0e-12);
-        Assert.assertEquals(0, distance.getPartialDerivative(0, 1, 0), 1.0e-12);
-        Assert.assertEquals(0, distance.getPartialDerivative(0, 0, 1), 1.0e-12);
-        Assert.assertEquals(v1.subtract(v2).getNormInf().getReal(), FieldVector3D.distanceInf(v1, v2).getReal(), 1.0e-12);
+        Assertions.assertEquals(5.0, distance.getReal(), 1.0e-12);
+        Assertions.assertEquals(1, distance.getPartialDerivative(1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(0, distance.getPartialDerivative(0, 1, 0), 1.0e-12);
+        Assertions.assertEquals(0, distance.getPartialDerivative(0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(v1.subtract(v2).getNormInf().getReal(), FieldVector3D.distanceInf(v1, v2).getReal(), 1.0e-12);
 
-        Assert.assertEquals(5.0,
+        Assertions.assertEquals(5.0,
                             FieldVector3D.distanceInf(createVector( 1, -2, 3, 3), createVector(-4,  2, 0, 3)).getReal(),
                             1.0e-12);
-        Assert.assertEquals(5.0,
+        Assertions.assertEquals(5.0,
                             FieldVector3D.distanceInf(createVector( 1, 3, -2, 3), createVector(-4, 0,  2, 3)).getReal(),
                             1.0e-12);
-        Assert.assertEquals(5.0,
+        Assertions.assertEquals(5.0,
                             FieldVector3D.distanceInf(createVector(-2,  1, 3, 3), createVector( 2, -4, 0, 3)).getReal(),
                             1.0e-12);
-        Assert.assertEquals(5.0,
+        Assertions.assertEquals(5.0,
                             FieldVector3D.distanceInf(createVector(-2, 3,  1, 3), createVector( 2, 0, -4, 3)).getReal(),
                             1.0e-12);
-        Assert.assertEquals(5.0,
+        Assertions.assertEquals(5.0,
                             FieldVector3D.distanceInf(createVector(3, -2,  1, 3), createVector(0,  2, -4, 3)).getReal(),
                             1.0e-12);
-        Assert.assertEquals(5.0,
+        Assertions.assertEquals(5.0,
                             FieldVector3D.distanceInf(createVector(3,  1, -2, 3), createVector(0, -4,  2, 3)).getReal(),
                             1.0e-12);
 
-        Assert.assertEquals(5.0,
+        Assertions.assertEquals(5.0,
                             FieldVector3D.distanceInf(createVector( 1, -2, 3, 3), new Vector3D(-4,  2, 0)).getReal(),
                             1.0e-12);
-        Assert.assertEquals(5.0,
+        Assertions.assertEquals(5.0,
                             FieldVector3D.distanceInf(createVector( 1, 3, -2, 3), new Vector3D(-4, 0,  2)).getReal(),
                             1.0e-12);
-        Assert.assertEquals(5.0,
+        Assertions.assertEquals(5.0,
                             FieldVector3D.distanceInf(createVector(-2,  1, 3, 3), new Vector3D( 2, -4, 0)).getReal(),
                             1.0e-12);
-        Assert.assertEquals(5.0,
+        Assertions.assertEquals(5.0,
                             FieldVector3D.distanceInf(createVector(-2, 3,  1, 3), new Vector3D( 2, 0, -4)).getReal(),
                             1.0e-12);
-        Assert.assertEquals(5.0,
+        Assertions.assertEquals(5.0,
                             FieldVector3D.distanceInf(createVector(3, -2,  1, 3), new Vector3D(0,  2, -4)).getReal(),
                             1.0e-12);
-        Assert.assertEquals(5.0,
+        Assertions.assertEquals(5.0,
                             FieldVector3D.distanceInf(createVector(3,  1, -2, 3), new Vector3D(0, -4,  2)).getReal(),
                             1.0e-12);
 
@@ -494,24 +498,24 @@ public class FieldVector3DTest {
         FieldVector3D<DerivativeStructure> v1 = createVector(2, 1, -4, 3);
         FieldVector3D<DerivativeStructure> v2 = createVector(3, 1, -1, 3);
 
-        Assert.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v1, v2).getReal() - 11) < 1.0e-12);
-        Assert.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v1, v2.toVector3D()).getReal() - 11) < 1.0e-12);
-        Assert.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v1.toVector3D(), v2).getReal() - 11) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v1, v2).getReal() - 11) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v1, v2.toVector3D()).getReal() - 11) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v1.toVector3D(), v2).getReal() - 11) < 1.0e-12);
 
         FieldVector3D<DerivativeStructure> v3 = FieldVector3D.crossProduct(v1, v2);
         checkVector(v3, 3, -10, -1);
-        Assert.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v1, v3).getReal()) < 1.0e-12);
-        Assert.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v2, v3).getReal()) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v1, v3).getReal()) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v2, v3).getReal()) < 1.0e-12);
 
         v3 = FieldVector3D.crossProduct(v1, v2.toVector3D());
         checkVector(v3, 3, -10, -1);
-        Assert.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v1, v3).getReal()) < 1.0e-12);
-        Assert.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v2, v3).getReal()) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v1, v3).getReal()) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v2, v3).getReal()) < 1.0e-12);
 
         v3 = FieldVector3D.crossProduct(v1.toVector3D(), v2);
         checkVector(v3, 3, -10, -1);
-        Assert.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v1, v3).getReal()) < 1.0e-12);
-        Assert.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v2, v3).getReal()) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v1, v3).getReal()) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(FieldVector3D.dotProduct(v2, v3).getReal()) < 1.0e-12);
 
     }
 
@@ -530,15 +534,15 @@ public class FieldVector3DTest {
 
     @Test
     public void testAngular() {
-        Assert.assertEquals(0,           createVector(1, 0, 0, 3).getAlpha().getReal(), 1.0e-10);
-        Assert.assertEquals(0,           createVector(1, 0, 0, 3).getDelta().getReal(), 1.0e-10);
-        Assert.assertEquals(FastMath.PI / 2, createVector(0, 1, 0, 3).getAlpha().getReal(), 1.0e-10);
-        Assert.assertEquals(0,           createVector(0, 1, 0, 3).getDelta().getReal(), 1.0e-10);
-        Assert.assertEquals(FastMath.PI / 2, createVector(0, 0, 1, 3).getDelta().getReal(), 1.0e-10);
+        Assertions.assertEquals(0,           createVector(1, 0, 0, 3).getAlpha().getReal(), 1.0e-10);
+        Assertions.assertEquals(0,           createVector(1, 0, 0, 3).getDelta().getReal(), 1.0e-10);
+        Assertions.assertEquals(FastMath.PI / 2, createVector(0, 1, 0, 3).getAlpha().getReal(), 1.0e-10);
+        Assertions.assertEquals(0,           createVector(0, 1, 0, 3).getDelta().getReal(), 1.0e-10);
+        Assertions.assertEquals(FastMath.PI / 2, createVector(0, 0, 1, 3).getDelta().getReal(), 1.0e-10);
 
         FieldVector3D<DerivativeStructure> u = createVector(-1, 1, -1, 3);
-        Assert.assertEquals(3 * FastMath.PI /4, u.getAlpha().getReal(), 1.0e-10);
-        Assert.assertEquals(-1.0 / FastMath.sqrt(3), u.getDelta().sin().getReal(), 1.0e-10);
+        Assertions.assertEquals(3 * FastMath.PI /4, u.getAlpha().getReal(), 1.0e-10);
+        Assertions.assertEquals(-1.0 / FastMath.sqrt(3), u.getDelta().sin().getReal(), 1.0e-10);
     }
 
     @Test
@@ -549,27 +553,27 @@ public class FieldVector3DTest {
         FieldVector3D<DerivativeStructure>  i = k.orthogonal();
         FieldVector3D<DerivativeStructure> v2 = k.scalarMultiply(FastMath.cos(1.2)).add(i.scalarMultiply(FastMath.sin(1.2)));
 
-        Assert.assertTrue(FastMath.abs(FieldVector3D.angle(v1, v2).getReal() - 1.2) < 1.0e-12);
-        Assert.assertTrue(FastMath.abs(FieldVector3D.angle(v1, v2.toVector3D()).getReal() - 1.2) < 1.0e-12);
-        Assert.assertTrue(FastMath.abs(FieldVector3D.angle(v1.toVector3D(), v2).getReal() - 1.2) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(FieldVector3D.angle(v1, v2).getReal() - 1.2) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(FieldVector3D.angle(v1, v2.toVector3D()).getReal() - 1.2) < 1.0e-12);
+        Assertions.assertTrue(FastMath.abs(FieldVector3D.angle(v1.toVector3D(), v2).getReal() - 1.2) < 1.0e-12);
 
         try {
             FieldVector3D.angle(v1, Vector3D.ZERO);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathRuntimeException mae) {
             // expected
         }
-        Assert.assertEquals(0.0, FieldVector3D.angle(v1, v1.toVector3D()).getReal(), 1.0e-15);
-        Assert.assertEquals(FastMath.PI, FieldVector3D.angle(v1, v1.negate().toVector3D()).getReal(), 1.0e-15);
+        Assertions.assertEquals(0.0, FieldVector3D.angle(v1, v1.toVector3D()).getReal(), 1.0e-15);
+        Assertions.assertEquals(FastMath.PI, FieldVector3D.angle(v1, v1.negate().toVector3D()).getReal(), 1.0e-15);
 
     }
 
     @Test
     public void testNormalize() throws MathRuntimeException {
-        Assert.assertEquals(1.0, createVector(5, -4, 2, 3).normalize().getNorm().getReal(), 1.0e-12);
+        Assertions.assertEquals(1.0, createVector(5, -4, 2, 3).normalize().getNorm().getReal(), 1.0e-12);
         try {
             createVector(0, 0, 0, 3).normalize();
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathRuntimeException ae) {
             // expected behavior
         }
@@ -584,16 +588,16 @@ public class FieldVector3DTest {
     @Test
     public void testOrthogonal() throws MathRuntimeException {
         FieldVector3D<DerivativeStructure> v1 = createVector(0.1, 2.5, 1.3, 3);
-        Assert.assertEquals(0.0, FieldVector3D.dotProduct(v1, v1.orthogonal()).getReal(), 1.0e-12);
+        Assertions.assertEquals(0.0, FieldVector3D.dotProduct(v1, v1.orthogonal()).getReal(), 1.0e-12);
         FieldVector3D<DerivativeStructure> v2 = createVector(2.3, -0.003, 7.6, 3);
-        Assert.assertEquals(0.0, FieldVector3D.dotProduct(v2, v2.orthogonal()).getReal(), 1.0e-12);
+        Assertions.assertEquals(0.0, FieldVector3D.dotProduct(v2, v2.orthogonal()).getReal(), 1.0e-12);
         FieldVector3D<DerivativeStructure> v3 = createVector(-1.7, 1.4, 0.2, 3);
-        Assert.assertEquals(0.0, FieldVector3D.dotProduct(v3, v3.orthogonal()).getReal(), 1.0e-12);
+        Assertions.assertEquals(0.0, FieldVector3D.dotProduct(v3, v3.orthogonal()).getReal(), 1.0e-12);
         FieldVector3D<DerivativeStructure> v4 = createVector(4.2, 0.1, -1.8, 3);
-        Assert.assertEquals(0.0, FieldVector3D.dotProduct(v4, v4.orthogonal()).getReal(), 1.0e-12);
+        Assertions.assertEquals(0.0, FieldVector3D.dotProduct(v4, v4.orthogonal()).getReal(), 1.0e-12);
         try {
             createVector(0, 0, 0, 3).orthogonal();
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathRuntimeException ae) {
             // expected behavior
         }
@@ -601,18 +605,18 @@ public class FieldVector3DTest {
 
     @Test
     public void testAngle() throws MathRuntimeException {
-        Assert.assertEquals(0.22572612855273393616,
+        Assertions.assertEquals(0.22572612855273393616,
                             FieldVector3D.angle(createVector(1, 2, 3, 3), createVector(4, 5, 6, 3)).getReal(),
                             1.0e-12);
-        Assert.assertEquals(7.98595620686106654517199e-8,
+        Assertions.assertEquals(7.98595620686106654517199e-8,
                             FieldVector3D.angle(createVector(1, 2, 3, 3), createVector(2, 4, 6.000001, 3)).getReal(),
                             1.0e-12);
-        Assert.assertEquals(3.14159257373023116985197793156,
+        Assertions.assertEquals(3.14159257373023116985197793156,
                             FieldVector3D.angle(createVector(1, 2, 3, 3), createVector(-2, -4, -6.000001, 3)).getReal(),
                             1.0e-12);
         try {
             FieldVector3D.angle(createVector(0, 0, 0, 3), createVector(1, 0, 0, 3));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathRuntimeException ae) {
             // expected behavior
         }
@@ -631,8 +635,8 @@ public class FieldVector3DTest {
                                     8846951984510141.0 /     131072.0, 3);
         DerivativeStructure sNaive = u1.getX().multiply(u2.getX()).add(u1.getY().multiply(u2.getY())).add(u1.getZ().multiply(u2.getZ()));
         DerivativeStructure sAccurate = FieldVector3D.dotProduct(u1, u2);
-        Assert.assertEquals(0.0, sNaive.getReal(), 1.0e-30);
-        Assert.assertEquals(-2088690039198397.0 / 1125899906842624.0, sAccurate.getReal(), 1.0e-15);
+        Assertions.assertEquals(0.0, sNaive.getReal(), 1.0e-30);
+        Assertions.assertEquals(-2088690039198397.0 / 1125899906842624.0, sAccurate.getReal(), 1.0e-15);
     }
 
     @Test
@@ -654,16 +658,16 @@ public class FieldVector3DTest {
             Vector3D v = new Vector3D(vx, vy, vz);
 
             DerivativeStructure sAccurate = FieldVector3D.dotProduct(uds, vds);
-            Assert.assertEquals(sNaive, sAccurate.getReal(), 2.5e-16 * sNaive);
-            Assert.assertEquals(ux + vx, sAccurate.getPartialDerivative(1, 0, 0), 2.5e-16 * sNaive);
-            Assert.assertEquals(uy + vy, sAccurate.getPartialDerivative(0, 1, 0), 2.5e-16 * sNaive);
-            Assert.assertEquals(uz + vz, sAccurate.getPartialDerivative(0, 0, 1), 2.5e-16 * sNaive);
+            Assertions.assertEquals(sNaive, sAccurate.getReal(), 2.5e-16 * sNaive);
+            Assertions.assertEquals(ux + vx, sAccurate.getPartialDerivative(1, 0, 0), 2.5e-16 * sNaive);
+            Assertions.assertEquals(uy + vy, sAccurate.getPartialDerivative(0, 1, 0), 2.5e-16 * sNaive);
+            Assertions.assertEquals(uz + vz, sAccurate.getPartialDerivative(0, 0, 1), 2.5e-16 * sNaive);
 
             sAccurate = FieldVector3D.dotProduct(uds, v);
-            Assert.assertEquals(sNaive, sAccurate.getReal(), 2.5e-16 * sNaive);
-            Assert.assertEquals(vx, sAccurate.getPartialDerivative(1, 0, 0), 2.5e-16 * sNaive);
-            Assert.assertEquals(vy, sAccurate.getPartialDerivative(0, 1, 0), 2.5e-16 * sNaive);
-            Assert.assertEquals(vz, sAccurate.getPartialDerivative(0, 0, 1), 2.5e-16 * sNaive);
+            Assertions.assertEquals(sNaive, sAccurate.getReal(), 2.5e-16 * sNaive);
+            Assertions.assertEquals(vx, sAccurate.getPartialDerivative(1, 0, 0), 2.5e-16 * sNaive);
+            Assertions.assertEquals(vy, sAccurate.getPartialDerivative(0, 1, 0), 2.5e-16 * sNaive);
+            Assertions.assertEquals(vz, sAccurate.getPartialDerivative(0, 0, 1), 2.5e-16 * sNaive);
 
         }
     }
@@ -688,8 +692,8 @@ public class FieldVector3DTest {
                                        u1.getZ().multiply(u2.getX()).subtract(u1.getX().multiply(u2.getZ())),
                                        u1.getX().multiply(u2.getY()).subtract(u1.getY().multiply(u2.getX())));
         FieldVector3D<DerivativeStructure> cAccurate = FieldVector3D.crossProduct(u1, u2);
-        Assert.assertTrue(FieldVector3D.distance(u3, cNaive).getReal() > 2.9 * u3.getNorm().getReal());
-        Assert.assertEquals(0.0, FieldVector3D.distance(u3, cAccurate).getReal(), 1.0e-30 * cAccurate.getNorm().getReal());
+        Assertions.assertTrue(FieldVector3D.distance(u3, cNaive).getReal() > 2.9 * u3.getNorm().getReal());
+        Assertions.assertEquals(0.0, FieldVector3D.distance(u3, cAccurate).getReal(), 1.0e-30 * cAccurate.getNorm().getReal());
     }
 
     @Test
@@ -737,9 +741,9 @@ public class FieldVector3DTest {
         final FieldVector3D<Binary64> blendedVector = vector1.blendArithmeticallyWith(vector2, blendingValue);
 
         // Then
-        Assert.assertEquals(1.65, blendedVector.getX().getReal(), 1.0e-15);
-        Assert.assertEquals(3.3 , blendedVector.getY().getReal(), 1.0e-15);
-        Assert.assertEquals(6.9 , blendedVector.getZ().getReal(), 1.0e-15);
+        Assertions.assertEquals(1.65, blendedVector.getX().getReal(), 1.0e-15);
+        Assertions.assertEquals(3.3 , blendedVector.getY().getReal(), 1.0e-15);
+        Assertions.assertEquals(6.9 , blendedVector.getZ().getReal(), 1.0e-15);
     }
 
     private FieldVector3D<DerivativeStructure> createVector(double x, double y, double z, int params) {
@@ -750,48 +754,48 @@ public class FieldVector3DTest {
     }
 
     private void checkVector(FieldVector3D<DerivativeStructure> v, double x, double y, double z) {
-        Assert.assertEquals(x, v.getX().getReal(), 1.0e-12);
-        Assert.assertEquals(y, v.getY().getReal(), 1.0e-12);
-        Assert.assertEquals(z, v.getZ().getReal(), 1.0e-12);
+        Assertions.assertEquals(x, v.getX().getReal(), 1.0e-12);
+        Assertions.assertEquals(y, v.getY().getReal(), 1.0e-12);
+        Assertions.assertEquals(z, v.getZ().getReal(), 1.0e-12);
     }
 
     private void checkVector(FieldVector3D<DerivativeStructure> v, double x, double y, double z,
                              double dxdx, double dxdy, double dxdz,
                              double dydx, double dydy, double dydz,
                              double dzdx, double dzdy, double dzdz) {
-        Assert.assertEquals(x, v.getX().getReal(), 1.0e-12);
-        Assert.assertEquals(y, v.getY().getReal(), 1.0e-12);
-        Assert.assertEquals(z, v.getZ().getReal(), 1.0e-12);
-        Assert.assertEquals(dxdx, v.getX().getPartialDerivative(1, 0, 0), 1.0e-12);
-        Assert.assertEquals(dxdy, v.getX().getPartialDerivative(0, 1, 0), 1.0e-12);
-        Assert.assertEquals(dxdz, v.getX().getPartialDerivative(0, 0, 1), 1.0e-12);
-        Assert.assertEquals(dydx, v.getY().getPartialDerivative(1, 0, 0), 1.0e-12);
-        Assert.assertEquals(dydy, v.getY().getPartialDerivative(0, 1, 0), 1.0e-12);
-        Assert.assertEquals(dydz, v.getY().getPartialDerivative(0, 0, 1), 1.0e-12);
-        Assert.assertEquals(dzdx, v.getZ().getPartialDerivative(1, 0, 0), 1.0e-12);
-        Assert.assertEquals(dzdy, v.getZ().getPartialDerivative(0, 1, 0), 1.0e-12);
-        Assert.assertEquals(dzdz, v.getZ().getPartialDerivative(0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(x, v.getX().getReal(), 1.0e-12);
+        Assertions.assertEquals(y, v.getY().getReal(), 1.0e-12);
+        Assertions.assertEquals(z, v.getZ().getReal(), 1.0e-12);
+        Assertions.assertEquals(dxdx, v.getX().getPartialDerivative(1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(dxdy, v.getX().getPartialDerivative(0, 1, 0), 1.0e-12);
+        Assertions.assertEquals(dxdz, v.getX().getPartialDerivative(0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(dydx, v.getY().getPartialDerivative(1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(dydy, v.getY().getPartialDerivative(0, 1, 0), 1.0e-12);
+        Assertions.assertEquals(dydz, v.getY().getPartialDerivative(0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(dzdx, v.getZ().getPartialDerivative(1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(dzdy, v.getZ().getPartialDerivative(0, 1, 0), 1.0e-12);
+        Assertions.assertEquals(dzdz, v.getZ().getPartialDerivative(0, 0, 1), 1.0e-12);
     }
 
     private void checkVector(FieldVector3D<DerivativeStructure> v, double x, double y, double z,
                              double dxdx, double dxdy, double dxdz, double dxdt,
                              double dydx, double dydy, double dydz, double dydt,
                              double dzdx, double dzdy, double dzdz, double dzdt) {
-        Assert.assertEquals(x, v.getX().getReal(), 1.0e-12);
-        Assert.assertEquals(y, v.getY().getReal(), 1.0e-12);
-        Assert.assertEquals(z, v.getZ().getReal(), 1.0e-12);
-        Assert.assertEquals(dxdx, v.getX().getPartialDerivative(1, 0, 0, 0), 1.0e-12);
-        Assert.assertEquals(dxdy, v.getX().getPartialDerivative(0, 1, 0, 0), 1.0e-12);
-        Assert.assertEquals(dxdz, v.getX().getPartialDerivative(0, 0, 1, 0), 1.0e-12);
-        Assert.assertEquals(dxdt, v.getX().getPartialDerivative(0, 0, 0, 1), 1.0e-12);
-        Assert.assertEquals(dydx, v.getY().getPartialDerivative(1, 0, 0, 0), 1.0e-12);
-        Assert.assertEquals(dydy, v.getY().getPartialDerivative(0, 1, 0, 0), 1.0e-12);
-        Assert.assertEquals(dydz, v.getY().getPartialDerivative(0, 0, 1, 0), 1.0e-12);
-        Assert.assertEquals(dydt, v.getY().getPartialDerivative(0, 0, 0, 1), 1.0e-12);
-        Assert.assertEquals(dzdx, v.getZ().getPartialDerivative(1, 0, 0, 0), 1.0e-12);
-        Assert.assertEquals(dzdy, v.getZ().getPartialDerivative(0, 1, 0, 0), 1.0e-12);
-        Assert.assertEquals(dzdz, v.getZ().getPartialDerivative(0, 0, 1, 0), 1.0e-12);
-        Assert.assertEquals(dzdt, v.getZ().getPartialDerivative(0, 0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(x, v.getX().getReal(), 1.0e-12);
+        Assertions.assertEquals(y, v.getY().getReal(), 1.0e-12);
+        Assertions.assertEquals(z, v.getZ().getReal(), 1.0e-12);
+        Assertions.assertEquals(dxdx, v.getX().getPartialDerivative(1, 0, 0, 0), 1.0e-12);
+        Assertions.assertEquals(dxdy, v.getX().getPartialDerivative(0, 1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(dxdz, v.getX().getPartialDerivative(0, 0, 1, 0), 1.0e-12);
+        Assertions.assertEquals(dxdt, v.getX().getPartialDerivative(0, 0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(dydx, v.getY().getPartialDerivative(1, 0, 0, 0), 1.0e-12);
+        Assertions.assertEquals(dydy, v.getY().getPartialDerivative(0, 1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(dydz, v.getY().getPartialDerivative(0, 0, 1, 0), 1.0e-12);
+        Assertions.assertEquals(dydt, v.getY().getPartialDerivative(0, 0, 0, 1), 1.0e-12);
+        Assertions.assertEquals(dzdx, v.getZ().getPartialDerivative(1, 0, 0, 0), 1.0e-12);
+        Assertions.assertEquals(dzdy, v.getZ().getPartialDerivative(0, 1, 0, 0), 1.0e-12);
+        Assertions.assertEquals(dzdz, v.getZ().getPartialDerivative(0, 0, 1, 0), 1.0e-12);
+        Assertions.assertEquals(dzdt, v.getZ().getPartialDerivative(0, 0, 0, 1), 1.0e-12);
     }
 
 }

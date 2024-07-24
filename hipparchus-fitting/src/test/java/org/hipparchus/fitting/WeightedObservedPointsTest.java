@@ -21,11 +21,11 @@
  */
 package org.hipparchus.fitting;
 
-import java.util.List;
-
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 /**
  * Tests {@link WeightedObservedPoints}.
@@ -42,7 +42,7 @@ public class WeightedObservedPointsTest {
 
         store.add(w, x, y);
 
-        Assert.assertTrue(lastElementIsSame(store, new WeightedObservedPoint(w, x, y)));
+        Assertions.assertTrue(lastElementIsSame(store, new WeightedObservedPoint(w, x, y)));
     }
 
     @Test
@@ -55,7 +55,7 @@ public class WeightedObservedPointsTest {
 
         store.add(new WeightedObservedPoint(w, x, y));
 
-        Assert.assertTrue(lastElementIsSame(store, new WeightedObservedPoint(w, x, y)));
+        Assertions.assertTrue(lastElementIsSame(store, new WeightedObservedPoint(w, x, y)));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class WeightedObservedPointsTest {
 
         store.add(x, y);
 
-        Assert.assertTrue(lastElementIsSame(store, new WeightedObservedPoint(1, x, y)));
+        Assertions.assertTrue(lastElementIsSame(store, new WeightedObservedPoint(1, x, y)));
     }
 
     @Test
@@ -76,10 +76,10 @@ public class WeightedObservedPointsTest {
 
         store.add(new WeightedObservedPoint(1, 2, 3));
         store.add(new WeightedObservedPoint(2, -1, -2));
-        Assert.assertTrue(store.toList().size() == 2);
+        Assertions.assertEquals(2, store.toList().size());
 
         store.clear();
-        Assert.assertTrue(store.toList().size() == 0);
+        Assertions.assertEquals(0, store.toList().size());
     }
 
     // Ensure that an instance returned by "toList()" is independent from
@@ -92,15 +92,15 @@ public class WeightedObservedPointsTest {
         store.add(new WeightedObservedPoint(2, -3, -4));
 
         final List<WeightedObservedPoint> list = store.toList();
-        Assert.assertTrue(list.size() == 2);
+        Assertions.assertEquals(2, list.size());
 
         // Adding an element to "list" has no impact on "store".
         list.add(new WeightedObservedPoint(1.2, 3.4, 5.6));
-        Assert.assertFalse(list.size() == store.toList().size());
+        Assertions.assertFalse(list.size() == store.toList().size());
 
         // Clearing "store" has no impact on "list".
         store.clear();
-        Assert.assertFalse(list.size() == 0);
+        Assertions.assertFalse(list.size() == 0);
     }
 
     /**

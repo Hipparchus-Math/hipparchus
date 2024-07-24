@@ -32,8 +32,10 @@ import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for class {@link Logit}.
@@ -41,22 +43,26 @@ import org.junit.Test;
 public class LogitTest {
     private final double EPS = Math.ulp(1d);
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions1() {
-        final double lo = -1;
-        final double hi = 2;
-        final UnivariateFunction f = new Logit(lo, hi);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final double lo = -1;
+            final double hi = 2;
+            final UnivariateFunction f = new Logit(lo, hi);
 
-        f.value(lo - 1);
+            f.value(lo - 1);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions2() {
-        final double lo = -1;
-        final double hi = 2;
-        final UnivariateFunction f = new Logit(lo, hi);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final double lo = -1;
+            final double hi = 2;
+            final UnivariateFunction f = new Logit(lo, hi);
 
-        f.value(hi + 1);
+            f.value(hi + 1);
+        });
     }
 
     @Test
@@ -65,9 +71,9 @@ public class LogitTest {
         final double hi = 2;
         final UnivariateFunction f = new Logit(lo, hi);
 
-        Assert.assertEquals(Double.NEGATIVE_INFINITY, f.value(1), EPS);
-        Assert.assertEquals(Double.POSITIVE_INFINITY, f.value(2), EPS);
-        Assert.assertEquals(0, f.value(1.5), EPS);
+        Assertions.assertEquals(Double.NEGATIVE_INFINITY, f.value(1), EPS);
+        Assertions.assertEquals(Double.POSITIVE_INFINITY, f.value(2), EPS);
+        Assertions.assertEquals(0, f.value(1.5), EPS);
     }
 
     @Test
@@ -77,7 +83,7 @@ public class LogitTest {
         final Logit f = new Logit(lo, hi);
         final DerivativeStructure f15 = f.value(new DSFactory(1, 1).variable(0, 1.5));
 
-        Assert.assertEquals(4, f15.getPartialDerivative(1), EPS);
+        Assertions.assertEquals(4, f15.getPartialDerivative(1), EPS);
     }
 
     @Test
@@ -90,11 +96,11 @@ public class LogitTest {
             }) {
             try {
                 f.value(factory.variable(0, arg));
-                Assert.fail("an exception should have been thrown");
+                Assertions.fail("an exception should have been thrown");
             } catch (MathIllegalArgumentException ore) {
                 // expected
             } catch (Exception e) {
-                Assert.fail("wrong exception caught: " + e.getMessage());
+                Assertions.fail("wrong exception caught: " + e.getMessage());
             }
         }
     }
@@ -102,48 +108,60 @@ public class LogitTest {
     @Test
     public void testDerivativesHighOrder() {
         DerivativeStructure l = new Logit(1, 3).value(new DSFactory(1, 5).variable(0, 1.2));
-        Assert.assertEquals(-2.1972245773362193828, l.getPartialDerivative(0), 1.0e-16);
-        Assert.assertEquals(5.5555555555555555555,  l.getPartialDerivative(1), 9.0e-16);
-        Assert.assertEquals(-24.691358024691358025, l.getPartialDerivative(2), 2.0e-14);
-        Assert.assertEquals(250.34293552812071331,  l.getPartialDerivative(3), 2.0e-13);
-        Assert.assertEquals(-3749.4284407864654778, l.getPartialDerivative(4), 4.0e-12);
-        Assert.assertEquals(75001.270131585632282,  l.getPartialDerivative(5), 8.0e-11);
+        Assertions.assertEquals(-2.1972245773362193828, l.getPartialDerivative(0), 1.0e-16);
+        Assertions.assertEquals(5.5555555555555555555,  l.getPartialDerivative(1), 9.0e-16);
+        Assertions.assertEquals(-24.691358024691358025, l.getPartialDerivative(2), 2.0e-14);
+        Assertions.assertEquals(250.34293552812071331,  l.getPartialDerivative(3), 2.0e-13);
+        Assertions.assertEquals(-3749.4284407864654778, l.getPartialDerivative(4), 4.0e-12);
+        Assertions.assertEquals(75001.270131585632282,  l.getPartialDerivative(5), 8.0e-11);
     }
 
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void testParametricUsage1() {
-        final Logit.Parametric g = new Logit.Parametric();
-        g.value(0, null);
+        assertThrows(NullArgumentException.class, () -> {
+            final Logit.Parametric g = new Logit.Parametric();
+            g.value(0, null);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testParametricUsage2() {
-        final Logit.Parametric g = new Logit.Parametric();
-        g.value(0, new double[] {0});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Logit.Parametric g = new Logit.Parametric();
+            g.value(0, new double[]{0});
+        });
     }
 
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void testParametricUsage3() {
-        final Logit.Parametric g = new Logit.Parametric();
-        g.gradient(0, null);
+        assertThrows(NullArgumentException.class, () -> {
+            final Logit.Parametric g = new Logit.Parametric();
+            g.gradient(0, null);
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testParametricUsage4() {
-        final Logit.Parametric g = new Logit.Parametric();
-        g.gradient(0, new double[] {0});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Logit.Parametric g = new Logit.Parametric();
+            g.gradient(0, new double[]{0});
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testParametricUsage5() {
-        final Logit.Parametric g = new Logit.Parametric();
-        g.value(-1, new double[] {0, 1});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Logit.Parametric g = new Logit.Parametric();
+            g.value(-1, new double[]{0, 1});
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testParametricUsage6() {
-        final Logit.Parametric g = new Logit.Parametric();
-        g.value(2, new double[] {0, 1});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final Logit.Parametric g = new Logit.Parametric();
+            g.value(2, new double[]{0, 1});
+        });
     }
 
     @Test
@@ -153,9 +171,9 @@ public class LogitTest {
         final Logit f = new Logit(lo, hi);
 
         final Logit.Parametric g = new Logit.Parametric();
-        Assert.assertEquals(f.value(2), g.value(2, new double[] {lo, hi}), 0);
-        Assert.assertEquals(f.value(2.34567), g.value(2.34567, new double[] {lo, hi}), 0);
-        Assert.assertEquals(f.value(3), g.value(3, new double[] {lo, hi}), 0);
+        Assertions.assertEquals(f.value(2), g.value(2, new double[] {lo, hi}), 0);
+        Assertions.assertEquals(f.value(2.34567), g.value(2.34567, new double[] {lo, hi}), 0);
+        Assertions.assertEquals(f.value(3), g.value(3, new double[] {lo, hi}), 0);
     }
 
     @Test
@@ -171,11 +189,11 @@ public class LogitTest {
         DSFactory factory = new DSFactory(1, 1);
         for (int i = 0; i < 10; i++) {
             final double x = lo + random.nextDouble() * (hi - lo);
-            Assert.assertEquals(x, id.value(factory.variable(0, x)).getValue(), EPS);
+            Assertions.assertEquals(x, id.value(factory.variable(0, x)).getValue(), EPS);
         }
 
-        Assert.assertEquals(lo, id.value(factory.variable(0, lo)).getValue(), EPS);
-        Assert.assertEquals(hi, id.value(factory.variable(0, hi)).getValue(), EPS);
+        Assertions.assertEquals(lo, id.value(factory.variable(0, lo)).getValue(), EPS);
+        Assertions.assertEquals(hi, id.value(factory.variable(0, hi)).getValue(), EPS);
     }
 
     @Test
@@ -196,7 +214,7 @@ public class LogitTest {
                 final DerivativeStructure dsX = factory.variable(0, x);
                 max = FastMath.max(max, FastMath.abs(dsX.getPartialDerivative(maxOrder) -
                                                      id.value(dsX).getPartialDerivative(maxOrder)));
-                Assert.assertEquals(dsX.getPartialDerivative(maxOrder),
+                Assertions.assertEquals(dsX.getPartialDerivative(maxOrder),
                                     id.value(dsX).getPartialDerivative(maxOrder),
                                     epsilon[maxOrder]);
             }
@@ -205,26 +223,26 @@ public class LogitTest {
             // but combination leads to NaN as some intermediate point is infinite
             final DerivativeStructure dsLo = factory.variable(0, lo);
             if (maxOrder == 0) {
-                Assert.assertTrue(Double.isInfinite(f.value(dsLo).getPartialDerivative(maxOrder)));
-                Assert.assertEquals(lo, id.value(dsLo).getPartialDerivative(maxOrder), epsilon[maxOrder]);
+                Assertions.assertTrue(Double.isInfinite(f.value(dsLo).getPartialDerivative(maxOrder)));
+                Assertions.assertEquals(lo, id.value(dsLo).getPartialDerivative(maxOrder), epsilon[maxOrder]);
             } else if (maxOrder == 1) {
-                Assert.assertTrue(Double.isInfinite(f.value(dsLo).getPartialDerivative(maxOrder)));
-                Assert.assertTrue(Double.isNaN(id.value(dsLo).getPartialDerivative(maxOrder)));
+                Assertions.assertTrue(Double.isInfinite(f.value(dsLo).getPartialDerivative(maxOrder)));
+                Assertions.assertTrue(Double.isNaN(id.value(dsLo).getPartialDerivative(maxOrder)));
             } else {
-                Assert.assertTrue(Double.isNaN(f.value(dsLo).getPartialDerivative(maxOrder)));
-                Assert.assertTrue(Double.isNaN(id.value(dsLo).getPartialDerivative(maxOrder)));
+                Assertions.assertTrue(Double.isNaN(f.value(dsLo).getPartialDerivative(maxOrder)));
+                Assertions.assertTrue(Double.isNaN(id.value(dsLo).getPartialDerivative(maxOrder)));
             }
 
             final DerivativeStructure dsHi = factory.variable(0, hi);
             if (maxOrder == 0) {
-                Assert.assertTrue(Double.isInfinite(f.value(dsHi).getPartialDerivative(maxOrder)));
-                Assert.assertEquals(hi, id.value(dsHi).getPartialDerivative(maxOrder), epsilon[maxOrder]);
+                Assertions.assertTrue(Double.isInfinite(f.value(dsHi).getPartialDerivative(maxOrder)));
+                Assertions.assertEquals(hi, id.value(dsHi).getPartialDerivative(maxOrder), epsilon[maxOrder]);
             } else if (maxOrder == 1) {
-                Assert.assertTrue(Double.isInfinite(f.value(dsHi).getPartialDerivative(maxOrder)));
-                Assert.assertTrue(Double.isNaN(id.value(dsHi).getPartialDerivative(maxOrder)));
+                Assertions.assertTrue(Double.isInfinite(f.value(dsHi).getPartialDerivative(maxOrder)));
+                Assertions.assertTrue(Double.isNaN(id.value(dsHi).getPartialDerivative(maxOrder)));
             } else {
-                Assert.assertTrue(Double.isNaN(f.value(dsHi).getPartialDerivative(maxOrder)));
-                Assert.assertTrue(Double.isNaN(id.value(dsHi).getPartialDerivative(maxOrder)));
+                Assertions.assertTrue(Double.isNaN(f.value(dsHi).getPartialDerivative(maxOrder)));
+                Assertions.assertTrue(Double.isNaN(id.value(dsHi).getPartialDerivative(maxOrder)));
             }
 
         }

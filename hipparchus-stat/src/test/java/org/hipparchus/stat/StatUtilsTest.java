@@ -21,18 +21,17 @@
  */
 package org.hipparchus.stat;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for the {@link StatUtils} class.
@@ -55,39 +54,39 @@ public final class StatUtilsTest {
     @Test
     public void testStats() {
         double[] values = new double[] { ONE, TWO, TWO, THREE };
-        assertEquals("sum", SUM, StatUtils.sum(values), TOLERANCE);
-        assertEquals("sumsq", SUMSQ, StatUtils.sumSq(values), TOLERANCE);
-        assertEquals("var", VAR, StatUtils.variance(values), TOLERANCE);
-        assertEquals("var with mean", VAR, StatUtils.variance(values, MEAN), TOLERANCE);
-        assertEquals("mean", MEAN, StatUtils.mean(values), TOLERANCE);
-        assertEquals("min", MIN, StatUtils.min(values), TOLERANCE);
-        assertEquals("max", MAX, StatUtils.max(values), TOLERANCE);
+        assertEquals(SUM, StatUtils.sum(values), TOLERANCE, "sum");
+        assertEquals(SUMSQ, StatUtils.sumSq(values), TOLERANCE, "sumsq");
+        assertEquals(VAR, StatUtils.variance(values), TOLERANCE, "var");
+        assertEquals(VAR, StatUtils.variance(values, MEAN), TOLERANCE, "var with mean");
+        assertEquals(MEAN, StatUtils.mean(values), TOLERANCE, "mean");
+        assertEquals(MIN, StatUtils.min(values), TOLERANCE, "min");
+        assertEquals(MAX, StatUtils.max(values), TOLERANCE, "max");
     }
 
     @Test
     public void testN0andN1Conditions() {
         double[] values = new double[0];
 
-        assertTrue("Mean of n = 0 set should be NaN",
-                   Double.isNaN(StatUtils.mean(values)));
-        assertTrue("Variance of n = 0 set should be NaN",
-                   Double.isNaN(StatUtils.variance(values)));
+        assertTrue(Double.isNaN(StatUtils.mean(values)),
+                   "Mean of n = 0 set should be NaN");
+        assertTrue(Double.isNaN(StatUtils.variance(values)),
+                   "Variance of n = 0 set should be NaN");
 
         values = new double[] { ONE };
 
-        assertEquals("Mean of n = 1 set should be value of single item n1", ONE,
-                     StatUtils.mean(values), 0.0);
-        assertEquals("Variance of n = 1 set should be zero", 0,
-                     StatUtils.variance(values), 0.0);
+        assertEquals(ONE,
+                     StatUtils.mean(values), 0.0, "Mean of n = 1 set should be value of single item n1");
+        assertEquals(0,
+                     StatUtils.variance(values), 0.0, "Variance of n = 1 set should be zero");
     }
 
     @Test
     public void testArrayIndexConditions() {
         double[] values = { 1.0, 2.0, 3.0, 4.0 };
 
-        assertEquals("Sum not expected", 5.0, StatUtils.sum(values, 1, 2), Double.MIN_VALUE);
-        assertEquals("Sum not expected", 3.0, StatUtils.sum(values, 0, 2), Double.MIN_VALUE);
-        assertEquals("Sum not expected", 7.0, StatUtils.sum(values, 2, 2), Double.MIN_VALUE);
+        assertEquals(5.0, StatUtils.sum(values, 1, 2), Double.MIN_VALUE, "Sum not expected");
+        assertEquals(3.0, StatUtils.sum(values, 0, 2), Double.MIN_VALUE, "Sum not expected");
+        assertEquals(7.0, StatUtils.sum(values, 2, 2), Double.MIN_VALUE, "Sum not expected");
 
         try {
             StatUtils.sum(values, 2, 3);

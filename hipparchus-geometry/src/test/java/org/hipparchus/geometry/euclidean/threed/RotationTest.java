@@ -28,8 +28,8 @@ import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
@@ -47,15 +47,15 @@ public class RotationTest {
 
                 // first singularity
                 Rotation singularPlus = new Rotation(order, convention, 0.0, MathUtils.SEMI_PI, 0.125);
-                Assert.assertEquals(0.0, singularPlus.getAngles(order, convention)[0], 1.0e-16);
-                Assert.assertEquals(MathUtils.SEMI_PI, singularPlus.getAngles(order, convention)[1], 1.0e-16);
-                Assert.assertEquals(0.125, singularPlus.getAngles(order, convention)[2], 1.0e-16);
+                Assertions.assertEquals(0.0, singularPlus.getAngles(order, convention)[0], 1.0e-16);
+                Assertions.assertEquals(MathUtils.SEMI_PI, singularPlus.getAngles(order, convention)[1], 1.0e-16);
+                Assertions.assertEquals(0.125, singularPlus.getAngles(order, convention)[2], 1.0e-16);
 
                 // second singularity
                 Rotation singularMinus = new Rotation(order, convention, 0.0, -MathUtils.SEMI_PI, 0.125);
-                Assert.assertEquals(0.0, singularMinus.getAngles(order, convention)[0], 1.0e-16);
-                Assert.assertEquals(-MathUtils.SEMI_PI, singularMinus.getAngles(order, convention)[1], 1.0e-16);
-                Assert.assertEquals(0.125, singularMinus.getAngles(order, convention)[2], 1.0e-16);
+                Assertions.assertEquals(0.0, singularMinus.getAngles(order, convention)[0], 1.0e-16);
+                Assertions.assertEquals(-MathUtils.SEMI_PI, singularMinus.getAngles(order, convention)[1], 1.0e-16);
+                Assertions.assertEquals(0.125, singularMinus.getAngles(order, convention)[2], 1.0e-16);
 
             }
         }
@@ -73,15 +73,15 @@ public class RotationTest {
 
                 // first singularity
                 Rotation singularZero = new Rotation(order, convention, 0.125, 0.0, 0.0);
-                Assert.assertEquals(0.125, singularZero.getAngles(order, convention)[0], 1.0e-16);
-                Assert.assertEquals(0.0, singularZero.getAngles(order, convention)[1], 1.0e-16);
-                Assert.assertEquals(0.0, singularZero.getAngles(order, convention)[2], 1.0e-16);
+                Assertions.assertEquals(0.125, singularZero.getAngles(order, convention)[0], 1.0e-16);
+                Assertions.assertEquals(0.0, singularZero.getAngles(order, convention)[1], 1.0e-16);
+                Assertions.assertEquals(0.0, singularZero.getAngles(order, convention)[2], 1.0e-16);
 
                 // second singularity
                 Rotation singularPi = new Rotation(order, convention, 0.125, FastMath.PI, 0.0);
-                Assert.assertEquals(0.125, singularPi.getAngles(order, convention)[0], 1.0e-16);
-                Assert.assertEquals(FastMath.PI, singularPi.getAngles(order, convention)[1], 1.0e-16);
-                Assert.assertEquals(0.0, singularPi.getAngles(order, convention)[2], 1.0e-16);
+                Assertions.assertEquals(0.125, singularPi.getAngles(order, convention)[0], 1.0e-16);
+                Assertions.assertEquals(FastMath.PI, singularPi.getAngles(order, convention)[1], 1.0e-16);
+                Assertions.assertEquals(0.0, singularPi.getAngles(order, convention)[2], 1.0e-16);
 
             }
         }
@@ -124,9 +124,9 @@ public class RotationTest {
 
     try {
       new Rotation(new Vector3D(0, 0, 0), 2 * FastMath.PI / 3, RotationConvention.VECTOR_OPERATOR);
-      Assert.fail("an exception should have been thrown");
+      Assertions.fail("an exception should have been thrown");
     } catch (MathIllegalArgumentException e) {
-        Assert.assertEquals(LocalizedGeometryFormats.ZERO_NORM_FOR_ROTATION_AXIS, e.getSpecifier());
+        Assertions.assertEquals(LocalizedGeometryFormats.ZERO_NORM_FOR_ROTATION_AXIS, e.getSpecifier());
     }
 
     r = new Rotation(Vector3D.PLUS_K, 1.5 * FastMath.PI, RotationConvention.VECTOR_OPERATOR);
@@ -158,9 +158,9 @@ public class RotationTest {
 
     try {
       new Rotation(new Vector3D(0, 0, 0), 2 * FastMath.PI / 3, RotationConvention.FRAME_TRANSFORM);
-      Assert.fail("an exception should have been thrown");
+      Assertions.fail("an exception should have been thrown");
     } catch (MathIllegalArgumentException e) {
-        Assert.assertEquals(LocalizedGeometryFormats.ZERO_NORM_FOR_ROTATION_AXIS, e.getSpecifier());
+        Assertions.assertEquals(LocalizedGeometryFormats.ZERO_NORM_FOR_ROTATION_AXIS, e.getSpecifier());
     }
 
     r = new Rotation(Vector3D.PLUS_K, 1.5 * FastMath.PI, RotationConvention.FRAME_TRANSFORM);
@@ -189,9 +189,9 @@ public class RotationTest {
   private void checkWrongMatrix(final double[][] m) {
       try {
           new Rotation(m, 0.001);
-          Assert.fail("an exception should have been thrown");
+          Assertions.fail("an exception should have been thrown");
       } catch (MathIllegalArgumentException miae) {
-          Assert.assertEquals(LocalizedGeometryFormats.ROTATION_MATRIX_DIMENSIONS, miae.getSpecifier());
+          Assertions.assertEquals(LocalizedGeometryFormats.ROTATION_MATRIX_DIMENSIONS, miae.getSpecifier());
       }
   }
 
@@ -201,8 +201,8 @@ public class RotationTest {
     Rotation reverted = r.revert();
     checkRotation(r.compose(reverted, RotationConvention.VECTOR_OPERATOR), 1, 0, 0, 0);
     checkRotation(reverted.compose(r, RotationConvention.VECTOR_OPERATOR), 1, 0, 0, 0);
-    Assert.assertEquals(r.getAngle(), reverted.getAngle(), 1.0e-12);
-    Assert.assertEquals(-1,
+    Assertions.assertEquals(r.getAngle(), reverted.getAngle(), 1.0e-12);
+    Assertions.assertEquals(-1,
                         Vector3D.dotProduct(r.getAxis(RotationConvention.VECTOR_OPERATOR),
                                            reverted.getAxis(RotationConvention.VECTOR_OPERATOR)),
                         1.0e-12);
@@ -214,8 +214,8 @@ public class RotationTest {
     Rotation reverted = r.revert();
     checkRotation(r.compose(reverted, RotationConvention.FRAME_TRANSFORM), 1, 0, 0, 0);
     checkRotation(reverted.compose(r, RotationConvention.FRAME_TRANSFORM), 1, 0, 0, 0);
-    Assert.assertEquals(r.getAngle(), reverted.getAngle(), 1.0e-12);
-    Assert.assertEquals(-1,
+    Assertions.assertEquals(r.getAngle(), reverted.getAngle(), 1.0e-12);
+    Assertions.assertEquals(-1,
                         Vector3D.dotProduct(r.getAxis(RotationConvention.FRAME_TRANSFORM),
                                            reverted.getAxis(RotationConvention.FRAME_TRANSFORM)),
                         1.0e-12);
@@ -233,7 +233,7 @@ public class RotationTest {
 
     try {
         new Rotation(u, Vector3D.ZERO);
-        Assert.fail("an exception should have been thrown");
+        Assertions.fail("an exception should have been thrown");
     } catch (MathRuntimeException e) {
         // expected behavior
     }
@@ -273,7 +273,7 @@ public class RotationTest {
 
     try {
         new Rotation(u1, u2, Vector3D.ZERO, v2);
-        Assert.fail("an exception should have been thrown");
+        Assertions.fail("an exception should have been thrown");
     } catch (MathRuntimeException e) {
       // expected behavior
     }
@@ -289,7 +289,7 @@ public class RotationTest {
                      { 0.0, 1.0, 0.0 },
                      { 1.0, 0.0, 0.0 }
                    }, 1.0e-7);
-      Assert.fail("Expecting MathIllegalArgumentException");
+      Assertions.fail("Expecting MathIllegalArgumentException");
     } catch (MathIllegalArgumentException nrme) {
       // expected behavior
     }
@@ -300,7 +300,7 @@ public class RotationTest {
                      {  0.821760, -0.184320,  0.539200 },
                      { -0.354816,  0.574912,  0.737280 }
                    }, 1.0e-7);
-      Assert.fail("Expecting MathIllegalArgumentException");
+      Assertions.fail("Expecting MathIllegalArgumentException");
     } catch (MathIllegalArgumentException nrme) {
       // expected behavior
     }
@@ -311,7 +311,7 @@ public class RotationTest {
                        { -0.4,  0.6,  0.7 },
                        {  0.8, -0.2,  0.5 }
                      }, 1.0e-15);
-        Assert.fail("Expecting MathIllegalArgumentException");
+        Assertions.fail("Expecting MathIllegalArgumentException");
       } catch (MathIllegalArgumentException nrme) {
         // expected behavior
       }
@@ -368,25 +368,25 @@ public class RotationTest {
     double d21 = m2[2][1] - m3[2][1];
     double d22 = m2[2][2] - m3[2][2];
 
-    Assert.assertTrue(FastMath.abs(d00) < 6.0e-6);
-    Assert.assertTrue(FastMath.abs(d01) < 6.0e-6);
-    Assert.assertTrue(FastMath.abs(d02) < 6.0e-6);
-    Assert.assertTrue(FastMath.abs(d10) < 6.0e-6);
-    Assert.assertTrue(FastMath.abs(d11) < 6.0e-6);
-    Assert.assertTrue(FastMath.abs(d12) < 6.0e-6);
-    Assert.assertTrue(FastMath.abs(d20) < 6.0e-6);
-    Assert.assertTrue(FastMath.abs(d21) < 6.0e-6);
-    Assert.assertTrue(FastMath.abs(d22) < 6.0e-6);
+    Assertions.assertTrue(FastMath.abs(d00) < 6.0e-6);
+    Assertions.assertTrue(FastMath.abs(d01) < 6.0e-6);
+    Assertions.assertTrue(FastMath.abs(d02) < 6.0e-6);
+    Assertions.assertTrue(FastMath.abs(d10) < 6.0e-6);
+    Assertions.assertTrue(FastMath.abs(d11) < 6.0e-6);
+    Assertions.assertTrue(FastMath.abs(d12) < 6.0e-6);
+    Assertions.assertTrue(FastMath.abs(d20) < 6.0e-6);
+    Assertions.assertTrue(FastMath.abs(d21) < 6.0e-6);
+    Assertions.assertTrue(FastMath.abs(d22) < 6.0e-6);
 
-    Assert.assertTrue(FastMath.abs(d00) > 4.0e-7);
-    Assert.assertTrue(FastMath.abs(d01) > 4.0e-7);
-    Assert.assertTrue(FastMath.abs(d02) > 4.0e-7);
-    Assert.assertTrue(FastMath.abs(d10) > 4.0e-7);
-    Assert.assertTrue(FastMath.abs(d11) > 4.0e-7);
-    Assert.assertTrue(FastMath.abs(d12) > 4.0e-7);
-    Assert.assertTrue(FastMath.abs(d20) > 4.0e-7);
-    Assert.assertTrue(FastMath.abs(d21) > 4.0e-7);
-    Assert.assertTrue(FastMath.abs(d22) > 4.0e-7);
+    Assertions.assertTrue(FastMath.abs(d00) > 4.0e-7);
+    Assertions.assertTrue(FastMath.abs(d01) > 4.0e-7);
+    Assertions.assertTrue(FastMath.abs(d02) > 4.0e-7);
+    Assertions.assertTrue(FastMath.abs(d10) > 4.0e-7);
+    Assertions.assertTrue(FastMath.abs(d11) > 4.0e-7);
+    Assertions.assertTrue(FastMath.abs(d12) > 4.0e-7);
+    Assertions.assertTrue(FastMath.abs(d20) > 4.0e-7);
+    Assertions.assertTrue(FastMath.abs(d21) > 4.0e-7);
+    Assertions.assertTrue(FastMath.abs(d22) > 4.0e-7);
 
     for (int i = 0; i < 3; ++i) {
       for (int j = 0; j < 3; ++j) {
@@ -394,9 +394,9 @@ public class RotationTest {
                      + m3[i][1] * m3[j][1]
                      + m3[i][2] * m3[j][2];
         if (i == j) {
-          Assert.assertTrue(FastMath.abs(m3tm3 - 1.0) < 1.0e-10);
+          Assertions.assertTrue(FastMath.abs(m3tm3 - 1.0) < 1.0e-10);
         } else {
-          Assert.assertTrue(FastMath.abs(m3tm3) < 1.0e-10);
+          Assertions.assertTrue(FastMath.abs(m3tm3) < 1.0e-10);
         }
       }
     }
@@ -419,7 +419,7 @@ public class RotationTest {
                         { 0.0, 1.0, 0.0 },
                         { 1.0, 0.0, 0.0 } };
       r = new Rotation(m5, 1.0e-7);
-      Assert.fail("got " + r + ", should have caught an exception");
+      Assertions.fail("got " + r + ", should have caught an exception");
     } catch (MathIllegalArgumentException e) {
       // expected
     }
@@ -489,7 +489,7 @@ public class RotationTest {
           for (int i = 0; i < CardanOrders.length; ++i) {
               for (int j = 0; j < singularCardanAngle.length; ++j) {
                   Rotation r = new Rotation(CardanOrders[i], convention, 0.1, singularCardanAngle[j], 0.3);
-                  Assert.assertEquals(singularCardanAngle[j], r.getAngles(CardanOrders[i], convention)[1], 4.5e-16);
+                  Assertions.assertEquals(singularCardanAngle[j], r.getAngles(CardanOrders[i], convention)[1], 4.5e-16);
               }
           }
 
@@ -502,7 +502,7 @@ public class RotationTest {
           for (int i = 0; i < EulerOrders.length; ++i) {
               for (int j = 0; j < singularEulerAngle.length; ++j) {
                   Rotation r = new Rotation(EulerOrders[i], convention, 0.1, singularEulerAngle[j], 0.3);
-                  Assert.assertEquals(singularEulerAngle[j],  r.getAngles(EulerOrders[i], convention)[1], 1.0e-24);
+                  Assertions.assertEquals(singularEulerAngle[j],  r.getAngles(EulerOrders[i], convention)[1], 1.0e-24);
               }
           }
       }
@@ -575,7 +575,7 @@ public class RotationTest {
     Rotation r2 = new Rotation(new Vector3D(-1, 3, 2), 0.3, RotationConvention.FRAME_TRANSFORM);
     Rotation r3 = r2.compose(r1, RotationConvention.FRAME_TRANSFORM);
     Rotation r4 = r1.compose(r2, RotationConvention.VECTOR_OPERATOR);
-    Assert.assertEquals(0.0, Rotation.distance(r3, r4), 1.0e-15);
+    Assertions.assertEquals(0.0, Rotation.distance(r3, r4), 1.0e-15);
 
     for (double x = -0.9; x < 0.9; x += 0.2) {
       for (double y = -0.9; y < 0.9; y += 0.2) {
@@ -631,7 +631,7 @@ public class RotationTest {
     Rotation r2 = new Rotation(new Vector3D(-1, 3, 2), 0.3, RotationConvention.FRAME_TRANSFORM);
     Rotation r3 = r2.composeInverse(r1, RotationConvention.FRAME_TRANSFORM);
     Rotation r4 = r1.revert().composeInverse(r2.revert(), RotationConvention.VECTOR_OPERATOR);
-    Assert.assertEquals(0.0, Rotation.distance(r3, r4), 1.0e-15);
+    Assertions.assertEquals(0.0, Rotation.distance(r3, r4), 1.0e-15);
 
     for (double x = -0.9; x < 0.9; x += 0.2) {
       for (double y = -0.9; y < 0.9; y += 0.2) {
@@ -656,13 +656,13 @@ public class RotationTest {
                   Vector3D v = r.applyTo(u);
                   double[] inOut = new double[] { x, y, z };
                   r.applyTo(inOut, inOut);
-                  Assert.assertEquals(v.getX(), inOut[0], 1.0e-10);
-                  Assert.assertEquals(v.getY(), inOut[1], 1.0e-10);
-                  Assert.assertEquals(v.getZ(), inOut[2], 1.0e-10);
+                  Assertions.assertEquals(v.getX(), inOut[0], 1.0e-10);
+                  Assertions.assertEquals(v.getY(), inOut[1], 1.0e-10);
+                  Assertions.assertEquals(v.getZ(), inOut[2], 1.0e-10);
                   r.applyInverseTo(inOut, inOut);
-                  Assert.assertEquals(u.getX(), inOut[0], 1.0e-10);
-                  Assert.assertEquals(u.getY(), inOut[1], 1.0e-10);
-                  Assert.assertEquals(u.getZ(), inOut[2], 1.0e-10);
+                  Assertions.assertEquals(u.getX(), inOut[0], 1.0e-10);
+                  Assertions.assertEquals(u.getY(), inOut[1], 1.0e-10);
+                  Assertions.assertEquals(u.getZ(), inOut[2], 1.0e-10);
               }
           }
       }
@@ -717,10 +717,10 @@ public class RotationTest {
                                  -2275058564560979.0 /    1048576.0,
                                   4423475992255071.0 /      65536.0);
       Rotation rot = new Rotation(u1, u2, Vector3D.PLUS_I,Vector3D.PLUS_K);
-      Assert.assertEquals( 0.6228370359608200639829222, rot.getQ0(), 1.0e-15);
-      Assert.assertEquals( 0.0257707621456498790029987, rot.getQ1(), 1.0e-15);
-      Assert.assertEquals(-0.0000000002503012255839931, rot.getQ2(), 1.0e-15);
-      Assert.assertEquals(-0.7819270390861109450724902, rot.getQ3(), 1.0e-15);
+      Assertions.assertEquals( 0.6228370359608200639829222, rot.getQ0(), 1.0e-15);
+      Assertions.assertEquals( 0.0257707621456498790029987, rot.getQ1(), 1.0e-15);
+      Assertions.assertEquals(-0.0000000002503012255839931, rot.getQ2(), 1.0e-15);
+      Assertions.assertEquals(-0.7819270390861109450724902, rot.getQ3(), 1.0e-15);
   }
 
   @Test
@@ -736,9 +736,9 @@ public class RotationTest {
                   quat.getQ1() * quat.getQ1() +
                   quat.getQ2() * quat.getQ2() +
                   quat.getQ3() * quat.getQ3();
-      Assert.assertEquals(1.0, q2, 1.0e-14);
-      Assert.assertEquals(0.0, Vector3D.angle(v1, quat.applyTo(u1)), 1.0e-14);
-      Assert.assertEquals(0.0, Vector3D.angle(v2, quat.applyTo(u2)), 1.0e-14);
+      Assertions.assertEquals(1.0, q2, 1.0e-14);
+      Assertions.assertEquals(0.0, Vector3D.angle(v1, quat.applyTo(u1)), 1.0e-14);
+      Assertions.assertEquals(0.0, Vector3D.angle(v2, quat.applyTo(u2)), 1.0e-14);
 
   }
 
@@ -756,9 +756,9 @@ public class RotationTest {
 
       final Vector3D bad = new Rotation(order, RotationConvention.FRAME_TRANSFORM, zRotation, yRotation, xRotation).applyTo(startingVector);
 
-      Assert.assertEquals(bad.getX(), appliedIndividually.getX(), 1e-12);
-      Assert.assertEquals(bad.getY(), appliedIndividually.getY(), 1e-12);
-      Assert.assertEquals(bad.getZ(), appliedIndividually.getZ(), 1e-12);
+      Assertions.assertEquals(bad.getX(), appliedIndividually.getX(), 1e-12);
+      Assertions.assertEquals(bad.getY(), appliedIndividually.getY(), 1e-12);
+      Assertions.assertEquals(bad.getZ(), appliedIndividually.getZ(), 1e-12);
   }
 
   @Test
@@ -781,21 +781,21 @@ public class RotationTest {
                                             RotationConvention.FRAME_TRANSFORM);
       final Vector3D good = composite.applyTo(startingVector);
 
-      Assert.assertEquals(good.getX(), appliedIndividually.getX(), 1e-12);
-      Assert.assertEquals(good.getY(), appliedIndividually.getY(), 1e-12);
-      Assert.assertEquals(good.getZ(), appliedIndividually.getZ(), 1e-12);
+      Assertions.assertEquals(good.getX(), appliedIndividually.getX(), 1e-12);
+      Assertions.assertEquals(good.getY(), appliedIndividually.getY(), 1e-12);
+      Assertions.assertEquals(good.getZ(), appliedIndividually.getZ(), 1e-12);
   }
 
   private void checkVector(Vector3D v1, Vector3D v2) {
-    Assert.assertTrue(v1.subtract(v2).getNorm() < 1.0e-10);
+    Assertions.assertTrue(v1.subtract(v2).getNorm() < 1.0e-10);
   }
 
   private void checkAngle(double a1, double a2) {
-    Assert.assertEquals(a1, MathUtils.normalizeAngle(a2, a1), 1.0e-10);
+    Assertions.assertEquals(a1, MathUtils.normalizeAngle(a2, a1), 1.0e-10);
   }
 
   private void checkRotation(Rotation r, double q0, double q1, double q2, double q3) {
-    Assert.assertEquals(0, Rotation.distance(r, new Rotation(q0, q1, q2, q3, false)), 1.0e-12);
+    Assertions.assertEquals(0, Rotation.distance(r, new Rotation(q0, q1, q2, q3, false)), 1.0e-12);
   }
 
 }

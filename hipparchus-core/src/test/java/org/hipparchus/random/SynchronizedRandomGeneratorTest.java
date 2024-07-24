@@ -21,6 +21,9 @@
  */
 package org.hipparchus.random;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -28,9 +31,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 public class SynchronizedRandomGeneratorTest {
 
@@ -49,19 +49,19 @@ public class SynchronizedRandomGeneratorTest {
             orig.nextBytes(bOrig);
             wrap.nextBytes(bWrap);
             for (int k = 0; k < bSize; k++) {
-                Assert.assertEquals(bOrig[k], bWrap[k]);
+                Assertions.assertEquals(bOrig[k], bWrap[k]);
             }
 
-            Assert.assertEquals(orig.nextInt(), wrap.nextInt());
+            Assertions.assertEquals(orig.nextInt(), wrap.nextInt());
 
             final int range = (i + 1) * 89;
-            Assert.assertEquals(orig.nextInt(range), wrap.nextInt(range));
+            Assertions.assertEquals(orig.nextInt(range), wrap.nextInt(range));
 
-            Assert.assertEquals(orig.nextLong(), wrap.nextLong());
-            Assert.assertEquals(orig.nextBoolean(), wrap.nextBoolean());
-            Assert.assertEquals(orig.nextFloat(), wrap.nextFloat(), 0);
-            Assert.assertEquals(orig.nextDouble(), wrap.nextDouble(), 0);
-            Assert.assertEquals(orig.nextGaussian(), wrap.nextGaussian(), 0);
+            Assertions.assertEquals(orig.nextLong(), wrap.nextLong());
+            Assertions.assertEquals(orig.nextBoolean(), wrap.nextBoolean());
+            Assertions.assertEquals(orig.nextFloat(), wrap.nextFloat(), 0);
+            Assertions.assertEquals(orig.nextDouble(), wrap.nextDouble(), 0);
+            Assertions.assertEquals(orig.nextGaussian(), wrap.nextGaussian(), 0);
 
         }
     }
@@ -80,7 +80,7 @@ public class SynchronizedRandomGeneratorTest {
                               numberOfSamples);
             }
         } catch (InterruptedException e) {
-            Assert.fail(e.getMessage());
+            Assertions.fail(e.getMessage());
         } catch (ExecutionException e) {
             throw e.getCause();
         }

@@ -22,14 +22,20 @@
 package org.hipparchus.analysis.polynomials;
 
 import org.hipparchus.CalculusFieldElement;
-import org.hipparchus.analysis.differentiation.*;
+import org.hipparchus.analysis.differentiation.DSFactory;
+import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.Gradient;
+import org.hipparchus.analysis.differentiation.UnivariateDerivative1;
+import org.hipparchus.analysis.differentiation.UnivariateDerivative2;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests the FieldPolynomialFunction implementation of a UnivariateFunction.
@@ -50,16 +56,16 @@ public final class FieldPolynomialFunctionTest {
         FieldPolynomialFunction<Binary64> f = buildD64(c0);
 
         // verify that we are equal to c[0] at several (nonsymmetric) places
-        Assert.assertEquals(c0, f.value(0).getReal(), tolerance);
-        Assert.assertEquals(c0, f.value(-1).getReal(), tolerance);
-        Assert.assertEquals(c0, f.value(-123.5).getReal(), tolerance);
-        Assert.assertEquals(c0, f.value(3).getReal(), tolerance);
-        Assert.assertEquals(c0, f.value(new Binary64(456.89)).getReal(), tolerance);
+        Assertions.assertEquals(c0, f.value(0).getReal(), tolerance);
+        Assertions.assertEquals(c0, f.value(-1).getReal(), tolerance);
+        Assertions.assertEquals(c0, f.value(-123.5).getReal(), tolerance);
+        Assertions.assertEquals(c0, f.value(3).getReal(), tolerance);
+        Assertions.assertEquals(c0, f.value(new Binary64(456.89)).getReal(), tolerance);
 
-        Assert.assertEquals(0, f.degree());
-        Assert.assertEquals(0, f.polynomialDerivative().value(0).getReal(), tolerance);
+        Assertions.assertEquals(0, f.degree());
+        Assertions.assertEquals(0, f.polynomialDerivative().value(0).getReal(), tolerance);
 
-        Assert.assertEquals(0, f.polynomialDerivative().polynomialDerivative().value(0).getReal(), tolerance);
+        Assertions.assertEquals(0, f.polynomialDerivative().polynomialDerivative().value(0).getReal(), tolerance);
     }
 
     /**
@@ -76,18 +82,18 @@ public final class FieldPolynomialFunctionTest {
        FieldPolynomialFunction<Binary64> f = buildD64(-1.5, 3);
 
         // verify that we are equal to c[0] when x=0
-        Assert.assertEquals(-1.5, f.value(new Binary64(0)).getReal(), tolerance);
+        Assertions.assertEquals(-1.5, f.value(new Binary64(0)).getReal(), tolerance);
 
         // now check a few other places
-        Assert.assertEquals(-4.5, f.value(new Binary64(-1)).getReal(), tolerance);
-        Assert.assertEquals(-9, f.value(new Binary64(-2.5)).getReal(), tolerance);
-        Assert.assertEquals(0, f.value(new Binary64(0.5)).getReal(), tolerance);
-        Assert.assertEquals(3, f.value(new Binary64(1.5)).getReal(), tolerance);
-        Assert.assertEquals(7.5, f.value(new Binary64(3)).getReal(), tolerance);
+        Assertions.assertEquals(-4.5, f.value(new Binary64(-1)).getReal(), tolerance);
+        Assertions.assertEquals(-9, f.value(new Binary64(-2.5)).getReal(), tolerance);
+        Assertions.assertEquals(0, f.value(new Binary64(0.5)).getReal(), tolerance);
+        Assertions.assertEquals(3, f.value(new Binary64(1.5)).getReal(), tolerance);
+        Assertions.assertEquals(7.5, f.value(new Binary64(3)).getReal(), tolerance);
 
-        Assert.assertEquals(1, f.degree());
+        Assertions.assertEquals(1, f.degree());
 
-        Assert.assertEquals(0, f.polynomialDerivative().polynomialDerivative().value(0).getReal(), tolerance);
+        Assertions.assertEquals(0, f.polynomialDerivative().polynomialDerivative().value(0).getReal(), tolerance);
     }
 
     /**
@@ -99,14 +105,14 @@ public final class FieldPolynomialFunctionTest {
         FieldPolynomialFunction<Binary64> f = buildD64(-2, -3, 2);
 
         // verify that we are equal to c[0] when x=0
-        Assert.assertEquals(-2, f.value(0).getReal(), tolerance);
+        Assertions.assertEquals(-2, f.value(0).getReal(), tolerance);
 
         // now check a few other places
-        Assert.assertEquals(0, f.value(-0.5).getReal(), tolerance);
-        Assert.assertEquals(0, f.value(2).getReal(), tolerance);
-        Assert.assertEquals(-2, f.value(1.5).getReal(), tolerance);
-        Assert.assertEquals(7, f.value(-1.5).getReal(), tolerance);
-        Assert.assertEquals(265.5312, f.value(12.34).getReal(), tolerance);
+        Assertions.assertEquals(0, f.value(-0.5).getReal(), tolerance);
+        Assertions.assertEquals(0, f.value(2).getReal(), tolerance);
+        Assertions.assertEquals(-2, f.value(1.5).getReal(), tolerance);
+        Assertions.assertEquals(7, f.value(-1.5).getReal(), tolerance);
+        Assertions.assertEquals(265.5312, f.value(12.34).getReal(), tolerance);
     }
 
     /**
@@ -118,16 +124,16 @@ public final class FieldPolynomialFunctionTest {
         FieldPolynomialFunction<Binary64> f = buildD64(0, 0, 15, -13, -3, 1);
 
         // verify that we are equal to c[0] when x=0
-        Assert.assertEquals(0, f.value(0).getReal(), tolerance);
+        Assertions.assertEquals(0, f.value(0).getReal(), tolerance);
 
         // now check a few other places
-        Assert.assertEquals(0, f.value(5).getReal(), tolerance);
-        Assert.assertEquals(0, f.value(1).getReal(), tolerance);
-        Assert.assertEquals(0, f.value(-3).getReal(), tolerance);
-        Assert.assertEquals(54.84375, f.value(-1.5).getReal(), tolerance);
-        Assert.assertEquals(-8.06637, f.value(1.3).getReal(), tolerance);
+        Assertions.assertEquals(0, f.value(5).getReal(), tolerance);
+        Assertions.assertEquals(0, f.value(1).getReal(), tolerance);
+        Assertions.assertEquals(0, f.value(-3).getReal(), tolerance);
+        Assertions.assertEquals(54.84375, f.value(-1.5).getReal(), tolerance);
+        Assertions.assertEquals(-8.06637, f.value(1.3).getReal(), tolerance);
 
-        Assert.assertEquals(5, f.degree());
+        Assertions.assertEquals(5, f.degree());
     }
 
     /**
@@ -148,15 +154,15 @@ public final class FieldPolynomialFunctionTest {
         FieldPolynomialFunction<Binary64> h = buildD64(h_coeff);
 
         // compare f' = g
-        Assert.assertEquals(f.polynomialDerivative().value(0).getReal(), g.value(0).getReal(), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(1).getReal(), g.value(1).getReal(), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(100).getReal(), g.value(100).getReal(), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(4.1).getReal(), g.value(4.1).getReal(), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(-3.25).getReal(), g.value(-3.25).getReal(), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(0).getReal(), g.value(0).getReal(), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(1).getReal(), g.value(1).getReal(), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(100).getReal(), g.value(100).getReal(), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(4.1).getReal(), g.value(4.1).getReal(), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(-3.25).getReal(), g.value(-3.25).getReal(), tolerance);
 
         // compare g' = h
-        Assert.assertEquals(g.polynomialDerivative().value(FastMath.PI).getReal(), h.value(FastMath.PI).getReal(), tolerance);
-        Assert.assertEquals(g.polynomialDerivative().value(FastMath.E).getReal(),  h.value(FastMath.E).getReal(),  tolerance);
+        Assertions.assertEquals(g.polynomialDerivative().value(FastMath.PI).getReal(), h.value(FastMath.PI).getReal(), tolerance);
+        Assertions.assertEquals(g.polynomialDerivative().value(FastMath.E).getReal(),  h.value(FastMath.E).getReal(),  tolerance);
     }
 
     @Test
@@ -171,7 +177,7 @@ public final class FieldPolynomialFunctionTest {
         p1 = buildD64( 1, -4, 2 );
         p2 = buildD64( -1, 3, -2 );
         p1 = p1.add(p2);
-        Assert.assertEquals(1, p1.degree());
+        Assertions.assertEquals(1, p1.degree());
         checkCoeffs(Double.MIN_VALUE, p1, 0, -1);
     }
 
@@ -187,7 +193,7 @@ public final class FieldPolynomialFunctionTest {
         p1 = buildD64( 1, -4, 2 );
         p2 = buildD64( -1, 3, 2 );
         p1 = p1.subtract(p2);
-        Assert.assertEquals(1, p1.degree());
+        Assertions.assertEquals(1, p1.degree());
         checkCoeffs(Double.MIN_VALUE, p1, 2, -7);
     }
 
@@ -225,15 +231,15 @@ public final class FieldPolynomialFunctionTest {
         FieldPolynomialFunction<Binary64> h = buildD64(h_coeff);
 
         // compare f' = g
-        Assert.assertEquals(f.polynomialDerivative().value(0).getReal(), g.value(0).getReal(), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(1).getReal(), g.value(1).getReal(), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(100).getReal(), g.value(100).getReal(), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(4.1).getReal(), g.value(4.1).getReal(), tolerance);
-        Assert.assertEquals(f.polynomialDerivative().value(-3.25).getReal(), g.value(-3.25).getReal(), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(0).getReal(), g.value(0).getReal(), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(1).getReal(), g.value(1).getReal(), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(100).getReal(), g.value(100).getReal(), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(4.1).getReal(), g.value(4.1).getReal(), tolerance);
+        Assertions.assertEquals(f.polynomialDerivative().value(-3.25).getReal(), g.value(-3.25).getReal(), tolerance);
 
         // compare g' = h
-        Assert.assertEquals(g.polynomialDerivative().value(FastMath.PI).getReal(), h.value(FastMath.PI).getReal(), tolerance);
-        Assert.assertEquals(g.polynomialDerivative().value(FastMath.E).getReal(),  h.value(FastMath.E).getReal(),  tolerance);
+        Assertions.assertEquals(g.polynomialDerivative().value(FastMath.PI).getReal(), h.value(FastMath.PI).getReal(), tolerance);
+        Assertions.assertEquals(g.polynomialDerivative().value(FastMath.E).getReal(),  h.value(FastMath.E).getReal(),  tolerance);
     }
 
     @Test
@@ -281,25 +287,29 @@ public final class FieldPolynomialFunctionTest {
         // -x^2
         final double[] coeff = {0, 0, -1};
         final FieldPolynomialFunction<Binary64> p = buildD64(coeff);
-        Assert.assertEquals(-2d/3d, p.integrate(-1, 1).getReal(),Double.MIN_VALUE);
+        Assertions.assertEquals(-2d/3d, p.integrate(-1, 1).getReal(),Double.MIN_VALUE);
 
         // x(x-1)(x+1) - should integrate to 0 over [-1,1]
         final FieldPolynomialFunction<Binary64> p2 = buildD64(0, 1).
                                                       multiply(buildD64(-1, 1)).
                                                       multiply(buildD64(1, 1));
-        Assert.assertEquals(0, p2.integrate(-1, 1).getReal(), Double.MIN_VALUE);
+        Assertions.assertEquals(0, p2.integrate(-1, 1).getReal(), Double.MIN_VALUE);
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testIntegrateInfiniteBounds() {
-        final FieldPolynomialFunction<Binary64> p = buildD64(1);
-        p.integrate(0, Double.POSITIVE_INFINITY);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final FieldPolynomialFunction<Binary64> p = buildD64(1);
+            p.integrate(0, Double.POSITIVE_INFINITY);
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testIntegrateBadInterval() {
-        final FieldPolynomialFunction<Binary64> p = buildD64(1);
-        p.integrate(0, -1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final FieldPolynomialFunction<Binary64> p = buildD64(1);
+            p.integrate(0, -1);
+        });
     }
 
     @Test
@@ -339,33 +349,33 @@ public final class FieldPolynomialFunctionTest {
 
     private <T extends CalculusFieldElement<T>> void templateIssue259DisappearingCoefficients(T[] coefficients) {
         final FieldPolynomialFunction<T> polynomialFunction = new FieldPolynomialFunction<>(coefficients);
-        Assert.assertEquals(coefficients.length, polynomialFunction.getCoefficients().length);
+        Assertions.assertEquals(coefficients.length, polynomialFunction.getCoefficients().length);
         for (int i = 0; i < coefficients.length; i++) {
-            Assert.assertEquals(coefficients[i], polynomialFunction.getCoefficients()[i]);
+            Assertions.assertEquals(coefficients[i], polynomialFunction.getCoefficients()[i]);
         }
     }
 
     private <T extends CalculusFieldElement<T>> void checkInverseDifferentiation(FieldPolynomialFunction<T> p) {
         final T[] c0 = p.getCoefficients();
         final T[] c1 = p.antiDerivative().polynomialDerivative().getCoefficients();
-        Assert.assertEquals(c0.length, c1.length);
+        Assertions.assertEquals(c0.length, c1.length);
         for (int i = 0; i < c0.length; ++i) {
-            Assert.assertEquals(c0[i].getReal(), c1[i].getReal(), 1e-12);
+            Assertions.assertEquals(c0[i].getReal(), c1[i].getReal(), 1e-12);
         }
     }
 
     private <T extends CalculusFieldElement<T>> void checkCoeffs(final double tolerance, final FieldPolynomialFunction<T> p,
                                                                  final double... ref) {
         final T[] c = p.getCoefficients();
-        Assert.assertEquals(ref.length, c.length);
+        Assertions.assertEquals(ref.length, c.length);
         for (int i = 0; i < ref.length; ++i) {
-            Assert.assertEquals(ref[i], c[i].getReal(), tolerance);
+            Assertions.assertEquals(ref[i], c[i].getReal(), tolerance);
         }
     }
 
     private <T extends CalculusFieldElement<T>> void checkNullPolynomial(FieldPolynomialFunction<T> p) {
         for (T coefficient : p.getCoefficients()) {
-            Assert.assertEquals(0, coefficient.getReal(), 1e-15);
+            Assertions.assertEquals(0, coefficient.getReal(), 1e-15);
         }
     }
 

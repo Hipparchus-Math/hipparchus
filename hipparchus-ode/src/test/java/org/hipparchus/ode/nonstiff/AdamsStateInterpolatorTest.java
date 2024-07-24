@@ -22,6 +22,7 @@ import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
+import org.junit.jupiter.api.Test;
 
 public class AdamsStateInterpolatorTest extends ODEStateInterpolatorAbstractTest {
 
@@ -58,6 +59,7 @@ public class AdamsStateInterpolatorTest extends ODEStateInterpolatorAbstractTest
     }
 
     @Override
+    @Test
     public void interpolationAtBounds() {
         // as the Adams step interpolator is based on a Taylor expansion since previous step,
         // the maximum error is at step end and not in the middle of the step
@@ -66,26 +68,31 @@ public class AdamsStateInterpolatorTest extends ODEStateInterpolatorAbstractTest
     }
 
     @Override
+    @Test
     public void interpolationInside() {
         doInterpolationInside(3.3e-10, 1.4e-6);
     }
 
     @Override
+    @Test
     public void restrictPrevious() {
         doRestrictPrevious(1.0e-15, 1.0e-15);
     }
 
     @Override
+    @Test
     public void restrictCurrent() {
         doRestrictCurrent(1.0e-15, 1.0e-15);
     }
 
     @Override
+    @Test
     public void restrictBothEnds() {
         doRestrictBothEnds(1.0e-15, 1.0e-15);
     }
 
     @Override
+    @Test
     public void degenerateInterpolation() {
         doDegenerateInterpolation();
     }

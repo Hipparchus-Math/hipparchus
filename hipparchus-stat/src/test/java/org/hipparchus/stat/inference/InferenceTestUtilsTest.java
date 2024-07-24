@@ -21,20 +21,20 @@
  */
 package org.hipparchus.stat.inference;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.hipparchus.util.FastMath;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 /**
@@ -60,21 +60,20 @@ public class InferenceTestUtilsTest {
 
         long[] observed = {10, 9, 11};
         double[] expected = {10, 10, 10};
-        assertEquals("chi-square statistic", 0.2,
-                     InferenceTestUtils.chiSquare(expected, observed), 10E-12);
-        assertEquals("chi-square p-value", 0.904837418036,
-                     InferenceTestUtils.chiSquareTest(expected, observed), 1E-10);
+        assertEquals(0.2,
+                     InferenceTestUtils.chiSquare(expected, observed), 10E-12, "chi-square statistic");
+        assertEquals(0.904837418036,
+                     InferenceTestUtils.chiSquareTest(expected, observed), 1E-10, "chi-square p-value");
 
         long[] observed1 = { 500, 623, 72, 70, 31 };
         double[] expected1 = { 485, 541, 82, 61, 37 };
-        assertEquals("chi-square test statistic", 9.023307936427388,
-                     InferenceTestUtils.chiSquare(expected1, observed1), 1E-10);
-        assertEquals("chi-square p-value", 0.06051952647453607,
-                     InferenceTestUtils.chiSquareTest(expected1, observed1), 1E-9);
-        assertTrue("chi-square test reject",
-                   InferenceTestUtils.chiSquareTest(expected1, observed1, 0.07));
-        assertTrue("chi-square test accept",
-                   !InferenceTestUtils.chiSquareTest(expected1, observed1, 0.05));
+        assertEquals(9.023307936427388,
+                     InferenceTestUtils.chiSquare(expected1, observed1), 1E-10, "chi-square test statistic");
+        assertEquals(0.06051952647453607,
+                     InferenceTestUtils.chiSquareTest(expected1, observed1), 1E-9, "chi-square p-value");
+        assertTrue(InferenceTestUtils.chiSquareTest(expected1, observed1, 0.07),
+                   "chi-square test reject");
+        assertFalse(InferenceTestUtils.chiSquareTest(expected1, observed1, 0.05), "chi-square test accept");
 
         try {
             InferenceTestUtils.chiSquareTest(expected1, observed1, 95);
@@ -129,15 +128,15 @@ public class InferenceTestUtilsTest {
         // Target values computed using R version 1.8.1
 
         long[][] counts = { {40, 22, 43}, {91, 21, 28}, {60, 10, 22}};
-        assertEquals( "chi-square test statistic", 22.709027688, InferenceTestUtils.chiSquare(counts), 1E-9);
-        assertEquals("chi-square p-value", 0.000144751460134, InferenceTestUtils.chiSquareTest(counts), 1E-9);
-        assertTrue("chi-square test reject", InferenceTestUtils.chiSquareTest(counts, 0.0002));
-        assertTrue("chi-square test accept", !InferenceTestUtils.chiSquareTest(counts, 0.0001));
+        assertEquals( 22.709027688, InferenceTestUtils.chiSquare(counts), 1E-9, "chi-square test statistic");
+        assertEquals(0.000144751460134, InferenceTestUtils.chiSquareTest(counts), 1E-9, "chi-square p-value");
+        assertTrue(InferenceTestUtils.chiSquareTest(counts, 0.0002), "chi-square test reject");
+        assertFalse(InferenceTestUtils.chiSquareTest(counts, 0.0001), "chi-square test accept");
 
         long[][] counts2 = {{10, 15}, {30, 40}, {60, 90} };
-        assertEquals( "chi-square test statistic", 0.168965517241, InferenceTestUtils.chiSquare(counts2), 1E-9);
-        assertEquals("chi-square p-value",0.918987499852, InferenceTestUtils.chiSquareTest(counts2), 1E-9);
-        assertTrue("chi-square test accept", !InferenceTestUtils.chiSquareTest(counts2, 0.1));
+        assertEquals( 0.168965517241, InferenceTestUtils.chiSquare(counts2), 1E-9, "chi-square test statistic");
+        assertEquals(0.918987499852, InferenceTestUtils.chiSquareTest(counts2), 1E-9, "chi-square p-value");
+        assertFalse(InferenceTestUtils.chiSquareTest(counts2, 0.1), "chi-square test accept");
 
         // ragged input array
         long[][] counts3 = { {40, 22, 43}, {91, 21, 28}, {60, 10}};
@@ -193,9 +192,9 @@ public class InferenceTestUtilsTest {
 
         ChiSquareTest csti = new ChiSquareTest();
         double cst = csti.chiSquareTest(exp, obs);
-        assertEquals("chi-square p-value", 0.0, cst, 1E-3);
-        assertEquals("chi-square test statistic", 114875.90421929007,
-                     InferenceTestUtils.chiSquare(exp, obs), 1E-9);
+        assertEquals(0.0, cst, 1E-3, "chi-square p-value");
+        assertEquals(114875.90421929007,
+                     InferenceTestUtils.chiSquare(exp, obs), 1E-9, "chi-square test statistic");
     }
 
     /** Contingency table containing zeros - PR # 32531 */
@@ -203,8 +202,8 @@ public class InferenceTestUtilsTest {
     public void testChiSquareZeroCount() {
         // Target values computed using R version 1.8.1
         long[][] counts = { {40, 0, 4}, {91, 1, 2}, {60, 2, 0}};
-        assertEquals( "chi-square test statistic", 9.67444662263, InferenceTestUtils.chiSquare(counts), 1E-9);
-        assertEquals("chi-square p-value", 0.0462835770603, InferenceTestUtils.chiSquareTest(counts), 1E-9);
+        assertEquals( 9.67444662263, InferenceTestUtils.chiSquare(counts), 1E-9, "chi-square test statistic");
+        assertEquals(0.0462835770603, InferenceTestUtils.chiSquareTest(counts), 1E-9, "chi-square p-value");
     }
 
     private double[] tooShortObs = { 1.0 };
@@ -224,10 +223,10 @@ public class InferenceTestUtilsTest {
         }
 
         // Target comparison values computed using R version 1.8.1 (Linux version)
-        assertEquals("t statistic",  -2.81976445346, InferenceTestUtils.t(mu, observed), 10E-10);
-        assertEquals("t statistic",  -2.81976445346, InferenceTestUtils.t(mu, sampleStats), 10E-10);
-        assertEquals("p value", 0.0136390585873, InferenceTestUtils.tTest(mu, observed), 10E-10);
-        assertEquals("p value", 0.0136390585873, InferenceTestUtils.tTest(mu, sampleStats), 10E-10);
+        assertEquals(-2.81976445346, InferenceTestUtils.t(mu, observed), 10E-10, "t statistic");
+        assertEquals(-2.81976445346, InferenceTestUtils.t(mu, sampleStats), 10E-10, "t statistic");
+        assertEquals(0.0136390585873, InferenceTestUtils.tTest(mu, observed), 10E-10, "p value");
+        assertEquals(0.0136390585873, InferenceTestUtils.tTest(mu, sampleStats), 10E-10, "p value");
 
         try {
             InferenceTestUtils.t(mu, (double[]) null);
@@ -295,14 +294,14 @@ public class InferenceTestUtilsTest {
             oneSidedPStats.addValue(oneSidedP[i]);
         }
         // Target comparison values computed using R version 1.8.1 (Linux version)
-        assertEquals("one sample t stat", 3.86485535541, InferenceTestUtils.t(0d, oneSidedP), 10E-10);
-        assertEquals("one sample t stat", 3.86485535541, InferenceTestUtils.t(0d, oneSidedPStats),1E-10);
-        assertEquals("one sample p value", 0.000521637019637, InferenceTestUtils.tTest(0d, oneSidedP) / 2d, 10E-10);
-        assertEquals("one sample p value", 0.000521637019637, InferenceTestUtils.tTest(0d, oneSidedPStats) / 2d, 10E-5);
-        assertTrue("one sample t-test reject", InferenceTestUtils.tTest(0d, oneSidedP, 0.01));
-        assertTrue("one sample t-test reject", InferenceTestUtils.tTest(0d, oneSidedPStats, 0.01));
-        assertTrue("one sample t-test accept", !InferenceTestUtils.tTest(0d, oneSidedP, 0.0001));
-        assertTrue("one sample t-test accept", !InferenceTestUtils.tTest(0d, oneSidedPStats, 0.0001));
+        assertEquals(3.86485535541, InferenceTestUtils.t(0d, oneSidedP), 10E-10, "one sample t stat");
+        assertEquals(3.86485535541, InferenceTestUtils.t(0d, oneSidedPStats),1E-10,"one sample t stat");
+        assertEquals(0.000521637019637, InferenceTestUtils.tTest(0d, oneSidedP) / 2d, 10E-10, "one sample p value");
+        assertEquals(0.000521637019637, InferenceTestUtils.tTest(0d, oneSidedPStats) / 2d, 10E-5, "one sample p value");
+        assertTrue(InferenceTestUtils.tTest(0d, oneSidedP, 0.01), "one sample t-test reject");
+        assertTrue(InferenceTestUtils.tTest(0d, oneSidedPStats, 0.01), "one sample t-test reject");
+        assertFalse(InferenceTestUtils.tTest(0d, oneSidedP, 0.0001), "one sample t-test accept");
+        assertFalse(InferenceTestUtils.tTest(0d, oneSidedPStats, 0.0001), "one sample t-test accept");
 
         try {
             InferenceTestUtils.tTest(0d, oneSidedP, 95);
@@ -334,22 +333,20 @@ public class InferenceTestUtilsTest {
         }
 
         // Target comparison values computed using R version 1.8.1 (Linux version)
-        assertEquals("two sample heteroscedastic t stat", 1.60371728768,
-                     InferenceTestUtils.t(sample1, sample2), 1E-10);
-        assertEquals("two sample heteroscedastic t stat", 1.60371728768,
-                     InferenceTestUtils.t(sampleStats1, sampleStats2), 1E-10);
-        assertEquals("two sample heteroscedastic p value", 0.128839369622,
-                     InferenceTestUtils.tTest(sample1, sample2), 1E-10);
-        assertEquals("two sample heteroscedastic p value", 0.128839369622,
-                     InferenceTestUtils.tTest(sampleStats1, sampleStats2), 1E-10);
-        assertTrue("two sample heteroscedastic t-test reject",
-                   InferenceTestUtils.tTest(sample1, sample2, 0.2));
-        assertTrue("two sample heteroscedastic t-test reject",
-                   InferenceTestUtils.tTest(sampleStats1, sampleStats2, 0.2));
-        assertTrue("two sample heteroscedastic t-test accept",
-                   !InferenceTestUtils.tTest(sample1, sample2, 0.1));
-        assertTrue("two sample heteroscedastic t-test accept",
-                   !InferenceTestUtils.tTest(sampleStats1, sampleStats2, 0.1));
+        assertEquals(1.60371728768,
+                     InferenceTestUtils.t(sample1, sample2), 1E-10, "two sample heteroscedastic t stat");
+        assertEquals(1.60371728768,
+                     InferenceTestUtils.t(sampleStats1, sampleStats2), 1E-10, "two sample heteroscedastic t stat");
+        assertEquals(0.128839369622,
+                     InferenceTestUtils.tTest(sample1, sample2), 1E-10, "two sample heteroscedastic p value");
+        assertEquals(0.128839369622,
+                     InferenceTestUtils.tTest(sampleStats1, sampleStats2), 1E-10, "two sample heteroscedastic p value");
+        assertTrue(InferenceTestUtils.tTest(sample1, sample2, 0.2),
+                   "two sample heteroscedastic t-test reject");
+        assertTrue(InferenceTestUtils.tTest(sampleStats1, sampleStats2, 0.2),
+                   "two sample heteroscedastic t-test reject");
+        assertFalse(InferenceTestUtils.tTest(sample1, sample2, 0.1), "two sample heteroscedastic t-test accept");
+        assertFalse(InferenceTestUtils.tTest(sampleStats1, sampleStats2, 0.1), "two sample heteroscedastic t-test accept");
 
         try {
             InferenceTestUtils.tTest(sample1, sample2, .95);
@@ -421,14 +418,13 @@ public class InferenceTestUtilsTest {
         }
 
         // Target comparison values computed using R version 1.8.1 (Linux version)
-        assertEquals("two sample homoscedastic t stat", 0.73096310086,
-                     InferenceTestUtils.homoscedasticT(sample1, sample2), 10E-11);
-        assertEquals("two sample homoscedastic p value", 0.4833963785,
-                     InferenceTestUtils.homoscedasticTTest(sampleStats1, sampleStats2), 1E-10);
-        assertTrue("two sample homoscedastic t-test reject",
-                   InferenceTestUtils.homoscedasticTTest(sample1, sample2, 0.49));
-        assertTrue("two sample homoscedastic t-test accept",
-                   !InferenceTestUtils.homoscedasticTTest(sample1, sample2, 0.48));
+        assertEquals(0.73096310086,
+                     InferenceTestUtils.homoscedasticT(sample1, sample2), 10E-11, "two sample homoscedastic t stat");
+        assertEquals(0.4833963785,
+                     InferenceTestUtils.homoscedasticTTest(sampleStats1, sampleStats2), 1E-10, "two sample homoscedastic p value");
+        assertTrue(InferenceTestUtils.homoscedasticTTest(sample1, sample2, 0.49),
+                   "two sample homoscedastic t-test reject");
+        assertFalse(InferenceTestUtils.homoscedasticTTest(sample1, sample2, 0.48), "two sample homoscedastic t-test accept");
     }
 
     @Test
@@ -472,9 +468,9 @@ public class InferenceTestUtilsTest {
         double[] exp = new double[] { 0.54d, 0.40d, 0.05d, 0.01d };
         long[] obs = new long[] { 70, 79, 3, 4 };
 
-        assertEquals("G test statistic", 13.144799, InferenceTestUtils.g(exp, obs), 1E-5);
+        assertEquals(13.144799, InferenceTestUtils.g(exp, obs), 1E-5, "G test statistic");
         double p_gtgf = InferenceTestUtils.gTest(exp, obs);
-        assertEquals("g-Test p-value", 0.004333, p_gtgf, 1E-5);
+        assertEquals(0.004333, p_gtgf, 1E-5, "g-Test p-value");
         assertTrue(InferenceTestUtils.gTest(exp, obs, 0.05));
     }
 
@@ -485,10 +481,10 @@ public class InferenceTestUtilsTest {
 
         double g = InferenceTestUtils.gDataSetsComparison(obs1, obs2);
 
-        assertEquals("G test statistic", 7.3008170, g, 1E-4);
+        assertEquals(7.3008170, g, 1E-4, "G test statistic");
         double p_gti = InferenceTestUtils.gTestDataSetsComparison(obs1, obs2);
 
-        assertEquals("g-Test p-value", 0.0259805, p_gti, 1E-4);
+        assertEquals(0.0259805, p_gti, 1E-4, "g-Test p-value");
         assertTrue(InferenceTestUtils.gTestDataSetsComparison(obs1, obs2, 0.05));
     }
 

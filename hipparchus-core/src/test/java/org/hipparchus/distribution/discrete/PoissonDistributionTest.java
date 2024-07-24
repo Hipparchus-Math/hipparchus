@@ -24,8 +24,10 @@ package org.hipparchus.distribution.discrete;
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * <code>PoissonDistributionTest</code>
@@ -132,12 +134,12 @@ public class PoissonDistributionTest extends IntegerDistributionAbstractTest {
         PoissonDistribution dist = new PoissonDistribution(100);
         double result = dist.normalApproximateProbability(110)
                 - dist.normalApproximateProbability(89);
-        Assert.assertEquals(0.706281887248, result, 1E-10);
+        Assertions.assertEquals(0.706281887248, result, 1E-10);
 
         dist = new PoissonDistribution(10000);
         result = dist.normalApproximateProbability(10200)
         - dist.normalApproximateProbability(9899);
-        Assert.assertEquals(0.820070051552, result, 1E-10);
+        Assertions.assertEquals(0.820070051552, result, 1E-10);
     }
 
     /**
@@ -146,19 +148,21 @@ public class PoissonDistributionTest extends IntegerDistributionAbstractTest {
     @Test
     public void testDegenerateInverseCumulativeProbability() {
         PoissonDistribution dist = new PoissonDistribution(DEFAULT_TEST_POISSON_PARAMETER);
-        Assert.assertEquals(Integer.MAX_VALUE, dist.inverseCumulativeProbability(1.0d));
-        Assert.assertEquals(0, dist.inverseCumulativeProbability(0d));
+        Assertions.assertEquals(Integer.MAX_VALUE, dist.inverseCumulativeProbability(1.0d));
+        Assertions.assertEquals(0, dist.inverseCumulativeProbability(0d));
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNegativeMean() {
-        new PoissonDistribution(-1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new PoissonDistribution(-1);
+        });
     }
 
     @Test
     public void testMean() {
         PoissonDistribution dist = new PoissonDistribution(10.0);
-        Assert.assertEquals(10.0, dist.getMean(), 0.0);
+        Assertions.assertEquals(10.0, dist.getMean(), 0.0);
     }
 
     @Test
@@ -174,14 +178,14 @@ public class PoissonDistributionTest extends IntegerDistributionAbstractTest {
             while (x >= 0) {
                 try {
                     p = dist.cumulativeProbability((int) x);
-                    Assert.assertFalse("NaN cumulative probability returned for mean = " +
-                            mean + " x = " + x,Double.isNaN(p));
+                    Assertions.assertFalse(Double.isNaN(p),"NaN cumulative probability returned for mean = " +
+                            mean + " x = " + x);
                     if (x > mean - 2 * sigma) {
-                        Assert.assertTrue("Zero cum probaility returned for mean = " +
-                                mean + " x = " + x, p > 0);
+                        Assertions.assertTrue(p > 0, "Zero cum probaility returned for mean = " +
+                                mean + " x = " + x);
                     }
                 } catch (Exception ex) {
-                    Assert.fail("mean of " + mean + " and x of " + x + " caused " + ex.getMessage());
+                    Assertions.fail("mean of " + mean + " and x of " + x + " caused " + ex.getMessage());
                 }
                 x -= dx;
             }
@@ -207,10 +211,10 @@ public class PoissonDistributionTest extends IntegerDistributionAbstractTest {
 
     private void checkProbability(PoissonDistribution dist, int x) {
         double p = dist.cumulativeProbability(x);
-        Assert.assertFalse("NaN cumulative probability returned for mean = " +
-                dist.getMean() + " x = " + x, Double.isNaN(p));
-        Assert.assertTrue("Zero cum probability returned for mean = " +
-                dist.getMean() + " x = " + x, p > 0);
+        Assertions.assertFalse(Double.isNaN(p), "NaN cumulative probability returned for mean = " +
+                dist.getMean() + " x = " + x);
+        Assertions.assertTrue(p > 0, "Zero cum probability returned for mean = " +
+                dist.getMean() + " x = " + x);
     }
 
     @Test
@@ -224,10 +228,10 @@ public class PoissonDistributionTest extends IntegerDistributionAbstractTest {
                 try {
                     int ret = dist.inverseCumulativeProbability(p);
                     // Verify that returned value satisties definition
-                    Assert.assertTrue(p <= dist.cumulativeProbability(ret));
-                    Assert.assertTrue(p > dist.cumulativeProbability(ret - 1));
+                    Assertions.assertTrue(p <= dist.cumulativeProbability(ret));
+                    Assertions.assertTrue(p > dist.cumulativeProbability(ret - 1));
                 } catch (Exception ex) {
-                    Assert.fail("mean of " + mean + " and p of " + p + " caused " + ex.getMessage());
+                    Assertions.fail("mean of " + mean + " and p of " + p + " caused " + ex.getMessage());
                 }
                 p += dp;
             }
@@ -241,11 +245,11 @@ public class PoissonDistributionTest extends IntegerDistributionAbstractTest {
         PoissonDistribution dist;
 
         dist = new PoissonDistribution(1);
-        Assert.assertEquals(dist.getNumericalMean(), 1, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), 1, tol);
+        Assertions.assertEquals(1, dist.getNumericalMean(), tol);
+        Assertions.assertEquals(1, dist.getNumericalVariance(), tol);
 
         dist = new PoissonDistribution(11.23);
-        Assert.assertEquals(dist.getNumericalMean(), 11.23, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), 11.23, tol);
+        Assertions.assertEquals(11.23, dist.getNumericalMean(), tol);
+        Assertions.assertEquals(11.23, dist.getNumericalVariance(), tol);
     }
 }

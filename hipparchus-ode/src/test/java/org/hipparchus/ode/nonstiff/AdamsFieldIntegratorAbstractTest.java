@@ -49,8 +49,8 @@ import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public abstract class AdamsFieldIntegratorAbstractTest {
 
@@ -62,7 +62,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
     createIntegrator(Field<T> field, final int nSteps, final double minStep, final double maxStep,
                      final double[] vecAbsoluteTolerance, final double[] vecRelativeTolerance);
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public abstract void testMinStep();
 
     protected <T extends CalculusFieldElement<T>> void doDimensionCheck(final Field<T> field) {
@@ -85,9 +85,9 @@ public abstract class AdamsFieldIntegratorAbstractTest {
     protected void doNbPointsTest() {
         try {
             createIntegrator(Binary64Field.getInstance(), 1, 1.0e-3, 1.0e+3, 1.0e-15, 1.0e-15);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
+            Assertions.assertEquals(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
                                 miae.getSpecifier());
         }
         try {
@@ -95,9 +95,9 @@ public abstract class AdamsFieldIntegratorAbstractTest {
             double[] vecRelativeTolerance = { 1.0e-15, 1.0e-16 };
             createIntegrator(Binary64Field.getInstance(),
                              1, 1.0e-3, 1.0e+3, vecAbsoluteTolerance, vecRelativeTolerance);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
+            Assertions.assertEquals(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
                                 miae.getSpecifier());
         }
     }
@@ -120,28 +120,28 @@ public abstract class AdamsFieldIntegratorAbstractTest {
                                                                  scalAbsoluteTolerance,
                                                                  scalRelativeTolerance);
             int orderCorrection = integ instanceof AdamsBashforthFieldIntegrator ? 0 : 1;
-            Assert.assertEquals(FastMath.pow(2.0, 1.0 / (4 + orderCorrection)), integ.getMaxGrowth(), 1.0e-10);
-            Assert.assertEquals(0.2, integ.getMinReduction(), 1.0e-10);
-            Assert.assertEquals(4, integ.getNSteps());
-            Assert.assertEquals(0.9, integ.getSafety(), 1.0e-10);
-             Assert.assertTrue(integ.getStarterIntegrator() instanceof DormandPrince853FieldIntegrator);
+            Assertions.assertEquals(FastMath.pow(2.0, 1.0 / (4 + orderCorrection)), integ.getMaxGrowth(), 1.0e-10);
+            Assertions.assertEquals(0.2, integ.getMinReduction(), 1.0e-10);
+            Assertions.assertEquals(4, integ.getNSteps());
+            Assertions.assertEquals(0.9, integ.getSafety(), 1.0e-10);
+             Assertions.assertTrue(integ.getStarterIntegrator() instanceof DormandPrince853FieldIntegrator);
             TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
             integ.addStepHandler(handler);
             integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
 
-            Assert.assertTrue(handler.getMaximalValueError().getReal() > ratioMin * scalAbsoluteTolerance);
-            Assert.assertTrue(handler.getMaximalValueError().getReal() < ratioMax * scalAbsoluteTolerance);
+            Assertions.assertTrue(handler.getMaximalValueError().getReal() > ratioMin * scalAbsoluteTolerance);
+            Assertions.assertTrue(handler.getMaximalValueError().getReal() < ratioMax * scalAbsoluteTolerance);
 
             int calls = pb.getCalls();
-            Assert.assertEquals(integ.getEvaluations(), calls);
-            Assert.assertTrue(calls <= previousCalls);
+            Assertions.assertEquals(integ.getEvaluations(), calls);
+            Assertions.assertTrue(calls <= previousCalls);
             previousCalls = calls;
 
         }
 
     }
 
-    @Test(expected = MathIllegalStateException.class)
+    @Test
     public abstract void exceedMaxEvaluations();
 
     protected <T extends CalculusFieldElement<T>> void doExceedMaxEvaluations(final Field<T> field, final int max) {
@@ -213,10 +213,10 @@ public abstract class AdamsFieldIntegratorAbstractTest {
         integ.addStepHandler(handler);
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
 
-        Assert.assertEquals(0.0, handler.getLastError().getReal(), epsilonLast);
-        Assert.assertEquals(0.0, handler.getMaximalValueError().getReal(), epsilonMaxValue);
-        Assert.assertEquals(0, handler.getMaximalTimeError().getReal(), epsilonMaxTime);
-        Assert.assertEquals(name, integ.getName());
+        Assertions.assertEquals(0.0, handler.getLastError().getReal(), epsilonLast);
+        Assertions.assertEquals(0.0, handler.getMaximalValueError().getReal(), epsilonMaxValue);
+        Assertions.assertEquals(0, handler.getMaximalTimeError().getReal(), epsilonMaxTime);
+        Assertions.assertEquals(name, integ.getName());
     }
 
     @Test
@@ -269,9 +269,9 @@ public abstract class AdamsFieldIntegratorAbstractTest {
             integ.addStepHandler(handler);
             integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
             if (nSteps < nLimit) {
-                Assert.assertTrue(handler.getMaximalValueError().getReal() > epsilonBad);
+                Assertions.assertTrue(handler.getMaximalValueError().getReal() > epsilonBad);
             } else {
-                Assert.assertTrue(handler.getMaximalValueError().getReal() < epsilonGood);
+                Assertions.assertTrue(handler.getMaximalValueError().getReal() < epsilonGood);
             }
         }
 
@@ -300,10 +300,10 @@ public abstract class AdamsFieldIntegratorAbstractTest {
             final T[] y0 = MathArrays.buildArray(field, ode.getDimension());
             y0[0] = field.getZero().add(1.0);
             integ.integrate(new FieldExpandableODE<>(ode), new FieldODEState<>(t0, y0), t1);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
-            Assert.assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
+            Assertions.assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
+            Assertions.assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
         }
     }
 
@@ -359,11 +359,11 @@ public abstract class AdamsFieldIntegratorAbstractTest {
                     T tCurr = interpolator.getCurrentState().getTime();
                     T t     = tPrev.multiply(10 - i).add(tCurr.multiply(i)).divide(10);
                     FieldODEStateAndDerivative<T> state = interpolator.getInterpolatedState(t);
-                    Assert.assertEquals(2, state.getPrimaryStateDimension());
-                    Assert.assertEquals(1, state.getNumberOfSecondaryStates());
-                    Assert.assertEquals(2, state.getSecondaryStateDimension(0));
-                    Assert.assertEquals(1, state.getSecondaryStateDimension(1));
-                    Assert.assertEquals(3, state.getCompleteStateDimension());
+                    Assertions.assertEquals(2, state.getPrimaryStateDimension());
+                    Assertions.assertEquals(1, state.getNumberOfSecondaryStates());
+                    Assertions.assertEquals(2, state.getSecondaryStateDimension(0));
+                    Assertions.assertEquals(1, state.getSecondaryStateDimension(1));
+                    Assertions.assertEquals(3, state.getCompleteStateDimension());
                     max[0] = FastMath.max(max[0],
                                           t.sin().subtract(state.getPrimaryState()[0]).norm());
                     max[0] = FastMath.max(max[0],
@@ -383,13 +383,13 @@ public abstract class AdamsFieldIntegratorAbstractTest {
 
         FieldODEStateAndDerivative<T> finalState =
                         integrator.integrate(expandable, initialState, field.getZero().add(10.0));
-        Assert.assertEquals(10.0, finalState.getTime().getReal(), 1.0e-12);
-        Assert.assertEquals(0, max[0], epsilonSinCos);
-        Assert.assertEquals(0, max[1], epsilonLinear);
+        Assertions.assertEquals(10.0, finalState.getTime().getReal(), 1.0e-12);
+        Assertions.assertEquals(0, max[0], epsilonSinCos);
+        Assertions.assertEquals(0, max[1], epsilonLinear);
 
     }
 
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public abstract void testStartFailure();
 
         protected <T extends CalculusFieldElement<T>> void doTestStartFailure(final Field<T> field) {
@@ -442,8 +442,8 @@ public abstract class AdamsFieldIntegratorAbstractTest {
                 final double[] theoreticalI = thK[i].getAllDerivatives();
                 final double[] truncatedI   = tkKtrunc[i].getAllDerivatives();
                 for (int k = 0; k < factory.getCompiler().getSize(); ++k) {
-                    Assert.assertEquals(truncatedI[k], theoreticalI[k], 1e-15);
-                    Assert.assertEquals(truncatedI[k], integratedI[k],  3e-6);
+                    Assertions.assertEquals(truncatedI[k], theoreticalI[k], 1e-15);
+                    Assertions.assertEquals(truncatedI[k], integratedI[k],  3e-6);
                 }
             }
         });

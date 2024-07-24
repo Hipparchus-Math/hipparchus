@@ -21,17 +21,17 @@
  */
 package org.hipparchus.stat.descriptive;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.stat.descriptive.moment.SecondMoment;
 import org.hipparchus.util.FastMath;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test cases for {@link StorelessUnivariateStatistic} classes.
@@ -110,44 +110,39 @@ public abstract class StorelessUnivariateStatisticAbstractTest
         StorelessUnivariateStatistic statistic = getUnivariateStatistic();
         StorelessUnivariateStatistic statistic2 = null;
 
-        assertTrue("non-null, compared to null", !statistic.equals(statistic2));
-        assertTrue("reflexive, non-null", statistic.equals(statistic));
+        assertNotEquals(statistic, statistic2, "non-null, compared to null");
+        assertEquals(statistic, statistic, "reflexive, non-null");
 
         int emptyHash = statistic.hashCode();
         statistic2 = getUnivariateStatistic();
-        assertTrue("empty stats should be equal", statistic.equals(statistic2));
-        assertEquals("empty stats should have the same hashcode",
-                     emptyHash, statistic2.hashCode());
+        assertEquals(statistic, statistic2, "empty stats should be equal");
+        assertEquals(emptyHash, statistic2.hashCode(), "empty stats should have the same hashcode");
 
         statistic.increment(1d);
-        assertTrue("reflexive, non-empty", statistic.equals(statistic));
-        assertTrue("non-empty, compared to empty", !statistic.equals(statistic2));
-        assertTrue("non-empty, compared to empty", !statistic2.equals(statistic));
-        assertTrue("non-empty stat should have different hashcode from empty stat",
-                   statistic.hashCode() != emptyHash);
+        assertEquals(statistic, statistic, "reflexive, non-empty");
+        assertNotEquals(statistic, statistic2, "non-empty, compared to empty");
+        assertNotEquals(statistic2, statistic, "non-empty, compared to empty");
+        assertTrue(statistic.hashCode() != emptyHash,
+                   "non-empty stat should have different hashcode from empty stat");
 
         statistic2.increment(1d);
-        assertTrue("stats with same data should be equal", statistic.equals(statistic2));
-        assertEquals("stats with same data should have the same hashcode",
-                     statistic.hashCode(), statistic2.hashCode());
+        assertEquals(statistic, statistic2, "stats with same data should be equal");
+        assertEquals(statistic.hashCode(), statistic2.hashCode(), "stats with same data should have the same hashcode");
 
         statistic.increment(Double.POSITIVE_INFINITY);
-        assertTrue("stats with different n's should not be equal", !statistic2.equals(statistic));
-        assertTrue("stats with different n's should have different hashcodes",
-                   statistic.hashCode() != statistic2.hashCode());
+        assertNotEquals(statistic2, statistic, "stats with different n's should not be equal");
+        assertTrue(statistic.hashCode() != statistic2.hashCode(),
+                   "stats with different n's should have different hashcodes");
 
         statistic2.increment(Double.POSITIVE_INFINITY);
-        assertTrue("stats with same data should be equal", statistic.equals(statistic2));
-        assertEquals("stats with same data should have the same hashcode",
-                     statistic.hashCode(), statistic2.hashCode());
+        assertEquals(statistic, statistic2, "stats with same data should be equal");
+        assertEquals(statistic.hashCode(), statistic2.hashCode(), "stats with same data should have the same hashcode");
 
         statistic.clear();
         statistic2.clear();
-        assertTrue("cleared stats should be equal", statistic.equals(statistic2));
-        assertEquals("cleared stats should have thashcode of empty stat",
-                     emptyHash, statistic2.hashCode());
-        assertEquals("cleared stats should have thashcode of empty stat",
-                     emptyHash, statistic.hashCode());
+        assertEquals(statistic, statistic2, "cleared stats should be equal");
+        assertEquals(emptyHash, statistic2.hashCode(), "cleared stats should have thashcode of empty stat");
+        assertEquals(emptyHash, statistic.hashCode(), "cleared stats should have thashcode of empty stat");
 
     }
 
@@ -199,14 +194,14 @@ public abstract class StorelessUnivariateStatisticAbstractTest
         replica = master.copy();
 
         // Check same
-        assertTrue(replica.equals(master));
-        assertTrue(master.equals(replica));
+        assertEquals(replica, master);
+        assertEquals(master, replica);
 
         // Now add second part to both and check again
         master.incrementAll(testArray, (int) index, (int) (testArray.length - index));
         replica.incrementAll(testArray, (int) index, (int) (testArray.length - index));
-        assertTrue(replica.equals(master));
-        assertTrue(master.equals(replica));
+        assertEquals(replica, master);
+        assertEquals(master, replica);
     }
 
     @Test

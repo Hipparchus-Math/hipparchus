@@ -29,7 +29,7 @@ import org.hipparchus.analysis.polynomials.FieldPolynomialSplineFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
 import org.hipparchus.util.Binary64;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test the LinearInterpolator.

@@ -22,8 +22,8 @@ import org.hipparchus.special.elliptic.legendre.LegendreEllipticIntegral;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class FieldJacobiThetaTest {
 
@@ -33,7 +33,7 @@ public class FieldJacobiThetaTest {
     }
 
     private <T extends CalculusFieldElement<T>> void doTestNoConvergence(Field<T> field) {
-        Assert.assertTrue(new FieldJacobiTheta<>(field.getZero().newInstance(Double.NaN)).values(field.getZero()).theta1().isNaN());
+        Assertions.assertTrue(new FieldJacobiTheta<>(field.getZero().newInstance(Double.NaN)).values(field.getZero()).theta1().isNaN());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class FieldJacobiThetaTest {
                                             add(FastMath.pow(q, 9)).
                                             add(FastMath.pow(q, 16)).multiply(2));
         final T theta3 = new FieldJacobiTheta<>(q).values(field.getZero()).theta3();
-        Assert.assertEquals(t3Ref.getReal(), theta3.getReal(), 1.0e-12);
+        Assertions.assertEquals(t3Ref.getReal(), theta3.getReal(), 1.0e-12);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class FieldJacobiThetaTest {
         final T m      = k.multiply(k);
         final T q      = LegendreEllipticIntegral.nome(m);
         final T theta3 = new FieldJacobiTheta<>(q).values(field.getZero()).theta3();
-        Assert.assertEquals(LegendreEllipticIntegral.bigK(m).getReal(),
+        Assertions.assertEquals(LegendreEllipticIntegral.bigK(m).getReal(),
                             theta3.multiply(theta3).multiply(MathUtils.SEMI_PI).getReal(),
                             1.0e-12);
     }
@@ -98,12 +98,12 @@ public class FieldJacobiThetaTest {
         final T tz2 = thetaZ.theta2();
         final T tz3 = thetaZ.theta3();
         final T tz4 = thetaZ.theta4();
-        Assert.assertEquals(valuesN.sn().getReal(), t03.multiply(tz1)              .divide(t02.multiply(tz4)).getReal(),               3.0e-15);
-        Assert.assertEquals(valuesN.cn().getReal(), t04.multiply(tz2)              .divide(t02.multiply(tz4)).getReal(),               3.0e-15);
-        Assert.assertEquals(valuesN.dn().getReal(), t04.multiply(tz3)              .divide(t03.multiply(tz4)).getReal(),               3.0e-15);
-        Assert.assertEquals(valuesD.sd().getReal(), t03.multiply(t03).multiply(tz1).divide(t02.multiply(t04).multiply(tz3)).getReal(), 3.0e-15);
-        Assert.assertEquals(valuesD.cd().getReal(), t03.multiply(tz2)              .divide(t02.multiply(tz3)).getReal(),               3.0e-15);
-        Assert.assertEquals(valuesC.sc().getReal(), t03.multiply(tz1)              .divide(t04.multiply(tz2)).getReal(),               3.0e-15);
+        Assertions.assertEquals(valuesN.sn().getReal(), t03.multiply(tz1)              .divide(t02.multiply(tz4)).getReal(),               3.0e-15);
+        Assertions.assertEquals(valuesN.cn().getReal(), t04.multiply(tz2)              .divide(t02.multiply(tz4)).getReal(),               3.0e-15);
+        Assertions.assertEquals(valuesN.dn().getReal(), t04.multiply(tz3)              .divide(t03.multiply(tz4)).getReal(),               3.0e-15);
+        Assertions.assertEquals(valuesD.sd().getReal(), t03.multiply(t03).multiply(tz1).divide(t02.multiply(t04).multiply(tz3)).getReal(), 3.0e-15);
+        Assertions.assertEquals(valuesD.cd().getReal(), t03.multiply(tz2)              .divide(t02.multiply(tz3)).getReal(),               3.0e-15);
+        Assertions.assertEquals(valuesC.sc().getReal(), t03.multiply(tz1)              .divide(t04.multiply(tz2)).getReal(),               3.0e-15);
 
     }
 

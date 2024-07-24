@@ -21,18 +21,18 @@
  */
 package org.hipparchus.stat.descriptive;
 
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.Locale;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import java.util.Locale;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for the {@link MultivariateSummaryStatistics} class.
@@ -172,12 +172,12 @@ public class MultivariateSummaryStatisticsTest {
         MultivariateSummaryStatistics u = createMultivariateSummaryStatistics(2, true);
         MultivariateSummaryStatistics t = null;
         int emptyHash = u.hashCode();
-        assertTrue(u.equals(u));
-        assertFalse(u.equals(t));
-        assertFalse(u.equals(Double.valueOf(0)));
+        assertEquals(u, u);
+        assertNotEquals(u, t);
+        assertNotEquals(u, Double.valueOf(0));
         t = createMultivariateSummaryStatistics(2, true);
-        assertTrue(t.equals(u));
-        assertTrue(u.equals(t));
+        assertEquals(t, u);
+        assertEquals(u, t);
         assertEquals(emptyHash, t.hashCode());
 
         // Add some data to u
@@ -186,8 +186,8 @@ public class MultivariateSummaryStatisticsTest {
         u.addValue(new double[] { 3d, 1d });
         u.addValue(new double[] { 4d, 1d });
         u.addValue(new double[] { 5d, 1d });
-        assertFalse(t.equals(u));
-        assertFalse(u.equals(t));
+        assertNotEquals(t, u);
+        assertNotEquals(u, t);
         assertTrue(u.hashCode() != t.hashCode());
 
         //Add data in same order to t
@@ -196,15 +196,15 @@ public class MultivariateSummaryStatisticsTest {
         t.addValue(new double[] { 3d, 1d });
         t.addValue(new double[] { 4d, 1d });
         t.addValue(new double[] { 5d, 1d });
-        assertTrue(t.equals(u));
-        assertTrue(u.equals(t));
+        assertEquals(t, u);
+        assertEquals(u, t);
         assertEquals(u.hashCode(), t.hashCode());
 
         // Clear and make sure summaries are indistinguishable from empty summary
         u.clear();
         t.clear();
-        assertTrue(t.equals(u));
-        assertTrue(u.equals(t));
+        assertEquals(t, u);
+        assertEquals(u, t);
         assertEquals(emptyHash, t.hashCode());
         assertEquals(emptyHash, u.hashCode());
     }

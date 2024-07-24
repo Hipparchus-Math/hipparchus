@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 
 public class DormandPrince853IntegratorTest extends EmbeddedRungeKuttaIntegratorAbstractTest {
@@ -35,36 +35,43 @@ public class DormandPrince853IntegratorTest extends EmbeddedRungeKuttaIntegrator
     }
 
     @Override
+    @Test
     public void testBackward() {
         doTestBackward(8.1e-8, 1.1e-7, 1.0e-12, "Dormand-Prince 8 (5, 3)");
     }
 
     @Override
+    @Test
     public void testKepler() {
         doTestKepler(4.4e-11);
     }
 
     @Override
+    @Test
     public void testTorqueFreeMotionOmegaOnly() {
         doTestTorqueFreeMotionOmegaOnly(4.0e-16);
     }
 
     @Override
+    @Test
     public void testTorqueFreeMotion() {
         doTestTorqueFreeMotion(1.3e-12, 9.0e-12);
     }
 
     @Override
+    @Test
     public void testTorqueFreeMotionIssue230() {
         doTestTorqueFreeMotionIssue230(2.9e-14, 7.8e-14);
     }
 
     @Override
+    @Test
     public void testForwardBackwardExceptions() {
         doTestForwardBackwardExceptions();
     }
 
     @Override
+    @Test
     public void testIncreasingTolerance() {
         // the 1.3 factor is only valid for this test
         // and has been obtained from trial and error
@@ -73,21 +80,25 @@ public class DormandPrince853IntegratorTest extends EmbeddedRungeKuttaIntegrator
     }
 
     @Override
+    @Test
     public void testEvents() {
         doTestEvents(2.1e-7, "Dormand-Prince 8 (5, 3)");
     }
 
     @Override
+    @Test
     public void testStepEnd() {
         doTestStepEnd(20, "Dormand-Prince 8 (5, 3)");
     }
 
     @Override
+    @Test
     public void testStopAfterStep() {
         doTestStopAfterStep(12, 6.842171);
     }
 
     @Override
+    @Test
     public void testResetAfterStep() {
         doTestResetAfterStep(12, 13);
     }
@@ -108,6 +119,7 @@ public class DormandPrince853IntegratorTest extends EmbeddedRungeKuttaIntegrator
     }
 
     @Override
+    @Test
     public void testPartialDerivatives() {
         doTestPartialDerivatives(2.6e-12, 2.0e-11);
     }

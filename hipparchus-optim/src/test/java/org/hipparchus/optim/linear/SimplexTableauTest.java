@@ -21,13 +21,13 @@
  */
 package org.hipparchus.optim.linear;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class SimplexTableauTest {
 
@@ -87,7 +87,7 @@ public class SimplexTableauTest {
         Collection<LinearConstraint> constraints = createConstraints();
         SimplexTableau tableau =
             new SimplexTableau(f, constraints, GoalType.MAXIMIZE, false, 1.0e-6);
-        Assert.assertEquals(tableau, UnitTestUtils.serializeAndRecover(tableau));
+        Assertions.assertEquals(tableau, UnitTestUtils.serializeAndRecover(tableau));
     }
 
     private LinearObjectiveFunction createFunction() {
@@ -103,11 +103,11 @@ public class SimplexTableauTest {
     }
 
     private void assertMatrixEquals(double[][] expected, double[][] result) {
-        Assert.assertEquals("Wrong number of rows.", expected.length, result.length);
+        Assertions.assertEquals(expected.length, result.length, "Wrong number of rows.");
         for (int i = 0; i < expected.length; i++) {
-            Assert.assertEquals("Wrong number of columns.", expected[i].length, result[i].length);
+            Assertions.assertEquals(expected[i].length, result[i].length, "Wrong number of columns.");
             for (int j = 0; j < expected[i].length; j++) {
-                Assert.assertEquals("Wrong value at position [" + i + "," + j + "]", expected[i][j], result[i][j], 1.0e-15);
+                Assertions.assertEquals(expected[i][j], result[i][j], 1.0e-15, "Wrong value at position [" + i + "," + j + "]");
             }
         }
     }

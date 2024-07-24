@@ -21,12 +21,14 @@
  */
 package org.hipparchus.geometry.euclidean.twod.hull;
 
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.geometry.euclidean.twod.Vector2D;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.geometry.euclidean.twod.Vector2D;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test class for MonotoneChain.
@@ -40,21 +42,23 @@ public class MonotoneChainTest extends ConvexHullGenerator2DAbstractTest {
 
     // ------------------------------------------------------------------------------
 
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testConvergenceException() {
-        final Collection<Vector2D> points = new ArrayList<Vector2D>();
+        assertThrows(MathIllegalStateException.class, () -> {
+            final Collection<Vector2D> points = new ArrayList<Vector2D>();
 
-        points.add(new Vector2D(1, 1));
-        points.add(new Vector2D(1, 5));
-        points.add(new Vector2D(0, 7));
-        points.add(new Vector2D(1, 10));
-        points.add(new Vector2D(1, 20));
-        points.add(new Vector2D(20, 20));
-        points.add(new Vector2D(20, 40));
-        points.add(new Vector2D(40, 1));
+            points.add(new Vector2D(1, 1));
+            points.add(new Vector2D(1, 5));
+            points.add(new Vector2D(0, 7));
+            points.add(new Vector2D(1, 10));
+            points.add(new Vector2D(1, 20));
+            points.add(new Vector2D(20, 20));
+            points.add(new Vector2D(20, 40));
+            points.add(new Vector2D(40, 1));
 
-        @SuppressWarnings("unused")
-        final ConvexHull2D hull = new MonotoneChain(true, 2).generate(points);
+            @SuppressWarnings("unused")
+            final ConvexHull2D hull = new MonotoneChain(true, 2).generate(points);
+        });
     }
 
 }

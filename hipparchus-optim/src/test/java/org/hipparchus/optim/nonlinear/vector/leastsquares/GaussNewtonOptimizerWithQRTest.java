@@ -22,14 +22,14 @@
 
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
-import java.io.IOException;
-
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.QRDecomposer;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.SimpleVectorValueChecker;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -61,7 +61,7 @@ public class GaussNewtonOptimizerWithQRTest
         try {
             super.testMoreEstimatedParametersUnsorted();
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
+            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
         }
     }
 
@@ -98,7 +98,7 @@ public class GaussNewtonOptimizerWithQRTest
              */
             super.testCircleFittingBadInit();
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
+            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
         }
     }
 
@@ -112,7 +112,7 @@ public class GaussNewtonOptimizerWithQRTest
              */
             super.testHahn1();
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
+            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
         }
     }
 

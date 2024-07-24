@@ -22,8 +22,8 @@
 package org.hipparchus.analysis.polynomials;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for Lagrange form of polynomial function.
@@ -53,20 +53,20 @@ public final class PolynomialFunctionLagrangeFormTest {
         p = new PolynomialFunctionLagrangeForm(x, y);
 
         z = 2.0; expected = -1.0; result = p.value(z);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         z = 4.5; expected = 2.75; result = p.value(z);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         z = 6.0; expected = 5.0; result = p.value(z);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
-        Assert.assertEquals(1, p.degree());
+        Assertions.assertEquals(1, p.degree());
 
         c = p.getCoefficients();
-        Assert.assertEquals(2, c.length);
-        Assert.assertEquals(-4.0, c[0], tolerance);
-        Assert.assertEquals(1.5, c[1], tolerance);
+        Assertions.assertEquals(2, c.length);
+        Assertions.assertEquals(-4.0, c[0], tolerance);
+        Assertions.assertEquals(1.5, c[1], tolerance);
     }
 
     /**
@@ -87,21 +87,21 @@ public final class PolynomialFunctionLagrangeFormTest {
         p = new PolynomialFunctionLagrangeForm(x, y);
 
         z = 1.0; expected = 4.0; result = p.value(z);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         z = 2.5; expected = 22.0; result = p.value(z);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         z = -2.0; expected = -5.0; result = p.value(z);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
-        Assert.assertEquals(2, p.degree());
+        Assertions.assertEquals(2, p.degree());
 
         c = p.getCoefficients();
-        Assert.assertEquals(3, c.length);
-        Assert.assertEquals(-3.0, c[0], tolerance);
-        Assert.assertEquals(5.0, c[1], tolerance);
-        Assert.assertEquals(2.0, c[2], tolerance);
+        Assertions.assertEquals(3, c.length);
+        Assertions.assertEquals(-3.0, c[0], tolerance);
+        Assertions.assertEquals(5.0, c[1], tolerance);
+        Assertions.assertEquals(2.0, c[2], tolerance);
     }
 
     /**
@@ -122,24 +122,24 @@ public final class PolynomialFunctionLagrangeFormTest {
         p = new PolynomialFunctionLagrangeForm(x, y);
 
         z = 0.0; expected = 0.0; result = p.value(z);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         z = -2.0; expected = 0.0; result = p.value(z);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
         z = 4.0; expected = 360.0; result = p.value(z);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertEquals(expected, result, tolerance);
 
-        Assert.assertEquals(5, p.degree());
+        Assertions.assertEquals(5, p.degree());
 
         c = p.getCoefficients();
-        Assert.assertEquals(6, c.length);
-        Assert.assertEquals(0.0, c[0], tolerance);
-        Assert.assertEquals(6.0, c[1], tolerance);
-        Assert.assertEquals(1.0, c[2], tolerance);
-        Assert.assertEquals(-7.0, c[3], tolerance);
-        Assert.assertEquals(-1.0, c[4], tolerance);
-        Assert.assertEquals(1.0, c[5], tolerance);
+        Assertions.assertEquals(6, c.length);
+        Assertions.assertEquals(0.0, c[0], tolerance);
+        Assertions.assertEquals(6.0, c[1], tolerance);
+        Assertions.assertEquals(1.0, c[2], tolerance);
+        Assertions.assertEquals(-7.0, c[3], tolerance);
+        Assertions.assertEquals(-1.0, c[4], tolerance);
+        Assertions.assertEquals(1.0, c[5], tolerance);
     }
 
     /**
@@ -153,7 +153,7 @@ public final class PolynomialFunctionLagrangeFormTest {
             double[] x = { 1.0 };
             double[] y = { 2.0 };
             new PolynomialFunctionLagrangeForm(x, y);
-            Assert.fail("Expecting MathIllegalArgumentException - bad input array length");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad input array length");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -162,7 +162,7 @@ public final class PolynomialFunctionLagrangeFormTest {
             double[] x = { 1.0, 2.0, 3.0, 4.0 };
             double[] y = { 0.0, -4.0, -24.0 };
             new PolynomialFunctionLagrangeForm(x, y);
-            Assert.fail("Expecting MathIllegalArgumentException - mismatch input arrays");
+            Assertions.fail("Expecting MathIllegalArgumentException - mismatch input arrays");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }

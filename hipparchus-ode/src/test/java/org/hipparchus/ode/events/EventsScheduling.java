@@ -35,8 +35,8 @@ import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Check events handlers and step handlers are called at consistent times.
@@ -96,7 +96,7 @@ public class EventsScheduling {
 
         integrator.integrate(new ExpandableODE(ode), initialState, stop);
 
-        Assert.assertEquals(expectedCalls, checker.calls);
+        Assertions.assertEquals(expectedCalls, checker.calls);
 
     }
 
@@ -132,7 +132,7 @@ public class EventsScheduling {
 
         integrator.integrate(new FieldExpandableODE<>(ode), initialState, new Binary64(stop));
 
-        Assert.assertEquals(expectedCalls, checker.calls);
+        Assertions.assertEquals(expectedCalls, checker.calls);
 
     }
 
@@ -156,14 +156,14 @@ public class EventsScheduling {
                 // check scheduling is always consistent with integration direction
                 if (start < stop) {
                     // forward direction
-                    Assert.assertTrue(time >= start);
-                    Assert.assertTrue(time <= stop);
-                    Assert.assertTrue(time >= last);
+                    Assertions.assertTrue(time >= start);
+                    Assertions.assertTrue(time <= stop);
+                    Assertions.assertTrue(time >= last);
                } else {
                     // backward direction
-                   Assert.assertTrue(time <= start);
-                   Assert.assertTrue(time >= stop);
-                   Assert.assertTrue(time <= last);
+                   Assertions.assertTrue(time <= start);
+                   Assertions.assertTrue(time >= stop);
+                   Assertions.assertTrue(time <= last);
                 }
             }
             last = time;

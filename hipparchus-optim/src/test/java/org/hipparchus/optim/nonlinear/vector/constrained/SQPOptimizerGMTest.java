@@ -18,8 +18,8 @@ package org.hipparchus.optim.nonlinear.vector.constrained;
 
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class SQPOptimizerGMTest extends AbstractTestAbstractSQPOptimizerTest {
 
@@ -40,7 +40,7 @@ public class SQPOptimizerGMTest extends AbstractTestAbstractSQPOptimizerTest {
         final OptimizationData[] data = new OptimizationData[] { new ObjectiveFunction(q), eqc };
         final LagrangeSolution    solution  = optimizer.optimize(data);
 
-        Assert.assertEquals(1.5, solution.getValue(), 1.e-4);
+        Assertions.assertEquals(1.5, solution.getValue(), 1.e-4);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class SQPOptimizerGMTest extends AbstractTestAbstractSQPOptimizerTest {
         final OptimizationData[] data = new OptimizationData[] { new ObjectiveFunction(q), eqc };
         final LagrangeSolution    solution  = optimizer.optimize(data);
 
-        Assert.assertEquals(1.5, solution.getValue(), 1.e-4);
+        Assertions.assertEquals(1.5, solution.getValue(), 1.e-4);
     }
 
 }

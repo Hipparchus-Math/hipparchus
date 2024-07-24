@@ -20,7 +20,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ODEStateAndDerivative;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class LutherStateInterpolatorTest extends RungeKuttaStateInterpolatorAbstractTest {
 
@@ -54,21 +54,25 @@ public class LutherStateInterpolatorTest extends RungeKuttaStateInterpolatorAbst
     }
 
     @Override
+    @Test
     public void restrictPrevious() {
         doRestrictPrevious(1.0e-15, 1.0e-15);
     }
 
     @Override
+    @Test
     public void restrictCurrent() {
         doRestrictCurrent(1.0e-15, 1.0e-15);
     }
 
     @Override
+    @Test
     public void restrictBothEnds() {
         doRestrictBothEnds(1.0e-15, 1.0e-15);
     }
 
     @Override
+    @Test
     public void degenerateInterpolation() {
         doDegenerateInterpolation();
     }

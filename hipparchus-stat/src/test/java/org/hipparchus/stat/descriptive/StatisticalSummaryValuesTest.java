@@ -21,11 +21,11 @@
  */
 package org.hipparchus.stat.descriptive;
 
-import java.util.Locale;
-
 import org.hipparchus.UnitTestUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Locale;
 
 /**
  * Test cases for the {@link StatisticalSummaryValues} class.
@@ -45,21 +45,21 @@ public final class StatisticalSummaryValuesTest {
     public void testEqualsAndHashCode() {
         StatisticalSummaryValues u  = new StatisticalSummaryValues(1, 2, 3, 4, 5, 6);
         StatisticalSummaryValues t = null;
-        Assert.assertTrue("reflexive", u.equals(u));
-        Assert.assertFalse("non-null compared to null", u.equals(t));
-        Assert.assertFalse("wrong type", u.equals(Double.valueOf(0)));
+        Assertions.assertEquals(u, u, "reflexive");
+        Assertions.assertNotEquals(u, t, "non-null compared to null");
+        Assertions.assertNotEquals(u, Double.valueOf(0), "wrong type");
         t = new StatisticalSummaryValues(1, 2, 3, 4, 5, 6);
-        Assert.assertTrue("instances with same data should be equal", t.equals(u));
-        Assert.assertEquals("hash code", u.hashCode(), t.hashCode());
+        Assertions.assertEquals(t, u, "instances with same data should be equal");
+        Assertions.assertEquals(u.hashCode(), t.hashCode(), "hash code");
 
         u = new StatisticalSummaryValues(Double.NaN, 2, 3, 4, 5, 6);
         t = new StatisticalSummaryValues(1, Double.NaN, 3, 4, 5, 6);
-        Assert.assertFalse("instances based on different data should be different",
-                (u.equals(t) ||t.equals(u)));
+        Assertions.assertFalse((u.equals(t) ||t.equals(u)),
+                "instances based on different data should be different");
     }
 
     private void verifyEquality(StatisticalSummaryValues s, StatisticalSummaryValues u) {
-        Assert.assertEquals("N",s.getN(),u.getN());
+        Assertions.assertEquals(s.getN(),u.getN(),"N");
         UnitTestUtils.assertEquals("sum",s.getSum(),u.getSum(), 0);
         UnitTestUtils.assertEquals("var",s.getVariance(),u.getVariance(), 0);
         UnitTestUtils.assertEquals("std",s.getStandardDeviation(),u.getStandardDeviation(), 0);
@@ -73,7 +73,7 @@ public final class StatisticalSummaryValuesTest {
         StatisticalSummaryValues u  = new StatisticalSummaryValues(4.5, 16, 10, 5, 4, 45);
         Locale d = Locale.getDefault();
         Locale.setDefault(Locale.US);
-        Assert.assertEquals("StatisticalSummaryValues:\n" +
+        Assertions.assertEquals("StatisticalSummaryValues:\n" +
                      "n: 10\n" +
                      "min: 4.0\n" +
                      "max: 5.0\n" +

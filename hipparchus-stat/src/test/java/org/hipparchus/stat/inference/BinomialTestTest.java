@@ -24,8 +24,8 @@ package org.hipparchus.stat.inference;
 import org.hipparchus.distribution.discrete.BinomialDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for the BinomialTest class.
@@ -40,11 +40,11 @@ public class BinomialTestTest {
 
     @Test
     public void testBinomialTestPValues() {
-        Assert.assertEquals(0.04375, testStatistic.binomialTest(
+        Assertions.assertEquals(0.04375, testStatistic.binomialTest(
             trials, successes, probability, AlternativeHypothesis.TWO_SIDED), 1E-4);
-        Assert.assertEquals(0.02654, testStatistic.binomialTest(
+        Assertions.assertEquals(0.02654, testStatistic.binomialTest(
             trials, successes, probability, AlternativeHypothesis.GREATER_THAN), 1E-4);
-        Assert.assertEquals(0.982, testStatistic.binomialTest(
+        Assertions.assertEquals(0.982, testStatistic.binomialTest(
             trials, successes, probability, AlternativeHypothesis.LESS_THAN), 1E-4);
     }
 
@@ -52,20 +52,20 @@ public class BinomialTestTest {
     public void testBinomialTestExceptions() {
         try {
             testStatistic.binomialTest(10, -1, 0.5, AlternativeHypothesis.TWO_SIDED);
-            Assert.fail("Expected not positive exception");
+            Assertions.fail("Expected not positive exception");
         } catch (MathIllegalArgumentException e) {
             // expected exception;
         }
 
         try {
             testStatistic.binomialTest(10, 11, 0.5, AlternativeHypothesis.TWO_SIDED);
-            Assert.fail("Expected illegal argument exception");
+            Assertions.fail("Expected illegal argument exception");
         } catch (MathIllegalArgumentException e) {
             // expected exception;
         }
         try {
             testStatistic.binomialTest(10, 11, 0.5, null);
-            Assert.fail("Expected illegal argument exception");
+            Assertions.fail("Expected illegal argument exception");
         } catch (MathIllegalArgumentException e) {
             // expected exception;
         }
@@ -76,13 +76,13 @@ public class BinomialTestTest {
         double alpha05 = 0.05;
         double alpha01 = 0.01;
 
-        Assert.assertTrue(testStatistic.binomialTest(trials, successes, probability, AlternativeHypothesis.TWO_SIDED, alpha05));
-        Assert.assertTrue(testStatistic.binomialTest(trials, successes, probability, AlternativeHypothesis.GREATER_THAN, alpha05));
-        Assert.assertFalse(testStatistic.binomialTest(trials, successes, probability, AlternativeHypothesis.LESS_THAN, alpha05));
+        Assertions.assertTrue(testStatistic.binomialTest(trials, successes, probability, AlternativeHypothesis.TWO_SIDED, alpha05));
+        Assertions.assertTrue(testStatistic.binomialTest(trials, successes, probability, AlternativeHypothesis.GREATER_THAN, alpha05));
+        Assertions.assertFalse(testStatistic.binomialTest(trials, successes, probability, AlternativeHypothesis.LESS_THAN, alpha05));
 
-        Assert.assertFalse(testStatistic.binomialTest(trials, successes, probability, AlternativeHypothesis.TWO_SIDED, alpha01));
-        Assert.assertFalse(testStatistic.binomialTest(trials, successes, probability, AlternativeHypothesis.GREATER_THAN, alpha01));
-        Assert.assertFalse(testStatistic.binomialTest(trials, successes, probability, AlternativeHypothesis.LESS_THAN, alpha05));
+        Assertions.assertFalse(testStatistic.binomialTest(trials, successes, probability, AlternativeHypothesis.TWO_SIDED, alpha01));
+        Assertions.assertFalse(testStatistic.binomialTest(trials, successes, probability, AlternativeHypothesis.GREATER_THAN, alpha01));
+        Assertions.assertFalse(testStatistic.binomialTest(trials, successes, probability, AlternativeHypothesis.LESS_THAN, alpha05));
     }
 
     /**
@@ -90,7 +90,7 @@ public class BinomialTestTest {
      */
     @Test
     public void testAllSuccessesTwoSidedHighP() {
-        Assert.assertEquals(1d, testStatistic.binomialTest(200, 200, 0.9950429, AlternativeHypothesis.TWO_SIDED),
+        Assertions.assertEquals(1d, testStatistic.binomialTest(200, 200, 0.9950429, AlternativeHypothesis.TWO_SIDED),
                             Double.MIN_VALUE);
     }
 
@@ -99,7 +99,7 @@ public class BinomialTestTest {
      */
     @Test
     public void testAllSuccessesTwoSidedEvenP() {
-        Assert.assertEquals(2 * FastMath.pow(0.5, 5),
+        Assertions.assertEquals(2 * FastMath.pow(0.5, 5),
                             testStatistic.binomialTest(5, 5, 0.5,
                             AlternativeHypothesis.TWO_SIDED),
                             Double.MIN_VALUE);
@@ -110,7 +110,7 @@ public class BinomialTestTest {
      */
     @Test
     public void testNoSuccessesTwoSidedEvenP() {
-        Assert.assertEquals(2 * FastMath.pow(0.5, 5),
+        Assertions.assertEquals(2 * FastMath.pow(0.5, 5),
                             testStatistic.binomialTest(5, 0, 0.5,
                             AlternativeHypothesis.TWO_SIDED),
                             Double.MIN_VALUE);
@@ -122,7 +122,7 @@ public class BinomialTestTest {
     @Test
     public void testAllSuccessesTwoSidedLowP() {
         final BinomialDistribution dist = new BinomialDistribution(5, 0.4);
-        Assert.assertEquals(dist.probability(5),
+        Assertions.assertEquals(dist.probability(5),
                             testStatistic.binomialTest(5, 5, 0.4,
                             AlternativeHypothesis.TWO_SIDED),
                             Double.MIN_VALUE);
@@ -134,7 +134,7 @@ public class BinomialTestTest {
      */
     public void testNoSuccessesTwoSidedHighP() {
         final BinomialDistribution dist = new BinomialDistribution(5, 0.9);
-        Assert.assertEquals(dist.probability(0),
+        Assertions.assertEquals(dist.probability(0),
                             testStatistic.binomialTest(5, 0, 0.9,
                             AlternativeHypothesis.TWO_SIDED),
                             Double.MIN_VALUE);
@@ -154,7 +154,7 @@ public class BinomialTestTest {
     @Test
     public void testNoSuccessesTwoSidedLowP() {
         final BinomialDistribution dist = new BinomialDistribution(5, 0.2);
-        Assert.assertEquals(1 - dist.probability(1),
+        Assertions.assertEquals(1 - dist.probability(1),
                             testStatistic.binomialTest(5, 0, 0.2,
                             AlternativeHypothesis.TWO_SIDED),
                             Double.MIN_VALUE);
@@ -165,7 +165,7 @@ public class BinomialTestTest {
      */
     @Test
     public void testNoSuccessesTwoSidedVeryLowP() {
-        Assert.assertEquals(1d,
+        Assertions.assertEquals(1d,
                             testStatistic.binomialTest(5, 0,  0.001,
                             AlternativeHypothesis.TWO_SIDED),
                             Double.MIN_VALUE);

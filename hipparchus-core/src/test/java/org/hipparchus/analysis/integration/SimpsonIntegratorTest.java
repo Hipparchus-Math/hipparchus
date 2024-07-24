@@ -26,8 +26,8 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 /**
@@ -51,16 +51,16 @@ public final class SimpsonIntegratorTest {
         min = 0; max = FastMath.PI; expected = 2;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(1000, f, min, max);
-        Assert.assertTrue(integrator.getEvaluations() < 100);
-        Assert.assertTrue(integrator.getIterations()  < 10);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < 100);
+        Assertions.assertTrue(integrator.getIterations()  < 10);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = -FastMath.PI/3; max = 0; expected = -0.5;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(1000, f, min, max);
-        Assert.assertTrue(integrator.getEvaluations() < 50);
-        Assert.assertTrue(integrator.getIterations()  < 10);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < 50);
+        Assertions.assertTrue(integrator.getIterations()  < 10);
+        Assertions.assertEquals(expected, result, tolerance);
     }
 
     /**
@@ -75,23 +75,23 @@ public final class SimpsonIntegratorTest {
         min = 0; max = 1; expected = -1.0/48;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(1000, f, min, max);
-        Assert.assertTrue(integrator.getEvaluations() < 150);
-        Assert.assertTrue(integrator.getIterations()  < 10);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < 150);
+        Assertions.assertTrue(integrator.getIterations()  < 10);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = 0; max = 0.5; expected = 11.0/768;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(1000, f, min, max);
-        Assert.assertTrue(integrator.getEvaluations() < 100);
-        Assert.assertTrue(integrator.getIterations()  < 10);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < 100);
+        Assertions.assertTrue(integrator.getIterations()  < 10);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = -1; max = 4; expected = 2048/3.0 - 78 + 1.0/48;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(1000, f, min, max);
-        Assert.assertTrue(integrator.getEvaluations() < 150);
-        Assert.assertTrue(integrator.getIterations()  < 10);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < 150);
+        Assertions.assertTrue(integrator.getIterations()  < 10);
+        Assertions.assertEquals(expected, result, tolerance);
     }
 
     /**
@@ -103,21 +103,21 @@ public final class SimpsonIntegratorTest {
         try {
             // bad interval
             new SimpsonIntegrator().integrate(1000, f, 1, -1);
-            Assert.fail("Expecting MathIllegalArgumentException - bad interval");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
             new SimpsonIntegrator(5, 4);
-            Assert.fail("Expecting MathIllegalArgumentException - bad iteration limits");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad iteration limits");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
             new SimpsonIntegrator(10, 99);
-            Assert.fail("Expecting MathIllegalArgumentException - bad iteration limits");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad iteration limits");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }

@@ -16,6 +16,9 @@
  */
 package org.hipparchus.util;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -24,9 +27,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 public class FastMathCalcTest {
 
@@ -37,20 +37,34 @@ public class FastMathCalcTest {
         final double[] fmTableB   = getD1("ExpIntTable", "EXP_INT_TABLE_B");
         final int      len        = getInt("EXP_INT_TABLE_LEN");
         final int      max        = getInt("EXP_INT_TABLE_MAX_INDEX");
-        Assert.assertEquals(len, fmTableA.length);
-        Assert.assertEquals(len, fmTableB.length);
+        Assertions.assertEquals(len, fmTableA.length);
+        Assertions.assertEquals(len, fmTableB.length);
 
-        final double[] tmp   = new double[2];
+        final double[] tmp = new double[2];
         final double[] recip = new double[2];
         for (int i = 0; i < max; i++) {
             FastMathCalc.expint(i, tmp);
             if (i == 0) {
-                Assert.assertEquals(fmTableA[max], tmp[0], FastMath.ulp(fmTableA[i]));
-                Assert.assertEquals(fmTableB[max], tmp[1], FastMath.ulp(fmTableB[i]));
+                if (Double.isNaN(FastMath.ulp(fmTableA[i])) ||
+                                Double.isNaN(FastMath.ulp(fmTableB[i]))) {
+                    Assertions.assertEquals(fmTableA[max], tmp[0]);
+                    Assertions.assertEquals(fmTableB[max], tmp[1]);
+                } else {
+                    Assertions.assertEquals(fmTableA[max], tmp[0],
+                                            FastMath.ulp(fmTableA[i]));
+                    Assertions.assertEquals(fmTableB[max], tmp[1],
+                                            FastMath.ulp(fmTableB[i]));
+                }
             } else {
                 FastMathCalc.splitReciprocal(tmp, recip);
-                Assert.assertEquals(fmTableA[max - i], recip[0], FastMath.ulp(fmTableA[i]));
-                Assert.assertEquals(fmTableB[max - i], recip[1], FastMath.ulp(fmTableB[i]));
+                if (Double.isNaN(FastMath.ulp(fmTableA[i])) ||
+                                Double.isNaN(FastMath.ulp(fmTableB[i]))) {
+                    Assertions.assertEquals(fmTableA[max - i], recip[0]);
+                    Assertions.assertEquals(fmTableB[max - i], recip[1]);
+                } else {
+                    Assertions.assertEquals(fmTableA[max - i], recip[0], FastMath.ulp(fmTableA[i]));
+                    Assertions.assertEquals(fmTableB[max - i], recip[1], FastMath.ulp(fmTableB[i]));
+                }
             }
         }
 
@@ -62,15 +76,15 @@ public class FastMathCalcTest {
         final double[] fmTableA   = getD1("ExpFracTable", "EXP_FRAC_TABLE_A");
         final double[] fmTableB   = getD1("ExpFracTable", "EXP_FRAC_TABLE_B");
         final int      len        = getInt("EXP_FRAC_TABLE_LEN");
-        Assert.assertEquals(len, fmTableA.length);
-        Assert.assertEquals(len, fmTableB.length);
+        Assertions.assertEquals(len, fmTableA.length);
+        Assertions.assertEquals(len, fmTableB.length);
 
         final double factor = 1d / (len - 1);
         final double[] tmp = new double[2];
         for (int i = 0; i < len; i++) {
             FastMathCalc.slowexp(i * factor, tmp);
-            Assert.assertEquals(fmTableA[i], tmp[0], FastMath.ulp(fmTableA[i]));
-            Assert.assertEquals(fmTableB[i], tmp[1], FastMath.ulp(fmTableB[i]));
+            Assertions.assertEquals(fmTableA[i], tmp[0], FastMath.ulp(fmTableA[i]));
+            Assertions.assertEquals(fmTableB[i], tmp[1], FastMath.ulp(fmTableB[i]));
         }
 
     }
@@ -79,14 +93,14 @@ public class FastMathCalcTest {
     public void testLnMantTables() {
         final double[][] fmTable  = getD2("lnMant", "LN_MANT");
         final int      len        = getInt("LN_MANT_LEN");
-        Assert.assertEquals(len, fmTable.length);
+        Assertions.assertEquals(len, fmTable.length);
 
         for (int i = 0; i < len; i++) {
             final double d = Double.longBitsToDouble( (((long) i) << 42) | 0x3ff0000000000000L );
             final double[] tmp = FastMathCalc.slowLog(d);
-            Assert.assertEquals(fmTable[i].length, tmp.length);
+            Assertions.assertEquals(fmTable[i].length, tmp.length);
             for (int j = 0; j < fmTable[i].length; ++j) {
-                Assert.assertEquals(fmTable[i][j], tmp[j], FastMath.ulp(fmTable[i][j]));
+                Assertions.assertEquals(fmTable[i][j], tmp[j], FastMath.ulp(fmTable[i][j]));
             }
         }
 
@@ -109,13 +123,13 @@ public class FastMathCalcTest {
             double   d      = Double.longBitsToDouble(bits);
             double[] result = new double[2];
             split.invoke(null, d, result);
-            Assert.assertEquals(bits, Double.doubleToRawLongBits(result[0] + result[1]));
-            Assert.assertEquals(high, Double.doubleToRawLongBits(result[0]));
-            Assert.assertEquals(low,  Double.doubleToRawLongBits(result[1]));
+            Assertions.assertEquals(bits, Double.doubleToRawLongBits(result[0] + result[1]));
+            Assertions.assertEquals(high, Double.doubleToRawLongBits(result[0]));
+            Assertions.assertEquals(low,  Double.doubleToRawLongBits(result[1]));
 
         } catch (NoSuchMethodException | SecurityException | IllegalArgumentException |
                  IllegalAccessException | InvocationTargetException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
     }
 
@@ -149,7 +163,7 @@ public class FastMathCalcTest {
 
         } catch (NoSuchMethodException | SecurityException | IllegalArgumentException |
                  IllegalAccessException | InvocationTargetException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
     }
 
@@ -160,15 +174,15 @@ public class FastMathCalcTest {
             return (double[]) field.get(null);
         } catch (NoSuchFieldException | SecurityException |
                  IllegalArgumentException | IllegalAccessException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
             return null;
         }
     }
 
     private void checkTable(final double[] reference, final double[] actual, int maxUlps) {
-        Assert.assertEquals(reference.length, actual.length);
+        Assertions.assertEquals(reference.length, actual.length);
         for (int i = 0; i < reference.length; ++i) {
-            Assert.assertTrue(Precision.equals(reference[i], actual[i], maxUlps));
+            Assertions.assertTrue(Precision.equals(reference[i], actual[i], maxUlps));
         }
     }
 
@@ -180,7 +194,7 @@ public class FastMathCalcTest {
                                                                      String.class, Integer.TYPE, double[].class);
             printArray.setAccessible(true);
             printArray.invoke(null, ps, "name", 2, new double[] { 1.25, -0.5 });
-            Assert.assertEquals(String.format("name=%n" +
+            Assertions.assertEquals(String.format("name=%n" +
                                               "    {%n" +
                                               "        +1.25d,%n" +
                                               "        -0.5d,%n" +
@@ -189,7 +203,7 @@ public class FastMathCalcTest {
         } catch (IOException | NoSuchMethodException | IllegalAccessException |
                  IllegalArgumentException | InvocationTargetException e) {
             e.printStackTrace();
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
     }
 
@@ -201,7 +215,7 @@ public class FastMathCalcTest {
                                                                      String.class, Integer.TYPE, double[][].class);
             printArray.setAccessible(true);
             printArray.invoke(null, ps, "name", 2, new double[][] { { 1.25, -0.5 }, { 0.0, 3.0 } });
-            Assert.assertEquals(String.format("name%n" + 
+            Assertions.assertEquals(String.format("name%n" + 
                                               "    { %n" + 
                                               "        {+1.25d,                  -0.5d,                   }, // 0%n" +
                                               "        {+0.0d,                   +3.0d,                   }, // 1%n" +
@@ -210,7 +224,7 @@ public class FastMathCalcTest {
         } catch (IOException | NoSuchMethodException | IllegalAccessException |
                  IllegalArgumentException | InvocationTargetException e) {
             e.printStackTrace();
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
     }
 
@@ -226,7 +240,7 @@ public class FastMathCalcTest {
             return (double[]) fmTableField.get(null);
 
         } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
             return null;
         }
     }
@@ -243,7 +257,7 @@ public class FastMathCalcTest {
             return (double[][]) fmTableField.get(null);
 
         } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
             return null;
         }
     }
@@ -256,7 +270,7 @@ public class FastMathCalcTest {
             return ((Integer) fmLen.get(null)).intValue();
 
         } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
             return -1;
         }
     }

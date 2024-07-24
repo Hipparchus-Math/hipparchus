@@ -21,17 +21,17 @@
  */
 package org.hipparchus.distribution.discrete;
 
-import static org.junit.Assert.assertEquals;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.util.Pair;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.util.Pair;
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test class for {@link EnumeratedIntegerDistribution}.
@@ -63,30 +63,30 @@ public class EnumeratedIntegerDistributionTest {
         EnumeratedIntegerDistribution invalid = null;
         try {
             new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0});
-            Assert.fail("Expected MathIllegalArgumentException");
+            Assertions.fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
         }
         try {
             new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, -1.0});
-            Assert.fail("Expected MathIllegalArgumentException");
+            Assertions.fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
         }
         try {
             new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, 0.0});
-            Assert.fail("Expected MathRuntimeException");
+            Assertions.fail("Expected MathRuntimeException");
         } catch (MathRuntimeException e) {
         }
         try {
           new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, Double.NaN});
-            Assert.fail("Expected MathIllegalArgumentException");
+            Assertions.fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
         }
         try {
         new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, Double.POSITIVE_INFINITY});
-            Assert.fail("Expected NotFiniteNumberException");
+            Assertions.fail("Expected NotFiniteNumberException");
         } catch (MathIllegalArgumentException e) {
         }
-        Assert.assertNull("Expected non-initialized DiscreteRealDistribution", invalid);
+        Assertions.assertNull(invalid, "Expected non-initialized DiscreteRealDistribution");
     }
 
     /**
@@ -98,7 +98,7 @@ public class EnumeratedIntegerDistributionTest {
         double[] results = new double[]{0, 0.2, 0, 0, 0, 0.5, 0, 0, 0, 0.3, 0};
         for (int p = 0; p < points.length; p++) {
             double probability = testDistribution.probability(points[p]);
-            Assert.assertEquals(results[p], probability, 0.0);
+            Assertions.assertEquals(results[p], probability, 0.0);
         }
     }
 
@@ -111,7 +111,7 @@ public class EnumeratedIntegerDistributionTest {
         double[] results = new double[]{0, 0.2, 0.2, 0.2, 0.2, 0.7, 0.7, 0.7, 0.7, 1.0, 1.0};
         for (int p = 0; p < points.length; p++) {
             double probability = testDistribution.cumulativeProbability(points[p]);
-            Assert.assertEquals(results[p], probability, 1e-10);
+            Assertions.assertEquals(results[p], probability, 1e-10);
         }
     }
 
@@ -120,7 +120,7 @@ public class EnumeratedIntegerDistributionTest {
      */
     @Test
     public void testGetNumericalMean() {
-        Assert.assertEquals(3.4, testDistribution.getNumericalMean(), 1e-10);
+        Assertions.assertEquals(3.4, testDistribution.getNumericalMean(), 1e-10);
     }
 
     /**
@@ -128,7 +128,7 @@ public class EnumeratedIntegerDistributionTest {
      */
     @Test
     public void testGetNumericalVariance() {
-        Assert.assertEquals(7.84, testDistribution.getNumericalVariance(), 1e-10);
+        Assertions.assertEquals(7.84, testDistribution.getNumericalVariance(), 1e-10);
     }
 
     /**
@@ -136,7 +136,7 @@ public class EnumeratedIntegerDistributionTest {
      */
     @Test
     public void testGetSupportLowerBound() {
-        Assert.assertEquals(-1, testDistribution.getSupportLowerBound());
+        Assertions.assertEquals(-1, testDistribution.getSupportLowerBound());
     }
 
     /**
@@ -144,7 +144,7 @@ public class EnumeratedIntegerDistributionTest {
      */
     @Test
     public void testGetSupportUpperBound() {
-        Assert.assertEquals(7, testDistribution.getSupportUpperBound());
+        Assertions.assertEquals(7, testDistribution.getSupportUpperBound());
     }
 
     /**
@@ -152,7 +152,7 @@ public class EnumeratedIntegerDistributionTest {
      */
     @Test
     public void testIsSupportConnected() {
-        Assert.assertTrue(testDistribution.isSupportConnected());
+        Assertions.assertTrue(testDistribution.isSupportConnected());
     }
 
     @Test

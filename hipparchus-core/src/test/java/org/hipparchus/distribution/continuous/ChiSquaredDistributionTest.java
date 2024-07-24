@@ -22,9 +22,10 @@
 
 package org.hipparchus.distribution.continuous;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for {@link ChiSquaredDistribution}.
@@ -81,7 +82,8 @@ public class ChiSquaredDistributionTest extends RealDistributionAbstractTest {
         };
     }
 
- // --------------------- Override tolerance  --------------
+    // --------------------- Override tolerance  --------------
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -145,11 +147,11 @@ public class ChiSquaredDistributionTest extends RealDistributionAbstractTest {
         ChiSquaredDistribution dist;
 
         dist = new ChiSquaredDistribution(1500);
-        assertEquals(dist.getNumericalMean(), 1500, tol);
-        assertEquals(dist.getNumericalVariance(), 3000, tol);
+        assertEquals(1500, dist.getNumericalMean(), tol);
+        assertEquals(3000, dist.getNumericalVariance(), tol);
 
         dist = new ChiSquaredDistribution(1.12);
-        assertEquals(dist.getNumericalMean(), 1.12, tol);
-        assertEquals(dist.getNumericalVariance(), 2.24, tol);
+        assertEquals(1.12, dist.getNumericalMean(), tol);
+        assertEquals(2.24, dist.getNumericalVariance(), tol);
     }
 }

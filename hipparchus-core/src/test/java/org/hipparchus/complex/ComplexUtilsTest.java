@@ -25,8 +25,10 @@ package org.hipparchus.complex;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  */
@@ -77,9 +79,11 @@ public class ComplexUtilsTest {
         return Complex.I.multiply(new Complex(theta, 0)).exp().multiply(new Complex(r, 0));
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPolar2ComplexIllegalModulus() {
-        ComplexUtils.polar2Complex(-1, 0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            ComplexUtils.polar2Complex(-1, 0);
+        });
     }
 
     @Test
@@ -111,7 +115,7 @@ public class ComplexUtilsTest {
         final Complex[] complex = ComplexUtils.convertToComplex(real);
 
         for (int i = 0; i < real.length; i++) {
-            Assert.assertEquals(real[i], complex[i].getReal(), 0d);
+            Assertions.assertEquals(real[i], complex[i].getReal(), 0d);
         }
     }
 }

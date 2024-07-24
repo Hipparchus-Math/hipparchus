@@ -26,8 +26,8 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for midpoint integrator.
@@ -51,9 +51,9 @@ public final class MidPointIntegratorTest {
         double expected = -3697001.0 / 48.0;
         double tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         double result = integrator.integrate(Integer.MAX_VALUE, f, min, max);
-        Assert.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
-        Assert.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
+        Assertions.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
+        Assertions.assertEquals(expected, result, tolerance);
 
     }
 
@@ -70,18 +70,18 @@ public final class MidPointIntegratorTest {
         double expected = 2;
         double tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         double result = integrator.integrate(Integer.MAX_VALUE, f, min, max);
-        Assert.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
-        Assert.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
+        Assertions.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = -FastMath.PI/3;
         max = 0;
         expected = -0.5;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(Integer.MAX_VALUE, f, min, max);
-        Assert.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
-        Assert.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
+        Assertions.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
+        Assertions.assertEquals(expected, result, tolerance);
 
     }
 
@@ -98,27 +98,27 @@ public final class MidPointIntegratorTest {
         double expected = -1.0 / 48;
         double tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         double result = integrator.integrate(Integer.MAX_VALUE, f, min, max);
-        Assert.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
-        Assert.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
+        Assertions.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = 0;
         max = 0.5;
         expected = 11.0 / 768;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(Integer.MAX_VALUE, f, min, max);
-        Assert.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
-        Assert.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
+        Assertions.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
+        Assertions.assertEquals(expected, result, tolerance);
 
         min = -1;
         max = 4;
         expected = 2048 / 3.0 - 78 + 1.0 / 48;
         tolerance = FastMath.abs(expected * integrator.getRelativeAccuracy());
         result = integrator.integrate(Integer.MAX_VALUE, f, min, max);
-        Assert.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
-        Assert.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
-        Assert.assertEquals(expected, result, tolerance);
+        Assertions.assertTrue(integrator.getEvaluations() < Integer.MAX_VALUE / 2);
+        Assertions.assertTrue(integrator.getIterations() < MidPointIntegrator.MIDPOINT_MAX_ITERATIONS_COUNT / 2);
+        Assertions.assertEquals(expected, result, tolerance);
 
     }
 
@@ -132,21 +132,21 @@ public final class MidPointIntegratorTest {
         try {
             // bad interval
             new MidPointIntegrator().integrate(1000, f, 1, -1);
-            Assert.fail("Expecting MathIllegalArgumentException - bad interval");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
             new MidPointIntegrator(5, 4);
-            Assert.fail("Expecting MathIllegalArgumentException - bad iteration limits");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad iteration limits");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
             new MidPointIntegrator(10, 99);
-            Assert.fail("Expecting MathIllegalArgumentException - bad iteration limits");
+            Assertions.fail("Expecting MathIllegalArgumentException - bad iteration limits");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }

@@ -21,11 +21,13 @@
  */
 package org.hipparchus.random;
 
+import org.hipparchus.exception.NullArgumentException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.util.Random;
 
-import org.hipparchus.exception.NullArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test cases for the RandomAdaptor class.
@@ -44,30 +46,34 @@ public class RandomAdaptorTest {
     private void checkConstant(Random random) {
         byte[] bytes = new byte[] {0};
         random.nextBytes(bytes);
-        Assert.assertEquals(0, bytes[0]);
-        Assert.assertFalse(random.nextBoolean());
-        Assert.assertEquals(0, random.nextDouble(), 0);
-        Assert.assertEquals(0, random.nextFloat(), 0);
-        Assert.assertEquals(0, random.nextGaussian(), 0);
-        Assert.assertEquals(0, random.nextInt());
-        Assert.assertEquals(0, random.nextInt(1));
-        Assert.assertEquals(0, random.nextLong());
+        Assertions.assertEquals(0, bytes[0]);
+        Assertions.assertFalse(random.nextBoolean());
+        Assertions.assertEquals(0, random.nextDouble(), 0);
+        Assertions.assertEquals(0, random.nextFloat(), 0);
+        Assertions.assertEquals(0, random.nextGaussian(), 0);
+        Assertions.assertEquals(0, random.nextInt());
+        Assertions.assertEquals(0, random.nextInt(1));
+        Assertions.assertEquals(0, random.nextLong());
         random.setSeed(100);
-        Assert.assertEquals(0, random.nextDouble(), 0);
+        Assertions.assertEquals(0, random.nextDouble(), 0);
     }
 
     @SuppressWarnings("unused")
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void testNullGenerator(){
-       RandomGenerator nullGenerator = null;
-       Random random = new RandomAdaptor(nullGenerator);
+        assertThrows(NullArgumentException.class, () -> {
+            RandomGenerator nullGenerator = null;
+            Random random = new RandomAdaptor(nullGenerator);
+        });
     }
 
     @SuppressWarnings("unused")
-    @Test(expected=NullArgumentException.class)
+    @Test
     public void testNullGenerator2(){
-       RandomGenerator nullGenerator = null;
-       Random random = RandomAdaptor.of(nullGenerator);
+        assertThrows(NullArgumentException.class, () -> {
+            RandomGenerator nullGenerator = null;
+            Random random = RandomAdaptor.of(nullGenerator);
+        });
     }
 
     /*

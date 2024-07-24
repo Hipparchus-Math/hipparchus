@@ -21,7 +21,7 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.Field;
 import org.hipparchus.util.Binary64Field;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class HighamHall54FieldIntegratorTest extends EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
@@ -38,51 +38,61 @@ public class HighamHall54FieldIntegratorTest extends EmbeddedRungeKuttaFieldInte
     }
 
     @Override
+    @Test
     public void testNonFieldIntegratorConsistency() {
         doTestNonFieldIntegratorConsistency(Binary64Field.getInstance());
     }
 
     @Override
+    @Test
     public void testSanityChecks() {
         doTestSanityChecks(Binary64Field.getInstance());
     }
 
     @Override
+    @Test
     public void testBackward() {
         doTestBackward(Binary64Field.getInstance(), 5.0e-7, 5.0e-7, 1.0e-12, "Higham-Hall 5(4)");
     }
 
     @Override
+    @Test
     public void testKepler() {
         doTestKepler(Binary64Field.getInstance(), 1.5e-4);
     }
 
     @Override
+    @Test
     public void testTorqueFreeMotionOmegaOnly() {
         doTestTorqueFreeMotionOmegaOnly(Binary64Field.getInstance(), 3.0e-15);
     }
 
     @Override
+    @Test
     public void testTorqueFreeMotion() {
         doTestTorqueFreeMotion(Binary64Field.getInstance(), 1.6e-15, 7.0e-16);
     }
 
     @Override
+    @Test
     public void testTorqueFreeMotionIssue230() {
         doTestTorqueFreeMotionIssue230(Binary64Field.getInstance(), 5.4e-15, 1.5e-15);
     }
 
     @Override
+    @Test
     public void testForwardBackwardExceptions() {
         doTestForwardBackwardExceptions(Binary64Field.getInstance());
     }
 
     @Override
+    @Test
     public void testMinStep() {
         doTestMinStep(Binary64Field.getInstance());
     }
 
     @Override
+    @Test
     public void testIncreasingTolerance() {
         // the 1.3 factor is only valid for this test
         // and has been obtained from trial and error
@@ -91,36 +101,43 @@ public class HighamHall54FieldIntegratorTest extends EmbeddedRungeKuttaFieldInte
     }
 
     @Override
+    @Test
     public void testEvents() {
         doTestEvents(Binary64Field.getInstance(), 1.0e-7, "Higham-Hall 5(4)");
     }
 
     @Override
+    @Test
     public void testStepEnd() {
         doTestStepEnd(Binary64Field.getInstance(), 119, "Higham-Hall 5(4)");
     }
 
     @Override
+    @Test
     public void testStopAfterStep() {
         doTestStopAfterStep(Binary64Field.getInstance(), 12, 1.110791);
     }
 
     @Override
+    @Test
     public void testResetAfterStep() {
         doTestResetAfterStep(Binary64Field.getInstance(), 12, 14);
     }
 
     @Override
+    @Test
     public void testEventsErrors() {
         doTestEventsErrors(Binary64Field.getInstance());
     }
 
     @Override
+    @Test
     public void testEventsNoConvergence() {
         doTestEventsNoConvergence(Binary64Field.getInstance());
     }
 
     @Override
+    @Test
     public void testPartialDerivatives() {
         doTestPartialDerivatives(1.2e-11, new double[] { 8.0e-11, 1.8e-11, 2.6e-12, 2.6e-12, 1.8e-11 });
     }

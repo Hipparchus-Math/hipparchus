@@ -21,11 +21,8 @@
  */
 package org.hipparchus.stat;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import org.hipparchus.UnitTestUtils;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -33,8 +30,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hipparchus.UnitTestUtils;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test cases for the {@link Frequency} class.
@@ -54,22 +54,22 @@ public final class LongFrequencyTest {
     public void testCounts() {
         LongFrequency f = new LongFrequency();
 
-        assertEquals("total count", 0, f.getSumFreq());
+        assertEquals(0, f.getSumFreq(), "total count");
         f.addValue(ONE_LONG);
         f.addValue(TWO_LONG);
         f.addValue(1L);
         f.addValue((long) ONE);
-        assertEquals("one frequency count", 3, f.getCount(1L));
-        assertEquals("two frequency count", 1, f.getCount(2L));
-        assertEquals("three frequency count", 0, f.getCount(3L));
-        assertEquals("total count", 4, f.getSumFreq());
-        assertEquals("zero cumulative frequency", 0, f.getCumFreq(0L));
-        assertEquals("one cumulative frequency", 3,  f.getCumFreq(1L));
-        assertEquals("two cumulative frequency", 4,  f.getCumFreq(2L));
-        assertEquals("five cumulative frequency", 4, f.getCumFreq(5L));
+        assertEquals(3, f.getCount(1L), "one frequency count");
+        assertEquals(1, f.getCount(2L), "two frequency count");
+        assertEquals(0, f.getCount(3L), "three frequency count");
+        assertEquals(4, f.getSumFreq(), "total count");
+        assertEquals(0, f.getCumFreq(0L), "zero cumulative frequency");
+        assertEquals(3,  f.getCumFreq(1L),  "one cumulative frequency");
+        assertEquals(4,  f.getCumFreq(2L),  "two cumulative frequency");
+        assertEquals(4, f.getCumFreq(5L), "five cumulative frequency");
 
         f.clear();
-        assertEquals("total count", 0, f.getSumFreq());
+        assertEquals(0, f.getSumFreq(), "total count");
     }
 
     /** test pcts */
@@ -85,15 +85,15 @@ public final class LongFrequencyTest {
         f.addValue(THREE_LONG);
         f.addValue(3L);
         f.addValue((long) THREE);
-        assertEquals("one pct", 0.25, f.getPct(1L), TOLERANCE);
-        assertEquals("two pct", 0.25, f.getPct(Long.valueOf(2)), TOLERANCE);
-        assertEquals("three pct", 0.5, f.getPct(THREE_LONG), TOLERANCE);
-        assertEquals("five pct", 0, f.getPct(5L), TOLERANCE);
-        assertEquals("one cum pct", 0.25, f.getCumPct(1L), TOLERANCE);
-        assertEquals("two cum pct", 0.50, f.getCumPct(Long.valueOf(2)), TOLERANCE);
-        assertEquals("three cum pct", 1.0, f.getCumPct(THREE_LONG), TOLERANCE);
-        assertEquals("five cum pct", 1.0, f.getCumPct(5L), TOLERANCE);
-        assertEquals("zero cum pct", 0.0, f.getCumPct(0L), TOLERANCE);
+        assertEquals(0.25, f.getPct(1L), TOLERANCE, "one pct");
+        assertEquals(0.25, f.getPct(Long.valueOf(2)), TOLERANCE, "two pct");
+        assertEquals(0.5, f.getPct(THREE_LONG), TOLERANCE, "three pct");
+        assertEquals(0, f.getPct(5L), TOLERANCE, "five pct");
+        assertEquals(0.25, f.getCumPct(1L), TOLERANCE, "one cum pct");
+        assertEquals(0.50, f.getCumPct(Long.valueOf(2)), TOLERANCE, "two cum pct");
+        assertEquals(1.0, f.getCumPct(THREE_LONG), TOLERANCE, "three cum pct");
+        assertEquals(1.0, f.getCumPct(5L), TOLERANCE, "five cum pct");
+        assertEquals(0.0, f.getCumPct(0L), TOLERANCE, "zero cum pct");
     }
 
     /**
@@ -136,18 +136,18 @@ public final class LongFrequencyTest {
         f.addValue(int1);
         f.addValue(2);
         f.addValue(Long.valueOf(2).intValue());
-        assertEquals("Integer 1 count", 2, f.getCount(1));
-        assertEquals("Integer 1 count", 2, f.getCount(Integer.valueOf(1)));
-        assertEquals("Integer 1 count", 2, f.getCount(Long.valueOf(1).intValue()));
-        assertEquals("Integer 1 cumPct", 0.5, f.getCumPct(1), TOLERANCE);
-        assertEquals("Integer 1 cumPct", 0.5, f.getCumPct(Long.valueOf(1).intValue()), TOLERANCE);
-        assertEquals("Integer 1 cumPct", 0.5, f.getCumPct(Integer.valueOf(1)), TOLERANCE);
+        assertEquals(2, f.getCount(1), "Integer 1 count");
+        assertEquals(2, f.getCount(Integer.valueOf(1)), "Integer 1 count");
+        assertEquals(2, f.getCount(Long.valueOf(1).intValue()), "Integer 1 count");
+        assertEquals(0.5, f.getCumPct(1), TOLERANCE, "Integer 1 cumPct");
+        assertEquals(0.5, f.getCumPct(Long.valueOf(1).intValue()), TOLERANCE, "Integer 1 cumPct");
+        assertEquals(0.5, f.getCumPct(Integer.valueOf(1)), TOLERANCE, "Integer 1 cumPct");
 
         f.incrementValue(ONE, -2);
         f.incrementValue(THREE, 5);
 
-        assertEquals("Integer 1 count", 0, f.getCount(1));
-        assertEquals("Integer 3 count", 5, f.getCount(3));
+        assertEquals(0, f.getCount(1), "Integer 1 count");
+        assertEquals(5, f.getCount(3), "Integer 3 count");
 
         Iterator<?> it = f.valuesIterator();
         while (it.hasNext()) {

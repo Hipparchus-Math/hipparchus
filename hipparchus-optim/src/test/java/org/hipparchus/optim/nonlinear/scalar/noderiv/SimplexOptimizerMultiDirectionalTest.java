@@ -32,22 +32,26 @@ import org.hipparchus.optim.SimpleValueChecker;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SimplexOptimizerMultiDirectionalTest {
-    @Test(expected=MathRuntimeException.class)
+    @Test
     public void testBoundsUnsupported() {
-        SimplexOptimizer optimizer = new SimplexOptimizer(1e-10, 1e-30);
-        final FourExtrema fourExtrema = new FourExtrema();
+        assertThrows(MathRuntimeException.class, () -> {
+            SimplexOptimizer optimizer = new SimplexOptimizer(1e-10, 1e-30);
+            final FourExtrema fourExtrema = new FourExtrema();
 
-        optimizer.optimize(new MaxEval(100),
-                           new ObjectiveFunction(fourExtrema),
-                           GoalType.MINIMIZE,
-                           new InitialGuess(new double[] { -3, 0 }),
-                           new NelderMeadSimplex(new double[] { 0.2, 0.2 }),
-                           new SimpleBounds(new double[] { -5, -1 },
-                                            new double[] { 5, 1 }));
+            optimizer.optimize(new MaxEval(100),
+                new ObjectiveFunction(fourExtrema),
+                GoalType.MINIMIZE,
+                new InitialGuess(new double[]{-3, 0}),
+                new NelderMeadSimplex(new double[]{0.2, 0.2}),
+                new SimpleBounds(new double[]{-5, -1},
+                    new double[]{5, 1}));
+        });
     }
 
     @Test
@@ -61,14 +65,14 @@ public class SimplexOptimizerMultiDirectionalTest {
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { -3, 0 }),
                                  new MultiDirectionalSimplex(new double[] { 0.2, 0.2 }));
-        Assert.assertEquals(fourExtrema.xM, optimum.getPoint()[0], 4e-6);
-        Assert.assertEquals(fourExtrema.yP, optimum.getPoint()[1], 3e-6);
-        Assert.assertEquals(fourExtrema.valueXmYp, optimum.getValue(), 8e-13);
-        Assert.assertTrue(optimizer.getEvaluations() > 120);
-        Assert.assertTrue(optimizer.getEvaluations() < 150);
+        Assertions.assertEquals(fourExtrema.xM, optimum.getPoint()[0], 4e-6);
+        Assertions.assertEquals(fourExtrema.yP, optimum.getPoint()[1], 3e-6);
+        Assertions.assertEquals(fourExtrema.valueXmYp, optimum.getValue(), 8e-13);
+        Assertions.assertTrue(optimizer.getEvaluations() > 120);
+        Assertions.assertTrue(optimizer.getEvaluations() < 150);
 
         // Check that the number of iterations is updated (MATH-949).
-        Assert.assertTrue(optimizer.getIterations() > 0);
+        Assertions.assertTrue(optimizer.getIterations() > 0);
     }
 
     @Test
@@ -82,14 +86,14 @@ public class SimplexOptimizerMultiDirectionalTest {
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { 1, 0 }),
                                  new MultiDirectionalSimplex(new double[] { 0.2, 0.2 }));
-        Assert.assertEquals(fourExtrema.xP, optimum.getPoint()[0], 2e-8);
-        Assert.assertEquals(fourExtrema.yM, optimum.getPoint()[1], 3e-6);
-        Assert.assertEquals(fourExtrema.valueXpYm, optimum.getValue(), 2e-12);
-        Assert.assertTrue(optimizer.getEvaluations() > 120);
-        Assert.assertTrue(optimizer.getEvaluations() < 150);
+        Assertions.assertEquals(fourExtrema.xP, optimum.getPoint()[0], 2e-8);
+        Assertions.assertEquals(fourExtrema.yM, optimum.getPoint()[1], 3e-6);
+        Assertions.assertEquals(fourExtrema.valueXpYm, optimum.getValue(), 2e-12);
+        Assertions.assertTrue(optimizer.getEvaluations() > 120);
+        Assertions.assertTrue(optimizer.getEvaluations() < 150);
 
         // Check that the number of iterations is updated (MATH-949).
-        Assert.assertTrue(optimizer.getIterations() > 0);
+        Assertions.assertTrue(optimizer.getIterations() > 0);
     }
 
     @Test
@@ -103,14 +107,14 @@ public class SimplexOptimizerMultiDirectionalTest {
                                  GoalType.MAXIMIZE,
                                  new InitialGuess(new double[] { -3.0, 0.0 }),
                                  new MultiDirectionalSimplex(new double[] { 0.2, 0.2 }));
-        Assert.assertEquals(fourExtrema.xM, optimum.getPoint()[0], 7e-7);
-        Assert.assertEquals(fourExtrema.yM, optimum.getPoint()[1], 3e-7);
-        Assert.assertEquals(fourExtrema.valueXmYm, optimum.getValue(), 2e-14);
-        Assert.assertTrue(optimizer.getEvaluations() > 120);
-        Assert.assertTrue(optimizer.getEvaluations() < 150);
+        Assertions.assertEquals(fourExtrema.xM, optimum.getPoint()[0], 7e-7);
+        Assertions.assertEquals(fourExtrema.yM, optimum.getPoint()[1], 3e-7);
+        Assertions.assertEquals(fourExtrema.valueXmYm, optimum.getValue(), 2e-14);
+        Assertions.assertTrue(optimizer.getEvaluations() > 120);
+        Assertions.assertTrue(optimizer.getEvaluations() < 150);
 
         // Check that the number of iterations is updated (MATH-949).
-        Assert.assertTrue(optimizer.getIterations() > 0);
+        Assertions.assertTrue(optimizer.getIterations() > 0);
     }
 
     @Test
@@ -124,14 +128,14 @@ public class SimplexOptimizerMultiDirectionalTest {
                                  GoalType.MAXIMIZE,
                                  new InitialGuess(new double[] { 1, 0 }),
                                  new MultiDirectionalSimplex(new double[] { 0.2, 0.2 }));
-        Assert.assertEquals(fourExtrema.xP, optimum.getPoint()[0], 2e-8);
-        Assert.assertEquals(fourExtrema.yP, optimum.getPoint()[1], 3e-6);
-        Assert.assertEquals(fourExtrema.valueXpYp, optimum.getValue(), 2e-12);
-        Assert.assertTrue(optimizer.getEvaluations() > 180);
-        Assert.assertTrue(optimizer.getEvaluations() < 220);
+        Assertions.assertEquals(fourExtrema.xP, optimum.getPoint()[0], 2e-8);
+        Assertions.assertEquals(fourExtrema.yP, optimum.getPoint()[1], 3e-6);
+        Assertions.assertEquals(fourExtrema.valueXpYp, optimum.getValue(), 2e-12);
+        Assertions.assertTrue(optimizer.getEvaluations() > 180);
+        Assertions.assertTrue(optimizer.getEvaluations() < 220);
 
         // Check that the number of iterations is updated (MATH-949).
-        Assert.assertTrue(optimizer.getIterations() > 0);
+        Assertions.assertTrue(optimizer.getIterations() > 0);
     }
 
     @Test
@@ -158,10 +162,10 @@ public class SimplexOptimizerMultiDirectionalTest {
                                         { 0.9, 1.2 },
                                         {  3.5, -2.3 } }));
 
-        Assert.assertEquals(count, optimizer.getEvaluations());
-        Assert.assertTrue(optimizer.getEvaluations() > 50);
-        Assert.assertTrue(optimizer.getEvaluations() < 100);
-        Assert.assertTrue(optimum.getValue() > 1e-2);
+        Assertions.assertEquals(count, optimizer.getEvaluations());
+        Assertions.assertTrue(optimizer.getEvaluations() > 50);
+        Assertions.assertTrue(optimizer.getEvaluations() < 100);
+        Assertions.assertTrue(optimum.getValue() > 1e-2);
     }
 
     @Test
@@ -186,10 +190,10 @@ public class SimplexOptimizerMultiDirectionalTest {
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { 3, -1, 0, 1 }),
                                  new MultiDirectionalSimplex(4));
-        Assert.assertEquals(count, optimizer.getEvaluations());
-        Assert.assertTrue(optimizer.getEvaluations() > 800);
-        Assert.assertTrue(optimizer.getEvaluations() < 900);
-        Assert.assertTrue(optimum.getValue() > 1e-2);
+        Assertions.assertEquals(count, optimizer.getEvaluations());
+        Assertions.assertTrue(optimizer.getEvaluations() > 800);
+        Assertions.assertTrue(optimizer.getEvaluations() < 900);
+        Assertions.assertTrue(optimum.getValue() > 1e-2);
     }
 
     @Test
@@ -206,12 +210,12 @@ public class SimplexOptimizerMultiDirectionalTest {
         final double EPSILON = 1e-5;
         final double expectedMaximum = function.getMaximum();
         final double actualMaximum = estimate.getValue();
-        Assert.assertEquals(expectedMaximum, actualMaximum, EPSILON);
+        Assertions.assertEquals(expectedMaximum, actualMaximum, EPSILON);
 
         final double[] expectedPosition = function.getMaximumPosition();
         final double[] actualPosition = estimate.getPoint();
-        Assert.assertEquals(expectedPosition[0], actualPosition[0], EPSILON );
-        Assert.assertEquals(expectedPosition[1], actualPosition[1], EPSILON );
+        Assertions.assertEquals(expectedPosition[0], actualPosition[0], EPSILON );
+        Assertions.assertEquals(expectedPosition[1], actualPosition[1], EPSILON );
     }
 
     private static class FourExtrema implements MultivariateFunction {

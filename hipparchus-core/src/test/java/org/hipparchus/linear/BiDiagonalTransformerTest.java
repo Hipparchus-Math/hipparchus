@@ -23,8 +23,8 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class BiDiagonalTransformerTest {
 
@@ -51,12 +51,12 @@ public class BiDiagonalTransformerTest {
         final int m = matrix.getRowDimension();
         final int n = matrix.getColumnDimension();
         BiDiagonalTransformer transformer = new BiDiagonalTransformer(matrix);
-        Assert.assertEquals(m, transformer.getU().getRowDimension());
-        Assert.assertEquals(m, transformer.getU().getColumnDimension());
-        Assert.assertEquals(m, transformer.getB().getRowDimension());
-        Assert.assertEquals(n, transformer.getB().getColumnDimension());
-        Assert.assertEquals(n, transformer.getV().getRowDimension());
-        Assert.assertEquals(n, transformer.getV().getColumnDimension());
+        Assertions.assertEquals(m, transformer.getU().getRowDimension());
+        Assertions.assertEquals(m, transformer.getU().getColumnDimension());
+        Assertions.assertEquals(m, transformer.getB().getRowDimension());
+        Assertions.assertEquals(n, transformer.getB().getColumnDimension());
+        Assertions.assertEquals(n, transformer.getV().getRowDimension());
+        Assertions.assertEquals(n, transformer.getV().getColumnDimension());
 
     }
 
@@ -73,7 +73,7 @@ public class BiDiagonalTransformerTest {
         RealMatrix b = transformer.getB();
         RealMatrix v = transformer.getV();
         double norm = u.multiply(b).multiplyTransposed(v).subtract(matrix).getNorm1();
-        Assert.assertEquals(0, norm, 1.0e-14);
+        Assertions.assertEquals(0, norm, 1.0e-14);
     }
 
     @Test
@@ -93,7 +93,7 @@ public class BiDiagonalTransformerTest {
     private void checkOrthogonal(RealMatrix m) {
         RealMatrix mTm = m.transposeMultiply(m);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(mTm.getRowDimension());
-        Assert.assertEquals(0, mTm.subtract(id).getNorm1(), 1.0e-14);
+        Assertions.assertEquals(0, mTm.subtract(id).getNorm1(), 1.0e-14);
     }
 
     @Test
@@ -110,11 +110,11 @@ public class BiDiagonalTransformerTest {
             for (int j = 0; j < cols; ++j) {
                 if (rows < cols) {
                     if ((i < j) || (i > j + 1)) {
-                        Assert.assertEquals(0, m.getEntry(i, j), 1.0e-16);
+                        Assertions.assertEquals(0, m.getEntry(i, j), 1.0e-16);
                     }
                 } else {
                     if ((i < j - 1) || (i > j)) {
-                        Assert.assertEquals(0, m.getEntry(i, j), 1.0e-16);
+                        Assertions.assertEquals(0, m.getEntry(i, j), 1.0e-16);
                     }
                 }
             }
@@ -150,16 +150,16 @@ public class BiDiagonalTransformerTest {
 
        // check values against known references
        RealMatrix u = transformer.getU();
-       Assert.assertEquals(0, u.subtract(uRef).getNorm1(), 1.0e-14);
+       Assertions.assertEquals(0, u.subtract(uRef).getNorm1(), 1.0e-14);
        RealMatrix b = transformer.getB();
-       Assert.assertEquals(0, b.subtract(bRef).getNorm1(), 1.0e-14);
+       Assertions.assertEquals(0, b.subtract(bRef).getNorm1(), 1.0e-14);
        RealMatrix v = transformer.getV();
-       Assert.assertEquals(0, v.subtract(vRef).getNorm1(), 1.0e-14);
+       Assertions.assertEquals(0, v.subtract(vRef).getNorm1(), 1.0e-14);
 
        // check the same cached instance is returned the second time
-       Assert.assertTrue(u == transformer.getU());
-       Assert.assertTrue(b == transformer.getB());
-       Assert.assertTrue(v == transformer.getV());
+       Assertions.assertTrue(u == transformer.getU());
+       Assertions.assertTrue(b == transformer.getB());
+       Assertions.assertTrue(v == transformer.getV());
 
     }
 
@@ -183,24 +183,24 @@ public class BiDiagonalTransformerTest {
 
         // check values against known references
         RealMatrix u = transformer.getU();
-        Assert.assertEquals(0, u.subtract(uRef).getNorm1(), 1.0e-14);
+        Assertions.assertEquals(0, u.subtract(uRef).getNorm1(), 1.0e-14);
         RealMatrix b = transformer.getB();
-        Assert.assertEquals(0, b.subtract(bRef).getNorm1(), 1.0e-14);
+        Assertions.assertEquals(0, b.subtract(bRef).getNorm1(), 1.0e-14);
         RealMatrix v = transformer.getV();
-        Assert.assertEquals(0, v.subtract(vRef).getNorm1(), 1.0e-14);
+        Assertions.assertEquals(0, v.subtract(vRef).getNorm1(), 1.0e-14);
 
         // check the same cached instance is returned the second time
-        Assert.assertTrue(u == transformer.getU());
-        Assert.assertTrue(b == transformer.getB());
-        Assert.assertTrue(v == transformer.getV());
+        Assertions.assertTrue(u == transformer.getU());
+        Assertions.assertTrue(b == transformer.getB());
+        Assertions.assertTrue(v == transformer.getV());
 
     }
 
     @Test
     public void testUpperOrLower() {
-        Assert.assertTrue(new BiDiagonalTransformer(MatrixUtils.createRealMatrix(testSquare)).isUpperBiDiagonal());
-        Assert.assertTrue(new BiDiagonalTransformer(MatrixUtils.createRealMatrix(testNonSquare)).isUpperBiDiagonal());
-        Assert.assertFalse(new BiDiagonalTransformer(MatrixUtils.createRealMatrix(testNonSquare).transpose()).isUpperBiDiagonal());
+        Assertions.assertTrue(new BiDiagonalTransformer(MatrixUtils.createRealMatrix(testSquare)).isUpperBiDiagonal());
+        Assertions.assertTrue(new BiDiagonalTransformer(MatrixUtils.createRealMatrix(testNonSquare)).isUpperBiDiagonal());
+        Assertions.assertFalse(new BiDiagonalTransformer(MatrixUtils.createRealMatrix(testNonSquare).transpose()).isUpperBiDiagonal());
     }
 
 }

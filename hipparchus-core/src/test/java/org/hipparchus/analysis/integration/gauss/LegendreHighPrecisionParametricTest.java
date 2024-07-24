@@ -21,12 +21,11 @@
  */
 package org.hipparchus.analysis.integration.gauss;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
 import java.util.ArrayList;
 import java.util.Collection;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 /**
  * Test of the {@link FieldLegendreRuleFactory}.
@@ -36,7 +35,6 @@ import org.junit.runners.Parameterized.Parameters;
  * quadrature rules.
  *
  */
-@RunWith(value=Parameterized.class)
 public class LegendreHighPrecisionParametricTest extends GaussianQuadratureAbstractTest {
     private static GaussIntegratorFactory factory = new GaussIntegratorFactory();
 
@@ -46,23 +44,6 @@ public class LegendreHighPrecisionParametricTest extends GaussianQuadratureAbstr
     public static final int MAX_NUM_POINTS = 30;
 
     /**
-     * Creates a new instance of this test, with the specified number of nodes
-     * for the Gauss-Legendre quadrature rule.
-     *
-     * @param numberOfPoints Order of integration rule.
-     * @param maxDegree Maximum degree of monomials to be tested.
-     * @param eps Value of &epsilon;.
-     * @param numUlps Value of the maximum relative error (in ulps).
-     */
-    public LegendreHighPrecisionParametricTest(int numberOfPoints,
-                                               int maxDegree,
-                                               double eps,
-                                               double numUlps) {
-        super(factory.legendreHighPrecision(numberOfPoints),
-              maxDegree, eps, numUlps);
-    }
-
-    /**
      * Returns the collection of parameters to be passed to the constructor of
      * this class.
      * Gauss-Legendre quadrature rules of order 1, ..., {@link #MAX_NUM_POINTS}
@@ -70,9 +51,8 @@ public class LegendreHighPrecisionParametricTest extends GaussianQuadratureAbstr
      *
      * @return the collection of parameters for this parameterized test.
      */
-    @Parameters
     public static Collection<Object[]> getParameters() {
-        final ArrayList<Object[]> parameters = new ArrayList<Object[]>();
+        final ArrayList<Object[]> parameters = new ArrayList<>();
         for (int k = 1; k <= MAX_NUM_POINTS; k++) {
             parameters.add(new Object[] { k, 2 * k - 1, Math.ulp(1d), 13d });
         }
@@ -85,5 +65,15 @@ public class LegendreHighPrecisionParametricTest extends GaussianQuadratureAbstr
             return 0;
         }
         return 2d / (n + 1);
+    }
+
+    @ParameterizedTest
+    @MethodSource("getParameters")
+    public void testAllMonomials(int numberOfPoints,
+                                 int maxDegree,
+                                 double eps,
+                                 double numUlps) {
+        super.testAllMonomials(factory.legendreHighPrecision(numberOfPoints),
+                               maxDegree, eps, numUlps);
     }
 }

@@ -16,8 +16,8 @@
  */
 package org.hipparchus.linear;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class RealMatrixTest {
 
@@ -29,7 +29,7 @@ public class RealMatrixTest {
         DefaultMatrix dma = new DefaultMatrix(a);
         DefaultMatrix dmb = new DefaultMatrix(b);
         RealMatrix abT = dma.multiplyTransposed(dmb);
-        Assert.assertEquals(0.0, abT.subtract(abTRef).getNorm1(), 1.0e-10);
+        Assertions.assertEquals(0.0, abT.subtract(abTRef).getNorm1(), 1.0e-10);
     }
 
     @Test
@@ -40,13 +40,13 @@ public class RealMatrixTest {
         DefaultMatrix dma = new DefaultMatrix(a);
         DefaultMatrix dmb = new DefaultMatrix(b);
         RealMatrix aTb = dma.transposeMultiply(dmb);
-        Assert.assertEquals(0.0, aTb.subtract(aTbRef).getNorm1(), 1.0e-10);
+        Assertions.assertEquals(0.0, aTb.subtract(aTbRef).getNorm1(), 1.0e-10);
     }
 
     @Test
     public void testDefaultMap() {
         RealMatrix a = MatrixUtils.createRealMatrix(new double[][] { {1d,2d,3d}, {2d,5d,3d}, {1d,0d,8d} });
-        Assert.assertEquals(0.0, a.add(a.map(x -> -x)).getNorm1(), 1.0e-10);
+        Assertions.assertEquals(0.0, a.add(a.map(x -> -x)).getNorm1(), 1.0e-10);
     }
 
     // local class that does NOT override multiplyTransposed nor transposeMultiply nor map nor mapToSelf

@@ -21,15 +21,14 @@
  */
 package org.hipparchus.analysis.integration.gauss;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Test of the {@link FieldHermiteRuleFactory}.
@@ -39,7 +38,6 @@ import org.junit.runners.Parameterized.Parameters;
  * quadrature rules.
  *
  */
-@RunWith(value=Parameterized.class)
 public class FieldHermiteParametricTest extends FieldGaussianQuadratureAbstractTest {
     private static final double SQRT_PI = FastMath.sqrt(Math.PI);
     private static final FieldGaussIntegratorFactory<Binary64> factory = new FieldGaussIntegratorFactory<>(Binary64Field.getInstance());
@@ -50,23 +48,6 @@ public class FieldHermiteParametricTest extends FieldGaussianQuadratureAbstractT
     public static final int MAX_NUM_POINTS = 30;
 
     /**
-     * Creates a new instance of this test, with the specified number of nodes
-     * for the Gauss-Hermite quadrature rule.
-     *
-     * @param numberOfPoints Order of integration rule.
-     * @param maxDegree Maximum degree of monomials to be tested.
-     * @param eps Value of &epsilon;.
-     * @param numUlps Value of the maximum relative error (in ulps).
-     */
-    public FieldHermiteParametricTest(int numberOfPoints,
-                                 int maxDegree,
-                                 double eps,
-                                 double numUlps) {
-        super(factory.hermite(numberOfPoints),
-              maxDegree, eps, numUlps);
-    }
-
-    /**
      * Returns the collection of parameters to be passed to the constructor of
      * this class.
      * Gauss-Hermite quadrature rules of order 1, ..., {@link #MAX_NUM_POINTS}
@@ -74,7 +55,6 @@ public class FieldHermiteParametricTest extends FieldGaussianQuadratureAbstractT
      *
      * @return the collection of parameters for this parameterized test.
      */
-    @Parameters
     public static Collection<Object[]> getParameters() {
         final ArrayList<Object[]> parameters = new ArrayList<Object[]>();
         final int [] numUlps = {
@@ -106,5 +86,13 @@ public class FieldHermiteParametricTest extends FieldGaussianQuadratureAbstractT
         }
 
         return p / q * SQRT_PI;
+    }
+
+    @ParameterizedTest
+    @MethodSource("getParameters")
+    public void testAllMonomials(int numberOfPoints, int maxDegree, double eps,
+                                 double numUlps) {
+        super.testAllMonomials(factory.hermite(numberOfPoints), maxDegree, eps,
+                               numUlps);
     }
 }

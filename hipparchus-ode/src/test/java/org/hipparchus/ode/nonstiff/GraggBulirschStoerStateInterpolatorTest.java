@@ -24,6 +24,7 @@ import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
+import org.junit.jupiter.api.Test;
 
 public class GraggBulirschStoerStateInterpolatorTest extends ODEStateInterpolatorAbstractTest {
 
@@ -59,31 +60,37 @@ public class GraggBulirschStoerStateInterpolatorTest extends ODEStateInterpolato
     }
 
     @Override
+    @Test
     public void interpolationAtBounds() {
         doInterpolationAtBounds(1.0e-15);
     }
 
     @Override
+    @Test
     public void interpolationInside() {
         doInterpolationInside(3.5e-18, 1.2e-16);
     }
 
     @Override
+    @Test
     public void restrictPrevious() {
         doRestrictPrevious(1.0e-15, 1.0e-15);
     }
 
     @Override
+    @Test
     public void restrictCurrent() {
         doRestrictCurrent(1.0e-15, 1.0e-15);
     }
 
     @Override
+    @Test
     public void restrictBothEnds() {
         doRestrictBothEnds(1.0e-15, 1.0e-15);
     }
 
     @Override
+    @Test
     public void degenerateInterpolation() {
         doDegenerateInterpolation();
     }

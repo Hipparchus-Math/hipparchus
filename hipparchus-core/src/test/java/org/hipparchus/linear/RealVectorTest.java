@@ -22,13 +22,15 @@
 
 package org.hipparchus.linear;
 
-import java.util.Iterator;
-
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.linear.RealVector.Entry;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Iterator;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for {@link RealVector}.
@@ -61,25 +63,37 @@ public class RealVectorTest extends RealVectorAbstractTest {
     @Test
     @Override
     public void testGetSubVectorInvalidIndex1() {
-        checkUnsupported(() -> super.testGetSubVectorInvalidIndex1());
+        assertThrows(UnsupportedOperationException.class, () -> {
+            final int n = 10;
+            create(new double[n]).getSubVector(-1, 2);
+        });
     }
 
     @Test
     @Override
     public void testGetSubVectorInvalidIndex2() {
-        checkUnsupported(() -> super.testGetSubVectorInvalidIndex2());
+        assertThrows(UnsupportedOperationException.class, () -> {
+            final int n = 10;
+            create(new double[n]).getSubVector(2, 2);
+        });
     }
 
     @Test
     @Override
     public void testGetSubVectorInvalidIndex3() {
-        checkUnsupported(() -> super.testGetSubVectorInvalidIndex3());
+        assertThrows(UnsupportedOperationException.class, () -> {
+            final int n = 10;
+            create(new double[n]).getSubVector(0, 2);
+        });
     }
 
     @Test
     @Override
     public void testGetSubVectorInvalidIndex4() {
-        checkUnsupported(() -> super.testGetSubVectorInvalidIndex4());
+        assertThrows(UnsupportedOperationException.class, () -> {
+            final int n = 10;
+            create(new double[n]).getSubVector(3, 2);
+        });
     }
 
     @Test
@@ -97,19 +111,25 @@ public class RealVectorTest extends RealVectorAbstractTest {
     @Test
     @Override
     public void testSetSubVectorInvalidIndex1() {
-        checkUnsupported(() -> super.testSetSubVectorInvalidIndex1());
+        assertThrows(UnsupportedOperationException.class, () -> {
+            create(new double[10]).setSubVector(-1, create(new double[2]));
+        });
     }
 
     @Test
     @Override
     public void testSetSubVectorInvalidIndex2() {
-        checkUnsupported(() -> super.testSetSubVectorInvalidIndex2());
+        assertThrows(UnsupportedOperationException.class, () -> {
+            create(new double[10]).setSubVector(10, create(new double[2]));
+        });
     }
 
     @Test
     @Override
     public void testSetSubVectorInvalidIndex3() {
-        checkUnsupported(() -> super.testSetSubVectorInvalidIndex3());
+        assertThrows(UnsupportedOperationException.class, () -> {
+            create(new double[10]).setSubVector(9, create(new double[2]));
+        });
     }
 
     @Test
@@ -139,7 +159,9 @@ public class RealVectorTest extends RealVectorAbstractTest {
     @Test
     @Override
     public void testEbeMultiplyDimensionMismatch() {
-        checkUnsupported(() -> super.testEbeMultiplyDimensionMismatch());
+        assertThrows(UnsupportedOperationException.class, () -> {
+            doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.MUL);
+        });
     }
 
     @Test
@@ -157,7 +179,9 @@ public class RealVectorTest extends RealVectorAbstractTest {
     @Test
     @Override
     public void testEbeDivideDimensionMismatch() {
-        checkUnsupported(() -> super.testEbeDivideDimensionMismatch());
+        assertThrows(UnsupportedOperationException.class, () -> {
+            doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.DIV);
+        });
     }
 
     @Test
@@ -179,13 +203,13 @@ public class RealVectorTest extends RealVectorAbstractTest {
         };
         for (Iterator<Entry> it = v.sparseIterator(); it.hasNext(); i++) {
             e = it.next();
-            Assert.assertEquals(nonDefault[i], e.getValue(), 0);
+            Assertions.assertEquals(nonDefault[i], e.getValue(), 0);
         }
         double [] onlyOne = {x, x + 1d, x};
         v = create(onlyOne);
         for(Iterator<Entry> it = v.sparseIterator(); it.hasNext(); ) {
             e = it.next();
-            Assert.assertEquals(onlyOne[1], e.getValue(), 0);
+            Assertions.assertEquals(onlyOne[1], e.getValue(), 0);
         }
     }
 
@@ -208,9 +232,9 @@ public class RealVectorTest extends RealVectorAbstractTest {
     private void checkUnsupported(final Thunk t) {
         try {
             t.call();
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathRuntimeException mre) {
-            Assert.assertEquals(LocalizedCoreFormats.UNSUPPORTED_OPERATION, mre.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.UNSUPPORTED_OPERATION, mre.getSpecifier());
         } catch (UnsupportedOperationException uoe) {
             // expected
         }

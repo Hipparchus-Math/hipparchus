@@ -22,12 +22,11 @@
 
 package org.hipparchus.clustering;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 public class MultiKMeansPlusPlusClustererTest {
 
@@ -69,7 +68,7 @@ public class MultiKMeansPlusPlusClustererTest {
         };
         List<CentroidCluster<DoublePoint>> clusters = transformer.cluster(Arrays.asList(points));
 
-        Assert.assertEquals(3, clusters.size());
+        Assertions.assertEquals(3, clusters.size());
         boolean cluster1Found = false;
         boolean cluster2Found = false;
         boolean cluster3Found = false;
@@ -79,24 +78,24 @@ public class MultiKMeansPlusPlusClustererTest {
             double[] point = center.getPoint();
             if (point[0] < 0) {
                 cluster1Found = true;
-                Assert.assertEquals(8, cluster.getPoints().size());
-                Assert.assertEquals(-14, point[0], epsilon);
-                Assert.assertEquals( 4, point[1], epsilon);
+                Assertions.assertEquals(8, cluster.getPoints().size());
+                Assertions.assertEquals(-14, point[0], epsilon);
+                Assertions.assertEquals( 4, point[1], epsilon);
             } else if (point[1] < 0) {
                 cluster2Found = true;
-                Assert.assertEquals(5, cluster.getPoints().size());
-                Assert.assertEquals( 0, point[0], epsilon);
-                Assert.assertEquals(-1, point[1], epsilon);
+                Assertions.assertEquals(5, cluster.getPoints().size());
+                Assertions.assertEquals( 0, point[0], epsilon);
+                Assertions.assertEquals(-1, point[1], epsilon);
             } else {
                 cluster3Found = true;
-                Assert.assertEquals(8, cluster.getPoints().size());
-                Assert.assertEquals(15, point[0], epsilon);
-                Assert.assertEquals(5, point[1], epsilon);
+                Assertions.assertEquals(8, cluster.getPoints().size());
+                Assertions.assertEquals(15, point[0], epsilon);
+                Assertions.assertEquals(5, point[1], epsilon);
             }
         }
-        Assert.assertTrue(cluster1Found);
-        Assert.assertTrue(cluster2Found);
-        Assert.assertTrue(cluster3Found);
+        Assertions.assertTrue(cluster1Found);
+        Assertions.assertTrue(cluster2Found);
+        Assertions.assertTrue(cluster3Found);
 
     }
 

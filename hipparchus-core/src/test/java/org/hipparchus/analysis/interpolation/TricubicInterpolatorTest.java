@@ -24,8 +24,8 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.analysis.TrivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test case for the {@link TricubicInterpolator tricubic interpolator}.
@@ -47,42 +47,42 @@ public final class TricubicInterpolatorTest {
         double[] wxval = new double[] {3, 2, 5, 6.5};
         try {
             tcf = new TricubicInterpolator().interpolate(wxval, yval, zval, fval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         double[] wyval = new double[] {-4, -1, -1, 2.5};
         try {
             tcf = new TricubicInterpolator().interpolate(xval, wyval, zval, fval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         double[] wzval = new double[] {-12, -8, -9, -3, 0, 2.5};
         try {
             tcf = new TricubicInterpolator().interpolate(xval, yval, wzval, fval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         double[][][] wfval = new double[xval.length - 1][yval.length][zval.length];
         try {
             tcf = new TricubicInterpolator().interpolate(xval, yval, zval, wfval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         wfval = new double[xval.length][yval.length - 1][zval.length];
         try {
             tcf = new TricubicInterpolator().interpolate(xval, yval, zval, wfval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         wfval = new double[xval.length][yval.length][zval.length - 1];
         try {
             tcf = new TricubicInterpolator().interpolate(xval, yval, zval, wfval);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -97,21 +97,21 @@ public final class TricubicInterpolatorTest {
         TricubicInterpolatingFunction tcf = new TricubicInterpolator().interpolate(xval, yval, zval, fval);
 
         // Valid.
-        Assert.assertTrue(tcf.isValidPoint(4, -3, -8));
-        Assert.assertTrue(tcf.isValidPoint(5, -3, -8));
-        Assert.assertTrue(tcf.isValidPoint(4, -1, -8));
-        Assert.assertTrue(tcf.isValidPoint(5, -1, -8));
-        Assert.assertTrue(tcf.isValidPoint(4, -3, 0));
-        Assert.assertTrue(tcf.isValidPoint(5, -3, 0));
-        Assert.assertTrue(tcf.isValidPoint(4, -1, 0));
-        Assert.assertTrue(tcf.isValidPoint(5, -1, 0));
+        Assertions.assertTrue(tcf.isValidPoint(4, -3, -8));
+        Assertions.assertTrue(tcf.isValidPoint(5, -3, -8));
+        Assertions.assertTrue(tcf.isValidPoint(4, -1, -8));
+        Assertions.assertTrue(tcf.isValidPoint(5, -1, -8));
+        Assertions.assertTrue(tcf.isValidPoint(4, -3, 0));
+        Assertions.assertTrue(tcf.isValidPoint(5, -3, 0));
+        Assertions.assertTrue(tcf.isValidPoint(4, -1, 0));
+        Assertions.assertTrue(tcf.isValidPoint(5, -1, 0));
 
         // Invalid.
-        Assert.assertFalse(tcf.isValidPoint(3.5, -3, -8));
-        Assert.assertFalse(tcf.isValidPoint(4.5, -3.1, -8));
-        Assert.assertFalse(tcf.isValidPoint(4.5, -2, 0));
-        Assert.assertFalse(tcf.isValidPoint(4.5, 0, -3.5));
-        Assert.assertFalse(tcf.isValidPoint(-10, 4.1, -1));
+        Assertions.assertFalse(tcf.isValidPoint(3.5, -3, -8));
+        Assertions.assertFalse(tcf.isValidPoint(4.5, -3.1, -8));
+        Assertions.assertFalse(tcf.isValidPoint(4.5, -2, 0));
+        Assertions.assertFalse(tcf.isValidPoint(4.5, 0, -3.5));
+        Assertions.assertFalse(tcf.isValidPoint(-10, 4.1, -1));
     }
 
     /**
@@ -156,16 +156,14 @@ public final class TricubicInterpolatorTest {
         z = 0;
         expected = f.value(x, y, z);
         result = tcf.value(x, y, z);
-        Assert.assertEquals("On sample point",
-                            expected, result, 1e-15);
+        Assertions.assertEquals(expected, result, 1e-15, "On sample point");
 
         x = 4.5;
         y = -1.5;
         z = -4.25;
         expected = f.value(x, y, z);
         result = tcf.value(x, y, z);
-        Assert.assertEquals("Half-way between sample points (middle of the patch)",
-                            expected, result, 1e-14);
+        Assertions.assertEquals(expected, result, 1e-14, "Half-way between sample points (middle of the patch)");
     }
 
     /**
@@ -216,15 +214,13 @@ public final class TricubicInterpolatorTest {
         z = 0;
         expected = f.value(x, y, z);
         result = tcf.value(x, y, z);
-        Assert.assertEquals("On sample point",
-                            expected, result, 1e-14);
+        Assertions.assertEquals(expected, result, 1e-14, "On sample point");
 
         x = 4.5;
         y = -1.5;
         z = -4.25;
         expected = f.value(x, y, z);
         result = tcf.value(x, y, z);
-        Assert.assertEquals("Half-way between sample points (middle of the patch)",
-                            expected, result, 1e-1); // XXX Too high tolerance!
+        Assertions.assertEquals(expected, result, 1e-1, "Half-way between sample points (middle of the patch)"); // XXX Too high tolerance!
     }
 }

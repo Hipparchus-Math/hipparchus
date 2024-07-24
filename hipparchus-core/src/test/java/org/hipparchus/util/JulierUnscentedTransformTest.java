@@ -20,15 +20,19 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class JulierUnscentedTransformTest {
 
     /** test state dimension equal to 0 */
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testWrongStateDimension() {
-        new JulierUnscentedTransform(0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new JulierUnscentedTransform(0);
+        });
     }
 
     /** test weight computation */
@@ -42,14 +46,14 @@ public class JulierUnscentedTransformTest {
         final RealVector wm = julier.getWm();
 
         // Verify
-        Assert.assertEquals(5,    wc.getDimension());
-        Assert.assertEquals(5,    wm.getDimension());
-        Assert.assertEquals(0.0,  wc.getEntry(0), Double.MIN_VALUE);
-        Assert.assertEquals(0.0,  wm.getEntry(0), Double.MIN_VALUE);
-        Assert.assertEquals(0.25, wc.getEntry(1), Double.MIN_VALUE);
-        Assert.assertEquals(0.25, wm.getEntry(1), Double.MIN_VALUE);
-        Assert.assertEquals(0.25, wc.getEntry(2), Double.MIN_VALUE);
-        Assert.assertEquals(0.25, wm.getEntry(2), Double.MIN_VALUE);
+        Assertions.assertEquals(5,    wc.getDimension());
+        Assertions.assertEquals(5,    wm.getDimension());
+        Assertions.assertEquals(0.0,  wc.getEntry(0), Double.MIN_VALUE);
+        Assertions.assertEquals(0.0,  wm.getEntry(0), Double.MIN_VALUE);
+        Assertions.assertEquals(0.25, wc.getEntry(1), Double.MIN_VALUE);
+        Assertions.assertEquals(0.25, wm.getEntry(1), Double.MIN_VALUE);
+        Assertions.assertEquals(0.25, wc.getEntry(2), Double.MIN_VALUE);
+        Assertions.assertEquals(0.25, wm.getEntry(2), Double.MIN_VALUE);
 
     }
 
@@ -67,7 +71,7 @@ public class JulierUnscentedTransformTest {
         final RealVector[] sigma = julier.unscentedTransform(state, covariance);
 
         // Verify
-        Assert.assertEquals(5, sigma.length);
+        Assertions.assertEquals(5, sigma.length);
         checkSigmaPoint(sigma[0], 1.0, 1.0);
         checkSigmaPoint(sigma[1], 2.0, 1.0);
         checkSigmaPoint(sigma[2], 1.0, 2.0);
@@ -94,21 +98,21 @@ public class JulierUnscentedTransformTest {
         final RealMatrix covariance = inverse.getSecond();
         
         // Verify
-        Assert.assertEquals(2, state.getDimension());
-        Assert.assertEquals(1.0, state.getEntry(0), 0.);
-        Assert.assertEquals(1.0, state.getEntry(1), 0.);
+        Assertions.assertEquals(2, state.getDimension());
+        Assertions.assertEquals(1.0, state.getEntry(0), 0.);
+        Assertions.assertEquals(1.0, state.getEntry(1), 0.);
         
-        Assert.assertEquals(2, covariance.getColumnDimension());
-        Assert.assertEquals(2, covariance.getRowDimension());
-        Assert.assertEquals(0.5, covariance.getEntry(0, 0), 0.);
-        Assert.assertEquals(0.0, covariance.getEntry(0, 1), 0.);
-        Assert.assertEquals(0.0, covariance.getEntry(1, 0), 0.);
-        Assert.assertEquals(0.5, covariance.getEntry(1, 1), 0.);
+        Assertions.assertEquals(2, covariance.getColumnDimension());
+        Assertions.assertEquals(2, covariance.getRowDimension());
+        Assertions.assertEquals(0.5, covariance.getEntry(0, 0), 0.);
+        Assertions.assertEquals(0.0, covariance.getEntry(0, 1), 0.);
+        Assertions.assertEquals(0.0, covariance.getEntry(1, 0), 0.);
+        Assertions.assertEquals(0.5, covariance.getEntry(1, 1), 0.);
     }
 
     private static void checkSigmaPoint(final RealVector sigma, final double ref1, final double ref2) {
-        Assert.assertEquals(ref1,  sigma.getEntry(0), Double.MIN_VALUE);
-        Assert.assertEquals(ref2,  sigma.getEntry(1), Double.MIN_VALUE);
+        Assertions.assertEquals(ref1,  sigma.getEntry(0), Double.MIN_VALUE);
+        Assertions.assertEquals(ref2,  sigma.getEntry(1), Double.MIN_VALUE);
     }
 
 }

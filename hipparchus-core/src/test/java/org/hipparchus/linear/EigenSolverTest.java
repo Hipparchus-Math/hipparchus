@@ -22,12 +22,14 @@
 
 package org.hipparchus.linear;
 
-import java.util.Random;
-
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class EigenSolverTest {
 
@@ -45,10 +47,10 @@ public class EigenSolverTest {
         RealMatrix m =
             EigenDecompositionSymmetricTest.createTestMatrix(r, new double[] { 1.0, 0.0, -1.0, -2.0, -3.0 });
         DecompositionSolver es = new EigenDecompositionSymmetric(m).getSolver();
-        Assert.assertFalse(es.isNonSingular());
+        Assertions.assertFalse(es.isNonSingular());
         try {
             es.getInverse();
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException ime) {
             // expected behavior
         }
@@ -61,11 +63,11 @@ public class EigenSolverTest {
         RealMatrix m =
             EigenDecompositionSymmetricTest.createTestMatrix(r, new double[] { 1.0, 0.5, -1.0, -2.0, -3.0 });
         DecompositionSolver es = new EigenDecompositionSymmetric(m).getSolver();
-        Assert.assertTrue(es.isNonSingular());
+        Assertions.assertTrue(es.isNonSingular());
         RealMatrix inverse = es.getInverse();
         RealMatrix error =
             m.multiply(inverse).subtract(MatrixUtils.createRealIdentityMatrix(m.getRowDimension()));
-        Assert.assertEquals(0, error.getNorm1(), 4.0e-15);
+        Assertions.assertEquals(0, error.getNorm1(), 4.0e-15);
     }
 
     /**
@@ -89,26 +91,30 @@ public class EigenSolverTest {
         for (int i = 0; i < m.getRowDimension(); i++) {
             for (int j = 0; j < m.getColumnDimension(); j++) {
                 if (i == j) {
-                    Assert.assertTrue(Precision.equals(1, id.getEntry(i, j), 1e-15));
+                    Assertions.assertTrue(Precision.equals(1, id.getEntry(i, j), 1e-15));
                 } else {
-                    Assert.assertTrue(Precision.equals(0, id.getEntry(i, j), 1e-15));
+                    Assertions.assertTrue(Precision.equals(0, id.getEntry(i, j), 1e-15));
                 }
             }
         }
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNonInvertibleMath1045() {
-        EigenDecompositionSymmetric eigen =
-            new EigenDecompositionSymmetric(MatrixUtils.createRealMatrix(bigSingular));
-        eigen.getSolver().getInverse();
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            EigenDecompositionSymmetric eigen =
+                new EigenDecompositionSymmetric(MatrixUtils.createRealMatrix(bigSingular));
+            eigen.getSolver().getInverse();
+        });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testZeroMatrix() {
-        EigenDecompositionSymmetric eigen =
-            new EigenDecompositionSymmetric(MatrixUtils.createRealMatrix(new double[][] {{0}}));
-        eigen.getSolver().getInverse();
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            EigenDecompositionSymmetric eigen =
+                new EigenDecompositionSymmetric(MatrixUtils.createRealMatrix(new double[][]{{0}}));
+            eigen.getSolver().getInverse();
+        });
     }
 
     /** test solve dimension errors */
@@ -123,19 +129,19 @@ public class EigenSolverTest {
         RealMatrix b = MatrixUtils.createRealMatrix(new double[2][2]);
         try {
             es.solve(b);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
         try {
             es.solve(b.getColumnVector(0));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
         try {
             es.solve(new ArrayRealVectorTest.RealVectorTestImpl(b.getColumn(0)));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
@@ -172,11 +178,11 @@ public class EigenSolverTest {
 
         // using RealMatrix
         RealMatrix solution=es.solve(b);
-        Assert.assertEquals(0, solution.subtract(xRef).getNorm1(), 2.5e-12);
+        Assertions.assertEquals(0, solution.subtract(xRef).getNorm1(), 2.5e-12);
 
         // using RealVector
         for (int i = 0; i < b.getColumnDimension(); ++i) {
-            Assert.assertEquals(0,
+            Assertions.assertEquals(0,
                          es.solve(b.getColumnVector(i)).subtract(xRef.getColumnVector(i)).getNorm(),
                          2.0e-11);
         }
@@ -185,7 +191,7 @@ public class EigenSolverTest {
         for (int i = 0; i < b.getColumnDimension(); ++i) {
             ArrayRealVectorTest.RealVectorTestImpl v =
                 new ArrayRealVectorTest.RealVectorTestImpl(b.getColumn(i));
-            Assert.assertEquals(0,
+            Assertions.assertEquals(0,
                          es.solve(v).subtract(xRef.getColumnVector(i)).getNorm(),
                          2.0e-11);
         }

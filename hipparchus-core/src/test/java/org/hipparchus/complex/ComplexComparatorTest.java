@@ -16,10 +16,10 @@
  */
 package org.hipparchus.complex;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ComplexComparatorTest {
 
@@ -31,24 +31,25 @@ public class ComplexComparatorTest {
 
     @Test
     public void test() {
-        assertEquals("ok", comp.compare(o1, o2), -1 * comp.compare(o2, o1));
+        assertEquals(comp.compare(o1, o2), -1 * comp.compare(o2, o1), "ok");
     }
 
     @Test
     public void test2() {
-        assertEquals("ok",
-                     ((comp.compare(o1, o2) > 0) && (comp.compare(o2, o3) > 0)),
-                     comp.compare(o1, o3) > 0);
+        assertEquals(((comp.compare(o1, o2) > 0) && (comp.compare(o2, o3) > 0)),
+                     comp.compare(o1, o3) > 0,
+                     "ok");
     }
 
     @Test
     public void test3() {
-        assertEquals("ok", ((comp.compare(o1, o11) == 0)),
-                     comp.compare(o1, o2) == comp.compare(o11, o2));
+        assertEquals(((comp.compare(o1, o11) == 0)),
+                     comp.compare(o1, o2) == comp.compare(o11, o2),
+                     "ok");
     }
 
     @Test
     public void test4() {
-        assertTrue("ok", (comp.compare(o1, o11) == 0));
+        assertTrue((comp.compare(o1, o11) == 0), "ok");
     }
 }

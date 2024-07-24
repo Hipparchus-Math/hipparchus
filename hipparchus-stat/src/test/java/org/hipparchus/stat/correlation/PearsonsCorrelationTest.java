@@ -27,8 +27,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 public class PearsonsCorrelationTest {
@@ -188,7 +188,7 @@ public class PearsonsCorrelationTest {
             data[i][1] = i + 1/((double)i + 1);
         }
         PearsonsCorrelation corrInstance = new PearsonsCorrelation(data);
-        Assert.assertTrue(corrInstance.getCorrelationPValues().getEntry(0, 1) > 0);
+        Assertions.assertTrue(corrInstance.getCorrelationPValues().getEntry(0, 1) > 0);
     }
 
 
@@ -199,8 +199,8 @@ public class PearsonsCorrelationTest {
     public void testConstant() {
         double[] noVariance = new double[] {1, 1, 1, 1};
         double[] values = new double[] {1, 2, 3, 4};
-        Assert.assertTrue(Double.isNaN(new PearsonsCorrelation().correlation(noVariance, values)));
-        Assert.assertTrue(Double.isNaN(new PearsonsCorrelation().correlation(values, noVariance)));
+        Assertions.assertTrue(Double.isNaN(new PearsonsCorrelation().correlation(noVariance, values)));
+        Assertions.assertTrue(Double.isNaN(new PearsonsCorrelation().correlation(values, noVariance)));
     }
 
 
@@ -214,14 +214,14 @@ public class PearsonsCorrelationTest {
         double[] two = new double[] {2};
         try {
             new PearsonsCorrelation().correlation(one, two);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         RealMatrix matrix = new BlockRealMatrix(new double[][] {{0},{1}});
         try {
             new PearsonsCorrelation(matrix);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
@@ -243,7 +243,7 @@ public class PearsonsCorrelationTest {
             for (int j = 0; j < i; j++) {
                 double t = FastMath.abs(rValues.getEntry(i, j)) / stdErrors.getEntry(i, j);
                 double p = 2 * (1 - tDistribution.cumulativeProbability(t));
-                Assert.assertEquals(p, pValues.getEntry(i, j), 10E-15);
+                Assertions.assertEquals(p, pValues.getEntry(i, j), 10E-15);
             }
         }
     }
@@ -283,7 +283,7 @@ public class PearsonsCorrelationTest {
         double[][] data = matrix.getData();
         double[] x = matrix.getColumn(0);
         double[] y = matrix.getColumn(1);
-        Assert.assertEquals(new PearsonsCorrelation().correlation(x, y),
+        Assertions.assertEquals(new PearsonsCorrelation().correlation(x, y),
                 corrInstance.getCorrelationMatrix().getEntry(0, 1), Double.MIN_VALUE);
         UnitTestUtils.assertEquals("Correlation matrix", corrInstance.getCorrelationMatrix(),
                 new PearsonsCorrelation().computeCorrelationMatrix(data), Double.MIN_VALUE);

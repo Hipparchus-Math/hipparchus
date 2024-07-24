@@ -20,13 +20,16 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.Field;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexField;
-import org.hipparchus.ode.*;
+import org.hipparchus.ode.ExpandableODE;
+import org.hipparchus.ode.FieldExpandableODE;
+import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
+import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.SinCos;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class FieldExplicitRungeKuttaIntegratorTest {
 
@@ -40,7 +43,7 @@ public class FieldExplicitRungeKuttaIntegratorTest {
         final Complex actualFraction = FieldExplicitRungeKuttaIntegrator.fraction(field, p, q);
         // THEN
         final Complex expectedFraction = FieldExplicitRungeKuttaIntegrator.fraction(field, (double) p, (double) q);
-        Assert.assertEquals(expectedFraction.getReal(), actualFraction.getReal(), 0);
+        Assertions.assertEquals(expectedFraction.getReal(), actualFraction.getReal(), 0);
     }
 
     @Test
@@ -75,7 +78,7 @@ public class FieldExplicitRungeKuttaIntegratorTest {
         final double[] expectedState = ExplicitRungeKuttaIntegrator.applyExternalButcherWeights(y0Real, yDotKReal, h.getReal(),
                 explicitRungeKutta.getB());
         for (int i = 0; i < expectedState.length; i++) {
-            Assert.assertEquals(expectedState[i], actualState[i].getReal(), 0);
+            Assertions.assertEquals(expectedState[i], actualState[i].getReal(), 0);
         }
     }
 
@@ -105,7 +108,7 @@ public class FieldExplicitRungeKuttaIntegratorTest {
         final Complex[] expectedState = FieldExplicitRungeKuttaIntegrator.applyExternalButcherWeights(y0, yDotK, h,
                 fieldExplicitRungeKutta.getRealB());
         for (int i = 0; i < expectedState.length; i++) {
-            Assert.assertEquals(expectedState[i], actualState[i]);
+            Assertions.assertEquals(expectedState[i], actualState[i]);
         }
     }
 

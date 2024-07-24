@@ -21,10 +21,6 @@
  */
 package org.hipparchus.distribution.continuous;
 
-
-import java.util.ArrayList;
-import java.util.Collections;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.integration.BaseAbstractUnivariateIntegrator;
@@ -32,10 +28,13 @@ import org.hipparchus.analysis.integration.IterativeLegendreGaussIntegrator;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Abstract base class for {@link RealDistribution} tests.
@@ -139,7 +138,7 @@ public abstract class RealDistributionAbstractTest {
     /**
      * Setup sets all test instance data to default values
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         distribution = makeDistribution();
         cumulativeTestPoints = makeCumulativeTestPoints();
@@ -153,7 +152,7 @@ public abstract class RealDistributionAbstractTest {
     /**
      * Cleans up test instance data
      */
-    @After
+    @AfterEach
     public void tearDown() {
         distribution = null;
         cumulativeTestPoints = null;
@@ -191,7 +190,7 @@ public abstract class RealDistributionAbstractTest {
                     } catch (MathIllegalArgumentException e) {
                         continue;
                     }
-                    Assert.fail("distribution.probability(double, double) should have thrown an exception that second argument is too large");
+                    Assertions.fail("distribution.probability(double, double) should have thrown an exception that second argument is too large");
                 }
             }
         }
@@ -302,19 +301,19 @@ public abstract class RealDistributionAbstractTest {
     public void testIllegalArguments() {
         try {
             distribution.probability(1, 0);
-            Assert.fail("Expecting MathIllegalArgumentException for bad cumulativeProbability interval");
+            Assertions.fail("Expecting MathIllegalArgumentException for bad cumulativeProbability interval");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             distribution.inverseCumulativeProbability(-1);
-            Assert.fail("Expecting MathIllegalArgumentException for p = -1");
+            Assertions.fail("Expecting MathIllegalArgumentException for p = -1");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             distribution.inverseCumulativeProbability(2);
-            Assert.fail("Expecting MathIllegalArgumentException for p = 2");
+            Assertions.fail("Expecting MathIllegalArgumentException for p = 2");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -349,7 +348,7 @@ public abstract class RealDistributionAbstractTest {
         }
         Collections.sort(integrationTestPoints);
         for (int i = 1; i < integrationTestPoints.size(); i++) {
-            Assert.assertEquals(
+            Assertions.assertEquals(
                     distribution.probability(
                             integrationTestPoints.get(0), integrationTestPoints.get(i)),
                             integrator.integrate(

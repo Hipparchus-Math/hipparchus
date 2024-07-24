@@ -24,8 +24,11 @@ package org.hipparchus.distribution.continuous;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test cases for ExponentialDistribution.
@@ -33,6 +36,7 @@ import org.junit.Test;
 public class ExponentialDistributionTest extends RealDistributionAbstractTest {
 
     // --------------------- Override tolerance  --------------
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -88,36 +92,38 @@ public class ExponentialDistributionTest extends RealDistributionAbstractTest {
     @Test
     public void testCumulativeProbability2() {
         double actual = getDistribution().probability(0.25, 0.75);
-        Assert.assertEquals(0.0905214, actual, 10e-4);
+        Assertions.assertEquals(0.0905214, actual, 10e-4);
     }
 
     @Test
     public void testDensity() {
         ExponentialDistribution d1 = new ExponentialDistribution(1);
-        Assert.assertTrue(Precision.equals(0.0, d1.density(-1e-9), 1));
-        Assert.assertTrue(Precision.equals(1.0, d1.density(0.0), 1));
-        Assert.assertTrue(Precision.equals(0.0, d1.density(1000.0), 1));
-        Assert.assertTrue(Precision.equals(FastMath.exp(-1), d1.density(1.0), 1));
-        Assert.assertTrue(Precision.equals(FastMath.exp(-2), d1.density(2.0), 1));
+        Assertions.assertTrue(Precision.equals(0.0, d1.density(-1e-9), 1));
+        Assertions.assertTrue(Precision.equals(1.0, d1.density(0.0), 1));
+        Assertions.assertTrue(Precision.equals(0.0, d1.density(1000.0), 1));
+        Assertions.assertTrue(Precision.equals(FastMath.exp(-1), d1.density(1.0), 1));
+        Assertions.assertTrue(Precision.equals(FastMath.exp(-2), d1.density(2.0), 1));
 
         ExponentialDistribution d2 = new ExponentialDistribution(3);
-        Assert.assertTrue(Precision.equals(1/3.0, d2.density(0.0), 1));
+        Assertions.assertTrue(Precision.equals(1/3.0, d2.density(0.0), 1));
         // computed using  print(dexp(1, rate=1/3), digits=10) in R 2.5
-        Assert.assertEquals(0.2388437702, d2.density(1.0), 1e-8);
+        Assertions.assertEquals(0.2388437702, d2.density(1.0), 1e-8);
 
         // computed using  print(dexp(2, rate=1/3), digits=10) in R 2.5
-        Assert.assertEquals(0.1711390397, d2.density(2.0), 1e-8);
+        Assertions.assertEquals(0.1711390397, d2.density(2.0), 1e-8);
     }
 
     @Test
     public void testMeanAccessors() {
         ExponentialDistribution distribution = (ExponentialDistribution) getDistribution();
-        Assert.assertEquals(5d, distribution.getMean(), Double.MIN_VALUE);
+        Assertions.assertEquals(5d, distribution.getMean(), Double.MIN_VALUE);
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions() {
-        new ExponentialDistribution(0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new ExponentialDistribution(0);
+        });
     }
 
     @Test
@@ -126,11 +132,11 @@ public class ExponentialDistributionTest extends RealDistributionAbstractTest {
         ExponentialDistribution dist;
 
         dist = new ExponentialDistribution(11d);
-        Assert.assertEquals(dist.getNumericalMean(), 11d, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), 11d * 11d, tol);
+        Assertions.assertEquals(11d, dist.getNumericalMean(), tol);
+        Assertions.assertEquals(dist.getNumericalVariance(), 11d * 11d, tol);
 
         dist = new ExponentialDistribution(10.5d);
-        Assert.assertEquals(dist.getNumericalMean(), 10.5d, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), 10.5d * 10.5d, tol);
+        Assertions.assertEquals(10.5d, dist.getNumericalMean(), tol);
+        Assertions.assertEquals(dist.getNumericalVariance(), 10.5d * 10.5d, tol);
     }
 }

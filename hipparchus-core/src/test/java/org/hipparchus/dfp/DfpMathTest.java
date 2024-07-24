@@ -22,10 +22,10 @@
 
 package org.hipparchus.dfp;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class DfpMathTest {
 
@@ -35,7 +35,7 @@ public class DfpMathTest {
     private Dfp nan;
     private Dfp qnan;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         // Some basic setup.  Define some constants and clear the status flags
         factory = new DfpField(20);
@@ -50,7 +50,7 @@ public class DfpMathTest {
         pi.getField().clearIEEEFlags();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         pinf = null;
         ninf = null;
@@ -74,7 +74,7 @@ public class DfpMathTest {
         b = (b && x.getField().getIEEEFlags() == flags);
 
         if (!b)
-            Assert.assertTrue("assersion failed "+desc+" x = "+x.toString()+" flags = "+x.getField().getIEEEFlags(), b);
+            Assertions.assertTrue(b, "assersion failed "+desc+" x = "+x.toString()+" flags = "+x.getField().getIEEEFlags());
 
         x.getField().clearIEEEFlags();
     }

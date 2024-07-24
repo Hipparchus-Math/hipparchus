@@ -21,11 +21,11 @@
  */
 package org.hipparchus.stat.descriptive.moment;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test cases for the {@link Kurtosis} class.

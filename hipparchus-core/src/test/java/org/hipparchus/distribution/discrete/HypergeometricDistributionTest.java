@@ -22,14 +22,14 @@
 
 package org.hipparchus.distribution.discrete;
 
-import static org.junit.Assert.assertEquals;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for HyperGeometriclDistribution.
@@ -123,8 +123,8 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
         verifyDensities();
         verifyCumulativeProbabilities();
         verifyInverseCumulativeProbabilities();
-        Assert.assertEquals(dist.getSupportLowerBound(), 3);
-        Assert.assertEquals(dist.getSupportUpperBound(), 3);
+        Assertions.assertEquals(3, dist.getSupportLowerBound());
+        Assertions.assertEquals(3, dist.getSupportUpperBound());
     }
 
     /** Verify that if there are no successes, mass is concentrated on 0 */
@@ -141,8 +141,8 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
         verifyDensities();
         verifyCumulativeProbabilities();
         verifyInverseCumulativeProbabilities();
-        Assert.assertEquals(dist.getSupportLowerBound(), 0);
-        Assert.assertEquals(dist.getSupportUpperBound(), 0);
+        Assertions.assertEquals(0, dist.getSupportLowerBound());
+        Assertions.assertEquals(0, dist.getSupportUpperBound());
     }
 
     /** Verify that if sampleSize = populationSize, mass is concentrated on numberOfSuccesses */
@@ -159,39 +159,39 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
         verifyDensities();
         verifyCumulativeProbabilities();
         verifyInverseCumulativeProbabilities();
-        Assert.assertEquals(dist.getSupportLowerBound(), 3);
-        Assert.assertEquals(dist.getSupportUpperBound(), 3);
+        Assertions.assertEquals(3, dist.getSupportLowerBound());
+        Assertions.assertEquals(3, dist.getSupportUpperBound());
     }
 
     @Test
     public void testPreconditions() {
         try {
             new HypergeometricDistribution(0, 3, 5);
-            Assert.fail("negative population size. MathIllegalArgumentException expected");
+            Assertions.fail("negative population size. MathIllegalArgumentException expected");
         } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new HypergeometricDistribution(5, -1, 5);
-            Assert.fail("negative number of successes. MathIllegalArgumentException expected");
+            Assertions.fail("negative number of successes. MathIllegalArgumentException expected");
         } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new HypergeometricDistribution(5, 3, -1);
-            Assert.fail("negative sample size. MathIllegalArgumentException expected");
+            Assertions.fail("negative sample size. MathIllegalArgumentException expected");
         } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new HypergeometricDistribution(5, 6, 5);
-            Assert.fail("numberOfSuccesses > populationSize. MathIllegalArgumentException expected");
+            Assertions.fail("numberOfSuccesses > populationSize. MathIllegalArgumentException expected");
         } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new HypergeometricDistribution(5, 3, 6);
-            Assert.fail("sampleSize > populationSize. MathIllegalArgumentException expected");
+            Assertions.fail("sampleSize > populationSize. MathIllegalArgumentException expected");
         } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
@@ -200,9 +200,9 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
     @Test
     public void testAccessors() {
         HypergeometricDistribution dist = new HypergeometricDistribution(5, 3, 4);
-        Assert.assertEquals(5, dist.getPopulationSize());
-        Assert.assertEquals(3, dist.getNumberOfSuccesses());
-        Assert.assertEquals(4, dist.getSampleSize());
+        Assertions.assertEquals(5, dist.getPopulationSize());
+        Assertions.assertEquals(3, dist.getNumberOfSuccesses());
+        Assertions.assertEquals(4, dist.getSampleSize());
     }
 
     @Test
@@ -286,12 +286,12 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
         HypergeometricDistribution dist;
 
         dist = new HypergeometricDistribution(1500, 40, 100);
-        Assert.assertEquals(dist.getNumericalMean(), 40d * 100d / 1500d, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), ( 100d * 40d * (1500d - 100d) * (1500d - 40d) ) / ( (1500d * 1500d * 1499d) ), tol);
+        Assertions.assertEquals(dist.getNumericalMean(), 40d * 100d / 1500d, tol);
+        Assertions.assertEquals(dist.getNumericalVariance(), ( 100d * 40d * (1500d - 100d) * (1500d - 40d) ) / ( (1500d * 1500d * 1499d) ), tol);
 
         dist = new HypergeometricDistribution(3000, 55, 200);
-        Assert.assertEquals(dist.getNumericalMean(), 55d * 200d / 3000d, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), ( 200d * 55d * (3000d - 200d) * (3000d - 55d) ) / ( (3000d * 3000d * 2999d) ), tol);
+        Assertions.assertEquals(dist.getNumericalMean(), 55d * 200d / 3000d, tol);
+        Assertions.assertEquals(dist.getNumericalVariance(), ( 200d * 55d * (3000d - 200d) * (3000d - 55d) ) / ( (3000d * 3000d * 2999d) ), tol);
     }
 
     @Test
@@ -303,12 +303,12 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
         int k = 0;
         final HypergeometricDistribution dist = new HypergeometricDistribution(N, m, n);
 
-        Assert.assertTrue(Precision.compareTo(1.0, dist.upperCumulativeProbability(k), 1) == 0);
-        Assert.assertTrue(Precision.compareTo(dist.cumulativeProbability(k), 0.0, 1) > 0);
+        Assertions.assertEquals(0, Precision.compareTo(1.0, dist.upperCumulativeProbability(k), 1));
+        Assertions.assertTrue(Precision.compareTo(dist.cumulativeProbability(k), 0.0, 1) > 0);
 
         // another way to calculate the upper cumulative probability
         double upper = 1.0 - dist.cumulativeProbability(k) + dist.probability(k);
-        Assert.assertTrue(Precision.compareTo(1.0, upper, 1) == 0);
+        Assertions.assertEquals(0, Precision.compareTo(1.0, upper, 1));
     }
 
     @Test

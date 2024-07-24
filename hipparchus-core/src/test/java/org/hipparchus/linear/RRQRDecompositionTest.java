@@ -22,11 +22,13 @@
 
 package org.hipparchus.linear;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.util.Random;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 public class RRQRDecompositionTest {
@@ -76,10 +78,10 @@ public class RRQRDecompositionTest {
         int rows = m.getRowDimension();
         int columns = m.getColumnDimension();
         RRQRDecomposition qr = new RRQRDecomposition(m);
-        Assert.assertEquals(rows,    qr.getQ().getRowDimension());
-        Assert.assertEquals(rows,    qr.getQ().getColumnDimension());
-        Assert.assertEquals(rows,    qr.getR().getRowDimension());
-        Assert.assertEquals(columns, qr.getR().getColumnDimension());
+        Assertions.assertEquals(rows,    qr.getQ().getRowDimension());
+        Assertions.assertEquals(rows,    qr.getQ().getColumnDimension());
+        Assertions.assertEquals(rows,    qr.getR().getRowDimension());
+        Assertions.assertEquals(columns, qr.getR().getColumnDimension());
     }
 
     /** test AP = QR */
@@ -105,7 +107,7 @@ public class RRQRDecompositionTest {
     private void checkAPEqualQR(RealMatrix m) {
         RRQRDecomposition rrqr = new RRQRDecomposition(m);
         double norm = rrqr.getQ().multiply(rrqr.getR()).subtract(m.multiply(rrqr.getP())).getNorm1();
-        Assert.assertEquals(0, norm, normTolerance);
+        Assertions.assertEquals(0, norm, normTolerance);
     }
 
     /** test the orthogonality of Q */
@@ -132,7 +134,7 @@ public class RRQRDecompositionTest {
         RRQRDecomposition qr = new RRQRDecomposition(m);
         RealMatrix eye = MatrixUtils.createRealIdentityMatrix(m.getRowDimension());
         double norm = qr.getQT().multiply(qr.getQ()).subtract(eye).getNorm1();
-        Assert.assertEquals(0, norm, normTolerance);
+        Assertions.assertEquals(0, norm, normTolerance);
     }
 
     /** test that R is upper triangular */
@@ -166,7 +168,7 @@ public class RRQRDecompositionTest {
             @Override
             public void visit(int row, int column, double value) {
                 if (column < row) {
-                    Assert.assertEquals(0.0, value, entryTolerance);
+                    Assertions.assertEquals(0.0, value, entryTolerance);
                 }
             }
         });
@@ -203,17 +205,19 @@ public class RRQRDecompositionTest {
             @Override
             public void visit(int row, int column, double value) {
                 if (column > row) {
-                    Assert.assertEquals(0.0, value, entryTolerance);
+                    Assertions.assertEquals(0.0, value, entryTolerance);
                 }
             }
         });
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testNonInvertible() {
-        RRQRDecomposition qr =
-            new RRQRDecomposition(MatrixUtils.createRealMatrix(testData3x3Singular), 3.0e-16);
-        qr.getSolver().getInverse();
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            RRQRDecomposition qr =
+                new RRQRDecomposition(MatrixUtils.createRealMatrix(testData3x3Singular), 3.0e-16);
+            qr.getSolver().getInverse();
+        });
     }
 
     private RealMatrix createTestMatrix(final Random r, final int rows, final int columns) {
@@ -233,7 +237,7 @@ public class RRQRDecompositionTest {
         double[][] d = { { 1, 1, 1 }, { 0, 0, 0 }, { 1, 2, 3 } };
         RealMatrix m = new Array2DRowRealMatrix(d);
         RRQRDecomposition qr = new RRQRDecomposition(m);
-        Assert.assertEquals(2, qr.getRank(1.0e-16));
+        Assertions.assertEquals(2, qr.getRank(1.0e-16));
     }
 
 }

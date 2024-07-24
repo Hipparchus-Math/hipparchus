@@ -21,9 +21,6 @@
  */
 package org.hipparchus.ode.events;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
@@ -34,8 +31,11 @@ import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /** Tests for overlapping state events. Also tests an event function that does
  * not converge to zero, but does have values of opposite sign around its root.
@@ -110,13 +110,13 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
                 //System.out.println("Event 2 @ t=" + t);
             }
         }
-        Assert.assertEquals(EVENT_TIMES1.length, events1.size());
-        Assert.assertEquals(EVENT_TIMES2.length, events2.size());
+        Assertions.assertEquals(EVENT_TIMES1.length, events1.size());
+        Assertions.assertEquals(EVENT_TIMES2.length, events2.size());
         for(int i = 0; i < EVENT_TIMES1.length; i++) {
-            Assert.assertEquals(EVENT_TIMES1[i], events1.get(i), 1e-7);
+            Assertions.assertEquals(EVENT_TIMES1[i], events1.get(i), 1e-7);
         }
         for(int i = 0; i < EVENT_TIMES2.length; i++) {
-            Assert.assertEquals(EVENT_TIMES2[i], events2.get(i), 1e-7);
+            Assertions.assertEquals(EVENT_TIMES2[i], events2.get(i), 1e-7);
         }
         //System.out.println();
     }

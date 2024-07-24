@@ -21,8 +21,8 @@
  */
 package org.hipparchus.random;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class Well44497bTest extends RandomGeneratorAbstractTest {
 
@@ -112,7 +112,7 @@ public class Well44497bTest extends RandomGeneratorAbstractTest {
         };
 
         for (int i = 0; i < refInt.length; ++i) {
-            Assert.assertEquals(refInt[i], mt.nextInt());
+            Assertions.assertEquals(refInt[i], mt.nextInt());
         }
 
     }

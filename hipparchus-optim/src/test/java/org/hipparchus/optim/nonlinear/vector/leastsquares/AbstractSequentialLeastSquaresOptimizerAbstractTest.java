@@ -16,14 +16,6 @@
  */
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.sameInstance;
-
-import java.io.IOException;
-import java.util.Arrays;
-
-import org.hamcrest.MatcherAssert;
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -43,8 +35,16 @@ import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer.
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Evaluation;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Pair;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.util.Arrays;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Some of the unit tests are re-implementations of the MINPACK <a
@@ -94,7 +94,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
     }
 
     public void fail(LeastSquaresOptimizer optimizer) {
-        Assert.fail("Expected Exception from: " + optimizer.toString());
+        Assertions.fail("Expected Exception from: " + optimizer.toString());
     }
 
     /**
@@ -105,9 +105,9 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
      */
     public void assertEquals(double tolerance, RealVector actual, double... expected){
         for (int i = 0; i < expected.length; i++) {
-            Assert.assertEquals(expected[i], actual.getEntry(i), tolerance);
+            Assertions.assertEquals(expected[i], actual.getEntry(i), tolerance);
         }
-        Assert.assertEquals(expected.length, actual.getDimension());
+        Assertions.assertEquals(expected.length, actual.getDimension());
     }
 
     /**
@@ -150,7 +150,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         Optimum optimum = optimizer.optimize(lsp);
 
         //TODO more specific test? could pass with 'return 1;'
-        Assert.assertTrue(optimum.getIterations() > 0);
+        Assertions.assertTrue(optimum.getIterations() > 0);
     }
 
     @Test
@@ -163,9 +163,9 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         defineOptimizer(null);
         Optimum optimum = optimizer.optimize(ls);
 
-        Assert.assertEquals(0, optimum.getRMS(), TOl);
+        Assertions.assertEquals(0, optimum.getRMS(), TOl);
         assertEquals(TOl, optimum.getPoint(), 1.5);
-        Assert.assertEquals(0.0, optimum.getResiduals().getEntry(0), TOl);
+        Assertions.assertEquals(0.0, optimum.getResiduals().getEntry(0), TOl);
     }
 
     @Test
@@ -178,7 +178,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         defineOptimizer(null);
         Optimum optimum = optimizer.optimize(problem.getBuilder().build());
 
-        Assert.assertEquals(0, optimum.getRMS(), TOl);
+        Assertions.assertEquals(0, optimum.getRMS(), TOl);
         assertEquals(TOl, optimum.getPoint(), 7, 3);
         assertEquals(TOl, optimum.getResiduals(), 0, 0, 0);
     }
@@ -197,9 +197,9 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         defineOptimizer(null);
         Optimum optimum = optimizer.optimize(problem.getBuilder().build());
 
-        Assert.assertEquals(0, optimum.getRMS(), TOl);
+        Assertions.assertEquals(0, optimum.getRMS(), TOl);
         for (int i = 0; i < problem.target.length; ++i) {
-            Assert.assertEquals(0.55 * i, optimum.getPoint().getEntry(i), TOl);
+            Assertions.assertEquals(0.55 * i, optimum.getPoint().getEntry(i), TOl);
         }
     }
 
@@ -214,7 +214,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         defineOptimizer(null);
         Optimum optimum = optimizer.optimize(problem.getBuilder().build());
 
-        Assert.assertEquals(0, optimum.getRMS(), TOl);
+        Assertions.assertEquals(0, optimum.getRMS(), TOl);
         assertEquals(TOl, optimum.getPoint(), 1, 2, 3);
     }
 
@@ -233,7 +233,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         defineOptimizer(null);
         Optimum optimum = optimizer.optimize(problem.getBuilder().build());
 
-        Assert.assertEquals(0, optimum.getRMS(), TOl);
+        Assertions.assertEquals(0, optimum.getRMS(), TOl);
         assertEquals(TOl, optimum.getPoint(), 3, 4, -1, -2, 1 + epsilon, 1 - epsilon);
     }
 
@@ -272,7 +272,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         Optimum optimum = optimizer
                 .optimize(problem1.getBuilder().start(start).build());
 
-        Assert.assertEquals(0, optimum.getRMS(), TOl);
+        Assertions.assertEquals(0, optimum.getRMS(), TOl);
         assertEquals(TOl, optimum.getPoint(), 1, 1, 1, 1);
 
         LinearProblem problem2 = new LinearProblem(new double[][]{
@@ -284,7 +284,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
 
         optimum = optimizer.optimize(problem2.getBuilder().start(start).build());
 
-        Assert.assertEquals(0, optimum.getRMS(), TOl);
+        Assertions.assertEquals(0, optimum.getRMS(), TOl);
         assertEquals(1e-8, optimum.getPoint(), -81, 137, -34, 22);
     }
 
@@ -300,7 +300,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         Optimum optimum = optimizer
                 .optimize(problem.getBuilder().start(new double[]{7, 6, 5, 4}).build());
 
-        Assert.assertEquals(0, optimum.getRMS(), TOl);
+        Assertions.assertEquals(0, optimum.getRMS(), TOl);
     }
 
     @Test
@@ -317,11 +317,11 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         Optimum optimum = optimizer.optimize(
                 problem.getBuilder().start(new double[]{2, 2, 2, 2, 2, 2}).build());
 
-        Assert.assertEquals(0, optimum.getRMS(), TOl);
+        Assertions.assertEquals(0, optimum.getRMS(), TOl);
         RealVector point = optimum.getPoint();
         //the first two elements are under constrained
         //check first two elements obey the constraint: sum to 3
-        Assert.assertEquals(3, point.getEntry(0) + point.getEntry(1), TOl);
+        Assertions.assertEquals(3, point.getEntry(0) + point.getEntry(1), TOl);
         //#constrains = #states fro the last 4 elements
         assertEquals(TOl, point.getSubVector(2, 4), 3, 4, 5, 6);
     }
@@ -338,7 +338,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         Optimum optimum = optimizer
                 .optimize(problem.getBuilder().start(new double[]{1, 1}).build());
 
-        Assert.assertEquals(0, optimum.getRMS(), TOl);
+        Assertions.assertEquals(0, optimum.getRMS(), TOl);
         assertEquals(TOl, optimum.getPoint(), 2, 1);
     }
 
@@ -355,7 +355,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
                 .optimize(problem.getBuilder().start(new double[]{1, 1}).build());
 
         //TODO what is this actually testing?
-        Assert.assertTrue(optimum.getRMS() > 0.1);
+        Assertions.assertTrue(optimum.getRMS() > 0.1);
     }
 
     @Test
@@ -370,7 +370,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
             //TODO why is this part here? hasn't it been tested already?
             Optimum optimum = optimizer.optimize(problem.getBuilder().build());
 
-            Assert.assertEquals(0, optimum.getRMS(), TOl);
+            Assertions.assertEquals(0, optimum.getRMS(), TOl);
             assertEquals(TOl, optimum.getPoint(), -1, 1);
 
             //TODO move to builder test
@@ -379,7 +379,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
 
             fail(optimizer);
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, e.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, e.getSpecifier());
         }
     }
 
@@ -393,7 +393,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
             defineOptimizer(null);
             Optimum optimum = optimizer.optimize(problem.getBuilder().build());
 
-            Assert.assertEquals(0, optimum.getRMS(), TOl);
+            Assertions.assertEquals(0, optimum.getRMS(), TOl);
             assertEquals(TOl, optimum.getPoint(), -1, 1);
 
             //TODO move to builder test
@@ -406,7 +406,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
 
             fail(optimizer);
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, e.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, e.getSpecifier());
         }
     }
 
@@ -433,11 +433,11 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
                                             checkerPair(new SimpleVectorValueChecker(1e-3, 1e-3)).
                                             start(new double[] { 98.680, 47.345 }).
                                             build());
-        Assert.assertEquals(2, oneRun.getJacobian().getColumnDimension());
+        Assertions.assertEquals(2, oneRun.getJacobian().getColumnDimension());
         Vector2D oneShotCenter = new Vector2D(oneRun.getPoint().getEntry(0), oneRun.getPoint().getEntry(1));
-        Assert.assertEquals(96.075901, oneShotCenter.getX(),               1.0e-6);
-        Assert.assertEquals(48.135169, oneShotCenter.getY(),               1.0e-6);
-        Assert.assertEquals(69.960161, circleAll.getRadius(oneShotCenter), 1.0e-6);
+        Assertions.assertEquals(96.075901, oneShotCenter.getX(),               1.0e-6);
+        Assertions.assertEquals(48.135169, oneShotCenter.getY(),               1.0e-6);
+        Assertions.assertEquals(69.960161, circleAll.getRadius(oneShotCenter), 1.0e-6);
 
         // then split the observations in two sets,
         // the first one using 3 observations and the second one using 2 observations
@@ -446,11 +446,11 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
                                               checkerPair(new SimpleVectorValueChecker(1e-3, 1e-3)).
                                               start(new double[] { 98.680, 47.345 }).
                                               build());
-        Assert.assertEquals(2, firstRun.getJacobian().getColumnDimension());
+        Assertions.assertEquals(2, firstRun.getJacobian().getColumnDimension());
         Vector2D firstRunCenter = new Vector2D(firstRun.getPoint().getEntry(0), firstRun.getPoint().getEntry(1));
-        Assert.assertEquals(93.650000, firstRunCenter.getX(),               1.0e-6);
-        Assert.assertEquals(45.500000, firstRunCenter.getY(),               1.0e-6);
-        Assert.assertEquals(67.896265, circleAll.getRadius(firstRunCenter), 1.0e-6);
+        Assertions.assertEquals(93.650000, firstRunCenter.getX(),               1.0e-6);
+        Assertions.assertEquals(45.500000, firstRunCenter.getY(),               1.0e-6);
+        Assertions.assertEquals(67.896265, circleAll.getRadius(firstRunCenter), 1.0e-6);
 
         // for the second run, we start from the state and covariance only,
         // instead of using the evaluation "firstRun" that we have
@@ -460,11 +460,11 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
                                                       checkerPair(new SimpleVectorValueChecker(1e-3, 1e-3)).
                                                       start(new double[] { firstRunCenter.getX(), firstRunCenter.getY() }).
                                                       build());
-        Assert.assertEquals(2, secondRun.getJacobian().getColumnDimension());
+        Assertions.assertEquals(2, secondRun.getJacobian().getColumnDimension());
         Vector2D secondRunCenter = new Vector2D(secondRun.getPoint().getEntry(0), secondRun.getPoint().getEntry(1));
-        Assert.assertEquals(97.070437, secondRunCenter.getX(),               1.0e-6);
-        Assert.assertEquals(49.039898, secondRunCenter.getY(),               1.0e-6);
-        Assert.assertEquals(70.789016, circleAll.getRadius(secondRunCenter), 1.0e-6);
+        Assertions.assertEquals(97.070437, secondRunCenter.getX(),               1.0e-6);
+        Assertions.assertEquals(49.039898, secondRunCenter.getY(),               1.0e-6);
+        Assertions.assertEquals(70.789016, circleAll.getRadius(secondRunCenter), 1.0e-6);
         
     }
 
@@ -478,8 +478,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         for (int i = 0; i < actual.getDimension(); i++) {
             double expected = dataset.getParameter(i);
             double delta = FastMath.abs(errParams * expected);
-            Assert.assertEquals(dataset.getName() + ", param #" + i,
-                    expected, actual.getEntry(i), delta);
+            Assertions.assertEquals(expected, actual.getEntry(i), delta, dataset.getName() + ", param #" + i);
         }
     }
 
@@ -506,11 +505,11 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         final LeastSquaresBuilder builder = problem.getBuilder()
                 .checker(new ConvergenceChecker<Evaluation>() {
                     public boolean converged(int iteration, Evaluation previous, Evaluation current) {
-                        MatcherAssert.assertThat(
+                        assertThat(
                                 previous.getPoint(),
                                 not(sameInstance(current.getPoint())));
-                        Assert.assertArrayEquals(new double[3], previous.getPoint().toArray(), 0);
-                        Assert.assertArrayEquals(new double[] {1, 2, 3}, current.getPoint().toArray(), TOl);
+                        Assertions.assertArrayEquals(new double[3], previous.getPoint().toArray(), 0);
+                        Assertions.assertArrayEquals(new double[] {1, 2, 3}, current.getPoint().toArray(), TOl);
                         checked[0] = true;
                         return true;
                     }
@@ -518,7 +517,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
         defineOptimizer(null);
         optimizer.optimize(builder.build());
 
-        MatcherAssert.assertThat(checked[0], is(true));
+        assertThat(checked[0], is(true));
     }
     
     @Test
@@ -543,7 +542,7 @@ public abstract class AbstractSequentialLeastSquaresOptimizerAbstractTest {
             optimizer.optimize(lsp);
             fail(optimizer);
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, mise.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, mise.getSpecifier());
         }
     }
 

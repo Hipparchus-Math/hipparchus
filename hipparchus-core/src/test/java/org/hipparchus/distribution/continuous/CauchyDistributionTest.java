@@ -22,12 +22,13 @@
 
 package org.hipparchus.distribution.continuous;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for CauchyDistribution.
@@ -36,6 +37,8 @@ public class CauchyDistributionTest extends RealDistributionAbstractTest {
 
     // --------------------- Override tolerance  --------------
     protected double defaultTolerance = 1e-9;
+
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();

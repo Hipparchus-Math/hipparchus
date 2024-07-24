@@ -22,12 +22,12 @@
  */
 package org.hipparchus.util;
 
-import static org.junit.Assert.assertEquals;
-
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937a;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RyuDoubleTest {
 
@@ -148,9 +148,9 @@ public class RyuDoubleTest {
                 // in about 3% cases, standard Double.toString and Ryū give different results
                 // in theses cases, Ryū finds either an equal or shorter representation
                 // and both representations are information preserving (i.e. they parse to the same number)
-                Assert.assertTrue(s2.length() <= s1.length());
-                Assert.assertEquals(l, Double.doubleToRawLongBits(Double.parseDouble(s1)));
-                Assert.assertEquals(l, Double.doubleToRawLongBits(Double.parseDouble(s2)));
+                Assertions.assertTrue(s2.length() <= s1.length());
+                Assertions.assertEquals(l, Double.doubleToRawLongBits(Double.parseDouble(s1)));
+                Assertions.assertEquals(l, Double.doubleToRawLongBits(Double.parseDouble(s2)));
             }
         }
     }

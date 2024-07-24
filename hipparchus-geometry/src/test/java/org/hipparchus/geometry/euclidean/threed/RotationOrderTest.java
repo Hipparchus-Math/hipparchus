@@ -22,12 +22,12 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
-import java.lang.reflect.Field;
-
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.lang.reflect.Field;
 
 
 public class RotationOrderTest {
@@ -43,7 +43,7 @@ public class RotationOrderTest {
     };
 
     for (int i = 0; i < orders.length; ++i) {
-      Assert.assertEquals(getFieldName(orders[i]), orders[i].toString());
+      Assertions.assertEquals(getFieldName(orders[i]), orders[i].toString());
     }
 
   }
@@ -52,9 +52,9 @@ public class RotationOrderTest {
   public void testIssue72() {
       for (RotationOrder order : RotationOrder.values()) {
           RotationOrder buildOrder = RotationOrder.getRotationOrder(order.toString());
-          Assert.assertEquals(0.0, Vector3D.distance1(order.getA1(), buildOrder.getA1()), Double.MIN_VALUE);
-          Assert.assertEquals(0.0, Vector3D.distance1(order.getA2(), buildOrder.getA2()), Double.MIN_VALUE);
-          Assert.assertEquals(0.0, Vector3D.distance1(order.getA3(), buildOrder.getA3()), Double.MIN_VALUE);
+          Assertions.assertEquals(0.0, Vector3D.distance1(order.getA1(), buildOrder.getA1()), Double.MIN_VALUE);
+          Assertions.assertEquals(0.0, Vector3D.distance1(order.getA2(), buildOrder.getA2()), Double.MIN_VALUE);
+          Assertions.assertEquals(0.0, Vector3D.distance1(order.getA3(), buildOrder.getA3()), Double.MIN_VALUE);
       }
   }
 
@@ -64,8 +64,8 @@ public class RotationOrderTest {
       try {
           RotationOrder.getRotationOrder(wrongName);
       } catch (MathIllegalStateException mise) {
-          Assert.assertEquals(LocalizedGeometryFormats.INVALID_ROTATION_ORDER_NAME, mise.getSpecifier());
-          Assert.assertEquals(wrongName, mise.getParts()[0]);
+          Assertions.assertEquals(LocalizedGeometryFormats.INVALID_ROTATION_ORDER_NAME, mise.getSpecifier());
+          Assertions.assertEquals(wrongName, mise.getParts()[0]);
       }
   }
 

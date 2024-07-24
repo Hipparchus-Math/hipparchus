@@ -22,8 +22,6 @@
 
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
-import java.io.IOException;
-
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.euclidean.threed.Plane;
@@ -32,8 +30,10 @@ import org.hipparchus.linear.SingularValueDecomposer;
 import org.hipparchus.optim.SimpleVectorValueChecker;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -108,7 +108,7 @@ public class GaussNewtonOptimizerWithSVDTest
             super.testHahn1();
             fail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, e.getSpecifier());
         }
     }
 
@@ -120,7 +120,7 @@ public class GaussNewtonOptimizerWithSVDTest
             super.testGetIterations();
             fail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED,
+            Assertions.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED,
                                 e.getSpecifier());
         }
     }
@@ -146,7 +146,7 @@ public class GaussNewtonOptimizerWithSVDTest
         double actual = optimum.getResiduals().getNorm();
 
         //verify
-        Assert.assertEquals(expected, actual, TOl);
+        Assertions.assertEquals(expected, actual, TOl);
     }
 
 }

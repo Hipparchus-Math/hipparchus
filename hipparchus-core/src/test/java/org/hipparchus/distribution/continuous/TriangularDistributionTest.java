@@ -22,9 +22,13 @@
 
 package org.hipparchus.distribution.continuous;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for {@link TriangularDistribution}.
@@ -33,6 +37,7 @@ public class TriangularDistributionTest extends RealDistributionAbstractTest {
 
     // --- Override tolerance -------------------------------------------------
 
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -142,38 +147,46 @@ public class TriangularDistributionTest extends RealDistributionAbstractTest {
     @Test
     public void testGetLowerBound() {
         TriangularDistribution distribution = makeDistribution();
-        Assert.assertEquals(-3.0, distribution.getSupportLowerBound(), 0);
+        Assertions.assertEquals(-3.0, distribution.getSupportLowerBound(), 0);
     }
 
     /** Test upper bound getter. */
     @Test
     public void testGetUpperBound() {
         TriangularDistribution distribution = makeDistribution();
-        Assert.assertEquals(12.0, distribution.getSupportUpperBound(), 0);
+        Assertions.assertEquals(12.0, distribution.getSupportUpperBound(), 0);
     }
 
     /** Test pre-condition for equal lower/upper limit. */
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions1() {
-        new TriangularDistribution(0, 0, 0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new TriangularDistribution(0, 0, 0);
+        });
     }
 
     /** Test pre-condition for lower limit larger than upper limit. */
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions2() {
-        new TriangularDistribution(1, 1, 0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new TriangularDistribution(1, 1, 0);
+        });
     }
 
     /** Test pre-condition for mode larger than upper limit. */
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions3() {
-        new TriangularDistribution(0, 2, 1);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new TriangularDistribution(0, 2, 1);
+        });
     }
 
     /** Test pre-condition for mode smaller than lower limit. */
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testPreconditions4() {
-        new TriangularDistribution(2, 1, 3);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new TriangularDistribution(2, 1, 3);
+        });
     }
 
     /** Test mean/variance. */
@@ -182,15 +195,15 @@ public class TriangularDistributionTest extends RealDistributionAbstractTest {
         TriangularDistribution dist;
 
         dist = new TriangularDistribution(0, 0.5, 1.0);
-        Assert.assertEquals(dist.getNumericalMean(), 0.5, 0);
-        Assert.assertEquals(dist.getNumericalVariance(), 1 / 24.0, 0);
+        Assertions.assertEquals(0.5, dist.getNumericalMean(), 0);
+        Assertions.assertEquals(dist.getNumericalVariance(), 1 / 24.0, 0);
 
         dist = new TriangularDistribution(0, 1, 1);
-        Assert.assertEquals(dist.getNumericalMean(), 2 / 3.0, 0);
-        Assert.assertEquals(dist.getNumericalVariance(), 1 / 18.0, 0);
+        Assertions.assertEquals(dist.getNumericalMean(), 2 / 3.0, 0);
+        Assertions.assertEquals(dist.getNumericalVariance(), 1 / 18.0, 0);
 
         dist = new TriangularDistribution(-3, 2, 12);
-        Assert.assertEquals(dist.getNumericalMean(), 3 + (2 / 3.0), 0);
-        Assert.assertEquals(dist.getNumericalVariance(), 175 / 18.0, 0);
+        Assertions.assertEquals(dist.getNumericalMean(), 3 + (2 / 3.0), 0);
+        Assertions.assertEquals(dist.getNumericalVariance(), 175 / 18.0, 0);
     }
 }

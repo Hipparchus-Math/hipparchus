@@ -15,8 +15,10 @@ package org.hipparchus.util;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test for {@link Incrementor}.
@@ -25,27 +27,27 @@ public class IncrementorTest {
     @Test
     public void testConstructor1() {
         final Incrementor i = new Incrementor();
-        Assert.assertEquals(Integer.MAX_VALUE, i.getMaximalCount());
-        Assert.assertEquals(0, i.getCount());
+        Assertions.assertEquals(Integer.MAX_VALUE, i.getMaximalCount());
+        Assertions.assertEquals(0, i.getCount());
     }
 
     @Test
     public void testConstructor2() {
         final Incrementor i = new Incrementor(10);
-        Assert.assertEquals(10, i.getMaximalCount());
-        Assert.assertEquals(0, i.getCount());
+        Assertions.assertEquals(10, i.getMaximalCount());
+        Assertions.assertEquals(0, i.getCount());
     }
 
     @Test
     public void testCanIncrement1() {
         final Incrementor i = new Incrementor(3);
-        Assert.assertTrue(i.canIncrement());
+        Assertions.assertTrue(i.canIncrement());
         i.increment();
-        Assert.assertTrue(i.canIncrement());
+        Assertions.assertTrue(i.canIncrement());
         i.increment();
-        Assert.assertTrue(i.canIncrement());
+        Assertions.assertTrue(i.canIncrement());
         i.increment();
-        Assert.assertFalse(i.canIncrement());
+        Assertions.assertFalse(i.canIncrement());
     }
 
     @Test
@@ -59,7 +61,7 @@ public class IncrementorTest {
         // and not in the previous loop.
         try {
             i.increment();
-            Assert.fail("MathIllegalStateException expected");
+            Assertions.fail("MathIllegalStateException expected");
         } catch (MathIllegalStateException e) {
             // Expected.
         }
@@ -72,15 +74,15 @@ public class IncrementorTest {
             i.increment(2);
         }
 
-        Assert.assertEquals(2, i.getCount());
+        Assertions.assertEquals(2, i.getCount());
     }
 
     @Test
     public void testAccessor() {
         final Incrementor i = new Incrementor(10);
 
-        Assert.assertEquals(10, i.getMaximalCount());
-        Assert.assertEquals(0, i.getCount());
+        Assertions.assertEquals(10, i.getMaximalCount());
+        Assertions.assertEquals(0, i.getCount());
     }
 
     @Test
@@ -91,28 +93,32 @@ public class IncrementorTest {
         i.increment();
         i.increment();
 
-        Assert.assertEquals(3, i.getCount());
+        Assertions.assertEquals(3, i.getCount());
     }
 
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testAboveMaxCount() {
-        final Incrementor i = new Incrementor(3);
+        assertThrows(MathIllegalStateException.class, () -> {
+            final Incrementor i = new Incrementor(3);
 
-        i.increment();
-        i.increment();
-        i.increment();
-        i.increment();
+            i.increment();
+            i.increment();
+            i.increment();
+            i.increment();
+        });
     }
 
-    @Test(expected=IllegalStateException.class)
+    @Test
     public void testAlternateException() {
-        final Incrementor.MaxCountExceededCallback cb =
-            (int max) -> {
-                throw new IllegalStateException();
-            };
+        assertThrows(IllegalStateException.class, () -> {
+            final Incrementor.MaxCountExceededCallback cb =
+                (int max) -> {
+                    throw new IllegalStateException();
+                };
 
-        final Incrementor i = new Incrementor(0, cb);
-        i.increment();
+            final Incrementor i = new Incrementor(0, cb);
+            i.increment();
+        });
     }
 
     @Test
@@ -122,9 +128,9 @@ public class IncrementorTest {
         i.increment();
         i.increment();
         i.increment();
-        Assert.assertEquals(3, i.getCount());
+        Assertions.assertEquals(3, i.getCount());
         i.reset();
-        Assert.assertEquals(0, i.getCount());
+        Assertions.assertEquals(0, i.getCount());
     }
 
     @Test
@@ -132,18 +138,20 @@ public class IncrementorTest {
         final Incrementor i = new Incrementor(3);
 
         i.increment(2);
-        Assert.assertEquals(2, i.getCount());
+        Assertions.assertEquals(2, i.getCount());
         i.increment(1);
-        Assert.assertEquals(3, i.getCount());
+        Assertions.assertEquals(3, i.getCount());
     }
 
-    @Test(expected=MathIllegalStateException.class)
+    @Test
     public void testBulkIncrementExceeded() {
-        final Incrementor i = new Incrementor(3);
+        assertThrows(MathIllegalStateException.class, () -> {
+            final Incrementor i = new Incrementor(3);
 
-        i.increment(2);
-        Assert.assertEquals(2, i.getCount());
-        i.increment(2);
+            i.increment(2);
+            Assertions.assertEquals(2, i.getCount());
+            i.increment(2);
+        });
     }
 
     @Test
@@ -151,28 +159,28 @@ public class IncrementorTest {
     {
         final Incrementor i = new Incrementor(3);
 
-        Assert.assertEquals(3, i.getMaximalCount());
+        Assertions.assertEquals(3, i.getMaximalCount());
 
         Incrementor i2 = i.withMaximalCount(10);
 
-        Assert.assertNotEquals(i, i2);
-        Assert.assertEquals(3, i.getMaximalCount());
-        Assert.assertEquals(10, i2.getMaximalCount());
+        Assertions.assertNotEquals(i, i2);
+        Assertions.assertEquals(3, i.getMaximalCount());
+        Assertions.assertEquals(10, i2.getMaximalCount());
     }
 
     @Test
     public void testMaxInt() {
        final Incrementor i = new Incrementor().withCount(Integer.MAX_VALUE - 2);
         i.increment();
-        Assert.assertEquals(Integer.MAX_VALUE - 1, i.getCount());
+        Assertions.assertEquals(Integer.MAX_VALUE - 1, i.getCount());
         i.increment();
-        Assert.assertEquals(Integer.MAX_VALUE, i.getCount());
-        Assert.assertFalse(i.canIncrement());
+        Assertions.assertEquals(Integer.MAX_VALUE, i.getCount());
+        Assertions.assertFalse(i.canIncrement());
         try {
             i.increment();
-            Assert.fail("an exception should have been throwns");
+            Assertions.fail("an exception should have been throwns");
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(mise.getSpecifier(), LocalizedCoreFormats.MAX_COUNT_EXCEEDED);
+            Assertions.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, mise.getSpecifier());
         }
     }
 

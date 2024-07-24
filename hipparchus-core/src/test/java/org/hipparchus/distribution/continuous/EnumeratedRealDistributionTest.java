@@ -21,19 +21,19 @@
  */
 package org.hipparchus.distribution.continuous;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.util.Pair;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.util.Pair;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test class for {@link EnumeratedRealDistribution}.
@@ -88,7 +88,7 @@ public class EnumeratedRealDistributionTest {
             fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
         }
-        assertNull("Expected non-initialized DiscreteRealDistribution", invalid);
+        assertNull(invalid, "Expected non-initialized DiscreteRealDistribution");
     }
 
     /**

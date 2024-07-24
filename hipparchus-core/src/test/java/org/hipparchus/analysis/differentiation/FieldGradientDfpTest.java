@@ -22,8 +22,8 @@ import org.hipparchus.dfp.DfpField;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937a;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for class {@link FieldGradient} on {@link Dfp}.
@@ -39,7 +39,7 @@ public class FieldGradientDfpTest extends FieldGradientAbstractTest<Dfp> {
 
     @Test
     public void testHashcode() {
-        Assert.assertEquals(-1057583321, build(2, 1).hashCode());
+        Assertions.assertEquals(-1057583321, build(2, 1).hashCode());
     }
 
     @Override
@@ -54,7 +54,7 @@ public class FieldGradientDfpTest extends FieldGradientAbstractTest<Dfp> {
         final RandomGenerator random = new Well19937a(0x36d4f8862421e0e4l);
         for (int i = -300; i < 300; ++i) {
             final double x = FastMath.scalb(2.0 * random.nextDouble() - 1.0, i);
-            Assert.assertTrue(FastMath.ulp(x) >= build(x).ulp().getReal());
+            Assertions.assertTrue(FastMath.ulp(x) >= build(x).ulp().getReal());
         }
     }
 

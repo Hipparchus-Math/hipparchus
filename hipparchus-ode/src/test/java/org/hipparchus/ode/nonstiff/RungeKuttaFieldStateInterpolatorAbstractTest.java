@@ -17,11 +17,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
-
-import java.lang.reflect.InvocationTargetException;
-
-import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
+import org.hipparchus.Field;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldExpandableODE;
@@ -31,7 +28,9 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.sampling.AbstractFieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.util.MathArrays;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
+
+import java.lang.reflect.InvocationTargetException;
 
 public abstract class RungeKuttaFieldStateInterpolatorAbstractTest extends FieldODEStateInterpolatorAbstractTest {
 
@@ -140,7 +139,7 @@ public abstract class RungeKuttaFieldStateInterpolatorAbstractTest extends Field
         } catch (ClassNotFoundException | InstantiationException   | IllegalAccessException    |
                  NoSuchFieldException   | IllegalArgumentException | InvocationTargetException |
                  NoSuchMethodException  | SecurityException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assertions.fail(e.getLocalizedMessage());
         }
 
         return regularInterpolator;

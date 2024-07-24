@@ -18,8 +18,8 @@
 package org.hipparchus.random;
 
 import org.hipparchus.UnitTestUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 
 public class UniformRandomGeneratorTest {
@@ -33,8 +33,8 @@ public class UniformRandomGeneratorTest {
         for (int i = 0; i < sample.length; ++i) {
             sample[i] = generator.nextNormalizedDouble();
         }
-        Assert.assertEquals(0.0, UnitTestUtils.mean(sample), 0.07);
-        Assert.assertEquals(1.0, UnitTestUtils.variance(sample), 0.02);
+        Assertions.assertEquals(0.0, UnitTestUtils.mean(sample), 0.07);
+        Assertions.assertEquals(1.0, UnitTestUtils.variance(sample), 0.02);
     }
 
 }

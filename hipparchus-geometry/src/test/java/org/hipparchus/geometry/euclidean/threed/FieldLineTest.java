@@ -21,13 +21,13 @@
  */
 package org.hipparchus.geometry.euclidean.threed;
 
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.Binary64;
 import org.hipparchus.util.Binary64Field;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class FieldLineTest {
 
@@ -39,14 +39,14 @@ public class FieldLineTest {
                                                                      new Binary64(0),
                                                                      new Binary64(2)),
                                                  1.0e-10);
-        Assert.assertTrue(l.contains(p1));
-        Assert.assertTrue(l.contains(new FieldVector3D<>(1.0, p1, 0.3, l.getDirection())));
-        Assert.assertTrue(l.contains(new Vector3D(1.0, p1.toVector3D(), 0.3, l.getDirection().toVector3D())));
+        Assertions.assertTrue(l.contains(p1));
+        Assertions.assertTrue(l.contains(new FieldVector3D<>(1.0, p1, 0.3, l.getDirection())));
+        Assertions.assertTrue(l.contains(new Vector3D(1.0, p1.toVector3D(), 0.3, l.getDirection().toVector3D())));
         FieldVector3D<Binary64> u = l.getDirection().orthogonal();
         FieldVector3D<Binary64> v = FieldVector3D.crossProduct(l.getDirection(), u);
         for (double a = 0; a < 2 * FastMath.PI; a += 0.3) {
             Binary64 alpha = new Binary64(a);
-            Assert.assertTrue(! l.contains(p1.add(new FieldVector3D<>(alpha.cos(), u, alpha.sin(), v))));
+            Assertions.assertFalse(l.contains(p1.add(new FieldVector3D<>(alpha.cos(), u, alpha.sin(), v))));
         }
     }
 
@@ -56,8 +56,8 @@ public class FieldLineTest {
         FieldVector3D<Binary64> p2  = createVector(3.4, -5.8, 1.2);
         FieldLine<Binary64>     lA  = new FieldLine<>(p1, p2, 1.0e-10);
         FieldLine<Binary64>     lB  = new FieldLine<>(p2, p1, 1.0e-10);
-        Assert.assertTrue(lA.isSimilarTo(lB));
-        Assert.assertTrue(! lA.isSimilarTo(new FieldLine<>(p1, p1.add(lA.getDirection().orthogonal()), 1.0e-10)));
+        Assertions.assertTrue(lA.isSimilarTo(lB));
+        Assertions.assertFalse(lA.isSimilarTo(new FieldLine<>(p1, p1.add(lA.getDirection().orthogonal()), 1.0e-10)));
     }
 
     @Test
@@ -65,24 +65,24 @@ public class FieldLineTest {
         FieldLine<Binary64> l = new FieldLine<>(createVector(0, 1, 1),
                                                  createVector(0, 2, 2),
                                                  1.0e-10);
-        Assert.assertEquals(FastMath.sqrt(3.0 / 2.0),
+        Assertions.assertEquals(FastMath.sqrt(3.0 / 2.0),
                             l.distance(createVector(1, 0, 1)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(0,
+        Assertions.assertEquals(0,
                             l.distance(createVector(0, -4, -4)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(1.0e-10, l.getTolerance(), 1.0e-20);
-        Assert.assertEquals(0.0, l.getAbscissa(Vector3D.ZERO).getReal(), 1.0e-20);
-        Assert.assertEquals(0.0, l.getAbscissa(FieldVector3D.getZero(Binary64Field.getInstance())).getReal(), 1.0e-20);
-        Assert.assertEquals(0.0, l.getOrigin().getX().getReal(), 1.0e-20);
-        Assert.assertEquals(0.0, l.getOrigin().getY().getReal(), 1.0e-20);
-        Assert.assertEquals(0.0, l.getOrigin().getZ().getReal(), 1.0e-20);
-        Assert.assertEquals(0.0, l.pointAt(new Binary64(1.0)).toVector3D().getX(), 1.0e-20);
-        Assert.assertEquals(0.5 * FastMath.sqrt(2), l.pointAt(new Binary64(1.0)).toVector3D().getY(), 1.0e-15);
-        Assert.assertEquals(0.5 * FastMath.sqrt(2), l.pointAt(new Binary64(1.0)).toVector3D().getZ(), 1.0e-15);
-        Assert.assertEquals(0.0, l.pointAt(1.0).toVector3D().getX(), 1.0e-20);
-        Assert.assertEquals(0.5 * FastMath.sqrt(2), l.pointAt(1.0).toVector3D().getY(), 1.0e-15);
-        Assert.assertEquals(0.5 * FastMath.sqrt(2), l.pointAt(1.0).toVector3D().getZ(), 1.0e-15);
+        Assertions.assertEquals(1.0e-10, l.getTolerance(), 1.0e-20);
+        Assertions.assertEquals(0.0, l.getAbscissa(Vector3D.ZERO).getReal(), 1.0e-20);
+        Assertions.assertEquals(0.0, l.getAbscissa(FieldVector3D.getZero(Binary64Field.getInstance())).getReal(), 1.0e-20);
+        Assertions.assertEquals(0.0, l.getOrigin().getX().getReal(), 1.0e-20);
+        Assertions.assertEquals(0.0, l.getOrigin().getY().getReal(), 1.0e-20);
+        Assertions.assertEquals(0.0, l.getOrigin().getZ().getReal(), 1.0e-20);
+        Assertions.assertEquals(0.0, l.pointAt(new Binary64(1.0)).toVector3D().getX(), 1.0e-20);
+        Assertions.assertEquals(0.5 * FastMath.sqrt(2), l.pointAt(new Binary64(1.0)).toVector3D().getY(), 1.0e-15);
+        Assertions.assertEquals(0.5 * FastMath.sqrt(2), l.pointAt(new Binary64(1.0)).toVector3D().getZ(), 1.0e-15);
+        Assertions.assertEquals(0.0, l.pointAt(1.0).toVector3D().getX(), 1.0e-20);
+        Assertions.assertEquals(0.5 * FastMath.sqrt(2), l.pointAt(1.0).toVector3D().getY(), 1.0e-15);
+        Assertions.assertEquals(0.5 * FastMath.sqrt(2), l.pointAt(1.0).toVector3D().getZ(), 1.0e-15);
     }
 
     @Test
@@ -90,35 +90,35 @@ public class FieldLineTest {
         FieldLine<Binary64> l = new FieldLine<>(createVector(0, 1, 1),
                                                  createVector(0, 2, 2),
                                                  1.0e-10);
-        Assert.assertEquals(1.0,
+        Assertions.assertEquals(1.0,
                             l.distance(new FieldLine<>(createVector(1, 0, 1),
                                                        createVector(1, 0, 2),
                                                        1.0e-10)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(0.5,
+        Assertions.assertEquals(0.5,
                             l.distance(new FieldLine<>(createVector(-0.5, 0, 0),
                                                        createVector(-0.5, -1, -1),
                                                        1.0e-10)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             l.distance(l).getReal(),
                             1.0e-10);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             l.distance(new FieldLine<>(createVector(0, -4, -4),
                                                        createVector(0, -5, -5),
                                                        1.0e-10)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             l.distance(new FieldLine<>(createVector(0, -4, -4),
                                                        createVector(0, -3, -4),
                                                        1.0e-10)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             l.distance(new FieldLine<>(createVector(0, -4, -4),
                                                        createVector(1, -4, -4),
                                                        1.0e-10)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(FastMath.sqrt(8),
+        Assertions.assertEquals(FastMath.sqrt(8),
                             l.distance(new FieldLine<>(createVector(0, -4, 0),
                                                        createVector(1, -4, 0),
                                                        1.0e-10)).getReal(),
@@ -130,35 +130,35 @@ public class FieldLineTest {
         FieldLine<Binary64> l = new FieldLine<>(createVector(0, 1, 1),
                                                  createVector(0, 2, 2),
                                                  1.0e-10);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             l.closestPoint(new FieldLine<>(createVector(1, 0, 1),
                                                            createVector(1, 0, 2),
                                                            1.0e-10)).distance(createVector(0, 0, 0)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(0.5,
+        Assertions.assertEquals(0.5,
                             l.closestPoint(new FieldLine<>(createVector(-0.5, 0, 0),
                                                            createVector(-0.5, -1, -1),
                                                            1.0e-10)).distance(createVector(-0.5, 0, 0)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             l.closestPoint(l).distance(createVector(0, 0, 0)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             l.closestPoint(new FieldLine<>(createVector(0, -4, -4),
                                                            createVector(0, -5, -5),
                                                            1.0e-10)).distance(createVector(0, 0, 0)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             l.closestPoint(new FieldLine<>(createVector(0, -4, -4),
                                                            createVector(0, -3, -4),
                                                            1.0e-10)).distance(createVector(0, -4, -4)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             l.closestPoint(new FieldLine<>(createVector(0, -4, -4),
                                                            createVector(1, -4, -4),
                                                            1.0e-10)).distance(createVector(0, -4, -4)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             l.closestPoint(new FieldLine<>(createVector(0, -4, 0),
                                                            createVector(1, -4, 0),
                                                            1.0e-10)).distance(createVector(0, -2, -2)).getReal(),
@@ -168,21 +168,21 @@ public class FieldLineTest {
     @Test
     public void testIntersection() throws MathIllegalArgumentException {
         FieldLine<Binary64> l = new FieldLine<>(createVector(0, 1, 1), createVector(0, 2, 2), 1.0e-10);
-        Assert.assertNull(l.intersection(new FieldLine<>(createVector(1, 0, 1), createVector(1, 0, 2), 1.0e-10)));
-        Assert.assertNull(l.intersection(new FieldLine<>(createVector(-0.5, 0, 0), createVector(-0.5, -1, -1), 1.0e-10)));
-        Assert.assertEquals(0.0,
+        Assertions.assertNull(l.intersection(new FieldLine<>(createVector(1, 0, 1), createVector(1, 0, 2), 1.0e-10)));
+        Assertions.assertNull(l.intersection(new FieldLine<>(createVector(-0.5, 0, 0), createVector(-0.5, -1, -1), 1.0e-10)));
+        Assertions.assertEquals(0.0,
                             l.intersection(l).distance(createVector(0, 0, 0)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             l.intersection(new FieldLine<>(createVector(0, -4, -4), createVector(0, -5, -5), 1.0e-10)).distance(createVector(0, 0, 0)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             l.intersection(new FieldLine<>(createVector(0, -4, -4), createVector(0, -3, -4), 1.0e-10)).distance(createVector(0, -4, -4)).getReal(),
                             1.0e-10);
-        Assert.assertEquals(0.0,
+        Assertions.assertEquals(0.0,
                             l.intersection(new FieldLine<>(createVector(0, -4, -4), createVector(1, -4, -4), 1.0e-10)).distance(createVector(0, -4, -4)).getReal(),
                             1.0e-10);
-        Assert.assertNull(l.intersection(new FieldLine<>(createVector(0, -4, 0), createVector(1, -4, 0), 1.0e-10)));
+        Assertions.assertNull(l.intersection(new FieldLine<>(createVector(0, -4, 0), createVector(1, -4, 0), 1.0e-10)));
     }
 
     @Test
@@ -200,9 +200,9 @@ public class FieldLineTest {
         // verify
         Binary64[] e = expected.toArray();
         Binary64[] r = reverted.getDirection().toArray();
-        Assert.assertEquals(e.length, e.length);
+        Assertions.assertEquals(e.length, e.length);
         for (int i = 0; i < e.length; ++i) {
-            Assert.assertEquals(e[i].getReal(), r[i].getReal(), 1.0e-10);
+            Assertions.assertEquals(e[i].getReal(), r[i].getReal(), 1.0e-10);
         }
 
     }

@@ -20,33 +20,33 @@ import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937a;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class CarlsonEllipticIntegralRealTest {
 
     @Test
     public void testNoConvergenceRf() {
-        Assert.assertTrue(Double.isNaN(CarlsonEllipticIntegral.rF(1, 2, Double.NaN)));
+        Assertions.assertTrue(Double.isNaN(CarlsonEllipticIntegral.rF(1, 2, Double.NaN)));
     }
 
     @Test
     public void testDlmfRf() {
         double rf = CarlsonEllipticIntegral.rF(1, 2, 4);
-        Assert.assertEquals(0.6850858166, rf, 1.0e-10);
+        Assertions.assertEquals(0.6850858166, rf, 1.0e-10);
     }
 
     @Test
     public void testCarlson1995rF() {
 
         double rf1 = CarlsonEllipticIntegral.rF(1, 2, 0);
-        Assert.assertEquals( 1.3110287771461, rf1, 1.0e-13);
+        Assertions.assertEquals( 1.3110287771461, rf1, 1.0e-13);
 
         double rf2 = CarlsonEllipticIntegral.rF(0.5, 1, 0);
-        Assert.assertEquals( 1.8540746773014, rf2, 1.0e-13);
+        Assertions.assertEquals( 1.8540746773014, rf2, 1.0e-13);
 
         double rf4 = CarlsonEllipticIntegral.rF(2, 3, 4);
-        Assert.assertEquals( 0.58408284167715, rf4, 1.0e-13);
+        Assertions.assertEquals( 0.58408284167715, rf4, 1.0e-13);
 
     }
 
@@ -61,26 +61,26 @@ public class CarlsonEllipticIntegralRealTest {
             double rfL    = CarlsonEllipticIntegral.rF(x + lambda, y + lambda, lambda);
             double rfM    = CarlsonEllipticIntegral.rF(x + mu,     y + mu,     mu);
             double rf0    = CarlsonEllipticIntegral.rF(x,             y,             0);
-            Assert.assertEquals(0.0, FastMath.abs(rfL + rfM - rf0), 2.0e-14);
+            Assertions.assertEquals(0.0, FastMath.abs(rfL + rfM - rf0), 2.0e-14);
         }
     }
 
     @Test
     public void testNoConvergenceRc() {
-        Assert.assertTrue(Double.isNaN(CarlsonEllipticIntegral.rC(1, Double.NaN)));
+        Assertions.assertTrue(Double.isNaN(CarlsonEllipticIntegral.rC(1, Double.NaN)));
     }
 
     @Test
     public void testCarlson1995rC() {
 
         double rc1 = CarlsonEllipticIntegral.rC(0, 0.25);
-        Assert.assertEquals(FastMath.PI, rc1, 1.0e-15);
+        Assertions.assertEquals(FastMath.PI, rc1, 1.0e-15);
 
         double rc2 = CarlsonEllipticIntegral.rC(2.25, 2);
-        Assert.assertEquals(FastMath.log(2), rc2, 1.0e-15);
+        Assertions.assertEquals(FastMath.log(2), rc2, 1.0e-15);
 
         double rc5 = CarlsonEllipticIntegral.rC(0.25, -2);
-        Assert.assertEquals(FastMath.log(2) / 3.0, rc5, 1.0e-15);
+        Assertions.assertEquals(FastMath.log(2) / 3.0, rc5, 1.0e-15);
 
     }
 
@@ -94,7 +94,7 @@ public class CarlsonEllipticIntegralRealTest {
             double rcL    = CarlsonEllipticIntegral.rC(lambda,          x + lambda);
             double rcM    = CarlsonEllipticIntegral.rC(mu,              x + mu);
             double rc0    = CarlsonEllipticIntegral.rC(0, x);
-            Assert.assertEquals(0.0, FastMath.abs(rcL + rcM - rc0), 3.0e-14);
+            Assertions.assertEquals(0.0, FastMath.abs(rcL + rcM - rc0), 3.0e-14);
         }
     }
 
@@ -106,23 +106,23 @@ public class CarlsonEllipticIntegralRealTest {
             final double y = 3 * random.nextDouble();
             final double rf = CarlsonEllipticIntegral.rF(x, y, y);
             final double rc = CarlsonEllipticIntegral.rC(x, y);
-            Assert.assertEquals(0.0, FastMath.abs(rf - rc), 4.0e-15);
+            Assertions.assertEquals(0.0, FastMath.abs(rf - rc), 4.0e-15);
         }
     }
 
     @Test
     public void testNoConvergenceRj() {
-        Assert.assertTrue(Double.isNaN(CarlsonEllipticIntegral.rJ(1, 1, 1, Double.NaN)));
+        Assertions.assertTrue(Double.isNaN(CarlsonEllipticIntegral.rJ(1, 1, 1, Double.NaN)));
     }
 
     @Test
     public void testCarlson1995rJ() {
 
         double rj01 = CarlsonEllipticIntegral.rJ(0, 1, 2, 3);
-        Assert.assertEquals(0.77688623778582, rj01, 1.0e-13);
+        Assertions.assertEquals(0.77688623778582, rj01, 1.0e-13);
 
         double rj02 = CarlsonEllipticIntegral.rJ(2, 3, 4, 5);
-        Assert.assertEquals( 0.14297579667157, rj02, 1.0e-13);
+        Assertions.assertEquals( 0.14297579667157, rj02, 1.0e-13);
 
     }
 
@@ -141,23 +141,23 @@ public class CarlsonEllipticIntegralRealTest {
             double rjM    = CarlsonEllipticIntegral.rJ(x + mu,     y + mu,     mu,      p + mu);
             double rj0    = CarlsonEllipticIntegral.rJ(x,          y,          0,       p);
             double rc     = CarlsonEllipticIntegral.rC(a, b);
-            Assert.assertEquals(0.0, FastMath.abs(rjL + rjM - (rj0 - rc * 3)), 3.0e-13);
+            Assertions.assertEquals(0.0, FastMath.abs(rjL + rjM - (rj0 - rc * 3)), 3.0e-13);
         }
     }
 
     @Test
     public void testNoConvergenceRd() {
-        Assert.assertTrue(Double.isNaN(CarlsonEllipticIntegral.rD(1, 1, Double.NaN)));
+        Assertions.assertTrue(Double.isNaN(CarlsonEllipticIntegral.rD(1, 1, Double.NaN)));
     }
 
     @Test
     public void testCarlson1995rD() {
 
         double rd1 = CarlsonEllipticIntegral.rD(0, 2, 1);
-        Assert.assertEquals(1.7972103521034, rd1, 1.0e-13);
+        Assertions.assertEquals(1.7972103521034, rd1, 1.0e-13);
 
         double rd2 = CarlsonEllipticIntegral.rD(2, 3, 4);
-        Assert.assertEquals( 0.16510527294261, rd2, 1.0e-13);
+        Assertions.assertEquals( 0.16510527294261, rd2, 1.0e-13);
 
     }
 
@@ -173,7 +173,7 @@ public class CarlsonEllipticIntegralRealTest {
             double rdM    = CarlsonEllipticIntegral.rD(mu,              x + mu,     y + mu);
             double rd0    = CarlsonEllipticIntegral.rD(0,               x,          y);
             double frac   = 3 / (y * FastMath.sqrt(x + y + lambda + mu));
-            Assert.assertEquals(0.0, FastMath.abs(rdL + rdM - rd0 + frac), 9.0e-12);
+            Assertions.assertEquals(0.0, FastMath.abs(rdL + rdM - rd0 + frac), 9.0e-12);
         }
     }
 
@@ -190,7 +190,7 @@ public class CarlsonEllipticIntegralRealTest {
             // this is DLMF equation 19.21.7
             double lhs = (x - y) * CarlsonEllipticIntegral.rD(y, z, x) + (z - y) * CarlsonEllipticIntegral.rD(x, y, z);
             double rhs = (CarlsonEllipticIntegral.rF(x, y, z) - FastMath.sqrt(y / (x * z))) * 3;
-            Assert.assertEquals(0.0, FastMath.abs(lhs - rhs), 1.0e-10);
+            Assertions.assertEquals(0.0, FastMath.abs(lhs - rhs), 1.0e-10);
         }
     }
 
@@ -207,7 +207,7 @@ public class CarlsonEllipticIntegralRealTest {
             // this is DLMF equation 19.21.8
             double lhs = CarlsonEllipticIntegral.rD(y, z, x) + CarlsonEllipticIntegral.rD(z, x, y) + CarlsonEllipticIntegral.rD(x, y, z);
             double rhs = 3 / FastMath.sqrt(x * y * z);
-            Assert.assertEquals(0.0, FastMath.abs(lhs - rhs), 2.0e-11);
+            Assertions.assertEquals(0.0, FastMath.abs(lhs - rhs), 2.0e-11);
         }
     }
 
@@ -215,13 +215,13 @@ public class CarlsonEllipticIntegralRealTest {
     public void testCarlson1995rG() {
 
         double rg1 = CarlsonEllipticIntegral.rG(0, 16, 16);
-        Assert.assertEquals(FastMath.PI, rg1, 1.0e-13);
+        Assertions.assertEquals(FastMath.PI, rg1, 1.0e-13);
 
         double rg2 = CarlsonEllipticIntegral.rG(2, 3, 4);
-        Assert.assertEquals(1.7255030280692, rg2, 1.0e-13);
+        Assertions.assertEquals(1.7255030280692, rg2, 1.0e-13);
 
         double rg6 = CarlsonEllipticIntegral.rG(0, 0.0796, 4);
-        Assert.assertEquals( 1.0284758090288, rg6, 1.0e-13);
+        Assertions.assertEquals( 1.0284758090288, rg6, 1.0e-13);
 
     }
 
@@ -232,7 +232,7 @@ public class CarlsonEllipticIntegralRealTest {
             double x = random.nextDouble() * 3;
             double y = random.nextDouble() * 3;
             double z = random.nextDouble() * 3;
-            Assert.assertEquals(0.0, FastMath.abs(CarlsonEllipticIntegral.rG(x, y, z) - rgAlternateImplementation(x, y, z)), 2.0e-15);
+            Assertions.assertEquals(0.0, FastMath.abs(CarlsonEllipticIntegral.rG(x, y, z) - rgAlternateImplementation(x, y, z)), 2.0e-15);
         }
     }
 

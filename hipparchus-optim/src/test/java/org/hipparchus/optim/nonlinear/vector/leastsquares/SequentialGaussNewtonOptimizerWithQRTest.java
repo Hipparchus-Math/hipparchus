@@ -17,16 +17,16 @@
 
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
-import java.io.IOException;
-
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.QRDecomposer;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.SimpleVectorValueChecker;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Evaluation;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -62,7 +62,7 @@ public class SequentialGaussNewtonOptimizerWithQRTest
             super.testMoreEstimatedParametersUnsorted();
             fail(optimizer);
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
+            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
         }
     }
     
@@ -86,7 +86,7 @@ public class SequentialGaussNewtonOptimizerWithQRTest
             optimizer.optimize(lsp);
             fail(optimizer);
         } catch (MathIllegalStateException e) {
-            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED,
+            Assertions.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED,
                                 e.getSpecifier());
         }
     }
@@ -102,7 +102,7 @@ public class SequentialGaussNewtonOptimizerWithQRTest
              */
             super.testHahn1();
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
+            Assertions.assertEquals(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
         }
     }
 

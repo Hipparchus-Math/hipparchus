@@ -29,8 +29,8 @@ import org.hipparchus.optim.SimplePointChecker;
 import org.hipparchus.optim.nonlinear.scalar.noderiv.AbstractSimplex;
 import org.hipparchus.optim.nonlinear.scalar.noderiv.NelderMeadSimplex;
 import org.hipparchus.optim.nonlinear.scalar.noderiv.SimplexOptimizer;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class MultivariateFunctionPenaltyAdapterTest {
     @Test
@@ -52,8 +52,8 @@ public class MultivariateFunctionPenaltyAdapterTest {
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { 1.5, 2.25 }));
 
-        Assert.assertEquals(biQuadratic.getBoundedXOptimum(), optimum.getPoint()[0], 2e-7);
-        Assert.assertEquals(biQuadratic.getBoundedYOptimum(), optimum.getPoint()[1], 2e-7);
+        Assertions.assertEquals(biQuadratic.getBoundedXOptimum(), optimum.getPoint()[0], 2e-7);
+        Assertions.assertEquals(biQuadratic.getBoundedYOptimum(), optimum.getPoint()[1], 2e-7);
     }
 
     @Test
@@ -75,8 +75,8 @@ public class MultivariateFunctionPenaltyAdapterTest {
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { -1.5, 4.0 }));
 
-        Assert.assertEquals(biQuadratic.getBoundedXOptimum(), optimum.getPoint()[0], 2e-7);
-        Assert.assertEquals(biQuadratic.getBoundedYOptimum(), optimum.getPoint()[1], 2e-7);
+        Assertions.assertEquals(biQuadratic.getBoundedXOptimum(), optimum.getPoint()[0], 2e-7);
+        Assertions.assertEquals(biQuadratic.getBoundedYOptimum(), optimum.getPoint()[1], 2e-7);
     }
 
     @Test
@@ -98,8 +98,8 @@ public class MultivariateFunctionPenaltyAdapterTest {
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { -1.5, 4.0 }));
 
-        Assert.assertEquals(biQuadratic.getBoundedXOptimum(), optimum.getPoint()[0], 2e-7);
-        Assert.assertEquals(biQuadratic.getBoundedYOptimum(), optimum.getPoint()[1], 2e-7);
+        Assertions.assertEquals(biQuadratic.getBoundedXOptimum(), optimum.getPoint()[0], 2e-7);
+        Assertions.assertEquals(biQuadratic.getBoundedYOptimum(), optimum.getPoint()[1], 2e-7);
     }
 
     @Test
@@ -123,8 +123,8 @@ public class MultivariateFunctionPenaltyAdapterTest {
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { -1.5, 4.0 }));
 
-        Assert.assertEquals(biQuadratic.getBoundedXOptimum(), optimum.getPoint()[0], 2e-7);
-        Assert.assertEquals(biQuadratic.getBoundedYOptimum(), optimum.getPoint()[1], 2e-7);
+        Assertions.assertEquals(biQuadratic.getBoundedXOptimum(), optimum.getPoint()[0], 2e-7);
+        Assertions.assertEquals(biQuadratic.getBoundedYOptimum(), optimum.getPoint()[1], 2e-7);
     }
 
     @Test
@@ -148,8 +148,8 @@ public class MultivariateFunctionPenaltyAdapterTest {
                                  GoalType.MINIMIZE,
                                  new InitialGuess(new double[] { -1.5, 4.0 }));
 
-        Assert.assertEquals(biQuadratic.getBoundedXOptimum(), optimum.getPoint()[0], 2e-7);
-        Assert.assertEquals(biQuadratic.getBoundedYOptimum(), optimum.getPoint()[1], 2e-7);
+        Assertions.assertEquals(biQuadratic.getBoundedXOptimum(), optimum.getPoint()[0], 2e-7);
+        Assertions.assertEquals(biQuadratic.getBoundedYOptimum(), optimum.getPoint()[1], 2e-7);
     }
 
     private static class BiQuadratic implements MultivariateFunction {
@@ -175,10 +175,10 @@ public class MultivariateFunctionPenaltyAdapterTest {
 
         public double value(double[] point) {
             // the function should never be called with out of range points
-            Assert.assertTrue(point[0] >= xMin);
-            Assert.assertTrue(point[0] <= xMax);
-            Assert.assertTrue(point[1] >= yMin);
-            Assert.assertTrue(point[1] <= yMax);
+            Assertions.assertTrue(point[0] >= xMin);
+            Assertions.assertTrue(point[0] <= xMax);
+            Assertions.assertTrue(point[1] >= yMin);
+            Assertions.assertTrue(point[1] <= yMax);
 
             final double dx = point[0] - xOptimum;
             final double dy = point[1] - yOptimum;

@@ -30,8 +30,8 @@ import java.util.Locale;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.Vector;
 import org.hipparchus.geometry.VectorFormat;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public abstract class Vector3DFormatAbstractTest {
 
@@ -63,10 +63,10 @@ public abstract class Vector3DFormatAbstractTest {
                 return null;
             }
         };
-        Assert.assertArrayEquals(NumberFormat.getAvailableLocales(), VectorFormat.getAvailableLocales());
-        Assert.assertEquals("{", vFormat.getPrefix());
-        Assert.assertEquals("}", vFormat.getSuffix());
-        Assert.assertEquals("; ", vFormat.getSeparator());
+        Assertions.assertArrayEquals(NumberFormat.getAvailableLocales(), VectorFormat.getAvailableLocales());
+        Assertions.assertEquals("{", vFormat.getPrefix());
+        Assertions.assertEquals("}", vFormat.getSuffix());
+        Assertions.assertEquals("; ", vFormat.getSeparator());
     }
 
     @Test
@@ -84,10 +84,10 @@ public abstract class Vector3DFormatAbstractTest {
                 return null;
             }
         };
-        Assert.assertEquals("{", vFormat.getPrefix());
-        Assert.assertEquals("}", vFormat.getSuffix());
-        Assert.assertEquals("; ", vFormat.getSeparator());
-        Assert.assertSame(nf, vFormat.getFormat());
+        Assertions.assertEquals("{", vFormat.getPrefix());
+        Assertions.assertEquals("}", vFormat.getSuffix());
+        Assertions.assertEquals("; ", vFormat.getSeparator());
+        Assertions.assertSame(nf, vFormat.getFormat());
     }
 
     @Test
@@ -104,9 +104,9 @@ public abstract class Vector3DFormatAbstractTest {
                 return null;
             }
         };
-        Assert.assertEquals("<", vFormat.getPrefix());
-        Assert.assertEquals(">", vFormat.getSuffix());
-        Assert.assertEquals("|", vFormat.getSeparator());
+        Assertions.assertEquals("<", vFormat.getPrefix());
+        Assertions.assertEquals(">", vFormat.getSuffix());
+        Assertions.assertEquals("|", vFormat.getSeparator());
     }
 
     @Test
@@ -114,7 +114,7 @@ public abstract class Vector3DFormatAbstractTest {
         Vector3D c = new Vector3D(1, 1, 1);
         String expected = "{1; 1; 1}";
         String actual = vector3DFormat.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -126,7 +126,7 @@ public abstract class Vector3DFormatAbstractTest {
             "43; 1" + getDecimalCharacter() +
             "63}";
         String actual = vector3DFormat.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -138,7 +138,7 @@ public abstract class Vector3DFormatAbstractTest {
             "4343434343; 1" + getDecimalCharacter() +
             "6333333333}";
         String actual = vector3DFormat.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -150,7 +150,7 @@ public abstract class Vector3DFormatAbstractTest {
             "43; 1" + getDecimalCharacter() +
             "63}";
         String actual = vector3DFormat.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -162,7 +162,7 @@ public abstract class Vector3DFormatAbstractTest {
             "4343434343; 1" + getDecimalCharacter() +
             "63}";
         String actual = vector3DFormat.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -174,7 +174,7 @@ public abstract class Vector3DFormatAbstractTest {
             "43; -1" + getDecimalCharacter() +
             "6333333333}";
         String actual = vector3DFormat.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -182,7 +182,7 @@ public abstract class Vector3DFormatAbstractTest {
         Vector3D c = new Vector3D(1, 1, 1);
         String expected = "[1 : 1 : 1]";
         String actual = vector3DFormatSquare.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -197,7 +197,7 @@ public abstract class Vector3DFormatAbstractTest {
             "3333333333; 432" + getDecimalCharacter() +
             "4444444444}";
         String actual = (new Vector3DFormat()).format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
 
         Locale.setDefault(defaultLocal);
     }
@@ -207,7 +207,7 @@ public abstract class Vector3DFormatAbstractTest {
         Vector3D c = Vector3D.NaN;
         String expected = "{(NaN); (NaN); (NaN)}";
         String actual = vector3DFormat.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -215,7 +215,7 @@ public abstract class Vector3DFormatAbstractTest {
         Vector3D c = Vector3D.POSITIVE_INFINITY;
         String expected = "{(Infinity); (Infinity); (Infinity)}";
         String actual = vector3DFormat.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -223,7 +223,7 @@ public abstract class Vector3DFormatAbstractTest {
         Vector3D c = Vector3D.NEGATIVE_INFINITY;
         String expected = "{(-Infinity); (-Infinity); (-Infinity)}";
         String actual = vector3DFormat.format(c);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -231,7 +231,7 @@ public abstract class Vector3DFormatAbstractTest {
         String source = "{1; 1; 1}";
         Vector3D expected = new Vector3D(1, 1, 1);
         Vector3D actual = vector3DFormat.parse(source);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -239,12 +239,12 @@ public abstract class Vector3DFormatAbstractTest {
         Vector3D expected = new Vector3D(1, 1, 1);
         ParsePosition pos1 = new ParsePosition(0);
         String source1 = "{1;1;1}";
-        Assert.assertEquals(expected, vector3DFormat.parse(source1, pos1));
-        Assert.assertEquals(source1.length(), pos1.getIndex());
+        Assertions.assertEquals(expected, vector3DFormat.parse(source1, pos1));
+        Assertions.assertEquals(source1.length(), pos1.getIndex());
         ParsePosition pos2 = new ParsePosition(0);
         String source2 = " { 1 ; 1 ; 1 } ";
-        Assert.assertEquals(expected, vector3DFormat.parse(source2, pos2));
-        Assert.assertEquals(source2.length() - 1, pos2.getIndex());
+        Assertions.assertEquals(expected, vector3DFormat.parse(source2, pos2));
+        Assertions.assertEquals(source2.length() - 1, pos2.getIndex());
     }
 
     @Test
@@ -256,7 +256,7 @@ public abstract class Vector3DFormatAbstractTest {
             "63}";
         Vector3D expected = new Vector3D(1.23, 1.43, 1.63);
         Vector3D actual = vector3DFormat.parse(source);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -268,7 +268,7 @@ public abstract class Vector3DFormatAbstractTest {
             "6333}";
         Vector3D expected = new Vector3D(1.2323, 1.4343, 1.6333);
         Vector3D actual = vector3DFormat.parse(source);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -280,7 +280,7 @@ public abstract class Vector3DFormatAbstractTest {
             "6333}";
         Vector3D expected = new Vector3D(-1.2323, 1.4343, 1.6333);
         Vector3D actual = vector3DFormat.parse(source);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -292,7 +292,7 @@ public abstract class Vector3DFormatAbstractTest {
             "6333}";
         Vector3D expected = new Vector3D(1.2323, -1.4343, 1.6333);
         Vector3D actual = vector3DFormat.parse(source);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -304,7 +304,7 @@ public abstract class Vector3DFormatAbstractTest {
             "6333}";
         Vector3D expected = new Vector3D(1.2323, 1.4343, -1.6333);
         Vector3D actual = vector3DFormat.parse(source);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -316,7 +316,7 @@ public abstract class Vector3DFormatAbstractTest {
             "6333}";
         Vector3D expected = new Vector3D(-1.2323, -1.4343, -1.6333);
         Vector3D actual = vector3DFormat.parse(source);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -328,7 +328,7 @@ public abstract class Vector3DFormatAbstractTest {
             "6333}";
         Vector3D expected = new Vector3D(0.0, -1.4343, 1.6333);
         Vector3D actual = vector3DFormat.parse(source);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -340,57 +340,57 @@ public abstract class Vector3DFormatAbstractTest {
             "6333]";
         Vector3D expected = new Vector3D(1.2323, 1.4343, 1.6333);
         Vector3D actual = vector3DFormatSquare.parse(source);
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     public void testParseNan() throws MathIllegalStateException {
         String source = "{(NaN); (NaN); (NaN)}";
         Vector3D actual = vector3DFormat.parse(source);
-        Assert.assertTrue(Vector3D.NaN.equals(actual));
+        Assertions.assertEquals(Vector3D.NaN, actual);
     }
 
     @Test
     public void testParsePositiveInfinity() throws MathIllegalStateException {
         String source = "{(Infinity); (Infinity); (Infinity)}";
         Vector3D actual = vector3DFormat.parse(source);
-        Assert.assertEquals(Vector3D.POSITIVE_INFINITY, actual);
+        Assertions.assertEquals(Vector3D.POSITIVE_INFINITY, actual);
     }
 
     @Test
     public void testParseNegativeInfinity() throws MathIllegalStateException {
         String source = "{(-Infinity); (-Infinity); (-Infinity)}";
         Vector3D actual = vector3DFormat.parse(source);
-        Assert.assertEquals(Vector3D.NEGATIVE_INFINITY, actual);
+        Assertions.assertEquals(Vector3D.NEGATIVE_INFINITY, actual);
     }
 
     @Test
     public void testConstructorSingleFormat() {
         NumberFormat nf = NumberFormat.getInstance();
         Vector3DFormat cf = new Vector3DFormat(nf);
-        Assert.assertNotNull(cf);
-        Assert.assertEquals(nf, cf.getFormat());
+        Assertions.assertNotNull(cf);
+        Assertions.assertEquals(nf, cf.getFormat());
     }
 
     @Test
     public void testForgottenPrefix() {
         ParsePosition pos = new ParsePosition(0);
-        Assert.assertNull(new Vector3DFormat().parse("1; 1; 1}", pos));
-        Assert.assertEquals(0, pos.getErrorIndex());
+        Assertions.assertNull(new Vector3DFormat().parse("1; 1; 1}", pos));
+        Assertions.assertEquals(0, pos.getErrorIndex());
     }
 
     @Test
     public void testForgottenSeparator() {
         ParsePosition pos = new ParsePosition(0);
-        Assert.assertNull(new Vector3DFormat().parse("{1; 1 1}", pos));
-        Assert.assertEquals(6, pos.getErrorIndex());
+        Assertions.assertNull(new Vector3DFormat().parse("{1; 1 1}", pos));
+        Assertions.assertEquals(6, pos.getErrorIndex());
     }
 
     @Test
     public void testForgottenSuffix() {
         ParsePosition pos = new ParsePosition(0);
-        Assert.assertNull(new Vector3DFormat().parse("{1; 1; 1 ", pos));
-        Assert.assertEquals(8, pos.getErrorIndex());
+        Assertions.assertNull(new Vector3DFormat().parse("{1; 1; 1 ", pos));
+        Assertions.assertEquals(8, pos.getErrorIndex());
     }
 
 }

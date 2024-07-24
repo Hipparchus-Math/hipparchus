@@ -13,21 +13,22 @@
  */
 package org.hipparchus.util;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.Arrays;
-
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.ResizableDoubleArray.ExpansionMode;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * This class contains test cases for the ResizableDoubleArray.
@@ -39,14 +40,14 @@ public class ResizableDoubleArrayTest {
     // Array used to test rolling
     protected ResizableDoubleArray ra = null;
 
-    @After
+    @AfterEach
     public void tearDown()
         throws Exception {
         da = null;
         ra = null;
     }
 
-    @Before
+    @BeforeEach
     public void setUp()
         throws Exception {
         da = new ResizableDoubleArray();
@@ -155,9 +156,9 @@ public class ResizableDoubleArrayTest {
         double[] testArray = da.getElements();
 
         for (int i = 0; i < da.getNumElements(); i++) {
-            assertEquals("The testArray values should equal the controlArray values, " +
-                         "index i: " + i + " does not match", testArray[i],
-                         controlArray[i], Double.MIN_VALUE);
+            assertEquals(testArray[i],
+                         controlArray[i], Double.MIN_VALUE, "The testArray values should equal the controlArray values, " +
+                         "index i: " + i + " does not match");
         }
     }
 
@@ -174,13 +175,15 @@ public class ResizableDoubleArrayTest {
         da.addElement(122.0);
         da.addElement(1212.0);
 
-        assertEquals("Min should be -2.0", -2.0,
+        assertEquals(-2.0,
                      Arrays.stream(da.getElements()).min().getAsDouble(),
-                     Double.MIN_VALUE);
+                     Double.MIN_VALUE,
+                     "Min should be -2.0");
 
-        assertEquals("Max should be 1212.0", 1212.0,
+        assertEquals(1212.0,
                      Arrays.stream(da.getElements()).max().getAsDouble(),
-                     Double.MIN_VALUE);
+                     Double.MIN_VALUE,
+                     "Max should be 1212.0");
     }
 
     @Test
@@ -195,16 +198,14 @@ public class ResizableDoubleArrayTest {
         // Expand the array arbitrarily to 1000 items
         da.setElement(1000, 3.4);
 
-        assertEquals("The number of elements should now be 1001, it isn't",
-                     da.getNumElements(), 1001);
+        assertEquals(1001, da.getNumElements(), "The number of elements should now be 1001, it isn't");
 
-        assertEquals("Uninitialized Elements are default value of 0.0, index 766 wasn't",
-                     0.0, da.getElement(760), Double.MIN_VALUE);
+        assertEquals(0.0, da.getElement(760), Double.MIN_VALUE, "Uninitialized Elements are default value of 0.0, index 766 wasn't");
 
-        assertEquals("The 1000th index should be 3.4, it isn't", 3.4,
-                     da.getElement(1000), Double.MIN_VALUE);
-        assertEquals("The 0th index should be 2.0, it isn't", 2.0,
-                     da.getElement(0), Double.MIN_VALUE);
+        assertEquals(3.4,
+                     da.getElement(1000), Double.MIN_VALUE, "The 1000th index should be 3.4, it isn't");
+        assertEquals(2.0,
+                     da.getElement(0), Double.MIN_VALUE, "The 0th index should be 2.0, it isn't");
     }
 
     @Test
@@ -251,15 +252,15 @@ public class ResizableDoubleArrayTest {
             da.addElement(i);
         }
 
-        assertEquals("Number of elements should be equal to 1000 after adding 1000 values",
-                     1000, da.getNumElements());
+        assertEquals(1000, da.getNumElements(), "Number of elements should be equal to 1000 after adding 1000 values");
 
-        assertEquals("The element at the 56th index should be 56", 56.0,
-                     da.getElement(56), Double.MIN_VALUE);
+        assertEquals(56.0,
+                     da.getElement(56), Double.MIN_VALUE, "The element at the 56th index should be 56");
 
-        assertEquals("Internal Storage length should be 1024 if we started out with initial capacity of " +
-                     "16 and an expansion factor of 2.0", 1024,
-                     da.getCapacity());
+        assertEquals(1024,
+                     da.getCapacity(),
+                     "Internal Storage length should be 1024 if we started out with initial capacity of " +
+                     "16 and an expansion factor of 2.0");
     }
 
     @Test
@@ -299,21 +300,23 @@ public class ResizableDoubleArrayTest {
         ra.addElement(1.0);
         ra.addElementRolling(2.0);
 
-        assertEquals("There should be 6 elements in the eda", 6,
-                     ra.getNumElements());
-        assertEquals("The max element should be 2.0", 2.0,
+        assertEquals(6,
+                     ra.getNumElements(),
+                     "There should be 6 elements in the eda");
+        assertEquals(2.0,
                      Arrays.stream(ra.getElements()).max().getAsDouble(),
-                     Double.MIN_VALUE);
-        assertEquals("The min element should be 1.0", 1.0,
+                     Double.MIN_VALUE,
+                     "The max element should be 2.0");
+        assertEquals(1.0,
                      Arrays.stream(ra.getElements()).min().getAsDouble(),
-                     Double.MIN_VALUE);
+                     Double.MIN_VALUE,
+                     "The min element should be 1.0");
 
         for (int i = 0; i < 1024; i++) {
             ra.addElementRolling(i);
         }
 
-        assertEquals("We just inserted 1024 rolling elements, num elements should still be 6",
-                     6, ra.getNumElements());
+        assertEquals(6, ra.getNumElements(), "We just inserted 1024 rolling elements, num elements should still be 6");
 
         // MULTIPLICATIVE_MODE
         da.clear();
@@ -377,10 +380,10 @@ public class ResizableDoubleArrayTest {
         da.addElement(1.0);
         da.addElement(1.0);
         da.addElement(1.0);
-        assertEquals("Number of elements should equal 6", da.getNumElements(), 6);
+        assertEquals(6, da.getNumElements(), "Number of elements should equal 6");
 
         da.setNumElements(3);
-        assertEquals("Number of elements should equal 3", da.getNumElements(), 3);
+        assertEquals(3, da.getNumElements(), "Number of elements should equal 3");
 
         try {
             da.setNumElements(-3);
@@ -389,15 +392,15 @@ public class ResizableDoubleArrayTest {
         }
 
         da.setNumElements(1024);
-        assertEquals("Number of elements should now be 1024", da.getNumElements(), 1024);
-        assertEquals("Element 453 should be a default double", da.getElement(453), 0.0, Double.MIN_VALUE);
+        assertEquals(1024, da.getNumElements(), "Number of elements should now be 1024");
+        assertEquals(0.0, da.getElement(453), Double.MIN_VALUE, "Element 453 should be a default double");
     }
 
     @Test
     public void testWithInitialCapacity() {
 
         ResizableDoubleArray eDA2 = new ResizableDoubleArray(2);
-        assertEquals("Initial number of elements should be 0", 0, eDA2.getNumElements());
+        assertEquals(0, eDA2.getNumElements(), "Initial number of elements should be 0");
 
         final RandomDataGenerator gen = new RandomDataGenerator(1000);
         final int iterations = gen.nextInt(100, 1000);
@@ -406,20 +409,19 @@ public class ResizableDoubleArrayTest {
             eDA2.addElement(i);
         }
 
-        assertEquals("Number of elements should be equal to " + iterations,
-                     iterations, eDA2.getNumElements());
+        assertEquals(iterations, eDA2.getNumElements(), "Number of elements should be equal to " + iterations);
 
         eDA2.addElement(2.0);
 
-        assertEquals("Number of elements should be equals to " +
-                     (iterations + 1), iterations + 1, eDA2.getNumElements());
+        assertEquals(iterations + 1, eDA2.getNumElements(), "Number of elements should be equals to " +
+                     (iterations + 1));
     }
 
     @Test
     public void testWithInitialCapacityAndExpansionFactor() {
 
         ResizableDoubleArray eDA3 = new ResizableDoubleArray(3, 3.0, 3.5);
-        assertEquals("Initial number of elements should be 0", 0, eDA3.getNumElements());
+        assertEquals(0, eDA3.getNumElements(), "Initial number of elements should be 0");
 
         final RandomDataGenerator gen = new RandomDataGenerator(1000);
         final int iterations = gen.nextInt(100, 1000);
@@ -428,16 +430,15 @@ public class ResizableDoubleArrayTest {
             eDA3.addElement(i);
         }
 
-        assertEquals("Number of elements should be equal to " + iterations,
-                     iterations, eDA3.getNumElements());
+        assertEquals(iterations, eDA3.getNumElements(), "Number of elements should be equal to " + iterations);
 
         eDA3.addElement(2.0);
 
-        assertEquals("Number of elements should be equals to " +
-                     (iterations + 1), iterations + 1, eDA3.getNumElements());
+        assertEquals(iterations + 1, eDA3.getNumElements(), "Number of elements should be equals to " +
+                     (iterations + 1));
 
-        assertEquals("Expansion factor should equal 3.0", 3.0f,
-                     eDA3.getExpansionFactor(), Double.MIN_VALUE);
+        assertEquals(3.0f,
+                     eDA3.getExpansionFactor(), Double.MIN_VALUE, "Expansion factor should equal 3.0");
     }
 
     @Test
@@ -453,19 +454,19 @@ public class ResizableDoubleArrayTest {
         da.addElement(2.0);
         da.addElement(2.0);
         da.addElement(2.0);
-        assertEquals("Number of elements should be 11", 11, da.getNumElements());
+        assertEquals(11, da.getNumElements(), "Number of elements should be 11");
 
         da.discardFrontElements(5);
-        assertEquals("Number of elements should be 6", 6, da.getNumElements());
+        assertEquals(6, da.getNumElements(), "Number of elements should be 6");
 
         da.addElement(2.0);
         da.addElement(2.0);
         da.addElement(2.0);
         da.addElement(2.0);
-        assertEquals("Number of elements should be 10", 10, da.getNumElements());
+        assertEquals(10, da.getNumElements(), "Number of elements should be 10");
 
         da.discardMostRecentElements(2);
-        assertEquals("Number of elements should be 8", 8, da.getNumElements());
+        assertEquals(8, da.getNumElements(), "Number of elements should be 8");
 
         try {
             da.discardFrontElements(-1);
@@ -507,21 +508,19 @@ public class ResizableDoubleArrayTest {
         da.addElement(2.0);
         da.addElement(2.0);
         da.addElement(2.0);
-        assertEquals("Number of elements should be 11", 11, da.getNumElements());
+        assertEquals(11, da.getNumElements(), "Number of elements should be 11");
 
         da.substituteMostRecentElement(24);
 
-        assertEquals("Number of elements should be 11", 11, da.getNumElements());
+        assertEquals(11, da.getNumElements(), "Number of elements should be 11");
 
-        try {
+        Assertions.assertDoesNotThrow(() -> {
             da.discardMostRecentElements(10);
-        } catch (Exception e) {
-            fail("Trying to discard a negative number of element is not allowed");
-        }
+        }, "Trying to discard a negative number of element is not allowed");
 
         da.substituteMostRecentElement(24);
 
-        assertEquals("Number of elements should be 1", 1, da.getNumElements());
+        assertEquals(1, da.getNumElements(), "Number of elements should be 1");
 
     }
 
@@ -533,14 +532,14 @@ public class ResizableDoubleArrayTest {
         // Wrong type
         ResizableDoubleArray first = new ResizableDoubleArray();
         Double other = Double.valueOf(2);
-        assertFalse(first.equals(other));
+        assertNotEquals(first, other);
 
         // Null
         other = null;
-        assertFalse(first.equals(other));
+        assertNotEquals(first, other);
 
         // Reflexive
-        assertTrue(first.equals(first));
+        assertEquals(first, first);
 
         // Argumentless constructor
         ResizableDoubleArray second = new ResizableDoubleArray();
@@ -648,15 +647,15 @@ public class ResizableDoubleArrayTest {
 
     private void verifyEquality(ResizableDoubleArray a,
                                 ResizableDoubleArray b) {
-        assertTrue(b.equals(a));
-        assertTrue(a.equals(b));
+        assertEquals(b, a);
+        assertEquals(a, b);
         assertEquals(a.hashCode(), b.hashCode());
     }
 
     private void verifyInequality(ResizableDoubleArray a,
                                   ResizableDoubleArray b) {
-        assertFalse(b.equals(a));
-        assertFalse(a.equals(b));
+        assertNotEquals(b, a);
+        assertNotEquals(a, b);
         assertFalse(a.hashCode() == b.hashCode());
     }
 

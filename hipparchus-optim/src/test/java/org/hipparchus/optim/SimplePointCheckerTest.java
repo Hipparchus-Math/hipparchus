@@ -22,13 +22,17 @@
 package org.hipparchus.optim;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SimplePointCheckerTest {
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testIterationCheckPrecondition() {
-        new SimplePointChecker<PointValuePair>(1e-1, 1e-2, 0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            new SimplePointChecker<PointValuePair>(1e-1, 1e-2, 0);
+        });
     }
 
     @Test
@@ -36,8 +40,8 @@ public class SimplePointCheckerTest {
         final int max = 10;
         final SimplePointChecker<PointValuePair> checker
             = new SimplePointChecker<PointValuePair>(1e-1, 1e-2, max);
-        Assert.assertTrue(checker.converged(max, null, null));
-        Assert.assertTrue(checker.converged(max + 1, null, null));
+        Assertions.assertTrue(checker.converged(max, null, null));
+        Assertions.assertTrue(checker.converged(max + 1, null, null));
     }
 
     @Test
@@ -48,11 +52,11 @@ public class SimplePointCheckerTest {
         final PointValuePair a = new PointValuePair(new double[] { 1d }, 1d);
         final PointValuePair b = new PointValuePair(new double[] { 10d }, 10d);
 
-        Assert.assertFalse(checker.converged(-1, a, b));
-        Assert.assertFalse(checker.converged(0, a, b));
-        Assert.assertFalse(checker.converged(1000000, a, b));
+        Assertions.assertFalse(checker.converged(-1, a, b));
+        Assertions.assertFalse(checker.converged(0, a, b));
+        Assertions.assertFalse(checker.converged(1000000, a, b));
 
-        Assert.assertTrue(checker.converged(-1, a, a));
-        Assert.assertTrue(checker.converged(-1, b, b));
+        Assertions.assertTrue(checker.converged(-1, a, a));
+        Assertions.assertTrue(checker.converged(-1, b, b));
     }
 }

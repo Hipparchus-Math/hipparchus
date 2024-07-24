@@ -22,12 +22,6 @@
 
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
-import static org.hamcrest.CoreMatchers.is;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.hamcrest.MatcherAssert;
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -43,8 +37,14 @@ import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Ev
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Incrementor;
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -96,13 +96,13 @@ public class LevenbergMarquardtOptimizerTest
                                                    problem.getBuilder().maxIterations(20).build());
 
         //TODO check that it is a bad fit? Why the extra conditions?
-        Assert.assertTrue(FastMath.sqrt(problem.getTarget().length) * optimum.getRMS() > 0.6);
+        Assertions.assertTrue(FastMath.sqrt(problem.getTarget().length) * optimum.getRMS() > 0.6);
 
         try {
             optimum.getCovariances(1.5e-14);
             fail(optimizer);
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedCoreFormats.SINGULAR_MATRIX, e.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.SINGULAR_MATRIX, e.getSpecifier());
         }
 
     }
@@ -148,13 +148,13 @@ public class LevenbergMarquardtOptimizerTest
 
             optimizer.optimize(problem);
 
-            Assert.assertTrue(!shouldFail);
+            Assertions.assertFalse(shouldFail);
             //TODO check it got the right answer
 
         } catch (MathIllegalArgumentException ee) {
-            Assert.assertTrue(shouldFail);
+            Assertions.assertTrue(shouldFail);
         } catch (MathIllegalStateException ee) {
-            Assert.assertTrue(shouldFail);
+            Assertions.assertTrue(shouldFail);
         }
     }
 
@@ -222,17 +222,17 @@ public class LevenbergMarquardtOptimizerTest
         // Check that the computed solution is within the reference error range.
         for (int i = 0; i < numParams; i++) {
             final double error = FastMath.sqrt(expectedCovarMatrix[i][i]);
-            Assert.assertEquals("Parameter " + i, expectedSolution[i], solution.getEntry(i), error);
+            Assertions.assertEquals(expectedSolution[i], solution.getEntry(i), error, "Parameter " + i);
         }
 
         // Check that each entry of the computed covariance matrix is within 10%
         // of the reference matrix entry.
         for (int i = 0; i < numParams; i++) {
             for (int j = 0; j < numParams; j++) {
-                Assert.assertEquals("Covariance matrix [" + i + "][" + j + "]",
-                                    expectedCovarMatrix[i][j],
+                Assertions.assertEquals(expectedCovarMatrix[i][j],
                                     covarMatrix.getEntry(i, j),
-                                    FastMath.abs(0.1 * expectedCovarMatrix[i][j]));
+                                    FastMath.abs(0.1 * expectedCovarMatrix[i][j]),
+                                    "Covariance matrix [" + i + "][" + j + "]");
             }
         }
 
@@ -250,10 +250,10 @@ public class LevenbergMarquardtOptimizerTest
         final double expectedRms = 1.0582887010256337;
 
         final double tol = 1e14;
-        Assert.assertEquals(expectedChi2, chi2, tol);
-        Assert.assertEquals(expectedReducedChi2, reducedChi2, tol);
-        Assert.assertEquals(expectedCost, cost, tol);
-        Assert.assertEquals(expectedRms, rms, tol);
+        Assertions.assertEquals(expectedChi2, chi2, tol);
+        Assertions.assertEquals(expectedReducedChi2, reducedChi2, tol);
+        Assertions.assertEquals(expectedCost, cost, tol);
+        Assertions.assertEquals(expectedRms, rms, tol);
     }
 
     @Test
@@ -290,10 +290,10 @@ public class LevenbergMarquardtOptimizerTest
         final double[] asymptoticStandardErrorFound = optimum.getSigma(1e-14).toArray();
 
         // Check that the parameters are found within the assumed error bars.
-        Assert.assertEquals(xCenter, paramFound[0], 3 * asymptoticStandardErrorFound[0]);
-        Assert.assertEquals(yCenter, paramFound[1], 3 * asymptoticStandardErrorFound[1]);
-        Assert.assertEquals(radius,  paramFound[2], 3 * asymptoticStandardErrorFound[2]);
-        Assert.assertTrue(incrementor.getCount() < 40);
+        Assertions.assertEquals(xCenter, paramFound[0], 3 * asymptoticStandardErrorFound[0]);
+        Assertions.assertEquals(yCenter, paramFound[1], 3 * asymptoticStandardErrorFound[1]);
+        Assertions.assertEquals(radius,  paramFound[2], 3 * asymptoticStandardErrorFound[2]);
+        Assertions.assertTrue(incrementor.getCount() < 40);
     }
 
     @Test
@@ -321,7 +321,7 @@ public class LevenbergMarquardtOptimizerTest
         final Optimum optimum
             = optimizer.optimize(builder(circle).maxIterations(50).start(init).build());
         final int numEval = optimum.getEvaluations();
-        Assert.assertTrue(numEval > 1);
+        Assertions.assertTrue(numEval > 1);
 
         // Build a new problem with a validator that amounts to cheating.
         final ParameterValidator cheatValidator
@@ -335,7 +335,7 @@ public class LevenbergMarquardtOptimizerTest
         final Optimum cheatOptimum
             = optimizer.optimize(builder(circle).maxIterations(50).start(init).parameterValidator(cheatValidator).build());
         final int cheatNumEval = cheatOptimum.getEvaluations();
-        Assert.assertTrue(cheatNumEval < numEval);
+        Assertions.assertTrue(cheatNumEval < numEval);
         // System.out.println("n=" + numEval + " nc=" + cheatNumEval);
     }
 
@@ -356,8 +356,8 @@ public class LevenbergMarquardtOptimizerTest
 
         //verify
         //check iterations and evaluations are not switched.
-        MatcherAssert.assertThat(optimum.getIterations(), is(1));
-        MatcherAssert.assertThat(optimum.getEvaluations(), is(2));
+        assertThat(optimum.getIterations(), is(1));
+        assertThat(optimum.getEvaluations(), is(2));
     }
 
     private static class BevingtonProblem {

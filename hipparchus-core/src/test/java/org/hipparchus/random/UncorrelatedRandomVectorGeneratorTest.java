@@ -20,8 +20,8 @@ package org.hipparchus.random;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class UncorrelatedRandomVectorGeneratorTest {
     private double[] mean;
@@ -57,13 +57,13 @@ public class UncorrelatedRandomVectorGeneratorTest {
         RealMatrix estimatedCorrelation = UnitTestUtils.covarianceMatrix(matrix);
         //RealMatrix estimatedCorrelation = covStat.getResult();
         for (int i = 0; i < estimatedMean.length; ++i) {
-            Assert.assertEquals(mean[i], estimatedMean[i], 0.07);
+            Assertions.assertEquals(mean[i], estimatedMean[i], 0.07);
             for (int j = 0; j < i; ++j) {
                 scale = standardDeviation[i] * standardDeviation[j];
-                Assert.assertEquals(0, estimatedCorrelation.getEntry(i, j) / scale, 0.03);
+                Assertions.assertEquals(0, estimatedCorrelation.getEntry(i, j) / scale, 0.03);
             }
             scale = standardDeviation[i] * standardDeviation[i];
-            Assert.assertEquals(1, estimatedCorrelation.getEntry(i, i) / scale, 0.025);
+            Assertions.assertEquals(1, estimatedCorrelation.getEntry(i, i) / scale, 0.025);
         }
     }
 }

@@ -22,11 +22,13 @@
 
 package org.hipparchus.util;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
 import java.util.NoSuchElementException;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test cases for the {@link MultidimensionalCounter} class.
@@ -38,19 +40,19 @@ public class MultidimensionalCounterTest {
 
         try {
             c = new MultidimensionalCounter(0, 1);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
             c = new MultidimensionalCounter(2, 0);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
             c = new MultidimensionalCounter(-1, 1);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException e) {
             // Expected.
         }
@@ -58,31 +60,31 @@ public class MultidimensionalCounterTest {
         c = new MultidimensionalCounter(2, 3);
         try {
             c.getCount(1, 1, 1);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
             c.getCount(3, 1);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
             c.getCount(0, -1);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
             c.getCounts(-1);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
             c.getCounts(6);
-            Assert.fail("MathIllegalArgumentException expected");
+            Assertions.fail("MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException e) {
             // Expected.
         }
@@ -93,13 +95,13 @@ public class MultidimensionalCounterTest {
         MultidimensionalCounter.Iterator iter = (new MultidimensionalCounter(2, 3)).iterator();
         try {
             iter.getCount(-1);
-            Assert.fail("IndexOutOfBoundsException expected");
+            Assertions.fail("IndexOutOfBoundsException expected");
         } catch (IndexOutOfBoundsException e) {
             // Expected.
         }
         try {
             iter.getCount(2);
-            Assert.fail("IndexOutOfBoundsException expected");
+            Assertions.fail("IndexOutOfBoundsException expected");
         } catch (IndexOutOfBoundsException e) {
             // Expected.
         }
@@ -115,32 +117,34 @@ public class MultidimensionalCounterTest {
 
         final int max = dim1 * dim2;
         for (int i = 0; i < max; i++) {
-            Assert.assertTrue(iter.hasNext());
+            Assertions.assertTrue(iter.hasNext());
 
             // Should not throw.
             iter.next();
         }
 
-        Assert.assertFalse(iter.hasNext());
+        Assertions.assertFalse(iter.hasNext());
     }
 
-    @Test(expected=NoSuchElementException.class)
+    @Test
     public void testIteratorNoMoreElements() {
-        final MultidimensionalCounter.Iterator iter
-            = new MultidimensionalCounter(4, 2).iterator();
+        assertThrows(NoSuchElementException.class, () -> {
+            final MultidimensionalCounter.Iterator iter
+                = new MultidimensionalCounter(4, 2).iterator();
 
-        while (iter.hasNext()) {
+            while (iter.hasNext()) {
+                iter.next();
+            }
+
+            // No more elements: should throw.
             iter.next();
-        }
-
-        // No more elements: should throw.
-        iter.next();
+        });
     }
 
     @Test
     public void testMulti2UniConversion() {
         final MultidimensionalCounter c = new MultidimensionalCounter(2, 4, 5);
-        Assert.assertEquals(c.getCount(1, 2, 3), 33);
+        Assertions.assertEquals(33, c.getCount(1, 2, 3));
     }
 
     @Test
@@ -148,11 +152,11 @@ public class MultidimensionalCounterTest {
         final int[] originalSize = new int[] {2, 6, 5};
         final MultidimensionalCounter c = new MultidimensionalCounter(originalSize);
         final int nDim = c.getDimension();
-        Assert.assertEquals(nDim, originalSize.length);
+        Assertions.assertEquals(nDim, originalSize.length);
 
         final int[] size = c.getSizes();
         for (int i = 0; i < nDim; i++) {
-            Assert.assertEquals(originalSize[i], size[i]);
+            Assertions.assertEquals(originalSize[i], size[i]);
         }
     }
 
@@ -187,34 +191,31 @@ public class MultidimensionalCounterTest {
         };
 
         final int totalSize = c.getSize();
-        Assert.assertEquals(expected.length, totalSize);
+        Assertions.assertEquals(expected.length, totalSize);
 
         final int nDim = c.getDimension();
         final MultidimensionalCounter.Iterator iter = c.iterator();
         for (int i = 0; i < totalSize; i++) {
             if (!iter.hasNext()) {
-                Assert.fail("Too short");
+                Assertions.fail("Too short");
             }
             final int uniDimIndex = iter.next().intValue();
-            Assert.assertEquals("Wrong iteration at " + i, i, uniDimIndex);
+            Assertions.assertEquals(i, uniDimIndex, "Wrong iteration at " + i);
 
             for (int dimIndex = 0; dimIndex < nDim; dimIndex++) {
-                Assert.assertEquals("Wrong multidimensional index for [" + i + "][" + dimIndex + "]",
-                                    expected[i][dimIndex], iter.getCount(dimIndex));
+                Assertions.assertEquals(expected[i][dimIndex], iter.getCount(dimIndex), "Wrong multidimensional index for [" + i + "][" + dimIndex + "]");
             }
 
-            Assert.assertEquals("Wrong unidimensional index for [" + i + "]",
-                                c.getCount(expected[i]), uniDimIndex);
+            Assertions.assertEquals(c.getCount(expected[i]), uniDimIndex, "Wrong unidimensional index for [" + i + "]");
 
             final int[] indices = c.getCounts(uniDimIndex);
             for (int dimIndex = 0; dimIndex < nDim; dimIndex++) {
-                Assert.assertEquals("Wrong multidimensional index for [" + i + "][" + dimIndex + "]",
-                                    expected[i][dimIndex], indices[dimIndex]);
+                Assertions.assertEquals(expected[i][dimIndex], indices[dimIndex], "Wrong multidimensional index for [" + i + "][" + dimIndex + "]");
             }
         }
 
         if (iter.hasNext()) {
-            Assert.fail("Too long");
+            Assertions.fail("Too long");
         }
     }
 }

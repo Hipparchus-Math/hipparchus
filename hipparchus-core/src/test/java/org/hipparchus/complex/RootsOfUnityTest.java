@@ -24,8 +24,10 @@ package org.hipparchus.complex;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 /**
@@ -34,44 +36,52 @@ import org.junit.Test;
  */
 public class RootsOfUnityTest {
 
-    @Test(expected = MathIllegalStateException.class)
+    @Test
     public void testMathIllegalState1() {
-        final RootsOfUnity roots = new RootsOfUnity();
-        roots.getReal(0);
+        assertThrows(MathIllegalStateException.class, () -> {
+            final RootsOfUnity roots = new RootsOfUnity();
+            roots.getReal(0);
+        });
     }
 
-    @Test(expected = MathIllegalStateException.class)
+    @Test
     public void testMathIllegalState2() {
-        final RootsOfUnity roots = new RootsOfUnity();
-        roots.getImaginary(0);
+        assertThrows(MathIllegalStateException.class, () -> {
+            final RootsOfUnity roots = new RootsOfUnity();
+            roots.getImaginary(0);
+        });
     }
 
-    @Test(expected = MathIllegalStateException.class)
+    @Test
     public void testMathIllegalState3() {
-        final RootsOfUnity roots = new RootsOfUnity();
-        roots.isCounterClockWise();
+        assertThrows(MathIllegalStateException.class, () -> {
+            final RootsOfUnity roots = new RootsOfUnity();
+            roots.isCounterClockWise();
+        });
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testZeroNumberOfRoots() {
-        final RootsOfUnity roots = new RootsOfUnity();
-        roots.computeRoots(0);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            final RootsOfUnity roots = new RootsOfUnity();
+            roots.computeRoots(0);
+        });
     }
 
     @Test
     public void testGetNumberOfRoots() {
         final RootsOfUnity roots = new RootsOfUnity();
-        Assert.assertEquals("", 0, roots.getNumberOfRoots());
+        Assertions.assertEquals(0, roots.getNumberOfRoots(), "");
         roots.computeRoots(5);
-        Assert.assertEquals("", 5, roots.getNumberOfRoots());
+        Assertions.assertEquals(5, roots.getNumberOfRoots(), "");
         /*
          * Testing -5 right after 5 is important, as the roots in this case are
          * not recomputed.
          */
         roots.computeRoots(-5);
-        Assert.assertEquals("", 5, roots.getNumberOfRoots());
+        Assertions.assertEquals(5, roots.getNumberOfRoots(), "");
         roots.computeRoots(6);
-        Assert.assertEquals("", 6, roots.getNumberOfRoots());
+        Assertions.assertEquals(6, roots.getNumberOfRoots(), "");
     }
 
     @Test
@@ -98,8 +108,8 @@ public class RootsOfUnityTest {
         for (int k = 0; k < n; k++) {
             final double t = 2.0 * FastMath.PI * k / n;
             final String msg = String.format("n = %d, k = %d", n, k);
-            Assert.assertEquals(msg, FastMath.cos(t), roots.getReal(k), tol);
-            Assert.assertEquals(msg, FastMath.sin(t), roots.getImaginary(k), tol);
+            Assertions.assertEquals(FastMath.cos(t), roots.getReal(k), tol, msg);
+            Assertions.assertEquals(FastMath.sin(t), roots.getImaginary(k), tol, msg);
         }
     }
 }

@@ -13,15 +13,17 @@
  */
 package org.hipparchus.util;
 
-import java.util.Arrays;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.Well1024a;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Test cases for the {@link MathArrays} class.
@@ -44,12 +46,12 @@ public class MathArraysTest {
 
         // Make sure test has not changed
         for (int i = 0; i < test.length; i++) {
-            Assert.assertEquals(correctTest[i], test[i], 0);
+            Assertions.assertEquals(correctTest[i], test[i], 0);
         }
 
         // Test scaled values
         for (int i = 0; i < scaled.length; i++) {
-            Assert.assertEquals(correctScaled[i], scaled[i], 0);
+            Assertions.assertEquals(correctScaled[i], scaled[i], 0);
         }
     }
 
@@ -61,25 +63,33 @@ public class MathArraysTest {
 
         // Make sure test has changed
         for (int i = 0; i < test.length; i++) {
-            Assert.assertEquals(correctScaled[i], test[i], 0);
+            Assertions.assertEquals(correctScaled[i], test[i], 0);
         }
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testEbeAddPrecondition() {
-        MathArrays.ebeAdd(new double[3], new double[4]);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            MathArrays.ebeAdd(new double[3], new double[4]);
+        });
     }
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testEbeSubtractPrecondition() {
-        MathArrays.ebeSubtract(new double[3], new double[4]);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            MathArrays.ebeSubtract(new double[3], new double[4]);
+        });
     }
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testEbeMultiplyPrecondition() {
-        MathArrays.ebeMultiply(new double[3], new double[4]);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            MathArrays.ebeMultiply(new double[3], new double[4]);
+        });
     }
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testEbeDividePrecondition() {
-        MathArrays.ebeDivide(new double[3], new double[4]);
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            MathArrays.ebeDivide(new double[3], new double[4]);
+        });
     }
 
     @Test
@@ -89,7 +99,7 @@ public class MathArraysTest {
         final double[] r = MathArrays.ebeAdd(a, b);
 
         for (int i = 0; i < a.length; i++) {
-            Assert.assertEquals(a[i] + b[i], r[i], 0);
+            Assertions.assertEquals(a[i] + b[i], r[i], 0);
         }
     }
     @Test
@@ -99,7 +109,7 @@ public class MathArraysTest {
         final double[] r = MathArrays.ebeSubtract(a, b);
 
         for (int i = 0; i < a.length; i++) {
-            Assert.assertEquals(a[i] - b[i], r[i], 0);
+            Assertions.assertEquals(a[i] - b[i], r[i], 0);
         }
     }
     @Test
@@ -109,7 +119,7 @@ public class MathArraysTest {
         final double[] r = MathArrays.ebeMultiply(a, b);
 
         for (int i = 0; i < a.length; i++) {
-            Assert.assertEquals(a[i] * b[i], r[i], 0);
+            Assertions.assertEquals(a[i] * b[i], r[i], 0);
         }
     }
     @Test
@@ -119,7 +129,7 @@ public class MathArraysTest {
         final double[] r = MathArrays.ebeDivide(a, b);
 
         for (int i = 0; i < a.length; i++) {
-            Assert.assertEquals(a[i] / b[i], r[i], 0);
+            Assertions.assertEquals(a[i] / b[i], r[i], 0);
         }
     }
 
@@ -127,42 +137,42 @@ public class MathArraysTest {
     public void testL1DistanceDouble() {
         double[] p1 = { 2.5,  0.0 };
         double[] p2 = { -0.5, 4.0 };
-        Assert.assertTrue(Precision.equals(7.0, MathArrays.distance1(p1, p2), 1));
+        Assertions.assertTrue(Precision.equals(7.0, MathArrays.distance1(p1, p2), 1));
     }
 
     @Test
     public void testL1DistanceInt() {
         int[] p1 = { 3, 0 };
         int[] p2 = { 0, 4 };
-        Assert.assertEquals(7, MathArrays.distance1(p1, p2));
+        Assertions.assertEquals(7, MathArrays.distance1(p1, p2));
     }
 
     @Test
     public void testL2DistanceDouble() {
         double[] p1 = { 2.5,  0.0 };
         double[] p2 = { -0.5, 4.0 };
-        Assert.assertTrue(Precision.equals(5.0, MathArrays.distance(p1, p2), 1));
+        Assertions.assertTrue(Precision.equals(5.0, MathArrays.distance(p1, p2), 1));
     }
 
     @Test
     public void testL2DistanceInt() {
         int[] p1 = { 3, 0 };
         int[] p2 = { 0, 4 };
-        Assert.assertTrue(Precision.equals(5, MathArrays.distance(p1, p2), 1));
+        Assertions.assertTrue(Precision.equals(5, MathArrays.distance(p1, p2), 1));
     }
 
     @Test
     public void testLInfDistanceDouble() {
         double[] p1 = { 2.5,  0.0 };
         double[] p2 = { -0.5, 4.0 };
-        Assert.assertTrue(Precision.equals(4.0, MathArrays.distanceInf(p1, p2), 1));
+        Assertions.assertTrue(Precision.equals(4.0, MathArrays.distanceInf(p1, p2), 1));
     }
 
     @Test
     public void testLInfDistanceInt() {
         int[] p1 = { 3, 0 };
         int[] p2 = { 0, 4 };
-        Assert.assertEquals(4, MathArrays.distanceInf(p1, p2));
+        Assertions.assertEquals(4, MathArrays.distanceInf(p1, p2));
     }
 
     @Test
@@ -171,24 +181,24 @@ public class MathArraysTest {
 
         final double[] v1 = { 1, 0 };
         expected = 1;
-        Assert.assertEquals(expected, MathArrays.cosAngle(v1, v1), 0d);
+        Assertions.assertEquals(expected, MathArrays.cosAngle(v1, v1), 0d);
 
         final double[] v2 = { 0, 1 };
         expected = 0;
-        Assert.assertEquals(expected, MathArrays.cosAngle(v1, v2), 0d);
+        Assertions.assertEquals(expected, MathArrays.cosAngle(v1, v2), 0d);
 
         final double[] v3 = { 7, 7 };
         expected = Math.sqrt(2) / 2;
-        Assert.assertEquals(expected, MathArrays.cosAngle(v1, v3), 1e-15);
-        Assert.assertEquals(expected, MathArrays.cosAngle(v3, v2), 1e-15);
+        Assertions.assertEquals(expected, MathArrays.cosAngle(v1, v3), 1e-15);
+        Assertions.assertEquals(expected, MathArrays.cosAngle(v3, v2), 1e-15);
 
         final double[] v4 = { -5, 0 };
         expected = -1;
-        Assert.assertEquals(expected, MathArrays.cosAngle(v1, v4), 0);
+        Assertions.assertEquals(expected, MathArrays.cosAngle(v1, v4), 0);
 
         final double[] v5 = { -100, 100 };
         expected = 0;
-        Assert.assertEquals(expected, MathArrays.cosAngle(v3, v5), 0);
+        Assertions.assertEquals(expected, MathArrays.cosAngle(v3, v5), 0);
     }
 
     @Test
@@ -197,11 +207,11 @@ public class MathArraysTest {
 
         final double[] v1 = { 1, 1, 0 };
         expected = 1;
-        Assert.assertEquals(expected, MathArrays.cosAngle(v1, v1), 1e-15);
+        Assertions.assertEquals(expected, MathArrays.cosAngle(v1, v1), 1e-15);
 
         final double[] v2 = { 1, 1, 1 };
         expected = Math.sqrt(2) / Math.sqrt(3);
-        Assert.assertEquals(expected, MathArrays.cosAngle(v1, v2), 1e-15);
+        Assertions.assertEquals(expected, MathArrays.cosAngle(v1, v2), 1e-15);
     }
 
     @Test
@@ -213,11 +223,11 @@ public class MathArraysTest {
         final double big = 1e200;
         final double[] v2 = { -big, -big };
         expected = -1;
-        Assert.assertEquals(expected, MathArrays.cosAngle(v1, v2), 1e-15);
+        Assertions.assertEquals(expected, MathArrays.cosAngle(v1, v2), 1e-15);
 
         final double[] v3 = { big, -big };
         expected = 0;
-        Assert.assertEquals(expected, MathArrays.cosAngle(v1, v3), 1e-15);
+        Assertions.assertEquals(expected, MathArrays.cosAngle(v1, v3), 1e-15);
     }
 
     @Test
@@ -234,35 +244,35 @@ public class MathArraysTest {
         try {
             MathArrays.checkOrder(new double[] {-15, -5.5, -1, -1, 2, 15},
                                  MathArrays.OrderDirection.INCREASING, true);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             MathArrays.checkOrder(new double[] {-15, -5.5, -1, -2, 2},
                                  MathArrays.OrderDirection.INCREASING, false);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             MathArrays.checkOrder(new double[] {3, 3, -5.5, -11, -27.5},
                                  MathArrays.OrderDirection.DECREASING, true);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             MathArrays.checkOrder(new double[] {3, -1, 0, -5.5, -11, -27.5},
                                  MathArrays.OrderDirection.DECREASING, false);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             MathArrays.checkOrder(new double[] {3, 0, -5.5, -11, -10},
                                  MathArrays.OrderDirection.DECREASING, false);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // Expected
         }
@@ -270,72 +280,72 @@ public class MathArraysTest {
 
     @Test
     public void testIsMonotonic() {
-        Assert.assertFalse(MathArrays.isMonotonic(new double[] { -15, -5.5, -1, -1, 2, 15 },
+        Assertions.assertFalse(MathArrays.isMonotonic(new double[] { -15, -5.5, -1, -1, 2, 15 },
                                                   MathArrays.OrderDirection.INCREASING, true));
-        Assert.assertTrue(MathArrays.isMonotonic(new double[] { -15, -5.5, -1, 0, 2, 15 },
+        Assertions.assertTrue(MathArrays.isMonotonic(new double[] { -15, -5.5, -1, 0, 2, 15 },
                                                  MathArrays.OrderDirection.INCREASING, true));
-        Assert.assertFalse(MathArrays.isMonotonic(new double[] { -15, -5.5, -1, -2, 2 },
+        Assertions.assertFalse(MathArrays.isMonotonic(new double[] { -15, -5.5, -1, -2, 2 },
                                                   MathArrays.OrderDirection.INCREASING, false));
-        Assert.assertTrue(MathArrays.isMonotonic(new double[] { -15, -5.5, -1, -1, 2 },
+        Assertions.assertTrue(MathArrays.isMonotonic(new double[] { -15, -5.5, -1, -1, 2 },
                                                  MathArrays.OrderDirection.INCREASING, false));
-        Assert.assertFalse(MathArrays.isMonotonic(new double[] { 3, 3, -5.5, -11, -27.5 },
+        Assertions.assertFalse(MathArrays.isMonotonic(new double[] { 3, 3, -5.5, -11, -27.5 },
                                                   MathArrays.OrderDirection.DECREASING, true));
-        Assert.assertTrue(MathArrays.isMonotonic(new double[] { 3, 2, -5.5, -11, -27.5 },
+        Assertions.assertTrue(MathArrays.isMonotonic(new double[] { 3, 2, -5.5, -11, -27.5 },
                                                  MathArrays.OrderDirection.DECREASING, true));
-        Assert.assertFalse(MathArrays.isMonotonic(new double[] { 3, -1, 0, -5.5, -11, -27.5 },
+        Assertions.assertFalse(MathArrays.isMonotonic(new double[] { 3, -1, 0, -5.5, -11, -27.5 },
                                                   MathArrays.OrderDirection.DECREASING, false));
-        Assert.assertTrue(MathArrays.isMonotonic(new double[] { 3, 0, 0, -5.5, -11, -27.5 },
+        Assertions.assertTrue(MathArrays.isMonotonic(new double[] { 3, 0, 0, -5.5, -11, -27.5 },
                                                  MathArrays.OrderDirection.DECREASING, false));
     }
 
     @Test
     public void testIsMonotonicComparable() {
-        Assert.assertFalse(MathArrays.isMonotonic(new Double[] { Double.valueOf(-15),
+        Assertions.assertFalse(MathArrays.isMonotonic(new Double[] { Double.valueOf(-15),
                                                                  Double.valueOf(-5.5),
                                                                  Double.valueOf(-1),
                                                                  Double.valueOf(-1),
                                                                  Double.valueOf(2),
                                                                  Double.valueOf(15) },
                 MathArrays.OrderDirection.INCREASING, true));
-        Assert.assertTrue(MathArrays.isMonotonic(new Double[] { Double.valueOf(-15),
+        Assertions.assertTrue(MathArrays.isMonotonic(new Double[] { Double.valueOf(-15),
                                                                 Double.valueOf(-5.5),
                                                                 Double.valueOf(-1),
                                                                 Double.valueOf(0),
                                                                 Double.valueOf(2),
                                                                 Double.valueOf(15) },
                 MathArrays.OrderDirection.INCREASING, true));
-        Assert.assertFalse(MathArrays.isMonotonic(new Double[] { Double.valueOf(-15),
+        Assertions.assertFalse(MathArrays.isMonotonic(new Double[] { Double.valueOf(-15),
                                                                  Double.valueOf(-5.5),
                                                                  Double.valueOf(-1),
                                                                  Double.valueOf(-2),
                                                                  Double.valueOf(2) },
                 MathArrays.OrderDirection.INCREASING, false));
-        Assert.assertTrue(MathArrays.isMonotonic(new Double[] { Double.valueOf(-15),
+        Assertions.assertTrue(MathArrays.isMonotonic(new Double[] { Double.valueOf(-15),
                                                                 Double.valueOf(-5.5),
                                                                 Double.valueOf(-1),
                                                                 Double.valueOf(-1),
                                                                 Double.valueOf(2) },
                 MathArrays.OrderDirection.INCREASING, false));
-        Assert.assertFalse(MathArrays.isMonotonic(new Double[] { Double.valueOf(3),
+        Assertions.assertFalse(MathArrays.isMonotonic(new Double[] { Double.valueOf(3),
                                                                  Double.valueOf(3),
                                                                  Double.valueOf(-5.5),
                                                                  Double.valueOf(-11),
                                                                  Double.valueOf(-27.5) },
                 MathArrays.OrderDirection.DECREASING, true));
-        Assert.assertTrue(MathArrays.isMonotonic(new Double[] { Double.valueOf(3),
+        Assertions.assertTrue(MathArrays.isMonotonic(new Double[] { Double.valueOf(3),
                                                                 Double.valueOf(2),
                                                                 Double.valueOf(-5.5),
                                                                 Double.valueOf(-11),
                                                                 Double.valueOf(-27.5) },
                 MathArrays.OrderDirection.DECREASING, true));
-        Assert.assertFalse(MathArrays.isMonotonic(new Double[] { Double.valueOf(3),
+        Assertions.assertFalse(MathArrays.isMonotonic(new Double[] { Double.valueOf(3),
                                                                  Double.valueOf(-1),
                                                                  Double.valueOf(0),
                                                                  Double.valueOf(-5.5),
                                                                  Double.valueOf(-11),
                                                                  Double.valueOf(-27.5) },
                 MathArrays.OrderDirection.DECREASING, false));
-        Assert.assertTrue(MathArrays.isMonotonic(new Double[] { Double.valueOf(3),
+        Assertions.assertTrue(MathArrays.isMonotonic(new Double[] { Double.valueOf(3),
                                                                 Double.valueOf(0),
                                                                 Double.valueOf(0),
                                                                 Double.valueOf(-5.5),
@@ -354,13 +364,13 @@ public class MathArraysTest {
         MathArrays.checkRectangular(empty);
         try {
             MathArrays.checkRectangular(ragged);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try {
             MathArrays.checkRectangular(nullArray);
-            Assert.fail("Expecting NullArgumentException");
+            Assertions.fail("Expecting NullArgumentException");
         } catch (NullArgumentException ex) {
             // Expected
         }
@@ -376,13 +386,13 @@ public class MathArraysTest {
         MathArrays.checkPositive(empty);
         try {
             MathArrays.checkPositive(nullArray);
-            Assert.fail("Expecting NullPointerException");
+            Assertions.fail("Expecting NullPointerException");
         } catch (NullPointerException ex) {
             // Expected
         }
         try {
             MathArrays.checkPositive(nonNegative);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
@@ -398,13 +408,13 @@ public class MathArraysTest {
         MathArrays.checkNonNegative(empty);
         try {
             MathArrays.checkNonNegative(nullArray);
-            Assert.fail("Expecting NullPointerException");
+            Assertions.fail("Expecting NullPointerException");
         } catch (NullPointerException ex) {
             // Expected
         }
         try {
             MathArrays.checkNonNegative(hasNegative);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
@@ -420,13 +430,13 @@ public class MathArraysTest {
         MathArrays.checkNonNegative(empty);
         try {
             MathArrays.checkNonNegative(nullArray);
-            Assert.fail("Expecting NullPointerException");
+            Assertions.fail("Expecting NullPointerException");
         } catch (NullPointerException ex) {
             // Expected
         }
         try {
             MathArrays.checkNonNegative(hasNegative);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
@@ -460,29 +470,31 @@ public class MathArraysTest {
         MathArrays.checkNotNaN(empty);
         try {
             MathArrays.checkNotNaN(nullArray);
-            Assert.fail("Expecting NullPointerException");
+            Assertions.fail("Expecting NullPointerException");
         } catch (NullPointerException ex) {
             // Expected
         }
         try {
             MathArrays.checkNotNaN(withNaN);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // Expected
         }
     }
 
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testCheckEqualLength1() {
-        MathArrays.checkEqualLength(new double[] {1, 2, 3},
-                                    new double[] {1, 2, 3, 4});
+        assertThrows(MathIllegalArgumentException.class, () -> {
+            MathArrays.checkEqualLength(new double[]{1, 2, 3},
+                new double[]{1, 2, 3, 4});
+        });
     }
 
     @Test
     public void testCheckEqualLength2() {
         final double[] a = new double[] {-1, -12, -23, -34};
         final double[] b = new double[] {56, 67, 78, 89};
-        Assert.assertTrue(MathArrays.checkEqualLength(a, b, false));
+        Assertions.assertTrue(MathArrays.checkEqualLength(a, b, false));
     }
 
     @Test
@@ -493,25 +505,25 @@ public class MathArraysTest {
 
         MathArrays.sortInPlace(x1, x2, x3);
 
-        Assert.assertEquals(-3,  x1[0], FastMath.ulp(1d));
-        Assert.assertEquals(9,   x2[0], FastMath.ulp(1d));
-        Assert.assertEquals(-27, x3[0], FastMath.ulp(1d));
+        Assertions.assertEquals(-3,  x1[0], FastMath.ulp(1d));
+        Assertions.assertEquals(9,   x2[0], FastMath.ulp(1d));
+        Assertions.assertEquals(-27, x3[0], FastMath.ulp(1d));
 
-        Assert.assertEquals(1, x1[1], FastMath.ulp(1d));
-        Assert.assertEquals(1, x2[1], FastMath.ulp(1d));
-        Assert.assertEquals(1, x3[1], FastMath.ulp(1d));
+        Assertions.assertEquals(1, x1[1], FastMath.ulp(1d));
+        Assertions.assertEquals(1, x2[1], FastMath.ulp(1d));
+        Assertions.assertEquals(1, x3[1], FastMath.ulp(1d));
 
-        Assert.assertEquals(2, x1[2], FastMath.ulp(1d));
-        Assert.assertEquals(4, x2[2], FastMath.ulp(1d));
-        Assert.assertEquals(8, x3[2], FastMath.ulp(1d));
+        Assertions.assertEquals(2, x1[2], FastMath.ulp(1d));
+        Assertions.assertEquals(4, x2[2], FastMath.ulp(1d));
+        Assertions.assertEquals(8, x3[2], FastMath.ulp(1d));
 
-        Assert.assertEquals(4,  x1[3], FastMath.ulp(1d));
-        Assert.assertEquals(16, x2[3], FastMath.ulp(1d));
-        Assert.assertEquals(64, x3[3], FastMath.ulp(1d));
+        Assertions.assertEquals(4,  x1[3], FastMath.ulp(1d));
+        Assertions.assertEquals(16, x2[3], FastMath.ulp(1d));
+        Assertions.assertEquals(64, x3[3], FastMath.ulp(1d));
 
-        Assert.assertEquals(5,   x1[4], FastMath.ulp(1d));
-        Assert.assertEquals(25,  x2[4], FastMath.ulp(1d));
-        Assert.assertEquals(125, x3[4], FastMath.ulp(1d));
+        Assertions.assertEquals(5,   x1[4], FastMath.ulp(1d));
+        Assertions.assertEquals(25,  x2[4], FastMath.ulp(1d));
+        Assertions.assertEquals(125, x3[4], FastMath.ulp(1d));
     }
 
     @Test
@@ -524,25 +536,25 @@ public class MathArraysTest {
                                MathArrays.OrderDirection.DECREASING,
                                x2, x3);
 
-        Assert.assertEquals(-3,  x1[4], FastMath.ulp(1d));
-        Assert.assertEquals(9,   x2[4], FastMath.ulp(1d));
-        Assert.assertEquals(-27, x3[4], FastMath.ulp(1d));
+        Assertions.assertEquals(-3,  x1[4], FastMath.ulp(1d));
+        Assertions.assertEquals(9,   x2[4], FastMath.ulp(1d));
+        Assertions.assertEquals(-27, x3[4], FastMath.ulp(1d));
 
-        Assert.assertEquals(1, x1[3], FastMath.ulp(1d));
-        Assert.assertEquals(1, x2[3], FastMath.ulp(1d));
-        Assert.assertEquals(1, x3[3], FastMath.ulp(1d));
+        Assertions.assertEquals(1, x1[3], FastMath.ulp(1d));
+        Assertions.assertEquals(1, x2[3], FastMath.ulp(1d));
+        Assertions.assertEquals(1, x3[3], FastMath.ulp(1d));
 
-        Assert.assertEquals(2, x1[2], FastMath.ulp(1d));
-        Assert.assertEquals(4, x2[2], FastMath.ulp(1d));
-        Assert.assertEquals(8, x3[2], FastMath.ulp(1d));
+        Assertions.assertEquals(2, x1[2], FastMath.ulp(1d));
+        Assertions.assertEquals(4, x2[2], FastMath.ulp(1d));
+        Assertions.assertEquals(8, x3[2], FastMath.ulp(1d));
 
-        Assert.assertEquals(4,  x1[1], FastMath.ulp(1d));
-        Assert.assertEquals(16, x2[1], FastMath.ulp(1d));
-        Assert.assertEquals(64, x3[1], FastMath.ulp(1d));
+        Assertions.assertEquals(4,  x1[1], FastMath.ulp(1d));
+        Assertions.assertEquals(16, x2[1], FastMath.ulp(1d));
+        Assertions.assertEquals(64, x3[1], FastMath.ulp(1d));
 
-        Assert.assertEquals(5,   x1[0], FastMath.ulp(1d));
-        Assert.assertEquals(25,  x2[0], FastMath.ulp(1d));
-        Assert.assertEquals(125, x3[0], FastMath.ulp(1d));
+        Assertions.assertEquals(5,   x1[0], FastMath.ulp(1d));
+        Assertions.assertEquals(25,  x2[0], FastMath.ulp(1d));
+        Assertions.assertEquals(125, x3[0], FastMath.ulp(1d));
     }
 
     @Test
@@ -555,9 +567,9 @@ public class MathArraysTest {
         final double[] sx = {1, 2, 3};
         final double[] sy = {2, 3, 1};
         final double[] sz = {5, 7, 0};
-        Assert.assertTrue(Arrays.equals(sx, x));
-        Assert.assertTrue(Arrays.equals(sy, y));
-        Assert.assertTrue(Arrays.equals(sz, z));
+        Assertions.assertTrue(Arrays.equals(sx, x));
+        Assertions.assertTrue(Arrays.equals(sy, y));
+        Assertions.assertTrue(Arrays.equals(sz, z));
     }
 
     @Test
@@ -568,19 +580,19 @@ public class MathArraysTest {
         final double[] onep = {2};
         try {
             MathArrays.sortInPlace(one, two);
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             MathArrays.sortInPlace(one, nullArray);
-            Assert.fail("Expecting NullArgumentException");
+            Assertions.fail("Expecting NullArgumentException");
         } catch (NullArgumentException ex) {
             // expected
         }
         try {
             MathArrays.sortInPlace(one, onep, nullArray);
-            Assert.fail("Expecting NullArgumentException");
+            Assertions.fail("Expecting NullArgumentException");
         } catch (NullArgumentException ex) {
             // expected
         }
@@ -592,7 +604,7 @@ public class MathArraysTest {
         final double[] a = { 1.23456789 };
         final double[] b = { 98765432.1 };
 
-        Assert.assertEquals(a[0] * b[0], MathArrays.linearCombination(a, b), 0d);
+        Assertions.assertEquals(a[0] * b[0], MathArrays.linearCombination(a, b), 0d);
     }
 
     @Test
@@ -613,26 +625,26 @@ public class MathArraysTest {
                                                                 a[2], b[2]);
         final double abSumArray = MathArrays.linearCombination(a, b);
 
-        Assert.assertEquals(abSumInline, abSumArray, 0);
-        Assert.assertEquals(-1.8551294182586248737720779899, abSumInline, 1.0e-15);
+        Assertions.assertEquals(abSumInline, abSumArray, 0);
+        Assertions.assertEquals(-1.8551294182586248737720779899, abSumInline, 1.0e-15);
 
         final double naive = a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-        Assert.assertTrue(FastMath.abs(naive - abSumInline) > 1.5);
+        Assertions.assertTrue(FastMath.abs(naive - abSumInline) > 1.5);
 
     }
 
     @Test
     public void testLinearCombinationSignedZero() {
-        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(+0.0, 1.0, +0.0, 1.0)) > 0);
-        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(-0.0, 1.0, -0.0, 1.0)) < 0);
-        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(+0.0, 1.0, +0.0, 1.0, +0.0, 1.0)) > 0);
-        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(-0.0, 1.0, -0.0, 1.0, -0.0, 1.0)) < 0);
-        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(+0.0, 1.0, +0.0, 1.0, +0.0, 1.0)) > 0);
-        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(-0.0, 1.0, -0.0, 1.0, -0.0, 1.0)) < 0);
-        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(+0.0, 1.0, +0.0, 1.0, +0.0, 1.0, +0.0, 1.0)) > 0);
-        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(-0.0, 1.0, -0.0, 1.0, -0.0, 1.0, -0.0, 1.0)) < 0);
-        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(new double[] {+0.0, +0.0}, new double[] {1.0, 1.0})) > 0);
-        Assert.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(new double[] {-0.0, -0.0}, new double[] {1.0, 1.0})) < 0);
+        Assertions.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(+0.0, 1.0, +0.0, 1.0)) > 0);
+        Assertions.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(-0.0, 1.0, -0.0, 1.0)) < 0);
+        Assertions.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(+0.0, 1.0, +0.0, 1.0, +0.0, 1.0)) > 0);
+        Assertions.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(-0.0, 1.0, -0.0, 1.0, -0.0, 1.0)) < 0);
+        Assertions.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(+0.0, 1.0, +0.0, 1.0, +0.0, 1.0)) > 0);
+        Assertions.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(-0.0, 1.0, -0.0, 1.0, -0.0, 1.0)) < 0);
+        Assertions.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(+0.0, 1.0, +0.0, 1.0, +0.0, 1.0, +0.0, 1.0)) > 0);
+        Assertions.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(-0.0, 1.0, -0.0, 1.0, -0.0, 1.0, -0.0, 1.0)) < 0);
+        Assertions.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(new double[] {+0.0, +0.0}, new double[] {1.0, 1.0})) > 0);
+        Assertions.assertTrue(FastMath.copySign(1, MathArrays.linearCombination(new double[] {-0.0, -0.0}, new double[] {1.0, 1.0})) < 0);
     }
 
     @Test
@@ -653,7 +665,7 @@ public class MathArraysTest {
                                                                 uz, vz);
             final double sArray = MathArrays.linearCombination(new double[] {ux, uy, uz},
                                                                new double[] {vx, vy, vz});
-            Assert.assertEquals(sInline, sArray, 0);
+            Assertions.assertEquals(sInline, sArray, 0);
         }
     }
 
@@ -682,11 +694,11 @@ public class MathArraysTest {
                                                                 scaledA[2], scaledB[2]);
         final double abSumArray = MathArrays.linearCombination(scaledA, scaledB);
 
-        Assert.assertEquals(abSumInline, abSumArray, 0);
-        Assert.assertEquals(-1.8551294182586248737720779899, abSumInline, 1.0e-15);
+        Assertions.assertEquals(abSumInline, abSumArray, 0);
+        Assertions.assertEquals(-1.8551294182586248737720779899, abSumInline, 1.0e-15);
 
         final double naive = scaledA[0] * scaledB[0] + scaledA[1] * scaledB[1] + scaledA[2] * scaledB[2];
-        Assert.assertTrue(FastMath.abs(naive - abSumInline) > 1.5);
+        Assertions.assertTrue(FastMath.abs(naive - abSumInline) > 1.5);
 
     }
 
@@ -713,238 +725,238 @@ public class MathArraysTest {
             { Double.NaN, -2, 3, 4}
         };
 
-        Assert.assertEquals(-3,
+        Assertions.assertEquals(-3,
                             MathArrays.linearCombination(a[0][0], b[0][0],
                                                          a[0][1], b[0][1]),
                             1.0e-10);
-        Assert.assertEquals(6,
+        Assertions.assertEquals(6,
                             MathArrays.linearCombination(a[0][0], b[0][0],
                                                          a[0][1], b[0][1],
                                                          a[0][2], b[0][2]),
                             1.0e-10);
-        Assert.assertEquals(22,
+        Assertions.assertEquals(22,
                             MathArrays.linearCombination(a[0][0], b[0][0],
                                                          a[0][1], b[0][1],
                                                          a[0][2], b[0][2],
                                                          a[0][3], b[0][3]),
                             1.0e-10);
-        Assert.assertEquals(22, MathArrays.linearCombination(a[0], b[0]), 1.0e-10);
+        Assertions.assertEquals(22, MathArrays.linearCombination(a[0], b[0]), 1.0e-10);
 
-        Assert.assertEquals(Double.NEGATIVE_INFINITY,
+        Assertions.assertEquals(Double.NEGATIVE_INFINITY,
                             MathArrays.linearCombination(a[1][0], b[1][0],
                                                          a[1][1], b[1][1]),
                             1.0e-10);
-        Assert.assertEquals(Double.NEGATIVE_INFINITY,
+        Assertions.assertEquals(Double.NEGATIVE_INFINITY,
                             MathArrays.linearCombination(a[1][0], b[1][0],
                                                          a[1][1], b[1][1],
                                                          a[1][2], b[1][2]),
                             1.0e-10);
-        Assert.assertEquals(Double.NEGATIVE_INFINITY,
+        Assertions.assertEquals(Double.NEGATIVE_INFINITY,
                             MathArrays.linearCombination(a[1][0], b[1][0],
                                                          a[1][1], b[1][1],
                                                          a[1][2], b[1][2],
                                                          a[1][3], b[1][3]),
                             1.0e-10);
-        Assert.assertEquals(Double.NEGATIVE_INFINITY, MathArrays.linearCombination(a[1], b[1]), 1.0e-10);
+        Assertions.assertEquals(Double.NEGATIVE_INFINITY, MathArrays.linearCombination(a[1], b[1]), 1.0e-10);
 
-        Assert.assertEquals(-3,
+        Assertions.assertEquals(-3,
                             MathArrays.linearCombination(a[2][0], b[2][0],
                                                          a[2][1], b[2][1]),
                             1.0e-10);
-        Assert.assertEquals(Double.POSITIVE_INFINITY,
+        Assertions.assertEquals(Double.POSITIVE_INFINITY,
                             MathArrays.linearCombination(a[2][0], b[2][0],
                                                          a[2][1], b[2][1],
                                                          a[2][2], b[2][2]),
                             1.0e-10);
-        Assert.assertEquals(Double.POSITIVE_INFINITY,
+        Assertions.assertEquals(Double.POSITIVE_INFINITY,
                             MathArrays.linearCombination(a[2][0], b[2][0],
                                                          a[2][1], b[2][1],
                                                          a[2][2], b[2][2],
                                                          a[2][3], b[2][3]),
                             1.0e-10);
-        Assert.assertEquals(Double.POSITIVE_INFINITY, MathArrays.linearCombination(a[2], b[2]), 1.0e-10);
+        Assertions.assertEquals(Double.POSITIVE_INFINITY, MathArrays.linearCombination(a[2], b[2]), 1.0e-10);
 
-        Assert.assertEquals(Double.NEGATIVE_INFINITY,
+        Assertions.assertEquals(Double.NEGATIVE_INFINITY,
                             MathArrays.linearCombination(a[3][0], b[3][0],
                                                          a[3][1], b[3][1]),
                             1.0e-10);
-        Assert.assertEquals(Double.NEGATIVE_INFINITY,
+        Assertions.assertEquals(Double.NEGATIVE_INFINITY,
                             MathArrays.linearCombination(a[3][0], b[3][0],
                                                          a[3][1], b[3][1],
                                                          a[3][2], b[3][2]),
                             1.0e-10);
-        Assert.assertEquals(Double.NEGATIVE_INFINITY,
+        Assertions.assertEquals(Double.NEGATIVE_INFINITY,
                             MathArrays.linearCombination(a[3][0], b[3][0],
                                                          a[3][1], b[3][1],
                                                          a[3][2], b[3][2],
                                                          a[3][3], b[3][3]),
                             1.0e-10);
-        Assert.assertEquals(Double.NEGATIVE_INFINITY, MathArrays.linearCombination(a[3], b[3]), 1.0e-10);
+        Assertions.assertEquals(Double.NEGATIVE_INFINITY, MathArrays.linearCombination(a[3], b[3]), 1.0e-10);
 
-        Assert.assertEquals(Double.POSITIVE_INFINITY,
+        Assertions.assertEquals(Double.POSITIVE_INFINITY,
                             MathArrays.linearCombination(a[4][0], b[4][0],
                                                          a[4][1], b[4][1]),
                             1.0e-10);
-        Assert.assertEquals(Double.POSITIVE_INFINITY,
+        Assertions.assertEquals(Double.POSITIVE_INFINITY,
                             MathArrays.linearCombination(a[4][0], b[4][0],
                                                          a[4][1], b[4][1],
                                                          a[4][2], b[4][2]),
                             1.0e-10);
-        Assert.assertEquals(Double.POSITIVE_INFINITY,
+        Assertions.assertEquals(Double.POSITIVE_INFINITY,
                             MathArrays.linearCombination(a[4][0], b[4][0],
                                                          a[4][1], b[4][1],
                                                          a[4][2], b[4][2],
                                                          a[4][3], b[4][3]),
                             1.0e-10);
-        Assert.assertEquals(Double.POSITIVE_INFINITY, MathArrays.linearCombination(a[4], b[4]), 1.0e-10);
+        Assertions.assertEquals(Double.POSITIVE_INFINITY, MathArrays.linearCombination(a[4], b[4]), 1.0e-10);
 
-        Assert.assertEquals(-3,
+        Assertions.assertEquals(-3,
                             MathArrays.linearCombination(a[5][0], b[5][0],
                                                          a[5][1], b[5][1]),
                             1.0e-10);
-        Assert.assertEquals(Double.POSITIVE_INFINITY,
+        Assertions.assertEquals(Double.POSITIVE_INFINITY,
                             MathArrays.linearCombination(a[5][0], b[5][0],
                                                          a[5][1], b[5][1],
                                                          a[5][2], b[5][2]),
                             1.0e-10);
-        Assert.assertEquals(Double.POSITIVE_INFINITY,
+        Assertions.assertEquals(Double.POSITIVE_INFINITY,
                             MathArrays.linearCombination(a[5][0], b[5][0],
                                                          a[5][1], b[5][1],
                                                          a[5][2], b[5][2],
                                                          a[5][3], b[5][3]),
                             1.0e-10);
-        Assert.assertEquals(Double.POSITIVE_INFINITY, MathArrays.linearCombination(a[5], b[5]), 1.0e-10);
+        Assertions.assertEquals(Double.POSITIVE_INFINITY, MathArrays.linearCombination(a[5], b[5]), 1.0e-10);
 
-        Assert.assertEquals(Double.POSITIVE_INFINITY,
+        Assertions.assertEquals(Double.POSITIVE_INFINITY,
                             MathArrays.linearCombination(a[6][0], b[6][0],
                                                          a[6][1], b[6][1]),
                             1.0e-10);
-        Assert.assertEquals(Double.POSITIVE_INFINITY,
+        Assertions.assertEquals(Double.POSITIVE_INFINITY,
                             MathArrays.linearCombination(a[6][0], b[6][0],
                                                          a[6][1], b[6][1],
                                                          a[6][2], b[6][2]),
                             1.0e-10);
-        Assert.assertTrue(Double.isNaN(MathArrays.linearCombination(a[6][0], b[6][0],
+        Assertions.assertTrue(Double.isNaN(MathArrays.linearCombination(a[6][0], b[6][0],
                                                                     a[6][1], b[6][1],
                                                                     a[6][2], b[6][2],
                                                                     a[6][3], b[6][3])));
-        Assert.assertTrue(Double.isNaN(MathArrays.linearCombination(a[6], b[6])));
+        Assertions.assertTrue(Double.isNaN(MathArrays.linearCombination(a[6], b[6])));
 
-        Assert.assertTrue(Double.isNaN(MathArrays.linearCombination(a[7][0], b[7][0],
+        Assertions.assertTrue(Double.isNaN(MathArrays.linearCombination(a[7][0], b[7][0],
                                                                     a[7][1], b[7][1])));
-        Assert.assertTrue(Double.isNaN(MathArrays.linearCombination(a[7][0], b[7][0],
+        Assertions.assertTrue(Double.isNaN(MathArrays.linearCombination(a[7][0], b[7][0],
                                                                     a[7][1], b[7][1],
                                                                     a[7][2], b[7][2])));
-        Assert.assertTrue(Double.isNaN(MathArrays.linearCombination(a[7][0], b[7][0],
+        Assertions.assertTrue(Double.isNaN(MathArrays.linearCombination(a[7][0], b[7][0],
                                                                     a[7][1], b[7][1],
                                                                     a[7][2], b[7][2],
                                                                     a[7][3], b[7][3])));
-        Assert.assertTrue(Double.isNaN(MathArrays.linearCombination(a[7], b[7])));
+        Assertions.assertTrue(Double.isNaN(MathArrays.linearCombination(a[7], b[7])));
     }
 
     @Test
     public void testArrayEquals() {
-        Assert.assertFalse(MathArrays.equals(new double[] { 1d }, null));
-        Assert.assertFalse(MathArrays.equals(null, new double[] { 1d }));
-        Assert.assertTrue(MathArrays.equals((double[]) null, (double[]) null));
+        Assertions.assertFalse(MathArrays.equals(new double[] { 1d }, null));
+        Assertions.assertFalse(MathArrays.equals(null, new double[] { 1d }));
+        Assertions.assertTrue(MathArrays.equals((double[]) null, (double[]) null));
 
-        Assert.assertFalse(MathArrays.equals(new double[] { 1d }, new double[0]));
-        Assert.assertTrue(MathArrays.equals(new double[] { 1d }, new double[] { 1d }));
-        Assert.assertTrue(MathArrays.equals(new double[] { Double.POSITIVE_INFINITY,
+        Assertions.assertFalse(MathArrays.equals(new double[] { 1d }, new double[0]));
+        Assertions.assertTrue(MathArrays.equals(new double[] { 1d }, new double[] { 1d }));
+        Assertions.assertTrue(MathArrays.equals(new double[] { Double.POSITIVE_INFINITY,
                                                            Double.NEGATIVE_INFINITY, 1d, 0d },
                                             new double[] { Double.POSITIVE_INFINITY,
                                                            Double.NEGATIVE_INFINITY, 1d, 0d }));
-        Assert.assertFalse(MathArrays.equals(new double[] { Double.NaN },
+        Assertions.assertFalse(MathArrays.equals(new double[] { Double.NaN },
                                              new double[] { Double.NaN }));
-        Assert.assertFalse(MathArrays.equals(new double[] { Double.POSITIVE_INFINITY },
+        Assertions.assertFalse(MathArrays.equals(new double[] { Double.POSITIVE_INFINITY },
                                              new double[] { Double.NEGATIVE_INFINITY }));
-        Assert.assertFalse(MathArrays.equals(new double[] { 1d },
+        Assertions.assertFalse(MathArrays.equals(new double[] { 1d },
                                              new double[] { FastMath.nextAfter(FastMath.nextAfter(1d, 2d), 2d) }));
 
     }
 
     @Test
     public void testArrayEqualsIncludingNaN() {
-        Assert.assertFalse(MathArrays.equalsIncludingNaN(new double[] { 1d }, null));
-        Assert.assertFalse(MathArrays.equalsIncludingNaN(null, new double[] { 1d }));
-        Assert.assertTrue(MathArrays.equalsIncludingNaN((double[]) null, (double[]) null));
+        Assertions.assertFalse(MathArrays.equalsIncludingNaN(new double[] { 1d }, null));
+        Assertions.assertFalse(MathArrays.equalsIncludingNaN(null, new double[] { 1d }));
+        Assertions.assertTrue(MathArrays.equalsIncludingNaN((double[]) null, (double[]) null));
 
-        Assert.assertFalse(MathArrays.equalsIncludingNaN(new double[] { 1d }, new double[0]));
-        Assert.assertTrue(MathArrays.equalsIncludingNaN(new double[] { 1d }, new double[] { 1d }));
-        Assert.assertTrue(MathArrays.equalsIncludingNaN(new double[] { Double.NaN, Double.POSITIVE_INFINITY,
+        Assertions.assertFalse(MathArrays.equalsIncludingNaN(new double[] { 1d }, new double[0]));
+        Assertions.assertTrue(MathArrays.equalsIncludingNaN(new double[] { 1d }, new double[] { 1d }));
+        Assertions.assertTrue(MathArrays.equalsIncludingNaN(new double[] { Double.NaN, Double.POSITIVE_INFINITY,
                                                                        Double.NEGATIVE_INFINITY, 1d, 0d },
                                                         new double[] { Double.NaN, Double.POSITIVE_INFINITY,
                                                                        Double.NEGATIVE_INFINITY, 1d, 0d }));
-        Assert.assertFalse(MathArrays.equalsIncludingNaN(new double[] { Double.POSITIVE_INFINITY },
+        Assertions.assertFalse(MathArrays.equalsIncludingNaN(new double[] { Double.POSITIVE_INFINITY },
                                                          new double[] { Double.NEGATIVE_INFINITY }));
-        Assert.assertFalse(MathArrays.equalsIncludingNaN(new double[] { 1d },
+        Assertions.assertFalse(MathArrays.equalsIncludingNaN(new double[] { 1d },
                                                          new double[] { FastMath.nextAfter(FastMath.nextAfter(1d, 2d), 2d) }));
     }
 
     @Test
     public void testLongArrayEquals() {
-        Assert.assertFalse(MathArrays.equals(new long[] { 1L }, null));
-        Assert.assertFalse(MathArrays.equals(null, new long[] { 1L }));
-        Assert.assertTrue(MathArrays.equals((long[]) null, (long[]) null));
+        Assertions.assertFalse(MathArrays.equals(new long[] { 1L }, null));
+        Assertions.assertFalse(MathArrays.equals(null, new long[] { 1L }));
+        Assertions.assertTrue(MathArrays.equals((long[]) null, (long[]) null));
 
-        Assert.assertFalse(MathArrays.equals(new long[] { 1L }, new long[0]));
-        Assert.assertTrue(MathArrays.equals(new long[] { 1L }, new long[] { 1L }));
-        Assert.assertTrue(MathArrays.equals(new long[] { 0x7ff0000000000000L,
+        Assertions.assertFalse(MathArrays.equals(new long[] { 1L }, new long[0]));
+        Assertions.assertTrue(MathArrays.equals(new long[] { 1L }, new long[] { 1L }));
+        Assertions.assertTrue(MathArrays.equals(new long[] { 0x7ff0000000000000L,
                                                            0xfff0000000000000L, 1L, 0L },
                                             new long[] { 0x7ff0000000000000L,
                                                            0xfff0000000000000L, 1L, 0L }));
-        Assert.assertFalse(MathArrays.equals(new long[] { 0x7ff0000000000000L },
+        Assertions.assertFalse(MathArrays.equals(new long[] { 0x7ff0000000000000L },
                                              new long[] { 0xfff0000000000000L }));
 
     }
 
     @Test
     public void testIntArrayEquals() {
-        Assert.assertFalse(MathArrays.equals(new int[] { 1 }, null));
-        Assert.assertFalse(MathArrays.equals(null, new int[] { 1 }));
-        Assert.assertTrue(MathArrays.equals((int[]) null, (int[]) null));
+        Assertions.assertFalse(MathArrays.equals(new int[] { 1 }, null));
+        Assertions.assertFalse(MathArrays.equals(null, new int[] { 1 }));
+        Assertions.assertTrue(MathArrays.equals((int[]) null, (int[]) null));
 
-        Assert.assertFalse(MathArrays.equals(new int[] { 1 }, new int[0]));
-        Assert.assertTrue(MathArrays.equals(new int[] { 1 }, new int[] { 1 }));
-        Assert.assertTrue(MathArrays.equals(new int[] { Integer.MAX_VALUE,
+        Assertions.assertFalse(MathArrays.equals(new int[] { 1 }, new int[0]));
+        Assertions.assertTrue(MathArrays.equals(new int[] { 1 }, new int[] { 1 }));
+        Assertions.assertTrue(MathArrays.equals(new int[] { Integer.MAX_VALUE,
                                                         Integer.MIN_VALUE, 1, 0 },
                                             new int[] { Integer.MAX_VALUE,
                                                         Integer.MIN_VALUE, 1, 0 }));
-        Assert.assertFalse(MathArrays.equals(new int[] { Integer.MAX_VALUE },
+        Assertions.assertFalse(MathArrays.equals(new int[] { Integer.MAX_VALUE },
                                              new int[] { Integer.MIN_VALUE }));
 
     }
 
     @Test
     public void testByteArrayEquals() {
-        Assert.assertFalse(MathArrays.equals(new byte[] { 1 }, null));
-        Assert.assertFalse(MathArrays.equals(null, new byte[] { 1 }));
-        Assert.assertTrue(MathArrays.equals((byte[]) null, (byte[]) null));
+        Assertions.assertFalse(MathArrays.equals(new byte[] { 1 }, null));
+        Assertions.assertFalse(MathArrays.equals(null, new byte[] { 1 }));
+        Assertions.assertTrue(MathArrays.equals((byte[]) null, (byte[]) null));
 
-        Assert.assertFalse(MathArrays.equals(new byte[] { 1 }, new byte[0]));
-        Assert.assertTrue(MathArrays.equals(new byte[] { 1 }, new byte[] { 1 }));
-        Assert.assertTrue(MathArrays.equals(new byte[] { Byte.MAX_VALUE,
+        Assertions.assertFalse(MathArrays.equals(new byte[] { 1 }, new byte[0]));
+        Assertions.assertTrue(MathArrays.equals(new byte[] { 1 }, new byte[] { 1 }));
+        Assertions.assertTrue(MathArrays.equals(new byte[] { Byte.MAX_VALUE,
                                                          Byte.MIN_VALUE, 1, 0 },
                                             new byte[] { Byte.MAX_VALUE,
                                                          Byte.MIN_VALUE, 1, 0 }));
-        Assert.assertFalse(MathArrays.equals(new byte[] { Byte.MAX_VALUE },
+        Assertions.assertFalse(MathArrays.equals(new byte[] { Byte.MAX_VALUE },
                                              new byte[] { Byte.MIN_VALUE }));
 
     }
 
     @Test
     public void testShortArrayEquals() {
-        Assert.assertFalse(MathArrays.equals(new short[] { 1 }, null));
-        Assert.assertFalse(MathArrays.equals(null, new short[] { 1 }));
-        Assert.assertTrue(MathArrays.equals((short[]) null, (short[]) null));
+        Assertions.assertFalse(MathArrays.equals(new short[] { 1 }, null));
+        Assertions.assertFalse(MathArrays.equals(null, new short[] { 1 }));
+        Assertions.assertTrue(MathArrays.equals((short[]) null, (short[]) null));
 
-        Assert.assertFalse(MathArrays.equals(new short[] { 1 }, new short[0]));
-        Assert.assertTrue(MathArrays.equals(new short[] { 1 }, new short[] { 1 }));
-        Assert.assertTrue(MathArrays.equals(new short[] { Short.MAX_VALUE,
+        Assertions.assertFalse(MathArrays.equals(new short[] { 1 }, new short[0]));
+        Assertions.assertTrue(MathArrays.equals(new short[] { 1 }, new short[] { 1 }));
+        Assertions.assertTrue(MathArrays.equals(new short[] { Short.MAX_VALUE,
                                                           Short.MIN_VALUE, 1, 0 },
                                             new short[] { Short.MAX_VALUE,
                                                           Short.MIN_VALUE, 1, 0 }));
-        Assert.assertFalse(MathArrays.equals(new short[] { Short.MAX_VALUE },
+        Assertions.assertFalse(MathArrays.equals(new short[] { Short.MAX_VALUE },
                                              new short[] { Short.MIN_VALUE }));
 
     }
@@ -971,26 +983,26 @@ public class MathArraysTest {
         double[] zeroSum = new double[] {-1, 1};
         try {
             MathArrays.normalizeArray(zeroSum, 1);
-            Assert.fail("expecting MathRuntimeException");
+            Assertions.fail("expecting MathRuntimeException");
         } catch (MathRuntimeException ex) {}
 
         // Infinite elements -> MathRuntimeException
         double[] hasInf = new double[] {1, 2, 1, Double.NEGATIVE_INFINITY};
         try {
             MathArrays.normalizeArray(hasInf, 1);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {}
 
         // Infinite target -> MathIllegalArgumentException
         try {
             MathArrays.normalizeArray(testValues1, Double.POSITIVE_INFINITY);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {}
 
         // NaN target -> MathIllegalArgumentException
         try {
             MathArrays.normalizeArray(testValues1, Double.NaN);
-            Assert.fail("expecting MathIllegalArgumentException");
+            Assertions.fail("expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {}
     }
 
@@ -1007,46 +1019,46 @@ public class MathArraysTest {
         double tolerance = 1e-13;
 
         double[] yActual = MathArrays.convolve(x1, h1);
-        Assert.assertArrayEquals(y1, yActual, tolerance);
+        Assertions.assertArrayEquals(y1, yActual, tolerance);
 
         double[] x2 = { 1, 2, 3 };
         double[] h2 = { 0, 1, 0.5 };
         double[] y2 = { 0, 1, 2.5, 4, 1.5 };
 
         yActual = MathArrays.convolve(x2, h2);
-        Assert.assertArrayEquals(y2, yActual, tolerance);
+        Assertions.assertArrayEquals(y2, yActual, tolerance);
 
         try {
             MathArrays.convolve(new double[]{1, 2}, null);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (NullArgumentException e) {
             // expected behavior
         }
 
         try {
             MathArrays.convolve(null, new double[]{1, 2});
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (NullArgumentException e) {
             // expected behavior
         }
 
         try {
             MathArrays.convolve(new double[]{1, 2}, new double[]{});
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // expected behavior
         }
 
         try {
             MathArrays.convolve(new double[]{}, new double[]{1, 2});
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // expected behavior
         }
 
         try {
             MathArrays.convolve(new double[]{}, new double[]{});
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             // expected behavior
         }
@@ -1061,7 +1073,7 @@ public class MathArraysTest {
 
         // Ensure that all entries below index "start" did not move.
         for (int i = 0; i < start; i++) {
-            Assert.assertEquals(orig[i], list[i]);
+            Assertions.assertEquals(orig[i], list[i]);
         }
 
         // Ensure that at least one entry has moved.
@@ -1072,7 +1084,7 @@ public class MathArraysTest {
                 break;
             }
         }
-        Assert.assertTrue(ok);
+        Assertions.assertTrue(ok);
     }
 
     @Test
@@ -1084,7 +1096,7 @@ public class MathArraysTest {
 
         // Ensure that all entries above index "start" did not move.
         for (int i = start + 1; i < orig.length; i++) {
-            Assert.assertEquals(orig[i], list[i]);
+            Assertions.assertEquals(orig[i], list[i]);
         }
 
         // Ensure that at least one entry has moved.
@@ -1095,7 +1107,7 @@ public class MathArraysTest {
                 break;
             }
         }
-        Assert.assertTrue(ok);
+        Assertions.assertTrue(ok);
     }
 
     @Test
@@ -1105,14 +1117,14 @@ public class MathArraysTest {
 
         final int[] natural = MathArrays.natural(n);
         for (int i = 0; i < n; i++) {
-            Assert.assertEquals(expected[i], natural[i]);
+            Assertions.assertEquals(expected[i], natural[i]);
         }
     }
 
     @Test
     public void testNaturalZero() {
         final int[] natural = MathArrays.natural(0);
-        Assert.assertEquals(0, natural.length);
+        Assertions.assertEquals(0, natural.length);
     }
 
     @Test
@@ -1124,76 +1136,76 @@ public class MathArraysTest {
 
         final int[] seq = MathArrays.sequence(size, start, stride);
         for (int i = 0; i < size; i++) {
-            Assert.assertEquals(expected[i], seq[i]);
+            Assertions.assertEquals(expected[i], seq[i]);
         }
     }
 
     @Test
     public void testSequenceZero() {
         final int[] seq = MathArrays.sequence(0, 12345, 6789);
-        Assert.assertEquals(0, seq.length);
+        Assertions.assertEquals(0, seq.length);
     }
 
     @Test
     public void testVerifyValuesPositive() {
         for (int j = 0; j < 6; j++) {
             for (int i = 1; i < (7 - j); i++) {
-                Assert.assertTrue(MathArrays.verifyValues(testArray, 0, i));
+                Assertions.assertTrue(MathArrays.verifyValues(testArray, 0, i));
             }
         }
-        Assert.assertTrue(MathArrays.verifyValues(singletonArray, 0, 1));
-        Assert.assertTrue(MathArrays.verifyValues(singletonArray, 0, 0, true));
+        Assertions.assertTrue(MathArrays.verifyValues(singletonArray, 0, 1));
+        Assertions.assertTrue(MathArrays.verifyValues(singletonArray, 0, 0, true));
     }
 
     @Test
     public void testVerifyValuesNegative() {
-        Assert.assertFalse(MathArrays.verifyValues(singletonArray, 0, 0));
-        Assert.assertFalse(MathArrays.verifyValues(testArray, 0, 0));
+        Assertions.assertFalse(MathArrays.verifyValues(singletonArray, 0, 0));
+        Assertions.assertFalse(MathArrays.verifyValues(testArray, 0, 0));
         try {
             MathArrays.verifyValues(singletonArray, 2, 1);  // start past end
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             MathArrays.verifyValues(testArray, 0, 7);  // end past end
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             MathArrays.verifyValues(testArray, -1, 1);  // start negative
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             MathArrays.verifyValues(testArray, 0, -1);  // length negative
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             MathArrays.verifyValues(nullArray, 0, 1);  // null array
-            Assert.fail("Expecting NullArgumentException");
+            Assertions.fail("Expecting NullArgumentException");
         } catch (NullArgumentException ex) {
             // expected
         }
         try {
             MathArrays.verifyValues(testArray, nullArray, 0, 1);  // null weights array
-            Assert.fail("Expecting NullArgumentException");
+            Assertions.fail("Expecting NullArgumentException");
         } catch (NullArgumentException ex) {
             // expected
         }
         try {
             MathArrays.verifyValues(singletonArray, testWeightsArray, 0, 1);  // weights.length != value.length
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             MathArrays.verifyValues(testArray, testNegativeWeightsArray, 0, 6);  // can't have negative weights
-            Assert.fail("Expecting MathIllegalArgumentException");
+            Assertions.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -1205,13 +1217,13 @@ public class MathArraysTest {
         final double[] x = new double[] {0, 1, 2};
         final double[] y = new double[] {3, 4, 5, 6, 7, 8};
         final double[] z = new double[] {9};
-        Assert.assertArrayEquals(u, MathArrays.concatenate(x, y, z), 0);
+        Assertions.assertArrayEquals(u, MathArrays.concatenate(x, y, z), 0);
     }
 
     @Test
     public void testConcatentateSingle() {
         final double[] x = new double[] {0, 1, 2};
-        Assert.assertArrayEquals(x, MathArrays.concatenate(x), 0);
+        Assertions.assertArrayEquals(x, MathArrays.concatenate(x), 0);
     }
 
     public void testConcatenateEmptyArguments() {
@@ -1219,23 +1231,25 @@ public class MathArraysTest {
         final double[] y = new double[] {3};
         final double[] z = new double[] {};
         final double[] u = new double[] {0, 1, 2, 3};
-        Assert.assertArrayEquals(u,  MathArrays.concatenate(x, z, y), 0);
-        Assert.assertArrayEquals(u,  MathArrays.concatenate(x, y, z), 0);
-        Assert.assertArrayEquals(u,  MathArrays.concatenate(z, x, y), 0);
-        Assert.assertEquals(0,  MathArrays.concatenate(z, z, z).length);
+        Assertions.assertArrayEquals(u,  MathArrays.concatenate(x, z, y), 0);
+        Assertions.assertArrayEquals(u,  MathArrays.concatenate(x, y, z), 0);
+        Assertions.assertArrayEquals(u,  MathArrays.concatenate(z, x, y), 0);
+        Assertions.assertEquals(0,  MathArrays.concatenate(z, z, z).length);
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test
     public void testConcatenateNullArguments() {
-        final double[] x = new double[] {0, 1, 2};
-        MathArrays.concatenate(x, null);
+        assertThrows(NullPointerException.class, () -> {
+            final double[] x = new double[]{0, 1, 2};
+            MathArrays.concatenate(x, null);
+        });
     }
 
     @Test
     public void testUnique() {
         final double[] x = {0, 9, 3, 0, 11, 7, 3, 5, -1, -2};
         final double[] values = {11, 9, 7, 5, 3, 0, -1, -2};
-        Assert.assertArrayEquals(values, MathArrays.unique(x), 0);
+        Assertions.assertArrayEquals(values, MathArrays.unique(x), 0);
     }
 
     @Test
@@ -1243,7 +1257,7 @@ public class MathArraysTest {
         final double [] x = {0, Double.NEGATIVE_INFINITY, 3, Double.NEGATIVE_INFINITY,
             3, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY};
         final double[] u = {Double.POSITIVE_INFINITY, 3, 0, Double.NEGATIVE_INFINITY};
-        Assert.assertArrayEquals(u , MathArrays.unique(x), 0);
+        Assertions.assertArrayEquals(u , MathArrays.unique(x), 0);
     }
 
     @Test
@@ -1251,26 +1265,28 @@ public class MathArraysTest {
         final double[] x = new double[] {10, 2, Double.NaN, Double.NaN, Double.NaN,
             Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY};
         final double[] u = MathArrays.unique(x);
-        Assert.assertEquals(5, u.length);
-        Assert.assertTrue(Double.isNaN(u[0]));
-        Assert.assertEquals(Double.POSITIVE_INFINITY, u[1], 0);
-        Assert.assertEquals(10, u[2], 0);
-        Assert.assertEquals(2, u[3], 0);
-        Assert.assertEquals(Double.NEGATIVE_INFINITY, u[4], 0);
+        Assertions.assertEquals(5, u.length);
+        Assertions.assertTrue(Double.isNaN(u[0]));
+        Assertions.assertEquals(Double.POSITIVE_INFINITY, u[1], 0);
+        Assertions.assertEquals(10, u[2], 0);
+        Assertions.assertEquals(2, u[3], 0);
+        Assertions.assertEquals(Double.NEGATIVE_INFINITY, u[4], 0);
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test
     public void testUniqueNullArgument() {
-        MathArrays.unique(null);
+        assertThrows(NullPointerException.class, () -> {
+            MathArrays.unique(null);
+        });
     }
 
     @Test
     public void testBuildArray1() {
         Binary64Field field = Binary64Field.getInstance();
         Binary64[] array = MathArrays.buildArray(field, 3);
-        Assert.assertEquals(3, array.length);
+        Assertions.assertEquals(3, array.length);
         for (Binary64 d : array) {
-            Assert.assertSame(field.getZero(), d);
+            Assertions.assertSame(field.getZero(), d);
         }
     }
 
@@ -1278,11 +1294,11 @@ public class MathArraysTest {
     public void testBuildArray2AllIndices() {
         Binary64Field field = Binary64Field.getInstance();
         Binary64[][] array = MathArrays.buildArray(field, 3, 2);
-        Assert.assertEquals(3, array.length);
+        Assertions.assertEquals(3, array.length);
         for (Binary64[] a1 : array) {
-            Assert.assertEquals(2, a1.length);
+            Assertions.assertEquals(2, a1.length);
             for (Binary64 d : a1) {
-                Assert.assertSame(field.getZero(), d);
+                Assertions.assertSame(field.getZero(), d);
             }
         }
     }
@@ -1291,9 +1307,9 @@ public class MathArraysTest {
     public void testBuildArray2MissingLastIndex() {
         Binary64Field field = Binary64Field.getInstance();
         Binary64[][] array = MathArrays.buildArray(field, 3, -1);
-        Assert.assertEquals(3, array.length);
+        Assertions.assertEquals(3, array.length);
         for (Binary64[] a1 : array) {
-            Assert.assertNull(a1);
+            Assertions.assertNull(a1);
         }
     }
 
@@ -1301,13 +1317,13 @@ public class MathArraysTest {
     public void testBuildArray3AllIndices() {
         Binary64Field field = Binary64Field.getInstance();
         Binary64[][][] array = MathArrays.buildArray(field, 3, 2, 4);
-        Assert.assertEquals(3, array.length);
+        Assertions.assertEquals(3, array.length);
         for (Binary64[][] a1 : array) {
-            Assert.assertEquals(2, a1.length);
+            Assertions.assertEquals(2, a1.length);
             for (Binary64[] a2 : a1) {
-                Assert.assertEquals(4, a2.length);
+                Assertions.assertEquals(4, a2.length);
                 for (Binary64 d : a2) {
-                    Assert.assertSame(field.getZero(), d);
+                    Assertions.assertSame(field.getZero(), d);
                 }
             }
         }
@@ -1317,11 +1333,11 @@ public class MathArraysTest {
     public void testBuildArray3MissingLastIndex() {
         Binary64Field field = Binary64Field.getInstance();
         Binary64[][][] array = MathArrays.buildArray(field, 3, 2, -1);
-        Assert.assertEquals(3, array.length);
+        Assertions.assertEquals(3, array.length);
         for (Binary64[][] a1 : array) {
-            Assert.assertEquals(2, a1.length);
+            Assertions.assertEquals(2, a1.length);
             for (Binary64[] a2 : a1) {
-                Assert.assertNull(a2);
+                Assertions.assertNull(a2);
             }
         }
     }

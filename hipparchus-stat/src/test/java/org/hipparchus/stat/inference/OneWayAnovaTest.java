@@ -21,13 +21,13 @@
  */
 package org.hipparchus.stat.inference;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.StreamingStatistics;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -56,22 +56,22 @@ public class OneWayAnovaTest {
         threeClasses.add(classB);
         threeClasses.add(classC);
 
-        Assert.assertEquals("ANOVA F-value",  24.67361709460624,
-                 testStatistic.anovaFValue(threeClasses), 1E-12);
+        Assertions.assertEquals(24.67361709460624,
+                 testStatistic.anovaFValue(threeClasses), 1E-12, "ANOVA F-value");
 
         List<double[]> twoClasses = new ArrayList<double[]>();
         twoClasses.add(classA);
         twoClasses.add(classB);
 
-        Assert.assertEquals("ANOVA F-value",  0.0150579150579,
-                 testStatistic.anovaFValue(twoClasses), 1E-12);
+        Assertions.assertEquals(0.0150579150579,
+                 testStatistic.anovaFValue(twoClasses), 1E-12, "ANOVA F-value");
 
         List<double[]> emptyContents = new ArrayList<double[]>();
         emptyContents.add(emptyArray);
         emptyContents.add(classC);
         try {
             testStatistic.anovaFValue(emptyContents);
-            Assert.fail("empty array for key classX, MathIllegalArgumentException expected");
+            Assertions.fail("empty array for key classX, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -80,7 +80,7 @@ public class OneWayAnovaTest {
         tooFew.add(classA);
         try {
             testStatistic.anovaFValue(tooFew);
-            Assert.fail("less than two classes, MathIllegalArgumentException expected");
+            Assertions.fail("less than two classes, MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
@@ -95,15 +95,15 @@ public class OneWayAnovaTest {
         threeClasses.add(classB);
         threeClasses.add(classC);
 
-        Assert.assertEquals("ANOVA P-value", 6.959446E-06,
-                 testStatistic.anovaPValue(threeClasses), 1E-12);
+        Assertions.assertEquals(6.959446E-06,
+                 testStatistic.anovaPValue(threeClasses), 1E-12, "ANOVA P-value");
 
         List<double[]> twoClasses = new ArrayList<double[]>();
         twoClasses.add(classA);
         twoClasses.add(classB);
 
-        Assert.assertEquals("ANOVA P-value",  0.904212960464,
-                 testStatistic.anovaPValue(twoClasses), 1E-12);
+        Assertions.assertEquals(0.904212960464,
+                 testStatistic.anovaPValue(twoClasses), 1E-12, "ANOVA P-value");
 
     }
 
@@ -127,15 +127,15 @@ public class OneWayAnovaTest {
         }
         threeClasses.add(statsC);
 
-        Assert.assertEquals("ANOVA P-value", 6.959446E-06,
-                 testStatistic.anovaPValue(threeClasses, true), 1E-12);
+        Assertions.assertEquals(6.959446E-06,
+                 testStatistic.anovaPValue(threeClasses, true), 1E-12, "ANOVA P-value");
 
         List<StreamingStatistics> twoClasses = new ArrayList<StreamingStatistics>();
         twoClasses.add(statsA);
         twoClasses.add(statsB);
 
-        Assert.assertEquals("ANOVA P-value",  0.904212960464,
-                 testStatistic.anovaPValue(twoClasses, false), 1E-12);
+        Assertions.assertEquals(0.904212960464,
+                 testStatistic.anovaPValue(twoClasses, false), 1E-12, "ANOVA P-value");
 
     }
 
@@ -147,13 +147,13 @@ public class OneWayAnovaTest {
         threeClasses.add(classB);
         threeClasses.add(classC);
 
-        Assert.assertTrue("ANOVA Test P<0.01", testStatistic.anovaTest(threeClasses, 0.01));
+        Assertions.assertTrue(testStatistic.anovaTest(threeClasses, 0.01), "ANOVA Test P<0.01");
 
         List<double[]> twoClasses = new ArrayList<double[]>();
         twoClasses.add(classA);
         twoClasses.add(classB);
 
-        Assert.assertFalse("ANOVA Test P>0.01", testStatistic.anovaTest(twoClasses, 0.01));
+        Assertions.assertFalse(testStatistic.anovaTest(twoClasses, 0.01), "ANOVA Test P>0.01");
     }
 
 }

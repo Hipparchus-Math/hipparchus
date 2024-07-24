@@ -16,9 +16,9 @@
  */
 package org.hipparchus.analysis.differentiation;
 
-import org.hipparchus.Field;
 import org.hipparchus.CalculusFieldElement;
 import org.hipparchus.CalculusFieldElementAbstractTest;
+import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.FieldUnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -26,8 +26,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test for class {@link UnivariateDerivative}.
@@ -43,80 +43,80 @@ public class GradientTest extends CalculusFieldElementAbstractTest<Gradient> {
     @Test
     public void testGetGradient() {
         Gradient g = new Gradient(-0.5, 2.5, 10.0, -1.0);
-        Assert.assertEquals(-0.5, g.getReal(), 1.0e-15);
-        Assert.assertEquals(-0.5, g.getValue(), 1.0e-15);
-        Assert.assertEquals(+2.5, g.getGradient()[0], 1.0e-15);
-        Assert.assertEquals(10.0, g.getGradient()[1], 1.0e-15);
-        Assert.assertEquals(-1.0, g.getGradient()[2], 1.0e-15);
-        Assert.assertEquals(+2.5, g.getPartialDerivative(0), 1.0e-15);
-        Assert.assertEquals(10.0, g.getPartialDerivative(1), 1.0e-15);
-        Assert.assertEquals(-1.0, g.getPartialDerivative(2), 1.0e-15);
-        Assert.assertEquals(3, g.getFreeParameters());
+        Assertions.assertEquals(-0.5, g.getReal(), 1.0e-15);
+        Assertions.assertEquals(-0.5, g.getValue(), 1.0e-15);
+        Assertions.assertEquals(+2.5, g.getGradient()[0], 1.0e-15);
+        Assertions.assertEquals(10.0, g.getGradient()[1], 1.0e-15);
+        Assertions.assertEquals(-1.0, g.getGradient()[2], 1.0e-15);
+        Assertions.assertEquals(+2.5, g.getPartialDerivative(0), 1.0e-15);
+        Assertions.assertEquals(10.0, g.getPartialDerivative(1), 1.0e-15);
+        Assertions.assertEquals(-1.0, g.getPartialDerivative(2), 1.0e-15);
+        Assertions.assertEquals(3, g.getFreeParameters());
         try {
             g.getPartialDerivative(-1);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
         }
         try {
             g.getPartialDerivative(+3);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, miae.getSpecifier());
         }
     }
 
     @Test
     public void testConstant() {
         Gradient g = Gradient.constant(5, -4.5);
-        Assert.assertEquals(5, g.getFreeParameters());
-        Assert.assertEquals(-4.5, g.getValue(), 1.0e-15);
+        Assertions.assertEquals(5, g.getFreeParameters());
+        Assertions.assertEquals(-4.5, g.getValue(), 1.0e-15);
         for (int i = 0 ; i < g.getFreeParameters(); ++i) {
-            Assert.assertEquals(0.0, g.getPartialDerivative(i), 1.0e-15);
+            Assertions.assertEquals(0.0, g.getPartialDerivative(i), 1.0e-15);
         }
     }
 
     @Test
     public void testVariable() {
         Gradient g = Gradient.variable(5, 1, -4.5);
-        Assert.assertEquals(5, g.getFreeParameters());
-        Assert.assertEquals(-4.5, g.getValue(), 1.0e-15);
+        Assertions.assertEquals(5, g.getFreeParameters());
+        Assertions.assertEquals(-4.5, g.getValue(), 1.0e-15);
         for (int i = 0 ; i < g.getFreeParameters(); ++i) {
-            Assert.assertEquals(i == 1 ? 1.0 : 0.0, g.getPartialDerivative(i), 1.0e-15);
+            Assertions.assertEquals(i == 1 ? 1.0 : 0.0, g.getPartialDerivative(i), 1.0e-15);
         }
     }
 
     @Test
     public void testDoublePow() {
-        Assert.assertSame(build(3).getField().getZero(), Gradient.pow(0.0, build(1.5)));
+        Assertions.assertSame(build(3).getField().getZero(), Gradient.pow(0.0, build(1.5)));
         Gradient g = Gradient.pow(2.0, build(1.5));
         DSFactory factory = new DSFactory(2, 1);
         DerivativeStructure ds = factory.constant(2.0).pow(factory.build(1.5, 1.0, FastMath.scalb(1.0, -10)));
-        Assert.assertEquals(ds.getValue(), g.getValue(), 1.0e-15);
+        Assertions.assertEquals(ds.getValue(), g.getValue(), 1.0e-15);
         final int[] indices = new int[ds.getFreeParameters()];
         for (int i = 0; i < g.getFreeParameters(); ++i) {
             indices[i] = 1;
-            Assert.assertEquals(ds.getPartialDerivative(indices), g.getPartialDerivative(i), 1.0e-15);
+            Assertions.assertEquals(ds.getPartialDerivative(indices), g.getPartialDerivative(i), 1.0e-15);
             indices[i] = 0;
         }
     }
 
     @Test
     public void testTaylor() {
-        Assert.assertEquals(2.75, new Gradient(2, 1, 0.125).taylor(0.5, 2.0), 1.0e-15);
+        Assertions.assertEquals(2.75, new Gradient(2, 1, 0.125).taylor(0.5, 2.0), 1.0e-15);
     }
 
     @Test
     public void testOrder() {
-        Assert.assertEquals(1, new Gradient(2,  1, 0.125).getOrder());
+        Assertions.assertEquals(1, new Gradient(2,  1, 0.125).getOrder());
     }
 
     @Test
     public void testGetPartialDerivative() {
         final Gradient g = new Gradient(2,  1, 0.125);
-        Assert.assertEquals(2.0,   g.getPartialDerivative(0, 0), 1.0e-15); // f(x,y)
-        Assert.assertEquals(1.0,   g.getPartialDerivative(1, 0), 1.0e-15); // ∂f/∂x
-        Assert.assertEquals(0.125, g.getPartialDerivative(0, 1), 1.0e-15); // ∂f/∂y
+        Assertions.assertEquals(2.0,   g.getPartialDerivative(0, 0), 1.0e-15); // f(x,y)
+        Assertions.assertEquals(1.0,   g.getPartialDerivative(1, 0), 1.0e-15); // ∂f/∂x
+        Assertions.assertEquals(0.125, g.getPartialDerivative(0, 1), 1.0e-15); // ∂f/∂y
     }
 
     @Test
@@ -124,96 +124,112 @@ public class GradientTest extends CalculusFieldElementAbstractTest<Gradient> {
         final Gradient g = new Gradient(2,  1, 0.125);
         try {
             g.getPartialDerivative(0, 0, 0);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
-            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
-            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
         }
         try {
             g.getPartialDerivative(0, 5);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
-            Assert.assertEquals(5, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
+            Assertions.assertEquals(5, ((Integer) miae.getParts()[0]).intValue());
         }
         try {
             g.getPartialDerivative(1, 1);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
-            Assert.assertEquals(1, ((Integer) miae.getParts()[0]).intValue());
+            Assertions.assertEquals(LocalizedCoreFormats.DERIVATION_ORDER_NOT_ALLOWED, miae.getSpecifier());
+            Assertions.assertEquals(1, ((Integer) miae.getParts()[0]).intValue());
         }
     }
 
     @Test
     public void testHashcode() {
-        Assert.assertEquals(1608501298, new Gradient(2, 1, -0.25).hashCode());
+        Assertions.assertEquals(1608501298, new Gradient(2, 1, -0.25).hashCode());
     }
 
     @Test
     public void testEquals() {
         Gradient g = new Gradient(12, -34, 56);
-        Assert.assertEquals(g, g);
-        Assert.assertNotEquals(g, "");
-        Assert.assertEquals(g, new Gradient(12, -34, 56));
-        Assert.assertNotEquals(g, new Gradient(21, -34, 56));
-        Assert.assertNotEquals(g, new Gradient(12, -43, 56));
-        Assert.assertNotEquals(g, new Gradient(12, -34, 65));
-        Assert.assertNotEquals(g, new Gradient(21, -43, 65));
+        Assertions.assertEquals(g, g);
+        Assertions.assertNotEquals("", g);
+        Assertions.assertEquals(g, new Gradient(12, -34, 56));
+        Assertions.assertNotEquals(g, new Gradient(21, -34, 56));
+        Assertions.assertNotEquals(g, new Gradient(12, -43, 56));
+        Assertions.assertNotEquals(g, new Gradient(12, -34, 65));
+        Assertions.assertNotEquals(g, new Gradient(21, -43, 65));
     }
 
     @Test
     public void testRunTimeClass() {
         Field<Gradient> field = build(0.0).getField();
-        Assert.assertEquals(Gradient.class, field.getRuntimeClass());
+        Assertions.assertEquals(Gradient.class, field.getRuntimeClass());
     }
 
     @Test
     public void testConversion() {
         Gradient gA = new Gradient(-0.5, 2.5, 4.5);
         DerivativeStructure ds = gA.toDerivativeStructure();
-        Assert.assertEquals(2, ds.getFreeParameters());
-        Assert.assertEquals(1, ds.getOrder());
-        Assert.assertEquals(-0.5, ds.getValue(), 1.0e-15);
-        Assert.assertEquals(-0.5, ds.getPartialDerivative(0, 0), 1.0e-15);
-        Assert.assertEquals( 2.5, ds.getPartialDerivative(1, 0), 1.0e-15);
-        Assert.assertEquals( 4.5, ds.getPartialDerivative(0, 1), 1.0e-15);
+        Assertions.assertEquals(2, ds.getFreeParameters());
+        Assertions.assertEquals(1, ds.getOrder());
+        Assertions.assertEquals(-0.5, ds.getValue(), 1.0e-15);
+        Assertions.assertEquals(-0.5, ds.getPartialDerivative(0, 0), 1.0e-15);
+        Assertions.assertEquals( 2.5, ds.getPartialDerivative(1, 0), 1.0e-15);
+        Assertions.assertEquals( 4.5, ds.getPartialDerivative(0, 1), 1.0e-15);
         Gradient gB = new Gradient(ds);
-        Assert.assertNotSame(gA, gB);
-        Assert.assertEquals(gA, gB);
+        Assertions.assertNotSame(gA, gB);
+        Assertions.assertEquals(gA, gB);
         try {
             new Gradient(new DSFactory(1, 2).variable(0, 1.0));
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
         }
     }
 
     @Test
     public void testNewInstance() {
         Gradient g = build(5.25);
-        Assert.assertEquals(5.25, g.getValue(), 1.0e-15);
-        Assert.assertEquals(1.0,  g.getPartialDerivative(0), 1.0e-15);
-        Assert.assertEquals(0.0009765625,  g.getPartialDerivative(1), 1.0e-15);
+        Assertions.assertEquals(5.25, g.getValue(), 1.0e-15);
+        Assertions.assertEquals(1.0,  g.getPartialDerivative(0), 1.0e-15);
+        Assertions.assertEquals(0.0009765625,  g.getPartialDerivative(1), 1.0e-15);
         Gradient newInstance = g.newInstance(7.5);
-        Assert.assertEquals(7.5, newInstance.getValue(), 1.0e-15);
-        Assert.assertEquals(0.0, newInstance.getPartialDerivative(0), 1.0e-15);
-        Assert.assertEquals(0.0, newInstance.getPartialDerivative(1), 1.0e-15);
+        Assertions.assertEquals(7.5, newInstance.getValue(), 1.0e-15);
+        Assertions.assertEquals(0.0, newInstance.getPartialDerivative(0), 1.0e-15);
+        Assertions.assertEquals(0.0, newInstance.getPartialDerivative(1), 1.0e-15);
     }
 
-    protected void checkAgainstDS(final double x, final FieldUnivariateFunction f) {
+    protected void checkAgainstDS(final double x,
+                                  final FieldUnivariateFunction f) {
         final Gradient xG = build(x);
         final Gradient yG = f.value(xG);
         final DerivativeStructure yDS = f.value(xG.toDerivativeStructure());
-        Assert.assertEquals(yDS.getFreeParameters(), yG.getFreeParameters());
-        Assert.assertEquals(yDS.getValue(), yG.getValue(), 1.0e-15 * FastMath.abs(yDS.getValue()));
+        Assertions.assertEquals(yDS.getFreeParameters(),
+                                yG.getFreeParameters());
+
+        if (Double.isNaN(yDS.getValue())) {
+            Assertions.assertEquals(yDS.getValue(), yG.getValue());
+        } else {
+            Assertions.assertEquals(yDS.getValue(), yG.getValue(),
+                                    1.0e-15 * FastMath.abs(yDS.getValue()));
+        }
         final int[] indices = new int[yDS.getFreeParameters()];
         for (int i = 0; i < yG.getFreeParameters(); ++i) {
             indices[i] = 1;
-            Assert.assertEquals(yDS.getPartialDerivative(indices),
-                                yG.getPartialDerivative(i),
-                                4.0e-14* FastMath.abs(yDS.getPartialDerivative(indices)));
+            if (Double.isNaN(yDS.getPartialDerivative(indices))) {
+                Assertions.assertEquals(yDS.getPartialDerivative(indices),
+                                        yG.getPartialDerivative(i));
+            } else {
+                Assertions.assertEquals(yDS.getPartialDerivative(indices),
+                                        yG.getPartialDerivative(i),
+                                        4.0e-14 * FastMath.abs(
+                                                        yDS.getPartialDerivative(
+                                                                        indices)));
+
+            }
             indices[i] = 0;
         }
     }
@@ -491,25 +507,25 @@ public class GradientTest extends CalculusFieldElementAbstractTest<Gradient> {
     public void testSerialization() {
         Gradient a = build(1.3);
         Gradient b = (Gradient) UnitTestUtils.serializeAndRecover(a);
-        Assert.assertEquals(a, b);
-        Assert.assertNotSame(a, b);
+        Assertions.assertEquals(a, b);
+        Assertions.assertNotSame(a, b);
     }
 
     @Test
     public void testZero() {
         Gradient zero = build(17.0).getField().getZero();
-        Assert.assertEquals(0.0, zero.getValue(), 1.0e-15);
+        Assertions.assertEquals(0.0, zero.getValue(), 1.0e-15);
         for (int i = 0; i < zero.getFreeParameters(); ++i) {
-            Assert.assertEquals(0.0, zero.getPartialDerivative(i), 1.0e-15);
+            Assertions.assertEquals(0.0, zero.getPartialDerivative(i), 1.0e-15);
         }
     }
 
     @Test
     public void testOne() {
         Gradient one = build(17.0).getField().getOne();
-        Assert.assertEquals(1.0, one.getValue(), 1.0e-15);
+        Assertions.assertEquals(1.0, one.getValue(), 1.0e-15);
         for (int i = 0; i < one.getFreeParameters(); ++i) {
-            Assert.assertEquals(0.0, one.getPartialDerivative(i), 1.0e-15);
+            Assertions.assertEquals(0.0, one.getPartialDerivative(i), 1.0e-15);
         }
     }
 

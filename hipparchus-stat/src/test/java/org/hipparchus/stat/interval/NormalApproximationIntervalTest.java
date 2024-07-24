@@ -21,8 +21,8 @@
  */
 package org.hipparchus.stat.interval;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test cases for the NormalApproximationInterval.
@@ -37,8 +37,8 @@ public class NormalApproximationIntervalTest extends BinomialProportionAbstractT
     @Test
     public void testStandardInterval() {
         ConfidenceInterval confidenceInterval = createStandardTestInterval();
-        Assert.assertEquals(0.07793197, confidenceInterval.getLowerBound(), 1E-5);
-        Assert.assertEquals(0.1220680, confidenceInterval.getUpperBound(), 1E-5);
+        Assertions.assertEquals(0.07793197, confidenceInterval.getLowerBound(), 1E-5);
+        Assertions.assertEquals(0.1220680, confidenceInterval.getUpperBound(), 1E-5);
     }
 
 }

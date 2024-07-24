@@ -22,8 +22,6 @@
 
 package org.hipparchus.distribution.multivariate;
 
-import java.util.Random;
-
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -32,8 +30,10 @@ import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Random;
 
 /**
  * Test cases for {@link MultivariateNormalDistribution}.
@@ -51,7 +51,7 @@ public class MultivariateNormalDistributionTest {
 
         final double[] m = d.getMeans();
         for (int i = 0; i < m.length; i++) {
-            Assert.assertEquals(mu[i], m[i], 0);
+            Assertions.assertEquals(mu[i], m[i], 0);
         }
     }
 
@@ -69,7 +69,7 @@ public class MultivariateNormalDistributionTest {
         final int dim = d.getDimension();
         for (int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
-                Assert.assertEquals(sigma[i][j], s.getEntry(i, j), 0);
+                Assertions.assertEquals(sigma[i][j], s.getEntry(i, j), 0);
             }
         }
     }
@@ -100,14 +100,14 @@ public class MultivariateNormalDistributionTest {
         final double sampledValueTolerance = 1e-2;
         for (int j = 0; j < dim; j++) {
             sampleMeans[j] /= samples.length;
-            Assert.assertEquals(mu[j], sampleMeans[j], sampledValueTolerance);
+            Assertions.assertEquals(mu[j], sampleMeans[j], sampledValueTolerance);
         }
 
         //final double[][] sampleSigma = new Covariance(samples).getCovarianceMatrix().getData();
         final RealMatrix sampleSigma = UnitTestUtils.covarianceMatrix(new Array2DRowRealMatrix(samples));
         for (int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
-                Assert.assertEquals(sigma[i][j], sampleSigma.getEntry(i, j), sampledValueTolerance);
+                Assertions.assertEquals(sigma[i][j], sampleSigma.getEntry(i, j), sampledValueTolerance);
             }
         }
     }
@@ -138,7 +138,7 @@ public class MultivariateNormalDistributionTest {
                                             0.03309922090210541 };
 
         for (int i = 0; i < testValues.length; i++) {
-            Assert.assertEquals(correctDensities[i], densities[i], 1e-16);
+            Assertions.assertEquals(correctDensities[i], densities[i], 1e-16);
         }
     }
 
@@ -158,7 +158,7 @@ public class MultivariateNormalDistributionTest {
         final double tol = Math.ulp(1d);
         for (int i = 0; i < numCases; i++) {
             final double v = rng.nextDouble() * 10 - 5;
-            Assert.assertEquals(uni.density(v), multi.density(new double[] { v }), tol);
+            Assertions.assertEquals(uni.density(v), multi.density(new double[] { v }), tol);
         }
     }
 
@@ -172,11 +172,11 @@ public class MultivariateNormalDistributionTest {
 
         final double tolerance1 = 1e-2;
         final MultivariateNormalDistribution mvd1 = new MultivariateNormalDistribution(mu, sigma, tolerance1);
-        Assert.assertEquals(tolerance1, mvd1.getSingularMatrixCheckTolerance(), Precision.EPSILON);
+        Assertions.assertEquals(tolerance1, mvd1.getSingularMatrixCheckTolerance(), Precision.EPSILON);
 
         final double tolerance2 = 1e-3;
         final MultivariateNormalDistribution mvd2 = new MultivariateNormalDistribution(mu, sigma, tolerance2);
-        Assert.assertEquals(tolerance2, mvd2.getSingularMatrixCheckTolerance(), Precision.EPSILON);
+        Assertions.assertEquals(tolerance2, mvd2.getSingularMatrixCheckTolerance(), Precision.EPSILON);
     }
 
     @Test
@@ -184,9 +184,9 @@ public class MultivariateNormalDistributionTest {
         try {
             new MultivariateNormalDistribution(new Well19937c(0x543l), new double[2],
                                                new double[][] { { -1.0, 0.0 }, { 0.0, -2.0 } });
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.NOT_POSITIVE_DEFINITE_MATRIX, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.NOT_POSITIVE_DEFINITE_MATRIX, miae.getSpecifier());
         }
     }
 
@@ -195,9 +195,9 @@ public class MultivariateNormalDistributionTest {
         MultivariateNormalDistribution d = new MultivariateNormalDistribution(new Well19937c(0x543l), new double[2],
                                                                               new double[][] { { 4.0, 0.0 }, { 0.0, 9.0 } });
         double[] s = d.getStandardDeviations();
-        Assert.assertEquals(2, s.length);
-        Assert.assertEquals(2.0, s[0], 1.0e-15);
-        Assert.assertEquals(3.0, s[1], 1.0e-15);
+        Assertions.assertEquals(2, s.length);
+        Assertions.assertEquals(2.0, s[0], 1.0e-15);
+        Assertions.assertEquals(3.0, s[1], 1.0e-15);
     }
 
     @Test
@@ -206,9 +206,9 @@ public class MultivariateNormalDistributionTest {
             MultivariateNormalDistribution d = new MultivariateNormalDistribution(new Well19937c(0x543l), new double[2],
                                                                                   new double[][] { { 4.0, 0.0 }, { 0.0, 4.0 } });
             d.density(new double[3]);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
         }
     }
 
@@ -221,9 +221,9 @@ public class MultivariateNormalDistributionTest {
     private void checkWrongArguments(double[] means, double[][] covariances) {
         try {
             new MultivariateNormalDistribution(new Well19937c(0x543l), means, covariances);
-            Assert.fail("an exception should have been thrown");
+            Assertions.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assertions.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
         }
     }
 }
